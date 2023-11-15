@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "cutout",
+  "textures": {
+    "side": "terrafirmagreg:block/bucket_side",
+    "bottom": "terrafirmagreg:block/bucket_bottom",
+    "top": "terrafirmagreg:block/bucket_top",
+    "particle": "#side"
+  },
+  "elements": [
+    {
+      "from": [3.5, 3, 6],
+      "to": [12.5, 5, 15],
+      "faces": {
+        "north": { "uv": [1, 1, 10, 2], "texture": "#bottom" },
+        "east": { "uv": [1, 9, 10, 10], "texture": "#bottom" },
+        "south": { "uv": [1, 9, 10, 10], "texture": "#bottom" },
+        "west": { "uv": [1, 1, 10, 2], "texture": "#bottom" },
+        "up": { "uv": [10, 10, 1, 1], "texture": "#bottom" },
+        "down": { "uv": [10, 1, 1, 10], "texture": "#bottom" }
+      }
+    },
+    {
+      "from": [3.5, 5, 15],
+      "to": [12.5, 14, 6],
+      "faces": {
+        "north": { "uv": [1, 0, 10, 9], "texture": "#side" },
+        "east": { "uv": [1, 0, 10, 9], "texture": "#side" },
+        "south": { "uv": [1, 0, 10, 9], "texture": "#side" },
+        "west": { "uv": [1, 0, 10, 9], "texture": "#side" }
+      }
+    },
+    {
+      "from": [2.5, 4, 5],
+      "to": [13.5, 14, 16],
+      "faces": {
+        "north": { "uv": [0, 0, 11, 10], "texture": "#side" },
+        "east": { "uv": [0, 0, 11, 10], "texture": "#side" },
+        "south": { "uv": [0, 0, 11, 10], "texture": "#side" },
+        "west": { "uv": [0, 0, 11, 10], "texture": "#side" },
+        "up": { "uv": [11, 11, 0, 0], "texture": "#top" },
+        "down": { "uv": [11, 0, 0, 11], "texture": "#bottom" }
+      }
+    }
+  ],
+  "display": {}
+}

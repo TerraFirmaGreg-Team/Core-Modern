@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:ingots/copper"
+    }
+  },
+  "pattern": ["## ", "###"],
+  "result": {
+    "item": "terrafirmagreg:tap"
+  },
+  "show_notification": true
+}

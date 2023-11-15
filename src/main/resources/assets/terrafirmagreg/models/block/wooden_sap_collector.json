@@ -1,0 +1,8 @@
+{
+  "parent": "terrafirmagreg:block/sap_collector",
+  "textures": {
+    "side": "terrafirmagreg:block/wooden_bucket_side",
+    "bottom": "terrafirmagreg:block/wooden_bucket_bottom",
+    "top": "terrafirmagreg:block/wooden_bucket_top"
+  }
+}

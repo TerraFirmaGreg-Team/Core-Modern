@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#minecraft:logs",
+    "minecraft:crying_obsidian",
+    {
+      "required": false,
+      "id": "pamhc2trees:pammaple"
+    }
+  ]
+}

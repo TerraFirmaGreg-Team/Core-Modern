@@ -5,14 +5,10 @@ import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.MarkerMaterial;
 import com.gregtechceu.gtceu.api.data.chemical.material.MarkerMaterials;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
-import com.gregtechceu.gtceu.api.data.chemical.material.stack.UnificationEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import exception.terrafirmagreg.compat.gregtech.TFGTagPrefixes;
@@ -27,12 +23,9 @@ import static exception.terrafirmagreg.objects.TFGItems.*;
 
 public class TFGRecipes {
 
-    public static void init(Consumer<FinishedRecipe> consumer)
-    {
-        for (var material : GTRegistries.MATERIALS.values())
-        {
-            if (material.hasProperty(PropertyKey.TOOL) && !material.hasProperty(PropertyKey.POLYMER))
-            {
+    public static void init(Consumer<FinishedRecipe> consumer) {
+        for (var material : GTRegistries.MATERIALS.values()) {
+            if (material.hasProperty(PropertyKey.TOOL) && !material.hasProperty(PropertyKey.POLYMER)) {
                 processHead(TFGTagPrefixes.toolHeadMiningHammer, material, SHAPE_EXTRUDER_MINING_HAMMER_HEAD, MarkerMaterials.Color.Blue, consumer);
                 processHead(TFGTagPrefixes.toolHeadSword, material, SHAPE_EXTRUDER_SWORD_HEAD, MarkerMaterials.Color.Black, consumer);
                 processHead(TFGTagPrefixes.toolHeadPickaxe, material, SHAPE_EXTRUDER_PICKAXE_HEAD, MarkerMaterials.Color.Cyan, consumer);
@@ -121,22 +114,18 @@ public class TFGRecipes {
                 "S h", "   ", "  f", 'S', SHAPE_EMPTY.asStack());
     }
 
-    private static void processHead(TagPrefix tagPrefix, Material material, ItemEntry<Item> extruderShape, MarkerMaterial lenseColor, Consumer<FinishedRecipe> consumer)
-    {
+    private static void processHead(TagPrefix tagPrefix, Material material, ItemEntry<Item> extruderShape, MarkerMaterial lenseColor, Consumer<FinishedRecipe> consumer) {
         var output = ChemicalHelper.get(tagPrefix, material);
         if (output.isEmpty()) return;
 
-        if (material.hasProperty(PropertyKey.INGOT))
-        {
+        if (material.hasProperty(PropertyKey.INGOT)) {
             EXTRUDER_RECIPES.recipeBuilder(tagPrefix.name + "_mold_head_to_head_" + material.getName())
                     .duration(12).EUt(32)
                     .notConsumable(extruderShape)
                     .inputItems(TagPrefix.ingot, material, (int) (tagPrefix.materialAmount() / GTValues.M))
                     .outputItems(output)
                     .save(consumer);
-        }
-        else if (material.hasProperty(PropertyKey.GEM))
-        {
+        } else if (material.hasProperty(PropertyKey.GEM)) {
             var lense = GTItems.GLASS_LENSES.get(lenseColor);
             if (lense == null) return;
 

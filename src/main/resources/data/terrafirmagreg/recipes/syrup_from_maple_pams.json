@@ -1,0 +1,17 @@
+{
+  "type": "terrafirmagreg:tap_extract",
+  "log": {
+    "item": "pamhc2trees:pammaple"
+  },
+  "processing_time": 1200,
+  "result": {
+    "item": "pamhc2trees:maplesyrupitem"
+  },
+  "fluid_color": "#bb9351",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "pamhc2trees"
+    }
+  ]
+}

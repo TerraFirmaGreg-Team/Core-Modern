@@ -29,40 +29,52 @@ public class TFGItems {
 
     static {
         EXTRUDER_SHAPES[0] = SHAPE_EXTRUDER_MINING_HAMMER_HEAD = GTRegistries.REGISTRATE.item("mining_hammer_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[1] = SHAPE_EXTRUDER_SWORD_HEAD = GTRegistries.REGISTRATE.item("sword_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[2] = SHAPE_EXTRUDER_PICKAXE_HEAD = GTRegistries.REGISTRATE.item("pickaxe_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[3] = SHAPE_EXTRUDER_SHOVEL_HEAD = GTRegistries.REGISTRATE.item("shovel_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[4] = SHAPE_EXTRUDER_AXE_HEAD = GTRegistries.REGISTRATE.item("axe_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[5] = SHAPE_EXTRUDER_HOE_HEAD = GTRegistries.REGISTRATE.item("hoe_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[6] = SHAPE_EXTRUDER_SCYTHE_HEAD = GTRegistries.REGISTRATE.item("scythe_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[7] = SHAPE_EXTRUDER_FILE_HEAD = GTRegistries.REGISTRATE.item("file_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[8] = SHAPE_EXTRUDER_HAMMER_HEAD = GTRegistries.REGISTRATE.item("hammer_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[9] = SHAPE_EXTRUDER_SAW_HEAD = GTRegistries.REGISTRATE.item("saw_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[10] = SHAPE_EXTRUDER_KNIFE_HEAD = GTRegistries.REGISTRATE.item("knife_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
 
         EXTRUDER_SHAPES[11] = SHAPE_EXTRUDER_BUTCHERY_KNIFE_HEAD = GTRegistries.REGISTRATE.item("butchery_knife_head_mold", Item::new)
-                .lang("Casting Mold (Mining Hammer)").onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
+                .lang("Casting Mold (Mining Hammer)")
+                .onRegister(materialInfo(new ItemMaterialInfo(new MaterialStack(GTMaterials.Steel, GTValues.M * 4)))).register();
     }
 
     public static void init() {}

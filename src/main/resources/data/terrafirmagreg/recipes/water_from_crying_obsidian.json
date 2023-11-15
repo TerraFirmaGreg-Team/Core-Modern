@@ -1,0 +1,14 @@
+{
+  "type": "terrafirmagreg:tap_extract",
+  "log": {
+    "item": "minecraft:crying_obsidian"
+  },
+  "processing_time": 1200,
+  "result": {
+    "item": "minecraft:water_bucket"
+  },
+  "collect_bucket": true,
+  "display_fluid": {
+    "fluid": "minecraft:water"
+  }
+}

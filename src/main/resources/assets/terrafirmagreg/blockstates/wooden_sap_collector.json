@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "terrafirmagreg:block/wooden_sap_collector",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "terrafirmagreg:block/wooden_sap_collector"
+    },
+    "facing=south": {
+      "model": "terrafirmagreg:block/wooden_sap_collector",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "terrafirmagreg:block/wooden_sap_collector",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "block.terrafirmagreg.tap": "Tap",
+  "block.terrafirmagreg.sap_collector": "Sap Collector",
+  "block.terrafirmagreg.wooden_sap_collector": "Sap Collector",
+  "item.terrafirmagreg.tap.modifier": "Speed modifier: %s",
+  "jei.terrafirmagreg.tap_extract": "Tree Tapping",
+  "jei.terrafirmagreg.life_cycle.months": "%s",
+  "jei.terrafirmagreg.life_cycle.all_year": "All year"
+}

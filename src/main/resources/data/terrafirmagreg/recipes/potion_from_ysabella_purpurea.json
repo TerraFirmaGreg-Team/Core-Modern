@@ -1,0 +1,21 @@
+{
+  "type": "terrafirmagreg:tap_extract",
+  "log": {
+    "item": "productivetrees:ysabella_purpurea_log"
+  },
+  "processing_time": 8000,
+  "result": {
+    "item": "minecraft:potion",
+    "nbt": "{\"Potion\":\"minecraft:strong_regeneration\"}"
+  },
+  "harvest_item": {
+    "item": "minecraft:glass_bottle"
+  },
+  "fluid_color": "#ff00ff",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "productivetrees"
+    }
+  ]
+}
