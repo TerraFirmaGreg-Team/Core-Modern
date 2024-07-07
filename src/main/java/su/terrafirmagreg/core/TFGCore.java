@@ -3,6 +3,7 @@ package su.terrafirmagreg.core;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -22,6 +23,14 @@ public final class TFGCore {
 
         TFGCommonEventHandler.init();
         if (FMLEnvironment.dist == Dist.CLIENT) TFGClientEventHandler.init();
+    }
+
+    public static boolean IsTFCAmbientalLoaded() {
+        return ModList.get().isLoaded("tfcambiental");
+    }
+
+    public static boolean IsCreatelLoaded() {
+        return ModList.get().isLoaded("create");
     }
 
     public static ResourceLocation id(String name) {

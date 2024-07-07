@@ -19,7 +19,7 @@ public final class TFGGTAddon implements IGTAddon {
 
     @Override
     public GTRegistrate getRegistrate() {
-        return TFGCore.REGISTRATE;
+        return null;
     }
 
     @Override
