@@ -75,10 +75,3 @@ mandatory = true
 versionRange = "3.2.4"
 ordering = "AFTER"
 side = "BOTH"
-
-[[dependencies."${mod_id}"]]
-modId = "create"
-mandatory = true
-versionRange = "0.5.1f"
-ordering = "NONE"
-side = "BOTH"
