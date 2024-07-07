@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.terrafirmagreg.core.TFGCore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,13 +60,20 @@ public abstract class GTOreVeinWidgetMixin extends WidgetGroup {
      * */
     @Inject(method = "getContainedOresAndBlocks", at = @At(value = "HEAD"), remap = false, cancellable = true)
     private static void tfg$getContainedOresAndBlocks(GTOreDefinition oreDefinition, CallbackInfoReturnable<List<ItemStack>> cir) {
+
+        var poorRawOre = TagPrefix.get("poorRawOre");
+        var richRawOre = TagPrefix.get("richRawOre");
+
+        if (poorRawOre == null || richRawOre == null)
+            cir.setReturnValue(new ArrayList<>());
+
         var tempList = new ArrayList<ItemStack>();
 
         for (var oreEntry : oreDefinition.veinGenerator().getAllEntries()) {
             oreEntry.getKey().right().ifPresent(material -> {
-                tempList.add(ChemicalHelper.get(TFGTagPrefix.poorRawOre, material));
+                tempList.add(ChemicalHelper.get(poorRawOre, material));
                 tempList.add(ChemicalHelper.get(TagPrefix.rawOre, material));
-                tempList.add(ChemicalHelper.get(TFGTagPrefix.richRawOre, material));
+                tempList.add(ChemicalHelper.get(richRawOre, material));
             });
         }
 
@@ -78,15 +86,23 @@ public abstract class GTOreVeinWidgetMixin extends WidgetGroup {
      * */
     @Unique
     private static List<List<ItemStack>> tfg$getOreRawOres(GTOreDefinition oreDefinition) {
+
+        var poorRawOre = TagPrefix.get("poorRawOre");
+        var richRawOre = TagPrefix.get("richRawOre");
+
+        if (poorRawOre == null || richRawOre == null)
+            return new ArrayList<>();
+
+
         var list = new ArrayList<List<ItemStack>>();
 
         oreDefinition.veinGenerator().getAllEntries().forEach(el -> {
             if (el.getKey().right().isPresent()) {
                 var oreList = new ArrayList<ItemStack>();
 
-                oreList.add(ChemicalHelper.get(TFGTagPrefix.poorRawOre, el.getKey().right().get()));
+                oreList.add(ChemicalHelper.get(poorRawOre, el.getKey().right().get()));
                 oreList.add(ChemicalHelper.get(TagPrefix.rawOre, el.getKey().right().get()));
-                oreList.add(ChemicalHelper.get(TFGTagPrefix.richRawOre, el.getKey().right().get()));
+                oreList.add(ChemicalHelper.get(richRawOre, el.getKey().right().get()));
 
                 list.add(oreList);
             }

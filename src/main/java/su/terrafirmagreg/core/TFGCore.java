@@ -1,11 +1,8 @@
 package su.terrafirmagreg.core;
 
-import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
-import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -20,42 +17,11 @@ public final class TFGCore {
     public static final String NAME = "TerraFirmaGreg";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final GTRegistrate REGISTRATE = GTRegistrate.create(TFGCore.MOD_ID);
-    public static MaterialRegistry MATERIAL_REGISTRY;
-
     public TFGCore() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TFGConfig.SPEC);
 
         TFGCommonEventHandler.init();
         if (FMLEnvironment.dist == Dist.CLIENT) TFGClientEventHandler.init();
-    }
-
-    public static boolean IsAe2Loaded() {
-        return ModList.get().isLoaded("ae2");
-    }
-
-    public static boolean IsSteamAndRailsLoaded() {
-        return ModList.get().isLoaded("railways");
-    }
-
-    public static boolean IsFirmaLifeLoaded() {
-        return ModList.get().isLoaded("firmalife");
-    }
-
-    public static boolean IsAstikorCartsLoaded() {
-        return ModList.get().isLoaded("tfcastikorcarts");
-    }
-
-    public static boolean IsFirmaCivLoaded() {
-        return ModList.get().isLoaded("firmaciv");
-    }
-
-    public static boolean IsTFCAmbientalLoaded() {
-        return ModList.get().isLoaded("tfcambiental");
-    }
-
-    public static boolean IsCreatelLoaded() {
-        return ModList.get().isLoaded("create");
     }
 
     public static ResourceLocation id(String name) {

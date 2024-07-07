@@ -34,9 +34,7 @@ public final class TFGGTAddon implements IGTAddon {
     public void registerWorldgenLayers() {}
 
     @Override
-    public void registerOreVeins() {
-        TFGOreVeins.register();
-    }
+    public void registerOreVeins() {}
 
     @Override
     public void registerFluidVeins() {}
