@@ -1,6 +1,0 @@
-{
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "tfg:item/lamp_casting_mold"
-    }
-}

@@ -6,8 +6,6 @@ import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.TFGItems;
-import su.terrafirmagreg.core.common.data.TFGData;
 import su.terrafirmagreg.core.common.data.recipes.TFGRecipes;
 
 import java.util.function.Consumer;
@@ -17,9 +15,7 @@ import java.util.function.Consumer;
 public final class TFGGTAddon implements IGTAddon {
 
     @Override
-    public void initializeAddon() {
-        TFGItems.init();
-    }
+    public void initializeAddon() {}
 
     @Override
     public GTRegistrate getRegistrate() {
@@ -32,14 +28,10 @@ public final class TFGGTAddon implements IGTAddon {
     }
 
     @Override
-    public void registerTagPrefixes() {
-        TFGTagPrefix.init();
-    }
+    public void registerTagPrefixes() {}
 
     @Override
-    public void registerWorldgenLayers() {
-        TFGWorldGenLayers.init();
-    }
+    public void registerWorldgenLayers() {}
 
     @Override
     public void registerOreVeins() {
@@ -47,19 +39,11 @@ public final class TFGGTAddon implements IGTAddon {
     }
 
     @Override
-    public void registerFluidVeins() {
-        TFGFluidVeins.register();
-    }
+    public void registerFluidVeins() {}
 
     @Override
-    public void addRecipes(Consumer<FinishedRecipe> provider) {
-        TFGData.init();
-        TFGRecipes.init(provider);
-    }
+    public void addRecipes(Consumer<FinishedRecipe> provider) {}
 
     @Override
-    public void removeRecipes(Consumer<ResourceLocation> consumer) {
-        TFGData.remove(consumer);
-        TFGRecipes.remove(consumer);
-    }
+    public void removeRecipes(Consumer<ResourceLocation> consumer) {}
 }

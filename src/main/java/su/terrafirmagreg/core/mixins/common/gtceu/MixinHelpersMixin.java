@@ -19,7 +19,6 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
 import su.terrafirmagreg.core.mixins.common.minecraft.IBlockLootSubProviderAccessor;
 
 @Mixin(value = MixinHelpers.class, remap = false)

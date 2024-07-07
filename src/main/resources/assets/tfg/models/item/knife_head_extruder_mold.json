@@ -1,6 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "tfg:item/knife_head_extruder_mold"
-    }
-}

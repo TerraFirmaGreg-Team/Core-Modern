@@ -144,6 +144,11 @@ repositories {
         url = "https://maven.blamejared.com/"
     }
 
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+
     flatDir {
         dir 'libs'
     }
@@ -167,14 +172,19 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:15.3.0.7"))
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.3.0.7"))
     // at runtime, use the full JEI jar for Forge
-    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.3.0.7"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.3.0.7"))
+
+    // EMI
+    compileOnly fg.deobf("dev.emi:emi-forge:1.1.7+1.20.1:api")
+    runtimeOnly fg.deobf("dev.emi:emi-forge:1.1.7+1.20.1")
 
     // REI
-    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:11.1.118")
-    runtimeOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:12.1.725")
+    //    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:11.1.118")
+    //    runtimeOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:12.1.725")
+    //
+    //    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:12.1.725")
+    //    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:12.1.725")
 
-    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:12.1.725")
-    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:12.1.725")
 
     // Create
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-10")

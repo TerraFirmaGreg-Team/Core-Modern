@@ -15,8 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.recipes.builders.tfc.TFGAdvancedShapedToolRecipeBuilder;
-import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
-import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
 
 import java.util.function.Consumer;
 
