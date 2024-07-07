@@ -6,8 +6,6 @@ import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.recipes.TFGRecipes;
-
 import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
