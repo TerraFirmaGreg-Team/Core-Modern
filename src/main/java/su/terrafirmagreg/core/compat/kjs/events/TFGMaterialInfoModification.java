@@ -1,50 +1,36 @@
 package su.terrafirmagreg.core.compat.kjs.events;
 
-import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 import dev.latvian.mods.kubejs.event.EventJS;
-import net.minecraft.world.level.ItemLike;
+import dev.latvian.mods.rhino.util.HideFromJS;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
-import su.terrafirmagreg.core.TFGCore;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class TFGMaterialInfoModification extends EventJS {
 
-    public void add(ItemLike itemLike, ItemMaterialInfo itemMaterialInfo) {
-        ChemicalHelper.registerMaterialInfo(itemLike, itemMaterialInfo);
+    public static final HashSet<ResourceLocation> EXCLUDED_ITEMS = new HashSet<>();
+    public static final HashMap<Item, ItemMaterialInfo> ADD_ITEMS = new HashMap<>();
+
+    public TFGMaterialInfoModification() {
+        clear();
     }
 
-    public boolean remove(ItemLike itemLike) {
-        var itemResourceLocation = ForgeRegistries.ITEMS.getKey(itemLike.asItem());
+    public void add(Item item, ItemMaterialInfo itemMaterialInfo) {
+        ADD_ITEMS.put(item, itemMaterialInfo);
+    }
 
-        if (itemResourceLocation == null) {
-            TFGCore.LOGGER.warn("Item not founded in item registry: {}", itemLike.asItem());
-            return false;
-        }
+    public void remove(Item itemToRemove) {
+        var rl = ForgeRegistries.ITEMS.getKey(itemToRemove);
+        EXCLUDED_ITEMS.add(rl);
+    }
 
-        var item = ChemicalHelper.ITEM_MATERIAL_INFO.keySet().stream().filter(
-                el -> {
-                    var elementResourceLocation = ForgeRegistries.ITEMS.getKey(el.asItem());
-
-                    if (elementResourceLocation == null) {
-                        return false;
-                    }
-
-                    return elementResourceLocation.equals(itemResourceLocation);
-                }).findFirst();
-
-
-
-        if (item.isPresent()) {
-            var removedValue = ChemicalHelper.ITEM_MATERIAL_INFO.remove(item.get());
-            if (removedValue != null) {
-                return true;
-            }
-
-            TFGCore.LOGGER.warn("Item has not been deleted from unification data: {}", itemResourceLocation);
-            return false;
-        }
-
-        TFGCore.LOGGER.warn("No unification info for: {}", itemResourceLocation);
-        return false;
+    @HideFromJS
+    public static void clear() {
+        EXCLUDED_ITEMS.clear();
+        ADD_ITEMS.clear();
     }
 }
