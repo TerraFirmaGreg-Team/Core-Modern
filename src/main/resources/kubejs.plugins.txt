@@ -1,1 +1,0 @@
-su.terrafirmagreg.core.compat.kjs.TFGKubeJSPlugin
