@@ -41,7 +41,7 @@ public final class TFGMaterialHandler {
                 .color(0xFBB982)
                 .buildAndRegister();
 
-        Fluix = new Material.Builder(TFGCore.id("fluix"))
+        /* Fluix = new Material.Builder(TFGCore.id("fluix"))
                 .fluid()
                 .gem(1)
                 .color(0xD2D2E6).iconSet(CERTUS)
@@ -49,7 +49,7 @@ public final class TFGMaterialHandler {
                 .components(Silicon, 1, Oxygen, 2)
                 .color(0x57448d)
                 .buildAndRegister();
-
+*/
         /* TFC Stone Types Materials */
         Gabbro = registerOreMaterial(Rock.GABBRO, 0x7F8081);
         Shale = registerOreMaterial(Rock.SHALE, 0x686567);

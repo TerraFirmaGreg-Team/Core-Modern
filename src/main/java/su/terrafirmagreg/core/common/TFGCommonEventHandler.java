@@ -31,11 +31,11 @@ public final class TFGCommonEventHandler {
     }
 
     private static void onRegisterMaterials(final MaterialEvent event) {
-        TFGMaterialHandler.init();
+        //TFGMaterialHandler.init();
     }
 
     private static void onPostRegisterMaterials(final PostMaterialEvent event) {
-        TFGMaterialHandler.postInit();
+        //TFGMaterialHandler.postInit();
     }
 
     private static void onCommonSetup(final FMLCommonSetupEvent event) {
