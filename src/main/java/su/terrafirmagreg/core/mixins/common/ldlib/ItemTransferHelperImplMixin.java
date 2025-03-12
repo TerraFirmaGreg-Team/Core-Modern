@@ -4,7 +4,6 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 
 import com.lowdragmc.lowdraglib.side.item.forge.ItemTransferHelperImpl;
 
-import dev.architectury.patchedmixin.staticmixin.spongepowered.asm.mixin.Shadow;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ChatType;
@@ -31,6 +30,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
@@ -45,9 +45,15 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import com.lowdragmc.lowdraglib.side.item.IItemTransfer;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import java.util.Optional;
+import java.util.Set;
+import net.dries007.tfc.common.items.TFCItems;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 
 @Mixin(value = ItemTransferHelperImpl.class, remap = false)
 public abstract class ItemTransferHelperImplMixin {
+
 
 	@Inject(
         method = "exportToTarget", 
@@ -62,9 +68,11 @@ public abstract class ItemTransferHelperImplMixin {
     private static void injectExportToTarget(
             IItemTransfer source, int maxAmount, Predicate<ItemStack> predicate, Level level, BlockPos pos, @Nullable Direction direction,
             CallbackInfo ci, BlockEntity blockEntity, Optional<IItemHandler> cap, IItemHandler target, int srcIndex, ItemStack sourceStack) {
-
-        if (!sourceStack.isEmpty()) {
-            sourceStack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve();
+        if (!sourceStack.isEmpty() ) {
+            Material material = ChemicalHelper.getMaterial(sourceStack).material();
+            if(material.hasProperty(TFGPropertyKeys.TFC_PROPERTY)){
+                sourceStack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve();
+            }
         }
         
     }
