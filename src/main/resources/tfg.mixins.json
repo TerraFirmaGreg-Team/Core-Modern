@@ -53,7 +53,8 @@
         "common.tfc.IngotPileBlockMixin",
         "common.tfc.ItemSizeManagerMixin",
         "common.tfc.TFCChunkGeneratorMixin",
-        "common.ldlib.ItemTransferHelperImplMixin"
+        "common.ldlib.ItemTransferHelperImplMixin",
+        "common.gtceu.NotifiableItemStackHandlerMixin"
     ],
     "client": [
         "client.ftb.ClientTeamManagerImplMixin",

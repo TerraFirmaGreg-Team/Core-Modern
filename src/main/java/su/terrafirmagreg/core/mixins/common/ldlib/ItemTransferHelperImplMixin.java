@@ -51,26 +51,41 @@ import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 
+
+// This mixin is used to fix compatibility between TFC, GTCEu-M & AE2
+// GTMachines produce items with their capabilities lazily initialized
+// When the items get transferred to a AE2 system the item capabilities remain unresolved
+// When the items get converted to AEKey they conflict with the items with resolved capabilities
+// To fix this, we resolve the capabilities for GTCEu items registered to contain the heat capability before they get transfered
+// Note: This fires every time a GT item is transferred by a machine
+//
+// Note: Deprecated for versions of GTCEu-Modern 1.5+
+// Alternate solution for 1.2.3.a can be found in NotifiableItemHandlerMixin.java
 @Mixin(value = ItemTransferHelperImpl.class, remap = false)
 public abstract class ItemTransferHelperImplMixin {
+
 
 
 	@Inject(
         method = "exportToTarget", 
         at = @At(
+            // The point the actual item is transferred is within LDlib. We inject the capability resolution right before the item gets inserted
             value = "INVOKE", 
             target = "Lcom/lowdragmc/lowdraglib/side/item/forge/ItemTransferHelperImpl;insertItem(Lnet/minecraftforge/items/IItemHandler;Lnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;", 
-            ordinal = 1
+            ordinal = 1 // The first call of insertItem tests if the items can be inserted, the second call actually inserts the item
         ), 
-        locals = LocalCapture.CAPTURE_FAILHARD,
-        cancellable = false
+        locals = LocalCapture.CAPTURE_FAILHARD, // Used to capture the sourceStack variable
+        cancellable = false // We do not alter the normal control flow of the function
     )
     private static void injectExportToTarget(
             IItemTransfer source, int maxAmount, Predicate<ItemStack> predicate, Level level, BlockPos pos, @Nullable Direction direction,
             CallbackInfo ci, BlockEntity blockEntity, Optional<IItemHandler> cap, IItemHandler target, int srcIndex, ItemStack sourceStack) {
         if (!sourceStack.isEmpty() ) {
+            // The materials that can be heated and contain the heat capabiltiy are registered in TGMaterialHandler.java
+            // We can check if the item is registered when the material contains the TFC_PROPERTY tag
             Material material = ChemicalHelper.getMaterial(sourceStack).material();
             if(material.hasProperty(TFGPropertyKeys.TFC_PROPERTY)){
+                // Resolve the capabilities before they get inserted
                 sourceStack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve();
             }
         }
@@ -80,37 +95,3 @@ public abstract class ItemTransferHelperImplMixin {
 }
 
 
-/*
-        String className = target.getClass().getName();
-        boolean targetIsGTCEuHandler = className.startsWith("com.gregtechceu");
-		boolean sourceIsGTCEuHandler = source instanceof NotifiableItemStackHandler;
-
-        Player player = Minecraft.getInstance().player;
-        if (player != null) {
-            PlayerChatMessage targetIsGTCEuHandlerMessage = PlayerChatMessage.unsigned(player.getUUID(), targetIsGTCEuHandler ? "targetIsGTCEuHandler" : "not Target" + target.getClass().getName());
-            PlayerChatMessage sourceIsGTCEuHandlerMessage = PlayerChatMessage.unsigned(player.getUUID(), sourceIsGTCEuHandler ? "sourceIsGTCEuHandler" : "not source");
-            player.createCommandSourceStack().sendChatMessage(new OutgoingChatMessage.Player(targetIsGTCEuHandlerMessage), false, ChatType.bind(ChatType.CHAT, player));
-            player.createCommandSourceStack().sendChatMessage(new OutgoingChatMessage.Player(sourceIsGTCEuHandlerMessage), false, ChatType.bind(ChatType.CHAT, player));
-
-        } 
-
-        // If the target is not GTCEu, force capability resolution
-        if (!targetIsGTCEuHandler && sourceIsGTCEuHandler) {
-
-            if(player!=null){
-                PlayerChatMessage attach = PlayerChatMessage.unsigned(player.getUUID(), "attach");
-                player.createCommandSourceStack().sendChatMessage(new OutgoingChatMessage.Player(attach), false, ChatType.bind(ChatType.CHAT, player));
-            }
-            if (!sourceStack.isEmpty()) {
-                sourceStack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve();
-                // sourceStack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(handler -> {
-                //     CompoundTag handlerTag = new CompoundTag();
-                //     for (int i = 0; i < handler.getSlots(); i++) {
-                //         ItemStack slotStack = handler.getStackInSlot(i);
-                //         handlerTag.put("Slot" + i, slotStack.save(new CompoundTag()));
-                //     }
-                //     sourceStack.getOrCreateTag().put("ForgeCaps", handlerTag);
-                // });
-            }
-        }
-*/
