@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 import com.gregtechceu.gtceu.api.machine.trait.ICapabilityTrait;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 
 import com.lowdragmc.lowdraglib.side.item.forge.ItemTransferHelperImpl;
 
@@ -97,15 +98,15 @@ public abstract class NotifiableItemStackHandlerMixin {
     //THIS VERSION WORKS, but runs twice on versions before GTCEu-M 1.5
     //TO update to GTCEu-M 1.5+ replace the method field with handleRecipe
 
-    // @Redirect(
-    //     method = "handleIngredient", // method = "handleRecipe", for GTCEu-M 1.5+
-    //     at = @At(
-    //         value = "INVOKE", 
-    //         target = "Lcom/lowdragmc/lowdraglib/misc/ItemStackTransfer;insertItem(ILnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;", //for GTCEu-M 1.5+ target = "Lcom/gregtechceu/gteu/api/transfer/item/CustomItemStackHandler;insertItem(ILnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;",
-    //         ordinal = 0
-    //     )
-    // )
-    private static ItemStack injectHandleIngredient(ItemStackTransfer capability, int slot, ItemStack stack, boolean simulated) {
+    @Redirect(
+        method = "handleRecipe", 
+        at = @At(
+            value = "INVOKE", 
+            target = "Lcom/gregtechceu/gtceu/api/transfer/item/CustomItemStackHandler;insertItem(ILnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;",
+            ordinal = 0
+        )
+    )
+    private static ItemStack injectHandleIngredient(CustomItemStackHandler capability, int slot, ItemStack stack, boolean simulated) {
         // The materials that can be heated and contain the heat capabiltiy are registered in TGMaterialHandler.java
         // We can check if the item is registered when the material contains the TFC_PROPERTY tag
         

@@ -66,17 +66,17 @@ public abstract class ItemTransferHelperImplMixin {
 
 
 
-	@Inject(
-        method = "exportToTarget", 
-        at = @At(
-            // The point the actual item is transferred is within LDlib. We inject the capability resolution right before the item gets inserted
-            value = "INVOKE", 
-            target = "Lcom/lowdragmc/lowdraglib/side/item/forge/ItemTransferHelperImpl;insertItem(Lnet/minecraftforge/items/IItemHandler;Lnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;", 
-            ordinal = 1 // The first call of insertItem tests if the items can be inserted, the second call actually inserts the item
-        ), 
-        locals = LocalCapture.CAPTURE_FAILHARD, // Used to capture the sourceStack variable
-        cancellable = false // We do not alter the normal control flow of the function
-    )
+	// @Inject(
+    //     method = "exportToTarget", 
+    //     at = @At(
+    //         // The point the actual item is transferred is within LDlib. We inject the capability resolution right before the item gets inserted
+    //         value = "INVOKE", 
+    //         target = "Lcom/lowdragmc/lowdraglib/side/item/forge/ItemTransferHelperImpl;insertItem(Lnet/minecraftforge/items/IItemHandler;Lnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;", 
+    //         ordinal = 1 // The first call of insertItem tests if the items can be inserted, the second call actually inserts the item
+    //     ), 
+    //     locals = LocalCapture.CAPTURE_FAILHARD, // Used to capture the sourceStack variable
+    //     cancellable = false // We do not alter the normal control flow of the function
+    // )
     private static void injectExportToTarget(
             IItemTransfer source, int maxAmount, Predicate<ItemStack> predicate, Level level, BlockPos pos, @Nullable Direction direction,
             CallbackInfo ci, BlockEntity blockEntity, Optional<IItemHandler> cap, IItemHandler target, int srcIndex, ItemStack sourceStack) {
