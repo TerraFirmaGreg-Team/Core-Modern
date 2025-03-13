@@ -110,13 +110,6 @@ public abstract class NotifiableItemStackHandlerMixin {
         // We can check if the item is registered when the material contains the TFC_PROPERTY tag
         
         if(!simulated){
-
-            Player player = Minecraft.getInstance().player;
-            if (player != null) {
-                PlayerChatMessage message = PlayerChatMessage.unsigned(player.getUUID(), "non simulated");
-                player.createCommandSourceStack().sendChatMessage(new OutgoingChatMessage.Player(message), false, ChatType.bind(ChatType.CHAT, player));
-            } 
-
             Material material = ChemicalHelper.getMaterial(stack).material();
             if(material.hasProperty(TFGPropertyKeys.TFC_PROPERTY)){
                 // Force capability resolution immediately after copying
@@ -124,12 +117,6 @@ public abstract class NotifiableItemStackHandlerMixin {
                     // Just accessing it ensures it's initialized
                 });
             }
-        }else{
-            Player player = Minecraft.getInstance().player;
-            if (player != null) {
-                PlayerChatMessage message = PlayerChatMessage.unsigned(player.getUUID(), "simulated");
-                player.createCommandSourceStack().sendChatMessage(new OutgoingChatMessage.Player(message), false, ChatType.bind(ChatType.CHAT, player));
-            } 
         }
             
         ItemStack returnStack = capability.insertItem(slot, stack, simulated);
