@@ -54,6 +54,7 @@ import java.util.Set;
 import net.dries007.tfc.common.items.TFCItems;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.MaterialStack;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -111,12 +112,15 @@ public abstract class NotifiableItemStackHandlerMixin {
         // We can check if the item is registered when the material contains the TFC_PROPERTY tag
         
         if(!simulated){
-            Material material = ChemicalHelper.getMaterial(stack).material();
-            if(material.hasProperty(TFGPropertyKeys.TFC_PROPERTY)){
-                // Force capability resolution immediately after copying
-                stack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(handler -> {
-                    // Just accessing it ensures it's initialized
-                });
+            MaterialStack materialStack = ChemicalHelper.getMaterial(stack);
+            if(materialStack != null){
+            Material material = materialStack.material();
+                if(material != null && material.hasProperty(TFGPropertyKeys.TFC_PROPERTY)){
+                    // Force capability resolution immediately after copying
+                    stack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(handler -> {
+                        // Just accessing it ensures it's initialized
+                    });
+                }
             }
         }
             
