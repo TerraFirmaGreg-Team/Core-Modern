@@ -49,6 +49,7 @@ import java.util.Set;
 import net.dries007.tfc.common.items.TFCItems;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 
 
@@ -80,14 +81,24 @@ public abstract class ItemTransferHelperImplMixin {
     private static void injectExportToTarget(
             IItemTransfer source, int maxAmount, Predicate<ItemStack> predicate, Level level, BlockPos pos, @Nullable Direction direction,
             CallbackInfo ci, BlockEntity blockEntity, Optional<IItemHandler> cap, IItemHandler target, int srcIndex, ItemStack sourceStack) {
-        if (!sourceStack.isEmpty() ) {
-            // The materials that can be heated and contain the heat capabiltiy are registered in TGMaterialHandler.java
-            // We can check if the item is registered when the material contains the TFC_PROPERTY tag
-            Material material = ChemicalHelper.getMaterial(sourceStack).material();
-            if(material.hasProperty(TFGPropertyKeys.TFC_PROPERTY)){
-                // Resolve the capabilities before they get inserted
-                sourceStack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve();
-            }
+        if (sourceStack.isEmpty() ) {
+            return;
+        }
+        // The materials that can be heated and contain the heat capabiltiy are registered in TGMaterialHandler.java
+        // We can check if the item is registered when the material contains the TFC_PROPERTY tag
+        MaterialStack materialStack = ChemicalHelper.getMaterial(sourceStack);
+        if(materialStack == null){
+            return;
+        }
+        Material material = materialStack.material();
+        if(material == null){
+            return;
+        }
+        if(material.hasProperty(TFGPropertyKeys.TFC_PROPERTY)){
+            // Resolve the capabilities before they get inserted
+            sourceStack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(handler -> {
+                    // Just accessing it ensures it's initialized
+            });
         }
         
     }
