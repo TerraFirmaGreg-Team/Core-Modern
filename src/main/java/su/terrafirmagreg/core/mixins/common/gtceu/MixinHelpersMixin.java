@@ -30,12 +30,19 @@ import su.terrafirmagreg.core.mixins.common.minecraft.IBlockLootSubProviderAcces
 @Mixin(value = MixinHelpers.class, remap = false)
 public abstract class MixinHelpersMixin {
 
-    @Redirect(method = "lambda$generateGTDynamicLoot$25", at = @At(value = "INVOKE", target = "Lnet/minecraft/data/loot/BlockLootSubProvider;createSilkTouchDispatchTable(Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;)Lnet/minecraft/world/level/storage/loot/LootTable$Builder;"), remap = true)
+    @Redirect(
+        method = "lambda$generateGTDynamicLoot$25",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/data/loot/BlockLootSubProvider;createSilkTouchDispatchTable(Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;)Lnet/minecraft/world/level/storage/loot/LootTable$Builder;"
+        ),
+        remap = true
+    )
     private static LootTable.Builder tfg$lambda$generateGTDynamicLoot$25(Block pBlock, LootPoolEntryContainer.Builder<?> pBuilder, @Local int oreMultiplier, @Local Block block, @Local(argsOnly = true) Material material, @Local(argsOnly = true) TagPrefix.OreType type) {
 
         var crushedOre = ChemicalHelper.get(TagPrefix.crushed, material);
 
-        var poorDropStack = ChemicalHelper.get(TFGTagPrefix.poorRawOre, material);
+        var poorDropStack = ChemicalHelper.get(TagPrefix.get("poor_raw"), material);
         if (poorDropStack.isEmpty()) poorDropStack = ChemicalHelper.get(TagPrefix.gem, material);
         if (poorDropStack.isEmpty()) poorDropStack = ChemicalHelper.get(TagPrefix.dust, material);
 
@@ -43,7 +50,7 @@ public abstract class MixinHelpersMixin {
         if (normalDropStack.isEmpty()) normalDropStack = ChemicalHelper.get(TagPrefix.gem, material);
         if (normalDropStack.isEmpty()) normalDropStack = ChemicalHelper.get(TagPrefix.dust, material);
 
-        var richDropStack = ChemicalHelper.get(TFGTagPrefix.richRawOre, material);
+        var richDropStack = ChemicalHelper.get(TagPrefix.get("rich_raw"), material);
         if (richDropStack.isEmpty()) richDropStack = ChemicalHelper.get(TagPrefix.gem, material);
         if (richDropStack.isEmpty()) richDropStack = ChemicalHelper.get(TagPrefix.dust, material);
 

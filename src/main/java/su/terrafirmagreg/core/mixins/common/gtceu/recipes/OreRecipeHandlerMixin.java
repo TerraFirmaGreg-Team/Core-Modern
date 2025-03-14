@@ -26,8 +26,8 @@ import java.util.function.Consumer;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.FORGE_HAMMER_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MACERATOR_RECIPES;
-import static su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix.poorRawOre;
-import static su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix.richRawOre;
+//import static su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix.poorRawOre;
+//import static su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix.richRawOre;
 
 @Mixin(value = OreRecipeHandler.class, remap = false)
 public abstract class OreRecipeHandlerMixin {
@@ -51,9 +51,9 @@ public abstract class OreRecipeHandlerMixin {
             }
         }
 
-        poorRawOre.executeHandler(provider, PropertyKey.ORE, OreRecipeHandlerMixin::tfg$processPoorRawOre);
+        //poorRawOre.executeHandler(provider, PropertyKey.ORE, OreRecipeHandlerMixin::tfg$processPoorRawOre);
         rawOre.executeHandler(provider, PropertyKey.ORE, OreRecipeHandlerMixin::tfg$processRawOre);
-        richRawOre.executeHandler(provider, PropertyKey.ORE, OreRecipeHandlerMixin::tfg$processRichRawOre);
+        //richRawOre.executeHandler(provider, PropertyKey.ORE, OreRecipeHandlerMixin::tfg$processRichRawOre);
 
         crushed.executeHandler(provider, PropertyKey.ORE, OreRecipeHandler::processCrushedOre);
         crushedPurified.executeHandler(provider, PropertyKey.ORE, OreRecipeHandler::processCrushedPurified);

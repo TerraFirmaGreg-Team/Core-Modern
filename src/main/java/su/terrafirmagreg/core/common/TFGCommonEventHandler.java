@@ -22,20 +22,10 @@ public final class TFGCommonEventHandler {
         bus.addListener(TFGConfig::onLoad);
         bus.addListener(TFGCommonEventHandler::onCommonSetup);
         bus.addListener(TFGCommonEventHandler::onRegisterMaterialRegistry);
-        bus.addListener(TFGCommonEventHandler::onRegisterMaterials);
-        bus.addListener(TFGCommonEventHandler::onPostRegisterMaterials);
     }
 
     private static void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
         TFGCore.MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(TFGCore.MOD_ID);
-    }
-
-    private static void onRegisterMaterials(final MaterialEvent event) {
-        TFGMaterialHandler.init();
-    }
-
-    private static void onPostRegisterMaterials(final PostMaterialEvent event) {
-        TFGMaterialHandler.postInit();
     }
 
     private static void onCommonSetup(final FMLCommonSetupEvent event) {

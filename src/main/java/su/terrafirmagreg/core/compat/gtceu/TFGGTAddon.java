@@ -21,9 +21,4 @@ public final class TFGGTAddon implements IGTAddon {
     public String addonModId() {
         return TFGCore.MOD_ID;
     }
-
-    @Override
-    public void registerTagPrefixes() {
-        TFGTagPrefix.init();
-    }
 }

@@ -13,7 +13,6 @@ import static su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix.*;
 public final class TFGMaterials {
 
     public static Material Latex;
-    public static Material Fluix;
 
     public static Material Gabbro;
     public static Material Shale;
