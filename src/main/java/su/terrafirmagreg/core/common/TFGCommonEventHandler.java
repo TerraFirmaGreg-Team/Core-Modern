@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.common;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
-import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -22,10 +21,15 @@ public final class TFGCommonEventHandler {
         bus.addListener(TFGConfig::onLoad);
         bus.addListener(TFGCommonEventHandler::onCommonSetup);
         bus.addListener(TFGCommonEventHandler::onRegisterMaterialRegistry);
+        bus.addListener(TFGCommonEventHandler::onPostRegisterMaterials);
     }
 
     private static void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
         TFGCore.MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(TFGCore.MOD_ID);
+    }
+
+    private static void onPostRegisterMaterials(final PostMaterialEvent event) {
+        TFGMaterialHandler.postInit();
     }
 
     private static void onCommonSetup(final FMLCommonSetupEvent event) {

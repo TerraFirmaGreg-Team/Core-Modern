@@ -83,9 +83,9 @@ public abstract class GTOreVeinWidgetMixin extends WidgetGroup {
 
         for (var oreEntry : oreDefinition.veinGenerator().getAllEntries()) {
             oreEntry.getKey().right().ifPresent(material -> {
-                tempList.add(ChemicalHelper.get(TagPrefix.get("poor_raw"), material));
+                tempList.add(ChemicalHelper.get(TFGTagPrefix.poorRawOre, material));
                 tempList.add(ChemicalHelper.get(TagPrefix.rawOre, material));
-                tempList.add(ChemicalHelper.get(TagPrefix.get("rich_raw"), material));
+                tempList.add(ChemicalHelper.get(TFGTagPrefix.richRawOre, material));
             });
         }
 
@@ -104,9 +104,9 @@ public abstract class GTOreVeinWidgetMixin extends WidgetGroup {
             if (el.getKey().right().isPresent()) {
                 var oreList = new ArrayList<ItemStack>();
 
-                oreList.add(ChemicalHelper.get(TagPrefix.get("poor_raw"), el.getKey().right().get()));
+                oreList.add(ChemicalHelper.get(TFGTagPrefix.poorRawOre, el.getKey().right().get()));
                 oreList.add(ChemicalHelper.get(TagPrefix.rawOre, el.getKey().right().get()));
-                oreList.add(ChemicalHelper.get(TagPrefix.get("rich_raw"), el.getKey().right().get()));
+                oreList.add(ChemicalHelper.get(TFGTagPrefix.richRawOre, el.getKey().right().get()));
 
                 list.add(oreList);
             }
