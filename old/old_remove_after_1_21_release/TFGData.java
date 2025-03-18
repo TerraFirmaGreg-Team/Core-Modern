@@ -24,69 +24,7 @@ package su.terrafirmagreg.core.old_remove_after_1_21_release;//package su.terraf
 //    }
 //
 //    public static void init() {
-////        for (final var material : GTCEuAPI.materialManager.getRegisteredMaterials()) {
-////            var property = material.getProperty(TFGPropertyKeys.TFC_PROPERTY);
-////            if (property == null) continue;
-////
-////            addTagItemHeat(TagPrefix.dustTiny, material, property, 0.357F);
-////            addTagItemHeat(TagPrefix.dustSmall, material, property, 0.714F);
-////            addTagItemHeat(TagPrefix.dust, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.dustImpure, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.dustPure, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.rod, material, property, 0.567F);
-////            addTagItemHeat(TagPrefix.rodLong, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.bolt, material, property, 0.245F);
-////            addTagItemHeat(TagPrefix.screw, material, property, 0.567F);
-////            addTagItemHeat(TagPrefix.nugget, material, property, 0.124F);
-////            addTagItemHeat(TagPrefix.ring, material, property, 0.567F);
-////            addTagItemHeat(TagPrefix.block, material, property, 12.861F);
-////
-////            addTagItemHeat(TagPrefix.ingot, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.ingotDouble, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.plate, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.plateDouble, material, property, 1.429F);
-////
-////            addTagItemHeat(TFGTagPrefix.poorRawOre, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.rawOre, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.richRawOre, material, property, 1.429F);
-////
-////            addTagItemHeat(TagPrefix.crushed, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.crushedRefined, material, property, 1.429F);
-////            addTagItemHeat(TagPrefix.crushedPurified, material, property, 1.429F);
-////
-////            addTagItemHeat(TFGTagPrefix.toolHeadSword, material, property, 2.875F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadShovel, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadScythe, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadPickaxe, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadSaw, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadKnife, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadHoe, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadHammer, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadAxe, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadFile, material, property, 1.429F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadButcheryKnife, material, property, 2.875F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadMiningHammer, material, property, 2.875F);
-////            addTagItemHeat(TFGTagPrefix.toolHeadSpade, material, property, 2.875F);
-////
-////            addToolItemHeat(GTToolType.SWORD, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.PICKAXE, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.SHOVEL, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.AXE, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.HOE, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.SAW, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.HARD_HAMMER, material, property, 2.875F);
-////            addToolItemHeat(GTToolType.FILE, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.SCYTHE, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.KNIFE, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.BUTCHERY_KNIFE, material, property, 2.875F);
-////            addToolItemHeat(GTToolType.MINING_HAMMER, material, property, 1.429F);
-////            addToolItemHeat(GTToolType.SPADE, material, property, 2.875F);
-////        }
-////
-////        addItemHeat(TFCItems.BRASS_MECHANISMS.get(), 0.567F, null, null);
-////        addItemHeat(TFCItems.BLUE_STEEL_BUCKET.get(), 1.429F, 924, 1232);
-////        addItemHeat(TFCItems.RED_STEEL_BUCKET.get(), 1.429F, 924, 1232);
-////        addItemHeat(GTItems.COMPRESSED_COKE_CLAY.get(), 0.1242F, null, null);
+
 //
 //        //        addItemHeat(FirmacivItems.CANNON.get(), 2.875F, null, null);
 //        //        addItemHeat(FirmacivItems.CANNON_BARREL.get(), 2.875F, null, null);
