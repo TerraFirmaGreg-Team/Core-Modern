@@ -1,57 +1,20 @@
 package su.terrafirmagreg.core.compat.gtceu;
 
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconType;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
-import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import com.gregtechceu.gtceu.api.data.tag.TagUtil;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
-import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
-import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.rock.Rock;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
-import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialIconType;
 
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.*;
-import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.oreTagPrefix;
 
 public final class TFGTagPrefix {
 
-    /* Stone Types */
-    public static final TagPrefix oreGabbro;
-    public static final TagPrefix oreShale;
-    public static final TagPrefix oreClaystone;
-    public static final TagPrefix oreLimestone;
-    public static final TagPrefix oreConglomerate;
-    public static final TagPrefix oreDolomite;
-    public static final TagPrefix oreChert;
-    public static final TagPrefix oreRhyolite;
-    public static final TagPrefix oreDacite;
-    public static final TagPrefix oreQuartzite;
-    public static final TagPrefix oreSlate;
-    public static final TagPrefix orePhyllite;
-    public static final TagPrefix oreSchist;
-    public static final TagPrefix oreGneiss;
-    public static final TagPrefix oreMarble;
-    public static final TagPrefix oreBasalt;
-    public static final TagPrefix oreDiorite;
-    public static final TagPrefix oreAndesite;
-    public static final TagPrefix oreGranite;
-    public static final TagPrefix oreChalk;
+    // These must stay in java because they don't work correctly in KJS -Py
 
     /* Tool Heads */
     public static final TagPrefix toolHeadSword;
@@ -94,48 +57,6 @@ public final class TFGTagPrefix {
     public static final TagPrefix slabPlated;
 
     static {
-        // Делаем все в статическом конструкторе
-        // Для начала удаляем греговское дерьмо
-        // После добавляем наши вкусные стоунтайпы
-
-        TagPrefix.ORES.remove(TagPrefix.rawOreBlock);
-
-        TagPrefix.ORES.remove(TagPrefix.ore);
-        TagPrefix.ORES.remove(TagPrefix.oreDeepslate);
-        TagPrefix.ORES.remove(TagPrefix.oreTuff);
-        TagPrefix.ORES.remove(TagPrefix.oreSand);
-        TagPrefix.ORES.remove(TagPrefix.oreRedSand);
-        TagPrefix.ORES.remove(TagPrefix.oreRedGranite);
-        TagPrefix.ORES.remove(TagPrefix.oreGravel);
-        TagPrefix.ORES.remove(TagPrefix.oreEndstone);
-
-        TagPrefix.ORES.remove(TagPrefix.oreBasalt);
-        TagPrefix.ORES.remove(TagPrefix.oreAndesite);
-        TagPrefix.ORES.remove(TagPrefix.oreDiorite);
-        TagPrefix.ORES.remove(TagPrefix.oreGranite);
-
-        /* Stone Types */
-        oreGabbro = registerOreTagPrefix(Rock.GABBRO);
-        oreShale = registerOreTagPrefix(Rock.SHALE);
-        oreClaystone = registerOreTagPrefix(Rock.CLAYSTONE);
-        oreLimestone = registerOreTagPrefix(Rock.LIMESTONE);
-        oreConglomerate = registerOreTagPrefix(Rock.CONGLOMERATE);
-        oreDolomite = registerOreTagPrefix(Rock.DOLOMITE);
-        oreChert = registerOreTagPrefix(Rock.CHERT);
-        oreRhyolite = registerOreTagPrefix(Rock.RHYOLITE);
-        oreDacite = registerOreTagPrefix(Rock.DACITE);
-        oreQuartzite = registerOreTagPrefix(Rock.QUARTZITE);
-        oreSlate = registerOreTagPrefix(Rock.SLATE);
-        orePhyllite = registerOreTagPrefix(Rock.PHYLLITE);
-        oreSchist = registerOreTagPrefix(Rock.SCHIST);
-        oreGneiss = registerOreTagPrefix(Rock.GNEISS);
-        oreMarble = registerOreTagPrefix(Rock.MARBLE);
-        oreBasalt = registerOreTagPrefix(Rock.BASALT);
-        oreDiorite = registerOreTagPrefix(Rock.DIORITE);
-        oreAndesite = registerOreTagPrefix(Rock.ANDESITE);
-        oreGranite = registerOreTagPrefix(Rock.GRANITE);
-        oreChalk = registerOreTagPrefix(Rock.CHALK);
-
         /* Tool Heads */
         toolHeadSword = new TagPrefix("swordHead")
                 .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
@@ -423,113 +344,6 @@ public final class TFGTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_PLATED_BLOCK));
-
-        /* Tag Fixes */
-        TagPrefix.plate.defaultTagPath("sheets/%s");
-        TagPrefix.plateDouble.defaultTagPath("double_sheets/%s");
-
-        TagPrefix.frameGt.unformattedTagPath("frames");
-
-        TagPrefix.wireGtSingle.defaultTagPath("single_wires/%s");
-        TagPrefix.wireGtSingle.unformattedTagPath("single_wires");
-        TagPrefix.wireGtDouble.defaultTagPath("double_wires/%s");
-        TagPrefix.wireGtDouble.unformattedTagPath("double_wires");
-        TagPrefix.wireGtQuadruple.defaultTagPath("quadruple_wires/%s");
-        TagPrefix.wireGtQuadruple.unformattedTagPath("quadruple_wires");
-        TagPrefix.wireGtOctal.defaultTagPath("octal_wires/%s");
-        TagPrefix.wireGtOctal.unformattedTagPath("octal_wires");
-        TagPrefix.wireGtHex.defaultTagPath("hex_wires/%s");
-        TagPrefix.wireGtHex.unformattedTagPath("hex_wires");
-
-        TagPrefix.cableGtSingle.defaultTagPath("single_cables/%s");
-        TagPrefix.cableGtSingle.unformattedTagPath("single_cables");
-        TagPrefix.cableGtDouble.defaultTagPath("double_cables/%s");
-        TagPrefix.cableGtDouble.unformattedTagPath("double_cables");
-        TagPrefix.cableGtQuadruple.defaultTagPath("quadruple_cables/%s");
-        TagPrefix.cableGtQuadruple.unformattedTagPath("quadruple_cables");
-        TagPrefix.cableGtOctal.defaultTagPath("octal_cables/%s");
-        TagPrefix.cableGtOctal.unformattedTagPath("octal_cables");
-        TagPrefix.cableGtHex.defaultTagPath("hex_cables/%s");
-        TagPrefix.cableGtHex.unformattedTagPath("hex_cables");
-
-        TagPrefix.pipeTinyFluid.defaultTagPath("tiny_fluid_pipes/%s");
-        TagPrefix.pipeTinyFluid.unformattedTagPath("tiny_fluid_pipes");
-        TagPrefix.pipeSmallFluid.defaultTagPath("small_fluid_pipes/%s");
-        TagPrefix.pipeSmallFluid.unformattedTagPath("small_fluid_pipes");
-        TagPrefix.pipeNormalFluid.defaultTagPath("normal_fluid_pipes/%s");
-        TagPrefix.pipeNormalFluid.unformattedTagPath("normal_fluid_pipes");
-        TagPrefix.pipeLargeFluid.defaultTagPath("large_fluid_pipes/%s");
-        TagPrefix.pipeLargeFluid.unformattedTagPath("large_fluid_pipes");
-        TagPrefix.pipeHugeFluid.defaultTagPath("huge_fluid_pipes/%s");
-        TagPrefix.pipeHugeFluid.unformattedTagPath("huge_fluid_pipes");
-        TagPrefix.pipeQuadrupleFluid.defaultTagPath("quadruple_fluid_pipes/%s");
-        TagPrefix.pipeQuadrupleFluid.unformattedTagPath("quadruple_fluid_pipes");
-        TagPrefix.pipeNonupleFluid.defaultTagPath("nonuple_fluid_pipes/%s");
-        TagPrefix.pipeNonupleFluid.unformattedTagPath("nonuple_fluid_pipes");
-
-        // FirmaLife Shit
-        TagPrefix.pipeTinyFluid.customTagPath("", (prefix, mat) -> TFGTags.Items.createItemTag("firmalife:always_valid_greenhouse_wall"));
-        TagPrefix.pipeSmallFluid.customTagPath("", (prefix, mat) -> TFGTags.Items.createItemTag("firmalife:always_valid_greenhouse_wall"));
-        TagPrefix.pipeNormalFluid.customTagPath("", (prefix, mat) -> TFGTags.Items.createItemTag("firmalife:always_valid_greenhouse_wall"));
-        TagPrefix.pipeLargeFluid.customTagPath("", (prefix, mat) -> TFGTags.Items.createItemTag("firmalife:always_valid_greenhouse_wall"));
-        // FirmaLife Shit
-
-        TagPrefix.pipeSmallItem.defaultTagPath("small_item_pipes/%s");
-        TagPrefix.pipeSmallItem.unformattedTagPath("small_item_pipes");
-        TagPrefix.pipeNormalItem.defaultTagPath("normal_item_pipes/%s");
-        TagPrefix.pipeNormalItem.unformattedTagPath("normal_item_pipes");
-        TagPrefix.pipeLargeItem.defaultTagPath("large_item_pipes/%s");
-        TagPrefix.pipeLargeItem.unformattedTagPath("large_item_pipes");
-        TagPrefix.pipeHugeItem.defaultTagPath("huge_item_pipes/%s");
-        TagPrefix.pipeHugeItem.unformattedTagPath("huge_item_pipes");
-
-        TagPrefix.pipeSmallRestrictive.defaultTagPath("small_restrictive_pipes/%s");
-        TagPrefix.pipeSmallRestrictive.unformattedTagPath("small_restrictive_pipes");
-        TagPrefix.pipeNormalRestrictive.defaultTagPath("normal_restrictive_pipes/%s");
-        TagPrefix.pipeNormalRestrictive.unformattedTagPath("normal_restrictive_pipes");
-        TagPrefix.pipeLargeRestrictive.defaultTagPath("large_restrictive_pipes/%s");
-        TagPrefix.pipeLargeRestrictive.unformattedTagPath("large_restrictive_pipes");
-        TagPrefix.pipeHugeRestrictive.defaultTagPath("huge_restrictive_pipes/%s");
-        TagPrefix.pipeHugeRestrictive.unformattedTagPath("huge_restrictive_pipes");
-
-        TagPrefix.toolHeadDrill.defaultTagPath("drill_heads/%s");
-        TagPrefix.toolHeadDrill.unformattedTagPath("drill_heads");
-
-        TagPrefix.toolHeadChainsaw.defaultTagPath("chainsaw_heads/%s");
-        TagPrefix.toolHeadChainsaw.unformattedTagPath("chainsaw_heads");
-
-        TagPrefix.toolHeadBuzzSaw.defaultTagPath("buzz_saw_heads/%s");
-        TagPrefix.toolHeadBuzzSaw.unformattedTagPath("buzz_saw_heads");
-
-        TagPrefix.toolHeadWrench.defaultTagPath("wrench_tips/%s");
-        TagPrefix.toolHeadWrench.unformattedTagPath("wrench_tips");
-
-        TagPrefix.toolHeadScrewdriver.defaultTagPath("screwdriver_tips/%s");
-        TagPrefix.toolHeadScrewdriver.unformattedTagPath("screwdriver_tips");
-
-        TagPrefix.turbineBlade.defaultTagPath("turbine_blades/%s");
-        TagPrefix.turbineBlade.unformattedTagPath("turbine_blades");
-    }
-
-    private static TagPrefix registerOreTagPrefix(Rock rockType) {
-        var material = GTCEuAPI.materialManager.getMaterial(TFGCore.MOD_ID + ":" + rockType.getSerializedName());
-        if (material == null) {
-            material = GTCEuAPI.materialManager.getMaterial(rockType.getSerializedName());
-        }
-
-        if (material == null) throw new IllegalArgumentException("Bad material in ore generation for: " + rockType.getSerializedName());
-
-        final Material fMaterial = material;
-        var tag = oreTagPrefix(rockType.getSerializedName(), BlockTags.MINEABLE_WITH_PICKAXE)
-            .registerOre(
-                    () -> TFCBlocks.ROCK_BLOCKS.get(rockType).get(Rock.BlockType.RAW).orElse(Blocks.STONE).defaultBlockState(),
-                    () -> fMaterial,
-                    BlockBehaviour.Properties.of().mapColor(MapColor.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F),
-                    new ResourceLocation(TerraFirmaCraft.MOD_ID, "block/rock/raw/" + rockType.getSerializedName())
-            );
-        tag.addSecondaryMaterial(new MaterialStack(material, GTValues.M));
-
-        return tag;
     }
 
     public static void init() {}
