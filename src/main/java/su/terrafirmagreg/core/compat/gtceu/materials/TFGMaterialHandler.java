@@ -2,6 +2,9 @@ package su.terrafirmagreg.core.compat.gtceu.materials;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
+import com.eerussianguy.firmalife.FirmaLife;
+import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.items.FLItems;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlag;
@@ -34,14 +37,17 @@ import static su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags.*;
 
 public final class TFGMaterialHandler {
 
+	// I couldn't get setIgnored() to work with TFC things, so they stay here for now. -Py
+
 	public static void postInit() {
 
-		// I couldn't get setIgnored() to work with TFC things, so they stay here for now. -Py
+		// Metal things
 
 		bell.setIgnored(Gold, Blocks.BELL);
 		bell.setIgnored(Brass, TFCBlocks.BRASS_BELL);
 		bell.setIgnored(Bronze, TFCBlocks.BRONZE_BELL);
 
+		// Tool-only metals
 
 		var metalDict = new HashMap<Material, Metal.Default>();
 		metalDict.put(Copper, Metal.Default.COPPER);
@@ -70,6 +76,7 @@ public final class TFGMaterialHandler {
 			bars.setIgnored(material, () -> metalBlocks.get(Metal.BlockType.BARS).get());
 		});
 
+		// All metals
 
 		metalDict.put(Brass, Metal.Default.BRASS);
 		metalDict.put(Gold, Metal.Default.GOLD);
@@ -87,6 +94,31 @@ public final class TFGMaterialHandler {
 			slabPlated.setIgnored(material, () -> TFCBlocks.METALS.get(metalType).get(Metal.BlockType.BLOCK_SLAB).get());
 		});
 
+		// Use TFC ores when they have rich/normal/poor items already
+
+		var oreDict = new HashMap<Material, Ore>();
+		oreDict.put(Tetrahedrite, Ore.TETRAHEDRITE);
+		oreDict.put(Copper, Ore.NATIVE_COPPER);
+		oreDict.put(Gold, Ore.NATIVE_GOLD);
+		oreDict.put(Hematite, Ore.HEMATITE);
+		oreDict.put(Sphalerite, Ore.SPHALERITE);
+		oreDict.put(YellowLimonite, Ore.LIMONITE);
+		oreDict.put(Magnetite, Ore.MAGNETITE);
+		oreDict.put(Malachite, Ore.MALACHITE);
+		oreDict.put(Garnierite, Ore.GARNIERITE);
+		oreDict.put(Bismuth, Ore.BISMUTHINITE);
+		oreDict.put(Cassiterite, Ore.CASSITERITE);
+		oreDict.put(Silver, Ore.NATIVE_SILVER);
+
+		oreDict.forEach((material, ore) -> {
+			poorRawOre.setIgnored(material, () -> TFCItems.GRADED_ORES.get(ore).get(Ore.Grade.POOR).get());
+			rawOre.setIgnored(material, () -> TFCItems.GRADED_ORES.get(ore).get(Ore.Grade.NORMAL).get());
+			richRawOre.setIgnored(material, () -> TFCItems.GRADED_ORES.get(ore).get(Ore.Grade.RICH).get());
+		});
+
+		poorRawOre.setIgnored(Chromite, () -> FLItems.CHROMIUM_ORES.get(Ore.Grade.POOR).get());
+		rawOre.setIgnored(Chromite, () -> FLItems.CHROMIUM_ORES.get(Ore.Grade.NORMAL).get());
+		richRawOre.setIgnored(Chromite, () -> FLItems.CHROMIUM_ORES.get(Ore.Grade.RICH).get());
 
 		oreSmall.setIgnored(Bismuth, () -> TFCBlocks.SMALL_ORES.get(Ore.BISMUTHINITE).get());
 		oreSmall.setIgnored(Cassiterite, () -> TFCBlocks.SMALL_ORES.get(Ore.CASSITERITE).get());
@@ -97,6 +129,7 @@ public final class TFGMaterialHandler {
 		oreSmall.setIgnored(Malachite, () -> TFCBlocks.SMALL_ORES.get(Ore.MALACHITE).get());
 		oreSmall.setIgnored(Sphalerite, () -> TFCBlocks.SMALL_ORES.get(Ore.SPHALERITE).get());
 		oreSmall.setIgnored(Tetrahedrite, () -> TFCBlocks.SMALL_ORES.get(Ore.TETRAHEDRITE).get());
+		oreSmall.setIgnored(Chromite, () -> FLBlocks.SMALL_CHROMITE.get());
 
 		oreSmallNative.setIgnored(Copper, () -> TFCBlocks.SMALL_ORES.get(Ore.NATIVE_COPPER).get());
 		oreSmallNative.setIgnored(Gold, () -> TFCBlocks.SMALL_ORES.get(Ore.NATIVE_GOLD).get());
