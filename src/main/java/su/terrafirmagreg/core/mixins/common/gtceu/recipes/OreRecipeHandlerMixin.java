@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.terrafirmagreg.core.TFGCore;
 
 import java.util.function.Consumer;
 
@@ -72,9 +73,9 @@ public abstract class OreRecipeHandlerMixin {
      * */
     @Redirect(method = "processOreForgeHammer", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/recipe/GTRecipeType;recipeBuilder(Ljava/lang/String;[Ljava/lang/Object;)Lcom/gregtechceu/gtceu/data/recipe/builder/GTRecipeBuilder;"), remap = false)
     private static GTRecipeBuilder tfg$processOreForgeHammer(GTRecipeType instance, String id, Object[] append, TagPrefix orePrefix, Material material) {
-        return instance.recipeBuilder(id)
-                .inputItems(ChemicalHelper.get(orePrefix, material))
-                .duration(10).EUt(16);
+        return instance.recipeBuilder(TFGCore.id(id))
+                .inputItems(ChemicalHelper.get(orePrefix, material));
+
     }
 
     /**
@@ -129,7 +130,7 @@ public abstract class OreRecipeHandlerMixin {
     }
 
     /**
-     * Метод переработки обычных кусков, в основном скопирован с processRawOre, но с некоторыми изменениями.
+     * Метод переработки бедных кусков, в основном скопирован с processRawOre, но с некоторыми изменениями.
      * */
     @Unique
     private static void tfg$processRawOre(TagPrefix orePrefix, Material material, OreProperty property, Consumer<FinishedRecipe> provider) {

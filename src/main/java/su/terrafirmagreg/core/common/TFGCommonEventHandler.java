@@ -29,7 +29,7 @@ public final class TFGCommonEventHandler {
     }
 
     private static void onPostRegisterMaterials(final PostMaterialEvent event) {
-        TFGMaterialHandler.postInit();
+        //TFGMaterialHandler.postInit();
     }
 
     private static void onCommonSetup(final FMLCommonSetupEvent event) {
