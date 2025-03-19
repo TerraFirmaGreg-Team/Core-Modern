@@ -37,7 +37,6 @@
         "common.gtceu.materials.SecondDegreeMixin",
         "common.gtceu.recipes.MaterialInfoLoaderMixin",
         "common.gtceu.recipes.OreRecipeHandlerMixin",
-        "common.gtceu.recipes.RecyclingRecipeHandlerMixin",
         "common.minecraft.EndDragonFightMixin",
         "common.minecraft.EndPodiumFeatureMixin",
         "common.minecraft.EndPortalBlockMixin",
@@ -52,7 +51,9 @@
         "common.tfc.IIngotPileBlockEntityEntryAccessor",
         "common.tfc.IngotPileBlockMixin",
         "common.tfc.ItemSizeManagerMixin",
-        "common.tfc.TFCChunkGeneratorMixin"
+        "common.tfc.TFCChunkGeneratorMixin",
+        "common.ldlib.ItemTransferHelperImplMixin",
+        "common.gtceu.NotifiableItemStackHandlerMixin"
     ],
     "client": [
         "client.ftb.ClientTeamManagerImplMixin",
