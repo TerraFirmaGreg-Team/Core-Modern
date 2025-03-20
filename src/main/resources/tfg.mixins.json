@@ -54,7 +54,8 @@
         "common.tfc.ItemSizeManagerMixin",
         "common.tfc.TFCChunkGeneratorMixin",
         "common.ldlib.ItemTransferHelperImplMixin",
-        "common.gtceu.NotifiableItemStackHandlerMixin"
+        "common.gtceu.NotifiableItemStackHandlerMixin",
+        "common.ae2.ConfigMenuInventoryMixin"
     ],
     "client": [
         "client.ftb.ClientTeamManagerImplMixin",
