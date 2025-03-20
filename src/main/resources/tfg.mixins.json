@@ -23,8 +23,6 @@
         "common.gtceu.GTRecipeTypesMixin",
         "common.gtceu.GTToolTypeMixin",
         "common.gtceu.HoeGroundBehaviorMixin",
-        "common.gtceu.MultiblockMachineBuilderMixin",
-        "common.gtceu.PrimitivePumpMachineMixin",
         "common.gtceu.SteamBoilerMachineMixin",
         "common.gtceu.SurfaceRockBlockMixin",
         "common.gtceu.TagPrefixItemMixin",
