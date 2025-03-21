@@ -13,6 +13,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 
+/**
+ * Mixin to make TFC items with heat data compatible with AE2.
+ * This mixin is for creating patterns.
+ */
+
 @Mixin(value = ConfigMenuInventory.class, remap = false)
 public abstract class ConfigMenuInventoryMixin {
 
