@@ -14,4 +14,5 @@ public final class TFGMaterialIconType {
     public static final MaterialIconType toolHeadJavelin = new MaterialIconType("toolHeadJavelin");
     public static final MaterialIconType toolHeadChisel = new MaterialIconType("toolHeadChisel");
     public static final MaterialIconType toolHeadMace = new MaterialIconType("toolHeadMace");
+
 }

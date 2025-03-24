@@ -40,7 +40,6 @@ public final class TFGTagPrefix {
 
     public static final TagPrefix poorRawOre;
     public static final TagPrefix richRawOre;
-
     public static final TagPrefix oreSmall;
     public static final TagPrefix oreSmallNative;
 
@@ -57,6 +56,9 @@ public final class TFGTagPrefix {
     public static final TagPrefix slabPlated;
 
     static {
+        // Remove generated raw ore blocks
+        TagPrefix.rawOreBlock.generateBlock(false);
+
         /* Tool Heads */
         toolHeadSword = new TagPrefix("swordHead")
                 .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
@@ -249,6 +251,7 @@ public final class TFGTagPrefix {
         ingotDouble = new TagPrefix("doubleIngot")
                 .defaultTagPath("double_ingots/%s")
                 .unformattedTagPath("double_ingots")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .materialIconType(MaterialIconType.ingotDouble)
                 .unificationEnabled(true)
@@ -258,6 +261,7 @@ public final class TFGTagPrefix {
         poorRawOre = new TagPrefix("poor_raw", true)
                 .idPattern("poor_raw_%s")
                 .defaultTagPath("poor_raw_materials/%s")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .unformattedTagPath("poor_raw_materials")
                 .materialIconType(TFGMaterialIconType.poorRawOre)
                 .unificationEnabled(true)
@@ -267,6 +271,7 @@ public final class TFGTagPrefix {
         richRawOre = new TagPrefix("rich_raw", true)
                 .idPattern("rich_raw_%s")
                 .defaultTagPath("rich_raw_materials/%s")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .unformattedTagPath("rich_raw_materials")
                 .materialIconType(TFGMaterialIconType.richRawOre)
                 .unificationEnabled(true)
