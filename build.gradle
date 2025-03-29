@@ -234,6 +234,9 @@ dependencies {
 
     // Jade
     implementation fg.deobf("maven.modrinth:jade:11.7.1")
+	
+	// TFC Roads and Roofs
+	implementation fg.deobf("curse.maven:roads-and-roofs-tfc-1048212:5852507")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
