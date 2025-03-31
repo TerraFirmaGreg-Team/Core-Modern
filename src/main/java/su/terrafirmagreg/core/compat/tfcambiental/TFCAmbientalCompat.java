@@ -23,6 +23,7 @@ import java.util.Optional;
 
 public final class TFCAmbientalCompat {
 
+    public static final float HEATPROOF = -9f;
     public static final float FULLY_INSULATED = -10f;
 
     public static void register() {
@@ -130,7 +131,7 @@ public final class TFCAmbientalCompat {
                 || item == AllItems.COPPER_BACKTANK.asItem());
         }));
 
-        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("blue_steel_diving_equipment", -3f, FULLY_INSULATED)).filter((mod) -> {
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("blue_steel_diving_equipment", -3f, HEATPROOF)).filter((mod) -> {
             var item = stack.getItem();
             return (item == AllItems.NETHERITE_DIVING_HELMET.asItem()
                 || item == AllItems.NETHERITE_DIVING_BOOTS.asItem()

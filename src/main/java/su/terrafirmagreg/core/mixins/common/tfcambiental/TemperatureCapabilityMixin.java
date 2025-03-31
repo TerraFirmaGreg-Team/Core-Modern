@@ -44,7 +44,16 @@ public abstract class TemperatureCapabilityMixin {
 		clearModifiers();
 		EquipmentTemperatureProvider.evaluateAll(getPlayer(), this.modifiers);
 
-		if (this.modifiers.getTotalPotency() == (TFCAmbientalCompat.FULLY_INSULATED * 4) + 1)
+		var totalPotency = this.modifiers.getTotalPotency();
+
+		if (totalPotency == (TFCAmbientalCompat.HEATPROOF * 4) + 1)
+		{
+			if (this.target > 28f)
+			{
+				this.target = 28f;
+			}
+		}
+		else if (totalPotency == (TFCAmbientalCompat.FULLY_INSULATED * 4) + 1)
 		{
 			this.target = 18f;
 		}
