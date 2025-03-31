@@ -22,6 +22,9 @@ public abstract class GTRecipeTypesMixin {
     @Shadow @Final
     public static GTRecipeType CHEMICAL_RECIPES;
 
+    @Shadow @Final
+    public static GTRecipeType ARC_FURNACE_RECIPES;
+
     /**
      * Нужно для того, чтобы настроить доп. рецепты.
      * Расширяет кол-во слотов в некоторых машинах.
@@ -40,6 +43,8 @@ public abstract class GTRecipeTypesMixin {
         // Добавляет новый слот под микросхему
         CHEMICAL_RECIPES.setMaxIOSize(3, 2, 3, 2);
         CHEMICAL_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
+
+        ARC_FURNACE_RECIPES.setMaxIOSize(2, 8, 1, 0);
     }
 
 }

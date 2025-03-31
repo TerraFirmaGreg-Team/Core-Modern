@@ -50,7 +50,8 @@
     "common.tfc.CrucibleBlockMixin",
     "common.tfc.IIngotPileBlockEntityAccessor",
     "common.tfc.IIngotPileBlockEntityEntryAccessor",
-    "common.tfc.IngotPileBlockMixin"
+    "common.tfc.IngotPileBlockMixin",
+    "common.tfcambiental.TemperatureCapabilityMixin"
   ],
   "client": [
     "client.ftb.ClientTeamManagerImplMixin",
