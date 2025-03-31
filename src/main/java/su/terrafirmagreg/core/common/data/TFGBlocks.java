@@ -7,9 +7,11 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
@@ -46,7 +48,7 @@ public final class TFGBlocks {
 
 	public static void generateBudIndicators()
 	{
-		ImmutableMap.Builder<Material, BlockEntry<BudIndicator>> builder = ImmutableMap.builder();
+		BUD_BLOCKS_BUILDER = ImmutableMap.builder();
 
 		for (MaterialRegistry registry : GTCEuAPI.materialManager.getRegistries())
 		{
@@ -55,11 +57,11 @@ public final class TFGBlocks {
 			{
 				if (material.hasProperty(PropertyKey.ORE) && material.hasProperty(PropertyKey.GEM))
 				{
-					registerBudIndicator(material, registrate, builder);
+					registerBudIndicator(material, registrate, BUD_BLOCKS_BUILDER);
 				}
 			}
 		}
-		BUD_BLOCKS = builder.build();
+		BUD_BLOCKS = BUD_BLOCKS_BUILDER.build();
 	}
 
 	@SuppressWarnings("deprecation")
