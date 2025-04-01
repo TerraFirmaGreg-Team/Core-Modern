@@ -25,6 +25,10 @@ public abstract class GTRecipeTypesMixin {
     @Shadow @Final
     public static GTRecipeType ARC_FURNACE_RECIPES;
 
+    @Shadow @Final public static GTRecipeType CHEMICAL_BATH_RECIPES;
+
+    @Shadow @Final public static GTRecipeType CENTRIFUGE_RECIPES;
+
     /**
      * Нужно для того, чтобы настроить доп. рецепты.
      * Расширяет кол-во слотов в некоторых машинах.
@@ -45,6 +49,11 @@ public abstract class GTRecipeTypesMixin {
         CHEMICAL_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
 
         ARC_FURNACE_RECIPES.setMaxIOSize(2, 8, 1, 0);
+
+        CHEMICAL_BATH_RECIPES.setMaxIOSize(2, 6, 1, 1);
+
+        CENTRIFUGE_RECIPES.setMaxIOSize(3, 6, 1, 6);
+        CENTRIFUGE_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
     }
 
 }
