@@ -7,6 +7,7 @@
   "mixins": [
     "client.minecraft.IBlockModelGeneratorsInvoker",
     "common.ae2.ConfigMenuInventoryMixin",
+    "common.beneath.BurpingFlowerBlockMixin",
     "common.beneath.PortalUtilMixin",
     "common.cc.JEIComputerCraftMixin",
     "common.cc.ModRegistryMixin",
