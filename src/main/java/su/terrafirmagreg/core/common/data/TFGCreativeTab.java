@@ -19,8 +19,6 @@ public class TFGCreativeTab {
 
 	private static void fillTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output out)
 	{
-		for (var entry : TFGBlocks.BLOCKS.getEntries()) {
-			out.accept(entry.get());
-		}
+		//out.accept(TFGItems.EXAMPLE.get());
 	}
 }

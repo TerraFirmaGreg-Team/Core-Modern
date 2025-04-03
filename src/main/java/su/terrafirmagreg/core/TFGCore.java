@@ -9,6 +9,7 @@ import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkConstants;
@@ -41,10 +42,11 @@ public final class TFGCore {
         setupFixForGlobalServerConfig();
 
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
         TFGBlocks.BLOCKS.register(bus);
         //TFGBlockEntities.BLOCK_ENTITIES.register(bus);
         //TFGItems.ITEMS.register(bus);
-        //TFGCreativeTab.TABS.register(bus);
+        TFGCreativeTab.TABS.register(bus);
     }
 
     public static ResourceLocation id(String name) {

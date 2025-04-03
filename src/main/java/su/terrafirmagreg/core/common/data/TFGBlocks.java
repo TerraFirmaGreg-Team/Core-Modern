@@ -7,11 +7,9 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
@@ -21,11 +19,16 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blocks.WoodAshPileBlock;
 import su.terrafirmagreg.core.common.data.buds.BudIndicator;
 import su.terrafirmagreg.core.common.data.buds.BudIndicatorItem;
 
@@ -44,6 +47,15 @@ public final class TFGBlocks {
 	public static Map<Material, BlockEntry<BudIndicator>> BUD_BLOCKS;
 
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TFGCore.MOD_ID);
+
+	public static final RegistryObject<Block> WOOD_ASH_PILE = register("ash_pile",
+		() -> new WoodAshPileBlock(BlockBehaviour.Properties.of()
+		   .mapColor(MapColor.COLOR_LIGHT_GRAY)
+		   .strength(0.2f)
+		   .sound(SoundType.SAND)
+		   .pushReaction(PushReaction.DESTROY)
+		   .isViewBlocking((state, level, pos) -> state.getValue(WoodAshPileBlock.LAYERS) >= 8)
+		   .isSuffocating((state, level, pos) -> state.getValue(WoodAshPileBlock.LAYERS) >= 8)));
 
 
 	public static void generateBudIndicators()
