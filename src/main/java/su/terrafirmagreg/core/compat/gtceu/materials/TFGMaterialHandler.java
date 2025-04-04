@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.compat.gtceu.materials;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
+import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.eerussianguy.firmalife.FirmaLife;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLItems;
@@ -12,6 +13,10 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.OreProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
+import com.negodya1.vintageimprovements.VintageBlocks;
+import com.negodya1.vintageimprovements.VintageImprovements;
+import com.negodya1.vintageimprovements.VintageItems;
+import com.simibubi.create.AllItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.blocks.rock.Rock;
@@ -46,6 +51,44 @@ public final class TFGMaterialHandler {
 		bell.setIgnored(Gold, Blocks.BELL);
 		bell.setIgnored(Brass, TFCBlocks.BRASS_BELL);
 		bell.setIgnored(Bronze, TFCBlocks.BRONZE_BELL);
+
+		bolt.setIgnored(Copper, FirmacivItems.COPPER_BOLT);
+
+		ingot.setIgnored(Zinc, () -> AllItems.ZINC_INGOT);
+		ingot.setIgnored(Brass, () -> AllItems.BRASS_INGOT);
+		ingot.setIgnored(Vanadium, VintageImprovements.VANADIUM_INGOT);
+		ingot.setIgnored(BlackSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLACK_STEEL).get(Metal.ItemType.INGOT).get());
+		ingot.setIgnored(RedSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.RED_STEEL).get(Metal.ItemType.INGOT).get());
+		ingot.setIgnored(BlueSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLUE_STEEL).get(Metal.ItemType.INGOT).get());
+
+		ingotDouble.setIgnored(BlackSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLACK_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
+		ingotDouble.setIgnored(RedSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.RED_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
+		ingotDouble.setIgnored(BlueSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLUE_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
+
+		nugget.setIgnored(Zinc, () -> AllItems.ZINC_NUGGET);
+		nugget.setIgnored(Copper, () -> AllItems.COPPER_NUGGET);
+		nugget.setIgnored(Brass, () -> AllItems.BRASS_NUGGET);
+		nugget.setIgnored(Vanadium, VintageImprovements.VANADIUM_NUGGET);
+
+		plate.setIgnored(Copper, () -> AllItems.COPPER_SHEET);
+		plate.setIgnored(Brass, () -> AllItems.BRASS_SHEET);
+		plate.setIgnored(Gold, () -> AllItems.GOLDEN_SHEET);
+		plate.setIgnored(Iron, () -> VintageItems.CAST_IRON_SHEET);
+		plate.setIgnored(Cobalt, () -> VintageItems.COBALT_SHEET);
+		plate.setIgnored(RoseGold, () -> VintageItems.ROSE_GOLD_SHEET);
+		plate.setIgnored(Aluminium, () -> VintageItems.ALUMINUM_SHEET);
+		plate.setIgnored(Invar, () -> VintageItems.INVAR_SHEET);
+		plate.setIgnored(Lead, () -> VintageItems.LEAD_SHEET);
+		plate.setIgnored(Nickel, () -> VintageItems.NICKEL_SHEET);
+		plate.setIgnored(Osmium, () -> VintageItems.OSMIUM_SHEET);
+		plate.setIgnored(Palladium, () -> VintageItems.PALLADIUM_SHEET);
+		plate.setIgnored(Platinum, () -> VintageItems.PLATINUM_SHEET);
+		plate.setIgnored(Rhodium, () -> VintageItems.RHODIUM_SHEET);
+		plate.setIgnored(Silver, () -> VintageItems.SILVER_SHEET);
+		plate.setIgnored(Vanadium, VintageImprovements.VANADIUM_SHEET);
+		plate.setIgnored(Zinc, VintageImprovements.ZINC_SHEET);
+
+		block.setIgnored(Vanadium, () -> VintageBlocks.VANADIUM_BLOCK);
 
 		// Tool-only metals
 
