@@ -30,6 +30,7 @@ public final class TFGCommonEventHandler {
     }
 
     private static void onPostRegisterMaterials(final PostMaterialEvent event) {
+        TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
     }
 
