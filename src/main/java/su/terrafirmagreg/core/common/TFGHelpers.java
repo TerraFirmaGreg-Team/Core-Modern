@@ -19,6 +19,8 @@ public final class TFGHelpers {
 
     public static final Random RANDOM = new Random();
 
+    public static boolean isMaterialRegistrationFinished;
+
     /**
      * Used in KubeJS!
      */
