@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.negodya1.vintageimprovements.VintageBlocks;
 import com.negodya1.vintageimprovements.VintageImprovements;
 import com.negodya1.vintageimprovements.VintageItems;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
@@ -89,6 +90,8 @@ public final class TFGMaterialHandler {
 		plate.setIgnored(Zinc, VintageImprovements.ZINC_SHEET);
 
 		block.setIgnored(Vanadium, () -> VintageBlocks.VANADIUM_BLOCK);
+		block.setIgnored(Zinc, () -> AllBlocks.ZINC_BLOCK);
+		block.setIgnored(Brass, () -> AllBlocks.BRASS_BLOCK);
 
 		// Tool-only metals
 
