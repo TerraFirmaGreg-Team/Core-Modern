@@ -52,7 +52,8 @@
     "common.tfc.IIngotPileBlockEntityAccessor",
     "common.tfc.IIngotPileBlockEntityEntryAccessor",
     "common.tfc.IngotPileBlockMixin",
-    "common.tfcambiental.TemperatureCapabilityMixin"
+    "common.tfcambiental.TemperatureCapabilityMixin",
+    "common.vintageimprovements.HelveItemsRendererMixin"
   ],
   "client": [
     "client.ftb.ClientTeamManagerImplMixin",
