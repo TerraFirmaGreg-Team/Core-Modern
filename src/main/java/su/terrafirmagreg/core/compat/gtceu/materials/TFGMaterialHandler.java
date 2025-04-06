@@ -6,6 +6,7 @@ import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.eerussianguy.firmalife.FirmaLife;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLItems;
+import com.eerussianguy.firmalife.common.util.FLMetal;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlag;
@@ -62,6 +63,7 @@ public final class TFGMaterialHandler {
 		ingot.setIgnored(RedSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.RED_STEEL).get(Metal.ItemType.INGOT).get());
 		ingot.setIgnored(BlueSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLUE_STEEL).get(Metal.ItemType.INGOT).get());
 
+		ingotDouble.setIgnored(Iron, () -> TFCItems.METAL_ITEMS.get(Metal.Default.CAST_IRON).get(Metal.ItemType.DOUBLE_INGOT).get());
 		ingotDouble.setIgnored(BlackSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLACK_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
 		ingotDouble.setIgnored(RedSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.RED_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
 		ingotDouble.setIgnored(BlueSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLUE_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
@@ -133,12 +135,21 @@ public final class TFGMaterialHandler {
 		metalDict.put(SterlingSilver, Metal.Default.STERLING_SILVER);
 		metalDict.put(Bismuth, Metal.Default.BISMUTH);
 		metalDict.put(Zinc, Metal.Default.ZINC);
+		metalDict.put(Iron, Metal.Default.CAST_IRON);
 
 		metalDict.forEach((material, metalType) -> {
 			blockPlated.setIgnored(material, () -> TFCBlocks.METALS.get(metalType).get(Metal.BlockType.BLOCK).get());
 			stairPlated.setIgnored(material, () -> TFCBlocks.METALS.get(metalType).get(Metal.BlockType.BLOCK_STAIRS).get());
 			slabPlated.setIgnored(material, () -> TFCBlocks.METALS.get(metalType).get(Metal.BlockType.BLOCK_SLAB).get());
 		});
+
+		blockPlated.setIgnored(Chromium, () -> FLBlocks.METALS.get(FLMetal.CHROMIUM).get(Metal.BlockType.BLOCK).get());
+		stairPlated.setIgnored(Chromium, () -> FLBlocks.METALS.get(FLMetal.CHROMIUM).get(Metal.BlockType.BLOCK_STAIRS).get());
+		slabPlated.setIgnored(Chromium, () -> FLBlocks.METALS.get(FLMetal.CHROMIUM).get(Metal.BlockType.BLOCK_SLAB).get());
+
+		blockPlated.setIgnored(StainlessSteel, () -> FLBlocks.METALS.get(FLMetal.STAINLESS_STEEL).get(Metal.BlockType.BLOCK).get());
+		stairPlated.setIgnored(StainlessSteel, () -> FLBlocks.METALS.get(FLMetal.STAINLESS_STEEL).get(Metal.BlockType.BLOCK_STAIRS).get());
+		slabPlated.setIgnored(StainlessSteel, () -> FLBlocks.METALS.get(FLMetal.STAINLESS_STEEL).get(Metal.BlockType.BLOCK_SLAB).get());
 
 		// Use TFC ores when they have rich/normal/poor items already
 
