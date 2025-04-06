@@ -19,6 +19,7 @@ import com.negodya1.vintageimprovements.VintageImprovements;
 import com.negodya1.vintageimprovements.VintageItems;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
+import com.therighthon.rnr.common.item.RNRItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.blocks.rock.Rock;
@@ -29,6 +30,9 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 import su.terrafirmagreg.core.compat.gtceu.properties.TFCProperty;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
+import com.therighthon.rnr.common.recipe.MattockRecipe;
+import com.therighthon.rnr.RoadsAndRoofs;
+import com.therighthon.rnr.common.RNRTags;
 
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -115,6 +119,8 @@ public final class TFGMaterialHandler {
 			toolHeadChisel.setIgnored(material, () -> metalItems.get(Metal.ItemType.CHISEL_HEAD).get());
 			toolHeadMace.setIgnored(material, () -> metalItems.get(Metal.ItemType.MACE_HEAD).get());
 			lampUnfinished.setIgnored(material, () -> metalItems.get(Metal.ItemType.UNFINISHED_LAMP).get());
+
+			toolHeadMattock.setIgnored(material, () -> RNRItems.MATTOCK_HEADS.get(metalType).get());
 
 			var metalBlocks = TFCBlocks.METALS.get(metalType);
 			lamp.setIgnored(material, () -> metalBlocks.get(Metal.BlockType.LAMP).get());

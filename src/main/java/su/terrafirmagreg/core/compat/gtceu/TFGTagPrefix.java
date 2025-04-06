@@ -35,6 +35,7 @@ public final class TFGTagPrefix {
     public static final TagPrefix toolHeadJavelin;
     public static final TagPrefix toolHeadChisel;
     public static final TagPrefix toolHeadMace;
+    public static final TagPrefix toolHeadMattock;
 
     /* Other */
     public static final TagPrefix ingotDouble;
@@ -241,6 +242,17 @@ public final class TFGTagPrefix {
                 .materialAmount(GTValues.M * 2)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadMace)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+
+        toolHeadMattock = new TagPrefix("mattockHead")
+                .defaultTagPath("mattock_heads/%s")
+                .unformattedTagPath("mattock_heads")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
+                .materialAmount(GTValues.M)
+                .maxStackSize(16)
+                .materialIconType(TFGMaterialIconType.toolHeadMattock)
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
