@@ -53,7 +53,8 @@
     "common.tfc.IIngotPileBlockEntityEntryAccessor",
     "common.tfc.IngotPileBlockMixin",
     "common.tfcambiental.TemperatureCapabilityMixin",
-    "common.vintageimprovements.HelveItemsRendererMixin"
+    "common.vintageimprovements.HelveItemsRendererMixin",
+    "common.vintageimprovements.VibratingRecipeMixin"
   ],
   "client": [
     "client.ftb.ClientTeamManagerImplMixin",
