@@ -99,6 +99,13 @@ public final class TFGMaterialHandler {
 		block.setIgnored(Zinc, () -> AllBlocks.ZINC_BLOCK);
 		block.setIgnored(Brass, () -> AllBlocks.BRASS_BLOCK);
 
+		crushedPurified.setIgnored(Gold, () -> AllItems.CRUSHED_GOLD);
+		crushedPurified.setIgnored(Copper, () -> AllItems.CRUSHED_COPPER);
+		crushedPurified.setIgnored(Zinc, () -> AllItems.CRUSHED_ZINC);
+		crushedPurified.setIgnored(Silver, () -> AllItems.CRUSHED_SILVER);
+		crushedPurified.setIgnored(Tin, () -> AllItems.CRUSHED_TIN);
+		crushedPurified.setIgnored(Lead, () -> AllItems.CRUSHED_LEAD);
+
 		// Tool-only metals
 
 		var metalDict = new HashMap<Material, Metal.Default>();
