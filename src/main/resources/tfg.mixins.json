@@ -9,8 +9,6 @@
     "common.ae2.ConfigMenuInventoryMixin",
     "common.beneath.BurpingFlowerBlockMixin",
     "common.beneath.PortalUtilMixin",
-    "common.cc.JEIComputerCraftMixin",
-    "common.cc.ModRegistryMixin",
     "common.create.BasinBlockEntityMixin",
     "common.create.BasinCategoryMixin",
     "common.create.DepotBehaviorMixin",
