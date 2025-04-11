@@ -18,6 +18,8 @@
     "common.firmalife.SprinklerBlockEntityMixin",
     "common.firmalife.SprinklerItemMixin",
     "common.flywheel.AnimatedBlazeBurnerMixin",
+    "common.greate.TieredCrushingRecipeMixin",
+    "common.greate.TieredMillingRecipeMixin",
     "common.gtceu.FisherMachineMixin",
     "common.gtceu.GTRecipeTypesMixin",
     "common.gtceu.GTToolTypeMixin",
@@ -51,6 +53,7 @@
     "common.tfc.IIngotPileBlockEntityEntryAccessor",
     "common.tfc.IngotPileBlockMixin",
     "common.tfcambiental.TemperatureCapabilityMixin",
+    "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
     "common.vintageimprovements.VibratingRecipeMixin"
   ],

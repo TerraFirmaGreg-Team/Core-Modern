@@ -242,6 +242,8 @@ dependencies {
     // Create: Vintage Improvements
     compileOnly fg.deobf("maven.modrinth:create-vintage-improvements:1.20.1-0.2.0.3") { transitive = false }
 
+    compileOnly fg.deobf("maven.modrinth:greate:0.0.38") { transitive = false }
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.6"))
