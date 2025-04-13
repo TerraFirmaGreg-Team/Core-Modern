@@ -12,6 +12,6 @@ public class TieredCrushingRecipeMixin {
 	@Inject(method = "getMaxOutputCount", at = @At(value = "HEAD"), cancellable = true)
 	private void tfg$getMaxOutputCount(CallbackInfoReturnable<Integer> cir)
 	{
-		cir.setReturnValue(9);
+		cir.setReturnValue(6);
 	}
 }
