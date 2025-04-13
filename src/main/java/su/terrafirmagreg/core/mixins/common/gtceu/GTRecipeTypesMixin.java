@@ -29,10 +29,6 @@ public abstract class GTRecipeTypesMixin {
     private static void tfg$init(CallbackInfo ci) {
 
         // Добавляет новый слот под микросхему
-        CUTTER_RECIPES.setMaxIOSize(2, 2, 1, 0);
-        CUTTER_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
-
-        // Добавляет новый слот под микросхему
         LASER_ENGRAVER_RECIPES.setMaxIOSize(3, 1, 0, 0);
         LASER_ENGRAVER_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
 
@@ -42,7 +38,7 @@ public abstract class GTRecipeTypesMixin {
 
         ARC_FURNACE_RECIPES.setMaxIOSize(2, 9, 1, 0);
 
-        MACERATOR_RECIPES.setMaxIOSize(1, 9, 0, 0);
+        MACERATOR_RECIPES.setMaxIOSize(1, 6, 0, 0);
 
         CHEMICAL_BATH_RECIPES.setMaxIOSize(2, 6, 1, 1);
 
