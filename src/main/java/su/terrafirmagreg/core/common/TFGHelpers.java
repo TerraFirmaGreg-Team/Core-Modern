@@ -6,11 +6,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.mixins.common.tfc.IIngotPileBlockEntityEntryAccessor;
 
@@ -21,6 +19,11 @@ public final class TFGHelpers {
 
     public static final Random RANDOM = new Random();
 
+    public static boolean isMaterialRegistrationFinished;
+
+    /**
+     * Used in KubeJS!
+     */
     @Nullable
     public static Material getMaterial(@NotNull String materialName) {
         var material = GTCEuAPI.materialManager.getMaterial(materialName);

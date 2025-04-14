@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialIconType;
 
@@ -34,13 +35,13 @@ public final class TFGTagPrefix {
     public static final TagPrefix toolHeadJavelin;
     public static final TagPrefix toolHeadChisel;
     public static final TagPrefix toolHeadMace;
+    public static final TagPrefix toolHeadMattock;
 
     /* Other */
     public static final TagPrefix ingotDouble;
 
     public static final TagPrefix poorRawOre;
     public static final TagPrefix richRawOre;
-
     public static final TagPrefix oreSmall;
     public static final TagPrefix oreSmallNative;
 
@@ -245,10 +246,22 @@ public final class TFGTagPrefix {
                 .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
 
+        toolHeadMattock = new TagPrefix("mattockHead")
+                .defaultTagPath("mattock_heads/%s")
+                .unformattedTagPath("mattock_heads")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
+                .materialAmount(GTValues.M)
+                .maxStackSize(16)
+                .materialIconType(TFGMaterialIconType.toolHeadMattock)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+
         /* Other */
         ingotDouble = new TagPrefix("doubleIngot")
                 .defaultTagPath("double_ingots/%s")
                 .unformattedTagPath("double_ingots")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .materialIconType(MaterialIconType.ingotDouble)
                 .unificationEnabled(true)
@@ -258,6 +271,7 @@ public final class TFGTagPrefix {
         poorRawOre = new TagPrefix("poor_raw", true)
                 .idPattern("poor_raw_%s")
                 .defaultTagPath("poor_raw_materials/%s")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .unformattedTagPath("poor_raw_materials")
                 .materialIconType(TFGMaterialIconType.poorRawOre)
                 .unificationEnabled(true)
@@ -267,6 +281,7 @@ public final class TFGTagPrefix {
         richRawOre = new TagPrefix("rich_raw", true)
                 .idPattern("rich_raw_%s")
                 .defaultTagPath("rich_raw_materials/%s")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .unformattedTagPath("rich_raw_materials")
                 .materialIconType(TFGMaterialIconType.richRawOre)
                 .unificationEnabled(true)

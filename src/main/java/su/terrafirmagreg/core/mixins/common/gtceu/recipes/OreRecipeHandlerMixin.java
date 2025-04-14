@@ -67,18 +67,6 @@ public abstract class OreRecipeHandlerMixin {
     }
 
     /**
-     * Исправление бага GTCEu.
-     * Если засунуть в for использование этого метода,
-     * то будет куча дубликатов рецептов из-за неверной работы .inputItems(TagPrefix, Material).
-     * */
-    @Redirect(method = "processOreForgeHammer", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/recipe/GTRecipeType;recipeBuilder(Ljava/lang/String;[Ljava/lang/Object;)Lcom/gregtechceu/gtceu/data/recipe/builder/GTRecipeBuilder;"), remap = false)
-    private static GTRecipeBuilder tfg$processOreForgeHammer(GTRecipeType instance, String id, Object[] append, TagPrefix orePrefix, Material material) {
-        return instance.recipeBuilder(TFGCore.id(id))
-                .inputItems(ChemicalHelper.get(orePrefix, material));
-
-    }
-
-    /**
      * Метод переработки бедных кусков, в основном скопирован с processRawOre, но с некоторыми изменениями.
      * */
     @Unique

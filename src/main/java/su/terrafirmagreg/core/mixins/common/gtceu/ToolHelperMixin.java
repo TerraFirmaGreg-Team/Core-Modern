@@ -38,9 +38,11 @@ public abstract class ToolHelperMixin {
         }
     }
 
-    /*
-        Changed the order of blocks broken from random to top to bottom
-        Very specific things needed to be changed for this functions that are not able to be changes using mixins, therefore overwriting the entire thing is easier
+    /**
+     * @author @jojo7682345
+     * @reason Changed the order of blocks broken from random to top to bottom
+     * Very specific things needed to be changed for this functions that are not able to be changes using mixins,
+     * therefore overwriting the entire thing is easier
      */
     @Overwrite
     public static Set<BlockPos> iterateAoE(ItemStack stack, AoESymmetrical aoeDefinition, Level world,
