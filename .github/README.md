@@ -29,3 +29,7 @@
 ## Development
 
 Interested in contributing? For detailed setup instructions, coding standards, and guidelines, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+![Image Readme](https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/image_readme.png?raw=true)
