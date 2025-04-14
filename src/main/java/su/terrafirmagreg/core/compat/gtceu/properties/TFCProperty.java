@@ -8,7 +8,7 @@ import lombok.Getter;
 import javax.annotation.Nullable;
 
 @Getter
-public final class TFCProperty implements IMaterialProperty<TFCProperty> {
+public final class TFCProperty implements IMaterialProperty {
 
     private int forgingTemp;
     private int weldingTemp;

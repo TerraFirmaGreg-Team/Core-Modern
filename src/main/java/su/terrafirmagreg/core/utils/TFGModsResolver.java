@@ -2,7 +2,7 @@ package su.terrafirmagreg.core.utils;
 
 import net.minecraftforge.fml.ModList;
 
-public enum Mods {
+public enum TFGModsResolver {
     AE2("ae2"),
     ASTIKOR_CARTS("astikorcarts"),
     STEAM_AND_RAILS("railways"),
@@ -15,7 +15,7 @@ public enum Mods {
     private final String name;
     private Boolean modLoaded;
 
-    Mods(String name) {
+    TFGModsResolver(String name) {
         this.name = name;
     }
 

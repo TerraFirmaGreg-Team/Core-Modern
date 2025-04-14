@@ -193,7 +193,7 @@ dependencies {
 
     // GTM
     implementation fg.deobf("maven.modrinth:ldlib:mc1.20.1-1.0.27.b-forge")
-    implementation fg.deobf("curse.maven:gregtechceu-modern-890405:5713445-sources-5713449") { transitive = false }
+    implementation fg.deobf("curse.maven:gregtechceu-modern-890405:6081505-sources-6081509") { transitive = false }
 
     // KJS
     implementation fg.deobf("maven.modrinth:rhino:2001.2.2-build.18+forge")

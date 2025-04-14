@@ -12,7 +12,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.compat.create.CreateCompat;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
-import su.terrafirmagreg.core.utils.Mods;
+import su.terrafirmagreg.core.utils.TFGModsResolver;
 
 public final class TFGCommonEventHandler {
 
@@ -40,8 +40,8 @@ public final class TFGCommonEventHandler {
 
     private static void onCommonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            if (TFGConfig.enableTFCAmbientalCompat && Mods.TFC_AMBIENTAL.isLoaded()) TFCAmbientalCompat.register();
-            if (TFGConfig.enableCreateCompat && Mods.CREATE.isLoaded()) CreateCompat.register();
+            if (TFGConfig.enableTFCAmbientalCompat && TFGModsResolver.TFC_AMBIENTAL.isLoaded()) TFCAmbientalCompat.register();
+            if (TFGConfig.enableCreateCompat && TFGModsResolver.CREATE.isLoaded()) CreateCompat.register();
         });
     }
 }

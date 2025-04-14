@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 import su.terrafirmagreg.core.compat.gtceu.properties.TFCProperty;
-import su.terrafirmagreg.core.utils.Mods;
+import su.terrafirmagreg.core.utils.TFGModsResolver;
 
 import java.util.Arrays;
 
@@ -458,7 +458,7 @@ public final class TFGMaterialHandler {
         }
 
         /* AE 2 */
-        if (Mods.AE2.isLoaded()) {
+        if (TFGModsResolver.AE2.isLoaded()) {
             block.setIgnored(Fluix, () -> AEBlocks.FLUIX_BLOCK);
             dust.setIgnored(Fluix, () -> AEItems.FLUIX_DUST);
             gem.setIgnored(Fluix, () -> AEItems.FLUIX_CRYSTAL);

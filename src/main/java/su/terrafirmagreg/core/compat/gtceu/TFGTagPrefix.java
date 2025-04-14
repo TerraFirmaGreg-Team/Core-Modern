@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.data.tag.TagUtil;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.data.GTMaterialItems;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -70,8 +71,6 @@ public final class TFGTagPrefix {
     public static final TagPrefix toolHeadJavelin;
     public static final TagPrefix toolHeadChisel;
     public static final TagPrefix toolHeadMace;
-
-
 
     /* Other */
     public static final TagPrefix ingotDouble;
@@ -139,7 +138,7 @@ public final class TFGTagPrefix {
 
         /* Tool Heads */
         toolHeadSword = new TagPrefix("swordHead")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .defaultTagPath("sword_heads/%s")
                 .unformattedTagPath("sword_heads")
                 .materialAmount(GTValues.M * 2)
@@ -152,7 +151,7 @@ public final class TFGTagPrefix {
         toolHeadPickaxe = new TagPrefix("pickaxeHead")
                 .defaultTagPath("pickaxe_heads/%s")
                 .unformattedTagPath("pickaxe_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(MaterialIconType.toolHeadPickaxe)
@@ -163,7 +162,7 @@ public final class TFGTagPrefix {
         toolHeadShovel = new TagPrefix("shovelHead")
                 .defaultTagPath("shovel_heads/%s")
                 .unformattedTagPath("shovel_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(MaterialIconType.toolHeadShovel)
@@ -174,7 +173,7 @@ public final class TFGTagPrefix {
         toolHeadAxe = new TagPrefix("axeHead")
                 .defaultTagPath("axe_heads/%s")
                 .unformattedTagPath("axe_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(MaterialIconType.toolHeadAxe)
@@ -185,7 +184,7 @@ public final class TFGTagPrefix {
         toolHeadHoe = new TagPrefix("hoeHead")
                 .defaultTagPath("hoe_heads/%s")
                 .unformattedTagPath("hoe_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(MaterialIconType.toolHeadHoe)
@@ -196,7 +195,7 @@ public final class TFGTagPrefix {
         toolHeadScythe = new TagPrefix("scytheHead")
                 .defaultTagPath("scythe_heads/%s")
                 .unformattedTagPath("scythe_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(MaterialIconType.toolHeadScythe)
@@ -207,7 +206,7 @@ public final class TFGTagPrefix {
         toolHeadFile = new TagPrefix("fileHead")
                 .defaultTagPath("file_heads/%s")
                 .unformattedTagPath("file_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(MaterialIconType.toolHeadFile)
@@ -218,7 +217,7 @@ public final class TFGTagPrefix {
         toolHeadHammer = new TagPrefix("hammerHead")
                 .defaultTagPath("hammer_heads/%s")
                 .unformattedTagPath("hammer_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(MaterialIconType.toolHeadHammer)
@@ -229,7 +228,7 @@ public final class TFGTagPrefix {
         toolHeadSaw = new TagPrefix("sawHead")
                 .defaultTagPath("saw_heads/%s")
                 .unformattedTagPath("saw_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(MaterialIconType.toolHeadSaw)
@@ -240,7 +239,7 @@ public final class TFGTagPrefix {
         toolHeadKnife = new TagPrefix("knifeHead")
                 .defaultTagPath("knife_heads/%s")
                 .unformattedTagPath("knife_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadKnife)
@@ -251,7 +250,7 @@ public final class TFGTagPrefix {
         toolHeadButcheryKnife = new TagPrefix("butcheryKnifeHead")
                 .defaultTagPath("butchery_knife_heads/%s")
                 .unformattedTagPath("butchery_knife_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M * 2)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadButcheryKnife)
@@ -262,7 +261,7 @@ public final class TFGTagPrefix {
         toolHeadMiningHammer = new TagPrefix("miningHammerHead")
                 .defaultTagPath("mining_hammer_heads/%s")
                 .unformattedTagPath("mining_hammer_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M * 2)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadMiningHammer)
@@ -273,7 +272,7 @@ public final class TFGTagPrefix {
         toolHeadSpade = new TagPrefix("spadeHead")
                 .defaultTagPath("spade_heads/%s")
                 .unformattedTagPath("spade_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M * 2)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadSpade)
@@ -284,7 +283,7 @@ public final class TFGTagPrefix {
         toolHeadPropick = new TagPrefix("propickHead")
                 .defaultTagPath("propick_heads/%s")
                 .unformattedTagPath("propick_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadPropick)
@@ -295,7 +294,7 @@ public final class TFGTagPrefix {
         toolHeadJavelin = new TagPrefix("javelinHead")
                 .defaultTagPath("javelin_heads/%s")
                 .unformattedTagPath("javelin_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadJavelin)
@@ -306,7 +305,7 @@ public final class TFGTagPrefix {
         toolHeadChisel = new TagPrefix("chiselHead")
                 .defaultTagPath("chisel_heads/%s")
                 .unformattedTagPath("chisel_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadChisel)
@@ -317,7 +316,7 @@ public final class TFGTagPrefix {
         toolHeadMace = new TagPrefix("maceHead")
                 .defaultTagPath("mace_heads/%s")
                 .unformattedTagPath("mace_heads")
-                .itemTable(() -> GTItems.MATERIAL_ITEMS)
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .materialAmount(GTValues.M * 2)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadMace)
