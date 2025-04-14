@@ -1,4 +1,21 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
+
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
+
+import net.minecraft.world.item.ItemStack;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
+import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
+
 import com.gregtechceu.gtceu.api.machine.trait.ICapabilityTrait;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;

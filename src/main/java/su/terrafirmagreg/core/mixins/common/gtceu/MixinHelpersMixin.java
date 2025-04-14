@@ -30,7 +30,14 @@ import su.terrafirmagreg.core.mixins.common.minecraft.IBlockLootSubProviderAcces
 @Mixin(value = MixinHelpers.class, remap = false)
 public abstract class MixinHelpersMixin {
 
-    @Redirect(method = "lambda$generateGTDynamicLoot$25", at = @At(value = "INVOKE", target = "Lnet/minecraft/data/loot/BlockLootSubProvider;createSilkTouchDispatchTable(Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;)Lnet/minecraft/world/level/storage/loot/LootTable$Builder;"), remap = true)
+    @Redirect(
+        method = "lambda$generateGTDynamicLoot$25",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/data/loot/BlockLootSubProvider;createSilkTouchDispatchTable(Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;)Lnet/minecraft/world/level/storage/loot/LootTable$Builder;"
+        ),
+        remap = true
+    )
     private static LootTable.Builder tfg$lambda$generateGTDynamicLoot$25(Block pBlock, LootPoolEntryContainer.Builder<?> pBuilder, @Local int oreMultiplier, @Local Block block, @Local(argsOnly = true) Material material, @Local(argsOnly = true) TagPrefix.OreType type) {
 
         var crushedOre = ChemicalHelper.get(TagPrefix.crushed, material);
@@ -48,55 +55,54 @@ public abstract class MixinHelpersMixin {
         if (richDropStack.isEmpty()) richDropStack = ChemicalHelper.get(TagPrefix.dust, material);
 
         return LootTable.lootTable().withPool(
-                LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1.0F))
-                        .add(
-                                AlternativesEntry.alternatives(
-                                        LootItem.lootTableItem(block)
-                                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0F)))
-                                                .when(IBlockLootSubProviderAccessor.getHasNoSilkTouchCondition().invert())
-                                )
-                                .otherwise(
-                                        AlternativesEntry.alternatives(
-                                                EntryGroup.list(
-                                                        LootItem.lootTableItem(crushedOre.getItem())
-                                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, oreMultiplier)))
-                                                                .setWeight(80)
-                                                                .apply(ApplyExplosionDecay.explosionDecay()),
+            LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1.0F))
+                .add(
+                    AlternativesEntry.alternatives(
+                        LootItem.lootTableItem(block)
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0F)))
+                                .when(IBlockLootSubProviderAccessor.getHasNoSilkTouchCondition().invert())
+                    )
+                    .otherwise(
+                        AlternativesEntry.alternatives(
+                            EntryGroup.list(
+                                LootItem.lootTableItem(crushedOre.getItem())
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, oreMultiplier)))
+                                        .setWeight(80)
+                                        .apply(ApplyExplosionDecay.explosionDecay()),
 
-                                                        LootItem.lootTableItem(crushedOre.getItem())
-                                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2, oreMultiplier * 2)))
-                                                                .setWeight(20)
-                                                                .apply(ApplyExplosionDecay.explosionDecay())
-                                                )
-                                            ).when(new LootItemCondition.Builder() {
-                                                @NotNull
-                                                @Override
-                                                public LootItemCondition build() {
-                                                    return MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFGTags.Items.Hammers)).build();
-                                                }
-                                            })
-                                        )
-                                        .otherwise(
-                                                EntryGroup.list(
-                                                        LootItem.lootTableItem(poorDropStack.getItem())
-                                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, oreMultiplier)))
-                                                                .setWeight(20)
-                                                                .apply(ApplyExplosionDecay.explosionDecay()),
-
-                                                        LootItem.lootTableItem(normalDropStack.getItem())
-                                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, oreMultiplier)))
-                                                                .setWeight(60)
-                                                                .apply(ApplyExplosionDecay.explosionDecay()),
-
-                                                        LootItem.lootTableItem(richDropStack.getItem())
-                                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, oreMultiplier)))
-                                                                .setWeight(20)
-                                                                .apply(ApplyExplosionDecay.explosionDecay())
-                                                )
-                                        )
+                                LootItem.lootTableItem(crushedOre.getItem())
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(2, oreMultiplier * 2)))
+                                        .setWeight(20)
+                                        .apply(ApplyExplosionDecay.explosionDecay())
+                            )
+                            ).when(new LootItemCondition.Builder() {
+                                @NotNull
+                                @Override
+                                public LootItemCondition build() {
+                                    return MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFGTags.Items.Hammers)).build();
+                                }
+                            })
                         )
+                        .otherwise(
+                            EntryGroup.list(
+                                LootItem.lootTableItem(poorDropStack.getItem())
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, oreMultiplier)))
+                                        .setWeight(20)
+                                        .apply(ApplyExplosionDecay.explosionDecay()),
+
+                                LootItem.lootTableItem(normalDropStack.getItem())
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, oreMultiplier)))
+                                        .setWeight(60)
+                                        .apply(ApplyExplosionDecay.explosionDecay()),
+
+                                LootItem.lootTableItem(richDropStack.getItem())
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, oreMultiplier)))
+                                        .setWeight(20)
+                                        .apply(ApplyExplosionDecay.explosionDecay())
+                            )
+                        )
+                )
         );
     }
-
 }
