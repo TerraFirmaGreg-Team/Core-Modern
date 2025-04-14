@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.OreProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.common.data.GTRecipeCategories;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
@@ -20,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.terrafirmagreg.core.TFGCore;
 
 import java.util.function.Consumer;
 
@@ -65,18 +67,6 @@ public abstract class OreRecipeHandlerMixin {
     }
 
     /**
-     * Исправление бага GTCEu.
-     * Если засунуть в for использование этого метода,
-     * то будет куча дубликатов рецептов из-за неверной работы .inputItems(TagPrefix, Material).
-     * */
-    @Redirect(method = "processOreForgeHammer", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/recipe/GTRecipeType;recipeBuilder(Ljava/lang/String;[Ljava/lang/Object;)Lcom/gregtechceu/gtceu/data/recipe/builder/GTRecipeBuilder;"), remap = false)
-    private static GTRecipeBuilder tfg$processOreForgeHammer(GTRecipeType instance, String id, Object[] append, TagPrefix orePrefix, Material material) {
-        return instance.recipeBuilder(id)
-                .inputItems(ChemicalHelper.get(orePrefix, material))
-                .duration(10).EUt(16);
-    }
-
-    /**
      * Метод переработки бедных кусков, в основном скопирован с processRawOre, но с некоторыми изменениями.
      * */
     @Unique
@@ -98,6 +88,7 @@ public abstract class OreRecipeHandlerMixin {
         if (!crushedStack.isEmpty()) {
             GTRecipeBuilder builder = FORGE_HAMMER_RECIPES.recipeBuilder("hammer_" + orePrefix.name + "_" + material.getName() + "_to_crushed_ore")
                     .inputItems(orePrefix, material)
+                    .category(GTRecipeCategories.ORE_FORGING)
                     .duration(10).EUt(16);
             if (material.hasProperty(PropertyKey.GEM) && !gem.isIgnored(material)) {
                 builder.chancedOutput(GTUtil.copyAmount(amountOfCrushedOre, ChemicalHelper.get(gem, material, crushedStack.getCount())), 7500, 950);
@@ -112,6 +103,7 @@ public abstract class OreRecipeHandlerMixin {
                     .chancedOutput(crushedStack, 2500, 500)
                     .chancedOutput(crushedStack, 1250, 250)
                     .EUt(2)
+                    .category(GTRecipeCategories.ORE_CRUSHING)
                     .duration(400)
                     .save(provider);
         }
@@ -126,7 +118,7 @@ public abstract class OreRecipeHandlerMixin {
     }
 
     /**
-     * Метод переработки обычных кусков, в основном скопирован с processRawOre, но с некоторыми изменениями.
+     * Метод переработки бедных кусков, в основном скопирован с processRawOre, но с некоторыми изменениями.
      * */
     @Unique
     private static void tfg$processRawOre(TagPrefix orePrefix, Material material, OreProperty property, Consumer<FinishedRecipe> provider) {
@@ -147,6 +139,7 @@ public abstract class OreRecipeHandlerMixin {
         if (!crushedStack.isEmpty()) {
             GTRecipeBuilder builder = FORGE_HAMMER_RECIPES.recipeBuilder("hammer_" + orePrefix.name + "_" + material.getName() + "_to_crushed_ore")
                     .inputItems(orePrefix, material)
+                    .category(GTRecipeCategories.ORE_FORGING)
                     .duration(10).EUt(16);
             if (material.hasProperty(PropertyKey.GEM) && !gem.isIgnored(material)) {
                 builder.outputItems(GTUtil.copyAmount(amountOfCrushedOre, ChemicalHelper.get(gem, material, crushedStack.getCount())));
@@ -163,6 +156,7 @@ public abstract class OreRecipeHandlerMixin {
                     .chancedOutput(crushedStack.copyWithCount(1), 1250, 250)
                     .EUt(2)
                     .duration(400)
+                    .category(GTRecipeCategories.ORE_CRUSHING)
                     .save(provider);
         }
 
@@ -197,6 +191,7 @@ public abstract class OreRecipeHandlerMixin {
         if (!crushedStack.isEmpty()) {
             GTRecipeBuilder builder = FORGE_HAMMER_RECIPES.recipeBuilder("hammer_" + orePrefix.name + "_" + material.getName() + "_to_crushed_ore")
                     .inputItems(orePrefix, material)
+                    .category(GTRecipeCategories.ORE_FORGING)
                     .duration(10).EUt(16);
             if (material.hasProperty(PropertyKey.GEM) && !gem.isIgnored(material)) {
                 builder.outputItems(GTUtil.copyAmount(amountOfCrushedOre, ChemicalHelper.get(gem, material, crushedStack.getCount())));
@@ -211,6 +206,7 @@ public abstract class OreRecipeHandlerMixin {
                     .chancedOutput(crushedStack.copyWithCount(1), 5000, 750)
                     .chancedOutput(crushedStack.copyWithCount(1), 2500, 500)
                     .chancedOutput(crushedStack.copyWithCount(1), 1250, 250)
+                    .category(GTRecipeCategories.ORE_CRUSHING)
                     .EUt(2)
                     .duration(400)
                     .save(provider);

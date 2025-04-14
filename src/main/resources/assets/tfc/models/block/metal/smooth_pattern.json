@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "tfc:block/metal/smooth_pattern"
-    }
-}
