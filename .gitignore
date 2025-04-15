@@ -41,3 +41,5 @@ libs
 
 *.jar
 
+run
+.vs
