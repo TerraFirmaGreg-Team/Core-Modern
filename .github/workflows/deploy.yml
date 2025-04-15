@@ -1,78 +1,89 @@
 name: Deploy
-run-name: "Deploy #${{ github.run_number }} by @${{ github.actor }}"
-
-env:
-  RELEASE_TYPE: "release"
-
+run-name: "Project Build #${{ github.run_number }}"
 on:
   push:
     branches:
       - main
 
 concurrency:
-  group: ${{ github.ref }}
+  group: ${{ github.workflow }}
   cancel-in-progress: true
+
+env:
+  RELEASE_TYPE: "release"
+  MINECRAFT_VERSION: "1.20.1"
+  JAVA_VERSION: "1.20.1"
 
 jobs:
   info:
-    name: Project Info
+    name: 🖥️ Project Info
     runs-on: ubuntu-latest
     outputs:
-      mod_version: ${{ steps.mod_version.outputs.value }}
-      mod_name: ${{ steps.mod_name.outputs.value }}
-      minecraft_version: ${{ steps.minecraft_version.outputs.value }}
+      project_version: ${{ steps.project_version.outputs.value }}
+      project_name: ${{ steps.project_name.outputs.value }}
+      project_full_name: ${{ steps.project_name.outputs.value }}-${{ steps.project_name_suffix.outputs.value }}
+      release_type: ${{ env.RELEASE_TYPE }}
+      minecraft_version: ${{ env.MINECRAFT_VERSION }}
+      java_version: ${{ env.JAVA_VERSION }}
       exists: ${{ steps.check_tag.outputs.exists }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
 
-      - name: Get mod name
-        id: mod_name
+      - name: 📈 Get mod name
+        id: project_name
         uses: dschanoeh/get-property@v1.2.0
         with:
           file: gradle.properties
           property: mod_name
 
-      - name: Get mod version
-        id: mod_version
+      - name: 📈 Get mod suffix
+        id: project_name_suffix
+        uses: dschanoeh/get-property@v1.2.0
+        with:
+          file: gradle.properties
+          property: mod_name_suffix
+
+      - name: 📈 Get mod version
+        id: project_version
         uses: dschanoeh/get-property@v1.2.0
         with:
           file: gradle.properties
           property: mod_version
 
-      - name: Get minecraft version
+      - name: 📈 Get minecraft version
         id: minecraft_version
         uses: dschanoeh/get-property@v1.2.0
         with:
           file: gradle.properties
           property: minecraft_version
 
-      - name: Check if tag exists
+      - name: 🔍 Check if tag exists
         uses: mukunku/tag-exists-action@v1.6.0
         id: check_tag
         with:
-          tag: ${{ steps.mod_version.outputs.value }}
+          tag: ${{ steps.project_version.outputs.value }}
 
 
   build:
-    name: Project Build
+    name: 📦 Project Build
     needs: [info]
     runs-on: ubuntu-latest
     if: needs.info.outputs.exists != 'true'
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4.2.2
 
-      - name: Set up JDK 17
+      - name: 📁 Set up JDK
         uses: actions/setup-java@v4.7.1
         with:
-          java-version: '17'
+          java-version: ${{ needs.info.outputs.java_version }}
           distribution: 'adopt'
           cache: 'gradle'
 
-      - name: Setup Gradle
+      - name: 📁 Setup Gradle
         uses: gradle/gradle-build-action@v3.5.0
         with:
           cache-write-only: false
@@ -83,24 +94,24 @@ jobs:
             jdks
             wrapper
 
-      - name: Validate Gradle wrapper
+      - name: 🔄 Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v3.5.0
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build
+      - name: 📦 Build
         uses: gradle/gradle-build-action@v3.5.0
         with:
           arguments: build
 
-      - name: Upload jar
+      - name: 🚀 Upload jar
         id: upload_file
         uses: actions/upload-artifact@v4.6.2
         with:
-          path: build/libs/${{ needs.info.outputs.mod_name }}-${{ needs.info.outputs.mod_version }}.jar
+          path: build/libs/${{ needs.info.outputs.project_full_name }}-${{ needs.info.outputs.project_version }}.jar
 
-      - name: Release
+      - name: 🚀 Release
         uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           modrinth-id: ${{ vars.MODRINTH_ID }}
@@ -115,22 +126,22 @@ jobs:
             gregtechceu-modern(required)
             terrafirmacraft(required)
 
-          github-tag: ${{ needs.info.outputs.mod_version }}
+          github-tag: ${{ needs.info.outputs.project_version }}
           github-generate-changelog: true
           github-draft: false
           github-prerelease: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-          files: build/libs/${{ needs.info.outputs.mod_name }}-${{ needs.info.outputs.mod_version }}.jar
+          files: build/libs/${{ needs.info.outputs.project_full_name }}-${{ needs.info.outputs.project_version }}.jar
 
-          name: "${{ needs.info.outputs.mod_name }}-${{ needs.info.outputs.mod_version }}"
-          version: ${{ needs.info.outputs.mod_version }}
+          name: "${{ needs.info.outputs.project_full_name }}-${{ needs.info.outputs.project_version }}"
+          version: ${{ needs.info.outputs.project_version }}
           version-type: ${{ env.RELEASE_TYPE }}
 
           loaders: forge
           game-versions: ${{ needs.info.outputs.minecraft_version }}
           game-version-filter: none
-          java: 17
+          java: ${{ needs.info.outputs.java_version }}
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail

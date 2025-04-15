@@ -24,8 +24,9 @@ import su.terrafirmagreg.core.common.data.TFGItems;
 
 @Mod(TFGCore.MOD_ID)
 public final class TFGCore {
+
     public static final String MOD_ID = "tfg";
-    public static final String NAME = "TFG-Core-Modern";
+    public static final String NAME = "TerraFirmaGreg-Core";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
 
     public static final GTRegistrate REGISTRATE = GTRegistrate.create(TFGCore.MOD_ID);

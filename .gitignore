@@ -1,25 +1,43 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
+### Package Files ###
+*.war
+*.ear
+*.txt
 
-# idea
-out
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+### Java ###
+
+*.class
+
+### Windows ###
+
+thumbs.db
+*.db
+
+### Intellij IDEA ###
+
+*.iml
 *.ipr
 *.iws
-*.iml
-!.idea/icon.svg
-.idea
 
-# gradle
+.idea
+.idea_modules
+!.idea/icon.svg
+classes
+out
 build
 .gradle
 
+### VS Code ###
+.vs
+
+
 # other
-eclipse
-runs
 run
-.vs/
+runs
+libs
+
+
+*.jar
+
