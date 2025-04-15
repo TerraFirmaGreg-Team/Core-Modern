@@ -12,7 +12,7 @@ concurrency:
 env:
   RELEASE_TYPE: "release"
   MINECRAFT_VERSION: "1.20.1"
-  JAVA_VERSION: "1.20.1"
+  JAVA_VERSION: "17"
 
 jobs:
   info:
@@ -97,7 +97,7 @@ jobs:
       - name: 🔄 Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v3.5.0
 
-      - name: Grant execute permission for gradlew
+      - name: 🔄 Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: 📦 Build
