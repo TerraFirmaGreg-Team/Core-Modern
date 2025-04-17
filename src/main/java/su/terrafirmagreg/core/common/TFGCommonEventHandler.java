@@ -22,6 +22,7 @@ public final class TFGCommonEventHandler {
         bus.addListener(TFGCommonEventHandler::onCommonSetup);
         bus.addListener(TFGCommonEventHandler::onRegisterMaterialRegistry);
         bus.addListener(TFGCommonEventHandler::onPostRegisterMaterials);
+        bus.addListener(TFGInteractionManager::init);
     }
 
     private static void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
@@ -29,13 +30,16 @@ public final class TFGCommonEventHandler {
     }
 
     private static void onPostRegisterMaterials(final PostMaterialEvent event) {
-        //TFGMaterialHandler.postInit();
+        TFGHelpers.isMaterialRegistrationFinished = true;
+        TFGMaterialHandler.postInit();
     }
 
     private static void onCommonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            if (TFGConfig.enableTFCAmbientalCompat && TFGModsResolver.TFC_AMBIENTAL.isLoaded()) TFCAmbientalCompat.register();
-            if (TFGConfig.enableCreateCompat && TFGModsResolver.CREATE.isLoaded()) CreateCompat.register();
+            if (TFGConfig.enableTFCAmbientalCompat && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
+                TFCAmbientalCompat.register();
+            if (TFGConfig.enableCreateCompat && TFGModsResolver.CREATE.isLoaded())
+                CreateCompat.register();
         });
     }
 }

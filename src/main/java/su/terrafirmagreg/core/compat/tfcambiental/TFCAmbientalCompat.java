@@ -4,13 +4,16 @@ import com.eerussianguy.firmalife.common.blocks.OvenBottomBlock;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.lumintorious.tfcambiental.api.AmbientalRegistry;
 import com.lumintorious.tfcambiental.modifier.TempModifier;
+import com.simibubi.create.AllItems;
 import net.dries007.tfc.common.blocks.SeaIceBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.AqueductBlock;
 import net.dries007.tfc.common.blocks.rock.Rock;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.material.Fluids;
@@ -19,6 +22,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public final class TFCAmbientalCompat {
+
+    public static final float HEATPROOF = -9f;
+    public static final float FULLY_INSULATED = -10f;
 
     public static void register() {
         /* Блоки магмы */
@@ -116,6 +122,40 @@ public final class TFCAmbientalCompat {
         AmbientalRegistry.BLOCKS.register((player, blockPos, state) -> Optional.of(new TempModifier("ice_block", -6.0F, 1.0F)).filter((mod) -> state.getBlock() instanceof IceBlock));
         AmbientalRegistry.BLOCKS.register((player, blockPos, state) -> Optional.of(new TempModifier("sea_ice", -6.0F, 1.0F)).filter((mod) -> state.getBlock() instanceof SeaIceBlock));
         AmbientalRegistry.BLOCKS.register((player, blockPos, state) -> Optional.of(new TempModifier("firmalife_oven", 6.0F, 1.0F)).filter((mod) -> state.getBlock() instanceof OvenBottomBlock && state.getValue(OvenBottomBlock.LIT)));
+
+        // Equipment
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("copper_diving_equipment", -1f, 0.1f)).filter((mod) -> {
+            var item = stack.getItem();
+            return (item == AllItems.COPPER_DIVING_HELMET.asItem()
+                || item == AllItems.COPPER_DIVING_BOOTS.asItem()
+                || item == AllItems.COPPER_BACKTANK.asItem());
+        }));
+
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("blue_steel_diving_equipment", -3f, HEATPROOF)).filter((mod) -> {
+            var item = stack.getItem();
+            return (item == AllItems.NETHERITE_DIVING_HELMET.asItem()
+                || item == AllItems.NETHERITE_DIVING_BOOTS.asItem()
+                || item == AllItems.NETHERITE_BACKTANK.asItem()
+                || item == Items.NETHERITE_LEGGINGS.asItem());
+        }));
+
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("nanomuscle_armor", -0.5f, FULLY_INSULATED)).filter((mod) -> {
+            var item = stack.getItem();
+            return (item == GTItems.NANO_HELMET.asItem()
+                || item == GTItems.NANO_CHESTPLATE.asItem()
+                || item == GTItems.NANO_LEGGINGS.asItem()
+                || item == GTItems.NANO_BOOTS.asItem()
+                || item == GTItems.NANO_CHESTPLATE_ADVANCED.asItem());
+        }));
+
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("quarktech_armor", -0.5f, FULLY_INSULATED)).filter((mod) -> {
+            var item = stack.getItem();
+            return (item == GTItems.QUANTUM_HELMET.asItem()
+                || item == GTItems.QUANTUM_CHESTPLATE.asItem()
+                || item == GTItems.QUANTUM_LEGGINGS.asItem()
+                || item == GTItems.QUANTUM_BOOTS.asItem()
+                || item == GTItems.QUANTUM_CHESTPLATE_ADVANCED.asItem());
+        }));
     }
 
 }

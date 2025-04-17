@@ -2,9 +2,11 @@ package su.terrafirmagreg.core.compat.gtceu.materials;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
+import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.eerussianguy.firmalife.FirmaLife;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLItems;
+import com.eerussianguy.firmalife.common.util.FLMetal;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlag;
@@ -12,6 +14,12 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.OreProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
+import com.negodya1.vintageimprovements.VintageBlocks;
+import com.negodya1.vintageimprovements.VintageImprovements;
+import com.negodya1.vintageimprovements.VintageItems;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
+import com.therighthon.rnr.common.item.RNRItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.blocks.rock.Rock;
@@ -22,6 +30,9 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 import su.terrafirmagreg.core.compat.gtceu.properties.TFCProperty;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
+import com.therighthon.rnr.common.recipe.MattockRecipe;
+import com.therighthon.rnr.RoadsAndRoofs;
+import com.therighthon.rnr.common.RNRTags;
 
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -47,6 +58,54 @@ public final class TFGMaterialHandler {
 		bell.setIgnored(Brass, TFCBlocks.BRASS_BELL);
 		bell.setIgnored(Bronze, TFCBlocks.BRONZE_BELL);
 
+		bolt.setIgnored(Copper, FirmacivItems.COPPER_BOLT);
+
+		ingot.setIgnored(Zinc, () -> AllItems.ZINC_INGOT);
+		ingot.setIgnored(Brass, () -> AllItems.BRASS_INGOT);
+		ingot.setIgnored(Vanadium, VintageImprovements.VANADIUM_INGOT);
+		ingot.setIgnored(BlackSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLACK_STEEL).get(Metal.ItemType.INGOT).get());
+		ingot.setIgnored(RedSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.RED_STEEL).get(Metal.ItemType.INGOT).get());
+		ingot.setIgnored(BlueSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLUE_STEEL).get(Metal.ItemType.INGOT).get());
+
+		ingotDouble.setIgnored(Iron, () -> TFCItems.METAL_ITEMS.get(Metal.Default.CAST_IRON).get(Metal.ItemType.DOUBLE_INGOT).get());
+		ingotDouble.setIgnored(BlackSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLACK_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
+		ingotDouble.setIgnored(RedSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.RED_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
+		ingotDouble.setIgnored(BlueSteel, () -> TFCItems.METAL_ITEMS.get(Metal.Default.BLUE_STEEL).get(Metal.ItemType.DOUBLE_INGOT).get());
+
+		nugget.setIgnored(Zinc, () -> AllItems.ZINC_NUGGET);
+		nugget.setIgnored(Copper, () -> AllItems.COPPER_NUGGET);
+		nugget.setIgnored(Brass, () -> AllItems.BRASS_NUGGET);
+		nugget.setIgnored(Vanadium, VintageImprovements.VANADIUM_NUGGET);
+
+		plate.setIgnored(Copper, () -> AllItems.COPPER_SHEET);
+		plate.setIgnored(Brass, () -> AllItems.BRASS_SHEET);
+		plate.setIgnored(Gold, () -> AllItems.GOLDEN_SHEET);
+		plate.setIgnored(Iron, () -> VintageItems.CAST_IRON_SHEET);
+		plate.setIgnored(Cobalt, () -> VintageItems.COBALT_SHEET);
+		plate.setIgnored(RoseGold, () -> VintageItems.ROSE_GOLD_SHEET);
+		plate.setIgnored(Aluminium, () -> VintageItems.ALUMINUM_SHEET);
+		plate.setIgnored(Invar, () -> VintageItems.INVAR_SHEET);
+		plate.setIgnored(Lead, () -> VintageItems.LEAD_SHEET);
+		plate.setIgnored(Nickel, () -> VintageItems.NICKEL_SHEET);
+		plate.setIgnored(Osmium, () -> VintageItems.OSMIUM_SHEET);
+		plate.setIgnored(Palladium, () -> VintageItems.PALLADIUM_SHEET);
+		plate.setIgnored(Platinum, () -> VintageItems.PLATINUM_SHEET);
+		plate.setIgnored(Rhodium, () -> VintageItems.RHODIUM_SHEET);
+		plate.setIgnored(Silver, () -> VintageItems.SILVER_SHEET);
+		plate.setIgnored(Vanadium, VintageImprovements.VANADIUM_SHEET);
+		plate.setIgnored(Zinc, VintageImprovements.ZINC_SHEET);
+
+		block.setIgnored(Vanadium, () -> VintageBlocks.VANADIUM_BLOCK);
+		block.setIgnored(Zinc, () -> AllBlocks.ZINC_BLOCK);
+		block.setIgnored(Brass, () -> AllBlocks.BRASS_BLOCK);
+
+		crushedPurified.setIgnored(Gold, () -> AllItems.CRUSHED_GOLD);
+		crushedPurified.setIgnored(Copper, () -> AllItems.CRUSHED_COPPER);
+		crushedPurified.setIgnored(Zinc, () -> AllItems.CRUSHED_ZINC);
+		crushedPurified.setIgnored(Silver, () -> AllItems.CRUSHED_SILVER);
+		crushedPurified.setIgnored(Tin, () -> AllItems.CRUSHED_TIN);
+		crushedPurified.setIgnored(Lead, () -> AllItems.CRUSHED_LEAD);
+
 		// Tool-only metals
 
 		var metalDict = new HashMap<Material, Metal.Default>();
@@ -68,6 +127,8 @@ public final class TFGMaterialHandler {
 			toolHeadMace.setIgnored(material, () -> metalItems.get(Metal.ItemType.MACE_HEAD).get());
 			lampUnfinished.setIgnored(material, () -> metalItems.get(Metal.ItemType.UNFINISHED_LAMP).get());
 
+			toolHeadMattock.setIgnored(material, () -> RNRItems.MATTOCK_HEADS.get(metalType).get());
+
 			var metalBlocks = TFCBlocks.METALS.get(metalType);
 			lamp.setIgnored(material, () -> metalBlocks.get(Metal.BlockType.LAMP).get());
 			anvil.setIgnored(material, () -> metalBlocks.get(Metal.BlockType.ANVIL).get());
@@ -87,12 +148,21 @@ public final class TFGMaterialHandler {
 		metalDict.put(SterlingSilver, Metal.Default.STERLING_SILVER);
 		metalDict.put(Bismuth, Metal.Default.BISMUTH);
 		metalDict.put(Zinc, Metal.Default.ZINC);
+		metalDict.put(Iron, Metal.Default.CAST_IRON);
 
 		metalDict.forEach((material, metalType) -> {
 			blockPlated.setIgnored(material, () -> TFCBlocks.METALS.get(metalType).get(Metal.BlockType.BLOCK).get());
 			stairPlated.setIgnored(material, () -> TFCBlocks.METALS.get(metalType).get(Metal.BlockType.BLOCK_STAIRS).get());
 			slabPlated.setIgnored(material, () -> TFCBlocks.METALS.get(metalType).get(Metal.BlockType.BLOCK_SLAB).get());
 		});
+
+		blockPlated.setIgnored(Chromium, () -> FLBlocks.METALS.get(FLMetal.CHROMIUM).get(Metal.BlockType.BLOCK).get());
+		stairPlated.setIgnored(Chromium, () -> FLBlocks.METALS.get(FLMetal.CHROMIUM).get(Metal.BlockType.BLOCK_STAIRS).get());
+		slabPlated.setIgnored(Chromium, () -> FLBlocks.METALS.get(FLMetal.CHROMIUM).get(Metal.BlockType.BLOCK_SLAB).get());
+
+		blockPlated.setIgnored(StainlessSteel, () -> FLBlocks.METALS.get(FLMetal.STAINLESS_STEEL).get(Metal.BlockType.BLOCK).get());
+		stairPlated.setIgnored(StainlessSteel, () -> FLBlocks.METALS.get(FLMetal.STAINLESS_STEEL).get(Metal.BlockType.BLOCK_STAIRS).get());
+		slabPlated.setIgnored(StainlessSteel, () -> FLBlocks.METALS.get(FLMetal.STAINLESS_STEEL).get(Metal.BlockType.BLOCK_SLAB).get());
 
 		// Use TFC ores when they have rich/normal/poor items already
 
