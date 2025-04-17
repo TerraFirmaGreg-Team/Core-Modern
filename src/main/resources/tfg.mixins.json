@@ -20,7 +20,6 @@
         "common.flywheel.AnimatedBlazeBurnerMixin",
         "common.gtceu.FisherMachineMixin",
         "common.gtceu.GTMachinesMixin",
-        "common.gtceu.GTOreVeinWidgetMixin",
         "common.gtceu.GTRecipeTypesMixin",
         "common.gtceu.GTToolTypeMixin",
         "common.gtceu.HoeGroundBehaviorMixin",
