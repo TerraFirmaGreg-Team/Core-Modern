@@ -37,7 +37,6 @@
     "common.gtceu.materials.MaterialPropertiesMixin",
     "common.gtceu.materials.SecondDegreeMixin",
     "common.gtceu.recipes.MaterialInfoLoaderMixin",
-    "common.gtceu.recipes.OreRecipeHandlerMixin",
     "common.ldlib.ItemTransferHelperImplMixin",
     "common.minecraft.EndDragonFightMixin",
     "common.minecraft.EndPodiumFeatureMixin",
