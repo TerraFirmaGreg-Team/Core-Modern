@@ -1,19 +1,10 @@
 package su.terrafirmagreg.core.compat.gtceu.materials;
 
-import appeng.core.definitions.AEBlocks;
-import appeng.core.definitions.AEItems;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
-import com.eerussianguy.firmalife.FirmaLife;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLItems;
 import com.eerussianguy.firmalife.common.util.FLMetal;
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlag;
-import com.gregtechceu.gtceu.api.data.chemical.material.properties.OreProperty;
-import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
-import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
-import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.negodya1.vintageimprovements.VintageBlocks;
 import com.negodya1.vintageimprovements.VintageImprovements;
 import com.negodya1.vintageimprovements.VintageItems;
@@ -22,29 +13,15 @@ import com.simibubi.create.AllItems;
 import com.therighthon.rnr.common.item.RNRItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
-import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.world.level.block.Blocks;
-import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
-import su.terrafirmagreg.core.compat.gtceu.properties.TFCProperty;
-import su.terrafirmagreg.core.utils.TFGModsResolver;
-import com.therighthon.rnr.common.recipe.MattockRecipe;
-import com.therighthon.rnr.RoadsAndRoofs;
-import com.therighthon.rnr.common.RNRTags;
 
-import java.util.Arrays;
-import java.util.Dictionary;
 import java.util.HashMap;
 
-import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.*;
-import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet.CERTUS;
-import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet.ROUGH;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix.*;
-import static su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags.*;
 
 public final class TFGMaterialHandler {
 
