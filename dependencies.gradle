@@ -92,9 +92,10 @@ dependencies {
     implementation fg.deobf("dev.emi:emi-forge:1.1.13+1.20.1")
 
     // Create
-    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-1.20.1:${flywheel_version}"))
-    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-1.20.1:${flywheel_version}"))
-    implementation fg.deobf("com.simibubi.create:create-1.20.1:${create_version}:slim") { transitive = false }
+    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"))
+    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"))
+    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
 
     // Create: Railways
     // TODO: Re-enable when mod updates to newest version
