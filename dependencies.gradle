@@ -6,6 +6,7 @@ repositories {
         url 'https://cursemaven.com'
         content {
             includeGroup "curse.maven"
+            excludeGroupByRegex("com\\.github.SSWTLZZ69.*")
         }
     }
     maven {
@@ -13,6 +14,7 @@ repositories {
         url 'https://api.modrinth.com/maven'
         content {
             includeGroup 'maven.modrinth'
+            excludeGroupByRegex("com\\.github.SSWTLZZ69.*")
         }
     }
     maven {
@@ -20,16 +22,41 @@ repositories {
         url "https://squiddev.cc/maven"
         content {
             includeGroup("cc.tweaked")
+            excludeGroupByRegex("com\\.github.SSWTLZZ69.*")
         }
     }
     maven {
         // location of the maven that hosts JEI files since January 2023
         name "Jared's maven"
         url "https://maven.blamejared.com"
+        content {
+            excludeGroupByRegex("com\\.github.SSWTLZZ69.*")
+        }
     }
     maven {
         name "Shedaniel maven"
         url "https://maven.shedaniel.me"
+        content {
+            excludeGroupByRegex("com\\.github.SSWTLZZ69.*")
+        }
+    }
+    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("dev.engine-room.flywheel")
+            excludeGroupByRegex("com\\.github.SSWTLZZ69.*")
+        }
+    }
+    //jitpack - needed for git releases
+    maven {
+        url "https://jitpack.io"
+        content {
+            includeGroup("com.github.SSWTLZZ69")
+        }
     }
     flatDir {
         dir 'libs'
@@ -65,17 +92,21 @@ dependencies {
     implementation fg.deobf("dev.emi:emi-forge:1.1.13+1.20.1")
 
     // Create
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-10")
-    implementation fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.f-27:all") { transitive = false }
+    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-1.20.1:${flywheel_version}"))
+    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-1.20.1:${flywheel_version}"))
+    implementation fg.deobf("com.simibubi.create:create-1.20.1:${create_version}:slim") { transitive = false }
 
     // Create: Railways
-    compileOnly fg.deobf("maven.modrinth:create-steam-n-rails:1.6.4+forge-mc1.20.1") { transitive = false }
+    // TODO: Re-enable when mod updates to newest version
+    // compileOnly fg.deobf("maven.modrinth:create-steam-n-rails:1.6.4+forge-mc1.20.1") { transitive = false }
 
     // Create: Vintage Improvements
-    implementation fg.deobf("maven.modrinth:create-vintage-improvements:1.20.1-0.2.0.3") { transitive = false }
+    // TODO: REPLACED with github fork for now
+    //implementation fg.deobf("maven.modrinth:create-vintage-improvements:1.20.1-0.2.0.3") { transitive = false }
+    implementation fg.deobf("com.github.SSWTLZZ69:Create-Vintage-Improvements:v0.3.1.0") { transitive = false }
 
     // Greate
-    compileOnly fg.deobf("maven.modrinth:greate:0.0.38") { transitive = false }
+    compileOnly fg.deobf("maven.modrinth:greate:0.0.39") { transitive = false }
 
     // GTM
     implementation fg.deobf("maven.modrinth:ldlib:mc1.20.1-1.0.31-forge")
