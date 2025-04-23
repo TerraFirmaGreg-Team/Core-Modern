@@ -67,7 +67,7 @@ repositories {
 dependencies {
 
 
-    implementation fg.deobf("maven.modrinth:embeddium:0.3.18+mc1.20.1")
+    implementation fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
     implementation fg.deobf("maven.modrinth:ferrite-core:DG5Fn9Sz")
     implementation fg.deobf("maven.modrinth:architectury-api:9.2.14+forge")
 
