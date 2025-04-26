@@ -83,8 +83,6 @@ public final class TFGMaterialHandler {
 		crushedPurified.setIgnored(Tin, () -> AllItems.CRUSHED_TIN);
 		crushedPurified.setIgnored(Lead, () -> AllItems.CRUSHED_LEAD);
 
-		dust.setIgnored(Obsidian, () -> AllItems.POWDERED_OBSIDIAN);
-
 		// Tool-only metals
 
 		var metalDict = new HashMap<Material, Metal.Default>();
