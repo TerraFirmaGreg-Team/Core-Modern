@@ -19,8 +19,8 @@ jobs:
     name: 🖥️ Project Info
     runs-on: ubuntu-latest
     outputs:
-      project_version: ${{ steps.check.outputs.version }}
-      project_name: ${{ steps.check.outputs.project_name }}
+      project_version: ${{ steps.project_version.outputs.value }}
+      project_name: ${{ steps.project_name.outputs.value }}-${{ steps.project_name_suffix.outputs.value }}
       project_full_name: ${{ steps.check.outputs.project_name }}-${{ steps.check.outputs.version }}
 
       minecraft_version: ${{ steps.check.outputs.minecraft_version }}
@@ -111,7 +111,7 @@ jobs:
     needs: [info]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 🔍 Checkout
         uses: actions/checkout@v4.2.2
 
       - name: 📁 Setup JDK
@@ -122,10 +122,9 @@ jobs:
           cache: 'gradle'
 
       - name: 📁 Setup Gradle
-        uses: gradle/actions/setup-gradle@v3.5.0
+        uses: gradle/actions/setup-gradle@v4.3.1
         with:
           cache-write-only: false
-          generate-job-summary: false
           gradle-home-cache-includes: |
             caches
             notifications
@@ -139,9 +138,15 @@ jobs:
         run: chmod +x gradlew
 
       - name: 📦 Build
-        uses: gradle/gradle-build-action@v3.5.0
-        with:
-          arguments: build
+        run: ./gradlew build
+
+      - name: 📦 Rename Jar
+        run: |
+          if [ -f build/libs/${{ needs.info.outputs.project_name }}-${{ needs.info.outputs.project_version }}.jar ]; then
+            mv build/libs/${{ needs.info.outputs.project_name }}-${{ needs.info.outputs.project_version }}.jar build/libs/${{ needs.info.outputs.project_full_name }}.jar
+          else
+            echo '::error::No value found for artifact `${{ needs.info.outputs.project_name }}-${{ needs.info.outputs.project_version }}.jar`.' && exit 1
+          fi
 
       - name: 🚀 Upload Artifact Jar
         uses: actions/upload-artifact@v4.6.2
@@ -157,11 +162,22 @@ jobs:
       if: ${{ needs.info.outputs.make_release == 'true' }}
 
       steps:
-        - name: 🚀 Upload jar
-          id: upload_file
-          uses: actions/upload-artifact@v4.6.2
+        - name: 📦 Checkout
+          uses: actions/checkout@v4.2.2
+
+        - name: 📦 Download artifact
+          uses: actions/download-artifact@v4.2.1
           with:
-            path: build/libs/${{ needs.info.outputs.project_full_name }}.jar
+            merge-multiple: true
+
+        - name: 🔍 Check if artifact exist
+          id: check_artifact
+          shell: bash
+          run: |
+            if [ ! -f ${{ needs.info.outputs.project_full_name }}.jar ]; then
+              echo '::error::No value found for artifact `curseforge.zip`.' && exit 1
+            fi
+            echo "✔️ All artifacts found"
 
         - name: 🚀 Release
           uses: Kir-Antipov/mc-publish@v3.3.0
@@ -184,7 +200,7 @@ jobs:
             github-prerelease: false
             github-token: ${{ secrets.GITHUB_TOKEN }}
 
-            files: build/libs/${{ needs.info.outputs.project_full_name }}.jar
+            files: ${{ needs.info.outputs.project_full_name }}.jar
 
             name: "${{ needs.info.outputs.project_full_name }}"
             version: ${{ needs.info.outputs.project_version }}
