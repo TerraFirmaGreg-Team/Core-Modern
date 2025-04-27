@@ -85,13 +85,9 @@ jobs:
           echo "project_name=${{ steps.project_name.outputs.value }}-${{ steps.project_name_suffix.outputs.value }}" >> $GITHUB_OUTPUT
           echo "minecraft_version=${{ steps.minecraft_version.outputs.value }}" >> $GITHUB_OUTPUT
           echo "java_version=${{ steps.java_version.outputs.value }}" >> $GITHUB_OUTPUT
-          if [ false ]; then
-              echo "version=build_#${{ github.run_number }}" >> $GITHUB_OUTPUT
-              echo "release_type=Unreleased" >> $GITHUB_OUTPUT
-          else
-            echo "version=${{ steps.project_version.outputs.value }}" >> $GITHUB_OUTPUT
-            echo "release_type=${{ env.RELEASE_TYPE }}" >> $GITHUB_OUTPUT
-          fi
+          echo "version=${{ steps.project_version.outputs.value }}" >> $GITHUB_OUTPUT
+          echo "release_type=${{ env.RELEASE_TYPE }}" >> $GITHUB_OUTPUT
+          
 
       - name: 📝 Generate Github Summary
         uses: WcAServices/markdown-template-action@v1.1.1
