@@ -87,7 +87,10 @@ jobs:
           echo "java_version=${{ steps.java_version.outputs.value }}" >> $GITHUB_OUTPUT
           echo "version=${{ steps.project_version.outputs.value }}" >> $GITHUB_OUTPUT
           echo "release_type=${{ env.RELEASE_TYPE }}" >> $GITHUB_OUTPUT
-          
+          if [ ${{ env.DEV_ENVIRONMENT == 'true' }} ]; then
+              echo "version=build_#${{ github.run_number }}" >> $GITHUB_OUTPUT
+              echo "release_type=Unreleased" >> $GITHUB_OUTPUT
+          fi
 
       - name: 📝 Generate Github Summary
         uses: WcAServices/markdown-template-action@v1.1.1
