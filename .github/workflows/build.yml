@@ -85,7 +85,7 @@ jobs:
           echo "project_name=${{ steps.project_name.outputs.value }}-${{ steps.project_name_suffix.outputs.value }}" >> $GITHUB_OUTPUT
           echo "minecraft_version=${{ steps.minecraft_version.outputs.value }}" >> $GITHUB_OUTPUT
           echo "java_version=${{ steps.java_version.outputs.value }}" >> $GITHUB_OUTPUT
-          if [ ${{ env.DEV_ENVIRONMENT}}  ]; then
+          if [ ${{ env.DEV_ENVIRONMENT}} ]; then
               echo "version=build_#${{ github.run_number }}" >> $GITHUB_OUTPUT
               echo "release_type=Unreleased" >> $GITHUB_OUTPUT
           else
@@ -164,6 +164,13 @@ jobs:
       steps:
         - name: 📦 Checkout
           uses: actions/checkout@v4.2.2
+
+        - name: 🔒 Check if CURSEFORGE_TOKEN exist
+          shell: bash
+          run: |
+            if [ "${{ secrets.CURSEFORGE_TOKEN }}" == '' ]; then
+              echo '::error::No value found for secret key `CURSEFORGE_TOKEN`. See https://docs.github.com/en/actions/security-guides/  encrypted-secrets#creating-encrypted-secrets-for-a-repository' && exit 1
+            fi  
 
         - name: 📦 Download artifact
           uses: actions/download-artifact@v4.2.1
