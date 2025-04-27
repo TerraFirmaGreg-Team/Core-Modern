@@ -198,6 +198,7 @@ jobs:
             github-generate-changelog: true
             github-draft: false
             github-prerelease: false
+            github-commitish: main
             github-token: ${{ secrets.GITHUB_TOKEN }}
 
             files: ${{ needs.info.outputs.project_full_name }}.jar
