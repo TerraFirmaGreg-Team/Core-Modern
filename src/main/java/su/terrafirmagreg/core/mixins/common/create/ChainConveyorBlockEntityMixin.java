@@ -70,7 +70,7 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
         compound.put("ChainMaterials", NBTHelper.writeCompoundList(tfg$connectionMaterialStats.entrySet(), entry -> {
             CompoundTag compoundTag = new CompoundTag();
             compoundTag.put("Target", NbtUtils.writeBlockPos(entry.getKey()));
-            compoundTag.putString("Material", ((Material)entry.getValue()).getName());
+            compoundTag.putString("Material", entry.getValue().getName());
             return compoundTag;
         }));
     }
@@ -82,12 +82,12 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
                 c -> tfg$connectionMaterialStats.put(NbtUtils.readBlockPos(c.getCompound("Target")),
                         GTMaterials.get(c.getString("Material"))));
         //Debug print
-        for (BlockPos pos : tfg$connectionMaterialStats.keySet())
-        {
-            String matName = tfg$connectionMaterialStats.get(pos).getName();
-            System.out.println("This map lives in entity at: " + this.getBlockPos().toString());
-            System.out.println("Pos: " + pos.toString() + "; Material: " + matName);
-        }
+//        for (BlockPos pos : tfg$connectionMaterialStats.keySet())
+//        {
+//            String matName = tfg$connectionMaterialStats.get(pos).getName();
+//            System.out.println("This map lives in entity at: " + this.getBlockPos());
+//            System.out.println("Pos: " + pos.toString() + "; Material: " + matName);
+//        }
     }
 
     @Inject(method = "chainDestroyed(Lnet/minecraft/core/BlockPos;ZZ)V", at = @At("HEAD"), cancellable = true, remap = false)
@@ -102,7 +102,6 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
             ci.cancel();
             return;
         }
-        System.out.println(target.toString());
         Item chainItem = getConnectionChainItem(target);
         ChainConveyorBlockEntity be = ((ChainConveyorBlockEntity) (Object) this);
         if (level != null && !be.forPointsAlongChains(target, chainCount,
