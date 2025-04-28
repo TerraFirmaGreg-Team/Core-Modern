@@ -10,7 +10,7 @@ public final class TFGTags {
 
     public static final class Items {
         public static final TagKey<Item> Hammers = createItemTag("forge:tools/hammers");
-
+        public static final TagKey<Item> Chains = createItemTag("forge:chains");
         public static final TagKey<Item> Strings = createItemTag("forge:string");
 
         public static TagKey<Item> createItemTag(String path) {
