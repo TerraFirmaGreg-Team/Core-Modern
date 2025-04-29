@@ -15,6 +15,7 @@
     "common.create.ChainConveyorBlockMixin",
     "common.create.ChainConveyorConnectionHandlerMixin",
     "common.create.ChainConveyorConnectionPacketMixin",
+    "client.create.ChainConveyorRendererMixin",
     "common.create.DepotBehaviorMixin",
     "common.create.InputEventsMixin",
     "common.create.ProcessingRecipeMixin",
