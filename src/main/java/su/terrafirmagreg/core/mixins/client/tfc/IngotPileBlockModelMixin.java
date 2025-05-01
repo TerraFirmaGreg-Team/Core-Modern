@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.mixins.client.tfc;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -49,11 +50,15 @@ public abstract class IngotPileBlockModelMixin implements SimpleStaticBlockEntit
             final var material = ChemicalHelper.getMaterial(stack);
             final int primaryColor = material == null ? 0 : material.material().getMaterialARGB(0);
             final int secondaryColor = material == null ? 0 : material.material().getMaterialARGB(1);
-            ResourceLocation metalResource = pile.getOrCacheMetal(i).getSoftTextureId();
-            boolean shouldUseTFCRender = ResourceLocation.isValidResourceLocation(metalResource.getPath());
-            if (!shouldUseTFCRender)
+            Metal metalAtPos = pile.getOrCacheMetal(i);
+
+            boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && material != null && !material.isEmpty());
+            ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getSoftTextureId() : TFGClientEventHandler.TFCMetalBlockTexturePattern;
+            if (!ResourceLocation.isValidResourceLocation(metalResource.getPath()))
             {
+                // Fallback if the texture being referenced doesn't actually exist.
                 metalResource = TFGClientEventHandler.TFCMetalBlockTexturePattern;
+                shouldUseTFCRender = false;
             }
             sprite = textureAtlas.apply(metalResource);
 
