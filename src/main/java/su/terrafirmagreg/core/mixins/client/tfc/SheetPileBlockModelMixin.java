@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
 
@@ -57,7 +58,7 @@ public abstract class SheetPileBlockModelMixin implements SimpleStaticBlockEntit
                 ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getTextureId() : TFGClientEventHandler.TFCMetalBlockTexturePattern;
 
                 sprite = (TextureAtlasSprite)textureAtlas.apply(metalResource);
-                this.renderSheet(poseStack, sprite, buffer, direction, packedLight, packedOverlay, shouldUseTFCRender, primaryColor, secondaryColor);
+                this.tfg$renderSheet(poseStack, sprite, buffer, direction, packedLight, packedOverlay, shouldUseTFCRender, primaryColor, secondaryColor);
             }
         }
 
@@ -68,7 +69,8 @@ public abstract class SheetPileBlockModelMixin implements SimpleStaticBlockEntit
         return sprite;
     }
 
-    private void renderSheet(PoseStack poseStack, TextureAtlasSprite sprite, VertexConsumer buffer, Direction direction, int packedLight, int packedOverlay, boolean shouldUseTFCRender, int primaryColor, int secondaryColor) {
+    @Unique
+    private void tfg$renderSheet(PoseStack poseStack, TextureAtlasSprite sprite, VertexConsumer buffer, Direction direction, int packedLight, int packedOverlay, boolean shouldUseTFCRender, int primaryColor, int secondaryColor) {
         if (shouldUseTFCRender)
             RenderHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, SheetPileBlock.getShapeForSingleFace(direction).bounds());
         else
