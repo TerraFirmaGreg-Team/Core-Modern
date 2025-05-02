@@ -54,12 +54,7 @@ public abstract class IngotPileBlockModelMixin implements SimpleStaticBlockEntit
 
             boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && material != null && !material.isEmpty());
             ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getSoftTextureId() : TFGClientEventHandler.TFCMetalBlockTexturePattern;
-            if (!ResourceLocation.isValidResourceLocation(metalResource.getPath()))
-            {
-                // Fallback if the texture being referenced doesn't actually exist.
-                metalResource = TFGClientEventHandler.TFCMetalBlockTexturePattern;
-                shouldUseTFCRender = false;
-            }
+
             sprite = textureAtlas.apply(metalResource);
 
             final int layer = (i + 8) / 8;
