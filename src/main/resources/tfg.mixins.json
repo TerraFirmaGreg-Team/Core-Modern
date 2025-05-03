@@ -24,6 +24,7 @@
     "common.gtceu.GTRecipeTypesMixin",
     "common.gtceu.GTToolTypeMixin",
     "common.gtceu.HoeGroundBehaviorMixin",
+    "common.gtceu.LargeBoilerMachineMixin",
     "common.gtceu.LootDataManagerMixin",
     "common.gtceu.ModelManagerMixin",
     "common.gtceu.NotifiableItemStackHandlerMixin",
