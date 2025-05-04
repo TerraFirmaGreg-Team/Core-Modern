@@ -19,7 +19,7 @@ jobs:
     name: 🖥️ Project Info
     runs-on: ubuntu-latest
     outputs:
-      project_version: ${{ steps.check.outputs.project_version }}
+      project_version: ${{ steps.project_version.outputs.value }}
       project_name: ${{ steps.check.outputs.project_name }}
       project_full_name: ${{ steps.check.outputs.project_name }}-${{ steps.check.outputs.project_version }}
 
@@ -144,7 +144,7 @@ jobs:
 
       - name: 📦 Rename Jar
         run: |
-          if [ ${{ env.DEV_ENVIRONMENT == 'false' }} ]; then
+          if ${{ env.DEV_ENVIRONMENT == 'true' }}; then
             mv build/libs/${{ needs.info.outputs.project_name }}-${{ needs.info.outputs.project_version }}.jar build/libs/${{ needs.info.outputs.project_full_name }}.jar
           fi
 
@@ -214,7 +214,9 @@ jobs:
             version: ${{ needs.info.outputs.project_version }}
             version-type: ${{ env.RELEASE_TYPE }}
 
-            loaders: forge
+            loaders: |
+              forge
+              neoforge
             game-versions: ${{ needs.info.outputs.minecraft_version }}
             game-version-filter: none
             java: ${{ needs.info.outputs.java_version }}
