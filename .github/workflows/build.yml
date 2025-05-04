@@ -204,7 +204,7 @@ jobs:
             github-tag: ${{ needs.info.outputs.project_version }}
             github-generate-changelog: true
             github-draft: false
-            github-prerelease: false
+            github-prerelease:  ${{ env.RELEASE_TYPE != 'release' }}
             github-commitish: main
             github-token: ${{ secrets.GITHUB_TOKEN }}
 
