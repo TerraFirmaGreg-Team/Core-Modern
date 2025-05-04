@@ -11,7 +11,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public final class TFGClientHelpers {
-
     /**
      * Просто скопированный метод из RenderHelper.java (TFC) + добавленный аргумент для цвета.
      * */
@@ -61,11 +60,15 @@ public final class TFGClientHelpers {
 
     /**
      * Просто скопированный метод из RenderHelper.java (TFC) + добавленный аргумент для цвета.
+     * airrice: Updated this to also use the side shading (TFC)
      * */
     public static void renderTexturedVertex(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float x, float y, float z, float u, float v, float normalX, float normalY, float normalZ, int color1, int color2)
     {
+        final int pColor =  increaseBrightness(FastColor.ARGB32.multiply(color1, color2), 90);
+        final int shadeToInt = (int)(RenderHelpers.getShade(normalX, normalY, normalZ) * 255);
+        final int pColor2 = FastColor.ARGB32.multiply(pColor, FastColor.ARGB32.color(255, shadeToInt,shadeToInt,shadeToInt));
         buffer.vertex(poseStack.last().pose(), x, y, z)
-                .color(increaseBrightness(FastColor.ARGB32.multiply(color1, color2), 90))
+                .color(pColor2)
                 .uv(u, v)
                 .uv2(packedLight)
                 .overlayCoords(packedOverlay)
@@ -91,5 +94,4 @@ public final class TFGClientHelpers {
         // Собираем новое ARGB значение
         return (alpha << 24) | (0xFF000000 | (red << 16) | (green << 8) | blue);
     }
-
 }

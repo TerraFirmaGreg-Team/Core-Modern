@@ -11,6 +11,7 @@ import net.dries007.tfc.common.blockentities.SheetPileBlockEntity;
 import net.dries007.tfc.common.blocks.DirectionPropertyBlock;
 import net.dries007.tfc.common.blocks.devices.SheetPileBlock;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.Metal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
 
@@ -44,26 +46,35 @@ public abstract class SheetPileBlockModelMixin implements SimpleStaticBlockEntit
 
         for (Direction direction : Helpers.DIRECTIONS)
         {
-            if (state.getValue(DirectionPropertyBlock.getProperty(direction))) // The properties are authoritative on which sides should be rendered
-            {
+            if ((Boolean)state.getValue(DirectionPropertyBlock.getProperty(direction)))
+            { // The properties are authoritative on which sides should be rendered
                 final var stack = pile.getSheet(direction);
                 final var material = ChemicalHelper.getMaterial(stack);
                 final int primaryColor = material == null ? 0 : material.material().getMaterialARGB(0);
                 final int secondaryColor = material == null ? 0 : material.material().getMaterialARGB(1);
+                Metal metalAtPos = pile.getOrCacheMetal(direction);
 
-                sprite = textureAtlas.apply(TFGClientEventHandler.TFCMetalBlockTexturePattern);
+                boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && material != null && !material.isEmpty());
+                ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getTextureId() : TFGClientEventHandler.TFCMetalBlockTexturePattern;
 
-                TFGClientHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, SheetPileBlock.getShapeForSingleFace(direction).bounds(), primaryColor, secondaryColor);
+                sprite = (TextureAtlasSprite)textureAtlas.apply(metalResource);
+                this.tfg$renderSheet(poseStack, sprite, buffer, direction, packedLight, packedOverlay, shouldUseTFCRender, primaryColor, secondaryColor);
             }
         }
 
-        if (sprite == null)
-        {
-            // Use whatever sprite we found in the ingot pile towards the top as the particle texture
+        if (sprite == null) {
             sprite = RenderHelpers.missingTexture();
         }
 
         return sprite;
+    }
+
+    @Unique
+    private void tfg$renderSheet(PoseStack poseStack, TextureAtlasSprite sprite, VertexConsumer buffer, Direction direction, int packedLight, int packedOverlay, boolean shouldUseTFCRender, int primaryColor, int secondaryColor) {
+        if (shouldUseTFCRender)
+            RenderHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, SheetPileBlock.getShapeForSingleFace(direction).bounds());
+        else
+            TFGClientHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, SheetPileBlock.getShapeForSingleFace(direction).bounds(), primaryColor, secondaryColor);
     }
 
 }
