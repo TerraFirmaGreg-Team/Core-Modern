@@ -45,7 +45,7 @@ public final class TFGCore {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         TFGBlocks.BLOCKS.register(bus);
-        //TFGBlockEntities.BLOCK_ENTITIES.register(bus);
+        TFGBlockEntities.BLOCK_ENTITIES.register(bus);
         //TFGItems.ITEMS.register(bus);
         TFGCreativeTab.TABS.register(bus);
     }
