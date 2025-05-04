@@ -19,9 +19,9 @@ jobs:
     name: 🖥️ Project Info
     runs-on: ubuntu-latest
     outputs:
-      project_version: ${{ steps.project_version.outputs.value }}
-      project_name: ${{ steps.project_name.outputs.value }}-${{ steps.project_name_suffix.outputs.value }}
-      project_full_name: ${{ steps.check.outputs.project_name }}-${{ steps.check.outputs.version }}
+      project_version: ${{ steps.check.outputs.project_version }}
+      project_name: ${{ steps.check.outputs.project_name }}
+      project_full_name: ${{ steps.check.outputs.project_name }}-${{ steps.check.outputs.project_version }}
 
       minecraft_version: ${{ steps.check.outputs.minecraft_version }}
       java_version: ${{ steps.check.outputs.java_version }}
