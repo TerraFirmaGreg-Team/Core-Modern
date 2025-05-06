@@ -22,13 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.compat.create.ChainGTMaterialInterface;
 
-@Mixin(value = ChainConveyorBlock.class, remap = false)
+@Mixin(value = ChainConveyorBlock.class)
 public abstract class ChainConveyorBlockMixin extends KineticBlock implements IBE<ChainConveyorBlockEntity>, IHaveBigOutline {
     public ChainConveyorBlockMixin(Properties properties) {
         super(properties);
     }
 
-    @Inject(method = "use(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;", at = @At("HEAD"), cancellable = true, remap = false)
+    @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     private void tfg$use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit, CallbackInfoReturnable<InteractionResult> cir)
     {
         if (!pLevel.isClientSide() && pPlayer != null && pPlayer.getItemInHand(pHand).is(TFGTags.Items.Chains))
