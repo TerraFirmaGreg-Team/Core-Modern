@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -105,6 +106,7 @@ public abstract class SprinklerBlockEntityMixin extends BlockEntity implements C
         }
     }
 
+    @Unique
     private static void updateStasisState(Level level, BlockPos pos, BlockState state, boolean hasWater) {
         boolean currentStasis = state.getValue(AbstractSprinklerBlock.STASIS);
         if (currentStasis != hasWater) {
