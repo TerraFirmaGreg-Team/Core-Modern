@@ -59,7 +59,7 @@ public final class TFGBlocks {
 
 	public static final RegistryObject<Block> LUNAR_ROOTS = register("lunar_roots",
 		() -> new LunarRootsBlock(BlockBehaviour.Properties.of()
-		    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+		    .mapColor(MapColor.NONE)
 		    .strength(0.1f)
 		    .sound(SoundType.NETHER_WART)
 		    .pushReaction(PushReaction.DESTROY)
@@ -71,7 +71,7 @@ public final class TFGBlocks {
 
 	public static final RegistryObject<Block> LUNAR_SPROUTS = register("lunar_sprouts",
 		() -> new LunarSproutsBlock(BlockBehaviour.Properties.of()
-		    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+		    .mapColor(MapColor.NONE)
 		    .strength(0.1f)
 		    .sound(SoundType.NETHER_WART)
 		    .pushReaction(PushReaction.DESTROY)
@@ -92,7 +92,6 @@ public final class TFGBlocks {
 			.mapColor(MapColor.TERRACOTTA_PURPLE)
 			.pushReaction(PushReaction.DESTROY)
 			.strength(0.2f)
-			.lightLevel((state) -> 11)
 			.sound(SoundType.CHERRY_WOOD),
 		LUNAR_CHORUS_PLANT));
 
