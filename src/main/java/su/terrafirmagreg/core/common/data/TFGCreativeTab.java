@@ -1,11 +1,21 @@
 package su.terrafirmagreg.core.common.data;
 
+import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.common.items.Food;
+import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.util.SelfTests;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
+
+import java.util.Map;
+import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public class TFGCreativeTab {
@@ -14,11 +24,42 @@ public class TFGCreativeTab {
 	public static final RegistryObject<CreativeModeTab> TFG = TABS.register("tfg",
 		() -> CreativeModeTab.builder()
 				  .title(Component.translatable("tfg.creative_tab.tfg"))
+				  .icon(() -> new ItemStack(TFCItems.FOOD.get(Food.PUMPKIN_CHUNKS).get()))
 				  .displayItems(TFGCreativeTab::fillTab)
 				  .build());
 
 	private static void fillTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output out)
 	{
-		//out.accept(TFGItems.EXAMPLE.get());
+		accept(out, TFGBlocks.LUNAR_ROOTS);
+		accept(out, TFGBlocks.LUNAR_SPROUTS);
+		accept(out, TFGBlocks.LUNAR_CHORUS_PLANT);
+		accept(out, TFGBlocks.LUNAR_CHORUS_FLOWER);
+	}
+
+	private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out, Map<K1, Map<K2, R>> map, K1 key1, K2 key2)
+	{
+		if (map.containsKey(key1) && map.get(key1).containsKey(key2))
+		{
+			out.accept(map.get(key1).get(key2).get());
+		}
+	}
+
+	private static <T extends ItemLike, R extends Supplier<T>, K> void accept(CreativeModeTab.Output out, Map<K, R> map, K key)
+	{
+		if (map.containsKey(key))
+		{
+			out.accept(map.get(key).get());
+		}
+	}
+
+	private static <T extends ItemLike, R extends Supplier<T>> void accept(CreativeModeTab.Output out, R reg)
+	{
+		if (reg.get().asItem() == Items.AIR)
+		{
+			TerraFirmaCraft.LOGGER.error("BlockItem with no Item added to creative tab: " + reg.get().toString());
+			SelfTests.reportExternalError();
+			return;
+		}
+		out.accept(reg.get());
 	}
 }

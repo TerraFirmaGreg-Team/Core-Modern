@@ -28,7 +28,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blocks.WoodAshPileBlock;
+import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.data.buds.BudIndicator;
 import su.terrafirmagreg.core.common.data.buds.BudIndicatorItem;
 
@@ -56,6 +56,45 @@ public final class TFGBlocks {
 		   .pushReaction(PushReaction.DESTROY)
 		   .isViewBlocking((state, level, pos) -> state.getValue(WoodAshPileBlock.LAYERS) >= 8)
 		   .isSuffocating((state, level, pos) -> state.getValue(WoodAshPileBlock.LAYERS) >= 8)));
+
+	public static final RegistryObject<Block> LUNAR_ROOTS = register("lunar_roots",
+		() -> new LunarRootsBlock(BlockBehaviour.Properties.of()
+		    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+		    .strength(0.1f)
+		    .sound(SoundType.NETHER_WART)
+		    .pushReaction(PushReaction.DESTROY)
+		    .lightLevel((state) -> 6)
+		    .noCollission()
+		    .noOcclusion()
+		    .isViewBlocking((state, level, pos) -> false)
+		    .isSuffocating((state, level, pos) -> false)));
+
+	public static final RegistryObject<Block> LUNAR_SPROUTS = register("lunar_sprouts",
+		() -> new LunarSproutsBlock(BlockBehaviour.Properties.of()
+		    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+		    .strength(0.1f)
+		    .sound(SoundType.NETHER_WART)
+		    .pushReaction(PushReaction.DESTROY)
+			.noCollission()
+			.noOcclusion()
+		    .isViewBlocking((state, level, pos) -> false)
+		    .isSuffocating((state, level, pos) -> false)));
+
+	public static final RegistryObject<Block> LUNAR_CHORUS_PLANT = register("lunar_chorus_plant",
+		() -> new LunarChorusPlantBlock(BlockBehaviour.Properties.of()
+		    .mapColor(MapColor.TERRACOTTA_PURPLE)
+			.pushReaction(PushReaction.DESTROY)
+		    .strength(0.2f)
+		    .sound(SoundType.CHERRY_WOOD)));
+
+	public static final RegistryObject<Block> LUNAR_CHORUS_FLOWER = register("lunar_chorus_flower",
+		() -> new LunarChorusFlowerBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.TERRACOTTA_PURPLE)
+			.pushReaction(PushReaction.DESTROY)
+			.strength(0.2f)
+			.lightLevel((state) -> 11)
+			.sound(SoundType.CHERRY_WOOD),
+		LUNAR_CHORUS_PLANT));
 
 
 	public static void generateBudIndicators()
@@ -85,7 +124,7 @@ public final class TFGBlocks {
 		var entry = registrate
 			.block(material.getName() + "_bud_indicator", p -> new BudIndicator(p, material))
 			.initialProperties(() -> Blocks.AMETHYST_CLUSTER)
-			.properties(p -> p.noLootTable().noOcclusion().strength(0.25f).lightLevel(b -> 3))
+			.properties(p -> p.noLootTable().noOcclusion().noCollission().strength(0.25f).lightLevel(b -> 3))
 			.setData(ProviderType.LANG, NonNullBiConsumer.noop())
 			.setData(ProviderType.LOOT, NonNullBiConsumer.noop())
 			.setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())

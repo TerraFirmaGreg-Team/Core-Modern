@@ -46,7 +46,7 @@ public final class TFGCore {
 
         TFGBlocks.BLOCKS.register(bus);
         TFGBlockEntities.BLOCK_ENTITIES.register(bus);
-        //TFGItems.ITEMS.register(bus);
+        TFGItems.ITEMS.register(bus);
         TFGCreativeTab.TABS.register(bus);
     }
 
