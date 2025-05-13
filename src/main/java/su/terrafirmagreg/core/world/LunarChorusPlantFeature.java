@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.ChorusFlowerBlock;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.LunarChorusFlowerBlock;
 
 public class LunarChorusPlantFeature extends Feature<NoneFeatureConfiguration> {
@@ -26,7 +27,7 @@ public class LunarChorusPlantFeature extends Feature<NoneFeatureConfiguration> {
 
 		if (level.isEmptyBlock(blockPos) && LunarChorusFlowerBlock.isGroundBlock(level.getBlockState(blockPos.below())))
 		{
-			ChorusFlowerBlock.generatePlant(level, blockPos, randomSource, 8);
+			((LunarChorusFlowerBlock) TFGBlocks.LUNAR_CHORUS_FLOWER.get()).generatePlant(level, blockPos, randomSource, 8);
 			return true;
 		}
 		else
