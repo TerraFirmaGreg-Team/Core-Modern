@@ -67,7 +67,8 @@ public final class TFGBlocks {
 		    .noCollission()
 		    .noOcclusion()
 		    .isViewBlocking((state, level, pos) -> false)
-		    .isSuffocating((state, level, pos) -> false)));
+		    .isSuffocating((state, level, pos) -> false)
+			.offsetType(BlockBehaviour.OffsetType.XZ)));
 
 	public static final RegistryObject<Block> LUNAR_SPROUTS = register("lunar_sprouts",
 		() -> new LunarSproutsBlock(BlockBehaviour.Properties.of()
@@ -78,7 +79,8 @@ public final class TFGBlocks {
 			.noCollission()
 			.noOcclusion()
 		    .isViewBlocking((state, level, pos) -> false)
-		    .isSuffocating((state, level, pos) -> false)));
+		    .isSuffocating((state, level, pos) -> false)
+			.offsetType(BlockBehaviour.OffsetType.XZ)));
 
 	public static final RegistryObject<Block> LUNAR_CHORUS_PLANT = register("lunar_chorus_plant",
 		() -> new LunarChorusPlantBlock(BlockBehaviour.Properties.of()
@@ -123,7 +125,13 @@ public final class TFGBlocks {
 		var entry = registrate
 			.block(material.getName() + "_bud_indicator", p -> new BudIndicator(p, material))
 			.initialProperties(() -> Blocks.AMETHYST_CLUSTER)
-			.properties(p -> p.noLootTable().noOcclusion().noCollission().strength(0.25f).lightLevel(b -> 3))
+			.properties(p -> p
+				.noLootTable()
+				.noOcclusion()
+				.noCollission()
+				.strength(0.25f)
+				.lightLevel(b -> 3)
+				.offsetType(BlockBehaviour.OffsetType.XZ))
 			.setData(ProviderType.LANG, NonNullBiConsumer.noop())
 			.setData(ProviderType.LOOT, NonNullBiConsumer.noop())
 			.setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
