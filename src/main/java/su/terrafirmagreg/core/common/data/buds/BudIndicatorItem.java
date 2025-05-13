@@ -1,14 +1,12 @@
 package su.terrafirmagreg.core.common.data.buds;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 
 public class BudIndicatorItem extends BlockItem {
 
-	@Getter
 	private final Material material;
 
 	public BudIndicatorItem(BudIndicator block, Properties props, Material mat) {
@@ -33,5 +31,9 @@ public class BudIndicatorItem extends BlockItem {
 	@Override
 	public Component getName(ItemStack stack) {
 		return getDescription();
+	}
+
+	public Material getMaterial() {
+		return material;
 	}
 }
