@@ -4,7 +4,9 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import lombok.Getter;
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.fluids.FluidProperty;
+import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
@@ -12,10 +14,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -23,6 +27,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,13 +38,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BudIndicator extends Block {
+public class BudIndicator extends Block implements IFluidLoggable {
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
+	public static final FluidProperty FLUID = TFCBlockStateProperties.ALL_WATER;
 
 	private static final VoxelShape AABB = Block.box(3, 0, 3, 13, 5, 13);
 	private static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
-	@Getter
 	private final Material material;
 
 
@@ -45,7 +53,9 @@ public class BudIndicator extends Block {
 		super(properties);
 		this.material = material;
 
-		registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.getRandom(RANDOM_SOURCE)));
+		registerDefaultState(this.defaultBlockState()
+			.setValue(FACING, Direction.getRandom(RANDOM_SOURCE))
+			.setValue(FLUID, FLUID.keyFor(Fluids.EMPTY)));
 
 		if (GTCEu.isClientSide())
 		{
@@ -91,7 +101,10 @@ public class BudIndicator extends Block {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return getStateForDirection(context.getNearestLookingVerticalDirection());
+
+		final FluidState fluid = context.getLevel().getFluidState(context.getClickedPos());
+		return getStateForDirection(context.getNearestLookingVerticalDirection())
+				   .setValue(getFluidProperty(), getFluidProperty().keyForOrEmpty(fluid.getType()));
 	}
 
 	public BlockState getStateForDirection(Direction direction) {
@@ -102,6 +115,7 @@ public class BudIndicator extends Block {
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
+		builder.add(FLUID);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -144,5 +158,40 @@ public class BudIndicator extends Block {
 	@Override
 	public MutableComponent getName() {
 		return Component.translatable("block.bud_indicator", material.getLocalizedName());
+	}
+
+	@Override
+	public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
+	{
+		if (fluid instanceof FlowingFluid && !getFluidProperty().canContain(fluid))
+		{
+			return true;
+		}
+		return IFluidLoggable.super.canPlaceLiquid(level, pos, state, fluid);
+	}
+
+	@Override
+	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn)
+	{
+		if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType()))
+		{
+			level.destroyBlock(pos, true);
+			level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
+			return true;
+		}
+		return IFluidLoggable.super.placeLiquid(level, pos, state, fluidStateIn);
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public FluidState getFluidState(BlockState state)
+	{
+		return IFluidLoggable.super.getFluidLoggedState(state);
+	}
+
+
+	@Override
+	public FluidProperty getFluidProperty() {
+		return FLUID;
 	}
 }
