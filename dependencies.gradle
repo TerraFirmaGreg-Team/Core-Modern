@@ -125,5 +125,6 @@ dependencies {
     // TFC Roads and Roofs
     implementation fg.deobf("curse.maven:roads-and-roofs-tfc-1048212:5852507")
 
-
+    // Ad Astra
+    //implementation fg.deobf("curse.maven:ad-astra-635042:5914893") { transitive = false }
 }

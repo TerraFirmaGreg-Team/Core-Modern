@@ -9,7 +9,6 @@ import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkConstants;
@@ -21,6 +20,7 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGCreativeTab;
 import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.world.TFGFeatures;
 
 @Mod(TFGCore.MOD_ID)
 public final class TFGCore {
@@ -45,9 +45,10 @@ public final class TFGCore {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         TFGBlocks.BLOCKS.register(bus);
-        //TFGBlockEntities.BLOCK_ENTITIES.register(bus);
-        //TFGItems.ITEMS.register(bus);
+        TFGBlockEntities.BLOCK_ENTITIES.register(bus);
+        TFGItems.ITEMS.register(bus);
         TFGCreativeTab.TABS.register(bus);
+        TFGFeatures.FEATURES.register(bus);
     }
 
     public static ResourceLocation id(String name) {
