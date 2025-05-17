@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -40,13 +39,13 @@ public abstract class SprinklerBlockEntityMixin {
     private static Fluid redirectSearchForFluid(Level level, BlockPos pos, Direction direction, boolean drain, Level unused1, BlockPos unused2, BlockState state, SprinklerBlockEntity sprinkler) {
         if (!sprinkler.isValid()) {
             tfg$updateStasisState(level, pos, state, false);
-            return FluidStack.EMPTY.getFluid();
+            return Fluids.EMPTY;
         }
 
         final Fluid water = ForgeRegistries.FLUIDS.getValue(new ResourceLocation("minecraft:water"));
         if (water == null) {
             tfg$updateStasisState(level, pos, state, false);
-            return FluidStack.EMPTY.getFluid();
+            return Fluids.EMPTY;
         }
 
         Direction targetDirection = null;
