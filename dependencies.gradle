@@ -90,7 +90,7 @@ dependencies {
     implementation fg.deobf("maven.modrinth:terrafirmacraft:3.2.14")
 
     // FirmaLife
-    implementation fg.deobf("maven.modrinth:firmalife:2.1.17")
+    implementation fg.deobf("maven.modrinth:firmalife:2.1.18")
 
     // Beneath
     implementation fg.deobf("maven.modrinth:beneath:1.0.4") { transitive = false }
