@@ -82,6 +82,63 @@ public final class TFGBlocks {
 		    .isSuffocating((state, level, pos) -> false)
 			.offsetType(BlockBehaviour.OffsetType.XZ)));
 
+	public static final RegistryObject<Block> STROMATOLITE_CLUSTER_MEDIUM = register("stromatolite_cluster_medium",
+		() -> new StromatoliteClusterMediumBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_BROWN)
+			.strength(0.1f)
+			.sound(SoundType.DRIPSTONE_BLOCK)
+			.pushReaction(PushReaction.DESTROY)
+			.noCollission()
+			.noOcclusion()
+			.isViewBlocking((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)
+			.offsetType(BlockBehaviour.OffsetType.XZ)));
+
+	public static final RegistryObject<Block> STROMATOLITE_CLUSTER_SMALL = register("stromatolite_cluster_small",
+		() -> new StromatoliteClusterSmallBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_BROWN)
+			.strength(0.1f)
+			.sound(SoundType.DRIPSTONE_BLOCK)
+			.pushReaction(PushReaction.DESTROY)
+			.noCollission()
+			.noOcclusion()
+			.isViewBlocking((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)
+			.offsetType(BlockBehaviour.OffsetType.XZ)));
+
+	public static final RegistryObject<Block> GEYSER_SOURCE = register("geyser_source",
+		() -> new GeyserBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_BROWN)
+			.strength(0.8f)
+			.sound(SoundType.DRIPSTONE_BLOCK)
+			.pushReaction(PushReaction.DESTROY)
+			.noLootTable()
+			.noCollission()
+			.noOcclusion()
+			.isViewBlocking((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)));
+
+	public static final RegistryObject<Block> GEYSER_SOURCE_SMALL = register("geyser_source_small",
+		() -> new GeyserBlockSmall(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_BROWN)
+			.strength(0.8f)
+			.sound(SoundType.DRIPSTONE_BLOCK)
+			.pushReaction(PushReaction.DESTROY)
+			.noLootTable()
+			.noCollission()
+			.noOcclusion()
+			.isViewBlocking((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)));
+
+	public static final RegistryObject<Block> PIGLIN_DISGUISE_BLOCK = register("piglin_disguise_block",
+		() -> new PiglinDisguiseBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_BROWN)
+			.strength(0.1f)
+			.sound(SoundType.DRIPSTONE_BLOCK)
+			.pushReaction(PushReaction.DESTROY)
+			.isViewBlocking((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)));
+
 	public static final RegistryObject<Block> LUNAR_CHORUS_PLANT = register("lunar_chorus_plant",
 		() -> new LunarChorusPlantBlock(BlockBehaviour.Properties.of()
 		    .mapColor(MapColor.TERRACOTTA_PURPLE)
