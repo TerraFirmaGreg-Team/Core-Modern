@@ -34,6 +34,9 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.LUNAR_SPROUTS);
 		accept(out, TFGBlocks.LUNAR_CHORUS_PLANT);
 		accept(out, TFGBlocks.LUNAR_CHORUS_FLOWER);
+
+		accept(out, TFGItems.PIGLIN_DISGUISE);
+
 	}
 
 	private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out, Map<K1, Map<K2, R>> map, K1 key1, K2 key2)
