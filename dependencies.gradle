@@ -90,7 +90,7 @@ dependencies {
     implementation fg.deobf("maven.modrinth:terrafirmacraft:3.2.14")
 
     // FirmaLife
-    implementation fg.deobf("maven.modrinth:firmalife:2.1.17")
+    implementation fg.deobf("maven.modrinth:firmalife:2.1.18")
 
     // Beneath
     implementation fg.deobf("maven.modrinth:beneath:1.0.4") { transitive = false }
@@ -125,5 +125,6 @@ dependencies {
     // TFC Roads and Roofs
     implementation fg.deobf("curse.maven:roads-and-roofs-tfc-1048212:5852507")
 
-
+    // Ad Astra
+    //implementation fg.deobf("curse.maven:ad-astra-635042:5914893") { transitive = false }
 }
