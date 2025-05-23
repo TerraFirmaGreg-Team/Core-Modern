@@ -18,6 +18,7 @@
     "common.firmalife.SprinklerBlockEntityMixin",
     "common.firmalife.SprinklerItemMixin",
     "common.firmalife.MixinGreenhousePortBlock",
+    "common.firmalife.HydroponicPlanterBlockEntityMixin",
     "common.flywheel.AnimatedBlazeBurnerMixin",
     "common.greate.TieredCrushingRecipeMixin",
     "common.greate.TieredMillingRecipeMixin",
