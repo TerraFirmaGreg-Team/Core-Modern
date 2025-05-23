@@ -50,9 +50,8 @@ public abstract class HydroponicPlanterBlockEntityMixin {
         if (result == Fluids.EMPTY) {
             result = SprinklerBlockEntity.searchForFluid(level, pos, direction, drain);
         }
-
         try {
-            boolean hasPipe = result != Fluids.EMPTY;
+            boolean hasPipe = result == Fluids.WATER;
             boolean current = HAS_PIPE_FIELD.getBoolean(planter);
             if (current != hasPipe) {
                 HAS_PIPE_FIELD.setBoolean(planter, hasPipe);
@@ -61,7 +60,6 @@ public abstract class HydroponicPlanterBlockEntityMixin {
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to update hasPipe state", e);
         }
-
         return result;
     }
 
@@ -72,8 +70,9 @@ public abstract class HydroponicPlanterBlockEntityMixin {
             return be.getCapability(ForgeCapabilities.FLUID_HANDLER, Direction.UP)
                     .map(handler -> {
                         FluidStack waterStack = new FluidStack(Fluids.WATER, 1);
-                        if (handler.drain(waterStack, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 1) {
-                            handler.drain(waterStack.copy(), IFluidHandler.FluidAction.EXECUTE);
+                        FluidStack drained = handler.drain(waterStack, IFluidHandler.FluidAction.SIMULATE);
+                        if (!drained.isEmpty() && drained.getAmount() >= 1) {
+                            handler.drain(waterStack, IFluidHandler.FluidAction.EXECUTE);
                             return Fluids.WATER;
                         }
                         return Fluids.EMPTY;

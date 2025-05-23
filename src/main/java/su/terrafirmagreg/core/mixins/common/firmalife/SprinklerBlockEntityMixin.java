@@ -67,16 +67,13 @@ public abstract class SprinklerBlockEntityMixin extends BlockEntity implements C
                         ForgeCapabilities.FLUID_HANDLER,
                         targetDirection.getOpposite()
                 );
-
                 if (handler.isPresent()) {
                     FluidStack drained = handler.map(h -> {
-                        FluidStack simulated = h.drain(new FluidStack(water, 1), IFluidHandler.FluidAction.SIMULATE);
-                        if (!simulated.isEmpty() && simulated.getAmount() >= 1) {
-                            return h.drain(new FluidStack(water, 1), IFluidHandler.FluidAction.EXECUTE);
+                        if (h.drain(1, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 1) {
+                            return h.drain(1, IFluidHandler.FluidAction.EXECUTE);
                         }
                         return FluidStack.EMPTY;
                     }).orElse(FluidStack.EMPTY);
-
                     if (!drained.isEmpty()) {
                         tfg$updateStasisState(level, pos, state, true);
                         return water;
