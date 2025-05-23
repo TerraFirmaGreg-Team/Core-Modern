@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.firmalife;
 
+import com.eerussianguy.firmalife.common.blockentities.ClimateReceiver;
 import com.eerussianguy.firmalife.common.blockentities.SprinklerBlockEntity;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.AbstractSprinklerBlock;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.FloorSprinklerBlock;
@@ -8,12 +9,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,8 +26,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = SprinklerBlockEntity.class, remap = false)
-public abstract class SprinklerBlockEntityMixin {
+public abstract class SprinklerBlockEntityMixin extends BlockEntity implements ClimateReceiver {
 
+    public SprinklerBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
 
     @Redirect(
             method = "serverTick",
@@ -36,53 +40,51 @@ public abstract class SprinklerBlockEntityMixin {
             ),
             remap = false
     )
-    private static Fluid redirectSearchForFluid(Level level, BlockPos pos, Direction direction, boolean drain, Level unused1, BlockPos unused2, BlockState state, SprinklerBlockEntity sprinkler) {
-        if (!sprinkler.isValid()) {
-            tfg$updateStasisState(level, pos, state, false);
-            return Fluids.EMPTY;
-        }
-
+    private static Fluid redirectSearchForFluid(Level level, BlockPos pos, Direction direction, boolean drain,
+                                                Level unused1, BlockPos unused2, BlockState state, SprinklerBlockEntity sprinkler) {
         final Fluid water = ForgeRegistries.FLUIDS.getValue(new ResourceLocation("minecraft:water"));
         if (water == null) {
             tfg$updateStasisState(level, pos, state, false);
-            return Fluids.EMPTY;
+            return null;
         }
 
-        Direction targetDirection = null;
         BlockState blockState = level.getBlockState(pos);
-        Block block = blockState.getBlock();
+        Direction targetDirection = null;
 
-        if (block instanceof SprinklerBlock) {
+        if (blockState.getBlock() instanceof SprinklerBlock) {
             Direction.Axis axis = blockState.getValue(SprinklerBlock.AXIS);
             if (axis == Direction.Axis.X) targetDirection = Direction.UP;
-
-        } else if (block instanceof FloorSprinklerBlock) {
+        } else if (blockState.getBlock() instanceof FloorSprinklerBlock) {
             targetDirection = Direction.DOWN;
         }
 
-        Fluid result = Fluids.EMPTY;
         if (targetDirection != null) {
             BlockPos neighborPos = pos.relative(targetDirection);
             BlockEntity neighbor = level.getBlockEntity(neighborPos);
 
             if (neighbor != null) {
-                result = neighbor.getCapability(ForgeCapabilities.FLUID_HANDLER, targetDirection.getOpposite()).map(handler -> {
-                    FluidStack simulated = handler.drain(new FluidStack(water, 1), IFluidHandler.FluidAction.SIMULATE);
-                    if (!simulated.isEmpty() && simulated.getAmount() >= 1) {
-                        handler.drain(new FluidStack(water, 1), IFluidHandler.FluidAction.EXECUTE);
+                LazyOptional<IFluidHandler> handler = neighbor.getCapability(
+                        ForgeCapabilities.FLUID_HANDLER,
+                        targetDirection.getOpposite()
+                );
+                if (handler.isPresent()) {
+                    FluidStack drained = handler.map(h -> {
+                        if (h.drain(1, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 1) {
+                            return h.drain(1, IFluidHandler.FluidAction.EXECUTE);
+                        }
+                        return FluidStack.EMPTY;
+                    }).orElse(FluidStack.EMPTY);
+                    if (!drained.isEmpty()) {
+                        tfg$updateStasisState(level, pos, state, true);
                         return water;
                     }
-                    return Fluids.EMPTY;
-                }).orElse(Fluids.EMPTY);
+                }
             }
         }
 
-        if (result == Fluids.EMPTY) {
-            result = SprinklerBlockEntity.searchForFluid(level, pos, direction, drain);
-        }
-
-        tfg$updateStasisState(level, pos, state, result != Fluids.EMPTY);
-        return result;
+        Fluid fallback = SprinklerBlockEntity.searchForFluid(level, pos, direction, drain);
+        tfg$updateStasisState(level, pos, state, fallback != null);
+        return fallback;
     }
 
     @Inject(
@@ -100,9 +102,11 @@ public abstract class SprinklerBlockEntityMixin {
 
     @Unique
     private static void tfg$updateStasisState(Level level, BlockPos pos, BlockState state, boolean hasWater) {
-        boolean currentStasis = state.getValue(AbstractSprinklerBlock.STASIS);
-        if (currentStasis != hasWater) {
-            level.setBlockAndUpdate(pos, state.setValue(AbstractSprinklerBlock.STASIS, hasWater));
+        if (state.hasProperty(AbstractSprinklerBlock.STASIS)) {
+            boolean currentStasis = state.getValue(AbstractSprinklerBlock.STASIS);
+            if (currentStasis != hasWater) {
+                level.setBlockAndUpdate(pos, state.setValue(AbstractSprinklerBlock.STASIS, hasWater));
+            }
         }
     }
 }
