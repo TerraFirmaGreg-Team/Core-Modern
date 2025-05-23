@@ -42,19 +42,14 @@ public abstract class SprinklerBlockEntityMixin extends BlockEntity implements C
     )
     private static Fluid redirectSearchForFluid(Level level, BlockPos pos, Direction direction, boolean drain,
                                                 Level unused1, BlockPos unused2, BlockState state, SprinklerBlockEntity sprinkler) {
-        if (!sprinkler.isValid()) {
-            updateStasisState(level, pos, state, false);
-            return null;
-        }
-
         final Fluid water = ForgeRegistries.FLUIDS.getValue(new ResourceLocation("minecraft:water"));
         if (water == null) {
-            updateStasisState(level, pos, state, false);
+            tfg$updateStasisState(level, pos, state, false);
             return null;
         }
 
-        Direction targetDirection = null;
         BlockState blockState = level.getBlockState(pos);
+        Direction targetDirection = null;
 
         if (blockState.getBlock() instanceof SprinklerBlock) {
             Direction.Axis axis = blockState.getValue(SprinklerBlock.AXIS);
@@ -63,7 +58,6 @@ public abstract class SprinklerBlockEntityMixin extends BlockEntity implements C
             targetDirection = Direction.DOWN;
         }
 
-        Fluid result = null;
         if (targetDirection != null) {
             BlockPos neighborPos = pos.relative(targetDirection);
             BlockEntity neighbor = level.getBlockEntity(neighborPos);
@@ -74,23 +68,26 @@ public abstract class SprinklerBlockEntityMixin extends BlockEntity implements C
                         targetDirection.getOpposite()
                 );
 
-                result = handler.map(h -> {
-                    FluidStack simulated = h.drain(new FluidStack(water, 1), IFluidHandler.FluidAction.SIMULATE);
-                    if (!simulated.isEmpty() && simulated.getAmount() >= 1) {
-                        h.drain(new FluidStack(water, 1), IFluidHandler.FluidAction.EXECUTE);
+                if (handler.isPresent()) {
+                    FluidStack drained = handler.map(h -> {
+                        FluidStack simulated = h.drain(new FluidStack(water, 1), IFluidHandler.FluidAction.SIMULATE);
+                        if (!simulated.isEmpty() && simulated.getAmount() >= 1) {
+                            return h.drain(new FluidStack(water, 1), IFluidHandler.FluidAction.EXECUTE);
+                        }
+                        return FluidStack.EMPTY;
+                    }).orElse(FluidStack.EMPTY);
+
+                    if (!drained.isEmpty()) {
+                        tfg$updateStasisState(level, pos, state, true);
                         return water;
                     }
-                    return null;
-                }).orElse(null);
+                }
             }
         }
 
-        if (result == null) {
-            result = SprinklerBlockEntity.searchForFluid(level, pos, direction, drain);
-        }
-
-        updateStasisState(level, pos, state, result != null);
-        return result;
+        Fluid fallback = SprinklerBlockEntity.searchForFluid(level, pos, direction, drain);
+        tfg$updateStasisState(level, pos, state, fallback != null);
+        return fallback;
     }
 
     @Inject(
@@ -107,10 +104,12 @@ public abstract class SprinklerBlockEntityMixin extends BlockEntity implements C
     }
 
     @Unique
-    private static void updateStasisState(Level level, BlockPos pos, BlockState state, boolean hasWater) {
-        boolean currentStasis = state.getValue(AbstractSprinklerBlock.STASIS);
-        if (currentStasis != hasWater) {
-            level.setBlockAndUpdate(pos, state.setValue(AbstractSprinklerBlock.STASIS, hasWater));
+    private static void tfg$updateStasisState(Level level, BlockPos pos, BlockState state, boolean hasWater) {
+        if (state.hasProperty(AbstractSprinklerBlock.STASIS)) {
+            boolean currentStasis = state.getValue(AbstractSprinklerBlock.STASIS);
+            if (currentStasis != hasWater) {
+                level.setBlockAndUpdate(pos, state.setValue(AbstractSprinklerBlock.STASIS, hasWater));
+            }
         }
     }
 }
