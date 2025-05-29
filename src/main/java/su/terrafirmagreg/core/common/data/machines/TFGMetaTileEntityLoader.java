@@ -10,6 +10,8 @@ public class TFGMetaTileEntityLoader {
 
 	public static void init(Consumer<FinishedRecipe> provider)
 	{
+		// The steam aqueous accumulator recipe is in KJS
+
 		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.AQUEOUS_ACCUMULATOR,
 			"PMR", "CHC", "GGG",
 			'P', CraftingComponent.PUMP,
