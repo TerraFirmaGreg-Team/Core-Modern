@@ -11,6 +11,7 @@
     "common.beneath.PortalUtilMixin",
     "common.create.BasinBlockEntityMixin",
     "common.create.BasinCategoryMixin",
+    "common.create.BoilerFluidHandlerMixin",
     "common.create.DepotBehaviorMixin",
     "common.create.ProcessingRecipeMixin",
     "common.emi.ItemEmiStackMixin",
