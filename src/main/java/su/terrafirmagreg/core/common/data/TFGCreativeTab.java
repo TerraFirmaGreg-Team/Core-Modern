@@ -40,6 +40,7 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.STROMATOLITE_CLUSTER_SMALL);
 
 		accept(out, TFGItems.PIGLIN_DISGUISE);
+		accept(out, TFGItems.TROWEL);
 
 	}
 
