@@ -10,10 +10,14 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(value = BoilerFluidHandler.class, remap = false)
 public class BoilerFluidHandlerMixin {
+    /**
+     * @author Zeropol
+     * @reason Allows create boilers to use TFC river water or gregtech steam too
+     */
     @Overwrite
     public boolean isFluidValid(int tank, FluidStack stack){    
       return FluidHelper.isWater(stack.getFluid())
-      || (TFCFluids.RIVER_WATER.get() == stack.getFluid())
-      || stack.getFluid().is(GTMaterials.Steam.getFluidTag());
+          || (TFCFluids.RIVER_WATER.get() == stack.getFluid())
+          || stack.getFluid().is(GTMaterials.Steam.getFluidTag());
     }
 }
