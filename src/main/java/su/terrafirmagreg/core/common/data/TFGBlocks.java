@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"deprecation", "unused"})
 public final class TFGBlocks {
 
 	// Reference table builders
@@ -212,7 +212,6 @@ public final class TFGBlocks {
 		BUD_BLOCKS = BUD_BLOCKS_BUILDER.build();
 	}
 
-	@SuppressWarnings("deprecation")
 	private static void registerBudIndicator(Material material, GTRegistrate registrate, ImmutableMap.Builder<Material, BlockEntry<BudIndicator>> builder)
 	{
 		TagPrefix budTag;
