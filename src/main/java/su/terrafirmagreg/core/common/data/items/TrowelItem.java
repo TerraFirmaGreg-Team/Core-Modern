@@ -15,70 +15,57 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.dries007.tfc.common.blocks.rock.Rock;
+import net.dries007.tfc.common.blocks.soil.SandBlockType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class TrowelItem extends Item {
     public TrowelItem(Properties properties) {
         super(properties.durability(1026));
     }
 
+    //Maps for RNR block replacing.
     public static Map<ResourceLocation, ResourceLocation> createBlockMapping() {
         Map<ResourceLocation, ResourceLocation> map = new HashMap<>();
 
-        String[] sandstone_colors = {
-                "pink",
-                "red",
-                "yellow",
-                "brown",
-                "green",
-                "white",
-                "black"
-        };
+        //Gets enums from TFC and turns into a sring for the maps.
+        List<String> sandstone_colors = Arrays.stream(SandBlockType.values())
+                .map(SandBlockType -> SandBlockType.name().toLowerCase(Locale.ROOT))
+                .toList();
 
-        String[] rocks = {
-                "granite",
-                "diorite",
-                "gabbro",
-                "shale",
-                "claystone",
-                "limestone",
-                "conglomerate",
-                "dolomite",
-                "chert",
-                "chalk",
-                "rhyolite",
-                "basalt",
-                "andesite",
-                "quartzite",
-                "slate",
-                "phyllite",
-                "schist",
-                "gneiss",
-                "marble"
-        };
+        List<String> rocks = Arrays.stream(Rock.values())
+                .map(rock -> rock.name().toLowerCase(Locale.ROOT))
+                .toList();
+
+        //Sandstone
         for (String sandstone_color : sandstone_colors) {
             map.put(
                     new ResourceLocation("rnr", "flagstone/" + sandstone_color + "_sandstone"),
                     new ResourceLocation("rnr", sandstone_color + "_sandstone_flagstones")
             );
         }
+        //Flagstones
         for (String flagstone_rock : rocks) {
             map.put(
                     new ResourceLocation("rnr", "flagstone/" + flagstone_rock),
                     new ResourceLocation("rnr", "rock/flagstones/" + flagstone_rock)
             );
         }
+        //Gravel
         for (String gravel_rock : rocks) {
             map.put(
                     new ResourceLocation("rnr", "gravel_fill/" + gravel_rock),
                     new ResourceLocation("rnr", "rock/gravel_road/" + gravel_rock)
             );
         }
+        //Cobble
         for (String cobble_rock : rocks) {
             map.put(
                     new ResourceLocation("tfc", "rock/loose/" + cobble_rock),
@@ -91,17 +78,19 @@ public class TrowelItem extends Item {
                     new ResourceLocation("rnr", "rock/cobbled_road/" + mossy_cobble_rock)
             );
         }
+        //Sett Bricks
         for (String brick_rock : rocks) {
             map.put(
                     new ResourceLocation("tfc", "brick/" + brick_rock),
                     new ResourceLocation("rnr", "rock/sett_road/" + brick_rock)
             );
         }
-
+        //Hoggin
         map.put(
                 new ResourceLocation("rnr", "hoggin_mix"),
                 new ResourceLocation("rnr", "hoggin")
         );
+        //Brick
         map.put(
                 new ResourceLocation("minecraft", "brick"),
                 new ResourceLocation("rnr", "brick_road")
@@ -126,8 +115,10 @@ public class TrowelItem extends Item {
 
         Map<ResourceLocation, ResourceLocation> blockMapping = createBlockMapping();
 
+        //Exception for rnr roads.
         if (clickedBlockId.toString().equals("rnr:base_course")) {
             List<ItemStack> validStacks = new ArrayList<>();
+            //Randomly chooses a spot in the hotbar.
             for (int i = 0; i < 9; i++) {
                 ItemStack hotbarStack = player.getInventory().getItem(i);
                 if (!hotbarStack.isEmpty()) {
@@ -146,16 +137,20 @@ public class TrowelItem extends Item {
             Block resultBlock = ForgeRegistries.BLOCKS.getValue(resultBlockId);
 
             if (resultBlock != null) {
+                //Updates state.
                 BlockState newState = resultBlock.defaultBlockState();
                 level.setBlock(targetPos, newState, 3);
                 level.updateNeighborsAt(targetPos, resultBlock);
 
+                //Plays sound when placing.
                 level.playSound(null, targetPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);
 
+                //Decreases item count unless in creative.
                 if (!player.isCreative()) {
                     randomStack.shrink(1);
                 }
 
+                //Damages the tool, or breaks it if at 0.
                 stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
 
                 return InteractionResult.SUCCESS;
@@ -164,6 +159,7 @@ public class TrowelItem extends Item {
             return InteractionResult.FAIL;
         }
 
+        //Normal block behavior.
         List<ItemStack> blockItems = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             ItemStack hotbarStack = player.getInventory().getItem(i);
@@ -176,6 +172,7 @@ public class TrowelItem extends Item {
 
         ItemStack randomStack = blockItems.get(new Random().nextInt(blockItems.size()));
         BlockItem blockItem = (BlockItem) randomStack.getItem();
+        //Gets context, like waterlogged, rotated, etc.
         BlockPlaceContext placeContext = new BlockPlaceContext(context);
         BlockState state = blockItem.getBlock().getStateForPlacement(placeContext);
         if (state == null) return InteractionResult.FAIL;
