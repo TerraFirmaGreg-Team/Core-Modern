@@ -172,28 +172,21 @@ public class TrowelItem extends Item {
 
         ItemStack randomStack = blockItems.get(new Random().nextInt(blockItems.size()));
         BlockItem blockItem = (BlockItem) randomStack.getItem();
-        //Gets context, like waterlogged, rotated, etc.
+        //Gets context like waterlogged, rotated, etc.
         BlockPlaceContext placeContext = new BlockPlaceContext(context);
-        BlockState state = blockItem.getBlock().getStateForPlacement(placeContext);
-        if (state == null) return InteractionResult.FAIL;
+        //Places block--respecting placement logic.
+        InteractionResult result = blockItem.place(placeContext);
 
         BlockPos placePos = context.getClickedPos().relative(context.getClickedFace());
+        level.playSound(null, placePos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);
 
-        if (level.getBlockState(placePos).canBeReplaced()) {
-            level.setBlock(placePos, state, 3);
-            level.updateNeighborsAt(placePos, state.getBlock());
-            level.scheduleTick(placePos, state.getBlock(), 1);
-
-            level.playSound(null, placePos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);
-
+        if (result.consumesAction()) {
             if (!player.isCreative()) {
                 randomStack.shrink(1);
             }
-
             stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
-            return InteractionResult.SUCCESS;
         }
 
-        return InteractionResult.PASS;
+        return result;
     }
 }
