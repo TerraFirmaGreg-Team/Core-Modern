@@ -31,7 +31,7 @@ public class TFGMachines {
 //				.rotationState(RotationState.ALL)
 //				.recipeType(TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES)
 //				.recipeModifier(SimpleSteamMachine::recipeModifier)
-//				.renderer(() -> new WorkableSteamMachineRenderer(pressure, GTCEu.id("block/machines/item_collector")))
+//				.renderer(() -> new WorkableSteamMachineRenderer(pressure, GTCEu.id("block/machines/aqueous_accumulator")))
 //				.register());
 
 	public static final MachineDefinition[] AQUEOUS_ACCUMULATOR =
@@ -42,7 +42,7 @@ public class TFGMachines {
 				.rotationState(RotationState.NON_Y_AXIS)
 				.recipeType(TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES)
 				.recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
-				.workableTieredHullRenderer(GTCEu.id("block/machines/item_collector"))
+				.workableTieredHullRenderer(GTCEu.id("block/machines/aqueous_accumulator"))
 				.tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
 					TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 				.tooltips(GTMachineUtils.explosion())
