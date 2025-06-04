@@ -83,7 +83,7 @@ public abstract class ToolHelperMixin {
                 for (int y = (row == 0 ? 0 : row * 2 - 1); y >= (row == 0 ? 0 : -1); y--) {
                     for (int x = 0; x <= layer; x++) {
                         for (int z = -column; z <= column; z++) {
-                            if (!(x == 0 && y == 0 && z == 0)) {
+                            if (!(x == 0 && y <= 0 && z == 0)) {
                                 BlockPos pos = blockHit.getBlockPos().offset(
                                         isX ? (isNegative ? x : -x) : (isNegative ? z : -z), y,
                                         isX ? (isNegative ? z : -z) : (isNegative ? x : -x));
@@ -92,6 +92,14 @@ public abstract class ToolHelperMixin {
                                 }
                             }
                         }
+                    }
+                }
+                // Block under targeted block must be the last one added to prevent collapse
+                // Targeted block is broken after all blocks in validPositions
+                if (row > 0) {
+                    BlockPos pos = blockHit.getBlockPos().offset(0, -1, 0);
+                    if (function.apply(stack, world, player, pos, new UseOnContext(player.level(), player, player.getUsedItemHand(), stack, blockHit))) {
+                        validPositions.add(pos);
                     }
                 }
             }
