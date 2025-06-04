@@ -25,8 +25,7 @@ public class TFGItems {
 			ITEMS.register("piglin_disguise", () -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), new Item.Properties()));
 
 	public static final RegistryObject<Item> TROWEL =
-			ITEMS.register("trowel", () ->
-					new TrowelItem(new Item.Properties()));
+			ITEMS.register("trowel", () -> new TrowelItem(new Item.Properties()));
 
 	private static RegistryObject<Item> register(String name)
 	{
