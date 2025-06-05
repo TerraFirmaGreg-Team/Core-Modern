@@ -170,20 +170,28 @@ public class TrowelItem extends Item {
 
         if (blockItems.isEmpty()) return InteractionResult.PASS;
 
+        //Caches trowel tool item.
+        int originalCount = stack.getCount();
+
         ItemStack randomStack = blockItems.get(new Random().nextInt(blockItems.size()));
         BlockItem blockItem = (BlockItem) randomStack.getItem();
         //Gets context like waterlogged, rotated, etc.
         BlockPlaceContext placeContext = new BlockPlaceContext(context);
         //Places block--respecting placement logic.
         InteractionResult result = blockItem.place(placeContext);
+        //Restores trowel tool
+        stack.setCount(originalCount);
 
         BlockPos placePos = context.getClickedPos().relative(context.getClickedFace());
         level.playSound(null, placePos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);
 
-        if (result.consumesAction()) {
-            if (!player.isCreative()) {
-                randomStack.shrink(1);
-            }
+        //Decreases item count unless in creative.
+        if (!player.isCreative()) {
+            randomStack.shrink(1);
+        }
+
+        // Only damage the trowel if the block was placed
+        if (result.consumesAction() && !player.isCreative()) {
             stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
         }
 
