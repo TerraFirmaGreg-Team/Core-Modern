@@ -10,6 +10,8 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.recipe.condition.RockBreakerCondition;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
+import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluids;
@@ -19,6 +21,26 @@ import net.minecraftforge.fluids.FluidStack;
 public class TFGRecipeTypes {
 
 	public static void init() { }
+
+	public final static GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register("greenhouse", GTRecipeTypes.MULTIBLOCK)
+			.setEUIO(IO.IN)
+			.setMaxIOSize(3, 4, 1, 0)
+			.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+			.setSound(GTSoundEntries.BATH);
+
+	public final static GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
+		.setEUIO(IO.IN)
+		.setMaxIOSize(3, 2, 0, 0)
+		.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+		.setMaxTooltips(2)
+		.setSound(GTSoundEntries.FURNACE);
+
+	public final static GTRecipeType FOOD_PROCESSOR_RECIPES = GTRecipeTypes.register("food_processor", GTRecipeTypes.ELECTRIC)
+		.setEUIO(IO.IN)
+		.setMaxIOSize(6, 2, 2, 0)
+		.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+		.setMaxTooltips(2)
+		.setSound(GTSoundEntries.MIXER);
 
 	public final static GTRecipeType AQUEOUS_ACCUMULATOR_RECIPES =
 		GTRecipeTypes.register("aqueous_accumulator", GTRecipeTypes.ELECTRIC)
