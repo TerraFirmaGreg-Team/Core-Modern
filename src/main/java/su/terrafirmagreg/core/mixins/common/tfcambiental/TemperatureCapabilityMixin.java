@@ -48,14 +48,21 @@ public abstract class TemperatureCapabilityMixin {
 
 		if (totalPotency == (TFCAmbientalCompat.HEATPROOF * 4) + 1)
 		{
-			if (this.target > 28f)
+			if (this.target > 29f)
 			{
-				this.target = 28f;
+				this.target = 29f;
 			}
 		}
 		else if (totalPotency == (TFCAmbientalCompat.FULLY_INSULATED * 4) + 1)
 		{
-			this.target = 18f;
+			if (this.target > 29f)
+			{
+				this.target = 29f;
+			}
+			else if (this.target < 1f)
+			{
+				this.target = 1f;
+			}
 		}
 	}
 }
