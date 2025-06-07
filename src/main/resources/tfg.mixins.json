@@ -39,6 +39,7 @@
     "common.gtceu.materials.FirstDegreeMixin",
     "common.gtceu.materials.MaterialBlocksMixin",
     "common.gtceu.materials.MaterialPropertiesMixin",
+    "common.gtceu.materials.OrePropertyMixin",
     "common.gtceu.materials.SecondDegreeMixin",
     "common.gtceu.recipes.ArcFurnaceLogicMixin",
     "common.gtceu.recipes.MaceratorLogicMixin",
