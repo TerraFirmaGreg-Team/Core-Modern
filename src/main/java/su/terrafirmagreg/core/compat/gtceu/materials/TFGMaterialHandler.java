@@ -11,11 +11,14 @@ import com.negodya1.vintageimprovements.VintageItems;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.therighthon.rnr.common.item.RNRItems;
+import earth.terrarium.adastra.common.registry.ModBlocks;
+import earth.terrarium.adastra.common.registry.ModItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.world.level.block.Blocks;
+import su.terrafirmagreg.core.common.TFGHelpers;
 
 import java.util.HashMap;
 
@@ -25,7 +28,7 @@ import static su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix.*;
 
 public final class TFGMaterialHandler {
 
-	// I couldn't get setIgnored() to work with TFC things, so they stay here for now. -Py
+	// setIgnored() doesn't work very well in KJS despite what GT docs say, so that code lives here instead
 
 	public static void postInit() {
 
@@ -75,6 +78,7 @@ public final class TFGMaterialHandler {
 		block.setIgnored(Vanadium, () -> VintageBlocks.VANADIUM_BLOCK);
 		block.setIgnored(Zinc, () -> AllBlocks.ZINC_BLOCK);
 		block.setIgnored(Brass, () -> AllBlocks.BRASS_BLOCK);
+		block.setIgnored(Steel, ModBlocks.STEEL_BLOCK);
 
 		crushedPurified.setIgnored(Gold, () -> AllItems.CRUSHED_GOLD);
 		crushedPurified.setIgnored(Copper, () -> AllItems.CRUSHED_COPPER);
@@ -82,6 +86,39 @@ public final class TFGMaterialHandler {
 		crushedPurified.setIgnored(Silver, () -> AllItems.CRUSHED_SILVER);
 		crushedPurified.setIgnored(Tin, () -> AllItems.CRUSHED_TIN);
 		crushedPurified.setIgnored(Lead, () -> AllItems.CRUSHED_LEAD);
+
+		// Ad astra materials
+
+		var desh = TFGHelpers.getMaterial("desh");
+		rawOre.setIgnored(desh, ModItems.RAW_DESH);
+		rawOreBlock.setIgnored(desh, ModItems.RAW_DESH_BLOCK);
+		block.setIgnored(desh, ModItems.DESH_BLOCK);
+		ingot.setIgnored(desh, ModItems.DESH_INGOT);
+		nugget.setIgnored(desh, ModItems.DESH_NUGGET);
+		plate.setIgnored(desh, ModItems.DESH_PLATE);
+
+		var ostrum = TFGHelpers.getMaterial("ostrum");
+		rawOre.setIgnored(ostrum, ModItems.RAW_OSTRUM);
+		rawOreBlock.setIgnored(ostrum, ModItems.RAW_OSTRUM_BLOCK);
+		block.setIgnored(ostrum, ModItems.OSTRUM_BLOCK);
+		ingot.setIgnored(ostrum, ModItems.OSTRUM_INGOT);
+		nugget.setIgnored(ostrum, ModItems.OSTRUM_NUGGET);
+		plate.setIgnored(ostrum, ModItems.OSTRUM_PLATE);
+
+		var calorite = TFGHelpers.getMaterial("calorite");
+		rawOre.setIgnored(calorite, ModItems.RAW_CALORITE);
+		rawOreBlock.setIgnored(calorite, ModItems.RAW_CALORITE_BLOCK);
+		block.setIgnored(calorite, ModItems.CALORITE_BLOCK);
+		ingot.setIgnored(calorite, ModItems.CALORITE_INGOT);
+		nugget.setIgnored(calorite, ModItems.CALORITE_NUGGET);
+		plate.setIgnored(calorite, ModItems.CALORITE_PLATE);
+
+		var etrium = TFGHelpers.getMaterial("etrium");
+		block.setIgnored(etrium, ModItems.ETRIUM_BLOCK);
+		ingot.setIgnored(etrium, ModItems.ETRIUM_INGOT);
+		nugget.setIgnored(etrium, ModItems.ETRIUM_NUGGET);
+		plate.setIgnored(etrium, ModItems.ETRIUM_PLATE);
+		rod.setIgnored(etrium, ModItems.ETRIUM_ROD);
 
 		// Tool-only metals
 
