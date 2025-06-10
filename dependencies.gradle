@@ -127,5 +127,6 @@ dependencies {
 
     // Ad Astra
     implementation fg.deobf("curse.maven:ad-astra-635042:5914893") { transitive = false }
+    implementation fg.deobf("curse.maven:botarium-704113:5486070") { transitive = false }
     implementation fg.deobf("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
 }

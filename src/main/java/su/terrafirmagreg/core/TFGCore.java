@@ -26,6 +26,7 @@ import su.terrafirmagreg.core.common.data.TFGCreativeTab;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.machines.TFGMachines;
 import su.terrafirmagreg.core.common.data.machines.TFGRecipeTypes;
+import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.world.TFGFeatures;
 
 @Mod(TFGCore.MOD_ID)
@@ -58,6 +59,8 @@ public final class TFGCore {
 
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
+
+        AdAstraCompat.RegisterEvents();
     }
 
     public static ResourceLocation id(String name) {

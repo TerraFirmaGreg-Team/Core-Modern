@@ -6,6 +6,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "client.minecraft.IBlockModelGeneratorsInvoker",
+    "common.ad_astra.GasTankItemMixin",
+    "common.ad_astra.SpaceSuitItemMixin",
     "common.ae2.ConfigMenuInventoryMixin",
     "common.beneath.BurpingFlowerBlockMixin",
     "common.beneath.PortalUtilMixin",

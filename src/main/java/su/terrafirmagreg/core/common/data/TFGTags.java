@@ -2,8 +2,11 @@ package su.terrafirmagreg.core.common.data;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public final class TFGTags {
@@ -24,6 +27,22 @@ public final class TFGTags {
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), new ResourceLocation(path));
+        }
+    }
+
+    public static final class Fluids {
+        public static final TagKey<Fluid> BreathableCompressedAir = createFluidTag("tfg:breathable_compressed_air");
+
+        public static TagKey<Fluid> createFluidTag(String path) {
+            return TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation(path));
+        }
+    }
+
+    public static final class Entities {
+        public static final TagKey<EntityType<?>> IgnoresGravity = createEntityTag("tfg:ignores_gravity");
+
+        public static TagKey<EntityType<?>> createEntityTag(String path) {
+            return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), new ResourceLocation(path));
         }
     }
 }
