@@ -30,7 +30,7 @@ public class TFGRecipeTypes {
 
 	public final static GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
 		.setEUIO(IO.IN)
-		.setMaxIOSize(3, 2, 0, 0)
+		.setMaxIOSize(1, 1, 0, 0)
 		.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
 		.setMaxTooltips(2)
 		.setSound(GTSoundEntries.FURNACE);

@@ -173,8 +173,8 @@ public final class TFGBlocks {
 		BUD_BLOCKS = BUD_BLOCKS_BUILDER.build();
 	}
 
-	@SuppressWarnings("deprecation")
-	private static void registerBudIndicator(Material material, GTRegistrate registrate, ImmutableMap.Builder<Material, BlockEntry<BudIndicator>> builder)
+	@SuppressWarnings("removal")
+    private static void registerBudIndicator(Material material, GTRegistrate registrate, ImmutableMap.Builder<Material, BlockEntry<BudIndicator>> builder)
 	{
 		TagPrefix budTag;
 		int lightLevel;
