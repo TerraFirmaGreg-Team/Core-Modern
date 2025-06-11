@@ -103,6 +103,7 @@ public class TFGMachines {
 			.rotationState(RotationState.NON_Y_AXIS)
 			.recipeType(TFGRecipeTypes.FOOD_PROCESSOR_RECIPES)
 			.recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT)
+			.editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("mixer"), TFGRecipeTypes.FOOD_PROCESSOR_RECIPES))
 			.workableTieredHullRenderer(GTCEu.id("block/machines/mixer"))
 			.tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
 					TFGRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
