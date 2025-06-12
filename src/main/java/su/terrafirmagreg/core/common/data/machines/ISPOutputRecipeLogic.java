@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
@@ -16,6 +15,10 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe.ActionResult;
+import com.gregtechceu.gtceu.api.recipe.chance.logic.ChanceLogic;
+import com.gregtechceu.gtceu.api.recipe.content.Content;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.network.chat.Component;
@@ -24,15 +27,24 @@ import net.minecraft.world.item.crafting.Ingredient;
 import su.terrafirmagreg.core.TFGCore;
 
 public class ISPOutputRecipeLogic extends RecipeLogic {
+    
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(ISPOutputRecipeLogic.class, RecipeLogic.MANAGED_FIELD_HOLDER);
+    
+    @Override
+    public ManagedFieldHolder getFieldHolder() {
+        return MANAGED_FIELD_HOLDER;
+    }
 
     // There is probably a better way to expose the TFC recipe data
-    record TFCRecipeData(List<Ingredient> inputs, ItemStackProvider output) {}
+    record TFCRecipeData(List<Ingredient> inputs, ItemStackProvider outputISP) {}
     private static Map<String, TFCRecipeData> TFCRecipes = new HashMap<>();
     public static void RegisterRecipeData(String id, List<Ingredient> inputs, ItemStackProvider output) {
         TFCRecipes.put(id, new TFCRecipeData(inputs, output));
     }
 
+    @Persisted
     List<ItemStack> currentItems = new ArrayList<>();
+
     List<ItemStack> currentItemsSimulated = new ArrayList<>();
 
 
@@ -53,9 +65,13 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
             if (!consumeRecipeInputItems(recipeData, true)) {
                 result = ActionResult.fail(() -> Component.translatable("gtceu.recipe_logic.insufficient_in").append(": ").append(ItemRecipeCapability.CAP.getName()), 0.0F);
             }
-            if (!processRecipeOutputItems(recipeData, true)) {
-                result = ActionResult.fail(() -> Component.translatable("gtceu.recipe_logic.insufficient_out").append(": ").append(ItemRecipeCapability.CAP.getName()), 0.0F);
-            }
+
+            if (currentItemsSimulated.isEmpty()) return ActionResult.FAIL_NO_REASON;
+
+            var itemStack = recipeData.outputISP.getStack(currentItemsSimulated.get(0));
+            result = recipe.matchRecipeContents(IO.OUT, getCapHolder(), 
+            Map.of(ItemRecipeCapability.CAP, List.of(new Content(Ingredient.of(itemStack), ChanceLogic.getMaxChancedValue(), ChanceLogic.getMaxChancedValue(), 0, null, null)))
+            , false);
         }
         return result;
     }
@@ -86,16 +102,14 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         if (lastRecipe != null) {
             lastRecipe.postWorking(machine);
             handleRecipeIO(lastRecipe, IO.OUT);
-            if (machine.alwaysTryModifyRecipe()) {
-                if (lastOriginRecipe != null) {
-                    var modified = machine.fullModifyRecipe(lastOriginRecipe.copy());
-                    if (modified == null)
-                        markLastRecipeDirty();
-                    else
-                        lastRecipe = modified;
-                } else {
+            if (lastOriginRecipe != null) {
+                var modified = machine.fullModifyRecipe(lastOriginRecipe.copy());
+                if (modified == null)
                     markLastRecipeDirty();
-                }
+                else
+                    lastRecipe = modified;
+            } else {
+                markLastRecipeDirty();
             }
             if (!recipeDirty && !suspendAfterFinish && matchRecipe(lastRecipe, this.machine).isSuccess()
                     && lastRecipe.matchTickRecipe(this.machine).isSuccess()
@@ -146,22 +160,19 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
         if (currentRecipe == null) return super.handleRecipeIO(recipe, io);
 
-        // Handle fluid IO
-        if (io == IO.IN) {
-            var fluids = recipe.getInputContents(FluidRecipeCapability.CAP);
-            recipe.handleRecipe(io, getCapHolder(), false, Map.of(ItemRecipeCapability.CAP, fluids), chanceCaches);
-        }
-        else if (io == IO.OUT) {
-            var fluids = recipe.getOutputContents(FluidRecipeCapability.CAP);
-            recipe.handleRecipe(io, getCapHolder(), false, Map.of(ItemRecipeCapability.CAP, fluids), chanceCaches);
-        }
+        if (currentItems.isEmpty()) return false;
 
-        if (io == IO.IN) {
-            return consumeRecipeInputItems(currentRecipe, false);
-        } else if (io == IO.OUT) {
-            return processRecipeOutputItems(currentRecipe, false);
+        // Handle fluid IO
+        var fluids = (io == IO.IN) ? recipe.getInputContents(FluidRecipeCapability.CAP): recipe.getOutputContents(FluidRecipeCapability.CAP);
+        recipe.handleRecipe(io, getCapHolder(), false, Map.of(FluidRecipeCapability.CAP, fluids), chanceCaches);
+
+        if (io == IO.IN) return consumeRecipeInputItems(currentRecipe, false);
+        else {
+            var itemStack = currentRecipe.outputISP.getStack(currentItems.get(0));
+            return recipe.handleRecipe(IO.OUT, getCapHolder(), false,
+            Map.of(ItemRecipeCapability.CAP, List.of(new Content(Ingredient.of(itemStack), ChanceLogic.getMaxChancedValue(), ChanceLogic.getMaxChancedValue(), 0, null, null)))
+            , chanceCaches);
         }
-        return false;
     }
 
     private boolean consumeRecipeInputItems(TFCRecipeData currentRecipe, boolean simulate) {
@@ -197,34 +208,6 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
         if (simulate) currentItemsSimulated = extracted;
         else currentItems = extracted;
-
-        return success;
-    }
-
-    private boolean processRecipeOutputItems(TFCRecipeData currentRecipe, boolean simulate) {
-        List<IRecipeHandler<?>> outputHandlers = getCapHolder().getCapabilitiesProxy().get(IO.OUT, ItemRecipeCapability.CAP);
-        if (outputHandlers == null) return false;
-        outputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
-        
-        var success = false;
-
-        ItemStack output = currentRecipe.output.getSingleStack((simulate) ? currentItemsSimulated.get(0) : currentItems.get(0));
-
-        for (IRecipeHandler<?> outputHandler : outputHandlers) {
-            if (outputHandler instanceof NotifiableItemStackHandler stackHandler) {
-                for (int i = 0; i < stackHandler.getSlots(); i++) {
-                    var validSlot = stackHandler.isItemValid(i, output);
-                    if (!validSlot) continue;
-                    output = stackHandler.insertItemInternal(i, output, simulate);
-                    if (output.isEmpty()) {
-                        success = true;
-                        return success;
-                    }
-                }
-            } else {
-                TFGCore.LOGGER.warn("Unexpected output capability proxy: Expected NotifiableItemStackHandler, actual: " + outputHandler.getClass());
-            }
-        }
 
         return success;
     }
