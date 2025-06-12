@@ -168,6 +168,9 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
     }
 
     private boolean consumeRecipeInputItems(TFCRecipeData currentRecipe, boolean simulate) {
+
+        if (currentRecipe.inputs.isEmpty()) return true;
+
         List<IRecipeHandler<?>> inputHandlers = getCapHolder().getCapabilitiesProxy().get(IO.IN, ItemRecipeCapability.CAP);
         if (inputHandlers == null) return false;
         inputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
@@ -217,6 +220,9 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
     }
 
     private boolean handleOutput(TFCRecipeData currentRecipe, boolean simulate) {
+
+        if (currentRecipe.outputISP == null) return true;
+
         if ((simulate && currentItemsSimulated.isEmpty()) || (!simulate && currentItems.isEmpty())) return false;
 
         List<IRecipeHandler<?>> outputHandlers = getCapHolder().getCapabilitiesProxy().get(IO.OUT, ItemRecipeCapability.CAP);

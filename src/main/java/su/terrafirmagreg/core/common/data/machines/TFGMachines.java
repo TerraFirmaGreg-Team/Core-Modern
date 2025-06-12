@@ -103,8 +103,8 @@ public class TFGMachines {
 			.rotationState(RotationState.NON_Y_AXIS)
 			.recipeType(TFGRecipeTypes.FOOD_PROCESSOR_RECIPES)
 			.recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT)
-			.editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("mixer"), TFGRecipeTypes.FOOD_PROCESSOR_RECIPES))
-			.workableTieredHullRenderer(GTCEu.id("block/machines/mixer"))
+			.editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("food_processor"), TFGRecipeTypes.FOOD_PROCESSOR_RECIPES))
+			.workableTieredHullRenderer(GTCEu.id("block/machines/food_processor"))
 			.tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
 					TFGRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 			.register(),
@@ -117,8 +117,8 @@ public class TFGMachines {
 			.rotationState(RotationState.NON_Y_AXIS)
 			.recipeType(TFGRecipeTypes.FOOD_OVEN_RECIPES)
 			.recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
-			.workableTieredHullRenderer(GTCEu.id("block/machines/electric_furnace"))
-			.editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("electric_furnace"), TFGRecipeTypes.FOOD_OVEN_RECIPES))
+			.workableTieredHullRenderer(GTCEu.id("block/machines/food_oven"))
+			.editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("food_oven"), TFGRecipeTypes.FOOD_OVEN_RECIPES))
 			.tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
 					TFGRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 			.register(),
