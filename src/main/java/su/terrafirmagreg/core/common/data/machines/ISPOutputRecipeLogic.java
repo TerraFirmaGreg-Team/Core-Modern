@@ -71,6 +71,7 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
             }
         }
 
+        //TFGCore.LOGGER.info("Testing: {} - {} {}", recipe.id.toString(), result.isSuccess(), result.isSuccess() ? "" : result.reason().get().getString());
         return result;
     }
 
@@ -185,11 +186,13 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                             if (sized.getInner().test(iStack)) {
                                 var amount = sized.getAmount();
                                 ItemStack result = stackHandler.extractItemInternal(index, amount, simulate);
-    
                                 if (result.getCount() < amount) {
                                     sized.setAmount(amount - result.getCount());
+                                    extracted.add(result);
                                 } else {
                                     iter.remove();
+                                    extracted.add(result);
+                                    break;
                                 }
                                 extracted.add(result);
                             }
@@ -197,6 +200,7 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                             if (ingredient.test(iStack)) {
                                 extracted.add(stackHandler.extractItemInternal(index, 1, simulate));
                                 iter.remove();
+                                break;
                             }
                         }
                     }
@@ -220,6 +224,11 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         outputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
 
         var itemStack = currentRecipe.outputISP.getStack(simulate ? currentItemsSimulated.get(0) : currentItems.get(0));
+        
+        //TFGCore.LOGGER.info("Handling: {}", simulate);
+        //TFGCore.LOGGER.info("Testing stack: {} tick: ({}) {}", itemStack.toString(), 
+        //FoodCapability.has(itemStack) ? FoodCapability.getRoundedCreationDate(FoodCapability.get(itemStack).getCreationDate()) : -1, 
+        //FoodCapability.has(itemStack) ? FoodCapability.get(itemStack).getCreationDate() : -1);
 
         // Logic to allow food items with similar creation dates to stack properly
         for (IRecipeHandler<?> outputHandler : outputHandlers) {
@@ -227,12 +236,17 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                 for (int index = 0; index < stackHandler.getSlots(); index++) {
                     if (!stackHandler.isItemValid(index, itemStack)) continue;
                     ItemStack inSlot = stackHandler.getStackInSlot(index);
+                    //TFGCore.LOGGER.info("Slot {} stack: {} tick: ({}) {}", index, inSlot.toString(), 
+                    //FoodCapability.has(inSlot) ? FoodCapability.getRoundedCreationDate(FoodCapability.get(inSlot).getCreationDate()) : -1, 
+                    //FoodCapability.has(inSlot) ? FoodCapability.get(inSlot).getCreationDate() : -1);
                     if (inSlot.isEmpty()) {
                         itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
                     } else if (FoodCapability.has(itemStack) && FoodCapability.has(inSlot) && FoodCapability.areStacksStackableExceptCreationDate(itemStack, inSlot)) {
+                        //TFGCore.LOGGER.info("Stackable");
                         var date1 = FoodCapability.get(inSlot).getCreationDate();
                         var date2 = FoodCapability.get(itemStack).getCreationDate();
                         if (FoodCapability.getRoundedCreationDate(date1) == FoodCapability.getRoundedCreationDate(date2)) {
+                            //TFGCore.LOGGER.info("Merging");
                             FoodCapability.get(itemStack).setCreationDate(date1);
                             itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
                         }
