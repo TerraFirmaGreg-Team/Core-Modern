@@ -37,7 +37,7 @@ public class TFGRecipeTypes {
 
 	public final static GTRecipeType FOOD_PROCESSOR_RECIPES = GTRecipeTypes.register("food_processor", GTRecipeTypes.ELECTRIC)
 		.setEUIO(IO.IN)
-		.setMaxIOSize(6, 2, 2, 0)
+		.setMaxIOSize(6, 2, 2, 1)
 		.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
 		.setMaxTooltips(2)
 		.setSound(GTSoundEntries.MIXER);
