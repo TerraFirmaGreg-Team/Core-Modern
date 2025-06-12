@@ -15,11 +15,11 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe.ActionResult;
-import com.gregtechceu.gtceu.api.recipe.chance.logic.ChanceLogic;
-import com.gregtechceu.gtceu.api.recipe.content.Content;
+import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -58,7 +58,7 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
     // Custom recipe match function
     private GTRecipe.ActionResult matchRecipe(GTRecipe recipe, IRecipeCapabilityHolder holder) {
-        ActionResult result = recipe.matchRecipe(holder);
+        ActionResult result = recipe.matchRecipeContents(IO.IN, holder, recipe.inputs, false);
         
         TFCRecipeData recipeData = TFCRecipes.get(recipe.id.getPath());
         if (result.isSuccess() && recipeData != null) {
@@ -66,13 +66,11 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                 result = ActionResult.fail(() -> Component.translatable("gtceu.recipe_logic.insufficient_in").append(": ").append(ItemRecipeCapability.CAP.getName()), 0.0F);
             }
 
-            if (currentItemsSimulated.isEmpty()) return ActionResult.FAIL_NO_REASON;
-
-            var itemStack = recipeData.outputISP.getStack(currentItemsSimulated.get(0));
-            result = recipe.matchRecipeContents(IO.OUT, getCapHolder(), 
-            Map.of(ItemRecipeCapability.CAP, List.of(new Content(Ingredient.of(itemStack), ChanceLogic.getMaxChancedValue(), ChanceLogic.getMaxChancedValue(), 0, null, null)))
-            , false);
+            if (!handleOutput(recipeData, true)) {
+                result = ActionResult.fail(() -> Component.translatable("gtceu.recipe_logic.insufficient_out").append(": ").append(ItemRecipeCapability.CAP.getName()), 0.0F);
+            }
         }
+
         return result;
     }
 
@@ -152,7 +150,6 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
     }
 
     //#endregion
-
     // Custom recipe IO logic
     @Override
     protected boolean handleRecipeIO(GTRecipe recipe, IO io) {
@@ -160,19 +157,13 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
         if (currentRecipe == null) return super.handleRecipeIO(recipe, io);
 
-        if (currentItems.isEmpty()) return false;
 
         // Handle fluid IO
         var fluids = (io == IO.IN) ? recipe.getInputContents(FluidRecipeCapability.CAP): recipe.getOutputContents(FluidRecipeCapability.CAP);
         recipe.handleRecipe(io, getCapHolder(), false, Map.of(FluidRecipeCapability.CAP, fluids), chanceCaches);
 
         if (io == IO.IN) return consumeRecipeInputItems(currentRecipe, false);
-        else {
-            var itemStack = currentRecipe.outputISP.getStack(currentItems.get(0));
-            return recipe.handleRecipe(IO.OUT, getCapHolder(), false,
-            Map.of(ItemRecipeCapability.CAP, List.of(new Content(Ingredient.of(itemStack), ChanceLogic.getMaxChancedValue(), ChanceLogic.getMaxChancedValue(), 0, null, null)))
-            , chanceCaches);
-        }
+        else return handleOutput(currentRecipe, false);
     }
 
     private boolean consumeRecipeInputItems(TFCRecipeData currentRecipe, boolean simulate) {
@@ -183,33 +174,75 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         List<Ingredient> inputsToConsume = new ArrayList<>(currentRecipe.inputs);
         List<ItemStack> extracted = new ArrayList<>();
 
-        var success = false;
         for (IRecipeHandler<?> inputHandler : inputHandlers) {
             if (inputHandler instanceof NotifiableItemStackHandler stackHandler) { 
-                for (int index = 0; index < stackHandler.getSlots(); index++) {
-                    if (inputsToConsume.isEmpty()) break;
-                    ItemStack iStack = stackHandler.getStackInSlot(index);
-                    for (Ingredient ingredient : inputsToConsume) {
-                        if (ingredient.test(iStack)) {
-                            extracted.add(stackHandler.extractItemInternal(index, 1, simulate));
-                            inputsToConsume.remove(ingredient);
-                            if (inputsToConsume.isEmpty()) {
-                                success = true;
-                                break;
+                var iter = inputsToConsume.iterator();
+                while (iter.hasNext()) {
+                    var ingredient = iter.next();
+                    for (int index = 0; index < stackHandler.getSlots(); index++) {
+                        ItemStack iStack = stackHandler.getStackInSlot(index);
+                        if (ingredient instanceof SizedIngredient sized) {
+                            if (sized.getInner().test(iStack)) {
+                                var amount = sized.getAmount();
+                                ItemStack result = stackHandler.extractItemInternal(index, amount, simulate);
+    
+                                if (result.getCount() < amount) {
+                                    sized.setAmount(amount - result.getCount());
+                                } else {
+                                    iter.remove();
+                                }
+                                extracted.add(result);
+                            }
+                        } else {
+                            if (ingredient.test(iStack)) {
+                                extracted.add(stackHandler.extractItemInternal(index, 1, simulate));
+                                iter.remove();
                             }
                         }
                     }
                 }
-
             } else {
                 TFGCore.LOGGER.warn("Unexpected input capability proxy: Expected NotifiableItemStackHandler, actual: " + inputHandler.getClass());
             }
         }
-
+        if (!inputsToConsume.isEmpty()) return false;
         if (simulate) currentItemsSimulated = extracted;
         else currentItems = extracted;
 
-        return success;
+        return true;
     }
 
+    private boolean handleOutput(TFCRecipeData currentRecipe, boolean simulate) {
+        if ((simulate && currentItemsSimulated.isEmpty()) || (!simulate && currentItems.isEmpty())) return false;
+
+        List<IRecipeHandler<?>> outputHandlers = getCapHolder().getCapabilitiesProxy().get(IO.OUT, ItemRecipeCapability.CAP);
+        if (outputHandlers == null) return false;
+        outputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
+
+        var itemStack = currentRecipe.outputISP.getStack(simulate ? currentItemsSimulated.get(0) : currentItems.get(0));
+
+        // Logic to allow food items with similar creation dates to stack properly
+        for (IRecipeHandler<?> outputHandler : outputHandlers) {
+            if (outputHandler instanceof NotifiableItemStackHandler stackHandler) {
+                for (int index = 0; index < stackHandler.getSlots(); index++) {
+                    if (!stackHandler.isItemValid(index, itemStack)) continue;
+                    ItemStack inSlot = stackHandler.getStackInSlot(index);
+                    if (inSlot.isEmpty()) {
+                        itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
+                    } else if (FoodCapability.has(itemStack) && FoodCapability.has(inSlot) && FoodCapability.areStacksStackableExceptCreationDate(itemStack, inSlot)) {
+                        var date1 = FoodCapability.get(inSlot).getCreationDate();
+                        var date2 = FoodCapability.get(itemStack).getCreationDate();
+                        if (FoodCapability.getRoundedCreationDate(date1) == FoodCapability.getRoundedCreationDate(date2)) {
+                            FoodCapability.get(itemStack).setCreationDate(date1);
+                            itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
+                        }
+                    }
+                    if (itemStack.isEmpty()) return true;
+                }
+            } else {
+                TFGCore.LOGGER.warn("Unexpected output capability proxy: Expected NotifiableItemStackHandler, actual: " + outputHandler.getClass());
+            }
+        }
+        return false;
+    }
 }
