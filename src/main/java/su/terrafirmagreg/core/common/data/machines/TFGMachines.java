@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.data.machines;
 
-import appeng.core.definitions.AEBlocks;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -11,31 +10,27 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
-import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BiFunction;
 
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
@@ -78,7 +73,7 @@ public class TFGMachines {
 				.or(Predicates.blockTag(BlockTags.LEAVES)))
 			.where(' ', Predicates.any())
 			.where('F', Predicates.frames(GTMaterials.Steel))
-			.where('X', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "quartz_glass"))))
+			.where('X', Predicates.blocks(Blocks.GLASS))
 			.where('D', Predicates.blockTag(BlockTags.DIRT))
 			.build())
 		.shapeInfos(definition -> {
@@ -95,7 +90,7 @@ public class TFGMachines {
 				.where('C', GTBlocks.STEEL_HULL.getDefaultState())
 				.where('D', TFCBlocks.SOIL.get(SoilBlockType.GRASS).get(SoilBlockType.Variant.LOAM).get())
 				.where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel))
-				.where('X', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "quartz_glass")))
+				.where('X', Blocks.GLASS)
 				.where('W', TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.LOG).get())
 				.where('L', TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.LEAVES).get())
 				.where(' ', Blocks.AIR)
@@ -136,6 +131,20 @@ public class TFGMachines {
 					TFGRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 			.register(),
 		GTMachineUtils.LOW_TIERS);
+
+	public static final MachineDefinition[] FOOD_REFRIGERATOR =
+		registerTieredMachines("food_refrigerator",
+			FoodRefrigeratorMachine::new, (tier, builder) -> builder
+			.langValue("%s Refrigerator %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
+			.rotationState(RotationState.NON_Y_AXIS)
+			.tooltips(
+				Component.translatable("gtceu.universal.tooltip.voltage_in", FormattingUtil.formatNumbers((long) GTValues.V[tier]), GTValues.VNF[tier]),
+				Component.translatable("gtceu.universal.tooltip.energy_storage_capacity", FormattingUtil.formatNumbers(GTValues.V[tier] * 64)),
+				Component.translatable("gtceu.universal.tooltip.item_storage_capacity", FoodRefrigeratorMachine.INVENTORY_SIZES[tier-1])
+			)
+			.tieredHullRenderer(GTCEu.id("block/machine/buffer"))
+			.register(), 
+			GTMachineUtils.LOW_TIERS);
 	
 	public static final MachineDefinition[] AQUEOUS_ACCUMULATOR =
 		registerTieredMachines("aqueous_accumulator",
