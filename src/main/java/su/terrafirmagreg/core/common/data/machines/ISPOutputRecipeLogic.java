@@ -20,8 +20,12 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.recipes.RecipeHelpers;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import su.terrafirmagreg.core.TFGCore;
@@ -36,16 +40,84 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
     }
 
     // There is probably a better way to expose the TFC recipe data
-    record TFCRecipeData(List<Ingredient> inputs, ItemStackProvider outputISP) {}
+    record TFCRecipeData(List<SizedIngredient> inputs, ItemStackProvider outputISP, List<ItemStack> secondaryOutputs) {}
     private static Map<String, TFCRecipeData> TFCRecipes = new HashMap<>();
-    public static void RegisterRecipeData(String id, List<Ingredient> inputs, ItemStackProvider output) {
-        TFCRecipes.put(id, new TFCRecipeData(inputs, output));
+    public static void RegisterRecipeData(String id, List<Ingredient> inputs, ItemStackProvider output, List<ItemStack> secondaryOutputs) {
+        List<SizedIngredient> sizedIngredients = new ArrayList<>();
+
+        for (Ingredient in : inputs) {
+            if (in instanceof SizedIngredient sized) sizedIngredients.add(sized);
+            else sizedIngredients.add(SizedIngredient.create(in, 1));
+        }
+
+        TFCRecipes.put(id, new TFCRecipeData(sizedIngredients, output, secondaryOutputs));
     }
 
     @Persisted
     List<ItemStack> currentItems = new ArrayList<>();
 
     List<ItemStack> currentItemsSimulated = new ArrayList<>();
+
+    class SimulatedCraftingContainer implements CraftingContainer {
+
+        private List<ItemStack> _items = new ArrayList<>();
+        public SimulatedCraftingContainer(List<ItemStack> items) {
+            // TFC expects each ItemStack to only have one item
+            for (ItemStack itemStack : items) {
+                for (int i = 0; i < itemStack.getCount(); i++) {
+                    _items.add(itemStack.copyWithCount(1));
+                }
+            }
+        }
+        @Override
+        public int getContainerSize() {
+            return _items.size();
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return _items.isEmpty();
+        }
+
+        @Override
+        public ItemStack getItem(int pSlot) {
+            return pSlot >= _items.size() ? ItemStack.EMPTY : _items.get(pSlot);
+        }
+
+        @Override
+        public ItemStack removeItem(int pSlot, int pAmount) {
+            return pSlot >= _items.size() ? ItemStack.EMPTY : _items.get(pSlot);
+        }
+
+        @Override
+        public ItemStack removeItemNoUpdate(int pSlot) {return ItemStack.EMPTY;}
+
+        @Override
+        public void setItem(int pSlot, ItemStack pStack) {}
+
+        @Override
+        public void setChanged() {}
+
+        @Override
+        public boolean stillValid(Player pPlayer) {return false;}
+
+        @Override
+        public void clearContent() {}
+
+        @Override
+        public void fillStackedContents(StackedContents pContents) {}
+
+        @Override
+        public int getWidth() { return 1;
+        }
+
+        @Override
+        public int getHeight() {return 1;}
+
+        @Override
+        public List<ItemStack> getItems() {return _items;}
+
+    }
 
 
     public ISPOutputRecipeLogic(IRecipeLogicMachine machine) {
@@ -175,34 +247,26 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         if (inputHandlers == null) return false;
         inputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
 
-        List<Ingredient> inputsToConsume = new ArrayList<>(currentRecipe.inputs);
+        List<SizedIngredient> inputsToConsume = new ArrayList<>(currentRecipe.inputs);
         List<ItemStack> extracted = new ArrayList<>();
-
+        
         for (IRecipeHandler<?> inputHandler : inputHandlers) {
             if (inputHandler instanceof NotifiableItemStackHandler stackHandler) { 
                 var iter = inputsToConsume.iterator();
                 while (iter.hasNext()) {
-                    var ingredient = iter.next();
+                    var sized = iter.next();
+                    var amount = sized.getAmount();
+
                     for (int index = 0; index < stackHandler.getSlots(); index++) {
                         ItemStack iStack = stackHandler.getStackInSlot(index);
-                        if (ingredient instanceof SizedIngredient sized) {
-                            if (sized.getInner().test(iStack)) {
-                                var amount = sized.getAmount();
-                                ItemStack result = stackHandler.extractItemInternal(index, amount, simulate);
-                                if (result.getCount() < amount) {
-                                    sized.setAmount(amount - result.getCount());
-                                    extracted.add(result);
-                                } else {
-                                    iter.remove();
-                                    extracted.add(result);
-                                    break;
-                                }
+                        if (sized.getInner().test(iStack)) {
+                            ItemStack result = stackHandler.extractItemInternal(index, amount, simulate);
+                            if (result.getCount() < amount) {
+                                amount = amount - result.getCount();
                                 extracted.add(result);
-                            }
-                        } else {
-                            if (ingredient.test(iStack)) {
-                                extracted.add(stackHandler.extractItemInternal(index, 1, simulate));
+                            } else {
                                 iter.remove();
+                                extracted.add(result);
                                 break;
                             }
                         }
@@ -228,36 +292,32 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         List<IRecipeHandler<?>> outputHandlers = getCapHolder().getCapabilitiesProxy().get(IO.OUT, ItemRecipeCapability.CAP);
         if (outputHandlers == null) return false;
         outputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
-
-        var itemStack = currentRecipe.outputISP.getStack(simulate ? currentItemsSimulated.get(0) : currentItems.get(0));
-        
-        //TFGCore.LOGGER.info("Handling: {}", simulate);
-        //TFGCore.LOGGER.info("Testing stack: {} tick: ({}) {}", itemStack.toString(), 
-        //FoodCapability.has(itemStack) ? FoodCapability.getRoundedCreationDate(FoodCapability.get(itemStack).getCreationDate()) : -1, 
-        //FoodCapability.has(itemStack) ? FoodCapability.get(itemStack).getCreationDate() : -1);
-
+        RecipeHelpers.setCraftingInput(new SimulatedCraftingContainer(simulate ? currentItemsSimulated : currentItems));
+        var ispResult = currentRecipe.outputISP.getStack(simulate ? currentItemsSimulated.get(0) : currentItems.get(0));
+        List<ItemStack> allOutputs = new ArrayList<>(currentRecipe.secondaryOutputs);
+        allOutputs.add(0, ispResult);
         // Logic to allow food items with similar creation dates to stack properly
         for (IRecipeHandler<?> outputHandler : outputHandlers) {
             if (outputHandler instanceof NotifiableItemStackHandler stackHandler) {
                 for (int index = 0; index < stackHandler.getSlots(); index++) {
-                    if (!stackHandler.isItemValid(index, itemStack)) continue;
-                    ItemStack inSlot = stackHandler.getStackInSlot(index);
-                    //TFGCore.LOGGER.info("Slot {} stack: {} tick: ({}) {}", index, inSlot.toString(), 
-                    //FoodCapability.has(inSlot) ? FoodCapability.getRoundedCreationDate(FoodCapability.get(inSlot).getCreationDate()) : -1, 
-                    //FoodCapability.has(inSlot) ? FoodCapability.get(inSlot).getCreationDate() : -1);
-                    if (inSlot.isEmpty()) {
-                        itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
-                    } else if (FoodCapability.has(itemStack) && FoodCapability.has(inSlot) && FoodCapability.areStacksStackableExceptCreationDate(itemStack, inSlot)) {
-                        //TFGCore.LOGGER.info("Stackable");
-                        var date1 = FoodCapability.get(inSlot).getCreationDate();
-                        var date2 = FoodCapability.get(itemStack).getCreationDate();
-                        if (FoodCapability.getRoundedCreationDate(date1) == FoodCapability.getRoundedCreationDate(date2)) {
-                            //TFGCore.LOGGER.info("Merging");
-                            FoodCapability.get(itemStack).setCreationDate(date1);
+                    var iter = allOutputs.iterator();
+                    while (iter.hasNext()) {
+                        var itemStack = iter.next();
+                        if (!stackHandler.isItemValid(index, itemStack)) continue;
+                        ItemStack inSlot = stackHandler.getStackInSlot(index);
+                        if (inSlot.isEmpty()) {
                             itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
+                        } else if (FoodCapability.has(itemStack) && FoodCapability.has(inSlot) && FoodCapability.areStacksStackableExceptCreationDate(itemStack, inSlot)) {
+                            var date1 = FoodCapability.get(inSlot).getCreationDate();
+                            var date2 = FoodCapability.get(itemStack).getCreationDate();
+                            if (FoodCapability.getRoundedCreationDate(date1) == FoodCapability.getRoundedCreationDate(date2)) {
+                                FoodCapability.get(itemStack).setCreationDate(date1);
+                                itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
+                            }
                         }
+                        if (itemStack.isEmpty()) iter.remove();
                     }
-                    if (itemStack.isEmpty()) return true;
+                    if (allOutputs.size() == 0) return true;
                 }
             } else {
                 TFGCore.LOGGER.warn("Unexpected output capability proxy: Expected NotifiableItemStackHandler, actual: " + outputHandler.getClass());
