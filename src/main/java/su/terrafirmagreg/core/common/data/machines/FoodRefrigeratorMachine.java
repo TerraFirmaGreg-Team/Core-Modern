@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.machines;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,8 +17,8 @@ import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IAutoOutputItem;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
-import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -30,13 +32,10 @@ import com.lowdragmc.lowdraglib.utils.Position;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
 
 public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAutoOutputItem, IControllable, IFancyUIMachine, IMachineLife {
@@ -46,7 +45,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     
     
     @Override 
-    public ManagedFieldHolder getFieldHolder() {
+    public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
 
@@ -54,10 +53,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     private boolean currentlyWorking;
 
     @Persisted
-    protected NonNullList<ItemStack> storedItems;
     private final RefrigeratedStorage inventory;
 
-    private int inventorySize;
+    private final int inventorySize;
 
     protected ISubscription energySubscription;
     protected TickableSubscription tickSubscription;
@@ -66,14 +64,14 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
         super(holder, tier, args);
 
         inventorySize = INVENTORY_SIZES[tier - 1];
+
         inventory = new RefrigeratedStorage(this, inventorySize);
-        workingEnabled = true;
         currentlyWorking = false;
     }
 
     @Override
-    protected NotifiableEnergyContainer createEnergyContainer(Object... args) {
-        return new NotifiableEnergyContainer(this, GTValues.V[tier] * 64, GTValues.V[tier], 2l, 0l, 0l);
+    protected @NotNull NotifiableEnergyContainer createEnergyContainer(Object @NotNull ... args) {
+        return new NotifiableEnergyContainer(this, GTValues.V[tier] * 64, GTValues.V[tier], 2L, 0L, 0L);
     }
 
     //#region Logic
@@ -83,14 +81,10 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
         super.onLoad();
         if (isRemote()) return;
         if (getLevel() instanceof ServerLevel serverLevel) {
-            serverLevel.getServer().tell(new TickTask(0, () -> {
-                this.updateSubscription();
-            }));
+            serverLevel.getServer().tell(new TickTask(0, this::updateSubscription));
         }
 
-        energySubscription = energyContainer.addChangedListener(() -> {
-            this.updateSubscription();
-        });
+        energySubscription = energyContainer.addChangedListener(this::updateSubscription);
     }
 
     @Override
@@ -155,14 +149,18 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
 
     @Persisted
     private boolean workingEnabled;
+    @Getter
     @Persisted
     @DescSynced
     @RequireRerender
     protected Direction outputFacingItems;
+    @Getter
     @Persisted
     @DescSynced
     @RequireRerender
     protected boolean autoOutputItems;
+    @Setter
+    @Getter
     @Persisted
     protected boolean allowInputFromOutputSideItems;
 
@@ -175,24 +173,8 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
 
     @Override
     public void setWorkingEnabled(boolean isWorkingAllowed) {
-        updateSubscription();
         workingEnabled = isWorkingAllowed;
-    }
-
-    public Direction getOutputFacingItems() {
-        return this.outputFacingItems;
-    }
-
-    public boolean isAutoOutputItems() {
-        return this.autoOutputItems;
-    }
-
-    public boolean isAllowInputFromOutputSideItems() {
-        return this.allowInputFromOutputSideItems;
-    }
-
-    public void setAllowInputFromOutputSideItems(final boolean allowInputFromOutputSideItems) {
-        this.allowInputFromOutputSideItems = allowInputFromOutputSideItems;
+        updateSubscription();
     }
 
     @Override
@@ -208,14 +190,14 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     }
 
     @Override
-    public void onNeighborChanged(Block block, BlockPos fromPos, boolean isMoving) {
+    public void onNeighborChanged(@NotNull Block block, @NotNull BlockPos fromPos, boolean isMoving) {
         super.onNeighborChanged(block, fromPos, isMoving);
         updateAutoOutputSubscription();
     }
 
     protected void updateAutoOutputSubscription() {
         var outputFacing = getOutputFacingItems();
-        if ((isAutoOutputItems() && !inventory.isEmpty() && workingEnabled) && outputFacing != null && GTTransferUtils.hasAdjacentItemHandler(getLevel(), getPos(), outputFacing)) {
+        if ((isAutoOutputItems() && !inventory.isEmpty() && workingEnabled) && outputFacing != null && getLevel() != null && GTTransferUtils.hasAdjacentItemHandler(getLevel(), getPos(), outputFacing)) {
             autoOutputSubs = subscribeServerTick(autoOutputSubs, this::autoOutput);
         } else if (autoOutputSubs != null) {
             autoOutputSubs.unsubscribe();
@@ -264,38 +246,24 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     //#endregion
 
     //#region Refrigerated trait
-    protected class RefrigeratedStorage extends MachineTrait implements IItemHandlerModifiable {
+    protected class RefrigeratedStorage extends NotifiableItemStackHandler {
 
         public RefrigeratedStorage(MetaMachine machine, int slots) {
-            super(machine);
-            storedItems = NonNullList.withSize(slots, ItemStack.EMPTY);
-        }
-
-        @Override
-        public ManagedFieldHolder getFieldHolder() {
-            return MANAGED_FIELD_HOLDER;
-        }
-
-        @Override
-        public int getSlots() {
-            return storedItems.size();
+            super(machine, slots, IO.BOTH, IO.BOTH);
         }
 
 
         public void changeTraitForAll(boolean add) {
-            for (int i = 0; i < storedItems.size(); i++) {
+            for (int i = 0; i < storage.getSlots(); i++) {
+                var stack = storage.getStackInSlot(i).copy();
+                if (stack.isEmpty()) continue;
                 if (add) {
-                    FoodCapability.applyTrait(storedItems.get(i), TFGFoodTraits.REFRIGERATING);
+                    FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
                 } else {
-                    FoodCapability.removeTrait(storedItems.get(i), TFGFoodTraits.REFRIGERATING);
+                    FoodCapability.removeTrait(stack, TFGFoodTraits.REFRIGERATING);
                 }
+                storage.setStackInSlot(i, stack);
             }
-        }
-
-        @Override
-        public @NotNull ItemStack getStackInSlot(int slot) {
-            
-            return storedItems.get(slot);
         }
 
         @Override
@@ -304,37 +272,10 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
         {
             if (stack.isEmpty()) return ItemStack.EMPTY;
             if (currentlyWorking) FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
-
-            if (!isItemValid(slot, stack)) return stack;
-
-            ItemStack existing = storedItems.get(slot);
-
-            int limit = Math.min(getSlotLimit(slot), stack.getMaxStackSize());
-
-            if (!existing.isEmpty())
-            {
-                if (!ItemHandlerHelper.canItemStacksStack(stack, existing)) return stack;
-                limit -= existing.getCount();
-            }
-
-            if (limit <= 0) return stack;
-
-            boolean reachedLimit = stack.getCount() > limit;
-
-            if (!simulate)
-            {
-                if (existing.isEmpty())
-                {
-                    storedItems.set(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
-                }
-                else
-                {
-                    existing.grow(reachedLimit ? limit : stack.getCount());
-                }
-            }
-
+            var result = storage.insertItem(slot, stack, simulate);
             updateSubscription();
-            return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
+            FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
+            return result;
         }
 
         @Override
@@ -342,77 +283,18 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
         public ItemStack extractItem(int slot, int amount, boolean simulate)
         {
             if (amount == 0) return ItemStack.EMPTY;
-
-            ItemStack existing = storedItems.get(slot);
-
-            if (existing.isEmpty()) return ItemStack.EMPTY;
-
-            int toExtract = Math.min(amount, existing.getMaxStackSize());
-
-            if (existing.getCount() <= toExtract)
-            {
-                if (!simulate)
-                {
-                    storedItems.set(slot, ItemStack.EMPTY);
-                    FoodCapability.removeTrait(existing, TFGFoodTraits.REFRIGERATING);
-                    updateSubscription();
-                    return existing;
-                }
-                else
-                {
-                    var copy = existing.copy();
-                    FoodCapability.removeTrait(copy, TFGFoodTraits.REFRIGERATING);
-                    return copy;
-                }
-            }
-            else
-            {
-                if (!simulate)
-                {
-                    storedItems.set(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract));
-                }
-
-                var result = ItemHandlerHelper.copyStackWithSize(existing, toExtract);
-                FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
-                updateSubscription();
-                return result;
-            }
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return 64;
-            
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return true;
+            var result = storage.extractItem(slot, amount, simulate);
+            FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
+            updateSubscription();
+            return result;
         }
 
         @Override
         public void setStackInSlot(int slot, @NotNull ItemStack stack) {
             if (currentlyWorking) FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
-            FoodCapability.removeTrait(storedItems.get(slot), TFGFoodTraits.REFRIGERATING);
-            storedItems.set(slot, stack);
+            FoodCapability.removeTrait(storage.getStackInSlot(slot), TFGFoodTraits.REFRIGERATING);
+            storage.setStackInSlot(slot, stack);
             updateSubscription();
-        }
-
-        public boolean isEmpty() {
-            for (ItemStack item: storedItems) {
-                if (!item.isEmpty()) return false;
-            }
-            return true;
-        }
-
-        public void exportToNearby(@NotNull Direction... facings) {
-            if (isEmpty()) return;
-            var level = getMachine().getLevel();
-            var pos = getMachine().getPos();
-            for (Direction facing : facings) {
-                var filter = getMachine().getItemCapFilter(facing, IO.OUT);
-                GTTransferUtils.getAdjacentItemHandler(level, pos, facing).ifPresent(adj -> GTTransferUtils.transferItemsFiltered(this, adj, filter));
-            }
         }
         
     }
