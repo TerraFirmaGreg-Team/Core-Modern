@@ -21,6 +21,7 @@ import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 
 public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
 
@@ -29,16 +30,16 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public GreenhouseRecipeLogic getRecipeLogic() {
+    public @NotNull GreenhouseRecipeLogic getRecipeLogic() {
         return (GreenhouseRecipeLogic) super.getRecipeLogic();
     }
 
     @Override
-    protected RecipeLogic createRecipeLogic(Object... args) {
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull ... args) {
         return new GreenhouseRecipeLogic(this);
     }
 
-    class GreenhouseRecipeLogic extends RecipeLogic {
+    public static class GreenhouseRecipeLogic extends RecipeLogic {
         public GreenhouseRecipeLogic(IRecipeLogicMachine machine) {
             super(machine);
         }

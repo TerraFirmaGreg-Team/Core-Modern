@@ -20,6 +20,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.common.recipes.RecipeHelpers;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.network.chat.Component;
@@ -28,6 +29,7 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.TFGCore;
 
 public class ISPOutputRecipeLogic extends RecipeLogic {
@@ -41,7 +43,7 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
     // There is probably a better way to expose the TFC recipe data
     record TFCRecipeData(List<SizedIngredient> inputs, ItemStackProvider outputISP, List<ItemStack> secondaryOutputs) {}
-    private static Map<String, TFCRecipeData> TFCRecipes = new HashMap<>();
+    private static final Map<String, TFCRecipeData> TFCRecipes = new HashMap<>();
     public static void RegisterRecipeData(String id, List<Ingredient> inputs, ItemStackProvider output, List<ItemStack> secondaryOutputs) {
         List<SizedIngredient> sizedIngredients = new ArrayList<>();
 
@@ -58,9 +60,9 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
     List<ItemStack> currentItemsSimulated = new ArrayList<>();
 
-    class SimulatedCraftingContainer implements CraftingContainer {
+    static class SimulatedCraftingContainer implements CraftingContainer {
 
-        private List<ItemStack> _items = new ArrayList<>();
+        private final List<ItemStack> _items = new ArrayList<>();
         public SimulatedCraftingContainer(List<ItemStack> items) {
             // TFC expects each ItemStack to only have one item
             for (ItemStack itemStack : items) {
@@ -80,32 +82,32 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         }
 
         @Override
-        public ItemStack getItem(int pSlot) {
+        public @NotNull ItemStack getItem(int pSlot) {
             return pSlot >= _items.size() ? ItemStack.EMPTY : _items.get(pSlot);
         }
 
         @Override
-        public ItemStack removeItem(int pSlot, int pAmount) {
+        public @NotNull ItemStack removeItem(int pSlot, int pAmount) {
             return pSlot >= _items.size() ? ItemStack.EMPTY : _items.get(pSlot);
         }
 
         @Override
-        public ItemStack removeItemNoUpdate(int pSlot) {return ItemStack.EMPTY;}
+        public @NotNull ItemStack removeItemNoUpdate(int pSlot) {return ItemStack.EMPTY;}
 
         @Override
-        public void setItem(int pSlot, ItemStack pStack) {}
+        public void setItem(int pSlot, @NotNull ItemStack pStack) {}
 
         @Override
         public void setChanged() {}
 
         @Override
-        public boolean stillValid(Player pPlayer) {return false;}
+        public boolean stillValid(@NotNull Player pPlayer) {return false;}
 
         @Override
         public void clearContent() {}
 
         @Override
-        public void fillStackedContents(StackedContents pContents) {}
+        public void fillStackedContents(@NotNull StackedContents pContents) {}
 
         @Override
         public int getWidth() { return 1;
@@ -115,7 +117,7 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         public int getHeight() {return 1;}
 
         @Override
-        public List<ItemStack> getItems() {return _items;}
+        public @NotNull List<ItemStack> getItems() {return _items;}
 
     }
 
@@ -259,7 +261,8 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
                     for (int index = 0; index < stackHandler.getSlots(); index++) {
                         ItemStack iStack = stackHandler.getStackInSlot(index);
-                        if (sized.getInner().test(iStack)) {
+                        IFood food = FoodCapability.get(iStack);
+                        if (sized.getInner().test(iStack) && (food == null || !food.isRotten())) {
                             ItemStack result = stackHandler.extractItemInternal(index, amount, simulate);
                             if (result.getCount() < amount) {
                                 amount = amount - result.getCount();
@@ -273,7 +276,7 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                     }
                 }
             } else {
-                TFGCore.LOGGER.warn("Unexpected input capability proxy: Expected NotifiableItemStackHandler, actual: " + inputHandler.getClass());
+                TFGCore.LOGGER.warn("Unexpected input capability proxy: Expected NotifiableItemStackHandler, actual: {}", inputHandler.getClass());
             }
         }
         if (!inputsToConsume.isEmpty()) return false;
@@ -317,10 +320,10 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                         }
                         if (itemStack.isEmpty()) iter.remove();
                     }
-                    if (allOutputs.size() == 0) return true;
+                    if (allOutputs.isEmpty()) return true;
                 }
             } else {
-                TFGCore.LOGGER.warn("Unexpected output capability proxy: Expected NotifiableItemStackHandler, actual: " + outputHandler.getClass());
+                TFGCore.LOGGER.warn("Unexpected output capability proxy: Expected NotifiableItemStackHandler, actual: {}", outputHandler.getClass());
             }
         }
         return false;
