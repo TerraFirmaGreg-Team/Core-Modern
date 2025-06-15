@@ -20,6 +20,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.common.recipes.RecipeHelpers;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.network.chat.Component;
@@ -260,7 +261,8 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
                     for (int index = 0; index < stackHandler.getSlots(); index++) {
                         ItemStack iStack = stackHandler.getStackInSlot(index);
-                        if (sized.getInner().test(iStack)) {
+                        IFood food = FoodCapability.get(iStack);
+                        if (sized.getInner().test(iStack) && (food == null || !food.isRotten())) {
                             ItemStack result = stackHandler.extractItemInternal(index, amount, simulate);
                             if (result.getCount() < amount) {
                                 amount = amount - result.getCount();
