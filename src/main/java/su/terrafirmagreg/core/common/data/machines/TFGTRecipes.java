@@ -1,12 +1,18 @@
 package su.terrafirmagreg.core.common.data.machines;
 
-import com.eerussianguy.firmalife.common.FLTags;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.OvenType;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.CraftingComponent;
+import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.data.recipes.FinishedRecipe;
-import su.terrafirmagreg.core.common.data.TFGTags;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Consumer;
 
@@ -46,5 +52,23 @@ public class TFGTRecipes {
 			'G', CraftingComponent.GLASS,
 			// This is replaced with Greate's Whisk in kubejs
 			'W', CraftingComponent.PISTON);
+
+		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.FOOD_REFRIGERATOR,
+			"CFC", "SHS", "PRP",
+			'C', CraftingComponent.CABLE,
+			'F', CraftingComponent.CIRCUIT,
+			'S', ChemicalHelper.get(TagPrefix.plate, GTMaterials.Polyethylene),
+			'H', CraftingComponent.HULL,
+			'P', CraftingComponent.PUMP,
+			'R', CraftingComponent.ROTOR
+			);
+
+		VanillaRecipeHelper.addShapedRecipe(provider, new ResourceLocation("tfg", "electric_greenhouse"), TFGMachines.ELECTRIC_GREENHOUSE.asStack(),
+				"ABA", "CDC", "BCB",
+				'A', CustomTags.MV_CIRCUITS,
+				'B', ChemicalHelper.get(TagPrefix.cableGtSingle, GTMaterials.Copper),
+				'C', TFCItems.COMPOST.get(),
+				'D', GTBlocks.CASING_STEEL_SOLID.get()
+		);
 	}
 }

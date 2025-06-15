@@ -20,14 +20,15 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,21 +80,21 @@ public class TFGMachines {
 		.shapeInfos(definition -> {
 			List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
 			var builder = MultiblockShapeInfo.builder()
-				.aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
-				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", " XXFXX ")
-				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", " XXFXX ")
+				.aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
+				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
+				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", "#XXFXX#")
 				.aisle("CDDDDDC", "F##W##F", "F##W##F", "F##W##F", "F#LWL#F", "F#LWL#F", "F#LLL#F", "F#####F", "FFFFFFF")
-				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", " XXFXX ")
-				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", " XXFXX ")
-				.aisle("mitYfeC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
+				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", "#XXFXX#")
+				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
+				.aisle("mitYfeC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
 				.where('Y', definition, Direction.SOUTH)
 				.where('C', GTBlocks.STEEL_HULL.getDefaultState())
-				.where('D', TFCBlocks.SOIL.get(SoilBlockType.GRASS).get(SoilBlockType.Variant.LOAM).get())
+				.where('D', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "dirt/loam")))
 				.where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel))
 				.where('X', Blocks.GLASS)
-				.where('W', TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.LOG).get())
-				.where('L', TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.LEAVES).get())
-				.where(' ', Blocks.AIR)
+				.where('W', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/wood/oak")))
+				.where('L', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/leaves/oak")))
+				.where('#', Blocks.AIR)
 				.where('i', GTMachines.ITEM_IMPORT_BUS[GTValues.ULV], Direction.SOUTH)
 				.where('t', GTMachines.ITEM_EXPORT_BUS[GTValues.MV], Direction.SOUTH)
 				.where('f', GTMachines.FLUID_IMPORT_HATCH[GTValues.ULV], Direction.SOUTH)
@@ -106,7 +107,7 @@ public class TFGMachines {
 
 	public static final MachineDefinition[] FOOD_PROCESSOR = 
 		registerTieredMachines("food_processor", 
-		FoodProcessorMachine::new, (tier, builder) -> builder
+		SimpleFoodProcessingMachine::new, (tier, builder) -> builder
 			.langValue("%s Food Processor %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
 			.rotationState(RotationState.NON_Y_AXIS)
 			.recipeType(TFGRecipeTypes.FOOD_PROCESSOR_RECIPES)
@@ -119,8 +120,8 @@ public class TFGMachines {
 		GTMachineUtils.LOW_TIERS);
 
 	public static final MachineDefinition[] FOOD_OVEN = 
-		registerTieredMachines("food_oven", 
-		FoodProcessorMachine::new, (tier, builder) -> builder
+		registerTieredMachines("food_oven",
+				SimpleFoodProcessingMachine::new, (tier, builder) -> builder
 			.langValue("%s Electric Oven %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
 			.rotationState(RotationState.NON_Y_AXIS)
 			.recipeType(TFGRecipeTypes.FOOD_OVEN_RECIPES)
@@ -138,13 +139,13 @@ public class TFGMachines {
 			.langValue("%s Refrigerator %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
 			.rotationState(RotationState.NON_Y_AXIS)
 			.tooltips(
-				Component.translatable("gtceu.universal.tooltip.voltage_in", FormattingUtil.formatNumbers((long) GTValues.V[tier]), GTValues.VNF[tier]),
+				Component.translatable("gtceu.universal.tooltip.voltage_in", FormattingUtil.formatNumbers(GTValues.V[tier]), GTValues.VNF[tier]),
 				Component.translatable("gtceu.universal.tooltip.energy_storage_capacity", FormattingUtil.formatNumbers(GTValues.V[tier] * 64)),
-				Component.translatable("gtceu.universal.tooltip.item_storage_capacity", FoodRefrigeratorMachine.INVENTORY_SIZES[tier-1])
+				Component.translatable("gtceu.universal.tooltip.item_storage_capacity", FoodRefrigeratorMachine.INVENTORY_SIZE(tier))
 			)
 			.tieredHullRenderer(GTCEu.id("block/machine/buffer"))
 			.register(), 
-			GTMachineUtils.LOW_TIERS);
+			GTValues.tiersBetween(GTValues.MV, GTValues.EV));
 	
 	public static final MachineDefinition[] AQUEOUS_ACCUMULATOR =
 		registerTieredMachines("aqueous_accumulator",
