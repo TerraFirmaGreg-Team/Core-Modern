@@ -248,7 +248,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     //#endregion
 
     //#region Refrigerated trait
-    protected class RefrigeratedStorage extends NotifiableItemStackHandler {
+    public class RefrigeratedStorage extends NotifiableItemStackHandler {
 
         public RefrigeratedStorage(MetaMachine machine, int slots) {
             super(machine, slots, IO.BOTH, IO.BOTH);
