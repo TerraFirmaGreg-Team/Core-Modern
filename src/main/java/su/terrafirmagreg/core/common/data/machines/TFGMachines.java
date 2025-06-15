@@ -139,11 +139,11 @@ public class TFGMachines {
 			.tooltips(
 				Component.translatable("gtceu.universal.tooltip.voltage_in", FormattingUtil.formatNumbers(GTValues.V[tier]), GTValues.VNF[tier]),
 				Component.translatable("gtceu.universal.tooltip.energy_storage_capacity", FormattingUtil.formatNumbers(GTValues.V[tier] * 64)),
-				Component.translatable("gtceu.universal.tooltip.item_storage_capacity", FoodRefrigeratorMachine.INVENTORY_SIZES[tier-1])
+				Component.translatable("gtceu.universal.tooltip.item_storage_capacity", FoodRefrigeratorMachine.INVENTORY_SIZE(tier))
 			)
 			.tieredHullRenderer(GTCEu.id("block/machine/buffer"))
 			.register(), 
-			GTMachineUtils.LOW_TIERS);
+			GTValues.tiersBetween(GTValues.MV, GTValues.EV));
 	
 	public static final MachineDefinition[] AQUEOUS_ACCUMULATOR =
 		registerTieredMachines("aqueous_accumulator",

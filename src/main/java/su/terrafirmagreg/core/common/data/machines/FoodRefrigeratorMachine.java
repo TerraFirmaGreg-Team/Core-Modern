@@ -39,8 +39,10 @@ import net.minecraft.world.level.block.Block;
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
 
 public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAutoOutputItem, IControllable, IFancyUIMachine, IMachineLife {
-    
-    public static final int[] INVENTORY_SIZES = {18, 27, 36, 45};
+
+    public static int INVENTORY_SIZE(int tier) {
+        return 9 * tier;
+    }
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(FoodRefrigeratorMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
     
     
@@ -63,7 +65,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     public FoodRefrigeratorMachine(IMachineBlockEntity holder, int tier, Object... args) {
         super(holder, tier, args);
 
-        inventorySize = INVENTORY_SIZES[tier - 1];
+        inventorySize = INVENTORY_SIZE(tier);
 
         inventory = new RefrigeratedStorage(this, inventorySize);
         currentlyWorking = false;
