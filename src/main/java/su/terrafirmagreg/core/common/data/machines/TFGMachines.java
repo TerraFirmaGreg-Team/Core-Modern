@@ -25,8 +25,10 @@ import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,11 +89,11 @@ public class TFGMachines {
 				.aisle("mitYfeC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
 				.where('Y', definition, Direction.SOUTH)
 				.where('C', GTBlocks.STEEL_HULL.getDefaultState())
-				.where('D', Blocks.DIRT)
+				.where('D', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "dirt/loam")))
 				.where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel))
 				.where('X', Blocks.GLASS)
-				.where('W', Blocks.OAK_WOOD)
-				.where('L', Blocks.OAK_LEAVES)
+				.where('W', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/wood/oak")))
+				.where('L', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/leaves/oak")))
 				.where('#', Blocks.AIR)
 				.where('i', GTMachines.ITEM_IMPORT_BUS[GTValues.ULV], Direction.SOUTH)
 				.where('t', GTMachines.ITEM_EXPORT_BUS[GTValues.MV], Direction.SOUTH)
