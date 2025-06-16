@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.compat.ad_astra;
 import earth.terrarium.adastra.api.events.AdAstraEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import su.terrafirmagreg.core.common.data.TFGTags;
