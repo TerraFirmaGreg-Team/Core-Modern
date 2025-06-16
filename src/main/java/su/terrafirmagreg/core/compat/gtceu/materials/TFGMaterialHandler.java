@@ -4,6 +4,7 @@ import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLItems;
 import com.eerussianguy.firmalife.common.util.FLMetal;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.negodya1.vintageimprovements.VintageBlocks;
 import com.negodya1.vintageimprovements.VintageImprovements;
@@ -11,13 +12,16 @@ import com.negodya1.vintageimprovements.VintageItems;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.therighthon.rnr.common.item.RNRItems;
+import electrolyte.greate.registry.GreateMaterials;
 import earth.terrarium.adastra.common.registry.ModBlocks;
 import earth.terrarium.adastra.common.registry.ModItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Metal;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.common.TFGHelpers;
 
 import java.util.HashMap;
@@ -86,6 +90,18 @@ public final class TFGMaterialHandler {
 		crushedPurified.setIgnored(Silver, () -> AllItems.CRUSHED_SILVER);
 		crushedPurified.setIgnored(Tin, () -> AllItems.CRUSHED_TIN);
 		crushedPurified.setIgnored(Lead, () -> AllItems.CRUSHED_LEAD);
+
+		// AE2 materials
+
+		rawOreBlock.setIgnored(CertusQuartz, ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "quartz_block")));
+
+		var fluix = GTCEuAPI.materialManager.getMaterial("tfg:fluix");
+		block.setIgnored(fluix, ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "fluix_block")));
+
+		// Create materials
+
+		gem.setIgnored(GreateMaterials.RoseQuartz, () -> AllItems.ROSE_QUARTZ);
+		block.setIgnored(GreateMaterials.RoseQuartz, () -> AllBlocks.ROSE_QUARTZ_BLOCK);
 
 		// Ad astra materials
 
@@ -213,7 +229,7 @@ public final class TFGMaterialHandler {
 		oreSmall.setIgnored(Malachite, () -> TFCBlocks.SMALL_ORES.get(Ore.MALACHITE).get());
 		oreSmall.setIgnored(Sphalerite, () -> TFCBlocks.SMALL_ORES.get(Ore.SPHALERITE).get());
 		oreSmall.setIgnored(Tetrahedrite, () -> TFCBlocks.SMALL_ORES.get(Ore.TETRAHEDRITE).get());
-		oreSmall.setIgnored(Chromite, () -> FLBlocks.SMALL_CHROMITE.get());
+		oreSmall.setIgnored(Chromite, FLBlocks.SMALL_CHROMITE);
 
 		oreSmallNative.setIgnored(Copper, () -> TFCBlocks.SMALL_ORES.get(Ore.NATIVE_COPPER).get());
 		oreSmallNative.setIgnored(Gold, () -> TFCBlocks.SMALL_ORES.get(Ore.NATIVE_GOLD).get());
