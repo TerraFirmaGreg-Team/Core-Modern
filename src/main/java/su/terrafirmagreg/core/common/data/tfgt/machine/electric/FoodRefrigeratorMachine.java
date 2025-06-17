@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 
 import lombok.Getter;
 import lombok.Setter;

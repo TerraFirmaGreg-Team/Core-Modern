@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
 import java.util.ArrayList;
 import java.util.HashMap;

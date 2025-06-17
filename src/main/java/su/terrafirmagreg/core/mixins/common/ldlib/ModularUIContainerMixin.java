@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
-import su.terrafirmagreg.core.common.data.machines.FoodRefrigeratorMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.electric.FoodRefrigeratorMachine;
 
 @Mixin(value = ModularUIContainer.class)
 public class ModularUIContainerMixin {
