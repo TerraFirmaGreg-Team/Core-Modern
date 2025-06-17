@@ -44,7 +44,7 @@ public abstract class GTRecipeTypesMixin {
         MACERATOR_RECIPES.setMaxIOSize(1, 6, 0, 0);
         MACERATOR_RECIPES.setUiBuilder((recipe, widgetGroup) -> {
             widgetGroup.addWidget(new LabelWidget(3, widgetGroup.getSize().height - 38, Component.translatable("tfg.recipe.macerator_warning"))
-                .setTextColor(0xFF5555)
+                .setTextColor(0x555555)
                 .setDropShadow(false));
         });
 

@@ -34,7 +34,7 @@ public abstract class TieredMillingCategoryMixin extends GreateRecipeCategory<Ti
 		new TieredAnimatedMillstone(Millstones.MILLSTONES[recipe.getRecipeTier()].get()).draw(graphics, 48, 27);
 
 		if (recipe.getRecipeTier() < GTValues.HV) {
-			graphics.drawWordWrap(Minecraft.getInstance().font, Component.translatable("tfg.recipe.macerator_warning"), 90, 50, 85, 0xFF5555);
+			graphics.drawWordWrap(Minecraft.getInstance().font, Component.translatable("tfg.recipe.macerator_warning"), 87, 50, 90, 0x555555);
 		}
 	}
 }

@@ -33,7 +33,7 @@ public abstract class TieredCrushingCategoryMixin extends GreateRecipeCategory<T
 		new TieredAnimatedCrushingWheels(CrushingWheels.CRUSHING_WHEELS[recipe.getRecipeTier()].get()).draw(graphics, 62, 59);
 
 		if (recipe.getRecipeTier() < GTValues.HV) {
-			graphics.drawWordWrap(Minecraft.getInstance().font, Component.translatable("tfg.recipe.macerator_warning"), 2, 2, 50, 0xFF5555);
+			graphics.drawWordWrap(Minecraft.getInstance().font, Component.translatable("tfg.recipe.macerator_warning"), 2, 2, 50, 0x555555);
 		}
 	}
 }
