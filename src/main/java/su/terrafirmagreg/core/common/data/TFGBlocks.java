@@ -184,12 +184,12 @@ public final class TFGBlocks {
 
 	public static final RegistryObject<Block> PIGLIN_DISGUISE_BLOCK = register("piglin_disguise_block",
 		() -> new PiglinDisguiseBlock(BlockBehaviour.Properties.of()
-										  .mapColor(MapColor.COLOR_BROWN)
-										  .strength(0.1f)
-										  .sound(SoundType.DRIPSTONE_BLOCK)
-										  .pushReaction(PushReaction.DESTROY)
-										  .isViewBlocking((state, level, pos) -> false)
-										  .isSuffocating((state, level, pos) -> false)));
+			.mapColor(MapColor.COLOR_BROWN)
+			.strength(0.1f)
+			.sound(SoundType.DRIPSTONE_BLOCK)
+			.pushReaction(PushReaction.DESTROY)
+			.isViewBlocking((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)));
 
 
 	// Buds are generated automatically

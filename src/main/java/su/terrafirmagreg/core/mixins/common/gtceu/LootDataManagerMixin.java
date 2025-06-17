@@ -16,6 +16,7 @@ import java.util.Map;
 @Mixin(LootDataManager.class)
 public abstract class LootDataManagerMixin {
 
+	@SuppressWarnings("unchecked")
 	@Inject(method = "apply", at = @At(value = "HEAD"))
 	public void gtceu$injectLootTables(Map<LootDataType<?>, Map<ResourceLocation, ?>> allElements, CallbackInfo ci) {
 		if (GTCEu.isDataGen()) return;
