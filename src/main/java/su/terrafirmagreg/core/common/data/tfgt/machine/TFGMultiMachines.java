@@ -53,7 +53,10 @@ public class TFGMultiMachines {
 				.or(Predicates.autoAbilities(true, false, false)))
 			.where('#', Predicates.air()
 				.or(Predicates.blockTag(BlockTags.LOGS))
-				.or(Predicates.blockTag(BlockTags.LEAVES)))
+				.or(Predicates.blockTag(BlockTags.LEAVES))
+				.or(Predicates.blockTag(TFCTags.Blocks.PLANTS))
+				// Apparently TFC likes to sometimes spawn loose rocks on top of grass, including inside the greenhouse?
+				.or(Predicates.blockTag(dev.latvian.mods.kubejs.util.Tags.block(new ResourceLocation("tfc", "loose_rocks")))))
 			.where(' ', Predicates.any())
 			.where('F', Predicates.frames(GTMaterials.Steel))
 			.where('X', Predicates.blockTag(Tags.Blocks.GLASS)
