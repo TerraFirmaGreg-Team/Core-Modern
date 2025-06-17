@@ -3,6 +3,8 @@ package su.terrafirmagreg.core.mixins.common.gtceu;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,6 +42,11 @@ public abstract class GTRecipeTypesMixin {
         ARC_FURNACE_RECIPES.setMaxIOSize(2, 9, 1, 0);
 
         MACERATOR_RECIPES.setMaxIOSize(1, 6, 0, 0);
+        MACERATOR_RECIPES.setUiBuilder((recipe, widgetGroup) -> {
+            widgetGroup.addWidget(new LabelWidget(3, widgetGroup.getSize().height - 38, Component.translatable("tfg.recipe.macerator_warning"))
+                .setTextColor(0xFF5555)
+                .setDropShadow(false));
+        });
 
         CHEMICAL_BATH_RECIPES.setMaxIOSize(2, 6, 1, 1);
 
