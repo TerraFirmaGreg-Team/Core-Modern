@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.Tags;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 
@@ -60,10 +61,10 @@ public class TFGTRecipes {
 			'C', CraftingComponent.CABLE,
 			'F', CraftingComponent.CIRCUIT,
 			'S', ChemicalHelper.get(TagPrefix.plate, GTMaterials.Polyethylene),
+			// This is replaced with Hermetic Casing in kubejs
 			'H', CraftingComponent.HULL,
 			'P', CraftingComponent.PUMP,
-			'R', CraftingComponent.ROTOR
-			);
+			'R', CraftingComponent.ROTOR);
 
 		VanillaRecipeHelper.addShapedRecipe(provider, new ResourceLocation("tfg", "electric_greenhouse"),
 			TFGMultiMachines.ELECTRIC_GREENHOUSE.asStack(),
@@ -71,7 +72,7 @@ public class TFGTRecipes {
 				'A', CustomTags.MV_CIRCUITS,
 				'B', ChemicalHelper.get(TagPrefix.cableGtSingle, GTMaterials.Copper),
 				'C', TFCItems.COMPOST.get(),
-				'D', GTBlocks.CASING_STEEL_SOLID.get()
+				'D', GTBlocks.STEEL_HULL.get()
 		);
 	}
 }
