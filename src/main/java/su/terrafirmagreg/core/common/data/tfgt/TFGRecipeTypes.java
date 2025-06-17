@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -14,6 +14,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 
 @SuppressWarnings("deprecation")
 public class TFGRecipeTypes {

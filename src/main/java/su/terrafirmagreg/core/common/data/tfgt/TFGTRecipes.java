@@ -1,8 +1,9 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.gregtechceu.gtceu.data.recipe.CraftingComponent;
 import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
 import net.minecraft.data.recipes.FinishedRecipe;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 
 import java.util.function.Consumer;
 
