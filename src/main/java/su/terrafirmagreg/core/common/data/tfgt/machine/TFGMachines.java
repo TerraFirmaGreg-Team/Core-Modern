@@ -93,7 +93,7 @@ public class TFGMachines {
 				.where('C', GTBlocks.STEEL_HULL.getDefaultState())
 				.where('D', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "dirt/loam")))
 				.where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel))
-				.where('X', Blocks.GLASS)
+				.where('X', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("create", "framed_glass")))
 				.where('W', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/wood/oak")))
 				.where('L', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/leaves/oak")))
 				.where('#', Blocks.AIR)
