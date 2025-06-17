@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -29,6 +29,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
+import su.terrafirmagreg.core.common.data.tfgt.machine.electric.AqueousAccumulatorMachine;
+import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,8 +107,8 @@ public class TFGMachines {
 		})
 		.register();
 
-	public static final MachineDefinition[] FOOD_PROCESSOR = 
-		registerTieredMachines("food_processor", 
+	public static final MachineDefinition[] FOOD_PROCESSOR =
+		registerTieredMachines("food_processor",
 		SimpleFoodProcessingMachine::new, (tier, builder) -> builder
 			.langValue("%s Food Processor %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
 			.rotationState(RotationState.NON_Y_AXIS)
@@ -119,7 +121,7 @@ public class TFGMachines {
 			.register(),
 		GTMachineUtils.LOW_TIERS);
 
-	public static final MachineDefinition[] FOOD_OVEN = 
+	public static final MachineDefinition[] FOOD_OVEN =
 		registerTieredMachines("food_oven",
 				SimpleFoodProcessingMachine::new, (tier, builder) -> builder
 			.langValue("%s Electric Oven %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
@@ -144,9 +146,9 @@ public class TFGMachines {
 				Component.translatable("gtceu.universal.tooltip.item_storage_capacity", FoodRefrigeratorMachine.INVENTORY_SIZE(tier))
 			)
 			.workableTieredHullRenderer(GTCEu.id("block/machines/food_refrigerator"))
-			.register(), 
+			.register(),
 			GTValues.tiersBetween(GTValues.MV, GTValues.EV));
-	
+
 	public static final MachineDefinition[] AQUEOUS_ACCUMULATOR =
 		registerTieredMachines("aqueous_accumulator",
 			AqueousAccumulatorMachine::new, (tier, builder) -> builder
