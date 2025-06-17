@@ -168,6 +168,7 @@ public final class TFGBlocks {
 		() -> new LunarChorusPlantBlock(BlockBehaviour.Properties.of()
 		    .mapColor(MapColor.TERRACOTTA_PURPLE)
 			.pushReaction(PushReaction.DESTROY)
+			.noLootTable()
 		    .strength(0.2f)
 		    .sound(SoundType.CHERRY_WOOD)));
 
@@ -212,6 +213,7 @@ public final class TFGBlocks {
 		BUD_BLOCKS = BUD_BLOCKS_BUILDER.build();
 	}
 
+	@SuppressWarnings("removal")
 	private static void registerBudIndicator(Material material, GTRegistrate registrate, ImmutableMap.Builder<Material, BlockEntry<BudIndicator>> builder)
 	{
 		TagPrefix budTag;

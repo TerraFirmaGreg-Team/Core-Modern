@@ -26,6 +26,7 @@ import su.terrafirmagreg.core.common.data.TFGCreativeTab;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.world.TFGFeatures;
 
@@ -77,6 +78,7 @@ public final class TFGCore {
     @SubscribeEvent
     public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         TFGMachines.init();
+        TFGMultiMachines.init();
     }
 
     @SubscribeEvent

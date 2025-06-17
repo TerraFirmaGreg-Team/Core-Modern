@@ -14,6 +14,7 @@ import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 
 import java.util.function.Consumer;
 
@@ -64,7 +65,8 @@ public class TFGTRecipes {
 			'R', CraftingComponent.ROTOR
 			);
 
-		VanillaRecipeHelper.addShapedRecipe(provider, new ResourceLocation("tfg", "electric_greenhouse"), TFGMachines.ELECTRIC_GREENHOUSE.asStack(),
+		VanillaRecipeHelper.addShapedRecipe(provider, new ResourceLocation("tfg", "electric_greenhouse"),
+			TFGMultiMachines.ELECTRIC_GREENHOUSE.asStack(),
 				"ABA", "CDC", "BCB",
 				'A', CustomTags.MV_CIRCUITS,
 				'B', ChemicalHelper.get(TagPrefix.cableGtSingle, GTMaterials.Copper),
