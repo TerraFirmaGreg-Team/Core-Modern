@@ -13,10 +13,13 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import com.simibubi.create.content.decoration.palettes.AllPaletteBlocks;
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.GreenhouseMachine;
@@ -35,7 +38,7 @@ public class TFGMultiMachines {
 		.recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
 		.recipeModifier(GTRecipeModifiers.OC_PERFECT)
 		.appearanceBlock(GTBlocks.STEEL_HULL)
-		.workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"), GTCEu.id("block/multiblock/implosion_compressor"), false)
+		.sidedWorkableCasingRenderer("block/casings/steam/steel", GTCEu.id("block/multiblock/implosion_compressor"), false)
 		.pattern(definition -> FactoryBlockPattern.start()
 			.aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
 			.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", " XXFXX ")
@@ -53,8 +56,10 @@ public class TFGMultiMachines {
 				.or(Predicates.blockTag(BlockTags.LEAVES)))
 			.where(' ', Predicates.any())
 			.where('F', Predicates.frames(GTMaterials.Steel))
-			.where('X', Predicates.blocks(Blocks.GLASS))
-			.where('D', Predicates.blockTag(BlockTags.DIRT))
+			.where('X', Predicates.blockTag(Tags.Blocks.GLASS)
+				.or(Predicates.blocks(ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "quartz_glass")))))
+			.where('D', Predicates.blockTag(BlockTags.DIRT)
+				.or(Predicates.blockTag(TFCTags.Blocks.GRASS)))
 			.build())
 		.shapeInfos(definition -> {
 			List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
@@ -65,10 +70,10 @@ public class TFGMultiMachines {
 				.aisle("CDDDDDC", "F##W##F", "F##W##F", "F##W##F", "F#LWL#F", "F#LWL#F", "F#LLL#F", "F#####F", "FFFFFFF")
 				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", "#XXFXX#")
 				.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
-				.aisle("mitYfeC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
+				.aisle("mitYfee", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
 				.where('Y', definition, Direction.SOUTH)
 				.where('C', GTBlocks.STEEL_HULL.getDefaultState())
-				.where('D', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "dirt/loam")))
+				.where('D', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "grass/loam")))
 				.where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel))
 				.where('X', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("create", "framed_glass")))
 				.where('W', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/wood/oak")))
