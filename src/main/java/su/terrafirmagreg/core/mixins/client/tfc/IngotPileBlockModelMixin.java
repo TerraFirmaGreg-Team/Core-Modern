@@ -10,6 +10,7 @@ import net.dries007.tfc.client.model.IngotPileBlockModel;
 import net.dries007.tfc.client.model.SimpleStaticBlockEntityModel;
 import net.dries007.tfc.common.blockentities.IngotPileBlockEntity;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
+import net.dries007.tfc.util.Metal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
@@ -48,8 +49,12 @@ public abstract class IngotPileBlockModelMixin implements SimpleStaticBlockEntit
             final var material = ChemicalHelper.getMaterial(stack);
             final int primaryColor = material == null ? 0 : material.material().getMaterialARGB(0);
             final int secondaryColor = material == null ? 0 : material.material().getMaterialARGB(1);
+            Metal metalAtPos = pile.getOrCacheMetal(i);
 
-            sprite = textureAtlas.apply(TFGClientEventHandler.TFCMetalBlockTexturePattern);
+            boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && material != null && !material.isEmpty());
+            ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getSoftTextureId() : TFGClientEventHandler.TFCMetalBlockTexturePattern;
+
+            sprite = textureAtlas.apply(metalResource);
 
             final int layer = (i + 8) / 8;
             final boolean oddLayer = (layer % 2) == 1;
@@ -76,7 +81,10 @@ public abstract class IngotPileBlockModelMixin implements SimpleStaticBlockEntit
             final float maxY = scale * (minY + 4);
             final float maxZ = scale * (minZ + 15);
 
-            TFGClientHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 7, 4, 15, oddLayer, primaryColor, secondaryColor);
+            if (shouldUseTFCRender)
+                RenderHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 7.0F, 4.0F, 15.0F, oddLayer);
+            else
+                TFGClientHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 7, 4, 15, oddLayer, primaryColor, secondaryColor);
 
             poseStack.popPose();
         }
