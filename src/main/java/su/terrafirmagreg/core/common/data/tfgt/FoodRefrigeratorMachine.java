@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,9 +44,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
         return 9 * tier;
     }
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(FoodRefrigeratorMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
-    
-    
-    @Override 
+
+
+    @Override
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
@@ -114,7 +114,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
                 inventory.changeTraitForAll(true);
                 currentlyWorking = true;
             }
-        
+
             tickSubscription = subscribeServerTick(tickSubscription, this::tick);
         } else {
             if (currentlyWorking) {
@@ -129,7 +129,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     }
 
     public void tick() {
-        if (workingEnabled && !inventory.isEmpty()) consumeEnergy(false); 
+        if (workingEnabled && !inventory.isEmpty()) consumeEnergy(false);
         updateSubscription();
     }
 
@@ -140,7 +140,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     private boolean consumeEnergy(boolean simulate) {
         long amount = energyContainer.getEnergyStored() - getEnergyAmount();
         if ((amount < 0 || amount > energyContainer.getEnergyCapacity())) return false;
-        
+
         if (!simulate) energyContainer.removeEnergy(getEnergyAmount());
         return true;
     }
@@ -219,7 +219,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     //#endregion
 
     //#region GUI
-    
+
     @Override
     public Widget createUIWidget() {
         int perRow = 9;
@@ -298,7 +298,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
             storage.setStackInSlot(slot, stack);
             updateSubscription();
         }
-        
+
     }
 
     //#endregion
