@@ -24,8 +24,8 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGCreativeTab;
 import su.terrafirmagreg.core.common.data.TFGItems;
-import su.terrafirmagreg.core.common.data.machines.TFGMachines;
-import su.terrafirmagreg.core.common.data.machines.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
+import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.world.TFGFeatures;
 

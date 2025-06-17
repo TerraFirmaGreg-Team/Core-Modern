@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;

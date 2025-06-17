@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -7,13 +7,11 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
-import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
-import com.gregtechceu.gtceu.client.renderer.machine.WorkableSteamMachineRenderer;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
+import su.terrafirmagreg.core.common.data.tfgt.machine.electric.AqueousAccumulatorMachine;
+import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 
 import java.util.function.BiFunction;
 
