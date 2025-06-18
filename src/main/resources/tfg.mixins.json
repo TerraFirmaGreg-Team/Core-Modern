@@ -58,6 +58,8 @@
     "common.minecraft.NetherPortalBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
     "common.minecraft.ServerLifecycleHooksMixin",
+    "common.species.BirtMixin",
+    "common.species.LimpetMixin",
     "common.tfc.CharcoalForgeBlockMixin",
     "common.tfc.CrucibleBlockMixin",
     "common.tfc.IIngotPileBlockEntityAccessor",
