@@ -2,12 +2,15 @@ package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.client.renderer.machine.OverlayTieredMachineRenderer;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -16,6 +19,7 @@ import su.terrafirmagreg.core.common.data.tfgt.machine.electric.AqueousAccumulat
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.SimpleFoodProcessingMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.FoodRefrigeratorMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemLoaderBusMachine;
 
 import java.util.function.BiFunction;
 
@@ -93,6 +97,19 @@ public class TFGMachines {
 				.tooltips(GTMachineUtils.explosion())
 				.register(),
 			GTMachineUtils.LOW_TIERS);
+
+	public static final MachineDefinition RAILGUN_ITEM_LOADER_IN = REGISTRATE.machine("railgun_item_loader_in",
+			(holder) -> new RailgunItemLoaderBusMachine(holder, IO.IN))
+			.rotationState(RotationState.ALL)
+			.renderer(() -> new OverlayTieredMachineRenderer(3, GTCEu.id("block/machine/part/item_bus.import")))
+			.register();
+
+	public static final MachineDefinition RAILGUN_ITEM_LOADER_OUT = REGISTRATE.machine("railgun_item_loader_out",
+					(holder) -> new RailgunItemLoaderBusMachine(holder, IO.OUT))
+			.rotationState(RotationState.ALL)
+			.renderer(() -> new OverlayTieredMachineRenderer(3, GTCEu.id("block/machine/part/item_bus.export")))
+			.abilities(PartAbility.EXPORT_ITEMS)
+			.register();
 
 
 	public static MachineDefinition[] registerTieredMachines(String name,
