@@ -2,10 +2,13 @@ package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.OvenType;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.data.recipe.CraftingComponent;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
@@ -13,7 +16,7 @@ import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.Tags;
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 
@@ -74,5 +77,15 @@ public class TFGTRecipes {
 				'C', TFCItems.COMPOST.get(),
 				'D', GTBlocks.STEEL_HULL.get()
 		);
+
+		GTRecipeTypes.ASSEMBLER_RECIPES.recipeBuilder(TFGCore.id("interplanetary_link"))
+				.EUt(GTValues.VA[GTValues.HV])
+				.duration(100)
+				.inputItems(GTItems.ITEM_FILTER, 4)
+				.inputItems(GTItems.EMITTER_HV, 2)
+				.inputItems(CustomTags.HV_CIRCUITS, 2)
+				.inputItems(ChemicalHelper.get(TagPrefix.foil, GTMaterials.StainlessSteel, 16))
+				.outputItems(TFGTItems.INTERPLANETARY_LINK, 2)
+				.save(provider);
 	}
 }
