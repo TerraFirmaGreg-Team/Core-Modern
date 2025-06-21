@@ -91,6 +91,10 @@ public final class TFGMaterialHandler {
 		crushedPurified.setIgnored(Tin, () -> AllItems.CRUSHED_TIN);
 		crushedPurified.setIgnored(Lead, () -> AllItems.CRUSHED_LEAD);
 
+		// Misc
+
+		block.setIgnored(Stone, Blocks.STONE);
+
 		// AE2 materials
 
 		rawOreBlock.setIgnored(CertusQuartz, ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "quartz_block")));
@@ -106,35 +110,43 @@ public final class TFGMaterialHandler {
 		// Ad astra materials
 
 		var desh = TFGHelpers.getMaterial("desh");
-		rawOre.setIgnored(desh, ModItems.RAW_DESH);
-		rawOreBlock.setIgnored(desh, ModItems.RAW_DESH_BLOCK);
-		block.setIgnored(desh, ModItems.DESH_BLOCK);
-		ingot.setIgnored(desh, ModItems.DESH_INGOT);
-		nugget.setIgnored(desh, ModItems.DESH_NUGGET);
-		plate.setIgnored(desh, ModItems.DESH_PLATE);
+		if (desh != null) {
+			rawOre.setIgnored(desh, ModItems.RAW_DESH);
+			rawOreBlock.setIgnored(desh, ModItems.RAW_DESH_BLOCK);
+			block.setIgnored(desh, ModItems.DESH_BLOCK);
+			ingot.setIgnored(desh, ModItems.DESH_INGOT);
+			nugget.setIgnored(desh, ModItems.DESH_NUGGET);
+			plate.setIgnored(desh, ModItems.DESH_PLATE);
+		}
 
 		var ostrum = TFGHelpers.getMaterial("ostrum");
-		rawOre.setIgnored(ostrum, ModItems.RAW_OSTRUM);
-		rawOreBlock.setIgnored(ostrum, ModItems.RAW_OSTRUM_BLOCK);
-		block.setIgnored(ostrum, ModItems.OSTRUM_BLOCK);
-		ingot.setIgnored(ostrum, ModItems.OSTRUM_INGOT);
-		nugget.setIgnored(ostrum, ModItems.OSTRUM_NUGGET);
-		plate.setIgnored(ostrum, ModItems.OSTRUM_PLATE);
+		if (ostrum != null) {
+			rawOre.setIgnored(ostrum, ModItems.RAW_OSTRUM);
+			rawOreBlock.setIgnored(ostrum, ModItems.RAW_OSTRUM_BLOCK);
+			block.setIgnored(ostrum, ModItems.OSTRUM_BLOCK);
+			ingot.setIgnored(ostrum, ModItems.OSTRUM_INGOT);
+			nugget.setIgnored(ostrum, ModItems.OSTRUM_NUGGET);
+			plate.setIgnored(ostrum, ModItems.OSTRUM_PLATE);
+		}
 
 		var calorite = TFGHelpers.getMaterial("calorite");
-		rawOre.setIgnored(calorite, ModItems.RAW_CALORITE);
-		rawOreBlock.setIgnored(calorite, ModItems.RAW_CALORITE_BLOCK);
-		block.setIgnored(calorite, ModItems.CALORITE_BLOCK);
-		ingot.setIgnored(calorite, ModItems.CALORITE_INGOT);
-		nugget.setIgnored(calorite, ModItems.CALORITE_NUGGET);
-		plate.setIgnored(calorite, ModItems.CALORITE_PLATE);
+		if (calorite != null) {
+			rawOre.setIgnored(calorite, ModItems.RAW_CALORITE);
+			rawOreBlock.setIgnored(calorite, ModItems.RAW_CALORITE_BLOCK);
+			block.setIgnored(calorite, ModItems.CALORITE_BLOCK);
+			ingot.setIgnored(calorite, ModItems.CALORITE_INGOT);
+			nugget.setIgnored(calorite, ModItems.CALORITE_NUGGET);
+			plate.setIgnored(calorite, ModItems.CALORITE_PLATE);
+		}
 
 		var etrium = TFGHelpers.getMaterial("etrium");
-		block.setIgnored(etrium, ModItems.ETRIUM_BLOCK);
-		ingot.setIgnored(etrium, ModItems.ETRIUM_INGOT);
-		nugget.setIgnored(etrium, ModItems.ETRIUM_NUGGET);
-		plate.setIgnored(etrium, ModItems.ETRIUM_PLATE);
-		rod.setIgnored(etrium, ModItems.ETRIUM_ROD);
+		if (etrium != null) {
+			block.setIgnored(etrium, ModItems.ETRIUM_BLOCK);
+			ingot.setIgnored(etrium, ModItems.ETRIUM_INGOT);
+			nugget.setIgnored(etrium, ModItems.ETRIUM_NUGGET);
+			plate.setIgnored(etrium, ModItems.ETRIUM_PLATE);
+			rod.setIgnored(etrium, ModItems.ETRIUM_ROD);
+		}
 
 		// Tool-only metals
 
