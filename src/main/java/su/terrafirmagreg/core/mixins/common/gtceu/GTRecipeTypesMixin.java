@@ -24,6 +24,8 @@ public abstract class GTRecipeTypesMixin {
     @Shadow @Final public static GTRecipeType CENTRIFUGE_RECIPES;
     @Shadow @Final public static GTRecipeType COMPRESSOR_RECIPES;
 
+    @Shadow @Final public static GTRecipeType IMPLOSION_RECIPES;
+
     /**
      * Нужно для того, чтобы настроить доп. рецепты.
      * Расширяет кол-во слотов в некоторых машинах.
@@ -57,5 +59,7 @@ public abstract class GTRecipeTypesMixin {
         COMPRESSOR_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
         COMPRESSOR_RECIPES.setSlotOverlay(false, true, false, GuiTextures.COMPRESSOR_OVERLAY);
         COMPRESSOR_RECIPES.setSlotOverlay(false, true, true, GuiTextures.COMPRESSOR_OVERLAY);
+
+        IMPLOSION_RECIPES.setMaxIOSize(6, 2, 0, 0);
     }
 }
