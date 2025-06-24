@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -188,7 +189,8 @@ public abstract class LimpetMixin extends PathfinderMob {
 	@Inject(method = "canSpawn", at = @At("HEAD"), remap = false, cancellable = true)
 	private static void tfg$canSpawn(EntityType<? extends PathfinderMob> entityType, ServerLevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource randomSource, CallbackInfoReturnable<Boolean> cir) {
 		cir.setReturnValue(
-			levelAccessor.getBlockState(blockPos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON)
+			levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) == 0
+			&& levelAccessor.getBlockState(blockPos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON)
 			&& levelAccessor.getBlockState(blockPos.below()).isValidSpawn(levelAccessor, blockPos, entityType));
 	}
 }
