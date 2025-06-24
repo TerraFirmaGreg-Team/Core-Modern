@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.lumintorious.tfcambiental.api.AmbientalRegistry;
 import com.lumintorious.tfcambiental.modifier.TempModifier;
 import com.simibubi.create.AllItems;
+import earth.terrarium.adastra.common.registry.ModItems;
 import net.dries007.tfc.common.blocks.SeaIceBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.AqueductBlock;
@@ -139,7 +140,7 @@ public final class TFCAmbientalCompat {
                 || item == Items.NETHERITE_LEGGINGS.asItem());
         }));
 
-        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("nanomuscle_armor", -0.5f, FULLY_INSULATED)).filter((mod) -> {
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("nanomuscle_armor", 0f, FULLY_INSULATED)).filter((mod) -> {
             var item = stack.getItem();
             return (item == GTItems.NANO_HELMET.asItem()
                 || item == GTItems.NANO_CHESTPLATE.asItem()
@@ -148,13 +149,21 @@ public final class TFCAmbientalCompat {
                 || item == GTItems.NANO_CHESTPLATE_ADVANCED.asItem());
         }));
 
-        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("quarktech_armor", -0.5f, FULLY_INSULATED)).filter((mod) -> {
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("quarktech_armor", 0f, FULLY_INSULATED)).filter((mod) -> {
             var item = stack.getItem();
             return (item == GTItems.QUANTUM_HELMET.asItem()
                 || item == GTItems.QUANTUM_CHESTPLATE.asItem()
                 || item == GTItems.QUANTUM_LEGGINGS.asItem()
                 || item == GTItems.QUANTUM_BOOTS.asItem()
                 || item == GTItems.QUANTUM_CHESTPLATE_ADVANCED.asItem());
+        }));
+
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional.of(new TempModifier("space_suit", 0f, FULLY_INSULATED)).filter((mod) -> {
+            var item = stack.getItem();
+            return (item == ModItems.SPACE_HELMET.get() || item == ModItems.NETHERITE_SPACE_HELMET.get() || item == ModItems.JET_SUIT_HELMET.get()
+                || item == ModItems.SPACE_SUIT.get() || item == ModItems.NETHERITE_SPACE_SUIT.get() || item == ModItems.JET_SUIT.get()
+                || item == ModItems.SPACE_PANTS.get() || item == ModItems.NETHERITE_SPACE_PANTS.get() || item == ModItems.JET_SUIT_PANTS.get()
+                || item == ModItems.SPACE_BOOTS.get() || item == ModItems.NETHERITE_SPACE_BOOTS.get() || item == ModItems.JET_SUIT_BOOTS.get());
         }));
     }
 

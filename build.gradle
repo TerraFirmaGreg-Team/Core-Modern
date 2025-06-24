@@ -112,7 +112,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     maven {
         name "Tterrag"
-        url  "https://maven.tterrag.com/"
+        url  "https://modmaven.dev/"
         content {
             includeGroup("com.tterrag.registrate")
         }

@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.WoodAshPileBlock;
+import su.terrafirmagreg.core.common.data.blocks.LayerBlock;
 
 public class TFGInteractionManager {
 	public static void init(FMLCommonSetupEvent event)
@@ -32,21 +32,28 @@ public class TFGInteractionManager {
 				final BlockPos pos = context.getClickedPos();
 				final BlockState stateAt = level.getBlockState(pos);
 				final Block pile = TFGBlocks.WOOD_ASH_PILE.get();
-				if (player != null && (player.blockPosition().equals(pos) || (player.blockPosition().equals(pos.above()) && Helpers.isBlock(stateAt, pile) && stateAt.getValue(WoodAshPileBlock.LAYERS) == 8)))
+
+				if (player != null &&
+					(player.blockPosition().equals(pos)
+						|| (player.blockPosition().equals(pos.above())
+							&& Helpers.isBlock(stateAt, pile)
+							&& stateAt.getValue(LayerBlock.LAYERS) == 8)))
 				{
 					return InteractionResult.FAIL;
 				}
+
 				if (Helpers.isBlock(stateAt, pile))
 				{
-					int layers = stateAt.getValue(WoodAshPileBlock.LAYERS);
+					int layers = stateAt.getValue(LayerBlock.LAYERS);
 					if (layers != 8)
 					{
 						stack.shrink(1);
-						level.setBlockAndUpdate(pos, stateAt.setValue(WoodAshPileBlock.LAYERS, layers + 1));
+						level.setBlockAndUpdate(pos, stateAt.setValue(LayerBlock.LAYERS, layers + 1));
 						Helpers.playSound(level, pos, SoundType.SAND.getPlaceSound());
 						return InteractionResult.SUCCESS;
 					}
 				}
+
 				if (level.isEmptyBlock(pos.above()) && stateAt.isFaceSturdy(level, pos, Direction.UP))
 				{
 					stack.shrink(1);

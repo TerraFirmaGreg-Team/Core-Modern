@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -206,12 +207,29 @@ public class LunarChorusFlowerBlock extends Block {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
+	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+	{
+		if (!state.canSurvive(level, currentPos))
+		{
+			level.scheduleTick(currentPos, this, 1);
+			return Blocks.AIR.defaultBlockState();
+		}
+		return state;
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
 	public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos)
 	{
 		LunarChorusPlantBlock body = (LunarChorusPlantBlock) plant.get();
 
 		BlockState blockstate = pLevel.getBlockState(pPos.below());
-		if (blockstate.getBlock() != body && !isGroundBlock(blockstate))
+		if (blockstate.getBlock() == body || isGroundBlock(blockstate))
+		{
+			return true;
+		}
+		else
 		{
 			if (!blockstate.isAir())
 			{
@@ -241,10 +259,6 @@ public class LunarChorusFlowerBlock extends Block {
 
 				return isValid;
 			}
-		}
-		else
-		{
-			return true;
 		}
 	}
 
