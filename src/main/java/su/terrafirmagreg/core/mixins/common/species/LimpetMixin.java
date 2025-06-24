@@ -27,11 +27,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.*;
 import com.ninni.species.entity.Limpet;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -62,6 +59,7 @@ public abstract class LimpetMixin extends PathfinderMob {
 	@Shadow
 	public abstract void setScaredTicks(int scaredTicks);
 
+	@Unique
 	private boolean tfg$canMine(ItemStack stack)
 	{
 		return GTToolType.PICKAXE.is(stack)
