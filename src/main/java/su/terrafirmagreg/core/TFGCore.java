@@ -24,8 +24,11 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGCreativeTab;
 import su.terrafirmagreg.core.common.data.TFGItems;
-import su.terrafirmagreg.core.common.data.machines.TFGMachines;
-import su.terrafirmagreg.core.common.data.machines.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
+import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
+import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.world.TFGFeatures;
 
 @Mod(TFGCore.MOD_ID)
@@ -38,6 +41,7 @@ public final class TFGCore {
     public static final GTRegistrate REGISTRATE = GTRegistrate.create(TFGCore.MOD_ID);
     public static MaterialRegistry MATERIAL_REGISTRY;
 
+    @SuppressWarnings("removal")
     public TFGCore() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TFGConfig.SPEC);
 
@@ -56,14 +60,18 @@ public final class TFGCore {
         TFGCreativeTab.TABS.register(bus);
         TFGFeatures.FEATURES.register(bus);
 
+        TFGTItems.register();
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
+
+        AdAstraCompat.RegisterEvents();
     }
 
     public static ResourceLocation id(String name) {
-        return new ResourceLocation(MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 
+    @SuppressWarnings("removal")
     private static void setupFixForGlobalServerConfig() {
         ModLoadingContext.get().registerExtensionPoint(
                 IExtensionPoint.DisplayTest.class,
@@ -74,6 +82,7 @@ public final class TFGCore {
     @SubscribeEvent
     public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         TFGMachines.init();
+        TFGMultiMachines.init();
     }
 
     @SubscribeEvent

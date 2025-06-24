@@ -325,6 +325,8 @@ public final class TFGTagPrefix {
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
 
         chain = new TagPrefix("chain")
+                .defaultTagPath("chains/%s")
+                .unformattedTagPath("chains")
                 .materialAmount(GTValues.M / 16)
                 .unificationEnabled(true)
                 .generateItem(true)

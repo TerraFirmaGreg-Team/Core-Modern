@@ -8,13 +8,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import su.terrafirmagreg.core.TFGConfig;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.compat.create.CreateCompat;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
 
 public final class TFGCommonEventHandler {
 
+    @SuppressWarnings("removal")
     public static void init() {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -38,8 +38,6 @@ public final class TFGCommonEventHandler {
         event.enqueueWork(() -> {
             if (TFGConfig.enableTFCAmbientalCompat && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
                 TFCAmbientalCompat.register();
-            if (TFGConfig.enableCreateCompat && TFGModsResolver.CREATE.isLoaded())
-                CreateCompat.register();
         });
     }
 }

@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.machines;
+package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;

@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,60 +48,60 @@ public class TrowelItem extends Item {
         //Sandstone
         for (String sandstone_color : sandstone_colors) {
             map.put(
-                    new ResourceLocation("rnr", "flagstone/" + sandstone_color + "_sandstone"),
-                    new ResourceLocation("rnr", sandstone_color + "_sandstone_flagstones")
+                ResourceLocation.fromNamespaceAndPath("rnr", "flagstone/" + sandstone_color + "_sandstone"),
+                ResourceLocation.fromNamespaceAndPath("rnr", sandstone_color + "_sandstone_flagstones")
             );
         }
         //Flagstones
         for (String flagstone_rock : rocks) {
             map.put(
-                    new ResourceLocation("rnr", "flagstone/" + flagstone_rock),
-                    new ResourceLocation("rnr", "rock/flagstones/" + flagstone_rock)
+                ResourceLocation.fromNamespaceAndPath("rnr", "flagstone/" + flagstone_rock),
+                ResourceLocation.fromNamespaceAndPath("rnr", "rock/flagstones/" + flagstone_rock)
             );
         }
         //Gravel
         for (String gravel_rock : rocks) {
             map.put(
-                    new ResourceLocation("rnr", "gravel_fill/" + gravel_rock),
-                    new ResourceLocation("rnr", "rock/gravel_road/" + gravel_rock)
+                ResourceLocation.fromNamespaceAndPath("rnr", "gravel_fill/" + gravel_rock),
+                ResourceLocation.fromNamespaceAndPath("rnr", "rock/gravel_road/" + gravel_rock)
             );
         }
         //Cobble
         for (String cobble_rock : rocks) {
             map.put(
-                    new ResourceLocation("tfc", "rock/loose/" + cobble_rock),
-                    new ResourceLocation("rnr", "rock/cobbled_road/" + cobble_rock)
+                ResourceLocation.fromNamespaceAndPath("tfc", "rock/loose/" + cobble_rock),
+                ResourceLocation.fromNamespaceAndPath("rnr", "rock/cobbled_road/" + cobble_rock)
             );
         }
         for (String mossy_cobble_rock : rocks) {
             map.put(
-                    new ResourceLocation("tfc", "rock/mossy_loose/" + mossy_cobble_rock),
-                    new ResourceLocation("rnr", "rock/cobbled_road/" + mossy_cobble_rock)
+                ResourceLocation.fromNamespaceAndPath("tfc", "rock/mossy_loose/" + mossy_cobble_rock),
+                ResourceLocation.fromNamespaceAndPath("rnr", "rock/cobbled_road/" + mossy_cobble_rock)
             );
         }
         //Sett Bricks
         for (String brick_rock : rocks) {
             map.put(
-                    new ResourceLocation("tfc", "brick/" + brick_rock),
-                    new ResourceLocation("rnr", "rock/sett_road/" + brick_rock)
+                ResourceLocation.fromNamespaceAndPath("tfc", "brick/" + brick_rock),
+                ResourceLocation.fromNamespaceAndPath("rnr", "rock/sett_road/" + brick_rock)
             );
         }
         //Hoggin
         map.put(
-                new ResourceLocation("rnr", "hoggin_mix"),
-                new ResourceLocation("rnr", "hoggin")
+            ResourceLocation.fromNamespaceAndPath("rnr", "hoggin_mix"),
+            ResourceLocation.fromNamespaceAndPath("rnr", "hoggin")
         );
         //Brick
         map.put(
-                new ResourceLocation("minecraft", "brick"),
-                new ResourceLocation("rnr", "brick_road")
+            ResourceLocation.fromNamespaceAndPath("minecraft", "brick"),
+            ResourceLocation.fromNamespaceAndPath("rnr", "brick_road")
         );
 
         return map;
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         if (level.isClientSide()) return InteractionResult.SUCCESS;
 

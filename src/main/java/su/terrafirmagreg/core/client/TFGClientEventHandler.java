@@ -10,8 +10,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public final class TFGClientEventHandler {
 
-    public static final ResourceLocation TFCMetalBlockTexturePattern = new ResourceLocation(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
+    public static final ResourceLocation TFCMetalBlockTexturePattern = ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
 
+    @SuppressWarnings("removal")
     public TFGClientEventHandler() {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -21,7 +22,7 @@ public final class TFGClientEventHandler {
     }
 
     private static void registerSpecialModels(ModelEvent.RegisterAdditional event) {
-        event.register(new ResourceLocation(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern"));
+        event.register(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern"));
     }
 
     @SubscribeEvent

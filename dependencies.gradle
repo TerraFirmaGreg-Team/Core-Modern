@@ -31,6 +31,30 @@ repositories {
         name "Shedaniel maven"
         url "https://maven.shedaniel.me"
     }
+    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("dev.engine-room.flywheel")
+        }
+    }
+    maven { //GTM maven
+        name = 'GTCEu Maven'
+        url = 'https://maven.gtceu.com'
+        content {
+            includeGroup 'com.gregtechceu.gtceu'
+        }
+    }
+    maven { // LDLib, Shimmer
+        name = "FirstDarkDev Maven"
+        url = "https://maven.firstdarkdev.xyz/snapshots"
+        content {
+            includeGroup("com.lowdragmc.ldlib")
+        }
+    }
     flatDir {
         dir 'libs'
     }
@@ -40,7 +64,7 @@ repositories {
 dependencies {
 
 
-    implementation fg.deobf("maven.modrinth:embeddium:0.3.18+mc1.20.1")
+    implementation fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
     implementation fg.deobf("maven.modrinth:ferrite-core:DG5Fn9Sz")
     implementation fg.deobf("maven.modrinth:architectury-api:9.2.14+forge")
 
@@ -62,24 +86,29 @@ dependencies {
     // EMI
 //    compileOnly fg.deobf("dev.emi:emi-forge:1.1.12+1.20.1:api")
 //    runtimeOnly fg.deobf("dev.emi:emi-forge:1.1.12+1.20.1")
-    implementation fg.deobf("dev.emi:emi-forge:1.1.13+1.20.1")
+    implementation fg.deobf("dev.emi:emi-forge:1.1.20+1.20.1")
 
     // Create
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-10")
-    implementation fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.f-27:all") { transitive = false }
+    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"))
+    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"))
+    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
 
     // Create: Railways
-    compileOnly fg.deobf("maven.modrinth:create-steam-n-rails:1.6.4+forge-mc1.20.1") { transitive = false }
+    // TODO: Re-enable when mod updates to newest version
+    // compileOnly fg.deobf("maven.modrinth:create-steam-n-rails:1.6.4+forge-mc1.20.1") { transitive = false }
 
     // Create: Vintage Improvements
-    implementation fg.deobf("maven.modrinth:create-vintage-improvements:1.20.1-0.2.0.3") { transitive = false }
+    // TODO: REPLACED with github fork for now
+    //implementation fg.deobf("maven.modrinth:create-vintage-improvements:1.20.1-0.2.0.3") { transitive = false }
+    implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6493670") { transitive = false }
 
     // Greate
-    compileOnly fg.deobf("maven.modrinth:greate:0.0.38") { transitive = false }
+    compileOnly fg.deobf("maven.modrinth:greate:0.0.40") { transitive = false }
 
     // GTM
-    implementation fg.deobf("maven.modrinth:ldlib:mc1.20.1-1.0.31-forge")
-    implementation fg.deobf("curse.maven:gregtechceu-modern-890405:6081505-sources-6081509") { transitive = false }
+    implementation fg.deobf("com.gregtechceu.gtceu:gtceu-$minecraft_version:$gtm_version") { transitive = false }
+    implementation fg.deobf("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
 
     // KJS
     implementation fg.deobf("maven.modrinth:rhino:2001.2.2-build.18+forge")
@@ -126,5 +155,10 @@ dependencies {
     implementation fg.deobf("curse.maven:roads-and-roofs-tfc-1048212:5852507")
 
     // Ad Astra
-    //implementation fg.deobf("curse.maven:ad-astra-635042:5914893") { transitive = false }
+    implementation fg.deobf("curse.maven:ad-astra-635042:5914893") { transitive = false }
+    implementation fg.deobf("curse.maven:botarium-704113:5486070") { transitive = false }
+    implementation fg.deobf("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
+
+    // Species
+    implementation fg.deobf("maven.modrinth:species:N9CbMB7B") { transitive = false }
 }

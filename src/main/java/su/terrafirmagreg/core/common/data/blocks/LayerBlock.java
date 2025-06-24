@@ -1,20 +1,16 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
-import net.dries007.tfc.common.items.Powder;
-import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -23,16 +19,24 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.RegistryObject;
 
-public class WoodAshPileBlock extends Block {
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
+
+public class LayerBlock extends Block {
 	public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
 
-	public WoodAshPileBlock(Properties properties)
+	private final Supplier<ItemLike> m_cloneSupplier;
+
+
+	public LayerBlock(Supplier<ItemLike> item, Properties properties)
 	{
 		super(properties);
+		m_cloneSupplier = item;
 	}
+
 
 	@Override
 	public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)
@@ -55,7 +59,7 @@ public class WoodAshPileBlock extends Block {
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
-		return new ItemStack(TFCItems.POWDERS.get(Powder.WOOD_ASH).get());
+		return new ItemStack(m_cloneSupplier.get());
 	}
 
 	@Override
