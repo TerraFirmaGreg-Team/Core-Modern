@@ -5,6 +5,7 @@
   "refmap": "tfg.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "client.create.ChainConveyorRendererMixin",
     "client.minecraft.IBlockModelGeneratorsInvoker",
     "common.ad_astra.GasTankItemMixin",
     "common.ad_astra.SpaceSuitItemMixin",
@@ -18,7 +19,6 @@
     "common.create.ChainConveyorBlockMixin",
     "common.create.ChainConveyorConnectionHandlerMixin",
     "common.create.ChainConveyorConnectionPacketMixin",
-    "client.create.ChainConveyorRendererMixin",
     "common.create.DepotBehaviorMixin",
     "common.create.InputEventsMixin",
     "common.create.ProcessingRecipeMixin",
@@ -74,6 +74,7 @@
     "common.tfcambiental.TemperatureCapabilityMixin",
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
+    "common.vintageimprovements.VacuumChamberBlockMixin",
     "common.vintageimprovements.VibratingRecipeMixin"
   ],
   "client": [
