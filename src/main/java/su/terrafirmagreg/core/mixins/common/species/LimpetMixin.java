@@ -62,7 +62,7 @@ public abstract class LimpetMixin extends PathfinderMob {
 	@Shadow
 	public abstract void setScaredTicks(int scaredTicks);
 
-	private boolean canMine(ItemStack stack)
+	private boolean tfg$canMine(ItemStack stack)
 	{
 		return GTToolType.PICKAXE.is(stack)
 			|| GTToolType.MINING_HAMMER.is(stack)
@@ -85,7 +85,7 @@ public abstract class LimpetMixin extends PathfinderMob {
 			&& player.isAlive()
 			&& !player.getAbilities().instabuild
 			&& !player.isShiftKeyDown() ||
-				(this.getLimpetType().getId() > 0 && stack.isPresent() && canMine(stack.get()));
+				(this.getLimpetType().getId() > 0 && stack.isPresent() && tfg$canMine(stack.get()));
 	}
 
 	/**
@@ -94,7 +94,7 @@ public abstract class LimpetMixin extends PathfinderMob {
 	 */
 	@Overwrite
 	public boolean isValidEntityHoldingPickaxe(Player player) {
-		return this.getLimpetType().getId() > 0 && this.getStackInHand(player).isPresent() && canMine(this.getStackInHand(player).get());
+		return this.getLimpetType().getId() > 0 && this.getStackInHand(player).isPresent() && tfg$canMine(this.getStackInHand(player).get());
 	}
 
 	/**
@@ -103,7 +103,7 @@ public abstract class LimpetMixin extends PathfinderMob {
 	 */
 	@Overwrite
 	public Optional<ItemStack> getStackInHand(Player player) {
-		return Arrays.stream(InteractionHand.values()).filter(hand -> canMine(player.getItemInHand(hand))).map(player::getItemInHand).findFirst();
+		return Arrays.stream(InteractionHand.values()).filter(hand -> tfg$canMine(player.getItemInHand(hand))).map(player::getItemInHand).findFirst();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public abstract class LimpetMixin extends PathfinderMob {
 		if (source.getEntity() instanceof Player player
 				&& type.getId() > 0
 				&& !player.getMainHandItem().isEmpty()
-				&& canMine(player.getMainHandItem())) {
+				&& tfg$canMine(player.getMainHandItem())) {
 
 			if (type.getId() > 0) spawnBreakingParticles();
 
@@ -127,7 +127,7 @@ public abstract class LimpetMixin extends PathfinderMob {
 				this.playSound(SpeciesSoundEvents.LIMPET_BREAK.get(), 0.6f, this.getCrackedStage() + 1);
 				this.setScaredTicks(0);
 				for (ItemStack itemStack : player.getInventory().items) {
-					if (canMine(itemStack)) {
+					if (tfg$canMine(itemStack)) {
 						player.getCooldowns().addCooldown(itemStack.getItem(), player.getAbilities().instabuild ? 0 : 80);
 					}
 				}
