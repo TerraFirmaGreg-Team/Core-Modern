@@ -41,6 +41,7 @@ public final class TFGCore {
     public static final GTRegistrate REGISTRATE = GTRegistrate.create(TFGCore.MOD_ID);
     public static MaterialRegistry MATERIAL_REGISTRY;
 
+    @SuppressWarnings("removal")
     public TFGCore() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TFGConfig.SPEC);
 
@@ -67,9 +68,10 @@ public final class TFGCore {
     }
 
     public static ResourceLocation id(String name) {
-        return new ResourceLocation(MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 
+    @SuppressWarnings("removal")
     private static void setupFixForGlobalServerConfig() {
         ModLoadingContext.get().registerExtensionPoint(
                 IExtensionPoint.DisplayTest.class,

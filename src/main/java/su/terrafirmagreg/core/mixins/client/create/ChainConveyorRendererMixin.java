@@ -34,7 +34,7 @@ public class ChainConveyorRendererMixin {
         ChainGTMaterialInterface cgtbe = (ChainGTMaterialInterface) be;
         String matPath = cgtbe.getConnectionMaterial(blockPos).getResourceLocation().getPath();
         //TODO: Perhaps this could be adapted to use a white chain texture png, and simply modified colour-wise
-        tfg$tempChainTextureResource = new ResourceLocation(TerraFirmaCraft.MOD_ID, "textures/block/metal/chain/" + matPath + ".png");
+        tfg$tempChainTextureResource = ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "textures/block/metal/chain/" + matPath + ".png");
     }
 
     @Inject(method = "renderChains(Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At("TAIL"), remap = false)

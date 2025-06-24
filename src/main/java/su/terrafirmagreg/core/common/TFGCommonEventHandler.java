@@ -14,6 +14,7 @@ import su.terrafirmagreg.core.utils.TFGModsResolver;
 
 public final class TFGCommonEventHandler {
 
+    @SuppressWarnings("removal")
     public static void init() {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 

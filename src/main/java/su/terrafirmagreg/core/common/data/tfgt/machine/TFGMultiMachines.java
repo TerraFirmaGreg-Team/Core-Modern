@@ -11,9 +11,7 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
-import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.*;
-import com.simibubi.create.content.decoration.palettes.AllPaletteBlocks;
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -123,11 +121,11 @@ public class TFGMultiMachines {
 				.or(Predicates.blockTag(BlockTags.LEAVES))
 				.or(Predicates.blockTag(TFCTags.Blocks.PLANTS))
 				// Apparently TFC likes to sometimes spawn loose rocks on top of grass, including inside the greenhouse?
-				.or(Predicates.blockTag(dev.latvian.mods.kubejs.util.Tags.block(new ResourceLocation("tfc", "loose_rocks")))))
+				.or(Predicates.blockTag(dev.latvian.mods.kubejs.util.Tags.block(ResourceLocation.fromNamespaceAndPath("tfc", "loose_rocks")))))
 			.where(' ', Predicates.any())
 			.where('F', Predicates.frames(GTMaterials.Steel))
 			.where('X', Predicates.blockTag(Tags.Blocks.GLASS)
-				.or(Predicates.blocks(ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "quartz_glass")))))
+				.or(Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_glass")))))
 			.where('D', Predicates.blockTag(BlockTags.DIRT)
 				.or(Predicates.blockTag(TFCTags.Blocks.GRASS)))
 			.build())
@@ -143,11 +141,11 @@ public class TFGMultiMachines {
 				.aisle("mitYfee", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
 				.where('Y', definition, Direction.SOUTH)
 				.where('C', GTBlocks.STEEL_HULL.getDefaultState())
-				.where('D', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "grass/loam")))
+				.where('D', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfc", "grass/loam")))
 				.where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel))
-				.where('X', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("create", "framed_glass")))
-				.where('W', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/wood/oak")))
-				.where('L', ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfc", "wood/leaves/oak")))
+				.where('X', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("create", "framed_glass")))
+				.where('W', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfc", "wood/wood/oak")))
+				.where('L', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfc", "wood/leaves/oak")))
 				.where('#', Blocks.AIR)
 				.where('i', GTMachines.ITEM_IMPORT_BUS[GTValues.ULV], Direction.SOUTH)
 				.where('t', GTMachines.ITEM_EXPORT_BUS[GTValues.MV], Direction.SOUTH)

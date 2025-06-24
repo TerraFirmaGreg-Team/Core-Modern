@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -17,7 +16,7 @@ public final class TFGTags {
         public static final TagKey<Item> Strings = createItemTag("forge:string");
 
         public static TagKey<Item> createItemTag(String path) {
-            return TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation(path));
+            return TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.parse(path));
         }
     }
 
@@ -26,7 +25,7 @@ public final class TFGTags {
         public static final TagKey<Block> Logs = createBlockTag("minecraft:logs");
 
         public static TagKey<Block> createBlockTag(String path) {
-            return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), new ResourceLocation(path));
+            return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));
         }
     }
 
@@ -34,7 +33,7 @@ public final class TFGTags {
         public static final TagKey<Fluid> BreathableCompressedAir = createFluidTag("tfg:breathable_compressed_air");
 
         public static TagKey<Fluid> createFluidTag(String path) {
-            return TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation(path));
+            return TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), ResourceLocation.parse(path));
         }
     }
 
@@ -42,7 +41,7 @@ public final class TFGTags {
         public static final TagKey<EntityType<?>> IgnoresGravity = createEntityTag("tfg:ignores_gravity");
 
         public static TagKey<EntityType<?>> createEntityTag(String path) {
-            return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), new ResourceLocation(path));
+            return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.parse(path));
         }
     }
 }

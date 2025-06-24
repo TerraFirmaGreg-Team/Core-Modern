@@ -15,7 +15,6 @@ import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.resources.ResourceLocation;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
@@ -69,7 +68,7 @@ public class TFGTRecipes {
 			'P', CraftingComponent.PUMP,
 			'R', CraftingComponent.ROTOR);
 
-		VanillaRecipeHelper.addShapedRecipe(provider, new ResourceLocation("tfg", "electric_greenhouse"),
+		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("electric_greenhouse"),
 			TFGMultiMachines.ELECTRIC_GREENHOUSE.asStack(),
 				"ABA", "CDC", "BCB",
 				'A', CustomTags.MV_CIRCUITS,

@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
@@ -13,14 +12,11 @@ import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
 
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import dev.emi.emi.api.widget.TextWidget;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 
 @SuppressWarnings("deprecation")
 public class TFGRecipeTypes {
@@ -66,7 +62,7 @@ public class TFGRecipeTypes {
 			.setSound(GTSoundEntries.BATH)
 			.prepareBuilder(recipeBuilder -> recipeBuilder.addCondition(RockBreakerCondition.INSTANCE))
 			.setUiBuilder((recipe, widgetGroup) -> {
-				var fluidA = BuiltInRegistries.FLUID.get(new ResourceLocation(recipe.data.getString("fluidA")));
+				var fluidA = BuiltInRegistries.FLUID.get(ResourceLocation.parse(recipe.data.getString("fluidA")));
 				if (fluidA != Fluids.EMPTY) {
 					widgetGroup.addWidget(new TankWidget(new CustomFluidTank(new FluidStack(fluidA, 1000)),
 						widgetGroup.getSize().width - 50, widgetGroup.getSize().height - 35, false, false)

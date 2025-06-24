@@ -32,7 +32,9 @@ public class TFGMaterialInfoModification extends EventJS {
 	 */
 	public void add(String tagName, ItemMaterialInfo itemMaterialInfo) {
 		ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-		var tagKey = tagManager.createTagKey(new ResourceLocation(tagName));
+		assert tagManager != null;
+
+		var tagKey = tagManager.createTagKey(ResourceLocation.parse(tagName));
 		var tag = tagManager.getTag(tagKey);
 		tag.forEach(stack -> add(stack, itemMaterialInfo));
 	}

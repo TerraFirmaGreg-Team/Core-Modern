@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"unused"})
 public final class TFGBlocks {
 
 	// Reference table builders
@@ -247,7 +247,7 @@ public final class TFGBlocks {
 
 	public static void generateBudIndicatorLoot(Map<ResourceLocation, LootTable> lootTables) {
 		TFGBlocks.BUD_BLOCKS.forEach((material, blockEntry) -> {
-			ResourceLocation lootTableId = new ResourceLocation(blockEntry.getId().getNamespace(),
+			ResourceLocation lootTableId = ResourceLocation.fromNamespaceAndPath(blockEntry.getId().getNamespace(),
 				"blocks/" + blockEntry.getId().getPath());
 			((BlockBehaviourAccessor) blockEntry.get()).setDrops(lootTableId);
 		});

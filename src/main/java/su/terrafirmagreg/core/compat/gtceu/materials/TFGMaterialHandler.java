@@ -97,10 +97,10 @@ public final class TFGMaterialHandler {
 
 		// AE2 materials
 
-		rawOreBlock.setIgnored(CertusQuartz, ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "quartz_block")));
+		rawOreBlock.setIgnored(CertusQuartz, ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_block")));
 
 		var fluix = GTCEuAPI.materialManager.getMaterial("tfg:fluix");
-		block.setIgnored(fluix, ForgeRegistries.BLOCKS.getValue(new ResourceLocation("ae2", "fluix_block")));
+		block.setIgnored(fluix, ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ae2", "fluix_block")));
 
 		// Create materials
 

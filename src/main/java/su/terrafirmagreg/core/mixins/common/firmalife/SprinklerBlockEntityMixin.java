@@ -42,7 +42,7 @@ public abstract class SprinklerBlockEntityMixin extends BlockEntity implements C
     )
     private static Fluid redirectSearchForFluid(Level level, BlockPos pos, Direction direction, boolean drain,
                                                 Level unused1, BlockPos unused2, BlockState state, SprinklerBlockEntity sprinkler) {
-        final Fluid water = ForgeRegistries.FLUIDS.getValue(new ResourceLocation("minecraft:water"));
+        final Fluid water = ForgeRegistries.FLUIDS.getValue(ResourceLocation.withDefaultNamespace("water"));
         if (water == null) {
             tfg$updateStasisState(level, pos, state, false);
             return null;
