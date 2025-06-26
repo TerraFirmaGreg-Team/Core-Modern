@@ -5,7 +5,7 @@ import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemLoaderBusMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,10 +18,10 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
 
-    private List<RailgunItemLoaderBusMachine> getLoaderItemBuses() {
-        ArrayList<RailgunItemLoaderBusMachine> loaders = new ArrayList<>();
+    private List<RailgunItemBusMachine> getLoaderItemBuses() {
+        ArrayList<RailgunItemBusMachine> loaders = new ArrayList<>();
         for (IMultiPart part: getParts()) {
-            if (part instanceof RailgunItemLoaderBusMachine loader) loaders.add(loader);
+            if (part instanceof RailgunItemBusMachine loader) loaders.add(loader);
         }
         return Collections.unmodifiableList(loaders);
     }
