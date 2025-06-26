@@ -155,9 +155,10 @@ dependencies {
     implementation fg.deobf("curse.maven:roads-and-roofs-tfc-1048212:5852507")
 
     // Ad Astra
-    implementation fg.deobf("curse.maven:ad-astra-635042:5914893") { transitive = false }
+    implementation fg.deobf("curse.maven:ad-astra-635042:6262032") { transitive = false }
     implementation fg.deobf("curse.maven:botarium-704113:5486070") { transitive = false }
     implementation fg.deobf("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
+    implementation fg.deobf("curse.maven:resourceful-config-714059:6231176") { transitive = false }
 
     // Species
     implementation fg.deobf("maven.modrinth:species:N9CbMB7B") { transitive = false }
