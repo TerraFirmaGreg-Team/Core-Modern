@@ -19,7 +19,7 @@ import su.terrafirmagreg.core.common.data.tfgt.machine.electric.AqueousAccumulat
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.SimpleFoodProcessingMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.FoodRefrigeratorMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemLoaderBusMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
 import java.util.function.BiFunction;
 
@@ -99,13 +99,13 @@ public class TFGMachines {
 			GTMachineUtils.LOW_TIERS);
 
 	public static final MachineDefinition RAILGUN_ITEM_LOADER_IN = REGISTRATE.machine("railgun_item_loader_in",
-			(holder) -> new RailgunItemLoaderBusMachine(holder, IO.IN))
+                    (holder) -> new RailgunItemBusMachine(holder, IO.IN))
 			.rotationState(RotationState.ALL)
 			.renderer(() -> new OverlayTieredMachineRenderer(3, GTCEu.id("block/machine/part/item_bus.import")))
 			.register();
 
 	public static final MachineDefinition RAILGUN_ITEM_LOADER_OUT = REGISTRATE.machine("railgun_item_loader_out",
-					(holder) -> new RailgunItemLoaderBusMachine(holder, IO.OUT))
+			(holder) -> new RailgunItemBusMachine(holder, IO.OUT))
 			.rotationState(RotationState.ALL)
 			.renderer(() -> new OverlayTieredMachineRenderer(3, GTCEu.id("block/machine/part/item_bus.export")))
 			.abilities(PartAbility.EXPORT_ITEMS)
