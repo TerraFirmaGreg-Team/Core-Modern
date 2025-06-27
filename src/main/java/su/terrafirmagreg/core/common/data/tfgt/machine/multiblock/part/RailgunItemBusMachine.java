@@ -49,6 +49,7 @@ public class RailgunItemBusMachine extends ItemBusPartMachine {
 
     private @Nullable RailgunItemBusMachine linkedBus;
     @Persisted
+    @DescSynced
     protected CustomItemStackHandler linkInventory;
 
     @DescSynced
@@ -58,9 +59,7 @@ public class RailgunItemBusMachine extends ItemBusPartMachine {
 
     private void updateLink() {
         if (isRemote()) return;
-        long newId;
-        if (linkInventory.getStackInSlot(0).isEmpty()) newId = 0;
-        else newId = linkInventory.getStackInSlot(0).getOrCreateTag().getLong("linkId");
+        long newId = linkInventory.getStackInSlot(0).isEmpty() ? 0 : linkInventory.getStackInSlot(0).getOrCreateTag().getLong("linkId");
 
         if (oldLinkId == newId) return;
 
@@ -74,6 +73,7 @@ public class RailgunItemBusMachine extends ItemBusPartMachine {
 
         oldLinkId = newId;
         if (newId == 0) return;
+
         if (OPEN_LINKS.containsKey(newId) && OPEN_LINKS.get(newId).isReciever == isReciever) return;
         linkedBus = OPEN_LINKS.remove(newId);
         if (linkedBus != null) {
@@ -81,11 +81,12 @@ public class RailgunItemBusMachine extends ItemBusPartMachine {
             linkedBus.isLinked = true;
             isLinked = true;
             if (isReciever) {
-                _currentInactivityTrigger = linkedBus._currentInactivityTrigger;
-                _currentMode = linkedBus._currentMode;
-                _currentItemFilters = linkedBus._currentItemFilters;
+                currentInactivityTrigger = linkedBus.currentInactivityTrigger;
+                currentMode = linkedBus.currentMode;
+                currentItemFilters = linkedBus.currentItemFilters;
             }
         } else OPEN_LINKS.put(newId, this);
+
     }
 
     public enum Mode implements EnumSelectorWidget.SelectableEnum {
@@ -117,9 +118,12 @@ public class RailgunItemBusMachine extends ItemBusPartMachine {
         isLinked = false;
         linkInventory.setFilter((stack) -> stack.is(TFGTItems.INTERPLANETARY_LINK.asItem()));
         isReciever = ioMode == IO.OUT;
-        _currentMode = RailgunItemBusMachine.Mode.ITEM;
-        _currentInactivityTrigger = 0;
-        _currentItemFilters = new CustomItemStackHandler(3);
+        currentMode = RailgunItemBusMachine.Mode.ITEM;
+        currentInactivityTrigger = 0;
+        currentItemFilters = new CustomItemStackHandler(3);
+        currentItemFilters.setOnContentsChanged(() -> {
+            if (!isRemote() && linkedBus != null) linkedBus.currentItemFilters = currentItemFilters;
+        });
     }
 
     @Override
@@ -142,123 +146,99 @@ public class RailgunItemBusMachine extends ItemBusPartMachine {
     @Override
     public void onMachineRemoved() {
         updateLink();
-        super.onMachineRemoved();
         clearInventory(linkInventory);
+        super.onMachineRemoved();
     }
 
     @DescSynced
     @Persisted
-    private RailgunItemBusMachine.Mode _currentMode;
-    private RailgunItemBusMachine.Mode getCurrentMode() {
-        if (isReciever && linkedBus != null) return linkedBus.getCurrentMode();
-        return _currentMode;
-    }
+    private RailgunItemBusMachine.Mode currentMode;
     private void setCurrentMode(Mode newMode) {
-        if (isReciever && linkedBus != null) linkedBus.setCurrentMode(newMode);
-        _currentMode = newMode;
+        if (!isRemote() && linkedBus != null) linkedBus.currentMode = newMode;
+        currentMode = newMode;
     }
 
     @DescSynced
     @Persisted
-    private int _currentInactivityTrigger;
-    private int getCurrentInactivityTrigger() {
-        if (isReciever && linkedBus != null) return linkedBus.getCurrentInactivityTrigger();
-        return _currentInactivityTrigger;
-    }
+    private int currentInactivityTrigger;
     private void setCurrentInactivityTrigger(int triggerTime) {
-        if (isReciever && linkedBus != null) linkedBus.setCurrentInactivityTrigger(triggerTime);
-        _currentInactivityTrigger = triggerTime;
+        if (!isRemote() && linkedBus != null) linkedBus.currentInactivityTrigger = triggerTime;
+        currentInactivityTrigger = triggerTime;
     }
 
     @Persisted
     @DescSynced
-    private CustomItemStackHandler _currentItemFilters;
-    private CustomItemStackHandler getCurrentItemFilters() {
-        if (isReciever && linkedBus != null) return linkedBus.getCurrentItemFilters();
-        return _currentItemFilters;
+    private CustomItemStackHandler currentItemFilters;
+
+    /// Link GUI
+
+    private Widget createLinkGUIPage(FancyMachineUIWidget widget) {
+        if (!isFormed()) return new LabelWidget(0, 0, Component.translatable("tfg.machine.railgun_loader.parent_not_formed").getString());
+
+        // Top part of GUI
+        WidgetGroup linkStatusGroup = new WidgetGroup(4, 2, 164, 22);
+        var slot = new SlotWidget(linkInventory, 0, 0, 0, true, true);
+        var currentStatusLabel = new LabelWidget(22, 4, "");
+        slot.setChangeListener(() -> {
+            updateLink();
+            currentStatusLabel.setComponent(getCurrentStatusLabel());
+            markAsDirty();
+        });
+
+        currentStatusLabel.setComponent(getCurrentStatusLabel());
+        linkStatusGroup.addWidget(slot);
+        linkStatusGroup.addWidget(currentStatusLabel);
+
+        // Lower part of GUI
+
+        var linkConfigWidget = new WidgetGroup(4, 22, 164, 100);
+
+        var modeButton = new EnumSelectorWidget<>(0, 4, 20, 20, Mode.values(), currentMode, this::setCurrentMode);
+
+        linkConfigWidget.addWidget(modeButton);
+
+        var currentModeConfig = new WidgetGroup(Position.of(22, 4));
+
+        var inactivityIntInput = new IntInputWidget(0, 0, 100, 20, () -> currentInactivityTrigger, RailgunItemBusMachine.this::setCurrentInactivityTrigger);
+
+        var itemFilterGroup = new WidgetGroup(Position.of(0, 1));
+        itemFilterGroup.addWidget(new PhantomSlotWidget(currentItemFilters, 0, 0, 0));
+        itemFilterGroup.addWidget(new PhantomSlotWidget(currentItemFilters, 1, 18, 0));
+        itemFilterGroup.addWidget(new PhantomSlotWidget(currentItemFilters, 2, 36, 0));
+
+        currentModeConfig.addWidget(inactivityIntInput);
+        currentModeConfig.addWidget(itemFilterGroup);
+        inactivityIntInput.setVisible(currentMode == Mode.INACTIVITY);
+        itemFilterGroup.setVisible(currentMode == Mode.ITEM);
+
+        linkConfigWidget.addWidget(currentModeConfig);
+
+        var mainPage = new WidgetGroup(4, 4, 164, 150) {
+            @Override
+            public void updateScreen() {
+
+                linkConfigWidget.setVisible(isLinked);
+                inactivityIntInput.setVisible(currentMode == Mode.INACTIVITY);
+                itemFilterGroup.setVisible(currentMode == Mode.ITEM);
+
+                modeButton.setSelected(currentMode);
+                inactivityIntInput.setValue(currentInactivityTrigger);
+                super.updateScreen();
+            }
+        };
+
+        mainPage.addWidget(linkStatusGroup);
+        mainPage.addWidget(linkConfigWidget);
+
+        return mainPage;
     }
 
-    public class InterplanetaryLinkGUI implements IFancyUIProvider {
-        @Override
-        public IGuiTexture getTabIcon() {
-            return GuiTextures.TOOL_COVER_SETTINGS;
-        }
-
-        @Override
-        public Component getTitle() {
-            return Component.translatable("tfg.machine.railgun_loader.title");
-        }
-
-
-        private final WidgetGroup linkConfigWidget = new WidgetGroup(0, 25, 200, 100);;
-        @Override
-        public Widget createMainPage(FancyMachineUIWidget widget) {
-            if (!isFormed()) return new LabelWidget(0, 0, Component.translatable("tfg.machine.railgun_loader.parent_not_formed").getString());
-
-            var mainPage = new WidgetGroup(4, 4, 200, 150);
-            WidgetGroup linkStatusGroup = new WidgetGroup(0, 0, 200, 22);
-
-            var slot = new SlotWidget(linkInventory, 0, 0, 2, true, true);
-            var currentStatusLabel = new LabelWidget(22, 6, "");
-            slot.setChangeListener(() -> {
-                updateLink();
-                currentStatusLabel.setComponent(getCurrentStatusLabel());
-                createLinkConfigWidget();
-                markAsDirty();
-            });
-            currentStatusLabel.setComponent(getCurrentStatusLabel());
-            linkStatusGroup.addWidget(slot);
-            linkStatusGroup.addWidget(currentStatusLabel);
-            mainPage.addWidget(linkStatusGroup);
-
-
-            createLinkConfigWidget();
-            mainPage.addWidget(linkConfigWidget);
-
-            return mainPage;
-        }
-
-        private void createLinkConfigWidget() {
-            linkConfigWidget.clearAllWidgets();
-
-            var modeConfigWidget = new WidgetGroup(Position.of(4, 28));
-            if (!isLinked) return;
-            var button = new EnumSelectorWidget<>(4, 4, 20, 20, Mode.values(), RailgunItemBusMachine.this.getCurrentMode(), (newMode) -> {
-                setCurrentMode(newMode);
-                updateModeConfigWidget(modeConfigWidget);
-                markAsDirty();
-            });
-            linkConfigWidget.addWidget(button);
-
-            linkConfigWidget.addWidget(modeConfigWidget);
-            updateModeConfigWidget(modeConfigWidget);
-        }
-
-        private void updateModeConfigWidget(WidgetGroup widget) {
-            widget.clearAllWidgets();
-            if (getCurrentMode() == Mode.REDSTONE_SIGNAL) return;
-            if (getCurrentMode() == Mode.INACTIVITY) {
-                widget.addWidget(new IntInputWidget(0, 0, 100, 20, RailgunItemBusMachine.this::getCurrentInactivityTrigger, RailgunItemBusMachine.this::setCurrentInactivityTrigger));
-            } else {
-                WidgetGroup group = new WidgetGroup();
-                group.addWidget(new PhantomSlotWidget(getCurrentItemFilters(), 0, 0, 0));
-                group.addWidget(new PhantomSlotWidget(getCurrentItemFilters(), 1, 18, 0));
-                group.addWidget(new PhantomSlotWidget(getCurrentItemFilters(), 2, 36, 0));
-                widget.addWidget(group);
-            }
-        }
-
-        private Component getCurrentStatusLabel() {
-            if (linkInventory.getStackInSlot(0) == ItemStack.EMPTY) {
-                return Component.translatable("tfg.machine.railgun_loader.no_filter");
-            } else if (linkInventory.getStackInSlot(0).getOrCreateTag().getLong("linkId") == 0) {
-                return Component.translatable("tfg.machine.railgun_loader.filter_not_linked");
-            } else if (!isLinked) {
-                return Component.translatable("tfg.machine.railgun_loader.waiting_for_match");
-            } else {
-                return Component.translatable("item.tfg.interplanetarylink.linked");
-            }
-        }
+    private Component getCurrentStatusLabel() {
+        if (linkInventory.getStackInSlot(0) == ItemStack.EMPTY) return Component.translatable("tfg.machine.railgun_loader.no_filter");
+        var id = linkInventory.getStackInSlot(0).getOrCreateTag().getLong("linkId");
+        if (id == 0) return Component.translatable("tfg.machine.railgun_loader.filter_not_linked");
+        else if (!isLinked) return Component.translatable("tfg.machine.railgun_loader.waiting_for_match");
+        else return Component.translatable("item.tfg.interplanetarylink.linked");
     }
 
     @Override
@@ -268,7 +248,19 @@ public class RailgunItemBusMachine extends ItemBusPartMachine {
 
     @Override
     public void attachSideTabs(TabsWidget sideTabs) {
-        sideTabs.attachSubTab(new InterplanetaryLinkGUI());
+        sideTabs.attachSubTab(new IFancyUIProvider() {
+            @Override
+            public IGuiTexture getTabIcon() { return GuiTextures.TOOL_COVER_SETTINGS; }
+
+            @Override
+            public Component getTitle() {
+                return Component.translatable("tfg.machine.railgun_loader.title");
+            }
+
+            @Override
+            public Widget createMainPage(FancyMachineUIWidget widget) { return createLinkGUIPage(widget); }
+
+        });
         super.attachSideTabs(sideTabs);
     }
 }

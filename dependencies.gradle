@@ -104,7 +104,7 @@ dependencies {
     implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6493670") { transitive = false }
 
     // Greate
-    compileOnly fg.deobf("maven.modrinth:greate:0.0.40") { transitive = false }
+    implementation fg.deobf("maven.modrinth:greate:0.0.40") { transitive = false }
 
     // GTM
     implementation fg.deobf("com.gregtechceu.gtceu:gtceu-$minecraft_version:$gtm_version") { transitive = false }
@@ -115,9 +115,9 @@ dependencies {
     implementation fg.deobf("maven.modrinth:kubejs:2001.6.5-build.7+forge")
 
     // TFC
-    implementation fg.deobf("maven.modrinth:patchouli:1.20.1-84.1-forge")
-    implementation fg.deobf("maven.modrinth:terrafirmacraft:3.2.14")
-
+    implementation fg.deobf("maven.modrinth:patchouli:1.20.1-84.1-forge")  { transitive = false }
+    implementation fg.deobf("maven.modrinth:terrafirmacraft:3.2.14")  { transitive = false }
+    implementation fg.deobf("curse.maven:kubejs-tfc-841001:6685035") { transitive = false }
     // FirmaLife
     implementation fg.deobf("maven.modrinth:firmalife:2.1.18")
 
@@ -145,11 +145,11 @@ dependencies {
     compileOnly fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge:1.111.0")
 
     // FTB
-    implementation fg.deobf("curse.maven:ftb-teams-404468:4623116") { transitive = false }
-    implementation fg.deobf("curse.maven:ftb-library-404465:4864329") { transitive = false }
+    implementation fg.deobf("curse.maven:ftb-teams-forge-404468:6130786") { transitive = false }
+    implementation fg.deobf("curse.maven:ftb-library-forge-404465:6164053") { transitive = false }
 
     // Jade
-    implementation fg.deobf("maven.modrinth:jade:11.7.1")
+    implementation fg.deobf("curse.maven:jade-324717:6271651")
 
     // TFC Roads and Roofs
     implementation fg.deobf("curse.maven:roads-and-roofs-tfc-1048212:5852507")
