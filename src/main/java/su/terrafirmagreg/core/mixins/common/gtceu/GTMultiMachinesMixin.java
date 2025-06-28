@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(GTMultiMachines.class)
-public class ModifyMultiTanksMixin {
+public class GTMultiMachinesMixin {
 
     // WOODEN_MULTIBLOCK_TANK
     @ModifyArg(
