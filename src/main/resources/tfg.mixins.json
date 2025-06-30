@@ -75,7 +75,6 @@
     "common.tfcambiental.TemperatureCapabilityMixin",
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
-    "common.vintageimprovements.VacuumChamberBlockMixin",
     "common.vintageimprovements.VibratingRecipeMixin"
   ],
   "client": [
