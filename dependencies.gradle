@@ -161,4 +161,7 @@ dependencies {
 
     // Species
     implementation fg.deobf("maven.modrinth:species:N9CbMB7B") { transitive = false }
+
+    // Simply Stacked Dimensions
+    implementation fg.deobf("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
 }
