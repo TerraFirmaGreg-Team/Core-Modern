@@ -53,15 +53,19 @@ public abstract class TeleportHandlerMixin {
 		// And then a layer of cloud underneath in case of lava because I can't mixin to generateCloudPlatform for some reason
 		tfg$placeCloudIfLava(instance, pos.below().below(), lava, cloud);
 
+		tfg$placeCloudIfLava(instance, pos.north().below(), lava, cloud);
 		tfg$placeCloudIfLava(instance, pos.north().below().below(), lava, cloud);
 		tfg$placeCloudIfLava(instance, pos.north().east().below().below(), lava, cloud);
 
+		tfg$placeCloudIfLava(instance, pos.east().above().below(), lava, cloud);
 		tfg$placeCloudIfLava(instance, pos.east().above().below().below(), lava, cloud);
 		tfg$placeCloudIfLava(instance, pos.east().south().above().below().below(), lava, cloud);
 
+		tfg$placeCloudIfLava(instance, pos.south().above().below(), lava, cloud);
 		tfg$placeCloudIfLava(instance, pos.south().above().below().below(), lava, cloud);
 		tfg$placeCloudIfLava(instance, pos.south().west().above().below().below(), lava, cloud);
 
+		tfg$placeCloudIfLava(instance, pos.west().above().below(), lava, cloud);
 		tfg$placeCloudIfLava(instance, pos.west().above().below().below(), lava, cloud);
 		tfg$placeCloudIfLava(instance, pos.west().north().above().below().below(), lava, cloud);
 
