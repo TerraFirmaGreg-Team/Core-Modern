@@ -95,13 +95,6 @@ public final class TFGMaterialHandler {
 
 		block.setIgnored(Stone, Blocks.STONE);
 
-		// AE2 materials
-
-		rawOreBlock.setIgnored(CertusQuartz, ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_block")));
-
-		var fluix = GTCEuAPI.materialManager.getMaterial("tfg:fluix");
-		block.setIgnored(fluix, ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ae2", "fluix_block")));
-
 		// Create materials
 
 		gem.setIgnored(GreateMaterials.RoseQuartz, () -> AllItems.ROSE_QUARTZ);
