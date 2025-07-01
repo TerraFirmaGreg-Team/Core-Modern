@@ -99,9 +99,7 @@ dependencies {
     // compileOnly fg.deobf("maven.modrinth:create-steam-n-rails:1.6.4+forge-mc1.20.1") { transitive = false }
 
     // Create: Vintage Improvements
-    // TODO: REPLACED with github fork for now
-    //implementation fg.deobf("maven.modrinth:create-vintage-improvements:1.20.1-0.2.0.3") { transitive = false }
-    implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6493670") { transitive = false }
+    implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6708676") { transitive = false }
 
     // Greate
     implementation fg.deobf("maven.modrinth:greate:0.0.40") { transitive = false }
@@ -117,7 +115,8 @@ dependencies {
     // TFC
     implementation fg.deobf("maven.modrinth:patchouli:1.20.1-84.1-forge")  { transitive = false }
     implementation fg.deobf("maven.modrinth:terrafirmacraft:3.2.14")  { transitive = false }
-    implementation fg.deobf("curse.maven:kubejs-tfc-841001:6685035") { transitive = false }
+    implementation fg.deobf("curse.maven:kubejs-tfc-841001:6705934") { transitive = false }
+
     // FirmaLife
     implementation fg.deobf("maven.modrinth:firmalife:2.1.18")
 
@@ -162,4 +161,7 @@ dependencies {
 
     // Species
     implementation fg.deobf("maven.modrinth:species:N9CbMB7B") { transitive = false }
+
+    // Simply Stacked Dimensions
+    implementation fg.deobf("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
 }

@@ -30,8 +30,6 @@ public class TFGCreativeTab {
 
 	private static void fillTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output out)
 	{
-		accept(out, TFGBlocks.LUNAR_ROOTS);
-		accept(out, TFGBlocks.LUNAR_SPROUTS);
 		accept(out, TFGBlocks.LUNAR_CHORUS_PLANT);
 		accept(out, TFGBlocks.LUNAR_CHORUS_FLOWER);
 		accept(out, TFGBlocks.GEYSER_SOURCE);
