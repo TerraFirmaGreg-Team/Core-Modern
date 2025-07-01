@@ -66,6 +66,7 @@
     "common.minecraft.NetherPortalBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
     "common.minecraft.ServerLifecycleHooksMixin",
+    "common.simply_stacked_dimensions.TeleportHandlerMixin",
     "common.species.BirtMixin",
     "common.species.LimpetMixin",
     "common.tfc.CharcoalForgeBlockMixin",
