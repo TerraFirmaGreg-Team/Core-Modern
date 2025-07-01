@@ -71,6 +71,7 @@
     "common.species.LimpetMixin",
     "common.tfc.CharcoalForgeBlockMixin",
     "common.tfc.CrucibleBlockMixin",
+    "common.tfc.FarmlandBlockMixin",
     "common.tfc.IIngotPileBlockEntityAccessor",
     "common.tfc.IIngotPileBlockEntityEntryAccessor",
     "common.tfc.IngotPileBlockMixin",
