@@ -7,6 +7,7 @@
   "mixins": [
     "client.create.ChainConveyorRendererMixin",
     "client.minecraft.IBlockModelGeneratorsInvoker",
+    "common.ad_astra.EnvironmentEffectsMixin",
     "common.ad_astra.GasTankItemMixin",
     "common.ad_astra.ModSkyRendererMixin",
     "common.ad_astra.SpaceSuitItemMixin",
@@ -71,7 +72,9 @@
     "common.species.LimpetMixin",
     "common.tfc.CharcoalForgeBlockMixin",
     "common.tfc.CrucibleBlockMixin",
+    "common.tfc.EnvironmentHelpersMixin",
     "common.tfc.FarmlandBlockMixin",
+    "common.tfc.IcePileBlockMixin",
     "common.tfc.IIngotPileBlockEntityAccessor",
     "common.tfc.IIngotPileBlockEntityEntryAccessor",
     "common.tfc.IngotPileBlockMixin",
