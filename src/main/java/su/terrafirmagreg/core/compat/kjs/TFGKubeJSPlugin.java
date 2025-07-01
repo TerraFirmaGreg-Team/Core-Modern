@@ -7,6 +7,11 @@ import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
+import earth.terrarium.adastra.api.events.AdAstraEvents;
+import earth.terrarium.adastra.api.planets.PlanetApi;
+import earth.terrarium.adastra.api.systems.GravityApi;
+import earth.terrarium.adastra.api.systems.OxygenApi;
+import earth.terrarium.adastra.api.systems.TemperatureApi;
 import su.terrafirmagreg.core.common.TFGHelpers;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
@@ -33,6 +38,12 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         event.add("MaterialFlags", MaterialFlags.class);
         event.add("ItemMaterialInfo", ItemMaterialInfo.class);
         event.add("MaterialStack", MaterialStack.class);
+
+        event.add("AdAstraEvents", AdAstraEvents.class);
+        event.add("OxygenAPI", OxygenApi.API);
+        event.add("PlanetAPI", PlanetApi.API);
+        event.add("TemperatureAPI", TemperatureApi.API);
+        event.add("GravityAPI", GravityApi.API);
     }
 
     @Override
