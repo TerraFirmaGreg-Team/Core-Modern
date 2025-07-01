@@ -83,30 +83,4 @@ public class SmokeEmitterDecorationBlockBuilder extends ExtendedPropertiesBlockB
 	public SmokeEmitterDecorationBlock createObject() {
 		return new SmokeEmitterDecorationBlock(createProperties().offsetType(BlockBehaviour.OffsetType.XZ), getShape(), itemSupplier());
 	}
-
-	@Override
-	public void generateDataJsons(DataJsonGenerator generator) {
-		ResourceUtils.lootTable(b -> b.addPool(p -> {
-			p.survivesExplosion();
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:knives")));
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:hoes")));
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:scythes")));
-		}), generator, this);
-	}
-
-	private LootTableEntry lootEntryBase(String tag) {
-		final JsonObject json = new JsonObject();
-		json.addProperty("type", "minecraft:item");
-		if (preexistingItem != null) {
-			json.addProperty("name", preexistingItem.get().toString());
-		}
-		else {
-			json.addProperty("name", itemBuilder.id.toString());
-		}
-		return new LootTableEntry(json)
-			.addCondition(ResourceUtils.buildJson((condition) -> {
-				condition.addProperty("condition", "minecraft:match_tool");
-				condition.add("predicate", ResourceUtils.buildJson((predicate) -> predicate.addProperty("tag", tag)));
-			}));
-	}
 }
