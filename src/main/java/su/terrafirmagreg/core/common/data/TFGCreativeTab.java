@@ -32,10 +32,6 @@ public class TFGCreativeTab {
 	{
 		accept(out, TFGBlocks.LUNAR_CHORUS_PLANT);
 		accept(out, TFGBlocks.LUNAR_CHORUS_FLOWER);
-		accept(out, TFGBlocks.GEYSER_SOURCE);
-		accept(out, TFGBlocks.GEYSER_SOURCE_SMALL);
-		accept(out, TFGBlocks.STROMATOLITE_CLUSTER_MEDIUM);
-		accept(out, TFGBlocks.STROMATOLITE_CLUSTER_SMALL);
 
 		accept(out, TFGItems.PIGLIN_DISGUISE);
 		accept(out, TFGItems.TROWEL);
