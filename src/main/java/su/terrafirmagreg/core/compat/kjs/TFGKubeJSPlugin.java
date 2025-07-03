@@ -25,8 +25,6 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
 
         RegistryInfo.BLOCK.addType("tfg:decorative_plant", DecorativePlantBlockBuilder.class, DecorativePlantBlockBuilder::new);
         RegistryInfo.BLOCK.addType("tfg:double_decorative_plant", DoubleDecorativePlantBlockBuilder.class, DoubleDecorativePlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:smoke_emitter", SmokeEmitterDecorationBlockBuilder.class, SmokeEmitterDecorationBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:light_smoke_emitter", LightSmokeEmitterDecorationBlockBuilder.class, LightSmokeEmitterDecorationBlockBuilder::new);
         RegistryInfo.BLOCK.addType("tfg:particle_emitter_decoration", ParticleEmitterDecorationBlockBuilder.class, ParticleEmitterDecorationBlockBuilder::new);
         RegistryInfo.BLOCK.addType("tfg:particle_emitter", ParticleEmitterBlockBuilder.class, ParticleEmitterBlockBuilder::new);
     }

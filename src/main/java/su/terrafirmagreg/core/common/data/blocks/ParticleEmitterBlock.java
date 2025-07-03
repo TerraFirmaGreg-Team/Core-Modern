@@ -7,12 +7,14 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
@@ -21,8 +23,8 @@ import java.util.function.Supplier;
 
 public class ParticleEmitterBlock extends Block {
 
+	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final VoxelShape DEFAULT_SHAPE = Block.box(0.0F, 0.0F, 0.0F, 16.0F, 16.0F, 16.0F);
-
 	private final VoxelShape shape;
 	private final Supplier<SimpleParticleType> particleType;
 	private final double offsetX, offsetY, offsetZ;
@@ -45,6 +47,7 @@ public class ParticleEmitterBlock extends Block {
 			float red, float green, float blue, float scale
 	) {
 		super(properties);
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 		this.shape = shape;
 		this.particleType = particleType != null ? particleType : () -> ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
 		this.offsetX = offsetX;
@@ -66,6 +69,26 @@ public class ParticleEmitterBlock extends Block {
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return shape != null ? shape : super.getShape(state, level, pos, context);
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(FACING);
+	}
+
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, Rotation rot) {
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+	}
+
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirror) {
+		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
 	@Info("create an always visible particle if render type is 'forced' and enable color settings if the particle type is 'minecraft:dust'")
