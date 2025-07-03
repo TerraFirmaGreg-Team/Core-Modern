@@ -41,7 +41,6 @@ public class TFGMultiMachines {
 					.pattern(definition -> {
 
 							return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.FRONT, RelativeDirection.UP)
-									// Each char in a string refers to the x-axis, each array of strings refers to the z-axis, and each aisle refers to the y-axis
 									.aisle( "F###F",
 											"#SSS#",
 											"#SSS#",

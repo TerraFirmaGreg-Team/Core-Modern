@@ -102,7 +102,7 @@ dependencies {
     implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6708676") { transitive = false }
 
     // Greate
-    implementation fg.deobf("maven.modrinth:greate:0.0.40") { transitive = false }
+    implementation fg.deobf("maven.modrinth:greate:0.0.43") { transitive = false }
 
     // GTM
     implementation fg.deobf("com.gregtechceu.gtceu:gtceu-$minecraft_version:$gtm_version") { transitive = false }

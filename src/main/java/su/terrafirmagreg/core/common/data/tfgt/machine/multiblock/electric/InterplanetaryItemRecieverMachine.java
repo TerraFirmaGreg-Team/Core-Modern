@@ -2,53 +2,77 @@ package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
+import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import net.minecraft.world.item.ItemStack;
+import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
+import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
 
-public class InterplanetaryItemRecieverMachine extends WorkableElectricMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine {
+public class InterplanetaryItemRecieverMachine extends WorkableElectricMultiblockMachine implements ILogisticsNetworkReciever, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
 
     public InterplanetaryItemRecieverMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
 
-    private List<RailgunItemBusMachine> getLoaderItemBuses() {
-        ArrayList<RailgunItemBusMachine> loaders = new ArrayList<>();
-        for (IMultiPart part: getParts()) {
-            if (part instanceof RailgunItemBusMachine loader) loaders.add(loader);
-        }
-        return Collections.unmodifiableList(loaders);
+    public InterplanetaryItemRecieverMachine getMachine() {
+        return this;
+    }
+
+    @Override
+    public boolean isMachineValid() {
+        return isFormed() && !isInValid();
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
+        if (!isRemote()) getLogisticsNetwork().loadOrCreatePart(this);
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
+        if (!isRemote()) getLogisticsNetwork().unloadPart(this);
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void onMachineRemoved() {
+        if (!isRemote()) getLogisticsNetwork().destroyPart(this);
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public List<NotifiableItemStackHandler> getInventories() {
+        return List.of();
     }
 
     @Override
-    public void onPartUnload() {
-        super.onPartUnload();
+    public boolean makeInventoryDistinct(int invIndex) {
+        return false;
+    }
+
+    @Override
+    public boolean removeDistinctInventory(int invIndex) {
+        return false;
+    }
+
+    @Override
+    public boolean canAcceptItems(int inventoryIndex, List<ItemStack> stacks) {
+        return false;
+    }
+
+    @Override
+    public boolean isRecieverReady() {
+        return false;
+    }
+
+    @Override
+    public void onPackageSent(ItemTransitPackage itemPackage) {
+
     }
 }

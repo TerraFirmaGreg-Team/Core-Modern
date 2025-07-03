@@ -80,11 +80,12 @@ public class TFGTRecipes {
 		GTRecipeTypes.ASSEMBLER_RECIPES.recipeBuilder(TFGCore.id("interplanetary_link"))
 				.EUt(GTValues.VA[GTValues.HV])
 				.duration(100)
-				.inputItems(GTItems.ITEM_FILTER, 4)
+				.inputItems(GTItems.COVER_SCREEN, 1)
+				.inputItems(GTItems.SENSOR_HV, 2)
 				.inputItems(GTItems.EMITTER_HV, 2)
 				.inputItems(CustomTags.HV_CIRCUITS, 2)
 				.inputItems(ChemicalHelper.get(TagPrefix.foil, GTMaterials.StainlessSteel, 16))
-				.outputItems(TFGTItems.INTERPLANETARY_LINK, 2)
+				.outputItems(TFGTItems.INTERPLANETARY_LINK, 1)
 				.save(provider);
 	}
 }

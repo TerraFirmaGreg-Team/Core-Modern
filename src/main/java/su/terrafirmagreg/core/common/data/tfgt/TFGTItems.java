@@ -2,7 +2,7 @@ package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
-import su.terrafirmagreg.core.common.data.tfgt.item.InterplanetaryLinkBehaviour;
+import su.terrafirmagreg.core.common.data.tfgt.item.InterplanetaryLogisticsTool;
 
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
@@ -12,7 +12,7 @@ public class TFGTItems {
 
     public static ItemEntry<ComponentItem> INTERPLANETARY_LINK = REGISTRATE.item("interplanetary_link", ComponentItem::create)
             .lang("Interplanetary Link")
-            .onRegister(item -> item.attachComponents(new InterplanetaryLinkBehaviour()))
+            .onRegister(item -> item.attachComponents(new InterplanetaryLogisticsTool()))
             .register();
 
 }
