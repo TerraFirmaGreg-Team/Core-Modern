@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.AqueousAccumulatorMachine;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.machine.electric.InterplanetaryLogisticsMonitorMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.SimpleFoodProcessingMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.FoodRefrigeratorMachine;
 
@@ -123,6 +124,10 @@ public class TFGMachines {
 			.abilities(PartAbility.EXPORT_ITEMS)
 			.register();
 
+	public static final MachineDefinition INTERPLANETARY_LOGISTICS_MONITOR = REGISTRATE.machine("interplanetary_logistics_monitor",
+			InterplanetaryLogisticsMonitorMachine::new)
+			.rotationState(RotationState.NON_Y_AXIS)
+			.register();
 
 	public static MachineDefinition[] registerTieredMachines(String name,
 															 BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,

@@ -1,112 +1,61 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.gregtechceu.gtceu.api.gui.widget.EnumSelectorWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
+import com.lowdragmc.lowdraglib.syncdata.ITagSerializable;
 import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.saveddata.SavedData;
-import su.terrafirmagreg.core.TFGCore;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
 public class InterplanetaryLogisticsNetwork {
 
     private static InterplanetaryLogisticsNetwork NETWORK = null;
     public static InterplanetaryLogisticsNetwork get() {
-        return NETWORK;
-    }
-    public static InterplanetaryLogisticsNetwork get(IMachineBlockEntity entity) {
         if (NETWORK == null) {
-            NETWORK = new InterplanetaryLogisticsNetwork(Objects.requireNonNull(entity.level().getServer()).overworld());
+            NETWORK = new InterplanetaryLogisticsNetwork();
         }
         return NETWORK;
     }
 
     private final Map<DimensionalBlockPos, ILogisticsNetworkMachine> loadedMachines = new HashMap<>();
-    private final InterplanetaryLogisticsNetworkSavedData data;
-    private final ServerLevel level;
 
-    private InterplanetaryLogisticsNetwork(ServerLevel lvl) {
-        level = lvl;
-        data = InterplanetaryLogisticsNetworkSavedData.get(lvl);
-    }
-
-    public NetworkPart loadOrCreatePart(ILogisticsNetworkMachine machine) {
-        var owner = machine.getMachine().getHolder().getOwner();
-        if (owner instanceof FTBOwner ftbOwner) {
-            loadedMachines.put(machine.getDimensionalPos(), machine);
-            data.parts.computeIfAbsent(machine.getDimensionalPos(), k -> {
-                data.setDirty();
-                return new NetworkPart(k, ftbOwner.getTeam().getTeamId());
-            });
-
-            return data.parts.get(machine.getDimensionalPos());
-        }
-        TFGCore.LOGGER.warn("Interplanetary logistics machine does not have a valid FTB owner. {} {}", machine.getDimensionalPos(), machine.getMachine());
-        return null;
-
+    public void loadPart(ILogisticsNetworkMachine machine) {
+        loadedMachines.put(machine.getDimensionalPos(), machine);
     }
 
     public void unloadPart(ILogisticsNetworkMachine machine) {
         loadedMachines.remove(machine.getDimensionalPos());
     }
 
-    public void destroyPart(ILogisticsNetworkMachine machine) {
-        loadedMachines.remove(machine.getDimensionalPos());
-        data.parts.remove(machine.getDimensionalPos());
-        data.setDirty();
-    }
-
-    public List<NetworkPart> getPartsVisibleToPlayer(Player player) {
+    public List<ILogisticsNetworkMachine> getMachinesVisibleToPlayer(Player player) {
         var id = player.getUUID();
-        List<NetworkPart> parts = new ArrayList<>();
-        data.parts.forEach((k, v) -> {
-            var team = FTBTeamsAPI.api().getManager().getTeamByID(v.getOwnerId());
+        List<ILogisticsNetworkMachine> parts = new ArrayList<>();
+        loadedMachines.forEach((k, v) -> {
+            var owner = v.getMachine().getHolder().getOwner();
+            if (owner instanceof FTBOwner ftbOwner) {
+                var team = FTBTeamsAPI.api().getManager().getTeamByID(ftbOwner.getTeam().getTeamId());
 
-            if (team.isPresent() && team.get().getRankForPlayer(id).isAllyOrBetter()) {
-                parts.add(v);
+                if (team.isPresent() && team.get().getRankForPlayer(id).isAllyOrBetter()) {
+                    parts.add(v);
+                }
             }
         });
         return Collections.unmodifiableList(parts);
     }
 
-    public @Nullable NetworkPart getPart(DimensionalBlockPos partId) {
-        return data.parts.get(partId);
-    }
-
     public @Nullable ILogisticsNetworkMachine getNetworkMachine(DimensionalBlockPos partId) {
         return loadedMachines.get(partId);
-    }
-
-    public @Nullable ILogisticsNetworkReciever getRecieverMachine(DimensionalBlockPos partId) {
-        ILogisticsNetworkMachine m = loadedMachines.get(partId);
-        return (m instanceof ILogisticsNetworkReciever rec) ? rec : null;
-    }
-
-    public @Nullable ILogisticsNetworkSender getSenderMachine(DimensionalBlockPos partId) {
-        ILogisticsNetworkMachine m = loadedMachines.get(partId);
-        return (m instanceof ILogisticsNetworkSender snd) ? snd : null;
-    }
-
-    public void markDirty() {
-        data.setDirty();
     }
 
     /// Helper types & network part interfaces
@@ -117,9 +66,9 @@ public class InterplanetaryLogisticsNetwork {
         default DimensionalBlockPos getDimensionalPos() {
             return new DimensionalBlockPos(getMachine());
         }
-        default InterplanetaryLogisticsNetwork getLogisticsNetwork() {
-            return InterplanetaryLogisticsNetwork.get(getMachine().getHolder());
-        }
+
+        String getLogisticsUILabel();
+        void setLogisticsUILabel(String v);
 
         MetaMachine getMachine();
         boolean isMachineValid();
@@ -130,9 +79,7 @@ public class InterplanetaryLogisticsNetwork {
     }
 
     public non-sealed interface ILogisticsNetworkSender extends ILogisticsNetworkMachine {
-        default List<NetworkSenderConfigEntry> getSendConfigurations() {
-            return Collections.unmodifiableList(Objects.requireNonNull(getLogisticsNetwork().getPart(getDimensionalPos())).logisticsConfigurations);
-        }
+        List<NetworkSenderConfigEntry> getSendConfigurations();
 
         void onLogisticsConfigurationsChanged();
     }
@@ -140,50 +87,10 @@ public class InterplanetaryLogisticsNetwork {
     public non-sealed interface ILogisticsNetworkReciever extends ILogisticsNetworkMachine {
         boolean canAcceptItems(int inventoryIndex, List<ItemStack> stacks);
         boolean isRecieverReady();
-        void onPackageSent(ItemTransitPackage itemPackage);
+        void onPackageSent(DimensionalBlockPos sender, List<ItemStack> items, long travelTime, long launchedTick);
     }
 
-    public static class NetworkPart {
-        @Getter
-        private final DimensionalBlockPos partId;
-        @Getter @Setter
-        private String uiLabel;
-
-        public final List<NetworkSenderConfigEntry> logisticsConfigurations;
-        @Getter
-        private final UUID ownerId;
-        public NetworkPart(DimensionalBlockPos pos, UUID owner) {
-            partId = pos;
-            uiLabel = "";
-            ownerId = owner;
-            logisticsConfigurations = new ArrayList<>();
-        }
-
-        public NetworkPart(CompoundTag tag) {
-            partId = new DimensionalBlockPos(tag.getCompound("partId"));
-            uiLabel = tag.getString("uiLabel");
-            ownerId = tag.getUUID("ftbOwner");
-            logisticsConfigurations = new ArrayList<>();
-            var configTags = tag.getList("logisticsConfigurations", Tag.TAG_COMPOUND);
-            configTags.forEach(t -> logisticsConfigurations.add(new NetworkSenderConfigEntry((CompoundTag)t)));
-
-        }
-
-        public CompoundTag save() {
-            var tag = new CompoundTag();
-            tag.put("partId", partId.save());
-            tag.putString("uiLabel", uiLabel);
-            tag.putUUID("ftbOwner", ownerId);
-            var configTags = new ListTag();
-            logisticsConfigurations.forEach(c -> configTags.add(c.save()));
-            tag.put("logisticsConfigurations", configTags);
-            return tag;
-        }
-    }
-
-    public static class NetworkSenderConfigEntry {
-        @Getter
-        private final DimensionalBlockPos senderPartID;
+    public static class NetworkSenderConfigEntry implements ITagSerializable<CompoundTag> {
         @Getter @Setter
         private DimensionalBlockPos recieverPartID;
         @Getter @Setter
@@ -192,10 +99,6 @@ public class InterplanetaryLogisticsNetwork {
         private int recieverDistinctInventory = INV_ANY;
         @Getter @Setter
         private TriggerMode currentSendTrigger = TriggerMode.ITEM;
-
-        public NetworkSenderConfigEntry(DimensionalBlockPos sender) {
-            senderPartID = sender;
-        }
 
         public enum TriggerMode implements EnumSelectorWidget.SelectableEnum {
             ITEM("Item", "transfer_any"),
@@ -213,18 +116,17 @@ public class InterplanetaryLogisticsNetwork {
             }
         }
 
-        public NetworkSenderConfigEntry(CompoundTag tag) {
-            senderPartID = new DimensionalBlockPos(tag.getCompound("senderPartID"));
-            recieverPartID = new DimensionalBlockPos(tag.getCompound("recieverPartID"));
+        public void deserializeNBT(CompoundTag tag) {
+            recieverPartID = new DimensionalBlockPos();
+            recieverPartID.deserializeNBT(tag.getCompound("recieverPartID"));
             senderDistinctInventory = tag.getInt("senderDistinctInventory");
             recieverDistinctInventory = tag.getInt("recieverDistinctInventory");
             currentSendTrigger = TriggerMode.values()[tag.getInt("currentSendTrigger")];
         }
 
-        public CompoundTag save() {
+        public CompoundTag serializeNBT() {
             var tag = new CompoundTag();
-            tag.put("senderPartID", senderPartID.save());
-            tag.put("recieverPartID", recieverPartID.save());
+            tag.put("recieverPartID", recieverPartID.serializeNBT());
             tag.putInt("senderDistinctInventory", senderDistinctInventory);
             tag.putInt("recieverDistinctInventory", recieverDistinctInventory);
             tag.putInt("currentSendTrigger", currentSendTrigger.ordinal());
@@ -232,88 +134,30 @@ public class InterplanetaryLogisticsNetwork {
         }
     }
 
+    public static class DimensionalBlockPos implements ITagSerializable<CompoundTag> {
+        public String dimension;
+        public BlockPos pos;
 
-    public record ItemTransitPackage(DimensionalBlockPos sender, DimensionalBlockPos reciever, List<ItemStack> items, long travelTime, long launchedTick) {
+        public DimensionalBlockPos() {}
 
-        public ItemTransitPackage(CompoundTag tag) {
-            this(new DimensionalBlockPos(tag.getCompound("sender")),
-                    new DimensionalBlockPos(tag.getCompound("reciever")),
-                    tag.getList("items", Tag.TAG_COMPOUND).stream().map(t -> ItemStack.of((CompoundTag) t)).toList(),
-                    tag.getLong("travelTime"),
-                    tag.getLong("launchedTick"));
-        }
-
-        public CompoundTag save() {
-            var tag = new CompoundTag();
-            tag.put("sender", sender.save());
-            tag.put("reciever", reciever.save());
-            tag.putLong("travelTime", travelTime);
-            tag.putLong("launchedTick", launchedTick);
-            ListTag itemTags = new ListTag();
-            items.forEach(i -> itemTags.add(i.save(new CompoundTag())));
-            tag.put("items", itemTags);
-            return tag;
-        }
-    }
-
-    public record DimensionalBlockPos(String dimension, BlockPos pos) {
         public DimensionalBlockPos(MetaMachine machine) {
-            this(Objects.requireNonNull(machine.getLevel()).dimension().location().toString(), machine.getPos());
+            dimension = Objects.requireNonNull(machine.getLevel()).dimension().location().toString();
+            pos = machine.getPos();
         }
 
-        public DimensionalBlockPos(CompoundTag tag) {
-            this(tag.getString("dim"), new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z")));
+        @Override
+        public void deserializeNBT(CompoundTag tag) {
+            dimension = tag.getString("dim");
+            pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
         }
 
-        public CompoundTag save() {
+        public CompoundTag serializeNBT() {
             var tag = new CompoundTag();
             tag.putString("dim", dimension);
             tag.putInt("x", pos.getX());
             tag.putInt("y", pos.getY());
             tag.putInt("z", pos.getZ());
             return tag;
-        }
-    }
-
-    @ParametersAreNonnullByDefault
-    @MethodsReturnNonnullByDefault
-    private static class InterplanetaryLogisticsNetworkSavedData extends SavedData {
-        private static final String DATA_ID = "tfg_interdim_logistics";
-
-        public static InterplanetaryLogisticsNetworkSavedData get(ServerLevel level) {
-            return level.getDataStorage().computeIfAbsent(InterplanetaryLogisticsNetworkSavedData::new, InterplanetaryLogisticsNetworkSavedData::new, DATA_ID);
-        }
-
-        public final Map<DimensionalBlockPos, NetworkPart> parts = new HashMap<>();
-        public final List<ItemTransitPackage> itemsInTransit = new ArrayList<>();
-
-        private InterplanetaryLogisticsNetworkSavedData() {}
-        private InterplanetaryLogisticsNetworkSavedData(CompoundTag tag) {
-
-            var partsTag = tag.getList("networkParts", ListTag.TAG_COMPOUND);
-            partsTag.forEach(t -> {
-                var part = new NetworkPart((CompoundTag)t);
-                parts.put(part.partId, part);
-            });
-
-            var itemTransitTag = tag.getList("itemsInTransit", ListTag.TAG_COMPOUND);
-            itemTransitTag.forEach(t -> itemsInTransit.add(new ItemTransitPackage((CompoundTag)t)));
-        }
-
-        @Override
-        public CompoundTag save(CompoundTag pCompoundTag) {
-            var partsTag = new ListTag();
-            for (var part: parts.values()) {
-                partsTag.add(part.save());
-            }
-            pCompoundTag.put("networkParts", partsTag);
-
-            var itemsInTransitTag = new ListTag();
-            for (var items: itemsInTransit) {
-                itemsInTransitTag.add(items.save());
-            }
-            pCompoundTag.put("itemsInTransit", itemsInTransitTag);
-            return pCompoundTag;
         }
     }
 }

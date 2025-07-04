@@ -2,16 +2,34 @@ package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import lombok.Getter;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 
 import java.util.List;
 
-public class InterplanetaryItemLauncherMachine extends WorkableElectricMultiblockMachine implements ILogisticsNetworkSender, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
+public class InterplanetaryItemLauncherMachine extends WorkableElectricMultiblockMachine implements ILogisticsNetworkSender, IFancyUIMachine, IDisplayUIMachine {
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(InterplanetaryItemLauncherMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
+
+    @Override
+    public @NotNull ManagedFieldHolder getFieldHolder() {
+        return MANAGED_FIELD_HOLDER;
+    }
+
+    @Persisted
+    @Getter @Setter
+    private String logisticsUILabel;
+
+    @Persisted @Getter
+    private List<NetworkSenderConfigEntry> sendConfigurations;
 
     public InterplanetaryItemLauncherMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -24,18 +42,13 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (!isRemote()) getLogisticsNetwork().loadOrCreatePart(this);
+        if (!isRemote()) InterplanetaryLogisticsNetwork.get().loadPart(this);
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
-        if (!isRemote()) getLogisticsNetwork().unloadPart(this);
-    }
-
-    @Override
-    public void onMachineRemoved() {
-        if (!isRemote()) getLogisticsNetwork().destroyPart(this);
+        if (!isRemote()) InterplanetaryLogisticsNetwork.get().unloadPart(this);
     }
 
 
