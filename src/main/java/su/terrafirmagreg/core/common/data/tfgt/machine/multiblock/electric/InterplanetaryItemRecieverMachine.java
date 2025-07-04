@@ -5,14 +5,8 @@ import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 
@@ -20,17 +14,7 @@ import java.util.List;
 
 
 
-public class InterplanetaryItemRecieverMachine extends WorkableElectricMultiblockMachine implements ILogisticsNetworkReciever, IFancyUIMachine, IDisplayUIMachine {
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(InterplanetaryItemRecieverMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Persisted
-    @Getter @Setter
-    private String logisticsUILabel;
+public class InterplanetaryItemRecieverMachine extends WorkableElectricMultiblockMachine implements ILogisticsNetworkReciever, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
 
     public InterplanetaryItemRecieverMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -48,13 +32,18 @@ public class InterplanetaryItemRecieverMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (!isRemote()) InterplanetaryLogisticsNetwork.get().loadPart(this);
+        if (!isRemote()) getLogisticsNetwork().loadOrCreatePart(this);
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
-        if (!isRemote()) InterplanetaryLogisticsNetwork.get().unloadPart(this);
+        if (!isRemote()) getLogisticsNetwork().unloadPart(this);
+    }
+
+    @Override
+    public void onMachineRemoved() {
+        if (!isRemote()) getLogisticsNetwork().destroyPart(this);
     }
 
     @Override
@@ -83,7 +72,7 @@ public class InterplanetaryItemRecieverMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public void onPackageSent(DimensionalBlockPos sender, List<ItemStack> items, long travelTime, long launchedTick) {
+    public void onPackageSent(ItemTransitPackage itemPackage) {
 
     }
 }

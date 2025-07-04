@@ -24,6 +24,7 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGCreativeTab;
 import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
@@ -59,6 +60,7 @@ public final class TFGCore {
         TFGCreativeTab.TABS.register(bus);
         TFGFeatures.FEATURES.register(bus);
 
+        TFGTItems.register();
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
 
