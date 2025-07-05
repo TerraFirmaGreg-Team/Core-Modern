@@ -74,6 +74,7 @@
     "common.tfc.BloomeryBlockEntityMixin",
     "common.tfc.CharcoalForgeBlockMixin",
     "common.tfc.CrucibleBlockMixin",
+    "common.tfc.EntityTooltipsMixin",
     "common.tfc.EnvironmentHelpersMixin",
     "common.tfc.FarmlandBlockMixin",
     "common.tfc.IcePileBlockMixin",
