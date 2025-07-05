@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.AqueousAccumulatorMachine;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.machine.electric.InterplanetaryLogisticsMonitorMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.SimpleFoodProcessingMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.FoodRefrigeratorMachine;
 
@@ -121,6 +122,10 @@ public class TFGMachines {
 			.rotationState(RotationState.ALL)
 			.renderer(() -> new OverlayTieredMachineRenderer(3, GTCEu.id("block/machine/part/item_bus.export")))
 			.abilities(PartAbility.EXPORT_ITEMS)
+			.register();
+
+	public static final MachineDefinition INTERPLANETARY_LOGISTICS_MONITOR = REGISTRATE.machine("interplanetary_logistics_monitor", InterplanetaryLogisticsMonitorMachine::new)
+			.rotationState(RotationState.NON_Y_AXIS)
 			.register();
 
 

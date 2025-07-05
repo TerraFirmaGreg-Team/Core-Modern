@@ -85,7 +85,7 @@ public class TFGTRecipes {
 				.inputItems(GTItems.EMITTER_HV, 2)
 				.inputItems(CustomTags.HV_CIRCUITS, 2)
 				.inputItems(ChemicalHelper.get(TagPrefix.foil, GTMaterials.StainlessSteel, 16))
-				.outputItems(TFGTItems.INTERPLANETARY_LINK, 1)
+				.outputItems(TFGMachines.INTERPLANETARY_LOGISTICS_MONITOR, 1)
 				.save(provider);
 	}
 }

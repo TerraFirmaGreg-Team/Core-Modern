@@ -6,6 +6,8 @@ import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import net.minecraft.server.TickTask;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
@@ -32,7 +34,7 @@ public class InterplanetaryItemRecieverMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (!isRemote()) getLogisticsNetwork().loadOrCreatePart(this);
+        if (getLevel() instanceof ServerLevel sLvl) sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
     }
 
     @Override
