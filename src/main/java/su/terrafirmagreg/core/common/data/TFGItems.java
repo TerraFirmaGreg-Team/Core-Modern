@@ -1,6 +1,9 @@
 package su.terrafirmagreg.core.common.data;
 
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -27,6 +30,11 @@ public class TFGItems {
 	public static final RegistryObject<Item> TROWEL =
 			ITEMS.register("trowel", () -> new TrowelItem(new Item.Properties()));
 
+	public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
+
+
+
+
 	private static RegistryObject<Item> register(String name)
 	{
 		return register(name, () -> new Item(new Item.Properties()));
@@ -35,5 +43,10 @@ public class TFGItems {
 	private static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item)
 	{
 		return ITEMS.register(name.toLowerCase(Locale.ROOT), item);
+	}
+
+	private static <T extends EntityType<? extends Mob>> RegistryObject<Item> registerSpawnEgg(RegistryObject<T> entity, int color1, int color2)
+	{
+		return register("spawn_egg/" + entity.getId().getPath(), () -> new ForgeSpawnEggItem(entity, color1, color2, new Item.Properties()));
 	}
 }
