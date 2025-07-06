@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.common.*;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
@@ -58,7 +57,6 @@ public final class TFGCore {
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.ENTITIES.register(bus);
 
-        TFGTItems.register();
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         bus.addListener(TFGEntities::onAttributes);
