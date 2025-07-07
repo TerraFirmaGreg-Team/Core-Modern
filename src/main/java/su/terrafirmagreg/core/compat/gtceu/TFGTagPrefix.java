@@ -257,6 +257,17 @@ public final class TFGTagPrefix {
                 .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
 
+        toolHeadHook = new TagPrefix("fishHook")
+                .defaultTagPath("fish_hooks/%s")
+                .unformattedTagPath("fish_hooks")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
+                .materialAmount(GTValues.M)
+                .maxStackSize(16)
+                .materialIconType(TFGMaterialIconType.toolHeadHook)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+
         /* Other */
         ingotDouble = new TagPrefix("doubleIngot")
                 .defaultTagPath("double_ingots/%s")
