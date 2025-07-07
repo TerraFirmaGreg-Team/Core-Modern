@@ -163,6 +163,7 @@ public final class TFGMaterialHandler {
 			lampUnfinished.setIgnored(material, () -> metalItems.get(Metal.ItemType.UNFINISHED_LAMP).get());
 
 			toolHeadMattock.setIgnored(material, () -> RNRItems.MATTOCK_HEADS.get(metalType).get());
+			toolHeadHook.setIgnored(material, () -> metalItems.get(Metal.ItemType.FISH_HOOK).get());
 
 			var metalBlocks = TFCBlocks.METALS.get(metalType);
 			lamp.setIgnored(material, () -> metalBlocks.get(Metal.BlockType.LAMP).get());
