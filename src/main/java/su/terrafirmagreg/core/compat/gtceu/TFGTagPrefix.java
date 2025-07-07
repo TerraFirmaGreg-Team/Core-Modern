@@ -7,7 +7,6 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialIconType;
 
@@ -36,6 +35,8 @@ public final class TFGTagPrefix {
     public static final TagPrefix toolHeadChisel;
     public static final TagPrefix toolHeadMace;
     public static final TagPrefix toolHeadMattock;
+    public static final TagPrefix toolHeadHook;
+    public static final TagPrefix toolWrench;
 
     /* Other */
     public static final TagPrefix ingotDouble;
