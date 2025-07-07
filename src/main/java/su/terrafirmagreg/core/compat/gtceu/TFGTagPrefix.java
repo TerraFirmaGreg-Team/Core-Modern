@@ -36,7 +36,6 @@ public final class TFGTagPrefix {
     public static final TagPrefix toolHeadMace;
     public static final TagPrefix toolHeadMattock;
     public static final TagPrefix toolHeadHook;
-    public static final TagPrefix toolWrench;
 
     /* Other */
     public static final TagPrefix ingotDouble;
