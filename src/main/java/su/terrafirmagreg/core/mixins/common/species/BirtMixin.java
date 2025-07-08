@@ -1,6 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.species;
 
-import com.ninni.species.entity.Birt;
+import com.ninni.species.server.entity.mob.update_1.Birt;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
