@@ -28,6 +28,8 @@ public abstract class GTRecipeTypesMixin {
 
     @Shadow @Final public static GTRecipeType FERMENTING_RECIPES;
 
+    @Shadow @Final public static GTRecipeType PYROLYSE_RECIPES;
+
     /**
      * Нужно для того, чтобы настроить доп. рецепты.
      * Расширяет кол-во слотов в некоторых машинах.
@@ -66,5 +68,7 @@ public abstract class GTRecipeTypesMixin {
 
         FERMENTING_RECIPES.setMaxIOSize(2, 1, 1, 1);
         FERMENTING_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
+
+        PYROLYSE_RECIPES.setMaxIOSize(3, 2, 1, 1);
     }
 }
