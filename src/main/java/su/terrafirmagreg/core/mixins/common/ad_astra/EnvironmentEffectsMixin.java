@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.mixins.common.ad_astra;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
 import com.eerussianguy.firmalife.common.blocks.OvenBottomBlock;
 import earth.terrarium.adastra.common.systems.EnvironmentEffects;
+import earth.terrarium.adastra.common.tags.ModBlockTags;
 import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.*;
@@ -59,6 +60,9 @@ public abstract class EnvironmentEffectsMixin {
 		if (hasOxygenOnAnySide(level, pos))
 			return;
 
+		if (state.is(ModBlockTags.DESTROYED_IN_SPACE)){
+			level.destroyBlock(pos, true);
+		}
 		if (block instanceof TFCTorchBlock) {
 			Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
 			level.setBlockAndUpdate(pos, TFCBlocks.DEAD_TORCH.get().defaultBlockState());

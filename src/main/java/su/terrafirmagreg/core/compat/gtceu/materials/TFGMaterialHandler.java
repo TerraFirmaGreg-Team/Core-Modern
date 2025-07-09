@@ -4,7 +4,6 @@ import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLItems;
 import com.eerussianguy.firmalife.common.util.FLMetal;
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.negodya1.vintageimprovements.VintageBlocks;
 import com.negodya1.vintageimprovements.VintageImprovements;
@@ -17,11 +16,10 @@ import earth.terrarium.adastra.common.registry.ModBlocks;
 import earth.terrarium.adastra.common.registry.ModItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
+import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Metal;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.common.TFGHelpers;
 
 import java.util.HashMap;
@@ -141,6 +139,11 @@ public final class TFGMaterialHandler {
 			rod.setIgnored(etrium, ModItems.ETRIUM_ROD);
 		}
 
+		var kaolinite = TFGHelpers.getMaterial("kaolinite");
+		if (kaolinite != null) {
+			dust.setIgnored(kaolinite, () -> TFCItems.POWDERS.get(Powder.KAOLINITE).get());
+		}
+
 		// Tool-only metals
 
 		var metalDict = new HashMap<Material, Metal.Default>();
@@ -163,6 +166,7 @@ public final class TFGMaterialHandler {
 			lampUnfinished.setIgnored(material, () -> metalItems.get(Metal.ItemType.UNFINISHED_LAMP).get());
 
 			toolHeadMattock.setIgnored(material, () -> RNRItems.MATTOCK_HEADS.get(metalType).get());
+			toolHeadHook.setIgnored(material, () -> metalItems.get(Metal.ItemType.FISH_HOOK).get());
 
 			var metalBlocks = TFCBlocks.METALS.get(metalType);
 			lamp.setIgnored(material, () -> metalBlocks.get(Metal.BlockType.LAMP).get());
