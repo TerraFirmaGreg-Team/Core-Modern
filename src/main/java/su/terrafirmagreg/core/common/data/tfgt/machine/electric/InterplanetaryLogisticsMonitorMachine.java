@@ -6,21 +6,29 @@ import com.gregtechceu.gtceu.api.gui.widget.IntInputWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
-import com.lowdragmc.lowdraglib.gui.editor.ColorPattern;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.gui.widget.layout.Align;
-import com.lowdragmc.lowdraglib.gui.widget.layout.Layout;
 import com.lowdragmc.lowdraglib.utils.Position;
+import com.mojang.blaze3d.platform.Window;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
+
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implements IUIMachine {
@@ -35,20 +43,161 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
     private class InterplanetaryLogisticsManagerWidget extends TabContainer {
 
-        private static DraggableScrollableWidgetGroup getTabGroup() {
-            var group = (new DraggableScrollableWidgetGroup(4, 4, INNER_WIDTH, INNER_HEIGHT))
-                    .setDraggable(false)
-                    .setScrollable(true)
-                    .setScrollWheelDirection(DraggableScrollableWidgetGroup.ScrollWheelDirection.VERTICAL)
-                    .setYScrollBarWidth(4)
-                    .setYBarStyle(ColorPattern.RED.rectTexture(), ColorPattern.WHITE.rectTexture().setRadius(2));
-            group.setLayout(Layout.VERTICAL_CENTER);
-            group.setLayoutPadding(4);
-            return group;
+        //// Backend to make the gui actually work
+
+        // The ldlib scrollable widget group doesn't actually work
+        private static class FixedScrollableWidgetGroup extends WidgetGroup {
+            private int scrollYOffset;
+            private int innerHeight;
+            public FixedScrollableWidgetGroup() {
+                super(4, 4, INNER_WIDTH, INNER_HEIGHT);
+            }
+
+            private void computeInnerSize() {
+                innerHeight = 0;
+                for (Widget widget: widgets) {
+                    innerHeight += widget.getSizeHeight() + widget.getSelfPositionX();
+                }
+            }
+
+            @Override
+            public WidgetGroup addWidget(int index, Widget widget) {
+                super.addWidget(index, widget);
+                computeInnerSize();
+                return this;
+            }
+
+            @Override
+            public void removeWidget(Widget widget) {
+                super.removeWidget(widget);
+                computeInnerSize();
+            }
+
+            @Override
+            protected void onChildSelfPositionUpdate(Widget child) {
+                super.onChildSelfPositionUpdate(child);
+                computeInnerSize();
+            }
+
+            @Override
+            protected void onChildSizeUpdate(Widget child) {
+                super.onChildSizeUpdate(child);
+                computeInnerSize();
+            }
+
+            @Override
+            protected void recomputeLayout() {
+                var currentHeight = 0;
+                for (Widget widget: widgets) {
+                    widget.setSelfPosition(0, currentHeight);
+                    currentHeight += widget.getSizeHeight();
+                }
+            }
+
+            public void updateScrollOffset(int scrollYOffset) {
+                if (scrollYOffset == this.scrollYOffset) return;
+                if (innerHeight - scrollYOffset <= INNER_WIDTH) return;
+                if ((innerHeight - INNER_WIDTH) <= 0 || scrollYOffset < 0) scrollYOffset = 0;
+
+                int offset = scrollYOffset - this.scrollYOffset;
+                this.scrollYOffset = scrollYOffset;
+
+                for(Widget widget : this.widgets) {
+                    Position newPos = widget.addSelfPosition(0, -offset);
+                    widget.setVisible(newPos.y < this.getSize().height && newPos.y + widget.getSize().height > 0);
+                }
+            }
+
+            @OnlyIn(Dist.CLIENT)
+            @Override
+            public void drawInForeground(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+                if (this.isMouseOverElement(mouseX, mouseY)) {
+                    super.drawInForeground(graphics, mouseX, mouseY, partialTicks);
+                }
+            }
+
+            @OnlyIn(Dist.CLIENT)
+            @Override
+            public void drawInBackground(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+                this.drawBackgroundTexture(graphics, mouseX, mouseY);
+                int x = this.getPosition().x;
+                int y = this.getPosition().y;
+                int width = this.getSize().width;
+                int height = this.getSize().height;
+
+                Matrix4f trans = graphics.pose().last().pose();
+                Vector4f realPos = trans.transform(new Vector4f((float)x, (float)y, 0.0F, 1.0F));
+                Vector4f realPos2 = trans.transform(new Vector4f((float)(x + width), (float)(y + height), 0.0F, 1.0F));
+                graphics.enableScissor((int)realPos.x, (int)realPos.y, (int)realPos2.x, (int)realPos2.y);
+                this.drawWidgetsBackground(graphics, mouseX, mouseY, partialTicks);
+                graphics.disableScissor();
+            }
+
+            public void drawOverlay(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+                int x = this.getPosition().x;
+                int y = this.getPosition().y;
+                int width = this.getSize().width;
+                int height = this.getSize().height;
+                Matrix4f trans = graphics.pose().last().pose();
+                Vector4f realPos = trans.transform(new Vector4f((float)x, (float)y, 0.0F, 1.0F));
+                Vector4f realPos2 = trans.transform(new Vector4f((float)(x + width), (float)(y + height), 0.0F, 1.0F));
+                graphics.enableScissor((int)realPos.x, (int)realPos.y, (int)realPos2.x, (int)realPos2.y);
+                super.drawOverlay(graphics, mouseX, mouseY, partialTicks);
+                graphics.disableScissor();
+            }
+
+            @OnlyIn(Dist.CLIENT)
+            public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+                Window window = Minecraft.getInstance().getWindow();
+                double mouseX = Minecraft.getInstance().mouseHandler.xpos() * (double)window.getGuiScaledWidth() / (double)window.getScreenWidth();
+                double mouseY = Minecraft.getInstance().mouseHandler.ypos() * (double)window.getGuiScaledHeight() / (double)window.getScreenHeight();
+                if (this.isMouseOverElement(mouseX, mouseY)) {
+                    for(int i = this.widgets.size() - 1; i >= 0; --i) {
+                        Widget widget = this.widgets.get(i);
+                        if (widget.isVisible() && widget.isMouseOverElement(mouseX, mouseY)) {
+                            return widget.keyPressed(keyCode, scanCode, modifiers);
+                        }
+                    }
+                }
+
+                return super.keyPressed(keyCode, scanCode, modifiers);
+            }
+
+            @OnlyIn(Dist.CLIENT)
+            public boolean mouseWheelMove(double mouseX, double mouseY, double wheelDelta) {
+                if (this.isMouseOverElement(mouseX, mouseY)) {
+                    if (super.mouseWheelMove(mouseX, mouseY, wheelDelta)) {
+                        this.setFocus(true);
+                        return true;
+                    } else {
+                            this.setFocus(true);
+                            if (this.isFocus()) {
+                                int moveDelta = (int)(-Mth.clamp(wheelDelta, -1.0F, 1.0F) * (double)13.0F);
+                                this.updateScrollOffset(Mth.clamp(this.scrollYOffset + moveDelta, 0, INNER_HEIGHT));
+                            }
+
+                        return true;
+                    }
+                } else {
+                    this.setFocus(false);
+                    return false;
+                }
+            }
+
+            @OnlyIn(Dist.CLIENT)
+            public List<Rect2i> getGuiExtraAreas(Rect2i guiRect, List<Rect2i> list) {
+                Rect2i rect2i = this.toRectangleBox();
+
+                if (rect2i.getX() < guiRect.getX() || rect2i.getX() + rect2i.getWidth() > guiRect.getX() + guiRect.getWidth() || rect2i.getY() < guiRect.getY() || rect2i.getY() + rect2i.getHeight() > guiRect.getY() + guiRect.getHeight()) {
+                    list.add(this.toRectangleBox());
+                }
+
+                return list;
+            }
         }
 
-        private final DraggableScrollableWidgetGroup senderTab = getTabGroup();
-        private final DraggableScrollableWidgetGroup recieverTab = getTabGroup();
+        private final FixedScrollableWidgetGroup senderTab = new FixedScrollableWidgetGroup();
+        private final FixedScrollableWidgetGroup recieverTab = new FixedScrollableWidgetGroup();
 
         private void updateIfServer() {
             if (network != null) network.markDirty();
@@ -124,6 +273,8 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 recieverTab.addWidget(createWidgetRow(part));
             }
         }
+
+        //// The actual gui code
 
         private WidgetGroup createWidgetRow(NetworkPart part) {
             WidgetGroup rowGroup = new WidgetGroup(0, 0, 292, 0);
