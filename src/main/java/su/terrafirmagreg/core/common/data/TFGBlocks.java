@@ -68,101 +68,28 @@ public final class TFGBlocks {
 		() -> new LayerBlock(TFCItems.POWDERS.get(Powder.WOOD_ASH)::get, s_layerProperties.mapColor(MapColor.COLOR_LIGHT_GRAY)));
 
 	public static final RegistryObject<Block> WHITE_SAND_PILE = register("pile/white_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.WHITE)::get, s_layerProperties.mapColor(MapColor.QUARTZ)));
+		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.WHITE)::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> BLACK_SAND_PILE = register("pile/black_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.BLACK)::get, s_layerProperties.mapColor(MapColor.TERRACOTTA_BLACK)));
+		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.BLACK)::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> BROWN_SAND_PILE = register("pile/brown_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.BROWN)::get, s_layerProperties.mapColor(MapColor.DIRT)));
+		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.BROWN)::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> RED_SAND_PILE = register("pile/red_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.RED)::get, s_layerProperties.mapColor(MapColor.TERRACOTTA_RED)));
+		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.RED)::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> YELLOW_SAND_PILE = register("pile/yellow_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.YELLOW)::get, s_layerProperties.mapColor(MapColor.SAND)));
+		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.YELLOW)::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> GREEN_SAND_PILE = register("pile/green_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.GREEN)::get, s_layerProperties.mapColor(MapColor.COLOR_GREEN)));
+		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.GREEN)::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> PINK_SAND_PILE = register("pile/pink_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.PINK)::get, s_layerProperties.mapColor(MapColor.TERRACOTTA_PINK)));
+		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.PINK)::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> MOON_SAND_PILE = register("pile/moon_sand",
-		() -> new LayerBlock(ModBlocks.MOON_SAND::get, s_layerProperties.mapColor(MapColor.TERRACOTTA_LIGHT_GRAY)));
+		() -> new LayerBlock(ModBlocks.MOON_SAND::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> MARS_SAND_PILE = register("pile/mars_sand",
-		() -> new LayerBlock(ModBlocks.MARS_SAND::get, s_layerProperties.mapColor(MapColor.TERRACOTTA_RED)));
+		() -> new LayerBlock(ModBlocks.MARS_SAND::get, s_layerProperties.mapColor(MapColor.NONE)));
 	public static final RegistryObject<Block> VENUS_SAND_PILE = register("pile/venus_sand",
-		() -> new LayerBlock(ModBlocks.VENUS_SAND::get, s_layerProperties.mapColor(MapColor.TERRACOTTA_ORANGE)));
+		() -> new LayerBlock(ModBlocks.VENUS_SAND::get, s_layerProperties.mapColor(MapColor.NONE)));
 
 
 	// Decoration blocks
-
-	public static final RegistryObject<Block> LUNAR_ROOTS = register("lunar_roots",
-		() -> new LunarRootsBlock(BlockBehaviour.Properties.of()
-		    .mapColor(MapColor.NONE)
-		    .strength(0.1f)
-		    .sound(SoundType.NETHER_WART)
-		    .pushReaction(PushReaction.DESTROY)
-		    .lightLevel((state) -> 6)
-		    .noCollission()
-		    .noOcclusion()
-		    .isViewBlocking((state, level, pos) -> false)
-		    .isSuffocating((state, level, pos) -> false)
-			.offsetType(BlockBehaviour.OffsetType.XZ)));
-
-	public static final RegistryObject<Block> LUNAR_SPROUTS = register("lunar_sprouts",
-		() -> new LunarSproutsBlock(BlockBehaviour.Properties.of()
-		    .mapColor(MapColor.NONE)
-		    .strength(0.1f)
-		    .sound(SoundType.NETHER_WART)
-		    .pushReaction(PushReaction.DESTROY)
-			.noCollission()
-			.noOcclusion()
-		    .isViewBlocking((state, level, pos) -> false)
-		    .isSuffocating((state, level, pos) -> false)
-			.offsetType(BlockBehaviour.OffsetType.XZ)));
-
-	public static final RegistryObject<Block> STROMATOLITE_CLUSTER_MEDIUM = register("stromatolite_cluster_medium",
-		() -> new StromatoliteClusterMediumBlock(BlockBehaviour.Properties.of()
-			.mapColor(MapColor.COLOR_BROWN)
-			.strength(0.1f)
-			.sound(SoundType.DRIPSTONE_BLOCK)
-			.pushReaction(PushReaction.DESTROY)
-			.noCollission()
-			.noOcclusion()
-			.isViewBlocking((state, level, pos) -> false)
-			.isSuffocating((state, level, pos) -> false)
-			.offsetType(BlockBehaviour.OffsetType.XZ)));
-
-	public static final RegistryObject<Block> STROMATOLITE_CLUSTER_SMALL = register("stromatolite_cluster_small",
-		() -> new StromatoliteClusterSmallBlock(BlockBehaviour.Properties.of()
-			.mapColor(MapColor.COLOR_BROWN)
-			.strength(0.1f)
-			.sound(SoundType.DRIPSTONE_BLOCK)
-			.pushReaction(PushReaction.DESTROY)
-			.noCollission()
-			.noOcclusion()
-			.isViewBlocking((state, level, pos) -> false)
-			.isSuffocating((state, level, pos) -> false)
-			.offsetType(BlockBehaviour.OffsetType.XZ)));
-
-	public static final RegistryObject<Block> GEYSER_SOURCE = register("geyser_source",
-		() -> new GeyserBlock(BlockBehaviour.Properties.of()
-			.mapColor(MapColor.COLOR_BROWN)
-			.strength(0.8f)
-			.sound(SoundType.DRIPSTONE_BLOCK)
-			.pushReaction(PushReaction.DESTROY)
-			.noLootTable()
-			.noCollission()
-			.noOcclusion()
-			.isViewBlocking((state, level, pos) -> false)
-			.isSuffocating((state, level, pos) -> false)));
-
-	public static final RegistryObject<Block> GEYSER_SOURCE_SMALL = register("geyser_source_small",
-		() -> new GeyserBlockSmall(BlockBehaviour.Properties.of()
-			.mapColor(MapColor.COLOR_BROWN)
-			.strength(0.8f)
-			.sound(SoundType.DRIPSTONE_BLOCK)
-			.pushReaction(PushReaction.DESTROY)
-			.noLootTable()
-			.noCollission()
-			.noOcclusion()
-			.isViewBlocking((state, level, pos) -> false)
-			.isSuffocating((state, level, pos) -> false)));
 
 	public static final RegistryObject<Block> LUNAR_CHORUS_PLANT = register("lunar_chorus_plant",
 		() -> new LunarChorusPlantBlock(BlockBehaviour.Properties.of()
@@ -175,6 +102,7 @@ public final class TFGBlocks {
 	public static final RegistryObject<Block> LUNAR_CHORUS_FLOWER = register("lunar_chorus_flower",
 		() -> new LunarChorusFlowerBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.TERRACOTTA_PURPLE)
+			.noOcclusion()
 			.pushReaction(PushReaction.DESTROY)
 			.strength(0.2f)
 			.sound(SoundType.CHERRY_WOOD),

@@ -20,11 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.common.*;
-import su.terrafirmagreg.core.common.data.TFGBlockEntities;
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.TFGCreativeTab;
-import su.terrafirmagreg.core.common.data.TFGItems;
-import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
+import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
@@ -59,10 +55,13 @@ public final class TFGCore {
         TFGItems.ITEMS.register(bus);
         TFGCreativeTab.TABS.register(bus);
         TFGFeatures.FEATURES.register(bus);
+        TFGEntities.ENTITIES.register(bus);
 
-        TFGTItems.register();
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
+        bus.addListener(TFGEntities::onAttributes);
+        bus.addListener(TFGEntities::onSpawnPlacement);
+        bus.addListener(TFGEntities::onEntityRenderers);
 
         AdAstraCompat.RegisterEvents();
     }

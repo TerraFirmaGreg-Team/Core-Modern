@@ -68,13 +68,12 @@ dependencies {
     implementation fg.deobf("maven.modrinth:ferrite-core:DG5Fn9Sz")
     implementation fg.deobf("maven.modrinth:architectury-api:9.2.14+forge")
 
-    implementation fg.deobf("curse.maven:configuration-444699:4710266")
+    //implementation fg.deobf("curse.maven:configuration-444699:4710266")
 
     // JEI
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.3.0.7")
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.3.0.7")
-    // at runtime, use the full JEI jar for Forge
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.3.0.7")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge:${jei_version}")
 
     // REI
     //runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:11.1.118")
@@ -84,8 +83,6 @@ dependencies {
     //compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:12.1.725")
 
     // EMI
-//    compileOnly fg.deobf("dev.emi:emi-forge:1.1.12+1.20.1:api")
-//    runtimeOnly fg.deobf("dev.emi:emi-forge:1.1.12+1.20.1")
     implementation fg.deobf("dev.emi:emi-forge:1.1.20+1.20.1")
 
     // Create
@@ -99,15 +96,13 @@ dependencies {
     // compileOnly fg.deobf("maven.modrinth:create-steam-n-rails:1.6.4+forge-mc1.20.1") { transitive = false }
 
     // Create: Vintage Improvements
-    // TODO: REPLACED with github fork for now
-    //implementation fg.deobf("maven.modrinth:create-vintage-improvements:1.20.1-0.2.0.3") { transitive = false }
-    implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6493670") { transitive = false }
+    implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6708676") { transitive = false }
 
     // Greate
-    compileOnly fg.deobf("maven.modrinth:greate:0.0.40") { transitive = false }
+    implementation fg.deobf("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
-    implementation fg.deobf("com.gregtechceu.gtceu:gtceu-$minecraft_version:$gtm_version") { transitive = false }
+    implementation fg.deobf("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
     implementation fg.deobf("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
 
     // KJS
@@ -115,50 +110,56 @@ dependencies {
     implementation fg.deobf("maven.modrinth:kubejs:2001.6.5-build.7+forge")
 
     // TFC
-    implementation fg.deobf("maven.modrinth:patchouli:1.20.1-84.1-forge")
-    implementation fg.deobf("maven.modrinth:terrafirmacraft:3.2.14")
+    implementation fg.deobf("maven.modrinth:patchouli:1.20.1-84.1-forge")  { transitive = false }
+    implementation fg.deobf("maven.modrinth:terrafirmacraft:${tfc_version}")  { transitive = false }
+    implementation fg.deobf("curse.maven:kubejs-tfc-841001:6705934") { transitive = false }
 
     // FirmaLife
-    implementation fg.deobf("maven.modrinth:firmalife:2.1.18")
+    implementation fg.deobf("maven.modrinth:firmalife:${firmalife_version}")
 
     // Beneath
-    implementation fg.deobf("maven.modrinth:beneath:1.0.4") { transitive = false }
+    implementation fg.deobf("maven.modrinth:beneath:${beneath_version}") { transitive = false }
 
     // TFC-Ambiental
     implementation fg.deobf("maven.modrinth:curios:5.12.1+1.20.1")
     implementation fg.deobf("maven.modrinth:tfc-ambiental-second-edition:1.20.1-3.3.0")
 
     // FirmaCiv
-    implementation fg.deobf("maven.modrinth:alekiships:1.0.14") { transitive = false }
-    implementation fg.deobf("maven.modrinth:firmaciv:1.0.9") { transitive = false }
+    implementation fg.deobf("maven.modrinth:alekiships:${alekiships_version}") { transitive = false }
+    implementation fg.deobf("maven.modrinth:firmaciv:${firmaciv_version}") { transitive = false }
 
     // TFC AstikoCarts
     implementation fg.deobf("curse.maven:astikor-carts-redux-916493:4988266") { transitive = false }
     implementation fg.deobf("curse.maven:astikor-carts-tfc-844019:5141430") { transitive = false }
 
     // AE2
-    implementation fg.deobf("maven.modrinth:ae2:15.3.4")
+    implementation fg.deobf("curse.maven:guideme-1173950:6489464")
+    implementation fg.deobf("curse.maven:applied-energistics-2-223794:6629570")
 
     // ComputerCraft
-    compileOnly fg.deobf("cc.tweaked:cc-tweaked-1.20.1-core-api:1.111.0")
-    compileOnly fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge-api:1.111.0")
-    compileOnly fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge:1.111.0")
+    implementation fg.deobf("cc.tweaked:cc-tweaked-1.20.1-core-api:${cc_tweaked_version}")
+    implementation fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge-api:${cc_tweaked_version}")
+    implementation fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge:${cc_tweaked_version}")
 
     // FTB
-    implementation fg.deobf("curse.maven:ftb-teams-404468:4623116") { transitive = false }
-    implementation fg.deobf("curse.maven:ftb-library-404465:4864329") { transitive = false }
+    implementation fg.deobf("curse.maven:ftb-teams-forge-404468:6130786") { transitive = false }
+    implementation fg.deobf("curse.maven:ftb-library-forge-404465:6164053") { transitive = false }
 
     // Jade
-    implementation fg.deobf("maven.modrinth:jade:11.7.1")
+    implementation fg.deobf("curse.maven:jade-324717:6271651")
 
     // TFC Roads and Roofs
     implementation fg.deobf("curse.maven:roads-and-roofs-tfc-1048212:5852507")
 
     // Ad Astra
-    implementation fg.deobf("curse.maven:ad-astra-635042:5914893") { transitive = false }
+    implementation fg.deobf("curse.maven:ad-astra-635042:6262032") { transitive = false }
     implementation fg.deobf("curse.maven:botarium-704113:5486070") { transitive = false }
     implementation fg.deobf("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
+    implementation fg.deobf("curse.maven:resourceful-config-714059:6231176") { transitive = false }
 
     // Species
-    implementation fg.deobf("maven.modrinth:species:N9CbMB7B") { transitive = false }
+    implementation fg.deobf("maven.modrinth:species:3.3") { transitive = false }
+
+    // Simply Stacked Dimensions
+    implementation fg.deobf("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
 }
