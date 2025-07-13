@@ -4,6 +4,7 @@ import earth.terrarium.adastra.api.planets.PlanetApi;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +19,7 @@ public abstract class EnvironmentHelpersMixin {
 	@Inject(method = "tickChunk", at = @At("HEAD"), remap = false, cancellable = true)
 	private static void tfg$tickChunk(ServerLevel level, LevelChunk chunk, ProfilerFiller profiler, CallbackInfo ci)
 	{
-		if (PlanetApi.API.isExtraterrestrial(level))
+		if (PlanetApi.API.isExtraterrestrial(level) && !Level.OVERWORLD.equals(level.dimension()))
 		{
 			ci.cancel();
 		}
