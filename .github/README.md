@@ -13,12 +13,13 @@
     <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/button/brands/curseforge_logo_32x.png?raw=true" alt="Available on CurseForge" height="50"/>
   </a>
   <a href="https://modrinth.com/mod/terrafirmagreg-core">
-    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/button/brands/modrinth_logo_32x.png?raw=true" alt="Available on CurseForge" height="50"/>
+    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/button/brands/modrinth_logo_32x.png?raw=true" alt="Available on Modrinth" height="50"/>
   </a>
   <br/>
 </div>
 
 <br/>
+
 ---
 
 ## The Core of TerraFirmaGreg-Modern
