@@ -1,22 +1,24 @@
+
+<br/>
 <div align="center">
-  <h1>TerraFirmaGreg Core - Modern</h1>
+  <h1>TerraFirmaGreg-Core - Modern</h1>
   <a href="https://github.com/TerraFirmaGreg-Team/Core-Modern">
-    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/logo.png?raw=true" alt="Core Mod Logo" height="100">
+    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/icon/v3/1080x_1080p_still_ring.gif?raw=true" alt="Logo" height="120"/>
   </a>
   <br/>
-  <a href="https://discord.gg/AEaCzCTUwQ">
-    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/discord_logo.png?raw=true" alt="Join our Discord" height="50">
+  <a href="https://discord.terrafirmagreg.su">
+    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/button/brands/discord_logo_32x.png?raw=true" alt="Join our Discord" height="50"/>
   </a>
   <a href="https://www.curseforge.com/minecraft/mc-mods/terrafirmagreg-core">
-    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/curseforge_logo.png?raw=true" alt="Available on CurseForge" height="50">
+    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/button/brands/curseforge_logo_32x.png?raw=true" alt="Available on CurseForge" height="50"/>
+  </a>
+  <a href="https://modrinth.com/mod/terrafirmagreg-core">
+    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/button/brands/modrinth_logo_32x.png?raw=true" alt="Available on CurseForge" height="50"/>
   </a>
   <br/>
 </div>
 
 <br/>
-
-![Logo](https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/logo_large.png?raw=true)
-
 ---
 
 ## The Core of TerraFirmaGreg-Modern
@@ -32,5 +34,5 @@ Interested in contributing? For detailed setup instructions, coding standards, a
 
 ---
 
-![Image Readme](https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/image_readme.png?raw=true)
+![Image Readme](https://github.com/TerraFirmaGreg-Team/.github/blob/main/storage/modern/unedited/credit_discord_doctor_rge.png?raw=true)
 
