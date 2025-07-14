@@ -74,7 +74,6 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
         }
 
         private final DraggableScrollableWidgetGroup mainPage = getDragContainer();
-        private final Map<DimensionalBlockPos, DraggableScrollableWidgetGroup> partPages = new HashMap<>();
 
         @Override
         @OnlyIn(Dist.CLIENT)
@@ -94,27 +93,14 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             var container = new WidgetGroup(0, 0, INNER_WIDTH, 0);
             container.setLayout(Layout.VERTICAL_CENTER);
             container.setDynamicSized(true);
-            var senderContainer = new WidgetGroup(0, 0, 0, 0);
-            senderContainer.setDynamicSized(true);
-            senderContainer.setLayout(Layout.VERTICAL_CENTER);
-            var receiverContainer = new WidgetGroup(0, 0, 0, 0);
-            receiverContainer.setDynamicSized(true);
-            receiverContainer.setLayout(Layout.VERTICAL_CENTER);
-            container.addWidget(new LabelWidget(0, 0, "Senders"))
-                    .addWidget(senderContainer)
-                    .addWidget(new LabelWidget(0, 0, "Receivers"))
-                    .addWidget(receiverContainer);
-
 
             setAlign(Align.CENTER);
             setBackground(ResourceBorderTexture.BORDERED_BACKGROUND);
             addWidget(mainPage);
-
+            List<WidgetGroup> senderPages = new ArrayList<>();
+            List<WidgetGroup> receiverPages = new ArrayList<>();
             for (var part : parts) {
-                var statusPage = (part.isReceiverPart() ? createReceiverPartStatusPage(part) : createSenderPartStatusPage(part));
-                statusPage.setVisible(false);
-                partPages.put(part.getPartId(), statusPage);
-                addWidget(statusPage);
+                if (part.getUiLabel().isBlank()) part.setUiLabel("[unnamed]");
 
                 WidgetGroup rowGroup = new WidgetGroup(0, 0, INNER_WIDTH - 5, 22);
                 rowGroup.setLayout(Layout.HORIZONTAL_CENTER);
@@ -128,12 +114,21 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 rowGroup.addWidget(lbl);
 
                 rowGroup.addWidget(new ButtonWidget(0, 0, 16, 16, GuiTextures.BUTTON_RIGHT, (v) -> {
-                    statusPage.setVisible(true);
+                    addWidget(part.isReceiverPart() ? createReceiverPartStatusPage(part) : createSenderPartStatusPage(part));
                     mainPage.setVisible(false);
                 }));
 
-                if (part.isReceiverPart()) receiverContainer.addWidget(rowGroup);
-                else senderContainer.addWidget(rowGroup);
+                if (part.isReceiverPart()) receiverPages.add(rowGroup);
+                else senderPages.add(rowGroup);
+            }
+
+            container.addWidget(new LabelWidget(0, 0, "Senders"));
+            for (var page: senderPages) {
+                container.addWidget(page);
+            }
+            container.addWidget(new LabelWidget(0, 0, "Receivers"));
+            for (var page: receiverPages) {
+                container.addWidget(page);
             }
 
             mainPage.addWidget(container);
@@ -148,7 +143,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
             var topRow = new WidgetGroup(0, 0, INNER_WIDTH - 5, 20)
                     .addWidget(new ButtonWidget(2, 2, 16, 16, GuiTextures.BUTTON_LEFT, (v) -> {
-                        dragContainer.setVisible(false);
+                        removeWidget(dragContainer);
                         mainPage.setVisible(true);
                  })).addWidget(new TextFieldWidget(18, 2, 80, 16, part::getUiLabel, (s) -> {
                         part.setUiLabel(s);
@@ -193,7 +188,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
             var destinationSelector = new SelectorWidget(57, 2, 80, 18, new ArrayList<>(), -1).setButtonBackground(GuiTextures.BUTTON);
             if (!isRemote()) destinationSelector.setCandidatesSupplier(() -> parts.stream().filter((p) -> p.isReceiverPart() && !Objects.equals(p.getUiLabel(), "[unnamed]")).map(NetworkPart::getUiLabel).toList());
-
+            destinationSelector.setValue("[none]");
             parts.stream().filter(p -> p.getPartId() == config.getReceiverPartID()).findFirst().ifPresent(s -> destinationSelector.setValue(s.getUiLabel()));
 
             destinationSelector.setOnChanged((v) -> {
@@ -227,11 +222,14 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
             group.addWidget(new LabelWidget(0, 27, "Sender:"));
 
+            var senderCircuitInv = new CustomItemStackHandler(1);
+            var receiverCircuitInv = new CustomItemStackHandler(1);
+
             var senderDistinctCircuit = new GhostCircuitSlotWidget();
             senderDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY).setSelfPosition(40, 25);
             senderDistinctCircuit.setCircuitInventory(new CustomItemStackHandler(1));
             senderDistinctCircuit.setCircuitValue(config.getSenderDistinctInventory());
-            senderDistinctCircuit.setChangeListener(() -> {
+            senderCircuitInv.setOnContentsChanged(() -> {
                 config.setSenderDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderDistinctCircuit.getItem()));
                 updateIfServer();
             });
@@ -242,7 +240,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             receiverDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY).setSelfPosition(115, 25);
             receiverDistinctCircuit.setCircuitInventory(new CustomItemStackHandler(1));
             receiverDistinctCircuit.setCircuitValue(config.getReceiverDistinctInventory());
-            receiverDistinctCircuit.setChangeListener(() -> {
+            receiverCircuitInv.setOnContentsChanged(() -> {
                 config.setReceiverDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderDistinctCircuit.getItem()));
                 updateIfServer();
             });
