@@ -5,30 +5,29 @@ import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
+import java.util.ArrayList;
 import java.util.List;
 
+public class InterplanetaryItemReceiverMachine extends WorkableElectricMultiblockMachine implements ILogisticsNetworkReceiver, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
 
-
-public class InterplanetaryItemRecieverMachine extends WorkableElectricMultiblockMachine implements ILogisticsNetworkReciever, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
-
-    public InterplanetaryItemRecieverMachine(IMachineBlockEntity holder, Object... args) {
+    public InterplanetaryItemReceiverMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
 
-    public InterplanetaryItemRecieverMachine getMachine() {
+    public InterplanetaryItemReceiverMachine getMachine() {
         return this;
     }
 
     @Override
-    public boolean isMachineValid() {
-        return isFormed() && !isInValid();
+    public boolean isMachineInvalid() {
+        return !isFormed() || isInValid();
     }
 
     @Override
@@ -49,18 +48,13 @@ public class InterplanetaryItemRecieverMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public List<NotifiableItemStackHandler> getInventories() {
-        return List.of();
-    }
-
-    @Override
-    public boolean makeInventoryDistinct(int invIndex) {
-        return false;
-    }
-
-    @Override
-    public boolean removeDistinctInventory(int invIndex) {
-        return false;
+    public List<RailgunItemBusMachine> getInventories() {
+        if (isMachineInvalid()) return List.of();
+        List<RailgunItemBusMachine> parts = new ArrayList<>();
+        for (var part: getParts()) {
+            if (part instanceof RailgunItemBusMachine r) parts.add(r);
+        }
+        return parts;
     }
 
     @Override
@@ -69,12 +63,13 @@ public class InterplanetaryItemRecieverMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public boolean isRecieverReady() {
-        return false;
+    public void onPackageSent(DimensionalBlockPos sentFrom, List<ItemStack> items, long sentTick) {
+
     }
 
     @Override
-    public void onPackageSent(ItemTransitPackage itemPackage) {
-
+    public Component getCurrentStatusText() {
+        if (!isFormed()) return Component.literal("§cMultiblock not formed");
+        return null;
     }
 }
