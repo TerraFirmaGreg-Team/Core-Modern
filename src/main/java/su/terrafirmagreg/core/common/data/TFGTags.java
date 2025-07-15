@@ -14,6 +14,7 @@ public final class TFGTags {
         public static final TagKey<Item> Hammers = createItemTag("forge:tools/hammers");
         public static final TagKey<Item> Chains = createItemTag("forge:chains");
         public static final TagKey<Item> Strings = createItemTag("forge:string");
+        public static final TagKey<Item> Harvester = createItemTag("tfg:harvester");
 
         public static TagKey<Item> createItemTag(String path) {
             return TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.parse(path));
@@ -23,6 +24,7 @@ public final class TFGTags {
     public static final class Blocks {
         public static final TagKey<Block> GrassPlantableOn = createBlockTag("tfc:grass_plantable_on");
         public static final TagKey<Block> Logs = createBlockTag("minecraft:logs");
+        public static final TagKey<Block> HarvesterHarvestable = createBlockTag("tfg:harvester_harvestable");
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));
