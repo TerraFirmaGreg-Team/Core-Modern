@@ -56,6 +56,7 @@ public final class TFGCore {
         TFGCreativeTab.TABS.register(bus);
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.ENTITIES.register(bus);
+        TFGEvents.register();
 
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
