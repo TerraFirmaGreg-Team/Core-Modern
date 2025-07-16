@@ -10,6 +10,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.sounds.SoundEvents;
@@ -179,11 +180,19 @@ public class TrowelItem extends Item {
         //Gets context like waterlogged, rotated, etc.
         BlockPlaceContext placeContext = new BlockPlaceContext(context);
         //Places block--respecting placement logic.
+        BlockPos placePos = context.getClickedPos().relative(context.getClickedFace());
+        BlockState newState = blockItem.getBlock().getStateForPlacement(placeContext);
+
+        if (newState == null ||
+                !newState.canSurvive(level, placePos) ||
+                !level.isUnobstructed(newState, placePos, CollisionContext.of(player))) {
+            return InteractionResult.FAIL;
+        }
+
         InteractionResult result = blockItem.place(placeContext);
         //Restores trowel tool
         stack.setCount(originalCount);
 
-        BlockPos placePos = context.getClickedPos().relative(context.getClickedFace());
         level.playSound(null, placePos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);
 
         //Decreases item count unless in creative.
