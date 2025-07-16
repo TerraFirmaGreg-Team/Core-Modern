@@ -191,7 +191,9 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             var destinationSelector = new SelectorWidget(57, 2, 80, 18, new ArrayList<>(), -1).setButtonBackground(GuiTextures.BUTTON);
             if (!isRemote()) destinationSelector.setCandidatesSupplier(() -> parts.stream().filter((p) -> p.isReceiverPart() && !Objects.equals(p.getUiLabel(), "[unnamed]")).map(NetworkPart::getUiLabel).toList());
             destinationSelector.setValue("[none]");
-            parts.stream().filter(p -> p.getPartId() == config.getReceiverPartID()).findFirst().ifPresent(s -> destinationSelector.setValue(s.getUiLabel()));
+            for (var rPart: parts) {
+                if (rPart.getPartId() == config.getReceiverPartID()) destinationSelector.setValue(rPart.getUiLabel());
+            }
 
             destinationSelector.setOnChanged((v) -> {
                 parts.stream().filter(p -> Objects.equals(p.getUiLabel(), v)).findFirst().ifPresent(s -> config.setReceiverPartID(s.getPartId()));
