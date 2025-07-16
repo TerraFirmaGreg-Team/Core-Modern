@@ -234,7 +234,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             senderDistinctCircuit.setCircuitInventory(senderCircuitInv);
             senderDistinctCircuit.setCircuitValue(config.getSenderDistinctInventory());
             senderCircuitInv.setOnContentsChanged(() -> {
-                config.setSenderDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderDistinctCircuit.getItem()));
+                config.setSenderDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderCircuitInv.getStackInSlot(0)));
                 updateIfServer();
 
             });
@@ -246,7 +246,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             receiverDistinctCircuit.setCircuitInventory(receiverCircuitInv);
             receiverDistinctCircuit.setCircuitValue(config.getReceiverDistinctInventory());
             receiverCircuitInv.setOnContentsChanged(() -> {
-                config.setReceiverDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderDistinctCircuit.getItem()));
+                config.setReceiverDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(receiverCircuitInv.getStackInSlot(0)));
                 updateIfServer();
 
             });
