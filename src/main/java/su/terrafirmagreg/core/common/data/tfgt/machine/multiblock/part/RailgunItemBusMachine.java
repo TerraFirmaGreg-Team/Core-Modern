@@ -4,12 +4,19 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CircuitFancyConfigurator;
+import com.gregtechceu.gtceu.api.machine.feature.IRedstoneSignalMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
+import lombok.Getter;
+import lombok.Setter;
+import net.minecraft.core.Direction;
 import org.jetbrains.annotations.NotNull;
 
-public class RailgunItemBusMachine extends ItemBusPartMachine {
+public class RailgunItemBusMachine extends ItemBusPartMachine implements IRedstoneSignalMachine {
+    @Getter @Setter
+    private int currentCircuit;
+
     public RailgunItemBusMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
     }
@@ -24,5 +31,10 @@ public class RailgunItemBusMachine extends ItemBusPartMachine {
     public void attachConfigurators(@NotNull ConfiguratorPanel configuratorPanel) {
         superAttachConfigurators(configuratorPanel);
         configuratorPanel.attachConfigurators(new CircuitFancyConfigurator(circuitInventory.storage));
+    }
+
+    @Override
+    public boolean canConnectRedstone(@NotNull Direction side) {
+        return side != getFrontFacing();
     }
 }

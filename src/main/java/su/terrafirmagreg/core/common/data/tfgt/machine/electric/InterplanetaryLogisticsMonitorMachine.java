@@ -44,7 +44,8 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
         private InterplanetaryLogisticsNetwork network;
 
         private void updateIfServer() {
-            if (network != null) network.markDirty();
+            if (network == null) return;
+            network.markDirty();
         }
 
         public InterplanetaryLogisticsManagerWidget(Player accessor) {
@@ -165,8 +166,8 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 containerPadding.setDynamicSized(true);
                 var newEntry = new NetworkSenderConfigEntry(part.getPartId());
                 part.senderLogisticsConfigs.add(newEntry);
-                configListContainer.addWidget(configListContainer.widgets.size() - 1, createSenderLogisticsConfigRow(part, newEntry));
                 updateIfServer();
+                configListContainer.addWidget(configListContainer.widgets.size() - 1, createSenderLogisticsConfigRow(part, newEntry));
             }));
 
             group.addWidget(topRow).addWidget(configListContainer);
@@ -178,7 +179,9 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
         private WidgetGroup createSenderLogisticsConfigRow(NetworkPart part, NetworkSenderConfigEntry config) {
             var group = new WidgetGroup(4, 4, INNER_WIDTH - 13, 50);
             group.setId("sendConfigRow");
+
             group.addWidget(new ButtonWidget(262, 19, 12, 12, GuiTextures.BUTTON_INT_CIRCUIT_MINUS, (c) -> {
+                var index = part.senderLogisticsConfigs.indexOf(config);
                 part.senderLogisticsConfigs.remove(config);
                 updateIfServer();
                 group.getParent().removeWidget(group);
@@ -206,7 +209,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             var itemFilterGroup = new WidgetGroup(Position.of(160, 2))
                     .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 0, 0, 0).setChangeListener(this::updateIfServer))
                     .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 1, 18, 0).setChangeListener(this::updateIfServer))
-                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 2, 36, 0).setChangeListener(this::updateIfServer));
+                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 2, 36, 0).setChangeListener((this::updateIfServer)));
 
             inactivityIntInput.setVisible(config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.INACTIVITY);
             itemFilterGroup.setVisible(config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM);
@@ -232,6 +235,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             senderCircuitInv.setOnContentsChanged(() -> {
                 config.setSenderDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderDistinctCircuit.getItem()));
                 updateIfServer();
+
             });
 
             group.addWidget(new LabelWidget(65, 27, "Receiver:"));
@@ -243,6 +247,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             receiverCircuitInv.setOnContentsChanged(() -> {
                 config.setReceiverDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderDistinctCircuit.getItem()));
                 updateIfServer();
+
             });
 
             group.addWidget(senderDistinctCircuit).addWidget(receiverDistinctCircuit);
@@ -287,6 +292,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 var cooldownIntInput = new IntInputWidget(160, 5, 100, 20, config::getCurrentCooldown, (v) -> {
                     config.setCurrentCooldown(v);
                     updateIfServer();
+
                 });
                 cooldownIntInput.setMin(0).setMax(1800);
                 cooldownIntInput.setVisible(config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.COOLDOWN);

@@ -92,6 +92,7 @@ public class InterplanetaryLogisticsNetwork {
         return loadedMachines.get(partId);
     }
 
+
     public void markDirty() {
         data.setDirty();
     }
@@ -117,13 +118,11 @@ public class InterplanetaryLogisticsNetwork {
         default List<NetworkSenderConfigEntry> getSendConfigurations() {
             return Collections.unmodifiableList(Objects.requireNonNull(getLogisticsNetwork().getPart(getDimensionalPos())).senderLogisticsConfigs);
         }
-
-        void onLogisticsConfigurationsChanged();
     }
 
     public non-sealed interface ILogisticsNetworkReceiver extends ILogisticsNetworkMachine {
         boolean canAcceptItems(int inventoryIndex, List<ItemStack> stacks);
-        void onPackageSent(DimensionalBlockPos sentFrom, List<ItemStack> items, long sentTick);
+        void onPackageSent(int inventoryIndex, List<ItemStack> items, int travelDuration);
     }
 
     public static class NetworkPart {
@@ -250,7 +249,7 @@ public class InterplanetaryLogisticsNetwork {
         public enum TriggerMode implements EnumSelectorWidget.SelectableEnum {
             ITEM("Item", "transfer_any"),
             REDSTONE_SIGNAL("Redstone signal", "transfer_any"),
-            INACTIVITY("Inactivity", "transfer_any");
+            INACTIVITY("Inactivity (seconds)", "transfer_any");
 
             @Getter
             public final String tooltip;
