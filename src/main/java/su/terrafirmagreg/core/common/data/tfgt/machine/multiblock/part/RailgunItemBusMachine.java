@@ -8,15 +8,10 @@ import com.gregtechceu.gtceu.api.machine.feature.IRedstoneSignalMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
-import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.NotNull;
 
 public class RailgunItemBusMachine extends ItemBusPartMachine implements IRedstoneSignalMachine {
-    @Getter @Setter
-    private int currentCircuit;
-
     public RailgunItemBusMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
     }

@@ -181,7 +181,6 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             group.setId("sendConfigRow");
 
             group.addWidget(new ButtonWidget(262, 19, 12, 12, GuiTextures.BUTTON_INT_CIRCUIT_MINUS, (c) -> {
-                var index = part.senderLogisticsConfigs.indexOf(config);
                 part.senderLogisticsConfigs.remove(config);
                 updateIfServer();
                 group.getParent().removeWidget(group);
@@ -230,7 +229,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
             var senderDistinctCircuit = new GhostCircuitSlotWidget();
             senderDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY).setSelfPosition(40, 25);
-            senderDistinctCircuit.setCircuitInventory(new CustomItemStackHandler(1));
+            senderDistinctCircuit.setCircuitInventory(senderCircuitInv);
             senderDistinctCircuit.setCircuitValue(config.getSenderDistinctInventory());
             senderCircuitInv.setOnContentsChanged(() -> {
                 config.setSenderDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderDistinctCircuit.getItem()));
@@ -242,7 +241,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
             var receiverDistinctCircuit = new GhostCircuitSlotWidget();
             receiverDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY).setSelfPosition(115, 25);
-            receiverDistinctCircuit.setCircuitInventory(new CustomItemStackHandler(1));
+            receiverDistinctCircuit.setCircuitInventory(receiverCircuitInv);
             receiverDistinctCircuit.setCircuitValue(config.getReceiverDistinctInventory());
             receiverCircuitInv.setOnContentsChanged(() -> {
                 config.setReceiverDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderDistinctCircuit.getItem()));

@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.lowdragmc.lowdraglib.syncdata.ITagSerializable;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
@@ -16,7 +17,6 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
@@ -30,15 +30,13 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         return MANAGED_FIELD_HOLDER;
     }
 
-    private List<ItemPayload> payloads = new ArrayList<>();
+    private final List<ItemPayload> payloads = new ArrayList<>();
 
-    @SuppressWarnings("unchecked")
-    private final List<RailgunItemBusMachine>[] itemOutputs = new List[33];
+    private final List<RailgunItemBusMachine> itemOutputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
 
     public InterplanetaryItemReceiverMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
-        Arrays.fill(itemOutputs, new ArrayList<>());
     }
 
     public InterplanetaryItemReceiverMachine getMachine() {
@@ -68,30 +66,15 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         var server = Objects.requireNonNull(getLevel()).getServer();
         if (server == null) return;
         Arrays.fill(lastActiveTime, getLevel().getGameTime());
-        for (var inventory: getInventories()) {
-            var circuit = IntCircuitBehaviour.getCircuitConfiguration(inventory.getCircuitInventory().getStackInSlot(0));
-            inventory.setCurrentCircuit(circuit);
-            itemOutputs[circuit].add(inventory);
-            TFGCore.LOGGER.info("Inventory: {} {} registered on circuit {}", inventory.getDefinition().getName(), inventory.getDefinition().getTier(), circuit);
-            inventory.getCircuitInventory().addChangedListener(() -> {
-                var newCircuit = IntCircuitBehaviour.getCircuitConfiguration(inventory.getCircuitInventory().getStackInSlot(0));
-                if (newCircuit == inventory.getCurrentCircuit()) return;
-                itemOutputs[inventory.getCurrentCircuit()].remove(inventory);
-                TFGCore.LOGGER.info("Inventory: {} {} circuit {} -> {}", inventory.getDefinition().getName(), inventory.getDefinition().getTier(), inventory.getCurrentCircuit(), newCircuit);
-                inventory.setCurrentCircuit(newCircuit);
-                itemOutputs[newCircuit].add(inventory);
-            });
-
-        }
+        itemOutputs.clear();
+        itemOutputs.addAll(getInventories());
 
     }
 
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
-        for (List<RailgunItemBusMachine> itemOutput : itemOutputs) {
-            itemOutput.clear();
-        }
+        itemOutputs.clear();
     }
 
     @Override
@@ -111,19 +94,20 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     @Override
     public boolean canAcceptItems(int inventoryIndex, List<ItemStack> stacks) {
-        if (itemOutputs[inventoryIndex].isEmpty()) return false;
+        var withCircuit = itemOutputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == inventoryIndex && c.isWorkingEnabled()).toList();
+        if (withCircuit.isEmpty()) return false;
 
         var config = Objects.requireNonNull(getLogisticsNetwork().getPart(getDimensionalPos())).receiverLogisticsConfigs.get(inventoryIndex);
         var currentTick = Objects.requireNonNull(getLevel()).getGameTime();
         if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.COOLDOWN && lastActiveTime[inventoryIndex]+ 20L *config.getCurrentCooldown() > currentTick) {
             return false;
         } else if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.REDSTONE_DISABLE) {
-            for (var bus: itemOutputs[inventoryIndex]) {
+            for (var bus: withCircuit) {
                 if (getLevel().hasNeighborSignal(bus.getPos())) return false;
             }
         } else if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.REDSTONE_ENABLE) {
             var hasFoundSignal = false;
-            for (var bus: itemOutputs[inventoryIndex]) {
+            for (var bus: withCircuit) {
                 if (getLevel().hasNeighborSignal(bus.getPos())) {
                     hasFoundSignal = true;
                     break;
@@ -132,28 +116,40 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
             if (!hasFoundSignal) return false;
         }
 
-        for (ItemStack itemToInsert : stacks) {
-            var amountLeft = itemToInsert.copy();
-            for (RailgunItemBusMachine outputBus: itemOutputs[inventoryIndex]) {
-                var inventory = outputBus.getInventory();
-                for (int i=0; i<inventory.getSlots(); i++) {
-                    amountLeft = inventory.insertItemInternal(i, amountLeft, true);
-                    if (amountLeft == ItemStack.EMPTY) break;
-                }
-                if (amountLeft == ItemStack.EMPTY) break;
-            }
-            if (amountLeft != ItemStack.EMPTY) return false;
+        List<ItemStack> remaining = new ArrayList<>();
+
+        for (var stack: stacks) {
+            remaining.add(stack.copy());
         }
-        return true;
+
+
+        for (RailgunItemBusMachine outputBus: withCircuit) {
+            var inventory = outputBus.getInventory();
+            CustomItemStackHandler simulatedInsert = new CustomItemStackHandler(outputBus.getInventory().getSlots());
+            for (int i=0; i<inventory.getSlots(); i++) {
+                simulatedInsert.setStackInSlot(i, inventory.getStackInSlot(i).copy());
+            }
+
+            for (var iter = remaining.listIterator(); iter.hasNext();) {
+                var stack = iter.next();
+                for (int i=0; i<simulatedInsert.getSlots(); i++) {
+                    stack = simulatedInsert.insertItem(i, stack, false);
+                }
+                if (stack.isEmpty()) iter.remove();
+            }
+        }
+
+        return remaining.isEmpty();
     }
 
     private void onPackageArrival(ItemPayload payload) {
         payloads.remove(payload);
         lastActiveTime[payload.inventoryIndex] = Objects.requireNonNull(getLevel()).getGameTime();
+        var withCircuit = itemOutputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == payload.inventoryIndex && c.isWorkingEnabled()).toList();
 
         for (ItemStack itemToInsert : payload.items) {
             var amountLeft = itemToInsert.copy();
-            for (RailgunItemBusMachine outputBus: itemOutputs[payload.inventoryIndex]) {
+            for (RailgunItemBusMachine outputBus: withCircuit) {
                 var inventory = outputBus.getInventory();
                 for (int i=0; i<inventory.getSlots(); i++) {
                     amountLeft = inventory.insertItemInternal(i, amountLeft, false);

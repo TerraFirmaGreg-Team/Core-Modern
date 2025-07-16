@@ -28,7 +28,6 @@ import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,8 +47,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     private EnergyContainerList energyInputs;
 
-    @SuppressWarnings("unchecked")
-    private final List<RailgunItemBusMachine>[] itemInputs = new List[33];
+    private final List<RailgunItemBusMachine> itemInputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
 
     private RailgunAmmoLoaderMachine ammoLoaderPart;
@@ -57,7 +55,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     public InterplanetaryItemLauncherMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
         energyBuffer = 0;
-        Arrays.fill(itemInputs, new ArrayList<>());
     }
 
     public InterplanetaryItemLauncherMachine getMachine() {
@@ -103,6 +100,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         super.onStructureFormed();
         // Collect multiblock parts
         List<IEnergyContainer> energyHatches = new ArrayList<>();
+        itemInputs.clear();
         for (var part: getParts()) {
 
             if (part instanceof EnergyHatchPartMachine energyHatch) {
@@ -112,20 +110,11 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             if (part instanceof RailgunAmmoLoaderMachine ammo) {
                 ammoLoaderPart = ammo;
             }
-        }
 
-        for (var inventory: getInventories()) {
-            var circuit = IntCircuitBehaviour.getCircuitConfiguration(inventory.getCircuitInventory().getStackInSlot(0));
-            inventory.setCurrentCircuit(circuit);
-            itemInputs[circuit].add(inventory);
-            inventory.getCircuitInventory().addChangedListener(() -> {
-                var newCircuit = IntCircuitBehaviour.getCircuitConfiguration(inventory.getCircuitInventory().getStackInSlot(0));
-                if (newCircuit == inventory.getCurrentCircuit()) return;
-                itemInputs[inventory.getCurrentCircuit()].remove(inventory);
-                inventory.setCurrentCircuit(newCircuit);
-                itemInputs[newCircuit].add(inventory);
-            });
-            inventory.getInventory().addChangedListener(() -> lastActiveTime[inventory.getCurrentCircuit()] = Objects.requireNonNull(getLevel()).getGameTime());
+            if (part instanceof RailgunItemBusMachine bus) {
+                itemInputs.add(bus);
+                bus.getInventory().addChangedListener(() -> lastActiveTime[IntCircuitBehaviour.getCircuitConfiguration(bus.getCircuitInventory().getStackInSlot(0))] = Objects.requireNonNull(getLevel()).getGameTime());
+            }
         }
 
         energyInputs = new EnergyContainerList(energyHatches);
@@ -138,10 +127,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         energyInputs = null;
         energyBuffer = 0;
         ammoLoaderPart = null;
-
-        for (var inputs: itemInputs) {
-            inputs.clear();
-        }
+        itemInputs.clear();
     }
 
     @Override
@@ -186,7 +172,9 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             return;
         }
         for (var config: getSendConfigurations()) {
-            if (itemInputs[config.getSenderDistinctInventory()].isEmpty() || config.getReceiverPartID() == null) continue;
+            var withCircuit = itemInputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == config.getSenderDistinctInventory()
+                    && c.isWorkingEnabled() && !c.getInventory().isEmpty()).toList();
+            if (withCircuit.isEmpty() || config.getReceiverPartID() == null) continue;
             var result = tryLaunchItemPayload(config);
             if (result) return;
         }
@@ -197,14 +185,16 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         if (!(destination instanceof ILogisticsNetworkReceiver receiver)) return false;
 
         List<ItemStack> itemsToExtract = new ArrayList<>();
-
+        var itemBuses = itemInputs.stream().filter((c) ->
+                IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == config.getSenderDistinctInventory() && c.isWorkingEnabled() && !c.getInventory().isEmpty()).toList();
+        if (itemBuses.isEmpty()) return false;
         if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM) {
             for (int i = 0; i < config.getCurrentSendFilter().getSlots(); i++) {
                 itemsToExtract.add(config.getCurrentSendFilter().getStackInSlot(i));
             }
         } else if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.REDSTONE_SIGNAL) {
            boolean hasAnySignal = false;
-            for (var bus: itemInputs[config.getSenderDistinctInventory()]) {
+            for (var bus: itemBuses) {
                 if (Objects.requireNonNull(getLevel()).hasNeighborSignal(bus.getPos())) {
                     hasAnySignal = true;
                     break;
@@ -219,7 +209,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
         if (itemsToExtract.isEmpty()) {
             int matched = 0;
-            for (var bus: itemInputs[config.getSenderDistinctInventory()]) {
+            for (var bus: itemBuses) {
                 if (bus.getInventory().isEmpty()) continue;
                 for (int i = 0; i<bus.getInventory().getSlots(); i++) {
                     var stack = bus.getInventory().getStackInSlot(i);
@@ -232,10 +222,17 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             }
         }
 
-        if (itemsToExtract.isEmpty()) return false;
-        if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true)) return false;
-
-        if (!receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) return false;
+        if (itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
+        if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
+            if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM) return false;
+            itemsToExtract.remove(2);
+            if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
+                itemsToExtract.remove(1);
+                if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
+                    return false;
+                }
+            }
+        }
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
         if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 100);
         return true;
@@ -266,7 +263,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         for (var v: toExtract) {
             remainingItems.add(v.copy());
         }
-        for (RailgunItemBusMachine bus: itemInputs[circuit]) {
+        var itemBuses = itemInputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == circuit && c.isWorkingEnabled()).toList();
+        for (RailgunItemBusMachine bus: itemBuses) {
             tryExtractFromInventory(remainingItems, bus.getInventory().storage, simulated);
             if (remainingItems.isEmpty()) return true;
         }
