@@ -5,10 +5,7 @@ import com.eerussianguy.firmalife.common.blocks.OvenType;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
-import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.data.recipe.CraftingComponent;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
@@ -77,15 +74,28 @@ public class TFGTRecipes {
 				'D', GTBlocks.STEEL_HULL.get()
 		);
 
-		GTRecipeTypes.ASSEMBLER_RECIPES.recipeBuilder(TFGCore.id("interplanetary_link"))
-				.EUt(GTValues.VA[GTValues.HV])
-				.duration(100)
-				.inputItems(GTItems.COVER_SCREEN, 1)
-				.inputItems(GTItems.SENSOR_HV, 2)
-				.inputItems(GTItems.EMITTER_HV, 2)
-				.inputItems(CustomTags.HV_CIRCUITS, 2)
-				.inputItems(ChemicalHelper.get(TagPrefix.foil, GTMaterials.StainlessSteel, 16))
-				.outputItems(TFGMachines.INTERPLANETARY_LOGISTICS_MONITOR, 1)
-				.save(provider);
+		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("interplanetary_monitor"), TFGMachines.INTERPLANETARY_LOGISTICS_MONITOR.asStack(),
+				"CDC", "SHE", "WCW",
+				'C', CustomTags.HV_CIRCUITS,
+				'D', GTItems.COVER_SCREEN,
+				'S', GTItems.SENSOR_HV,
+				'H', GTMachines.HULL[GTValues.HV].asStack(),
+				'E', GTItems.EMITTER_HV,
+				'W', ChemicalHelper.get(TagPrefix.cableGtSingle, GTMaterials.Silver));
+
+		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("interplanetary_launcher"), TFGMultiMachines.INTERPLANETARY_ITEM_LAUNCHER.asStack(),
+				"NSN", "CHC", "NEN",
+				'C', CustomTags.IV_CIRCUITS,
+				'S', GTItems.SENSOR_HV,
+				'E', GTItems.EMITTER_HV,
+				'H', GTMachines.HULL[GTValues.EV].asStack(),
+				'N', ChemicalHelper.get(TagPrefix.plate, GTMaterials.HSLASteel));
+
+		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("interplanetary_receiver"), TFGMultiMachines.INTERPLANETARY_ITEM_RECEIVER.asStack(),
+				"CSC", "WHW", "CSC",
+				'C', CustomTags.MV_CIRCUITS,
+				'S', GTItems.SENSOR_MV,
+				'W', ChemicalHelper.get(TagPrefix.cableGtDouble, GTMaterials.Copper),
+				'H', GTMachines.HULL[GTValues.MV].asStack());
 	}
 }

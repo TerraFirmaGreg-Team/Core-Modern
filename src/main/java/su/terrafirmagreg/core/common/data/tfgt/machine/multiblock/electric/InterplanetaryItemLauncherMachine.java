@@ -20,9 +20,11 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
@@ -172,6 +174,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             return;
         }
         for (var config: getSendConfigurations()) {
+            if (ammoLoaderPart.getInventory().isEmpty()) return;
             var withCircuit = itemInputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == config.getSenderDistinctInventory()
                     && c.isWorkingEnabled() && !c.getInventory().isEmpty()).toList();
             if (withCircuit.isEmpty() || config.getReceiverPartID() == null) continue;
@@ -221,8 +224,9 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 if (matched == 3) break;
             }
         }
-
         if (itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
+
+        ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
         if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
             if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM) return false;
             itemsToExtract.remove(2);
@@ -234,6 +238,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             }
         }
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
+        itemsToExtract.add(new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse("tfg:spent_railgun_shell")))));
         if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 100);
         return true;
     }
