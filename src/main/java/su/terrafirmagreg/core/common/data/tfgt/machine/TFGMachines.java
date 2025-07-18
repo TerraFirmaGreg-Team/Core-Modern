@@ -18,11 +18,8 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.AqueousAccumulatorMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.InterplanetaryLogisticsMonitorMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.SimpleFoodProcessingMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.FoodRefrigeratorMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
 import java.util.function.BiFunction;
@@ -100,6 +97,19 @@ public class TFGMachines {
 					TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 				.tooltips(GTMachineUtils.explosion())
 				.register(),
+			GTMachineUtils.LOW_TIERS);
+
+	public static final MachineDefinition[] GAS_PRESSURIZER =
+		registerTieredMachines("gas_pressurizer",
+			GasPressurizerMachine::new, (tier, builder) -> builder
+			   .langValue("%s Gas Pressurizer %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
+			   .rotationState(RotationState.NON_Y_AXIS)
+			   .recipeType(TFGRecipeTypes.GAS_PRESSURIZER_RECIPES)
+			   .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
+			   .workableTieredHullRenderer(GTCEu.id("block/machines/gas_pressurizer"))
+			   .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+				   TFGRecipeTypes.GAS_PRESSURIZER_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
+			   .register(),
 			GTMachineUtils.LOW_TIERS);
 
 	public static final MachineDefinition[] RAILGUN_ITEM_LOADER_IN = registerTieredMachines("railgun_item_loader_in", (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.IN),

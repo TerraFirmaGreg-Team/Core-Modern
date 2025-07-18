@@ -44,7 +44,7 @@ public class TFGTRecipes {
 			'O', CraftingComponent.PISTON);
 
 		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.FOOD_PROCESSOR,
-			"BGB", "MHW", "AVP",
+			"BGC", "MHW", "AVP",
 			'H', CraftingComponent.HULL,
 			'B', CraftingComponent.CABLE,
 			'A', CraftingComponent.CONVEYOR,
@@ -52,6 +52,7 @@ public class TFGTRecipes {
 			'M', CraftingComponent.GRINDER,
 			'P', CraftingComponent.PUMP,
 			'G', CraftingComponent.GLASS,
+			'C', CraftingComponent.CIRCUIT,
 			// This is replaced with Greate's Whisk in kubejs
 			'W', CraftingComponent.PISTON);
 
@@ -64,6 +65,16 @@ public class TFGTRecipes {
 			'H', CraftingComponent.HULL,
 			'P', CraftingComponent.PUMP,
 			'R', CraftingComponent.ROTOR);
+
+		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.GAS_PRESSURIZER,
+			"GIG", "RHC", "EPE",
+			'H', CraftingComponent.HULL,
+			'I', CraftingComponent.PISTON,
+			'P', CraftingComponent.PUMP,
+			'R', CraftingComponent.ROTOR,
+			'C', CraftingComponent.CIRCUIT,
+			'G', CraftingComponent.GLASS,
+			'E', CraftingComponent.PIPE_NORMAL);
 
 		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("electric_greenhouse"),
 			TFGMultiMachines.ELECTRIC_GREENHOUSE.asStack(),
