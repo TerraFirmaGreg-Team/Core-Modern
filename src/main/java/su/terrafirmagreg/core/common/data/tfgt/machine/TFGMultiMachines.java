@@ -2,9 +2,11 @@ package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.block.IMachineBlock;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
@@ -23,6 +25,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
@@ -39,7 +42,7 @@ public class TFGMultiMachines {
 					.appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
 					.workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"), GTCEu.id("block/multiblock/implosion_compressor"), false)
 					.pattern(definition -> {
-
+							IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_IN).map(MachineDefinition::get).toArray(IMachineBlock[]::new);
 							return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.FRONT, RelativeDirection.UP)
 									.aisle( "F###F",
 											"#SSS#",
@@ -67,33 +70,36 @@ public class TFGMultiMachines {
 											"#FCF#",
 											"#####").setRepeatable(4)
 									.where('y', Predicates.controller(Predicates.blocks(definition.get())))
-									.where('#', Predicates.air())
+									.where('#', Predicates.any())
 									.where('F', Predicates.frames(GTMaterials.Aluminium))
 									.where('S', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
 									.where('C', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
 									.where('E', Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(2))
-									.where('s', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()).or(Predicates.blocks(TFGMachines.RAILGUN_ITEM_LOADER_IN.get()).setMinGlobalLimited(1)))
+									.where('s', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()).or(Predicates.blocks(inputBuses).setMinGlobalLimited(1)))
 										.build();
 							}
 					).register();
 
-	public static final MultiblockMachineDefinition INTERPLANETARY_ITEM_RECIEVER =
-			REGISTRATE.multiblock("interplanetary_item_reciever", InterplanetaryItemRecieverMachine::new)
+	public static final MultiblockMachineDefinition INTERPLANETARY_ITEM_RECEIVER =
+			REGISTRATE.multiblock("interplanetary_item_receiver", InterplanetaryItemReceiverMachine::new)
 					.rotationState(RotationState.NON_Y_AXIS)
 					.recipeType(GTRecipeTypes.DUMMY_RECIPES)
 					.noRecipeModifier()
 					.appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
 					.sidedWorkableCasingRenderer("block/casings/steam/steel", GTCEu.id("block/multiblock/implosion_compressor"), false)
-					.pattern( def -> FactoryBlockPattern.start()
-							.aisle("sys", "SSS", "SCS")
-							.aisle("sSs", "S#S", "C#C")
-							.aisle("sss", "SSS", "SCS")
-							.where('#', Predicates.air())
-							.where('y', Predicates.controller(Predicates.blocks(def.get())))
-							.where('s', Predicates.blocks(GTBlocks.STEEL_HULL.get()).or(Predicates.abilities(PartAbility.INPUT_ENERGY).or(Predicates.blocks(TFGMachines.RAILGUN_ITEM_LOADER_OUT.get()))))
-							.where('S', Predicates.blocks(GTBlocks.STEEL_HULL.get()))
-							.where('C', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
-							.build())
+					.pattern( def -> {
+						IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_OUT).map(MachineDefinition::get).toArray(IMachineBlock[]::new);
+						return FactoryBlockPattern.start()
+								.aisle("sys", "SSS", "SCS")
+								.aisle("sSs", "S#S", "C#C")
+								.aisle("sss", "SSS", "SCS")
+								.where('#', Predicates.air())
+								.where('y', Predicates.controller(Predicates.blocks(def.get())))
+								.where('s', Predicates.blocks(GTBlocks.STEEL_HULL.get()).or(Predicates.abilities(PartAbility.INPUT_ENERGY).or(Predicates.blocks(inputBuses))))
+								.where('S', Predicates.blocks(GTBlocks.STEEL_HULL.get()))
+								.where('C', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
+								.build();
+					})
 					.register();
 
 	public static final MultiblockMachineDefinition ELECTRIC_GREENHOUSE =
@@ -105,28 +111,24 @@ public class TFGMultiMachines {
 		.sidedWorkableCasingRenderer("block/casings/steam/steel", GTCEu.id("block/multiblock/implosion_compressor"), false)
 		.pattern(definition -> FactoryBlockPattern.start()
 			.aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
-			.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", " XXFXX ")
-			.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", " XXFXX ")
-			.aisle("CDDDDDC", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "FFFFFFF")
-			.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", " XXFXX ")
-			.aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", " XXFXX ")
+			.aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
+			.aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
+			.aisle("CDDDDDC", "F     F", "F     F", "F     F", "F     F", "F     F", "F     F", "F     F", "FFFFFFF")
+			.aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
+			.aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
 			.aisle("CCCYCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
 			.where('Y', Predicates.controller(Predicates.blocks(definition.get())))
 			.where('C', Predicates.blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(15)
 				.or(Predicates.autoAbilities(definition.getRecipeTypes()))
 				.or(Predicates.autoAbilities(true, false, false)))
-			.where('#', Predicates.air()
-				.or(Predicates.blockTag(BlockTags.LOGS))
-				.or(Predicates.blockTag(BlockTags.LEAVES))
-				.or(Predicates.blockTag(TFCTags.Blocks.PLANTS))
-				// Apparently TFC likes to sometimes spawn loose rocks on top of grass, including inside the greenhouse?
-				.or(Predicates.blockTag(dev.latvian.mods.kubejs.util.Tags.block(ResourceLocation.fromNamespaceAndPath("tfc", "loose_rocks")))))
 			.where(' ', Predicates.any())
 			.where('F', Predicates.frames(GTMaterials.Steel))
 			.where('X', Predicates.blockTag(Tags.Blocks.GLASS)
 				.or(Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_glass")))))
 			.where('D', Predicates.blockTag(BlockTags.DIRT)
-				.or(Predicates.blockTag(TFCTags.Blocks.GRASS)))
+				.or(Predicates.blockTag(TFCTags.Blocks.GRASS))
+				.or(Predicates.blockTag(BlockTags.SAND))
+				.or(Predicates.blockTag(TFCTags.Blocks.FARMLAND)))
 			.build())
 		.shapeInfos(definition -> {
 			List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();

@@ -67,6 +67,8 @@
     "common.simply_stacked_dimensions.TeleportHandlerMixin",
     "common.species.BirtMixin",
     "common.species.LimpetMixin",
+    "common.steamnrails.CRExtraRegistrationImplMixin",
+    "common.steamnrails.CRExtraRegistrationMixin",
     "common.tfc.BlastFurnaceBlockEntityMixin",
     "common.tfc.BloomeryBlockEntityMixin",
     "common.tfc.CharcoalForgeBlockMixin",

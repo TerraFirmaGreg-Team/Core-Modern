@@ -59,11 +59,6 @@ public abstract class GTRecipeTypesMixin {
         CENTRIFUGE_RECIPES.setMaxIOSize(3, 6, 1, 6);
         CENTRIFUGE_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
 
-        COMPRESSOR_RECIPES.setMaxIOSize(2, 1, 3, 1);
-        COMPRESSOR_RECIPES.setSlotOverlay(false, false, true, GuiTextures.CIRCUIT_OVERLAY);
-        COMPRESSOR_RECIPES.setSlotOverlay(false, true, false, GuiTextures.COMPRESSOR_OVERLAY);
-        COMPRESSOR_RECIPES.setSlotOverlay(false, true, true, GuiTextures.COMPRESSOR_OVERLAY);
-
         IMPLOSION_RECIPES.setMaxIOSize(6, 2, 0, 0);
 
         FERMENTING_RECIPES.setMaxIOSize(2, 1, 1, 1);

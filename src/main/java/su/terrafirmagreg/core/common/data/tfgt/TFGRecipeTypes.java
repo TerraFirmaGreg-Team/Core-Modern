@@ -57,7 +57,7 @@ public class TFGRecipeTypes {
 			.setMaxIOSize(1, 0, 0, 1)
 			.setEUIO(IO.IN)
 			.setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
-			.setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
+			.setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.LEFT_TO_RIGHT)
 			.setMaxTooltips(4)
 			.setSound(GTSoundEntries.BATH)
 			.prepareBuilder(recipeBuilder -> recipeBuilder.addCondition(RockBreakerCondition.INSTANCE))
@@ -69,5 +69,13 @@ public class TFGRecipeTypes {
 							.setBackground(GuiTextures.FLUID_SLOT).setShowAmount(false));
 				}
 			});
+
+	public final static GTRecipeType GAS_PRESSURIZER_RECIPES =
+		GTRecipeTypes.register("gas_pressurizer", GTRecipeTypes.ELECTRIC)
+			.setEUIO(IO.IN)
+			.setMaxIOSize(1, 1, 3, 1)
+			.setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
+			.setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, FillDirection.LEFT_TO_RIGHT)
+			.setSound(GTSoundEntries.COMPRESSOR);
 
 }

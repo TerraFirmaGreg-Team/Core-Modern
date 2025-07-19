@@ -18,11 +18,9 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.AqueousAccumulatorMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.InterplanetaryLogisticsMonitorMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.SimpleFoodProcessingMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.FoodRefrigeratorMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
 import java.util.function.BiFunction;
 
@@ -101,28 +99,36 @@ public class TFGMachines {
 				.register(),
 			GTMachineUtils.LOW_TIERS);
 
-	public static final MachineDefinition RAILGUN_ITEM_LOADER_IN = REGISTRATE.machine("railgun_item_loader_in",
-                    (holder) -> new ItemBusPartMachine(holder, 2, IO.IN) {
-						@Override
-						public void attachConfigurators(@NotNull ConfiguratorPanel configuratorPanel) {
-							superAttachConfigurators(configuratorPanel);
-						}
-					})
-			.rotationState(RotationState.ALL)
-			.renderer(() -> new OverlayTieredMachineRenderer(3, GTCEu.id("block/machine/part/item_bus.import")))
-			.register();
+	public static final MachineDefinition[] GAS_PRESSURIZER =
+		registerTieredMachines("gas_pressurizer",
+			GasPressurizerMachine::new, (tier, builder) -> builder
+			   .langValue("%s Gas Pressurizer %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
+			   .rotationState(RotationState.NON_Y_AXIS)
+			   .recipeType(TFGRecipeTypes.GAS_PRESSURIZER_RECIPES)
+			   .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
+			   .workableTieredHullRenderer(GTCEu.id("block/machines/gas_pressurizer"))
+			   .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+				   TFGRecipeTypes.GAS_PRESSURIZER_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
+			   .register(),
+			GTMachineUtils.LOW_TIERS);
 
-	public static final MachineDefinition RAILGUN_ITEM_LOADER_OUT = REGISTRATE.machine("railgun_item_loader_out",
-					(holder) -> new ItemBusPartMachine(holder, 2, IO.OUT) {
-						@Override
-						public void attachConfigurators(@NotNull ConfiguratorPanel configuratorPanel) {
-							superAttachConfigurators(configuratorPanel);
-						}
-					})
-			.rotationState(RotationState.ALL)
-			.renderer(() -> new OverlayTieredMachineRenderer(3, GTCEu.id("block/machine/part/item_bus.export")))
-			.abilities(PartAbility.EXPORT_ITEMS)
-			.register();
+	public static final MachineDefinition[] RAILGUN_ITEM_LOADER_IN = registerTieredMachines("railgun_item_loader_in", (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.IN),
+			(tier, builder) ->
+			builder.langValue("%s Interplanetary Railgun Loader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
+					.rotationState(RotationState.ALL)
+					.renderer(() -> new OverlayTieredMachineRenderer(tier, GTCEu.id("block/machine/part/item_bus.import")))
+					.abilities(PartAbility.IMPORT_ITEMS)
+					.register(),
+			GTMachineUtils.ALL_TIERS);
+
+	public static final MachineDefinition[] RAILGUN_ITEM_LOADER_OUT = registerTieredMachines("railgun_item_loader_out", (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.OUT),
+			(tier, builder) ->
+					builder.langValue("%s Interplanetary Railgun Unloader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
+							.rotationState(RotationState.ALL)
+							.renderer(() -> new OverlayTieredMachineRenderer(tier, GTCEu.id("block/machine/part/item_bus.export")))
+							.abilities(PartAbility.EXPORT_ITEMS)
+							.register(),
+			GTMachineUtils.ALL_TIERS);
 
 	public static final MachineDefinition INTERPLANETARY_LOGISTICS_MONITOR = REGISTRATE.machine("interplanetary_logistics_monitor", InterplanetaryLogisticsMonitorMachine::new)
 			.rotationState(RotationState.NON_Y_AXIS)
