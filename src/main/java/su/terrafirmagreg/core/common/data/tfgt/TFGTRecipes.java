@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.data.recipe.CraftingComponent;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.gregtechceu.gtceu.data.recipe.GTCraftingComponents;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
 import net.dries007.tfc.common.items.TFCItems;
@@ -26,55 +27,55 @@ public class TFGTRecipes {
 
 		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.AQUEOUS_ACCUMULATOR,
 			"RPR", "CHC", "GGG",
-			'P', CraftingComponent.PUMP,
-			'R', CraftingComponent.ROTOR,
-			'C', CraftingComponent.CABLE,
-			'H', CraftingComponent.HULL,
-			'G', CraftingComponent.GLASS);
+			'P', GTCraftingComponents.PUMP,
+			'R', GTCraftingComponents.ROTOR,
+			'C', GTCraftingComponents.CABLE,
+			'H', GTCraftingComponents.HULL,
+			'G', GTCraftingComponents.GLASS);
 
 		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.FOOD_OVEN,
 			"DTD", "AHB", "COC",
 			'T', FLBlocks.CURED_OVEN_TOP.get(OvenType.BRICK).get(),
-			'H', CraftingComponent.HULL,
-			'A', CraftingComponent.ROBOT_ARM,
-			'B', CraftingComponent.CABLE,
-			'C', CraftingComponent.COIL_HEATING_DOUBLE,
-			'D', CraftingComponent.PLATE,
+			'H', GTCraftingComponents.HULL,
+			'A', GTCraftingComponents.ROBOT_ARM,
+			'B', GTCraftingComponents.CABLE,
+			'C', GTCraftingComponents.COIL_HEATING_DOUBLE,
+			'D', GTCraftingComponents.PLATE,
 			// This is replaced with #tfg:metal_bars in kubejs
-			'O', CraftingComponent.PISTON);
+			'O', GTCraftingComponents.PISTON);
 
 		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.FOOD_PROCESSOR,
 			"BGC", "MHW", "AVP",
-			'H', CraftingComponent.HULL,
-			'B', CraftingComponent.CABLE,
-			'A', CraftingComponent.CONVEYOR,
+			'H', GTCraftingComponents.HULL,
+			'B', GTCraftingComponents.CABLE,
+			'A', GTCraftingComponents.CONVEYOR,
 			'V', FLBlocks.VAT.get(),
-			'M', CraftingComponent.GRINDER,
-			'P', CraftingComponent.PUMP,
-			'G', CraftingComponent.GLASS,
-			'C', CraftingComponent.CIRCUIT,
+			'M', GTCraftingComponents.GRINDER,
+			'P', GTCraftingComponents.PUMP,
+			'G', GTCraftingComponents.GLASS,
+			'C', GTCraftingComponents.CIRCUIT,
 			// This is replaced with Greate's Whisk in kubejs
-			'W', CraftingComponent.PISTON);
+			'W', GTCraftingComponents.PISTON);
 
 		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.FOOD_REFRIGERATOR,
 			"CFC", "SHS", "PRP",
-			'C', CraftingComponent.CABLE,
-			'F', CraftingComponent.CIRCUIT,
+			'C', GTCraftingComponents.CABLE,
+			'F', GTCraftingComponents.CIRCUIT,
 			'S', ChemicalHelper.get(TagPrefix.plate, GTMaterials.Polyethylene),
 			// This is replaced with Hermetic Casing in kubejs
-			'H', CraftingComponent.HULL,
-			'P', CraftingComponent.PUMP,
-			'R', CraftingComponent.ROTOR);
+			'H', GTCraftingComponents.HULL,
+			'P', GTCraftingComponents.PUMP,
+			'R', GTCraftingComponents.ROTOR);
 
 		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.GAS_PRESSURIZER,
 			"GIG", "RHC", "EPE",
-			'H', CraftingComponent.HULL,
-			'I', CraftingComponent.PISTON,
-			'P', CraftingComponent.PUMP,
-			'R', CraftingComponent.ROTOR,
-			'C', CraftingComponent.CIRCUIT,
-			'G', CraftingComponent.GLASS,
-			'E', CraftingComponent.PIPE_NORMAL);
+			'H', GTCraftingComponents.HULL,
+			'I', GTCraftingComponents.PISTON,
+			'P', GTCraftingComponents.PUMP,
+			'R', GTCraftingComponents.ROTOR,
+			'C', GTCraftingComponents.CIRCUIT,
+			'G', GTCraftingComponents.GLASS,
+			'E', GTCraftingComponents.PIPE_NORMAL);
 
 		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("electric_greenhouse"),
 			TFGMultiMachines.ELECTRIC_GREENHOUSE.asStack(),
