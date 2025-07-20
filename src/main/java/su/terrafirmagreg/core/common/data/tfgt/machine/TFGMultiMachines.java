@@ -23,6 +23,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
+import su.terrafirmagreg.core.common.data.TFGBlocks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,27 +56,51 @@ public class TFGMultiMachines {
 											"sSCSs",
 											"FsysF")
 									.aisle( "F###F",
-											"#CCC#",
-											"#CCC#",
-											"#CCC#",
+											"#LCL#",
+											"#RCR#",
+											"#LCL#",
 											"F###F")
 									.aisle( "FFFFF",
-											"FCCCF",
-											"FC#CF",
-											"FCCCF",
+											"FLCLF",
+											"FRHRF",
+											"FLCLF",
 											"FFFFF")
 									.aisle( "#####",
-											"#FCF#",
+											"#L#L#",
+											"#R#R#",
+											"#L#L#",
+											"#####").setRepeatable(3)
+									.aisle( "#####",
+											"#CHC#",
+											"#R#R#",
+											"#CHC#",
+											"#####")
+									.aisle( "#####",
+											"#M#M#",
+											"#R#R#",
+											"#M#M#",
+											"#####").setRepeatable(3)
+									.aisle( "#####",
+											"#CHC#",
+											"#R#R#",
+											"#CHC#",
+											"#####")
+									.aisle( "#####",
 											"#C#C#",
-											"#FCF#",
-											"#####").setRepeatable(4)
+											"#R#R#",
+											"#C#C#",
+											"#####").setRepeatable(2)
 									.where('y', Predicates.controller(Predicates.blocks(definition.get())))
 									.where('#', Predicates.any())
 									.where('F', Predicates.frames(GTMaterials.Aluminium))
+									.where('H', Predicates.frames(GTMaterials.HSLASteel))
 									.where('S', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
 									.where('C', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
 									.where('E', Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(2))
 									.where('s', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()).or(Predicates.blocks(inputBuses).setMinGlobalLimited(1)))
+									.where('L', Predicates.blocks(TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK.get()))
+									.where('M', Predicates.blocks(TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK.get()))
+									.where('R', Predicates.blocks(TFGBlocks.ELECTROMAGNETIC_ACCELERATOR_BLOCK.get()))
 										.build();
 							}
 					).register();
