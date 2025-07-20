@@ -32,6 +32,9 @@ public class TFGCreativeTab {
 	{
 		accept(out, TFGBlocks.LUNAR_CHORUS_PLANT);
 		accept(out, TFGBlocks.LUNAR_CHORUS_FLOWER);
+		accept(out, TFGBlocks.ELECTROMAGNETIC_ACCELERATOR_BLOCK);
+		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK);
+		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK);
 
 		accept(out, TFGItems.PIGLIN_DISGUISE);
 		accept(out, TFGItems.TROWEL);
