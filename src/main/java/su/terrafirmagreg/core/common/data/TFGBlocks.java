@@ -80,6 +80,31 @@ public final class TFGBlocks {
 			.isViewBlocking((state, level, pos) -> false)
 			.isSuffocating((state, level, pos) -> false)));
 
+	// Multi block casings
+
+	public static final RegistryObject<Block> ELECTROMAGNETIC_ACCELERATOR_BLOCK = register("electromagnetic_accelerator",
+			() -> new ElectromagneticAcceleratorBlock(BlockBehaviour.Properties.of()
+					.mapColor(MapColor.COLOR_LIGHT_BLUE)
+					.strength(0.5f)
+					.sound(SoundType.COPPER)
+					.lightLevel(state -> 15)
+					.speedFactor(1.5f)
+			));
+
+	public static final RegistryObject<Block> SUPERCONDUCTOR_COIL_LARGE_BLOCK = register("superconductor_coil_large",
+			() -> new SimpleBlock(BlockBehaviour.Properties.of()
+					.mapColor(MapColor.COLOR_ORANGE)
+					.strength(0.5f)
+					.sound(SoundType.COPPER)
+			));
+
+	public static final RegistryObject<Block> SUPERCONDUCTOR_COIL_SMALL_BLOCK = register("superconductor_coil_small",
+			() -> new SimpleBlock(BlockBehaviour.Properties.of()
+					.mapColor(MapColor.COLOR_ORANGE)
+					.strength(0.5f)
+					.sound(SoundType.COPPER)
+			));
+
 
 	// Buds are generated automatically
 
