@@ -33,7 +33,7 @@ public class ElectromagneticAcceleratorBlock extends Block {
 		public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 			for (int i = 0; i < 4; i++) {
 				if (level.isClientSide) {
-					ParticleType<?> pt = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation("ae2", "lightning_fx"));
+					ParticleType<?> pt = ForgeRegistries.PARTICLE_TYPES.getValue(ResourceLocation.fromNamespaceAndPath("ae2", "lightning_fx"));
 					if (pt instanceof SimpleParticleType) {
 						level.addAlwaysVisibleParticle((SimpleParticleType) pt, true,
 								pos.getX() + 0.5 + (random.nextFloat() - 0.5) * 0.5,
