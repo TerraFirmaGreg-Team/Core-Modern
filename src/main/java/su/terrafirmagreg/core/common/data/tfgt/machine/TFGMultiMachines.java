@@ -41,7 +41,7 @@ public class TFGMultiMachines {
 					.recipeType(GTRecipeTypes.DUMMY_RECIPES)
 					.noRecipeModifier()
 					.appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-					.workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"), GTCEu.id("block/multiblock/implosion_compressor"), false)
+					.workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 					.pattern(definition -> {
 							IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_IN).map(MachineDefinition::get).toArray(IMachineBlock[]::new);
 							return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.FRONT, RelativeDirection.UP)
@@ -111,7 +111,7 @@ public class TFGMultiMachines {
 					.recipeType(GTRecipeTypes.DUMMY_RECIPES)
 					.noRecipeModifier()
 					.appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-					.sidedWorkableCasingRenderer("block/casings/steam/steel", GTCEu.id("block/multiblock/implosion_compressor"), false)
+					.sidedWorkableCasingModel(GTCEu.id("block/casings/steam/steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 					.pattern( def -> {
 						IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_OUT).map(MachineDefinition::get).toArray(IMachineBlock[]::new);
 						return FactoryBlockPattern.start()
@@ -133,7 +133,7 @@ public class TFGMultiMachines {
 		.recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
 		.recipeModifier(GTRecipeModifiers.OC_PERFECT)
 		.appearanceBlock(GTBlocks.STEEL_HULL)
-		.sidedWorkableCasingRenderer("block/casings/steam/steel", GTCEu.id("block/multiblock/implosion_compressor"), false)
+		.sidedWorkableCasingModel(GTCEu.id("block/casings/steam/steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 		.pattern(definition -> FactoryBlockPattern.start()
 			.aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
 			.aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")

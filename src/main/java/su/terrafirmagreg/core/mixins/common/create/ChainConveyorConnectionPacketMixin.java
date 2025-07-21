@@ -30,14 +30,11 @@ public abstract class ChainConveyorConnectionPacketMixin extends BlockEntityConf
     @WrapOperation( method = "applySettings(Lnet/minecraft/server/level/ServerPlayer;Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;)V", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;addConnectionTo(Lnet/minecraft/core/BlockPos;)Z"), remap = false)
     private boolean tfg$applySettings$addConnectionTo(ChainConveyorBlockEntity instance, BlockPos target, Operation<Boolean> original)
     {
-        MaterialStack chainMatStack = ChemicalHelper.getMaterial(chain.getItem());
-        if (chainMatStack != null )
-        {
-            Material chainMat = chainMatStack.material();
-            ChainGTMaterialInterface cgtinstance = (ChainGTMaterialInterface) instance;
-            cgtinstance.addConnectionMaterial(target, chainMat);
-        }
-        return original.call(instance, target);
+        MaterialStack chainMatStack = ChemicalHelper.getMaterialStack(chain.getItem());
+        Material chainMat = chainMatStack.material();
+        ChainGTMaterialInterface cgtinstance = (ChainGTMaterialInterface) instance;
+        cgtinstance.addConnectionMaterial(target, chainMat);
+        return original.call(target);
     }
 
 
