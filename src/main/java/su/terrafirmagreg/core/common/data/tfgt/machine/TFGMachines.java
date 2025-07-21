@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -36,6 +37,11 @@ public class TFGMachines {
 //				.recipeModifier(SimpleSteamMachine::recipeModifier)
 //				.renderer(() -> new WorkableSteamMachineRenderer(pressure, GTCEu.id("block/machines/aqueous_accumulator")))
 //				.register());
+
+	public static final MachineDefinition BISMUTH_BRONZE_CRATE = GTMachineUtils.registerCrate(GTMaterials.BismuthBronze, 54, "Bismuth Bronze Crate");
+	public static final MachineDefinition BLACK_BRONZE_CRATE = GTMachineUtils.registerCrate(GTMaterials.BlackBronze, 54, "Black Bronze Crate");
+	public static final MachineDefinition BISMUTH_BRONZE_DRUM = GTMachineUtils.registerDrum(GTMaterials.BismuthBronze, 32000, "Bismuth Bronze Drum");
+	public static final MachineDefinition BLACK_BRONZE_DRUM = GTMachineUtils.registerDrum(GTMaterials.BlackBronze, 32000, "Black Bronze Drum");
 
 
 	public static final MachineDefinition[] FOOD_PROCESSOR =
