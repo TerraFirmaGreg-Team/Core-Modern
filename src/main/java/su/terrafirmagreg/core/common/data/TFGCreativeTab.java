@@ -36,6 +36,11 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK);
 		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK);
 
+		accept(out, TFGBlocks.MARS_DIRT);
+		accept(out, TFGBlocks.AMBER_MYCELIUM);
+		accept(out, TFGBlocks.RUSTICUS_MYCELIUM);
+		accept(out, TFGBlocks.SANGNUM_MYCELIUM);
+
 		accept(out, TFGItems.PIGLIN_DISGUISE);
 		accept(out, TFGItems.TROWEL);
 		accept(out, TFGItems.MOON_RABBIT_EGG);
