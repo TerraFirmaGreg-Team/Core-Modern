@@ -119,7 +119,6 @@ public class TFGMachines {
 			builder.langValue("%s Interplanetary Railgun Loader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
 					.rotationState(RotationState.ALL)
 					.overlayTieredHullModel(GTCEu.id("block/machine/part/item_bus.import"))
-					.abilities(PartAbility.IMPORT_ITEMS)
 					.register(),
 			GTMachineUtils.ALL_TIERS);
 
@@ -128,7 +127,6 @@ public class TFGMachines {
 					builder.langValue("%s Interplanetary Railgun Unloader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
 							.rotationState(RotationState.ALL)
 							.overlayTieredHullModel(GTCEu.id("block/machine/part/item_bus.export"))
-							.abilities(PartAbility.EXPORT_ITEMS)
 							.register(),
 			GTMachineUtils.ALL_TIERS);
 

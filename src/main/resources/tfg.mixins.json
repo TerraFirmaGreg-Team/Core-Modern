@@ -36,7 +36,6 @@
     "common.gtceu.GTMultiMachinesMixin",
     "common.gtceu.GTRecipeTypesMixin",
     "common.gtceu.GTToolTypeMixin",
-    "common.gtceu.LargeBoilerMachineMixin",
     "common.gtceu.LootDataManagerMixin",
     "common.gtceu.ModelManagerMixin",
     "common.gtceu.NotifiableItemStackHandlerMixin",
