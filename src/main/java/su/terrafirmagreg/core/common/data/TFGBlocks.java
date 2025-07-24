@@ -11,11 +11,6 @@ import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import earth.terrarium.adastra.common.registry.ModBlocks;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.soil.SandBlockType;
-import net.dries007.tfc.common.items.Powder;
-import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -52,41 +47,6 @@ public final class TFGBlocks {
 	public static Map<Material, BlockEntry<BudIndicator>> BUD_BLOCKS;
 
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TFGCore.MOD_ID);
-
-
-	// "Layer" blocks like the charcoal pile
-
-	private static final BlockBehaviour.Properties s_layerProperties = BlockBehaviour.Properties.of()
-			.strength(0.2f)
-			.sound(SoundType.SAND)
-			.pushReaction(PushReaction.DESTROY)
-			.isViewBlocking((state, level, pos) -> state.getValue(LayerBlock.LAYERS) >= 8)
-			.isSuffocating((state, level, pos) -> state.getValue(LayerBlock.LAYERS) >= 8);
-
-	// This one isn't in the pile folder for backwards compatibility
-	public static final RegistryObject<Block> WOOD_ASH_PILE = register("ash_pile",
-		() -> new LayerBlock(TFCItems.POWDERS.get(Powder.WOOD_ASH)::get, s_layerProperties.mapColor(MapColor.COLOR_LIGHT_GRAY)));
-
-	public static final RegistryObject<Block> WHITE_SAND_PILE = register("pile/white_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.WHITE)::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> BLACK_SAND_PILE = register("pile/black_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.BLACK)::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> BROWN_SAND_PILE = register("pile/brown_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.BROWN)::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> RED_SAND_PILE = register("pile/red_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.RED)::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> YELLOW_SAND_PILE = register("pile/yellow_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.YELLOW)::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> GREEN_SAND_PILE = register("pile/green_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.GREEN)::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> PINK_SAND_PILE = register("pile/pink_sand",
-		() -> new LayerBlock(TFCBlocks.SAND.get(SandBlockType.PINK)::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> MOON_SAND_PILE = register("pile/moon_sand",
-		() -> new LayerBlock(ModBlocks.MOON_SAND::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> MARS_SAND_PILE = register("pile/mars_sand",
-		() -> new LayerBlock(ModBlocks.MARS_SAND::get, s_layerProperties.mapColor(MapColor.NONE)));
-	public static final RegistryObject<Block> VENUS_SAND_PILE = register("pile/venus_sand",
-		() -> new LayerBlock(ModBlocks.VENUS_SAND::get, s_layerProperties.mapColor(MapColor.NONE)));
 
 
 	// Decoration blocks
