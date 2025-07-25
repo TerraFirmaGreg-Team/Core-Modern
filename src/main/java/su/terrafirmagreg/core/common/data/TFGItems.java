@@ -2,7 +2,9 @@ package su.terrafirmagreg.core.common.data;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,7 +34,9 @@ public class TFGItems {
 
 	public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
 
-
+	@SuppressWarnings("deprecation")
+	public static final RegistryObject<BucketItem> MARS_WATER_BUCKET = register("semiheavy_ammoniacal_water_bucket",
+		() -> new BucketItem(TFGFluids.MARS_WATER.getSource(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
 
 	private static RegistryObject<Item> register(String name)

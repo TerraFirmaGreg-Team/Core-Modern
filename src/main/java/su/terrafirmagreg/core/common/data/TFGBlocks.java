@@ -11,6 +11,9 @@ import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
+import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -19,6 +22,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -68,6 +72,39 @@ public final class TFGBlocks {
 			.sound(SoundType.CHERRY_WOOD),
 		LUNAR_CHORUS_PLANT));
 
+	// Connected texture grass blocks
+
+	public static final RegistryObject<Block> MARS_DIRT = register("grass/mars_dirt",
+		() -> new Block(BlockBehaviour.Properties.copy(Blocks.DIRT)));
+
+	public static final RegistryObject<Block> AMBER_MYCELIUM = register("grass/amber_mycelium",
+		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.TERRACOTTA_YELLOW)
+			.strength(5.0f)
+			.sound(SoundType.STEM)
+			.randomTicks(),
+		MARS_DIRT, null, null));
+
+	public static final RegistryObject<Block> RUSTICUS_MYCELIUM = register("grass/rusticus_mycelium",
+		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.TERRACOTTA_ORANGE)
+			.strength(5.0f)
+			.sound(SoundType.STEM)
+			.randomTicks(),
+		MARS_DIRT, null, null));
+
+	public static final RegistryObject<Block> SANGNUM_MYCELIUM = register("grass/sangnum_mycelium",
+		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.TERRACOTTA_RED)
+			.strength(5.0f)
+			.sound(SoundType.STEM)
+			.randomTicks(),
+		MARS_DIRT, null, null));
+
+	// Fluid blocks
+
+	public static final RegistryObject<LiquidBlock> MARS_WATER = registerNoItem("semiheavy_ammoniacal_water",
+		() -> new LiquidBlock(TFGFluids.MARS_WATER.source(), BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
 
 	// Misc blocks
 
@@ -168,6 +205,11 @@ public final class TFGBlocks {
 
 
 	// Helper registration methods
+
+	private static <T extends Block> RegistryObject<T> registerNoItem(String name, Supplier<T> blockSupplier)
+	{
+		return register(name, blockSupplier, (Function<T, ? extends BlockItem>) null);
+	}
 
 	private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier)
 	{

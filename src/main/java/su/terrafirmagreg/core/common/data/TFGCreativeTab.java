@@ -36,9 +36,15 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK);
 		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK);
 
+		accept(out, TFGBlocks.MARS_DIRT);
+		accept(out, TFGBlocks.AMBER_MYCELIUM);
+		accept(out, TFGBlocks.RUSTICUS_MYCELIUM);
+		accept(out, TFGBlocks.SANGNUM_MYCELIUM);
+
 		accept(out, TFGItems.PIGLIN_DISGUISE);
 		accept(out, TFGItems.TROWEL);
 		accept(out, TFGItems.MOON_RABBIT_EGG);
+		accept(out, TFGItems.MARS_WATER_BUCKET);
 	}
 
 	private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out, Map<K1, Map<K2, R>> map, K1 key1, K2 key2)
