@@ -25,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 @Mixin(value = EnvironmentEffects.class, remap = false)
 public abstract class EnvironmentEffectsMixin {
@@ -56,6 +57,9 @@ public abstract class EnvironmentEffectsMixin {
 	@Unique
 	private static void tfg$tickBlockBugWorkaround(ServerLevel level, BlockPos pos, BlockState state)
 	{
+		if (state.is(TFGTags.Blocks.DoNotDestroyInSpace))
+			return;
+
 		Block block = state.getBlock();
 		if (hasOxygenOnAnySide(level, pos))
 			return;

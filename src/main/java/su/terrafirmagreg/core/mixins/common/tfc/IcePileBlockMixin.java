@@ -4,6 +4,7 @@ import earth.terrarium.adastra.api.planets.PlanetApi;
 import net.dries007.tfc.common.blocks.IcePileBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +24,7 @@ public abstract class IcePileBlockMixin {
 	@Inject(method = "removeIcePileOrIce", at = @At("HEAD"), remap = false, cancellable = true)
 	private static void tfg$removeIcePileOrIce(LevelAccessor level, BlockPos pos, BlockState state, CallbackInfo ci)
 	{
-		if (level instanceof ServerLevel serverLevel && PlanetApi.API.isExtraterrestrial(serverLevel))
+		if (level instanceof ServerLevel serverLevel && PlanetApi.API.isExtraterrestrial(serverLevel) && !Level.OVERWORLD.equals(serverLevel.dimension()))
 		{
 			ci.cancel();
 		}

@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.network.chat.Component;
@@ -108,6 +109,8 @@ public class TFGMachines {
 			   .rotationState(RotationState.NON_Y_AXIS)
 			   .recipeType(TFGRecipeTypes.GAS_PRESSURIZER_RECIPES)
 			   .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
+			   .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("gas_pressurizer"),
+				   TFGRecipeTypes.GAS_PRESSURIZER_RECIPES))
 			   .workableTieredHullModel(GTCEu.id("block/machines/gas_pressurizer"))
 			   .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
 				   TFGRecipeTypes.GAS_PRESSURIZER_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
