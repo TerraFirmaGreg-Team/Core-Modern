@@ -56,6 +56,7 @@ public final class TFGCore {
         TFGCreativeTab.TABS.register(bus);
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.ENTITIES.register(bus);
+        TFGFluids.FLUIDS.register(bus);
         TFGEvents.register();
         TFGFoodTraits.init();
 

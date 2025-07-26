@@ -73,6 +73,7 @@
     "common.tfc.EntityTooltipsMixin",
     "common.tfc.EnvironmentHelpersMixin",
     "common.tfc.FarmlandBlockMixin",
+    "common.tfc.FluidHelpersMixin",
     "common.tfc.IcePileBlockMixin",
     "common.tfc.IIngotPileBlockEntityAccessor",
     "common.tfc.IIngotPileBlockEntityEntryAccessor",

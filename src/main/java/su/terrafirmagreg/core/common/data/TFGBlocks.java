@@ -22,6 +22,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -99,6 +100,11 @@ public final class TFGBlocks {
 			.sound(SoundType.STEM)
 			.randomTicks(),
 		MARS_DIRT, null, null));
+
+	// Fluid blocks
+
+	public static final RegistryObject<LiquidBlock> MARS_WATER = registerNoItem("semiheavy_ammoniacal_water",
+		() -> new LiquidBlock(TFGFluids.MARS_WATER.source(), BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
 
 	// Misc blocks
 
@@ -199,6 +205,11 @@ public final class TFGBlocks {
 
 
 	// Helper registration methods
+
+	private static <T extends Block> RegistryObject<T> registerNoItem(String name, Supplier<T> blockSupplier)
+	{
+		return register(name, blockSupplier, (Function<T, ? extends BlockItem>) null);
+	}
 
 	private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier)
 	{
