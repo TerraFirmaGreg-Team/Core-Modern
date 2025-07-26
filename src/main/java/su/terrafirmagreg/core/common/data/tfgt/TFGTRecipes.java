@@ -109,5 +109,6 @@ public class TFGTRecipes {
 				'S', GTItems.SENSOR_MV,
 				'W', ChemicalHelper.get(TagPrefix.cableGtDouble, GTMaterials.Copper),
 				'H', GTMachines.HULL[GTValues.MV].asStack());
+
 	}
 }

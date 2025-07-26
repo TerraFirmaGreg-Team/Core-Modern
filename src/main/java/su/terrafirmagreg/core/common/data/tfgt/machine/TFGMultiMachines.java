@@ -105,7 +105,7 @@ public class TFGMultiMachines {
 									.where('S', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
 									.where('C', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
 									.where('E', Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(2))
-									.where('s', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()).or(Predicates.blocks(inputBuses).setMinGlobalLimited(1)))
+									.where('s', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()).or(Predicates.blocks(inputBuses).setMinGlobalLimited(1)).or(Predicates.blocks(TFGMachines.RAILGUN_AMMO_LOADER.get()).setExactLimit(1)))
 									.where('L', Predicates.blocks(TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK.get()))
 									.where('M', Predicates.blocks(TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK.get()))
 									.where('R', Predicates.blocks(TFGBlocks.ELECTROMAGNETIC_ACCELERATOR_BLOCK.get()))
