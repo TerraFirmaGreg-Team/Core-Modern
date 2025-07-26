@@ -8,6 +8,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.world.feature.DeadCoralClawFeature;
+import su.terrafirmagreg.core.world.feature.DeadCoralMushroomFeature;
+import su.terrafirmagreg.core.world.feature.DeadCoralTreeFeature;
+import su.terrafirmagreg.core.world.feature.LunarChorusPlantFeature;
 
 import java.util.function.Function;
 
