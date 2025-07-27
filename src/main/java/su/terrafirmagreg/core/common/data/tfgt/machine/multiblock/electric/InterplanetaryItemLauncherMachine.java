@@ -238,7 +238,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             }
         }
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
-        itemsToExtract.add(new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse("tfg:spent_railgun_shell")))));
         if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 100);
         return true;
     }
