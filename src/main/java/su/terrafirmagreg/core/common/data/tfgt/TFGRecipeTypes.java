@@ -78,29 +78,4 @@ public class TFGRecipeTypes {
 			.setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, FillDirection.LEFT_TO_RIGHT)
 			.setSound(GTSoundEntries.COMPRESSOR);
 
-	public static final GTRecipeType NETHER_DOME_RECIPES = GTRecipeTypes.register("nether_dome", GTRecipeTypes.MULTIBLOCK)
-			.setEUIO(IO.IN)
-			.setMaxIOSize(2,1,1,1)
-			.setSlotOverlay(false, false, GuiTextures.SOLIDIFIER_OVERLAY)
-			.setSound(GTSoundEntries.FIRE);
-
-	public static final GTRecipeType END_DOME_RECIPES = GTRecipeTypes.register("end_dome", GTRecipeTypes.MULTIBLOCK)
-			.setEUIO(IO.IN)
-			.setMaxIOSize(2,1,1,1)
-			.setSlotOverlay(false, false, GuiTextures.SOLIDIFIER_OVERLAY)
-			.setSound(GTSoundEntries.FIRE);
-
-	public static final GTRecipeType STEAM_BLOOMERY_RECIPES = GTRecipeTypes.register("steam_bloomery", GTRecipeTypes.MULTIBLOCK)
-			.setEUIO(IO.IN)
-			.setMaxIOSize(2, 1, 0, 0)
-			.setSlotOverlay(false, false, GuiTextures.SOLIDIFIER_OVERLAY)
-			.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
-			.setSound(GTSoundEntries.FIRE);
-
-	public static final GTRecipeType LARGE_SOLAR_PANEL_RECIPES = GTRecipeTypes.register("large_solar_panel", GTRecipeTypes.GENERATOR)
-			.setEUIO(IO.OUT)
-			.setMaxIOSize(2,0,2,1)
-			.setSlotOverlay(false, false, GuiTextures.SOLIDIFIER_OVERLAY)
-			.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
-			.setSound(GTSoundEntries.COOLING);
 }

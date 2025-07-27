@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
-import appeng.core.definitions.AEBlocks;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.IMachineBlock;
@@ -10,25 +9,18 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.*;
-import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.rock.Ore;
-import net.dries007.tfc.common.blocks.rock.Rock;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
-import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
@@ -119,7 +111,7 @@ public class TFGMultiMachines {
 					.recipeType(GTRecipeTypes.DUMMY_RECIPES)
 					.noRecipeModifier()
 					.appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-					.sidedWorkableCasingModel(GTCEu.id("block/casings/steam/steel"), GTCEu.id("block/multiblock/implosion_compressor"))
+					.workableCasingModel(GTCEu.id("block/casings/steam/steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 					.pattern( def -> {
 						IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_OUT).map(MachineDefinition::get).toArray(IMachineBlock[]::new);
 						return FactoryBlockPattern.start()
@@ -141,7 +133,7 @@ public class TFGMultiMachines {
 		.recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
 		.recipeModifier(GTRecipeModifiers.OC_PERFECT)
 		.appearanceBlock(GTBlocks.STEEL_HULL)
-		.sidedWorkableCasingModel(GTCEu.id("block/casings/steam/steel"), GTCEu.id("block/multiblock/implosion_compressor"))
+		.workableCasingModel(GTCEu.id("block/casings/steam/steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 		.pattern(definition -> FactoryBlockPattern.start()
 			.aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
 			.aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
@@ -190,38 +182,4 @@ public class TFGMultiMachines {
 			return shapeInfo;
 		})
 		.register();
-
-	public static final MultiblockMachineDefinition LARGE_SOLAR_PANEL = REGISTRATE.multiblock("large_solar_panel", WorkableElectricMultiblockMachine::new)
-			.rotationState(RotationState.NON_Y_AXIS)
-			.generator(true)
-			.recipeType(TFGRecipeTypes.LARGE_SOLAR_PANEL_RECIPES)
-			.noRecipeModifier()
-			.appearanceBlock(() -> (ForgeRegistries.BLOCKS.getValue(TFGCore.id("casings/machine_casing_iron_desh"))))
-			.pattern(definition -> FactoryBlockPattern.start()
-					.aisle("P     P", "P     P", "P     P", "PPPPPPP", "PKKKKKP")
-					.aisle("       ", "       ", "       ", "P     P", "KIIIIIK")
-					.aisle("  PLP  ", "  PLP  ", "  RRR  ", "P RRR P", "KIIIIIK")
-					.aisle("  LPL  ", "  L#L  ", "  RGR  ", "P RGR P", "KIIGIIK")
-					.aisle("  PXP  ", "  PLP  ", "  RRR  ", "P RRR P", "KIIIIIK")
-					.aisle("       ", "       ", "       ", "P     P", "KIIIIIK")
-					.aisle("P     P", "P     P", "P     P", "PPPPPPP", "PKKKKKP")
-					.where('X', Predicates.controller(Predicates.blocks(definition.get())))
-					.where('R', Predicates.blocks(GTBlocks.CLEANROOM_GLASS.get()))
-					.where('I', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(TFGCore.id("casings/machine_casing_red_solar_panel"))))
-					.where('G', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse("ad_astra:glowing_iron_pillar"))))
-					.where('P', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(TFGCore.id("casings/machine_casing_iron_desh"))))
-					.where('K', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse("ad_astra:iron_plateblock"))))
-					.where('L', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(TFGCore.id("casings/machine_casing_iron_desh")))
-							.or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(2).setPreviewCount(1))
-							.or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1))
-							.or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2).setPreviewCount(1))
-							.or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(2).setPreviewCount(1))
-							.or(Predicates.abilities(PartAbility.PARALLEL_HATCH).setMaxGlobalLimited(1))
-							.or(Predicates.abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1)))
-					.where('#', Predicates.air())
-					.where(' ', Predicates.any())
-					.build()
-			)
-			.workableCasingModel(TFGCore.id("block/casings/machine_casing_iron_desh"), GTCEu.id("block/multiblock/hpca"))
-			.register();
 }
