@@ -170,7 +170,7 @@ public final class TFGBlocks {
 		int lightLevel;
 
 		var entry = registrate
-			.block(material.getName() + "_bud_indicator", p -> new BudIndicator(p, material))
+			.block("%s_bud_indicator".formatted(material.getName()), p -> new BudIndicator(p, material))
 			.initialProperties(() -> Blocks.AMETHYST_CLUSTER)
 			.properties(p -> p
 				.noLootTable()
