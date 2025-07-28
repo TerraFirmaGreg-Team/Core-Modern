@@ -23,21 +23,21 @@ public class TFGRecipeTypes {
 
 	public static void init() { }
 
-	public final static GTRecipeType GREENHOUSE_RECIPES =
+	public static final GTRecipeType GREENHOUSE_RECIPES =
 		GTRecipeTypes.register("greenhouse", GTRecipeTypes.MULTIBLOCK)
 			.setEUIO(IO.IN)
 			.setMaxIOSize(3, 4, 1, 0)
 			.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
 			.setSound(GTSoundEntries.BATH);
 
-	public final static GTRecipeType FOOD_OVEN_RECIPES =
+	public static final GTRecipeType FOOD_OVEN_RECIPES =
 		GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
 			.setEUIO(IO.IN)
 			.setMaxIOSize(1, 1, 1, 0)
 			.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
 			.setSound(GTSoundEntries.FURNACE);
 
-	public final static GTRecipeType FOOD_PROCESSOR_RECIPES =
+	public static final GTRecipeType FOOD_PROCESSOR_RECIPES =
 		GTRecipeTypes.register("food_processor", GTRecipeTypes.ELECTRIC)
 			.setEUIO(IO.IN)
 			.setMaxIOSize(6, 2, 2, 1)
@@ -52,7 +52,7 @@ public class TFGRecipeTypes {
 				}
 			});
 
-	public final static GTRecipeType AQUEOUS_ACCUMULATOR_RECIPES =
+	public static final GTRecipeType AQUEOUS_ACCUMULATOR_RECIPES =
 		GTRecipeTypes.register("aqueous_accumulator", GTRecipeTypes.ELECTRIC)
 			.setMaxIOSize(1, 0, 0, 1)
 			.setEUIO(IO.IN)
@@ -70,7 +70,7 @@ public class TFGRecipeTypes {
 				}
 			});
 
-	public final static GTRecipeType GAS_PRESSURIZER_RECIPES =
+	public static final GTRecipeType GAS_PRESSURIZER_RECIPES =
 		GTRecipeTypes.register("gas_pressurizer", GTRecipeTypes.ELECTRIC)
 			.setEUIO(IO.IN)
 			.setMaxIOSize(1, 1, 3, 1)

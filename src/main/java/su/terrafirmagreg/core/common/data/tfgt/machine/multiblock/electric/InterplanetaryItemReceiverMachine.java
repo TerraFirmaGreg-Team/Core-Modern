@@ -51,7 +51,10 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (getLevel() instanceof ServerLevel sLvl) sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
+        if (getLevel() instanceof ServerLevel sLvl) sLvl.getServer().tell(new TickTask(0, () -> {
+            getLogisticsNetwork().loadOrCreatePart(this);
+            payloads.forEach(p -> sLvl.getServer().tell(new TickTask(p.travelDuration, () -> onPackageArrival(p))));
+        }));
     }
 
     @Override
@@ -163,8 +166,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     @Override
     public void onPackageSent(int inventoryIndex, List<ItemStack> items, int travelDuration) {
         var server = Objects.requireNonNull(getLevel()).getServer();
-        var currentTick = getLevel().getGameTime();
-        var payload = new ItemPayload(currentTick, travelDuration, items, inventoryIndex);
+        var payload = new ItemPayload(travelDuration, items, inventoryIndex);
         payloads.add(payload);
         assert server != null;
         server.tell(new TickTask(travelDuration, () -> onPackageArrival(payload)));
@@ -200,20 +202,17 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     }
 
     private static class ItemPayload implements ITagSerializable<CompoundTag> {
-        public long sentTick;
-        public long travelDuration;
+        public int travelDuration;
         public List<ItemStack> items;
         public int inventoryIndex;
 
         public ItemPayload() {
-            sentTick = 0;
             travelDuration = 0;
             items = new ArrayList<>();
             inventoryIndex = 0;
         }
 
-        public ItemPayload(long sentTick, long travelDuration, List<ItemStack> items, int inventoryIndex) {
-            this.sentTick = sentTick;
+        public ItemPayload(int travelDuration, List<ItemStack> items, int inventoryIndex) {
             this.travelDuration = travelDuration;
             this.items = items;
             this.inventoryIndex = inventoryIndex;
@@ -222,8 +221,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         @Override
         public CompoundTag serializeNBT() {
             var tag = new CompoundTag();
-            tag.putLong("sentTick", sentTick);
-            tag.putLong("travelDuration", travelDuration);
+            tag.putInt("travelDuration", travelDuration);
             tag.putInt("inventoryIndex", inventoryIndex);
             var list = new ListTag();
             for (var s: items) {
@@ -235,8 +233,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
         @Override
         public void deserializeNBT(CompoundTag nbt) {
-            sentTick = nbt.getLong("sentTick");
-            travelDuration = nbt.getLong("travelDuration");
+            travelDuration = nbt.getInt("travelDuration");
             inventoryIndex = nbt.getInt("inventoryIndex");
             var list = nbt.getList("items", Tag.TAG_COMPOUND);
             for (Tag tag : list) {

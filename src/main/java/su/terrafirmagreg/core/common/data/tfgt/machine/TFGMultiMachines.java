@@ -41,7 +41,7 @@ public class TFGMultiMachines {
 					.recipeType(GTRecipeTypes.DUMMY_RECIPES)
 					.noRecipeModifier()
 					.appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-					.workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"), GTCEu.id("block/multiblock/implosion_compressor"), false)
+					.workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 					.pattern(definition -> {
 							IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_IN).map(MachineDefinition::get).toArray(IMachineBlock[]::new);
 							return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.FRONT, RelativeDirection.UP)
@@ -57,47 +57,48 @@ public class TFGMultiMachines {
 											"FsysF")
 									.aisle( "F###F",
 											"#LCL#",
-											"#RCR#",
+											"#R R#",
 											"#LCL#",
 											"F###F")
 									.aisle( "FFFFF",
 											"FLCLF",
-											"FRHRF",
+											"FR RF",
 											"FLCLF",
 											"FFFFF")
 									.aisle( "#####",
 											"#L#L#",
-											"#R#R#",
+											"#R R#",
 											"#L#L#",
 											"#####").setRepeatable(3)
 									.aisle( "#####",
 											"#CHC#",
-											"#R#R#",
+											"#R R#",
 											"#CHC#",
 											"#####")
 									.aisle( "#####",
 											"#M#M#",
-											"#R#R#",
+											"#R R#",
 											"#M#M#",
 											"#####").setRepeatable(3)
 									.aisle( "#####",
 											"#CHC#",
-											"#R#R#",
+											"#R R#",
 											"#CHC#",
 											"#####")
 									.aisle( "#####",
 											"#C#C#",
-											"#R#R#",
+											"#R R#",
 											"#C#C#",
 											"#####").setRepeatable(2)
 									.where('y', Predicates.controller(Predicates.blocks(definition.get())))
+									.where(' ', Predicates.air())
 									.where('#', Predicates.any())
 									.where('F', Predicates.frames(GTMaterials.Aluminium))
 									.where('H', Predicates.frames(GTMaterials.HSLASteel))
 									.where('S', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
 									.where('C', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
 									.where('E', Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(2))
-									.where('s', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()).or(Predicates.blocks(inputBuses).setMinGlobalLimited(1)))
+									.where('s', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()).or(Predicates.blocks(inputBuses).setMinGlobalLimited(1)).or(Predicates.blocks(TFGMachines.RAILGUN_AMMO_LOADER.get()).setExactLimit(1)))
 									.where('L', Predicates.blocks(TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK.get()))
 									.where('M', Predicates.blocks(TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK.get()))
 									.where('R', Predicates.blocks(TFGBlocks.ELECTROMAGNETIC_ACCELERATOR_BLOCK.get()))
@@ -111,7 +112,7 @@ public class TFGMultiMachines {
 					.recipeType(GTRecipeTypes.DUMMY_RECIPES)
 					.noRecipeModifier()
 					.appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-					.sidedWorkableCasingRenderer("block/casings/steam/steel", GTCEu.id("block/multiblock/implosion_compressor"), false)
+					.workableCasingModel(GTCEu.id("block/casings/steam/steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 					.pattern( def -> {
 						IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_OUT).map(MachineDefinition::get).toArray(IMachineBlock[]::new);
 						return FactoryBlockPattern.start()
@@ -133,7 +134,7 @@ public class TFGMultiMachines {
 		.recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
 		.recipeModifier(GTRecipeModifiers.OC_PERFECT)
 		.appearanceBlock(GTBlocks.STEEL_HULL)
-		.sidedWorkableCasingRenderer("block/casings/steam/steel", GTCEu.id("block/multiblock/implosion_compressor"), false)
+		.workableCasingModel(GTCEu.id("block/casings/steam/steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 		.pattern(definition -> FactoryBlockPattern.start()
 			.aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
 			.aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")

@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Mixin(value = FisherMachine.class, remap = false)
 public abstract class FisherMachineMixin  {
@@ -37,16 +38,8 @@ public abstract class FisherMachineMixin  {
     /**
      * Разрешает класть любые нитки с тегом forge:string в рыболов
      * */
-    @Redirect(method = "createBaitItemHandler", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableItemStackHandler;setFilter(Ljava/util/function/Function;)Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableItemStackHandler;"), remap = false)
-    private NotifiableItemStackHandler tfg$createBaitItemHandler$notifiableItemStackHandler$setFilter(NotifiableItemStackHandler instance, Function<ItemStack, Boolean> filter) {
+    @Redirect(method = "createBaitItemHandler", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableItemStackHandler;setFilter(Ljava/util/function/Predicate;)Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableItemStackHandler;"), remap = false)
+    private NotifiableItemStackHandler tfg$createBaitItemHandler$notifiableItemStackHandler$setFilter(NotifiableItemStackHandler instance, Predicate<ItemStack> filter) {
         return instance.setFilter((item) -> item.is(TFGTags.Items.Strings));
     }
-
-    /**
-     * Исправляет баг, когда рыболов не тратит нитки.
-     * */
-//    @Redirect(method = "fishingUpdate", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableItemStackHandler;extractItem(IIZ)Lnet/minecraft/world/item/ItemStack;"), remap = false)
-//    private ItemStack tfg$fishingUpdate$iItemTransfer$extractItem(NotifiableItemStackHandler instance, int i1, int i2, boolean b) {
-//        return instance.extractItemInternal(i1, i2, b);
-//    }
 }

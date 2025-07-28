@@ -48,7 +48,7 @@ public class InterplanetaryLogisticsNetwork {
 
         boolean isReceiver = machine instanceof ILogisticsNetworkReceiver;
 
-        var owner = machine.getMachine().getHolder().getOwner();
+        var owner = machine.getMachine().getOwner();
         if (owner instanceof FTBOwner ftbOwner) {
             loadedMachines.put(machine.getDimensionalPos(), machine);
             data.parts.computeIfAbsent(machine.getDimensionalPos(), k -> {

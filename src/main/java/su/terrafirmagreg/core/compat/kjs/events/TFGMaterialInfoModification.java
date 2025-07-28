@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.compat.kjs.events;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.ItemMaterialData;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 import dev.latvian.mods.kubejs.event.EventJS;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +22,7 @@ public class TFGMaterialInfoModification extends EventJS {
 	 * @param itemMaterialInfo информация о материале
 	 */
 	public void add(ItemLike itemLike, ItemMaterialInfo itemMaterialInfo) {
-		ChemicalHelper.registerMaterialInfo(itemLike, itemMaterialInfo);
+		ItemMaterialData.registerMaterialInfo(itemLike, itemMaterialInfo);
 	}
 
 	/**
@@ -55,12 +56,12 @@ public class TFGMaterialInfoModification extends EventJS {
 			return false;
 		}
 
-		var item = ChemicalHelper.ITEM_MATERIAL_INFO.keySet().stream()
+		var item = ItemMaterialData.ITEM_MATERIAL_INFO.keySet().stream()
 		                                            .filter(el -> Objects.equals(ForgeRegistries.ITEMS.getKey(el.asItem()), itemResourceLocation))
 		                                            .findFirst();
 
 		if (item.isPresent()) {
-			var removedValue = ChemicalHelper.ITEM_MATERIAL_INFO.remove(item.get());
+			var removedValue = ItemMaterialData.ITEM_MATERIAL_INFO.remove(item.get());
 			if (removedValue != null) {
 				return true;
 			}
