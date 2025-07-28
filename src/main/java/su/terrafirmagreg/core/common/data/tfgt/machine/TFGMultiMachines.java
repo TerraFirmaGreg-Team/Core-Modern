@@ -57,40 +57,41 @@ public class TFGMultiMachines {
 											"FsysF")
 									.aisle( "F###F",
 											"#LCL#",
-											"#RCR#",
+											"#R R#",
 											"#LCL#",
 											"F###F")
 									.aisle( "FFFFF",
 											"FLCLF",
-											"FRHRF",
+											"FR RF",
 											"FLCLF",
 											"FFFFF")
 									.aisle( "#####",
 											"#L#L#",
-											"#R#R#",
+											"#R R#",
 											"#L#L#",
 											"#####").setRepeatable(3)
 									.aisle( "#####",
 											"#CHC#",
-											"#R#R#",
+											"#R R#",
 											"#CHC#",
 											"#####")
 									.aisle( "#####",
 											"#M#M#",
-											"#R#R#",
+											"#R R#",
 											"#M#M#",
 											"#####").setRepeatable(3)
 									.aisle( "#####",
 											"#CHC#",
-											"#R#R#",
+											"#R R#",
 											"#CHC#",
 											"#####")
 									.aisle( "#####",
 											"#C#C#",
-											"#R#R#",
+											"#R R#",
 											"#C#C#",
 											"#####").setRepeatable(2)
 									.where('y', Predicates.controller(Predicates.blocks(definition.get())))
+									.where(' ', Predicates.air())
 									.where('#', Predicates.any())
 									.where('F', Predicates.frames(GTMaterials.Aluminium))
 									.where('H', Predicates.frames(GTMaterials.HSLASteel))

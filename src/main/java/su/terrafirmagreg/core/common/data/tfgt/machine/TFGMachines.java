@@ -21,6 +21,7 @@ import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunIt
 
 import java.util.function.BiFunction;
 
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 public class TFGMachines {
@@ -120,7 +121,11 @@ public class TFGMachines {
 			(tier, builder) ->
 			builder.langValue("%s Interplanetary Railgun Loader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
 					.rotationState(RotationState.ALL)
-					.overlayTieredHullModel(GTCEu.id("block/machine/part/item_bus.import"))
+					.colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null, GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
+					.tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
+							Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
+									(1 + Math.min(9, tier)) * (1 + Math.min(9, tier))))
+					.allowCoverOnFront(true)
 					.register(),
 			GTMachineUtils.ALL_TIERS);
 
@@ -128,7 +133,11 @@ public class TFGMachines {
 			(tier, builder) ->
 					builder.langValue("%s Interplanetary Railgun Unloader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
 							.rotationState(RotationState.ALL)
-							.overlayTieredHullModel(GTCEu.id("block/machine/part/item_bus.export"))
+							.colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null, GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
+							.tooltips(Component.translatable("gtceu.machine.item_bus.export.tooltip"),
+									Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
+											(1 + Math.min(9, tier)) * (1 + Math.min(9, tier))))
+							.allowCoverOnFront(true)
 							.register(),
 			GTMachineUtils.ALL_TIERS);
 
