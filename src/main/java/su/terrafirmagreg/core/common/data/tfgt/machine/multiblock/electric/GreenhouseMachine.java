@@ -14,7 +14,9 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 
@@ -45,7 +47,7 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
         }
 
         @Override
-        protected boolean handleRecipeIO(GTRecipe recipe, IO io) {
+        protected ActionResult handleRecipeIO(GTRecipe recipe, IO io) {
             if (io == IO.IN) return super.handleRecipeIO(recipe, io);
             Map<RecipeCapability<?>, List<Content>> contents = new HashMap<>();
             contents.put(FluidRecipeCapability.CAP, recipe.getOutputContents(FluidRecipeCapability.CAP));
@@ -56,12 +58,12 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
                 Object obj = content.content;
                 if (obj instanceof SizedIngredient sized) {
                     ItemStackProvider isp = ItemStackProvider.of(new ItemStack(sized.getInner().getItems()[0].getItem(), sized.getAmount()));
-                    modifiedItemOutputs.add(new Content(SizedIngredient.create(Ingredient.of(isp.getEmptyStack()), sized.getAmount()), content.chance, content.maxChance, content.tierChanceBoost, content.slotName, content.uiName));
+                    modifiedItemOutputs.add(new Content(SizedIngredient.create(Ingredient.of(isp.getEmptyStack()), sized.getAmount()), content.chance, content.maxChance, content.tierChanceBoost));
                 }
             }
             contents.put(ItemRecipeCapability.CAP, modifiedItemOutputs);
 
-            return recipe.handleRecipe(io, (IRecipeCapabilityHolder)getMachine(), false, contents, chanceCaches);
+            return RecipeHelper.handleRecipe((IRecipeCapabilityHolder)getMachine(), recipe, io, contents, chanceCaches, false, false);
         }
     }
 

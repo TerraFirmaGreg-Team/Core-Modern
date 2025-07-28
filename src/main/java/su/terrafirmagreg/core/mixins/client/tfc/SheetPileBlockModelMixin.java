@@ -49,12 +49,12 @@ public abstract class SheetPileBlockModelMixin implements SimpleStaticBlockEntit
             if ((Boolean)state.getValue(DirectionPropertyBlock.getProperty(direction)))
             { // The properties are authoritative on which sides should be rendered
                 final var stack = pile.getSheet(direction);
-                final var material = ChemicalHelper.getMaterial(stack);
-                final int primaryColor = material == null ? 0 : material.material().getMaterialARGB(0);
-                final int secondaryColor = material == null ? 0 : material.material().getMaterialARGB(1);
+                final var material = ChemicalHelper.getMaterialStack(stack);
+                final int primaryColor = material.material().getMaterialARGB(0);
+                final int secondaryColor = material.material().getMaterialARGB(1);
                 Metal metalAtPos = pile.getOrCacheMetal(direction);
 
-                boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && material != null && !material.isEmpty());
+                boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && !material.isEmpty());
                 ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getTextureId() : TFGClientEventHandler.TFCMetalBlockTexturePattern;
 
                 sprite = (TextureAtlasSprite)textureAtlas.apply(metalResource);
