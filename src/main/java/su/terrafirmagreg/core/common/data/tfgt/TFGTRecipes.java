@@ -104,8 +104,8 @@ public class TFGTRecipes {
 				.outputItems(TFGItems.RAILGUN_AMMO_SHELL.get(), 1)
 				.EUt(GTValues.VA[GTValues.MV])
 				.duration(20 * 10)
-				.inputItems(ChemicalHelper.get(TagPrefix.plateDouble, GTMaterials.Steel, 2))
-				.inputItems(ChemicalHelper.get(TagPrefix.rod, GTMaterials.SteelMagnetic, 2))
+				.inputItems(ChemicalHelper.get(TagPrefix.plateDouble, GTMaterials.Steel, 1))
+				.inputItems(ChemicalHelper.get(TagPrefix.rod, GTMaterials.IronMagnetic, 2))
 				.inputItems(ChemicalHelper.get(TagPrefix.wireFine, GTMaterials.AnnealedCopper, 2))
 				.save(provider);
 
@@ -113,8 +113,8 @@ public class TFGTRecipes {
 				.outputItems(TFGItems.RAILGUN_AMMO_SHELL.get(), 4)
 				.EUt(GTValues.VA[GTValues.HV])
 				.duration(20 * 10)
-				.inputItems(ChemicalHelper.get(TagPrefix.plateDouble, GTMaterials.BlackSteel, 2))
-				.inputItems(ChemicalHelper.get(TagPrefix.rod, GTMaterials.SteelMagnetic, 4))
+				.inputItems(ChemicalHelper.get(TagPrefix.plateDouble, GTMaterials.Titanium, 1))
+				.inputItems(ChemicalHelper.get(TagPrefix.rod, GTMaterials.SteelMagnetic, 2))
 				.inputItems(ChemicalHelper.get(TagPrefix.wireFine, GTMaterials.Gold, 2))
 				.save(provider);
 
@@ -122,7 +122,7 @@ public class TFGTRecipes {
 				.outputItems(TFGItems.RAILGUN_AMMO_SHELL.get(), 8)
 				.EUt(GTValues.VA[GTValues.EV])
 				.duration(20 * 10)
-				.inputItems(ChemicalHelper.get(TagPrefix.plateDouble, GTMaterials.Tungsten, 2))
+				.inputItems(ChemicalHelper.get(TagPrefix.plateDouble, GTMaterials.Tungsten, 1))
 				.inputItems(ChemicalHelper.get(TagPrefix.rod, GTMaterials.NeodymiumMagnetic, 2))
 				.inputItems(ChemicalHelper.get(TagPrefix.wireFine, GTMaterials.Aluminium, 2))
 				.save(provider);
