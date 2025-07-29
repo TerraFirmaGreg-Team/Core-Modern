@@ -58,6 +58,7 @@
     "common.minecraft.EndPortalBlockMixin",
     "common.minecraft.IBlockLootSubProviderAccessor",
     "common.minecraft.IUseOnContextInvoker",
+    "common.minecraft.MushroomBlockMixin",
     "common.minecraft.NetherPortalBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
     "common.minecraft.ServerLifecycleHooksMixin",
