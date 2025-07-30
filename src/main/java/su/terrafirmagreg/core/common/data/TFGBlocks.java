@@ -104,7 +104,7 @@ public final class TFGBlocks {
 	// Fluid blocks
 
 	public static final RegistryObject<LiquidBlock> MARS_WATER = registerNoItem("semiheavy_ammoniacal_water",
-		() -> new LiquidBlock(TFGFluids.MARS_WATER.source(), BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
+		() -> new LiquidBlock(TFGFluids.MARS_WATER.source(), BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.COLOR_CYAN).noLootTable()));
 
 	// Misc blocks
 
@@ -170,7 +170,7 @@ public final class TFGBlocks {
 		int lightLevel;
 
 		var entry = registrate
-			.block(material.getName() + "_bud_indicator", p -> new BudIndicator(p, material))
+			.block("%s_bud_indicator".formatted(material.getName()), p -> new BudIndicator(p, material))
 			.initialProperties(() -> Blocks.AMETHYST_CLUSTER)
 			.properties(p -> p
 				.noLootTable()

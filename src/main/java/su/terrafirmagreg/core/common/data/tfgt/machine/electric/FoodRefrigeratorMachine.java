@@ -251,7 +251,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     public class RefrigeratedStorage extends NotifiableItemStackHandler {
 
         public RefrigeratedStorage(MetaMachine machine, int slots) {
-            super(machine, slots, IO.BOTH, IO.BOTH);
+            super(machine, slots, IO.IN, IO.IN);
         }
 
 
