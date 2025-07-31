@@ -1,7 +1,7 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
 import net.dries007.tfc.common.capabilities.forge.ForgingBonus;
 import net.minecraft.core.BlockPos;
@@ -36,16 +36,17 @@ public abstract class ToolHelperMixin {
     /*
         Fixes forging bonuses not affecting GTCEU tools.
         Essentially just copies how TFC applies its mixin to vanilla mechanics and applies it instead to GT's ToolHelper class
+        Now rewritten to not rely on obfuscated methods and use local random provider
      */
 
     @Inject(method = "damageItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;I)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getDamageValue()I", shift = At.Shift.AFTER),
+            at = @At(value = "INVOKE",
+                    target = "Lcom/gregtechceu/gtceu/api/item/IGTTool;isElectric()Z",
+                    shift = At.Shift.AFTER
+            ),
             cancellable = true)
-    private static void applyForgingBonusToPreventItemDamage(ItemStack stack, LivingEntity user, int damage, CallbackInfo info)
-    {
-        RandomSource random = user == null ? GTValues.RNG : user.getRandom();
-        if (ForgingBonus.applyLikeUnbreaking(stack, random))
-        {
+    private static void applyForgingBonusToPreventItemDamage(ItemStack stack, LivingEntity user, int damage, CallbackInfo info, @Local RandomSource random) {
+        if (ForgingBonus.applyLikeUnbreaking(stack, random)) {
             info.cancel();
         }
     }
