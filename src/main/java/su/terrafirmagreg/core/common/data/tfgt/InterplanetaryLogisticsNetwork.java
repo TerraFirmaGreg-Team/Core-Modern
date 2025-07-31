@@ -29,6 +29,19 @@ import java.util.*;
 
 public class InterplanetaryLogisticsNetwork {
 
+    // Distances between planets
+    // The travel time of item payloads is the difference in distance (measured in seconds)
+    // Dimensions without a distance value are blacklisted
+    public static final Map<String, Integer> DIMENSION_DISTANCES = new HashMap<>();
+    static {
+        DIMENSION_DISTANCES.put("minecraft:overworld", 0);
+        DIMENSION_DISTANCES.put("ad_astra:earth_orbit", 0);
+        DIMENSION_DISTANCES.put("ad_astra:moon", 60);
+        DIMENSION_DISTANCES.put("ad_astra:moon_orbit", 60);
+        DIMENSION_DISTANCES.put("ad_astra:mars", 120);
+        DIMENSION_DISTANCES.put("ad_astra:mars_orbit", 120);
+    }
+
     private static InterplanetaryLogisticsNetwork NETWORK = null;
     public static InterplanetaryLogisticsNetwork get(IMachineBlockEntity entity) {
         if (NETWORK == null) {

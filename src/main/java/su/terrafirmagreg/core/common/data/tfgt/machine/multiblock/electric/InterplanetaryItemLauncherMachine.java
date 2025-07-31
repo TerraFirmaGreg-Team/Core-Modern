@@ -12,8 +12,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
-import com.gregtechceu.gtceu.common.data.GTMachines;
-import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -26,6 +24,7 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
@@ -78,7 +77,10 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (getLevel() instanceof ServerLevel sLvl) sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
+        if (getLevel() instanceof ServerLevel sLvl) {
+            if (!InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.containsKey(getDimensionalPos().dimension())) return;
+            sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
+        }
     }
 
     @Override
@@ -175,13 +177,14 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             return;
         }
         for (var config: getSendConfigurations()) {
-            if (ammoLoaderPart.getInventory().isEmpty()) return;
+            if (ammoLoaderPart.getInventory().isEmpty()) break;
             var withCircuit = itemInputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == config.getSenderDistinctInventory()
                     && c.isWorkingEnabled() && !c.getInventory().isEmpty()).toList();
             if (withCircuit.isEmpty() || config.getReceiverPartID() == null) continue;
             var result = tryLaunchItemPayload(config);
-            if (result) return;
+            if (result) break;
         }
+        updateSubscription();
     }
 
     private boolean tryLaunchItemPayload(NetworkSenderConfigEntry config) {
@@ -231,10 +234,14 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             }
         }
 
+        var sendPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.get(getDimensionalPos().dimension());
+        var receiverPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.get(receiver.getDimensionalPos().dimension());
+        var travelTime = Math.abs(sendPos-receiverPos);
+
         if (itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
         ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
-        if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 100);
+        if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20*travelTime);
         return true;
     }
 
