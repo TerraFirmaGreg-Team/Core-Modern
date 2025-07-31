@@ -15,6 +15,8 @@ public final class TFGTags {
         public static final TagKey<Item> Chains = createItemTag("forge:chains");
         public static final TagKey<Item> Strings = createItemTag("forge:string");
         public static final TagKey<Item> Harvester = createItemTag("tfg:harvester");
+        public static final TagKey<Item> CannotLaunchInRailgun = createItemTag("tfg:cannot_launch_in_railgun");
+
 
         public static TagKey<Item> createItemTag(String path) {
             return TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.parse(path));

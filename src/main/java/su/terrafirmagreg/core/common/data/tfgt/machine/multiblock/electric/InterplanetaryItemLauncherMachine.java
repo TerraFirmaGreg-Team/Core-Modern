@@ -219,25 +219,20 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                     var stack = bus.getInventory().getStackInSlot(i);
                     if (stack.isEmpty()) continue;
                     itemsToExtract.add(stack);
+                    if (tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) && receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
+                        matched++;
+                    } else {
+                        itemsToExtract.remove(stack);
+                    }
                     matched++;
                     if (matched == 3) break;
                 }
                 if (matched == 3) break;
             }
         }
-        if (itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
 
+        if (itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
         ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
-        if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-            if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM) return false;
-            itemsToExtract.remove(2);
-            if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-                itemsToExtract.remove(1);
-                if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-                    return false;
-                }
-            }
-        }
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
         if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 100);
         return true;
