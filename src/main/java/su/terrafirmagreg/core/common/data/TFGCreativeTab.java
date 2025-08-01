@@ -35,6 +35,7 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.ELECTROMAGNETIC_ACCELERATOR_BLOCK);
 		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK);
 		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK);
+		accept(out, TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL);
 
 		accept(out, TFGBlocks.MARS_DIRT);
 		accept(out, TFGBlocks.AMBER_MYCELIUM);

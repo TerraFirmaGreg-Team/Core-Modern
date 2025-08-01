@@ -142,6 +142,13 @@ public final class TFGBlocks {
 					.sound(SoundType.COPPER)
 			));
 
+	public static final RegistryObject<Block> MACHINE_CASING_ALUMINIUM_PLATED_STEEL = register("machine_casing_aluminium_plated_steel",
+			() -> new SimpleBlock(BlockBehaviour.Properties.of()
+					.mapColor(MapColor.COLOR_LIGHT_BLUE)
+					.strength(0.5f)
+					.sound(SoundType.COPPER)
+			));
+
 
 	// Buds are generated automatically
 
