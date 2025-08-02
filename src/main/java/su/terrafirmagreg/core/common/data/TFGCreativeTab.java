@@ -35,6 +35,7 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.ELECTROMAGNETIC_ACCELERATOR_BLOCK);
 		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK);
 		accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK);
+		accept(out, TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL);
 
 		accept(out, TFGBlocks.MARS_DIRT);
 		accept(out, TFGBlocks.AMBER_MYCELIUM);
@@ -45,6 +46,7 @@ public class TFGCreativeTab {
 		accept(out, TFGItems.TROWEL);
 		accept(out, TFGItems.MOON_RABBIT_EGG);
 		accept(out, TFGItems.MARS_WATER_BUCKET);
+		accept(out, TFGItems.RAILGUN_AMMO_SHELL);
 	}
 
 	private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out, Map<K1, Map<K2, R>> map, K1 key1, K2 key2)
