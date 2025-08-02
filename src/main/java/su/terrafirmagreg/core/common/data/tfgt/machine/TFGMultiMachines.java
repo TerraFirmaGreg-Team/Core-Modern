@@ -111,8 +111,8 @@ public class TFGMultiMachines {
 					.rotationState(RotationState.NON_Y_AXIS)
 					.recipeType(GTRecipeTypes.DUMMY_RECIPES)
 					.noRecipeModifier()
-					.appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-					.workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_frost_proof"), GTCEu.id("block/multiblock/implosion_compressor"))
+					.appearanceBlock(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
+					.workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_aluminium_plated_steel"), GTCEu.id("block/multiblock/implosion_compressor"))
 					.pattern( def -> {
 						IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_OUT).map(MachineDefinition::get).toArray(IMachineBlock[]::new);
 						return FactoryBlockPattern.start()
