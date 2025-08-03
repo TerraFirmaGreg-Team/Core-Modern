@@ -104,7 +104,7 @@ public final class TFGBlocks {
 	// Fluid blocks
 
 	public static final RegistryObject<LiquidBlock> MARS_WATER = registerNoItem("semiheavy_ammoniacal_water",
-		() -> new LiquidBlock(TFGFluids.MARS_WATER.source(), BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
+		() -> new LiquidBlock(TFGFluids.MARS_WATER.source(), BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.COLOR_CYAN).noLootTable()));
 
 	// Misc blocks
 
@@ -142,6 +142,13 @@ public final class TFGBlocks {
 					.sound(SoundType.COPPER)
 			));
 
+	public static final RegistryObject<Block> MACHINE_CASING_ALUMINIUM_PLATED_STEEL = register("machine_casing_aluminium_plated_steel",
+			() -> new SimpleBlock(BlockBehaviour.Properties.of()
+					.mapColor(MapColor.COLOR_LIGHT_BLUE)
+					.strength(0.5f)
+					.sound(SoundType.COPPER)
+			));
+
 
 	// Buds are generated automatically
 
@@ -170,7 +177,7 @@ public final class TFGBlocks {
 		int lightLevel;
 
 		var entry = registrate
-			.block(material.getName() + "_bud_indicator", p -> new BudIndicator(p, material))
+			.block("%s_bud_indicator".formatted(material.getName()), p -> new BudIndicator(p, material))
 			.initialProperties(() -> Blocks.AMETHYST_CLUSTER)
 			.properties(p -> p
 				.noLootTable()

@@ -20,12 +20,11 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
@@ -78,7 +77,10 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (getLevel() instanceof ServerLevel sLvl) sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
+        if (getLevel() instanceof ServerLevel sLvl) {
+            if (!InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.containsKey(getDimensionalPos().dimension())) return;
+            sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
+        }
     }
 
     @Override
@@ -126,6 +128,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     @Override
     public void onStructureInvalid() {
+        super.onStructureInvalid();
         energyInputs = null;
         energyBuffer = 0;
         ammoLoaderPart = null;
@@ -174,13 +177,14 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             return;
         }
         for (var config: getSendConfigurations()) {
-            if (ammoLoaderPart.getInventory().isEmpty()) return;
+            if (ammoLoaderPart.getInventory().isEmpty()) break;
             var withCircuit = itemInputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == config.getSenderDistinctInventory()
                     && c.isWorkingEnabled() && !c.getInventory().isEmpty()).toList();
             if (withCircuit.isEmpty() || config.getReceiverPartID() == null) continue;
             var result = tryLaunchItemPayload(config);
-            if (result) return;
+            if (result) break;
         }
+        updateSubscription();
     }
 
     private boolean tryLaunchItemPayload(NetworkSenderConfigEntry config) {
@@ -218,28 +222,27 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                     var stack = bus.getInventory().getStackInSlot(i);
                     if (stack.isEmpty()) continue;
                     itemsToExtract.add(stack);
+                    if (tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) && receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
+                        matched++;
+                    } else {
+                        itemsToExtract.remove(stack);
+                    }
                     matched++;
                     if (matched == 3) break;
                 }
                 if (matched == 3) break;
             }
         }
-        if (itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
 
+        var sendPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.get(getDimensionalPos().dimension());
+        var receiverPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.get(receiver.getDimensionalPos().dimension());
+        var travelTime = Math.abs(sendPos-receiverPos);
+
+        if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) ||itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
         ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
-        if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-            if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM) return false;
-            itemsToExtract.remove(2);
-            if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-                itemsToExtract.remove(1);
-                if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-                    return false;
-                }
-            }
-        }
+        energyBuffer -= 16 * GTValues.V[GTValues.HV];
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
-        itemsToExtract.add(new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse("tfg:spent_railgun_shell")))));
-        if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 100);
+        if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20*travelTime);
         return true;
     }
 

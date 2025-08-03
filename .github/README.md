@@ -24,8 +24,9 @@
 
 ## The Core of TerraFirmaGreg-Modern
 
-**TerraFirmaGreg-Core - Modern** is the backbone of the TerraFirmaGreg-Modern modpack, serving as an integration and enhancement module. Developed in Java, this core mod is designed to bridge **TerraFirmaCraft** and **GregTech Modern**, delivering seamless compatibility and new custom features that enrich the overall gameplay experience.
+**Main modpack page:** [TerraFirmaGreg-Modern](https://github.com/TerraFirmaGreg-Team/Modpack-Modern)
 
+**TerraFirmaGreg-Core - Modern** is the backbone of the TerraFirmaGreg-Modern modpack, serving as an integration and enhancement module. Developed in Java, this core mod is designed to bridge **TerraFirmaCraft** and **GregTech Modern**, delivering seamless compatibility and new custom features that enrich the overall gameplay experience.
 
 ---
 

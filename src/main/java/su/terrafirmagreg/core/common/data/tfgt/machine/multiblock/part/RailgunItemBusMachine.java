@@ -9,11 +9,18 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.BlockItem;
 import org.jetbrains.annotations.NotNull;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class RailgunItemBusMachine extends ItemBusPartMachine implements IRedstoneSignalMachine {
     public RailgunItemBusMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
+    }
+
+    @Override
+    protected @NotNull NotifiableItemStackHandler createInventory(Object @NotNull ... args) {
+        return new NotifiableItemStackHandler(this, getInventorySize(), io).setFilter(v -> !v.getTags().toList().contains(TFGTags.Items.CannotLaunchInRailgun) && v.getItem().canFitInsideContainerItems() && (!(v.getItem() instanceof BlockItem)));
     }
 
     @Override

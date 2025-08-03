@@ -60,6 +60,7 @@ public final class TFGCore {
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
         TFGEvents.register();
+        TFGFoodTraits.init();
 
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
