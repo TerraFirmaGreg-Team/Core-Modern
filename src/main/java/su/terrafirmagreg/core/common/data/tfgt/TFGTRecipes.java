@@ -2,28 +2,20 @@ package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.OvenType;
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.*;
-import com.gregtechceu.gtceu.data.recipe.CraftingComponent;
-import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.GTCraftingComponents;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
-import electrolyte.greate.foundation.data.recipe.GreateCraftingComponents;
-import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.data.recipes.FinishedRecipe;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGTCraftingComponents;
 
 import java.util.function.Consumer;
 
-import static com.gregtechceu.gtceu.common.data.GTMachines.ITEM_EXPORT_BUS;
 import static com.gregtechceu.gtceu.common.data.GTMachines.ITEM_IMPORT_BUS;
 
 public class TFGTRecipes {
