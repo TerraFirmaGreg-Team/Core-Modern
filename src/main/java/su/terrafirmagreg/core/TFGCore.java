@@ -26,6 +26,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.world.TFGFeatures;
+import su.terrafirmagreg.core.world.TFGSurfaceRules;
 
 @Mod(TFGCore.MOD_ID)
 public final class TFGCore {
@@ -57,6 +58,7 @@ public final class TFGCore {
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.ENTITIES.register(bus);
         TFGFluids.FLUIDS.register(bus);
+        TFGSurfaceRules.SURFACE_RULES.register(bus);
         TFGEvents.register();
         TFGFoodTraits.init();
 
