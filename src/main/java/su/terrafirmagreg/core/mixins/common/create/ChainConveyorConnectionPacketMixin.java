@@ -34,7 +34,7 @@ public abstract class ChainConveyorConnectionPacketMixin extends BlockEntityConf
         Material chainMat = chainMatStack.material();
         ChainGTMaterialInterface cgtinstance = (ChainGTMaterialInterface) instance;
         cgtinstance.addConnectionMaterial(target, chainMat);
-        return original.call(target);
+        return original.call(instance, target);
     }
 
 
