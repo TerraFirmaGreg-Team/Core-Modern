@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.world.surface_rule;
 
+import com.notenoughmail.kubejs_tfc.util.implementation.mixin.accessor.SurfaceRulesContextAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.block.state.BlockState;

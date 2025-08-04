@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.world.surface_rule;
 
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.notenoughmail.kubejs_tfc.util.implementation.mixin.accessor.SurfaceRulesContextAccessor;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -41,7 +42,9 @@ public record SandDuneSurfaceRuleSource(BlockState sandBlockState, BlockState sa
 		@Override
 		public BlockState tryApply(int x, int y, int z) {
 
+			// TODO
 			//chunk.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, )
+			return sandPileState;
 		}
 	}
 }
