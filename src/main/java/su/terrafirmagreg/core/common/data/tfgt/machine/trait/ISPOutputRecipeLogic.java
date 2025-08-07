@@ -139,12 +139,12 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         if (result.isSuccess() && recipeData != null) {
             if (!consumeRecipeInputItems(recipeData, true)) {
                 return ActionResult.fail(Component.translatable("gtceu.recipe_logic.insufficient_in")
-                        .append(": ").append(ItemRecipeCapability.CAP.getName()));
+                        .append(": ").append(ItemRecipeCapability.CAP.getName()), ItemRecipeCapability.CAP, IO.IN);
             }
 
             if (!handleOutput(recipeData, true)) {
                 return ActionResult.fail(Component.translatable("gtceu.recipe_logic.insufficient_out")
-                        .append(": ").append(ItemRecipeCapability.CAP.getName()));
+                        .append(": ").append(ItemRecipeCapability.CAP.getName()), ItemRecipeCapability.CAP, IO.OUT);
             }
         }
         return result;
@@ -164,11 +164,11 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
         if (io == IO.IN) return consumeRecipeInputItems(currentRecipe, false) ? ActionResult.SUCCESS :
                 ActionResult.fail(Component.translatable("gtceu.recipe_logic.insufficient_in")
-                .append(": ").append(ItemRecipeCapability.CAP.getName()));
+                .append(": ").append(ItemRecipeCapability.CAP.getName()), ItemRecipeCapability.CAP, io);
 
         else return handleOutput(currentRecipe, false) ? ActionResult.SUCCESS :
                 ActionResult.fail(Component.translatable("gtceu.recipe_logic.insufficient_out")
-                .append(": ").append(ItemRecipeCapability.CAP.getName()));
+                .append(": ").append(ItemRecipeCapability.CAP.getName()), ItemRecipeCapability.CAP, io);
     }
 
     private boolean consumeRecipeInputItems(TFCRecipeData currentRecipe, boolean simulate) {

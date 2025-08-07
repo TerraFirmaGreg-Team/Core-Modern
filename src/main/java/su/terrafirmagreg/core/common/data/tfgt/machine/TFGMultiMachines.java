@@ -129,7 +129,7 @@ public class TFGMultiMachines {
 								.where("D", Predicates.controller(Predicates.blocks(def.get())))
 								.where("E", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
 								.where('F', Predicates.blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
-								.where("G", Predicates.blocks(GTBlocks.YELLOW_STRIPES_BLOCK_A.get()))
+								.where("G", Predicates.blocks(GTBlocks.YELLOW_STRIPES_BLOCK_A.get()).or(Predicates.blocks(GTBlocks.YELLOW_STRIPES_BLOCK_B.get())))
 								.where(" ", Predicates.any())
 								.build();
 					})
