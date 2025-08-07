@@ -57,6 +57,7 @@ public final class TFGCore {
         TFGCreativeTab.TABS.register(bus);
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.ENTITIES.register(bus);
+        TFGParticles.register(bus);
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
         TFGEvents.register();
