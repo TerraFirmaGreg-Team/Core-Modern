@@ -67,6 +67,7 @@ public final class TFGCore {
         bus.addListener(TFGEntities::onAttributes);
         bus.addListener(TFGEntities::onSpawnPlacement);
         bus.addListener(TFGEntities::onEntityRenderers);
+        bus.addListener(TFGEntities::onEntityLayerRegister);
 
         AdAstraCompat.RegisterEvents();
     }
