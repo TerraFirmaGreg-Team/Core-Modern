@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-@Mixin(GTMultiMachines.class)
+@Mixin(value = GTMultiMachines.class, remap = false)
 public class GTMultiMachinesMixin {
 
     // WOODEN_MULTIBLOCK_TANK

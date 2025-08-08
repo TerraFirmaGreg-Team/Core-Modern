@@ -238,8 +238,9 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         var receiverPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.get(receiver.getDimensionalPos().dimension());
         var travelTime = Math.abs(sendPos-receiverPos);
 
-        if (itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
+        if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) ||itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
         ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
+        energyBuffer -= 16 * GTValues.V[GTValues.HV];
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
         if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20*travelTime);
         return true;
