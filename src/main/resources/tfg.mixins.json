@@ -67,8 +67,6 @@
     "common.species.GooberMixin",
     "common.species.LimpetMixin",
     "common.species.SpringlingMixin",
-    "common.steamnrails.CRExtraRegistrationImplMixin",
-    "common.steamnrails.CRExtraRegistrationMixin",
     "common.tfc.BlastFurnaceBlockEntityMixin",
     "common.tfc.BloomeryBlockEntityMixin",
     "common.tfc.CharcoalForgeBlockMixin",

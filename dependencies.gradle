@@ -89,9 +89,6 @@ dependencies {
     implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
 
-    // Create: Railways
-    implementation fg.deobf("curse.maven:create-steam-n-rails-688231:6688860") { transitive = false }
-
     // Create: Vintage Improvements
     implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6708676") { transitive = false }
 
