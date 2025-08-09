@@ -291,7 +291,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                     serverLevel,
                     x, y + 3, z,
                     new Vec3(1.0, 1.0, 1.0),
-                    new ResourceLocation("minecraft", "explosion"),
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "explosion"),
                     10,
                     1.0, 1.0, 1.0
             );
@@ -300,12 +300,12 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                     serverLevel,
                     x, y + 23, z,
                     new Vec3(0, 0.0, 0),
-                    new ResourceLocation("minecraft", "wax_off"),
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "wax_off"),
                     100,
                     0.0, 10.0, 0.0
             );
 
-            ResourceLocation boomSound = new ResourceLocation("minecraft", "entity.warden.sonic_boom");
+            ResourceLocation boomSound = ResourceLocation.fromNamespaceAndPath("minecraft", "entity.warden.sonic_boom");
             TFGNetworkHandler.sendSound(
                     serverLevel,
                     x, y + 13, z,                                        // position
@@ -314,7 +314,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                     0.1f                                                    // pitch
             );
 
-            ResourceLocation rocketSound = new ResourceLocation("minecraft", "entity.firework_rocket.blast");
+            ResourceLocation rocketSound = ResourceLocation.fromNamespaceAndPath("minecraft", "entity.firework_rocket.blast");
             TFGNetworkHandler.sendSound(
                     serverLevel,
                     x, y, z,
@@ -323,7 +323,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                     0.1f
             );
 
-            ResourceLocation explosionSound = new ResourceLocation("minecraft", "entity.generic.explode");
+            ResourceLocation explosionSound = ResourceLocation.fromNamespaceAndPath("minecraft", "entity.generic.explode");
             TFGNetworkHandler.sendSound(
                     serverLevel,
                     x, y, z,
