@@ -10,6 +10,7 @@
     "common.ad_astra.EnvironmentEffectsMixin",
     "common.ad_astra.GasTankItemMixin",
     "common.ad_astra.ModSkyRendererMixin",
+    "common.ad_astra.SlidingDoorBlockMixin",
     "common.ad_astra.SpaceSuitItemMixin",
     "common.ae2.ConfigMenuInventoryMixin",
     "common.beneath.BurpingFlowerBlockMixin",
