@@ -55,7 +55,7 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
     }
 
     public static AttributeSupplier.Builder createMobAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)16.0F).add(Attributes.MOVEMENT_SPEED, (double)0.2F);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)32.0F).add(Attributes.MOVEMENT_SPEED, (double)0.2F);
     }
 
 
@@ -144,13 +144,6 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
             return true;
         } else{ return false; }
     }
-
-
-    @Override
-    public EntityType<?> getEntityTypeForBaby() {
-        return super.getEntityTypeForBaby();
-    }
-
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other){

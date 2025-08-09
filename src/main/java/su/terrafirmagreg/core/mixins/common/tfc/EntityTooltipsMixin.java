@@ -32,6 +32,7 @@ import org.spongepowered.asm.mixin.Unique;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.entities.MoonRabbit;
 import su.terrafirmagreg.core.common.data.entities.TFCGlacianRam;
+import su.terrafirmagreg.core.common.data.entities.TFCSniffer;
 
 import java.util.Locale;
 
@@ -114,6 +115,9 @@ public abstract class EntityTooltipsMixin {
 			if (animal.isReadyForAnimalProduct()) {
 				tooltip.accept(animal.getProductReadyName().withStyle(ChatFormatting.GREEN));
 			}
+			if (animal instanceof TFCSniffer sniffer) {
+				if (sniffer.isReadyForWoolProduct()) tooltip.accept(sniffer.getWoolReadyName().withStyle(ChatFormatting.GREEN));
+			}
 			if (animal.isReadyToMate()) {
 				tooltip.accept(Component.translatable("tfc.jade.can_mate"));
 			}
@@ -139,6 +143,9 @@ public abstract class EntityTooltipsMixin {
 		}
 		if (entity instanceof TFCGlacianRam) {
 			tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.glacian_ram"));
+		}
+		if (entity instanceof TFCSniffer animal) {
+			tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.sniffer"));
 		}
 	};
 

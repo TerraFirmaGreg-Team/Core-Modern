@@ -17,6 +17,7 @@ public final class TFGTags {
         public static final TagKey<Item> Harvester = createItemTag("tfg:harvester");
         public static final TagKey<Item> CannotLaunchInRailgun = createItemTag("tfg:cannot_launch_in_railgun");
         public static final TagKey<Item> GlacianRamFood = createItemTag("tfg:glacian_ram_food");
+        public static final TagKey<Item> SnifferFood = createItemTag("tfg:sniffer_food");
 
 
         public static TagKey<Item> createItemTag(String path) {

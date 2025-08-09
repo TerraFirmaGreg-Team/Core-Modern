@@ -43,6 +43,7 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.SANGNUM_MYCELIUM);
 
 		accept(out, TFGItems.GLACIAN_WOOL);
+		accept(out, TFGItems.SNIFFER_WOOL);
 
 		accept(out, TFGItems.PIGLIN_DISGUISE);
 		accept(out, TFGItems.TROWEL);
@@ -52,6 +53,7 @@ public class TFGCreativeTab {
 
 		accept(out, TFGItems.MOON_RABBIT_EGG);
 		accept(out, TFGItems.GLACIAN_RAM_EGG);
+		accept(out, TFGItems.SNIFFER_SPAWN_EGG);
 	}
 
 	private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out, Map<K1, Map<K2, R>> map, K1 key1, K2 key2)

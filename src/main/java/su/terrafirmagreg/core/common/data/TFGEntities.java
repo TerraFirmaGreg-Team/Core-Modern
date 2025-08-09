@@ -24,7 +24,7 @@ public class TFGEntities {
 
 	public static final RegistryObject<EntityType<MoonRabbit>> MOON_RABBIT = register("moon_rabbit", EntityType.Builder.of(MoonRabbit::makeMoonRabbit, MobCategory.CREATURE).sized(1.0F, 1.3F).clientTrackingRange(10));
 	public static final RegistryObject<EntityType<TFCGlacianRam>> GLACIAN_RAM = register("glacian_ram",EntityType.Builder.of(TFCGlacianRam::makeTFCGlacianRam, MobCategory.CREATURE).sized(0.9f, 1.3f).clientTrackingRange(10));
-
+	public static final RegistryObject<EntityType<TFCSniffer>> SNIFFER = register("sniffer", EntityType.Builder.of(TFCSniffer::makeTFCSniffer, MobCategory.CREATURE).sized(1.9F, 1.75F).clientTrackingRange(10));
 
 	public static <E extends Entity> RegistryObject<EntityType<E>> register(String name, EntityType.Builder<E> builder)
 	{
@@ -45,6 +45,7 @@ public class TFGEntities {
 	{
 		event.put(MOON_RABBIT.get(), MoonRabbit.createAttributes().build());
 		event.put(GLACIAN_RAM.get(), TFCGlacianRam.createMobAttributes().build());
+		event.put(SNIFFER.get(), TFCSniffer.createMobAttributes().build());
 	}
 
 	public static void onSpawnPlacement(SpawnPlacementRegisterEvent event)
@@ -56,6 +57,7 @@ public class TFGEntities {
 	{
 		event.registerEntityRenderer(MOON_RABBIT.get(), MoonRabbitRenderer::new);
 		event.registerEntityRenderer(GLACIAN_RAM.get(), TFCGlacianRamRenderer::new);
+		event.registerEntityRenderer(SNIFFER.get(), TFCSnifferRenderer::new);
 	}
 
 	public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event){
