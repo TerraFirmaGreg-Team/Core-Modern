@@ -96,6 +96,28 @@ public class ElectricExtendoGrip extends ComponentItem{
     public static final String EXTENDO_MARKER = "electricExtendo";
     public static final String DUAL_EXTENDO_MARKER = "electricDualExtendo";
 
+    public static void clearMarkersIfNotInInventory(Player player) {
+        boolean containsEEG = false;
+        CompoundTag persistentData = player.getPersistentData();
+        boolean hasEitherEEGMarker = (persistentData.contains(EXTENDO_MARKER) || persistentData.contains(DUAL_EXTENDO_MARKER));
+        for (ItemStack i : player.inventoryMenu.getItems()) {
+            if (i.getItem() instanceof ElectricExtendoGrip) {
+                //TFGCore.LOGGER.info("Holding Electric Extendo Grip");
+                containsEEG = true;
+            }
+        }
+        if (!containsEEG && hasEitherEEGMarker) {
+            player.getAttributes()
+                    .removeAttributeModifiers(rangeModifier.get());
+            persistentData.remove(EXTENDO_MARKER);
+
+            player.getAttributes()
+                    .removeAttributeModifiers(doubleRangeModifier.get());
+            persistentData.remove(DUAL_EXTENDO_MARKER);
+        }
+
+    }
+
     @SubscribeEvent
     public static void holdingExtendoGripIncreasesRange(LivingEvent.LivingTickEvent event) {
         if (!(event.getEntity() instanceof Player player))
@@ -110,6 +132,7 @@ public class ElectricExtendoGrip extends ComponentItem{
         boolean wasHoldingExtendo = persistentData.contains(EXTENDO_MARKER);
         boolean wasHoldingDualExtendo = persistentData.contains(DUAL_EXTENDO_MARKER);
 
+        clearMarkersIfNotInInventory(player);
 
         //TFGCore.LOGGER.info("Charge is: {}", player.getMainHandItem().getOrCreateTag().getInt("Charge"));
         ItemStack mainHand = player.getMainHandItem();
@@ -255,24 +278,8 @@ public class ElectricExtendoGrip extends ComponentItem{
 //            extendo.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(h));
 //    }
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return BacktankUtil.isBarVisible(stack, maxUses());
-    }
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return BacktankUtil.getBarWidth(stack, maxUses());
-    }
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return BacktankUtil.getBarColor(stack, maxUses());
-    }
-
-    private static int maxUses() {
-        return AllConfigs.server().equipment.maxExtendoGripActions.get();
-    }
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {
