@@ -63,10 +63,10 @@ import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber
 public class ElectricExtendoGrip extends ComponentItem{
-    public static final int MAX_DAMAGE = 200;
+    //public static final int MAX_DAMAGE = 200;
 
-    public static final int COST = 10;
-    public static final int POWER_THRESHOLD = 100;
+    public static final int COST = 8;
+    //public static final int POWER_THRESHOLD = 100;
     public ElectricStats electricStats;
 
     public static final AttributeModifier singleRangeAttributeModifier =
@@ -86,9 +86,9 @@ public class ElectricExtendoGrip extends ComponentItem{
     private static DamageSource lastActiveDamageSource;
 
     public ElectricExtendoGrip(Properties properties) {
-        super(properties.defaultDurability(MAX_DAMAGE));
+        super(properties.defaultDurability(200));
 
-        electricStats = ElectricStats.createElectricItem(100_000L, GTValues.LV);
+        electricStats = ElectricStats.createElectricItem(1_000_000L, GTValues.MV);
 
         this.attachComponents(electricStats);
     }
