@@ -38,6 +38,7 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL);
 
 		accept(out, TFGBlocks.MARS_DIRT);
+		accept(out, TFGBlocks.MARS_FARMLAND);
 		accept(out, TFGBlocks.AMBER_MYCELIUM);
 		accept(out, TFGBlocks.RUSTICUS_MYCELIUM);
 		accept(out, TFGBlocks.SANGNUM_MYCELIUM);
