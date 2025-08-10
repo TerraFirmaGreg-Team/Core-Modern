@@ -39,6 +39,7 @@ public final class TFGClientEventHandler {
         event.registerSpriteSet(TFGParticles.RAILGUN_AMMO.get(), RailgunAmmoProvider::new);
     }
 
+    @SuppressWarnings("removal")
     public static void clientSetup(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());

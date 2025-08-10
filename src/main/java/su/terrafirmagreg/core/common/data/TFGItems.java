@@ -35,8 +35,6 @@ import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 public class TFGItems {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TFGCore.MOD_ID);
 
-	//public static final RegistryObject<Item> EXAMPLE_ITEM = register("pyritie");
-	//public static final GTRegistrate REGISTRATE = GTRegistrate.create(TFGCore.MOD_ID);
 
 	public static final RegistryObject<Item> PIGLIN_DISGUISE =
 			ITEMS.register("piglin_disguise", () -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), new Item.Properties()));
@@ -70,6 +68,4 @@ public class TFGItems {
 	{
 		return register("spawn_egg/" + entity.getId().getPath(), () -> new ForgeSpawnEggItem(entity, color1, color2, new Item.Properties()));
 	}
-
-
 }
