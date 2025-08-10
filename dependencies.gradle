@@ -160,4 +160,8 @@ dependencies {
 
     // Simply Stacked Dimensions
     implementation fg.deobf("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
+
+    // Hang Glider
+    implementation fg.deobf("maven.modrinth:puzzles-lib:${puzzleslib_version}")
+    implementation fg.deobf("maven.modrinth:hang-glider:${hangglider_version}")
 }
