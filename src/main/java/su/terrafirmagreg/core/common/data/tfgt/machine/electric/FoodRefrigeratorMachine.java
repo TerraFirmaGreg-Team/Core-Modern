@@ -129,19 +129,25 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
     }
 
     public void tick() {
-        if (workingEnabled && !inventory.isEmpty()) consumeEnergy(false);
+        if (workingEnabled && !inventory.isEmpty())
+            consumeEnergy(false);
+
         updateSubscription();
     }
 
     private long getEnergyAmount() {
-        return GTValues.VA[tier];
+        // 1A of LV per inventory row
+        return (long) GTValues.VA[GTValues.LV] * tier;
     }
 
     private boolean consumeEnergy(boolean simulate) {
         long amount = energyContainer.getEnergyStored() - getEnergyAmount();
-        if ((amount < 0 || amount > energyContainer.getEnergyCapacity())) return false;
+        if ((amount < 0 || amount > energyContainer.getEnergyCapacity()))
+            return false;
 
-        if (!simulate) energyContainer.removeEnergy(getEnergyAmount());
+        if (!simulate)
+            energyContainer.removeEnergy(getEnergyAmount());
+
         return true;
     }
 
@@ -205,7 +211,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
         public void changeTraitForAll(boolean add) {
             for (int i = 0; i < storage.getSlots(); i++) {
                 var stack = storage.getStackInSlot(i).copy();
-                if (stack.isEmpty()) continue;
+                if (stack.isEmpty())
+                    continue;
+
                 if (add) {
                     FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
                 } else {
@@ -219,8 +227,11 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
         @NotNull
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate)
         {
-            if (stack.isEmpty()) return ItemStack.EMPTY;
-            if (currentlyWorking) FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+            if (stack.isEmpty())
+                return ItemStack.EMPTY;
+            if (currentlyWorking)
+                FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+
             var result = storage.insertItem(slot, stack, simulate);
             updateSubscription();
             FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
@@ -231,7 +242,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
         @NotNull
         public ItemStack extractItem(int slot, int amount, boolean simulate)
         {
-            if (amount == 0) return ItemStack.EMPTY;
+            if (amount == 0)
+                return ItemStack.EMPTY;
+
             var result = storage.extractItem(slot, amount, simulate);
             FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
             updateSubscription();
@@ -240,7 +253,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements ICon
 
         @Override
         public void setStackInSlot(int slot, @NotNull ItemStack stack) {
-            if (currentlyWorking) FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+            if (currentlyWorking)
+                FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+
             FoodCapability.removeTrait(storage.getStackInSlot(slot), TFGFoodTraits.REFRIGERATING);
             storage.setStackInSlot(slot, stack);
             updateSubscription();
