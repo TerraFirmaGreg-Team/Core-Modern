@@ -8,6 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntity;
+import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
 
 
 public class TFGBlockEntities {
@@ -28,4 +29,7 @@ public class TFGBlockEntities {
 							FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.TREATED_WOOD).get(Greenhouse.BlockType.PORT).get()
 					).build(null)
 			);
+
+	public static final RegistryObject<BlockEntityType<ReflectorBlockEntity>> REFLECTOR_BLOCK_ENTITY = BLOCK_ENTITIES.register("reflector",
+			() -> BlockEntityType.Builder.of(ReflectorBlockEntity::new, TFGBlocks.REFLECTOR_BLOCK.get()).build(null));
 }

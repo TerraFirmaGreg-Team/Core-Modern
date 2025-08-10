@@ -25,6 +25,7 @@
     "common.create.DepotBehaviorMixin",
     "common.create.InputEventsMixin",
     "common.create.ProcessingRecipeMixin",
+    "common.create_additions.LiquidBlazeBurnerBlockEntityMixin",
     "common.emi.ItemEmiStackMixin",
     "common.firmalife.HydroponicPlanterBlockEntityMixin",
     "common.firmalife.MixinGreenhousePortBlock",

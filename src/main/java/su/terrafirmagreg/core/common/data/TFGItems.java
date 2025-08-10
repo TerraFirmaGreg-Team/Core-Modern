@@ -1,5 +1,13 @@
 package su.terrafirmagreg.core.common.data;
 
+import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.gui.misc.ProspectorMode;
+import com.gregtechceu.gtceu.api.item.ComponentItem;
+import com.gregtechceu.gtceu.api.item.component.ElectricStats;
+import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.gregtechceu.gtceu.common.item.ProspectorScannerBehavior;
+import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BucketItem;
@@ -10,11 +18,14 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.items.ElectricExtendoGrip;
 import su.terrafirmagreg.core.common.data.items.PiglinDisguise;
 import su.terrafirmagreg.core.common.data.items.TrowelItem;
 
 import java.util.Locale;
 import java.util.function.Supplier;
+
+import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 
 /**
  * Uncomment TFGCreativeTab in TFGCore if you register anything new here
@@ -25,6 +36,7 @@ public class TFGItems {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TFGCore.MOD_ID);
 
 	//public static final RegistryObject<Item> EXAMPLE_ITEM = register("pyritie");
+	//public static final GTRegistrate REGISTRATE = GTRegistrate.create(TFGCore.MOD_ID);
 
 	public static final RegistryObject<Item> PIGLIN_DISGUISE =
 			ITEMS.register("piglin_disguise", () -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), new Item.Properties()));
@@ -40,6 +52,10 @@ public class TFGItems {
 
 	public static final RegistryObject<Item> RAILGUN_AMMO_SHELL = ITEMS.register("railgun_ammo_shell", () -> new Item(new Item.Properties().stacksTo(16)));
 
+	public static final RegistryObject<ComponentItem> ELECTRIC_EXTENDO_GRIP = ITEMS.register("electric_extendo_grip", () -> new ElectricExtendoGrip(new Item.Properties()));
+
+
+
 	private static RegistryObject<Item> register(String name)
 	{
 		return register(name, () -> new Item(new Item.Properties()));
@@ -54,4 +70,6 @@ public class TFGItems {
 	{
 		return register("spawn_egg/" + entity.getId().getPath(), () -> new ForgeSpawnEggItem(entity, color1, color2, new Item.Properties()));
 	}
+
+
 }

@@ -92,6 +92,9 @@ dependencies {
     // Create: Vintage Improvements
     implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6708676") { transitive = false }
 
+    // Create: Crafts and Additions
+    implementation fg.deobf("curse.maven:create-crafts-and-additions-439890:6306951")
+
     // Greate
     implementation fg.deobf("maven.modrinth:greate:${greate_version}") { transitive = false }
 
