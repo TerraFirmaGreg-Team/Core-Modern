@@ -122,7 +122,7 @@ public final class TFGBlocks {
 	public static final RegistryObject<Block> ELECTROMAGNETIC_ACCELERATOR_BLOCK = register("electromagnetic_accelerator",
 			() -> new ElectromagneticAcceleratorBlock(BlockBehaviour.Properties.of()
 					.mapColor(MapColor.COLOR_LIGHT_BLUE)
-					.strength(0.5f)
+					.strength(5.5f)
 					.sound(SoundType.COPPER)
 					.lightLevel(state -> 15)
 					.speedFactor(1.5f)
@@ -131,23 +131,26 @@ public final class TFGBlocks {
 	public static final RegistryObject<Block> SUPERCONDUCTOR_COIL_LARGE_BLOCK = register("superconductor_coil_large",
 			() -> new SimpleBlock(BlockBehaviour.Properties.of()
 					.mapColor(MapColor.COLOR_ORANGE)
-					.strength(0.5f)
+					.strength(5.5f)
 					.sound(SoundType.COPPER)
 			));
 
 	public static final RegistryObject<Block> SUPERCONDUCTOR_COIL_SMALL_BLOCK = register("superconductor_coil_small",
 			() -> new SimpleBlock(BlockBehaviour.Properties.of()
 					.mapColor(MapColor.COLOR_ORANGE)
-					.strength(0.5f)
+					.strength(5.5f)
 					.sound(SoundType.COPPER)
 			));
 
 	public static final RegistryObject<Block> MACHINE_CASING_ALUMINIUM_PLATED_STEEL = register("machine_casing_aluminium_plated_steel",
 			() -> new SimpleBlock(BlockBehaviour.Properties.of()
 					.mapColor(MapColor.COLOR_LIGHT_BLUE)
-					.strength(0.5f)
+					.strength(5.5f)
 					.sound(SoundType.COPPER)
 			));
+
+	public static final RegistryObject<ReflectorBlock> REFLECTOR_BLOCK = register("reflector",
+			ReflectorBlock::new);
 
 
 	// Buds are generated automatically
