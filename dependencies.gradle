@@ -125,7 +125,7 @@ dependencies {
     implementation fg.deobf("maven.modrinth:alekiships:${alekiships_version}") { transitive = false }
     implementation fg.deobf("maven.modrinth:firmaciv:${firmaciv_version}") { transitive = false }
 
-    // TFC AstikoCarts
+    // TFC AstikorCarts
     implementation fg.deobf("curse.maven:astikor-carts-redux-916493:4988266") { transitive = false }
     implementation fg.deobf("curse.maven:astikor-carts-tfc-844019:5141430") { transitive = false }
 
