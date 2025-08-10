@@ -1,3 +1,9 @@
+/*
+ * This file includes code from TFC (https://github.com/TerraFirmaCraft/TerraFirmaCraft?tab=EUPL-1.2-1-ov-file)
+ * EUPL © the European Union 2007, 2016
+ * European Union Public Licence
+ * V. 1.2
+ */
 package su.terrafirmagreg.core.mixins.client.tfc;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;

@@ -1,3 +1,8 @@
+/*
+ * This file includes code from Create (https://github.com/Creators-of-Create/Create)
+ * Copyright (c) 2019 simibubi
+ * Licensed under the MIT License
+ */
 package su.terrafirmagreg.core.common.data.items;
 
 import com.google.common.base.Suppliers;
