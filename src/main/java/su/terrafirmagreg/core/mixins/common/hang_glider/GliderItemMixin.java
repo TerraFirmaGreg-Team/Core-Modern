@@ -23,7 +23,7 @@ public abstract class GliderItemMixin {
         ForgeConfigSpec.BooleanValue gliderPlanetToggle = TFGConfig.SERVER.glidersWorkOnPlanets.get(level.dimension());
         if (gliderPlanetToggle != null && !gliderPlanetToggle.get()) {
             if (!level.isClientSide()) {
-                MutableComponent chatMessage = Component.literal("You can't use a hang glider here!").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY);
+                MutableComponent chatMessage = Component.translatable("tfg.hangglider.disabled_dimension").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY);
                 player.sendSystemMessage(chatMessage);
             }
             cir.setReturnValue(InteractionResultHolder.fail(player.getItemInHand(usedHand)));
