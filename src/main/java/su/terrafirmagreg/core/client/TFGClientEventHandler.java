@@ -3,7 +3,7 @@ package su.terrafirmagreg.core.client;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.screen.NestBoxScreen;
 import net.dries007.tfc.common.fluids.TFCFluids;
-import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -13,9 +13,11 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -31,10 +33,15 @@ import java.util.List;
 
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGParticles;
+import su.terrafirmagreg.core.common.data.events.AdvancedOreProspectorEventHelper;
+import su.terrafirmagreg.core.common.data.events.NormalOreProspectorEventHelper;
+import su.terrafirmagreg.core.common.data.events.OreProspectorEvent;
+import su.terrafirmagreg.core.common.data.events.WeakOreProspectorEventHelper;
+import su.terrafirmagreg.core.common.data.particles.OreProspectorProvider;
 import su.terrafirmagreg.core.common.data.particles.RailgunAmmoProvider;
 import su.terrafirmagreg.core.common.data.particles.RailgunBoomProvider;
 
-
+@Mod.EventBusSubscriber(modid = "tfg", value = net.minecraftforge.api.distmarker.Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TFGClientEventHandler {
 
     public static final ResourceLocation TFCMetalBlockTexturePattern =
@@ -51,12 +58,65 @@ public final class TFGClientEventHandler {
         forgeBus.addListener(TFGClientEventHandler::onItemTooltip);
 
         bus.register(this);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public static void onTooltip(ItemTooltipEvent event) {
+        var tooltip = event.getToolTip();
+        var stack = event.getItemStack();
+
+        // Check Weak helpers
+        for (WeakOreProspectorEventHelper helper : OreProspectorEvent.WeakOreProspectorListHelper) {
+            if (stack.is(helper.getItemTag())) {
+                tooltip.add(Component.translatable(
+                        "tooltip.tfg.ore_prospector_stats",
+                        helper.getLength(),
+                        (int) (helper.getHalfWidth() * 2),
+                        (int) (helper.getHalfHeight() * 2)
+                ).withStyle(ChatFormatting.YELLOW));
+                return;
+            }
+        }
+
+        // Check Normal helpers
+        for (NormalOreProspectorEventHelper helper : OreProspectorEvent.NormalOreProspectorListHelper) {
+            if (stack.is(helper.getItemTag())) {
+                tooltip.add(Component.translatable(
+                        "tooltip.tfg.ore_prospector_stats",
+                        helper.getLength(),
+                        (int) (helper.getHalfWidth() * 2),
+                        (int) (helper.getHalfHeight() * 2)
+                ).withStyle(ChatFormatting.YELLOW));
+                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_count")
+                        .withStyle(ChatFormatting.YELLOW));
+                return;
+            }
+        }
+
+        // Check Advanced helpers
+        for (AdvancedOreProspectorEventHelper helper : OreProspectorEvent.AdvancedOreProspectorListHelper) {
+            if (stack.is(helper.getItemTag())) {
+                tooltip.add(Component.translatable(
+                        "tooltip.tfg.ore_prospector_stats",
+                        helper.getLength(),
+                        (int) (helper.getHalfWidth() * 2),
+                        (int) (helper.getHalfHeight() * 2)
+                ).withStyle(ChatFormatting.YELLOW));
+                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_count")
+                        .withStyle(ChatFormatting.YELLOW));
+                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_xray")
+                        .withStyle(ChatFormatting.YELLOW));
+                return;
+            }
+        }
     }
 
     @SubscribeEvent
     public void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(TFGParticles.RAILGUN_BOOM.get(), RailgunBoomProvider::new);
         event.registerSpriteSet(TFGParticles.RAILGUN_AMMO.get(), RailgunAmmoProvider::new);
+        event.registerSpriteSet(TFGParticles.ORE_PROSPECTOR.get(), OreProspectorProvider::new);
     }
 
     @SuppressWarnings("removal")
