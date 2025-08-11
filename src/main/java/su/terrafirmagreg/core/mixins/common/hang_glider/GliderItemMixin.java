@@ -18,8 +18,9 @@ import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mixin(value = GliderItem.class, remap = false)
 public abstract class GliderItemMixin {
+
     @Inject(method = "use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;", at = @At(value = "HEAD"), cancellable = true, remap = true)
-    private void testing(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+    private void tfg$cancelSpaceGliding(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         ForgeConfigSpec.BooleanValue gliderPlanetToggle = TFGConfig.SERVER.glidersWorkOnPlanets.get(level.dimension());
         if (gliderPlanetToggle != null && !gliderPlanetToggle.get()) {
             if (!level.isClientSide()) {
