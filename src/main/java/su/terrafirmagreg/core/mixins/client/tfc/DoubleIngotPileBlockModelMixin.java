@@ -1,3 +1,9 @@
+/*
+ * This file includes code from TFC (https://github.com/TerraFirmaCraft/TerraFirmaCraft?tab=EUPL-1.2-1-ov-file)
+ * EUPL © the European Union 2007, 2016
+ * European Union Public Licence
+ * V. 1.2
+ */
 package su.terrafirmagreg.core.mixins.client.tfc;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -46,12 +52,12 @@ public abstract class DoubleIngotPileBlockModelMixin implements SimpleStaticBloc
         for (int i = 0; i < ingots; i++)
         {
             final var stack = TFGHelpers.getStackFromIngotPileTileEntityByIndex(pileEntries, i);
-            final var material = ChemicalHelper.getMaterial(stack);
-            final int primaryColor = material == null ? 0 : material.material().getMaterialARGB(0);
-            final int secondaryColor = material == null ? 0 : material.material().getMaterialARGB(1);
+            final var material = ChemicalHelper.getMaterialStack(stack);
+            final int primaryColor = material.material().getMaterialARGB(0);
+            final int secondaryColor = material.material().getMaterialARGB(1);
             Metal metalAtPos = pile.getOrCacheMetal(i);
 
-            boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && material != null && !material.isEmpty());
+            boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && !material.isEmpty());
             ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getSoftTextureId() : TFGClientEventHandler.TFCMetalBlockTexturePattern;
 
             sprite = textureAtlas.apply(metalResource);

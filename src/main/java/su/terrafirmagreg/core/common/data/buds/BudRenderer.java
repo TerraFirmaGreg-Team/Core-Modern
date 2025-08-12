@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.buds;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.data.pack.GTDynamicResourcePack;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
@@ -12,7 +13,6 @@ import net.minecraft.data.models.model.DelegatedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import su.terrafirmagreg.core.TFGCore;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class BudRenderer {
 			ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(model.block);
 			ResourceLocation modelId = blockId.withPrefix("block/");
 
-			GTDynamicResourcePack.addBlockModel(modelId, new DelegatedModel(TFGCore.id("block/bud_indicator")));
+			GTDynamicResourcePack.addBlockModel(modelId, new DelegatedModel(GTCEu.id("block/bud_indicator")));
 			GTDynamicResourcePack.addBlockState(blockId, MultiVariantGenerator
 				 .multiVariant(model.block, Variant.variant().with(VariantProperties.MODEL, modelId))
 				 .with(PropertyDispatch.property(BlockStateProperties.FACING)

@@ -23,14 +23,8 @@ public abstract class ConfigMenuInventoryMixin {
 
 
     private static void applyItemCapabilities(ItemStack stack){
-        MaterialStack materialStack = ChemicalHelper.getMaterial(stack);
-        if(materialStack == null){
-            return;
-        }
+        MaterialStack materialStack = ChemicalHelper.getMaterialStack(stack);
         Material material = materialStack.material();
-        if(material == null){
-            return;
-        }
         if(material.hasProperty(TFGPropertyKeys.TFC_PROPERTY)){
             // Resolve the capabilities before they get inserted
             stack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(handler -> {

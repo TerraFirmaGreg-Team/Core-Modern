@@ -38,7 +38,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
 
-public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAutoOutputItem, IControllable, IFancyUIMachine, IMachineLife {
+public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IControllable, IFancyUIMachine, IMachineLife {
 
     public static int INVENTORY_SIZE(int tier) {
         return 9 * tier;
@@ -129,19 +129,25 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     }
 
     public void tick() {
-        if (workingEnabled && !inventory.isEmpty()) consumeEnergy(false);
+        if (workingEnabled && !inventory.isEmpty())
+            consumeEnergy(false);
+
         updateSubscription();
     }
 
     private long getEnergyAmount() {
-        return GTValues.VA[tier];
+        // 1A of LV per inventory row
+        return (long) GTValues.VA[GTValues.LV] * tier;
     }
 
     private boolean consumeEnergy(boolean simulate) {
         long amount = energyContainer.getEnergyStored() - getEnergyAmount();
-        if ((amount < 0 || amount > energyContainer.getEnergyCapacity())) return false;
+        if ((amount < 0 || amount > energyContainer.getEnergyCapacity()))
+            return false;
 
-        if (!simulate) energyContainer.removeEnergy(getEnergyAmount());
+        if (!simulate)
+            energyContainer.removeEnergy(getEnergyAmount());
+
         return true;
     }
 
@@ -151,22 +157,6 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
 
     @Persisted
     private boolean workingEnabled;
-    @Getter
-    @Persisted
-    @DescSynced
-    @RequireRerender
-    protected Direction outputFacingItems;
-    @Getter
-    @Persisted
-    @DescSynced
-    @RequireRerender
-    protected boolean autoOutputItems;
-    @Setter
-    @Getter
-    @Persisted
-    protected boolean allowInputFromOutputSideItems;
-
-    protected TickableSubscription autoOutputSubs;
 
     @Override
     public boolean isWorkingEnabled() {
@@ -177,43 +167,6 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     public void setWorkingEnabled(boolean isWorkingAllowed) {
         workingEnabled = isWorkingAllowed;
         updateSubscription();
-    }
-
-    @Override
-    public void setAutoOutputItems(boolean allow) {
-        this.autoOutputItems = allow;
-        updateAutoOutputSubscription();
-    }
-
-    @Override
-    public void setOutputFacingItems(@Nullable Direction outputFacing) {
-        this.outputFacingItems = outputFacing;
-        updateAutoOutputSubscription();
-    }
-
-    @Override
-    public void onNeighborChanged(@NotNull Block block, @NotNull BlockPos fromPos, boolean isMoving) {
-        super.onNeighborChanged(block, fromPos, isMoving);
-        updateAutoOutputSubscription();
-    }
-
-    protected void updateAutoOutputSubscription() {
-        var outputFacing = getOutputFacingItems();
-        if ((isAutoOutputItems() && !inventory.isEmpty() && workingEnabled) && outputFacing != null && getLevel() != null && GTTransferUtils.hasAdjacentItemHandler(getLevel(), getPos(), outputFacing)) {
-            autoOutputSubs = subscribeServerTick(autoOutputSubs, this::autoOutput);
-        } else if (autoOutputSubs != null) {
-            autoOutputSubs.unsubscribe();
-            autoOutputSubs = null;
-        }
-    }
-
-    protected void autoOutput() {
-        if (getOffsetTimer() % 5 == 0) {
-            if (isAutoOutputItems() && getOutputFacingItems() != null) {
-                inventory.exportToNearby(getOutputFacingItems());
-            }
-            updateAutoOutputSubscription();
-        }
     }
 
     //#endregion
@@ -251,14 +204,16 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
     public class RefrigeratedStorage extends NotifiableItemStackHandler {
 
         public RefrigeratedStorage(MetaMachine machine, int slots) {
-            super(machine, slots, IO.BOTH, IO.BOTH);
+            super(machine, slots, IO.IN, IO.IN);
         }
 
 
         public void changeTraitForAll(boolean add) {
             for (int i = 0; i < storage.getSlots(); i++) {
                 var stack = storage.getStackInSlot(i).copy();
-                if (stack.isEmpty()) continue;
+                if (stack.isEmpty())
+                    continue;
+
                 if (add) {
                     FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
                 } else {
@@ -272,8 +227,11 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
         @NotNull
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate)
         {
-            if (stack.isEmpty()) return ItemStack.EMPTY;
-            if (currentlyWorking) FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+            if (stack.isEmpty())
+                return ItemStack.EMPTY;
+            if (currentlyWorking)
+                FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+
             var result = storage.insertItem(slot, stack, simulate);
             updateSubscription();
             FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
@@ -284,7 +242,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
         @NotNull
         public ItemStack extractItem(int slot, int amount, boolean simulate)
         {
-            if (amount == 0) return ItemStack.EMPTY;
+            if (amount == 0)
+                return ItemStack.EMPTY;
+
             var result = storage.extractItem(slot, amount, simulate);
             FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
             updateSubscription();
@@ -293,7 +253,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine implements IAut
 
         @Override
         public void setStackInSlot(int slot, @NotNull ItemStack stack) {
-            if (currentlyWorking) FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+            if (currentlyWorking)
+                FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+
             FoodCapability.removeTrait(storage.getStackInSlot(slot), TFGFoodTraits.REFRIGERATING);
             storage.setStackInSlot(slot, stack);
             updateSubscription();

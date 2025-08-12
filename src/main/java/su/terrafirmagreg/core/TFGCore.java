@@ -12,7 +12,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkConstants;
@@ -21,11 +20,15 @@ import org.slf4j.LoggerFactory;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.common.*;
 import su.terrafirmagreg.core.common.data.*;
+import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
+import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.world.TFGFeatures;
+import su.terrafirmagreg.core.world.TFGSurfaceRules;
+import su.terrafirmagreg.core.network.*;
 
 @Mod(TFGCore.MOD_ID)
 public final class TFGCore {
@@ -39,8 +42,7 @@ public final class TFGCore {
 
     @SuppressWarnings("removal")
     public TFGCore() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TFGConfig.SPEC);
-
+        TFGConfig.init();
         TFGCommonEventHandler.init();
         if (FMLEnvironment.dist == Dist.CLIENT) {
             new TFGClientEventHandler();
@@ -50,19 +52,31 @@ public final class TFGCore {
 
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        TFGNetworkHandler.init();
         TFGBlocks.BLOCKS.register(bus);
         TFGBlockEntities.BLOCK_ENTITIES.register(bus);
         TFGItems.ITEMS.register(bus);
         TFGCreativeTab.TABS.register(bus);
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.ENTITIES.register(bus);
+        TFGParticles.register(bus);
+        TFGFluids.FLUIDS.register(bus);
+        TFGSurfaceRules.SURFACE_RULES.register(bus);
+        TFGContainers.CONTAINERS.register(bus);
+
+        TFGBrain.MEMORY_TYPES.register(bus);
+        TFGBrain.SENSOR_TYPES.register(bus);
+        TFGBrain.POI_TYPES.register(bus);
+
         TFGEvents.register();
+        TFGFoodTraits.init();
 
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         bus.addListener(TFGEntities::onAttributes);
         bus.addListener(TFGEntities::onSpawnPlacement);
         bus.addListener(TFGEntities::onEntityRenderers);
+        bus.addListener(TFGEntities::onEntityLayerRegister);
 
         AdAstraCompat.RegisterEvents();
     }

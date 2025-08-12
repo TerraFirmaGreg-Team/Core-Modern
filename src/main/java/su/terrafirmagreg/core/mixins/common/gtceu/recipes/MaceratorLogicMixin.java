@@ -13,8 +13,8 @@ public abstract class MaceratorLogicMixin {
 
 	// Prevents tools from being recycled into more dust than they started with
 
-	@Redirect(method = "createCustomRecipe", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/machine/trait/customlogic/MaceratorLogic;applyDurabilityRecipe(Ljava/lang/String;Lnet/minecraft/world/item/ItemStack;Lcom/gregtechceu/gtceu/api/data/chemical/material/Material;FFJI)Lcom/gregtechceu/gtceu/api/recipe/GTRecipe;"), remap = false)
-	public GTRecipe tfg$createCustomRecipe(MaceratorLogic instance, String id, ItemStack inputStack, Material mat, float fullAmount, float durability, long voltage, int durationFactor)
+	@Redirect(method = "search", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/machine/trait/customlogic/MaceratorLogic;applyDurabilityRecipe(Ljava/lang/String;Lnet/minecraft/world/item/ItemStack;Lcom/gregtechceu/gtceu/api/data/chemical/material/Material;FFJI)Lcom/gregtechceu/gtceu/api/recipe/GTRecipe;"), remap = false)
+	public GTRecipe tfg$search(MaceratorLogic instance, String id, ItemStack inputStack, Material mat, float fullAmount, float durability, long voltage, int durationFactor)
 	{
 		return null;
 	}

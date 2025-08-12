@@ -17,7 +17,7 @@ public abstract class OrePropertyMixin {
 	@Shadow @Final private List<Material> oreByProducts;
 
 	// Clear the byproduct list before adding new ones, otherwise it can't be edited in kjs
-	@Inject(method = "setOreByProducts", at = @At("HEAD"), remap = false)
+	@Inject(method = "setOreByProducts*", at = @At("HEAD"), remap = false)
 	public void tfg$setOreByProducts(Material[] materials, CallbackInfo ci)
 	{
 		this.oreByProducts.clear();

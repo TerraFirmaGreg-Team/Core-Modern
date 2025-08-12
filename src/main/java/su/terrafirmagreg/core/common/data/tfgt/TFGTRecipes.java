@@ -2,111 +2,97 @@ package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.OvenType;
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.*;
-import com.gregtechceu.gtceu.data.recipe.CraftingComponent;
-import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.gregtechceu.gtceu.data.recipe.GTCraftingComponents;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.data.recipes.FinishedRecipe;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGTCraftingComponents;
 
 import java.util.function.Consumer;
+
+import static com.gregtechceu.gtceu.common.data.GTMachines.ITEM_IMPORT_BUS;
 
 public class TFGTRecipes {
 
 	public static void init(Consumer<FinishedRecipe> provider)
 	{
-		// The steam aqueous accumulator recipe is in KJS
-
-		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.AQUEOUS_ACCUMULATOR,
+		MetaTileEntityLoader.registerMachineRecipe(provider, true, TFGMachines.AQUEOUS_ACCUMULATOR,
 			"RPR", "CHC", "GGG",
-			'P', CraftingComponent.PUMP,
-			'R', CraftingComponent.ROTOR,
-			'C', CraftingComponent.CABLE,
-			'H', CraftingComponent.HULL,
-			'G', CraftingComponent.GLASS);
+			'P', GTCraftingComponents.PUMP,
+			'R', GTCraftingComponents.ROTOR,
+			'C', GTCraftingComponents.CABLE,
+			'H', GTCraftingComponents.HULL,
+			'G', GTCraftingComponents.GLASS);
 
-		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.FOOD_OVEN,
+		MetaTileEntityLoader.registerMachineRecipe(provider, true, TFGMachines.FOOD_OVEN,
 			"DTD", "AHB", "COC",
 			'T', FLBlocks.CURED_OVEN_TOP.get(OvenType.BRICK).get(),
-			'H', CraftingComponent.HULL,
-			'A', CraftingComponent.ROBOT_ARM,
-			'B', CraftingComponent.CABLE,
-			'C', CraftingComponent.COIL_HEATING_DOUBLE,
-			'D', CraftingComponent.PLATE,
-			// This is replaced with #tfg:metal_bars in kubejs
-			'O', CraftingComponent.PISTON);
+			'H', GTCraftingComponents.HULL,
+			'A', GTCraftingComponents.ROBOT_ARM,
+			'B', GTCraftingComponents.CABLE,
+			'C', GTCraftingComponents.COIL_HEATING_DOUBLE,
+			'D', GTCraftingComponents.PLATE,
+			'O', TFCItems.WROUGHT_IRON_GRILL.get());
 
-		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.FOOD_PROCESSOR,
+		MetaTileEntityLoader.registerMachineRecipe(provider, true, TFGMachines.FOOD_PROCESSOR,
 			"BGC", "MHW", "AVP",
-			'H', CraftingComponent.HULL,
-			'B', CraftingComponent.CABLE,
-			'A', CraftingComponent.CONVEYOR,
+			'H', GTCraftingComponents.HULL,
+			'B', GTCraftingComponents.CABLE,
+			'A', GTCraftingComponents.CONVEYOR,
 			'V', FLBlocks.VAT.get(),
-			'M', CraftingComponent.GRINDER,
-			'P', CraftingComponent.PUMP,
-			'G', CraftingComponent.GLASS,
-			'C', CraftingComponent.CIRCUIT,
-			// This is replaced with Greate's Whisk in kubejs
-			'W', CraftingComponent.PISTON);
+			'M', GTCraftingComponents.GRINDER,
+			'P', GTCraftingComponents.PUMP,
+			'G', GTCraftingComponents.GLASS,
+			'C', GTCraftingComponents.CIRCUIT,
+			'W', TFGTCraftingComponents.WHISK);
 
-		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.FOOD_REFRIGERATOR,
+		MetaTileEntityLoader.registerMachineRecipe(provider, true, TFGMachines.FOOD_REFRIGERATOR,
 			"CFC", "SHS", "PRP",
-			'C', CraftingComponent.CABLE,
-			'F', CraftingComponent.CIRCUIT,
+			'C', GTCraftingComponents.CABLE,
+			'F', GTCraftingComponents.CIRCUIT,
 			'S', ChemicalHelper.get(TagPrefix.plate, GTMaterials.Polyethylene),
-			// This is replaced with Hermetic Casing in kubejs
-			'H', CraftingComponent.HULL,
-			'P', CraftingComponent.PUMP,
-			'R', CraftingComponent.ROTOR);
+			'H', TFGTCraftingComponents.HERMETIC_CASING,
+			'P', GTCraftingComponents.PUMP,
+			'R', GTCraftingComponents.ROTOR);
 
-		MetaTileEntityLoader.registerMachineRecipe(provider, TFGMachines.GAS_PRESSURIZER,
+		MetaTileEntityLoader.registerMachineRecipe(provider, true, TFGMachines.GAS_PRESSURIZER,
 			"GIG", "RHC", "EPE",
-			'H', CraftingComponent.HULL,
-			'I', CraftingComponent.PISTON,
-			'P', CraftingComponent.PUMP,
-			'R', CraftingComponent.ROTOR,
-			'C', CraftingComponent.CIRCUIT,
-			'G', CraftingComponent.GLASS,
-			'E', CraftingComponent.PIPE_NORMAL);
+			'H', GTCraftingComponents.HULL,
+			'I', GTCraftingComponents.PISTON,
+			'P', GTCraftingComponents.PUMP,
+			'R', GTCraftingComponents.ROTOR,
+			'C', GTCraftingComponents.CIRCUIT,
+			'G', GTCraftingComponents.GLASS,
+			'E', GTCraftingComponents.PIPE_NORMAL);
 
-		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("electric_greenhouse"),
-			TFGMultiMachines.ELECTRIC_GREENHOUSE.asStack(),
-				"ABA", "CDC", "BCB",
-				'A', CustomTags.MV_CIRCUITS,
-				'B', ChemicalHelper.get(TagPrefix.cableGtSingle, GTMaterials.Copper),
-				'C', TFCItems.COMPOST.get(),
-				'D', GTBlocks.STEEL_HULL.get()
-		);
 
-		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("interplanetary_monitor"), TFGMachines.INTERPLANETARY_LOGISTICS_MONITOR.asStack(),
-				"CDC", "SHE", "WCW",
-				'C', CustomTags.HV_CIRCUITS,
-				'D', GTItems.COVER_SCREEN,
-				'S', GTItems.SENSOR_HV,
-				'H', GTMachines.HULL[GTValues.HV].asStack(),
-				'E', GTItems.EMITTER_HV,
-				'W', ChemicalHelper.get(TagPrefix.cableGtSingle, GTMaterials.Silver));
+		for (int i = 0; i < TFGMachines.RAILGUN_ITEM_LOADER_IN.length; i++) {
+			if (TFGMachines.RAILGUN_ITEM_LOADER_IN[i] != null && TFGMachines.RAILGUN_ITEM_LOADER_OUT[i] != null) {
+				VanillaRecipeHelper.addShapedRecipe(provider, true,
+					TFGCore.id("railgun_input_bus_create_" + TFGMachines.RAILGUN_ITEM_LOADER_IN[i].getTier()),
+						TFGMachines.RAILGUN_ITEM_LOADER_IN[i].asStack(),
+						" d ", "rBx", " w ",
+						'B', ITEM_IMPORT_BUS[i].asStack());
 
-		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("interplanetary_launcher"), TFGMultiMachines.INTERPLANETARY_ITEM_LAUNCHER.asStack(),
-				"NSN", "CHC", "NEN",
-				'C', CustomTags.IV_CIRCUITS,
-				'S', GTItems.SENSOR_HV,
-				'E', GTItems.EMITTER_HV,
-				'H', GTMachines.HULL[GTValues.EV].asStack(),
-				'N', ChemicalHelper.get(TagPrefix.plate, GTMaterials.HSLASteel));
+				VanillaRecipeHelper.addShapedRecipe(provider, true,
+					TFGCore.id("railgun_input_convert_" + TFGMachines.RAILGUN_ITEM_LOADER_IN[i].getTier()),
+						TFGMachines.RAILGUN_ITEM_LOADER_IN[i].asStack(),
+						"d", "B",
+						'B', TFGMachines.RAILGUN_ITEM_LOADER_OUT[i].asStack());
 
-		VanillaRecipeHelper.addShapedRecipe(provider, TFGCore.id("interplanetary_receiver"), TFGMultiMachines.INTERPLANETARY_ITEM_RECEIVER.asStack(),
-				"CSC", "WHW", "CSC",
-				'C', CustomTags.MV_CIRCUITS,
-				'S', GTItems.SENSOR_MV,
-				'W', ChemicalHelper.get(TagPrefix.cableGtDouble, GTMaterials.Copper),
-				'H', GTMachines.HULL[GTValues.MV].asStack());
+				VanillaRecipeHelper.addShapedRecipe(provider, true,
+					TFGCore.id("railgun_output_convert_" + TFGMachines.RAILGUN_ITEM_LOADER_OUT[i].getTier()),
+						TFGMachines.RAILGUN_ITEM_LOADER_OUT[i].asStack(),
+						"d", "B",
+						'B', TFGMachines.RAILGUN_ITEM_LOADER_IN[i].asStack());
+			}
+		}
+
 	}
 }

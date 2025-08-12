@@ -19,13 +19,20 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import lombok.Getter;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import su.terrafirmagreg.core.common.data.TFGParticles;
+import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
@@ -78,7 +85,10 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (getLevel() instanceof ServerLevel sLvl) sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
+        if (getLevel() instanceof ServerLevel sLvl) {
+            if (!InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.containsKey(getDimensionalPos().dimension())) return;
+            sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
+        }
     }
 
     @Override
@@ -126,6 +136,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     @Override
     public void onStructureInvalid() {
+        super.onStructureInvalid();
         energyInputs = null;
         energyBuffer = 0;
         ammoLoaderPart = null;
@@ -174,13 +185,14 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             return;
         }
         for (var config: getSendConfigurations()) {
-            if (ammoLoaderPart.getInventory().isEmpty()) return;
+            if (ammoLoaderPart.getInventory().isEmpty()) break;
             var withCircuit = itemInputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == config.getSenderDistinctInventory()
                     && c.isWorkingEnabled() && !c.getInventory().isEmpty()).toList();
             if (withCircuit.isEmpty() || config.getReceiverPartID() == null) continue;
             var result = tryLaunchItemPayload(config);
-            if (result) return;
+            if (result) break;
         }
+        updateSubscription();
     }
 
     private boolean tryLaunchItemPayload(NetworkSenderConfigEntry config) {
@@ -218,28 +230,108 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                     var stack = bus.getInventory().getStackInSlot(i);
                     if (stack.isEmpty()) continue;
                     itemsToExtract.add(stack);
+                    if (tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) && receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
+                        matched++;
+                    } else {
+                        itemsToExtract.remove(stack);
+                    }
                     matched++;
                     if (matched == 3) break;
                 }
                 if (matched == 3) break;
             }
         }
-        if (itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
 
+        var sendPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.get(getDimensionalPos().dimension());
+        var receiverPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.get(receiver.getDimensionalPos().dimension());
+        var travelTime = Math.abs(sendPos-receiverPos);
+
+        if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) ||itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty)) return false;
         ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
-        if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-            if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM) return false;
-            itemsToExtract.remove(2);
-            if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-                itemsToExtract.remove(1);
-                if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true) || !receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
-                    return false;
-                }
-            }
-        }
+        energyBuffer -= 16 * GTValues.V[GTValues.HV];
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
-        itemsToExtract.add(new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse("tfg:spent_railgun_shell")))));
-        if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 100);
+        if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20*travelTime);
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            BlockPos basePos = this.getPos();
+            BlockState state = this.getBlockState();
+            Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
+
+            double x = basePos.getX() + 0.5;
+            double y = basePos.getY() + 1.0;
+            double z = basePos.getZ() + 0.5;
+
+            switch (facing) {
+                case NORTH -> z += 2;
+                case SOUTH -> z -= 2;
+                case WEST  -> x += 2;
+                case EAST  -> x -= 2;
+            }
+
+            assert TFGParticles.RAILGUN_AMMO.getKey() != null;
+            TFGNetworkHandler.sendParticle(
+                    serverLevel,
+                    x, y, z,                                              // position
+                    new Vec3(0, 1.0, 0),                      // vector  velocity
+                    TFGParticles.RAILGUN_AMMO.getKey().location(),        // particle
+                    1,                                                    // spawn count
+                    0.0, 0.0, 0.0                                     // x,y,z spread
+            );
+
+            assert TFGParticles.RAILGUN_BOOM.getKey() != null;
+            TFGNetworkHandler.sendParticle(
+                    serverLevel,
+                    x, y + 13, z,
+                    Vec3.ZERO,
+                    TFGParticles.RAILGUN_BOOM.getKey().location(),
+                    1,
+                    0.0, 0.0, 0.0
+            );
+
+            TFGNetworkHandler.sendParticle(
+                    serverLevel,
+                    x, y + 3, z,
+                    new Vec3(1.0, 1.0, 1.0),
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "explosion"),
+                    10,
+                    1.0, 1.0, 1.0
+            );
+
+            TFGNetworkHandler.sendParticle(
+                    serverLevel,
+                    x, y + 23, z,
+                    new Vec3(0, 0.0, 0),
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "wax_off"),
+                    100,
+                    0.0, 10.0, 0.0
+            );
+
+            ResourceLocation boomSound = ResourceLocation.fromNamespaceAndPath("minecraft", "entity.warden.sonic_boom");
+            TFGNetworkHandler.sendSound(
+                    serverLevel,
+                    x, y + 13, z,                                        // position
+                    boomSound,
+                    10.0f,                                           // volume
+                    0.1f                                                    // pitch
+            );
+
+            ResourceLocation rocketSound = ResourceLocation.fromNamespaceAndPath("minecraft", "entity.firework_rocket.blast");
+            TFGNetworkHandler.sendSound(
+                    serverLevel,
+                    x, y, z,
+                    rocketSound,
+                    10.0f,
+                    0.1f
+            );
+
+            ResourceLocation explosionSound = ResourceLocation.fromNamespaceAndPath("minecraft", "entity.generic.explode");
+            TFGNetworkHandler.sendSound(
+                    serverLevel,
+                    x, y, z,
+                    explosionSound,
+                    10.0f,
+                    2.0f
+            );
+        }
         return true;
     }
 

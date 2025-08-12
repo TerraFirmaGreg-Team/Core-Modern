@@ -15,6 +15,10 @@ public final class TFGTags {
         public static final TagKey<Item> Chains = createItemTag("forge:chains");
         public static final TagKey<Item> Strings = createItemTag("forge:string");
         public static final TagKey<Item> Harvester = createItemTag("tfg:harvester");
+        public static final TagKey<Item> CannotLaunchInRailgun = createItemTag("tfg:cannot_launch_in_railgun");
+        public static final TagKey<Item> GlacianRamFood = createItemTag("tfg:glacian_ram_food");
+        public static final TagKey<Item> SnifferFood = createItemTag("tfg:sniffer_food");
+
 
         public static TagKey<Item> createItemTag(String path) {
             return TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.parse(path));
@@ -25,6 +29,7 @@ public final class TFGTags {
         public static final TagKey<Block> GrassPlantableOn = createBlockTag("tfc:grass_plantable_on");
         public static final TagKey<Block> Logs = createBlockTag("minecraft:logs");
         public static final TagKey<Block> HarvesterHarvestable = createBlockTag("tfg:harvester_harvestable");
+        public static final TagKey<Block> DoNotDestroyInSpace = createBlockTag("tfg:do_not_destroy_in_space");
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));

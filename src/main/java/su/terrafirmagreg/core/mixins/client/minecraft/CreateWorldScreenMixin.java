@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.mixins.client.minecraft;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +22,7 @@ public abstract class CreateWorldScreenMixin {
         var allowedWorldPresets = values.getDefaultList().stream().filter(s -> {
             var preset = s.preset();
             if (preset == null) return false;
-            return preset.is(TerraFirmaCraft.PRESET);
+            return preset.is(TerraFirmaCraft.PRESET) || preset.is(WorldPresets.FLAT);
         }).toList();
 
         return instance.withValues(CycleButton.ValueListSupplier.create(allowedWorldPresets));
