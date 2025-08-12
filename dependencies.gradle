@@ -55,6 +55,10 @@ repositories {
             includeGroup("com.lowdragmc.ldlib")
         }
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
     flatDir {
         dir 'libs'
     }
@@ -76,7 +80,8 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge:${jei_version}")
 
     // EMI
-    implementation fg.deobf("dev.emi:emi-forge:1.1.20+1.20.1")
+    //compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
+    implementation fg.deobf("dev.emi:emi-forge:${emi_version}")
 
     // Create
     compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"))
@@ -84,11 +89,11 @@ dependencies {
     implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
 
-    // Create: Railways
-    implementation fg.deobf("curse.maven:create-steam-n-rails-688231:6688860") { transitive = false }
-
     // Create: Vintage Improvements
     implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6708676") { transitive = false }
+
+    // Create: Crafts and Additions
+    implementation fg.deobf("curse.maven:create-crafts-and-additions-439890:6306951")
 
     // Greate
     implementation fg.deobf("maven.modrinth:greate:${greate_version}") { transitive = false }

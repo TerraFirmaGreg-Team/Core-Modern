@@ -12,11 +12,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
@@ -26,9 +29,16 @@ import su.terrafirmagreg.core.common.data.contianer.LargeNestBoxScreen;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGParticles;
+import su.terrafirmagreg.core.common.data.particles.RailgunAmmoProvider;
+import su.terrafirmagreg.core.common.data.particles.RailgunBoomProvider;
+
+
 public final class TFGClientEventHandler {
 
-    public static final ResourceLocation TFCMetalBlockTexturePattern = ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
+    public static final ResourceLocation TFCMetalBlockTexturePattern =
+            ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
 
     @SuppressWarnings("removal")
     public TFGClientEventHandler() {
@@ -43,13 +53,20 @@ public final class TFGClientEventHandler {
         bus.register(this);
     }
 
-    public static void clientSetup(FMLClientSetupEvent evt)
-    {
+    @SubscribeEvent
+    public void registerParticles(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(TFGParticles.RAILGUN_BOOM.get(), RailgunBoomProvider::new);
+        event.registerSpriteSet(TFGParticles.RAILGUN_AMMO.get(), RailgunAmmoProvider::new);
+    }
+
+    @SuppressWarnings("removal")
+    public static void clientSetup(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
             MenuScreens.register(TFGContainers.LARGE_NEST_BOX.get(), LargeNestBoxScreen::new);
 
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getSource(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
         });
     }
 

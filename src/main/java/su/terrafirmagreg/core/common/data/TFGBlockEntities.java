@@ -10,6 +10,8 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 
+import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
+
 
 public class TFGBlockEntities {
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TFGCore.MOD_ID);
@@ -30,10 +32,15 @@ public class TFGBlockEntities {
 					).build(null)
 			);
 
+
 	public static final RegistryObject<BlockEntityType<LargeNestBoxBlockEntity>> LARGE_NEST_BOX =
 			BLOCK_ENTITIES.register("large_nest_box", () ->
 					BlockEntityType.Builder.of(LargeNestBoxBlockEntity::new,
 							TFGBlocks.LARGE_NEST_BOX.get()).build(null)
 			);
+
+
+	public static final RegistryObject<BlockEntityType<ReflectorBlockEntity>> REFLECTOR_BLOCK_ENTITY = BLOCK_ENTITIES.register("reflector",
+			() -> BlockEntityType.Builder.of(ReflectorBlockEntity::new, TFGBlocks.REFLECTOR_BLOCK.get()).build(null));
 
 }

@@ -1,3 +1,8 @@
+/*
+ * This file includes code from Create (https://github.com/Creators-of-Create/Create)
+ * Copyright (c) 2019 simibubi
+ * Licensed under the MIT License
+ */
 package su.terrafirmagreg.core.mixins.client.create;
 
 import com.llamalad7.mixinextras.sugar.Local;

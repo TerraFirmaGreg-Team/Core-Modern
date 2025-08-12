@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlag;
 public final class TFGMaterialFlags {
 
     public static final MaterialFlag HAS_TFC_TOOL = new MaterialFlag.Builder("has_tfc_tool").build();
+    public static final MaterialFlag HAS_GT_TOOL = new MaterialFlag.Builder("has_gt_tool").build();
     public static final MaterialFlag HAS_TFC_ARMOR = new MaterialFlag.Builder("has_tfc_armor").build();
     public static final MaterialFlag HAS_TFC_UTILITY = new MaterialFlag.Builder("has_tfc_utility").build();
     public static final MaterialFlag HAS_PLATED_BLOCK = new MaterialFlag.Builder("has_plated_block").build();
