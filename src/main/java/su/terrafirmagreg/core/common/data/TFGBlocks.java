@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -35,6 +36,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.data.buds.BudIndicator;
 import su.terrafirmagreg.core.common.data.buds.BudIndicatorItem;
@@ -171,6 +173,26 @@ public final class TFGBlocks {
 				.sound(SoundType.GRAVEL), RUSTICUS_MYCELIUM, null, MARS_FARMLAND, null, null));
 	}
 
+
+	// Mars animal related
+	public static final RegistryObject<Block> LARGE_NEST_BOX = register("large_nest_box",
+			() -> new LargeNestBoxBlock(ExtendedProperties.of()
+					.mapColor(MapColor.WOOD)
+					.strength(3f)
+					.noOcclusion()
+					.sound(TFCSounds.THATCH)
+					.blockEntity(TFGBlockEntities.LARGE_NEST_BOX)
+					.serverTicks(LargeNestBoxBlockEntity::serverTick)
+			));
+	public static final RegistryObject<Block> LARGE_NEST_BOX_WARPED = register("large_nest_box_warped",
+			() -> new LargeNestBoxBlock(ExtendedProperties.of()
+					.mapColor(MapColor.WOOD)
+					.strength(3f)
+					.noOcclusion()
+					.sound(TFCSounds.THATCH)
+					.blockEntity(TFGBlockEntities.LARGE_NEST_BOX)
+					.serverTicks(LargeNestBoxBlockEntity::serverTick)
+			));
 
 	// Buds are generated automatically
 

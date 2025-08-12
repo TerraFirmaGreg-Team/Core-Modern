@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.common.*;
 import su.terrafirmagreg.core.common.data.*;
+import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
@@ -61,6 +62,12 @@ public final class TFGCore {
         TFGParticles.register(bus);
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
+        TFGContainers.CONTAINERS.register(bus);
+
+        TFGBrain.MEMORY_TYPES.register(bus);
+        TFGBrain.SENSOR_TYPES.register(bus);
+        TFGBrain.POI_TYPES.register(bus);
+
         TFGEvents.register();
         TFGFoodTraits.init();
 
@@ -69,6 +76,7 @@ public final class TFGCore {
         bus.addListener(TFGEntities::onAttributes);
         bus.addListener(TFGEntities::onSpawnPlacement);
         bus.addListener(TFGEntities::onEntityRenderers);
+        bus.addListener(TFGEntities::onEntityLayerRegister);
 
         AdAstraCompat.RegisterEvents();
     }
