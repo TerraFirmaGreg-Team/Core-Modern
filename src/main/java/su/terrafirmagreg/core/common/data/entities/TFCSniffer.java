@@ -45,6 +45,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
+import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 
 import java.util.List;
 import java.util.Map;
@@ -64,6 +66,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     static boolean eatsRottenFood = false;
     //Produce = eggs
     static int produceTicks = 128000;
+    static int hatchDays = 20;
     static int woolTicks = 48000;
     static int maxWool = 8;
     static double produceFamiliarity = 0.15;
@@ -167,6 +170,32 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
         addUses(5);
     }
 
+    public ItemStack makeEgg()
+    {
+        final ItemStack stack = new ItemStack(TFGItems.SNIFFER_EGG.get());
+        if (isFertilized())
+        {
+            final @Nullable ILargeEgg egg = LargeEggCapability.get(stack);
+            if (egg != null)
+            {
+                final TFCSniffer baby = ((EntityType<TFCSniffer>) getType()).create(level());
+                if (baby != null)
+                {
+                    baby.setGender(Gender.valueOf(random.nextBoolean()));
+                    baby.setBirthDay(Calendars.SERVER.getTotalDays());
+                    baby.setFamiliarity(getFamiliarity() < 0.9F ? getFamiliarity() / 2.0F : getFamiliarity() * 0.9F);
+                    egg.setFertilized(baby, Calendars.SERVER.getTotalDays() + hatchDays);
+                }
+            }
+        }
+        AnimalProductEvent event = new AnimalProductEvent(level(), blockPosition(), null, this, stack, ItemStack.EMPTY, 1);
+        if (!MinecraftForge.EVENT_BUS.post(event))
+        {
+            addUses(event.getUses());
+        }
+        return event.getProduct();
+    }
+
     @Override
     public MutableComponent getProductReadyName() { return Component.translatable("tfc.jade.product.eggs"); }
 
@@ -216,7 +245,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     public void readAdditionalSaveData(CompoundTag nbt)
     {
         super.readAdditionalSaveData(nbt);
-        setProducedTick(nbt.getLong("producedWool"));
+        setWoolProducedTick(nbt.getLong("producedWool"));
     }
 
     @Override
@@ -290,7 +319,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     @Override
     protected Brain.Provider<? extends TFCSniffer> brainProvider()
     {
-        return Brain.provider(LivestockAi.MEMORY_TYPES, LivestockAi.SENSOR_TYPES);
+        return Brain.provider(TFCSnifferAi.MEMORY_TYPES, TFCSnifferAi.SENSOR_TYPES);
     }
     @Override
     public Brain<?> makeBrain(Dynamic<?> dynamic)
@@ -335,11 +364,11 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
             case SCENTING:
                 this.setState(TFCSniffer.State.SCENTING).onScentingStart();
                 break;
-            /*case SNIFFING:
+            case SNIFFING:
                 this.playSound(SoundEvents.SNIFFER_SNIFFING, 1.0F, 1.0F);
-                this.setState(Sniffer.State.SNIFFING);
+                this.setState(TFCSniffer.State.SNIFFING);
                 break;
-            case DIGGING:
+         /*   case DIGGING:
                 this.setState(Sniffer.State.DIGGING).onDiggingStart();
                 break;
             case RISING:
@@ -376,7 +405,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
         IDLING,
         //FEELING_HAPPY,
         SCENTING,
-        //SNIFFING,
+        SNIFFING
         //SEARCHING,
         //DIGGING,
         //RISING;

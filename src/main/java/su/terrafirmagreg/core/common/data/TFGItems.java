@@ -32,6 +32,9 @@ public class TFGItems {
 	public static final RegistryObject<Item> TROWEL =
 			ITEMS.register("trowel", () -> new TrowelItem(new Item.Properties()));
 
+	public static final RegistryObject<Item> SNIFFER_EGG =
+			ITEMS.register("sniffer_egg", ()->new Item(new Item.Properties()));
+
 	public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
 	public static final RegistryObject<Item> GLACIAN_RAM_EGG = registerSpawnEgg(TFGEntities.GLACIAN_RAM, 16772607, 3997758);
 	public static final RegistryObject<Item> SNIFFER_SPAWN_EGG = registerSpawnEgg(TFGEntities.SNIFFER, 11285007, 4829025);

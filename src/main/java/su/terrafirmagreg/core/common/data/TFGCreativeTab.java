@@ -42,8 +42,12 @@ public class TFGCreativeTab {
 		accept(out, TFGBlocks.RUSTICUS_MYCELIUM);
 		accept(out, TFGBlocks.SANGNUM_MYCELIUM);
 
+		accept(out, TFGBlocks.LARGE_NEST_BOX);
+		accept(out, TFGBlocks.LARGE_NEST_BOX_WARPED);
+
 		accept(out, TFGItems.GLACIAN_WOOL);
 		accept(out, TFGItems.SNIFFER_WOOL);
+		accept(out, TFGItems.SNIFFER_EGG);
 
 		accept(out, TFGItems.PIGLIN_DISGUISE);
 		accept(out, TFGItems.TROWEL);

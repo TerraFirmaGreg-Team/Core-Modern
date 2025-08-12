@@ -14,6 +14,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntityRenderer;
 import su.terrafirmagreg.core.common.data.entities.*;
 
 import java.util.Locale;
@@ -58,6 +59,8 @@ public class TFGEntities {
 		event.registerEntityRenderer(MOON_RABBIT.get(), MoonRabbitRenderer::new);
 		event.registerEntityRenderer(GLACIAN_RAM.get(), TFCGlacianRamRenderer::new);
 		event.registerEntityRenderer(SNIFFER.get(), TFCSnifferRenderer::new);
+
+	  //  event.registerBlockEntityRenderer(TFGBlockEntities.LARGE_NEST_BOX.get(), ctx -> new LargeNestBoxBlockEntityRenderer());
 	}
 
 	public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event){
