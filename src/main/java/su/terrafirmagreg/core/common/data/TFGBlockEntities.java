@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.data;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,10 +31,12 @@ public class TFGBlockEntities {
 					).build(null)
 			);
 
+	private static final Block[] LARGE_NEST_TYPES = {TFGBlocks.LARGE_NEST_BOX.get(), TFGBlocks.LARGE_NEST_BOX_WARPED.get()};
+
 	public static final RegistryObject<BlockEntityType<LargeNestBoxBlockEntity>> LARGE_NEST_BOX =
 			BLOCK_ENTITIES.register("large_nest_box", () ->
 					BlockEntityType.Builder.of(LargeNestBoxBlockEntity::new,
-							TFGBlocks.LARGE_NEST_BOX.get()).build(null)
+							LARGE_NEST_TYPES).build(null)
 			);
 
 }
