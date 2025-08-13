@@ -11,6 +11,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
+import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
 import su.terrafirmagreg.core.network.packet.ParticlePacket;
 import su.terrafirmagreg.core.network.packet.SoundPacket;
 
@@ -49,6 +50,13 @@ public class TFGNetworkHandler {
                 OreHighlightPacket::encode,
                 OreHighlightPacket::decode,
                 OreHighlightPacket::handle
+        );
+        INSTANCE.registerMessage(
+                id(),
+                OreHighlightVeinPacket.class,
+                OreHighlightVeinPacket::encode,
+                OreHighlightVeinPacket::decode,
+                OreHighlightVeinPacket::handle
         );
     }
 
@@ -94,13 +102,5 @@ public class TFGNetworkHandler {
                 pitch
         );
         sendToAllAround(level, pos, packet);
-    }
-
-    public static void register() {
-        int id = 0;
-        INSTANCE.registerMessage(id++, OreHighlightPacket.class,
-                OreHighlightPacket::encode,
-                OreHighlightPacket::decode,
-                OreHighlightPacket::handle);
     }
 }
