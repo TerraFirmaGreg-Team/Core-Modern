@@ -6,8 +6,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 import java.util.List;
 
@@ -15,82 +19,92 @@ import java.util.List;
 public class OreProspectorEvent {
 
     @SubscribeEvent
-    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+    public static void onRightClickBlock(PlayerInteractEvent.@NotNull RightClickBlock event) {
         Player player = event.getEntity();
         Level level = player.level();
         ItemStack held = player.getItemInHand(event.getHand());
 
         if (level.isClientSide()) return;
 
-        // Check if the held item matches any ore prospector tag
-        boolean matchesTag = OreProspectorCopper.getItemTag() != null && held.is(OreProspectorCopper.getItemTag())
-                || OreProspectorBronze.getItemTag() != null && held.is(OreProspectorBronze.getItemTag())
-                || OreProspectorWroughtIron.getItemTag() != null && held.is(OreProspectorWroughtIron.getItemTag())
-                || OreProspectorSteel.getItemTag() != null && held.is(OreProspectorSteel.getItemTag())
-                || OreProspectorBlackSteel.getItemTag() != null && held.is(OreProspectorBlackSteel.getItemTag())
-                || OreProspectorBlueSteel.getItemTag() != null && held.is(OreProspectorBlueSteel.getItemTag())
-                || OreProspectorRedSteel.getItemTag() != null && held.is(OreProspectorRedSteel.getItemTag());
+        boolean matchesTag = getWeakOreProspectorListHelper().stream().anyMatch(h -> held.is(h.getItemTag()))
+                || getNormalOreProspectorListHelper().stream().anyMatch(h -> held.is(h.getItemTag()))
+                || getAdvancedOreProspectorListHelper().stream().anyMatch(h -> held.is(h.getItemTag()));
 
         if (matchesTag) {
-            OreProspectorCopper.handleRightClick(event);
-            OreProspectorBronze.handleRightClick(event);
-            OreProspectorWroughtIron.handleRightClick(event);
-            OreProspectorSteel.handleRightClick(event);
-            OreProspectorBlackSteel.handleRightClick(event);
-            OreProspectorBlueSteel.handleRightClick(event);
-            OreProspectorRedSteel.handleRightClick(event);
+            getWeakOreProspectorListHelper().forEach(h -> h.handleRightClick(event));
+            getNormalOreProspectorListHelper().forEach(h -> h.handleRightClick(event));
+            getAdvancedOreProspectorListHelper().forEach(h -> h.handleRightClick(event));
 
-            event.setCanceled(true); // Cancel default behavior
+            event.setCanceled(true);
         }
     }
 
-    private static final WeakOreProspectorEventHelper OreProspectorCopper = new WeakOreProspectorEventHelper(
-            50, 5, 5, TFGTags.Items.OreProspectorsCopper
-    );
-    private static final WeakOreProspectorEventHelper OreProspectorBronze = new WeakOreProspectorEventHelper(
-            60, 8, 8, TFGTags.Items.OreProspectorsBronze
-    );
-    private static final NormalOreProspectorEventHelper OreProspectorWroughtIron = new NormalOreProspectorEventHelper(
-            70, 10, 10, TFGTags.Items.OreProspectorsWroughtIron
-    );
-    private static final NormalOreProspectorEventHelper OreProspectorSteel = new NormalOreProspectorEventHelper(
-            80, 12, 12, TFGTags.Items.OreProspectorsSteel
-    );
-    private static final NormalOreProspectorEventHelper OreProspectorBlackSteel = new NormalOreProspectorEventHelper(
-            90, 15, 15, TFGTags.Items.OreProspectorsBlackSteel
-    );
-    private static final AdvancedOreProspectorEventHelper OreProspectorBlueSteel = new AdvancedOreProspectorEventHelper(
-            140, 15, 15, TFGTags.Items.OreProspectorsBlueSteel
-    );
-    private static final AdvancedOreProspectorEventHelper OreProspectorRedSteel = new AdvancedOreProspectorEventHelper(
-            100, 25, 25, TFGTags.Items.OreProspectorsRedSteel
-    );
-
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        OreProspectorCopper.handleRightClick(event);
-        OreProspectorBronze.handleRightClick(event);
-        OreProspectorWroughtIron.handleRightClick(event);
-        OreProspectorSteel.handleRightClick(event);
-        OreProspectorBlackSteel.handleRightClick(event);
-        OreProspectorBlueSteel.handleRightClick(event);
-        OreProspectorRedSteel.handleRightClick(event);
+        getWeakOreProspectorListHelper().forEach(h -> h.handleRightClick(event));
+        getNormalOreProspectorListHelper().forEach(h -> h.handleRightClick(event));
+        getAdvancedOreProspectorListHelper().forEach(h -> h.handleRightClick(event));
     }
 
-    public static final List<WeakOreProspectorEventHelper> WeakOreProspectorListHelper = List.of(
-            OreProspectorCopper,
-            OreProspectorBronze
-    );
+    @Contract(" -> new")
+    public static @NotNull @Unmodifiable List<WeakOreProspectorEventHelper> getWeakOreProspectorListHelper() {
+        return List.of(
+                new WeakOreProspectorEventHelper(
+                        TFGConfig.CopperOreProspectorLength,
+                        TFGConfig.CopperOreProspectorHalfWidth,
+                        TFGConfig.CopperOreProspectorHalfWidth,
+                        TFGTags.Items.OreProspectorsCopper
+                ),
+                new WeakOreProspectorEventHelper(
+                        TFGConfig.BronzeOreProspectorLength,
+                        TFGConfig.BronzeOreProspectorHalfWidth,
+                        TFGConfig.BronzeOreProspectorHalfWidth,
+                        TFGTags.Items.OreProspectorsBronze
+                )
+        );
+    }
 
-    public static final List<NormalOreProspectorEventHelper> NormalOreProspectorListHelper = List.of(
-            OreProspectorWroughtIron,
-            OreProspectorSteel,
-            OreProspectorBlackSteel
-    );
+    @Contract(" -> new")
+    public static @NotNull @Unmodifiable List<NormalOreProspectorEventHelper> getNormalOreProspectorListHelper() {
+        return List.of(
+                new NormalOreProspectorEventHelper(
+                        TFGConfig.WroughtIronOreProspectorLength,
+                        TFGConfig.WroughtIronOreProspectorHalfWidth,
+                        TFGConfig.WroughtIronOreProspectorHalfWidth,
+                        TFGTags.Items.OreProspectorsWroughtIron
+                ),
+                new NormalOreProspectorEventHelper(
+                        TFGConfig.SteelOreProspectorLength,
+                        TFGConfig.SteelOreProspectorHalfWidth,
+                        TFGConfig.SteelOreProspectorHalfWidth,
+                        TFGTags.Items.OreProspectorsSteel
+                ),
+                new NormalOreProspectorEventHelper(
+                        TFGConfig.BlackSteelOreProspectorLength,
+                        TFGConfig.BlackSteelOreProspectorHalfWidth,
+                        TFGConfig.BlackSteelOreProspectorHalfWidth,
+                        TFGTags.Items.OreProspectorsBlackSteel
+                )
+        );
+    }
 
-    public static final List<AdvancedOreProspectorEventHelper> AdvancedOreProspectorListHelper = List.of(
-            OreProspectorBlueSteel,
-            OreProspectorRedSteel
-    );
-
+    @Contract(" -> new")
+    public static @NotNull @Unmodifiable List<AdvancedOreProspectorEventHelper> getAdvancedOreProspectorListHelper() {
+        return List.of(
+                new AdvancedOreProspectorEventHelper(
+                        TFGConfig.BlueSteelOreProspectorLength,
+                        TFGConfig.BlueSteelOreProspectorHalfWidth,
+                        TFGConfig.BlueSteelOreProspectorHalfWidth,
+                        TFGTags.Items.OreProspectorsBlueSteel,
+                        TFGConfig.BlueSteelOreProspectorRender
+                ),
+                new AdvancedOreProspectorEventHelper(
+                        TFGConfig.RedSteelOreProspectorLength,
+                        TFGConfig.RedSteelOreProspectorHalfWidth,
+                        TFGConfig.RedSteelOreProspectorHalfWidth,
+                        TFGTags.Items.OreProspectorsRedSteel,
+                        TFGConfig.RedSteelOreProspectorRender
+                )
+        );
+    }
 }

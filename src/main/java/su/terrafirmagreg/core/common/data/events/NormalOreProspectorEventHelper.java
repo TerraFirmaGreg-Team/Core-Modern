@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.events;
 
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -18,10 +19,15 @@ import java.util.*;
 
 public class NormalOreProspectorEventHelper {
 
+    @Getter
     private final double length;
+    @Getter
     private final double halfWidth;
+    @Getter
     private final double halfHeight;
+    @Getter
     private final TagKey<Item> itemTag;
+    @Getter
     private final TagKey<Block> oreTag = net.minecraftforge.common.Tags.Blocks.ORES;
 
     public NormalOreProspectorEventHelper(double length, double halfWidth, double halfHeight, TagKey<Item> itemTag) {
@@ -29,22 +35,6 @@ public class NormalOreProspectorEventHelper {
         this.halfWidth = halfWidth;
         this.halfHeight = halfHeight;
         this.itemTag = itemTag;
-    }
-
-    public double getLength() {
-        return length;
-    }
-
-    public double getHalfWidth() {
-        return halfWidth;
-    }
-
-    public double getHalfHeight() {
-        return halfHeight;
-    }
-
-    public TagKey<Item> getItemTag() {
-        return itemTag;
     }
 
     public void handleRightClick(PlayerInteractEvent event) {

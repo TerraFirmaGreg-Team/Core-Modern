@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.events;
 
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -14,40 +15,38 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.network.PacketDistributor;
-import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
+import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
 
 import java.util.*;
 
 public class AdvancedOreProspectorEventHelper {
 
+    // distance required to consider ores part of different veins
+    private static final int VEIN_SEPARATION_RADIUS = 10;
+
+    @Getter
     private final double length;
+    @Getter
     private final double halfWidth;
+    @Getter
     private final double halfHeight;
+    @Getter
     private final TagKey<Item> itemTag;
+    @Getter
     private final TagKey<Block> oreTag = net.minecraftforge.common.Tags.Blocks.ORES;
 
-    public AdvancedOreProspectorEventHelper(double length, double halfWidth, double halfHeight, TagKey<Item> itemTag) {
+    // toggle whether to send one particle per ore block, or one per vein center
+    @Getter
+    private final boolean centersOnly;
+
+    public AdvancedOreProspectorEventHelper(double length, double halfWidth, double halfHeight, TagKey<Item> itemTag, boolean centersOnly) {
         this.length = length;
         this.halfWidth = halfWidth;
         this.halfHeight = halfHeight;
         this.itemTag = itemTag;
-    }
-
-    public double getLength() {
-        return length;
-    }
-
-    public double getHalfWidth() {
-        return halfWidth;
-    }
-
-    public double getHalfHeight() {
-        return halfHeight;
-    }
-
-    public TagKey<Item> getItemTag() {
-        return itemTag;
+        this.centersOnly = centersOnly;
     }
 
     public void handleRightClick(PlayerInteractEvent event) {
@@ -58,7 +57,6 @@ public class AdvancedOreProspectorEventHelper {
 
         ItemStack held = player.getItemInHand(event.getHand());
         if (!held.is(itemTag)) return;
-
         if (player.getCooldowns().isOnCooldown(held.getItem())) return;
 
         Vec3 eyePos = player.getEyePosition();
@@ -99,16 +97,13 @@ public class AdvancedOreProspectorEventHelper {
         }
 
         if (oreCounts.isEmpty()) {
-            player.sendSystemMessage(Component.translatable("tfg.toast.ore_prospector_none").withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.translatable("tfg.toast.ore_prospector_none")
+                    .withStyle(ChatFormatting.GRAY));
         } else {
             int totalCount = oreCounts.values().stream().mapToInt(Integer::intValue).sum();
-
             player.sendSystemMessage(
-                    Component.translatable(
-                            "tfg.toast.ore_prospector_message",
-                            length,
-                            totalCount
-                    ).withStyle(ChatFormatting.GOLD)
+                    Component.translatable("tfg.toast.ore_prospector_message", length, totalCount)
+                            .withStyle(ChatFormatting.GOLD)
             );
             oreCounts.forEach((name, oreCount) ->
                     player.sendSystemMessage(Component.literal("- ")
@@ -127,11 +122,83 @@ public class AdvancedOreProspectorEventHelper {
             player.getCooldowns().addCooldown(held.getItem(), 40);
 
             if (!orePositions.isEmpty()) {
-                TFGNetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> sp), new OreHighlightPacket(orePositions));
+                if (centersOnly) {
+                    List<BlockPos> centers = computeVeinCentersByRadius(orePositions, VEIN_SEPARATION_RADIUS);
+                    if (!centers.isEmpty()) {
+                        TFGNetworkHandler.INSTANCE.send(
+                                PacketDistributor.PLAYER.with(() -> sp),
+                                new OreHighlightVeinPacket(centers)
+                        );
+                    }
+                } else {
+                    TFGNetworkHandler.INSTANCE.send(
+                            PacketDistributor.PLAYER.with(() -> sp),
+                            new OreHighlightPacket(orePositions)
+                    );
+                }
             }
         }
 
-        // Cancel the event so no default right-click logic happens
         event.setCanceled(true);
+    }
+
+    /*
+     * Vein grouping by minimum separation radius:
+     * Any ores within 'radius' of an existing cluster join that cluster.
+     * Clusters are connected components under "distance <= radius".
+     */
+    private static List<BlockPos> computeVeinCentersByRadius(List<BlockPos> orePositions, int radius) {
+        final int r2 = radius * radius;
+
+        List<BlockPos> centers = new ArrayList<>();
+        Set<BlockPos> unassigned = new HashSet<>(orePositions);
+
+        while (!unassigned.isEmpty()) {
+            // start a new cluster
+            BlockPos seed = unassigned.iterator().next();
+            unassigned.remove(seed);
+
+            List<BlockPos> cluster = new ArrayList<>();
+            ArrayDeque<BlockPos> q = new ArrayDeque<>();
+            q.add(seed);
+
+            while (!q.isEmpty()) {
+                BlockPos cur = q.poll();
+                cluster.add(cur);
+
+                List<BlockPos> toAttach = new ArrayList<>();
+                for (BlockPos candidate : unassigned) {
+                    if (dist2(cur, candidate) <= r2) {
+                        toAttach.add(candidate);
+                    }
+                }
+                for (BlockPos cand : toAttach) {
+                    unassigned.remove(cand);
+                    q.add(cand);
+                }
+            }
+
+            centers.add(averageBlockPos(cluster));
+        }
+
+        return centers;
+    }
+
+    private static int dist2(BlockPos a, BlockPos b) {
+        int dx = a.getX() - b.getX();
+        int dy = a.getY() - b.getY();
+        int dz = a.getZ() - b.getZ();
+        return dx * dx + dy * dy + dz * dz;
+    }
+
+    private static BlockPos averageBlockPos(List<BlockPos> list) {
+        long sx = 0, sy = 0, sz = 0;
+        for (BlockPos p : list) {
+            sx += p.getX();
+            sy += p.getY();
+            sz += p.getZ();
+        }
+        int n = list.size();
+        return new BlockPos(Math.round(sx / (float) n), Math.round(sy / (float) n), Math.round(sz / (float) n));
     }
 }
