@@ -10,6 +10,8 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
+import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
 import su.terrafirmagreg.core.network.packet.ParticlePacket;
 import su.terrafirmagreg.core.network.packet.SoundPacket;
 
@@ -41,6 +43,20 @@ public class TFGNetworkHandler {
                 SoundPacket::encode,
                 SoundPacket::decode,
                 SoundPacket::handle
+        );
+        INSTANCE.registerMessage(
+                id(),
+                OreHighlightPacket.class,
+                OreHighlightPacket::encode,
+                OreHighlightPacket::decode,
+                OreHighlightPacket::handle
+        );
+        INSTANCE.registerMessage(
+                id(),
+                OreHighlightVeinPacket.class,
+                OreHighlightVeinPacket::encode,
+                OreHighlightVeinPacket::decode,
+                OreHighlightVeinPacket::handle
         );
     }
 
