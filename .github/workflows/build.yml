@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: 🔍 Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.3.0
         with:
           fetch-depth: 0
 
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔍 Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.3.0
 
       - name: 📁 Setup JDK
         uses: actions/setup-java@v4.7.1
@@ -124,7 +124,7 @@ jobs:
           cache: 'gradle'
 
       - name: 📁 Setup Gradle
-        uses: gradle/actions/setup-gradle@v4.4.1
+        uses: gradle/actions/setup-gradle@v4.4.2
         with:
           cache-write-only: false
           gradle-home-cache-includes: |
@@ -134,7 +134,7 @@ jobs:
             wrapper
 
       - name: 🔄 Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v4.4.1
+        uses: gradle/actions/wrapper-validation@v4.4.2
 
       - name: 🔄 Grant Execute Permission For Gradlew
         run: chmod +x gradlew
@@ -163,7 +163,7 @@ jobs:
 
       steps:
         - name: 📦 Checkout
-          uses: actions/checkout@v4.2.2
+          uses: actions/checkout@v4.3.0
 
         - name: 🔒 Check if CURSEFORGE_TOKEN exist
           shell: bash
@@ -173,7 +173,7 @@ jobs:
             fi  
 
         - name: 📦 Download artifact
-          uses: actions/download-artifact@v4.3.0
+          uses: actions/download-artifact@v5.0.0
           with:
             merge-multiple: true
 

@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import net.minecraft.data.recipes.FinishedRecipe;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGTCraftingComponents;
 
 import java.util.function.Consumer;
 
@@ -27,6 +28,7 @@ public class TFGTAddon implements IGTAddon {
 
 	@Override
 	public void addRecipes(Consumer<FinishedRecipe> provider) {
+		TFGTCraftingComponents.register();
 		TFGTRecipes.init(provider);
 	}
 }
