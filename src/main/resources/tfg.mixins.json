@@ -56,6 +56,7 @@
     "common.gtceu.recipes.ArcFurnaceLogicMixin",
     "common.gtceu.recipes.MaceratorLogicMixin",
     "common.gtceu.recipes.MaterialInfoLoaderMixin",
+    "common.hang_glider.GliderItemMixin",
     "common.ldlib.ModularUIContainerMixin",
     "common.minecraft.EndDragonFightMixin",
     "common.minecraft.EndPodiumFeatureMixin",

@@ -12,7 +12,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkConstants;
@@ -26,6 +25,7 @@ import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
+import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.world.TFGFeatures;
 import su.terrafirmagreg.core.world.TFGSurfaceRules;
 import su.terrafirmagreg.core.network.*;
@@ -42,8 +42,7 @@ public final class TFGCore {
 
     @SuppressWarnings("removal")
     public TFGCore() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TFGConfig.SPEC);
-
+        TFGConfig.init();
         TFGCommonEventHandler.init();
         if (FMLEnvironment.dist == Dist.CLIENT) {
             new TFGClientEventHandler();
