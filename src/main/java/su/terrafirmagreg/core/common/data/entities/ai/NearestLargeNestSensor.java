@@ -9,7 +9,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.level.pathfinder.Path;
-import su.terrafirmagreg.core.common.data.entities.TFCSniffer;
+import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 
 import java.util.Set;
 import java.util.function.Predicate;
@@ -48,7 +48,8 @@ public class NearestLargeNestSensor extends Sensor<TFCSniffer> {
                     return true;
                 }
             };
-            Stream<BlockPos> found = manager.findAll(p -> p.value() == TFGBrain.LARGE_NEST_POI.get(), predicate, animal.blockPosition(), 48, PoiManager.Occupancy.ANY);
+            //Deals with pathing to the nest
+            Stream<BlockPos> found = manager.findAll(p -> p.value() == TFGBrain.LARGE_NEST_POI.get() || p.value() ==TFGBrain.WARPED_LARGE_NEST_POI.get(), predicate, animal.blockPosition(), 48, PoiManager.Occupancy.ANY);
             Path path = animal.getNavigation().createPath(found, TFGBrain.LARGE_NEST_POI.get().validRange());
             if (path != null && path.canReach())
             {

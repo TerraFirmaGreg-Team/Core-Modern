@@ -34,13 +34,13 @@ public class TFGBlockEntities {
 			);
 
 
-	private static final Block[] LARGE_NEST_TYPES = {TFGBlocks.LARGE_NEST_BOX.get(), TFGBlocks.LARGE_NEST_BOX_WARPED.get()};
+	//private static final Block[] LARGE_NEST_TYPES = {TFGBlocks.LARGE_NEST_BOX.get(), TFGBlocks.LARGE_NEST_BOX_WARPED.get()};
 
 
 	public static final RegistryObject<BlockEntityType<LargeNestBoxBlockEntity>> LARGE_NEST_BOX =
 			BLOCK_ENTITIES.register("large_nest_box", () ->
 					BlockEntityType.Builder.of(LargeNestBoxBlockEntity::new,
-							LARGE_NEST_TYPES).build(null)
+							TFGBlocks.LARGE_NEST_BOX.get(), TFGBlocks.LARGE_NEST_BOX_WARPED.get()).build(null)
 			);
 
 

@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.common.data;
 
-import earth.terrarium.adastra.AdAstra;
-import earth.terrarium.adastra.common.registry.ModEntityTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -14,8 +12,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntityRenderer;
-import su.terrafirmagreg.core.common.data.entities.*;
+import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
+import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamModel;
+import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamRenderer;
+import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbitRenderer;
+import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
+import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSnifferRenderer;
 
 import java.util.Locale;
 
