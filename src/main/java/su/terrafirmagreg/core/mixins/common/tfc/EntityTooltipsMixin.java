@@ -30,9 +30,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.entities.MoonRabbit;
-import su.terrafirmagreg.core.common.data.entities.TFCGlacianRam;
-import su.terrafirmagreg.core.common.data.entities.TFCSniffer;
+import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
+import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 
 import java.util.Locale;
 

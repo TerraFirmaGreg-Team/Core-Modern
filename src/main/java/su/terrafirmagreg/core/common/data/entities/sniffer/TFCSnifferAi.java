@@ -1,14 +1,12 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.sniffer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.livestock.BreedBehavior;
 import net.dries007.tfc.common.entities.ai.livestock.LivestockAi;
 import net.dries007.tfc.common.entities.ai.prey.AvoidPredatorBehavior;
-import net.dries007.tfc.common.entities.livestock.TFCAnimal;
 import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -22,7 +20,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.world.entity.animal.sniffer.SnifferAi;
 import net.minecraft.world.entity.schedule.Activity;
 import su.terrafirmagreg.core.common.data.entities.ai.LayLargeEggBehavior;
 import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
@@ -68,6 +65,7 @@ public class TFCSnifferAi extends LivestockAi {
                 new AnimalPanic(2.0F), // if memory of being hit, runs away
                 new FollowTemptation(e -> e.isBaby() ? 1.5F : 1.25F), // sets the walk and look targets to whomever it has a memory of being tempted by
                 new TFCSnifferAi.Scenting(60, 160), //Tries to do the "sniff sniff"
+                new TFCSnifferAi.Sniffing(100, 200), //Tries to do the "sniiiiif"
                 BabyFollowAdult.create(UniformInt.of(5, 16), 1.25F), // babies follow any random adult around
                 createIdleMovementBehaviors()
         ));
@@ -94,4 +92,27 @@ public class TFCSnifferAi extends LivestockAi {
             pEntity.transitionTo(TFCSniffer.State.IDLING);
         }
     }
+
+    static class Sniffing extends Behavior<TFCSniffer> {
+        Sniffing(int pMinDuration, int pMaxDuration) {
+            super(Map.of(MemoryModuleType.IS_PANICKING, MemoryStatus.VALUE_ABSENT, MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT), pMinDuration, pMaxDuration);
+        }
+
+        protected boolean checkExtraStartConditions(ServerLevel pLevel, TFCSniffer pOwner) {
+            return !pOwner.isBaby() && pOwner.isTempted();
+        }
+
+        protected boolean canStillUse(ServerLevel pLevel, TFCSniffer pEntity, long pGameTime) {
+            return pEntity.isTempted();
+        }
+
+        protected void start(ServerLevel pLevel, TFCSniffer pEntity, long pGameTime) {
+            pEntity.transitionTo(TFCSniffer.State.SNIFFING);
+        }
+
+        protected void stop(ServerLevel pLevel, TFCSniffer pEntity, long pGameTime) {
+            pEntity.transitionTo(TFCSniffer.State.IDLING);
+        }
+    }
+
 }

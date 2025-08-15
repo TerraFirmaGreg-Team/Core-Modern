@@ -1,8 +1,7 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.glacianram;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.adastra.AdAstra;
-import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

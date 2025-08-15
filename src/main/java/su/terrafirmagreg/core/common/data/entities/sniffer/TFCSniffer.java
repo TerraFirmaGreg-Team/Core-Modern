@@ -1,13 +1,10 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.sniffer;
 
 import com.mojang.serialization.Dynamic;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.entities.EntityHelpers;
-import net.dries007.tfc.common.entities.ai.livestock.LivestockAi;
 import net.dries007.tfc.common.entities.livestock.ProducingAnimal;
-import net.dries007.tfc.common.entities.livestock.ProducingMammal;
 import net.dries007.tfc.common.entities.livestock.TFCAnimal;
-import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.config.animals.ProducingAnimalConfig;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -29,11 +26,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.animal.sniffer.Sniffer;
-import net.minecraft.world.entity.animal.sniffer.SnifferAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -49,8 +42,6 @@ import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
 
@@ -65,17 +56,16 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     static int uses = 200;
     static boolean eatsRottenFood = false;
     //Produce = eggs
-    static int produceTicks = 128000;
+    static int produceTicks = 96000;
     static int hatchDays = 20;
+    static Item eggItem = TFGItems.SNIFFER_EGG.get();
     static int woolTicks = 48000;
     static int maxWool = 8;
+    static Item woolItem = TFGItems.SNIFFER_WOOL.get();
     static double produceFamiliarity = 0.15;
 
-    public final AnimationState feelingHappyAnimationState = new AnimationState();
     public final AnimationState scentingAnimationState = new AnimationState();
     public final AnimationState sniffingAnimationState = new AnimationState();
-    public final AnimationState diggingAnimationState = new AnimationState();
-    public final AnimationState risingAnimationState = new AnimationState();
 
     public TFCSniffer(EntityType<? extends TFCAnimal> type, Level level, TFCSounds.EntitySound sounds, ProducingAnimalConfig config) {
         super(type, level, sounds, config);
@@ -142,21 +132,11 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other){
 
-        if (other != this && this.getGender() == Gender.FEMALE && other instanceof TFCSniffer otherFertile && !isFertilized())
-        {
+        if (other != this && this.getGender() == Gender.FEMALE && other instanceof TFCSniffer otherFertile && !isFertilized()) {
             this.onFertilized(otherFertile);
             otherFertile.setProducedTick(0);
             this.setProductsCooldown();
         }
-        /*else if (other == this)
-        {
-            final Entity baby = getEntityTypeForBaby().create(level);
-            if (baby instanceof TFCAnimalProperties properties && baby instanceof AgeableMob ageable)
-            {
-                setBabyTraits(properties);
-                return ageable;
-            }
-        }*/
 
         return null;
     }
@@ -172,7 +152,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
 
     public ItemStack makeEgg()
     {
-        final ItemStack stack = new ItemStack(TFGItems.SNIFFER_EGG.get());
+        final ItemStack stack = new ItemStack(eggItem);
         if (isFertilized())
         {
             final @Nullable ILargeEgg egg = LargeEggCapability.get(stack);
@@ -223,7 +203,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     public ItemStack getWoolItem()
     {
         final int amount = (int) Math.ceil(getFamiliarity() * maxWool);
-        return new ItemStack(TFGItems.SNIFFER_WOOL.get(), amount);
+        return new ItemStack(woolItem, amount);
     }
 
     public boolean hasWool(){
@@ -291,7 +271,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     }
 
 
-    //Porting of sounds
+    //Sound Handlers
     protected void playStepSound(BlockPos pPos, BlockState pState) {
         this.playSound(SoundEvents.SNIFFER_STEP, 0.15F, 1.0F);
     }
@@ -342,6 +322,8 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
                 case SCENTING:
                     this.scentingAnimationState.startIfStopped(this.tickCount);
                     break;
+                case SNIFFING:
+                    this.sniffingAnimationState.startIfStopped(this.tickCount);
             }
             this.refreshDimensions();
 
@@ -368,24 +350,10 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
                 this.playSound(SoundEvents.SNIFFER_SNIFFING, 1.0F, 1.0F);
                 this.setState(TFCSniffer.State.SNIFFING);
                 break;
-         /*   case DIGGING:
-                this.setState(Sniffer.State.DIGGING).onDiggingStart();
-                break;
-            case RISING:
-                this.playSound(SoundEvents.SNIFFER_DIGGING_STOP, 1.0F, 1.0F);
-                this.setState(Sniffer.State.RISING);
-                break;
-            case FEELING_HAPPY:
-                this.playSound(SoundEvents.SNIFFER_HAPPY, 1.0F, 1.0F);
-                this.setState(Sniffer.State.FEELING_HAPPY);
-                break;*/
             case IDLING:
                 this.setState(TFCSniffer.State.IDLING);
                 break;
-           /* case SEARCHING:
-                this.setState(Sniffer.State.SEARCHING);*/
         }
-
         return this;
     }
 
@@ -394,20 +362,14 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     }
 
     private void resetAnimations() {
-        this.diggingAnimationState.stop();
         this.sniffingAnimationState.stop();
-        this.risingAnimationState.stop();
-        this.feelingHappyAnimationState.stop();
         this.scentingAnimationState.stop();
     }
 
     public enum State {
         IDLING,
-        //FEELING_HAPPY,
         SCENTING,
-        SNIFFING
-        //SEARCHING,
-        //DIGGING,
-        //RISING;
+        SNIFFING;
+
     }
 }

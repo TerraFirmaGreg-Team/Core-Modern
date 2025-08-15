@@ -6,7 +6,7 @@ import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.entities.TFCSniffer;
+import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 
 import java.util.Optional;
 
@@ -44,7 +44,7 @@ public class LayLargeEggBehavior extends MoveOntoBlockBehavior<TFCSniffer> {
     @Override
     protected boolean isTargetAt(ServerLevel level, BlockPos pos)
     {
-        return Helpers.isBlock(level.getBlockState(pos), TFGBlocks.LARGE_NEST_BOX.get());
+        return Helpers.isBlock(level.getBlockState(pos), TFGBlocks.LARGE_NEST_BOX.get()) || Helpers.isBlock(level.getBlockState(pos), TFGBlocks.LARGE_NEST_BOX_WARPED.get());
     }
 
 }

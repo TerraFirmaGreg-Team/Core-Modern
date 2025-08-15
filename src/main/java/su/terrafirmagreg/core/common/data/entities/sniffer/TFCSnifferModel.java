@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.sniffer;
 
 import net.minecraft.client.animation.definitions.SnifferAnimation;
 import net.minecraft.client.model.AgeableHierarchicalModel;
@@ -48,10 +48,7 @@ public class TFCSnifferModel<T extends TFCSniffer> extends AgeableHierarchicalMo
 
         this.animateWalk(SnifferAnimation.SNIFFER_WALK, pLimbSwing, pLimbSwingAmount, 9.0F, 100.0F);
 
-        this.animate(pEntity.diggingAnimationState, SnifferAnimation.SNIFFER_DIG, pAgeInTicks);
         this.animate(pEntity.sniffingAnimationState, SnifferAnimation.SNIFFER_LONGSNIFF, pAgeInTicks);
-        this.animate(pEntity.risingAnimationState, SnifferAnimation.SNIFFER_STAND_UP, pAgeInTicks);
-        this.animate(pEntity.feelingHappyAnimationState, SnifferAnimation.SNIFFER_HAPPY, pAgeInTicks);
         this.animate(pEntity.scentingAnimationState, SnifferAnimation.SNIFFER_SNIFFSNIFF, pAgeInTicks);
 
         if (this.young) {

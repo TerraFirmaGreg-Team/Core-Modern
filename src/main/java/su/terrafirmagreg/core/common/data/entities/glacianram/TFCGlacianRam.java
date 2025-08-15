@@ -1,10 +1,8 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.glacianram;
 
 import net.dries007.tfc.client.TFCSounds;
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.livestock.*;
 import net.dries007.tfc.config.TFCConfig;
-import net.dries007.tfc.config.animals.ProducingAnimalConfig;
 import net.dries007.tfc.config.animals.ProducingMammalConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.events.AnimalProductEvent;

@@ -1,12 +1,10 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.sniffer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.SnifferModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import su.terrafirmagreg.core.TFGCore;
 
 public class TFCSnifferRenderer extends MobRenderer<TFCSniffer, TFCSnifferModel<TFCSniffer>> {
