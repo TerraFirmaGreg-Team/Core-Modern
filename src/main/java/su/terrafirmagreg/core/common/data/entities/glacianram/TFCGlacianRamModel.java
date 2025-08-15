@@ -8,10 +8,11 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.TFGCore;
 
 public class TFCGlacianRamModel<T extends TFCGlacianRam> extends QuadrupedModel<T> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(TFGCore.MOD_ID, "glacian_ram"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "glacian_ram"), "main");
     private float headXRot;
 
     private final ModelPart head;
@@ -55,13 +56,13 @@ public class TFCGlacianRamModel<T extends TFCGlacianRam> extends QuadrupedModel<
         this.headXRot = entity.getHeadAngle(partialTick);
     }*/
 
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(@NotNull T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw + 180F, headPitch);
         horns.visible = entity.displayMaleCharacteristics();
         this.head.xRot = this.headXRot;
     }
 
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         super.renderToBuffer(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
