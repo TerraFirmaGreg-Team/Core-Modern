@@ -17,10 +17,46 @@ public final class TFGConfig {
 
     public static boolean enableCreateCompat;
     public static boolean enableTFCAmbientalCompat;
+    public static int CopperOreProspectorLength;
+    public static int CopperOreProspectorHalfWidth;
+    public static int BronzeOreProspectorLength;
+    public static int BronzeOreProspectorHalfWidth;
+    public static int WroughtIronOreProspectorLength;
+    public static int WroughtIronOreProspectorHalfWidth;
+    public static int SteelOreProspectorLength;
+    public static int SteelOreProspectorHalfWidth;
+    public static int BlackSteelOreProspectorLength;
+    public static int BlackSteelOreProspectorHalfWidth;
+    public static int BlueSteelOreProspectorLength;
+    public static int BlueSteelOreProspectorHalfWidth;
+    public static boolean BlueSteelOreProspectorRender;
+    public static int RedSteelOreProspectorLength;
+    public static int RedSteelOreProspectorHalfWidth;
+    public static boolean RedSteelOreProspectorRender;
+    public static int PreciseOreProspectorParticleChance;
+    public static int HarvestBasketRange;
 
     public static void onLoad(final ModConfigEvent event) {
         enableCreateCompat = COMMON.ENABLE_CREATE_COMPAT.get();
         enableTFCAmbientalCompat = COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get();
+        CopperOreProspectorLength = SERVER.COPPER_ORE_PROSPECTOR_LENGTH.get();
+        CopperOreProspectorHalfWidth = SERVER.COPPER_ORE_PROSPECTOR_WIDTH.get();
+        BronzeOreProspectorLength = SERVER.BRONZE_ORE_PROSPECTOR_LENGTH.get();
+        BronzeOreProspectorHalfWidth = SERVER.BRONZE_ORE_PROSPECTOR_WIDTH.get();
+        WroughtIronOreProspectorLength = SERVER.WROUGHT_IRON_ORE_PROSPECTOR_LENGTH.get();
+        WroughtIronOreProspectorHalfWidth = SERVER.WROUGHT_IRON_ORE_PROSPECTOR_LENGTH.get();
+        SteelOreProspectorLength = SERVER.STEEL_ORE_PROSPECTOR_LENGTH.get();
+        SteelOreProspectorHalfWidth = SERVER.STEEL_ORE_PROSPECTOR_WIDTH.get();
+        BlackSteelOreProspectorLength = SERVER.BLACK_STEEL_ORE_PROSPECTOR_LENGTH.get();
+        BlackSteelOreProspectorHalfWidth = SERVER.BLACK_STEEL_ORE_PROSPECTOR_WIDTH.get();
+        BlueSteelOreProspectorLength = SERVER.BLUE_STEEL_ORE_PROSPECTOR_LENGTH.get();
+        BlueSteelOreProspectorHalfWidth = SERVER.BLUE_STEEL_ORE_PROSPECTOR_WIDTH.get();
+        BlueSteelOreProspectorRender = SERVER.BLUE_STEEL_ORE_PROSPECTOR_RENDER.get();
+        RedSteelOreProspectorLength = SERVER.RED_STEEL_ORE_PROSPECTOR_LENGTH.get();
+        RedSteelOreProspectorHalfWidth = SERVER.RED_STEEL_ORE_PROSPECTOR_WIDTH.get();
+        RedSteelOreProspectorRender = SERVER.RED_STEEL_ORE_PROSPECTOR_RENDER.get();
+        PreciseOreProspectorParticleChance = COMMON.PRECISE_ORE_PROSPECTOR_PARTICLE_CHANCE.get();
+        HarvestBasketRange = SERVER.HARVEST_BASKET_RANGE.get();
     }
 
 

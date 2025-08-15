@@ -16,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 import java.util.*;
 
@@ -46,8 +47,8 @@ public class HarvesterEvent {
             return;
         }
 
-        // Sets the number of iterations for the search function.
-        int radius = 7;
+        // Sets the number of iterations for the search function using config .
+        int radius = TFGConfig.HarvestBasketRange;
 
         Set<BlockPos> visited = new HashSet<>();
         Queue<BlockPos> queue = new ArrayDeque<>();
