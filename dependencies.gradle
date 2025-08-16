@@ -156,7 +156,7 @@ dependencies {
     implementation fg.deobf("curse.maven:resourceful-config-714059:6231176") { transitive = false }
 
     // Species
-    implementation fg.deobf("maven.modrinth:species:3.4") { transitive = false }
+    implementation fg.deobf("maven.modrinth:species:3.5") { transitive = false }
 
     // Simply Stacked Dimensions
     implementation fg.deobf("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
@@ -164,4 +164,8 @@ dependencies {
     // Hang Glider
     implementation fg.deobf("maven.modrinth:puzzles-lib:${puzzleslib_version}")
     implementation fg.deobf("maven.modrinth:hang-glider:${hangglider_version}")
+
+    // Wan's ancient beasts
+    implementation fg.deobf("curse.maven:wans-ancient-beasts-1108604:6871096")
+    implementation fg.deobf("curse.maven:geckolib-388172:6789487")
 }

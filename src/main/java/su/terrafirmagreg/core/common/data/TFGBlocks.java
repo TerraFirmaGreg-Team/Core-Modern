@@ -95,7 +95,7 @@ public final class TFGBlocks {
 		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.TERRACOTTA_YELLOW)
 			.strength(5.0f)
-			.sound(SoundType.STEM)
+			.sound(SoundType.WART_BLOCK)
 			.randomTicks(),
 		MARS_DIRT, null, MARS_FARMLAND));
 
@@ -103,7 +103,7 @@ public final class TFGBlocks {
 		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.TERRACOTTA_ORANGE)
 			.strength(5.0f)
-			.sound(SoundType.STEM)
+			.sound(SoundType.WART_BLOCK)
 			.randomTicks(),
 		MARS_DIRT, null, MARS_FARMLAND));
 
@@ -111,7 +111,7 @@ public final class TFGBlocks {
 		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.TERRACOTTA_RED)
 			.strength(5.0f)
-			.sound(SoundType.STEM)
+			.sound(SoundType.WART_BLOCK)
 			.randomTicks(),
 		MARS_DIRT, null, MARS_FARMLAND));
 

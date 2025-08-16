@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class TFCGlacianRamRenderer extends MobRenderer<TFCGlacianRam, TFCGlacianRamModel<TFCGlacianRam>> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(AdAstra.MOD_ID, "textures/entity/mob/glacian_ram/glacian_ram.png");
-    private static final ResourceLocation SHEARED_TEXTURE = new ResourceLocation(AdAstra.MOD_ID, "textures/entity/mob/glacian_ram/sheared_glacian_ram.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(AdAstra.MOD_ID, "textures/entity/mob/glacian_ram/glacian_ram.png");
+    private static final ResourceLocation SHEARED_TEXTURE = ResourceLocation.fromNamespaceAndPath(AdAstra.MOD_ID, "textures/entity/mob/glacian_ram/sheared_glacian_ram.png");
 
     public TFCGlacianRamRenderer(EntityRendererProvider.Context context) {
-        super(context, new TFCGlacianRamModel(context.bakeLayer(TFCGlacianRamModel.LAYER_LOCATION)), 0.7F);
+        super(context, new TFCGlacianRamModel<>(context.bakeLayer(TFCGlacianRamModel.LAYER_LOCATION)), 0.7F);
     }
 
 

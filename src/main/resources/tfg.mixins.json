@@ -87,7 +87,9 @@
     "common.tfcambiental.TemperatureCapabilityMixin",
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
-    "common.vintageimprovements.VibratingRecipeMixin"
+    "common.vintageimprovements.VibratingRecipeMixin",
+    "common.wab.EaterMixin",
+    "common.wab.ToxlacanthMixin"
   ],
   "client": [
     "client.ftb.ClientTeamManagerImplMixin",
