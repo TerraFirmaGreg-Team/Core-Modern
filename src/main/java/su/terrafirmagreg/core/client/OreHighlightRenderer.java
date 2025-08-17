@@ -25,7 +25,7 @@ public class OreHighlightRenderer {
         long expireTime = System.currentTimeMillis() + HIGHLIGHT_DURATION_MS;
         Minecraft mc = Minecraft.getInstance();
 
-        int chance = TFGConfig.PreciseOreProspectorParticleChance; // 1 in N from config
+        int chance = TFGConfig.COMMON.PRECISE_ORE_PROSPECTOR_PARTICLE_CHANCE.get(); // 1 in N from config
 
         synchronized (highlights) {
             for (BlockPos pos : positions) {

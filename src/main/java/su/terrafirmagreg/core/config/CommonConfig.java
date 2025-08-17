@@ -5,6 +5,11 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public final class CommonConfig {
     public final ForgeConfigSpec.BooleanValue ENABLE_TFC_AMBIENTAL_COMPAT;
     public final ForgeConfigSpec.BooleanValue ENABLE_CREATE_COMPAT;
+
+    /**
+     * @deprecated (in CommonConfig) as of {@code 0.7.11}. This setting is clientside and should be moved to a new ClientConfig file.
+     */
+    @Deprecated
     public final ForgeConfigSpec.IntValue PRECISE_ORE_PROSPECTOR_PARTICLE_CHANCE;
 
     CommonConfig(ForgeConfigSpec.Builder builder) {
