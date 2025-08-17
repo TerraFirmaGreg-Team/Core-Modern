@@ -4,9 +4,10 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
  * Client Config
- * Not synced with server, only loaded on the client
- * Only use for aesthetic and rendering options!
+ * Not synced with server, only loaded on the client.
+ * Only use this for aesthetic and rendering options!
  */
+@SuppressWarnings("ClassCanBeRecord")
 public final class ClientConfig {
     public final ForgeConfigSpec.IntValue PRECISE_ORE_PROSPECTOR_PARTICLE_CHANCE;
 

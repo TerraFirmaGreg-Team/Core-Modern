@@ -13,6 +13,7 @@ import java.util.function.Function;
  * @see net.dries007.tfc.config.TFCConfig Original inspiration for this config structure
  */
 public final class TFGConfig {
+    public static final ClientConfig CLIENT = register(ModConfig.Type.CLIENT, ClientConfig::new);
     public static final CommonConfig COMMON = register(ModConfig.Type.COMMON, CommonConfig::new);
     public static final ServerConfig SERVER = register(ModConfig.Type.SERVER, ServerConfig::new);
 
