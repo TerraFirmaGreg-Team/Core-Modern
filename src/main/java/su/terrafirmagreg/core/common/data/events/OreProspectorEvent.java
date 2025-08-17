@@ -53,18 +53,18 @@ public class OreProspectorEvent {
 //                        TFGConfig.CopperOreProspectorLength,
 //                        TFGConfig.CopperOreProspectorHalfWidth,
 //                        TFGConfig.CopperOreProspectorHalfWidth,
-                        TFGConfig.SERVER.COPPER_ORE_PROSPECTOR_LENGTH.get(),
-                        TFGConfig.SERVER.COPPER_ORE_PROSPECTOR_WIDTH.get(),
-                        TFGConfig.SERVER.COPPER_ORE_PROSPECTOR_WIDTH.get(),
+                        TFGConfig.SERVER.copperPropickConfig.searchLength().get(),
+                        TFGConfig.SERVER.copperPropickConfig.searchWidth().get(),
+                        TFGConfig.SERVER.copperPropickConfig.searchWidth().get(),
                         TFGTags.Items.OreProspectorsCopper
                 ),
                 new WeakOreProspectorEventHelper(
 //                        TFGConfig.BronzeOreProspectorLength,
 //                        TFGConfig.BronzeOreProspectorHalfWidth,
 //                        TFGConfig.BronzeOreProspectorHalfWidth,
-                        TFGConfig.SERVER.BRONZE_ORE_PROSPECTOR_LENGTH.get(),
-                        TFGConfig.SERVER.BRONZE_ORE_PROSPECTOR_WIDTH.get(),
-                        TFGConfig.SERVER.BRONZE_ORE_PROSPECTOR_WIDTH.get(),
+                        TFGConfig.SERVER.bronzePropickConfig.searchLength().get(),
+                        TFGConfig.SERVER.bronzePropickConfig.searchWidth().get(),
+                        TFGConfig.SERVER.bronzePropickConfig.searchWidth().get(),
                         TFGTags.Items.OreProspectorsBronze
                 )
         );
@@ -77,27 +77,27 @@ public class OreProspectorEvent {
 //                        TFGConfig.WroughtIronOreProspectorLength,
 //                        TFGConfig.WroughtIronOreProspectorHalfWidth,
 //                        TFGConfig.WroughtIronOreProspectorHalfWidth,
-                        TFGConfig.SERVER.WROUGHT_IRON_ORE_PROSPECTOR_LENGTH.get(),
-                        TFGConfig.SERVER.WROUGHT_IRON_ORE_PROSPECTOR_WIDTH.get(),
-                        TFGConfig.SERVER.WROUGHT_IRON_ORE_PROSPECTOR_WIDTH.get(),
+                        TFGConfig.SERVER.wroughtIronPropickConfig.searchLength().get(),
+                        TFGConfig.SERVER.wroughtIronPropickConfig.searchWidth().get(),
+                        TFGConfig.SERVER.wroughtIronPropickConfig.searchWidth().get(),
                         TFGTags.Items.OreProspectorsWroughtIron
                 ),
                 new NormalOreProspectorEventHelper(
 //                        TFGConfig.SteelOreProspectorLength,
 //                        TFGConfig.SteelOreProspectorHalfWidth,
 //                        TFGConfig.SteelOreProspectorHalfWidth,
-                        TFGConfig.SERVER.STEEL_ORE_PROSPECTOR_LENGTH.get(),
-                        TFGConfig.SERVER.STEEL_ORE_PROSPECTOR_WIDTH.get(),
-                        TFGConfig.SERVER.STEEL_ORE_PROSPECTOR_WIDTH.get(),
+                        TFGConfig.SERVER.steelPropickConfig.searchLength().get(),
+                        TFGConfig.SERVER.steelPropickConfig.searchWidth().get(),
+                        TFGConfig.SERVER.steelPropickConfig.searchWidth().get(),
                         TFGTags.Items.OreProspectorsSteel
                 ),
                 new NormalOreProspectorEventHelper(
 //                        TFGConfig.BlackSteelOreProspectorLength,
 //                        TFGConfig.BlackSteelOreProspectorHalfWidth,
 //                        TFGConfig.BlackSteelOreProspectorHalfWidth,
-                        TFGConfig.SERVER.BLACK_STEEL_ORE_PROSPECTOR_LENGTH.get(),
-                        TFGConfig.SERVER.BLACK_STEEL_ORE_PROSPECTOR_WIDTH.get(),
-                        TFGConfig.SERVER.BLACK_STEEL_ORE_PROSPECTOR_WIDTH.get(),
+                        TFGConfig.SERVER.blackSteelPropickConfig.searchLength().get(),
+                        TFGConfig.SERVER.blackSteelPropickConfig.searchWidth().get(),
+                        TFGConfig.SERVER.blackSteelPropickConfig.searchWidth().get(),
                         TFGTags.Items.OreProspectorsBlackSteel
                 )
         );
@@ -110,23 +110,23 @@ public class OreProspectorEvent {
 //                        TFGConfig.BlueSteelOreProspectorLength,
 //                        TFGConfig.BlueSteelOreProspectorHalfWidth,
 //                        TFGConfig.BlueSteelOreProspectorHalfWidth,
-                        TFGConfig.SERVER.BLUE_STEEL_ORE_PROSPECTOR_LENGTH.get(),
-                        TFGConfig.SERVER.BLUE_STEEL_ORE_PROSPECTOR_WIDTH.get(),
-                        TFGConfig.SERVER.BLUE_STEEL_ORE_PROSPECTOR_WIDTH.get(),
+                        TFGConfig.SERVER.blueSteelPropickConfig.inner().searchLength().get(),
+                        TFGConfig.SERVER.blueSteelPropickConfig.inner().searchWidth().get(),
+                        TFGConfig.SERVER.blueSteelPropickConfig.inner().searchWidth().get(),
                         TFGTags.Items.OreProspectorsBlueSteel,
 //                        TFGConfig.BlueSteelOreProspectorRender
-                        TFGConfig.SERVER.BLUE_STEEL_ORE_PROSPECTOR_RENDER.get()
+                        TFGConfig.SERVER.blueSteelPropickConfig.preciselyRenderVein().get()
                 ),
                 new AdvancedOreProspectorEventHelper(
 //                        TFGConfig.RedSteelOreProspectorLength,
 //                        TFGConfig.RedSteelOreProspectorHalfWidth,
 //                        TFGConfig.RedSteelOreProspectorHalfWidth,
-                        TFGConfig.SERVER.RED_STEEL_ORE_PROSPECTOR_LENGTH.get(),
-                        TFGConfig.SERVER.RED_STEEL_ORE_PROSPECTOR_WIDTH.get(),
-                        TFGConfig.SERVER.RED_STEEL_ORE_PROSPECTOR_WIDTH.get(),
+                        TFGConfig.SERVER.redSteelPropickConfig.inner().searchLength().get(),
+                        TFGConfig.SERVER.redSteelPropickConfig.inner().searchWidth().get(),
+                        TFGConfig.SERVER.redSteelPropickConfig.inner().searchWidth().get(),
                         TFGTags.Items.OreProspectorsRedSteel,
 //                        TFGConfig.RedSteelOreProspectorRender
-                        TFGConfig.SERVER.RED_STEEL_ORE_PROSPECTOR_RENDER.get()
+                        TFGConfig.SERVER.redSteelPropickConfig.preciselyRenderVein().get()
                 )
         );
     }
