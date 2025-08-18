@@ -56,7 +56,7 @@ public final class TFGCommonEventHandler {
 
     private static void onCommonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            if (TFGConfig.enableTFCAmbientalCompat && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
+            if (TFGConfig.COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get() && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
                 TFCAmbientalCompat.register();
         });
     }

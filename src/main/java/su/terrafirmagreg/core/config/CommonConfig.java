@@ -15,5 +15,6 @@ public final class CommonConfig {
         builder.push("general");
         ENABLE_CREATE_COMPAT = builder.comment("Should be create compat enabled?").define("createCompat", true);
         ENABLE_TFC_AMBIENTAL_COMPAT = builder.comment("Should be tfc ambiental compat enabled?").define("tfcAmbientalCompat", true);
+        builder.pop();
     }
 }

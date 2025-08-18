@@ -26,15 +26,13 @@ public final class TFGConfig {
     public static boolean enableTFCAmbientalCompat;
 
     /**
-     *
-     * @param event please ensure that the correct {@link ModConfigEvent} type is being checked against.
-     * @deprecated Replaced by {@link ServerConfig} and {@link CommonConfig} as of {@code 0.7.10}. This method remains to ensure backwards compatibility with the old configuration system. In all future cases, use the appropriate sided config file to add configuration settings. Usage of this file for storing config values may introduce instability and cause crashes on load.
+     *  Use this function for listening to specific mod loading events. Do not use this to assign configuration values.
+     * @param event please ensure that the correct event type is being checked.
+     * @see net.minecraftforge.fml.event.config.ModConfigEvent.Loading
+     * @see net.minecraftforge.fml.event.config.ModConfigEvent.Reloading
+     * @see net.minecraftforge.fml.event.config.ModConfigEvent.Unloading
      */
-    @Deprecated
-    public static void onLoad(final ModConfigEvent event) {
-        enableCreateCompat = COMMON.ENABLE_CREATE_COMPAT.get();
-        enableTFCAmbientalCompat = COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get();
-    }
+    public static void onLoad(final ModConfigEvent event) {}
 
 
     @SuppressWarnings("removal")
