@@ -310,6 +310,7 @@ public final class TFGTagPrefix {
         oreSmallNative = new TagPrefix("smallNativeOre")
                 .materialAmount(GTValues.M / 4)
                 .unificationEnabled(true)
+                .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_SMALL_NATIVE_TFC_ORE));
 
         dustyRawOre = new TagPrefix("dusty_raw", true)
