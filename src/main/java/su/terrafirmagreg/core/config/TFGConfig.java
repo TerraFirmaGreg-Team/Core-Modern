@@ -27,6 +27,7 @@ public final class TFGConfig {
      * @see net.minecraftforge.fml.event.config.ModConfigEvent.Reloading
      * @see net.minecraftforge.fml.event.config.ModConfigEvent.Unloading
      */
+    @SuppressWarnings("unused")
     public static void onLoad(final ModConfigEvent event) {}
 
 
