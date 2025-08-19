@@ -9,8 +9,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.function.Function;
 
 /**
- * base of TFG config options. Use {@link ServerConfig} and {@link CommonConfig} instead for side-specific configuration.
- * @see net.dries007.tfc.config.TFCConfig Original inspiration for this config structure
+ * base of TFG config options. This is where each side-specific config is initialized and registered.
+ * Use {@link ServerConfig}, {@link CommonConfig}, {@link ClientConfig} instead for side-specific configuration.
+ * @see net.dries007.tfc.config.TFCConfig original inspiration for this config structure comes from TFC
  */
 public final class TFGConfig {
     public static final ClientConfig CLIENT = register(ModConfig.Type.CLIENT, ClientConfig::new);
@@ -18,12 +19,6 @@ public final class TFGConfig {
     public static final ServerConfig SERVER = register(ModConfig.Type.SERVER, ServerConfig::new);
 
     public static void init() {}
-
-    @Deprecated
-    public static boolean enableCreateCompat;
-
-    @Deprecated
-    public static boolean enableTFCAmbientalCompat;
 
     /**
      *  Use this function for listening to specific mod loading events. Do not use this to assign configuration values.
