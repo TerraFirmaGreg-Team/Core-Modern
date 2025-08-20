@@ -45,6 +45,8 @@ public final class TFGTagPrefix {
     public static final TagPrefix oreSmall;
     public static final TagPrefix oreSmallNative;
 
+    public static final TagPrefix dustyRawOre;
+
     public static final TagPrefix anvil;
     public static final TagPrefix lamp;
     public static final TagPrefix lampUnfinished;
@@ -310,6 +312,16 @@ public final class TFGTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_SMALL_NATIVE_TFC_ORE));
+
+        dustyRawOre = new TagPrefix("dusty_raw", true)
+                .idPattern("dusty_raw_%s")
+                .defaultTagPath("dusty_raw_materials/%s")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
+                .unformattedTagPath("dusty_raw_materials")
+                .materialIconType(TFGMaterialIconType.dustyRawOre)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(hasOreProperty.and(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_DUSTY_ORES)));
 
         anvil = new TagPrefix("anvil")
                 .materialAmount(GTValues.M * 14)
