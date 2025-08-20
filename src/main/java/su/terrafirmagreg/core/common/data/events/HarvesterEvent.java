@@ -48,7 +48,7 @@ public class HarvesterEvent {
         }
 
         // Sets the number of iterations for the search function using config .
-        int radius = TFGConfig.HarvestBasketRange;
+        int radius = TFGConfig.SERVER.HARVEST_BASKET_RANGE.get();
 
         Set<BlockPos> visited = new HashSet<>();
         Queue<BlockPos> queue = new ArrayDeque<>();

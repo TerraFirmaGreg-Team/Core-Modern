@@ -17,10 +17,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = Eater.class)
+@Mixin(value = Eater.class, remap = false)
 public abstract class EaterMixin extends Animal {
 
-	@Shadow public abstract int getNomCount();
+	@Shadow
+    public abstract int getNomCount();
 
 	protected EaterMixin(EntityType<? extends Animal> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);

@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import su.terrafirmagreg.core.compat.create.ChainGTMaterialInterface;
 
-@Mixin(value = ChainConveyorConnectionPacket.class)
+@Mixin(value = ChainConveyorConnectionPacket.class, remap = false)
 public abstract class ChainConveyorConnectionPacketMixin extends BlockEntityConfigurationPacket<ChainConveyorBlockEntity> {
     @Shadow private ItemStack chain;
     @Shadow private BlockPos targetPos;
@@ -27,18 +27,21 @@ public abstract class ChainConveyorConnectionPacketMixin extends BlockEntityConf
         super(pos);
     }
 
-    @WrapOperation( method = "applySettings(Lnet/minecraft/server/level/ServerPlayer;Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;)V", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;addConnectionTo(Lnet/minecraft/core/BlockPos;)Z"), remap = false)
+    @WrapOperation( method = "applySettings(Lnet/minecraft/server/level/ServerPlayer;Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;)V",
+            at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;addConnectionTo(Lnet/minecraft/core/BlockPos;)Z"), remap = false)
     private boolean tfg$applySettings$addConnectionTo(ChainConveyorBlockEntity instance, BlockPos target, Operation<Boolean> original)
     {
         MaterialStack chainMatStack = ChemicalHelper.getMaterialStack(chain.getItem());
         Material chainMat = chainMatStack.material();
         ChainGTMaterialInterface cgtinstance = (ChainGTMaterialInterface) instance;
         cgtinstance.addConnectionMaterial(target, chainMat);
+        //noinspection MixinExtrasOperationParameters
         return original.call(instance, target);
     }
 
 
-    @ModifyArg( method = "applySettings(Lnet/minecraft/server/level/ServerPlayer;Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;)V"))
+    @ModifyArg( method = "applySettings(Lnet/minecraft/server/level/ServerPlayer;Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;)V"))
     private ItemStack tfg$applySettings$placeItemBackInInventory(ItemStack pStack, @Local(ordinal = 0, argsOnly = true) ChainConveyorBlockEntity be)
     {
         BlockPos localPos = targetPos.subtract(be.getBlockPos());
