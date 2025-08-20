@@ -1,11 +1,11 @@
 package su.terrafirmagreg.core.common.data;
 
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SimpleParticleType;
 import su.terrafirmagreg.core.TFGCore;
 
 public class TFGParticles {
@@ -24,6 +24,9 @@ public class TFGParticles {
 
     public static final RegistryObject<SimpleParticleType> ORE_PROSPECTOR_VEIN =
             PARTICLES.register("ore_prospector_vein", () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> COLORED_WIND =
+            PARTICLES.register("colored_wind", () -> new SimpleParticleType(false));
 
     public static void register(IEventBus bus) {
         PARTICLES.register(bus);

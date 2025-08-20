@@ -7,6 +7,7 @@
   "mixins": [
     "client.create.ChainConveyorRendererMixin",
     "client.minecraft.IBlockModelGeneratorsInvoker",
+    "client.tfc.ClientForgeEventHandlerMixin",
     "common.ad_astra.EnvironmentEffectsMixin",
     "common.ad_astra.GasTankItemMixin",
     "common.ad_astra.LanderMixin",
@@ -102,5 +103,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "mixinextras": {
+    "minVersion": "0.5.0"
   }
 }
