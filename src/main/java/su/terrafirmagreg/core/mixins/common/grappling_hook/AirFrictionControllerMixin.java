@@ -1,3 +1,8 @@
+/*
+ * This file includes code from Grappling Hook - Reforged (https://www.curseforge.com/minecraft/mc-mods/grappling-hook-mod-reforged)
+ * Copyright (c) 2024 Chummycho
+ * Licensed under the GPLv3 License
+ */
 package su.terrafirmagreg.core.mixins.common.grappling_hook;
 
 
