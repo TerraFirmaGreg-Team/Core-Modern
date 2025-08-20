@@ -19,6 +19,12 @@ public class TFGParticles {
     public static final RegistryObject<SimpleParticleType> RAILGUN_AMMO =
             PARTICLES.register("railgun_ammo", () -> new SimpleParticleType(true));
 
+    public static final RegistryObject<SimpleParticleType> ORE_PROSPECTOR =
+            PARTICLES.register("ore_prospector", () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> ORE_PROSPECTOR_VEIN =
+            PARTICLES.register("ore_prospector_vein", () -> new SimpleParticleType(true));
+
     public static void register(IEventBus bus) {
         PARTICLES.register(bus);
     }

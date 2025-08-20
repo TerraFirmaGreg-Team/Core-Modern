@@ -92,6 +92,9 @@ dependencies {
     // Create: Vintage Improvements
     implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6708676") { transitive = false }
 
+    // Create: Crafts and Additions
+    implementation fg.deobf("curse.maven:create-crafts-and-additions-439890:6306951")
+
     // Greate
     implementation fg.deobf("maven.modrinth:greate:${greate_version}") { transitive = false }
 
@@ -122,7 +125,7 @@ dependencies {
     implementation fg.deobf("maven.modrinth:alekiships:${alekiships_version}") { transitive = false }
     implementation fg.deobf("maven.modrinth:firmaciv:${firmaciv_version}") { transitive = false }
 
-    // TFC AstikoCarts
+    // TFC AstikorCarts
     implementation fg.deobf("curse.maven:astikor-carts-redux-916493:4988266") { transitive = false }
     implementation fg.deobf("curse.maven:astikor-carts-tfc-844019:5141430") { transitive = false }
 
@@ -153,8 +156,20 @@ dependencies {
     implementation fg.deobf("curse.maven:resourceful-config-714059:6231176") { transitive = false }
 
     // Species
-    implementation fg.deobf("maven.modrinth:species:3.4") { transitive = false }
+    implementation fg.deobf("maven.modrinth:species:3.5") { transitive = false }
 
     // Simply Stacked Dimensions
     implementation fg.deobf("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
+
+    // Grappling Hook -- needless dependencies are dumb
+    implementation fg.deobf("curse.maven:cloth-config-348521:5729105")
+    implementation fg.deobf("curse.maven:grappling-hook-mod-reforged-1166811:6028357") { transitive = false }
+
+    // Hang Glider
+    implementation fg.deobf("maven.modrinth:puzzles-lib:${puzzleslib_version}")
+    implementation fg.deobf("maven.modrinth:hang-glider:${hangglider_version}")
+
+    // Wan's ancient beasts
+    implementation fg.deobf("curse.maven:wans-ancient-beasts-1108604:6871096")
+    implementation fg.deobf("curse.maven:geckolib-388172:6789487")
 }

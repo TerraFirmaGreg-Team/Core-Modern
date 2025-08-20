@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.moonrabbit;
 
 import com.mojang.serialization.Codec;
 import net.dries007.tfc.common.TFCTags;

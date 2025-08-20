@@ -11,9 +11,13 @@ import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import net.dries007.tfc.client.TFCSounds;
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
-import net.dries007.tfc.common.blocks.soil.SoilBlockType;
+import net.dries007.tfc.common.blocks.soil.DirtBlock;
+import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -32,6 +36,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.data.buds.BudIndicator;
 import su.terrafirmagreg.core.common.data.buds.BudIndicatorItem;
@@ -72,34 +77,43 @@ public final class TFGBlocks {
 			.sound(SoundType.CHERRY_WOOD),
 		LUNAR_CHORUS_PLANT));
 
-	// Connected texture grass blocks
+	// Connected texture grass blocks + dirt
 
-	public static final RegistryObject<Block> MARS_DIRT = register("grass/mars_dirt",
-		() -> new Block(BlockBehaviour.Properties.copy(Blocks.DIRT)));
+	// this one's constructor needs to reference the others, so it's in the static constructor below
+	public static RegistryObject<Block> MARS_DIRT;
+
+	public static final RegistryObject<Block> MARS_FARMLAND = register("grass/mars_farmland",
+		() -> new FarmlandBlock(ExtendedProperties.of(MapColor.DIRT)
+			.strength(1.3f)
+			.sound(SoundType.GRAVEL)
+			.isViewBlocking(TFCBlocks::always)
+			.isSuffocating(TFCBlocks::always)
+			.blockEntity(TFCBlockEntities.FARMLAND),
+		MARS_DIRT));
 
 	public static final RegistryObject<Block> AMBER_MYCELIUM = register("grass/amber_mycelium",
 		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.TERRACOTTA_YELLOW)
 			.strength(5.0f)
-			.sound(SoundType.STEM)
+			.sound(SoundType.WART_BLOCK)
 			.randomTicks(),
-		MARS_DIRT, null, null));
+		MARS_DIRT, null, MARS_FARMLAND));
 
 	public static final RegistryObject<Block> RUSTICUS_MYCELIUM = register("grass/rusticus_mycelium",
 		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.TERRACOTTA_ORANGE)
 			.strength(5.0f)
-			.sound(SoundType.STEM)
+			.sound(SoundType.WART_BLOCK)
 			.randomTicks(),
-		MARS_DIRT, null, null));
+		MARS_DIRT, null, MARS_FARMLAND));
 
 	public static final RegistryObject<Block> SANGNUM_MYCELIUM = register("grass/sangnum_mycelium",
 		() -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.TERRACOTTA_RED)
 			.strength(5.0f)
-			.sound(SoundType.STEM)
+			.sound(SoundType.WART_BLOCK)
 			.randomTicks(),
-		MARS_DIRT, null, null));
+		MARS_DIRT, null, MARS_FARMLAND));
 
 	// Fluid blocks
 
@@ -120,35 +134,65 @@ public final class TFGBlocks {
 	// Multi block casings
 
 	public static final RegistryObject<Block> ELECTROMAGNETIC_ACCELERATOR_BLOCK = register("electromagnetic_accelerator",
-			() -> new ElectromagneticAcceleratorBlock(BlockBehaviour.Properties.of()
-					.mapColor(MapColor.COLOR_LIGHT_BLUE)
-					.strength(0.5f)
-					.sound(SoundType.COPPER)
-					.lightLevel(state -> 15)
-					.speedFactor(1.5f)
-			));
+		() -> new ElectromagneticAcceleratorBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_LIGHT_BLUE)
+			.strength(5.5f)
+			.sound(SoundType.COPPER)
+			.lightLevel(state -> 15)
+			.speedFactor(1.5f)
+		));
 
 	public static final RegistryObject<Block> SUPERCONDUCTOR_COIL_LARGE_BLOCK = register("superconductor_coil_large",
-			() -> new SimpleBlock(BlockBehaviour.Properties.of()
-					.mapColor(MapColor.COLOR_ORANGE)
-					.strength(0.5f)
-					.sound(SoundType.COPPER)
-			));
+		() -> new SimpleBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_ORANGE)
+			.strength(5.5f)
+			.sound(SoundType.COPPER)
+		));
 
 	public static final RegistryObject<Block> SUPERCONDUCTOR_COIL_SMALL_BLOCK = register("superconductor_coil_small",
-			() -> new SimpleBlock(BlockBehaviour.Properties.of()
-					.mapColor(MapColor.COLOR_ORANGE)
-					.strength(0.5f)
-					.sound(SoundType.COPPER)
-			));
+		() -> new SimpleBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_ORANGE)
+			.strength(5.5f)
+			.sound(SoundType.COPPER)
+		));
 
 	public static final RegistryObject<Block> MACHINE_CASING_ALUMINIUM_PLATED_STEEL = register("machine_casing_aluminium_plated_steel",
-			() -> new SimpleBlock(BlockBehaviour.Properties.of()
-					.mapColor(MapColor.COLOR_LIGHT_BLUE)
-					.strength(0.5f)
-					.sound(SoundType.COPPER)
-			));
+		() -> new SimpleBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_LIGHT_BLUE)
+			.strength(5.5f)
+			.sound(SoundType.COPPER)
+		));
 
+	public static final RegistryObject<ReflectorBlock> REFLECTOR_BLOCK = register("reflector", ReflectorBlock::new);
+
+	static {
+		MARS_DIRT = register("grass/mars_dirt",
+			() -> new DirtBlock(Block.Properties.of()
+				.mapColor(MapColor.DIRT)
+				.strength(1.4f)
+				.sound(SoundType.GRAVEL), RUSTICUS_MYCELIUM, null, MARS_FARMLAND, null, null));
+	}
+
+
+	// Mars animal related
+	public static final RegistryObject<Block> LARGE_NEST_BOX = register("large_nest_box",
+			() -> new LargeNestBoxBlock(ExtendedProperties.of()
+					.mapColor(MapColor.WOOD)
+					.strength(3f)
+					.noOcclusion()
+					.sound(TFCSounds.THATCH)
+					.blockEntity(TFGBlockEntities.LARGE_NEST_BOX)
+					.serverTicks(LargeNestBoxBlockEntity::serverTick)
+			));
+	public static final RegistryObject<Block> LARGE_NEST_BOX_WARPED = register("large_nest_box_warped",
+			() -> new LargeNestBoxBlock(ExtendedProperties.of()
+					.mapColor(MapColor.WOOD)
+					.strength(3f)
+					.noOcclusion()
+					.sound(TFCSounds.THATCH)
+					.blockEntity(TFGBlockEntities.LARGE_NEST_BOX)
+					.serverTicks(LargeNestBoxBlockEntity::serverTick)
+			));
 
 	// Buds are generated automatically
 

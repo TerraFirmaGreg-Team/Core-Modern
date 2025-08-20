@@ -2,12 +2,16 @@ package su.terrafirmagreg.core.common.data;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntity;
+import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
+
+import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
 
 
 public class TFGBlockEntities {
@@ -28,4 +32,19 @@ public class TFGBlockEntities {
 							FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.TREATED_WOOD).get(Greenhouse.BlockType.PORT).get()
 					).build(null)
 			);
+
+
+	//private static final Block[] LARGE_NEST_TYPES = {TFGBlocks.LARGE_NEST_BOX.get(), TFGBlocks.LARGE_NEST_BOX_WARPED.get()};
+
+
+	public static final RegistryObject<BlockEntityType<LargeNestBoxBlockEntity>> LARGE_NEST_BOX =
+			BLOCK_ENTITIES.register("large_nest_box", () ->
+					BlockEntityType.Builder.of(LargeNestBoxBlockEntity::new,
+							TFGBlocks.LARGE_NEST_BOX.get(), TFGBlocks.LARGE_NEST_BOX_WARPED.get()).build(null)
+			);
+
+
+	public static final RegistryObject<BlockEntityType<ReflectorBlockEntity>> REFLECTOR_BLOCK_ENTITY = BLOCK_ENTITIES.register("reflector",
+			() -> BlockEntityType.Builder.of(ReflectorBlockEntity::new, TFGBlocks.REFLECTOR_BLOCK.get()).build(null));
+
 }

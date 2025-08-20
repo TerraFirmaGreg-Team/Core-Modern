@@ -18,4 +18,5 @@ public final class TFGMaterialIconType {
     public static final MaterialIconType toolHeadHook = new MaterialIconType("toolHeadHook");
 
 
+    public static final MaterialIconType dustyRawOre = new MaterialIconType("dustyRawOre");
 }
