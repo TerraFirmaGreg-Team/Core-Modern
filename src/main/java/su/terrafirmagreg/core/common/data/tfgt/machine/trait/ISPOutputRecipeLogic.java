@@ -244,7 +244,7 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                         } else if (FoodCapability.has(itemStack) && FoodCapability.has(inSlot) && FoodCapability.areStacksStackableExceptCreationDate(itemStack, inSlot)) {
                             var date1 = FoodCapability.get(inSlot).getCreationDate();
                             var date2 = FoodCapability.get(itemStack).getCreationDate();
-                            if (!simulate || (FoodCapability.getRoundedCreationDate(date1) == FoodCapability.getRoundedCreationDate(date2))) {
+                            if (FoodCapability.getRoundedCreationDate(date1) == FoodCapability.getRoundedCreationDate(date2)) {
                                 FoodCapability.get(itemStack).setCreationDate(date1);
                                 itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
                             }
