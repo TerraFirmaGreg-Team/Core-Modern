@@ -41,7 +41,7 @@ public abstract class ChainConveyorConnectionPacketMixin extends BlockEntityConf
 
 
     @ModifyArg( method = "applySettings(Lnet/minecraft/server/level/ServerPlayer;Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;)V"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;)V", ordinal = 0), remap = true)
     private ItemStack tfg$applySettings$placeItemBackInInventory(ItemStack pStack, @Local(ordinal = 0, argsOnly = true) ChainConveyorBlockEntity be)
     {
         BlockPos localPos = targetPos.subtract(be.getBlockPos());
