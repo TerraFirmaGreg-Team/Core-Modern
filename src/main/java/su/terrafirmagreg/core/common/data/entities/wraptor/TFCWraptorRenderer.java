@@ -12,9 +12,9 @@ import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSnifferModel;
 
 public class TFCWraptorRenderer extends MobRenderer<TFCWraptor, TFCWraptorModel<TFCWraptor>> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation("species", "textures/entity/wraptor/wraptor.png");
-    public static final ResourceLocation TEXTURE_GOTH = new ResourceLocation("species", "textures/entity/wraptor/wraptor_goth.png");
-    public static final ResourceLocation TEXTURE_TRANS = new ResourceLocation("species", "textures/entity/wraptor/wraptor_trans.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("species", "textures/entity/wraptor/wraptor.png");
+    public static final ResourceLocation TEXTURE_GOTH = ResourceLocation.fromNamespaceAndPath("species", "textures/entity/wraptor/wraptor_goth.png");
+    public static final ResourceLocation TEXTURE_TRANS = ResourceLocation.fromNamespaceAndPath("species", "textures/entity/wraptor/wraptor_trans.png");
 
     public TFCWraptorRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new TFCWraptorModel(ctx.bakeLayer(SpeciesEntityModelLayers.WRAPTOR)), 0.5F);

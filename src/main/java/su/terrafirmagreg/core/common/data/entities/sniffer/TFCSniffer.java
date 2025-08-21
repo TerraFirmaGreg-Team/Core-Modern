@@ -14,8 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -36,6 +34,7 @@ import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
@@ -45,10 +44,7 @@ import java.util.List;
 
 public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
 
-    private static final EntityDataSerializer<TFCSniffer.State> SNIFFER_STATE = EntityDataSerializer.simpleEnum(TFCSniffer.State.class);
-    static { EntityDataSerializers.registerSerializer(SNIFFER_STATE);}
-
-    private static final EntityDataAccessor<TFCSniffer.State> DATA_STATE = SynchedEntityData.defineId(TFCSniffer.class, SNIFFER_STATE);
+    private static final EntityDataAccessor<TFCSniffer.State> DATA_STATE = SynchedEntityData.defineId(TFCSniffer.class, TFGEntityDataSerializers.SNIFFER_STATE.get());
     private static final EntityDataAccessor<Long> DATA_WOOL = SynchedEntityData.defineId(TFCSniffer.class, EntityHelpers.LONG_SERIALIZER);
 
     static double familiarityCap = 0.35;
