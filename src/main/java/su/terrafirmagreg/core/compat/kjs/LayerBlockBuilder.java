@@ -1,6 +1,8 @@
 package su.terrafirmagreg.core.compat.kjs;
 
+import com.notenoughmail.kubejs_tfc.util.ResourceUtils;
 import dev.latvian.mods.kubejs.block.BlockBuilder;
+import dev.latvian.mods.kubejs.generator.DataJsonGenerator;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.resources.ResourceLocation;
@@ -38,8 +40,7 @@ public class LayerBlockBuilder extends BlockBuilder {
 		ResourceLocation rl = ResourceLocation.tryParse(id);
 		itemSupplier = Lazy.of(() -> {
 			var i = RegistryInfo.ITEM.getValue(rl);
-			if (i != null)
-			{
+			if (i != null) {
 				return i;
 			}
 			else {
@@ -54,5 +55,10 @@ public class LayerBlockBuilder extends BlockBuilder {
 	@Override
 	public LayerBlock createObject() {
 		return new LayerBlock(itemSupplier, createProperties());
+	}
+
+	@Override
+	public void generateDataJsons(DataJsonGenerator generator) {
+		ResourceUtils.lootTable(b -> b.addPool(p -> { }), generator, this);
 	}
 }
