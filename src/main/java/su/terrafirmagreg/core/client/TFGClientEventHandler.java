@@ -51,9 +51,13 @@ public final class TFGClientEventHandler {
 
     @SubscribeEvent
     public void registerParticles(RegisterParticleProvidersEvent event) {
+        // railgun animation
         event.registerSpriteSet(TFGParticles.RAILGUN_BOOM.get(), RailgunBoomProvider::new);
         event.registerSpriteSet(TFGParticles.RAILGUN_AMMO.get(), RailgunAmmoProvider::new);
-        event.registerSpriteSet(TFGParticles.COLORED_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 15117444)));
+        // martian wind
+        event.registerSpriteSet(TFGParticles.DEEP_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 12477985))); // avg color of red sand
+        event.registerSpriteSet(TFGParticles.MEDIUM_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 12878934))); // avg color of ad astra mars sand
+        event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 13606745))); // avg color of ad astra venus sand
     }
 
     @SuppressWarnings("removal")

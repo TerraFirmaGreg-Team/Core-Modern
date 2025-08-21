@@ -1,3 +1,8 @@
+/*
+ * This file includes code from TerraFirmaCraft (https://github.com/TerraFirmaCraft/TerraFirmaCraft)
+ * Copyright (c) 2020 alcatrazEscapee
+ * Licensed under the EUPLv1.2 License
+ */
 package su.terrafirmagreg.core.mixins.client.tfc;
 
 import com.llamalad7.mixinextras.expression.Definition;
@@ -15,16 +20,15 @@ import su.terrafirmagreg.core.common.data.TFGParticles;
 public abstract class ClientForgeEventHandlerMixin {
 
     @Definition(id = "WIND", field = "Lnet/dries007/tfc/client/particle/TFCParticles;WIND:Lnet/minecraftforge/registries/RegistryObject;")
-    @Definition(id = "get", method = "Lnet/minecraftforge/registries/RegistryObject;get() Ljava/lang/Object; ")
+    @Definition(id = "get", method = "Lnet/minecraftforge/registries/RegistryObject;get()Ljava/lang/Object;")
     @Definition(id = "ParticleOptions", type = ParticleOptions.class)
     @Expression("(ParticleOptions) WIND.get()")
-    @ModifyExpressionValue(method = "tickWind()V",
-            at = @At(value = "MIXINEXTRAS:EXPRESSION"))
+    @ModifyExpressionValue(method = "tickWind()V", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private static ParticleOptions redirectWindParticle(ParticleOptions original, @Local Level level) {
 //            if (AdAstraData.isPlanet(level.dimension()) && AdAstraData.getPlanet(level.dimension()).dimension().location().getPath().equals("mars"))
         if (true)
             {
-                return TFGParticles.COLORED_WIND.get();
+                return TFGParticles.LIGHT_MARS_WIND.get();
             } else return original;
     }
 }

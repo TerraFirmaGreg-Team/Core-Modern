@@ -6,6 +6,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import org.jetbrains.annotations.Nullable;
 import snownee.jade.util.Color;
@@ -35,7 +36,7 @@ public class ColoredWindParticleProvider implements ParticleProvider<SimpleParti
     @Override
     public @Nullable Particle createParticle(SimpleParticleType pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
         WindParticle particle = new WindParticle(pLevel, pX, pY, pZ);
-//        pLevel.getBiome(BlockPos.containing(pX, pY, pZ)).getTagKeys();
+        pLevel.getBiome(BlockPos.containing(pX, pY, pZ)).getTagKeys();
         particle.pickSprite(set);
         particle.setColor(this.r / 255f, this.g / 255f, this.b / 255f);
         return particle;
