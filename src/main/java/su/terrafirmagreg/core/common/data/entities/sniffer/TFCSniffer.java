@@ -59,7 +59,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     static int produceTicks = 96000;
     static int hatchDays = 20;
     static Item eggItem = TFGItems.SNIFFER_EGG.get();
-    static int woolTicks = 48000;
+    static int woolProduceTicks = 48000;
     static int maxWool = 8;
     static Item woolItem = TFGItems.SNIFFER_WOOL.get();
     static double produceFamiliarity = 0.15;
@@ -78,7 +78,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
     }
 
     public static AttributeSupplier.Builder createMobAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)50.0F).add(Attributes.MOVEMENT_SPEED, (double)0.1F);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)75.0F).add(Attributes.MOVEMENT_SPEED, (double)0.1F);
     }
 
     //Config Bypass
@@ -252,7 +252,7 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
 
     public long getWoolCooldown()
     {
-        return Math.max(0, woolTicks + getWoolProducedTick() - Calendars.get(level()).getTicks());
+        return Math.max(0, woolProduceTicks + getWoolProducedTick() - Calendars.get(level()).getTicks());
     }
 
     public boolean hasWoolProduct()

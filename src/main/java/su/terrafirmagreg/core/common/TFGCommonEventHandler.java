@@ -49,7 +49,7 @@ public final class TFGCommonEventHandler {
         ItemStack stack = event.getObject();
         if (!stack.isEmpty())
         {
-            if (stack.getItem() == TFGItems.SNIFFER_EGG.get())
+            if (stack.getItem() == TFGItems.SNIFFER_EGG.get() || stack.getItem() == TFGItems.WRAPTOR_EGG.get())
             {
                 event.addCapability(LargeEggCapability.KEY, new LargeEggHandler(stack));
             }

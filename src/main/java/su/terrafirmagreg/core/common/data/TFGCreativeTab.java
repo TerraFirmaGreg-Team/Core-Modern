@@ -50,6 +50,8 @@ public class TFGCreativeTab {
 		accept(out, TFGItems.GLACIAN_WOOL);
 		accept(out, TFGItems.SNIFFER_WOOL);
 		accept(out, TFGItems.SNIFFER_EGG);
+		accept(out, TFGItems.WRAPTOR_WOOL);
+		accept(out, TFGItems.WRAPTOR_EGG);
 
 		accept(out, TFGItems.PIGLIN_DISGUISE);
 		accept(out, TFGItems.TROWEL);
@@ -60,6 +62,7 @@ public class TFGCreativeTab {
 		accept(out, TFGItems.MOON_RABBIT_EGG);
 		accept(out, TFGItems.GLACIAN_RAM_EGG);
 		accept(out, TFGItems.SNIFFER_SPAWN_EGG);
+		accept(out, TFGItems.WRAPTOR_SPAWN_EGG);
     
 		accept(out, TFGItems.ELECTRIC_EXTENDO_GRIP);
 	}

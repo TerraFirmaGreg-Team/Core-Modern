@@ -45,7 +45,6 @@ public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeN
             Entity sitter = Seat.getSittingEntity(level, pos);
             if (sitter instanceof TFCSniffer sniffer)
             {
-                System.out.println("Sitting Sniffer");
                 if (sniffer.isReadyForAnimalProduct())
                 {
                     final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos().set(pos);

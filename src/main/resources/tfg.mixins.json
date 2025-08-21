@@ -15,6 +15,7 @@
     "common.ad_astra.SlidingDoorBlockMixin",
     "common.ad_astra.SpaceSuitItemMixin",
     "common.ae2.ConfigMenuInventoryMixin",
+    "common.ae2.InitP2PAttunementsMixin",
     "common.beneath.BurpingFlowerBlockMixin",
     "common.beneath.PortalUtilMixin",
     "common.create.BasinBlockEntityMixin",
