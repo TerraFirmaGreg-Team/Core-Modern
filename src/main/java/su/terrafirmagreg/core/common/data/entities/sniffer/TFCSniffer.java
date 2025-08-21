@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
@@ -29,6 +30,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,6 +41,7 @@ import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
+import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
 
 import java.util.List;
 
@@ -75,6 +78,11 @@ public class TFCSniffer extends ProducingAnimal implements IForgeShearable {
 
     public static AttributeSupplier.Builder createMobAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)75.0F).add(Attributes.MOVEMENT_SPEED, (double)0.1F);
+    }
+
+    public static boolean spawnRules(EntityType<? extends TFCSniffer> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand)
+    {
+        return level.getBlockState(pos).isAir();
     }
 
     //Config Bypass

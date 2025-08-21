@@ -59,7 +59,30 @@ public class TFGEntities {
 
 	public static void onSpawnPlacement(SpawnPlacementRegisterEvent event)
 	{
-		event.register(MOON_RABBIT.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MoonRabbit::spawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+		event.register(
+				MOON_RABBIT.get(),
+				SpawnPlacements.Type.ON_GROUND,
+				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+				MoonRabbit::spawnRules,
+				SpawnPlacementRegisterEvent.Operation.REPLACE);
+		event.register(
+				GLACIAN_RAM.get(),
+				SpawnPlacements.Type.ON_GROUND,
+				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+				TFCGlacianRam::spawnRules,
+				SpawnPlacementRegisterEvent.Operation.REPLACE);
+		event.register(
+				SNIFFER.get(),
+				SpawnPlacements.Type.ON_GROUND,
+				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+				TFCSniffer::spawnRules,
+				SpawnPlacementRegisterEvent.Operation.REPLACE);
+		event.register(
+				WRAPTOR.get(),
+				SpawnPlacements.Type.ON_GROUND,
+				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+				TFCWraptor::spawnRules,
+				SpawnPlacementRegisterEvent.Operation.REPLACE);
 	}
 
 	public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event)

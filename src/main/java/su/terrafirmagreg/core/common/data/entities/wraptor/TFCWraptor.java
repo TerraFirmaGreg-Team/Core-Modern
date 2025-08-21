@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,6 +35,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
+import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 
 import java.util.List;
@@ -66,6 +69,11 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
     @NotNull
     public static AttributeSupplier.Builder createMobAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)35.0F).add(Attributes.MOVEMENT_SPEED, (double)0.2F).add(Attributes.KNOCKBACK_RESISTANCE, (double)0.25F);
+    }
+
+    public static boolean spawnRules(EntityType<? extends TFCWraptor> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand)
+    {
+        return level.getBlockState(pos).isAir();
     }
 
     //Config Overrides
