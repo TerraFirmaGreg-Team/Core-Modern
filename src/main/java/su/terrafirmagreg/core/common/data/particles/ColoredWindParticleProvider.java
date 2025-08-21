@@ -16,6 +16,7 @@ public class ColoredWindParticleProvider implements ParticleProvider<SimpleParti
     private final float r;
     private final float g;
     private final float b;
+    private static int particlesSpawned = 0;
 
     public ColoredWindParticleProvider(SpriteSet set, int color) {
         this.set = set;
@@ -36,7 +37,10 @@ public class ColoredWindParticleProvider implements ParticleProvider<SimpleParti
     @Override
     public @Nullable Particle createParticle(SimpleParticleType pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
         WindParticle particle = new WindParticle(pLevel, pX, pY, pZ);
-        pLevel.getBiome(BlockPos.containing(pX, pY, pZ)).getTagKeys();
+        if (particlesSpawned++ >= 20) {
+            System.out.println(pLevel.getBiome(BlockPos.containing(pX, pY, pZ)).tags().toList());
+            particlesSpawned = 0;
+        }
         particle.pickSprite(set);
         particle.setColor(this.r / 255f, this.g / 255f, this.b / 255f);
         return particle;
