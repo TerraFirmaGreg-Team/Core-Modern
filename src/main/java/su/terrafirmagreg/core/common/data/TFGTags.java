@@ -58,4 +58,6 @@ public final class TFGTags {
             return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.parse(path));
         }
     }
+
+
 }

@@ -117,8 +117,8 @@ public final class TFGBlocks {
 
 	// Fluid blocks
 
-	public static final RegistryObject<LiquidBlock> MARS_WATER = registerNoItem("semiheavy_ammoniacal_water",
-		() -> new LiquidBlock(TFGFluids.MARS_WATER.source(), BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.COLOR_CYAN).noLootTable()));
+	public static final RegistryObject<LiquidBlock> MARS_WATER = registerNoItem("fluid/semiheavy_ammoniacal_water",
+		() -> new LiquidBlock(TFGFluids.MARS_WATER.source(), BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.WARPED_WART_BLOCK).noLootTable()));
 
 	// Misc blocks
 
