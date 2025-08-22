@@ -121,9 +121,9 @@ public final class TFGClientEventHandler {
         event.registerSpriteSet(TFGParticles.ORE_PROSPECTOR.get(), OreProspectorProvider::new);
         event.registerSpriteSet(TFGParticles.ORE_PROSPECTOR_VEIN.get(), OreProspectorVeinProvider::new);
         // martian wind
-        event.registerSpriteSet(TFGParticles.DEEP_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 12477985))); // avg color of red sand
-        event.registerSpriteSet(TFGParticles.MEDIUM_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 12878934))); // avg color of ad astra mars sand
-        event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 13606745))); // avg color of ad astra venus sand
+        event.registerSpriteSet(TFGParticles.DEEP_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xbe6621))); // avg color of red sand
+        event.registerSpriteSet(TFGParticles.MEDIUM_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xc48456))); // avg color of ad astra mars sand
+        event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
     }
 
     @SuppressWarnings("removal")
