@@ -15,4 +15,5 @@ public final class TFGMaterialFlags {
     public static final MaterialFlag GENERATE_FIRMALIFE_GREENHOUSE_BLOCKS = new MaterialFlag.Builder("generate_firmalife_greenhouse_blocks").build();
     public static final MaterialFlag HAS_SMALL_TFC_ORE = new MaterialFlag.Builder("has_small_tfc_ore").build();
     public static final MaterialFlag HAS_SMALL_NATIVE_TFC_ORE = new MaterialFlag.Builder("has_small_native_tfc_ore").build();
+    public static final MaterialFlag GENERATE_DUSTY_ORES = new MaterialFlag.Builder("generate_dusty_ores").build();
 }

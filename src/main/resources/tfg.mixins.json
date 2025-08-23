@@ -15,6 +15,7 @@
     "common.ad_astra.SlidingDoorBlockMixin",
     "common.ad_astra.SpaceSuitItemMixin",
     "common.ae2.ConfigMenuInventoryMixin",
+    "common.ae2.InitP2PAttunementsMixin",
     "common.beneath.BurpingFlowerBlockMixin",
     "common.beneath.PortalUtilMixin",
     "common.create.BasinBlockEntityMixin",
@@ -32,6 +33,8 @@
     "common.firmalife.HydroponicPlanterBlockEntityMixin",
     "common.firmalife.MixinGreenhousePortBlock",
     "common.flywheel.AnimatedBlazeBurnerMixin",
+    "common.grappling_hook.AirFrictionControllerMixin",
+    "common.grappling_hook.GrappleControllerMixin",
     "common.greate.TieredCrushingCategoryMixin",
     "common.greate.TieredCrushingRecipeMixin",
     "common.greate.TieredMillingCategoryMixin",
@@ -56,6 +59,8 @@
     "common.gtceu.recipes.ArcFurnaceLogicMixin",
     "common.gtceu.recipes.MaceratorLogicMixin",
     "common.gtceu.recipes.MaterialInfoLoaderMixin",
+    "common.hang_glider.GliderItemMixin",
+    "common.immersive_aircraft.BambooHopperEntityMixin",
     "common.ldlib.ModularUIContainerMixin",
     "common.minecraft.EndDragonFightMixin",
     "common.minecraft.EndPodiumFeatureMixin",
@@ -86,7 +91,9 @@
     "common.tfcambiental.TemperatureCapabilityMixin",
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
-    "common.vintageimprovements.VibratingRecipeMixin"
+    "common.vintageimprovements.VibratingRecipeMixin",
+    "common.wab.EaterMixin",
+    "common.wab.ToxlacanthMixin"
   ],
   "client": [
     "client.ftb.ClientTeamManagerImplMixin",

@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.moonrabbit;
 
 import net.dries007.tfc.client.render.entity.TFCRabbitRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

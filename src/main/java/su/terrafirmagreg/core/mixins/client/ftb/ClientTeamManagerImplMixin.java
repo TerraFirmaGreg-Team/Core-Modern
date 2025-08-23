@@ -1,3 +1,8 @@
+/*
+ * This file includes code from FTB (https://github.com/FTBTeam/FTB-Teams)
+ * Copyright © 2015-2021 the original authors.
+ * Licensed under the Apache License
+ */
 package su.terrafirmagreg.core.mixins.client.ftb;
 
 import com.mojang.util.UUIDTypeAdapter;

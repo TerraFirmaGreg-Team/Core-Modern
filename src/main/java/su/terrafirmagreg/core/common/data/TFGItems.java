@@ -42,13 +42,22 @@ public class TFGItems {
 	public static final RegistryObject<Item> TROWEL =
 			ITEMS.register("trowel", () -> new TrowelItem(new Item.Properties()));
 
+	public static final RegistryObject<Item> SNIFFER_EGG =
+			ITEMS.register("sniffer_egg", ()->new Item(new Item.Properties()));
+
 	public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
+	public static final RegistryObject<Item> GLACIAN_RAM_EGG = registerSpawnEgg(TFGEntities.GLACIAN_RAM, 16772607, 3997758);
+	public static final RegistryObject<Item> SNIFFER_SPAWN_EGG = registerSpawnEgg(TFGEntities.SNIFFER, 11285007, 4829025);
+
 
 	@SuppressWarnings("deprecation")
 	public static final RegistryObject<BucketItem> MARS_WATER_BUCKET = register("semiheavy_ammoniacal_water_bucket",
 		() -> new BucketItem(TFGFluids.MARS_WATER.getSource(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
 	public static final RegistryObject<Item> RAILGUN_AMMO_SHELL = ITEMS.register("railgun_ammo_shell", () -> new Item(new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> GLACIAN_WOOL = ITEMS.register("glacian_wool", () -> new Item(new Item.Properties().stacksTo(32)));
+	public static final RegistryObject<Item> SNIFFER_WOOL = ITEMS.register("sniffer_wool", () -> new Item(new Item.Properties().stacksTo(32)));
+
 
 	public static final RegistryObject<ComponentItem> ELECTRIC_EXTENDO_GRIP = ITEMS.register("electric_extendo_grip", () -> new ElectricExtendoGrip(new Item.Properties()));
 
