@@ -91,4 +91,10 @@ public abstract class TFGWoolEggProducingAnimal extends ProducingAnimal {
     {
         return Component.translatable("tfc.jade.product.wool");
     }
+
+    //Actual egg logic is defined in each class
+    public ItemStack makeEgg(){
+        System.out.println("You shouldn't see this");
+        return null;
+    }
 }

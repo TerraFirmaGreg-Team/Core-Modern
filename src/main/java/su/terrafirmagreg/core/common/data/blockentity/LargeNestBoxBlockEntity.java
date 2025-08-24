@@ -17,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,7 +29,9 @@ import su.terrafirmagreg.core.common.data.blocks.LargeNestBoxBlock;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.contianer.LargeNestBoxContainer;
+import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
+import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
 
 import javax.annotation.Nullable;
 
@@ -41,11 +44,12 @@ public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeN
 
         if (level.getGameTime() % 30 == 0)
         {
+
             if(!(state.getBlock() instanceof LargeNestBoxBlock)) return;
             Entity sitter = Seat.getSittingEntity(level, pos);
-            if (sitter instanceof TFCSniffer sniffer)
+            if (sitter instanceof TFGWoolEggProducingAnimal animal)
             {
-                if (sniffer.isReadyForAnimalProduct())
+                if (animal.isReadyForAnimalProduct())
                 {
                     final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos().set(pos);
 
@@ -59,21 +63,21 @@ public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeN
                         case 3: cursor.move(backward).move(left); break;
                     }
 
-                    if (sniffer.getRandom().nextInt(7) == 0)
+                    if (animal.getRandom().nextInt(7) == 0)
                     {
                         Helpers.playSound(level, pos, SoundEvents.CHICKEN_EGG);
-                        if (Helpers.insertOne(level, cursor, TFGBlockEntities.LARGE_NEST_BOX.get(), sniffer.makeEgg()))
+                        if (Helpers.insertOne(level, cursor, TFGBlockEntities.LARGE_NEST_BOX.get(), animal.makeEgg()))
                         {
-                            sniffer.setFertilized(false);
-                            sniffer.setProductsCooldown();
-                            sniffer.stopRiding();
+                            animal.setFertilized(false);
+                            animal.setProductsCooldown();
+                            animal.stopRiding();
                             nest.markForSync();
                         }
                     }
                 }
                 else
                 {
-                    sniffer.stopRiding();
+                    animal.stopRiding();
                 }
             }
 
@@ -174,7 +178,11 @@ public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeN
 
                 ItemStack stack = getStackInSlot(slot);
                 if (!stack.isEmpty()) {
-                    newEggState = 1;
+                    newEggState = switch (stack.getItem().toString()) {
+                        case "sniffer_egg" -> 1;
+                        case "wraptor_egg" -> 2;
+                        default -> newEggState;
+                    };
                 }
                 switch(slot){
                     case 0: cursor.move(forward); break;

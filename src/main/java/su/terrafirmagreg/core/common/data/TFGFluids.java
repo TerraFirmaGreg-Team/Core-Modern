@@ -31,6 +31,7 @@ public class TFGFluids {
 		waterLike()
 			.temperature(213)
 			.descriptionId("fluid.tfg.semiheavy_ammoniacal_water"),
+
 		new FluidTypeClientProperties(ALPHA_MASK | 0x55d9b1, WATER_STILL, WATER_FLOW, WATER_OVERLAY, UNDERWATER_LOCATION),
 		MixingFluid.Source::new,
 		MixingFluid.Flowing::new

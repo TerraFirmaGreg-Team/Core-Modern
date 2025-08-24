@@ -168,4 +168,7 @@ dependencies {
     // Wan's ancient beasts
     implementation fg.deobf("curse.maven:wans-ancient-beasts-1108604:6871096")
     implementation fg.deobf("curse.maven:geckolib-388172:6789487")
+
+    // Immersive Aircraft
+    implementation fg.deobf("curse.maven:immersive-aircraft-666014:6742170")
 }

@@ -41,9 +41,7 @@ public interface ILargeEgg extends INBTSerializable<CompoundTag>{
      * Clears the data from the stack
      */
     default void removeFertilization()
-    {
-
-    }
+    {}
 
 
     default void addTooltipInfo(@NotNull List<Component> text)

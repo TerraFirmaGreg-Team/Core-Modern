@@ -58,6 +58,7 @@
     "common.gtceu.recipes.MaceratorLogicMixin",
     "common.gtceu.recipes.MaterialInfoLoaderMixin",
     "common.hang_glider.GliderItemMixin",
+    "common.immersive_aircraft.BambooHopperEntityMixin",
     "common.ldlib.ModularUIContainerMixin",
     "common.minecraft.EndDragonFightMixin",
     "common.minecraft.EndPodiumFeatureMixin",

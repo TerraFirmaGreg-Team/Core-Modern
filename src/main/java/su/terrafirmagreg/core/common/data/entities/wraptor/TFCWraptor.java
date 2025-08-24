@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.entities.wraptor;
 
+import com.mojang.serialization.Dynamic;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.entities.livestock.ProducingAnimal;
@@ -18,6 +19,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -35,8 +37,6 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
-import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 
 import java.util.List;
 
@@ -124,7 +124,7 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
     }
 
     protected SoundEvent getHurtSound(DamageSource source) {
-        return (SoundEvent)SpeciesSoundEvents.WRAPTOR_HURT.get();
+        return SpeciesSoundEvents.WRAPTOR_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
@@ -165,6 +165,7 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
         addUses(5);
     }
 
+    @Override
     public ItemStack makeEgg()
     {
         final ItemStack stack = new ItemStack(eggItem);
@@ -181,6 +182,7 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
                     baby.setFamiliarity(getFamiliarity() < 0.9F ? getFamiliarity() / 2.0F : getFamiliarity() * 0.9F);
                     egg.setFertilized(baby, Calendars.SERVER.getTotalDays() + hatchDays);
                 }
+                else{System.out.println("Cannot Create Child");}
             }
         }
         AnimalProductEvent event = new AnimalProductEvent(level(), blockPosition(), null, this, stack, ItemStack.EMPTY, 1);
@@ -224,4 +226,17 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
     {
         return getFamiliarity() > produceFamiliarity && hasWoolProduct(woolProduceTicks);
     }
+
+    //AI Handlers
+    @Override
+    protected Brain.@NotNull Provider<? extends TFCWraptor> brainProvider()
+    {
+        return Brain.provider(TFCWraptorAi.MEMORY_TYPES, TFCWraptorAi.SENSOR_TYPES);
+    }
+    @Override
+    public @NotNull Brain<?> makeBrain(@NotNull Dynamic<?> dynamic)
+    {
+        return TFCWraptorAi.makeWraptorBrain(brainProvider().makeBrain(dynamic));
+    }
+
 }
