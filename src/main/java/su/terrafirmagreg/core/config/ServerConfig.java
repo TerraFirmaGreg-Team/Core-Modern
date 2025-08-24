@@ -46,19 +46,19 @@ public final class ServerConfig {
         }
 
         builder.pop().push("prospector_picks").push("copper");
-        copperPropickConfig = PropickConfig.build(builder, Metal.Default.COPPER, 50, 5);
+        copperPropickConfig = PropickConfig.build(builder, Metal.Default.COPPER, 15, 5);
         builder.pop().push("bronze");
-        bronzePropickConfig = PropickConfig.build(builder, Metal.Default.BRONZE, 60, 8);
+        bronzePropickConfig = PropickConfig.build(builder, Metal.Default.BRONZE, 20, 8);
         builder.pop().push("wrought_iron");
-        wroughtIronPropickConfig = PropickConfig.build(builder, Metal.Default.WROUGHT_IRON, 70, 10);
+        wroughtIronPropickConfig = PropickConfig.build(builder, Metal.Default.WROUGHT_IRON, 30, 10);
         builder.pop().push("steel");
-        steelPropickConfig = PropickConfig.build(builder, Metal.Default.STEEL, 80, 12);
+        steelPropickConfig = PropickConfig.build(builder, Metal.Default.STEEL, 40, 12);
         builder.pop().push("black_steel");
-        blackSteelPropickConfig = PropickConfig.build(builder, Metal.Default.BLACK_STEEL, 90, 15);
+        blackSteelPropickConfig = PropickConfig.build(builder, Metal.Default.BLACK_STEEL, 50, 15);
         builder.pop().push("blue_steel");
-        blueSteelPropickConfig = RenderingPropickConfig.build(builder, Metal.Default.BLUE_STEEL, 140, 15, true);
+        blueSteelPropickConfig = RenderingPropickConfig.build(builder, Metal.Default.BLUE_STEEL, 75, 15, true);
         builder.pop().push("red_steel");
-        redSteelPropickConfig = RenderingPropickConfig.build(builder, Metal.Default.RED_STEEL, 90, 25, false);
+        redSteelPropickConfig = RenderingPropickConfig.build(builder, Metal.Default.RED_STEEL, 50, 25, false);
 
 
         builder.pop(2).push("harvest_basket");
