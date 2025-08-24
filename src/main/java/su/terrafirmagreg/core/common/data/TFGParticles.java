@@ -26,8 +26,8 @@ public class TFGParticles {
             PARTICLES.register("ore_prospector_vein", () -> new SimpleParticleType(true));
 
     // Martian wind dust
-    public static final RegistryObject<SimpleParticleType> DEEP_MARS_WIND =
-            PARTICLES.register("deep_mars_wind", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> DARK_MARS_WIND =
+            PARTICLES.register("dark_mars_wind", () -> new SimpleParticleType(false));
     public static final RegistryObject<SimpleParticleType> MEDIUM_MARS_WIND =
             PARTICLES.register("medium_mars_wind", () -> new SimpleParticleType(false));
     public static final RegistryObject<SimpleParticleType> LIGHT_MARS_WIND =

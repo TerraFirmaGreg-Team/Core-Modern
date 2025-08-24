@@ -13,8 +13,6 @@ import net.dries007.tfc.client.ClientForgeEventHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -23,22 +21,14 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGParticles;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 @Mixin(value = ClientForgeEventHandler.class, remap = false)
 public abstract class ClientForgeEventHandlerMixin {
     @Unique
     private static int tfg$particleCounter = 0;
 
-    @SuppressWarnings("DataFlowIssue")
-    @Unique
-    private static final TagKey<Biome> dark_mars_sand = TagKey.create(Registries.BIOME, ResourceLocation.tryParse("tfg:has_dark_sand_particles"));
-    @SuppressWarnings("DataFlowIssue")
-    @Unique
-    private static final TagKey<Biome> medium_mars_sand = TagKey.create(Registries.BIOME, ResourceLocation.tryParse("tfg:has_medium_sand_particles"));
-    @SuppressWarnings("DataFlowIssue")
-    @Unique
-    private static final TagKey<Biome> light_mars_sand  = TagKey.create(Registries.BIOME, ResourceLocation.tryParse("tfg:has_light_sand_particles"));
-
+    @SuppressWarnings("LocalMayBeArgsOnly")
     @Definition(id = "WIND", field = "Lnet/dries007/tfc/client/particle/TFCParticles;WIND:Lnet/minecraftforge/registries/RegistryObject;")
     @Definition(id = "get", method = "Lnet/minecraftforge/registries/RegistryObject;get()Ljava/lang/Object;")
     @Definition(id = "ParticleOptions", type = ParticleOptions.class)
@@ -57,11 +47,11 @@ public abstract class ClientForgeEventHandlerMixin {
         }
 
         Holder<Biome> biome = level.getBiome(pos);
-        if (biome.is(dark_mars_sand)) {
-            return TFGParticles.DEEP_MARS_WIND.get();
-        } else if (biome.is(medium_mars_sand)) {
+        if (biome.is(TFGTags.Biomes.HasDarkSandWind)) {
+            return TFGParticles.DARK_MARS_WIND.get();
+        } else if (biome.is(TFGTags.Biomes.HasMediumSandWind)) {
             return TFGParticles.MEDIUM_MARS_WIND.get();
-        } else if (biome.is(light_mars_sand)){
+        } else if (biome.is(TFGTags.Biomes.HasLightSandWind)){
             return TFGParticles.LIGHT_MARS_WIND.get();
         } else return original;
     }
