@@ -161,6 +161,10 @@ dependencies {
     // Simply Stacked Dimensions
     implementation fg.deobf("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
 
+    // Grappling Hook -- needless dependencies are dumb
+    implementation fg.deobf("curse.maven:cloth-config-348521:5729105")
+    implementation fg.deobf("curse.maven:grappling-hook-mod-reforged-1166811:6028357") { transitive = false }
+
     // Hang Glider
     implementation fg.deobf("maven.modrinth:puzzles-lib:${puzzleslib_version}")
     implementation fg.deobf("maven.modrinth:hang-glider:${hangglider_version}")

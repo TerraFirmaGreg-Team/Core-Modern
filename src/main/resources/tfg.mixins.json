@@ -33,6 +33,8 @@
     "common.firmalife.HydroponicPlanterBlockEntityMixin",
     "common.firmalife.MixinGreenhousePortBlock",
     "common.flywheel.AnimatedBlazeBurnerMixin",
+    "common.grappling_hook.AirFrictionControllerMixin",
+    "common.grappling_hook.GrappleControllerMixin",
     "common.greate.TieredCrushingCategoryMixin",
     "common.greate.TieredCrushingRecipeMixin",
     "common.greate.TieredMillingCategoryMixin",
