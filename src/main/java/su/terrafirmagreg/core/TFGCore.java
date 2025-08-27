@@ -63,6 +63,7 @@ public final class TFGCore {
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
         TFGContainers.CONTAINERS.register(bus);
+        TFGEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(bus);
 
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);

@@ -5,12 +5,14 @@ import net.dries007.tfc.common.entities.misc.Seat;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 
 import java.util.Optional;
 
-public class LayLargeEggBehavior extends MoveOntoBlockBehavior<TFCSniffer> {
+public class LayLargeEggBehavior extends MoveOntoBlockBehavior<TFGWoolEggProducingAnimal> {
 
     public LayLargeEggBehavior()
     {
@@ -18,25 +20,25 @@ public class LayLargeEggBehavior extends MoveOntoBlockBehavior<TFCSniffer> {
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerLevel level, TFCSniffer animal)
+    protected boolean checkExtraStartConditions(ServerLevel level, TFGWoolEggProducingAnimal animal)
     {
         return animal.isReadyForAnimalProduct() && super.checkExtraStartConditions(level, animal);
     }
 
     @Override
-    protected boolean canStillUse(ServerLevel level, TFCSniffer animal, long time)
+    protected boolean canStillUse(ServerLevel level, TFGWoolEggProducingAnimal animal, long time)
     {
         return animal.isReadyForAnimalProduct() && super.canStillUse(level, animal, time);
     }
 
     @Override
-    protected void afterReached(TFCSniffer mob)
+    protected void afterReached(TFGWoolEggProducingAnimal mob)
     {
         Seat.sit(mob.level(), mob.blockPosition(), mob);
     }
 
     @Override
-    protected Optional<BlockPos> getNearestTarget(TFCSniffer mob)
+    protected @NotNull Optional<BlockPos> getNearestTarget(TFGWoolEggProducingAnimal mob)
     {
         return mob.getBrain().getMemory(TFGBrain.LARGE_NEST_MEMORY.get());
     }
