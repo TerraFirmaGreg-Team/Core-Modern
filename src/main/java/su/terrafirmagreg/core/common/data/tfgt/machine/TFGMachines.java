@@ -57,7 +57,7 @@ public class TFGMachines {
 			.tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
 					TFGRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 			.register(),
-		GTMachineUtils.LOW_TIERS);
+		GTMachineUtils.ELECTRIC_TIERS);
 
 	public static final MachineDefinition[] FOOD_OVEN =
 		registerTieredMachines("food_oven",
@@ -71,7 +71,7 @@ public class TFGMachines {
 			.tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
 					TFGRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 			.register(),
-		GTMachineUtils.LOW_TIERS);
+		GTMachineUtils.ELECTRIC_TIERS);
 
 	public static final MachineDefinition[] FOOD_REFRIGERATOR =
 		registerTieredMachines("food_refrigerator",
@@ -85,7 +85,7 @@ public class TFGMachines {
 			)
 			.workableTieredHullModel(GTCEu.id("block/machines/food_refrigerator"))
 			.register(),
-			GTValues.tiersBetween(GTValues.MV, GTValues.EV));
+			GTValues.tiersBetween(GTValues.MV, GTValues.IV));
 
 	public static final MachineDefinition[] AQUEOUS_ACCUMULATOR =
 		registerTieredMachines("aqueous_accumulator",
@@ -100,7 +100,7 @@ public class TFGMachines {
 					TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 				.tooltips(GTMachineUtils.explosion())
 				.register(),
-			GTMachineUtils.LOW_TIERS);
+			GTMachineUtils.ELECTRIC_TIERS);
 
 	public static final MachineDefinition[] GAS_PRESSURIZER =
 		registerTieredMachines("gas_pressurizer",
@@ -115,7 +115,7 @@ public class TFGMachines {
 			   .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
 				   TFGRecipeTypes.GAS_PRESSURIZER_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
 			   .register(),
-			GTMachineUtils.LOW_TIERS);
+			GTMachineUtils.ELECTRIC_TIERS);
 
 	public static final MachineDefinition[] RAILGUN_ITEM_LOADER_IN = registerTieredMachines("railgun_item_loader_in", (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.IN),
 			(tier, builder) ->

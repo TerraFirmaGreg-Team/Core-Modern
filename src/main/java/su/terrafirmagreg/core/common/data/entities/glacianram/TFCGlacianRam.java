@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.data.entities.glacianram;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.entities.livestock.*;
+import net.dries007.tfc.common.entities.prey.TFCRabbit;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.config.animals.ProducingMammalConfig;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -13,16 +14,15 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +54,11 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
 
     public static AttributeSupplier.Builder createMobAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)32.0F).add(Attributes.MOVEMENT_SPEED, (double)0.2F);
+    }
+
+    public static boolean spawnRules(EntityType<? extends TFCGlacianRam> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand)
+    {
+        return level.getBlockState(pos).isAir();
     }
 
 

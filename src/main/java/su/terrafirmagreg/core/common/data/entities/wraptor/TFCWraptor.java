@@ -1,6 +1,7 @@
-package su.terrafirmagreg.core.common.data.entities.sniffer;
+package su.terrafirmagreg.core.common.data.entities.wraptor;
 
 import com.mojang.serialization.Dynamic;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.entities.livestock.ProducingAnimal;
 import net.dries007.tfc.common.entities.livestock.TFCAnimal;
@@ -11,8 +12,6 @@ import net.dries007.tfc.util.events.AnimalProductEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -23,7 +22,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +32,6 @@ import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
@@ -43,45 +40,43 @@ import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
 
 import java.util.List;
 
-public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShearable {
-
-    private static final EntityDataAccessor<TFCSniffer.State> DATA_STATE = SynchedEntityData.defineId(TFCSniffer.class, TFGEntityDataSerializers.SNIFFER_STATE.get());
+public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShearable {
 
     static double familiarityCap = 0.35;
-    static int adulthoodDays = 80;
-    static int uses = 200;
+    static int adulthoodDays = 45;
+    static int uses = 100;
     static boolean eatsRottenFood = false;
     //Produce = eggs
-    static int produceTicks = 96000;
-    static int hatchDays = 20;
-    static Item eggItem = TFGItems.SNIFFER_EGG.get();
+    static int produceTicks = 48000;
+    static int hatchDays = 10;
+    static Item eggItem = TFGItems.WRAPTOR_EGG.get();
     static int woolProduceTicks = 48000;
-    static int maxWool = 8;
-    static Item woolItem = TFGItems.SNIFFER_WOOL.get();
+    static int maxWool = 12;
+    static Item woolItem = TFGItems.WRAPTOR_WOOL.get();
     static double produceFamiliarity = 0.15;
 
-    public final AnimationState scentingAnimationState = new AnimationState();
-    public final AnimationState sniffingAnimationState = new AnimationState();
+    public final AnimationState roarAnimationState = new AnimationState();
+    public final AnimationState fallingAnimationState = new AnimationState();
 
-    public TFCSniffer(EntityType<? extends TFCAnimal> type, Level level, TFCSounds.EntitySound sounds, ProducingAnimalConfig config) {
+    public TFCWraptor(EntityType<? extends TFCAnimal> type, Level level, TFCSounds.EntitySound sounds, ProducingAnimalConfig config) {
         super(type, level, sounds, config);
-        this.entityData.define(DATA_STATE, TFCSniffer.State.IDLING);
     }
 
-    public static TFCSniffer makeTFCSniffer(EntityType<? extends ProducingAnimal> type, Level level){
-        return new TFCSniffer(type, level, TFCSounds.MUSK_OX , TFCConfig.SERVER.duckConfig.inner());
+    public static TFCWraptor makeTFCWraptor(EntityType<? extends ProducingAnimal> type, Level level){
+        return new TFCWraptor(type, level, TFCSounds.CHICKEN , TFCConfig.SERVER.duckConfig.inner());
     }
 
+    @NotNull
     public static AttributeSupplier.Builder createMobAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 75.0F).add(Attributes.MOVEMENT_SPEED, 0.1F);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)35.0F).add(Attributes.MOVEMENT_SPEED, (double)0.2F).add(Attributes.KNOCKBACK_RESISTANCE, (double)0.25F);
     }
 
-    public static boolean spawnRules(EntityType<? extends TFCSniffer> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand)
+    public static boolean spawnRules(EntityType<? extends TFCWraptor> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand)
     {
         return level.getBlockState(pos).isAir();
     }
 
-    //Config Bypass
+    //Config Overrides
     @Override
     public float getAdultFamiliarityCap() {
         return (float) familiarityCap;
@@ -113,13 +108,34 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
     {
         return Math.max(0, produceTicks + getProducedTick() - Calendars.get(level()).getTicks());
     }
-    //End Region
-
     @Override
-    public @NotNull TagKey<Item> getFoodTag() {
-        return TFGTags.Items.SnifferFood;
+    public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
+        return entityDimensions.height * 0.95F;
     }
 
+    @Override
+    public TagKey<Item> getFoodTag() {
+        return TFGTags.Items.WraptorFood;
+    }
+
+    //Sound Handlers
+    protected SoundEvent getAmbientSound() {
+        return SpeciesSoundEvents.WRAPTOR_IDLE.get();
+    }
+
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SpeciesSoundEvents.WRAPTOR_HURT.get();
+    }
+
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.WRAPTOR_DEATH.get();
+    }
+
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(SpeciesSoundEvents.WRAPTOR_STEP.get(), 0.15F, 1.0F);
+    }
+
+    //Egg Stuff
     @Override
     public boolean hasProduct()
     {
@@ -128,11 +144,10 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
                 && (getGender() == Gender.FEMALE || (getGender() == Gender.MALE && isFertilized()));
     }
 
-    //Egg Stuff
     @Override
-    public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob other){
+    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other){
 
-        if (other != this && this.getGender() == Gender.FEMALE && other instanceof TFCSniffer otherFertile && !isFertilized()) {
+        if (other != this && this.getGender() == Gender.FEMALE && other instanceof TFCWraptor otherFertile && !isFertilized()) {
             this.onFertilized(otherFertile);
             otherFertile.setProducedTick(0);
             this.setProductsCooldown();
@@ -141,7 +156,7 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
         return null;
     }
 
-    public void onFertilized(TFCSniffer male) {
+    public void onFertilized(TFCWraptor male) {
         male.setFertilized(true);
         male.setLastFed(getLastFed()-1);
 
@@ -159,7 +174,7 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
             final @Nullable ILargeEgg egg = LargeEggCapability.get(stack);
             if (egg != null)
             {
-                final TFCSniffer baby = ((EntityType<TFCSniffer>) getType()).create(level());
+                final TFCWraptor baby = ((EntityType<TFCWraptor>) getType()).create(level());
                 if (baby != null)
                 {
                     baby.setGender(Gender.valueOf(random.nextBoolean()));
@@ -179,9 +194,9 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
     }
 
     @Override
-    public @NotNull MutableComponent getProductReadyName() { return Component.translatable("tfc.jade.product.eggs"); }
+    public MutableComponent getProductReadyName() { return Component.translatable("tfc.jade.product.eggs"); }
 
-    //Stuff from IForgeShearable for Wool
+    //Stuff from IForgeShearable
     @Override
     public boolean isShearable(@NotNull ItemStack item, Level level, BlockPos pos) {
         return isReadyForWoolProduct();
@@ -202,9 +217,9 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
         return List.of(event.getProduct());
     }
 
-    public boolean hasWool(){
-        long cooldown = getWoolCooldown(woolProduceTicks);
-        return cooldown == 0;
+    public int getFeatherStage(){
+        int usesLeft = getUsesToElderly();
+        return hasWoolProduct(woolProduceTicks) ?  6 * (usesLeft / uses) : 0;
     }
 
     public boolean isReadyForWoolProduct()
@@ -212,106 +227,16 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
         return getFamiliarity() > produceFamiliarity && hasWoolProduct(woolProduceTicks);
     }
 
-
-    //Sound Handlers
-    protected void playStepSound(@NotNull BlockPos pPos, @NotNull BlockState pState) {
-        this.playSound(SoundEvents.SNIFFER_STEP, 0.15F, 1.0F);
-    }
-
-    public @NotNull SoundEvent getEatingSound(@NotNull ItemStack pStack) {
-        return SoundEvents.SNIFFER_EAT;
-    }
-
-    protected @NotNull SoundEvent getHurtSound(@NotNull DamageSource pDamageSource) {
-        return SoundEvents.SNIFFER_HURT;
-    }
-
-    protected @NotNull SoundEvent getDeathSound() {
-        return SoundEvents.SNIFFER_DEATH;
-    }
-
-    protected @NotNull SoundEvent getAmbientSound() {return SoundEvents.SNIFFER_IDLE; }
-
-    private TFCSniffer onScentingStart() {
-        this.playSound(SoundEvents.SNIFFER_SCENTING, 2.0F, this.isBaby() ? 1.3F : 1.0F);
-        return this;
-    }
-
     //AI Handlers
     @Override
-    protected Brain.@NotNull Provider<? extends TFCSniffer> brainProvider()
+    protected Brain.@NotNull Provider<? extends TFCWraptor> brainProvider()
     {
-        return Brain.provider(TFCSnifferAi.MEMORY_TYPES, TFCSnifferAi.SENSOR_TYPES);
+        return Brain.provider(TFCWraptorAi.MEMORY_TYPES, TFCWraptorAi.SENSOR_TYPES);
     }
     @Override
     public @NotNull Brain<?> makeBrain(@NotNull Dynamic<?> dynamic)
     {
-        return TFCSnifferAi.makeSniffBrain(brainProvider().makeBrain(dynamic));
+        return TFCWraptorAi.makeWraptorBrain(brainProvider().makeBrain(dynamic));
     }
 
-    public boolean isTempted() {
-        return this.brain.getMemory(MemoryModuleType.IS_TEMPTED).orElse(false);
-    }
-
-    //Animation Handlers
-    @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> data)
-    {
-        if (DATA_STATE.equals(data)) {
-            TFCSniffer.State sniffer$state = this.getState();
-            this.resetAnimations();
-            switch (sniffer$state) {
-                case SCENTING:
-                    this.scentingAnimationState.startIfStopped(this.tickCount);
-                    break;
-                case SNIFFING:
-                    this.sniffingAnimationState.startIfStopped(this.tickCount);
-            }
-            this.refreshDimensions();
-
-        }
-
-        super.onSyncedDataUpdated(data);
-    }
-
-    private TFCSniffer.State getState() {
-        return this.entityData.get(DATA_STATE);
-    }
-
-    private TFCSniffer setState(TFCSniffer.State pState) {
-        this.entityData.set(DATA_STATE, pState);
-        return this;
-    }
-
-    public TFCSniffer transitionTo(TFCSniffer.State pState) {
-        switch (pState) {
-            case SCENTING:
-                this.setState(TFCSniffer.State.SCENTING).onScentingStart();
-                break;
-            case SNIFFING:
-                this.playSound(SoundEvents.SNIFFER_SNIFFING, 1.0F, 1.0F);
-                this.setState(TFCSniffer.State.SNIFFING);
-                break;
-            case IDLING:
-                this.setState(TFCSniffer.State.IDLING);
-                break;
-        }
-        return this;
-    }
-
-    public int getMaxHeadYRot() {
-        return 50;
-    }
-
-    private void resetAnimations() {
-        this.sniffingAnimationState.stop();
-        this.scentingAnimationState.stop();
-    }
-
-    public enum State {
-        IDLING,
-        SCENTING,
-        SNIFFING;
-
-    }
 }

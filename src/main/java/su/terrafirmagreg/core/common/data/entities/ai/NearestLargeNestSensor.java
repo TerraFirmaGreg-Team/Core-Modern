@@ -9,13 +9,14 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.level.pathfinder.Path;
+import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class NearestLargeNestSensor extends Sensor<TFCSniffer> {
+public class NearestLargeNestSensor extends Sensor<TFGWoolEggProducingAnimal> {
     private static final int CACHE_TIMEOUT = 40;
     private static final int BATCH_SIZE = 5;
 
@@ -24,9 +25,9 @@ public class NearestLargeNestSensor extends Sensor<TFCSniffer> {
     private final Long2LongMap batchCache = new Long2LongOpenHashMap(); // position to time
 
     @Override
-    protected void doTick(ServerLevel level, TFCSniffer animal)
+    protected void doTick(ServerLevel level, TFGWoolEggProducingAnimal animal)
     {
-        // we only need to do this if we are gonna make an egg and not sitting already
+        // we only need to do this if we are going to make an egg and not sitting already
         if (animal.isReadyForAnimalProduct() && !animal.isPassenger())
         {
             triedCount = 0;
