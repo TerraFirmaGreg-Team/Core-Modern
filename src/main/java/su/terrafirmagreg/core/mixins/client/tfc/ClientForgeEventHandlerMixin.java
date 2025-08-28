@@ -21,7 +21,7 @@ public abstract class ClientForgeEventHandlerMixin {
     /**
      * redirects tickWind() behavior depending on dimension
      */
-    @Inject(method = "tickWind", at = @At("HEAD"), cancellable = true, remap = true)
+    @Inject(method = "tickWind", at = @At("HEAD"), cancellable = true)
     private static void tfg$redirectTickWind(CallbackInfo ci) {
         final Level level = ClientHelpers.getLevel();
         if (level != null && level.dimension().equals(Planet.MARS)) {

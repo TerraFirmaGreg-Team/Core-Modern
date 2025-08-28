@@ -18,6 +18,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.dries007.tfc.common.blocks.soil.DirtBlock;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -114,6 +115,34 @@ public final class TFGBlocks {
 			.sound(SoundType.WART_BLOCK)
 			.randomTicks(),
 		MARS_DIRT, null, MARS_FARMLAND));
+
+    //#region Martian sand piles
+
+    public static final RegistryObject<LayerBlock> RED_SAND_PILE = register("pile/red_sand",
+        () -> new LayerBlock(
+//                Lazy.of(() -> TFCBlocks.SAND.get(SandBlockType.RED).get().asItem()),
+                BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                .randomTicks()
+            )
+    );
+
+    public static final RegistryObject<LayerBlock> MARS_SAND_PILE = register("pile/mars_sand",
+        () -> new LayerBlock(
+//                Lazy.of(() -> ModBlocks.MARS_SAND.get().asItem()),
+                BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                .randomTicks()
+            )
+    );
+
+    public static final RegistryObject<LayerBlock> VENUS_SAND_PILE = register("pile/venus_sand",
+        () -> new LayerBlock(
+//                Lazy.of(() -> ModBlocks.VENUS_SAND.get().asItem()),
+                BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                .randomTicks()
+        )
+    );
+
+    //#endregion
 
 	// Fluid blocks
 

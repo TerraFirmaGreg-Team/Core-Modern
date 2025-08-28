@@ -71,25 +71,28 @@ public class TFGWindManager {
                 final double xBias = wind.x > 0 ? 6 : -6; // if wind blows east, add 6, else minus 6
                 final double zBias = wind.y > 0 ? 6 : -6; // if wind blows north, add 6, else minus 6
 
+                final Vec2 offsetVec = wind.normalized().scale(-6);
+
                 final int particlesPerCheck = (int) Math.ceil((double) count / biomeChecks);
 
                 // total particles per tick: biomeChecks * particlesPerCheck =~ windStrength * particleMultiplier
 
                 for (int i = 0; i < biomeChecks; i++)
                 {
-                    // if wind blows east, bias spawn towards west
-                    final double checkX = pos.getX() + Mth.nextDouble(level.random, -12 - xBias, 12 - xBias);
-                    // if wind blows north, bias spawn towards south
-                    final double checkZ = pos.getZ() + Mth.nextDouble(level.random, -12 - zBias, 12 - zBias);
+                    final Vec2 randCheckVector = TFGClientHelpers.nextVec2InRadius(level.random, 12);
+
+                    final double checkX = pos.getX() + offsetVec.x + randCheckVector.x;
+                    final double checkZ = pos.getZ() + offsetVec.y + randCheckVector.y;
 
                     final BlockPos biomeCheckPos = new BlockPos((int) checkX, pos.getY(), (int) checkZ);
                     final Holder<Biome> biome = level.getBiome(biomeCheckPos);
                     final ParticleOptions particle = getParticleForBiome(biome);
 
                     for (int j = 0; j < particlesPerCheck; j++) {
-                        final double x = pos.getX() + Mth.nextDouble(level.random, -12 - xBias, 12 - xBias);
+                        final Vec2 randParticleVector = TFGClientHelpers.nextVec2InRadius(level.random, 12);
+                        final double x = pos.getX() + offsetVec.x + randParticleVector.x;
                         final double y = pos.getY() + Mth.nextDouble(level.random, -1, 6);
-                        final double z = pos.getZ() + Mth.nextDouble(level.random, -12 - zBias, 12 - zBias);
+                        final double z = pos.getZ() + offsetVec.y + randParticleVector.y;
 
                         if (level.canSeeSky(BlockPos.containing(x, y, z)))
                         {

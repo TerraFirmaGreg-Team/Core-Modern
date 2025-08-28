@@ -5,7 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.dries007.tfc.client.RenderHelpers;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -93,5 +96,14 @@ public final class TFGClientHelpers {
 
         // Собираем новое ARGB значение
         return (alpha << 24) | (0xFF000000 | (red << 16) | (green << 8) | blue);
+    }
+
+    public static Vec2 nextVec2InRadius(RandomSource random, float radius) {
+        float x, y;
+        do {
+            x = random.nextFloat() * 2 - 1; // [-1, 1]
+            y = random.nextFloat() * 2 - 1; // [-1, 1]
+        } while (Mth.lengthSquared(x, y) > 1);
+        return new Vec2(x * radius, y * radius);
     }
 }
