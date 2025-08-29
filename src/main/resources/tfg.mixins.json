@@ -71,6 +71,7 @@
     "common.minecraft.MushroomBlockMixin",
     "common.minecraft.NetherPortalBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
+    "common.minecraft.ServerLevelMixin",
     "common.minecraft.ServerLifecycleHooksMixin",
     "common.simply_stacked_dimensions.TeleportHandlerMixin",
     "common.species.BirtMixin",

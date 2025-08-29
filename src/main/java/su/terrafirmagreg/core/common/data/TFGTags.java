@@ -39,6 +39,8 @@ public final class TFGTags {
         public static final TagKey<Block> Logs = createBlockTag("minecraft:logs");
         public static final TagKey<Block> HarvesterHarvestable = createBlockTag("tfg:harvester_harvestable");
         public static final TagKey<Block> DoNotDestroyInSpace = createBlockTag("tfg:do_not_destroy_in_space");
+        public static final TagKey<Block> CanBeSandPiled = createBlockTag("tfg:can_be_sand_piled");
+
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));

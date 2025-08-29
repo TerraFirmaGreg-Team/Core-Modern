@@ -68,9 +68,6 @@ public class TFGWindManager {
                 if (count == 0)
                     return;
 
-                final double xBias = wind.x > 0 ? 6 : -6; // if wind blows east, add 6, else minus 6
-                final double zBias = wind.y > 0 ? 6 : -6; // if wind blows north, add 6, else minus 6
-
                 final Vec2 offsetVec = wind.normalized().scale(-6);
 
                 final int particlesPerCheck = (int) Math.ceil((double) count / biomeChecks);
