@@ -116,31 +116,42 @@ public final class TFGBlocks {
 			.randomTicks(),
 		MARS_DIRT, null, MARS_FARMLAND));
 
-    //#region Martian sand piles
+    //#region Martian sand piles and layer blocks
 
-    public static final RegistryObject<LayerBlock> RED_SAND_PILE = register("pile/red_sand",
-        () -> new LayerBlock(
-//                Lazy.of(() -> TFCBlocks.SAND.get(SandBlockType.RED).get().asItem()),
-                BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
-                .randomTicks()
-            )
-    );
 
-    public static final RegistryObject<LayerBlock> MARS_SAND_PILE = register("pile/mars_sand",
-        () -> new LayerBlock(
+    public static final RegistryObject<SandLayerBlock> RED_SAND_LAYER_BLOCK = register("layer/red_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                    //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> MARS_SAND_LAYER_BLOCK = register("layer/mars_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                    //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> VENUS_SAND_LAYER_BLOCK = register("layer/venus_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                    //TODO
+            ));
+
+//    public static final RegistryObject<SandPileBlock> RED_SAND_PILE = register("pile/red_sand",
+//        () -> new SandPileBlock(
+////                Lazy.of(() -> TFCBlocks.SAND.get(SandBlockType.RED).get().asItem()),
+//                ExtendedProperties.of(Blocks.SAND).randomTicks().blockEntity(TFCBlockEntities.PILE)
+//            )
+//    );
+//
+    public static final RegistryObject<SandPileBlock> MARS_SAND_PILE = register("pile/mars_sand",
+        () -> new SandPileBlock(
 //                Lazy.of(() -> ModBlocks.MARS_SAND.get().asItem()),
-                BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
-                .randomTicks()
+                ExtendedProperties.of(Blocks.SAND).randomTicks().blockEntity(TFCBlockEntities.PILE)
             )
     );
-
-    public static final RegistryObject<LayerBlock> VENUS_SAND_PILE = register("pile/venus_sand",
-        () -> new LayerBlock(
-//                Lazy.of(() -> ModBlocks.VENUS_SAND.get().asItem()),
-                BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
-                .randomTicks()
-        )
-    );
+//
+//    public static final RegistryObject<SandPileBlock> VENUS_SAND_PILE = register("pile/venus_sand",
+//        () -> new SandPileBlock(
+////                Lazy.of(() -> ModBlocks.VENUS_SAND.get().asItem()),
+//                ExtendedProperties.of(Blocks.SAND).randomTicks().blockEntity(TFCBlockEntities.PILE)
+//        )
+//    );
 
     //#endregion
 

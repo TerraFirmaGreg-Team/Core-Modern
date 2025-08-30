@@ -46,9 +46,9 @@ public class TFGCreativeTab {
 
         // martian sand piles
         // TODO: remove when dust storms are feature complete
-        accept(out, TFGBlocks.RED_SAND_PILE);
-        accept(out, TFGBlocks.MARS_SAND_PILE);
-        accept(out, TFGBlocks.VENUS_SAND_PILE);
+        accept(out, TFGBlocks.RED_SAND_LAYER_BLOCK);
+        accept(out, TFGBlocks.MARS_SAND_LAYER_BLOCK);
+        accept(out, TFGBlocks.VENUS_SAND_LAYER_BLOCK);
 
 		accept(out, TFGBlocks.LARGE_NEST_BOX);
 		accept(out, TFGBlocks.LARGE_NEST_BOX_WARPED);
