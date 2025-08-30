@@ -67,6 +67,7 @@
     "common.minecraft.EndPortalBlockMixin",
     "common.minecraft.IBlockLootSubProviderAccessor",
     "common.minecraft.IUseOnContextInvoker",
+    "common.minecraft.MobMixin",
     "common.minecraft.MushroomBlockMixin",
     "common.minecraft.NetherPortalBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
@@ -93,6 +94,8 @@
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
     "common.vintageimprovements.VibratingRecipeMixin",
+    "common.wab.CommonSetupMixin",
+    "common.wab.SurferMixin",
     "common.wab.ToxlacanthMixin"
   ],
   "client": [

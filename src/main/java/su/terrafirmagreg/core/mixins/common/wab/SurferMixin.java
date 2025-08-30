@@ -1,0 +1,56 @@
+package su.terrafirmagreg.core.mixins.common.wab;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.wanmine.wab.entity.Surfer;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+@Mixin(value = Surfer.class)
+public abstract class SurferMixin extends AbstractHorse {
+
+	@Shadow
+	public abstract void setCoralColor(String color);
+
+	protected SurferMixin(EntityType<? extends AbstractHorse> pEntityType, Level pLevel) {
+		super(pEntityType, pLevel);
+	}
+
+	// Stop surfers from drowning, the mars water doesn't seem to work right even though
+	// surfers should be able to breathe in water
+	@Inject(method = "tick", at = @At("HEAD"))
+	private void tfg$tick(CallbackInfo ci)
+	{
+		this.setAirSupply(300);
+	}
+
+	// Randomly set their color
+	@Inject(method = "finalizeSpawn", at = @At("HEAD"))
+	public void tfg$finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, SpawnGroupData groupData, CompoundTag tag, CallbackInfoReturnable<SpawnGroupData> cir)
+	{
+		RandomSource rand = level.getRandom();
+		float r = rand.nextFloat();
+
+		if (r > 0.85)
+			this.setCoralColor("brain");
+		else if (r > 0.7)
+			this.setCoralColor("bubble");
+		else if (r > 0.65)
+			this.setCoralColor("tube");
+		else if (r > 0.5)
+			this.setCoralColor("fire");
+		else if (r > 0.35)
+			this.setCoralColor("horn");
+	}
+}
