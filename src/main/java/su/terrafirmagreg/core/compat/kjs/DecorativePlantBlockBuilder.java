@@ -10,6 +10,7 @@ import dev.latvian.mods.kubejs.loot.LootTableEntry;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
+import net.dries007.tfc.common.fluids.FluidProperty;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
@@ -27,6 +28,7 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 	public transient VoxelShape cachedShape;
 	public transient Supplier<Item> preexistingItem;
 	public transient int rotate;
+	public transient Supplier<Item> lootItem;
 
 	public DecorativePlantBlockBuilder(ResourceLocation i) {
 		super(i);
@@ -55,6 +57,12 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 	@Info("Rotates the default models by 45 degrees")
 	public DecorativePlantBlockBuilder notAxisAligned() {
 		rotate = 45;
+		return this;
+	}
+
+	@Info("Whether or not this block should break into straw when cut with a hoe")
+	public DecorativePlantBlockBuilder lootItem(ResourceLocation item) {
+		lootItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
 		return this;
 	}
 
@@ -89,16 +97,20 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 	public void generateDataJsons(DataJsonGenerator generator) {
 		ResourceUtils.lootTable(b -> b.addPool(p -> {
 			p.survivesExplosion();
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:knives")));
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:hoes")));
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:scythes")));
+			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:knives", false)));
+			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:hoes", false)));
+			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:scythes", false)));
+			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:shears", true)));
 		}), generator, this);
 	}
 
-	private LootTableEntry lootEntryBase(String tag) {
+	private LootTableEntry lootEntryBase(String tag, boolean silkTouch) {
 		final JsonObject json = new JsonObject();
 		json.addProperty("type", "minecraft:item");
-		if (preexistingItem != null) {
+		if (lootItem != null && !silkTouch) {
+			json.addProperty("name", lootItem.get().toString());
+		}
+		else if (preexistingItem != null) {
 			json.addProperty("name", preexistingItem.get().toString());
 		}
 		else {
