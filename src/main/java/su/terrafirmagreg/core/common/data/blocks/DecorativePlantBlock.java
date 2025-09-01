@@ -31,13 +31,11 @@ public class DecorativePlantBlock extends ExtendedBlock implements IFluidLoggabl
 	public static final VoxelShape DEFAULT_SHAPE = Block.box(3.0F, 0.0F, 3.0F, 13.0F, 7.0F, 13.0F);
 
 	private final VoxelShape shape;
-	private final @Nullable Supplier<? extends Item> pickBlock;
 
 
-	public DecorativePlantBlock(ExtendedProperties properties, VoxelShape shape, @Nullable Supplier<? extends Item> pickBlock) {
+	public DecorativePlantBlock(ExtendedProperties properties, VoxelShape shape) {
 		super(properties);
 		this.shape = shape;
-		this.pickBlock = pickBlock;
 
 		this.registerDefaultState(this.stateDefinition.any()
 									  .setValue(FACING, Direction.NORTH)
