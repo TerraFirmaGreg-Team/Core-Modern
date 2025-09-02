@@ -19,7 +19,9 @@ import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
 public abstract class ServerLevelMixin {
     /**
      * injects just before TFC's {@link net.dries007.tfc.mixin.ServerLevelMixin} inject, allowing for redirect of extraterrestrial weather events
-     *
+     * <p>
+     *     NOTE: this works in conjunction with {@link su.terrafirmagreg.core.mixins.common.tfc.EnvironmentHelpersMixin} to override planetary weather behavior. This first triggers mars-specific weather, and {@code EnvironmentalHelpersMixin} then cancels overworld weather.
+     * </p>
      */
     @Inject(method = "tickChunk", at = @At(value = "TAIL"))
     private void onEnvironmentTick(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci)
