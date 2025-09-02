@@ -1,3 +1,9 @@
+/*
+ * This file includes code from Wan's Ancient Beasts (https://www.curseforge.com/minecraft/mc-mods/wans-ancient-beasts)
+ * Copyright (c) 2024 WanMine
+ * All Rights Reserved, though permission to use mixins was given
+ */
+
 package su.terrafirmagreg.core.mixins.common.wab;
 
 import net.minecraft.nbt.CompoundTag;
