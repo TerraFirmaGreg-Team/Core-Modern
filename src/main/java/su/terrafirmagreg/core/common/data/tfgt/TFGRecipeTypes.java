@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.common.recipe.condition.RockBreakerCondition;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
 
+import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -29,6 +30,15 @@ public class TFGRecipeTypes {
 			.setMaxIOSize(3, 4, 1, 0)
 			.setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
 			.setSound(GTSoundEntries.BATH);
+
+	public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
+			"tfg:textures/gui/progress_bar/progress_bar_dna.png"); //I might move this later if we end up making/using more custom progress bars.
+	public static final GTRecipeType BIOREACTOR_RECIPES =
+			GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
+					.setEUIO(IO.IN)
+					.setMaxIOSize(6, 6, 3, 3)
+					.setProgressBar(PROGRESS_BAR_DNA, FillDirection.LEFT_TO_RIGHT)
+					.setSound(GTSoundEntries.BATH);
 
 	public static final GTRecipeType FOOD_OVEN_RECIPES =
 		GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
