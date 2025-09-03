@@ -86,7 +86,6 @@
     "common.tfc.EnvironmentHelpersMixin",
     "common.tfc.FarmlandBlockMixin",
     "common.tfc.FluidHelpersMixin",
-    "common.tfc.ForestFeatureMixin",
     "common.tfc.GroundcoverBlockMixin",
     "common.tfc.IcePileBlockMixin",
     "common.tfc.IIngotPileBlockEntityAccessor",
