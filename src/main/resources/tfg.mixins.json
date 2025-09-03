@@ -69,6 +69,7 @@
     "common.minecraft.IBlockLootSubProviderAccessor",
     "common.minecraft.IUseOnContextInvoker",
     "common.minecraft.MobMixin",
+    "common.minecraft.MonsterMixin",
     "common.minecraft.MushroomBlockMixin",
     "common.minecraft.NetherPortalBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
