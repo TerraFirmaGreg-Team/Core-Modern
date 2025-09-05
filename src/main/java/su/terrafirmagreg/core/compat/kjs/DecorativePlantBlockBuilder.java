@@ -19,6 +19,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.util.Lazy;
 import su.terrafirmagreg.core.common.data.blocks.DecorativePlantBlock;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
@@ -27,6 +28,8 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 	public transient VoxelShape cachedShape;
 	public transient Supplier<Item> preexistingItem;
 	public transient int rotate;
+	@Nullable
+	public transient String lootItem;
 
 	public DecorativePlantBlockBuilder(ResourceLocation i) {
 		super(i);
@@ -58,6 +61,12 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 		return this;
 	}
 
+	@Info("Whether or not this block should break into straw when cut with a hoe")
+	public DecorativePlantBlockBuilder lootItem(String item) {
+		lootItem = item;
+		return this;
+	}
+
 	@HideFromJS
 	public VoxelShape getShape() {
 		if (customShape.isEmpty()) {
@@ -82,23 +91,27 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 
 	@Override
 	public DecorativePlantBlock createObject() {
-		return new DecorativePlantBlock(createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ), getShape(), itemSupplier());
+		return new DecorativePlantBlock(createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ), getShape());
 	}
 
 	@Override
 	public void generateDataJsons(DataJsonGenerator generator) {
 		ResourceUtils.lootTable(b -> b.addPool(p -> {
 			p.survivesExplosion();
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:knives")));
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:hoes")));
-			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:scythes")));
+			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:knives", false)));
+			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:hoes", false)));
+			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:scythes", false)));
+			p.addEntry(ResourceUtils.alternatives(lootEntryBase("tfc:shears", true)));
 		}), generator, this);
 	}
 
-	private LootTableEntry lootEntryBase(String tag) {
+	private LootTableEntry lootEntryBase(String tag, boolean silkTouch) {
 		final JsonObject json = new JsonObject();
 		json.addProperty("type", "minecraft:item");
-		if (preexistingItem != null) {
+		if (lootItem != null && !silkTouch) {
+			json.addProperty("name", lootItem);
+		}
+		else if (preexistingItem != null) {
 			json.addProperty("name", preexistingItem.get().toString());
 		}
 		else {

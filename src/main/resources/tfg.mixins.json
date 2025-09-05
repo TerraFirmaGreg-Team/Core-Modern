@@ -66,8 +66,11 @@
     "common.minecraft.EndDragonFightMixin",
     "common.minecraft.EndPodiumFeatureMixin",
     "common.minecraft.EndPortalBlockMixin",
+    "common.minecraft.HeightmapMixin",
     "common.minecraft.IBlockLootSubProviderAccessor",
     "common.minecraft.IUseOnContextInvoker",
+    "common.minecraft.MobMixin",
+    "common.minecraft.MonsterMixin",
     "common.minecraft.MushroomBlockMixin",
     "common.minecraft.NetherPortalBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
@@ -85,6 +88,7 @@
     "common.tfc.EnvironmentHelpersMixin",
     "common.tfc.FarmlandBlockMixin",
     "common.tfc.FluidHelpersMixin",
+    "common.tfc.GroundcoverBlockMixin",
     "common.tfc.IcePileBlockMixin",
     "common.tfc.IIngotPileBlockEntityAccessor",
     "common.tfc.IIngotPileBlockEntityEntryAccessor",
@@ -93,6 +97,8 @@
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
     "common.vintageimprovements.VibratingRecipeMixin",
+    "common.wab.CommonSetupMixin",
+    "common.wab.SurferMixin",
     "common.wab.ToxlacanthMixin"
   ],
   "client": [

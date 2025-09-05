@@ -10,20 +10,27 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Blocks;
-import net.wanmine.wab.entity.Toxlacanth;
+import net.wanmine.wab.event.setup.CommonSetup;
+import net.wanmine.wab.init.world.WabEntities;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 
-@Mixin(value = Toxlacanth.class, remap = false)
-public class ToxlacanthMixin {
+@Mixin(value = CommonSetup.class, remap = false)
+public class CommonSetupMixin {
 
-	@Inject(method = "canSpawn", at = @At("HEAD"), remap = false, cancellable = true)
-	private static void tfg$canSpawn(EntityType<? extends Toxlacanth> entity, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource random, CallbackInfoReturnable<Boolean> cir) {
-		cir.setReturnValue(level.getBlockState(pos).is(TFGBlocks.MARS_WATER.get()));
+	// Surfer doesn't have its own canSpawn method, so override its spawn behaviour here
+
+	@Inject(method = "checkAncientAnimalSpawnRules", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void tfg$checkAncientAnimalSpawnRules(EntityType<? extends Animal> pAnimal, LevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos pPos, RandomSource pRandom, CallbackInfoReturnable<Boolean> cir)
+	{
+		if (pAnimal == WabEntities.SURFER.get())
+		{
+			cir.setReturnValue(pLevel.getBlockState(pPos).is(TFGBlocks.MARS_WATER.get()));
+		}
 	}
 }
