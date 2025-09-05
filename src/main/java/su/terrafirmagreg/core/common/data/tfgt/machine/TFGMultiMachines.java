@@ -194,7 +194,7 @@ public class TFGMultiMachines {
 		.register();
 
 	private static final Supplier<Block> bioculture_casing =
-			() -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfg", "casings/machine_casing_bioculture"));
+			() -> ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"));
 	public static final MultiblockMachineDefinition BIOREACTOR =
 			REGISTRATE.multiblock("bioreactor", BioreactorMachine::new)
 					.rotationState(RotationState.NON_Y_AXIS)
