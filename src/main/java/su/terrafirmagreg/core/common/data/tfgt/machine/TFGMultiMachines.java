@@ -18,6 +18,7 @@ import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -28,6 +29,7 @@ import su.terrafirmagreg.core.common.data.TFGBlocks;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
@@ -190,4 +192,38 @@ public class TFGMultiMachines {
 			return shapeInfo;
 		})
 		.register();
+
+	private static final Supplier<Block> bioculture_casing =
+			() -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfg", "casings/machine_casing_bioculture"));
+	public static final MultiblockMachineDefinition BIOREACTOR =
+			REGISTRATE.multiblock("bioreactor", BioreactorMachine::new)
+					.rotationState(RotationState.NON_Y_AXIS)
+					.recipeType(TFGRecipeTypes.BIOREACTOR_RECIPES)
+					.recipeModifier(GTRecipeModifiers.OC_PERFECT)
+					.appearanceBlock(bioculture_casing)
+					.workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"), GTCEu.id("block/multiblock/implosion_compressor"))
+					.pattern(definition -> FactoryBlockPattern.start()
+							.aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FFF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
+							.aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
+							.aisle("#GGGABBBC", "BBBBDHHHD", "E J DHHHD", "E J BBBBF", "E J E K E", "E   E   E", "E   BBBBC", "BBBBB####")
+							.aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
+							.aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FLF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
+							.where(" ", Predicates.air())
+							.where("#", Predicates.any())
+							.where("A", Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
+							.where("B", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"))))
+							.where("C", Predicates.blocks(GTBlocks.CASING_EXTREME_ENGINE_INTAKE.get()))
+							.where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_ultraviolet"))))
+							.where("E", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture_glass"))))
+							.where("F", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture")))
+									.or(Predicates.autoAbilities(definition.getRecipeTypes()))
+									.or(Predicates.autoAbilities(true, false, false)))
+							.where("G", Predicates.blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+							.where("H", Predicates.blocks(GTBlocks.FILTER_CASING.get()))
+							.where("I", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("gtceu", "purple_lamp"))))
+							.where("J", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/bioculture_rotor_primary"))))
+							.where("K", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/bioculture_rotor_secondary"))))
+							.where("L", Predicates.controller(Predicates.blocks(definition.get())))
+							.build())
+					.register();
 }

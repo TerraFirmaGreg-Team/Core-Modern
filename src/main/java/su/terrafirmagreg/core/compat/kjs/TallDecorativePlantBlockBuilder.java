@@ -17,18 +17,19 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.util.Lazy;
-import su.terrafirmagreg.core.common.data.blocks.DoubleDecorativePlantBlock;
+import su.terrafirmagreg.core.common.data.blocks.TallDecorativePlantBlock;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
-public class DoubleDecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder {
+public class TallDecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder {
 
 	public transient VoxelShape cachedShape;
 	public transient Supplier<Item> preexistingItem;
 	public transient int rotate;
+	public transient int maxHeight;
 
-	public DoubleDecorativePlantBlockBuilder(ResourceLocation i) {
+	public TallDecorativePlantBlockBuilder(ResourceLocation i) {
 		super(i);
 
 		noCollision = true;
@@ -39,13 +40,14 @@ public class DoubleDecorativePlantBlockBuilder extends ExtendedPropertiesBlockBu
 		notSolid = true;
 		renderType = "cutout";
 		soundType = SoundType.GRASS;
+		maxHeight = 2;
 
 		mapColor(MapColor.NONE);
 		tagBlock(ResourceLocation.fromNamespaceAndPath("minecraft", "mineable/hoe"));
 	}
 
 	@Info("Sets the 'block item' of this block to an existing item")
-	public DoubleDecorativePlantBlockBuilder withPreexistingItem(ResourceLocation item) {
+	public TallDecorativePlantBlockBuilder withPreexistingItem(ResourceLocation item) {
 		itemBuilder = null;
 		preexistingItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
 		RegisterInteractionsEventJS.addBlockItemPlacement(preexistingItem, this);
@@ -53,15 +55,21 @@ public class DoubleDecorativePlantBlockBuilder extends ExtendedPropertiesBlockBu
 	}
 
 	@Info("Rotates the default models by 45 degrees")
-	public DoubleDecorativePlantBlockBuilder notAxisAligned() {
+	public TallDecorativePlantBlockBuilder notAxisAligned() {
 		rotate = 45;
+		return this;
+	}
+
+	@Info("Sets how tall the plant is")
+	public TallDecorativePlantBlockBuilder height(int height) {
+		this.maxHeight = height;
 		return this;
 	}
 
 	@HideFromJS
 	public VoxelShape getShape() {
 		if (customShape.isEmpty()) {
-			return su.terrafirmagreg.core.common.data.blocks.DoubleDecorativePlantBlock.DEFAULT_SHAPE;
+			return TallDecorativePlantBlock.DEFAULT_SHAPE;
 		}
 		if (cachedShape == null) {
 			cachedShape = BlockBuilder.createShape(customShape);
@@ -81,11 +89,11 @@ public class DoubleDecorativePlantBlockBuilder extends ExtendedPropertiesBlockBu
 	}
 
 	@Override
-	public DoubleDecorativePlantBlock createObject() {
-		return new DoubleDecorativePlantBlock(
-                createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ).properties(),
+	public TallDecorativePlantBlock createObject() {
+		return new TallDecorativePlantBlock(
+                createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ),
 				getShape(),
-				itemSupplier()
+			maxHeight
 		);
 	}
 
