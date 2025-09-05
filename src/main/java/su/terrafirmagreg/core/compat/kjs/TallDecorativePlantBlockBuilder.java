@@ -26,7 +26,6 @@ public class TallDecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuil
 
 	public transient VoxelShape cachedShape;
 	public transient Supplier<Item> preexistingItem;
-	public transient int rotate;
 	public transient int maxHeight;
 
 	public TallDecorativePlantBlockBuilder(ResourceLocation i) {
@@ -34,7 +33,6 @@ public class TallDecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuil
 
 		noCollision = true;
 		hardness = 0;
-		rotate = 0;
 		fullBlock = false;
 		opaque = false;
 		notSolid = true;
@@ -51,12 +49,6 @@ public class TallDecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuil
 		itemBuilder = null;
 		preexistingItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
 		RegisterInteractionsEventJS.addBlockItemPlacement(preexistingItem, this);
-		return this;
-	}
-
-	@Info("Rotates the default models by 45 degrees")
-	public TallDecorativePlantBlockBuilder notAxisAligned() {
-		rotate = 45;
 		return this;
 	}
 
