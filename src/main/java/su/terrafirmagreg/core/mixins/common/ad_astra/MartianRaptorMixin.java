@@ -12,7 +12,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-// Changes the martian raptor's sounds to skeleton sounds, to fit with its retexture
+/**
+ * Changes the martian raptor's sounds to skeleton sounds, to fit with its retexture
+ */
 
 @Mixin(value = MartianRaptor.class, remap = true)
 public class MartianRaptorMixin extends Mob {

@@ -9,6 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = Rocket.class, remap = false)
 public class RocketMixin {
 
+	/**
+	 * Prevents the rocket from exploding, since the auto lander mod was causing issues
+	 */
+
 	@Inject(method = "explode", at = @At("HEAD"), remap = false, cancellable = true)
 	public void tfg$explode(CallbackInfo ci)
 	{

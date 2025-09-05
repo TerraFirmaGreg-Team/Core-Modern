@@ -18,7 +18,9 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 @Mixin(value = EnvironmentHelpers.class, remap = false)
 public abstract class EnvironmentHelpersMixin {
 
-	// Stops TFC from trying to melt/freeze water on other planets, so ad astra can handle it instead
+	/**
+	 * Stops TFC from trying to melt/freeze water on other planets, so ad astra can handle it instead
+	 */
 
 	@Inject(method = "tickChunk", at = @At("HEAD"), remap = false, cancellable = true)
 	private static void tfg$tickChunk(ServerLevel level, LevelChunk chunk, ProfilerFiller profiler, CallbackInfo ci)
