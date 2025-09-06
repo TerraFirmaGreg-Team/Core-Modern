@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = Surfer.class)
 public abstract class SurferMixin extends AbstractHorse {
 
-	@Shadow
+	@Shadow(remap = false)
 	public abstract void setCoralColor(String color);
 
 	protected SurferMixin(EntityType<? extends AbstractHorse> pEntityType, Level pLevel) {
