@@ -10,6 +10,7 @@
     "common.ad_astra.EnvironmentEffectsMixin",
     "common.ad_astra.GasTankItemMixin",
     "common.ad_astra.LanderMixin",
+    "common.ad_astra.MartianRaptorMixin",
     "common.ad_astra.ModSkyRendererMixin",
     "common.ad_astra.RocketMixin",
     "common.ad_astra.SlidingDoorBlockMixin",
@@ -65,8 +66,11 @@
     "common.minecraft.EndDragonFightMixin",
     "common.minecraft.EndPodiumFeatureMixin",
     "common.minecraft.EndPortalBlockMixin",
+    "common.minecraft.HeightmapMixin",
     "common.minecraft.IBlockLootSubProviderAccessor",
     "common.minecraft.IUseOnContextInvoker",
+    "common.minecraft.MobMixin",
+    "common.minecraft.MonsterMixin",
     "common.minecraft.MushroomBlockMixin",
     "common.minecraft.NetherPortalBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
@@ -93,6 +97,8 @@
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
     "common.vintageimprovements.VibratingRecipeMixin",
+    "common.wab.CommonSetupMixin",
+    "common.wab.SurferMixin",
     "common.wab.ToxlacanthMixin"
   ],
   "client": [

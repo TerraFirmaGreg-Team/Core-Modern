@@ -13,6 +13,10 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+/**
+ * Makes the sliding doors work with GT/Create wrenches for locking/unlocking/destroying
+ */
+
 @Mixin(value = SlidingDoorBlock.class, remap = false)
 public abstract class SlidingDoorBlockMixin implements IWrenchable {
 

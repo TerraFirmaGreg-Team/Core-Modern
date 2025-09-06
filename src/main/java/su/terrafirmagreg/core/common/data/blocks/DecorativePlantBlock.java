@@ -6,7 +6,6 @@ import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -14,36 +13,30 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 import su.terrafirmagreg.core.compat.kjs.TFGBlockProperties;
-
-import java.util.function.Supplier;
 
 public class DecorativePlantBlock extends ExtendedBlock implements IFluidLoggable {
 
-	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER;
 	public static final VoxelShape DEFAULT_SHAPE = Block.box(3.0F, 0.0F, 3.0F, 13.0F, 7.0F, 13.0F);
 
 	private final VoxelShape shape;
-	private final @Nullable Supplier<? extends Item> pickBlock;
 
 
-	public DecorativePlantBlock(ExtendedProperties properties, VoxelShape shape, @Nullable Supplier<? extends Item> pickBlock) {
+	public DecorativePlantBlock(ExtendedProperties properties, VoxelShape shape) {
 		super(properties);
 		this.shape = shape;
-		this.pickBlock = pickBlock;
 
 		this.registerDefaultState(this.stateDefinition.any()
 									  .setValue(FACING, Direction.NORTH)
 									  .setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
-
-		getExtendedProperties().offsetType(OffsetType.XZ);
 	}
 
 	@Override

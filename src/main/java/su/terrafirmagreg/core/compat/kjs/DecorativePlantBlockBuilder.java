@@ -10,7 +10,6 @@ import dev.latvian.mods.kubejs.loot.LootTableEntry;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
-import net.dries007.tfc.common.fluids.FluidProperty;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
@@ -20,6 +19,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.util.Lazy;
 import su.terrafirmagreg.core.common.data.blocks.DecorativePlantBlock;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
@@ -27,15 +27,14 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 
 	public transient VoxelShape cachedShape;
 	public transient Supplier<Item> preexistingItem;
-	public transient int rotate;
-	public transient Supplier<Item> lootItem;
+	@Nullable
+	public transient String lootItem;
 
 	public DecorativePlantBlockBuilder(ResourceLocation i) {
 		super(i);
 
 		noCollision = true;
 		hardness = 0;
-		rotate = 0;
 		fullBlock = false;
 		opaque = false;
 		notSolid = true;
@@ -54,15 +53,9 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 		return this;
 	}
 
-	@Info("Rotates the default models by 45 degrees")
-	public DecorativePlantBlockBuilder notAxisAligned() {
-		rotate = 45;
-		return this;
-	}
-
 	@Info("Whether or not this block should break into straw when cut with a hoe")
-	public DecorativePlantBlockBuilder lootItem(ResourceLocation item) {
-		lootItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
+	public DecorativePlantBlockBuilder lootItem(String item) {
+		lootItem = item;
 		return this;
 	}
 
@@ -90,7 +83,7 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 
 	@Override
 	public DecorativePlantBlock createObject() {
-		return new DecorativePlantBlock(createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ), getShape(), itemSupplier());
+		return new DecorativePlantBlock(createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ), getShape());
 	}
 
 	@Override
@@ -108,7 +101,7 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 		final JsonObject json = new JsonObject();
 		json.addProperty("type", "minecraft:item");
 		if (lootItem != null && !silkTouch) {
-			json.addProperty("name", lootItem.get().toString());
+			json.addProperty("name", lootItem);
 		}
 		else if (preexistingItem != null) {
 			json.addProperty("name", preexistingItem.get().toString());
