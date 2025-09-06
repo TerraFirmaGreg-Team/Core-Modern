@@ -23,7 +23,7 @@ public abstract class ServerAdvancementManagerMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/advancements/AdvancementList;add(Ljava/util/Map;)V")
     )
     private void tfg$apply$advancementList$add(AdvancementList list, Map<ResourceLocation, Advancement.Builder> map) {
-        map.entrySet().removeIf(entry -> !entry.getKey().getNamespace().equals("tfc"));
+        map.entrySet().removeIf(entry -> !entry.getKey().getNamespace().equals("gtceu"));
         list.add(map);
     }
 }
