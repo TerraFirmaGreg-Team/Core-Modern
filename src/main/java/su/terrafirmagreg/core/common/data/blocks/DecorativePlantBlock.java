@@ -13,6 +13,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -22,7 +23,7 @@ import su.terrafirmagreg.core.compat.kjs.TFGBlockProperties;
 
 public class DecorativePlantBlock extends ExtendedBlock implements IFluidLoggable {
 
-	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER;
 	public static final VoxelShape DEFAULT_SHAPE = Block.box(3.0F, 0.0F, 3.0F, 13.0F, 7.0F, 13.0F);
 
@@ -36,8 +37,6 @@ public class DecorativePlantBlock extends ExtendedBlock implements IFluidLoggabl
 		this.registerDefaultState(this.stateDefinition.any()
 									  .setValue(FACING, Direction.NORTH)
 									  .setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
-
-		getExtendedProperties().offsetType(OffsetType.XZ);
 	}
 
 	@Override
