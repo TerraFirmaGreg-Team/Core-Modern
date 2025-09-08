@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -15,16 +16,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
-public class LayerBlock extends AbstractLayerBlock {
+public class KubeJSLayerBlock extends AbstractLayerBlock {
 	private final Supplier<ItemLike> m_cloneSupplier;
 
-    public LayerBlock(Properties properties) {
+    public KubeJSLayerBlock(Properties properties) {
         this(null, properties);
     }
 
-	public LayerBlock(Supplier<ItemLike> item, Properties properties)
+	public KubeJSLayerBlock(Supplier<ItemLike> item, Properties properties)
 	{
 		super(properties);
 		m_cloneSupplier = item;

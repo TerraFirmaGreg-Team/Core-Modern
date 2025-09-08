@@ -5,14 +5,13 @@ import dev.latvian.mods.kubejs.block.BlockBuilder;
 import dev.latvian.mods.kubejs.generator.DataJsonGenerator;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
+import java.util.function.Supplier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.util.Lazy;
-import su.terrafirmagreg.core.common.data.blocks.LayerBlock;
-
-import java.util.function.Supplier;
+import su.terrafirmagreg.core.common.data.blocks.KubeJSLayerBlock;
 
 public class LayerBlockBuilder extends BlockBuilder {
 
@@ -53,8 +52,8 @@ public class LayerBlockBuilder extends BlockBuilder {
 
 
 	@Override
-	public LayerBlock createObject() {
-		return new LayerBlock(itemSupplier, createProperties());
+	public KubeJSLayerBlock createObject() {
+		return new KubeJSLayerBlock(itemSupplier, createProperties());
 	}
 
 	@Override

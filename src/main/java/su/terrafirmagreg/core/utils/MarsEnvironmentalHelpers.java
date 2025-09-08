@@ -26,7 +26,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec2;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.AbstractLayerBlock;
-import su.terrafirmagreg.core.common.data.blocks.LayerBlock;
 import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
 import su.terrafirmagreg.core.config.TFGConfig;
 
@@ -188,7 +187,7 @@ public final class MarsEnvironmentalHelpers {
             {
                 final BlockPos adjPos = pos.relative(direction);
                 final BlockState adjState = level.getBlockState(adjPos);
-                if ((isSand(adjState) && adjState.getValue(LayerBlock.LAYERS) < state.getValue(LayerBlock.LAYERS)) // Adjacent snow that's lower than this one
+                if ((isSand(adjState) && adjState.getValue(AbstractLayerBlock.LAYERS) < state.getValue(AbstractLayerBlock.LAYERS)) // Adjacent snow that's lower than this one
                         || ((adjState.isAir() || Helpers.isBlock(adjState.getBlock(), TFCTags.Blocks.CAN_BE_SNOW_PILED)) && TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState().canSurvive(level, adjPos))) // Or, empty space that could support snow
                 {
                     found++;
