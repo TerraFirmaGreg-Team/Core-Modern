@@ -25,6 +25,7 @@ public final class TFGTags {
         public static final TagKey<Item> OreProspectorsRedSteel = createItemTag("tfg:tools/ore_prospectors/red_steel");
         public static final TagKey<Item> GlacianRamFood = createItemTag("tfg:glacian_ram_food");
         public static final TagKey<Item> SnifferFood = createItemTag("tfg:sniffer_food");
+        public static final TagKey<Item> WraptorFood = createItemTag("tfg:wraptor_food");
 
 
         public static TagKey<Item> createItemTag(String path) {
@@ -37,6 +38,8 @@ public final class TFGTags {
         public static final TagKey<Block> Logs = createBlockTag("minecraft:logs");
         public static final TagKey<Block> HarvesterHarvestable = createBlockTag("tfg:harvester_harvestable");
         public static final TagKey<Block> DoNotDestroyInSpace = createBlockTag("tfg:do_not_destroy_in_space");
+        public static final TagKey<Block> HeightmapIgnore = createBlockTag("tfg:heightmap_ignore");
+        public static final TagKey<Block> DecorativePlantAttachable = createBlockTag("tfg:decorative_plant_attachable");
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));

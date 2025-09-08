@@ -8,10 +8,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.world.feature.DeadCoralClawFeature;
-import su.terrafirmagreg.core.world.feature.DeadCoralMushroomFeature;
-import su.terrafirmagreg.core.world.feature.DeadCoralTreeFeature;
-import su.terrafirmagreg.core.world.feature.LunarChorusPlantFeature;
+import su.terrafirmagreg.core.world.feature.*;
 
 import java.util.function.Function;
 
@@ -23,6 +20,7 @@ public class TFGFeatures {
 	public static final RegistryObject<DeadCoralMushroomFeature> DEAD_CORAL_MUSHROOM = register("dead_coral_mushroom", DeadCoralMushroomFeature::new, NoneFeatureConfiguration.CODEC);
 	public static final RegistryObject<DeadCoralTreeFeature> DEAD_CORAL_TREE = register("dead_coral_tree", DeadCoralTreeFeature::new, NoneFeatureConfiguration.CODEC);
 
+	public static final RegistryObject<TallDecorativePlantFeature> TALL_DECORATIVE_PLANT = register("tall_decorative_plant", TallDecorativePlantFeature::new, TallDecorativePlantConfig.CODEC);
 
 	private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name, Function<Codec<C>, F> factory, Codec<C> codec)
 	{

@@ -19,6 +19,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
+import java.util.Locale;
 import java.util.function.BiFunction;
 
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
@@ -155,7 +156,7 @@ public class TFGMachines {
 		MachineDefinition[] definitions = new MachineDefinition[tiers.length];
 		for (int i = 0; i < tiers.length; i++) {
 			int tier = tiers[i];
-			var register =  REGISTRATE.machine(GTValues.VN[tier].toLowerCase() + "_" + name,
+			var register =  REGISTRATE.machine(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,
 				holder -> factory.apply(holder, tier)).tier(tier);
 			definitions[i] = builder.apply(tier, register);
 		}

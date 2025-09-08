@@ -37,9 +37,8 @@ import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import javax.annotation.Nullable;
 
 public class LargeNestBoxBlock extends BottomSupportedDeviceBlock {
-    private static final VoxelShape SHAPE = box(2, 0, 2, 14, 5, 14);
     public static final IntegerProperty NEST_PART = IntegerProperty.create("nest_part", 0,3 );
-    public static final IntegerProperty HAS_EGG_TYPE = IntegerProperty.create("has_egg_type", 0, 1);
+    public static final IntegerProperty HAS_EGG_TYPE = IntegerProperty.create("has_egg_type", 0, 2);
 
     public LargeNestBoxBlock(ExtendedProperties properties)
     {
@@ -161,11 +160,33 @@ public class LargeNestBoxBlock extends BottomSupportedDeviceBlock {
             Helpers.rotateShape(dir, 12, 0, 1, 15, 4, 16),
             Helpers.rotateShape(dir, 0, 1, 6, 10, 14, 15)));
 
+    private static final VoxelShape[] SHAPE_0_W = Helpers.computeHorizontalShapes(dir -> Shapes.or(
+            Helpers.rotateShape(dir, 1, 0, 0, 16, 1, 15),
+            Helpers.rotateShape(dir, 1, 0, 12, 16, 4, 15),
+            Helpers.rotateShape(dir, 1, 0, 0, 4, 4, 15),
+            Helpers.rotateShape(dir, 6, 1, 1, 14, 11, 9)));
+    private static final VoxelShape[] SHAPE_1_W = Helpers.computeHorizontalShapes(dir -> Shapes.or(
+            Helpers.rotateShape(dir, 1, 0, 1, 16, 1, 16),
+            Helpers.rotateShape(dir, 1, 0, 1, 16, 4, 4),
+            Helpers.rotateShape(dir, 1, 0, 1, 4, 4, 16),
+            Helpers.rotateShape(dir, 7, 1, 8, 14, 10, 15)));
+    private static final VoxelShape[] SHAPE_2_W = Helpers.computeHorizontalShapes(dir -> Shapes.or(
+            Helpers.rotateShape(dir, 0, 0, 0, 15, 1, 15),
+            Helpers.rotateShape(dir, 0, 0, 12, 15, 4, 15),
+            Helpers.rotateShape(dir, 12, 0, 0, 15, 4, 15),
+            Helpers.rotateShape(dir, 0, 1, 1, 6, 9, 7)));
+    private static final VoxelShape[] SHAPE_3_W = Helpers.computeHorizontalShapes(dir -> Shapes.or(
+            Helpers.rotateShape(dir, 0, 0, 1, 15, 1, 16),
+            Helpers.rotateShape(dir, 0, 0, 1, 15, 4, 4),
+            Helpers.rotateShape(dir, 12, 0, 1, 15, 4, 16),
+            Helpers.rotateShape(dir, 2, 1, 8, 9, 11, 15)));
+
     private static final VoxelShape[][] SHAPES_EMPTY = {SHAPE_0, SHAPE_1, SHAPE_2, SHAPE_3};
     private static final VoxelShape[][] SHAPES_SNIFFER = {SHAPE_0_S, SHAPE_1_S, SHAPE_2_S, SHAPE_3_S};
+    private static final VoxelShape[][] SHAPES_WRAPTOR = {SHAPE_0_W, SHAPE_1_W, SHAPE_2_W, SHAPE_3_W};
 
-    //SHAPES[NEST_PART][DIRECTION][HAS_SNIFFER_EGG]
-    public static final VoxelShape[][][] SHAPES = {SHAPES_EMPTY, SHAPES_SNIFFER};
+    //SHAPES[EGG_TYPE][NEST_PART][DIRECTION]
+    public static final VoxelShape[][][] SHAPES = {SHAPES_EMPTY, SHAPES_SNIFFER, SHAPES_WRAPTOR};
 
     @Override
     public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
@@ -205,7 +226,8 @@ public class LargeNestBoxBlock extends BottomSupportedDeviceBlock {
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return state.getValue(NEST_PART) == 0 ? super.newBlockEntity(pos, state) : null;
+        //return state.getValue(NEST_PART) == 0 ? super.newBlockEntity(pos, state) : null;
+        return super.newBlockEntity(pos, state);
     }
 
     @Override

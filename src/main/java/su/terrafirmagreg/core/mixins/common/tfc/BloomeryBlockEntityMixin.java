@@ -13,6 +13,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Prevents the bloomery from being lit in dimensions with no oxygen
+ */
+
 @Mixin(value = BloomeryBlockEntity.class)
 public abstract class BloomeryBlockEntityMixin extends BlockEntity {
 

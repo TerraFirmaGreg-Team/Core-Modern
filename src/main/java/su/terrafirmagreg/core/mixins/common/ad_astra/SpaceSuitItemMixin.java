@@ -25,6 +25,9 @@ public abstract class SpaceSuitItemMixin {
 	@Shadow @Final
 	protected long tankSize;
 
+	/**
+	 * Increases the size of the space suit's fluid tanks
+	 */
 	@Inject(method = "<init>", at = @At(value = "TAIL", target = "Learth/terrarium/adastra/common/items/armor/SpaceSuitItem;<init>(L;L;JL;)V"), remap = false)
 	private void tfg$SpaceSuitItem(ArmorMaterial material, ArmorItem.Type type, long tankSize, Item.Properties properties, CallbackInfo ci)
 	{
