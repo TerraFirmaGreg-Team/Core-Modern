@@ -1,5 +1,9 @@
 package su.terrafirmagreg.core.common.data.capabilities;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Stream;
 import net.dries007.tfc.util.Support;
 import net.dries007.tfc.util.Support.SupportRange;
 import net.minecraft.core.BlockPos;
@@ -10,17 +14,14 @@ import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Stream;
-
 /**
  * Additional data that is attached to a chunk during world generation. Stores support information of each placed support within a chunk.
  * Due to TFG adding supports with very large ranges, TFC's standard implementation of {@link net.dries007.tfc.util.Support#isSupported(net.minecraft.world.level.BlockGetter, net.minecraft.core.BlockPos) Support.isSupported()} consumes enormous amounts of TPS.
  * This capability is meant to remedy that problem by querying each support block instead of iterating through a volume.
  */
 public class Supports {
+
+    public static final Supports EMPTY = new Supports.Immutable();
 
     public static boolean isSupported(LevelReader level, BlockPos pos) {
         for (SupportEntry entry : getNearbySupportList(level, pos)) {
@@ -84,5 +85,8 @@ public class Supports {
         public int maxRange() {
             return Math.max(Math.max(rangeUp, rangeDown), rangeHorizontal);
         }
+    }
+
+    private static class Immutable extends Supports {
     }
 }
