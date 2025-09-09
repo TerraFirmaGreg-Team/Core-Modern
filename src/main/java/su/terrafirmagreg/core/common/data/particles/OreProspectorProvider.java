@@ -15,8 +15,8 @@ public class OreProspectorProvider implements ParticleProvider<SimpleParticleTyp
 
     @Override
     public Particle createParticle(SimpleParticleType type, ClientLevel level,
-                                   double x, double y, double z,
-                                   double dx, double dy, double dz) {
+            double x, double y, double z,
+            double dx, double dy, double dz) {
         OreProspector particle = new OreProspector(level, x, y, z);
         particle.pickSprite(spriteSet);
         return particle;

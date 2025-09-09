@@ -1,10 +1,12 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
-import org.jetbrains.annotations.NotNull;
+
 import su.terrafirmagreg.core.common.data.TFGItems;
 
 public class RailgunAmmoLoaderMachine extends ItemBusPartMachine {
@@ -14,5 +16,6 @@ public class RailgunAmmoLoaderMachine extends ItemBusPartMachine {
     }
 
     @Override
-    public void attachConfigurators(@NotNull ConfiguratorPanel configuratorPanel) {}
+    public void attachConfigurators(@NotNull ConfiguratorPanel configuratorPanel) {
+    }
 }

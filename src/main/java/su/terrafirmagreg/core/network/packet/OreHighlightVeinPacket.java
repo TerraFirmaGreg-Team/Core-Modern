@@ -1,15 +1,17 @@
 package su.terrafirmagreg.core.network.packet;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import su.terrafirmagreg.core.client.OreHighlightVeinRenderer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
+
+import su.terrafirmagreg.core.client.OreHighlightVeinRenderer;
 
 public record OreHighlightVeinPacket(List<BlockPos> veinCenters) {
 

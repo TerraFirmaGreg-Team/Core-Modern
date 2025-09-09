@@ -15,8 +15,8 @@ public class RailgunBoomProvider implements ParticleProvider<SimpleParticleType>
 
     @Override
     public Particle createParticle(SimpleParticleType type, ClientLevel level,
-                                   double x, double y, double z,
-                                   double dx, double dy, double dz) {
+            double x, double y, double z,
+            double dx, double dy, double dz) {
         return new RailgunBoom(level, x, y, z, dx, dy, dz, this.sprite);
     }
 }

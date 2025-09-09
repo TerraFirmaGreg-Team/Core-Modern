@@ -5,21 +5,22 @@
  */
 package su.terrafirmagreg.core.mixins.client.ftb;
 
-import dev.ftb.mods.ftbquests.client.gui.quests.QuestScreen;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import vazkii.patchouli.api.PatchouliAPI;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import dev.ftb.mods.ftbquests.client.gui.quests.QuestScreen;
+import vazkii.patchouli.api.PatchouliAPI;
 
 @OnlyIn(Dist.CLIENT)
 @Mixin(value = QuestScreen.class, remap = false)
@@ -49,7 +50,7 @@ public abstract class QuestScreenMixin {
                 throw new IllegalArgumentException("invalid page number");
             }
 
-            //open-patchouli-book command syntax: /... targets book entry (optional) page
+            // open-patchouli-book command syntax: /... targets book entry (optional) page
             ResourceLocation bookAddress = ResourceLocation.tryParse(GUIDE_RL);
             if (bookArgs.length == 1) {
                 PatchouliAPI.get().openBookGUI(bookAddress);

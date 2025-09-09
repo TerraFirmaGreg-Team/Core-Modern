@@ -5,32 +5,28 @@
  */
 package su.terrafirmagreg.core.common.data.items;
 
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
-import com.gregtechceu.gtceu.api.gui.misc.ProspectorMode;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.ElectricStats;
-import com.gregtechceu.gtceu.api.item.component.IItemComponent;
-import com.gregtechceu.gtceu.common.item.ProspectorScannerBehavior;
-import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPackets;
-import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripInteractionPacket;
-import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripItem;
 import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripItemRenderer;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import com.simibubi.create.infrastructure.config.AllConfigs;
+
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,7 +35,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.phys.*;
@@ -58,35 +53,30 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import su.terrafirmagreg.core.TFGCore;
+
 import su.terrafirmagreg.core.common.data.TFGItems;
 
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 @Mod.EventBusSubscriber
-public class ElectricExtendoGrip extends ComponentItem{
-    //public static final int MAX_DAMAGE = 200;
+public class ElectricExtendoGrip extends ComponentItem {
+    // public static final int MAX_DAMAGE = 200;
 
     public static final int COST = 8;
-    //public static final int POWER_THRESHOLD = 100;
+    // public static final int POWER_THRESHOLD = 100;
     public ElectricStats electricStats;
 
-    public static final AttributeModifier singleRangeAttributeModifier =
-            new AttributeModifier(UUID.fromString("604b1f96-e250-4674-9289-cca738a59460"), "Electric Extendo Grip Range modifier", 4,
-                    AttributeModifier.Operation.ADDITION);
-    public static final AttributeModifier doubleRangeAttributeModifier =
-            new AttributeModifier(UUID.fromString("704b1f96-e250-4674-9289-cca738a59460"), "Duel Electric Extendo Grip Range modifier", 6,
-                    AttributeModifier.Operation.ADDITION);
+    public static final AttributeModifier singleRangeAttributeModifier = new AttributeModifier(
+            UUID.fromString("604b1f96-e250-4674-9289-cca738a59460"), "Electric Extendo Grip Range modifier", 4,
+            AttributeModifier.Operation.ADDITION);
+    public static final AttributeModifier doubleRangeAttributeModifier = new AttributeModifier(
+            UUID.fromString("704b1f96-e250-4674-9289-cca738a59460"), "Duel Electric Extendo Grip Range modifier", 6,
+            AttributeModifier.Operation.ADDITION);
 
     private static final Supplier<Multimap<Attribute, AttributeModifier>> rangeModifier = Suppliers.memoize(() ->
-            // Holding an ElectricExtendoGrip
-            ImmutableMultimap.of(ForgeMod.BLOCK_REACH.get(), singleRangeAttributeModifier));
+    // Holding an ElectricExtendoGrip
+    ImmutableMultimap.of(ForgeMod.BLOCK_REACH.get(), singleRangeAttributeModifier));
     private static final Supplier<Multimap<Attribute, AttributeModifier>> doubleRangeModifier = Suppliers.memoize(() ->
-            // Holding two ElectricExtendoGrips o.O
-            ImmutableMultimap.of(ForgeMod.BLOCK_REACH.get(), doubleRangeAttributeModifier));
+    // Holding two ElectricExtendoGrips o.O
+    ImmutableMultimap.of(ForgeMod.BLOCK_REACH.get(), doubleRangeAttributeModifier));
 
     private static DamageSource lastActiveDamageSource;
 
@@ -104,10 +94,11 @@ public class ElectricExtendoGrip extends ComponentItem{
     public static void clearMarkersIfNotInInventory(Player player) {
         boolean containsEEG = false;
         CompoundTag persistentData = player.getPersistentData();
-        boolean hasEitherEEGMarker = (persistentData.contains(EXTENDO_MARKER) || persistentData.contains(DUAL_EXTENDO_MARKER));
+        boolean hasEitherEEGMarker = (persistentData.contains(EXTENDO_MARKER)
+                || persistentData.contains(DUAL_EXTENDO_MARKER));
         for (ItemStack i : player.inventoryMenu.getItems()) {
             if (i.getItem() instanceof ElectricExtendoGrip) {
-                //TFGCore.LOGGER.info("Holding Electric Extendo Grip");
+                // TFGCore.LOGGER.info("Holding Electric Extendo Grip");
                 containsEEG = true;
             }
         }
@@ -139,7 +130,7 @@ public class ElectricExtendoGrip extends ComponentItem{
 
         clearMarkersIfNotInInventory(player);
 
-        //TFGCore.LOGGER.info("Charge is: {}", player.getMainHandItem().getOrCreateTag().getInt("Charge"));
+        // TFGCore.LOGGER.info("Charge is: {}", player.getMainHandItem().getOrCreateTag().getInt("Charge"));
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
         ItemStack currentHand = null;
@@ -149,7 +140,6 @@ public class ElectricExtendoGrip extends ComponentItem{
         if (holdingExtendo) {
             currentHand = (mainHand.getItem() instanceof ElectricExtendoGrip) ? mainHand : offHand;
             IElectricItem currentElectric = GTCapabilityHelper.getElectricItem(currentHand);
-
 
             if (currentElectric != null) {
                 currentElectric.discharge(COST, Integer.MAX_VALUE, true, false, false);
@@ -172,7 +162,7 @@ public class ElectricExtendoGrip extends ComponentItem{
 
             } else {
 
-                //AllAdvancements.EXTENDO_GRIP.awardTo(player);
+                // AllAdvancements.EXTENDO_GRIP.awardTo(player);
                 player.getAttributes()
                         .addTransientAttributeModifiers(rangeModifier.get());
                 persistentData.putBoolean(EXTENDO_MARKER, true);
@@ -180,19 +170,17 @@ public class ElectricExtendoGrip extends ComponentItem{
         }
 
         if (holdingDualExtendo != wasHoldingDualExtendo) {
-            if (!holdingDualExtendo ) {
+            if (!holdingDualExtendo) {
                 player.getAttributes()
                         .removeAttributeModifiers(doubleRangeModifier.get());
                 persistentData.remove(DUAL_EXTENDO_MARKER);
             } else {
-                //AllAdvancements.EXTENDO_GRIP_DUAL.awardTo(player);
+                // AllAdvancements.EXTENDO_GRIP_DUAL.awardTo(player);
                 player.getAttributes()
                         .addTransientAttributeModifiers(doubleRangeModifier.get());
                 persistentData.putBoolean(DUAL_EXTENDO_MARKER, true);
             }
         }
-
-
 
     }
 
@@ -232,8 +220,8 @@ public class ElectricExtendoGrip extends ComponentItem{
         AABB AABB = player.getBoundingBox()
                 .expandTowards(Vector3d1.scale(d0))
                 .inflate(1.0D, 1.0D, 1.0D);
-        EntityHitResult entityraytraceresult =
-                ProjectileUtil.getEntityHitResult(player, Vector3d, Vector3d2, AABB, (e) -> {
+        EntityHitResult entityraytraceresult = ProjectileUtil.getEntityHitResult(player, Vector3d, Vector3d2, AABB,
+                (e) -> {
                     return !e.isSpectator() && e.isPickable();
                 }, d0 * d0);
         if (entityraytraceresult != null) {
@@ -250,14 +238,14 @@ public class ElectricExtendoGrip extends ComponentItem{
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void consumeDurabilityOnBlockBreak(BlockEvent.BreakEvent event) {
-        //findAndDamageExtendoGrip(event.getPlayer());
+        // findAndDamageExtendoGrip(event.getPlayer());
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void consumeDurabilityOnPlace(BlockEvent.EntityPlaceEvent event) {
         Entity entity = event.getEntity();
-        //if (entity instanceof Player)
-            //findAndDamageExtendoGrip((Player) entity);
+        // if (entity instanceof Player)
+        // findAndDamageExtendoGrip((Player) entity);
     }
 
 //	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -283,9 +271,6 @@ public class ElectricExtendoGrip extends ComponentItem{
 //            extendo.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(h));
 //    }
 
-
-
-
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {
         return true;
@@ -300,8 +285,8 @@ public class ElectricExtendoGrip extends ComponentItem{
         if (source == null)
             return;
         Entity trueSource = source.getEntity();
-        //if (trueSource instanceof Player)
-            //findAndDamageExtendoGrip((Player) trueSource);
+        // if (trueSource instanceof Player)
+        // findAndDamageExtendoGrip((Player) trueSource);
     }
 
     @SubscribeEvent
@@ -377,9 +362,5 @@ public class ElectricExtendoGrip extends ComponentItem{
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(SimpleCustomRenderer.create(this, new ExtendoGripItemRenderer()));
     }
-
-
-
-
 
 }

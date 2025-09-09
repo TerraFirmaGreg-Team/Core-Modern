@@ -1,5 +1,17 @@
 package su.terrafirmagreg.core.common.data.capabilities;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
+import net.dries007.tfc.common.capabilities.food.DelegateFoodHandler;
+import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.food.FoodData;
+import net.dries007.tfc.common.capabilities.food.FoodHandler;
+import net.dries007.tfc.common.capabilities.food.IFood;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -11,17 +23,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-
-import net.dries007.tfc.common.capabilities.food.DelegateFoodHandler;
-import net.dries007.tfc.common.capabilities.food.FoodCapability;
-import net.dries007.tfc.common.capabilities.food.FoodData;
-import net.dries007.tfc.common.capabilities.food.FoodHandler;
-import net.dries007.tfc.common.capabilities.food.IFood;
 
 public class LargeEggHandler implements ILargeEgg, DelegateFoodHandler, ICapabilitySerializable<CompoundTag> {
     private final LazyOptional<LargeEggHandler> capability;
@@ -35,8 +36,7 @@ public class LargeEggHandler implements ILargeEgg, DelegateFoodHandler, ICapabil
 
     private boolean initialized; // If the internal capability objects have loaded their data.
 
-    public LargeEggHandler(ItemStack itemStack)
-    {
+    public LargeEggHandler(ItemStack itemStack) {
         stack = itemStack;
         fertilized = false;
         hatchDay = 0;
@@ -46,26 +46,22 @@ public class LargeEggHandler implements ILargeEgg, DelegateFoodHandler, ICapabil
     }
 
     @Override
-    public long getHatchDay()
-    {
+    public long getHatchDay() {
         return hatchDay;
     }
 
     @Override
-    public Optional<Entity> getEntity(Level level)
-    {
+    public Optional<Entity> getEntity(Level level) {
         return entityTag != null ? EntityType.create(entityTag, level) : Optional.empty();
     }
 
     @Override
-    public boolean isFertilized()
-    {
+    public boolean isFertilized() {
         return fertilized;
     }
 
     @Override
-    public void setFertilized(@NotNull Entity entity, long hatchDay)
-    {
+    public void setFertilized(@NotNull Entity entity, long hatchDay) {
         fertilized = true;
         entityTag = entity.serializeNBT();
         this.hatchDay = hatchDay;
@@ -73,8 +69,7 @@ public class LargeEggHandler implements ILargeEgg, DelegateFoodHandler, ICapabil
     }
 
     @Override
-    public void removeFertilization()
-    {
+    public void removeFertilization() {
         entityTag = null;
         fertilized = false;
         hatchDay = 0;
@@ -85,14 +80,11 @@ public class LargeEggHandler implements ILargeEgg, DelegateFoodHandler, ICapabil
 
     @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
-    {
-        if (cap == FoodCapability.NETWORK_CAPABILITY)
-        {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (cap == FoodCapability.NETWORK_CAPABILITY) {
             return capability.cast();
         }
-        if (cap == LargeEggCapability.CAPABILITY || cap == FoodCapability.CAPABILITY)
-        {
+        if (cap == LargeEggCapability.CAPABILITY || cap == FoodCapability.CAPABILITY) {
             load();
             return capability.cast();
         }
@@ -100,45 +92,35 @@ public class LargeEggHandler implements ILargeEgg, DelegateFoodHandler, ICapabil
     }
 
     @Override
-    public IFood getFoodHandler()
-    {
+    public IFood getFoodHandler() {
         return foodHandler;
     }
 
     @Override
-    public void addTooltipInfo(ItemStack stack, List<Component> text)
-    {
-        if (!isFertilized())
-        {
+    public void addTooltipInfo(ItemStack stack, List<Component> text) {
+        if (!isFertilized()) {
             DelegateFoodHandler.super.addTooltipInfo(stack, text);
         }
     }
 
     @Override
-    public long getRottenDate()
-    {
-        if (isFertilized())
-        {
+    public long getRottenDate() {
+        if (isFertilized()) {
             return FoodHandler.NEVER_DECAY_DATE;
         }
         return DelegateFoodHandler.super.getRottenDate();
     }
 
-    private void load()
-    {
-        if (!initialized)
-        {
+    private void load() {
+        if (!initialized) {
             initialized = true;
 
             final CompoundTag tag = stack.getOrCreateTag();
-            if (tag.contains("entity", Tag.TAG_COMPOUND))
-            {
+            if (tag.contains("entity", Tag.TAG_COMPOUND)) {
                 entityTag = tag.getCompound("entity");
                 fertilized = tag.getBoolean("fertilized");
                 hatchDay = tag.getLong("hatch");
-            }
-            else
-            {
+            } else {
                 fertilized = false;
                 entityTag = null;
                 hatchDay = 0;
@@ -146,11 +128,9 @@ public class LargeEggHandler implements ILargeEgg, DelegateFoodHandler, ICapabil
         }
     }
 
-    private void save()
-    {
+    private void save() {
         final CompoundTag tag = stack.getOrCreateTag();
-        if (entityTag != null)
-        {
+        if (entityTag != null) {
             tag.put("entity", entityTag);
             tag.putBoolean("fertilized", fertilized);
             tag.putLong("hatch", hatchDay);

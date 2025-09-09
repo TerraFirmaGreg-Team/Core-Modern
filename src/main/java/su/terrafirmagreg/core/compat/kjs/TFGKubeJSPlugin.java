@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
+
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
@@ -12,10 +13,11 @@ import earth.terrarium.adastra.api.planets.PlanetApi;
 import earth.terrarium.adastra.api.systems.GravityApi;
 import earth.terrarium.adastra.api.systems.OxygenApi;
 import earth.terrarium.adastra.api.systems.TemperatureApi;
+
 import su.terrafirmagreg.core.common.TFGHelpers;
-import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
+import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
 import su.terrafirmagreg.core.compat.kjs.events.TFGStartupEvents;
 
 public final class TFGKubeJSPlugin extends KubeJSPlugin {
@@ -23,12 +25,18 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
     @Override
     public void init() {
 
-        RegistryInfo.BLOCK.addType("tfg:decorative_plant", DecorativePlantBlockBuilder.class, DecorativePlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:tall_decorative_plant", TallDecorativePlantBlockBuilder.class, TallDecorativePlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:floating_decorative_plant", DecorativeFloatingPlantBlockBuilder.class, DecorativeFloatingPlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:attached_decorative_plant", DecorativeAttachedPlantBlockBuilder.class, DecorativeAttachedPlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:particle_emitter_decoration", ParticleEmitterDecorationBlockBuilder.class, ParticleEmitterDecorationBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:particle_emitter", ParticleEmitterBlockBuilder.class, ParticleEmitterBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:decorative_plant", DecorativePlantBlockBuilder.class,
+                DecorativePlantBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:tall_decorative_plant", TallDecorativePlantBlockBuilder.class,
+                TallDecorativePlantBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:floating_decorative_plant", DecorativeFloatingPlantBlockBuilder.class,
+                DecorativeFloatingPlantBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:attached_decorative_plant", DecorativeAttachedPlantBlockBuilder.class,
+                DecorativeAttachedPlantBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:particle_emitter_decoration", ParticleEmitterDecorationBlockBuilder.class,
+                ParticleEmitterDecorationBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:particle_emitter", ParticleEmitterBlockBuilder.class,
+                ParticleEmitterBlockBuilder::new);
         RegistryInfo.BLOCK.addType("tfg:layer_block", LayerBlockBuilder.class, LayerBlockBuilder::new);
     }
 

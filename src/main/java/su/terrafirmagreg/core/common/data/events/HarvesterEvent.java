@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.events;
 
+import java.util.*;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.TagKey;
@@ -15,10 +17,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.config.TFGConfig;
-
-import java.util.*;
 
 public class HarvesterEvent {
 
@@ -29,7 +30,8 @@ public class HarvesterEvent {
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
 
         Level level = event.getLevel();
-        if (level.isClientSide()) return;
+        if (level.isClientSide())
+            return;
 
         Player player = event.getEntity();
         InteractionHand hand = event.getHand();
@@ -56,18 +58,19 @@ public class HarvesterEvent {
 
         while (!queue.isEmpty()) {
             BlockPos current = queue.poll();
-            if (!visited.add(current)) continue;
+            if (!visited.add(current))
+                continue;
 
             BlockState state = level.getBlockState(current);
-            if (!state.is(HARVESTABLE_BLOCK_TAG)) continue;
+            if (!state.is(HARVESTABLE_BLOCK_TAG))
+                continue;
 
             // Simulate Use
             BlockHitResult hit = new BlockHitResult(
                     Vec3.atCenterOf(current),
                     Direction.UP,
                     current,
-                    false
-            );
+                    false);
 
             InteractionResult result = state.use(level, player, hand, hit);
 
@@ -75,7 +78,8 @@ public class HarvesterEvent {
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dz = -1; dz <= 1; dz++) {
-                        if (dx == 0 && dy == 0 && dz == 0) continue;
+                        if (dx == 0 && dy == 0 && dz == 0)
+                            continue;
                         BlockPos neighbor = current.offset(dx, dy, dz);
                         if (neighbor.closerThan(clickedPos, radius)) {
                             queue.add(neighbor);
@@ -96,8 +100,7 @@ public class HarvesterEvent {
                     net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER,
                     net.minecraft.sounds.SoundSource.PLAYERS,
                     2.0f,
-                    0.2f
-            );
+                    0.2f);
 
             // Damage Item
             held.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(hand));
@@ -107,4 +110,3 @@ public class HarvesterEvent {
         event.setCanceled(true);
     }
 }
-

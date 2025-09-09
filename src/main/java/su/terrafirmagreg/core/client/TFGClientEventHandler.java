@@ -1,12 +1,13 @@
 package su.terrafirmagreg.core.client;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.client.screen.NestBoxScreen;
-import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.dries007.tfc.client.screen.NestBoxScreen;
-import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -14,8 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -26,18 +25,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import org.jetbrains.annotations.NotNull;
+import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.contianer.LargeNestBoxScreen;
-
-import javax.annotation.Nullable;
-import java.util.List;
-
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.events.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.OreProspectorEvent;
@@ -50,8 +44,8 @@ import su.terrafirmagreg.core.common.data.particles.RailgunBoomProvider;
 @Mod.EventBusSubscriber(modid = "tfg", value = net.minecraftforge.api.distmarker.Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TFGClientEventHandler {
 
-    public static final ResourceLocation TFCMetalBlockTexturePattern =
-            ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
+    public static final ResourceLocation TFCMetalBlockTexturePattern = ResourceLocation
+            .fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
 
     @SuppressWarnings("removal")
     public TFGClientEventHandler() {
@@ -78,8 +72,7 @@ public final class TFGClientEventHandler {
                         "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
-                        (int) (helper.getHalfHeight() * 2)
-                ).withStyle(ChatFormatting.YELLOW));
+                        (int) (helper.getHalfHeight() * 2)).withStyle(ChatFormatting.YELLOW));
                 return;
             }
         }
@@ -91,8 +84,7 @@ public final class TFGClientEventHandler {
                         "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
-                        (int) (helper.getHalfHeight() * 2)
-                ).withStyle(ChatFormatting.YELLOW));
+                        (int) (helper.getHalfHeight() * 2)).withStyle(ChatFormatting.YELLOW));
                 tooltip.add(Component.translatable("tfg.tooltip.ore_prospector_count")
                         .withStyle(ChatFormatting.YELLOW));
                 return;
@@ -111,8 +103,7 @@ public final class TFGClientEventHandler {
                         "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
-                        (int) (helper.getHalfHeight() * 2)
-                ).withStyle(ChatFormatting.YELLOW));
+                        (int) (helper.getHalfHeight() * 2)).withStyle(ChatFormatting.YELLOW));
 
                 tooltip.add(Component.translatable("tfg.tooltip.ore_prospector_count")
                         .withStyle(ChatFormatting.YELLOW));
@@ -148,23 +139,19 @@ public final class TFGClientEventHandler {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private static void onItemTooltip(ItemTooltipEvent event)
-    {
+    private static void onItemTooltip(ItemTooltipEvent event) {
         final ItemStack stack = event.getItemStack();
         final List<Component> text = event.getToolTip();
-        if (!stack.isEmpty())
-        {
+        if (!stack.isEmpty()) {
             final @Nullable ILargeEgg egg = LargeEggCapability.get(stack);
-            if (egg != null)
-            {
+            if (egg != null) {
                 egg.addTooltipInfo(text);
             }
         }
     }
 
     @SubscribeEvent
-    public void modConstruct(FMLConstructModEvent event)
-    {
+    public void modConstruct(FMLConstructModEvent event) {
 
     }
 }

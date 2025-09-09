@@ -1,7 +1,15 @@
 package su.terrafirmagreg.core.mixins.common.firmalife;
 
+import java.lang.reflect.Field;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
 import com.eerussianguy.firmalife.common.blockentities.HydroponicPlanterBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.SprinklerBlockEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -12,12 +20,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.lang.reflect.Field;
 
 @Mixin(HydroponicPlanterBlockEntity.class)
 public abstract class HydroponicPlanterBlockEntityMixin {
@@ -34,18 +36,10 @@ public abstract class HydroponicPlanterBlockEntityMixin {
         }
     }
 
-    @Redirect(
-            method = "hydroponicServerTick",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lcom/eerussianguy/firmalife/common/blockentities/SprinklerBlockEntity;searchForFluid(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;Z)Lnet/minecraft/world/level/material/Fluid;"
-            ),
-            remap = false
-    )
+    @Redirect(method = "hydroponicServerTick", at = @At(value = "INVOKE", target = "Lcom/eerussianguy/firmalife/common/blockentities/SprinklerBlockEntity;searchForFluid(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;Z)Lnet/minecraft/world/level/material/Fluid;"), remap = false)
     private static Fluid redirectSearchForFluid(
             Level level, BlockPos pos, Direction direction, boolean drain,
-            Level unusedLevel, BlockPos unusedPos, BlockState state, HydroponicPlanterBlockEntity planter
-    ) {
+            Level unusedLevel, BlockPos unusedPos, BlockState state, HydroponicPlanterBlockEntity planter) {
         Fluid result = checkGTFluidHandler(level, pos.below());
         if (result == Fluids.EMPTY) {
             result = SprinklerBlockEntity.searchForFluid(level, pos, direction, drain);

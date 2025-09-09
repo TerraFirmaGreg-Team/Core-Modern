@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.blockentity;
 
+import javax.annotation.Nullable;
+
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.blockentities.TickableInventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.InventoryItemHandler;
@@ -17,12 +19,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.util.INBTSerializable;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.LargeNestBoxBlock;
@@ -30,63 +32,58 @@ import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.contianer.LargeNestBoxContainer;
 import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
-import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
-import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
 
-import javax.annotation.Nullable;
+public class LargeNestBoxBlockEntity
+        extends TickableInventoryBlockEntity<LargeNestBoxBlockEntity.LargeNestBoxInventory> {
 
-public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeNestBoxBlockEntity.LargeNestBoxInventory> {
-
-    public static void serverTick(Level level, BlockPos pos, BlockState state, LargeNestBoxBlockEntity nest)
-    {
+    public static void serverTick(Level level, BlockPos pos, BlockState state, LargeNestBoxBlockEntity nest) {
 
         nest.checkForLastTickSync();
 
-        if (level.getGameTime() % 30 == 0)
-        {
+        if (level.getGameTime() % 30 == 0) {
 
-            if(!(state.getBlock() instanceof LargeNestBoxBlock)) return;
+            if (!(state.getBlock() instanceof LargeNestBoxBlock))
+                return;
             Entity sitter = Seat.getSittingEntity(level, pos);
-            if (sitter instanceof TFGWoolEggProducingAnimal animal)
-            {
-                if (animal.isReadyForAnimalProduct())
-                {
+            if (sitter instanceof TFGWoolEggProducingAnimal animal) {
+                if (animal.isReadyForAnimalProduct()) {
                     final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos().set(pos);
 
                     final Direction backward = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
                     final Direction left = backward.getClockWise();
 
-                    switch(state.getValue(LargeNestBoxBlock.NEST_PART)){
-                        case 0: break;
-                        case 1: cursor.move(backward); break;
-                        case 2: cursor.move(left); break;
-                        case 3: cursor.move(backward).move(left); break;
+                    switch (state.getValue(LargeNestBoxBlock.NEST_PART)) {
+                        case 0:
+                            break;
+                        case 1:
+                            cursor.move(backward);
+                            break;
+                        case 2:
+                            cursor.move(left);
+                            break;
+                        case 3:
+                            cursor.move(backward).move(left);
+                            break;
                     }
 
-                    if (animal.getRandom().nextInt(7) == 0)
-                    {
+                    if (animal.getRandom().nextInt(7) == 0) {
                         Helpers.playSound(level, pos, SoundEvents.CHICKEN_EGG);
-                        if (Helpers.insertOne(level, cursor, TFGBlockEntities.LARGE_NEST_BOX.get(), animal.makeEgg()))
-                        {
+                        if (Helpers.insertOne(level, cursor, TFGBlockEntities.LARGE_NEST_BOX.get(), animal.makeEgg())) {
                             animal.setFertilized(false);
                             animal.setProductsCooldown();
                             animal.stopRiding();
                             nest.markForSync();
                         }
                     }
-                }
-                else
-                {
+                } else {
                     animal.stopRiding();
                 }
             }
 
-            for (int slot = 0; slot < nest.inventory.getSlots(); slot++)
-            {
+            for (int slot = 0; slot < nest.inventory.getSlots(); slot++) {
                 final ItemStack stack = nest.inventory.getStackInSlot(slot);
                 final @Nullable ILargeEgg egg = LargeEggCapability.get(stack);
-                if (egg != null && egg.getHatchDay() > 0 && egg.getHatchDay() <= Calendars.SERVER.getTotalDays())
-                {
+                if (egg != null && egg.getHatchDay() > 0 && egg.getHatchDay() <= Calendars.SERVER.getTotalDays()) {
                     egg.getEntity(level).ifPresent(entity -> {
                         entity.moveTo(pos, 0f, 0f);
                         level.addFreshEntity(entity);
@@ -97,52 +94,40 @@ public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeN
         }
     }
 
-
-
     public static final int SLOTS = 4;
     private static final Component NAME = Component.translatable(TFGCore.MOD_ID + ".block_entity.large_nest_box");
 
-    public LargeNestBoxBlockEntity(BlockPos pos, BlockState state)
-    {
+    public LargeNestBoxBlockEntity(BlockPos pos, BlockState state) {
         super(TFGBlockEntities.LARGE_NEST_BOX.get(), pos, state, LargeNestBoxInventory::new, NAME);
 
-        if (TFCConfig.SERVER.nestBoxEnableAutomation.get())
-        {
+        if (TFCConfig.SERVER.nestBoxEnableAutomation.get()) {
             sidedInventory.on(new PartialItemHandler(inventory).extractAll(), Direction.DOWN);
         }
     }
 
-
-
     @Override
-    public int getSlotStackLimit(int slot)
-    {
+    public int getSlotStackLimit(int slot) {
         return 1;
     }
 
     @Override
-    public boolean isItemValid(int slot, ItemStack stack)
-    {
+    public boolean isItemValid(int slot, ItemStack stack) {
         return Helpers.mightHaveCapability(stack, LargeEggCapability.CAPABILITY);
     }
 
-
     @Override
-    public void setAndUpdateSlots(int slot)
-    {
+    public void setAndUpdateSlots(int slot) {
         super.setAndUpdateSlots(slot);
         markForSync();
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int windowID, Inventory inv, Player player)
-    {
+    public AbstractContainerMenu createMenu(int windowID, Inventory inv, Player player) {
         return LargeNestBoxContainer.create(this, inv, windowID);
     }
 
-
-    public static class LargeNestBoxInventory extends InventoryItemHandler implements INBTSerializable<CompoundTag>{
+    public static class LargeNestBoxInventory extends InventoryItemHandler implements INBTSerializable<CompoundTag> {
         private final InventoryBlockEntity<?> entity;
 
         LargeNestBoxInventory(InventoryBlockEntity<?> entity) {
@@ -151,14 +136,12 @@ public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeN
         }
 
         @Override
-        public int getSlotStackLimit(int slot)
-        {
+        public int getSlotStackLimit(int slot) {
             return 1;
         }
 
         @Override
-        public boolean isItemValid(int slot, ItemStack stack)
-        {
+        public boolean isItemValid(int slot, ItemStack stack) {
             return Helpers.mightHaveCapability(stack, LargeEggCapability.CAPABILITY);
         }
 
@@ -175,7 +158,6 @@ public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeN
             for (int i = 0; i < getSlots(); i++) {
                 int newEggState = 0;
 
-
                 ItemStack stack = getStackInSlot(slot);
                 if (!stack.isEmpty()) {
                     newEggState = switch (stack.getItem().toString()) {
@@ -184,17 +166,25 @@ public class LargeNestBoxBlockEntity extends TickableInventoryBlockEntity<LargeN
                         default -> newEggState;
                     };
                 }
-                switch(slot){
-                    case 0: cursor.move(forward); break;
-                    case 1: cursor.move(forward).move(right); break;
-                    case 2: break;
-                    case 3: cursor.move(right); break;
+                switch (slot) {
+                    case 0:
+                        cursor.move(forward);
+                        break;
+                    case 1:
+                        cursor.move(forward).move(right);
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        cursor.move(right);
+                        break;
                 }
 
-                if (!(level.getBlockState(cursor).getBlock() instanceof LargeNestBoxBlock)) break;
+                if (!(level.getBlockState(cursor).getBlock() instanceof LargeNestBoxBlock))
+                    break;
                 int eggState = level.getBlockState(cursor).getValue(LargeNestBoxBlock.HAS_EGG_TYPE);
 
-                if (eggState != newEggState){
+                if (eggState != newEggState) {
                     BlockState targetState = level.getBlockState(cursor);
                     level.setBlockAndUpdate(cursor, targetState.setValue(LargeNestBoxBlock.HAS_EGG_TYPE, newEggState));
                 }
