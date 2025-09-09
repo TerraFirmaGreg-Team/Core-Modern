@@ -6,6 +6,7 @@
 package su.terrafirmagreg.core.utils;
 
 import earth.terrarium.adastra.api.planets.Planet;
+
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec2;
+
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.AbstractLayerBlock;
 import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
@@ -147,15 +149,15 @@ public final class MarsEnvironmentalHelpers {
             }
             return true;
         }
-//        else if (SnowPileBlock.canPlaceSnowPile(level, pos, state))
-//        {
-//            SnowPileBlock.placeSnowPile(level, pos, state, false);
-//            return true;
-//        }
+        else if (SandPileBlock.canPlaceSandPile(level, pos, state))
+        {
+            SandPileBlock.placeSandPile(level, pos, state, false);
+            return true;
+        }
         else if (state.isAir() && TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState().canSurvive(level, pos))
         {
             // Vanilla snow placement (single layers)
-            level.setBlock(pos, TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState(), 3);
+            level.setBlock(pos, PlanetEnvironmentalHelpers.getSandBlockForBiome(level, pos, false).defaultBlockState(), 3);
             return true;
         }
 //        else if (level instanceof Level fullLevel)

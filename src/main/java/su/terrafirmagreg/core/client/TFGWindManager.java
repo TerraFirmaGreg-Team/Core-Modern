@@ -8,6 +8,7 @@ package su.terrafirmagreg.core.client;
 
 
 import lombok.Setter;
+
 import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.client.particle.TFCParticles;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec2;
+
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -39,9 +41,14 @@ public class TFGWindManager {
         private static int biomeChecks = 4;
 
         private static ParticleOptions getParticleForBiome(Holder<Biome> biome) {
-            if (biome.is(TFGTags.Biomes.HasDarkSandWind)) return TFGParticles.DARK_MARS_WIND.get();
-            if (biome.is(TFGTags.Biomes.HasMediumSandWind)) return TFGParticles.MEDIUM_MARS_WIND.get();
-            if (biome.is(TFGTags.Biomes.HasLightSandWind)) return TFGParticles.LIGHT_MARS_WIND.get();
+            final ParticleOptions darkWind = TFGParticles.DARK_MARS_WIND.get();
+            final ParticleOptions mediumWind = TFGParticles.MEDIUM_MARS_WIND.get();
+            final ParticleOptions lightWind = TFGParticles.LIGHT_MARS_WIND.get();
+
+            if (biome.is(TFGTags.Biomes.HasDarkSandWind)) return darkWind;
+            if (biome.is(TFGTags.Biomes.HasMediumSandWind)) return mediumWind;
+            if (biome.is(TFGTags.Biomes.HasLightSandWind)) return lightWind;
+
             return TFCParticles.WIND.get();
         }
 

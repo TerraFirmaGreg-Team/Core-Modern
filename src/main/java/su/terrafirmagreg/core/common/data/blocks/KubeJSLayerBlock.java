@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -14,8 +13,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.HitResult;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+
+/**
+ * TODO: make it so that this doesn't crash the modpack on launch
+ */
 public class KubeJSLayerBlock extends AbstractLayerBlock {
 	private final Supplier<ItemLike> m_cloneSupplier;
 
