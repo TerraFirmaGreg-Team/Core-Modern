@@ -28,7 +28,7 @@ public class SyringeClientHandler {
                     String mobId = stack.getTag().getString("mob_type");
                     if (mobId.isEmpty()) return 0xFFFFFF; // Fallback for if a player gets a blank item through cheats.
 
-                    EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(mobId));
+                    EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(mobId));
                     if (type == null) {
                         // unknown entity fallback to white.
                         return 0xFFFFFF;
