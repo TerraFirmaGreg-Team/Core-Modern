@@ -75,7 +75,7 @@ public final class TFGClientEventHandler {
         for (WeakOreProspectorEventHelper helper : OreProspectorEvent.getWeakOreProspectorListHelper()) {
             if (stack.is(helper.getItemTag())) {
                 tooltip.add(Component.translatable(
-                        "tooltip.tfg.ore_prospector_stats",
+                        "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
                         (int) (helper.getHalfHeight() * 2)
@@ -88,12 +88,12 @@ public final class TFGClientEventHandler {
         for (NormalOreProspectorEventHelper helper : OreProspectorEvent.getNormalOreProspectorListHelper()) {
             if (stack.is(helper.getItemTag())) {
                 tooltip.add(Component.translatable(
-                        "tooltip.tfg.ore_prospector_stats",
+                        "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
                         (int) (helper.getHalfHeight() * 2)
                 ).withStyle(ChatFormatting.YELLOW));
-                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_count")
+                tooltip.add(Component.translatable("tfg.tooltip.ore_prospector_count")
                         .withStyle(ChatFormatting.YELLOW));
                 return;
             }
@@ -104,19 +104,19 @@ public final class TFGClientEventHandler {
             if (stack.is(helper.getItemTag())) {
                 // Determine the mode key based on centersOnly
                 String modeKey = helper.isCentersOnly()
-                        ? "tooltip.tfg.ore_prospector_mode_vein"
-                        : "tooltip.tfg.ore_prospector_mode_block";
+                        ? "tfg.tooltip.ore_prospector_mode_vein"
+                        : "tfg.tooltip.ore_prospector_mode_block";
 
                 tooltip.add(Component.translatable(
-                        "tooltip.tfg.ore_prospector_stats",
+                        "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
                         (int) (helper.getHalfHeight() * 2)
                 ).withStyle(ChatFormatting.YELLOW));
 
-                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_count")
+                tooltip.add(Component.translatable("tfg.tooltip.ore_prospector_count")
                         .withStyle(ChatFormatting.YELLOW));
-                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_xray",
+                tooltip.add(Component.translatable("tfg.tooltip.ore_prospector_xray",
                         Component.translatable(modeKey) // pass the localized "vein" or "per block"
                 ).withStyle(ChatFormatting.YELLOW));
                 return;
