@@ -41,11 +41,4 @@ public abstract class GTUtilMixin {
             }
         }
     }
-
-    //i realised this doesnt give me coord
-    /*@Redirect(method = "canSeeSunClearly", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;isRaining()Z"), remap = false)
-    private static boolean tfg$canSeeSunClearly$isRaining(Level instance) {
-        TFGCore.LOGGER.info("bananaphone");
-        return false;
-    }*/
 }
