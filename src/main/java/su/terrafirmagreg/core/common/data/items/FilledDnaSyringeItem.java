@@ -27,7 +27,7 @@ public class FilledDnaSyringeItem extends Item {
                                 @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         if (stack.hasTag() && Objects.requireNonNull(stack.getTag()).contains("mob_type")) {
             String mobId = stack.getTag().getString("mob_type");
-            ResourceLocation rl = new ResourceLocation(mobId);
+            ResourceLocation rl = ResourceLocation.parse(mobId);
             EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(rl);
 
             if (type != null) {
