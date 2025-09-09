@@ -22,15 +22,16 @@ public abstract class GTUtilMixin {
     @Overwrite
     public static boolean canSeeSunClearly(Level world, BlockPos blockPos) {
         //todo: i heard theres some ad astra weather stuff??
-        if (!world.canSeeSky(blockPos.above())) {
+        BlockPos bLockPosAbove = blockPos.above();
+        if (!world.canSeeSky(bLockPosAbove)) {
             return false;
         } else {
-            Biome biome = (Biome)world.getBiome(blockPos.above()).value();
+            Biome biome = (Biome)world.getBiome(bLockPosAbove).value();
             //for tfc overworld: EnvironmentHelpers.isRainingOrSnowing(world,blockPos) instead of world.isRaining()
             //just incase I left it how it was before for other dimensions
             if(world.dimension()==Level.OVERWORLD) {
                 return world.isDay() && !EnvironmentHelpers.isRainingOrSnowing(world,blockPos);
-            } else if (!world.isRaining() || !biome.warmEnoughToRain(blockPos.above()) && !biome.coldEnoughToSnow(blockPos.above())) {
+            } else if (!world.isRaining() || !biome.warmEnoughToRain(bLockPosAbove) && !biome.coldEnoughToSnow(bLockPosAbove)) {
                 return world.isDay();
             } else {
                 return false;
