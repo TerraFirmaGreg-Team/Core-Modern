@@ -31,11 +31,7 @@ public abstract class GTUtilMixin {
             if(world.dimension()==Level.OVERWORLD) {
                 return world.isDay() && !EnvironmentHelpers.isRainingOrSnowing(world,blockPos);
             } else if (!world.isRaining() || !biome.warmEnoughToRain(blockPos.above()) && !biome.coldEnoughToSnow(blockPos.above())) {
-                if (world.getBiome(blockPos.above()).is(BiomeTags.IS_END)) {
-                    return false;
-                } else {
-                    return world.isDay();
-                }
+                return world.isDay();
             } else {
                 return false;
             }
