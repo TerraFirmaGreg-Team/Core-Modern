@@ -15,7 +15,7 @@ public abstract class GTUtilMixin {
 
     /**
      * @author FiNiTe
-     * @reason i think replacing it fully just makes sense
+     * @reason makes GT solar machines understand TFC's rain mechanics
      * <br>
      * the EnvironmentHelpers thing I found from <a href="https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.20.x/src/main/java/net/dries007/tfc/mixin/LevelMixin.java">https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.20.x/src/main/java/net/dries007/tfc/mixin/LevelMixin.java</a>
      */
