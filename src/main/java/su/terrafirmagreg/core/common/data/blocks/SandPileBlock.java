@@ -34,7 +34,7 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
 
     public static boolean canPlaceSandPile(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        return Helpers.isBlock(state.getBlock(), TFCTags.Blocks.CAN_BE_SNOW_PILED) && TFGBlocks.MARS_SAND_PILE.get().defaultBlockState().canSurvive(level, pos);
+        return Helpers.isBlock(state.getBlock(), TFCTags.Blocks.CAN_BE_SNOW_PILED) && TFGBlocks.MARS_SAND_PILE_BLOCK.get().defaultBlockState().canSurvive(level, pos);
     }
 
     // TODO

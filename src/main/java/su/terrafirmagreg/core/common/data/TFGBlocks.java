@@ -136,17 +136,17 @@ public final class TFGBlocks {
                     //TODO
             ));
 
-    public static final RegistryObject<SandPileBlock> RED_SAND_PILE = register("pile/red_sand",
+    public static final RegistryObject<SandPileBlock> RED_SAND_PILE_BLOCK = register("pile/red_sand",
         () -> new SandPileBlock(
                 ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
             )
     );
-    public static final RegistryObject<SandPileBlock> MARS_SAND_PILE = register("pile/mars_sand",
+    public static final RegistryObject<SandPileBlock> MARS_SAND_PILE_BLOCK = register("pile/mars_sand",
         () -> new SandPileBlock(
                 ExtendedProperties.of(ModBlocks.MARS_SAND.get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
             )
     );
-    public static final RegistryObject<SandPileBlock> VENUS_SAND_PILE = register("pile/venus_sand",
+    public static final RegistryObject<SandPileBlock> VENUS_SAND_PILE_BLOCK = register("pile/venus_sand",
         () -> new SandPileBlock(
                 ExtendedProperties.of(ModBlocks.VENUS_SAND.get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
         )
