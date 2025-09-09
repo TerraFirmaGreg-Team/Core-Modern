@@ -21,6 +21,7 @@ public class TFGFeatures {
 	public static final RegistryObject<DeadCoralTreeFeature> DEAD_CORAL_TREE = register("dead_coral_tree", DeadCoralTreeFeature::new, NoneFeatureConfiguration.CODEC);
 
 	public static final RegistryObject<TallDecorativePlantFeature> TALL_DECORATIVE_PLANT = register("tall_decorative_plant", TallDecorativePlantFeature::new, TallDecorativePlantConfig.CODEC);
+	public static final RegistryObject<AttachedDecorativePlantFeature> ATTACHED_DECORATIVE_PLANT = register("attached_decorative_plant", AttachedDecorativePlantFeature::new, AttachedDecorativePlantConfig.CODEC);
 
 	private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name, Function<Codec<C>, F> factory, Codec<C> codec)
 	{

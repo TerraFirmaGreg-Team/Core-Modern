@@ -26,6 +26,7 @@ public final class TFGTags {
         public static final TagKey<Item> GlacianRamFood = createItemTag("tfg:glacian_ram_food");
         public static final TagKey<Item> SnifferFood = createItemTag("tfg:sniffer_food");
         public static final TagKey<Item> WraptorFood = createItemTag("tfg:wraptor_food");
+        public static final TagKey<Item> EmptySyringe = createItemTag("tfg:empty_dna_syringes");
 
 
         public static TagKey<Item> createItemTag(String path) {

@@ -18,9 +18,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.items.ElectricExtendoGrip;
-import su.terrafirmagreg.core.common.data.items.PiglinDisguise;
-import su.terrafirmagreg.core.common.data.items.TrowelItem;
+import su.terrafirmagreg.core.common.data.items.*;
 
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -42,6 +40,14 @@ public class TFGItems {
 	public static final RegistryObject<Item> TROWEL =
 			ITEMS.register("trowel", () -> new TrowelItem(new Item.Properties()));
 
+    public static final RegistryObject<Item> EMPTY_DNA_SYRINGE =
+            ITEMS.register("empty_dna_syringe", () -> new EmptyDnaSyringeItem(new Item.Properties()));
+    public static final RegistryObject<Item> CLEAN_DNA_SYRINGE =
+            ITEMS.register("clean_dna_syringe", () -> new EmptyDnaSyringeItem(new Item.Properties()));
+    public static final RegistryObject<Item> DIRTY_DNA_SYRINGE =
+            ITEMS.register("dirty_dna_syringe", () -> new DirtyDnaSyringeItem(new Item.Properties()));
+    public static final RegistryObject<Item> FILLED_DNA_SYRINGE =
+            ITEMS.register("filled_dna_syringe", () -> new FilledDnaSyringeItem(new Item.Properties()));
 
 	public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
 	public static final RegistryObject<Item> GLACIAN_RAM_EGG = registerSpawnEgg(TFGEntities.GLACIAN_RAM, 16772607, 3997758);

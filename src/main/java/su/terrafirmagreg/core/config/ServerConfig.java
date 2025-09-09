@@ -3,13 +3,17 @@ package su.terrafirmagreg.core.config;
 import earth.terrarium.adastra.api.planets.Planet;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.config.tools.PropickConfig;
 import su.terrafirmagreg.core.config.tools.RenderingPropickConfig;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static su.terrafirmagreg.core.TFGCore.LOGGER;
 
 /**
  * Server Config
@@ -30,6 +34,8 @@ public final class ServerConfig {
     public final RenderingPropickConfig redSteelPropickConfig;
 
     public final ForgeConfigSpec.IntValue HARVEST_BASKET_RANGE;
+
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.push("hang_glider");
@@ -66,6 +72,25 @@ public final class ServerConfig {
                 .comment("\nRadius of the harvest basket collection. Set to 0 to disable. Default: 7")
                 .defineInRange("HarvestBasketRange", 7, 0, 20);
 
+        builder.pop().push("syringe_blacklist");
+        SYRINGE_BLACKLIST = builder
+                .comment("Blacklist of entity IDs that cannot be sampled by the DNA syringe. Can be empty.")
+                .defineListAllowEmpty(
+                        "syringeBlacklist", List.of(),
+                        o -> {
+                            if (!(o instanceof String s)) return false;
+                            ResourceLocation id = ResourceLocation.tryParse(s);
+                            if (id == null) {
+                                LOGGER.warn("[TFG Config] Invalid entity ID syntax in syringeBlacklist: {}", s);
+                                return false;
+                            }
+                            if (!ForgeRegistries.ENTITY_TYPES.containsKey(id)) {
+                                LOGGER.warn("[TFG Config] Unknown entity ID in syringeBlacklist: {}", id);
+                                return false;
+                            }
+                            return true;
+                        }
+                );
         builder.pop();
     }
 
