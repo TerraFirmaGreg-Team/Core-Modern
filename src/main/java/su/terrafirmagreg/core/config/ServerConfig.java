@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.config;
 
-import com.mojang.logging.LogUtils;
 import earth.terrarium.adastra.api.planets.Planet;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.resources.ResourceKey;
@@ -8,12 +7,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.slf4j.Logger;
 import su.terrafirmagreg.core.config.tools.PropickConfig;
 import su.terrafirmagreg.core.config.tools.RenderingPropickConfig;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static su.terrafirmagreg.core.TFGCore.LOGGER;
 
 /**
  * Server Config
@@ -21,8 +21,6 @@ import java.util.List;
  *  - Default to this config for most things, and only use client/common when appropriate.
  */
 public final class ServerConfig {
-
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final List<ResourceKey<Level>> planetDimensions = List.of(Planet.EARTH_ORBIT, Planet.MOON_ORBIT, Planet.MARS_ORBIT, Planet.VENUS_ORBIT, Planet.MERCURY_ORBIT, Planet.GLACIO_ORBIT, Planet.MOON, Planet.MARS, Planet.VENUS, Planet.MERCURY, Planet.GLACIO);
     public final HashMap<ResourceKey<Level>, ForgeConfigSpec.BooleanValue> glidersWorkOnPlanets;
