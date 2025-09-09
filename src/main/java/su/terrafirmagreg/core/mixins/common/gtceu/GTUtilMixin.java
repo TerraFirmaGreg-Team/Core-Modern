@@ -17,11 +17,10 @@ public abstract class GTUtilMixin {
      * @author FiNiTe
      * @reason makes GT solar machines understand TFC's rain mechanics
      * <br>
-     * the EnvironmentHelpers thing I found from <a href="https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.20.x/src/main/java/net/dries007/tfc/mixin/LevelMixin.java">https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.20.x/src/main/java/net/dries007/tfc/mixin/LevelMixin.java</a>
+     * the EnvironmentHelpers thing I found from https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.20.x/src/main/java/net/dries007/tfc/mixin/LevelMixin.java
      */
     @Overwrite
     public static boolean canSeeSunClearly(Level world, BlockPos blockPos) {
-        //todo: i heard theres some ad astra weather stuff??
         BlockPos bLockPosAbove = blockPos.above();
         if (!world.canSeeSky(bLockPosAbove)) {
             return false;
