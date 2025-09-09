@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
+import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.IMachineBlock;
@@ -14,6 +16,7 @@ import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.*;
+
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -22,16 +25,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
-import su.terrafirmagreg.core.common.data.TFGBlocks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
-
-import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 public class TFGMultiMachines {
 
@@ -194,7 +196,7 @@ public class TFGMultiMachines {
 		.register();
 
 	private static final Supplier<Block> bioculture_casing =
-			() -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tfg", "casings/machine_casing_bioculture"));
+			() -> ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"));
 	public static final MultiblockMachineDefinition BIOREACTOR =
 			REGISTRATE.multiblock("bioreactor", BioreactorMachine::new)
 					.rotationState(RotationState.NON_Y_AXIS)
