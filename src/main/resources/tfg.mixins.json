@@ -11,6 +11,7 @@
     "common.ad_astra.EnvironmentEffectsMixin",
     "common.ad_astra.GasTankItemMixin",
     "common.ad_astra.LanderMixin",
+    "common.ad_astra.MartianRaptorMixin",
     "common.ad_astra.ModSkyRendererMixin",
     "common.ad_astra.RocketMixin",
     "common.ad_astra.SlidingDoorBlockMixin",

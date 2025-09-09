@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.mixins.common.minecraft;
 
 import com.ninni.species.registry.SpeciesEntities;
 import earth.terrarium.adastra.common.registry.ModEntityTypes;
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,10 +26,14 @@ public class MonsterMixin {
 
 		if (pType == SpeciesEntities.QUAKE.get() || pType == ModEntityTypes.MARTIAN_RAPTOR.get())
 		{
+			BlockState belowBlock = levelAccessor.getBlockState(blockPos.below());
+
 			// Make these only spawn underground
-			cir.setReturnValue(levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) == 0
+			cir.setReturnValue(
+				belowBlock.is(TFCTags.Blocks.MONSTER_SPAWNS_ON)
+				&& levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) == 0
 				&& levelAccessor.getBrightness(LightLayer.SKY, blockPos) == 0
-				&& levelAccessor.getBlockState(blockPos.below()).isValidSpawn(levelAccessor, blockPos, pType));
+				&& belowBlock.isValidSpawn(levelAccessor, blockPos, pType));
 		}
 	}
 }

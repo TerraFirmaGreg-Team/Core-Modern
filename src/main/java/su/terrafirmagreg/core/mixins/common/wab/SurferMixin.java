@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = Surfer.class)
 public abstract class SurferMixin extends AbstractHorse {
 
-	@Shadow
+	@Shadow(remap = false)
 	public abstract void setCoralColor(String color);
 
 	protected SurferMixin(EntityType<? extends AbstractHorse> pEntityType, Level pLevel) {
@@ -48,15 +48,15 @@ public abstract class SurferMixin extends AbstractHorse {
 		RandomSource rand = level.getRandom();
 		float r = rand.nextFloat();
 
-		if (r > 0.85)
+		if (r > 0.9)
 			this.setCoralColor("brain");
-		else if (r > 0.7)
+		else if (r > 0.8)
 			this.setCoralColor("bubble");
-		else if (r > 0.65)
+		else if (r > 0.7)
 			this.setCoralColor("tube");
-		else if (r > 0.5)
+		else if (r > 0.6)
 			this.setCoralColor("fire");
-		else if (r > 0.35)
+		else if (r > 0.5)
 			this.setCoralColor("horn");
 	}
 }

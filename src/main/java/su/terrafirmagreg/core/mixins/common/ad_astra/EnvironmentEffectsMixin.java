@@ -54,9 +54,12 @@ public abstract class EnvironmentEffectsMixin {
 
 	// Bloomery and Blast furnace can't be extinguished after being started (outside of like, breaking them),
 	// so they get their own mixins
+
 	@Unique
 	private static void tfg$tickBlockBugWorkaround(ServerLevel level, BlockPos pos, BlockState state)
 	{
+		// Add our own tag for things that do have one of the below tags (such as leaves, saplings) but which we
+		// want to be excluded from being destroyed (such as mars saplings)
 		if (state.is(TFGTags.Blocks.DoNotDestroyInSpace))
 			return;
 

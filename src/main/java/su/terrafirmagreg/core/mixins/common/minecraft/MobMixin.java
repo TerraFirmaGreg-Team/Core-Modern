@@ -13,6 +13,8 @@ public class MobMixin {
 
 	@Inject(method = "checkSpawnObstruction", at = @At("HEAD"), cancellable = true)
 	public void tfg$checkSpawnObstruction(LevelReader pLevel, CallbackInfoReturnable<Boolean> cir) {
+		// Surfers normally use the normal Mob spawn rules for checking obstruction, which includes checking if
+		// the block doesn't have a fluid in it, which... causes problems for a mob that's supposed to be aquatic.
 		if ((Mob) (Object) this instanceof Surfer)
 		{
 			cir.setReturnValue(pLevel.isUnobstructed((Mob) (Object) this));

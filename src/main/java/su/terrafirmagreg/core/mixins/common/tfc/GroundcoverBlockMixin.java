@@ -8,6 +8,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.terrafirmagreg.core.compat.kjs.TFGBlockProperties;
 
+/**
+ * Lets groundcover blocks (loose rocks and sticks etc) be waterloggable with our own property,
+ * which has all TFC waters as well as our own mars water
+ */
+
 @Mixin(value = GroundcoverBlock.class, remap = false)
 public class GroundcoverBlockMixin  {
 

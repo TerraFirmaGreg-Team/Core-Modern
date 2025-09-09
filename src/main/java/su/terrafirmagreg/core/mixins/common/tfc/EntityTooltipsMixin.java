@@ -42,12 +42,9 @@ import static net.dries007.tfc.compat.jade.common.EntityTooltips.*;
 @Mixin(value = EntityTooltips.class, remap = false)
 public abstract class EntityTooltipsMixin {
 
-	// This is easier than doing our own jade compat, lol
-
-	//@Inject(method = "register", at = @At("TAIL"), remap = false)
 	/**
-	 * @author a
-	 * @reason a
+	 * @author Pyritie
+	 * @reason Adds our own jade tooltips to new TFC-like animals
 	 */
 	@Overwrite
 	public static void register(RegisterCallback<EntityTooltip, Entity> registry)
@@ -66,8 +63,6 @@ public abstract class EntityTooltipsMixin {
 		registry.register("ocelot", OCELOT, TFCOcelot.class);
 		registry.register("fishing_hook", HOOK, TFCFishingHook.class);
 		registry.register("rabbit", TFG_RABBIT, Rabbit.class);
-
-		//registry.register(ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "moon_rabbit"), MOON_RABBIT, MoonRabbit.class);
 	}
 
 	@Unique

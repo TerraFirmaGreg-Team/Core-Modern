@@ -27,7 +27,6 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 
 	public transient VoxelShape cachedShape;
 	public transient Supplier<Item> preexistingItem;
-	public transient int rotate;
 	@Nullable
 	public transient String lootItem;
 
@@ -36,7 +35,6 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 
 		noCollision = true;
 		hardness = 0;
-		rotate = 0;
 		fullBlock = false;
 		opaque = false;
 		notSolid = true;
@@ -52,12 +50,6 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
 		itemBuilder = null;
 		preexistingItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
 		RegisterInteractionsEventJS.addBlockItemPlacement(preexistingItem, this);
-		return this;
-	}
-
-	@Info("Rotates the default models by 45 degrees")
-	public DecorativePlantBlockBuilder notAxisAligned() {
-		rotate = 45;
 		return this;
 	}
 
