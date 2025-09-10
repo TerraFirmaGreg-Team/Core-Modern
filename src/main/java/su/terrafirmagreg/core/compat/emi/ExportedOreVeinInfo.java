@@ -103,7 +103,7 @@ package su.terrafirmagreg.core.compat.emi;
 				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("goethite", 15),new OreVeinInfoRecipe.WeightedBlock("yellow_limonite", 30),new OreVeinInfoRecipe.WeightedBlock("hematite", 50),new OreVeinInfoRecipe.WeightedBlock("gold", 5),}),
 			new OreVeinInfoRecipe("normal_lapis", "minecraft:overworld", 
-				170, 0.25, -60, 10, 50, 0, 0, new String[] {
+				170, 0.25, -60, 10, 40, 0, 0, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("lazurite", 35),new OreVeinInfoRecipe.WeightedBlock("sodalite", 25),new OreVeinInfoRecipe.WeightedBlock("lapis", 25),new OreVeinInfoRecipe.WeightedBlock("calcite", 15),}),
 			new OreVeinInfoRecipe("normal_limonite", "minecraft:overworld", 
@@ -303,15 +303,15 @@ package su.terrafirmagreg.core.compat.emi;
 				"tfc:rock/raw/diorite","ad_astra:moon_stone","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("apatite", 23),new OreVeinInfoRecipe.WeightedBlock("tricalcium_phosphate", 33),new OreVeinInfoRecipe.WeightedBlock("pyrochlore", 38),new OreVeinInfoRecipe.WeightedBlock("olivine", 4),}),
 			new OreVeinInfoRecipe("moon_bauxite", "ad_astra:moon", 
-				200, 0.4, 0, 80, 50, 0, 0, new String[] {
+				200, 0.35, 0, 80, 40, 0, 0, new String[] {
 				"tfc:rock/raw/basalt","ad_astra:moon_stone","ad_astra:moon_deepslate","ad_astra:glacio_stone","tfc:rock/raw/diorite","tfc:rock/raw/rhyolite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("bauxite", 36),new OreVeinInfoRecipe.WeightedBlock("ilmenite", 42),new OreVeinInfoRecipe.WeightedBlock("armalcolite", 21),}),
 			new OreVeinInfoRecipe("moon_beryllium", "ad_astra:moon", 
-				260, 0.45, 0, 120, 0, 70, 10, new String[] {
+				260, 0.35, 0, 120, 0, 70, 8, new String[] {
 				"tfc:rock/raw/basalt","ad_astra:moon_stone","ad_astra:glacio_stone",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("beryllium", 31),new OreVeinInfoRecipe.WeightedBlock("emerald", 45),new OreVeinInfoRecipe.WeightedBlock("thorium", 0),new OreVeinInfoRecipe.WeightedBlock("olivine", 4),new OreVeinInfoRecipe.WeightedBlock("rock_salt", 18),}),
 			new OreVeinInfoRecipe("moon_cassiterite", "ad_astra:moon", 
-				210, 0.3, 10, 128, 40, 0, 0, new String[] {
+				210, 0.3, 10, 128, 35, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("chalcopyrite", 35),new OreVeinInfoRecipe.WeightedBlock("zeolite", 5),new OreVeinInfoRecipe.WeightedBlock("cassiterite", 41),new OreVeinInfoRecipe.WeightedBlock("tin", 17),}),
 			new OreVeinInfoRecipe("moon_sheldonite", "ad_astra:moon", 
@@ -319,39 +319,39 @@ package su.terrafirmagreg.core.compat.emi;
 				"tfc:rock/raw/basalt","tfc:rock/raw/andesite","ad_astra:glacio_stone",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("bornite", 35),new OreVeinInfoRecipe.WeightedBlock("cooperite", 25),new OreVeinInfoRecipe.WeightedBlock("platinum", 15),new OreVeinInfoRecipe.WeightedBlock("nickel", 25),}),
 			new OreVeinInfoRecipe("moon_desh", "ad_astra:moon", 
-				230, 0.35, 10, 80, 45, 0, 0, new String[] {
+				230, 0.35, 10, 80, 30, 0, 0, new String[] {
 				"tfc:rock/raw/andesite","tfc:rock/raw/dacite","tfc:rock/raw/gabbro","tfc:rock/raw/basalt",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("desh", 40),new OreVeinInfoRecipe.WeightedBlock("ilmenite", 25),new OreVeinInfoRecipe.WeightedBlock("aluminium", 20),new OreVeinInfoRecipe.WeightedBlock("armalcolite", 15),}),
+				new OreVeinInfoRecipe.WeightedBlock("desh", 25),new OreVeinInfoRecipe.WeightedBlock("ilmenite", 30),new OreVeinInfoRecipe.WeightedBlock("aluminium", 25),new OreVeinInfoRecipe.WeightedBlock("armalcolite", 20),}),
 			new OreVeinInfoRecipe("moon_garnet", "ad_astra:moon", 
 				230, 0.35, 10, 128, 35, 7, 0, new String[] {
 				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("red_garnet", 9),new OreVeinInfoRecipe.WeightedBlock("yellow_garnet", 14),new OreVeinInfoRecipe.WeightedBlock("amethyst", 38),new OreVeinInfoRecipe.WeightedBlock("opal", 38),}),
 			new OreVeinInfoRecipe("moon_garnierite", "ad_astra:moon", 
-				250, 0.4, 5, 85, 55, 0, 0, new String[] {
+				250, 0.35, 5, 85, 45, 0, 0, new String[] {
 				"tfc:rock/raw/gabbro","tfc:rock/raw/diorite","tfc:rock/raw/rhyolite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("garnierite", 23),new OreVeinInfoRecipe.WeightedBlock("nickel", 19),new OreVeinInfoRecipe.WeightedBlock("cobaltite", 19),new OreVeinInfoRecipe.WeightedBlock("pentlandite", 23),new OreVeinInfoRecipe.WeightedBlock("cobalt", 14),}),
 			new OreVeinInfoRecipe("moon_gold", "ad_astra:moon", 
-				170, 0.4, 10, 80, 40, 10, 0, new String[] {
+				170, 0.35, 10, 80, 35, 10, 0, new String[] {
 				"tfc:rock/raw/basalt","tfc:rock/raw/granite","tfc:rock/raw/diorite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("green_sapphire", 5),new OreVeinInfoRecipe.WeightedBlock("bauxite", 20),new OreVeinInfoRecipe.WeightedBlock("magnetite", 20),new OreVeinInfoRecipe.WeightedBlock("gold", 55),}),
 			new OreVeinInfoRecipe("moon_graphite", "ad_astra:moon", 
-				260, 0.55, 0, 120, 0, 60, 12, new String[] {
+				260, 0.4, 0, 120, 0, 60, 9, new String[] {
 				"tfc:rock/raw/basalt","ad_astra:moon_stone","ad_astra:glacio_stone","tfc:rock/raw/gabbro","tfc:rock/raw/basalt",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("graphite", 52),new OreVeinInfoRecipe.WeightedBlock("diamond", 36),new OreVeinInfoRecipe.WeightedBlock("olivine", 10),}),
 			new OreVeinInfoRecipe("moon_gypsum", "ad_astra:moon", 
-				180, 0.3, 10, 100, 40, 9, 0, new String[] {
+				180, 0.3, 10, 100, 30, 9, 0, new String[] {
 				"ad_astra:moon_stone","ad_astra:glacio_stone","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("borax", 20),new OreVeinInfoRecipe.WeightedBlock("calcite", 25),new OreVeinInfoRecipe.WeightedBlock("alunite", 15),new OreVeinInfoRecipe.WeightedBlock("gypsum", 35),new OreVeinInfoRecipe.WeightedBlock("olivine", 5),}),
 			new OreVeinInfoRecipe("moon_lubricant", "ad_astra:moon", 
-				190, 0.25, 0, 66, 36, 0, 0, new String[] {
+				190, 0.25, 0, 66, 30, 0, 0, new String[] {
 				"tfc:rock/raw/diorite","tfc:rock/raw/gabbro","ad_astra:moon_stone","ad_astra:moon_deepslate","tfc:rock/raw/basalt",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("soapstone", 30),new OreVeinInfoRecipe.WeightedBlock("talc", 20),new OreVeinInfoRecipe.WeightedBlock("glauconite_sand", 25),new OreVeinInfoRecipe.WeightedBlock("pentlandite", 15),new OreVeinInfoRecipe.WeightedBlock("trona", 10),}),
 			new OreVeinInfoRecipe("moon_magnetite", "ad_astra:moon", 
-				280, 0.3, 0, 90, 70, 0, 0, new String[] {
+				280, 0.25, 0, 90, 50, 0, 0, new String[] {
 				"tfc:rock/raw/diorite","tfc:rock/raw/gabbro","ad_astra:moon_stone","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("magnetite", 25),new OreVeinInfoRecipe.WeightedBlock("vanadium_magnetite", 15),new OreVeinInfoRecipe.WeightedBlock("chromite", 40),new OreVeinInfoRecipe.WeightedBlock("gold", 15),new OreVeinInfoRecipe.WeightedBlock("sapphire", 5),}),
 			new OreVeinInfoRecipe("moon_manganese", "ad_astra:moon", 
-				215, 0.5, 5, 80, 40, 0, 0, new String[] {
+				215, 0.35, 5, 80, 30, 0, 0, new String[] {
 				"tfc:rock/raw/andesite","tfc:rock/raw/basalt","tfc:rock/raw/gabbro","tfc:rock/raw/dacite","tfc:rock/raw/basalt","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("grossular", 37),new OreVeinInfoRecipe.WeightedBlock("spessartine", 25),new OreVeinInfoRecipe.WeightedBlock("pyrolusite", 25),new OreVeinInfoRecipe.WeightedBlock("tantalite", 12),}),
 			new OreVeinInfoRecipe("moon_mica", "ad_astra:moon", 
@@ -359,27 +359,27 @@ package su.terrafirmagreg.core.compat.emi;
 				"tfc:rock/raw/diorite","tfc:rock/raw/gabbro","ad_astra:moon_stone","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("kyanite", 33),new OreVeinInfoRecipe.WeightedBlock("mica", 23),new OreVeinInfoRecipe.WeightedBlock("bauxite", 23),new OreVeinInfoRecipe.WeightedBlock("aluminium", 14),new OreVeinInfoRecipe.WeightedBlock("olivine", 4),}),
 			new OreVeinInfoRecipe("moon_molybdenum", "ad_astra:moon", 
-				245, 0.45, 0, 50, 40, 0, 0, new String[] {
+				245, 0.35, 0, 50, 35, 0, 0, new String[] {
 				"tfc:rock/raw/basalt","tfc:rock/raw/dacite","tfc:rock/raw/gabbro","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("wulfenite", 44),new OreVeinInfoRecipe.WeightedBlock("molybdenite", 33),new OreVeinInfoRecipe.WeightedBlock("powellite", 16),new OreVeinInfoRecipe.WeightedBlock("olivine", 5),}),
 			new OreVeinInfoRecipe("moon_monazite", "ad_astra:moon", 
-				310, 0.2, 0, 70, 50, 0, 0, new String[] {
+				310, 0.2, 0, 70, 40, 0, 0, new String[] {
 				"ad_astra:glacio_stone","tfc:rock/raw/andesite","tfc:rock/raw/dacite","tfc:rock/raw/rhyolite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("bastnasite", 61),new OreVeinInfoRecipe.WeightedBlock("monazite", 30),new OreVeinInfoRecipe.WeightedBlock("neodymium", 6),new OreVeinInfoRecipe.WeightedBlock("olivine", 1),}),
 			new OreVeinInfoRecipe("moon_pyrolusite", "ad_astra:moon", 
-				210, 0.25, 20, 80, 40, 0, 0, new String[] {
+				210, 0.25, 20, 80, 35, 0, 0, new String[] {
 				"tfc:rock/raw/andesite","tfc:rock/raw/basalt","tfc:rock/raw/gabbro","ad_astra:moon_stone","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("pyrolusite", 38),new OreVeinInfoRecipe.WeightedBlock("cobaltite", 23),new OreVeinInfoRecipe.WeightedBlock("cobalt", 23),new OreVeinInfoRecipe.WeightedBlock("tantalite", 14),}),
 			new OreVeinInfoRecipe("moon_quartz", "ad_astra:moon", 
-				230, 0.3, 10, 100, 60, 0, 0, new String[] {
+				230, 0.3, 10, 100, 45, 0, 0, new String[] {
 				"tfc:rock/raw/basalt","ad_astra:moon_deepslate","tfc:rock/raw/gabbro","ad_astra:moon_stone","tfc:rock/raw/diorite","ad_astra:glacio_stone","tfc:rock/raw/dacite","tfc:rock/raw/rhyolite","tfc:rock/raw/andesite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("quartzite", 20),new OreVeinInfoRecipe.WeightedBlock("certus_quartz", 45),new OreVeinInfoRecipe.WeightedBlock("nether_quartz", 30),new OreVeinInfoRecipe.WeightedBlock("barite", 5),}),
 			new OreVeinInfoRecipe("moon_redstone", "ad_astra:moon", 
-				250, 0.2, 20, 100, 45, 0, 0, new String[] {
+				250, 0.2, 20, 100, 35, 0, 0, new String[] {
 				"tfc:rock/raw/dacite","ad_astra:glacio_stone","tfc:rock/raw/andesite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("redstone", 42),new OreVeinInfoRecipe.WeightedBlock("ruby", 33),new OreVeinInfoRecipe.WeightedBlock("cinnabar", 19),new OreVeinInfoRecipe.WeightedBlock("olivine", 4),}),
 			new OreVeinInfoRecipe("moon_saltpeter", "ad_astra:moon", 
-				210, 0.3, 0, 90, 35, 0, 0, new String[] {
+				210, 0.3, 0, 90, 30, 0, 0, new String[] {
 				"tfc:rock/raw/rhyolite","tfc:rock/raw/andesite","ad_astra:moon_deepslate","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("saltpeter", 29),new OreVeinInfoRecipe.WeightedBlock("soapstone", 20),new OreVeinInfoRecipe.WeightedBlock("electrotine", 37),new OreVeinInfoRecipe.WeightedBlock("talc", 12),}),
 			new OreVeinInfoRecipe("moon_sapphire", "ad_astra:moon", 
@@ -387,23 +387,23 @@ package su.terrafirmagreg.core.compat.emi;
 				"tfc:rock/raw/basalt","ad_astra:moon_deepslate",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("almandine", 38),new OreVeinInfoRecipe.WeightedBlock("pyrope", 27),new OreVeinInfoRecipe.WeightedBlock("sapphire", 16),new OreVeinInfoRecipe.WeightedBlock("green_sapphire", 16),new OreVeinInfoRecipe.WeightedBlock("olivine", 2),}),
 			new OreVeinInfoRecipe("moon_scheelite", "ad_astra:moon", 
-				200, 0.45, 0, 70, 20, 0, 0, new String[] {
+				200, 0.4, 0, 70, 20, 0, 0, new String[] {
 				"tfc:rock/raw/rhyolite","ad_astra:glacio_stone","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("scheelite", 40),new OreVeinInfoRecipe.WeightedBlock("tungstate", 50),new OreVeinInfoRecipe.WeightedBlock("lithium", 10),}),
 			new OreVeinInfoRecipe("moon_silver", "ad_astra:moon", 
-				210, 0.4, 20, 75, 30, 0, 0, new String[] {
+				210, 0.35, 20, 75, 30, 0, 0, new String[] {
 				"ad_astra:moon_stone","ad_astra:moon_deepslate","tfc:rock/raw/rhyolite","tfc:rock/raw/diorite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("galena", 28),new OreVeinInfoRecipe.WeightedBlock("silver", 42),new OreVeinInfoRecipe.WeightedBlock("lead", 23),new OreVeinInfoRecipe.WeightedBlock("olivine", 4),}),
 			new OreVeinInfoRecipe("moon_sphalerite", "ad_astra:moon", 
-				205, 0.4, 2, 75, 40, 0, 0, new String[] {
+				205, 0.35, 2, 75, 35, 0, 0, new String[] {
 				"tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/gabbro","tfc:rock/raw/dacite","ad_astra:glacio_stone",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("desh", 15),new OreVeinInfoRecipe.WeightedBlock("sphalerite", 50),new OreVeinInfoRecipe.WeightedBlock("pyrite", 35),}),
+				new OreVeinInfoRecipe.WeightedBlock("desh", 10),new OreVeinInfoRecipe.WeightedBlock("sphalerite", 50),new OreVeinInfoRecipe.WeightedBlock("pyrite", 40),}),
 			new OreVeinInfoRecipe("moon_tetrahedrite", "ad_astra:moon", 
-				190, 0.3, 50, 128, 40, 0, 0, new String[] {
+				190, 0.3, 50, 128, 35, 0, 0, new String[] {
 				"tfc:rock/raw/dacite","ad_astra:glacio_stone","tfc:rock/raw/andesite","tfc:rock/raw/rhyolite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("tetrahedrite", 40),new OreVeinInfoRecipe.WeightedBlock("copper", 15),new OreVeinInfoRecipe.WeightedBlock("stibnite", 20),new OreVeinInfoRecipe.WeightedBlock("chalcocite", 25),}),
 			new OreVeinInfoRecipe("moon_topaz", "ad_astra:moon", 
-				210, 0.5, 0, 120, 64, 25, 0, new String[] {
+				210, 0.35, 0, 120, 45, 16, 0, new String[] {
 				"tfc:rock/raw/basalt","ad_astra:moon_deepslate","tfc:rock/raw/gabbro","ad_astra:moon_stone","tfc:rock/raw/diorite","ad_astra:glacio_stone","tfc:rock/raw/dacite","tfc:rock/raw/rhyolite","tfc:rock/raw/andesite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("blue_topaz", 35),new OreVeinInfoRecipe.WeightedBlock("topaz", 25),new OreVeinInfoRecipe.WeightedBlock("chalcocite", 25),new OreVeinInfoRecipe.WeightedBlock("bornite", 15),}),
 			new OreVeinInfoRecipe("nether_anthracite", "minecraft:the_nether", 
@@ -497,7 +497,7 @@ package su.terrafirmagreg.core.compat.emi;
 			new OreVeinInfoRecipe("nether_naquadah", "minecraft:the_nether", 
 				250, 0.3, 0, 38, 32, 0, 0, new String[] {
 				"minecraft:blackstone","tfc:rock/raw/basalt",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("naquadah", 75),new OreVeinInfoRecipe.WeightedBlock("plutonium", 25),}),
+				new OreVeinInfoRecipe.WeightedBlock("naquadah", 100),}),
 			new OreVeinInfoRecipe("nether_olivine", "minecraft:the_nether", 
 				250, 0.35, 24, 128, 31, 0, 0, new String[] {
 				"minecraft:deepslate","tfc:rock/raw/basalt","minecraft:blackstone","minecraft:dripstone_block",}, new OreVeinInfoRecipe.WeightedBlock[] {
