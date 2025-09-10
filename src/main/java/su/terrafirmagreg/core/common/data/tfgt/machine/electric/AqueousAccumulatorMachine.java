@@ -6,10 +6,12 @@ import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 
 public class AqueousAccumulatorMachine extends SimpleTieredMachine {
 
-	public AqueousAccumulatorMachine(IMachineBlockEntity holder, int tier, Object... args) {
-		super(holder, tier, GTMachineUtils.defaultTankSizeFunction, args);
-	}
+    public AqueousAccumulatorMachine(IMachineBlockEntity holder, int tier, Object... args) {
+        super(holder, tier, GTMachineUtils.defaultTankSizeFunction, args);
+    }
 
-	@Override
-	public boolean shouldWeatherOrTerrainExplosion() { return false; }
+    @Override
+    public boolean shouldWeatherOrTerrainExplosion() {
+        return false;
+    }
 }

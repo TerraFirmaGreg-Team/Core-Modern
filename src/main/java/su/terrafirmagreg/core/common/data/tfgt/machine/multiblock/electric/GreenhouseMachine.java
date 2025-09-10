@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
@@ -23,7 +25,6 @@ import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.NotNull;
 
 public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
 
@@ -37,7 +38,7 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull ... args) {
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
         return new GreenhouseRecipeLogic(this);
     }
 
@@ -48,7 +49,8 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
 
         @Override
         protected ActionResult handleRecipeIO(GTRecipe recipe, IO io) {
-            if (io == IO.IN) return super.handleRecipeIO(recipe, io);
+            if (io == IO.IN)
+                return super.handleRecipeIO(recipe, io);
             Map<RecipeCapability<?>, List<Content>> contents = new HashMap<>();
             contents.put(FluidRecipeCapability.CAP, recipe.getOutputContents(FluidRecipeCapability.CAP));
 
@@ -57,13 +59,17 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
             for (Content content : recipe.getOutputContents(ItemRecipeCapability.CAP)) {
                 Object obj = content.content;
                 if (obj instanceof SizedIngredient sized) {
-                    ItemStackProvider isp = ItemStackProvider.of(new ItemStack(sized.getInner().getItems()[0].getItem(), sized.getAmount()));
-                    modifiedItemOutputs.add(new Content(SizedIngredient.create(Ingredient.of(isp.getEmptyStack()), sized.getAmount()), content.chance, content.maxChance, content.tierChanceBoost));
+                    ItemStackProvider isp = ItemStackProvider
+                            .of(new ItemStack(sized.getInner().getItems()[0].getItem(), sized.getAmount()));
+                    modifiedItemOutputs.add(
+                            new Content(SizedIngredient.create(Ingredient.of(isp.getEmptyStack()), sized.getAmount()),
+                                    content.chance, content.maxChance, content.tierChanceBoost));
                 }
             }
             contents.put(ItemRecipeCapability.CAP, modifiedItemOutputs);
 
-            return RecipeHelper.handleRecipe((IRecipeCapabilityHolder)getMachine(), recipe, io, contents, chanceCaches, false, false);
+            return RecipeHelper.handleRecipe((IRecipeCapabilityHolder) getMachine(), recipe, io, contents, chanceCaches,
+                    false, false);
         }
     }
 

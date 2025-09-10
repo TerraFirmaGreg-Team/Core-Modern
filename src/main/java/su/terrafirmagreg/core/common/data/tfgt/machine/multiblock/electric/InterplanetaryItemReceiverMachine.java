@@ -1,5 +1,9 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
+import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
@@ -9,6 +13,7 @@ import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.lowdragmc.lowdraglib.syncdata.ITagSerializable;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -16,14 +21,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
+
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
-import java.util.*;
-
-public class InterplanetaryItemReceiverMachine extends WorkableElectricMultiblockMachine implements ILogisticsNetworkReceiver, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(InterplanetaryItemReceiverMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+public class InterplanetaryItemReceiverMachine extends WorkableElectricMultiblockMachine
+        implements ILogisticsNetworkReceiver, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            InterplanetaryItemReceiverMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Override
     public @NotNull ManagedFieldHolder getFieldHolder() {
@@ -51,23 +56,26 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (getLevel() instanceof ServerLevel sLvl) sLvl.getServer().tell(new TickTask(0, () -> {
-            getLogisticsNetwork().loadOrCreatePart(this);
-            payloads.forEach(p -> sLvl.getServer().tell(new TickTask(p.travelDuration, () -> onPackageArrival(p))));
-        }));
+        if (getLevel() instanceof ServerLevel sLvl)
+            sLvl.getServer().tell(new TickTask(0, () -> {
+                getLogisticsNetwork().loadOrCreatePart(this);
+                payloads.forEach(p -> sLvl.getServer().tell(new TickTask(p.travelDuration, () -> onPackageArrival(p))));
+            }));
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
-        if (!isRemote()) getLogisticsNetwork().unloadPart(this);
+        if (!isRemote())
+            getLogisticsNetwork().unloadPart(this);
     }
 
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
         var server = Objects.requireNonNull(getLevel()).getServer();
-        if (server == null) return;
+        if (server == null)
+            return;
         Arrays.fill(lastActiveTime, getLevel().getGameTime());
         itemOutputs.clear();
         itemOutputs.addAll(getInventories());
@@ -82,63 +90,75 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     @Override
     public void onMachineRemoved() {
-        if (!isRemote()) getLogisticsNetwork().destroyPart(this);
+        if (!isRemote())
+            getLogisticsNetwork().destroyPart(this);
     }
 
     @Override
     public List<RailgunItemBusMachine> getInventories() {
-        if (isMachineInvalid()) return List.of();
+        if (isMachineInvalid())
+            return List.of();
         List<RailgunItemBusMachine> parts = new ArrayList<>();
-        for (var part: getParts()) {
-            if (part instanceof RailgunItemBusMachine r) parts.add(r);
+        for (var part : getParts()) {
+            if (part instanceof RailgunItemBusMachine r)
+                parts.add(r);
         }
         return parts;
     }
 
     @Override
     public boolean canAcceptItems(int inventoryIndex, List<ItemStack> stacks) {
-        var withCircuit = itemOutputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == inventoryIndex && c.isWorkingEnabled()).toList();
-        if (withCircuit.isEmpty()) return false;
+        var withCircuit = itemOutputs.stream()
+                .filter((c) -> IntCircuitBehaviour
+                        .getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == inventoryIndex
+                        && c.isWorkingEnabled())
+                .toList();
+        if (withCircuit.isEmpty())
+            return false;
 
-        var config = Objects.requireNonNull(getLogisticsNetwork().getPart(getDimensionalPos())).receiverLogisticsConfigs.get(inventoryIndex);
+        var config = Objects.requireNonNull(getLogisticsNetwork().getPart(getDimensionalPos())).receiverLogisticsConfigs
+                .get(inventoryIndex);
         var currentTick = Objects.requireNonNull(getLevel()).getGameTime();
-        if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.COOLDOWN && lastActiveTime[inventoryIndex]+ 20L *config.getCurrentCooldown() > currentTick) {
+        if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.COOLDOWN
+                && lastActiveTime[inventoryIndex] + 20L * config.getCurrentCooldown() > currentTick) {
             return false;
         } else if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.REDSTONE_DISABLE) {
-            for (var bus: withCircuit) {
-                if (getLevel().hasNeighborSignal(bus.getPos())) return false;
+            for (var bus : withCircuit) {
+                if (getLevel().hasNeighborSignal(bus.getPos()))
+                    return false;
             }
         } else if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.REDSTONE_ENABLE) {
             var hasFoundSignal = false;
-            for (var bus: withCircuit) {
+            for (var bus : withCircuit) {
                 if (getLevel().hasNeighborSignal(bus.getPos())) {
                     hasFoundSignal = true;
                     break;
                 }
             }
-            if (!hasFoundSignal) return false;
+            if (!hasFoundSignal)
+                return false;
         }
 
         List<ItemStack> remaining = new ArrayList<>();
 
-        for (var stack: stacks) {
+        for (var stack : stacks) {
             remaining.add(stack.copy());
         }
 
-
-        for (RailgunItemBusMachine outputBus: withCircuit) {
+        for (RailgunItemBusMachine outputBus : withCircuit) {
             var inventory = outputBus.getInventory();
             CustomItemStackHandler simulatedInsert = new CustomItemStackHandler(outputBus.getInventory().getSlots());
-            for (int i=0; i<inventory.getSlots(); i++) {
+            for (int i = 0; i < inventory.getSlots(); i++) {
                 simulatedInsert.setStackInSlot(i, inventory.getStackInSlot(i).copy());
             }
 
             for (var iter = remaining.listIterator(); iter.hasNext();) {
                 var stack = iter.next();
-                for (int i=0; i<simulatedInsert.getSlots(); i++) {
+                for (int i = 0; i < simulatedInsert.getSlots(); i++) {
                     stack = simulatedInsert.insertItem(i, stack, false);
                 }
-                if (stack.isEmpty()) iter.remove();
+                if (stack.isEmpty())
+                    iter.remove();
             }
         }
 
@@ -148,17 +168,23 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     private void onPackageArrival(ItemPayload payload) {
         payloads.remove(payload);
         lastActiveTime[payload.inventoryIndex] = Objects.requireNonNull(getLevel()).getGameTime();
-        var withCircuit = itemOutputs.stream().filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == payload.inventoryIndex && c.isWorkingEnabled()).toList();
+        var withCircuit = itemOutputs.stream()
+                .filter((c) -> IntCircuitBehaviour
+                        .getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == payload.inventoryIndex
+                        && c.isWorkingEnabled())
+                .toList();
 
         for (ItemStack itemToInsert : payload.items) {
             var amountLeft = itemToInsert.copy();
-            for (RailgunItemBusMachine outputBus: withCircuit) {
+            for (RailgunItemBusMachine outputBus : withCircuit) {
                 var inventory = outputBus.getInventory();
-                for (int i=0; i<inventory.getSlots(); i++) {
+                for (int i = 0; i < inventory.getSlots(); i++) {
                     amountLeft = inventory.insertItemInternal(i, amountLeft, false);
-                    if (amountLeft == ItemStack.EMPTY) break;
+                    if (amountLeft == ItemStack.EMPTY)
+                        break;
                 }
-                if (amountLeft == ItemStack.EMPTY) break;
+                if (amountLeft == ItemStack.EMPTY)
+                    break;
             }
         }
     }
@@ -174,16 +200,18 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     @Override
     public Component getCurrentStatusText() {
-        if (!isFormed()) return Component.literal("§cMultiblock not formed");
+        if (!isFormed())
+            return Component.literal("§cMultiblock not formed");
         return null;
     }
 
     @Override
     public void saveCustomPersistedData(@NotNull CompoundTag tag, boolean forDrop) {
         super.saveCustomPersistedData(tag, forDrop);
-        if (forDrop) return;
+        if (forDrop)
+            return;
         var newTag = new ListTag();
-        for (var payload: payloads) {
+        for (var payload : payloads) {
             newTag.add(payload.serializeNBT());
         }
         tag.put("payloads", newTag);
@@ -193,8 +221,9 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     public void loadCustomPersistedData(@NotNull CompoundTag tag) {
         super.loadCustomPersistedData(tag);
         var listTag = tag.getList("payloads", Tag.TAG_COMPOUND);
-        for (var entry: listTag) {
-            if (!(entry instanceof CompoundTag ctag)) return;
+        for (var entry : listTag) {
+            if (!(entry instanceof CompoundTag ctag))
+                return;
             var saved = new ItemPayload();
             saved.deserializeNBT(ctag);
             payloads.add(saved);
@@ -224,7 +253,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
             tag.putInt("travelDuration", travelDuration);
             tag.putInt("inventoryIndex", inventoryIndex);
             var list = new ListTag();
-            for (var s: items) {
+            for (var s : items) {
                 list.add(s.save(new CompoundTag()));
             }
             tag.put("items", list);
@@ -237,7 +266,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
             inventoryIndex = nbt.getInt("inventoryIndex");
             var list = nbt.getList("items", Tag.TAG_COMPOUND);
             for (Tag tag : list) {
-                items.add(ItemStack.of((CompoundTag)tag));
+                items.add(ItemStack.of((CompoundTag) tag));
             }
         }
     }

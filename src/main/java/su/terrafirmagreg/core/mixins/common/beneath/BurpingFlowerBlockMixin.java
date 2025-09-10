@@ -1,37 +1,33 @@
 package su.terrafirmagreg.core.mixins.common.beneath;
 
-import com.eerussianguy.beneath.common.blocks.BurpingFlowerBlock;
-import com.eerussianguy.beneath.common.blocks.FacingFlowerBlock;
-import com.eerussianguy.beneath.misc.BeneathParticles;
-import net.dries007.tfc.util.Helpers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.eerussianguy.beneath.common.blocks.BurpingFlowerBlock;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
 /**
- * Replaces the default burpflower recipes with our own,
- * because they're done through code instead of through recipes
+ * Replaces the default burpflower recipes with our own, because they're done through code instead of through recipes
  */
 @Mixin(value = BurpingFlowerBlock.class, remap = false)
 public abstract class BurpingFlowerBlockMixin {
 
-	@Shadow
-	public abstract boolean meetsConditions(Level level, BlockPos pos, BlockState state);
+    @Shadow
+    public abstract boolean meetsConditions(Level level, BlockPos pos, BlockState state);
 
-	@Inject(method = "performAction", at = @At("HEAD"), remap = false, cancellable = true)
-	public void tfg$performAction(ServerLevel level, BlockPos pos, BlockState state, RandomSource random, CallbackInfo ci)
-	{
-		// Disabled because you get froglights in space now.
-		// Is there any point in having the burpflower do anything? It feels too magical
+    @Inject(method = "performAction", at = @At("HEAD"), remap = false, cancellable = true)
+    public void tfg$performAction(ServerLevel level, BlockPos pos, BlockState state, RandomSource random,
+            CallbackInfo ci) {
+        // Disabled because you get froglights in space now.
+        // Is there any point in having the burpflower do anything? It feels too magical
 
 //		final Direction dir = state.getValue(FacingFlowerBlock.FACING);
 //		final BlockPos resultPos = pos.relative(dir);
@@ -67,6 +63,6 @@ public abstract class BurpingFlowerBlockMixin {
 //			level.setBlockAndUpdate(sulfurPos, level.getBlockState(sulfurPos).getFluidState().createLegacyBlock());
 //		}
 
-		ci.cancel();
-	}
+        ci.cancel();
+    }
 }

@@ -18,82 +18,73 @@ import net.minecraft.world.level.Level;
 
 public abstract class TFGWoolEggProducingAnimal extends ProducingAnimal {
 
-    private static final EntityDataAccessor<Long> DATA_WOOL = SynchedEntityData.defineId(TFGWoolEggProducingAnimal.class, EntityHelpers.LONG_SERIALIZER);
+    private static final EntityDataAccessor<Long> DATA_WOOL = SynchedEntityData
+            .defineId(TFGWoolEggProducingAnimal.class, EntityHelpers.LONG_SERIALIZER);
 
-
-
-    public TFGWoolEggProducingAnimal(EntityType<? extends TFCAnimal> type, Level level, TFCSounds.EntitySound sounds, ProducingAnimalConfig config) {
+    public TFGWoolEggProducingAnimal(EntityType<? extends TFCAnimal> type, Level level, TFCSounds.EntitySound sounds,
+            ProducingAnimalConfig config) {
         super(type, level, sounds, config);
     }
 
-
-    public ItemStack getWoolItem(Item woolItem, int maxWool)
-    {
+    public ItemStack getWoolItem(Item woolItem, int maxWool) {
         final int amount = (int) Math.ceil(getFamiliarity() * maxWool);
         return new ItemStack(woolItem, amount);
     }
 
-    public boolean hasWool(int woolProduceTicks){
+    public boolean hasWool(int woolProduceTicks) {
         long cooldown = getWoolCooldown(woolProduceTicks);
-        if (cooldown == 0){
+        if (cooldown == 0) {
             return true;
-        } else{ return false; }
+        } else {
+            return false;
+        }
     }
 
-    //Adds separate produce info for wool
+    // Adds separate produce info for wool
     @Override
-    public void addAdditionalSaveData(CompoundTag nbt)
-    {
+    public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putLong("producedWool", getWoolProducedTick());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag nbt)
-    {
+    public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         setWoolProducedTick(nbt.getLong("producedWool"));
     }
 
     @Override
-    public void defineSynchedData()
-    {
+    public void defineSynchedData() {
         super.defineSynchedData();
         entityData.define(DATA_WOOL, 0L);
     }
 
-    public long getWoolProducedTick()
-    {
+    public long getWoolProducedTick() {
         return entityData.get(DATA_WOOL);
     }
 
-    public void setWoolProducedTick(long producedTick)
-    {
+    public void setWoolProducedTick(long producedTick) {
         entityData.set(DATA_WOOL, producedTick);
     }
 
-    public void setWoolCooldown()
-    {
+    public void setWoolCooldown() {
         setWoolProducedTick(Calendars.get(level()).getTicks());
     }
 
-    public long getWoolCooldown(int woolProduceTicks)
-    {
+    public long getWoolCooldown(int woolProduceTicks) {
         return Math.max(0, woolProduceTicks + getWoolProducedTick() - Calendars.get(level()).getTicks());
     }
 
-    public boolean hasWoolProduct(int woolProduceTicks)
-    {
-        return(getWoolProducedTick() <= 0 || getWoolCooldown(woolProduceTicks) <= 0) && getAgeType() == Age.ADULT;
+    public boolean hasWoolProduct(int woolProduceTicks) {
+        return (getWoolProducedTick() <= 0 || getWoolCooldown(woolProduceTicks) <= 0) && getAgeType() == Age.ADULT;
     }
 
-    public MutableComponent getWoolReadyName()
-    {
+    public MutableComponent getWoolReadyName() {
         return Component.translatable("tfc.jade.product.wool");
     }
 
-    //Actual egg logic is defined in each class
-    public ItemStack makeEgg(){
+    // Actual egg logic is defined in each class
+    public ItemStack makeEgg() {
         System.out.println("You shouldn't see this");
         return null;
     }

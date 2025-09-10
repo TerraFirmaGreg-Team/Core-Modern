@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.data.events;
 
-import lombok.Getter;
+import java.util.*;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -15,11 +16,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.network.PacketDistributor;
+
+import lombok.Getter;
+
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
-
-import java.util.*;
 
 public class AdvancedOreProspectorEventHelper {
 
@@ -41,7 +43,8 @@ public class AdvancedOreProspectorEventHelper {
     @Getter
     private final boolean centersOnly;
 
-    public AdvancedOreProspectorEventHelper(double length, double halfWidth, double halfHeight, TagKey<Item> itemTag, boolean centersOnly) {
+    public AdvancedOreProspectorEventHelper(double length, double halfWidth, double halfHeight, TagKey<Item> itemTag,
+            boolean centersOnly) {
         this.length = length;
         this.halfWidth = halfWidth;
         this.halfHeight = halfHeight;
@@ -53,18 +56,22 @@ public class AdvancedOreProspectorEventHelper {
         Player player = event.getEntity();
         Level level = player.level();
 
-        if (level.isClientSide()) return;
+        if (level.isClientSide())
+            return;
 
         ItemStack held = player.getItemInHand(event.getHand());
-        if (!held.is(itemTag)) return;
-        if (player.getCooldowns().isOnCooldown(held.getItem())) return;
+        if (!held.is(itemTag))
+            return;
+        if (player.getCooldowns().isOnCooldown(held.getItem()))
+            return;
 
         Vec3 eyePos = player.getEyePosition();
         Vec3 lookDir = player.getLookAngle().normalize();
 
         Vec3 up = new Vec3(0, 1, 0);
         Vec3 right = lookDir.cross(up).normalize();
-        if (right.lengthSqr() == 0) right = new Vec3(1, 0, 0);
+        if (right.lengthSqr() == 0)
+            right = new Vec3(1, 0, 0);
         up = right.cross(lookDir).normalize();
 
         Set<BlockPos> checkedPositions = new HashSet<>();
@@ -84,7 +91,8 @@ public class AdvancedOreProspectorEventHelper {
                     Vec3 worldPos = eyePos.add(localPos);
 
                     BlockPos pos = BlockPos.containing(worldPos);
-                    if (!checkedPositions.add(pos)) continue;
+                    if (!checkedPositions.add(pos))
+                        continue;
 
                     Block block = level.getBlockState(pos).getBlock();
                     if (block.defaultBlockState().is(oreTag)) {
@@ -103,14 +111,11 @@ public class AdvancedOreProspectorEventHelper {
             int totalCount = oreCounts.values().stream().mapToInt(Integer::intValue).sum();
             player.sendSystemMessage(
                     Component.translatable("tfg.toast.ore_prospector_message", length, totalCount)
-                            .withStyle(ChatFormatting.GOLD)
-            );
-            oreCounts.forEach((name, oreCount) ->
-                    player.sendSystemMessage(Component.literal("- ")
-                            .append(name)
-                            .append(Component.literal(": " + oreCount))
-                            .withStyle(ChatFormatting.AQUA))
-            );
+                            .withStyle(ChatFormatting.GOLD));
+            oreCounts.forEach((name, oreCount) -> player.sendSystemMessage(Component.literal("- ")
+                    .append(name)
+                    .append(Component.literal(": " + oreCount))
+                    .withStyle(ChatFormatting.AQUA)));
         }
 
         if (player instanceof ServerPlayer sp) {
@@ -127,14 +132,12 @@ public class AdvancedOreProspectorEventHelper {
                     if (!centers.isEmpty()) {
                         TFGNetworkHandler.INSTANCE.send(
                                 PacketDistributor.PLAYER.with(() -> sp),
-                                new OreHighlightVeinPacket(centers)
-                        );
+                                new OreHighlightVeinPacket(centers));
                     }
                 } else {
                     TFGNetworkHandler.INSTANCE.send(
                             PacketDistributor.PLAYER.with(() -> sp),
-                            new OreHighlightPacket(orePositions)
-                    );
+                            new OreHighlightPacket(orePositions));
                 }
             }
         }
@@ -143,8 +146,7 @@ public class AdvancedOreProspectorEventHelper {
     }
 
     /*
-     * Vein grouping by minimum separation radius:
-     * Any ores within 'radius' of an existing cluster join that cluster.
+     * Vein grouping by minimum separation radius: Any ores within 'radius' of an existing cluster join that cluster.
      * Clusters are connected components under "distance <= radius".
      */
     private static List<BlockPos> computeVeinCentersByRadius(List<BlockPos> orePositions, int radius) {

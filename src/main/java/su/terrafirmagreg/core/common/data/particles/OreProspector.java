@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.data.particles;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.GameRenderer;
@@ -33,7 +34,7 @@ public class OreProspector extends TextureSheetParticle {
 
     @Override
     public int getLightColor(float partialTicks) {
-        return 0x00F000F0;  // Max brightness packed light value
+        return 0x00F000F0; // Max brightness packed light value
     }
 
     // particle sheet with no depth testing

@@ -1,16 +1,16 @@
 package su.terrafirmagreg.core.network.packet;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.network.NetworkEvent;
+import java.util.function.Supplier;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-
-import java.util.function.Supplier;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ParticlePacket {
     private final double x, y, z;
@@ -20,10 +20,10 @@ public class ParticlePacket {
     private final double dx, dy, dz;
 
     public ParticlePacket(double x, double y, double z,
-                          double motX, double motY, double motZ,
-                          ResourceLocation particleId,
-                          int count,
-                          double dx, double dy, double dz) {
+            double motX, double motY, double motZ,
+            ResourceLocation particleId,
+            int count,
+            double dx, double dy, double dz) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -69,7 +69,8 @@ public class ParticlePacket {
     public static void handle(ParticlePacket pkt, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ClientLevel level = Minecraft.getInstance().level;
-            if (level == null) return;
+            if (level == null)
+                return;
 
             ParticleType<?> type = ForgeRegistries.PARTICLE_TYPES.getValue(pkt.particleId);
             if (type instanceof SimpleParticleType simpleType) {

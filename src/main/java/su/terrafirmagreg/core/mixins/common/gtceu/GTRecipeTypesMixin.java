@@ -1,8 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
-import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,26 +7,47 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+
 @Mixin(value = GTRecipeTypes.class, remap = false)
 public abstract class GTRecipeTypesMixin {
 
-    @Shadow @Final public static GTRecipeType LASER_ENGRAVER_RECIPES;
-    @Shadow @Final public static GTRecipeType CHEMICAL_RECIPES;
-    @Shadow @Final public static GTRecipeType ARC_FURNACE_RECIPES;
-    @Shadow @Final public static GTRecipeType MACERATOR_RECIPES;
-    @Shadow @Final public static GTRecipeType CHEMICAL_BATH_RECIPES;
-    @Shadow @Final public static GTRecipeType CENTRIFUGE_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType LASER_ENGRAVER_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType CHEMICAL_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType ARC_FURNACE_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType MACERATOR_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType CHEMICAL_BATH_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType CENTRIFUGE_RECIPES;
 
-    @Shadow @Final public static GTRecipeType IMPLOSION_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType IMPLOSION_RECIPES;
 
-    @Shadow @Final public static GTRecipeType FERMENTING_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType FERMENTING_RECIPES;
 
-    @Shadow @Final public static GTRecipeType PYROLYSE_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType PYROLYSE_RECIPES;
 
     /**
-     * Нужно для того, чтобы настроить доп. рецепты.
-     * Расширяет кол-во слотов в некоторых машинах.
-     * */
+     * Нужно для того, чтобы настроить доп. рецепты. Расширяет кол-во слотов в некоторых машинах.
+     */
     @Inject(method = "init", at = @At(value = "TAIL"), remap = false)
     private static void tfg$init(CallbackInfo ci) {
 

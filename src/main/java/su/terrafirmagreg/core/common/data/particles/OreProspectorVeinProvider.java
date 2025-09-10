@@ -15,8 +15,8 @@ public class OreProspectorVeinProvider implements ParticleProvider<SimpleParticl
 
     @Override
     public Particle createParticle(SimpleParticleType type, ClientLevel level,
-                                   double x, double y, double z,
-                                   double dx, double dy, double dz) {
+            double x, double y, double z,
+            double dx, double dy, double dz) {
         OreProspectorVein particle = new OreProspectorVein(level, x, y, z);
         particle.pickSprite(spriteSet);
         return particle;

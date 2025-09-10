@@ -4,11 +4,12 @@ import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
 
@@ -19,14 +20,16 @@ public class SyringeClientHandler {
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         ItemColor colorProvider = (stack, tintIndex) -> {
             // Only tint layer 1 and 2. Layer 0 is the base texture.
-            if (tintIndex == 0) return 0xFFFFFF;
+            if (tintIndex == 0)
+                return 0xFFFFFF;
 
             // Applies color tints to filled dna syringes.
             if (stack.hasTag()) {
                 assert stack.getTag() != null;
                 if (stack.getTag().contains("mob_type")) {
                     String mobId = stack.getTag().getString("mob_type");
-                    if (mobId.isEmpty()) return 0xFFFFFF; // Fallback for if a player gets a blank item through cheats.
+                    if (mobId.isEmpty())
+                        return 0xFFFFFF; // Fallback for if a player gets a blank item through cheats.
 
                     EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(mobId));
                     if (type == null) {
@@ -43,7 +46,8 @@ public class SyringeClientHandler {
                         return eggColor & 0xFFFFFF; // strip alpha if present.
                     }
 
-                    // If SpawnEggItem.byId returned null, fallback: try to find any spawn egg item that targets this type.
+                    // If SpawnEggItem.byId returned null, fallback: try to find any spawn egg item that targets this
+                    // type.
                     for (var item : ForgeRegistries.ITEMS.getValues()) {
                         if (item instanceof SpawnEggItem se) {
                             try {
