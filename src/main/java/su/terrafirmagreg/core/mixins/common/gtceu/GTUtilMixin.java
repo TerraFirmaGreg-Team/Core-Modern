@@ -30,7 +30,7 @@ public abstract class GTUtilMixin {
             // for tfc overworld: EnvironmentHelpers.isRainingOrSnowing(world,blockPos) instead of world.isRaining()
             // just incase I left it how it was before for other dimensions
             if (world.dimension() == Level.OVERWORLD) {
-                // world.isDay() sometimes gives false due to skyDarken not being < 4 sometimes
+                // world.isDay() sometimes gives false due to skyDarken not being < 4 sometimes during day
                 // (maybe smth to do with vanilla or tfc rain logic idk)
                 return Calendars.get(world).getCalendarDayTime() <= 12000
                         && !EnvironmentHelpers.isRainingOrSnowing(world, blockPos);
