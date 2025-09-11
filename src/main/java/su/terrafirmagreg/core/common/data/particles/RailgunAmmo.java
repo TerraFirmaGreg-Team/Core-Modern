@@ -9,7 +9,7 @@ public class RailgunAmmo extends TextureSheetParticle {
     private final SpriteSet sprites;
 
     public RailgunAmmo(ClientLevel level, double x, double y, double z,
-                       double dx, double dy, double dz, SpriteSet sprites) {
+            double dx, double dy, double dz, SpriteSet sprites) {
         super(level, x, y, z, dx, dy, dz);
         this.sprites = sprites;
         this.setSpriteFromAge(sprites);

@@ -1,11 +1,12 @@
 package su.terrafirmagreg.core.compat.gtceu.properties;
 
+import javax.annotation.Nullable;
+
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.IMaterialProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.MaterialProperties;
-import lombok.Getter;
 
-import javax.annotation.Nullable;
+import lombok.Getter;
 
 @Getter
 public final class TFCProperty implements IMaterialProperty {
@@ -27,7 +28,8 @@ public final class TFCProperty implements IMaterialProperty {
         this(forgingTemp, weldingTemp, meltTemp, outputMaterial, tier, 100);
     }
 
-    public TFCProperty(int forgingTemp, int weldingTemp, int meltTemp, @Nullable Material outputMaterial, int tier, int percentOfMaterial) {
+    public TFCProperty(int forgingTemp, int weldingTemp, int meltTemp, @Nullable Material outputMaterial, int tier,
+            int percentOfMaterial) {
         setForgingTemp(forgingTemp);
         setWeldingTemp(weldingTemp);
         setMeltTemp(meltTemp);
@@ -69,5 +71,6 @@ public final class TFCProperty implements IMaterialProperty {
     }
 
     @Override
-    public void verifyProperty(MaterialProperties materialProperties) {}
+    public void verifyProperty(MaterialProperties materialProperties) {
+    }
 }

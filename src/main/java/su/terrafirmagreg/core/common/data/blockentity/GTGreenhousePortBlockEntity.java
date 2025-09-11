@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.common.data.blockentity;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -11,8 +14,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
 public class GTGreenhousePortBlockEntity extends BlockEntity implements IFluidHandler {
@@ -74,7 +76,8 @@ public class GTGreenhousePortBlockEntity extends BlockEntity implements IFluidHa
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, GTGreenhousePortBlockEntity self) {
-        if (level.isClientSide) return;
+        if (level.isClientSide)
+            return;
         for (Direction dir : Direction.values()) {
             BlockPos neighborPos = pos.relative(dir);
             BlockEntity neighbor = level.getBlockEntity(neighborPos);

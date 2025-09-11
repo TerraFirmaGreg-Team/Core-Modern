@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.data.events;
 
-import lombok.Getter;
+import java.util.*;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -15,7 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
-import java.util.*;
+import lombok.Getter;
 
 public class WeakOreProspectorEventHelper {
 
@@ -41,19 +42,23 @@ public class WeakOreProspectorEventHelper {
         Player player = event.getEntity();
         Level level = player.level();
 
-        if (level.isClientSide()) return;
+        if (level.isClientSide())
+            return;
 
         ItemStack held = player.getItemInHand(event.getHand());
-        if (!held.is(itemTag)) return;
+        if (!held.is(itemTag))
+            return;
 
-        if (player.getCooldowns().isOnCooldown(held.getItem())) return;
+        if (player.getCooldowns().isOnCooldown(held.getItem()))
+            return;
 
         Vec3 eyePos = player.getEyePosition();
         Vec3 lookDir = player.getLookAngle().normalize();
 
         Vec3 up = new Vec3(0, 1, 0);
         Vec3 right = lookDir.cross(up).normalize();
-        if (right.lengthSqr() == 0) right = new Vec3(1, 0, 0);
+        if (right.lengthSqr() == 0)
+            right = new Vec3(1, 0, 0);
         up = right.cross(lookDir).normalize();
 
         Set<BlockPos> checkedPositions = new HashSet<>();
@@ -73,7 +78,8 @@ public class WeakOreProspectorEventHelper {
                     Vec3 worldPos = eyePos.add(localPos);
 
                     BlockPos pos = BlockPos.containing(worldPos);
-                    if (!checkedPositions.add(pos)) continue;
+                    if (!checkedPositions.add(pos))
+                        continue;
 
                     Block block = level.getBlockState(pos).getBlock();
                     if (block.defaultBlockState().is(oreTag)) {
@@ -86,21 +92,18 @@ public class WeakOreProspectorEventHelper {
         }
 
         if (oreCounts.isEmpty()) {
-            player.sendSystemMessage(Component.translatable("tfg.toast.ore_prospector_none").withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(
+                    Component.translatable("tfg.toast.ore_prospector_none").withStyle(ChatFormatting.GRAY));
         } else {
 
             player.sendSystemMessage(
                     Component.translatable(
                             "tfg.toast.ore_prospector_message",
                             length,
-                            "??"
-                    ).withStyle(ChatFormatting.GOLD)
-            );
-            oreCounts.forEach((name, oreCount) ->
-                    player.sendSystemMessage(Component.literal("- ")
-                            .append(name)
-                            .withStyle(ChatFormatting.AQUA))
-            );
+                            "??").withStyle(ChatFormatting.GOLD));
+            oreCounts.forEach((name, oreCount) -> player.sendSystemMessage(Component.literal("- ")
+                    .append(name)
+                    .withStyle(ChatFormatting.AQUA)));
         }
 
         if (player instanceof ServerPlayer sp) {

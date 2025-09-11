@@ -11,18 +11,18 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DecorativeFloatingPlantBlock extends DecorativePlantBlock {
 
-	public DecorativeFloatingPlantBlock(ExtendedProperties properties, VoxelShape shape) {
-		super(properties, shape);
-	}
+    public DecorativeFloatingPlantBlock(ExtendedProperties properties, VoxelShape shape) {
+        super(properties, shape);
+    }
 
-	@Override
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-		FluidState fluid = level.getFluidState(pos.below());
-		return fluid.is(TFCTags.Fluids.WATER_LIKE) || fluid.is(TFCTags.Fluids.LAVA_LIKE);
-	}
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        FluidState fluid = level.getFluidState(pos.below());
+        return fluid.is(TFCTags.Fluids.WATER_LIKE) || fluid.is(TFCTags.Fluids.LAVA_LIKE);
+    }
 
-	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return defaultBlockState();
-	}
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return defaultBlockState();
+    }
 }

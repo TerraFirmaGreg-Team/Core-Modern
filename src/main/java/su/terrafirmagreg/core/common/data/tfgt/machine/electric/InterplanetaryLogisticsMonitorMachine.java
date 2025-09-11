@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 
+import java.util.*;
+
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.EnumSelectorWidget;
 import com.gregtechceu.gtceu.api.gui.widget.GhostCircuitSlotWidget;
@@ -19,14 +21,15 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.gui.widget.layout.Align;
 import com.lowdragmc.lowdraglib.gui.widget.layout.Layout;
 import com.lowdragmc.lowdraglib.utils.Position;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
-import java.util.*;
 
 public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implements IUIMachine {
     public InterplanetaryLogisticsMonitorMachine(IMachineBlockEntity holder) {
@@ -44,7 +47,8 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
         private InterplanetaryLogisticsNetwork network;
 
         private void updateIfServer() {
-            if (network == null) return;
+            if (network == null)
+                return;
             network.markDirty();
         }
 
@@ -69,9 +73,11 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
         }
 
         private DraggableScrollableWidgetGroup getDragContainer() {
-            return new DraggableScrollableWidgetGroup(4, 4, INNER_WIDTH, INNER_HEIGHT).setDraggable(false).setScrollable(true)
+            return new DraggableScrollableWidgetGroup(4, 4, INNER_WIDTH, INNER_HEIGHT).setDraggable(false)
+                    .setScrollable(true)
                     .setScrollWheelDirection(DraggableScrollableWidgetGroup.ScrollWheelDirection.VERTICAL)
-                    .setYScrollBarWidth(4).setYBarStyle(ColorPattern.RED.rectTexture(), ColorPattern.WHITE.rectTexture().setRadius(2));
+                    .setYScrollBarWidth(4)
+                    .setYBarStyle(ColorPattern.RED.rectTexture(), ColorPattern.WHITE.rectTexture().setRadius(2));
         }
 
         private final DraggableScrollableWidgetGroup mainPage = getDragContainer();
@@ -82,7 +88,8 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             var count = buffer.readInt();
             for (int i = 0; i < count; i++) {
                 var nbt = buffer.readNbt();
-                if (nbt == null) continue;
+                if (nbt == null)
+                    continue;
 
                 var part = new NetworkPart(nbt);
                 parts.add(part);
@@ -101,7 +108,8 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             List<WidgetGroup> senderPages = new ArrayList<>();
             List<WidgetGroup> receiverPages = new ArrayList<>();
             for (var part : parts) {
-                if (part.getUiLabel().isBlank()) part.setUiLabel("[unnamed]");
+                if (part.getUiLabel().isBlank())
+                    part.setUiLabel("[unnamed]");
 
                 WidgetGroup rowGroup = new WidgetGroup(0, 0, INNER_WIDTH - 5, 22);
                 rowGroup.setLayout(Layout.HORIZONTAL_CENTER);
@@ -115,20 +123,23 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 rowGroup.addWidget(lbl);
 
                 rowGroup.addWidget(new ButtonWidget(0, 0, 16, 16, GuiTextures.BUTTON_RIGHT, (v) -> {
-                    addWidget(part.isReceiverPart() ? createReceiverPartStatusPage(part) : createSenderPartStatusPage(part));
+                    addWidget(part.isReceiverPart() ? createReceiverPartStatusPage(part)
+                            : createSenderPartStatusPage(part));
                     mainPage.setVisible(false);
                 }));
 
-                if (part.isReceiverPart()) receiverPages.add(rowGroup);
-                else senderPages.add(rowGroup);
+                if (part.isReceiverPart())
+                    receiverPages.add(rowGroup);
+                else
+                    senderPages.add(rowGroup);
             }
 
             container.addWidget(new LabelWidget(0, 0, "Senders"));
-            for (var page: senderPages) {
+            for (var page : senderPages) {
                 container.addWidget(page);
             }
             container.addWidget(new LabelWidget(0, 0, "Receivers"));
-            for (var page: receiverPages) {
+            for (var page : receiverPages) {
                 container.addWidget(page);
             }
 
@@ -146,18 +157,17 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                     .addWidget(new ButtonWidget(2, 2, 16, 16, GuiTextures.BUTTON_LEFT, (v) -> {
                         removeWidget(dragContainer);
                         mainPage.setVisible(true);
-                 })).addWidget(new TextFieldWidget(18, 2, 80, 16, part::getUiLabel, (s) -> {
+                    })).addWidget(new TextFieldWidget(18, 2, 80, 16, part::getUiLabel, (s) -> {
                         part.setUiLabel(s);
                         updateIfServer();
-                 })).addWidget(new LabelWidget(102, 5, () -> part.getPartId().getUiString()));
-
+                    })).addWidget(new LabelWidget(102, 5, () -> part.getPartId().getUiString()));
 
             var configListContainer = new WidgetGroup(0, 0, INNER_WIDTH - 5, 20);
             configListContainer.setDynamicSized(true);
             configListContainer.setLayout(Layout.VERTICAL_CENTER);
             configListContainer.setBackground(GuiTextures.BACKGROUND_INVERSE);
 
-            for (var config: part.senderLogisticsConfigs) {
+            for (var config : part.senderLogisticsConfigs) {
                 configListContainer.addWidget(createSenderLogisticsConfigRow(part, config));
             }
 
@@ -167,7 +177,8 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 var newEntry = new NetworkSenderConfigEntry(part.getPartId());
                 part.senderLogisticsConfigs.add(newEntry);
                 updateIfServer();
-                configListContainer.addWidget(configListContainer.widgets.size() - 1, createSenderLogisticsConfigRow(part, newEntry));
+                configListContainer.addWidget(configListContainer.widgets.size() - 1,
+                        createSenderLogisticsConfigRow(part, newEntry));
             }));
 
             group.addWidget(topRow).addWidget(configListContainer);
@@ -188,15 +199,21 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
             group.addWidget(new LabelWidget(0, 6, "Destination:"));
 
-            var destinationSelector = new SelectorWidget(57, 2, 80, 18, new ArrayList<>(), -1).setButtonBackground(GuiTextures.BUTTON);
-            if (!isRemote()) destinationSelector.setCandidatesSupplier(() -> parts.stream().filter((p) -> p.isReceiverPart() && !Objects.equals(p.getUiLabel(), "[unnamed]")).map(NetworkPart::getUiLabel).toList());
+            var destinationSelector = new SelectorWidget(57, 2, 80, 18, new ArrayList<>(), -1)
+                    .setButtonBackground(GuiTextures.BUTTON);
+            if (!isRemote())
+                destinationSelector.setCandidatesSupplier(() -> parts.stream()
+                        .filter((p) -> p.isReceiverPart() && !Objects.equals(p.getUiLabel(), "[unnamed]"))
+                        .map(NetworkPart::getUiLabel).toList());
             destinationSelector.setValue("[none]");
-            for (var rPart: parts) {
-                if (rPart.getPartId() == config.getReceiverPartID()) destinationSelector.setValue(rPart.getUiLabel());
+            for (var rPart : parts) {
+                if (rPart.getPartId() == config.getReceiverPartID())
+                    destinationSelector.setValue(rPart.getUiLabel());
             }
 
             destinationSelector.setOnChanged((v) -> {
-                parts.stream().filter(p -> Objects.equals(p.getUiLabel(), v)).findFirst().ifPresent(s -> config.setReceiverPartID(s.getPartId()));
+                parts.stream().filter(p -> Objects.equals(p.getUiLabel(), v)).findFirst()
+                        .ifPresent(s -> config.setReceiverPartID(s.getPartId()));
                 updateIfServer();
             });
 
@@ -208,19 +225,26 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             });
 
             var itemFilterGroup = new WidgetGroup(Position.of(160, 2))
-                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 0, 0, 0).setChangeListener(this::updateIfServer))
-                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 1, 18, 0).setChangeListener(this::updateIfServer))
-                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 2, 36, 0).setChangeListener((this::updateIfServer)));
+                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 0, 0, 0)
+                            .setChangeListener(this::updateIfServer))
+                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 1, 18, 0)
+                            .setChangeListener(this::updateIfServer))
+                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 2, 36, 0)
+                            .setChangeListener((this::updateIfServer)));
 
-            inactivityIntInput.setVisible(config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.INACTIVITY);
+            inactivityIntInput
+                    .setVisible(config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.INACTIVITY);
             itemFilterGroup.setVisible(config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM);
 
-            var modeSelector = new EnumSelectorWidget<>(140, 1, 20, 20, NetworkSenderConfigEntry.TriggerMode.values(), config.getCurrentSendTrigger(), (v) -> {
-                config.setCurrentSendTrigger(v);
-                inactivityIntInput.setVisible(config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.INACTIVITY);
-                itemFilterGroup.setVisible(config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM);
-                updateIfServer();
-            });
+            var modeSelector = new EnumSelectorWidget<>(140, 1, 20, 20, NetworkSenderConfigEntry.TriggerMode.values(),
+                    config.getCurrentSendTrigger(), (v) -> {
+                        config.setCurrentSendTrigger(v);
+                        inactivityIntInput.setVisible(
+                                config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.INACTIVITY);
+                        itemFilterGroup.setVisible(
+                                config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM);
+                        updateIfServer();
+                    });
 
             group.addWidget(inactivityIntInput).addWidget(itemFilterGroup).addWidget(modeSelector);
 
@@ -230,11 +254,13 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             var receiverCircuitInv = new CustomItemStackHandler(1);
 
             var senderDistinctCircuit = new GhostCircuitSlotWidget();
-            senderDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY).setSelfPosition(40, 25);
+            senderDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY).setSelfPosition(40,
+                    25);
             senderDistinctCircuit.setCircuitInventory(senderCircuitInv);
             senderDistinctCircuit.setCircuitValue(config.getSenderDistinctInventory());
             senderCircuitInv.setOnContentsChanged(() -> {
-                config.setSenderDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(senderCircuitInv.getStackInSlot(0)));
+                config.setSenderDistinctInventory(
+                        IntCircuitBehaviour.getCircuitConfiguration(senderCircuitInv.getStackInSlot(0)));
                 updateIfServer();
 
             });
@@ -242,11 +268,13 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             group.addWidget(new LabelWidget(65, 27, "Receiver:"));
 
             var receiverDistinctCircuit = new GhostCircuitSlotWidget();
-            receiverDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY).setSelfPosition(115, 25);
+            receiverDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY)
+                    .setSelfPosition(115, 25);
             receiverDistinctCircuit.setCircuitInventory(receiverCircuitInv);
             receiverDistinctCircuit.setCircuitValue(config.getReceiverDistinctInventory());
             receiverCircuitInv.setOnContentsChanged(() -> {
-                config.setReceiverDistinctInventory(IntCircuitBehaviour.getCircuitConfiguration(receiverCircuitInv.getStackInSlot(0)));
+                config.setReceiverDistinctInventory(
+                        IntCircuitBehaviour.getCircuitConfiguration(receiverCircuitInv.getStackInSlot(0)));
                 updateIfServer();
 
             });
@@ -265,7 +293,6 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             group.setLayout(Layout.VERTICAL_CENTER);
             group.setDynamicSized(true);
 
-
             var topRow = new WidgetGroup(0, 0, INNER_WIDTH - 5, 20)
                     .addWidget(new ButtonWidget(2, 2, 16, 16, GuiTextures.BUTTON_LEFT, (v) -> {
                         dragContainer.setVisible(false);
@@ -282,12 +309,16 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             configListContainer.setLayout(Layout.VERTICAL_CENTER);
             configListContainer.setBackground(GuiTextures.BACKGROUND_INVERSE);
 
-            for (var config: part.receiverLogisticsConfigs) {
+            for (var config : part.receiverLogisticsConfigs) {
                 var logisticsConfigGroup = new WidgetGroup(4, 4, INNER_WIDTH - 13, 30);
 
                 GuiTextureGroup circuitTexture;
-                if (config.getDistinctInventory() == 0) circuitTexture = new GuiTextureGroup(GuiTextures.SLOT, new ItemStackTexture(IntCircuitBehaviour.stack(0)), new ItemStackTexture(Items.BARRIER));
-                else circuitTexture = new GuiTextureGroup(GuiTextures.SLOT, new ItemStackTexture(IntCircuitBehaviour.stack(config.getDistinctInventory())));
+                if (config.getDistinctInventory() == 0)
+                    circuitTexture = new GuiTextureGroup(GuiTextures.SLOT,
+                            new ItemStackTexture(IntCircuitBehaviour.stack(0)), new ItemStackTexture(Items.BARRIER));
+                else
+                    circuitTexture = new GuiTextureGroup(GuiTextures.SLOT,
+                            new ItemStackTexture(IntCircuitBehaviour.stack(config.getDistinctInventory())));
                 var circuitWidget = new ImageWidget(6, 6, 18, 18, circuitTexture);
 
                 var cooldownIntInput = new IntInputWidget(160, 5, 100, 20, config::getCurrentCooldown, (v) -> {
@@ -298,11 +329,12 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 cooldownIntInput.setMin(0).setMax(1800);
                 cooldownIntInput.setVisible(config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.COOLDOWN);
 
-                var modeSelector = new EnumSelectorWidget<>(140, 5, 20, 20, NetworkReceiverConfigEntry.LogicMode.values(), config.getCurrentMode(), (v) -> {
-                    config.setCurrentMode(v);
-                    cooldownIntInput.setVisible(v == NetworkReceiverConfigEntry.LogicMode.COOLDOWN);
-                    updateIfServer();
-                });
+                var modeSelector = new EnumSelectorWidget<>(140, 5, 20, 20,
+                        NetworkReceiverConfigEntry.LogicMode.values(), config.getCurrentMode(), (v) -> {
+                            config.setCurrentMode(v);
+                            cooldownIntInput.setVisible(v == NetworkReceiverConfigEntry.LogicMode.COOLDOWN);
+                            updateIfServer();
+                        });
 
                 logisticsConfigGroup.addWidget(circuitWidget).addWidget(modeSelector).addWidget(cooldownIntInput);
                 configListContainer.addWidget(logisticsConfigGroup);

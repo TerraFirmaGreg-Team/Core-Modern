@@ -48,6 +48,7 @@
     "common.gtceu.ModelManagerMixin",
     "common.gtceu.NotifiableItemStackHandlerMixin",
     "common.gtceu.SteamBoilerMachineMixin",
+    "common.gtceu.GTUtilMixin",
     "common.gtceu.SurfaceRockBlockMixin",
     "common.gtceu.TagPrefixItemMixin",
     "common.gtceu.ToolHelperMixin",

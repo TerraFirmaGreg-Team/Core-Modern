@@ -1,10 +1,14 @@
 package su.terrafirmagreg.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -15,21 +19,20 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.common.*;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
 import su.terrafirmagreg.core.common.data.TFGEffects;
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
+import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.network.*;
 import su.terrafirmagreg.core.world.TFGFeatures;
 import su.terrafirmagreg.core.world.TFGSurfaceRules;
-import su.terrafirmagreg.core.network.*;
 
 @Mod(TFGCore.MOD_ID)
 public final class TFGCore {
@@ -92,8 +95,7 @@ public final class TFGCore {
     private static void setupFixForGlobalServerConfig() {
         ModLoadingContext.get().registerExtensionPoint(
                 IExtensionPoint.DisplayTest.class,
-                () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true)
-        );
+                () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
     }
 
     @SubscribeEvent

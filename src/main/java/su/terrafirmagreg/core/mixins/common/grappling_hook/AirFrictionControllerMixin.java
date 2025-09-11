@@ -5,24 +5,26 @@
  */
 package su.terrafirmagreg.core.mixins.common.grappling_hook;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.yyon.grapplinghook.controllers.AirfrictionController;
 import com.yyon.grapplinghook.controllers.GrappleController;
 import com.yyon.grapplinghook.utils.GrappleCustomization;
 import com.yyon.grapplinghook.utils.Vec;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = AirfrictionController.class, remap = false)
 public class AirFrictionControllerMixin extends GrappleController {
 
-    public AirFrictionControllerMixin(int grapplehookEntityId, int entityId, Level world, Vec pos, int controllerid, GrappleCustomization custom) {
+    public AirFrictionControllerMixin(int grapplehookEntityId, int entityId, Level world, Vec pos, int controllerid,
+            GrappleCustomization custom) {
         super(grapplehookEntityId, entityId, world, pos, controllerid, custom);
     }
 

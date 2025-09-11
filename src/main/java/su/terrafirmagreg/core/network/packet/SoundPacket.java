@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.network.packet;
 
+import java.util.function.Supplier;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -8,8 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class SoundPacket {
     private final double x, y, z;
@@ -40,14 +40,14 @@ public class SoundPacket {
                 buf.readDouble(), buf.readDouble(), buf.readDouble(),
                 buf.readResourceLocation(),
                 buf.readFloat(),
-                buf.readFloat()
-        );
+                buf.readFloat());
     }
 
     public static void handle(SoundPacket pkt, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ClientLevel level = Minecraft.getInstance().level;
-            if (level == null) return;
+            if (level == null)
+                return;
 
             SoundEvent sound = BuiltInRegistries.SOUND_EVENT.get(pkt.soundId);
             if (sound != null) {

@@ -13,10 +13,13 @@ plugins {
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'com.diffplug.spotless' version '7.2.1'
 }
 
 apply from: 'gradle/scripts/helpers.gradle'
 apply plugin: 'org.spongepowered.mixin'
+
+import com.diffplug.gradle.spotless.JsonExtension
 
 // Early Assertions
 assertProperty 'mod_version'
@@ -198,4 +201,35 @@ tasks.named('jar', Jar).configure {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+/////////////
+// Spotless
+spotless {
+
+    java {
+        target 'src/*/java/su/**/*.java'
+
+        endWithNewline()
+        indentWithSpaces()
+        removeUnusedImports()
+        toggleOffOn()
+        eclipse().configFile 'codeformat/codeformat.xml'
+        importOrderFile 'codeformat/tfg.importorder'
+
+        bumpThisNumberIfACustomStepChanges(1)
+    }
+
+    json {
+        target 'src/*/resources/**/*.json'
+        targetExclude 'src/generated/resources/**'
+        var biomeConfig = it.new JsonExtension.BiomeJson(null)
+        try {
+            biomeConfig.downloadDir(new File(rootDir, ".gradle/biome").absolutePath)
+        } catch (Exception ignored) {
+        }
+        addStep(biomeConfig.createStep())
+        indentWithSpaces(2)
+        endWithNewline()
+    }
 }
