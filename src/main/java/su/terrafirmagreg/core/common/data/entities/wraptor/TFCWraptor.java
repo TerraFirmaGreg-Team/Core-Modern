@@ -1,10 +1,12 @@
 package su.terrafirmagreg.core.common.data.entities.wraptor;
 
 import java.util.List;
+import java.util.function.IntFunction;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
 import com.ninni.species.registry.SpeciesSoundEvents;
 
@@ -16,13 +18,20 @@ import net.dries007.tfc.config.animals.ProducingAnimalConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.events.AnimalProductEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
@@ -33,6 +42,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.MinecraftForge;
@@ -58,6 +68,8 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
     static Item woolItem = TFGItems.WRAPTOR_WOOL.get();
     static double produceFamiliarity = 0.15;
 
+    private static final EntityDataAccessor<Integer> DATA_VARIANT_ID = SynchedEntityData.defineId(TFCWraptor.class, EntityDataSerializers.INT);
+
     public final AnimationState roarAnimationState = new AnimationState();
     public final AnimationState fallingAnimationState = new AnimationState();
 
@@ -76,9 +88,35 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
                 .add(Attributes.MOVEMENT_SPEED, (double) 0.2F).add(Attributes.KNOCKBACK_RESISTANCE, (double) 0.25F);
     }
 
+    @Override
+    public void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_VARIANT_ID, WraptorVariant.DEFAULT.id);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("WraptorVariant", this.getVariant().id);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.setVariant(WraptorVariant.byId(tag.getInt("WraptorVariant")));
+    }
+
     public static boolean spawnRules(EntityType<? extends TFCWraptor> type, LevelAccessor level, MobSpawnType spawn,
             BlockPos pos, RandomSource rand) {
         return level.getBlockState(pos).isAir();
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
+            SpawnGroupData spawnData, CompoundTag tag) {
+        spawnData = super.finalizeSpawn(level, difficulty, reason, spawnData, tag);
+        this.setVariant(getRandomWraptorType());
+        return spawnData;
     }
 
     // Config Overrides
@@ -150,8 +188,7 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
 
-        if (other != this && this.getGender() == Gender.FEMALE && other instanceof TFCWraptor otherFertile
-                && !isFertilized()) {
+        if (other != this && this.getGender() == Gender.FEMALE && other instanceof TFCWraptor otherFertile && !isFertilized()) {
             this.onFertilized(otherFertile);
             otherFertile.setProducedTick(0);
             this.setProductsCooldown();
@@ -186,8 +223,7 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
                 }
             }
         }
-        AnimalProductEvent event = new AnimalProductEvent(level(), blockPosition(), null, this, stack, ItemStack.EMPTY,
-                1);
+        AnimalProductEvent event = new AnimalProductEvent(level(), blockPosition(), null, this, stack, ItemStack.EMPTY, 1);
         if (!MinecraftForge.EVENT_BUS.post(event)) {
             addUses(event.getUses());
         }
@@ -206,15 +242,13 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
     }
 
     @Override
-    public @NotNull List<ItemStack> onSheared(@Nullable Player player, @NotNull ItemStack item, Level level,
-            BlockPos pos, int fortune) {
+    public @NotNull List<ItemStack> onSheared(@Nullable Player player, @NotNull ItemStack item, Level level, BlockPos pos, int fortune) {
 
         setWoolCooldown();
         playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
 
         // if the event was not cancelled
-        AnimalProductEvent event = new AnimalProductEvent(level, pos, player, this, getWoolItem(woolItem, maxWool),
-                item, 1);
+        AnimalProductEvent event = new AnimalProductEvent(level, pos, player, this, getWoolItem(woolItem, maxWool), item, 1);
         if (!MinecraftForge.EVENT_BUS.post(event)) {
             addUses(event.getUses());
         }
@@ -241,4 +275,49 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
         return TFCWraptorAi.makeWraptorBrain(brainProvider().makeBrain(dynamic));
     }
 
+    public WraptorVariant getVariant() {
+        return WraptorVariant.byId(this.entityData.get(DATA_VARIANT_ID));
+    }
+
+    public void setVariant(WraptorVariant variant) {
+        this.entityData.set(DATA_VARIANT_ID, variant.id);
+    }
+
+    private WraptorVariant getRandomWraptorType() {
+        int rand = random.nextIntBetweenInclusive(0, 49);
+        if (rand == 0)
+            return WraptorVariant.TRANS;
+        else if (rand == 1)
+            return WraptorVariant.GOTH;
+        else
+            return WraptorVariant.DEFAULT;
+    }
+
+    public static enum WraptorVariant implements StringRepresentable {
+        DEFAULT(0, "default"),
+        TRANS(1, "trans"),
+        GOTH(2, "goth");
+
+        private static final IntFunction<WraptorVariant> BY_ID = ByIdMap.sparse(WraptorVariant::id, values(), DEFAULT);
+        public static final Codec<WraptorVariant> CODEC = StringRepresentable.fromEnum(WraptorVariant::values);
+        final int id;
+        private final String name;
+
+        private WraptorVariant(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public @NotNull String getSerializedName() {
+            return this.name;
+        }
+
+        public int id() {
+            return this.id;
+        }
+
+        public static WraptorVariant byId(int id) {
+            return (WraptorVariant) BY_ID.apply(id);
+        }
+    }
 }

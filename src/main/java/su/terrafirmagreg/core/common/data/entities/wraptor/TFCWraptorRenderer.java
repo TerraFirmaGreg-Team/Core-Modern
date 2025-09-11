@@ -20,7 +20,11 @@ public class TFCWraptorRenderer extends MobRenderer<TFCWraptor, TFCWraptorModel<
     }
 
     public ResourceLocation getTextureLocation(TFCWraptor entity) {
-        if (!entity.getName().getString().equalsIgnoreCase("goth")
+        if (entity.getVariant() == TFCWraptor.WraptorVariant.TRANS) {
+            return TEXTURE_TRANS;
+        } else if (entity.getVariant() == TFCWraptor.WraptorVariant.GOTH) {
+            return TEXTURE_GOTH;
+        } else if (!entity.getName().getString().equalsIgnoreCase("goth")
                 && !entity.getName().getString().equalsIgnoreCase("susie")) {
             return entity.getName().getString().equalsIgnoreCase("trans") ? TEXTURE_TRANS : TEXTURE;
         } else {
