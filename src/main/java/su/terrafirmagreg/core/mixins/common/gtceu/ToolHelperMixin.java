@@ -1,7 +1,14 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.llamalad7.mixinextras.sugar.Local;
+
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
 import net.dries007.tfc.common.capabilities.forge.ForgingBonus;
 import net.minecraft.core.BlockPos;
@@ -13,39 +20,30 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ToolHelper.class, remap = false)
 public abstract class ToolHelperMixin {
 
     /**
-     * Исправляет баг при ломании AOE инстрами кучи угля.
-     * Возможно нужно добавить ? (я забыл, что, но это было где-то)
-     * */
+     * Исправляет баг при ломании AOE инстрами кучи угля. Возможно нужно добавить ? (я забыл, что, но это было где-то)
+     */
     @Redirect(method = "removeBlockRoutine", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;destroy(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V"), remap = true)
-    private static void tfg$removeBlockRoutine$block$destroy(Block instance, LevelAccessor pLevel, BlockPos pPos, BlockState pState, BlockState state, Level world, ServerPlayer player, BlockPos pos, boolean playSound) {
+    private static void tfg$removeBlockRoutine$block$destroy(Block instance, LevelAccessor pLevel, BlockPos pPos,
+            BlockState pState, BlockState state, Level world, ServerPlayer player, BlockPos pos, boolean playSound) {
         if (instance instanceof CharcoalPileBlock charcoalPileBlock) {
             charcoalPileBlock.onDestroyedByPlayer(state, world, pPos, player, true, state.getFluidState());
         }
     }
 
     /*
-        Fixes forging bonuses not affecting GTCEU tools.
-        Essentially just copies how TFC applies its mixin to vanilla mechanics and applies it instead to GT's ToolHelper class
-        Now rewritten to not rely on obfuscated methods and use local random provider
+     * Fixes forging bonuses not affecting GTCEU tools. Essentially just copies how TFC applies its mixin to vanilla
+     * mechanics and applies it instead to GT's ToolHelper class Now rewritten to not rely on obfuscated methods and use
+     * local random provider
      */
 
-    @Inject(method = "damageItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;I)V",
-            at = @At(value = "INVOKE",
-                    target = "Lcom/gregtechceu/gtceu/api/item/IGTTool;isElectric()Z",
-                    shift = At.Shift.AFTER
-            ),
-            cancellable = true)
-    private static void applyForgingBonusToPreventItemDamage(ItemStack stack, LivingEntity user, int damage, CallbackInfo info, @Local RandomSource random) {
+    @Inject(method = "damageItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;I)V", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/item/IGTTool;isElectric()Z", shift = At.Shift.AFTER), cancellable = true)
+    private static void applyForgingBonusToPreventItemDamage(ItemStack stack, LivingEntity user, int damage,
+            CallbackInfo info, @Local RandomSource random) {
         if (ForgingBonus.applyLikeUnbreaking(stack, random)) {
             info.cancel();
         }

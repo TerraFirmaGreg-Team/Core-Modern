@@ -1,0 +1,41 @@
+package su.terrafirmagreg.core.mixins.common.gtceu;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+
+import com.gregtechceu.gtceu.utils.GTUtil;
+
+import net.dries007.tfc.util.EnvironmentHelpers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+
+@Mixin(value = GTUtil.class, remap = false)
+public abstract class GTUtilMixin {
+
+    /**
+     * @author FiNiTe
+     * @reason makes GT solar machines understand TFC's rain mechanics <br>
+     *         the EnvironmentHelpers thing I found from
+     *         https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.20.x/src/main/java/net/dries007/tfc/mixin/LevelMixin.java
+     */
+    @Overwrite
+    public static boolean canSeeSunClearly(Level world, BlockPos blockPos) {
+        BlockPos bLockPosAbove = blockPos.above();
+        if (!world.canSeeSky(bLockPosAbove)) {
+            return false;
+        } else {
+            Biome biome = (Biome) world.getBiome(bLockPosAbove).value();
+            // for tfc overworld: EnvironmentHelpers.isRainingOrSnowing(world,blockPos) instead of world.isRaining()
+            // just incase I left it how it was before for other dimensions
+            if (world.dimension() == Level.OVERWORLD) {
+                return world.isDay() && !EnvironmentHelpers.isRainingOrSnowing(world, blockPos);
+            } else if (!world.isRaining()
+                    || !biome.warmEnoughToRain(bLockPosAbove) && !biome.coldEnoughToSnow(bLockPosAbove)) {
+                return world.isDay();
+            } else {
+                return false;
+            }
+        }
+    }
+}

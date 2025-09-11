@@ -1,6 +1,11 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import java.util.Map;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.collect.ImmutableMap;
+
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
@@ -15,79 +20,71 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
-import su.terrafirmagreg.core.common.data.TFGTags;
 
-import java.util.Map;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 // Mostly copied from TFC's EpiphytePlantBlock
 
-public class DecorativeAttachedPlantBlock extends DecorativePlantBlock
-{
-	public static final DirectionProperty FACING = BlockStateProperties.FACING;
-	private final boolean allowVertical;
+public class DecorativeAttachedPlantBlock extends DecorativePlantBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    private final boolean allowVertical;
 
-	protected static final VoxelShape NORTH_SHAPE = box(0.0, 0.0, 4.0, 16.0, 16.0, 16.0);
-	protected static final VoxelShape SOUTH_SHAPE = box(0.0, 0.0, 0.0, 16.0, 16.0, 12.0);
-	protected static final VoxelShape WEST_SHAPE = box(4.0, 0.0, 0.0, 16.0, 16.0, 16.0);
-	protected static final VoxelShape EAST_SHAPE = box(0.0, 0.0, 0.0, 12.0, 16.0, 16.0);
-	protected static final VoxelShape UP_SHAPE = box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
-	protected static final VoxelShape DOWN_SHAPE = box(0.0, 4.0, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape NORTH_SHAPE = box(0.0, 0.0, 4.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SOUTH_SHAPE = box(0.0, 0.0, 0.0, 16.0, 16.0, 12.0);
+    protected static final VoxelShape WEST_SHAPE = box(4.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape EAST_SHAPE = box(0.0, 0.0, 0.0, 12.0, 16.0, 16.0);
+    protected static final VoxelShape UP_SHAPE = box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
+    protected static final VoxelShape DOWN_SHAPE = box(0.0, 4.0, 0.0, 16.0, 16.0, 16.0);
 
-	protected static final Map<Direction, VoxelShape> SHAPES = ImmutableMap.of(
-		Direction.NORTH, NORTH_SHAPE,
-		Direction.SOUTH, SOUTH_SHAPE,
-		Direction.WEST, WEST_SHAPE,
-		Direction.EAST, EAST_SHAPE,
-		Direction.UP, UP_SHAPE,
-		Direction.DOWN, DOWN_SHAPE);
+    protected static final Map<Direction, VoxelShape> SHAPES = ImmutableMap.of(
+            Direction.NORTH, NORTH_SHAPE,
+            Direction.SOUTH, SOUTH_SHAPE,
+            Direction.WEST, WEST_SHAPE,
+            Direction.EAST, EAST_SHAPE,
+            Direction.UP, UP_SHAPE,
+            Direction.DOWN, DOWN_SHAPE);
 
+    public DecorativeAttachedPlantBlock(ExtendedProperties properties, boolean allowVertical) {
+        super(properties, DecorativePlantBlock.DEFAULT_SHAPE);
+        this.allowVertical = allowVertical;
+    }
 
-	public DecorativeAttachedPlantBlock(ExtendedProperties properties, boolean allowVertical) {
-		super(properties, DecorativePlantBlock.DEFAULT_SHAPE);
-		this.allowVertical = allowVertical;
-	}
+    @Override
+    public BlockState updateShape(BlockState state, Direction direction, BlockState facingState, LevelAccessor level,
+            BlockPos currentPos, BlockPos facingPos) {
+        // Must be attached to a log
+        if (direction.getOpposite() == state.getValue(FACING)
+                && !Helpers.isBlock(facingState, TFGTags.Blocks.DecorativePlantAttachable)) {
+            return Blocks.AIR.defaultBlockState();
+        }
+        return state;
+    }
 
-	@Override
-	public BlockState updateShape(BlockState state, Direction direction, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
-	{
-		// Must be attached to a log
-		if (direction.getOpposite() == state.getValue(FACING) && !Helpers.isBlock(facingState, TFGTags.Blocks.DecorativePlantAttachable))
-		{
-			return Blocks.AIR.defaultBlockState();
-		}
-		return state;
-	}
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        Direction facing = state.getValue(FACING);
 
-	@Override
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
-	{
-		Direction facing = state.getValue(FACING);
+        if (!allowVertical && (facing == Direction.DOWN || facing == Direction.UP)) {
+            return false;
+        }
 
-		if (!allowVertical && (facing == Direction.DOWN || facing == Direction.UP)) {
-			return false;
-		}
+        BlockState attachedState = level.getBlockState(pos.relative(facing.getOpposite()));
+        return Helpers.isBlock(attachedState, TFGTags.Blocks.DecorativePlantAttachable);
+    }
 
-		BlockState attachedState = level.getBlockState(pos.relative(facing.getOpposite()));
-		return Helpers.isBlock(attachedState, TFGTags.Blocks.DecorativePlantAttachable);
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPES.get(state.getValue(FACING));
+    }
 
-	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-	{
-		return SHAPES.get(state.getValue(FACING));
-	}
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Direction direction = context.getClickedFace();
+        if (!allowVertical && (direction == Direction.DOWN || direction == Direction.UP)) {
+            return null;
+        }
 
-	@Nullable
-	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext context)
-	{
-		Direction direction = context.getClickedFace();
-		if (!allowVertical && (direction == Direction.DOWN || direction == Direction.UP))
-		{
-			return null;
-		}
-
-		return defaultBlockState().setValue(FACING, direction);
-	}
+        return defaultBlockState().setValue(FACING, direction);
+    }
 }

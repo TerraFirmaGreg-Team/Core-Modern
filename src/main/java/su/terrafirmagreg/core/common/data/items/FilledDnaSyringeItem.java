@@ -1,6 +1,10 @@
 package su.terrafirmagreg.core.common.data.items;
 
-import lombok.Getter;
+import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -11,10 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class FilledDnaSyringeItem extends Item {
     public FilledDnaSyringeItem(Properties props) {
@@ -24,7 +24,7 @@ public class FilledDnaSyringeItem extends Item {
     // Tooltip showing which mob's DNA is inside.
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level,
-                                @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+            @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         if (stack.hasTag() && Objects.requireNonNull(stack.getTag()).contains("mob_type")) {
             String mobId = stack.getTag().getString("mob_type");
             ResourceLocation rl = ResourceLocation.parse(mobId);

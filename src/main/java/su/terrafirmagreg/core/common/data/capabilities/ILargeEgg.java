@@ -3,16 +3,16 @@ package su.terrafirmagreg.core.common.data.capabilities;
 import java.util.List;
 import java.util.Optional;
 
+import org.jetbrains.annotations.NotNull;
+
+import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import net.dries007.tfc.util.calendar.Calendars;
-import org.jetbrains.annotations.NotNull;
-
-public interface ILargeEgg extends INBTSerializable<CompoundTag>{
+public interface ILargeEgg extends INBTSerializable<CompoundTag> {
 
     /**
      * @return the day it will hatch, as in ICalendar#getTotalDays
@@ -40,22 +40,16 @@ public interface ILargeEgg extends INBTSerializable<CompoundTag>{
     /**
      * Clears the data from the stack
      */
-    default void removeFertilization()
-    {}
+    default void removeFertilization() {
+    }
 
-
-    default void addTooltipInfo(@NotNull List<Component> text)
-    {
-        if (isFertilized())
-        {
+    default void addTooltipInfo(@NotNull List<Component> text) {
+        if (isFertilized()) {
             final long remainingDays = getHatchDay() - Calendars.CLIENT.getTotalDays();
             text.add(Component.translatable("tfc.tooltip.fertilized"));
-            if (remainingDays > 0)
-            {
+            if (remainingDays > 0) {
                 text.add(Component.translatable("tfc.tooltip.egg_hatch", remainingDays));
-            }
-            else
-            {
+            } else {
                 text.add(Component.translatable("tfc.tooltip.egg_hatch_today"));
             }
         }

@@ -6,11 +6,18 @@
  */
 package su.terrafirmagreg.core.mixins.client.tfc;
 
+import java.util.function.Function;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import org.spongepowered.asm.mixin.Mixin;
+
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.client.model.DoubleIngotPileBlockModel;
 import net.dries007.tfc.client.model.SimpleStaticBlockEntityModel;
@@ -22,35 +29,34 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.spongepowered.asm.mixin.Mixin;
+
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
 import su.terrafirmagreg.core.common.TFGHelpers;
 import su.terrafirmagreg.core.mixins.common.tfc.IIngotPileBlockEntityAccessor;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Function;
-
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @Mixin(value = DoubleIngotPileBlockModel.class, remap = false)
 @OnlyIn(Dist.CLIENT)
-public abstract class DoubleIngotPileBlockModelMixin implements SimpleStaticBlockEntityModel<DoubleIngotPileBlockModel, IngotPileBlockEntity> {
+public abstract class DoubleIngotPileBlockModelMixin
+        implements SimpleStaticBlockEntityModel<DoubleIngotPileBlockModel, IngotPileBlockEntity> {
 
     /**
-     * Измененный метод рендера кучек с одинарными слитками. Теперь они отрисовываются исходя из цвета материала слитка, инфа берется из GTCEu.
-     * */
+     * Измененный метод рендера кучек с одинарными слитками. Теперь они отрисовываются исходя из цвета материала слитка,
+     * инфа берется из GTCEu.
+     */
     @Override
-    public TextureAtlasSprite render(IngotPileBlockEntity pile, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay)
-    {
+    public TextureAtlasSprite render(IngotPileBlockEntity pile, PoseStack poseStack, VertexConsumer buffer,
+            int packedLight, int packedOverlay) {
         final int ingots = pile.getBlockState().getValue(DoubleIngotPileBlock.DOUBLE_COUNT);
-        final Function<ResourceLocation, TextureAtlasSprite> textureAtlas = Minecraft.getInstance().getTextureAtlas(RenderHelpers.BLOCKS_ATLAS);
+        final Function<ResourceLocation, TextureAtlasSprite> textureAtlas = Minecraft.getInstance()
+                .getTextureAtlas(RenderHelpers.BLOCKS_ATLAS);
 
         final var pileEntries = ((IIngotPileBlockEntityAccessor) (Object) pile).getEntries();
 
         TextureAtlasSprite sprite = null;
-        for (int i = 0; i < ingots; i++)
-        {
+        for (int i = 0; i < ingots; i++) {
             final var stack = TFGHelpers.getStackFromIngotPileTileEntityByIndex(pileEntries, i);
             final var material = ChemicalHelper.getMaterialStack(stack);
             final int primaryColor = material.material().getMaterialARGB(0);
@@ -58,7 +64,8 @@ public abstract class DoubleIngotPileBlockModelMixin implements SimpleStaticBloc
             Metal metalAtPos = pile.getOrCacheMetal(i);
 
             boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && !material.isEmpty());
-            ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getSoftTextureId() : TFGClientEventHandler.TFCMetalBlockTexturePattern;
+            ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getSoftTextureId()
+                    : TFGClientEventHandler.TFCMetalBlockTexturePattern;
 
             sprite = textureAtlas.apply(metalResource);
 
@@ -69,8 +76,7 @@ public abstract class DoubleIngotPileBlockModelMixin implements SimpleStaticBloc
             final float z = i % 6 >= 3 ? 0.5f : 0;
 
             poseStack.pushPose();
-            if (oddLayer)
-            {
+            if (oddLayer) {
                 // Rotate 90 degrees every other layer
                 poseStack.translate(0.5f, 0f, 0.5f);
                 poseStack.mulPose(Axis.YP.rotationDegrees(90f));
@@ -87,16 +93,18 @@ public abstract class DoubleIngotPileBlockModelMixin implements SimpleStaticBloc
             final float maxY = scale * (minY + 5);
             final float maxZ = scale * (minZ + 15);
             if (shouldUseTFCRender)
-                RenderHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 10.0F, 5.0F, 15.0F, oddLayer);
-            else
-            {
-                TFGClientHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 10, 5, 15, oddLayer, primaryColor, secondaryColor);
+                RenderHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay,
+                        minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY,
+                        10.0F, 5.0F, 15.0F, oddLayer);
+            else {
+                TFGClientHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay,
+                        minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 10,
+                        5, 15, oddLayer, primaryColor, secondaryColor);
             }
             poseStack.popPose();
         }
 
-        if (sprite == null)
-        {
+        if (sprite == null) {
             // Use whatever sprite we found in the ingot pile towards the top as the particle texture
             sprite = RenderHelpers.missingTexture();
         }

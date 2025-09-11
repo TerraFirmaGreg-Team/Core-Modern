@@ -1,28 +1,31 @@
 package su.terrafirmagreg.core.config;
 
-import earth.terrarium.adastra.api.planets.Planet;
+import static su.terrafirmagreg.core.TFGCore.LOGGER;
+
+import java.util.HashMap;
+import java.util.List;
+
 import net.dries007.tfc.util.Metal;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import earth.terrarium.adastra.api.planets.Planet;
+
 import su.terrafirmagreg.core.config.tools.PropickConfig;
 import su.terrafirmagreg.core.config.tools.RenderingPropickConfig;
 
-import java.util.HashMap;
-import java.util.List;
-
-import static su.terrafirmagreg.core.TFGCore.LOGGER;
-
 /**
- * Server Config
- *  - Synced from server to client, can have default config settings be customized by users.
- *  - Default to this config for most things, and only use client/common when appropriate.
+ * Server Config - Synced from server to client, can have default config settings be customized by users. - Default to
+ * this config for most things, and only use client/common when appropriate.
  */
 public final class ServerConfig {
 
-    private static final List<ResourceKey<Level>> planetDimensions = List.of(Planet.EARTH_ORBIT, Planet.MOON_ORBIT, Planet.MARS_ORBIT, Planet.VENUS_ORBIT, Planet.MERCURY_ORBIT, Planet.GLACIO_ORBIT, Planet.MOON, Planet.MARS, Planet.VENUS, Planet.MERCURY, Planet.GLACIO);
+    private static final List<ResourceKey<Level>> planetDimensions = List.of(Planet.EARTH_ORBIT, Planet.MOON_ORBIT,
+            Planet.MARS_ORBIT, Planet.VENUS_ORBIT, Planet.MERCURY_ORBIT, Planet.GLACIO_ORBIT, Planet.MOON, Planet.MARS,
+            Planet.VENUS, Planet.MERCURY, Planet.GLACIO);
     public final HashMap<ResourceKey<Level>, ForgeConfigSpec.BooleanValue> glidersWorkOnPlanets;
 
     public final PropickConfig copperPropickConfig;
@@ -46,9 +49,9 @@ public final class ServerConfig {
             String dimensionName = dimension.location().getPath();
             String dimensionPath = "can_glide_on_" + dimensionName;
             glidersWorkOnPlanets.put(dimension, builder
-                    .comment(String.format("\nIf true, gliders will function in the Ad Astra dimension %s", ConfigHelpers.toTitleCase(dimensionName)))
-                    .define(dimensionPath, false)
-            );
+                    .comment(String.format("\nIf true, gliders will function in the Ad Astra dimension %s",
+                            ConfigHelpers.toTitleCase(dimensionName)))
+                    .define(dimensionPath, false));
         }
 
         builder.pop().push("prospector_picks").push("copper");
@@ -66,7 +69,6 @@ public final class ServerConfig {
         builder.pop().push("red_steel");
         redSteelPropickConfig = RenderingPropickConfig.build(builder, Metal.Default.RED_STEEL, 50, 25, false);
 
-
         builder.pop(2).push("harvest_basket");
         HARVEST_BASKET_RANGE = builder
                 .comment("\nRadius of the harvest basket collection. Set to 0 to disable. Default: 7")
@@ -78,7 +80,8 @@ public final class ServerConfig {
                 .defineListAllowEmpty(
                         "syringeBlacklist", List.of(),
                         o -> {
-                            if (!(o instanceof String s)) return false;
+                            if (!(o instanceof String s))
+                                return false;
                             ResourceLocation id = ResourceLocation.tryParse(s);
                             if (id == null) {
                                 LOGGER.warn("[TFG Config] Invalid entity ID syntax in syringeBlacklist: {}", s);
@@ -89,8 +92,7 @@ public final class ServerConfig {
                                 return false;
                             }
                             return true;
-                        }
-                );
+                        });
         builder.pop();
     }
 

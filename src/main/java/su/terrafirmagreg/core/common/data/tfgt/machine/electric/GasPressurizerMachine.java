@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 
 public class GasPressurizerMachine extends SimpleTieredMachine {
 
-	public GasPressurizerMachine(IMachineBlockEntity holder, int tier, Object... args) {
-		super(holder, tier, GTMachineUtils.defaultTankSizeFunction, args);
-	}
+    public GasPressurizerMachine(IMachineBlockEntity holder, int tier, Object... args) {
+        super(holder, tier, GTMachineUtils.defaultTankSizeFunction, args);
+    }
 }

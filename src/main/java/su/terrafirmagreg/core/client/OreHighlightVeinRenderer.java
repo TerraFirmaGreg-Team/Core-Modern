@@ -1,16 +1,17 @@
 package su.terrafirmagreg.core.client;
 
-import net.minecraft.core.BlockPos;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGParticles;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 public class OreHighlightVeinRenderer {
@@ -32,8 +33,7 @@ public class OreHighlightVeinRenderer {
                             pos.getX() + 0.5,
                             pos.getY() + 0.5,
                             pos.getZ() + 0.5,
-                            0, 0, 0
-                    );
+                            0, 0, 0);
                 }
             }
         }
@@ -41,7 +41,8 @@ public class OreHighlightVeinRenderer {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+        if (event.phase != TickEvent.Phase.END)
+            return;
 
         long now = System.currentTimeMillis();
         synchronized (highlights) {
@@ -49,5 +50,6 @@ public class OreHighlightVeinRenderer {
         }
     }
 
-    private record Highlight(BlockPos pos, long expireTime) {}
+    private record Highlight(BlockPos pos, long expireTime) {
+    }
 }

@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
@@ -21,10 +22,10 @@ public class TFGNetworkHandler {
             ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
+            PROTOCOL_VERSION::equals);
 
     private static int packetId = 0;
+
     private static int id() {
         return packetId++;
     }
@@ -35,37 +36,33 @@ public class TFGNetworkHandler {
                 ParticlePacket.class,
                 ParticlePacket::encode,
                 ParticlePacket::decode,
-                ParticlePacket::handle
-        );
+                ParticlePacket::handle);
         INSTANCE.registerMessage(
                 id(),
                 SoundPacket.class,
                 SoundPacket::encode,
                 SoundPacket::decode,
-                SoundPacket::handle
-        );
+                SoundPacket::handle);
         INSTANCE.registerMessage(
                 id(),
                 OreHighlightPacket.class,
                 OreHighlightPacket::encode,
                 OreHighlightPacket::decode,
-                OreHighlightPacket::handle
-        );
+                OreHighlightPacket::handle);
         INSTANCE.registerMessage(
                 id(),
                 OreHighlightVeinPacket.class,
                 OreHighlightVeinPacket::encode,
                 OreHighlightVeinPacket::decode,
-                OreHighlightVeinPacket::handle
-        );
+                OreHighlightVeinPacket::handle);
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {
-        if (!(level instanceof ServerLevel serverLevel)) return;
+        if (!(level instanceof ServerLevel serverLevel))
+            return;
         INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(
                 pos.getX(), pos.getY(), pos.getZ(),
-                64, serverLevel.dimension()
-        )), packet);
+                64, serverLevel.dimension())), packet);
     }
 
     public static void sendParticle(
@@ -74,16 +71,14 @@ public class TFGNetworkHandler {
             Vec3 motion,
             ResourceLocation particleId,
             int count,
-            double dx, double dy, double dz
-    ) {
+            double dx, double dy, double dz) {
         BlockPos pos = new BlockPos(Mth.floor(x), Mth.floor(y), Mth.floor(z));
         ParticlePacket packet = new ParticlePacket(
                 x, y, z,
                 motion.x, motion.y, motion.z,
                 particleId,
                 count,
-                dx, dy, dz
-        );
+                dx, dy, dz);
         sendToAllAround(level, pos, packet);
     }
 
@@ -92,15 +87,13 @@ public class TFGNetworkHandler {
             double x, double y, double z,
             ResourceLocation soundId,
             float volume,
-            float pitch
-    ) {
+            float pitch) {
         BlockPos pos = new BlockPos(Mth.floor(x), Mth.floor(y), Mth.floor(z));
         SoundPacket packet = new SoundPacket(
                 x, y, z,
                 soundId,
                 volume,
-                pitch
-        );
+                pitch);
         sendToAllAround(level, pos, packet);
     }
 }
