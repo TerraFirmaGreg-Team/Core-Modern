@@ -29,39 +29,39 @@ public abstract class BurpingFlowerBlockMixin {
         // Disabled because you get froglights in space now.
         // Is there any point in having the burpflower do anything? It feels too magical
 
-//		final Direction dir = state.getValue(FacingFlowerBlock.FACING);
-//		final BlockPos resultPos = pos.relative(dir);
-//		final BlockState stateAtResult = level.getBlockState(resultPos);
-//		level.sendParticles(BeneathParticles.SULFURIC_SMOKE.get(), resultPos.getX() + 0.5, resultPos.getY() + 0.5,
-//			resultPos.getZ() + 0.5, 5, 0, 0, 0, 1);
-//
-//		boolean worked = true;
-//		if (Helpers.isBlock(stateAtResult, Blocks.SHROOMLIGHT))
-//		{
-//			var rand = random.nextFloat();
-//			if (rand < 0.33f)
-//			{
-//				level.setBlockAndUpdate(resultPos, Blocks.OCHRE_FROGLIGHT.defaultBlockState());
-//			}
-//			else if (rand < 0.67f)
-//			{
-//				level.setBlockAndUpdate(resultPos, Blocks.PEARLESCENT_FROGLIGHT.defaultBlockState());
-//			}
-//			else
-//			{
-//				level.setBlockAndUpdate(resultPos, Blocks.VERDANT_FROGLIGHT.defaultBlockState());
-//			}
-//		}
-//		else
-//		{
-//			worked = false;
-//		}
-//
-//		if (worked && meetsConditions(level, pos, state))
-//		{
-//			final BlockPos sulfurPos = pos.relative(state.getValue(FacingFlowerBlock.FACING).getOpposite());
-//			level.setBlockAndUpdate(sulfurPos, level.getBlockState(sulfurPos).getFluidState().createLegacyBlock());
-//		}
+        //		final Direction dir = state.getValue(FacingFlowerBlock.FACING);
+        //		final BlockPos resultPos = pos.relative(dir);
+        //		final BlockState stateAtResult = level.getBlockState(resultPos);
+        //		level.sendParticles(BeneathParticles.SULFURIC_SMOKE.get(), resultPos.getX() + 0.5, resultPos.getY() + 0.5,
+        //			resultPos.getZ() + 0.5, 5, 0, 0, 0, 1);
+        //
+        //		boolean worked = true;
+        //		if (Helpers.isBlock(stateAtResult, Blocks.SHROOMLIGHT))
+        //		{
+        //			var rand = random.nextFloat();
+        //			if (rand < 0.33f)
+        //			{
+        //				level.setBlockAndUpdate(resultPos, Blocks.OCHRE_FROGLIGHT.defaultBlockState());
+        //			}
+        //			else if (rand < 0.67f)
+        //			{
+        //				level.setBlockAndUpdate(resultPos, Blocks.PEARLESCENT_FROGLIGHT.defaultBlockState());
+        //			}
+        //			else
+        //			{
+        //				level.setBlockAndUpdate(resultPos, Blocks.VERDANT_FROGLIGHT.defaultBlockState());
+        //			}
+        //		}
+        //		else
+        //		{
+        //			worked = false;
+        //		}
+        //
+        //		if (worked && meetsConditions(level, pos, state))
+        //		{
+        //			final BlockPos sulfurPos = pos.relative(state.getValue(FacingFlowerBlock.FACING).getOpposite());
+        //			level.setBlockAndUpdate(sulfurPos, level.getBlockState(sulfurPos).getFluidState().createLegacyBlock());
+        //		}
 
         ci.cancel();
     }

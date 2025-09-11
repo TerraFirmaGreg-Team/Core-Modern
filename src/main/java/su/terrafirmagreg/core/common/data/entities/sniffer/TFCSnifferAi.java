@@ -58,14 +58,14 @@ public class TFCSnifferAi extends LivestockAi {
     public static void initSniffIdleActivity(Brain<? extends TFCSniffer> brain) {
         brain.addActivity(Activity.IDLE, 0, ImmutableList.of(
                 SetLookTarget.create(EntityType.PLAYER, 6.0F, UniformInt.of(30, 60)), // looks at player, but its only
-                                                                                      // try it every so often -- "Run
-                                                                                      // Sometimes"
+                // try it every so often -- "Run
+                // Sometimes"
                 AvoidPredatorBehavior.create(true),
                 new LayLargeEggBehavior(),
                 new BreedBehavior<>(1.0F), // custom TFC breed behavior
                 new AnimalPanic(2.0F), // if memory of being hit, runs away
                 new FollowTemptation(e -> e.isBaby() ? 1.5F : 1.25F), // sets the walk and look targets to whomever it
-                                                                      // has a memory of being tempted by
+                // has a memory of being tempted by
                 new TFCSnifferAi.Scenting(60, 160), // Tries to do the "sniff sniff"
                 new TFCSnifferAi.Sniffing(100, 200), // Tries to do the "sniiiiif"
                 BabyFollowAdult.create(UniformInt.of(5, 16), 1.25F), // babies follow any random adult around

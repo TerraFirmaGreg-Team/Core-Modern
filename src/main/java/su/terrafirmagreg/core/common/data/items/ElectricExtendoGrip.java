@@ -248,28 +248,28 @@ public class ElectricExtendoGrip extends ComponentItem {
         // findAndDamageExtendoGrip((Player) entity);
     }
 
-//	@SubscribeEvent(priority = EventPriority.LOWEST)
-//	public static void consumeDurabilityOnPlace(PlayerInteractEvent event) {
-//		findAndDamageExtendoGrip(event.getPlayer());
-//	}
+    //	@SubscribeEvent(priority = EventPriority.LOWEST)
+    //	public static void consumeDurabilityOnPlace(PlayerInteractEvent event) {
+    //		findAndDamageExtendoGrip(event.getPlayer());
+    //	}
 
-//    private static void findAndDamageExtendoGrip(Player player) {
-//        if (player == null)
-//            return;
-//        if (player.level().isClientSide)
-//            return;
-//        InteractionHand hand = InteractionHand.MAIN_HAND;
-//        ItemStack extendo = player.getMainHandItem();
-//        if (!AllItems.EXTENDO_GRIP.isIn(extendo)) {
-//            extendo = player.getOffhandItem();
-//            hand = InteractionHand.OFF_HAND;
-//        }
-//        if (!AllItems.EXTENDO_GRIP.isIn(extendo))
-//            return;
-//        final InteractionHand h = hand;
-//        if (!BacktankUtil.canAbsorbDamage(player, maxUses()))
-//            extendo.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(h));
-//    }
+    //    private static void findAndDamageExtendoGrip(Player player) {
+    //        if (player == null)
+    //            return;
+    //        if (player.level().isClientSide)
+    //            return;
+    //        InteractionHand hand = InteractionHand.MAIN_HAND;
+    //        ItemStack extendo = player.getMainHandItem();
+    //        if (!AllItems.EXTENDO_GRIP.isIn(extendo)) {
+    //            extendo = player.getOffhandItem();
+    //            hand = InteractionHand.OFF_HAND;
+    //        }
+    //        if (!AllItems.EXTENDO_GRIP.isIn(extendo))
+    //            return;
+    //        final InteractionHand h = hand;
+    //        if (!BacktankUtil.canAbsorbDamage(player, maxUses()))
+    //            extendo.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(h));
+    //    }
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {

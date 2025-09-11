@@ -18,10 +18,10 @@ public abstract class GTToolTypeMixin {
     /**
      *
      */
-//    @Redirect(method = "lambda$static$7", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/item/tool/ToolDefinitionBuilder;behaviors([Lcom/gregtechceu/gtceu/api/item/tool/behavior/IToolBehavior;)Lcom/gregtechceu/gtceu/api/item/tool/ToolDefinitionBuilder;"), remap = false)
-//    private static ToolDefinitionBuilder tfg$clinit7(ToolDefinitionBuilder instance, IToolBehavior[] behaviours) {
-//        return instance.behaviors(HarvestCropsBehavior.INSTANCE);
-//    }
+    //    @Redirect(method = "lambda$static$7", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/item/tool/ToolDefinitionBuilder;behaviors([Lcom/gregtechceu/gtceu/api/item/tool/behavior/IToolBehavior;)Lcom/gregtechceu/gtceu/api/item/tool/ToolDefinitionBuilder;"), remap = false)
+    //    private static ToolDefinitionBuilder tfg$clinit7(ToolDefinitionBuilder instance, IToolBehavior[] behaviours) {
+    //        return instance.behaviors(HarvestCropsBehavior.INSTANCE);
+    //    }
 
     /**
      * Устанавливает новое поведение для пилы, чтобы та могла создавать лодки каное из FirmaCiv.

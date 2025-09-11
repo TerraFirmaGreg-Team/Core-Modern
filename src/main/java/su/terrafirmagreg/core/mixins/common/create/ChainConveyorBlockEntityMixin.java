@@ -89,12 +89,12 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity
                 c -> tfg$connectionMaterialStats.put(NbtUtils.readBlockPos(c.getCompound("Target")),
                         GTMaterials.get(c.getString("Material"))));
         // Debug print
-//        for (BlockPos pos : tfg$connectionMaterialStats.keySet())
-//        {
-//            String matName = tfg$connectionMaterialStats.get(pos).getName();
-//            System.out.println("This map lives in entity at: " + this.getBlockPos());
-//            System.out.println("Pos: " + pos.toString() + "; Material: " + matName);
-//        }
+        //        for (BlockPos pos : tfg$connectionMaterialStats.keySet())
+        //        {
+        //            String matName = tfg$connectionMaterialStats.get(pos).getName();
+        //            System.out.println("This map lives in entity at: " + this.getBlockPos());
+        //            System.out.println("Pos: " + pos.toString() + "; Material: " + matName);
+        //        }
     }
 
     @Inject(method = "chainDestroyed(Lnet/minecraft/core/BlockPos;ZZ)V", at = @At("HEAD"), cancellable = true, remap = false)
