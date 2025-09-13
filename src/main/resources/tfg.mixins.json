@@ -93,7 +93,6 @@
     "common.tfc.IcePileBlockMixin",
     "common.tfc.IIngotPileBlockEntityAccessor",
     "common.tfc.IIngotPileBlockEntityEntryAccessor",
-    "common.tfc.IngotPileBlockMixin",
     "common.tfcambiental.TemperatureCapabilityMixin",
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
