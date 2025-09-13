@@ -34,14 +34,14 @@ public class TFGMachines {
 
     // Left here for future reference, but remember that steam machines can't handle fluids
 
-//	public static final MachineDefinition STEAM_AQUEOUS_ACCUMULATOR =
-//		registerSteamMachine("aqueous_accumulator",
-//			SimpleSteamMachine::new, (pressure, builder) -> builder
-//				.rotationState(RotationState.ALL)
-//				.recipeType(TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES)
-//				.recipeModifier(SimpleSteamMachine::recipeModifier)
-//				.renderer(() -> new WorkableSteamMachineRenderer(pressure, GTCEu.id("block/machines/aqueous_accumulator")))
-//				.register());
+    //	public static final MachineDefinition STEAM_AQUEOUS_ACCUMULATOR =
+    //		registerSteamMachine("aqueous_accumulator",
+    //			SimpleSteamMachine::new, (pressure, builder) -> builder
+    //				.rotationState(RotationState.ALL)
+    //				.recipeType(TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES)
+    //				.recipeModifier(SimpleSteamMachine::recipeModifier)
+    //				.renderer(() -> new WorkableSteamMachineRenderer(pressure, GTCEu.id("block/machines/aqueous_accumulator")))
+    //				.register());
 
     public static final MachineDefinition BISMUTH_BRONZE_CRATE = GTMachineUtils.registerCrate(GTMaterials.BismuthBronze,
             54, "Bismuth Bronze Crate");

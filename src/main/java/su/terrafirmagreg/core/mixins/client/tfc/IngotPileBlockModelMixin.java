@@ -13,6 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.spongepowered.asm.mixin.Mixin;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -30,6 +31,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
 import su.terrafirmagreg.core.common.TFGHelpers;
@@ -47,18 +49,24 @@ public abstract class IngotPileBlockModelMixin
      * инфа берется из GTCEu.
      */
     @Override
-    public TextureAtlasSprite render(IngotPileBlockEntity pile, PoseStack poseStack, VertexConsumer buffer,
-            int packedLight, int packedOverlay) {
+    public TextureAtlasSprite render(IngotPileBlockEntity pile, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay) {
         final int ingots = pile.getBlockState().getValue(IngotPileBlock.COUNT);
-        final Function<ResourceLocation, TextureAtlasSprite> textureAtlas = Minecraft.getInstance()
-                .getTextureAtlas(RenderHelpers.BLOCKS_ATLAS);
+        final Function<ResourceLocation, TextureAtlasSprite> textureAtlas = Minecraft.getInstance().getTextureAtlas(RenderHelpers.BLOCKS_ATLAS);
 
-        final var pileEntries = ((IIngotPileBlockEntityAccessor) (Object) pile).getEntries();
+        final var pileEntries = ((IIngotPileBlockEntityAccessor) pile).getEntries();
 
         TextureAtlasSprite sprite = null;
         for (int i = 0; i < ingots; i++) {
             final var stack = TFGHelpers.getStackFromIngotPileTileEntityByIndex(pileEntries, i);
-            final var material = ChemicalHelper.getMaterialStack(stack);
+            MaterialStack material;
+
+            try {
+                material = ChemicalHelper.getMaterialStack(stack);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                TFGCore.LOGGER.error("Encountered exception when attempting to get material from item stack: {}: {}", stack, ex);
+                return RenderHelpers.missingTexture();
+            }
+
             final int primaryColor = material.material().getMaterialARGB(0);
             final int secondaryColor = material.material().getMaterialARGB(1);
             Metal metalAtPos = pile.getOrCacheMetal(i);
@@ -93,14 +101,15 @@ public abstract class IngotPileBlockModelMixin
             final float maxY = scale * (minY + 4);
             final float maxZ = scale * (minZ + 15);
 
-            if (shouldUseTFCRender)
+            if (shouldUseTFCRender) {
                 RenderHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay,
                         minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY,
                         7.0F, 4.0F, 15.0F, oddLayer);
-            else
+            } else {
                 TFGClientHelpers.renderTexturedTrapezoidalCuboid(poseStack, buffer, sprite, packedLight, packedOverlay,
                         minX, maxX, minZ, maxZ, minX + scale, maxX - scale, minZ + scale, maxZ - scale, minY, maxY, 7,
                         4, 15, oddLayer, primaryColor, secondaryColor);
+            }
 
             poseStack.popPose();
         }

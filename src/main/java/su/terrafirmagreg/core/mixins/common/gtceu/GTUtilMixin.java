@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.dries007.tfc.util.EnvironmentHelpers;
+import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -29,7 +30,10 @@ public abstract class GTUtilMixin {
             // for tfc overworld: EnvironmentHelpers.isRainingOrSnowing(world,blockPos) instead of world.isRaining()
             // just incase I left it how it was before for other dimensions
             if (world.dimension() == Level.OVERWORLD) {
-                return world.isDay() && !EnvironmentHelpers.isRainingOrSnowing(world, blockPos);
+                // world.isDay() sometimes gives false due to skyDarken not being < 4 sometimes during day
+                // (maybe smth to do with vanilla or tfc rain logic idk)
+                return Calendars.get(world).getCalendarDayTime() <= 12000
+                        && !EnvironmentHelpers.isRainingOrSnowing(world, blockPos);
             } else if (!world.isRaining()
                     || !biome.warmEnoughToRain(bLockPosAbove) && !biome.coldEnoughToSnow(bLockPosAbove)) {
                 return world.isDay();

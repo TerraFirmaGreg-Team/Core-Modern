@@ -208,7 +208,10 @@ tasks.withType(JavaCompile).configureEach {
 spotless {
 
     java {
-        target 'src/*/java/su/**/*.java'
+        target project.fileTree(project.rootDir) {
+            include 'src/*/java/su/**/*.java'
+            exclude 'src/**/compat/emi/ExportedOreVeinInfo.java'
+        }
 
         endWithNewline()
         indentWithSpaces()
