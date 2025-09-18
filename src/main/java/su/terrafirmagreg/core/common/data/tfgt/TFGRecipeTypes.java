@@ -53,6 +53,22 @@ public class TFGRecipeTypes {
                 }
             });
 
+    public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
+            .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(6, 6, 3, 3)
+            .setProgressBar(PROGRESS_BAR_DNA, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var text = recipe.data.getString("action");
+                if (!text.isEmpty()) {
+                    widgetGroup.addWidget(new LabelWidget(widgetGroup.getSize().width - 50,
+                            widgetGroup.getSize().height - 30, Component.translatable(text))
+                            .setTextColor(-1)
+                            .setDropShadow(true));
+                }
+            });
+
     public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 1, 1, 0)

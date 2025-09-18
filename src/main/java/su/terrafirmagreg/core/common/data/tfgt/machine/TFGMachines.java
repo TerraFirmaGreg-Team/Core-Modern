@@ -26,6 +26,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.SingleItemstackBus;
 
 public class TFGMachines {
 
@@ -157,6 +158,13 @@ public class TFGMachines {
                     .allowCoverOnFront(true)
                     .register(),
             GTMachineUtils.ALL_TIERS);
+
+    public static final MachineDefinition SINGLE_ITEMSTACK_BUS = REGISTRATE
+            .machine("single_itemstack_bus", SingleItemstackBus::new)
+            .rotationState(RotationState.ALL)
+            .tooltips(Component.translatable("tfg.tooltip.single_itemstack_bus"))
+            .tier(GTValues.EV)
+            .register();
 
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE
             .machine("railgun_ammo_loader", RailgunAmmoLoaderMachine::new).register();
