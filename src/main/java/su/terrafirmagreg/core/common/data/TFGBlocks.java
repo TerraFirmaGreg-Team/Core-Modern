@@ -12,8 +12,6 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
-import earth.terrarium.adastra.common.registry.ModBlocks;
-
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -128,11 +126,11 @@ public final class TFGBlocks {
                     //TODO
             ));
     public static final RegistryObject<SandLayerBlock> MARS_SAND_LAYER_BLOCK = register("layer/mars_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(ModBlocks.MARS_SAND.get())
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
                     //TODO
             ));
     public static final RegistryObject<SandLayerBlock> VENUS_SAND_LAYER_BLOCK = register("layer/venus_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(ModBlocks.VENUS_SAND.get())
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
                     //TODO
             ));
 
@@ -143,12 +141,12 @@ public final class TFGBlocks {
     );
     public static final RegistryObject<SandPileBlock> MARS_SAND_PILE_BLOCK = register("pile/mars_sand",
         () -> new SandPileBlock(
-                ExtendedProperties.of(ModBlocks.MARS_SAND.get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
+                ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
             )
     );
     public static final RegistryObject<SandPileBlock> VENUS_SAND_PILE_BLOCK = register("pile/venus_sand",
         () -> new SandPileBlock(
-                ExtendedProperties.of(ModBlocks.VENUS_SAND.get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
+                ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
         )
     );
 

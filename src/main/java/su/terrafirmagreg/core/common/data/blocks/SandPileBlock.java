@@ -130,6 +130,12 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
     }
 
     private final ExtendedProperties properties;
+    private Block originBlock;
+
+    public SandPileBlock(ExtendedProperties properties, Block originBlock) {
+        this(properties);
+        this.originBlock = originBlock;
+    }
 
     public SandPileBlock(ExtendedProperties properties)
     {
@@ -166,7 +172,7 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
         // We have to handle the getStateForPlacement in a mixin to snow layer block
         // TODO: remove before modpack release
         // want to replace with logic like, "if item in hand has the same root type as the clicked block, then increment"
-        if (context.getItemInHand().getItem() == Blocks.SNOW.asItem() && state.getValue(LAYERS) < 8)
+        if (context.getItemInHand().getItem() == TFGBlocks.MARS_SAND_LAYER_BLOCK.get().asItem() && state.getValue(LAYERS) < 8)
         {
             if (context.replacingClickedOnBlock())
             {
