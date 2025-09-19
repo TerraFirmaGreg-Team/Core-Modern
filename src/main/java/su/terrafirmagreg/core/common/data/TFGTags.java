@@ -31,6 +31,31 @@ public final class TFGTags {
         public static final TagKey<Item> WraptorFood = createItemTag("tfg:wraptor_food");
         public static final TagKey<Item> EmptySyringe = createItemTag("tfg:empty_dna_syringes");
 
+        //Block Interaction tags for use in EMI
+        public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");
+        public static final TagKey<Item> INTERACTIONBRICKSTAIR = createItemTag("tfg:interaction/brick_stairs");
+        public static final TagKey<Item> INTERACTIONBRICKSLAB = createItemTag("tfg:interaction/brick_slab");
+        public static final TagKey<Item> INTERACTIONBRICKWALL = createItemTag("tfg:interaction/brick_wall");
+        public static final TagKey<Item> INTERACTIONCRACKEDBRICK = createItemTag("tfg:interaction/cracked_brick");
+        public static final TagKey<Item> INTERACTIONCRACKEDSTAIR = createItemTag("tfg:interaction/cracked_brick_stairs");
+        public static final TagKey<Item> INTERACTIONCRACKEDSLAB = createItemTag("tfg:interaction/cracked_brick_slab");
+        public static final TagKey<Item> INTERACTIONCRACKEDWALL = createItemTag("tfg:interaction/cracked_brick_wall");
+        public static final TagKey<Item> INTERACTIONMOSSYBRICK = createItemTag("tfg:interaction/mossy_brick");
+        public static final TagKey<Item> INTERACTIONMOSSYSTAIR = createItemTag("tfg:interaction/mossy_brick_stairs");
+        public static final TagKey<Item> INTERACTIONMOSSYSLAB = createItemTag("tfg:interaction/mossy_brick_slab");
+        public static final TagKey<Item> INTERACTIONMOSSYWALL = createItemTag("tfg:interaction/mossy_brick_wall");
+
+        public static final TagKey<Item> INTERACTIONSMOOTHBRICK = createItemTag("tfg:interaction/smooth_brick");
+
+        public static final TagKey<Item> INTERACTIONCOBBLE = createItemTag("tfg:interaction/cobble");
+        public static final TagKey<Item> INTERACTIONCOBBLESTAIR = createItemTag("tfg:interaction/cobble_stairs");
+        public static final TagKey<Item> INTERACTIONCOBBLESLAB = createItemTag("tfg:interaction/cobble_slab");
+        public static final TagKey<Item> INTERACTIONCOBBLEWALL = createItemTag("tfg:interaction/cobble_wall");
+        public static final TagKey<Item> INTERACTIONMOSSYCOBBLESTAIR = createItemTag("tfg:interaction/mossy_cobble_stairs");
+        public static final TagKey<Item> INTERACTIONMOSSYCOBBLE = createItemTag("tfg:interaction/mossy_cobble");
+        public static final TagKey<Item> INTERACTIONMOSSYCOBBLESLAB = createItemTag("tfg:interaction/mossy_cobble_slab");
+        public static final TagKey<Item> INTERACTIONMOSSYCOBBLEWALL = createItemTag("tfg:interaction/mossy_cobble_wall");
+
         public static TagKey<Item> createItemTag(String path) {
             return TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.parse(path));
         }
