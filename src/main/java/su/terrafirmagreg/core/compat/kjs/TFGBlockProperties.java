@@ -12,6 +12,6 @@ import su.terrafirmagreg.core.common.data.TFGFluids;
 public class TFGBlockProperties {
 
     public static final FluidProperty SPACE_WATER = FluidProperty.create("fluid",
-            Stream.of(Fluids.EMPTY, Fluids.WATER, Fluids.LAVA, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER, TFGFluids.MARS_WATER));
+            Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER, TFGFluids.MARS_WATER));
     public static final IntegerProperty HEIGHT = IntegerProperty.create("height", 0, 5);
 }
