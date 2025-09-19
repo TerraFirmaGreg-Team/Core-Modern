@@ -41,6 +41,7 @@
     "common.greate.TieredCrushingRecipeMixin",
     "common.greate.TieredMillingCategoryMixin",
     "common.greate.TieredMillingRecipeMixin",
+    "common.gtceu.CleanroomConditionMixin",
     "common.gtceu.FisherMachineMixin",
     "common.gtceu.GTMultiMachinesMixin",
     "common.gtceu.GTRecipeTypesMixin",
