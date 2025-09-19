@@ -107,7 +107,7 @@ dependencies {
     // TFC
     implementation fg.deobf("maven.modrinth:patchouli:1.20.1-84.1-forge")  { transitive = false }
     implementation fg.deobf("maven.modrinth:terrafirmacraft:${tfc_version}")  { transitive = false }
-    implementation fg.deobf("curse.maven:kubejs-tfc-841001:6836898") { transitive = false }
+    implementation fg.deobf("curse.maven:kubejs-tfc-841001:6996502") { transitive = false }
 
     // FirmaLife
     implementation fg.deobf("maven.modrinth:firmalife:${firmalife_version}")
