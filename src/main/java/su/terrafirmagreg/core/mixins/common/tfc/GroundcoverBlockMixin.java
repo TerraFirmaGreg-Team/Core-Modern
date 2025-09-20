@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.dries007.tfc.common.blocks.GroundcoverBlock;
 import net.dries007.tfc.common.fluids.FluidProperty;
 
-import su.terrafirmagreg.core.compat.kjs.TFGBlockProperties;
+import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 
 /**
  * Lets groundcover blocks (loose rocks and sticks etc) be waterloggable with our own property, which has all TFC waters
