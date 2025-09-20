@@ -72,6 +72,7 @@
     "common.minecraft.HeightmapMixin",
     "common.minecraft.IBlockLootSubProviderAccessor",
     "common.minecraft.IUseOnContextInvoker",
+    "common.minecraft.MinecartFurnaceMixin",
     "common.minecraft.MonsterMixin",
     "common.minecraft.MushroomBlockMixin",
     "common.minecraft.NetherPortalBlockMixin",
