@@ -2,8 +2,6 @@ package su.terrafirmagreg.core.mixins.common.tfc;
 
 import org.spongepowered.asm.mixin.*;
 
-import com.mojang.serialization.Codec;
-
 import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.chunkdata.ChunkData;
@@ -16,7 +14,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraftforge.common.Tags;
@@ -24,11 +21,7 @@ import net.minecraftforge.common.Tags;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 
 @Mixin(value = IceCaveFeature.class)
-public class IceCaveFeatureMixin extends Feature<NoneFeatureConfiguration> {
-
-    public IceCaveFeatureMixin(Codec<NoneFeatureConfiguration> pCodec) {
-        super(pCodec);
-    }
+public class IceCaveFeatureMixin {
 
     /**
      * @author Pyritie
@@ -69,7 +62,7 @@ public class IceCaveFeatureMixin extends Feature<NoneFeatureConfiguration> {
                 } else if (Helpers.isBlock(finalState, BlockTags.ICE) && random.nextFloat() < 0.1F) {
                     placeDisc(level, mutablePos, random);
                 }
-            } else if (mutablePos.getY() < 105 && random.nextFloat() < 0.1F)//occluding thin areas
+            } else if (mutablePos.getY() < 105 && random.nextFloat() < 0.1F) //occluding thin areas
             {
                 for (int j = 0; j < 8; j++) {
                     mutablePos.move(Direction.UP, j);
@@ -85,19 +78,19 @@ public class IceCaveFeatureMixin extends Feature<NoneFeatureConfiguration> {
                 }
             }
 
-            if (random.nextFloat() < 0.01F)//extra springs
+            if (random.nextFloat() < 0.01F) //extra springs
             {
                 mutablePos.setY(4 + random.nextInt(7));
                 if (FluidHelpers.isAirOrEmptyFluid(level.getBlockState(mutablePos))) {
                     mutablePos.move(Direction.UP);
                     if (Helpers.isBlock(level.getBlockState(mutablePos), Tags.Blocks.STONE)) {
-                        setBlock(level, mutablePos, TFGFluids.MARS_WATER.createSourceBlock());
+                        level.setBlock(mutablePos, TFGFluids.MARS_WATER.createSourceBlock(), 3);
                         level.scheduleTick(mutablePos, TFGFluids.MARS_WATER.getSource(), 0);
                     }
                 }
             }
 
-            if (random.nextFloat() < 0.05F)//large spikes
+            if (random.nextFloat() < 0.05F) //large spikes
             {
                 if (mutablePos.getY() < 105 && Helpers.isBlock(level.getBlockState(mutablePos), Tags.Blocks.STONE)) {
                     mutablePos.move(Direction.DOWN);
