@@ -68,7 +68,7 @@ public abstract class IngotPileBlockModelMixin
                 return RenderHelpers.missingTexture();
             }
 
-			final int primaryColor = material.material().getMaterialARGB(0);
+            final int primaryColor = material.material().getMaterialARGB(0);
             final int secondaryColor = material.material().getMaterialARGB(1);
             Metal metalAtPos = pile.getOrCacheMetal(i);
 
