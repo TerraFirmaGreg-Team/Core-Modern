@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.common.data.tfgt;
 import java.util.Collections;
 import java.util.List;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
@@ -22,8 +21,6 @@ import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
-
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 
 @SuppressWarnings("deprecation")
 public class TFGRecipeTypes {
@@ -85,7 +82,6 @@ public class TFGRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.LEFT_TO_RIGHT)
             .setMaxTooltips(4)
             .setSound(GTSoundEntries.BATH)
-            .setIconSupplier(() -> TFGMachines.AQUEOUS_ACCUMULATOR[GTValues.LV].asStack())
             .setUiBuilder((recipe, widgetGroup) -> {
                 // Copied and pasted from the rock breaker
                 HolderSet<Fluid> fluid = null;
