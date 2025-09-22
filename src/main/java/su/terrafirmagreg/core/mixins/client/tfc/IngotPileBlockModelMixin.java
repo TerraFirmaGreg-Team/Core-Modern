@@ -6,6 +6,7 @@
  */
 package su.terrafirmagreg.core.mixins.client.tfc;
 
+import java.util.ConcurrentModificationException;
 import java.util.function.Function;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -62,12 +63,12 @@ public abstract class IngotPileBlockModelMixin
 
             try {
                 material = ChemicalHelper.getMaterialStack(stack);
-            } catch (ArrayIndexOutOfBoundsException ex) {
+            } catch (ArrayIndexOutOfBoundsException | ConcurrentModificationException ex) {
                 TFGCore.LOGGER.error("Encountered exception when attempting to get material from item stack: {}: {}", stack, ex);
                 return RenderHelpers.missingTexture();
             }
 
-            final int primaryColor = material.material().getMaterialARGB(0);
+			final int primaryColor = material.material().getMaterialARGB(0);
             final int secondaryColor = material.material().getMaterialARGB(1);
             Metal metalAtPos = pile.getOrCacheMetal(i);
 
