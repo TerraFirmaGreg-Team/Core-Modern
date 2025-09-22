@@ -99,6 +99,8 @@
     "common.tfcambiental.TemperatureCapabilityMixin",
     "common.vintageimprovements.CurvingRecipeMixin",
     "common.vintageimprovements.HelveItemsRendererMixin",
+    "common.vintageimprovements.LatheMovingBlockMixin",
+    "common.vintageimprovements.LatheRotatingBlockMixin",
     "common.vintageimprovements.VibratingRecipeMixin",
     "common.wab.CommonSetupMixin",
     "common.wab.SurferMixin",
