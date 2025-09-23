@@ -59,8 +59,8 @@ public abstract class SheetPileBlockModelMixin
 
         for (Direction direction : Helpers.DIRECTIONS) {
             if ((Boolean) state.getValue(DirectionPropertyBlock.getProperty(direction))) { // The properties are
-                                                                                           // authoritative on which
-                                                                                           // sides should be rendered
+                                                                                          // authoritative on which
+                                                                                          // sides should be rendered
                 final var stack = pile.getSheet(direction);
                 final var material = ChemicalHelper.getMaterialStack(stack);
                 final int primaryColor = material.material().getMaterialARGB(0);
