@@ -1,11 +1,12 @@
 package su.terrafirmagreg.core.common.data.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.world.phys.Vec3;
 
 public class RailgunBoom extends TextureSheetParticle {
@@ -17,7 +18,7 @@ public class RailgunBoom extends TextureSheetParticle {
     private final float gap;
 
     public RailgunBoom(ClientLevel level, double x, double y, double z,
-                       double dx, double dy, double dz, SpriteSet sprites) {
+            double dx, double dy, double dz, SpriteSet sprites) {
         super(level, x, y, z, dx, dy, dz);
         this.sprites = sprites;
         this.scale = 1.0f + this.random.nextFloat() * 1.5f;
@@ -58,7 +59,8 @@ public class RailgunBoom extends TextureSheetParticle {
             int localAge = this.age - (i * delay);
             int localLifetime = delay * count;
 
-            if (localAge < 0 || localAge >= localLifetime) continue;
+            if (localAge < 0 || localAge >= localLifetime)
+                continue;
 
             // Set sprite based on local age
             setSpriteFromLocalAge(sprites, localAge, localLifetime);
@@ -87,8 +89,8 @@ public class RailgunBoom extends TextureSheetParticle {
     }
 
     private void addQuad(VertexConsumer buffer, double x, double y, double z, float leftOffset, float rightOffset,
-                         float u0, float u1, float v0, float v1,
-                         float r, float g, float b, float a, int light) {
+            float u0, float u1, float v0, float v1,
+            float r, float g, float b, float a, int light) {
         buffer.vertex(x + leftOffset, y, z + rightOffset).uv(u0, v0).color(r, g, b, a).uv2(light).endVertex();
         buffer.vertex(x + leftOffset, y, z + leftOffset).uv(u0, v1).color(r, g, b, a).uv2(light).endVertex();
         buffer.vertex(x + rightOffset, y, z + leftOffset).uv(u1, v1).color(r, g, b, a).uv2(light).endVertex();

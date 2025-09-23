@@ -1,21 +1,25 @@
 package su.terrafirmagreg.core.common.data.entities.glacianram;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.mojang.blaze3d.vertex.PoseStack;
-import earth.terrarium.adastra.AdAstra;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
+
+import earth.terrarium.adastra.AdAstra;
 
 public class TFCGlacianRamRenderer extends MobRenderer<TFCGlacianRam, TFCGlacianRamModel<TFCGlacianRam>> {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(AdAstra.MOD_ID, "textures/entity/mob/glacian_ram/glacian_ram.png");
-    private static final ResourceLocation SHEARED_TEXTURE = ResourceLocation.fromNamespaceAndPath(AdAstra.MOD_ID, "textures/entity/mob/glacian_ram/sheared_glacian_ram.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(AdAstra.MOD_ID,
+            "textures/entity/mob/glacian_ram/glacian_ram.png");
+    private static final ResourceLocation SHEARED_TEXTURE = ResourceLocation.fromNamespaceAndPath(AdAstra.MOD_ID,
+            "textures/entity/mob/glacian_ram/sheared_glacian_ram.png");
 
     public TFCGlacianRamRenderer(EntityRendererProvider.Context context) {
         super(context, new TFCGlacianRamModel<>(context.bakeLayer(TFCGlacianRamModel.LAYER_LOCATION)), 0.7F);
     }
-
 
     @Override
     protected void scale(TFCGlacianRam pLivingEntity, PoseStack pPoseStack, float pPartialTickTime) {
@@ -25,9 +29,7 @@ public class TFCGlacianRamRenderer extends MobRenderer<TFCGlacianRam, TFCGlacian
     }
 
     public @NotNull ResourceLocation getTextureLocation(TFCGlacianRam entity) {
-        return entity.hasWool() ?   TEXTURE : SHEARED_TEXTURE;
+        return entity.hasWool() ? TEXTURE : SHEARED_TEXTURE;
     }
-
-
 
 }

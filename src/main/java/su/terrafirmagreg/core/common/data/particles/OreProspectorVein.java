@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
@@ -37,7 +38,7 @@ public class OreProspectorVein extends TextureSheetParticle {
 
     @Override
     public int getLightColor(float partialTicks) {
-        return 0x00F000F0;  // Max brightness packed light value
+        return 0x00F000F0; // Max brightness packed light value
     }
 
     // particle sheet with no depth testing

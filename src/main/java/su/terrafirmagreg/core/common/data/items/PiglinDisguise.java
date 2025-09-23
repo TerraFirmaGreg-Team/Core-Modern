@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.items;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -7,7 +9,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
 
 public class PiglinDisguise extends BlockItem {
 

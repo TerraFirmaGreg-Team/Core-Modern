@@ -1,6 +1,19 @@
 package su.terrafirmagreg.core.compat.emi;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -8,21 +21,15 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import dev.emi.emi.registry.EmiTags;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
+
 import su.terrafirmagreg.core.TFGCore;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class OreVeinInfoRecipe implements EmiRecipe {
-    public record WeightedBlock(String ore, int weightPercent) {}
-    public record WeightedItem(Item ore, int weightPercent) {}
+    public record WeightedBlock(String ore, int weightPercent) {
+    }
+
+    public record WeightedItem(Item ore, int weightPercent) {
+    }
 
     private final String ID;
     private final ResourceLocation dimension;
@@ -31,7 +38,9 @@ public class OreVeinInfoRecipe implements EmiRecipe {
     private final String[] rockTypes;
     private final WeightedBlock[] ores;
     private final WeightedItem[] oreItems;
-    public OreVeinInfoRecipe(String ID, String dimension, int rarity, double density, int minY, int maxY, int size, int height, int radius, String[] types, WeightedBlock[] blocks) {
+
+    public OreVeinInfoRecipe(String ID, String dimension, int rarity, double density, int minY, int maxY, int size,
+            int height, int radius, String[] types, WeightedBlock[] blocks) {
         this.ID = ID;
         this.dimension = ResourceLocation.parse(dimension);
         this.rarity = rarity;
@@ -51,13 +60,16 @@ public class OreVeinInfoRecipe implements EmiRecipe {
         }
 
         List<WeightedItem> rawOres = new ArrayList<>();
-        for (var ore: ores) {
+        for (var ore : ores) {
             List<Item> validRawOres = new ArrayList<>();
-            var normalTag = tagRegistry.getTag(tagRegistry.createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "raw_materials/" + ore.ore)));
+            var normalTag = tagRegistry.getTag(tagRegistry
+                    .createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "raw_materials/" + ore.ore)));
             normalTag.forEach(v -> {
-                if (!tagRegistry.getTag(tagRegistry.createTagKey(EmiTags.HIDDEN_FROM_RECIPE_VIEWERS)).contains(v)) validRawOres.add(v);
+                if (!tagRegistry.getTag(tagRegistry.createTagKey(EmiTags.HIDDEN_FROM_RECIPE_VIEWERS)).contains(v))
+                    validRawOres.add(v);
             });
-            if (validRawOres.isEmpty()) continue;
+            if (validRawOres.isEmpty())
+                continue;
             rawOres.add(new WeightedItem(validRawOres.get(0), ore.weightPercent));
         }
 
@@ -98,24 +110,26 @@ public class OreVeinInfoRecipe implements EmiRecipe {
     private int createLabelWidget(WidgetHolder holder, int offsetY) {
         var oreVeinLabelComp = Component.translatable("ore_vein.tfg." + ID).getVisualOrderText();
         var width = Minecraft.getInstance().font.width(oreVeinLabelComp);
-        var offsetX = (getDisplayWidth()- width)/2;
+        var offsetX = (getDisplayWidth() - width) / 2;
         holder.addText(oreVeinLabelComp, offsetX, 0, 0, false);
         return offsetY + Minecraft.getInstance().font.lineHeight + 2;
     }
 
     private int createOreItemWidgets(WidgetHolder holder, int offsetY) {
-        var offsetX = (getDisplayWidth()-(oreItems.length*20))/2;;
+        var offsetX = (getDisplayWidth() - (oreItems.length * 20)) / 2;
+        ;
         var font = Minecraft.getInstance().font;
         for (WeightedItem oreItem : oreItems) {
 
-            var widget = new SlotWidget(EmiIngredient.of(Ingredient.of(oreItem.ore), 1), offsetX+1, offsetY);
+            var widget = new SlotWidget(EmiIngredient.of(Ingredient.of(oreItem.ore), 1), offsetX + 1, offsetY);
             widget.large(false);
             widget.drawBack(true);
             widget.recipeContext(this);
             holder.add(widget);
 
-            var oreChance = Component.literal( (oreItem.weightPercent == 0 ? 1 : oreItem.weightPercent) + "%").getVisualOrderText();
-            var textOffset = (20-font.width(oreChance))/2;
+            var oreChance = Component.literal((oreItem.weightPercent == 0 ? 1 : oreItem.weightPercent) + "%")
+                    .getVisualOrderText();
+            var textOffset = (20 - font.width(oreChance)) / 2;
             holder.addText(oreChance, offsetX + textOffset, offsetY + 18, 0, false);
 
             offsetX += 20;
@@ -153,12 +167,13 @@ public class OreVeinInfoRecipe implements EmiRecipe {
 
         var perLine = Math.floorDiv(getDisplayWidth(), 18);
         perLine = Math.min(perLine, rockTypes.length);
-        var offsetStart = (getDisplayWidth()-(perLine*18))/2;
+        var offsetStart = (getDisplayWidth() - (perLine * 18)) / 2;
         var offsetX = offsetStart;
         var currentDrawPos = 1;
         for (String rockBlock : rockTypes) {
             var block = ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse(rockBlock));
-            if (block == null) continue;
+            if (block == null)
+                continue;
             var blockItem = block.asItem();
 
             if (currentDrawPos > perLine) {
@@ -181,9 +196,11 @@ public class OreVeinInfoRecipe implements EmiRecipe {
 
     private void createDimensionMarker(WidgetHolder holder, int offsetY) {
         var marker = GTRegistries.DIMENSION_MARKERS.get(dimension);
-        if (marker == null) return;
+        if (marker == null)
+            return;
         var icon = marker.getIcon();
-        var slot = new SlotWidget(EmiIngredient.of(Ingredient.of(icon)), getDisplayWidth() - 26, getDisplayHeight() - 26);
+        var slot = new SlotWidget(EmiIngredient.of(Ingredient.of(icon)), getDisplayWidth() - 26,
+                getDisplayHeight() - 26);
         slot.large(true);
         slot.drawBack(false);
         slot.recipeContext(this);
@@ -204,11 +221,15 @@ public class OreVeinInfoRecipe implements EmiRecipe {
     public List<EmiStack> getOutputs() {
         List<EmiStack> oreList = new ArrayList<>();
         var tagRegistry = ForgeRegistries.ITEMS.tags();
-        if (tagRegistry == null) return oreList;
-        for (var ore: ores) {
-            var poorTag = tagRegistry.getTag(tagRegistry.createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "poor_raw_materials/" + ore.ore)));
-            var normalTag = tagRegistry.getTag(tagRegistry.createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "raw_materials/" + ore.ore)));
-            var richTag = tagRegistry.getTag(tagRegistry.createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "rich_raw_materials/" + ore.ore)));
+        if (tagRegistry == null)
+            return oreList;
+        for (var ore : ores) {
+            var poorTag = tagRegistry.getTag(tagRegistry
+                    .createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "poor_raw_materials/" + ore.ore)));
+            var normalTag = tagRegistry.getTag(tagRegistry
+                    .createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "raw_materials/" + ore.ore)));
+            var richTag = tagRegistry.getTag(tagRegistry
+                    .createTagKey(ResourceLocation.fromNamespaceAndPath("forge", "rich_raw_materials/" + ore.ore)));
 
             poorTag.forEach(v -> oreList.add(EmiStack.of(v)));
             normalTag.forEach(v -> oreList.add(EmiStack.of(v)));

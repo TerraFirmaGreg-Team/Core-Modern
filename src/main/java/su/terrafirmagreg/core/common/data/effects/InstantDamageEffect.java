@@ -1,9 +1,11 @@
 package su.terrafirmagreg.core.common.data.effects;
 
 import com.gregtechceu.gtceu.common.data.GTDamageTypes;
+
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+
 import su.terrafirmagreg.core.common.data.TFGEffects;
 
 public class InstantDamageEffect extends MobEffect {
@@ -13,7 +15,7 @@ public class InstantDamageEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
-        if(this == TFGEffects.INSTANT_RADIATION.get()){
+        if (this == TFGEffects.INSTANT_RADIATION.get()) {
             livingEntity.hurt(GTDamageTypes.RADIATION.source(livingEntity.level()), (float) 50);
         }
     }

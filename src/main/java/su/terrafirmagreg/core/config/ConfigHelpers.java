@@ -7,10 +7,11 @@ public final class ConfigHelpers {
         String[] parts = input.split("_");
         StringBuilder result = new StringBuilder();
         for (String part : parts) {
-            if (part.isEmpty()) continue;
+            if (part.isEmpty())
+                continue;
             result.append(part.substring(0, 1).toUpperCase())
                     .append(part.substring(1).toLowerCase(Locale.ROOT))
-                    .append(omitSpaces? "" : " ");
+                    .append(omitSpaces ? "" : " ");
         }
         return result.toString().trim();
     }

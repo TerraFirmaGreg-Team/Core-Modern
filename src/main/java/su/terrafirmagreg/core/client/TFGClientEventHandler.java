@@ -1,5 +1,11 @@
 package su.terrafirmagreg.core.client;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -38,8 +44,8 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = "tfg", value = net.minecraftforge.api.distmarker.Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TFGClientEventHandler {
 
-    public static final ResourceLocation TFCMetalBlockTexturePattern =
-            ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
+    public static final ResourceLocation TFCMetalBlockTexturePattern = ResourceLocation
+            .fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
 
     @SuppressWarnings("removal")
     public TFGClientEventHandler() {
@@ -63,11 +69,10 @@ public final class TFGClientEventHandler {
         for (WeakOreProspectorEventHelper helper : OreProspectorEvent.getWeakOreProspectorListHelper()) {
             if (stack.is(helper.getItemTag())) {
                 tooltip.add(Component.translatable(
-                        "tooltip.tfg.ore_prospector_stats",
+                        "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
-                        (int) (helper.getHalfHeight() * 2)
-                ).withStyle(ChatFormatting.YELLOW));
+                        (int) (helper.getHalfHeight() * 2)).withStyle(ChatFormatting.YELLOW));
                 return;
             }
         }
@@ -76,12 +81,11 @@ public final class TFGClientEventHandler {
         for (NormalOreProspectorEventHelper helper : OreProspectorEvent.getNormalOreProspectorListHelper()) {
             if (stack.is(helper.getItemTag())) {
                 tooltip.add(Component.translatable(
-                        "tooltip.tfg.ore_prospector_stats",
+                        "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
-                        (int) (helper.getHalfHeight() * 2)
-                ).withStyle(ChatFormatting.YELLOW));
-                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_count")
+                        (int) (helper.getHalfHeight() * 2)).withStyle(ChatFormatting.YELLOW));
+                tooltip.add(Component.translatable("tfg.tooltip.ore_prospector_count")
                         .withStyle(ChatFormatting.YELLOW));
                 return;
             }
@@ -92,19 +96,18 @@ public final class TFGClientEventHandler {
             if (stack.is(helper.getItemTag())) {
                 // Determine the mode key based on centersOnly
                 String modeKey = helper.isCentersOnly()
-                        ? "tooltip.tfg.ore_prospector_mode_vein"
-                        : "tooltip.tfg.ore_prospector_mode_block";
+                        ? "tfg.tooltip.ore_prospector_mode_vein"
+                        : "tfg.tooltip.ore_prospector_mode_block";
 
                 tooltip.add(Component.translatable(
-                        "tooltip.tfg.ore_prospector_stats",
+                        "tfg.tooltip.ore_prospector_stats",
                         helper.getLength(),
                         (int) (helper.getHalfWidth() * 2),
-                        (int) (helper.getHalfHeight() * 2)
-                ).withStyle(ChatFormatting.YELLOW));
+                        (int) (helper.getHalfHeight() * 2)).withStyle(ChatFormatting.YELLOW));
 
-                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_count")
+                tooltip.add(Component.translatable("tfg.tooltip.ore_prospector_count")
                         .withStyle(ChatFormatting.YELLOW));
-                tooltip.add(Component.translatable("tooltip.tfg.ore_prospector_xray",
+                tooltip.add(Component.translatable("tfg.tooltip.ore_prospector_xray",
                         Component.translatable(modeKey) // pass the localized "vein" or "per block"
                 ).withStyle(ChatFormatting.YELLOW));
                 return;
@@ -142,23 +145,19 @@ public final class TFGClientEventHandler {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private static void onItemTooltip(ItemTooltipEvent event)
-    {
+    private static void onItemTooltip(ItemTooltipEvent event) {
         final ItemStack stack = event.getItemStack();
         final List<Component> text = event.getToolTip();
-        if (!stack.isEmpty())
-        {
+        if (!stack.isEmpty()) {
             final @Nullable ILargeEgg egg = LargeEggCapability.get(stack);
-            if (egg != null)
-            {
+            if (egg != null) {
                 egg.addTooltipInfo(text);
             }
         }
     }
 
     @SubscribeEvent
-    public void modConstruct(FMLConstructModEvent event)
-    {
+    public void modConstruct(FMLConstructModEvent event) {
 
     }
 }

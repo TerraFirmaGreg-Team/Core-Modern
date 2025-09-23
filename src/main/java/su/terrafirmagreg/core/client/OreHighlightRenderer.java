@@ -1,19 +1,20 @@
 package su.terrafirmagreg.core.client;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGParticles;
-import su.terrafirmagreg.core.config.TFGConfig;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGParticles;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 public class OreHighlightRenderer {
@@ -38,8 +39,7 @@ public class OreHighlightRenderer {
                             pos.getX() + 0.5,
                             pos.getY() + 0.5,
                             pos.getZ() + 0.5,
-                            0, 0, 0
-                    );
+                            0, 0, 0);
                 }
             }
         }
@@ -47,7 +47,8 @@ public class OreHighlightRenderer {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+        if (event.phase != TickEvent.Phase.END)
+            return;
 
         long now = System.currentTimeMillis();
 
@@ -62,5 +63,6 @@ public class OreHighlightRenderer {
         }
     }
 
-    private record Highlight(BlockPos pos, long expireTime) {}
+    private record Highlight(BlockPos pos, long expireTime) {
+    }
 }
