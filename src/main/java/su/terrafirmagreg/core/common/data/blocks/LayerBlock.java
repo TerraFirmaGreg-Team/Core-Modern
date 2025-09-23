@@ -71,7 +71,7 @@ public class LayerBlock extends Block {
                     if (layersUnder + layersAt <= 8) {
                         level.setBlock(facingPos, facingState.setValue(LAYERS, layersAt + layersUnder), 3);
                         level.destroyBlock(currentPos, false); // Have to destroy the block to prevent it from dropping
-                                                               // an additional wood ash
+                                                              // an additional wood ash
                         return Blocks.AIR.defaultBlockState();
                     } else {
                         level.setBlock(facingPos, facingState.setValue(LAYERS, 8), 3);
