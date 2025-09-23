@@ -21,7 +21,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import su.terrafirmagreg.core.compat.kjs.TFGBlockProperties;
+import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 
 public class TallDecorativePlantBlock extends ExtendedBlock implements IFluidLoggable {
 

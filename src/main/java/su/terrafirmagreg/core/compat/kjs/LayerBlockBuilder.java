@@ -53,8 +53,8 @@ public class LayerBlockBuilder extends BlockBuilder {
     }
 
     @Override
-    public LayerBlock createObject() {
-        return new LayerBlock(itemSupplier, createProperties());
+    public KubeJSLayerBlock createObject() {
+        return new KubeJSLayerBlock(itemSupplier, createProperties());
     }
 
     @Override

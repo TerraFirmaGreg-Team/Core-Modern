@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -31,6 +32,31 @@ public final class TFGTags {
         public static final TagKey<Item> WraptorFood = createItemTag("tfg:wraptor_food");
         public static final TagKey<Item> EmptySyringe = createItemTag("tfg:empty_dna_syringes");
 
+        //Block Interaction tags for use in EMI
+        public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");
+        public static final TagKey<Item> INTERACTIONBRICKSTAIR = createItemTag("tfg:interaction/brick_stairs");
+        public static final TagKey<Item> INTERACTIONBRICKSLAB = createItemTag("tfg:interaction/brick_slab");
+        public static final TagKey<Item> INTERACTIONBRICKWALL = createItemTag("tfg:interaction/brick_wall");
+        public static final TagKey<Item> INTERACTIONCRACKEDBRICK = createItemTag("tfg:interaction/cracked_brick");
+        public static final TagKey<Item> INTERACTIONCRACKEDSTAIR = createItemTag("tfg:interaction/cracked_brick_stairs");
+        public static final TagKey<Item> INTERACTIONCRACKEDSLAB = createItemTag("tfg:interaction/cracked_brick_slab");
+        public static final TagKey<Item> INTERACTIONCRACKEDWALL = createItemTag("tfg:interaction/cracked_brick_wall");
+        public static final TagKey<Item> INTERACTIONMOSSYBRICK = createItemTag("tfg:interaction/mossy_brick");
+        public static final TagKey<Item> INTERACTIONMOSSYSTAIR = createItemTag("tfg:interaction/mossy_brick_stairs");
+        public static final TagKey<Item> INTERACTIONMOSSYSLAB = createItemTag("tfg:interaction/mossy_brick_slab");
+        public static final TagKey<Item> INTERACTIONMOSSYWALL = createItemTag("tfg:interaction/mossy_brick_wall");
+
+        public static final TagKey<Item> INTERACTIONSMOOTHBRICK = createItemTag("tfg:interaction/smooth_brick");
+
+        public static final TagKey<Item> INTERACTIONCOBBLE = createItemTag("tfg:interaction/cobble");
+        public static final TagKey<Item> INTERACTIONCOBBLESTAIR = createItemTag("tfg:interaction/cobble_stairs");
+        public static final TagKey<Item> INTERACTIONCOBBLESLAB = createItemTag("tfg:interaction/cobble_slab");
+        public static final TagKey<Item> INTERACTIONCOBBLEWALL = createItemTag("tfg:interaction/cobble_wall");
+        public static final TagKey<Item> INTERACTIONMOSSYCOBBLESTAIR = createItemTag("tfg:interaction/mossy_cobble_stairs");
+        public static final TagKey<Item> INTERACTIONMOSSYCOBBLE = createItemTag("tfg:interaction/mossy_cobble");
+        public static final TagKey<Item> INTERACTIONMOSSYCOBBLESLAB = createItemTag("tfg:interaction/mossy_cobble_slab");
+        public static final TagKey<Item> INTERACTIONMOSSYCOBBLEWALL = createItemTag("tfg:interaction/mossy_cobble_wall");
+
         public static TagKey<Item> createItemTag(String path) {
             return TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.parse(path));
         }
@@ -43,6 +69,7 @@ public final class TFGTags {
         public static final TagKey<Block> DoNotDestroyInSpace = createBlockTag("tfg:do_not_destroy_in_space");
         public static final TagKey<Block> HeightmapIgnore = createBlockTag("tfg:heightmap_ignore");
         public static final TagKey<Block> DecorativePlantAttachable = createBlockTag("tfg:decorative_plant_attachable");
+
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));
@@ -64,4 +91,21 @@ public final class TFGTags {
             return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.parse(path));
         }
     }
+
+    public static final class Biomes {
+        // martian dust storm intensity
+        public static final TagKey<Biome> HasSevereDustStorms = createBiomeTag("tfg:has_severe_dust_storms");
+        public static final TagKey<Biome> HasModerateDustStorms = createBiomeTag("tfg:has_moderate_dust_storms");
+        public static final TagKey<Biome> HasMildDustStorms = createBiomeTag("tfg:has_mild_dust_storms");
+
+        // martian dust storm wind color
+        public static final TagKey<Biome> HasDarkSandWind = createBiomeTag("tfg:has_dark_sand_particles");
+        public static final TagKey<Biome> HasMediumSandWind = createBiomeTag("tfg:has_medium_sand_particles");
+        public static final TagKey<Biome> HasLightSandWind = createBiomeTag("tfg:has_light_sand_particles");
+
+        private static TagKey<Biome> createBiomeTag(String path) {
+            return TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), ResourceLocation.parse(path));
+        }
+    }
+
 }

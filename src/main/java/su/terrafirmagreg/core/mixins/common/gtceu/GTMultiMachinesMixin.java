@@ -15,8 +15,14 @@ public class GTMultiMachinesMixin {
         return 1_000_000;
     }
 
-    // STEEL_MULTIBLOCK_TANK
+    // BRONZE_MULTIBLOCK_TANK
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/data/machines/GTMachineUtils;registerMultiblockTank(Ljava/lang/String;Ljava/lang/String;ILjava/util/function/Supplier;Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/fluids/PropertyFluidFilter;Ljava/util/function/BiConsumer;)Lcom/gregtechceu/gtceu/api/machine/MultiblockMachineDefinition;", ordinal = 1), index = 2)
+    private static int patchBronzeTankCapacity(int original) {
+        return 4_000_000;
+    }
+
+    // STEEL_MULTIBLOCK_TANK
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/common/data/machines/GTMachineUtils;registerMultiblockTank(Ljava/lang/String;Ljava/lang/String;ILjava/util/function/Supplier;Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/fluids/PropertyFluidFilter;Ljava/util/function/BiConsumer;)Lcom/gregtechceu/gtceu/api/machine/MultiblockMachineDefinition;", ordinal = 2), index = 2)
     private static int patchSteelTankCapacity(int original) {
         return 8_000_000;
     }

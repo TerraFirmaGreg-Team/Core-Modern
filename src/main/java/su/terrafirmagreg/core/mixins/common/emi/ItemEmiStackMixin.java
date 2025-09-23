@@ -15,6 +15,7 @@ public abstract class ItemEmiStackMixin {
 
     /**
      * Исправляет баг, когда еда в EMI может пропасть.
+     * Ensures that food in EMI always appears fresh.
      */
     @ModifyReturnValue(method = "getItemStack", at = @At(value = "RETURN"))
     private ItemStack getItemStack(final ItemStack stack) {

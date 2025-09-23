@@ -45,8 +45,14 @@ public class TFGCreativeTab {
         accept(out, TFGBlocks.RUSTICUS_MYCELIUM);
         accept(out, TFGBlocks.SANGNUM_MYCELIUM);
 
-        accept(out, TFGBlocks.LARGE_NEST_BOX);
-        accept(out, TFGBlocks.LARGE_NEST_BOX_WARPED);
+        // martian sand piles
+        // TODO: remove when dust storms are feature complete
+        accept(out, TFGBlocks.RED_SAND_LAYER_BLOCK);
+        accept(out, TFGBlocks.MARS_SAND_LAYER_BLOCK);
+        accept(out, TFGBlocks.VENUS_SAND_LAYER_BLOCK);
+
+		accept(out, TFGBlocks.LARGE_NEST_BOX);
+		accept(out, TFGBlocks.LARGE_NEST_BOX_WARPED);
 
         accept(out, TFGItems.GLACIAN_WOOL);
         accept(out, TFGItems.SNIFFER_WOOL);

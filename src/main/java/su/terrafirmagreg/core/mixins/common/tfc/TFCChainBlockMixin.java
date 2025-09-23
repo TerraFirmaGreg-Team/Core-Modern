@@ -5,21 +5,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.dries007.tfc.common.blocks.GroundcoverBlock;
+import net.dries007.tfc.common.blocks.TFCChainBlock;
 import net.dries007.tfc.common.fluids.FluidProperty;
 
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 
-/**
- * Lets groundcover blocks (loose rocks and sticks etc) be waterloggable with our own property, which has all TFC waters
- * as well as our own mars water
- */
+@Mixin(value = TFCChainBlock.class, remap = false)
+public class TFCChainBlockMixin {
 
-@Mixin(value = GroundcoverBlock.class, remap = false)
-public class GroundcoverBlockMixin {
+    // Lets chains be waterlogged with mars water.
+    // Who's going to do that? Nobody, but TFCChainBlock and RockSpikeBlock both use
+    // TFCBlocks.lavaLoggedBlockEmission, so if we want rock spikes to be mars-waterloggable,
+    // chains need to be as well.
 
     @Inject(method = "getFluidProperty", at = @At("HEAD"), remap = false, cancellable = true)
     public void tfg$getFluidProperty(CallbackInfoReturnable<FluidProperty> cir) {
-        cir.setReturnValue(TFGBlockProperties.SPACE_WATER);
+        cir.setReturnValue(TFGBlockProperties.SPACE_WATER_AND_LAVA);
     }
 }

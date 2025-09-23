@@ -25,6 +25,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.dries007.tfc.common.blocks.soil.DirtBlock;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -49,7 +50,13 @@ import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.data.buds.BudIndicator;
 import su.terrafirmagreg.core.common.data.buds.BudIndicatorItem;
 
-@SuppressWarnings({ "unused" })
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
+@SuppressWarnings({"unused"})
 public final class TFGBlocks {
 
     // Reference table builders
@@ -117,6 +124,39 @@ public final class TFGBlocks {
                     .sound(SoundType.WART_BLOCK)
                     .randomTicks(),
                     MARS_DIRT, null, MARS_FARMLAND));
+
+    //#region Martian sand piles and layer blocks, in order of color
+
+    public static final RegistryObject<SandLayerBlock> RED_SAND_LAYER_BLOCK = register("layer/red_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                    //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> MARS_SAND_LAYER_BLOCK = register("layer/mars_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                    //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> VENUS_SAND_LAYER_BLOCK = register("layer/venus_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get())
+                    //TODO
+            ));
+
+    public static final RegistryObject<SandPileBlock> RED_SAND_PILE_BLOCK = register("pile/red_sand",
+        () -> new SandPileBlock(
+                ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
+            )
+    );
+    public static final RegistryObject<SandPileBlock> MARS_SAND_PILE_BLOCK = register("pile/mars_sand",
+        () -> new SandPileBlock(
+                ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
+            )
+    );
+    public static final RegistryObject<SandPileBlock> VENUS_SAND_PILE_BLOCK = register("pile/venus_sand",
+        () -> new SandPileBlock(
+                ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).randomTicks().blockEntity(TFCBlockEntities.PILE)
+        )
+    );
+
+    //#endregion
 
     // Fluid blocks
 
