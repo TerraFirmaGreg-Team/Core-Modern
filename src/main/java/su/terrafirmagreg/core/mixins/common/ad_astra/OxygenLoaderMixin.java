@@ -3,19 +3,18 @@ package su.terrafirmagreg.core.mixins.common.ad_astra;
 import java.util.function.Supplier;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import earth.terrarium.adastra.common.blockentities.base.RecipeMachineBlockEntity;
 import earth.terrarium.adastra.common.blockentities.machines.OxygenLoaderBlockEntity;
 import earth.terrarium.adastra.common.recipes.machines.OxygenLoadingRecipe;
-import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;
 import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.impl.WrappedBlockFluidContainer;
 
@@ -26,20 +25,18 @@ public abstract class OxygenLoaderMixin extends RecipeMachineBlockEntity<OxygenL
         super(pos, state, containerSize, recipeType);
     }
 
+    @Shadow
+    private WrappedBlockFluidContainer fluidContainer;
+
     /**
      * @author Bumperdo09
      * @reason Fixes the oxygen spreader consuming more oxygen than it can actually use
      * https://github.com/TerraFirmaGreg-Team/Modpack-Modern/issues/1760
      * https://github.com/terrarium-earth/Ad-Astra/issues/544
      */
-    @Inject(method = "recipeTick", at = @At("HEAD"), remap = false, cancellable = true)
-    public void tfg$recipeTick(ServerLevel level, WrappedBlockEnergyContainer energyStorage, CallbackInfo ci) {
-        if (recipe == null)
-            return;
-        var fluidContainer = getFluidContainer();
-        if (!canCraft() || recipe.result().getFluidAmount() != fluidContainer.internalInsert(recipe.result(), true)) {
-            clearRecipe();
-            ci.cancel();
-        }
+    @ModifyExpressionValue(method = "recipeTick", at = @At(value = "INVOKE", target = "Learth/terrarium/adastra/common/blockentities/machines/OxygenLoaderBlockEntity;canCraft()Z"))
+    private boolean modifyCanCraftCheck(boolean original) {
+        // boolean logic is different here than in the PR because the not operator is applied after the injection
+        return original && (recipe.result().getFluidAmount() == fluidContainer.internalInsert(recipe.result(), true));
     }
 }
