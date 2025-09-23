@@ -29,6 +29,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
+import su.terrafirmagreg.core.compat.create.CustomArmInteractionPointTypes;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.*;
 import su.terrafirmagreg.core.world.TFGFeatures;
@@ -83,6 +84,7 @@ public final class TFGCore {
         bus.addListener(TFGEntities::onSpawnPlacement);
         bus.addListener(TFGEntities::onEntityRenderers);
         bus.addListener(TFGEntities::onEntityLayerRegister);
+        bus.addListener(CustomArmInteractionPointTypes::onRegister);
 
         AdAstraCompat.RegisterEvents();
     }
