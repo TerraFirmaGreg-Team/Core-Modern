@@ -387,12 +387,16 @@ public class TFGMultiMachines {
                     .aisle("           AAAAAAA           ", "        AAACCCCCCCAAA        ", "       ACCCAAAAAAACCCA       ", "     AACAAAAAAAAAAAAACAA     ", "    ACCAAAAAAAAAAAAAAACCA    ", "   ACAAAAAACCCCCCCAAAAAACA   ", "   ACAAAACC       CCAAAACA   ", "  ACAAAAC           CAAAACA  ", " ACAAAAC             CAAAACA ", " ACAAAC               CAAACA ", " ACAAAC               CAAACA ", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", " ACAAAC               CAAACA ", " ACAAAC               CAAACA ", " ACAAAAC             CAAAACA ", "  ACAAAAC           CAAAACA  ", "   ACAAAACC       CCAAAACA   ", "   ACAAAAAACCCCCCCAAAAAACA   ", "    ACCAAAAAAAAAAAAAAACCA    ", "     AACAAAAAAAAAAAAACAA     ", "       ACCCAAAAAAACCCA       ", "        AAACCCCCCCAAA        ", "           AAAAAAA           ")
                     // spotless:on
                     .where("C", Predicates.blocks(GTBlocks.PLASTCRETE.get()))
-                    .where("E", Predicates.frames(GTMaterials.Steel))
+                    .where("E",
+                            Predicates.blocks(ForgeRegistries.BLOCKS.getValue(
+                                    ResourceLocation.fromNamespaceAndPath("tfg", "sample_rack"))))
                     .where("G", Predicates.blocks(GTBlocks.FILTER_CASING.get()))
                     .where("I", Predicates.blocks(GTBlocks.CLEANROOM_GLASS.get()))
                     .where("J", Predicates.frames(GTMaterials.HastelloyC276))
                     .where("K", Predicates.blocks(Blocks.OAK_PLANKS))
-                    .where("L", Predicates.blocks(Blocks.SPRUCE_PLANKS))
+                    .where("L",
+                            Predicates.blocks(ForgeRegistries.BLOCKS.getValue(
+                                    ResourceLocation.fromNamespaceAndPath("tfg", "growth_monitor"))))
                     .where("M", Predicates.blocks(Blocks.BIRCH_PLANKS))
                     .where("N", Predicates.blocks(TFGMachines.SINGLE_ITEMSTACK_BUS.get()))
                     .where(" ", Predicates.any())
