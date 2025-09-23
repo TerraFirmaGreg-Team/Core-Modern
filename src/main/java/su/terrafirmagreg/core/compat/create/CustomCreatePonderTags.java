@@ -1,19 +1,15 @@
 package su.terrafirmagreg.core.compat.create;
 
-import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
 import com.tterrag.registrate.util.entry.RegistryEntry;
+
 import net.createmod.catnip.platform.CatnipServices;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.Tags;
-
-import static com.eerussianguy.firmalife.common.blocks.OvenType.BRICK;
 
 public class CustomCreatePonderTags {
 

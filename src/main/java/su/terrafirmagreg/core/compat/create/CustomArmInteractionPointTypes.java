@@ -1,13 +1,8 @@
 package su.terrafirmagreg.core.compat.create;
 
-import com.eerussianguy.firmalife.common.blocks.FLBlocks;
-import com.eerussianguy.firmalife.common.blocks.OvenBottomBlock;
 import com.eerussianguy.firmalife.common.blocks.OvenHopperBlock;
-import com.eerussianguy.firmalife.common.blocks.OvenTopBlock;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.*;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.simibubi.create.Create;
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
@@ -38,7 +33,7 @@ public final class CustomArmInteractionPointTypes {
         Registry.register(CreateBuiltInRegistries.ARM_INTERACTION_POINT_TYPE, Create.asResource(name), type);
     }
 
-    public static  void onRegister(final RegisterEvent event){
+    public static void onRegister(final RegisterEvent event) {
         init();
     }
 
@@ -68,26 +63,26 @@ public final class CustomArmInteractionPointTypes {
             return new ArmInteractionPoint(this, level, pos, state);
         }
     }
-/* Doesn't work yet
+    /* Doesn't work yet
     public static class OvenTopBlockType extends ArmInteractionPointType {
         @Override
         public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
             return state.getBlock() instanceof OvenTopBlock;
         }
-
+    
         @Override
         public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
             return new ArmInteractionPoint(this, level, pos, state);
         }
     }
-
+    
     Doesn't work yet
     public static class OvenBottomBlockType extends ArmInteractionPointType {
         @Override
         public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
             return state.getBlock() instanceof OvenBottomBlock;
         }
-
+    
         @Override
         public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
             return new ArmInteractionPoint(this, level, pos, state);
@@ -106,7 +101,7 @@ public final class CustomArmInteractionPointTypes {
         }
     }
 
-    public static class RotorHolderBlockType extends ArmInteractionPointType{
+    public static class RotorHolderBlockType extends ArmInteractionPointType {
         @Override
         public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
             return PartAbility.ROTOR_HOLDER.getAllBlocks().contains(state.getBlock());
@@ -117,7 +112,7 @@ public final class CustomArmInteractionPointTypes {
             return new ArmInteractionPoint(this, level, pos, state);
         }
     }
-/* All the ones using Firmalife stuff don't work
+    /* All the ones using Firmalife stuff don't work
     public static class SinglePlanterBlockType extends ArmInteractionPointType{
         @Override
         public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
@@ -126,22 +121,22 @@ public final class CustomArmInteractionPointTypes {
             else if(state.getBlock() instanceof BonsaiPlanterBlock) return true;
             else return state.getBlock() instanceof TrellisPlanterBlock;
         }
-
+    
         @Override
         public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
             return new ArmInteractionPoint(this, level, pos, state);
         }
-
+    
     }
-
+    
     public static class QuadPlanterBlockType extends ArmInteractionPointType{
         @Override
         public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
             if (state.getBlock() instanceof QuadPlanterBlock) return true;
             else return state.getBlock() instanceof HydroponicPlanterBlock;
-
+    
         }
-
+    
         @Override
         public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
             return new ArmInteractionPoint(this, level, pos, state);
