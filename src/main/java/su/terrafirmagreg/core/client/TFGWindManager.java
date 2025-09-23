@@ -6,9 +6,6 @@
 
 package su.terrafirmagreg.core.client;
 
-
-import lombok.Setter;
-
 import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.client.particle.TFCParticles;
@@ -21,13 +18,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec2;
 
+import lombok.Setter;
+
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFGWindManager {
 
     private interface IWindTicker {
-        static void tickWind() {}
+        static void tickWind() {
+        }
     }
 
     public static class Mars implements IWindTicker {
@@ -45,9 +45,12 @@ public class TFGWindManager {
             final ParticleOptions mediumWind = TFGParticles.MEDIUM_MARS_WIND.get();
             final ParticleOptions lightWind = TFGParticles.LIGHT_MARS_WIND.get();
 
-            if (biome.is(TFGTags.Biomes.HasDarkSandWind)) return darkWind;
-            if (biome.is(TFGTags.Biomes.HasMediumSandWind)) return mediumWind;
-            if (biome.is(TFGTags.Biomes.HasLightSandWind)) return lightWind;
+            if (biome.is(TFGTags.Biomes.HasDarkSandWind))
+                return darkWind;
+            if (biome.is(TFGTags.Biomes.HasMediumSandWind))
+                return mediumWind;
+            if (biome.is(TFGTags.Biomes.HasLightSandWind))
+                return lightWind;
 
             return TFCParticles.WIND.get();
         }
@@ -67,8 +70,7 @@ public class TFGWindManager {
                 // TFC comments say not to go over 1, but afaik there's no problem with doing so.
                 final float windStrength = wind.length();
                 int count = 0;
-                if (windStrength > windThreshold)
-                {
+                if (windStrength > windThreshold) {
                     count = (int) (windStrength * particleMultiplier);
                 }
 
@@ -81,8 +83,7 @@ public class TFGWindManager {
 
                 // total particles per tick: biomeChecks * particlesPerCheck =~ windStrength * particleMultiplier
 
-                for (int i = 0; i < biomeChecks; i++)
-                {
+                for (int i = 0; i < biomeChecks; i++) {
                     final Vec2 randCheckVector = TFGClientHelpers.nextVec2InRadius(level.random, 12);
 
                     final double checkX = pos.getX() + offsetVec.x + randCheckVector.x;
@@ -98,8 +99,7 @@ public class TFGWindManager {
                         final double y = pos.getY() + Mth.nextDouble(level.random, -1, 6);
                         final double z = pos.getZ() + offsetVec.y + randParticleVector.y;
 
-                        if (level.canSeeSky(BlockPos.containing(x, y, z)))
-                        {
+                        if (level.canSeeSky(BlockPos.containing(x, y, z))) {
                             level.addParticle(particle, x, y, z, 0D, 0D, 0D);
                         }
                     }

@@ -5,14 +5,17 @@
  */
 package su.terrafirmagreg.core.mixins.client.tfc;
 
-import earth.terrarium.adastra.api.planets.Planet;
-import net.dries007.tfc.client.ClientForgeEventHandler;
-import net.dries007.tfc.client.ClientHelpers;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import net.dries007.tfc.client.ClientForgeEventHandler;
+import net.dries007.tfc.client.ClientHelpers;
+import net.minecraft.world.level.Level;
+
+import earth.terrarium.adastra.api.planets.Planet;
+
 import su.terrafirmagreg.core.client.TFGWindManager;
 
 @Mixin(value = ClientForgeEventHandler.class, remap = false)

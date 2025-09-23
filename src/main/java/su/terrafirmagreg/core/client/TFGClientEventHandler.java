@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.jetbrains.annotations.NotNull;
+
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.data.TFGFluids;
@@ -37,9 +37,6 @@ import su.terrafirmagreg.core.common.data.events.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.OreProspectorEvent;
 import su.terrafirmagreg.core.common.data.events.WeakOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.particles.*;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = "tfg", value = net.minecraftforge.api.distmarker.Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TFGClientEventHandler {
