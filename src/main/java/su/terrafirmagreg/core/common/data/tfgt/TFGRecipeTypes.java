@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MULTIBLOCK;
+import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +17,7 @@ import com.gregtechceu.gtceu.common.recipe.condition.AdjacentFluidCondition;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidEntryList;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
-import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
+import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 
@@ -28,19 +31,19 @@ public class TFGRecipeTypes {
     public static void init() {
     }
 
-    public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register("greenhouse", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register("greenhouse", MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(3, 4, 1, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.BATH);
 
     public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
             "tfg:textures/gui/progress_bar/progress_bar_dna.png"); // I might move this later if we end up making/using
                                                                                                                                               // more custom progress bars.
-    public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
-            .setProgressBar(PROGRESS_BAR_DNA, FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(PROGRESS_BAR_DNA, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.BATH)
             .setUiBuilder((recipe, widgetGroup) -> {
                 var text = recipe.data.getString("action");
@@ -55,14 +58,14 @@ public class TFGRecipeTypes {
     public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 1, 1, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.FURNACE);
 
     public static final GTRecipeType FOOD_PROCESSOR_RECIPES = GTRecipeTypes
             .register("food_processor", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 2, 2, 1)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.MIXER)
             .setUiBuilder((recipe, widgetGroup) -> {
                 var text = recipe.data.getString("action");
@@ -79,7 +82,7 @@ public class TFGRecipeTypes {
             .setMaxIOSize(1, 0, 0, 1)
             .setEUIO(IO.IN)
             .setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, LEFT_TO_RIGHT)
             .setMaxTooltips(4)
             .setSound(GTSoundEntries.BATH)
             .setUiBuilder((recipe, widgetGroup) -> {
@@ -107,7 +110,20 @@ public class TFGRecipeTypes {
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 1, 3, 1)
             .setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.COMPRESSOR);
+
+    public static final GTRecipeType NUCLEAR_TURBINE = GTRecipeTypes
+            .register("nuclear_turbine", GTRecipeTypes.GENERATOR)
+            .setMaxIOSize(0, 0, 1, 1)
+            .setSound(GTSoundEntries.JET_ENGINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
+
+    public final static GTRecipeType EVAPORATION_TOWER = GTRecipeTypes
+            .register("evaporation_tower", MULTIBLOCK)
+            .setMaxIOSize(0, 1, 1, 12)
+            .setEUIO(IO.IN)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
 
 }
