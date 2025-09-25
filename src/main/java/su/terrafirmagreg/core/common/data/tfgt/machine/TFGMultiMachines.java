@@ -317,6 +317,7 @@ public class TFGMultiMachines {
                         .where("Y", blocks(ForgeRegistries.BLOCKS.getValue(
                                 ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation")))
                                 .or(abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                                .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                                 .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                         .setMaxGlobalLimited(2))
                                 .or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
@@ -350,7 +351,7 @@ public class TFGMultiMachines {
                 middle.add("SSS");
                 List<String> back = new ArrayList<>(15);
                 back.add("MES");
-                back.add("SFS");
+                back.add("FSS");
                 for (int i = 1; i <= 11; ++i) {
                     front.add("SSS");
                     middle.add(1, "S#S");

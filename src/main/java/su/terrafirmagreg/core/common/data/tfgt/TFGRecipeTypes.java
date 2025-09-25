@@ -121,7 +121,7 @@ public class TFGRecipeTypes {
 
     public final static GTRecipeType EVAPORATION_TOWER = GTRecipeTypes
             .register("evaporation_tower", MULTIBLOCK)
-            .setMaxIOSize(0, 1, 1, 12)
+            .setMaxIOSize(1, 1, 1, 12)
             .setEUIO(IO.IN)
             .setSound(GTSoundEntries.CHEMICAL)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
