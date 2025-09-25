@@ -81,6 +81,7 @@
     "common.minecraft.MushroomBlockMixin",
     "common.minecraft.ServerAdvancementManagerMixin",
     "common.minecraft.ServerLifecycleHooksMixin",
+    "common.sandworms.WormSignHandlerMixin",
     "common.simply_stacked_dimensions.TeleportHandlerMixin",
     "common.species.BirtMixin",
     "common.species.GooberMixin",
