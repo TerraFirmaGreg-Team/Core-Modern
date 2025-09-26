@@ -41,6 +41,7 @@
     "common.create_additions.LiquidBlazeBurnerBlockEntityMixin",
     "common.emi.ItemEmiStackMixin",
     "common.firmalife.HydroponicPlanterBlockEntityMixin",
+    "common.firmalife.MixinFoodShelfBlockEntity",
     "common.firmalife.MixinGreenhousePortBlock",
     "common.flywheel.AnimatedBlazeBurnerMixin",
     "common.grappling_hook.AirFrictionControllerMixin",
