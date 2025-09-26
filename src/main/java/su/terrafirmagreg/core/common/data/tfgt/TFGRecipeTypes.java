@@ -116,7 +116,7 @@ public class TFGRecipeTypes {
     public static final GTRecipeType NUCLEAR_TURBINE = GTRecipeTypes
             .register("nuclear_turbine", GTRecipeTypes.GENERATOR)
             .setMaxIOSize(0, 0, 1, 1)
-            .setSound(GTSoundEntries.JET_ENGINE)
+            .setSound(GTSoundEntries.TURBINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
 
     public final static GTRecipeType EVAPORATION_TOWER = GTRecipeTypes
