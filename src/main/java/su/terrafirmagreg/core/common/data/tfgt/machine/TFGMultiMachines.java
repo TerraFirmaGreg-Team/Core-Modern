@@ -258,7 +258,7 @@ public class TFGMultiMachines {
                     .where('Y', controller(blocks(definition.get())))
                     .where("A", blocks(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
                     .where("B", frames(GTMaterials.StainlessSteel))
-                    .where("C", blocks(CASING_STEEL_TURBINE.get()).setMinGlobalLimited(58)
+                    .where("C", blocks(CASING_STEEL_TURBINE.get()).setMinGlobalLimited(50)
                             .or(autoAbilities(definition.getRecipeTypes()))
                             .or(autoAbilities(true, false, false))
                             .or(abilities(OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
