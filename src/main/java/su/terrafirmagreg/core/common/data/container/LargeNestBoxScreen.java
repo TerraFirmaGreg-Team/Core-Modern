@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.contianer;
+package su.terrafirmagreg.core.common.data.container;
 
 import net.dries007.tfc.client.screen.TFCContainerScreen;
 import net.minecraft.network.chat.Component;
