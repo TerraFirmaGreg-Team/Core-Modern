@@ -131,7 +131,7 @@ dependencies {
     // AE2
     implementation fg.deobf("curse.maven:guideme-1173950:7013686")
     implementation fg.deobf(jarJar("appeng:appliedenergistics2-forge:$ae2_version")) {
-        jarJar.ranged(it, "[$ae2_version,)
+        jarJar.ranged(it, "[$ae2_version,)")
     }
 
     // ComputerCraft
