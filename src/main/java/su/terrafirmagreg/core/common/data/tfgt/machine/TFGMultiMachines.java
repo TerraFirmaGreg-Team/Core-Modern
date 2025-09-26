@@ -1,9 +1,10 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import static com.gregtechceu.gtceu.api.GTValues.HV;
+import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STAINLESS_CLEAN;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.OC_NON_PERFECT_SUBTICK;
@@ -26,9 +27,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
@@ -63,7 +62,7 @@ public class TFGMultiMachines {
             .pattern(definition -> {
                 IMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_IN)
                         .map(MachineDefinition::get).toArray(IMachineBlock[]::new);
-                return FactoryBlockPattern.start(RIGHT, RelativeDirection.FRONT, UP)
+                return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                         .aisle("F###F", "#SSS#", "#SSS#", "#ESE#", "F###F")
                         .aisle("FsssF", "sSCSs", "sCCCs", "sSCSs", "FsysF")
                         .aisle("F###F", "#LCL#", "#R R#", "#LCL#", "F###F")
@@ -73,14 +72,14 @@ public class TFGMultiMachines {
                         .aisle("#####", "#M#M#", "#R R#", "#M#M#", "#####").setRepeatable(3)
                         .aisle("#####", "#CHC#", "#R R#", "#CHC#", "#####")
                         .aisle("#####", "#C#C#", "#R R#", "#C#C#", "#####").setRepeatable(2)
-                        .where('y', Predicates.controller(blocks(definition.get())))
-                        .where(' ', Predicates.air())
-                        .where('#', Predicates.any())
-                        .where('F', Predicates.frames(GTMaterials.Aluminium))
-                        .where('H', Predicates.frames(GTMaterials.HSLASteel))
+                        .where('y', controller(blocks(definition.get())))
+                        .where(' ', air())
+                        .where('#', any())
+                        .where('F', frames(GTMaterials.Aluminium))
+                        .where('H', frames(GTMaterials.HSLASteel))
                         .where('S', blocks(CASING_STAINLESS_CLEAN.get()))
                         .where('C', blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
-                        .where('E', abilities(PartAbility.INPUT_ENERGY).setExactLimit(2))
+                        .where('E', abilities(INPUT_ENERGY).setExactLimit(2))
                         .where('s',
                                 blocks(CASING_STAINLESS_CLEAN.get())
                                         .or(blocks(inputBuses).setMinGlobalLimited(1))
@@ -114,16 +113,16 @@ public class TFGMultiMachines {
                         .where("B", blocks(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
                         .where("b",
                                 blocks(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get())
-                                        .or(abilities(PartAbility.INPUT_ENERGY)
+                                        .or(abilities(INPUT_ENERGY)
                                                 .or(blocks(inputBuses))))
-                        .where("C", Predicates.frames(GTMaterials.Aluminium))
-                        .where("D", Predicates.controller(blocks(def.get())))
-                        .where("E", blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                        .where("C", frames(GTMaterials.Aluminium))
+                        .where("D", controller(blocks(def.get())))
+                        .where("E", blocks(CASING_STEEL_SOLID.get()))
                         .where('F', blocks(GCYMBlocks.CASING_NONCONDUCTING.get()))
                         .where("G",
-                                blocks(GTBlocks.YELLOW_STRIPES_BLOCK_A.get())
-                                        .or(blocks(GTBlocks.YELLOW_STRIPES_BLOCK_B.get())))
-                        .where(" ", Predicates.any())
+                                blocks(YELLOW_STRIPES_BLOCK_A.get())
+                                        .or(blocks(YELLOW_STRIPES_BLOCK_B.get())))
+                        .where(" ", any())
                         .build();
             })
             .register();
@@ -133,58 +132,44 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
             .recipeModifier(GTRecipeModifiers.OC_PERFECT)
-            .appearanceBlock(GTBlocks.STEEL_HULL)
+            .appearanceBlock(STEEL_HULL)
             .workableCasingModel(GTCEu.id("block/casings/steam/steel"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX",
-                            "   F   ")
-                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X",
-                            " XXFXX ")
-                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X",
-                            " XXFXX ")
-                    .aisle("CDDDDDC", "F     F", "F     F", "F     F", "F     F", "F     F", "F     F", "F     F",
-                            "FFFFFFF")
-                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X",
-                            " XXFXX ")
-                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X",
-                            " XXFXX ")
-                    .aisle("CCCYCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX",
-                            "   F   ")
-                    .where('Y', Predicates.controller(blocks(definition.get())))
-                    .where('C', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(15)
+                    .aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
+                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
+                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
+                    .aisle("CDDDDDC", "F     F", "F     F", "F     F", "F     F", "F     F", "F     F", "F     F", "FFFFFFF")
+                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
+                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
+                    .aisle("CCCYCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
+                    .where('Y', controller(blocks(definition.get())))
+                    .where('C', blocks(STEEL_HULL.get()).setMinGlobalLimited(15)
                             .or(autoAbilities(definition.getRecipeTypes()))
                             .or(autoAbilities(true, false, false)))
-                    .where(' ', Predicates.any())
-                    .where('F', Predicates.frames(GTMaterials.Steel)
-                            .or(blocks(GTBlocks.CASING_STEEL_SOLID.get())))
-                    .where('X', Predicates.blockTag(Tags.Blocks.GLASS)
+                    .where(' ', any())
+                    .where('F', frames(GTMaterials.Steel)
+                            .or(blocks(CASING_STEEL_SOLID.get())))
+                    .where('X', blockTag(Tags.Blocks.GLASS)
                             .or(blocks(ForgeRegistries.BLOCKS
                                     .getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_glass")))))
-                    .where('D', Predicates.blockTag(BlockTags.DIRT)
-                            .or(Predicates.blockTag(TFCTags.Blocks.GRASS))
-                            .or(Predicates.blockTag(BlockTags.SAND))
-                            .or(Predicates.blockTag(TFCTags.Blocks.FARMLAND)))
+                    .where('D', blockTag(BlockTags.DIRT)
+                            .or(blockTag(TFCTags.Blocks.GRASS))
+                            .or(blockTag(BlockTags.SAND))
+                            .or(blockTag(TFCTags.Blocks.FARMLAND)))
                     .build())
             .shapeInfos(definition -> {
                 List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
                 var builder = MultiblockShapeInfo.builder()
-                        .aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX",
-                                "###F###")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X",
-                                "#XXFXX#")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X",
-                                "#XXFXX#")
-                        .aisle("CDDDDDC", "F##W##F", "F##W##F", "F##W##F", "F#LWL#F", "F#LWL#F", "F#LLL#F", "F#####F",
-                                "FFFFFFF")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X",
-                                "#XXFXX#")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X",
-                                "#XXFXX#")
-                        .aisle("mitYfee", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX",
-                                "###F###")
+                        .aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
+                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
+                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", "#XXFXX#")
+                        .aisle("CDDDDDC", "F##W##F", "F##W##F", "F##W##F", "F#LWL#F", "F#LWL#F", "F#LLL#F", "F#####F", "FFFFFFF")
+                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", "#XXFXX#")
+                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
+                        .aisle("mitYfee", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
                         .where('Y', definition, Direction.SOUTH)
-                        .where('C', GTBlocks.STEEL_HULL.getDefaultState())
+                        .where('C', STEEL_HULL.getDefaultState())
                         .where('D',
                                 ForgeRegistries.BLOCKS
                                         .getValue(ResourceLocation.fromNamespaceAndPath("tfc", "grass/loam")))
@@ -220,23 +205,18 @@ public class TFGMultiMachines {
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FFF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#",
-                            "#BBB#####")
-                    .aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB",
-                            "BBBBB####")
-                    .aisle("#GGGABBBC", "BBBBDHHHD", "E J DHHHD", "E J BBBBF", "E J E K E", "E   E   E", "E   BBBBC",
-                            "BBBBB####")
-                    .aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB",
-                            "BBBBB####")
-                    .aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FLF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#",
-                            "#BBB#####")
-                    .where(" ", Predicates.air())
-                    .where("#", Predicates.any())
-                    .where("A", blocks(GTBlocks.CASING_PTFE_INERT.get()))
+                    .aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FFF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
+                    .aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
+                    .aisle("#GGGABBBC", "BBBBDHHHD", "E J DHHHD", "E J BBBBF", "E J E K E", "E   E   E", "E   BBBBC", "BBBBB####")
+                    .aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
+                    .aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FLF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
+                    .where(" ", air())
+                    .where("#", any())
+                    .where("A", blocks(CASING_PTFE_INERT.get()))
                     .where("B",
                             blocks(ForgeRegistries.BLOCKS.getValue(
                                     ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"))))
-                    .where("C", blocks(GTBlocks.CASING_EXTREME_ENGINE_INTAKE.get()))
+                    .where("C", blocks(CASING_EXTREME_ENGINE_INTAKE.get()))
                     .where("D",
                             blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation
                                     .fromNamespaceAndPath("tfg", "casings/machine_casing_ultraviolet"))))
@@ -247,8 +227,8 @@ public class TFGMultiMachines {
                             ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture")))
                             .or(autoAbilities(definition.getRecipeTypes()))
                             .or(autoAbilities(true, false, false)))
-                    .where("G", blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
-                    .where("H", blocks(GTBlocks.FILTER_CASING.get()))
+                    .where("G", blocks(CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+                    .where("H", blocks(FILTER_CASING.get()))
                     .where("I",
                             blocks(ForgeRegistries.BLOCKS
                                     .getValue(ResourceLocation.fromNamespaceAndPath("gtceu", "purple_lamp"))))
@@ -258,7 +238,7 @@ public class TFGMultiMachines {
                     .where("K",
                             blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation
                                     .fromNamespaceAndPath("tfg", "casings/bioculture_rotor_secondary"))))
-                    .where("L", Predicates.controller(blocks(definition.get())))
+                    .where("L", controller(blocks(definition.get())))
                     .build())
             .register();
 
@@ -266,7 +246,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.NUCLEAR_TURBINE)
             .recipeModifier(LargeTurbineMachine::recipeModifier, true)
-            .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
+            .appearanceBlock(CASING_STEEL_TURBINE)
             .workableCasingModel(GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("A   A", "A   A", "CCCCC", "CDCDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
@@ -274,19 +254,19 @@ public class TFGMultiMachines {
                     .aisle("     ", "     ", "CCGCC", "CFHFC", "CFHFC", "CAFAC", "BAFAB", " A A ", " A A ", " A A ", " A A ")
                     .aisle("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
                     .aisle("A   A", "A   A", "CCCCC", "CDYDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
-                    .where(" ", Predicates.air())
-                    .where('Y', Predicates.controller(blocks(definition.get())))
+                    .where(" ", air())
+                    .where('Y', controller(blocks(definition.get())))
                     .where("A", blocks(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
-                    .where("B", Predicates.frames(GTMaterials.StainlessSteel))
-                    .where("C", blocks(GTBlocks.CASING_STEEL_TURBINE.get()).setMinGlobalLimited(58)
+                    .where("B", frames(GTMaterials.StainlessSteel))
+                    .where("C", blocks(CASING_STEEL_TURBINE.get()).setMinGlobalLimited(58)
                             .or(autoAbilities(definition.getRecipeTypes()))
                             .or(autoAbilities(true, false, false))
-                            .or(abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
+                            .or(abilities(OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
                     .where("D", blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ad_astra", "vent"))))
-                    .where("E", blocks(GTBlocks.COIL_CUPRONICKEL.get()))
-                    .where("F", blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+                    .where("E", blocks(COIL_CUPRONICKEL.get()))
+                    .where("F", blocks(CASING_TITANIUM_PIPE.get()))
                     .where("G", blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new)))
-                    .where("H", blocks(GTBlocks.CASING_TITANIUM_GEARBOX.get()))
+                    .where("H", blocks(CASING_TITANIUM_GEARBOX.get()))
                     .build())
             .register();
 
@@ -301,11 +281,9 @@ public class TFGMultiMachines {
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> {
-                TraceabilityPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X);
-                if (GTCEu.Mods.isAE2Loaded()) {
-                    exportPredicate = exportPredicate.or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
-                }
+                TraceabilityPredicate exportPredicate = abilities(EXPORT_FLUIDS_1X).or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
                 exportPredicate.setMaxLayerLimited(1);
+
                 TraceabilityPredicate maint = autoAbilities(true, false, false)
                         .setMaxGlobalLimited(1);
                 return FactoryBlockPattern.start(RIGHT, BACK, UP)
@@ -316,18 +294,19 @@ public class TFGMultiMachines {
                         .where('S', controller(blocks(definition.getBlock())))
                         .where("Y", blocks(ForgeRegistries.BLOCKS.getValue(
                                 ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation")))
-                                .or(abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
-                                .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                                .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                                .or(abilities(EXPORT_ITEMS).setMaxGlobalLimited(1))
+                                .or(abilities(IMPORT_ITEMS).setMaxGlobalLimited(1))
+                                .or(abilities(INPUT_ENERGY).setMinGlobalLimited(1)
                                         .setMaxGlobalLimited(2))
-                                .or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
+                                .or(abilities(IMPORT_FLUIDS).setExactLimit(1))
                                 .or(maint))
                         .where("Z", blocks(ForgeRegistries.BLOCKS.getValue(
                                 ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation")))
                                 .or(exportPredicate)
                                 .or(maint))
                         .where('X', blocks(ForgeRegistries.BLOCKS.getValue(
-                                ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation"))).or(exportPredicate))
+                                ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation")))
+                                .or(exportPredicate))
                         .where('#', air())
                         .build();
             })

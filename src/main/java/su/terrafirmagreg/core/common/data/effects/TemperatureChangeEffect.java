@@ -31,7 +31,8 @@ public class TemperatureChangeEffect extends MobEffect {
         if (this == TFGEffects.COOLING.get()) {
             tempCap.setTemperature(tempCap.getTemperature() - deltaTemp * (amplifier + 1));
         } else if (this == TFGEffects.WARMING.get()) {
-            if (tempCap.getTemperature() <= maxTemp) tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
+            if (tempCap.getTemperature() <= maxTemp)
+                tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
         }
     }
 
