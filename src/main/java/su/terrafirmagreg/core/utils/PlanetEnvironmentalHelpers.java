@@ -14,6 +14,8 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 import java.util.Arrays;
 import java.util.List;
 
+import static su.terrafirmagreg.core.TFGCore.LOGGER;
+
 public class PlanetEnvironmentalHelpers {
     private static final List<Pair<TagKey<Biome>, MarsSandBlockType>> marsBiomeTags =
             Arrays.asList(
@@ -30,7 +32,7 @@ public class PlanetEnvironmentalHelpers {
             LevelReader level, BlockPos pos, boolean isPileBlock) {
         final Holder<Biome> currentBiome = level.getBiome(pos);
 
-        return marsBiomeTags.stream()
+        Block layer = marsBiomeTags.stream()
                 .findFirst()
                 .filter(pair -> currentBiome.is(pair.getFirst()))
                 .map(
@@ -38,11 +40,16 @@ public class PlanetEnvironmentalHelpers {
                                 isPileBlock
                                         ? pair.getSecond().getPileBlock()
                                         : pair.getSecond().getLayerBlock())
-                // TODO: replace with orElseThrow before modpack release
-                .orElse(
-                        isPileBlock
-                                ? MarsSandBlockType.MEDIUM.getPileBlock()
-                                : MarsSandBlockType.MEDIUM.getLayerBlock());
+                .orElse(null);
+
+        if (layer == null) {
+            layer = isPileBlock
+                    ? MarsSandBlockType.MEDIUM.getPileBlock()
+                    : MarsSandBlockType.MEDIUM.getLayerBlock();
+            LOGGER.warn("{} is missing a sand wind biome tag! falling back to medium sand wind", currentBiome);
+        }
+
+        return layer;
     }
 
     public enum MarsSandBlockType {
@@ -52,8 +59,10 @@ public class PlanetEnvironmentalHelpers {
 
         private static final MarsSandBlockType[] VALUES = values();
 
-        @Getter private final Block layerBlock;
-        @Getter private final Block pileBlock;
+        @Getter
+        private final Block layerBlock;
+        @Getter
+        private final Block pileBlock;
 
         MarsSandBlockType(Block layerBlock, Block pileBlock) {
             this.layerBlock = layerBlock;
