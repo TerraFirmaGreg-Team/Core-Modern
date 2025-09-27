@@ -1,9 +1,5 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import java.util.Optional;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.PileBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
@@ -24,10 +20,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.HitResult;
-
+import org.jetbrains.annotations.Nullable;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.utils.PlanetEnvironmentalHelpers;
+
+import java.util.Optional;
 
 public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtension, EntityBlockExtension {
 
@@ -171,11 +168,11 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
         return defaultBlockState();
     }
 
-//    @Override
-//    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
-//    {
-//        // TODO: remove before modpack release
-//        return new ItemStack(Blocks.SNOW);
-//    }
+    //    @Override
+    //    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
+    //    {
+    //        // TODO: remove before modpack release
+    //        return new ItemStack(Blocks.SNOW);
+    //    }
 
 }

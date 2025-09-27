@@ -1,9 +1,7 @@
 package su.terrafirmagreg.core.utils;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.mojang.datafixers.util.Pair;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -11,9 +9,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-
-import lombok.Getter;
-
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
