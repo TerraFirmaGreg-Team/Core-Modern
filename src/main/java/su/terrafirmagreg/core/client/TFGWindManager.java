@@ -6,7 +6,6 @@
 
 package su.terrafirmagreg.core.client;
 
-import lombok.Setter;
 import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.client.particle.TFCParticles;
@@ -18,6 +17,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec2;
+
+import lombok.Setter;
+
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;

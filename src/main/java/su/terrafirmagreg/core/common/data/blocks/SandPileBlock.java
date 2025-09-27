@@ -1,5 +1,9 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import java.util.Optional;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.PileBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
@@ -20,11 +24,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import org.jetbrains.annotations.Nullable;
+
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.utils.PlanetEnvironmentalHelpers;
-
-import java.util.Optional;
 
 public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtension, EntityBlockExtension {
 

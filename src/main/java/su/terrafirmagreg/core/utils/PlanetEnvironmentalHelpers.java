@@ -1,7 +1,14 @@
 package su.terrafirmagreg.core.utils;
 
+import static su.terrafirmagreg.core.TFGCore.LOGGER;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.mojang.datafixers.util.Pair;
-import lombok.Getter;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -9,15 +16,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+
+import lombok.Getter;
+
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static su.terrafirmagreg.core.TFGCore.LOGGER;
 
 public class PlanetEnvironmentalHelpers {
     private static final List<Pair<TagKey<Biome>, MarsSandBlockType>> marsBiomeTags = Arrays.asList(

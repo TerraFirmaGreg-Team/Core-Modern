@@ -5,7 +5,6 @@
  */
 package su.terrafirmagreg.core.utils;
 
-import earth.terrarium.adastra.api.planets.Planet;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
@@ -24,6 +23,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec2;
+
+import earth.terrarium.adastra.api.planets.Planet;
+
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.AbstractLayerBlock;
 import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
