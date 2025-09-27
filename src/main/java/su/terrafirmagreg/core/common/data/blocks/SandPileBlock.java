@@ -13,7 +13,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -21,10 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.HitResult;
-
 import org.jetbrains.annotations.Nullable;
-
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.utils.PlanetEnvironmentalHelpers;
 
@@ -61,7 +57,7 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
             level.blockUpdated(posAbove, Blocks.AIR);
         }
 
-        // And update grass with the snowy property
+        // TODO: update grass with the sandy property
 //        final BlockPos posBelow = pos.below();
 //        level.setBlock(posBelow, Helpers.setProperty(level.getBlockState(posBelow), SnowyDirtBlock.SNOWY, true), 2);
     }
@@ -188,16 +184,17 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
 
     @Nullable
     @Override
+    // do i even need this?
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return defaultBlockState();
     }
 
-    @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
-    {
-        // TODO: remove before modpack release
-        return new ItemStack(Blocks.SNOW);
-    }
+//    @Override
+//    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
+//    {
+//        // TODO: remove before modpack release
+//        return new ItemStack(Blocks.SNOW);
+//    }
 
 }

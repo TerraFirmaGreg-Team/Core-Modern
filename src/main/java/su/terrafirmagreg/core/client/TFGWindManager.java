@@ -8,7 +8,6 @@ package su.terrafirmagreg.core.client;
 
 
 import lombok.Setter;
-
 import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.client.particle.TFCParticles;
@@ -20,9 +19,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec2;
-
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
 
 public class TFGWindManager {
 
@@ -62,8 +61,10 @@ public class TFGWindManager {
             if (player != null && level != null && level.getGameTime() % 2 == 0) // spawns particles every 2 ticks
             {
                 final BlockPos pos = player.blockPosition();
-                // wind source depends on climate model - in this case, KubeJS Mars
-                final Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
+                // wind source depends on climate model - in this case, KubeJS Mars, OR whatever the current override is
+                final Vec2 wind = MarsEnvironmentalHelpers.wind_override.lengthSquared() == 0.0
+                        ? ClimateRenderCache.INSTANCE.getWind()
+                        : MarsEnvironmentalHelpers.wind_override;
                 // TFC comments say not to go over 1, but afaik there's no problem with doing so.
                 final float windStrength = wind.length();
                 int count = 0;

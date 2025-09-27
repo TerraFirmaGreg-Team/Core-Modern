@@ -6,7 +6,6 @@
 package su.terrafirmagreg.core.utils;
 
 import earth.terrarium.adastra.api.planets.Planet;
-
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
@@ -25,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec2;
-
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.AbstractLayerBlock;
 import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
@@ -37,6 +35,9 @@ public final class MarsEnvironmentalHelpers {
     public static final float DUST_LOOSEN_SPEED = 2.0f; // sand piles will erode at this speed or higher
     public static final int DUST_SETTLE_RANDOM_TICK_CHANCE = 50;
     public static final int DUST_LOOSEN_RANDOM_TICK_CHANCE = 50;
+
+    public static Vec2 wind_override = Vec2.ZERO;
+    public static float dustiness_override = 0.0f;
 
     // fuck it we're doing sand rain overrides
     public static boolean isAtmosphereDusty(Level level, BlockPos pos)
@@ -102,15 +103,14 @@ public final class MarsEnvironmentalHelpers {
     }
 
     // TODO: after adding sand piles
-    private static void removeSandAt(Level level, BlockPos surfacePos, float temperature, int expectedLayers) {
-//        // Snow melting - both snow and snow piles
-//        final BlockState state = level.getBlockState(surfacePos);
-//        if (isSnow(state))
-//        {
-//            // When melting snow, we melt layers at +2 from expected, while the temperature is still below zero
-//            // This slowly reduces massive excess amounts of snow, if they're present, but doesn't actually start melting snow a lot when we're still below freezing.
-//            SnowPileBlock.removePileOrSnow(level, surfacePos, state, temperature > 0f ? expectedLayers : expectedLayers + 2);
-//        }
+    private static void removeSandAt(LevelAccessor level, BlockPos surfacePos, float temperature, int expectedLayers) {
+        // Snow melting - both snow and snow piles
+        final BlockState state = level.getBlockState(surfacePos);
+        if (isSand(state)) {
+            // When melting snow, we melt layers at +2 from expected, while the temperature is still below zero
+            // This slowly reduces massive excess amounts of snow, if they're present, but doesn't actually start melting snow a lot when we're still below freezing.
+            SandPileBlock.removePileOrSand(level, surfacePos, state, temperature > 0f ? expectedLayers : expectedLayers + 2);
+        }
     }
 
     private static boolean placeSandOrSandPile(Level level, BlockPos initialPos, RandomSource random, int expectedLayers) {
@@ -206,4 +206,21 @@ public final class MarsEnvironmentalHelpers {
         }
         return pos;
     }
+
+    //region Debug Commands
+    public static void setDustIntensity(float intensity) {
+        dustiness_override = intensity;
+    }
+
+    public static void setWind(float strength) {
+        wind_override = wind_override.lengthSquared() == 0.0
+                ? new Vec2(1, 0).scale(strength)
+                : wind_override.normalized().scale(strength);
+    }
+
+    public static void setWind(Vec2 vector) {
+        wind_override = vector;
+    }
+
+    //endregion
 }
