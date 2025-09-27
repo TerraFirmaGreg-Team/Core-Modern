@@ -38,9 +38,9 @@ public class WindmillBearingBlockEntityMixin extends GeneratingKineticBlockEntit
             CreateLang.translate("gui.goggles.kinetic_stats").forGoggles(tooltip);
         }
 
-        Lang.builder("tfg").translate("greate.windmill_hint.1").style(ChatFormatting.GOLD).forGoggles(tooltip);
-        Lang.builder("tfg").translate("greate.windmill_hint.2").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
-        Lang.builder("tfg").translate("greate.windmill_hint.3").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
+        Lang.builder("tfg").translate("greate.windmill_hint_1").style(ChatFormatting.GOLD).forGoggles(tooltip);
+        Lang.builder("tfg").translate("greate.windmill_hint_2").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
+        Lang.builder("tfg").translate("greate.windmill_hint_3").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
 
         Lang.builder("greate").translate("tooltip.capacity").style(ChatFormatting.GRAY).forGoggles(tooltip);
         Lang.builder("greate").add(CreateLang.number(GConfigUtility.getMaxCapacityFromTier(1)).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space()
