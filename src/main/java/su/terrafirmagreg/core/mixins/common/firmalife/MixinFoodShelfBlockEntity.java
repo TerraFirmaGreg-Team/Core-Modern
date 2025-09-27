@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-@Mixin(FoodShelfBlockEntity.class)
+@Mixin(value = FoodShelfBlockEntity.class, remap = false)
 public abstract class MixinFoodShelfBlockEntity extends InventoryBlockEntity<ItemStackHandler> implements ClimateReceiver {
 
     @Shadow

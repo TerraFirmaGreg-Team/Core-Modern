@@ -17,7 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
-import su.terrafirmagreg.core.common.data.contianer.LargeNestBoxContainer;
+import su.terrafirmagreg.core.common.data.container.LargeNestBoxContainer;
 
 public class TFGContainers {
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES,
