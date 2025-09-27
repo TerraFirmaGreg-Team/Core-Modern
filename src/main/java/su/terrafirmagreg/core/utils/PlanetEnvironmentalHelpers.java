@@ -1,16 +1,13 @@
 package su.terrafirmagreg.core.utils;
 
 import com.mojang.datafixers.util.Pair;
-
 import lombok.Getter;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -24,8 +21,13 @@ public class PlanetEnvironmentalHelpers {
                     new Pair<>(TFGTags.Biomes.HasMediumSandWind, MarsSandBlockType.MEDIUM),
                     new Pair<>(TFGTags.Biomes.HasLightSandWind, MarsSandBlockType.LIGHT));
 
+    /**
+     * Retrieves the correct sand layer block for a given block position.
+     *
+     * @param isPileBlock whether the layer block to be placed is a pile
+     */
     public static Block getSandBlockForBiome(
-            LevelAccessor level, BlockPos pos, boolean isPileBlock) {
+            LevelReader level, BlockPos pos, boolean isPileBlock) {
         final Holder<Biome> currentBiome = level.getBiome(pos);
 
         return marsBiomeTags.stream()
