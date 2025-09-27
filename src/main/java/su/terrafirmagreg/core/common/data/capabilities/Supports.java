@@ -1,5 +1,10 @@
 package su.terrafirmagreg.core.common.data.capabilities;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Stream;
+
 import net.dries007.tfc.util.Support;
 import net.dries007.tfc.util.Support.SupportRange;
 import net.minecraft.core.BlockPos;
@@ -9,11 +14,6 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Additional data that is attached to a chunk during world generation. Stores support information of each placed support within a chunk.
@@ -26,8 +26,10 @@ public class Supports {
 
     public static boolean isSupported(LevelReader level, BlockPos pos) {
         for (SupportEntry entry : getNearbySupportList(level, pos)) {
-            if (pos.distManhattan(entry.pos) > entry.maxRange()) continue;
-            if (entry.boundingBox().contains(pos.getCenter())) return true;
+            if (pos.distManhattan(entry.pos) > entry.maxRange())
+                continue;
+            if (entry.boundingBox().contains(pos.getCenter()))
+                return true;
         }
         return false;
     }
@@ -53,18 +55,18 @@ public class Supports {
     }
 
     public static Supports get(LevelChunk chunk) {
-//        return chunk.isEmpty() ? EMPTY : chunk.getCapability(SupportsCapability.CAPABILITY).map(SupportsCapability::getData).orElse(EMPTY);
+        //        return chunk.isEmpty() ? EMPTY : chunk.getCapability(SupportsCapability.CAPABILITY).map(SupportsCapability::getData).orElse(EMPTY);
         return null;
     }
 
     private List<SupportEntry> supportEntries;
 
-    public Supports() {}
+    public Supports() {
+    }
 
     public List<SupportEntry> getSupportList() {
         return this.supportEntries;
     }
-
 
     public class SupportEntry {
         final public BlockPos pos;

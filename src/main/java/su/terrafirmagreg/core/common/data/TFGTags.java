@@ -70,7 +70,6 @@ public final class TFGTags {
         public static final TagKey<Block> HeightmapIgnore = createBlockTag("tfg:heightmap_ignore");
         public static final TagKey<Block> DecorativePlantAttachable = createBlockTag("tfg:decorative_plant_attachable");
 
-
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));
         }

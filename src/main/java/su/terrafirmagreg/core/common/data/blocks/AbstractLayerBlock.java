@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -15,8 +17,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-
-import javax.annotation.Nullable;
 
 /**
  * Base layer block implementation that bundles genericized TFC {@link net.dries007.tfc.mixin.SnowLayerBlockMixin} methods
@@ -49,12 +49,10 @@ public abstract class AbstractLayerBlock extends SnowLayerBlock {
      * Add behavior to layer blocks - when they are destroyed, they should only destroy one layer.
      */
     @Override
-    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)
-    {
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         playerWillDestroy(level, pos, state, player);
         final int prevLayers = state.getValue(LAYERS);
-        if (prevLayers > 1 && !player.isCreative())
-        {
+        if (prevLayers > 1 && !player.isCreative()) {
             return level.setBlock(pos, state.setValue(LAYERS, prevLayers - 1), level.isClientSide ? 11 : 3);
         }
         return level.setBlock(pos, fluid.createLegacyBlock(), level.isClientSide ? 11 : 3);
@@ -73,7 +71,5 @@ public abstract class AbstractLayerBlock extends SnowLayerBlock {
 
     @Override
     public abstract float getSpeedFactor();
-
-
 
 }

@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec2;
+
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.AbstractLayerBlock;
 import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
@@ -40,22 +41,20 @@ public final class MarsEnvironmentalHelpers {
     public static float dustiness_override = 0.0f;
 
     // fuck it we're doing sand rain overrides
-    public static boolean isAtmosphereDusty(Level level, BlockPos pos)
-    {
+    public static boolean isAtmosphereDusty(Level level, BlockPos pos) {
         return level.isRaining() && WorldTracker.get(level).isRaining(level, pos);
-//        return true;
+        //        return true;
     }
 
-    public static boolean isSand(BlockState state)
-    {
+    public static boolean isSand(BlockState state) {
         final Block blockStateBlock = state.getBlock();
         return blockStateBlock instanceof AbstractLayerBlock || blockStateBlock instanceof SandPileBlock;
     }
 
     // TODO: get working
-    public static void tickChunk(ServerLevel level, LevelChunk chunk, ProfilerFiller profiler)
-    {
-        if (!level.dimension().equals(Planet.MARS)) return;
+    public static void tickChunk(ServerLevel level, LevelChunk chunk, ProfilerFiller profiler) {
+        if (!level.dimension().equals(Planet.MARS))
+            return;
 
         final ChunkPos chunkPos = chunk.getPos();
         final BlockPos lcgPos = level.getBlockRandomPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), 15);
@@ -68,34 +67,25 @@ public final class MarsEnvironmentalHelpers {
         profiler.pop();
     }
 
-    private static void doSand(Level level, BlockPos surfacePos, float temperature, Vec2 wind)
-    {
+    private static void doSand(Level level, BlockPos surfacePos, float temperature, Vec2 wind) {
         // Snow only accumulates during rain
         final RandomSource random = level.random;
         final int expectedLayers = (int) getExpectedSandLayerHeight(wind.length());
-        if (wind.length() <= DUST_SETTLE_SPEED /* && isAtmosphereDusty(level, surfacePos)*/)
-        {
-            if (random.nextInt(TFGConfig.SERVER.sandAccumulateChance.get()) == 0)
-            {
+        if (wind.length() <= DUST_SETTLE_SPEED /* && isAtmosphereDusty(level, surfacePos)*/) {
+            if (random.nextInt(TFGConfig.SERVER.sandAccumulateChance.get()) == 0) {
                 // Handle smoother snow placement: if there's an adjacent position with less snow, switch to that position instead
                 // Additionally, handle up to two block tall plants if they can be piled
                 // This means we need to check three levels deep
-                if (!placeSandOrSandPile(level, surfacePos, random, expectedLayers))
-                {
-                    if (!placeSandOrSandPile(level, surfacePos.below(), random, expectedLayers))
-                    {
+                if (!placeSandOrSandPile(level, surfacePos, random, expectedLayers)) {
+                    if (!placeSandOrSandPile(level, surfacePos.below(), random, expectedLayers)) {
                         placeSandOrSandPile(level, surfacePos.below(2), random, expectedLayers);
                     }
                 }
             }
-        }
-        else
-        {
-            if (random.nextInt(TFCConfig.SERVER.snowMeltChance.get()) == 0)
-            {
+        } else {
+            if (random.nextInt(TFCConfig.SERVER.snowMeltChance.get()) == 0) {
                 removeSandAt(level, surfacePos, temperature, expectedLayers);
-                if (random.nextFloat() < 0.2f)
-                {
+                if (random.nextFloat() < 0.2f) {
                     removeSandAt(level, surfacePos.relative(Direction.Plane.HORIZONTAL.getRandomDirection(random)), temperature, expectedLayers);
                 }
             }
@@ -114,12 +104,11 @@ public final class MarsEnvironmentalHelpers {
     }
 
     private static boolean placeSandOrSandPile(Level level, BlockPos initialPos, RandomSource random, int expectedLayers) {
-        if (expectedLayers < 1)
-        {
+        if (expectedLayers < 1) {
             // Don't place snow if we're < 1 expected layers
             return false;
         }
-//
+        //
         // First, try and find an optimal position, to smoothen out snow accumulation
         // This will only move to the side, if we're currently at a snow location
         final BlockPos pos = findOptimalSandLocation(level, initialPos, level.getBlockState(initialPos), random);
@@ -127,44 +116,36 @@ public final class MarsEnvironmentalHelpers {
 
         // If we didn't move to the side, then we still need to pass a can see sky check
         // If we did, we might've moved under an overhang from a previously valid snow location
-        if (initialPos.equals(pos) && !level.canSeeSky(pos))
-        {
+        if (initialPos.equals(pos) && !level.canSeeSky(pos)) {
             return false;
         }
         return placeSandOrSandPileAt(level, pos, state, random, expectedLayers);
     }
 
-    private static boolean placeSandOrSandPileAt(LevelAccessor level, BlockPos pos, BlockState state, RandomSource random, int expectedLayers)
-    {
+    private static boolean placeSandOrSandPileAt(LevelAccessor level, BlockPos pos, BlockState state, RandomSource random, int expectedLayers) {
         // Then, handle possibilities
-        if (isSand(state) && state.getValue(AbstractLayerBlock.LAYERS) < 7)
-        {
+        if (isSand(state) && state.getValue(AbstractLayerBlock.LAYERS) < 7) {
             // Snow and snow layers can accumulate snow
             // The chance that this works is reduced the higher the pile is
             final int currentLayers = state.getValue(AbstractLayerBlock.LAYERS);
             final BlockState newState = state.setValue(AbstractLayerBlock.LAYERS, Integer.valueOf(currentLayers + 1));
-            if (newState.canSurvive(level, pos) && random.nextInt(1 + 3 * currentLayers) == 0 && expectedLayers > currentLayers)
-            {
+            if (newState.canSurvive(level, pos) && random.nextInt(1 + 3 * currentLayers) == 0 && expectedLayers > currentLayers) {
                 level.setBlock(pos, newState, 3);
             }
             return true;
-        }
-        else if (SandPileBlock.canPlaceSandPile(level, pos, state))
-        {
+        } else if (SandPileBlock.canPlaceSandPile(level, pos, state)) {
             SandPileBlock.placeSandPile(level, pos, state, false);
             return true;
-        }
-        else if (state.isAir() && TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState().canSurvive(level, pos))
-        {
+        } else if (state.isAir() && TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState().canSurvive(level, pos)) {
             // Vanilla snow placement (single layers)
             level.setBlock(pos, PlanetEnvironmentalHelpers.getSandBlockForBiome(level, pos, false).defaultBlockState(), 3);
             return true;
         }
-//        else if (level instanceof Level fullLevel)
-//        {
-//            // Fills cauldrons with snow
-//            state.getBlock().handlePrecipitation(state, fullLevel, pos, Biome.Precipitation.SNOW);
-//        }
+        //        else if (level instanceof Level fullLevel)
+        //        {
+        //            // Fills cauldrons with snow
+        //            state.getBlock().handlePrecipitation(state, fullLevel, pos, Biome.Precipitation.SNOW);
+        //        }
         return false;
     }
 
@@ -179,28 +160,24 @@ public final class MarsEnvironmentalHelpers {
         return (float) (3.0 / Math.pow(windStrength + 0.625, 2));
     }
 
-    private static BlockPos findOptimalSandLocation(LevelAccessor level, BlockPos pos, BlockState state, RandomSource random)
-    {
+    private static BlockPos findOptimalSandLocation(LevelAccessor level, BlockPos pos, BlockState state, RandomSource random) {
         BlockPos targetPos = null;
         int found = 0;
-        if (isSand(state))
-        {
-            for (Direction direction : Direction.Plane.HORIZONTAL)
-            {
+        if (isSand(state)) {
+            for (Direction direction : Direction.Plane.HORIZONTAL) {
                 final BlockPos adjPos = pos.relative(direction);
                 final BlockState adjState = level.getBlockState(adjPos);
                 if ((isSand(adjState) && adjState.getValue(AbstractLayerBlock.LAYERS) < state.getValue(AbstractLayerBlock.LAYERS)) // Adjacent snow that's lower than this one
-                        || ((adjState.isAir() || Helpers.isBlock(adjState.getBlock(), TFCTags.Blocks.CAN_BE_SNOW_PILED)) && TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState().canSurvive(level, adjPos))) // Or, empty space that could support snow
+                        || ((adjState.isAir() || Helpers.isBlock(adjState.getBlock(), TFCTags.Blocks.CAN_BE_SNOW_PILED))
+                                && TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState().canSurvive(level, adjPos))) // Or, empty space that could support snow
                 {
                     found++;
-                    if (targetPos == null || random.nextInt(found) == 0)
-                    {
+                    if (targetPos == null || random.nextInt(found) == 0) {
                         targetPos = adjPos;
                     }
                 }
             }
-            if (targetPos != null)
-            {
+            if (targetPos != null) {
                 return targetPos;
             }
         }

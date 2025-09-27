@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.data.capabilities;
 
-
 //public class SupportsCapability implements ICapabilitySerializable<CompoundTag> {
 //
 //    public static final Capability<SupportsCapability> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});

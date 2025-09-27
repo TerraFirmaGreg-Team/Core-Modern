@@ -1,7 +1,9 @@
 package su.terrafirmagreg.core.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.mojang.datafixers.util.Pair;
-import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -9,6 +11,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+
+import lombok.Getter;
+
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -20,11 +25,10 @@ import java.util.Set;
 import static su.terrafirmagreg.core.TFGCore.LOGGER;
 
 public class PlanetEnvironmentalHelpers {
-    private static final List<Pair<TagKey<Biome>, MarsSandBlockType>> marsBiomeTags =
-            Arrays.asList(
-                    new Pair<>(TFGTags.Biomes.HasDarkSandWind, MarsSandBlockType.DEEP),
-                    new Pair<>(TFGTags.Biomes.HasMediumSandWind, MarsSandBlockType.MEDIUM),
-                    new Pair<>(TFGTags.Biomes.HasLightSandWind, MarsSandBlockType.LIGHT));
+    private static final List<Pair<TagKey<Biome>, MarsSandBlockType>> marsBiomeTags = Arrays.asList(
+            new Pair<>(TFGTags.Biomes.HasDarkSandWind, MarsSandBlockType.DEEP),
+            new Pair<>(TFGTags.Biomes.HasMediumSandWind, MarsSandBlockType.MEDIUM),
+            new Pair<>(TFGTags.Biomes.HasLightSandWind, MarsSandBlockType.LIGHT));
 
     private static final Set<ResourceKey<Biome>> biomesWithoutTags = new HashSet<>();
 
@@ -41,10 +45,9 @@ public class PlanetEnvironmentalHelpers {
                 .findFirst()
                 .filter(pair -> currentBiome.is(pair.getFirst()))
                 .map(
-                        pair ->
-                                isPileBlock
-                                        ? pair.getSecond().getPileBlock()
-                                        : pair.getSecond().getLayerBlock())
+                        pair -> isPileBlock
+                                ? pair.getSecond().getPileBlock()
+                                : pair.getSecond().getLayerBlock())
                 .orElse(null);
 
         if (layer == null) {
@@ -62,7 +65,7 @@ public class PlanetEnvironmentalHelpers {
     }
 
     public enum MarsSandBlockType {
-        DEEP(TFGBlocks.RED_SAND_LAYER_BLOCK.get(), TFGBlocks.RED_SAND_PILE_BLOCK.get()),
+        DEEP(TFGBlocks.HEMATITIC_SAND_LAYER_BLOCK.get(), TFGBlocks.HEMATITIC_SAND_PILE_BLOCK.get()),
         MEDIUM(TFGBlocks.MARS_SAND_LAYER_BLOCK.get(), TFGBlocks.MARS_SAND_PILE_BLOCK.get()),
         LIGHT(TFGBlocks.VENUS_SAND_LAYER_BLOCK.get(), TFGBlocks.VENUS_SAND_PILE_BLOCK.get());
 

@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.wood.ILeavesBlock;
 import net.dries007.tfc.util.Helpers;
@@ -17,9 +19,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import org.jetbrains.annotations.Nullable;
 
-public class SandLayerBlock extends AbstractLayerBlock{
+public class SandLayerBlock extends AbstractLayerBlock {
 
     public SandLayerBlock(Properties properties) {
         super(properties);
@@ -73,8 +74,7 @@ public class SandLayerBlock extends AbstractLayerBlock{
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext pContext) {
         BlockState blockstate = pContext.getLevel().getBlockState(pContext.getClickedPos());
         // if targeted block is an instance of SandLayerBlock then add layer
-        if (blockstate.getBlock() instanceof SandPileBlock)
-        {
+        if (blockstate.getBlock() instanceof SandPileBlock) {
             // Similar to how snow layers modifies their placement state when targeting other snow layers, we do the same for snow piles
             return blockstate.setValue(LAYERS, Math.min(8, blockstate.getValue(LAYERS) + 1));
         } else if (blockstate.is(this)) {
@@ -89,6 +89,5 @@ public class SandLayerBlock extends AbstractLayerBlock{
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
-
 
 }
