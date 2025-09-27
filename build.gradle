@@ -226,12 +226,7 @@ spotless {
     json {
         target 'src/*/resources/**/*.json'
         targetExclude 'src/generated/resources/**'
-        var biomeConfig = it.new JsonExtension.BiomeJson(null)
-        try {
-            biomeConfig.downloadDir(new File(rootDir, ".gradle/biome").absolutePath)
-        } catch (Exception ignored) {
-        }
-        addStep(biomeConfig.createStep())
+        simple()
         indentWithSpaces(2)
         endWithNewline()
     }
