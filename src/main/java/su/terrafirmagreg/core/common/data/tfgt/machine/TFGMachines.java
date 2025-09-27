@@ -163,7 +163,6 @@ public class TFGMachines {
             .machine("single_itemstack_bus", SingleItemstackBus::new)
             .rotationState(RotationState.ALL)
             .tooltips(Component.translatable("tfg.tooltip.single_itemstack_bus"))
-            .tier(GTValues.EV)
             .register();
 
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE

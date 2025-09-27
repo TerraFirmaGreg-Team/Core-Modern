@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
+import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.PARALLEL_HATCH;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMac
 
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
@@ -37,6 +40,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
@@ -180,15 +184,15 @@ public class TFGMultiMachines {
             })
             .register();
 
-    private static final Supplier<Block> bioculture_casing = () -> ForgeRegistries.BLOCKS
+    private static final Supplier<Block> BIOCULTURE_CASING = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"));
     public static final MultiblockMachineDefinition BIOREACTOR = REGISTRATE
             .multiblock("bioreactor", BioreactorMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.BIOREACTOR_RECIPES)
-            .appearanceBlock(bioculture_casing)
-            .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"),
-                GTCEu.id("block/multiblock/implosion_compressor"))
+            .appearanceBlock(BIOCULTURE_CASING)
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
+                    GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern.start()
                 .aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FFF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
                 .aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
@@ -367,13 +371,13 @@ public class TFGMultiMachines {
             .multiblock("growth_chamber", GrowthChamberMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.GROWTH_CHAMBER_RECIPES)
-            .recipeModifier(GTRecipeModifiers::multiSmelterParallel)
-            .appearanceBlock(bioculture_casing)
-            .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"),
+            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .appearanceBlock(BIOCULTURE_CASING)
+            .tooltips(Component.translatable("tfg.tooltip.growth_chamber"))
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern
                     .start(RelativeDirection.LEFT, RelativeDirection.FRONT, RelativeDirection.DOWN)
-                    // spotless:off
                     .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "             ANA             ", "             NAN             ", "             ANA             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ").setRepeatable(1, 8)
                     .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "             HLH             ", "             HHH             ", "           HHAAAHH           ", "           LHAAAHL           ", "           HHAAAHH           ", "             HHH             ", "             HLH             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
                     .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             AAA             ", "           K AAA K           ", "             AAA             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
@@ -397,7 +401,8 @@ public class TFGMultiMachines {
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
-                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1)))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1))
+                            .or(abilities(PARALLEL_HATCH).setMaxGlobalLimited(1)))
                     .where("N", Predicates.blocks(TFGMachines.SINGLE_ITEMSTACK_BUS.get()))
                     .where(" ", Predicates.any())
                     .where("H", Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
@@ -407,8 +412,5 @@ public class TFGMultiMachines {
                     .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture_glass"))))
                     .where("O", Predicates.controller(Predicates.blocks(definition.get())))
                     .build())
-                    // spotless:on
             .register();
-
-    // spotless:on
 }
