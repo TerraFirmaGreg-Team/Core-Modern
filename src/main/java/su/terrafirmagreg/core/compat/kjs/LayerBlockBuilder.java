@@ -1,21 +1,18 @@
 package su.terrafirmagreg.core.compat.kjs;
 
-import java.util.function.Supplier;
-
 import com.notenoughmail.kubejs_tfc.util.ResourceUtils;
-
+import dev.latvian.mods.kubejs.block.BlockBuilder;
+import dev.latvian.mods.kubejs.generator.DataJsonGenerator;
+import dev.latvian.mods.kubejs.registry.RegistryInfo;
+import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.util.Lazy;
+import su.terrafirmagreg.core.common.data.blocks.SandLayerBlock;
 
-import dev.latvian.mods.kubejs.block.BlockBuilder;
-import dev.latvian.mods.kubejs.generator.DataJsonGenerator;
-import dev.latvian.mods.kubejs.registry.RegistryInfo;
-import dev.latvian.mods.kubejs.typings.Info;
-
-import su.terrafirmagreg.core.common.data.blocks.LayerBlock;
+import java.util.function.Supplier;
 
 public class LayerBlockBuilder extends BlockBuilder {
 
@@ -53,8 +50,8 @@ public class LayerBlockBuilder extends BlockBuilder {
     }
 
     @Override
-    public KubeJSLayerBlock createObject() {
-        return new KubeJSLayerBlock(itemSupplier, createProperties());
+    public SandLayerBlock createObject() {
+        return new SandLayerBlock(createProperties());
     }
 
     @Override

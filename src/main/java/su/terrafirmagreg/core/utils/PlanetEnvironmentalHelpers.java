@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
@@ -12,7 +13,9 @@ import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static su.terrafirmagreg.core.TFGCore.LOGGER;
 
@@ -22,6 +25,8 @@ public class PlanetEnvironmentalHelpers {
                     new Pair<>(TFGTags.Biomes.HasDarkSandWind, MarsSandBlockType.DEEP),
                     new Pair<>(TFGTags.Biomes.HasMediumSandWind, MarsSandBlockType.MEDIUM),
                     new Pair<>(TFGTags.Biomes.HasLightSandWind, MarsSandBlockType.LIGHT));
+
+    private static final Set<ResourceKey<Biome>> biomesWithoutTags = new HashSet<>();
 
     /**
      * Retrieves the correct sand layer block for a given block position.
@@ -46,7 +51,11 @@ public class PlanetEnvironmentalHelpers {
             layer = isPileBlock
                     ? MarsSandBlockType.MEDIUM.getPileBlock()
                     : MarsSandBlockType.MEDIUM.getLayerBlock();
-            LOGGER.warn("{} is missing a sand wind biome tag! falling back to medium sand wind", currentBiome);
+            ResourceKey<Biome> biomeTag = currentBiome.unwrapKey().orElseThrow();
+            if (!biomesWithoutTags.contains(biomeTag)) {
+                biomesWithoutTags.add(biomeTag);
+                LOGGER.warn("{} is missing a sand wind biome tag! falling back to medium sand wind", biomeTag.location());
+            }
         }
 
         return layer;
