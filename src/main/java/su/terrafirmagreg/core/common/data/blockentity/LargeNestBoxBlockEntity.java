@@ -30,7 +30,7 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.LargeNestBoxBlock;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
-import su.terrafirmagreg.core.common.data.contianer.LargeNestBoxContainer;
+import su.terrafirmagreg.core.common.data.container.LargeNestBoxContainer;
 import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
 
 public class LargeNestBoxBlockEntity

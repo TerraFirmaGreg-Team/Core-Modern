@@ -16,6 +16,9 @@ public class TemperatureChangeEffect extends MobEffect {
     // How many ticks per effect trigger
     private static final int defaultTime = 20;
 
+    //Max temp so people don't die
+    private static final float maxTemp = 25;
+
     public TemperatureChangeEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
@@ -28,7 +31,8 @@ public class TemperatureChangeEffect extends MobEffect {
         if (this == TFGEffects.COOLING.get()) {
             tempCap.setTemperature(tempCap.getTemperature() - deltaTemp * (amplifier + 1));
         } else if (this == TFGEffects.WARMING.get()) {
-            tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
+            if (tempCap.getTemperature() <= maxTemp)
+                tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
         }
     }
 
