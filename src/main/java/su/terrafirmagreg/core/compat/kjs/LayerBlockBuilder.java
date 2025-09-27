@@ -1,11 +1,14 @@
 package su.terrafirmagreg.core.compat.kjs;
 
 import com.notenoughmail.kubejs_tfc.util.ResourceUtils;
-import dev.latvian.mods.kubejs.block.BlockBuilder;
-import dev.latvian.mods.kubejs.generator.DataJsonGenerator;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
+
+import dev.latvian.mods.kubejs.block.BlockBuilder;
+import dev.latvian.mods.kubejs.generator.DataJsonGenerator;
+
 import su.terrafirmagreg.core.common.data.blocks.SandLayerBlock;
 
 public class LayerBlockBuilder extends BlockBuilder {

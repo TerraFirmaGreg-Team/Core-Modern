@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.HitResult;
 
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.utils.PlanetEnvironmentalHelpers;
@@ -171,11 +170,11 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
         return defaultBlockState();
     }
 
-//    @Override
-//    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
-//    {
-//        // TODO: remove before modpack release
-//        return new ItemStack(Blocks.SNOW);
-//    }
+    //    @Override
+    //    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
+    //    {
+    //        // TODO: remove before modpack release
+    //        return new ItemStack(Blocks.SNOW);
+    //    }
 
 }
