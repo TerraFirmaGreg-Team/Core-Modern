@@ -4,6 +4,7 @@ import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -19,8 +20,12 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMachine;
 
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
@@ -206,6 +211,109 @@ public class TFGMultiMachines {
                 .where("K", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/bioculture_rotor_secondary"))))
                 .where("L", Predicates.controller(Predicates.blocks(definition.get())))
                 .build())
+            .register();
+
+    public static final MultiblockMachineDefinition NUCLEAR_TURBINE = REGISTRATE
+            .multiblock("nuclear_turbine", (holder) -> new LargeTurbineMachine(holder, GTValues.EV))
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGRecipeTypes.NUCLEAR_TURBINE)
+            .recipeModifier(LargeTurbineMachine::recipeModifier, true)
+            .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
+            .workableCasingModel(GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                .aisle("A   A", "A   A", "CCCCC", "CDCDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
+                .aisle("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
+                .aisle("     ", "     ", "CCGCC", "CFHFC", "CFHFC", "CAFAC", "BAFAB", " A A ", " A A ", " A A ", " A A ")
+                .aisle("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
+                .aisle("A   A", "A   A", "CCCCC", "CDYDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
+                .where(" ", Predicates.air())
+                .where('Y', Predicates.controller(Predicates.blocks(definition.get())))
+                .where("A", Predicates.blocks(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
+                .where("B", Predicates.frames(GTMaterials.StainlessSteel))
+                .where("C", Predicates.blocks(GTBlocks.CASING_STEEL_TURBINE.get()).setMinGlobalLimited(50)
+                    .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                    .or(Predicates.autoAbilities(true, false, false))
+                    .or(Predicates.abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
+                .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ad_astra", "vent"))))
+                .where("E", Predicates.blocks(GTBlocks.COIL_CUPRONICKEL.get()))
+                .where("F", Predicates.blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+                .where("G", Predicates.blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new)))
+                .where("H", Predicates.blocks(GTBlocks.CASING_TITANIUM_GEARBOX.get()))
+                .build())
+            .register();
+
+    private static final Supplier<Block> evaporation_casing = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation"));
+    public static final MultiblockMachineDefinition EVAPORATION_TOWER = REGISTRATE
+            .multiblock("evaporation_tower", DistillationTowerMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGRecipeTypes.EVAPORATION_TOWER)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
+            .appearanceBlock(evaporation_casing)
+            .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"), GTCEu.id("block/multiblock/implosion_compressor"))
+            .pattern(definition -> {
+                TraceabilityPredicate exportPredicate = Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).or(Predicates.blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
+                exportPredicate.setMaxLayerLimited(1);
+
+                TraceabilityPredicate maint = Predicates.autoAbilities(true, false, false).setMaxGlobalLimited(1);
+                return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
+                    .aisle("YSY", "YYY", "YYY")
+                    .aisle("ZZZ", "Z#Z", "ZZZ")
+                    .aisle("XXX", "X#X", "XXX").setRepeatable(0, 10)
+                    .aisle("XXX", "XXX", "XXX")
+                    .where('S', Predicates.controller(Predicates.blocks(definition.getBlock())))
+                    .where("Y", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(
+                        ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation")))
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                                    .setMaxGlobalLimited(2))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
+                            .or(maint))
+                    .where("Z", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(
+                        ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation")))
+                            .or(exportPredicate)
+                            .or(maint))
+                    .where('X', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(
+                        ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation")))
+                            .or(exportPredicate))
+                    .where('#', Predicates.air())
+                    .build();
+            })
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
+                var builder = MultiblockShapeInfo.builder()
+                    .where('C', definition, Direction.NORTH)
+                    .where('S', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation")))
+                    .where('X', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
+                    .where('I', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.NORTH)
+                    .where('E', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
+                    .where('M', GTMachines.MAINTENANCE_HATCH, Direction.SOUTH)
+                    .where('#', Blocks.AIR.defaultBlockState())
+                    .where('F', GTMachines.FLUID_EXPORT_HATCH[GTValues.HV], Direction.SOUTH);
+                List<String> front = new ArrayList<>(15);
+                front.add("XCI");
+                front.add("SSS");
+                List<String> middle = new ArrayList<>(15);
+                middle.add("SSS");
+                middle.add("SSS");
+                List<String> back = new ArrayList<>(15);
+                back.add("MES");
+                back.add("FSS");
+                for (int i = 1; i <= 11; ++i) {
+                    front.add("SSS");
+                    middle.add(1, "S#S");
+                    back.add("SFS");
+                    var copy = builder.shallowCopy()
+                        .aisle(front.toArray(String[]::new))
+                        .aisle(middle.toArray(String[]::new))
+                        .aisle(back.toArray(String[]::new));
+                    shapeInfos.add(copy.build());
+                }
+                return shapeInfos;
+            })
+            .allowExtendedFacing(false)
+            .partSorter(Comparator.comparingInt(p -> p.self().getPos().getY()))
             .register();
 
     // spotless:on
