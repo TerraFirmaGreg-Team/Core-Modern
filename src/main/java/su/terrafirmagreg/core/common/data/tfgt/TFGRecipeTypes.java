@@ -36,8 +36,7 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.BATH);
 
     public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
-            "tfg:textures/gui/progress_bar/progress_bar_dna.png"); // I might move this later if we end up making/using
-                                                                                                                                              // more custom progress bars.
+            "tfg:textures/gui/progress_bar/progress_bar_dna.png");
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
@@ -53,11 +52,13 @@ public class TFGRecipeTypes {
                 }
             });
 
+    public static final ResourceTexture PROGRESS_BAR_PETRI = new ResourceTexture(
+            "tfg:textures/gui/progress_bar/progress_bar_petri.png");
     public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
             .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
-            .setMaxIOSize(6, 6, 3, 3)
-            .setProgressBar(PROGRESS_BAR_DNA, FillDirection.LEFT_TO_RIGHT)
+            .setMaxIOSize(18, 6, 3, 3)
+            .setProgressBar(PROGRESS_BAR_PETRI, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.CHEMICAL)
             .setUiBuilder((recipe, widgetGroup) -> {
                 var text = recipe.data.getString("action");

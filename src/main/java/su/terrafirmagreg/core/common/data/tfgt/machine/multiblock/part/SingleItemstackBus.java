@@ -1,9 +1,9 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part;
 
-import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;

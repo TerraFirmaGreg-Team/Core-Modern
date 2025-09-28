@@ -162,7 +162,9 @@ public class TFGMachines {
     public static final MachineDefinition SINGLE_ITEMSTACK_BUS = REGISTRATE
             .machine("single_itemstack_bus", SingleItemstackBus::new)
             .rotationState(RotationState.ALL)
-            .tooltips(Component.translatable("tfg.tooltip.single_itemstack_bus"))
+            .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
+                    Component.translatable("tfg.tooltip.single_itemstack_bus_1"),
+                    Component.translatable("tfg.tooltip.single_itemstack_bus_2"))
             .register();
 
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE
