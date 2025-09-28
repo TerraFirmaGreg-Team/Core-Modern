@@ -188,7 +188,7 @@ jobs:
             echo "✔️ All artifacts found"
 
         - name: 🚀 Release
-          uses: Kir-Antipov/mc-publish@v3.3.0
+          uses: Xikaro/game-publish@3.3.1
           with:
             modrinth-id: ${{ vars.MODRINTH_ID }}
             modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -202,6 +202,7 @@ jobs:
               gregtechceu-modern(required)
               terrafirmacraft(required)
 
+            github-name: ${{ needs.info.outputs.project_version }}
             github-tag: ${{ needs.info.outputs.project_version }}
             github-generate-changelog: true
             github-draft: false
