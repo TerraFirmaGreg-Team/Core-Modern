@@ -124,4 +124,10 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.CHEMICAL)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, FillDirection.LEFT_TO_RIGHT);
 
+    public final static GTRecipeType COOLING_TOWER = GTRecipeTypes
+            .register("cooling_tower", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(2, 2, 2, 2)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.LEFT_TO_RIGHT);
+
 }
