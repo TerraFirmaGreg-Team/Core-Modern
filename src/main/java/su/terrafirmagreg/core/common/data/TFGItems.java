@@ -34,8 +34,6 @@ public class TFGItems {
 
     public static final RegistryObject<Item> EMPTY_DNA_SYRINGE = ITEMS.register("empty_dna_syringe",
             () -> new EmptyDnaSyringeItem(new Item.Properties()));
-    public static final RegistryObject<Item> CLEAN_DNA_SYRINGE = ITEMS.register("clean_dna_syringe",
-            () -> new EmptyDnaSyringeItem(new Item.Properties()));
     public static final RegistryObject<Item> DIRTY_DNA_SYRINGE = ITEMS.register("dirty_dna_syringe",
             () -> new DirtyDnaSyringeItem(new Item.Properties()));
     public static final RegistryObject<Item> FILLED_DNA_SYRINGE = ITEMS.register("filled_dna_syringe",
