@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.PARALLEL_HATCH;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.ArrayList;
@@ -374,7 +373,8 @@ public class TFGMultiMachines {
             .recipeType(TFGRecipeTypes.GROWTH_CHAMBER_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(BIOCULTURE_CASING)
-            .tooltips(Component.translatable("tfg.tooltip.growth_chamber"))
+            .tooltips(Component.translatable("tfg.tooltip.machine.parallel"),
+                    Component.translatable("tfg.tooltip.growth_chamber"))
             .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern

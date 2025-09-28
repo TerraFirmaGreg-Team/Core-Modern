@@ -65,7 +65,6 @@ public class TFGCreativeTab {
         accept(out, TFGItems.PIGLIN_DISGUISE);
         accept(out, TFGItems.TROWEL);
         accept(out, TFGItems.EMPTY_DNA_SYRINGE);
-        accept(out, TFGItems.CLEAN_DNA_SYRINGE);
         accept(out, TFGItems.DIRTY_DNA_SYRINGE);
 
         accept(out, TFGItems.MARS_WATER_BUCKET);
