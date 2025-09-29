@@ -41,9 +41,17 @@ public class TFGCreativeTab {
 
         accept(out, TFGBlocks.MARS_DIRT);
         accept(out, TFGBlocks.MARS_FARMLAND);
+        accept(out, TFGBlocks.MARS_CLAY);
+        accept(out, TFGBlocks.MARS_PATH);
         accept(out, TFGBlocks.AMBER_MYCELIUM);
+        accept(out, TFGBlocks.AMBER_CLAY_MYCELIUM);
+        accept(out, TFGBlocks.AMBER_KAOLIN_MYCELIUM);
         accept(out, TFGBlocks.RUSTICUS_MYCELIUM);
+        accept(out, TFGBlocks.RUSTICUS_CLAY_MYCELIUM);
+        accept(out, TFGBlocks.RUSTICUS_KAOLIN_MYCELIUM);
         accept(out, TFGBlocks.SANGNUM_MYCELIUM);
+        accept(out, TFGBlocks.SANGNUM_CLAY_MYCELIUM);
+        accept(out, TFGBlocks.SANGNUM_KAOLIN_MYCELIUM);
 
         accept(out, TFGBlocks.LARGE_NEST_BOX);
         accept(out, TFGBlocks.LARGE_NEST_BOX_WARPED);
@@ -57,7 +65,6 @@ public class TFGCreativeTab {
         accept(out, TFGItems.PIGLIN_DISGUISE);
         accept(out, TFGItems.TROWEL);
         accept(out, TFGItems.EMPTY_DNA_SYRINGE);
-        accept(out, TFGItems.CLEAN_DNA_SYRINGE);
         accept(out, TFGItems.DIRTY_DNA_SYRINGE);
 
         accept(out, TFGItems.MARS_WATER_BUCKET);

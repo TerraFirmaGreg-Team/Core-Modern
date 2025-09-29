@@ -25,6 +25,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.dries007.tfc.common.blocks.soil.DirtBlock;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.common.blocks.soil.PathBlock;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -82,8 +83,15 @@ public final class TFGBlocks {
 
     // Connected texture grass blocks + dirt
 
-    // this one's constructor needs to reference the others, so it's in the static constructor below
+    // This one's constructor needs to reference the others, so it's in the static constructor below
     public static RegistryObject<Block> MARS_DIRT;
+    public static RegistryObject<Block> MARS_CLAY;
+
+    public static final RegistryObject<Block> MARS_PATH = register("grass/mars_path",
+            () -> new PathBlock(Block.Properties.of()
+                    .mapColor(MapColor.DIRT)
+                    .strength(1.4f)
+                    .sound(SoundType.GRAVEL), MARS_DIRT));
 
     public static final RegistryObject<Block> MARS_FARMLAND = register("grass/mars_farmland",
             () -> new FarmlandBlock(ExtendedProperties.of(MapColor.DIRT)
@@ -91,32 +99,43 @@ public final class TFGBlocks {
                     .sound(SoundType.GRAVEL)
                     .isViewBlocking(TFCBlocks::always)
                     .isSuffocating(TFCBlocks::always)
-                    .blockEntity(TFCBlockEntities.FARMLAND),
-                    MARS_DIRT));
+                    .blockEntity(TFCBlockEntities.FARMLAND), MARS_DIRT));
 
+    private static final BlockBehaviour.Properties amber_properties = BlockBehaviour.Properties.of()
+            .mapColor(MapColor.TERRACOTTA_YELLOW)
+            .strength(5.0f)
+            .sound(SoundType.WART_BLOCK)
+            .randomTicks();
     public static final RegistryObject<Block> AMBER_MYCELIUM = register("grass/amber_mycelium",
-            () -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_YELLOW)
-                    .strength(5.0f)
-                    .sound(SoundType.WART_BLOCK)
-                    .randomTicks(),
-                    MARS_DIRT, null, MARS_FARMLAND));
+            () -> new ConnectedGrassBlock(amber_properties, MARS_DIRT, MARS_PATH, MARS_FARMLAND));
+    public static final RegistryObject<Block> AMBER_CLAY_MYCELIUM = register("grass/amber_clay_mycelium",
+            () -> new ConnectedGrassBlock(amber_properties, MARS_CLAY, MARS_PATH, MARS_FARMLAND));
+    public static final RegistryObject<Block> AMBER_KAOLIN_MYCELIUM = register("grass/amber_kaolin_mycelium",
+            () -> new ConnectedGrassBlock(amber_properties, TFCBlocks.RED_KAOLIN_CLAY, null, null));
 
+    private static final BlockBehaviour.Properties rusticus_properties = BlockBehaviour.Properties.of()
+            .mapColor(MapColor.TERRACOTTA_ORANGE)
+            .strength(5.0f)
+            .sound(SoundType.WART_BLOCK)
+            .randomTicks();
     public static final RegistryObject<Block> RUSTICUS_MYCELIUM = register("grass/rusticus_mycelium",
-            () -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_ORANGE)
-                    .strength(5.0f)
-                    .sound(SoundType.WART_BLOCK)
-                    .randomTicks(),
-                    MARS_DIRT, null, MARS_FARMLAND));
+            () -> new ConnectedGrassBlock(rusticus_properties, MARS_DIRT, MARS_PATH, MARS_FARMLAND));
+    public static final RegistryObject<Block> RUSTICUS_CLAY_MYCELIUM = register("grass/rusticus_clay_mycelium",
+            () -> new ConnectedGrassBlock(rusticus_properties, MARS_CLAY, MARS_PATH, MARS_FARMLAND));
+    public static final RegistryObject<Block> RUSTICUS_KAOLIN_MYCELIUM = register("grass/rusticus_kaolin_mycelium",
+            () -> new ConnectedGrassBlock(rusticus_properties, TFCBlocks.RED_KAOLIN_CLAY, null, null));
 
+    private static final BlockBehaviour.Properties sangnum_properties = BlockBehaviour.Properties.of()
+            .mapColor(MapColor.TERRACOTTA_RED)
+            .strength(5.0f)
+            .sound(SoundType.WART_BLOCK)
+            .randomTicks();
     public static final RegistryObject<Block> SANGNUM_MYCELIUM = register("grass/sangnum_mycelium",
-            () -> new ConnectedGrassBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_RED)
-                    .strength(5.0f)
-                    .sound(SoundType.WART_BLOCK)
-                    .randomTicks(),
-                    MARS_DIRT, null, MARS_FARMLAND));
+            () -> new ConnectedGrassBlock(sangnum_properties, MARS_DIRT, MARS_PATH, MARS_FARMLAND));
+    public static final RegistryObject<Block> SANGNUM_CLAY_MYCELIUM = register("grass/sangnum_clay_mycelium",
+            () -> new ConnectedGrassBlock(sangnum_properties, MARS_CLAY, MARS_PATH, MARS_FARMLAND));
+    public static final RegistryObject<Block> SANGNUM_KAOLIN_MYCELIUM = register("grass/sangnum_kaolin_mycelium",
+            () -> new ConnectedGrassBlock(sangnum_properties, TFCBlocks.RED_KAOLIN_CLAY, null, null));
 
     // Fluid blocks
 
@@ -172,7 +191,12 @@ public final class TFGBlocks {
                 () -> new DirtBlock(Block.Properties.of()
                         .mapColor(MapColor.DIRT)
                         .strength(1.4f)
-                        .sound(SoundType.GRAVEL), RUSTICUS_MYCELIUM, null, MARS_FARMLAND, null, null));
+                        .sound(SoundType.GRAVEL), RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
+        MARS_CLAY = register("grass/mars_clay_dirt",
+                () -> new DirtBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.DIRT)
+                        .strength(1.4f)
+                        .sound(SoundType.GRAVEL), RUSTICUS_CLAY_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
     }
 
     // Mars animal related

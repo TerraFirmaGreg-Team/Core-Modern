@@ -38,6 +38,8 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         RegistryInfo.BLOCK.addType("tfg:particle_emitter", ParticleEmitterBlockBuilder.class,
                 ParticleEmitterBlockBuilder::new);
         RegistryInfo.BLOCK.addType("tfg:layer_block", LayerBlockBuilder.class, LayerBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:active_cardinal", GTActiveCardinalBuilder.class, GTActiveCardinalBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:active_particle_emitter", GTActiveParticleBuilder.class, GTActiveParticleBuilder::new);
     }
 
     @Override
