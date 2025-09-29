@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
+import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.PARALLEL_HATCH;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMac
 
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
@@ -37,6 +40,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
@@ -180,16 +184,15 @@ public class TFGMultiMachines {
             })
             .register();
 
-    private static final Supplier<Block> bioculture_casing = () -> ForgeRegistries.BLOCKS
+    private static final Supplier<Block> BIOCULTURE_CASING = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"));
     public static final MultiblockMachineDefinition BIOREACTOR = REGISTRATE
             .multiblock("bioreactor", BioreactorMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.BIOREACTOR_RECIPES)
-            .recipeModifier(GTRecipeModifiers.OC_PERFECT)
-            .appearanceBlock(bioculture_casing)
-            .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"),
-                GTCEu.id("block/multiblock/implosion_compressor"))
+            .appearanceBlock(BIOCULTURE_CASING)
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
+                    GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> FactoryBlockPattern.start()
                 .aisle("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FFF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
                 .aisle("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
@@ -244,14 +247,14 @@ public class TFGMultiMachines {
                 .build())
             .register();
 
-    private static final Supplier<Block> evaporation_casing = () -> ForgeRegistries.BLOCKS
+    private static final Supplier<Block> EVAPORATION_CASING = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_stainless_evaporation"));
     public static final MultiblockMachineDefinition EVAPORATION_TOWER = REGISTRATE
             .multiblock("evaporation_tower", DistillationTowerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.EVAPORATION_TOWER)
             .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
-            .appearanceBlock(evaporation_casing)
+            .appearanceBlock(EVAPORATION_CASING)
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"), GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> {
                 TraceabilityPredicate exportPredicate = Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).or(Predicates.blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
@@ -374,5 +377,53 @@ public class TFGMultiMachines {
                     .build())
             .register();
 
+    public static final MultiblockMachineDefinition GROWTH_CHAMBER = REGISTRATE
+            .multiblock("growth_chamber", GrowthChamberMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGRecipeTypes.GROWTH_CHAMBER_RECIPES)
+            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .appearanceBlock(BIOCULTURE_CASING)
+            .tooltips(Component.translatable("tfg.tooltip.machine.parallel"),
+                    Component.translatable("tfg.tooltip.growth_chamber"))
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
+                    GTCEu.id("block/multiblock/implosion_compressor"))
+            .pattern(definition -> FactoryBlockPattern
+                    .start(RelativeDirection.LEFT, RelativeDirection.FRONT, RelativeDirection.DOWN)
+                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "             ANA             ", "             NBN             ", "             AAA             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ").setRepeatable(1, 5)
+                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "             HLH             ", "             HHH             ", "           HHAAAHH           ", "           LHAAAHL           ", "           HHAAAHH           ", "             HHH             ", "             HLH             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             AAA             ", "           K AAA K           ", "             AAA             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             MMM             ", "           K MAM K           ", "             MMM             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "              O              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .aisle("                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "              K              ", "                             ", "             AAA             ", "           K AAA K           ", "             AAA             ", "                             ", "              K              ", "                             ", "                             ", "                             ", "                             ", "              A              ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                    .aisle("          AAAAAAAAA          ", "       AAAACCCCCCCAAAA       ", "      AACCCFDFDFDFCCCAA      ", "    AAACDFDFDFDFDFDFDCAAA    ", "   AACCDDFDFDFDFDFDFDDCCAA   ", "   ACCDFDFDCCCCCCCDFDFDCCA   ", "  AAFDCDFCCAAAAAAACCFDCDCAA  ", " AACDFDCCAAAIIJIIAAACCDFDCAA ", " ACDDDFCAAIIIIJIIIIAACFDDDCA ", " ACFFFCAAIIIIIJIIIIIAACFFFCA ", "AACDDDCAIIIIIIJIIIIIIACDDDCAA", "ACFFFCAAIIIIJJKJJIIIIAACFFFCA", "ACDDDCAIIIIJ  A  JIIIIACDDDCA", "ACFFFCAIIIIJ AAA JIIIIACFFFCA", "ACDDDCAJJJJKAAAAAKJJJJACDDDCA", "ACFFFCAIIIIJ AAA JIIIIACFFFCA", "ACDDDCAIIIIJ  A  JIIIIACDDDCA", "ACFFFCAAIIIIJJKJJIIIIAACFFFCA", "AACDDDCAIIIIIIJIIIIIIACDDDCAA", " ACFFFCAAIIIIIJIIIIIAACFFFCA ", " ACDDDFCAAIIIIJIIIIAACFDDDCA ", " AACDFDCCAAAIIJIIAAACCDFDCAA ", "  AACDCDFCCAAAAAAACCFDCDCAA  ", "   ACCDFDFDCCCCCCCDFDFDCCA   ", "   AACCDDFDFDFDFDFDFDDCCAA   ", "    AAACDFDFDFDFDFDFDCAAA    ", "      AACCCFDFDFDFCCCAA      ", "       AAAACCCCCCCAAAA       ", "          AAAAAAAAA          ")
+                    .aisle("                             ", "           DDDDDDD           ", "        DDD       DDD        ", "       D             D       ", "     DD               DD     ", "    DC     CCCCCCC     CD    ", "    D C  CC       CC  C D    ", "   D   CC           CC   D   ", "  D    C             C    D  ", "  D   C               C   D  ", "  D   C               C   D  ", " D   C        K        C   D ", " D   C                 C   D ", " D   C                 C   D ", " D   C     K     K     C   D ", " D   C                 C   D ", " D   C                 C   D ", " D   C        K        C   D ", "  D   C               C   D  ", "  D   C               C   D  ", "  D    C             C    D  ", "   D   CC           CC   D   ", "    D C  CC       CC  C D    ", "    DC     CCCCCCC     CD    ", "     DD               DD     ", "       D             D       ", "        DDD       DDD        ", "           DDDDDDD           ", "                             ")
+                    .aisle("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CCCCCCC E E CD    ", "    D C ECC       CCE C D    ", "   D E CC           CC E D   ", "  D   EC             CE   D  ", "  DEEEC               CEEED  ", "  D   C               C   D  ", " DEEEC        K        CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C     K     K     C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC        K        CEEED ", "  D   C               C   D  ", "  DEEEC               CEEED  ", "  D   EC             CE   D  ", "   D E CC           CC E D   ", "    D C ECC       CCE C D    ", "    DC E E CCCCCCC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
+                    .aisle("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CGCCCGC E E CD    ", "    D C ECC   H   CCE C D    ", "   D E CC     H     CC E D   ", "  D   EC      H      CE   D  ", "  DEEEC       H       CEEED  ", "  D   C       H       C   D  ", " DEEEC        H        CEEED ", " D   G                 G   D ", " DEEEC                 CEEED ", " D   CHHHHHH     HHHHHHC   D ", " DEEEC                 CEEED ", " D   G                 G   D ", " DEEEC        H        CEEED ", "  D   C       H       C   D  ", "  DEEEC       H       CEEED  ", "  D   EC      H      CE   D  ", "   D E CC     H     CC E D   ", "    D C ECC   H   CCE C D    ", "    DC E E CGCCCGC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
+                    .aisle("                             ", "           DDDDDDD           ", "        DDDE E E EDDD        ", "       D E E E E E E D       ", "     DD  E E E E E E  DD     ", "    DC E E CCCCCCC E E CD    ", "    D C ECC       CCE C D    ", "   D E CC           CC E D   ", "  D   EC             CE   D  ", "  DEEEC               CEEED  ", "  D   C               C   D  ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", " D   C                 C   D ", " DEEEC                 CEEED ", "  D   C               C   D  ", "  DEEEC               CEEED  ", "  D   EC             CE   D  ", "   D E CC           CC E D   ", "    D C ECC       CCE C D    ", "    DC E E CCCCCCC E E CD    ", "     DD  E E E E E E  DD     ", "       D E E E E E E D       ", "        DDDE E E EDDD        ", "           DDDDDDD           ", "                             ")
+                    .aisle("           AAAAAAA           ", "        AAACCCCCCCAAA        ", "       ACCCAAAAAAACCCA       ", "     AACAAAAAAAAAAAAACAA     ", "    ACCAAAAAAAAAAAAAAACCA    ", "   ACAAAAAACCCCCCCAAAAAACA   ", "   ACAAAACC       CCAAAACA   ", "  ACAAAAC           CAAAACA  ", " ACAAAAC             CAAAACA ", " ACAAAC               CAAACA ", " ACAAAC               CAAACA ", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", "ACAAAC                 CAAACA", " ACAAAC               CAAACA ", " ACAAAC               CAAACA ", " ACAAAAC             CAAAACA ", "  ACAAAAC           CAAAACA  ", "   ACAAAACC       CCAAAACA   ", "   ACAAAAAACCCCCCCAAAAAACA   ", "    ACCAAAAAAAAAAAAAAACCA    ", "     AACAAAAAAAAAAAAACAA     ", "       ACCCAAAAAAACCCA       ", "        AAACCCCCCCAAA        ", "           AAAAAAA           ")
+                    .where("C", Predicates.blocks(GTBlocks.PLASTCRETE.get()))
+                    .where("E", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "sample_rack"))))
+                    .where("G", Predicates.blocks(GTBlocks.FILTER_CASING.get()))
+                    .where("I", Predicates.blocks(GTBlocks.CLEANROOM_GLASS.get()))
+                    .where("J", Predicates.frames(GTMaterials.HastelloyC276))
+                    .where("K", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_sterilizing_pipes"))))
+                    .where("L", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "growth_monitor"))))
+                    .where("M", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture")))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1))
+                            .or(abilities(PARALLEL_HATCH).setMaxGlobalLimited(1)))
+                    .where("N", Predicates.blocks(TFGMachines.SINGLE_ITEMSTACK_BUS.get()))
+                    .where(" ", Predicates.any())
+                    .where("H", Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
+                    .where("A", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"))))
+                    .where("F", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_iron_desh"))))
+                    .where("F", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_ultraviolet"))))
+                    .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture_glass"))))
+                    .where("B", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("megacells", "mega_crafting_unit"))))
+                    .where("O", Predicates.controller(Predicates.blocks(definition.get())))
+                    .build())
+            .register();
     // spotless:on
 }
