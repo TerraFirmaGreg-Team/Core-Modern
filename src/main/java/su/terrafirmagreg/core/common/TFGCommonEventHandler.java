@@ -59,9 +59,8 @@ public final class TFGCommonEventHandler {
         event.enqueueWork(() -> {
             if (TFGConfig.COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get() && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
                 TFCAmbientalCompat.register();
-
-            TFGFissionComponents.addComponents();
         });
+        TFGFissionComponents.addComponents();
 
     }
 }
