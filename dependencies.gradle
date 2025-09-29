@@ -179,4 +179,8 @@ dependencies {
 
     //Create Liquid Fuel
     implementation fg.deobf("curse.maven:create-liquid-fuel-840734:5217310")
+
+    //Dea's Fission Vazde
+    implementation fg.deobf("curse.maven:deafission-1354541:7042696")
+
 }
