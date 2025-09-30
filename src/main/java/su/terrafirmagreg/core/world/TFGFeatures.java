@@ -32,6 +32,9 @@ public class TFGFeatures {
     public static final RegistryObject<AttachedDecorativePlantFeature> ATTACHED_DECORATIVE_PLANT = register(
             "attached_decorative_plant", AttachedDecorativePlantFeature::new, AttachedDecorativePlantConfig.CODEC);
 
+    public static final RegistryObject<MartianPolesFeature> MARTIAN_POLES = register("martian_poles",
+            MartianPolesFeature::new, MartianPolesConfig.CODEC);
+
     private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
             Function<Codec<C>, F> factory, Codec<C> codec) {
         return FEATURES.register(name, () -> factory.apply(codec));

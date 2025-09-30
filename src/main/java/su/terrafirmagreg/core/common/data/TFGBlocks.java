@@ -21,6 +21,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
+import net.dries007.tfc.common.blocks.IcicleBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.dries007.tfc.common.blocks.soil.DirtBlock;
@@ -59,8 +60,7 @@ public final class TFGBlocks {
     // Reference tables
     public static Map<Material, BlockEntry<BudIndicator>> BUD_BLOCKS;
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
-            TFGCore.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TFGCore.MOD_ID);
 
     // Decoration blocks
 
@@ -154,6 +154,16 @@ public final class TFGBlocks {
                     .isViewBlocking((state, level, pos) -> false)
                     .isSuffocating((state, level, pos) -> false)));
 
+    public static final RegistryObject<Block> MARS_ICE = register("mars_ice",
+            () -> new MarsIceBlock(BlockBehaviour.Properties.copy(Blocks.ICE)));
+
+    public static final RegistryObject<Block> MARS_ICICLE = register("mars_icicle",
+            () -> new IcicleBlock(BlockBehaviour.Properties.copy(TFCBlocks.ICICLE.get())));
+
+    public static final RegistryObject<Block> DRY_ICE = register("dry_ice",
+            () -> new DryIceBlock(BlockBehaviour.Properties.copy(Blocks.ICE)
+                    .sound(SoundType.BONE_BLOCK)));
+
     // Multi block casings
 
     public static final RegistryObject<Block> ELECTROMAGNETIC_ACCELERATOR_BLOCK = register(
@@ -186,19 +196,6 @@ public final class TFGBlocks {
 
     public static final RegistryObject<ReflectorBlock> REFLECTOR_BLOCK = register("reflector", ReflectorBlock::new);
 
-    static {
-        MARS_DIRT = register("grass/mars_dirt",
-                () -> new DirtBlock(Block.Properties.of()
-                        .mapColor(MapColor.DIRT)
-                        .strength(1.4f)
-                        .sound(SoundType.GRAVEL), RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
-        MARS_CLAY = register("grass/mars_clay_dirt",
-                () -> new DirtBlock(BlockBehaviour.Properties.of()
-                        .mapColor(MapColor.DIRT)
-                        .strength(1.4f)
-                        .sound(SoundType.GRAVEL), RUSTICUS_CLAY_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
-    }
-
     // Mars animal related
     public static final RegistryObject<Block> LARGE_NEST_BOX = register("large_nest_box",
             () -> new LargeNestBoxBlock(ExtendedProperties.of()
@@ -216,6 +213,21 @@ public final class TFGBlocks {
                     .sound(TFCSounds.THATCH)
                     .blockEntity(TFGBlockEntities.LARGE_NEST_BOX)
                     .serverTicks(LargeNestBoxBlockEntity::serverTick)));
+
+    // These are done separately to avoid cyclic references
+
+    static {
+        MARS_DIRT = register("grass/mars_dirt",
+                () -> new DirtBlock(Block.Properties.of()
+                        .mapColor(MapColor.DIRT)
+                        .strength(1.4f)
+                        .sound(SoundType.GRAVEL), RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
+        MARS_CLAY = register("grass/mars_clay_dirt",
+                () -> new DirtBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.DIRT)
+                        .strength(1.4f)
+                        .sound(SoundType.GRAVEL), RUSTICUS_CLAY_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
+    }
 
     // Buds are generated automatically
 
