@@ -186,4 +186,6 @@ dependencies {
     //Dea's Fission Vazde
     implementation fg.deobf("curse.maven:deafission-1354541:7045813")
 
+    //Create Picky Waterwheels
+    implementation fg.deobf("curse.maven:create-picky-waterwheels-866839:6932328")
 }
