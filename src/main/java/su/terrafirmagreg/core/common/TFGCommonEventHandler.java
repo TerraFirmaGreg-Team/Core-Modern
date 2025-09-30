@@ -1,15 +1,22 @@
 package su.terrafirmagreg.core.common;
 
+import static appeng.api.upgrades.Upgrades.add;
+
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import appeng.core.definitions.AEItems;
+import appeng.core.localization.GuiText;
+import de.mari_023.ae2wtlib.AE2wtlib;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
@@ -59,8 +66,17 @@ public final class TFGCommonEventHandler {
         event.enqueueWork(() -> {
             if (TFGConfig.COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get() && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
                 TFCAmbientalCompat.register();
+            addUpgrades(AEItems.WIRELESS_TERMINAL);
+            addUpgrades(AEItems.WIRELESS_CRAFTING_TERMINAL);
+            addUpgrades(AE2wtlib.PATTERN_ENCODING_TERMINAL);
+            addUpgrades(AE2wtlib.PATTERN_ACCESS_TERMINAL);
+            addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
         });
         TFGFissionComponents.addComponents();
 
+    }
+
+    private static void addUpgrades(ItemLike item) {
+        add(TFGItems.WIRELESS_CARD.get(), item, 1, GuiText.WirelessTerminals.getTranslationKey());
     }
 }
