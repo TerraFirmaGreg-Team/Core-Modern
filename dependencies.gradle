@@ -182,4 +182,8 @@ dependencies {
 
     // Programmed Circuit Card
     implementation fg.deobf("curse.maven:programmed-circuit-card-1150540:7027959")
+
+    //Dea's Fission Vazde
+    implementation fg.deobf("curse.maven:deafission-1354541:7045813")
+
 }

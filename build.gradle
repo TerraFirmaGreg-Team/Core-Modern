@@ -238,3 +238,38 @@ spotless {
         endWithNewline()
     }
 }
+
+
+tasks.named("build") {
+    dependsOn("spotlessApply")
+}
+
+// Rename the final file: delete regular *.jar (if produced) and strip the -all suffix from the shaded jar
+tasks.register('renameAllJar') {
+    doLast {
+        def libsDir = file("${buildDir}/libs")
+        if (!libsDir.exists()) return
+        // Delete a possible regular jar first
+        libsDir.listFiles()?.findAll { it.name == "${archivesBaseName}-${version}.jar" }?.each { File reg ->
+            reg.delete()
+        }
+        // Rename *-all.jar to *.jar
+        libsDir.listFiles()?.findAll { it.name.endsWith('-all.jar') }?.each { File f ->
+            def targetName = f.name.replace('-all.jar', '.jar')
+            def target = new File(f.parentFile, targetName)
+            if (target.exists()) target.delete()
+            if (!f.renameTo(target)) {
+                throw new GradleException("Failed to rename ${f.name} to ${target.name}")
+            }
+        }
+    }
+}
+
+// Run rename step after available packaging task (bind safely after tasks are created)
+gradle.projectsEvaluated {
+    tasks.findByName('reobfJarJar')?.finalizedBy('renameAllJar')
+    tasks.findByName('reobfJar')?.finalizedBy('renameAllJar')
+    // Fallbacks if reobf tasks are not present in this environment
+    tasks.findByName('jarJar')?.finalizedBy('renameAllJar')
+    tasks.findByName('jar')?.finalizedBy('renameAllJar')
+}
