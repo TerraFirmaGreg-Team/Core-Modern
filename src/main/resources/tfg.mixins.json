@@ -19,6 +19,7 @@
     "common.ae2.InitP2PAttunementsMixin",
     "common.beneath.BurpingFlowerBlockMixin",
     "common.beneath.LavaAqueductBlockMixin",
+    "common.beneath.NetherSpikesFeatureMixin",
     "common.beneath.PortalUtilMixin",
     "common.create.BasinBlockEntityMixin",
     "common.create.BasinCategoryMixin",
