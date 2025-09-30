@@ -14,7 +14,6 @@
         "common.ad_astra.SpaceSuitItemMixin",
         "common.ae2.ConfigMenuInventoryMixin",
         "common.ae2.InitP2PAttunementsMixin",
-        "common.ae2.WirelessTerminalItemMixin",
         "common.ae2.WirelessTerminalMenuHostMixin",
         "common.beneath.BurpingFlowerBlockMixin",
         "common.beneath.LavaAqueductBlockMixin",
