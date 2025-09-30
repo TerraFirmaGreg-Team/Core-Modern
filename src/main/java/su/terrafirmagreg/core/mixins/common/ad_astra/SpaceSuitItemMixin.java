@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
@@ -24,6 +25,11 @@ public abstract class SpaceSuitItemMixin {
     @Shadow
     @Final
     protected long tankSize;
+
+    @Shadow
+    public static long getOxygenAmount(Entity entity) {
+        return 0;
+    } //There is probably a better way of doing this (static abstract doesn't work)
 
     /**
      * Increases the size of the space suit's fluid tanks
@@ -47,4 +53,15 @@ public abstract class SpaceSuitItemMixin {
                         1,
                         (t, f) -> f.is(TFGTags.Fluids.BreathableCompressedAir)));
     }
+
+    /**
+     * @author Bumperdo09
+     * @reason Change comparison from > to >=. ALlows for space suit to consume all gas in the suit.
+     * Allows for changing the type of gas used in the suit safely without needing a pressured environment
+     */
+    @Overwrite()
+    public static boolean hasOxygen(Entity entity) {
+        return getOxygenAmount(entity) >= FluidConstants.fromMillibuckets(1);
+    }
+
 }

@@ -21,9 +21,10 @@ thumbs.db
 *.ipr
 *.iws
 
+
 .idea
 .idea_modules
-!.idea/icon.svg
+!.idea/icon.png
 classes
 out
 build

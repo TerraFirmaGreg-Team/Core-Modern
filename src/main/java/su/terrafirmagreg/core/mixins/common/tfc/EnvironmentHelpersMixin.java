@@ -4,14 +4,19 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.dries007.tfc.util.EnvironmentHelpers;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import earth.terrarium.adastra.api.planets.PlanetApi;
+
+import su.terrafirmagreg.core.common.data.TFGBlocks;
 
 @Mixin(value = EnvironmentHelpers.class, remap = false)
 public abstract class EnvironmentHelpersMixin {
@@ -24,6 +29,17 @@ public abstract class EnvironmentHelpersMixin {
     private static void tfg$tickChunk(ServerLevel level, LevelChunk chunk, ProfilerFiller profiler, CallbackInfo ci) {
         if (PlanetApi.API.isExtraterrestrial(level) && !Level.OVERWORLD.equals(level.dimension())) {
             ci.cancel();
+        }
+    }
+
+    /**
+     * Adds mars water as a water block
+     */
+
+    @Inject(method = "isWater", at = @At("HEAD"), remap = false, cancellable = true)
+    private static void tfg$isWater(BlockState state, CallbackInfoReturnable<Boolean> cir) {
+        if (Helpers.isBlock(state, TFGBlocks.MARS_WATER.get())) {
+            cir.setReturnValue(true);
         }
     }
 }

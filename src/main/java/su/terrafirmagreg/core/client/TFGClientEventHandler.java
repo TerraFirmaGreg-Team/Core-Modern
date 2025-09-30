@@ -31,7 +31,7 @@ import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
-import su.terrafirmagreg.core.common.data.contianer.LargeNestBoxScreen;
+import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.events.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.OreProspectorEvent;
@@ -130,6 +130,9 @@ public final class TFGClientEventHandler {
 
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getSource(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICICLE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
         });
     }
