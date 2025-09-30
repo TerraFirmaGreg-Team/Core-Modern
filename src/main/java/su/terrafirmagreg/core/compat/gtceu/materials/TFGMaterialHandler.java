@@ -105,7 +105,6 @@ public final class TFGMaterialHandler {
 
         // Create materials
 
-        gem.setIgnored(GreateMaterials.RoseQuartz, () -> AllItems.ROSE_QUARTZ);
         block.setIgnored(GreateMaterials.RoseQuartz, () -> AllBlocks.ROSE_QUARTZ_BLOCK);
 
         // Ad astra materials
