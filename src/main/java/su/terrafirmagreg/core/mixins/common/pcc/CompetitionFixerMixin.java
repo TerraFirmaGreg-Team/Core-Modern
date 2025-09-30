@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.programmed_circuit_card;
+package su.terrafirmagreg.core.mixins.common.pcc;
 
 import java.util.function.Supplier;
 
