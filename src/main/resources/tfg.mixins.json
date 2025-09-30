@@ -78,6 +78,8 @@
         "common.minecraft.MushroomBlockMixin",
         "common.minecraft.ServerAdvancementManagerMixin",
         "common.minecraft.ServerLifecycleHooksMixin",
+        "common.pcc.CompetitionFixerMixin",
+        "common.pcc.PatternProviderLogicMixinSquared",
         "common.sandworms.WormSignHandlerMixin",
         "common.simply_stacked_dimensions.TeleportHandlerMixin",
         "common.species.BirtMixin",
