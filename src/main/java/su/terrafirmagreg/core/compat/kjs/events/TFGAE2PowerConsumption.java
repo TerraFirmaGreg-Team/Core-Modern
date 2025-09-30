@@ -1,8 +1,10 @@
 package su.terrafirmagreg.core.compat.kjs.events;
 
+import net.minecraft.resources.ResourceLocation;
+
 import dev.latvian.mods.kubejs.event.EventJS;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.resources.ResourceLocation;
+
 import su.terrafirmagreg.core.TFGCore;
 
 public class TFGAE2PowerConsumption extends EventJS {
@@ -22,6 +24,5 @@ public class TFGAE2PowerConsumption extends EventJS {
         }
         powerConsumption.remove(level);
     }
-
 
 }

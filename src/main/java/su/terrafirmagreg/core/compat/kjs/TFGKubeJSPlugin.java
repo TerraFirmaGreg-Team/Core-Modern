@@ -71,8 +71,6 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         TFGServerEvents.GROUP.register();
     }
 
-
-
     @Override
     public void onServerReload() {
         TFGAE2PowerConsumption.powerConsumption.clear();
