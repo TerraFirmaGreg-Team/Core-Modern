@@ -17,6 +17,14 @@ public class TFGAE2PowerConsumption extends EventJS {
         powerConsumption.put(level, power);
     }
 
+    public void add(String level, double power) {
+        var location = ResourceLocation.parse(level);
+        if (powerConsumption.containsKey(location)) {
+            TFGCore.LOGGER.warn("Power consumption for level {} already exists, overwriting!", location);
+        }
+        powerConsumption.put(location, power);
+    }
+
     public void remove(ResourceLocation level) {
         if (!powerConsumption.containsKey(level)) {
             TFGCore.LOGGER.warn("Power consumption for level {} does not exist, skipping!", level);
