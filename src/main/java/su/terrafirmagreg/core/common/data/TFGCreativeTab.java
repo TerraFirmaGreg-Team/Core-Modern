@@ -79,6 +79,8 @@ public class TFGCreativeTab {
         accept(out, TFGItems.WRAPTOR_SPAWN_EGG);
 
         accept(out, TFGItems.ELECTRIC_EXTENDO_GRIP);
+
+        accept(out, TFGItems.WIRELESS_CARD);
     }
 
     private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out,
