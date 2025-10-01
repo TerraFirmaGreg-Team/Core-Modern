@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
@@ -17,50 +18,43 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
+
 /**
- * Particle emitter block similar to `su.terrafirmagreg.core.common.data.blocks.ParticleEmitterBlock`
- * But extends GT ActiveBlock so it can generate particles when active/inactive.
+ * Active/inactive particle emitter (client only; block entity handles spawning if present).
  */
-public class ActiveParticleBlock extends ActiveBlock {
-    /**
-     * The constant FACING.
-     */
+public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    /**
-     * The constant DEFAULT_SHAPE.
-     */
     public static final VoxelShape DEFAULT_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
     private final VoxelShape shape;
     private final ParticleConfig inactiveConfig;
     private final ParticleConfig activeConfig;
+    private final boolean hasTicker;
 
-    /**
-     * Instantiates a new Active particle block.
-     *
-     * @param properties     the properties
-     * @param shape          the shape
-     * @param itemSupplier   the item supplier
-     * @param inactiveConfig the inactive config
-     * @param activeConfig   the active config
-     */
     public ActiveParticleBlock(
             Properties properties,
             VoxelShape shape,
             Supplier<Item> itemSupplier,
             ParticleConfig inactiveConfig,
-            ParticleConfig activeConfig) {
+            ParticleConfig activeConfig,
+            boolean hasTicker) {
         super(properties);
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
         this.inactiveConfig = inactiveConfig;
         this.activeConfig = activeConfig;
-
+        this.hasTicker = hasTicker;
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(GTBlockStateProperties.ACTIVE, false));
@@ -93,17 +87,36 @@ public class ActiveParticleBlock extends ActiveBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (hasTicker && level.getBlockEntity(pos) != null)
+            return;
         ParticleConfig cfg = state.getValue(GTBlockStateProperties.ACTIVE) ? activeConfig : inactiveConfig;
-        if (cfg != null) {
-            cfg.spawn(level, pos, random);
-        }
+        if (cfg != null)
+            cfg.spawnClient(level, pos, random);
     }
 
-    /**
-     * The type Particle config.
-     */
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return hasTicker ? new TickerBlockEntity(pos, state) : null;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if (!hasTicker || !level.isClientSide)
+            return null;
+        if (type != TFGBlockEntities.TICKER_ENTITY.get())
+            return null;
+        return (lvl, p, s, be) -> {
+            if (be instanceof TickerBlockEntity) {
+                ParticleConfig cfg = s.getValue(GTBlockStateProperties.ACTIVE) ? activeConfig : inactiveConfig;
+                if (cfg != null)
+                    cfg.spawnClient(lvl, p, lvl.random);
+            }
+        };
+    }
+
     public static class ParticleConfig {
         private final Supplier<SimpleParticleType> type;
+        private final double baseX, baseY, baseZ;
         private final double offsetX, offsetY, offsetZ;
         private final double velocityX, velocityY, velocityZ;
         private final int count;
@@ -111,26 +124,9 @@ public class ActiveParticleBlock extends ActiveBlock {
         private final boolean useDust;
         private final float r, g, b, scale;
 
-        /**
-         * Instantiates a new Particle config.
-         *
-         * @param type      the type
-         * @param offsetX   the offset x
-         * @param offsetY   the offset y
-         * @param offsetZ   the offset z
-         * @param velocityX the velocity x
-         * @param velocityY the velocity y
-         * @param velocityZ the velocity z
-         * @param count     the count
-         * @param forced    the forced
-         * @param useDust   the use dust
-         * @param r         the r
-         * @param g         the g
-         * @param b         the b
-         * @param scale     the scale
-         */
         public ParticleConfig(
                 Supplier<SimpleParticleType> type,
+                double baseX, double baseY, double baseZ,
                 double offsetX, double offsetY, double offsetZ,
                 double velocityX, double velocityY, double velocityZ,
                 int count,
@@ -138,6 +134,9 @@ public class ActiveParticleBlock extends ActiveBlock {
                 boolean useDust,
                 float r, float g, float b, float scale) {
             this.type = type != null ? type : () -> ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+            this.baseX = baseX;
+            this.baseY = baseY;
+            this.baseZ = baseZ;
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.offsetZ = offsetZ;
@@ -153,35 +152,36 @@ public class ActiveParticleBlock extends ActiveBlock {
             this.scale = scale;
         }
 
-        /**
-         * Spawn.
-         *
-         * @param level  the level
-         * @param pos    the pos
-         * @param random the random
-         */
-        public void spawn(Level level, BlockPos pos, RandomSource random) {
-            for (int i = 0; i < count; i++) {
-                double x = pos.getX() + 0.5 + random.nextDouble() * offsetX * (random.nextBoolean() ? 1 : -1);
-                double y = pos.getY() + random.nextDouble() * offsetY;
-                double z = pos.getZ() + 0.5 + random.nextDouble() * offsetZ * (random.nextBoolean() ? 1 : -1);
+        private double randOffset(RandomSource rdn, double range) {
+            if (range <= 0)
+                return 0;
+            return rdn.nextDouble() * range * (rdn.nextBoolean() ? 1 : -1);
+        }
 
-                if (useDust) {
-                    var dust = new net.minecraft.core.particles.DustParticleOptions(
-                            new Vector3f(r, g, b), scale);
-                    if (forced) {
-                        level.addAlwaysVisibleParticle(dust, true, x, y, z, velocityX, velocityY, velocityZ);
-                    } else {
-                        level.addParticle(dust, x, y, z, velocityX, velocityY, velocityZ);
-                    }
-                } else {
-                    var p = type.get();
-                    if (forced) {
-                        level.addAlwaysVisibleParticle(p, true, x, y, z, velocityX, velocityY, velocityZ);
-                    } else {
-                        level.addParticle(p, x, y, z, velocityX, velocityY, velocityZ);
-                    }
-                }
+        private void emitClient(Level level, double x, double y, double z) {
+            if (useDust) {
+                var dust = new DustParticleOptions(new Vector3f(r, g, b), scale);
+                if (forced)
+                    level.addAlwaysVisibleParticle(dust, true, x, y, z, velocityX, velocityY, velocityZ);
+                else
+                    level.addParticle(dust, x, y, z, velocityX, velocityY, velocityZ);
+            } else {
+                var p = type.get();
+                if (forced)
+                    level.addAlwaysVisibleParticle(p, true, x, y, z, velocityX, velocityY, velocityZ);
+                else
+                    level.addParticle(p, x, y, z, velocityX, velocityY, velocityZ);
+            }
+        }
+
+        public void spawnClient(Level level, BlockPos pos, RandomSource random) {
+            if (!level.isClientSide)
+                return;
+            for (int i = 0; i < count; i++) {
+                double x = pos.getX() + baseX + randOffset(random, offsetX);
+                double y = pos.getY() + baseY + (offsetY > 0 ? random.nextDouble() * offsetY : 0);
+                double z = pos.getZ() + baseZ + randOffset(random, offsetZ);
+                emitClient(level, x, y, z);
             }
         }
     }

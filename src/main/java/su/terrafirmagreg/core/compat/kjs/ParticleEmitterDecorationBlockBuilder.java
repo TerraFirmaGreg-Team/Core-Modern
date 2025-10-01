@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.compat.kjs;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.notenoughmail.kubejs_tfc.block.internal.ExtendedPropertiesBlockBuilder;
@@ -24,11 +26,15 @@ import su.terrafirmagreg.core.common.data.blocks.ParticleEmitterDecorationBlock;
 
 public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlockBuilder {
 
+    public static final List<net.minecraft.world.level.block.Block> REGISTERED_BLOCKS = new ArrayList<>();
+
     public transient VoxelShape cachedShape;
     public transient Supplier<Item> preexistingItem;
     public transient int rotate;
 
     public transient Supplier<SimpleParticleType> particleType = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+
+    public transient double baseX = 0.5, baseY = 0.5, baseZ = 0.5;
     public transient double offsetX = 0.25, offsetY = 1.0, offsetZ = 0.25;
     public transient double velocityX = 0.0, velocityY = 0.07, velocityZ = 0.0;
     public transient int particleCount = 1;
@@ -36,9 +42,10 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
     public transient boolean useDustOptions = false;
     public transient float dustRed = 1.0f, dustGreen = 0.0f, dustBlue = 0.0f, dustScale = 1.0f;
 
+    private transient boolean hasTicker = false;
+
     public ParticleEmitterDecorationBlockBuilder(ResourceLocation i) {
         super(i);
-
         noCollision = true;
         hardness = 0;
         rotate = 0;
@@ -47,11 +54,24 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         notSolid = true;
         renderType = "cutout";
         soundType = SoundType.GRASS;
-
         mapColor(MapColor.NONE);
     }
 
-    @Info("Sets the 'block item' of this block to an existing item")
+    @Info("Enable/disable per-tick ticker (default true)")
+    public ParticleEmitterDecorationBlockBuilder hasTicker(boolean enabled) {
+        this.hasTicker = enabled;
+        return this;
+    }
+
+    @Info("Sets base position inside block")
+    public ParticleEmitterDecorationBlockBuilder particleBase(double x, double y, double z) {
+        baseX = x;
+        baseY = y;
+        baseZ = z;
+        return this;
+    }
+
+    @Info("Attach existing item as block item")
     public ParticleEmitterDecorationBlockBuilder withPreexistingItem(ResourceLocation item) {
         itemBuilder = null;
         preexistingItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
@@ -59,31 +79,28 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         return this;
     }
 
-    @Info("Rotates the default models by 45 degrees")
+    @Info("Rotate generated models by 45 degrees")
     public ParticleEmitterDecorationBlockBuilder notAxisAligned() {
         rotate = 45;
         return this;
     }
 
-    @Info("Sets the particle type emitted by the block (example: 'minecraft:bubble')")
+    @Info("Set particle type")
     public ParticleEmitterDecorationBlockBuilder particle(String id) {
         ResourceLocation rl = ResourceLocation.tryParse(id);
         particleType = Lazy.of(() -> {
             ParticleType<?> pt = RegistryInfo.PARTICLE_TYPE.getValue(rl);
             if (pt instanceof SimpleParticleType simple) {
+                if (id.equals("minecraft:dust"))
+                    useDustOptions = true;
                 return simple;
             }
             throw new IllegalArgumentException("Particle type '" + id + "' is not a SimpleParticleType");
         });
-
-        if (id.equals("minecraft:dust")) {
-            useDustOptions = true;
-        }
-
         return this;
     }
 
-    @Info("Sets the offset range for particles (default: 0.25, 1.0, 0.25)")
+    @Info("Set random spread ranges")
     public ParticleEmitterDecorationBlockBuilder particleOffset(double x, double y, double z) {
         offsetX = x;
         offsetY = y;
@@ -91,7 +108,7 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         return this;
     }
 
-    @Info("Sets the particle velocity (default: 0.0, 0.07, 0.0)")
+    @Info("Set particle velocity")
     public ParticleEmitterDecorationBlockBuilder particleVelocity(double x, double y, double z) {
         velocityX = x;
         velocityY = y;
@@ -99,35 +116,33 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         return this;
     }
 
-    @Info("Sets the number of particles emitted per tick (default: 1)")
+    @Info("Set particle count")
     public ParticleEmitterDecorationBlockBuilder particleCount(int count) {
         particleCount = count;
         return this;
     }
 
-    @Info("If true, particles are always visible in 512 blocks and on minimal visual setting. Normal is 32 blocks. (default: false)")
+    @Info("Always visible")
     public ParticleEmitterDecorationBlockBuilder particleForced(boolean forced) {
         particleForced = forced;
         return this;
     }
 
-    @Info("Set RGB color and scale for 'dust' particle type (float from 0.0 to 1.0)")
+    @Info("Dust RGB + scale")
     public ParticleEmitterDecorationBlockBuilder dustColor(float r, float g, float b, float scale) {
-        this.dustRed = r;
-        this.dustGreen = g;
-        this.dustBlue = b;
-        this.dustScale = scale;
+        dustRed = r;
+        dustGreen = g;
+        dustBlue = b;
+        dustScale = scale;
         return this;
     }
 
     @HideFromJS
     public VoxelShape getShape() {
-        if (customShape.isEmpty()) {
+        if (customShape.isEmpty())
             return ParticleEmitterDecorationBlock.DEFAULT_SHAPE;
-        }
-        if (cachedShape == null) {
+        if (cachedShape == null)
             cachedShape = BlockBuilder.createShape(customShape);
-        }
         return cachedShape;
     }
 
@@ -142,16 +157,24 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
 
     @Override
     public ParticleEmitterDecorationBlock createObject() {
-        return new ParticleEmitterDecorationBlock(
-                createProperties().offsetType(BlockBehaviour.OffsetType.XZ),
+        var props = createProperties().offsetType(BlockBehaviour.OffsetType.XZ);
+        var block = new ParticleEmitterDecorationBlock(
+                props,
                 getShape(),
                 itemSupplier(),
                 particleType,
+                baseX, baseY, baseZ,
                 offsetX, offsetY, offsetZ,
                 velocityX, velocityY, velocityZ,
                 particleCount,
                 particleForced,
                 useDustOptions,
-                dustRed, dustGreen, dustBlue, dustScale);
+                dustRed, dustGreen, dustBlue, dustScale,
+                hasTicker);
+        if (hasTicker) {
+            REGISTERED_BLOCKS.add(block);
+            ParticleEmitterBlockBuilder.REGISTERED_BLOCKS.add(block);
+        }
+        return block;
     }
 }

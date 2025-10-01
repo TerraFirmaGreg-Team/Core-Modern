@@ -1,8 +1,12 @@
 package su.terrafirmagreg.core.common.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -12,6 +16,10 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
+import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
+import su.terrafirmagreg.core.compat.kjs.GTActiveParticleBuilder;
+import su.terrafirmagreg.core.compat.kjs.ParticleEmitterBlockBuilder;
+import su.terrafirmagreg.core.compat.kjs.ParticleEmitterDecorationBlockBuilder;
 
 public class TFGBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister
@@ -44,4 +52,12 @@ public class TFGBlockEntities {
                     () -> BlockEntityType.Builder.of(ReflectorBlockEntity::new, TFGBlocks.REFLECTOR_BLOCK.get())
                             .build(null));
 
+    public static final RegistryObject<BlockEntityType<TickerBlockEntity>> TICKER_ENTITY = BLOCK_ENTITIES
+            .register("particle_emitter", () -> {
+                List<Block> blocks = new ArrayList<>();
+                blocks.addAll(ParticleEmitterBlockBuilder.REGISTERED_BLOCKS);
+                blocks.addAll(ParticleEmitterDecorationBlockBuilder.REGISTERED_BLOCKS);
+                blocks.addAll(GTActiveParticleBuilder.REGISTERED_BLOCKS);
+                return BlockEntityType.Builder.of(TickerBlockEntity::new, blocks.toArray(Block[]::new)).build(null);
+            });
 }
