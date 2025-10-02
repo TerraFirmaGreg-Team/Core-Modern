@@ -1,6 +1,9 @@
 package su.terrafirmagreg.core.mixins.common.tfc;
 
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.util.Helpers;
@@ -10,6 +13,7 @@ import net.dries007.tfc.world.feature.cave.IceCaveFeature;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -18,6 +22,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraftforge.common.Tags;
 
+import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 
 @Mixin(value = IceCaveFeature.class)
@@ -107,12 +112,39 @@ public class IceCaveFeatureMixin {
         return true;
     }
 
-    @Shadow(remap = false)
-    private void placeDisc(WorldGenLevel world, BlockPos.MutableBlockPos mutablePos, RandomSource random) {
+    @Inject(method = "getState", at = @At("HEAD"), remap = false, cancellable = true)
+    private void tfg$getState(RandomSource rand, CallbackInfoReturnable<BlockState> cir) {
+        cir.setReturnValue(rand.nextFloat() < 0.4F ? TFGBlocks.MARS_ICE.get().defaultBlockState() : TFGBlocks.DRY_ICE.get().defaultBlockState());
+    }
+
+    /**
+     * @author Pyritie
+     * @reason Replaces ice block
+     */
+    @Overwrite(remap = false)
+    private void placeSphere(WorldGenLevel world, BlockPos.MutableBlockPos mutablePos, RandomSource rand) {
+        float radius = 1.0F + rand.nextFloat() * rand.nextFloat() * 3.0F;
+        float radiusSquared = radius * radius;
+        int size = Mth.ceil(radius);
+        BlockPos pos = mutablePos.immutable();
+        BlockState ice = TFGBlocks.MARS_ICE.get().defaultBlockState();
+
+        for (int x = -size; x <= size; ++x) {
+            for (int y = -size; y <= size; ++y) {
+                for (int z = -size; z <= size; ++z) {
+                    if ((float) (x * x + y * y + z * z) <= radiusSquared) {
+                        mutablePos.set(pos).move(x, y, z);
+                        if (world.isEmptyBlock(mutablePos)) {
+                            world.setBlock(mutablePos, ice, 3);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Shadow(remap = false)
-    private void placeSphere(WorldGenLevel world, BlockPos.MutableBlockPos mutablePos, RandomSource rand) {
+    private void placeDisc(WorldGenLevel world, BlockPos.MutableBlockPos mutablePos, RandomSource random) {
     }
 
     @Shadow(remap = false)

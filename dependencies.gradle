@@ -133,6 +133,7 @@ dependencies {
     implementation fg.deobf(jarJar("appeng:appliedenergistics2-forge:$ae2_version")) {
         jarJar.ranged(it, "[$ae2_version,)")
     }
+    implementation fg.deobf("curse.maven:applied-energistics-2-wireless-terminals-459929:7014805")
 
     // ComputerCraft
     implementation fg.deobf("cc.tweaked:cc-tweaked-1.20.1-core-api:${cc_tweaked_version}")
@@ -180,7 +181,12 @@ dependencies {
     //Create Liquid Fuel
     implementation fg.deobf("curse.maven:create-liquid-fuel-840734:5217310")
 
+    // Programmed Circuit Card
+    implementation fg.deobf("curse.maven:programmed-circuit-card-1150540:7027959")
+
     //Dea's Fission Vazde
     implementation fg.deobf("curse.maven:deafission-1354541:7045813")
 
+    //Create Picky Waterwheels
+    implementation fg.deobf("curse.maven:create-picky-waterwheels-866839:6932328")
 }

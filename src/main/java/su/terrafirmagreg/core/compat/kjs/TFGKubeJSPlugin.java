@@ -18,6 +18,8 @@ import su.terrafirmagreg.core.common.TFGHelpers;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
+import su.terrafirmagreg.core.compat.kjs.events.TFGAE2PowerConsumption;
+import su.terrafirmagreg.core.compat.kjs.events.TFGServerEvents;
 import su.terrafirmagreg.core.compat.kjs.events.TFGStartupEvents;
 
 public final class TFGKubeJSPlugin extends KubeJSPlugin {
@@ -66,5 +68,12 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
     public void registerEvents() {
         super.registerEvents();
         TFGStartupEvents.GROUP.register();
+        TFGServerEvents.GROUP.register();
+    }
+
+    @Override
+    public void onServerReload() {
+        TFGAE2PowerConsumption.powerConsumption.clear();
+        TFGServerEvents.AE2_POWER_CONSUMPTION.post(new TFGAE2PowerConsumption());
     }
 }
