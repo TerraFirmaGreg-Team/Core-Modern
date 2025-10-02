@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -25,23 +26,33 @@ public class BlockInteractionRecipe implements EmiRecipe {
     private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
             "textures/gui/emi/arrow.png");
 
-    private final TagKey<Item> INPUT;
-    private final TagKey<Item> OUTPUT;
-    private final TagKey<Item> TOOL;
-    private final Item CONSUMABLE;
+    private final List<EmiIngredient> INPUTS = new ArrayList<>();
+    private final List<EmiStack> OUTPUTS = new ArrayList<>();
+    //TOOL refers to the item(s) used to transform the block
+    private final List<EmiIngredient> TOOL = new ArrayList<>();
 
     public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, TagKey<Item> TOOL) {
-        this.INPUT = INPUT;
-        this.OUTPUT = OUTPUT;
-        this.TOOL = TOOL;
-        this.CONSUMABLE = null;
+        INPUTS.add(EmiIngredient.of(INPUT));
+        ForgeRegistries.ITEMS.tags().getTag(OUTPUT).forEach(i -> OUTPUTS.add(EmiStack.of(i)));
+        this.TOOL.add(EmiIngredient.of(TOOL));
     }
 
     public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, Item CONSUMABLE) {
-        this.INPUT = INPUT;
-        this.OUTPUT = OUTPUT;
-        this.TOOL = null;
-        this.CONSUMABLE = CONSUMABLE;
+        INPUTS.add(EmiIngredient.of(INPUT));
+        ForgeRegistries.ITEMS.tags().getTag(OUTPUT).forEach(i -> OUTPUTS.add(EmiStack.of(i)));
+        this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
+    }
+
+    public BlockInteractionRecipe(Item INPUT, Item OUTPUT, TagKey<Item> TOOL) {
+        INPUTS.add(EmiIngredient.of(Ingredient.of(INPUT)));
+        OUTPUTS.add(EmiStack.of(OUTPUT));
+        this.TOOL.add(EmiIngredient.of(TOOL));
+    }
+
+    public BlockInteractionRecipe(Item INPUT, Item OUTPUT, Item CONSUMABLE) {
+        INPUTS.add(EmiIngredient.of(Ingredient.of(INPUT)));
+        OUTPUTS.add(EmiStack.of(OUTPUT));
+        this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
     }
 
     @Override
@@ -51,7 +62,7 @@ public class BlockInteractionRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return TFGCore.id(INPUT.toString() + "_" + OUTPUT.toString() + "_block_interaction_emi");
+        return TFGCore.id(INPUTS.toString() + "_" + OUTPUTS.toString() + "_block_interaction_emi");
     }
 
     @Override
@@ -69,17 +80,14 @@ public class BlockInteractionRecipe implements EmiRecipe {
         int itemOffsetY = 5;
         int itemOffsetX = 25;
 
-        createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(INPUT));
+        createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(INPUTS));
         itemOffsetX += 20;
 
-        if (TOOL != null)
-            createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(TOOL));
-        if (CONSUMABLE != null)
-            createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiStack.of(CONSUMABLE));
+        createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(TOOL));
         itemOffsetX += 20;
 
         itemOffsetX = createArrowWidget(widgetHolder, itemOffsetY, itemOffsetX, 30);
-        createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(OUTPUT));
+        createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(OUTPUTS));
 
     }
 
@@ -103,14 +111,11 @@ public class BlockInteractionRecipe implements EmiRecipe {
 
     @Override
     public List<EmiIngredient> getInputs() {
-        return List.of(EmiIngredient.of(INPUT));
+        return INPUTS;
     }
 
     @Override
     public List<EmiStack> getOutputs() {
-        List<EmiStack> outputList = new ArrayList<>();
-        ForgeRegistries.ITEMS.tags().getTag(OUTPUT).forEach(i -> outputList.add(EmiStack.of(i)));
-
-        return outputList;
+        return OUTPUTS;
     }
 }
