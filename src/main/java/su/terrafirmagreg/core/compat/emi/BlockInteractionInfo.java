@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.compat.emi;
 
 import java.util.function.Supplier;
 
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.simibubi.create.AllTags;
@@ -18,8 +20,8 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class BlockInteractionInfo {
     private static final Item pumice_item = TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.PUMICE).get().asItem();
-    private static final Supplier<Item> incoloy_frame = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("gtceu", "incoloy_ma_956_frame")).asItem();
+    private static final Item incoloy_frame = ChemicalHelper.get(TagPrefix.frameGt, GTMaterials.IncoloyMA956).getItem();
+
     private static final Supplier<Item> glacian_frame = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool_frame")).asItem();
     private static final Supplier<Item> aes_frame = () -> ForgeRegistries.BLOCKS
@@ -93,12 +95,12 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, pumice_item),
 
             //Insulation Add
-            new BlockInteractionRecipe(incoloy_frame.get(), aes_frame.get(), aes_roll.get()),
-            new BlockInteractionRecipe(incoloy_frame.get(), glacian_frame.get(), glacian_wool.get()),
+            new BlockInteractionRecipe(incoloy_frame, aes_frame.get(), aes_roll.get()),
+            new BlockInteractionRecipe(incoloy_frame, glacian_frame.get(), glacian_wool.get()),
 
             //Insulation Remove
-            new BlockInteractionRecipe(aes_frame.get(), incoloy_frame.get(), CustomTags.WIRE_CUTTERS),
-            new BlockInteractionRecipe(glacian_frame.get(), incoloy_frame.get(), CustomTags.WIRE_CUTTERS)
+            new BlockInteractionRecipe(aes_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe(glacian_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS)
     };
 
 }
