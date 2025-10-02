@@ -1,6 +1,8 @@
 package su.terrafirmagreg.core.compat.emi;
 
-import com.gregtechceu.gtceu.common.data.GTItems;
+import java.util.function.Supplier;
+
+import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.simibubi.create.AllTags;
 
@@ -8,12 +10,25 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.GroundcoverBlockType;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class BlockInteractionInfo {
     private static final Item pumice_item = TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.PUMICE).get().asItem();
+    private static final Supplier<Item> incoloy_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("gtceu", "incoloy_ma_956_frame")).asItem();
+    private static final Supplier<Item> glacian_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool_frame")).asItem();
+    private static final Supplier<Item> aes_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "aes_insulation_frame")).asItem();
+
+    private static final Supplier<Item> glacian_wool = () -> ForgeRegistries.ITEMS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool")).asItem();
+    private static final Supplier<Item> aes_roll = () -> ForgeRegistries.ITEMS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "aes_insulation_roll")).asItem();
 
     public static BlockInteractionRecipe[] RECIPES = {
             //Brick -> cracked
@@ -75,8 +90,15 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFGTags.Items.INTERACTIONCOBBLE, pumice_item),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFGTags.Items.INTERACTIONCOBBLESTAIR, pumice_item),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFGTags.Items.INTERACTIONCOBBLESLAB, pumice_item),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, pumice_item)
+            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, pumice_item),
 
+            //Insulation Add
+            new BlockInteractionRecipe(incoloy_frame.get(), aes_frame.get(), aes_roll.get()),
+            new BlockInteractionRecipe(incoloy_frame.get(), glacian_frame.get(), glacian_wool.get()),
+
+            //Insulation Remove
+            new BlockInteractionRecipe(aes_frame.get(), incoloy_frame.get(), CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe(glacian_frame.get(), incoloy_frame.get(), CustomTags.WIRE_CUTTERS)
     };
 
 }
