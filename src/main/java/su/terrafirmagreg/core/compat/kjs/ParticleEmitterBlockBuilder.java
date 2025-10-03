@@ -1,15 +1,17 @@
 package su.terrafirmagreg.core.compat.kjs;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.notenoughmail.kubejs_tfc.block.internal.ExtendedPropertiesBlockBuilder;
-import com.notenoughmail.kubejs_tfc.event.RegisterInteractionsEventJS;
 
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.util.Lazy;
@@ -21,57 +23,70 @@ import dev.latvian.mods.rhino.util.HideFromJS;
 
 import su.terrafirmagreg.core.common.data.blocks.ParticleEmitterBlock;
 
+// KubeJS builder for a simple particle emitter block.
 public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder {
+    public static final List<net.minecraft.world.level.block.Block> REGISTERED_BLOCKS = new ArrayList<>();
 
     public transient VoxelShape cachedShape;
     public transient Supplier<Item> preexistingItem;
-    public transient int rotate;
+    public transient Supplier<Item> itemBuilder;
 
+    // Particle configuration defaults.
     public transient Supplier<SimpleParticleType> particleType = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+    public transient double baseX = 0.5, baseY = 0.5, baseZ = 0.5;
     public transient double offsetX = 0.25, offsetY = 1.0, offsetZ = 0.25;
-    public transient double velocityX = 0.0, velocityY = 0.07, velocityZ = 0.0;
+    public transient double velocityX = 0.0, velocityY = 0.0, velocityZ = 0.0;
     public transient int particleCount = 1;
     public transient boolean particleForced = false;
     public transient boolean useDustOptions = false;
     public transient float dustRed = 1.0f, dustGreen = 0.0f, dustBlue = 0.0f, dustScale = 1.0f;
+    private transient boolean hasTicker = false;
+    public transient int emitDelay = 0;
 
-    public ParticleEmitterBlockBuilder(ResourceLocation i) {
-        super(i);
-        hardness = 1.5f;
-        resistance = 6;
-        rotate = 0;
+    public ParticleEmitterBlockBuilder(ResourceLocation id) {
+        super(id);
         soundType = SoundType.STONE;
-
-        mapColor(MapColor.NONE);
+        hardness = 1.5f;
+        resistance = 6.0f;
+        mapColor(MapColor.STONE);
     }
 
-    @Info("Sets the 'block item' of this block to an existing item")
-    public ParticleEmitterBlockBuilder withPreexistingItem(ResourceLocation item) {
-        itemBuilder = null;
-        preexistingItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
-        RegisterInteractionsEventJS.addBlockItemPlacement(preexistingItem, this);
+    @Info("Enable/disable block entity ticker (default false).")
+    public ParticleEmitterBlockBuilder hasTicker(boolean enabled) {
+        this.hasTicker = enabled;
         return this;
     }
 
-    @Info("Sets the particle type emitted by the block (example: 'minecraft:bubble')")
+    @Info("Random emission delay scale")
+    public ParticleEmitterBlockBuilder emitDelay(int delay) {
+        this.emitDelay = Math.max(0, delay);
+        return this;
+    }
+
+    @Info("Starting emission position (default: center -> 0.5, 0.5, 0.5).")
+    public ParticleEmitterBlockBuilder particleBase(double x, double y, double z) {
+        baseX = x;
+        baseY = y;
+        baseZ = z;
+        return this;
+    }
+
+    @Info("Particle type id (SimpleParticleType 'minecraft:dust' enables dust options).")
     public ParticleEmitterBlockBuilder particle(String id) {
         ResourceLocation rl = ResourceLocation.tryParse(id);
         particleType = Lazy.of(() -> {
             ParticleType<?> pt = RegistryInfo.PARTICLE_TYPE.getValue(rl);
             if (pt instanceof SimpleParticleType simple) {
+                if (id.equals("minecraft:dust"))
+                    useDustOptions = true;
                 return simple;
             }
             throw new IllegalArgumentException("Particle type '" + id + "' is not a SimpleParticleType");
         });
-
-        if (id.equals("minecraft:dust")) {
-            useDustOptions = true;
-        }
-
         return this;
     }
 
-    @Info("Sets the offset range for particles (default: 0.25, 1.0, 0.25)")
+    @Info("Random spread ranges (default 0.25, 1.0, 0.25).")
     public ParticleEmitterBlockBuilder particleOffset(double x, double y, double z) {
         offsetX = x;
         offsetY = y;
@@ -79,7 +94,7 @@ public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder 
         return this;
     }
 
-    @Info("Sets the particle velocity (default: 0.0, 0.07, 0.0)")
+    @Info("Particle velocity (default 0, 0, 0).")
     public ParticleEmitterBlockBuilder particleVelocity(double x, double y, double z) {
         velocityX = x;
         velocityY = y;
@@ -87,35 +102,40 @@ public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder 
         return this;
     }
 
-    @Info("Sets the number of particles emitted per tick (default: 1)")
+    @Info("Particles per emission (>=1; default 1).")
     public ParticleEmitterBlockBuilder particleCount(int count) {
         particleCount = count;
         return this;
     }
 
-    @Info("If true, particles are always visible in 512 blocks and on minimal visual setting. Normal is 32 blocks. (default: false)")
+    @Info("Always visible (default false).")
     public ParticleEmitterBlockBuilder particleForced(boolean forced) {
         particleForced = forced;
         return this;
     }
 
-    @Info("Set RGB color and scale for 'dust' particle type (float from 0.0 to 1.0)")
+    @Info("Dust color r, g, b + scale (only if dust particle chosen).")
     public ParticleEmitterBlockBuilder dustColor(float r, float g, float b, float scale) {
-        this.dustRed = r;
-        this.dustGreen = g;
-        this.dustBlue = b;
-        this.dustScale = scale;
+        dustRed = r;
+        dustGreen = g;
+        dustBlue = b;
+        dustScale = scale;
+        return this;
+    }
+
+    @Info("Attach existing item instead of generating new.")
+    public ParticleEmitterBlockBuilder withPreexistingItem(ResourceLocation item) {
+        itemBuilder = null;
+        preexistingItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
         return this;
     }
 
     @HideFromJS
     public VoxelShape getShape() {
-        if (customShape.isEmpty()) {
+        if (customShape.isEmpty())
             return ParticleEmitterBlock.DEFAULT_SHAPE;
-        }
-        if (cachedShape == null) {
+        if (cachedShape == null)
             cachedShape = BlockBuilder.createShape(customShape);
-        }
         return cachedShape;
     }
 
@@ -128,18 +148,27 @@ public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder 
         return null;
     }
 
+    // Creates and optionally registers the emitter block.
     @Override
     public ParticleEmitterBlock createObject() {
-        return new ParticleEmitterBlock(
-                createProperties(),
+        BlockBehaviour.Properties props = createProperties();
+        ParticleEmitterBlock block = new ParticleEmitterBlock(
+                props,
                 getShape(),
                 itemSupplier(),
                 particleType,
+                baseX, baseY, baseZ,
                 offsetX, offsetY, offsetZ,
                 velocityX, velocityY, velocityZ,
                 particleCount,
                 particleForced,
                 useDustOptions,
-                dustRed, dustGreen, dustBlue, dustScale);
+                dustRed, dustGreen, dustBlue, dustScale,
+                hasTicker,
+                emitDelay);
+        if (hasTicker) {
+            REGISTERED_BLOCKS.add(block);
+        }
+        return block;
     }
 }
