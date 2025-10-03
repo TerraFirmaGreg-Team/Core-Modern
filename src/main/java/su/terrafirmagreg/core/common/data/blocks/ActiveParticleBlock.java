@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import java.util.function.Supplier;
 
-import dev.latvian.mods.kubejs.typings.Info;
 import org.joml.Vector3f;
 
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
