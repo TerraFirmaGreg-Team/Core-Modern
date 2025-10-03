@@ -172,9 +172,9 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
             return null;
         return type == TFGBlockEntities.TICKER_ENTITY.get()
                 ? (lvl, p, s, be) -> {
-            if (be instanceof TickerBlockEntity && shouldEmit(lvl.random))
-                spawnParticlesClient(lvl, p, lvl.random);
-        }
+                    if (be instanceof TickerBlockEntity && shouldEmit(lvl.random))
+                        spawnParticlesClient(lvl, p, lvl.random);
+                }
                 : null;
     }
 }

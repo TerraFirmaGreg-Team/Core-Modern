@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.ParticleEmitterBlock;
 
-
 // Client based ticker.
 public class TickerBlockEntity extends BlockEntity {
 
@@ -17,7 +16,7 @@ public class TickerBlockEntity extends BlockEntity {
         super(TFGBlockEntities.TICKER_ENTITY.get(), pos, state);
     }
 
-     // Invokes the block's animateTick using RNG.
+    // Invokes the block's animateTick using RNG.
     public static void clientTick(Level level, BlockPos pos, BlockState state, TickerBlockEntity be) {
         if (level.isClientSide && state.getBlock() instanceof ParticleEmitterBlock block) {
             block.animateTick(state, level, pos, level.random);

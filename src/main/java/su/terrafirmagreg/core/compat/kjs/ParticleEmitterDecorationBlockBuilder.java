@@ -34,8 +34,7 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
     public transient int rotate;
 
     // Particle configuration defaults.
-    public transient Supplier<SimpleParticleType> particleType =
-            () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+    public transient Supplier<SimpleParticleType> particleType = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
     public transient double baseX = 0.5, baseY = 0.5, baseZ = 0.5;
     public transient double offsetX = 0.25, offsetY = 1.0, offsetZ = 0.25;
     public transient double velocityX = 0.0, velocityY = 0.0, velocityZ = 0.0;
@@ -71,9 +70,11 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         return this;
     }
 
-    @Info("Starting emission position (default 0.5, 0.5, 0.5).")
+    @Info("Starting emission position (default: center -> 0.5, 0.5, 0.5).")
     public ParticleEmitterDecorationBlockBuilder particleBase(double x, double y, double z) {
-        baseX = x; baseY = y; baseZ = z;
+        baseX = x;
+        baseY = y;
+        baseZ = z;
         return this;
     }
 
@@ -108,13 +109,17 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
 
     @Info("Random spread ranges (default 0.25, 1.0, 0.25).")
     public ParticleEmitterDecorationBlockBuilder particleOffset(double x, double y, double z) {
-        offsetX = x; offsetY = y; offsetZ = z;
+        offsetX = x;
+        offsetY = y;
+        offsetZ = z;
         return this;
     }
 
     @Info("Particle velocity (default 0, 0, 0).")
     public ParticleEmitterDecorationBlockBuilder particleVelocity(double x, double y, double z) {
-        velocityX = x; velocityY = y; velocityZ = z;
+        velocityX = x;
+        velocityY = y;
+        velocityZ = z;
         return this;
     }
 
@@ -132,7 +137,10 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
 
     @Info("Dust color r, g, b + scale (only if dust particle chosen).")
     public ParticleEmitterDecorationBlockBuilder dustColor(float r, float g, float b, float scale) {
-        dustRed = r; dustGreen = g; dustBlue = b; dustScale = scale;
+        dustRed = r;
+        dustGreen = g;
+        dustBlue = b;
+        dustScale = scale;
         return this;
     }
 

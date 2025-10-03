@@ -52,7 +52,6 @@ public class TFGBlockEntities {
                     () -> BlockEntityType.Builder.of(ReflectorBlockEntity::new, TFGBlocks.REFLECTOR_BLOCK.get())
                             .build(null));
 
-
     // Shared particle emitter ticker entity.
     public static final RegistryObject<BlockEntityType<TickerBlockEntity>> TICKER_ENTITY = BLOCK_ENTITIES
             .register("particle_emitter", () -> {

@@ -179,16 +179,16 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
             return null;
         return type == TFGBlockEntities.TICKER_ENTITY.get()
                 ? (lvl, p, s, be) -> {
-            if (be instanceof TickerBlockEntity && shouldEmit(lvl.random))
-                spawnClient(lvl, p, lvl.random);
-        }
+                    if (be instanceof TickerBlockEntity && shouldEmit(lvl.random))
+                        spawnClient(lvl, p, lvl.random);
+                }
                 : null;
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos,
-                                boolean movedByPiston) {
+            boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (!canSurvive(state, level, pos)) {
             Block.updateOrDestroy(state, Blocks.AIR.defaultBlockState(), level, pos, Block.UPDATE_ALL);

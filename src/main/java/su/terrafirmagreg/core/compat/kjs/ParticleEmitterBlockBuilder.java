@@ -63,9 +63,11 @@ public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder 
         return this;
     }
 
-    @Info("Starting emission position (default 0.5, 0.5, 0.5).")
+    @Info("Starting emission position (default: center -> 0.5, 0.5, 0.5).")
     public ParticleEmitterBlockBuilder particleBase(double x, double y, double z) {
-        baseX = x; baseY = y; baseZ = z;
+        baseX = x;
+        baseY = y;
+        baseZ = z;
         return this;
     }
 
@@ -86,13 +88,17 @@ public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder 
 
     @Info("Random spread ranges (default 0.25, 1.0, 0.25).")
     public ParticleEmitterBlockBuilder particleOffset(double x, double y, double z) {
-        offsetX = x; offsetY = y; offsetZ = z;
+        offsetX = x;
+        offsetY = y;
+        offsetZ = z;
         return this;
     }
 
     @Info("Particle velocity (default 0, 0, 0).")
     public ParticleEmitterBlockBuilder particleVelocity(double x, double y, double z) {
-        velocityX = x; velocityY = y; velocityZ = z;
+        velocityX = x;
+        velocityY = y;
+        velocityZ = z;
         return this;
     }
 
@@ -110,7 +116,10 @@ public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder 
 
     @Info("Dust color r, g, b + scale (only if dust particle chosen).")
     public ParticleEmitterBlockBuilder dustColor(float r, float g, float b, float scale) {
-        dustRed = r; dustGreen = g; dustBlue = b; dustScale = scale;
+        dustRed = r;
+        dustGreen = g;
+        dustBlue = b;
+        dustScale = scale;
         return this;
     }
 

@@ -31,8 +31,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     public transient Supplier<Item> itemBuilder;
 
     // Inactive defaults
-    private transient Supplier<SimpleParticleType> inactiveParticle =
-            () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.ASH;
+    private transient Supplier<SimpleParticleType> inactiveParticle = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.ASH;
     private transient boolean hasInactive = false;
     private transient double inactiveBaseX = 0.5, inactiveBaseY = 0.5, inactiveBaseZ = 0.5;
     private transient double inactiveOffsetX, inactiveOffsetY, inactiveOffsetZ;
@@ -43,8 +42,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     private transient float inactiveDustRed, inactiveDustGreen, inactiveDustBlue, inactiveDustScale;
 
     // Active defaults
-    private transient Supplier<SimpleParticleType> activeParticle =
-            () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+    private transient Supplier<SimpleParticleType> activeParticle = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
     private transient boolean hasActive = false;
     private transient double activeBaseX = 0.5, activeBaseY = 0.5, activeBaseZ = 0.5;
     private transient double activeOffsetX, activeOffsetY, activeOffsetZ;
@@ -86,19 +84,25 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
 
     @Info("Inactive base position.")
     public GTActiveParticleBuilder inactiveBase(double x, double y, double z) {
-        this.inactiveBaseX = x; this.inactiveBaseY = y; this.inactiveBaseZ = z;
+        this.inactiveBaseX = x;
+        this.inactiveBaseY = y;
+        this.inactiveBaseZ = z;
         return this;
     }
 
     @Info("Inactive spread offsets.")
     public GTActiveParticleBuilder inactiveOffset(double x, double y, double z) {
-        this.inactiveOffsetX = x; this.inactiveOffsetY = y; this.inactiveOffsetZ = z;
+        this.inactiveOffsetX = x;
+        this.inactiveOffsetY = y;
+        this.inactiveOffsetZ = z;
         return this;
     }
 
     @Info("Inactive velocity.")
     public GTActiveParticleBuilder inactiveVelocity(double x, double y, double z) {
-        this.inactiveVelX = x; this.inactiveVelY = y; this.inactiveVelZ = z;
+        this.inactiveVelX = x;
+        this.inactiveVelY = y;
+        this.inactiveVelZ = z;
         return this;
     }
 
@@ -117,7 +121,10 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     @Info("Inactive dust color + scale.")
     public GTActiveParticleBuilder inactiveDust(float r, float g, float b, float scale) {
         this.inactiveUseDust = true;
-        this.inactiveDustRed = r; this.inactiveDustGreen = g; this.inactiveDustBlue = b; this.inactiveDustScale = scale;
+        this.inactiveDustRed = r;
+        this.inactiveDustGreen = g;
+        this.inactiveDustBlue = b;
+        this.inactiveDustScale = scale;
         return this;
     }
 
@@ -133,19 +140,25 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
 
     @Info("Active base position.")
     public GTActiveParticleBuilder activeBase(double x, double y, double z) {
-        this.activeBaseX = x; this.activeBaseY = y; this.activeBaseZ = z;
+        this.activeBaseX = x;
+        this.activeBaseY = y;
+        this.activeBaseZ = z;
         return this;
     }
 
     @Info("Active spread offsets.")
     public GTActiveParticleBuilder activeOffset(double x, double y, double z) {
-        this.activeOffsetX = x; this.activeOffsetY = y; this.activeOffsetZ = z;
+        this.activeOffsetX = x;
+        this.activeOffsetY = y;
+        this.activeOffsetZ = z;
         return this;
     }
 
     @Info("Active velocity.")
     public GTActiveParticleBuilder activeVelocity(double x, double y, double z) {
-        this.activeVelX = x; this.activeVelY = y; this.activeVelZ = z;
+        this.activeVelX = x;
+        this.activeVelY = y;
+        this.activeVelZ = z;
         return this;
     }
 
@@ -164,7 +177,10 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     @Info("Active dust color + scale.")
     public GTActiveParticleBuilder activeDust(float r, float g, float b, float scale) {
         this.activeUseDust = true;
-        this.activeDustRed = r; this.activeDustGreen = g; this.activeDustBlue = b; this.activeDustScale = scale;
+        this.activeDustRed = r;
+        this.activeDustGreen = g;
+        this.activeDustBlue = b;
+        this.activeDustScale = scale;
         return this;
     }
 

@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import java.util.function.Supplier;
 
-import dev.latvian.mods.kubejs.typings.Info;
 import org.joml.Vector3f;
 
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
@@ -27,6 +26,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import dev.latvian.mods.kubejs.typings.Info;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
