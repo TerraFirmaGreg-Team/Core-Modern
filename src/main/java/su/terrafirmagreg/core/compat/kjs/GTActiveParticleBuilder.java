@@ -15,11 +15,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import dev.latvian.mods.kubejs.block.BlockBuilder;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
+import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
 
 import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock;
 import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock.ParticleConfig;
 
+// KubeJS Builder for an GT active/inactive dual particle block.
 public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
 
     public static final List<net.minecraft.world.level.block.Block> REGISTERED_BLOCKS = new ArrayList<>();
@@ -28,8 +30,9 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     public transient Supplier<Item> preexistingItem;
     public transient Supplier<Item> itemBuilder;
 
-    // Inactive
-    private transient Supplier<SimpleParticleType> inactiveParticle = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.ASH;
+    // Inactive defaults
+    private transient Supplier<SimpleParticleType> inactiveParticle =
+            () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.ASH;
     private transient boolean hasInactive = false;
     private transient double inactiveBaseX = 0.5, inactiveBaseY = 0.5, inactiveBaseZ = 0.5;
     private transient double inactiveOffsetX, inactiveOffsetY, inactiveOffsetZ;
@@ -39,8 +42,9 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     private transient boolean inactiveUseDust = false;
     private transient float inactiveDustRed, inactiveDustGreen, inactiveDustBlue, inactiveDustScale;
 
-    // Active
-    private transient Supplier<SimpleParticleType> activeParticle = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+    // Active defaults
+    private transient Supplier<SimpleParticleType> activeParticle =
+            () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
     private transient boolean hasActive = false;
     private transient double activeBaseX = 0.5, activeBaseY = 0.5, activeBaseZ = 0.5;
     private transient double activeOffsetX, activeOffsetY, activeOffsetZ;
@@ -51,108 +55,116 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     private transient float activeDustRed, activeDustGreen, activeDustBlue, activeDustScale;
 
     private transient boolean hasTicker = false;
+    private transient int emitDelay = 0;
 
     public GTActiveParticleBuilder(ResourceLocation id) {
         super(id);
         property(GTBlockStateProperties.ACTIVE);
     }
 
+    @Info("Enable/disable block entity ticker (default false).")
     public GTActiveParticleBuilder hasTicker(boolean enabled) {
         this.hasTicker = enabled;
         return this;
     }
 
-    // Inactive
+    @Info("Random emission delay scale")
+    public GTActiveParticleBuilder emitDelay(int delay) {
+        this.emitDelay = Math.max(0, delay);
+        return this;
+    }
+
+    /**
+     * Inactive particle configuration.
+     */
+    @Info("Inactive particle id.")
     public GTActiveParticleBuilder inactiveParticle(String id) {
         this.inactiveParticle = resolveParticle(id, true);
         this.hasInactive = true;
         return this;
     }
 
+    @Info("Inactive base position.")
     public GTActiveParticleBuilder inactiveBase(double x, double y, double z) {
-        this.inactiveBaseX = x;
-        this.inactiveBaseY = y;
-        this.inactiveBaseZ = z;
+        this.inactiveBaseX = x; this.inactiveBaseY = y; this.inactiveBaseZ = z;
         return this;
     }
 
+    @Info("Inactive spread offsets.")
     public GTActiveParticleBuilder inactiveOffset(double x, double y, double z) {
-        this.inactiveOffsetX = x;
-        this.inactiveOffsetY = y;
-        this.inactiveOffsetZ = z;
+        this.inactiveOffsetX = x; this.inactiveOffsetY = y; this.inactiveOffsetZ = z;
         return this;
     }
 
+    @Info("Inactive velocity.")
     public GTActiveParticleBuilder inactiveVelocity(double x, double y, double z) {
-        this.inactiveVelX = x;
-        this.inactiveVelY = y;
-        this.inactiveVelZ = z;
+        this.inactiveVelX = x; this.inactiveVelY = y; this.inactiveVelZ = z;
         return this;
     }
 
+    @Info("Inactive particle count.")
     public GTActiveParticleBuilder inactiveCount(int count) {
         this.inactiveCount = count;
         return this;
     }
 
+    @Info("Inactive always visible.")
     public GTActiveParticleBuilder inactiveForced(boolean forced) {
         this.inactiveForced = forced;
         return this;
     }
 
+    @Info("Inactive dust color + scale.")
     public GTActiveParticleBuilder inactiveDust(float r, float g, float b, float scale) {
         this.inactiveUseDust = true;
-        this.inactiveDustRed = r;
-        this.inactiveDustGreen = g;
-        this.inactiveDustBlue = b;
-        this.inactiveDustScale = scale;
+        this.inactiveDustRed = r; this.inactiveDustGreen = g; this.inactiveDustBlue = b; this.inactiveDustScale = scale;
         return this;
     }
 
-    // Active
+    /**
+     * Active particle configuration.
+     */
+    @Info("Active particle id.")
     public GTActiveParticleBuilder activeParticle(String id) {
         this.activeParticle = resolveParticle(id, false);
         this.hasActive = true;
         return this;
     }
 
+    @Info("Active base position.")
     public GTActiveParticleBuilder activeBase(double x, double y, double z) {
-        this.activeBaseX = x;
-        this.activeBaseY = y;
-        this.activeBaseZ = z;
+        this.activeBaseX = x; this.activeBaseY = y; this.activeBaseZ = z;
         return this;
     }
 
+    @Info("Active spread offsets.")
     public GTActiveParticleBuilder activeOffset(double x, double y, double z) {
-        this.activeOffsetX = x;
-        this.activeOffsetY = y;
-        this.activeOffsetZ = z;
+        this.activeOffsetX = x; this.activeOffsetY = y; this.activeOffsetZ = z;
         return this;
     }
 
+    @Info("Active velocity.")
     public GTActiveParticleBuilder activeVelocity(double x, double y, double z) {
-        this.activeVelX = x;
-        this.activeVelY = y;
-        this.activeVelZ = z;
+        this.activeVelX = x; this.activeVelY = y; this.activeVelZ = z;
         return this;
     }
 
+    @Info("Active particle count.")
     public GTActiveParticleBuilder activeCount(int count) {
         this.activeCount = count;
         return this;
     }
 
+    @Info("Active always visible.")
     public GTActiveParticleBuilder activeForced(boolean forced) {
         this.activeForced = forced;
         return this;
     }
 
+    @Info("Active dust color + scale.")
     public GTActiveParticleBuilder activeDust(float r, float g, float b, float scale) {
         this.activeUseDust = true;
-        this.activeDustRed = r;
-        this.activeDustGreen = g;
-        this.activeDustBlue = b;
-        this.activeDustScale = scale;
+        this.activeDustRed = r; this.activeDustGreen = g; this.activeDustBlue = b; this.activeDustScale = scale;
         return this;
     }
 
@@ -174,6 +186,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
         return null;
     }
 
+    // Creates dual-state particle block with optional ticker registration.
     @Override
     public ActiveParticleBlock createObject() {
         ParticleConfig inactiveCfg = hasInactive ? new ParticleConfig(
@@ -198,7 +211,8 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
                 itemSupplier(),
                 inactiveCfg,
                 activeCfg,
-                hasTicker);
+                hasTicker,
+                emitDelay);
         if (hasTicker) {
             REGISTERED_BLOCKS.add(block);
         }

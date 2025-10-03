@@ -24,6 +24,7 @@ import dev.latvian.mods.rhino.util.HideFromJS;
 
 import su.terrafirmagreg.core.common.data.blocks.ParticleEmitterDecorationBlock;
 
+// KubeJS builder for decoration particle emitters.
 public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlockBuilder {
 
     public static final List<net.minecraft.world.level.block.Block> REGISTERED_BLOCKS = new ArrayList<>();
@@ -32,17 +33,18 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
     public transient Supplier<Item> preexistingItem;
     public transient int rotate;
 
-    public transient Supplier<SimpleParticleType> particleType = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
-
+    // Particle configuration defaults.
+    public transient Supplier<SimpleParticleType> particleType =
+            () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
     public transient double baseX = 0.5, baseY = 0.5, baseZ = 0.5;
     public transient double offsetX = 0.25, offsetY = 1.0, offsetZ = 0.25;
-    public transient double velocityX = 0.0, velocityY = 0.07, velocityZ = 0.0;
+    public transient double velocityX = 0.0, velocityY = 0.0, velocityZ = 0.0;
     public transient int particleCount = 1;
     public transient boolean particleForced = false;
     public transient boolean useDustOptions = false;
     public transient float dustRed = 1.0f, dustGreen = 0.0f, dustBlue = 0.0f, dustScale = 1.0f;
-
     private transient boolean hasTicker = false;
+    public transient int emitDelay = 0;
 
     public ParticleEmitterDecorationBlockBuilder(ResourceLocation i) {
         super(i);
@@ -57,21 +59,25 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         mapColor(MapColor.NONE);
     }
 
-    @Info("Enable/disable per-tick ticker (default true)")
+    @Info("Enable/disable block entity ticker (default false).")
     public ParticleEmitterDecorationBlockBuilder hasTicker(boolean enabled) {
         this.hasTicker = enabled;
         return this;
     }
 
-    @Info("Sets base position inside block")
-    public ParticleEmitterDecorationBlockBuilder particleBase(double x, double y, double z) {
-        baseX = x;
-        baseY = y;
-        baseZ = z;
+    @Info("Random emission delay scale")
+    public ParticleEmitterDecorationBlockBuilder emitDelay(int delay) {
+        this.emitDelay = Math.max(0, delay);
         return this;
     }
 
-    @Info("Attach existing item as block item")
+    @Info("Starting emission position (default 0.5, 0.5, 0.5).")
+    public ParticleEmitterDecorationBlockBuilder particleBase(double x, double y, double z) {
+        baseX = x; baseY = y; baseZ = z;
+        return this;
+    }
+
+    @Info("Attach existing item instead of generating new.")
     public ParticleEmitterDecorationBlockBuilder withPreexistingItem(ResourceLocation item) {
         itemBuilder = null;
         preexistingItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
@@ -79,13 +85,13 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         return this;
     }
 
-    @Info("Rotate generated models by 45 degrees")
+    @Info("Rotate generated models 45 degrees.")
     public ParticleEmitterDecorationBlockBuilder notAxisAligned() {
         rotate = 45;
         return this;
     }
 
-    @Info("Set particle type")
+    @Info("Particle type id (SimpleParticleType 'minecraft:dust' enables dust options).")
     public ParticleEmitterDecorationBlockBuilder particle(String id) {
         ResourceLocation rl = ResourceLocation.tryParse(id);
         particleType = Lazy.of(() -> {
@@ -100,40 +106,33 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         return this;
     }
 
-    @Info("Set random spread ranges")
+    @Info("Random spread ranges (default 0.25, 1.0, 0.25).")
     public ParticleEmitterDecorationBlockBuilder particleOffset(double x, double y, double z) {
-        offsetX = x;
-        offsetY = y;
-        offsetZ = z;
+        offsetX = x; offsetY = y; offsetZ = z;
         return this;
     }
 
-    @Info("Set particle velocity")
+    @Info("Particle velocity (default 0, 0, 0).")
     public ParticleEmitterDecorationBlockBuilder particleVelocity(double x, double y, double z) {
-        velocityX = x;
-        velocityY = y;
-        velocityZ = z;
+        velocityX = x; velocityY = y; velocityZ = z;
         return this;
     }
 
-    @Info("Set particle count")
+    @Info("Particles per emission (>=1; default 1).")
     public ParticleEmitterDecorationBlockBuilder particleCount(int count) {
         particleCount = count;
         return this;
     }
 
-    @Info("Always visible")
+    @Info("Always visible (default false).")
     public ParticleEmitterDecorationBlockBuilder particleForced(boolean forced) {
         particleForced = forced;
         return this;
     }
 
-    @Info("Dust RGB + scale")
+    @Info("Dust color r, g, b + scale (only if dust particle chosen).")
     public ParticleEmitterDecorationBlockBuilder dustColor(float r, float g, float b, float scale) {
-        dustRed = r;
-        dustGreen = g;
-        dustBlue = b;
-        dustScale = scale;
+        dustRed = r; dustGreen = g; dustBlue = b; dustScale = scale;
         return this;
     }
 
@@ -155,6 +154,7 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         return null;
     }
 
+    // Creates and optionally registers the emitter block.
     @Override
     public ParticleEmitterDecorationBlock createObject() {
         var props = createProperties().offsetType(BlockBehaviour.OffsetType.XZ);
@@ -170,7 +170,8 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
                 particleForced,
                 useDustOptions,
                 dustRed, dustGreen, dustBlue, dustScale,
-                hasTicker);
+                hasTicker,
+                emitDelay);
         if (hasTicker) {
             REGISTERED_BLOCKS.add(block);
             ParticleEmitterBlockBuilder.REGISTERED_BLOCKS.add(block);

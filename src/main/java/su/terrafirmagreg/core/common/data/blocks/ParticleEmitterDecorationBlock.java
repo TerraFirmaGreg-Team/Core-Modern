@@ -30,14 +30,13 @@ import dev.latvian.mods.kubejs.typings.Info;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 
+// Decoration variant particle emitter.
 public class ParticleEmitterDecorationBlock extends Block implements EntityBlock {
-
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(2.0F, 0.0F, 2.0F, 14.0F, 16.0F, 14.0F);
 
     private final VoxelShape shape;
     private final Supplier<SimpleParticleType> particleType;
-
     private final double baseX, baseY, baseZ;
     private final double offsetX, offsetY, offsetZ;
     private final double velocityX, velocityY, velocityZ;
@@ -46,6 +45,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     private final boolean useDustOptions;
     private final float red, green, blue, scale;
     private final boolean hasTicker;
+    private final int emitDelay;
 
     public ParticleEmitterDecorationBlock(
             Properties properties,
@@ -59,7 +59,8 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
             boolean particleForced,
             boolean useDustOptions,
             float red, float green, float blue, float scale,
-            boolean hasTicker) {
+            boolean hasTicker,
+            int emitDelay) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
@@ -81,6 +82,14 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
         this.blue = blue;
         this.scale = scale;
         this.hasTicker = hasTicker;
+        this.emitDelay = Math.max(0, emitDelay);
+    }
+
+    private boolean shouldEmit(RandomSource random) {
+        if (emitDelay <= 0)
+            return true;
+        int inner = 1 + random.nextInt(emitDelay);
+        return random.nextInt(inner) == 0;
     }
 
     @Override
@@ -108,18 +117,20 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
+    // Needs sturdy block below.
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockPos below = pos.below();
         return level.getBlockState(below).isFaceSturdy(level, below, Direction.UP);
     }
 
-    @Info("Client visual tick (skipped if ticker entity present).")
+    @Info("Client display tick. Cannot be every tick. Use ticker for adjustable frequency.")
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (hasTicker && level.getBlockEntity(pos) != null)
             return;
-        spawnClient(level, pos, random);
+        if (shouldEmit(random))
+            spawnClient(level, pos, random);
     }
 
     private double randOffset(RandomSource r, double range) {
@@ -155,27 +166,29 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
         }
     }
 
+    // Creates ticker entity if enabled.
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return hasTicker ? new TickerBlockEntity(pos, state) : null;
     }
 
+    // Client ticker setting emission each tick when enabled.
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (!hasTicker || !level.isClientSide)
             return null;
         return type == TFGBlockEntities.TICKER_ENTITY.get()
                 ? (lvl, p, s, be) -> {
-                    if (be instanceof TickerBlockEntity)
-                        spawnClient(lvl, p, lvl.random);
-                }
+            if (be instanceof TickerBlockEntity && shouldEmit(lvl.random))
+                spawnClient(lvl, p, lvl.random);
+        }
                 : null;
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos,
-            boolean movedByPiston) {
+                                boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (!canSurvive(state, level, pos)) {
             Block.updateOrDestroy(state, Blocks.AIR.defaultBlockState(), level, pos, Block.UPDATE_ALL);

@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import java.util.function.Supplier;
 
+import dev.latvian.mods.kubejs.typings.Info;
 import org.joml.Vector3f;
 
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
@@ -31,10 +32,10 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 
 /**
- * Active/inactive particle emitter (client only; block entity handles spawning if present).
+ * Particle emitter block with active/inactive states.
+ * Adds the ability to have different particle effects based on the active state.
  */
 public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
-
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
@@ -42,6 +43,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     private final ParticleConfig inactiveConfig;
     private final ParticleConfig activeConfig;
     private final boolean hasTicker;
+    private final int emitDelay;
 
     public ActiveParticleBlock(
             Properties properties,
@@ -49,15 +51,24 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
             Supplier<Item> itemSupplier,
             ParticleConfig inactiveConfig,
             ParticleConfig activeConfig,
-            boolean hasTicker) {
+            boolean hasTicker,
+            int emitDelay) {
         super(properties);
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
         this.inactiveConfig = inactiveConfig;
         this.activeConfig = activeConfig;
         this.hasTicker = hasTicker;
+        this.emitDelay = Math.max(0, emitDelay);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(GTBlockStateProperties.ACTIVE, false));
+    }
+
+    private boolean shouldEmit(RandomSource random) {
+        if (emitDelay <= 0)
+            return true;
+        int inner = 1 + random.nextInt(emitDelay);
+        return random.nextInt(inner) == 0;
     }
 
     @Override
@@ -85,20 +96,25 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
+    @Info("Client display tick. Cannot be every tick. Use ticker for adjustable frequency.")
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (hasTicker && level.getBlockEntity(pos) != null)
+            return;
+        if (!shouldEmit(random))
             return;
         ParticleConfig cfg = state.getValue(GTBlockStateProperties.ACTIVE) ? activeConfig : inactiveConfig;
         if (cfg != null)
             cfg.spawnClient(level, pos, random);
     }
 
+    // Creates ticker entity if enabled.
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return hasTicker ? new TickerBlockEntity(pos, state) : null;
     }
 
+    // Client ticker setting emission each tick when enabled.
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (!hasTicker || !level.isClientSide)
@@ -106,7 +122,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
         if (type != TFGBlockEntities.TICKER_ENTITY.get())
             return null;
         return (lvl, p, s, be) -> {
-            if (be instanceof TickerBlockEntity) {
+            if (be instanceof TickerBlockEntity && shouldEmit(lvl.random)) {
                 ParticleConfig cfg = s.getValue(GTBlockStateProperties.ACTIVE) ? activeConfig : inactiveConfig;
                 if (cfg != null)
                     cfg.spawnClient(lvl, p, lvl.random);
@@ -114,6 +130,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
         };
     }
 
+    // Immutable particle emission configuration.
     public static class ParticleConfig {
         private final Supplier<SimpleParticleType> type;
         private final double baseX, baseY, baseZ;
@@ -174,6 +191,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
             }
         }
 
+        // Spawns configured particle batch.
         public void spawnClient(Level level, BlockPos pos, RandomSource random) {
             if (!level.isClientSide)
                 return;

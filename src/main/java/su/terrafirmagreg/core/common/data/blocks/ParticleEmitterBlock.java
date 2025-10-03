@@ -29,13 +29,13 @@ import dev.latvian.mods.kubejs.typings.Info;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 
+//Basic particle emitter block. Uses random display ticks unless a ticker entity is attached.
 public class ParticleEmitterBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
     private final VoxelShape shape;
     private final Supplier<SimpleParticleType> particleType;
-
     private final double baseX, baseY, baseZ;
     private final double offsetX, offsetY, offsetZ;
     private final double velocityX, velocityY, velocityZ;
@@ -44,6 +44,7 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
     private final boolean useDustOptions;
     private final float red, green, blue, scale;
     private final boolean hasTicker;
+    private final int emitDelay;
 
     public ParticleEmitterBlock(
             Properties properties,
@@ -57,7 +58,8 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
             boolean particleForced,
             boolean useDustOptions,
             float red, float green, float blue, float scale,
-            boolean hasTicker) {
+            boolean hasTicker,
+            int emitDelay) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
@@ -79,6 +81,14 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
         this.blue = blue;
         this.scale = scale;
         this.hasTicker = hasTicker;
+        this.emitDelay = Math.max(0, emitDelay);
+    }
+
+    private boolean shouldEmit(RandomSource random) {
+        if (emitDelay <= 0)
+            return true;
+        int inner = 1 + random.nextInt(emitDelay);
+        return random.nextInt(inner) == 0;
     }
 
     @Override
@@ -106,12 +116,13 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    @Info("Client visual tick (skipped if ticker entity present).")
+    @Info("Client display tick. Cannot be every tick. Use ticker for adjustable frequency.")
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (hasTicker && level.getBlockEntity(pos) != null)
             return;
-        spawnParticlesClient(level, pos, random);
+        if (shouldEmit(random))
+            spawnParticlesClient(level, pos, random);
     }
 
     private double randOffset(RandomSource r, double range) {
@@ -120,6 +131,7 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
         return r.nextDouble() * range * (r.nextBoolean() ? 1 : -1);
     }
 
+    // Spawns configured particle batch client-side.
     private void spawnParticlesClient(Level level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide)
             return;
@@ -147,20 +159,22 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
         }
     }
 
+    // Creates ticker entity if enabled.
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return hasTicker ? new TickerBlockEntity(pos, state) : null;
     }
 
+    // Client ticker setting emission each tick when enabled.
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (!hasTicker || !level.isClientSide) return null;
+        if (!hasTicker || !level.isClientSide)
+            return null;
         return type == TFGBlockEntities.TICKER_ENTITY.get()
                 ? (lvl, p, s, be) -> {
-            if (be instanceof TickerBlockEntity t && t.shouldEmit(lvl)) {
+            if (be instanceof TickerBlockEntity && shouldEmit(lvl.random))
                 spawnParticlesClient(lvl, p, lvl.random);
-            }
         }
-        : null;
+                : null;
     }
 }
