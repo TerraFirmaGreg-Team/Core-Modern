@@ -12,6 +12,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.util.Lazy;
 
 import dev.latvian.mods.kubejs.block.BlockBuilder;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
@@ -237,16 +238,21 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
 
     private Supplier<SimpleParticleType> resolveParticle(String id, boolean isInactive) {
         ResourceLocation rl = ResourceLocation.tryParse(id);
-        ParticleType<?> pt = RegistryInfo.PARTICLE_TYPE.getValue(rl);
-        if (pt instanceof SimpleParticleType simple) {
-            if (id.equals("minecraft:dust")) {
-                if (isInactive)
-                    this.inactiveUseDust = true;
-                else
-                    this.activeUseDust = true;
-            }
-            return () -> simple;
+
+        if ("minecraft:dust".equals(id)) {
+            if (isInactive)
+                this.inactiveUseDust = true;
+            else
+                this.activeUseDust = true;
         }
-        throw new IllegalArgumentException("Particle type '" + id + "' is not a SimpleParticleType");
+
+        // Defer registry lookup until first use to avoid ordering issues
+        return Lazy.of(() -> {
+            ParticleType<?> pt = RegistryInfo.PARTICLE_TYPE.getValue(rl);
+            if (pt instanceof SimpleParticleType simple) {
+                return simple;
+            }
+            throw new IllegalArgumentException("Particle type '" + id + "' is not a SimpleParticleType");
+        });
     }
 }
