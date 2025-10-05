@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.common.recipe.condition.AdjacentFluidCondition;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidEntryList;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
+import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
@@ -35,13 +36,30 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.BATH);
 
     public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
-            "tfg:textures/gui/progress_bar/progress_bar_dna.png"); // I might move this later if we end up making/using
-                                                                                                                                              // more custom progress bars.
+            "tfg:textures/gui/progress_bar/progress_bar_dna.png");
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
             .setProgressBar(PROGRESS_BAR_DNA, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.BATH)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var text = recipe.data.getString("action");
+                if (!text.isEmpty()) {
+                    widgetGroup.addWidget(new LabelWidget(widgetGroup.getSize().width - 50,
+                            widgetGroup.getSize().height - 30, Component.translatable(text))
+                            .setTextColor(-1)
+                            .setDropShadow(true));
+                }
+            });
+
+    public static final ResourceTexture PROGRESS_BAR_PETRI = new ResourceTexture(
+            "tfg:textures/gui/progress_bar/progress_bar_petri.png");
+    public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
+            .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(18, 6, 3, 3)
+            .setProgressBar(PROGRESS_BAR_PETRI, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.CHEMICAL)
             .setUiBuilder((recipe, widgetGroup) -> {
                 var text = recipe.data.getString("action");
                 if (!text.isEmpty()) {
@@ -109,5 +127,24 @@ public class TFGRecipeTypes {
             .setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.COMPRESSOR);
+
+    public static final GTRecipeType NUCLEAR_TURBINE = GTRecipeTypes
+            .register("nuclear_turbine", GTRecipeTypes.GENERATOR)
+            .setMaxIOSize(0, 0, 1, 1)
+            .setSound(GTSoundEntries.TURBINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
+
+    public final static GTRecipeType EVAPORATION_TOWER = GTRecipeTypes
+            .register("evaporation_tower", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 1, 1, 12)
+            .setEUIO(IO.IN)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, FillDirection.LEFT_TO_RIGHT);
+
+    public final static GTRecipeType COOLING_TOWER = GTRecipeTypes
+            .register("cooling_tower", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(2, 2, 2, 2)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.LEFT_TO_RIGHT);
 
 }

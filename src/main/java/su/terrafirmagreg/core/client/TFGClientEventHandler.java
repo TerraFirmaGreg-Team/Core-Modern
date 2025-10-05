@@ -31,15 +31,12 @@ import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
-import su.terrafirmagreg.core.common.data.contianer.LargeNestBoxScreen;
+import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.events.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.OreProspectorEvent;
 import su.terrafirmagreg.core.common.data.events.WeakOreProspectorEventHelper;
-import su.terrafirmagreg.core.common.data.particles.OreProspectorProvider;
-import su.terrafirmagreg.core.common.data.particles.OreProspectorVeinProvider;
-import su.terrafirmagreg.core.common.data.particles.RailgunAmmoProvider;
-import su.terrafirmagreg.core.common.data.particles.RailgunBoomProvider;
+import su.terrafirmagreg.core.common.data.particles.*;
 
 @Mod.EventBusSubscriber(modid = "tfg", value = net.minecraftforge.api.distmarker.Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TFGClientEventHandler {
@@ -121,6 +118,7 @@ public final class TFGClientEventHandler {
         event.registerSpriteSet(TFGParticles.RAILGUN_AMMO.get(), RailgunAmmoProvider::new);
         event.registerSpriteSet(TFGParticles.ORE_PROSPECTOR.get(), OreProspectorProvider::new);
         event.registerSpriteSet(TFGParticles.ORE_PROSPECTOR_VEIN.get(), OreProspectorVeinProvider::new);
+        event.registerSpriteSet(TFGParticles.COOLING_STEAM.get(), CoolingSteamProvider::new);
     }
 
     @SuppressWarnings("removal")
@@ -130,6 +128,9 @@ public final class TFGClientEventHandler {
 
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getSource(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICICLE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
         });
     }

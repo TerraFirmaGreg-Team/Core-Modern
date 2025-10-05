@@ -10,10 +10,13 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import appeng.api.upgrades.Upgrades;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.items.*;
@@ -33,8 +36,6 @@ public class TFGItems {
             () -> new TrowelItem(new Item.Properties()));
 
     public static final RegistryObject<Item> EMPTY_DNA_SYRINGE = ITEMS.register("empty_dna_syringe",
-            () -> new EmptyDnaSyringeItem(new Item.Properties()));
-    public static final RegistryObject<Item> CLEAN_DNA_SYRINGE = ITEMS.register("clean_dna_syringe",
             () -> new EmptyDnaSyringeItem(new Item.Properties()));
     public static final RegistryObject<Item> DIRTY_DNA_SYRINGE = ITEMS.register("dirty_dna_syringe",
             () -> new DirtyDnaSyringeItem(new Item.Properties()));
@@ -70,6 +71,9 @@ public class TFGItems {
 
     public static final RegistryObject<ComponentItem> ELECTRIC_EXTENDO_GRIP = ITEMS.register("electric_extendo_grip",
             () -> new ElectricExtendoGrip(new Item.Properties()));
+
+    public static final RegistryObject<Item> WIRELESS_CARD = ITEMS.register("wireless_card",
+            () -> Upgrades.createUpgradeCardItem(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 
     private static RegistryObject<Item> register(String name) {
         return register(name, () -> new Item(new Item.Properties()));

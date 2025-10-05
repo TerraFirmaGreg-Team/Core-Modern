@@ -39,6 +39,14 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(ORE_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
         Arrays.stream(ExportedOreVeinInfo.RECIPES).forEach(emiRegistry::addRecipe);
 
+        // These two aren't normal ores so add them separately
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_anthracite", "minecraft:the_nether",
+                35, 0.8, 48, 127, 13, 4, 0, new String[] { "minecraft:deepslate" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("cursecoal", 100) }));
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_sylvite", "minecraft:the_nether",
+                75, 0.6, 0, 64, 17, 0, 0, new String[] { "minecraft:blackstone" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("sylvite", 100) }));
+
         emiRegistry.addCategory(BLAZE_BURNER);
         emiRegistry.addWorkstation(BLAZE_BURNER, EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
         for (var liquid_fuel : BurnerStomachHandler.LIQUID_BURNER_FUEL_MAP.entrySet()) {

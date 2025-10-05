@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.contianer;
+package su.terrafirmagreg.core.common.data.container;
 
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.container.BlockEntityContainer;

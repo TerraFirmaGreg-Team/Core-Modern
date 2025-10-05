@@ -126,6 +126,9 @@ repositories {
         name "TerraformersMC"
         url "https://maven.terraformersmc.com/"
     }
+    maven { // Mixin²
+        url = "https://maven.bawnorton.com/releases"
+    }
 }
 
 dependencies {
@@ -144,6 +147,10 @@ dependencies {
     compileOnly annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0")
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.0")) {
         jarJar.ranged(it, "[0.5.0,)")
+    }
+    compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.6-beta.1"))
+    implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.6-beta.1")) {
+        jarJar.ranged(it, "[0.3.6-beta.1,)")
     }
 }
 
@@ -226,13 +233,43 @@ spotless {
     json {
         target 'src/*/resources/**/*.json'
         targetExclude 'src/generated/resources/**'
-        var biomeConfig = it.new JsonExtension.BiomeJson(null)
-        try {
-            biomeConfig.downloadDir(new File(rootDir, ".gradle/biome").absolutePath)
-        } catch (Exception ignored) {
-        }
-        addStep(biomeConfig.createStep())
+        simple()
         indentWithSpaces(2)
         endWithNewline()
     }
+}
+
+
+tasks.named("build") {
+    dependsOn("spotlessApply")
+}
+
+// Rename the final file: delete regular *.jar (if produced) and strip the -all suffix from the shaded jar
+tasks.register('renameAllJar') {
+    doLast {
+        def libsDir = file("${buildDir}/libs")
+        if (!libsDir.exists()) return
+        // Delete a possible regular jar first
+        libsDir.listFiles()?.findAll { it.name == "${archivesBaseName}-${version}.jar" }?.each { File reg ->
+            reg.delete()
+        }
+        // Rename *-all.jar to *.jar
+        libsDir.listFiles()?.findAll { it.name.endsWith('-all.jar') }?.each { File f ->
+            def targetName = f.name.replace('-all.jar', '.jar')
+            def target = new File(f.parentFile, targetName)
+            if (target.exists()) target.delete()
+            if (!f.renameTo(target)) {
+                throw new GradleException("Failed to rename ${f.name} to ${target.name}")
+            }
+        }
+    }
+}
+
+// Run rename step after available packaging task (bind safely after tasks are created)
+gradle.projectsEvaluated {
+    tasks.findByName('reobfJarJar')?.finalizedBy('renameAllJar')
+    tasks.findByName('reobfJar')?.finalizedBy('renameAllJar')
+    // Fallbacks if reobf tasks are not present in this environment
+    tasks.findByName('jarJar')?.finalizedBy('renameAllJar')
+    tasks.findByName('jar')?.finalizedBy('renameAllJar')
 }
