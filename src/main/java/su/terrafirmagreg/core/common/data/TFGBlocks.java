@@ -23,10 +23,7 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IcicleBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
-import net.dries007.tfc.common.blocks.soil.DirtBlock;
-import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
-import net.dries007.tfc.common.blocks.soil.PathBlock;
+import net.dries007.tfc.common.blocks.soil.*;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -136,6 +133,79 @@ public final class TFGBlocks {
             () -> new ConnectedGrassBlock(sangnum_properties, MARS_CLAY, MARS_PATH, MARS_FARMLAND));
     public static final RegistryObject<Block> SANGNUM_KAOLIN_MYCELIUM = register("grass/sangnum_kaolin_mycelium",
             () -> new ConnectedGrassBlock(sangnum_properties, TFCBlocks.RED_KAOLIN_CLAY, null, null));
+
+    //#region Martian sand piles and layer blocks, in order of color
+
+    // Still in the pile folder because these are for the existing pre-0.11 layer blocks in peoples' worlds
+
+    public static final RegistryObject<SandLayerBlock> ASH_LAYER_BLOCK = register("ash_pile",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> BLACK_SAND_LAYER_BLOCK = register("pile/black_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.BLACK).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> WHITE_SAND_LAYER_BLOCK = register("pile/white_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.WHITE).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> BROWN_SAND_LAYER_BLOCK = register("pile/brown_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.BROWN).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> RED_SAND_LAYER_BLOCK = register("pile/red_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> YELLOW_SAND_LAYER_BLOCK = register("pile/yellow_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.YELLOW).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> PINK_SAND_LAYER_BLOCK = register("pile/pink_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.PINK).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> GREEN_SAND_LAYER_BLOCK = register("pile/green_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.GREEN).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> MOON_SAND_LAYER_BLOCK = register("pile/moon_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> HEMATITIC_SAND_LAYER_BLOCK = register("pile/hematitic_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> MARS_SAND_LAYER_BLOCK = register("pile/mars_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> VENUS_SAND_LAYER_BLOCK = register("pile/venus_sand",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> MARS_SNOW_LAYER_BLOCK = register("pile/mars_snow",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SNOW_PILE.get()).sound(SoundType.SNOW).noOcclusion().mapColor(MapColor.NONE)
+            //TODO
+            ));
+
+    // The _covering suffix is to differentiate these from the other piles
+    public static final RegistryObject<SandPileBlock> HEMATITIC_SAND_PILE_BLOCK = register("pile/hematitic_sand_covering",
+            () -> new SandPileBlock(
+                    ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)));
+    public static final RegistryObject<SandPileBlock> MARS_SAND_PILE_BLOCK = register("pile/mars_sand_covering",
+            () -> new SandPileBlock(
+                    ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)));
+    public static final RegistryObject<SandPileBlock> VENUS_SAND_PILE_BLOCK = register("pile/venus_sand_covering",
+            () -> new SandPileBlock(
+                    ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)));
+    public static final RegistryObject<SandPileBlock> MARS_SNOW_PILE_BLOCK = register("pile/mars_snow_covering",
+            () -> new SandPileBlock(
+                    ExtendedProperties.of(TFCBlocks.SNOW_PILE.get()).noOcclusion().sound(SoundType.SNOW).randomTicks().blockEntity(TFCBlockEntities.PILE)));
+
+    //#endregion
 
     // Fluid blocks
 
