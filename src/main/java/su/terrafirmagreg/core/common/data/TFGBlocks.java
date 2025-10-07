@@ -26,8 +26,8 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.dries007.tfc.common.blocks.soil.DirtBlock;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
-import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.soil.PathBlock;
+import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -151,6 +151,10 @@ public final class TFGBlocks {
             ));
     public static final RegistryObject<SandLayerBlock> VENUS_SAND_LAYER_BLOCK = register("pile/venus_sand",
             () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).mapColor(MapColor.NONE)
+            //TODO
+            ));
+    public static final RegistryObject<SandLayerBlock> MARS_SNOW_LAYER_BLOCK = register("pile/mars_snow",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SNOW_PILE.get()).sound(SoundType.SNOW).mapColor(MapColor.NONE)
             //TODO
             ));
 
