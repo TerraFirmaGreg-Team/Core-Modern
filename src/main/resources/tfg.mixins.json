@@ -109,6 +109,8 @@
         "common.vintageimprovements.LatheRotatingBlockMixin",
         "common.vintageimprovements.VibratingRecipeMixin",
         "common.wab.CommonSetupMixin",
+        "common.wab.EaterAttackPlayerGoalMixin",
+        "common.wab.QuickSandMixin",
         "common.wab.SurferMixin",
         "common.wab.ToxlacanthMixin"
     ],
