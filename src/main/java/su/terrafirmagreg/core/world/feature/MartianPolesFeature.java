@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SnowyDirtBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -62,8 +63,8 @@ public class MartianPolesFeature extends Feature<MartianPolesConfig> {
         final int snowFinishTemp = context.config().snowFinishTemp();
 
         final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        final BlockState snowState = TFGBlocks.MARS_SNOW_LAYER_BLOCK.get().defaultBlockState();
-        final BlockState piledSnowState = TFGBlocks.MARS_SNOW_LAYER_BLOCK.get().defaultBlockState().setValue(SnowLayerBlock.LAYERS, 2);
+        final BlockState snowState = Blocks.SNOW.defaultBlockState();
+        final BlockState piledSnowState = Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 2);
         final BlockState iceState = TFGBlocks.MARS_ICE.get().defaultBlockState();
 
         for (int x = startX; x <= startX + 15; x++) {
