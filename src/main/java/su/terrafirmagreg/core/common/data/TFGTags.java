@@ -107,5 +107,4 @@ public final class TFGTags {
             return TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), ResourceLocation.parse(path));
         }
     }
-
 }
