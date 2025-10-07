@@ -53,6 +53,24 @@ public class TFGRecipeTypes {
                 }
             });
 
+    public static final ResourceTexture PROGRESS_BAR_PETRI = new ResourceTexture(
+            "tfg:textures/gui/progress_bar/progress_bar_petri.png");
+    public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
+            .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(18, 6, 3, 3)
+            .setProgressBar(PROGRESS_BAR_PETRI, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var text = recipe.data.getString("action");
+                if (!text.isEmpty()) {
+                    widgetGroup.addWidget(new LabelWidget(widgetGroup.getSize().width - 50,
+                            widgetGroup.getSize().height - 30, Component.translatable(text))
+                            .setTextColor(-1)
+                            .setDropShadow(true));
+                }
+            });
+
     public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 1, 1, 0)
@@ -123,5 +141,11 @@ public class TFGRecipeTypes {
             .setEUIO(IO.IN)
             .setSound(GTSoundEntries.CHEMICAL)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, FillDirection.LEFT_TO_RIGHT);
+
+    public final static GTRecipeType COOLING_TOWER = GTRecipeTypes
+            .register("cooling_tower", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(2, 2, 2, 2)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.LEFT_TO_RIGHT);
 
 }

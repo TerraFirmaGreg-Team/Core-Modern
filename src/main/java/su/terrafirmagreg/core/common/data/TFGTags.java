@@ -69,6 +69,7 @@ public final class TFGTags {
         public static final TagKey<Block> DoNotDestroyInSpace = createBlockTag("tfg:do_not_destroy_in_space");
         public static final TagKey<Block> HeightmapIgnore = createBlockTag("tfg:heightmap_ignore");
         public static final TagKey<Block> DecorativePlantAttachable = createBlockTag("tfg:decorative_plant_attachable");
+        public static final TagKey<Block> TitaniumConcrete = createBlockTag("tfg:titanium_concrete");
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));

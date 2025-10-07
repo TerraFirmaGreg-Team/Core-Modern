@@ -1,6 +1,10 @@
 package su.terrafirmagreg.core.compat.emi;
 
-import com.gregtechceu.gtceu.common.data.GTItems;
+import java.util.function.Supplier;
+
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.simibubi.create.AllTags;
 
@@ -8,12 +12,33 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.GroundcoverBlockType;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class BlockInteractionInfo {
     private static final Item pumice_item = TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.PUMICE).get().asItem();
+    private static final Item incoloy_frame = ChemicalHelper.get(TagPrefix.frameGt, GTMaterials.IncoloyMA956).getItem();
+
+    private static final Supplier<Item> glacian_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool_frame")).asItem();
+    private static final Supplier<Item> aes_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "aes_insulation_frame")).asItem();
+    private static final Supplier<Item> impure_moderate_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "impure_moderate_core_frame")).asItem();
+    private static final Supplier<Item> moderate_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "moderate_core_frame")).asItem();
+
+    private static final Supplier<Item> glacian_wool = () -> ForgeRegistries.ITEMS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool")).asItem();
+    private static final Supplier<Item> aes_roll = () -> ForgeRegistries.ITEMS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "aes_insulation_roll")).asItem();
+    private static final Supplier<Item> impure_moderator = () -> ForgeRegistries.ITEMS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "impure_graphite_moderator")).asItem();
+    private static final Supplier<Item> moderator = () -> ForgeRegistries.ITEMS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "graphite_moderator")).asItem();
 
     public static BlockInteractionRecipe[] RECIPES = {
             //Brick -> cracked
@@ -75,8 +100,19 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFGTags.Items.INTERACTIONCOBBLE, pumice_item),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFGTags.Items.INTERACTIONCOBBLESTAIR, pumice_item),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFGTags.Items.INTERACTIONCOBBLESLAB, pumice_item),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, pumice_item)
+            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, pumice_item),
 
+            //Insulation Add
+            new BlockInteractionRecipe(incoloy_frame, aes_frame.get(), aes_roll.get()),
+            new BlockInteractionRecipe(incoloy_frame, glacian_frame.get(), glacian_wool.get()),
+            new BlockInteractionRecipe(incoloy_frame, impure_moderate_frame.get(), impure_moderator.get()),
+            new BlockInteractionRecipe(incoloy_frame, moderate_frame.get(), moderator.get()),
+
+            //Insulation Remove
+            new BlockInteractionRecipe(aes_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe(glacian_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe(impure_moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe(moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
     };
 
 }

@@ -108,7 +108,7 @@ jobs:
             📃 **Tag Exists**: `${{ steps.check.outputs.exists }}`
             📃 **Make Release**: `${{ steps.check.outputs.make_release }}`
 
-  build-mod:
+  build:
     name: 📦 Build Mod
     needs: [info]
     runs-on: ubuntu-latest
@@ -124,7 +124,7 @@ jobs:
           cache: 'gradle'
 
       - name: 📁 Setup Gradle
-        uses: gradle/actions/setup-gradle@v4.4.3
+        uses: gradle/actions/setup-gradle@v5.0.0
         with:
           cache-write-only: false
           gradle-home-cache-includes: |
@@ -134,7 +134,7 @@ jobs:
             wrapper
 
       - name: 🔄 Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v4.4.3
+        uses: gradle/actions/wrapper-validation@v5.0.0
 
       - name: 🔄 Grant Execute Permission For Gradlew
         run: chmod +x gradlew
@@ -143,6 +143,7 @@ jobs:
         run: ./gradlew build -x spotlessCheck
 
       - name: 📦 Rename Jar
+        shell: bash
         run: |
           if ${{ env.DEV_ENVIRONMENT == 'true' }}; then
             mv build/libs/${{ needs.info.outputs.project_name }}-${{ needs.info.outputs.project_version }}.jar build/libs/${{ needs.info.outputs.project_full_name }}.jar
@@ -157,7 +158,7 @@ jobs:
 
   release:
       name: 🚀 Release
-      needs: [info, build-mod]
+      needs: [info, build]
       runs-on: ubuntu-latest
       if: ${{ needs.info.outputs.make_release == 'true' }}
 
@@ -187,7 +188,7 @@ jobs:
             echo "✔️ All artifacts found"
 
         - name: 🚀 Release
-          uses: Kir-Antipov/mc-publish@v3.3.0
+          uses: Xikaro/game-publish@3.3.1
           with:
             modrinth-id: ${{ vars.MODRINTH_ID }}
             modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -201,6 +202,7 @@ jobs:
               gregtechceu-modern(required)
               terrafirmacraft(required)
 
+            github-name: ${{ needs.info.outputs.project_version }}
             github-tag: ${{ needs.info.outputs.project_version }}
             github-generate-changelog: true
             github-draft: false

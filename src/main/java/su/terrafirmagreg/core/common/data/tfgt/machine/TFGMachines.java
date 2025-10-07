@@ -26,6 +26,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.SingleItemstackBus;
 
 public class TFGMachines {
 
@@ -93,6 +94,8 @@ public class TFGMachines {
                                     FormattingUtil.formatNumbers(GTValues.V[tier] * 64)),
                             Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
                                     FoodRefrigeratorMachine.INVENTORY_SIZE(tier)))
+                    .tooltips(Component.translatable("tfg.machine.food_refrigerator_power_usage",
+                            FormattingUtil.formatNumbers(GTValues.VA[GTValues.LV] * tier)))
                     .workableTieredHullModel(GTCEu.id("block/machines/food_refrigerator"))
                     .register(),
             GTValues.tiersBetween(GTValues.MV, GTValues.IV));
@@ -157,6 +160,14 @@ public class TFGMachines {
                     .allowCoverOnFront(true)
                     .register(),
             GTMachineUtils.ALL_TIERS);
+
+    public static final MachineDefinition SINGLE_ITEMSTACK_BUS = REGISTRATE
+            .machine("single_itemstack_bus", SingleItemstackBus::new)
+            .rotationState(RotationState.ALL)
+            .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
+                    Component.translatable("tfg.tooltip.single_itemstack_bus.0"),
+                    Component.translatable("tfg.tooltip.single_itemstack_bus.1"))
+            .register();
 
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE
             .machine("railgun_ammo_loader", RailgunAmmoLoaderMachine::new).register();

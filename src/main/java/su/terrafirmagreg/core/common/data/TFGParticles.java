@@ -23,8 +23,11 @@ public class TFGParticles {
     public static final RegistryObject<SimpleParticleType> ORE_PROSPECTOR = PARTICLES.register("ore_prospector",
             () -> new SimpleParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> ORE_PROSPECTOR_VEIN = PARTICLES
-            .register("ore_prospector_vein", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> ORE_PROSPECTOR_VEIN = PARTICLES.register("ore_prospector_vein",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> COOLING_STEAM = PARTICLES.register("cooling_steam",
+            () -> new SimpleParticleType(true));
 
     // Martian wind dust
     public static final RegistryObject<SimpleParticleType> DARK_MARS_WIND = PARTICLES.register("dark_mars_wind", () -> new SimpleParticleType(false));

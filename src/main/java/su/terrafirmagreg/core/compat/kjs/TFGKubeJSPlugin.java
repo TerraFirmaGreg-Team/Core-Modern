@@ -18,6 +18,8 @@ import su.terrafirmagreg.core.common.TFGHelpers;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
+import su.terrafirmagreg.core.compat.kjs.events.TFGAE2PowerConsumption;
+import su.terrafirmagreg.core.compat.kjs.events.TFGServerEvents;
 import su.terrafirmagreg.core.compat.kjs.events.TFGStartupEvents;
 
 public final class TFGKubeJSPlugin extends KubeJSPlugin {
@@ -38,6 +40,8 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
         RegistryInfo.BLOCK.addType("tfg:particle_emitter", ParticleEmitterBlockBuilder.class,
                 ParticleEmitterBlockBuilder::new);
         RegistryInfo.BLOCK.addType("tfg:layer_block", LayerBlockBuilder.class, LayerBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:active_cardinal", GTActiveCardinalBuilder.class, GTActiveCardinalBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:active_particle_emitter", GTActiveParticleBuilder.class, GTActiveParticleBuilder::new);
     }
 
     @Override
@@ -64,5 +68,12 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
     public void registerEvents() {
         super.registerEvents();
         TFGStartupEvents.GROUP.register();
+        TFGServerEvents.GROUP.register();
+    }
+
+    @Override
+    public void onServerReload() {
+        TFGAE2PowerConsumption.powerConsumption.clear();
+        TFGServerEvents.AE2_POWER_CONSUMPTION.post(new TFGAE2PowerConsumption());
     }
 }
