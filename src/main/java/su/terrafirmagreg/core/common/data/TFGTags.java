@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -88,6 +89,22 @@ public final class TFGTags {
 
         public static TagKey<EntityType<?>> createEntityTag(String path) {
             return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.parse(path));
+        }
+    }
+
+    public static final class Biomes {
+        // martian dust storm intensity
+        public static final TagKey<Biome> HasSevereDustStorms = createBiomeTag("tfg:has_severe_dust_storms");
+        public static final TagKey<Biome> HasModerateDustStorms = createBiomeTag("tfg:has_moderate_dust_storms");
+        public static final TagKey<Biome> HasMildDustStorms = createBiomeTag("tfg:has_mild_dust_storms");
+
+        // martian dust storm wind color
+        public static final TagKey<Biome> HasDarkSandWind = createBiomeTag("tfg:has_dark_sand_particles");
+        public static final TagKey<Biome> HasMediumSandWind = createBiomeTag("tfg:has_medium_sand_particles");
+        public static final TagKey<Biome> HasLightSandWind = createBiomeTag("tfg:has_light_sand_particles");
+
+        private static TagKey<Biome> createBiomeTag(String path) {
+            return TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), ResourceLocation.parse(path));
         }
     }
 }

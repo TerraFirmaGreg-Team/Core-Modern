@@ -94,6 +94,8 @@ public class TFGMachines {
                                     FormattingUtil.formatNumbers(GTValues.V[tier] * 64)),
                             Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
                                     FoodRefrigeratorMachine.INVENTORY_SIZE(tier)))
+                    .tooltips(Component.translatable("tfg.machine.food_refrigerator_power_usage",
+                            FormattingUtil.formatNumbers(GTValues.VA[GTValues.LV] * tier)))
                     .workableTieredHullModel(GTCEu.id("block/machines/food_refrigerator"))
                     .register(),
             GTValues.tiersBetween(GTValues.MV, GTValues.IV));

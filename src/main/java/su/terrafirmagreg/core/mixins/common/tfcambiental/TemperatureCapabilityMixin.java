@@ -52,10 +52,10 @@ public abstract class TemperatureCapabilityMixin {
                 this.target = 29f;
             }
         } else if (totalPotency == (TFCAmbientalCompat.FULLY_INSULATED * 4) + 1) {
-            if (this.target > 29f) {
-                this.target = 29f;
-            } else if (this.target < 1f) {
-                this.target = 1f;
+            if (this.target > 25f) {
+                this.target = 25f;
+            } else if (this.target < 5f) {
+                this.target = 5f;
             }
         }
     }
