@@ -19,10 +19,12 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.wanmine.wab.entity.Surfer;
+import net.wanmine.wab.entity.Toxlacanth;
 
 @Mixin(value = Surfer.class)
 public abstract class SurferMixin extends AbstractHorse {
@@ -58,5 +60,11 @@ public abstract class SurferMixin extends AbstractHorse {
             this.setCoralColor("fire");
         else if (r > 0.5)
             this.setCoralColor("horn");
+    }
+
+    // Yumy fish
+    @Inject(method = "registerGoals", at = @At("TAIL"))
+    protected void tfg$registerGoals(CallbackInfo ci) {
+        this.goalSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Toxlacanth.class, false, false));
     }
 }
