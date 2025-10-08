@@ -8,9 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import fi.dea.mc.deafission.common.data.FissionComponents;
-import fi.dea.mc.deafission.core.components.EfficiencyComponent;
 import fi.dea.mc.deafission.core.components.HeatComponent;
-import fi.dea.mc.deafission.core.components.ThrottleComponent;
 
 public class TFGFissionComponents {
 
