@@ -6,10 +6,12 @@
  */
 package su.terrafirmagreg.core.mixins.client.tfc;
 
+import java.util.ConcurrentModificationException;
 import java.util.function.Function;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -34,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
 
@@ -58,11 +61,18 @@ public abstract class SheetPileBlockModelMixin
                 .getTextureAtlas(RenderHelpers.BLOCKS_ATLAS);
 
         for (Direction direction : Helpers.DIRECTIONS) {
-            if ((Boolean) state.getValue(DirectionPropertyBlock.getProperty(direction))) { // The properties are
-                                                                                           // authoritative on which
-                                                                                           // sides should be rendered
+            // The properties are authoritative on which sides should be rendered
+            if ((Boolean) state.getValue(DirectionPropertyBlock.getProperty(direction))) {
                 final var stack = pile.getSheet(direction);
-                final var material = ChemicalHelper.getMaterialStack(stack);
+                MaterialStack material;
+
+                try {
+                    material = ChemicalHelper.getMaterialStack(stack);
+                } catch (ArrayIndexOutOfBoundsException | ConcurrentModificationException ex) {
+                    TFGCore.LOGGER.error("Encountered exception when attempting to get material from item stack: {}: {}", stack, ex);
+                    return RenderHelpers.missingTexture();
+                }
+
                 final int primaryColor = material.material().getMaterialARGB(0);
                 final int secondaryColor = material.material().getMaterialARGB(1);
                 Metal metalAtPos = pile.getOrCacheMetal(direction);

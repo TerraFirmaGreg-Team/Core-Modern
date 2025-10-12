@@ -6,10 +6,12 @@
  */
 package su.terrafirmagreg.core.mixins.client.tfc;
 
+import java.util.ConcurrentModificationException;
 import java.util.function.Function;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import org.spongepowered.asm.mixin.Mixin;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -30,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
 import su.terrafirmagreg.core.common.TFGHelpers;
@@ -47,8 +50,7 @@ public abstract class DoubleIngotPileBlockModelMixin
      * инфа берется из GTCEu.
      */
     @Override
-    public TextureAtlasSprite render(IngotPileBlockEntity pile, PoseStack poseStack, VertexConsumer buffer,
-            int packedLight, int packedOverlay) {
+    public TextureAtlasSprite render(IngotPileBlockEntity pile, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay) {
         final int ingots = pile.getBlockState().getValue(DoubleIngotPileBlock.DOUBLE_COUNT);
         final Function<ResourceLocation, TextureAtlasSprite> textureAtlas = Minecraft.getInstance()
                 .getTextureAtlas(RenderHelpers.BLOCKS_ATLAS);
@@ -58,7 +60,15 @@ public abstract class DoubleIngotPileBlockModelMixin
         TextureAtlasSprite sprite = null;
         for (int i = 0; i < ingots; i++) {
             final var stack = TFGHelpers.getStackFromIngotPileTileEntityByIndex(pileEntries, i);
-            final var material = ChemicalHelper.getMaterialStack(stack);
+            MaterialStack material;
+
+            try {
+                material = ChemicalHelper.getMaterialStack(stack);
+            } catch (ArrayIndexOutOfBoundsException | ConcurrentModificationException ex) {
+                TFGCore.LOGGER.error("Encountered exception when attempting to get material from item stack: {}: {}", stack, ex);
+                return RenderHelpers.missingTexture();
+            }
+
             final int primaryColor = material.material().getMaterialARGB(0);
             final int secondaryColor = material.material().getMaterialARGB(1);
             Metal metalAtPos = pile.getOrCacheMetal(i);
