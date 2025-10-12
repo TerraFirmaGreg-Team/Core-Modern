@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.compat.emi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -111,7 +113,7 @@ public class BlockInteractionRecipe implements EmiRecipe {
 
     @Override
     public List<EmiIngredient> getInputs() {
-        return INPUTS;
+        return Stream.concat(INPUTS.stream(), TOOL.stream()).collect(Collectors.toList());
     }
 
     @Override
