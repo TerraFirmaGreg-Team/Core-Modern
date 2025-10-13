@@ -31,6 +31,7 @@
         "common.create.InputEventsMixin",
         "common.create.LargeWaterWheelBlockEntityMixin",
         "common.create.LargeWaterWheelBlockMixin",
+        "common.create.OpenEndedPipeMixin",
         "common.create.ProcessingRecipeMixin",
         "common.create.WaterWheelBlockEntityMixin",
         "common.create.WaterWheelBlockMixin",
