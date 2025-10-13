@@ -110,11 +110,10 @@
         "common.vintageimprovements.LatheMovingBlockMixin",
         "common.vintageimprovements.LatheRotatingBlockMixin",
         "common.vintageimprovements.VibratingRecipeMixin",
-        "common.wab.CommonSetupMixin",
         "common.wab.CrusherMixin",
         "common.wab.EaterMixin",
         "common.wab.QuickSandMixin",
-        "common.wab.SurferMixin",
+        "common.wab.SoarerMixin",
         "common.wab.ToxlacanthMixin"
     ],
     "minVersion": "0.8",
