@@ -27,6 +27,7 @@ public class TFGTCraftingComponents {
                 .add(9, GreateTagPrefixes.whisk, GTMaterials.Neutronium);
 
         HERMETIC_CASING = CraftingComponent.of("hermetic_casing", GTBlocks.HERMETIC_CASING_LV.asStack())
+                .add(0, TFGMachines.HERMETIC_CASING_ULV.asStack())
                 .add(1, GTBlocks.HERMETIC_CASING_LV.asStack())
                 .add(2, GTBlocks.HERMETIC_CASING_MV.asStack())
                 .add(3, GTBlocks.HERMETIC_CASING_HV.asStack())
