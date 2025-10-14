@@ -24,7 +24,7 @@ import net.minecraft.world.level.material.Fluids;
 
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.LayerBlock;
+import su.terrafirmagreg.core.common.data.blocks.SandLayerBlock;
 
 // Most of this code is taken from TFC's OverworldClimateModel::onChunkLoad(),
 // since that's where it does its initial snow placement
@@ -63,7 +63,6 @@ public class MartianPolesFeature extends Feature<MartianPolesConfig> {
         final int snowFinishTemp = context.config().snowFinishTemp();
 
         final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        // TODO: replace with special mars snow
         final BlockState snowState = Blocks.SNOW.defaultBlockState();
         final BlockState piledSnowState = Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 2);
         final BlockState iceState = TFGBlocks.MARS_ICE.get().defaultBlockState();
@@ -81,8 +80,7 @@ public class MartianPolesFeature extends Feature<MartianPolesConfig> {
                 BlockState stateAt = level.getBlockState(mutablePos);
                 float snowTempNoise = snowTemperatureModifier + noise;
                 if (snowTempNoise < 0) {
-                    // TODO: change to the other layer block class once that branch is in
-                    if ((stateAt.isAir() || stateAt.getBlock() instanceof LayerBlock) && snowState.canSurvive(level, mutablePos)) {
+                    if ((stateAt.isAir() || stateAt.getBlock() instanceof SandLayerBlock) && snowState.canSurvive(level, mutablePos)) {
                         // Place snow
                         level.setBlock(mutablePos, snowTempNoise < -1 ? piledSnowState : snowState, 2);
                         mutablePos.move(Direction.DOWN);

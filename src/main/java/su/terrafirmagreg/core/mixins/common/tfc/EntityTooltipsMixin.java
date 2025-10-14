@@ -34,11 +34,14 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.wanmine.wab.entity.Soarer;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
+import su.terrafirmagreg.core.common.data.entities.soarer.SoarerData;
+import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
 
 @Mixin(value = EntityTooltips.class, remap = false)
@@ -64,6 +67,8 @@ public abstract class EntityTooltipsMixin {
         registry.register("ocelot", OCELOT, TFCOcelot.class);
         registry.register("fishing_hook", HOOK, TFCFishingHook.class);
         registry.register("rabbit", TFG_RABBIT, Rabbit.class);
+        registry.register("surfer", TFG_SURFER, TFCSurfer.class);
+        registry.register("soarer", TFG_SOARER, Soarer.class);
     }
 
     @Unique
@@ -74,6 +79,32 @@ public abstract class EntityTooltipsMixin {
                             .toLowerCase(Locale.ROOT)));
         } else if (entity instanceof Rabbit rabbit) {
             tooltip.accept(Helpers.translateEnum(rabbit.getVariant(), "rabbit_variant"));
+        }
+    };
+
+    @Unique
+    private static final EntityTooltip TFG_SURFER = (level, entity, tooltip) -> {
+        if (entity instanceof TFCSurfer surfer) {
+            tooltip.accept(Component.translatable((TFGCore.MOD_ID + ".tooltip.surfer_variant." + surfer.getCoralColor()).toLowerCase(Locale.ROOT)));
+
+            tooltip.accept(Helpers.translateEnum(surfer.isMale() ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
+
+            float familiarity = Math.max(0.0F, Math.min(1.0F, surfer.getFamiliarity()));
+            String familiarityPercent = String.format("%.2f", familiarity * 100.0F);
+            tooltip.accept(Component.translatable("tfc.jade.familiarity", familiarityPercent));
+
+            tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.surfer"));
+        }
+    };
+
+    @Unique
+    private static final EntityTooltip TFG_SOARER = (level, entity, tooltip) -> {
+        if (entity instanceof Soarer soarer) {
+            tooltip.accept(Helpers.translateEnum(SoarerData.isMale(soarer) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
+
+            float familiarity = Math.max(0.0F, Math.min(1.0F, SoarerData.getFamiliarity(soarer)));
+            String familiarityPercent = String.format("%.2f", familiarity * 100.0F);
+            tooltip.accept(Component.translatable("tfc.jade.familiarity", familiarityPercent));
         }
     };
 

@@ -13,6 +13,8 @@ import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.wanmine.wab.entity.render.EntityRenderer;
+import net.wanmine.wab.entity.render.model.SurferModel;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
@@ -22,6 +24,7 @@ import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbitRenderer;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSnifferRenderer;
+import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
 
@@ -39,6 +42,8 @@ public class TFGEntities {
             .of(TFCSniffer::makeTFCSniffer, MobCategory.CREATURE).sized(1.9F, 1.75F).clientTrackingRange(10));
     public static final RegistryObject<EntityType<TFCWraptor>> WRAPTOR = register("wraptor", EntityType.Builder
             .of(TFCWraptor::makeTFCWraptor, MobCategory.CREATURE).sized(0.8F, 2.2F).clientTrackingRange(10));
+    public static final RegistryObject<EntityType<TFCSurfer>> SURFER = register("surfer", EntityType.Builder
+            .of(TFCSurfer::makeTFCSurfer, MobCategory.WATER_CREATURE).sized(1.2F, 0.7F).clientTrackingRange(10));
 
     public static <E extends Entity> RegistryObject<EntityType<E>> register(String name,
             EntityType.Builder<E> builder) {
@@ -61,6 +66,7 @@ public class TFGEntities {
         event.put(GLACIAN_RAM.get(), TFCGlacianRam.createMobAttributes().build());
         event.put(SNIFFER.get(), TFCSniffer.createMobAttributes().build());
         event.put(WRAPTOR.get(), TFCWraptor.createMobAttributes().build());
+        event.put(SURFER.get(), TFCSurfer.getDefaultAttributes().build());
     }
 
     public static void onSpawnPlacement(SpawnPlacementRegisterEvent event) {
@@ -88,6 +94,12 @@ public class TFGEntities {
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 TFCWraptor::spawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(
+                SURFER.get(),
+                SpawnPlacements.Type.IN_WATER,
+                Heightmap.Types.OCEAN_FLOOR,
+                TFCSurfer::spawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 
     public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -95,6 +107,8 @@ public class TFGEntities {
         event.registerEntityRenderer(GLACIAN_RAM.get(), TFCGlacianRamRenderer::new);
         event.registerEntityRenderer(SNIFFER.get(), TFCSnifferRenderer::new);
         event.registerEntityRenderer(WRAPTOR.get(), TFCWraptorRenderer::new);
+
+        event.registerEntityRenderer(SURFER.get(), EntityRenderer.create(SurferModel::new, 0.6F));
 
         // event.registerBlockEntityRenderer(TFGBlockEntities.LARGE_NEST_BOX.get(), ctx -> new
         // LargeNestBoxBlockEntityRenderer());
