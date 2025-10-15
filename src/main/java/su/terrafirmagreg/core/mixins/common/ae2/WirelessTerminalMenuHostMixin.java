@@ -35,7 +35,7 @@ public abstract class WirelessTerminalMenuHostMixin extends ItemMenuHost {
      */
     @Redirect(method = "checkWirelessRange", at = @At(value = "INVOKE", target = "Lappeng/helpers/WirelessTerminalMenuHost;rangeCheck()Z"))
     private boolean tfg$checkWirelessRange(WirelessTerminalMenuHost instance) {
-        return (this.getUpgrades().isInstalled(TFGItems.WIRELESS_CARD.get()) && this.myWap != null)
+        return this.getUpgrades().isInstalled(TFGItems.WIRELESS_CARD.get())
                 || instance.rangeCheck();
     }
 
