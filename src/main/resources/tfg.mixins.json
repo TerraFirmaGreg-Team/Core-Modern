@@ -84,6 +84,7 @@
         "common.simply_stacked_dimensions.TeleportHandlerMixin",
         "common.species.BirtMixin",
         "common.species.CruncherMixin",
+        "common.species.DeepfishMixin",
         "common.species.GooberMixin",
         "common.species.LimpetMixin",
         "common.species.SpringlingMixin",
