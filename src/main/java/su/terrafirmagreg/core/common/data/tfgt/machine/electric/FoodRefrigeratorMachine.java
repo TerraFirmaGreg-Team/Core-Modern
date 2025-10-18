@@ -23,6 +23,7 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.food.IFood;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -200,22 +201,205 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
     // #region Refrigerated trait
     public class RefrigeratedStorage extends NotifiableItemStackHandler {
 
+        private boolean internalEdit = false;
+
         public RefrigeratedStorage(MetaMachine machine, int slots) {
             super(machine, slots, IO.IN, IO.IN);
         }
 
+        private void setNotifying(int slot, ItemStack stack) {
+            internalEdit = true;
+            try {
+                RefrigeratedStorage.super.setStackInSlot(slot, stack);
+            } finally {
+                internalEdit = false;
+            }
+        }
+
         public void changeTraitForAll(boolean add) {
             for (int i = 0; i < storage.getSlots(); i++) {
-                var stack = storage.getStackInSlot(i).copy();
+                ItemStack stack = storage.getStackInSlot(i);
                 if (stack.isEmpty())
                     continue;
 
+                ItemStack copy = stack.copy();
                 if (add) {
-                    FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+                    FoodCapability.applyTrait(copy, TFGFoodTraits.REFRIGERATING);
                 } else {
-                    FoodCapability.removeTrait(stack, TFGFoodTraits.REFRIGERATING);
+                    FoodCapability.removeTrait(copy, TFGFoodTraits.REFRIGERATING);
                 }
-                storage.setStackInSlot(i, stack);
+                setNotifying(i, copy);
+            }
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            IFood food = FoodCapability.get(stack);
+            return food != null && !food.isRotten();
+        }
+
+        private void unifyFoodDates() {
+            if (FoodRefrigeratorMachine.this.isRemote())
+                return;
+
+            final int slots = storage.getSlots();
+            final boolean[] processed = new boolean[slots];
+
+            for (int i = 0; i < slots; i++) {
+                if (processed[i])
+                    continue;
+
+                final ItemStack base = storage.getStackInSlot(i);
+                final IFood baseFood = base.isEmpty() ? null : FoodCapability.get(base);
+                if (base.isEmpty() || baseFood == null || baseFood.isRotten()) {
+                    processed[i] = true;
+                    continue;
+                }
+
+                final int[] group = new int[slots];
+                int gSize = 0;
+                boolean hasNonFull = false;
+                long minDate = Long.MAX_VALUE;
+
+                for (int j = i; j < slots; j++) {
+                    if (processed[j])
+                        continue;
+                    final ItemStack other = storage.getStackInSlot(j);
+                    final IFood otherFood = other.isEmpty() ? null : FoodCapability.get(other);
+                    if (other.isEmpty() || otherFood == null || otherFood.isRotten())
+                        continue;
+                    if (!FoodCapability.areStacksStackableExceptCreationDate(other, base))
+                        continue;
+
+                    group[gSize++] = j;
+
+                    if (other.getCount() < other.getMaxStackSize()) {
+                        hasNonFull = true;
+                        long date = otherFood.getCreationDate();
+                        if (date < minDate)
+                            minDate = date;
+                    }
+                }
+
+                if (!hasNonFull || minDate == Long.MAX_VALUE) {
+                    for (int k = 0; k < gSize; k++)
+                        processed[group[k]] = true;
+                    continue;
+                }
+
+                for (int k = 0; k < gSize; k++) {
+                    int idx = group[k];
+                    ItemStack st = storage.getStackInSlot(idx);
+                    if (st.isEmpty()) {
+                        processed[idx] = true;
+                        continue;
+                    }
+                    if (st.getCount() < st.getMaxStackSize()) {
+                        ItemStack copy = st.copy();
+                        IFood food = FoodCapability.get(copy);
+                        if (food != null)
+                            food.setCreationDate(minDate);
+                        setNotifying(idx, copy);
+                    }
+                    processed[idx] = true;
+                }
+            }
+        }
+
+        private void combineStacks() {
+            if (FoodRefrigeratorMachine.this.isRemote())
+                return;
+
+            final int slots = storage.getSlots();
+            final boolean[] processed = new boolean[slots];
+
+            for (int i = 0; i < slots; i++) {
+                if (processed[i])
+                    continue;
+
+                final ItemStack base = storage.getStackInSlot(i);
+                final IFood baseFood = base.isEmpty() ? null : FoodCapability.get(base);
+                if (base.isEmpty() || baseFood == null || baseFood.isRotten()) {
+                    processed[i] = true;
+                    continue;
+                }
+
+                final int[] group = new int[slots];
+                int gSize = 0;
+
+                for (int j = i; j < slots; j++) {
+                    if (processed[j])
+                        continue;
+                    final ItemStack other = storage.getStackInSlot(j);
+                    final IFood otherFood = other.isEmpty() ? null : FoodCapability.get(other);
+                    if (other.isEmpty() || otherFood == null || otherFood.isRotten())
+                        continue;
+                    if (!FoodCapability.areStacksStackableExceptCreationDate(other, base))
+                        continue;
+                    group[gSize++] = j;
+                }
+
+                int total = 0;
+                int maxSize = 0;
+                ItemStack template = ItemStack.EMPTY;
+
+                for (int k = 0; k < gSize; k++) {
+                    ItemStack st = storage.getStackInSlot(group[k]);
+                    if (st.isEmpty())
+                        continue;
+                    if (st.getCount() < st.getMaxStackSize()) {
+                        total += st.getCount();
+                        maxSize = st.getMaxStackSize();
+                        if (template.isEmpty())
+                            template = st.copy();
+                    }
+                }
+
+                if (template.isEmpty() || total <= 1) {
+                    for (int k = 0; k < gSize; k++)
+                        processed[group[k]] = true;
+                    continue;
+                }
+
+                int remaining = total;
+                for (int k = 0; k < gSize; k++) {
+                    int idx = group[k];
+                    ItemStack st = storage.getStackInSlot(idx);
+                    if (st.isEmpty() || st.getCount() == st.getMaxStackSize())
+                        continue;
+
+                    if (remaining <= 0) {
+                        setNotifying(idx, ItemStack.EMPTY);
+                        continue;
+                    }
+
+                    int put = Math.min(maxSize, remaining);
+                    ItemStack filled = template.copy();
+                    filled.setCount(put);
+                    setNotifying(idx, filled);
+                    remaining -= put;
+                }
+
+                for (int k = 0; k < gSize; k++)
+                    processed[group[k]] = true;
+            }
+        }
+
+        private void compactInventory() {
+            if (FoodRefrigeratorMachine.this.isRemote())
+                return;
+
+            final int slots = storage.getSlots();
+            int nextFree = 0;
+            for (int i = 0; i < slots; i++) {
+                ItemStack cur = storage.getStackInSlot(i);
+                if (cur.isEmpty())
+                    continue;
+                if (i != nextFree) {
+                    setNotifying(nextFree, cur.copy());
+                    setNotifying(i, ItemStack.EMPTY);
+                }
+                nextFree++;
             }
         }
 
@@ -224,12 +408,27 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
             if (stack.isEmpty())
                 return ItemStack.EMPTY;
-            if (currentlyWorking)
-                FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
 
-            var result = storage.insertItem(slot, stack, simulate);
-            updateSubscription();
-            FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
+            IFood incoming = FoodCapability.get(stack);
+            if (incoming == null || incoming.isRotten())
+                return stack;
+
+            ItemStack toInsert = stack.copy();
+            if (currentlyWorking)
+                FoodCapability.applyTrait(toInsert, TFGFoodTraits.REFRIGERATING);
+
+            ItemStack result = storage.insertItem(slot, toInsert, simulate);
+
+            if (!simulate) {
+                unifyFoodDates();
+                combineStacks();
+                compactInventory();
+                onContentsChanged();
+                updateSubscription();
+            }
+
+            if (currentlyWorking)
+                FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
             return result;
         }
 
@@ -239,22 +438,53 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             if (amount == 0)
                 return ItemStack.EMPTY;
 
-            var result = storage.extractItem(slot, amount, simulate);
+            ItemStack result = storage.extractItem(slot, amount, simulate);
+
             FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
-            updateSubscription();
+
+            if (!simulate) {
+                unifyFoodDates();
+                combineStacks();
+                compactInventory();
+                onContentsChanged();
+                updateSubscription();
+            }
             return result;
         }
 
         @Override
         public void setStackInSlot(int slot, @NotNull ItemStack stack) {
-            if (currentlyWorking)
-                FoodCapability.applyTrait(stack, TFGFoodTraits.REFRIGERATING);
+            if (!internalEdit) {
+                if (stack.isEmpty()) {
+                    RefrigeratedStorage.super.setStackInSlot(slot, ItemStack.EMPTY);
+                    unifyFoodDates();
+                    combineStacks();
+                    compactInventory();
+                    updateSubscription();
+                    return;
+                }
 
-            FoodCapability.removeTrait(storage.getStackInSlot(slot), TFGFoodTraits.REFRIGERATING);
-            storage.setStackInSlot(slot, stack);
-            updateSubscription();
+                IFood food = FoodCapability.get(stack);
+                if (food == null || food.isRotten())
+                    return;
+
+                ItemStack toSet = stack;
+                if (currentlyWorking) {
+                    toSet = stack.copy();
+                    FoodCapability.applyTrait(toSet, TFGFoodTraits.REFRIGERATING);
+                }
+
+                RefrigeratedStorage.super.setStackInSlot(slot, toSet);
+
+                unifyFoodDates();
+                combineStacks();
+                compactInventory();
+                updateSubscription();
+                return;
+            }
+
+            RefrigeratedStorage.super.setStackInSlot(slot, stack);
         }
-
     }
 
     // #endregion
