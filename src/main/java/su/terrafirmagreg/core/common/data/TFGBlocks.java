@@ -187,10 +187,6 @@ public final class TFGBlocks {
             () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)
             //TODO
             ));
-    public static final RegistryObject<SandLayerBlock> MARS_SNOW_LAYER_BLOCK = register("pile/mars_snow",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SNOW_PILE.get()).sound(SoundType.SNOW).noOcclusion().mapColor(MapColor.NONE)
-            //TODO
-            ));
 
     // The _covering suffix is to differentiate these from the other piles
     public static final RegistryObject<SandPileBlock> HEMATITIC_SAND_PILE_BLOCK = register("pile/hematitic_sand_covering",
@@ -202,9 +198,6 @@ public final class TFGBlocks {
     public static final RegistryObject<SandPileBlock> VENUS_SAND_PILE_BLOCK = register("pile/venus_sand_covering",
             () -> new SandPileBlock(
                     ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)));
-    public static final RegistryObject<SandPileBlock> MARS_SNOW_PILE_BLOCK = register("pile/mars_snow_covering",
-            () -> new SandPileBlock(
-                    ExtendedProperties.of(TFCBlocks.SNOW_PILE.get()).noOcclusion().sound(SoundType.SNOW).randomTicks().blockEntity(TFCBlockEntities.PILE)));
 
     //#endregion
 

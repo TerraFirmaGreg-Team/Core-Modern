@@ -42,14 +42,11 @@ public class TFGItems {
     public static final RegistryObject<Item> FILLED_DNA_SYRINGE = ITEMS.register("filled_dna_syringe",
             () -> new FilledDnaSyringeItem(new Item.Properties()));
 
-    public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516,
-            9756658);
-    public static final RegistryObject<Item> GLACIAN_RAM_EGG = registerSpawnEgg(TFGEntities.GLACIAN_RAM, 16772607,
-            3997758);
-    public static final RegistryObject<Item> SNIFFER_SPAWN_EGG = registerSpawnEgg(TFGEntities.SNIFFER, 11285007,
-            4829025);
-    public static final RegistryObject<Item> WRAPTOR_SPAWN_EGG = registerSpawnEgg(TFGEntities.WRAPTOR, 15767516,
-            4829025);
+    public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
+    public static final RegistryObject<Item> GLACIAN_RAM_EGG = registerSpawnEgg(TFGEntities.GLACIAN_RAM, 16772607, 3997758);
+    public static final RegistryObject<Item> SNIFFER_SPAWN_EGG = registerSpawnEgg(TFGEntities.SNIFFER, 11285007, 4829025);
+    public static final RegistryObject<Item> WRAPTOR_SPAWN_EGG = registerSpawnEgg(TFGEntities.WRAPTOR, 15767516, 4829025);
+    public static final RegistryObject<Item> SURFER_SPAWN_EGG = registerSpawnEgg(TFGEntities.SURFER, 7644045, 12824430);
 
     @SuppressWarnings("deprecation")
     public static final RegistryObject<BucketItem> MARS_WATER_BUCKET = register("semiheavy_ammoniacal_water_bucket",
@@ -83,8 +80,7 @@ public class TFGItems {
         return ITEMS.register(name.toLowerCase(Locale.ROOT), item);
     }
 
-    private static <T extends EntityType<? extends Mob>> RegistryObject<Item> registerSpawnEgg(RegistryObject<T> entity,
-            int color1, int color2) {
+    private static <T extends EntityType<? extends Mob>> RegistryObject<Item> registerSpawnEgg(RegistryObject<T> entity, int color1, int color2) {
         return register("spawn_egg/" + entity.getId().getPath(),
                 () -> new ForgeSpawnEggItem(entity, color1, color2, new Item.Properties()));
     }

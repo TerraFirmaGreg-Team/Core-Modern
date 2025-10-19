@@ -1,6 +1,9 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
+import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
+import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createTieredHullMachineModel;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.Locale;
@@ -8,19 +11,38 @@ import java.util.function.BiFunction;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
+import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.item.QuantumTankMachineItem;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
+import com.gregtechceu.gtceu.common.data.models.GTModels;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.storage.QuantumChestMachine;
+import com.gregtechceu.gtceu.common.machine.storage.QuantumTankMachine;
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
+import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.tterrag.registrate.util.entry.BlockEntry;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.fluids.FluidType;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
@@ -53,7 +75,7 @@ public class TFGMachines {
     public static final MachineDefinition BLACK_BRONZE_DRUM = GTMachineUtils.registerDrum(GTMaterials.BlackBronze,
             32000, "Black Bronze Drum");
 
-    public static final MachineDefinition[] FOOD_PROCESSOR = registerTieredMachines("food_processor",
+    public static final MachineDefinition[] FOOD_PROCESSOR = registerTieredMachines(REGISTRATE, "food_processor",
             SimpleFoodProcessingMachine::new, (tier, builder) -> builder
                     .langValue("%s Food Processor %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
@@ -68,7 +90,7 @@ public class TFGMachines {
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] FOOD_OVEN = registerTieredMachines("food_oven",
+    public static final MachineDefinition[] FOOD_OVEN = registerTieredMachines(REGISTRATE, "food_oven",
             SimpleFoodProcessingMachine::new, (tier, builder) -> builder
                     .langValue("%s Electric Oven %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
@@ -83,7 +105,7 @@ public class TFGMachines {
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] FOOD_REFRIGERATOR = registerTieredMachines("food_refrigerator",
+    public static final MachineDefinition[] FOOD_REFRIGERATOR = registerTieredMachines(REGISTRATE, "food_refrigerator",
             FoodRefrigeratorMachine::new, (tier, builder) -> builder
                     .langValue("%s Refrigerator %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
@@ -100,7 +122,7 @@ public class TFGMachines {
                     .register(),
             GTValues.tiersBetween(GTValues.MV, GTValues.IV));
 
-    public static final MachineDefinition[] AQUEOUS_ACCUMULATOR = registerTieredMachines("aqueous_accumulator",
+    public static final MachineDefinition[] AQUEOUS_ACCUMULATOR = registerTieredMachines(REGISTRATE, "aqueous_accumulator",
             AqueousAccumulatorMachine::new, (tier, builder) -> builder
                     .langValue("%s Aqueous Accumulator %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("aqueous_accumulator"),
@@ -116,7 +138,7 @@ public class TFGMachines {
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] GAS_PRESSURIZER = registerTieredMachines("gas_pressurizer",
+    public static final MachineDefinition[] GAS_PRESSURIZER = registerTieredMachines(REGISTRATE, "gas_pressurizer",
             GasPressurizerMachine::new, (tier, builder) -> builder
                     .langValue("%s Gas Pressurizer %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
@@ -131,7 +153,7 @@ public class TFGMachines {
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] RAILGUN_ITEM_LOADER_IN = registerTieredMachines("railgun_item_loader_in",
+    public static final MachineDefinition[] RAILGUN_ITEM_LOADER_IN = registerTieredMachines(REGISTRATE, "railgun_item_loader_in",
             (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.IN),
             (tier, builder) -> builder
                     .langValue(
@@ -146,7 +168,7 @@ public class TFGMachines {
                     .register(),
             GTMachineUtils.ALL_TIERS);
 
-    public static final MachineDefinition[] RAILGUN_ITEM_LOADER_OUT = registerTieredMachines("railgun_item_loader_out",
+    public static final MachineDefinition[] RAILGUN_ITEM_LOADER_OUT = registerTieredMachines(REGISTRATE, "railgun_item_loader_out",
             (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.OUT),
             (tier, builder) -> builder
                     .langValue(
@@ -177,14 +199,80 @@ public class TFGMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .register();
 
-    public static MachineDefinition[] registerTieredMachines(String name,
+    // LV super chest is 1M, which is already crazy.
+    // 10K is about as much as three steel crates holding items that stack to 64
+    public static final MachineDefinition ULV_SUPER_CHEST = GTRegistration.REGISTRATE.machine("ulv_super_chest",
+            (holder) -> new QuantumChestMachine(holder, GTValues.ULV, 10_000))
+            .langValue("ULV Super Chest")
+            .blockProp(BlockBehaviour.Properties::dynamicShape)
+            .rotationState(RotationState.ALL)
+            .allowExtendedFacing(true)
+            .model(createTieredHullMachineModel(GTCEu.id("block/machine/template/quantum/quantum_chest"))
+                    .andThen(b -> b.addDynamicRenderer(DynamicRenderHelper::createQuantumChestRender)))
+            .hasBER(true)
+            .tooltipBuilder(GTMachineUtils.CHEST_TOOLTIPS)
+            .tooltips(Component.translatable("gtceu.machine.quantum_chest.tooltip"),
+                    Component.translatable("gtceu.universal.tooltip.item_storage_total",
+                            FormattingUtil.formatNumbers(10_000)))
+            .tier(GTValues.ULV)
+            .register();
+
+    // LV super tank is 4K, same as a bronze multiblock tank, so this being the same as the wood one feels appropriate
+    public static final MachineDefinition ULV_SUPER_TANK = GTRegistration.REGISTRATE.machine("ulv_super_tank",
+            MachineDefinition::new, (holder) -> new QuantumTankMachine(holder, GTValues.ULV, 1000 * FluidType.BUCKET_VOLUME),
+            MetaMachineBlock::new, QuantumTankMachineItem::new, MetaMachineBlockEntity::new)
+            .langValue("ULV Super Tank")
+            .blockProp(BlockBehaviour.Properties::dynamicShape)
+            .rotationState(RotationState.ALL)
+            .allowExtendedFacing(true)
+            .model(createTieredHullMachineModel(GTCEu.id("block/machine/template/quantum/quantum_tank"))
+                    .andThen(b -> b.addDynamicRenderer(DynamicRenderHelper::createQuantumTankRender)))
+            .hasBER(true)
+            .tooltipBuilder(GTMachineUtils.TANK_TOOLTIPS)
+            .tooltips(Component.translatable("gtceu.machine.quantum_tank.tooltip"),
+                    Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
+                            FormattingUtil.formatNumbers(1000 * FluidType.BUCKET_VOLUME)))
+            .tier(GTValues.ULV)
+            .register();
+
+    public static final BlockEntry<Block> HERMETIC_CASING_ULV = GTRegistration.REGISTRATE.block("ulv_hermetic_casing", Block::new)
+            .lang("Basic Hermetic Casing")
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .properties(p -> p.isValidSpawn((state, level, pos, end) -> false))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .blockstate(GTModels.createHermeticCasingModel("ulv"))
+            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    // Needed so you can get the full 2A of EV out of the large solar array mk1 while in HV.
+    public static final MachineDefinition HV_ENERGY_OUTPUT_HATCH_4A = GTRegistration.REGISTRATE.machine("hv_energy_output_hatch_4a",
+            (holder) -> new EnergyHatchPartMachine(holder, GTValues.HV, OUT, 4))
+            .langValue(GTValues.VNF[GTValues.HV] + " 4A Dynamo Hatch")
+            .rotationState(RotationState.ALL)
+            .abilities(PartAbility.OUTPUT_ENERGY)
+            .modelProperty(IS_FORMED, false)
+            .tooltips(Component.translatable("gtceu.universal.tooltip.voltage_out",
+                    FormattingUtil.formatNumbers(GTValues.V[GTValues.HV]), GTValues.VNF[GTValues.HV]),
+                    Component.translatable("gtceu.universal.tooltip.amperage_out", 4),
+                    Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
+                            FormattingUtil
+                                    .formatNumbers(EnergyHatchPartMachine.getHatchEnergyCapacity(GTValues.HV, 4))),
+                    Component.translatable("gtceu.machine.energy_hatch.output_hi_amp.tooltip"))
+            .overlayTieredHullModel("energy_output_hatch_4a")
+            .tier(GTValues.HV)
+            .register();
+
+    public static MachineDefinition[] registerTieredMachines(GTRegistrate registrate, String name,
             BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
             BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
             int... tiers) {
+
         MachineDefinition[] definitions = new MachineDefinition[tiers.length];
         for (int i = 0; i < tiers.length; i++) {
             int tier = tiers[i];
-            var register = REGISTRATE.machine(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,
+            var register = registrate.machine(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,
                     holder -> factory.apply(holder, tier)).tier(tier);
             definitions[i] = builder.apply(tier, register);
         }
