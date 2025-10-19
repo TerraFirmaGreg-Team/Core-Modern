@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
+import com.gregtechceu.gtceu.api.gui.widget.ToggleButtonWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
@@ -15,6 +16,9 @@ import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
+import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
+import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
@@ -24,9 +28,12 @@ import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.IFood;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+
+import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
 
@@ -55,6 +62,10 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
     protected ISubscription energySubscription;
     protected TickableSubscription tickSubscription;
+
+    @Getter
+    @Persisted
+    private boolean unifyDatesEnabled = true;
 
     public FoodRefrigeratorMachine(IMachineBlockEntity holder, int tier, Object... args) {
         super(holder, tier, args);
@@ -164,6 +175,20 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         updateSubscription();
     }
 
+    public void setUnifyDatesEnabled(boolean enabled) {
+        if (this.unifyDatesEnabled == enabled)
+            return;
+        this.unifyDatesEnabled = enabled;
+
+        if (!isRemote() && enabled && currentlyWorking) {
+            inventory.unifyFoodDates();
+            inventory.combineStacks();
+            inventory.compactInventory();
+            inventory.onContentsChanged();
+        }
+        updateSubscription();
+    }
+
     // #endregion
 
     // #region GUI
@@ -192,6 +217,41 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                         + energyBar.getSize().width + 2, (size.height - template.getSize().height) / 2));
         group.addWidget(energyBar);
         group.addWidget(template);
+
+        {
+            IGuiTexture overlayOn = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_on.png");
+            IGuiTexture overlayOff = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_off.png");
+
+            var toggle = new ToggleButtonWidget(4, 2, 18, 18,
+                    this::isUnifyDatesEnabled,
+                    this::setUnifyDatesEnabled
+            ) {
+                private void refreshTooltip() {
+                    String base = "tfg.gui.refrigerator.unify_dates";
+                    setTooltipText(Component.translatable(base).getString());
+                }
+
+                {
+                    IGuiTexture backDisabled = GuiTextures.TOGGLE_BUTTON_BACK.getSubTexture(0, 0, 1, 0.5);
+                    IGuiTexture backEnabled = GuiTextures.TOGGLE_BUTTON_BACK.getSubTexture(0, 0.5, 1, 0.5);
+
+                    setTexture(
+                            new GuiTextureGroup(backDisabled, overlayOff),
+                            new GuiTextureGroup(backEnabled, overlayOn)
+                    );
+                    refreshTooltip();
+                }
+
+                @Override
+                public void drawInForeground(net.minecraft.client.gui.@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+                    refreshTooltip();
+                    super.drawInForeground(graphics, mouseX, mouseY, partialTicks);
+                }
+            };
+
+            group.addWidget(toggle);
+        }
+
         editableUI.setupUI(group, this);
         return group;
     }
@@ -240,6 +300,11 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
         private void unifyFoodDates() {
             if (FoodRefrigeratorMachine.this.isRemote())
+                return;
+
+            if (!FoodRefrigeratorMachine.this.currentlyWorking)
+                return;
+            if (!FoodRefrigeratorMachine.this.unifyDatesEnabled)
                 return;
 
             final int slots = storage.getSlots();
@@ -310,6 +375,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             if (FoodRefrigeratorMachine.this.isRemote())
                 return;
 
+            if (!FoodRefrigeratorMachine.this.currentlyWorking)
+                return;
+
             final int slots = storage.getSlots();
             final boolean[] processed = new boolean[slots];
 
@@ -336,6 +404,12 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                         continue;
                     if (!FoodCapability.areStacksStackableExceptCreationDate(other, base))
                         continue;
+
+                    if (!FoodRefrigeratorMachine.this.unifyDatesEnabled) {
+                        if (otherFood.getCreationDate() != baseFood.getCreationDate())
+                            continue;
+                    }
+
                     group[gSize++] = j;
                 }
 
