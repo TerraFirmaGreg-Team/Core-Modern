@@ -224,8 +224,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
             var toggle = new ToggleButtonWidget(4, 2, 18, 18,
                     this::isUnifyDatesEnabled,
-                    this::setUnifyDatesEnabled
-            ) {
+                    this::setUnifyDatesEnabled) {
                 private void refreshTooltip() {
                     String base = "tfg.gui.refrigerator.unify_dates";
                     setTooltipText(Component.translatable(base).getString());
@@ -237,8 +236,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
                     setTexture(
                             new GuiTextureGroup(backDisabled, overlayOff),
-                            new GuiTextureGroup(backEnabled, overlayOn)
-                    );
+                            new GuiTextureGroup(backEnabled, overlayOn));
                     refreshTooltip();
                 }
 
@@ -477,6 +475,20 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             }
         }
 
+        private ItemStack withoutRefrigeratingTrait(ItemStack stack) {
+            if (stack.isEmpty())
+                return ItemStack.EMPTY;
+            ItemStack copy = stack.copy();
+            FoodCapability.removeTrait(copy, TFGFoodTraits.REFRIGERATING);
+            return copy;
+        }
+
+        @Override
+        @NotNull
+        public ItemStack getStackInSlot(int slot) {
+            return storage.getStackInSlot(slot);
+        }
+
         @Override
         @NotNull
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
@@ -488,10 +500,15 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                 return stack;
 
             ItemStack toInsert = stack.copy();
-            if (currentlyWorking)
+            if (currentlyWorking) {
                 FoodCapability.applyTrait(toInsert, TFGFoodTraits.REFRIGERATING);
+            }
 
             ItemStack result = storage.insertItem(slot, toInsert, simulate);
+
+            if (!simulate && currentlyWorking) {
+                FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
+            }
 
             if (!simulate) {
                 unifyFoodDates();
@@ -500,29 +517,44 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                 onContentsChanged();
                 updateSubscription();
             }
-
-            if (currentlyWorking)
-                FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
             return result;
         }
 
+        //WIP
         @Override
         @NotNull
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             if (amount == 0)
                 return ItemStack.EMPTY;
 
-            ItemStack result = storage.extractItem(slot, amount, simulate);
-
-            FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
-
-            if (!simulate) {
-                unifyFoodDates();
-                combineStacks();
-                compactInventory();
-                onContentsChanged();
-                updateSubscription();
+            if (simulate) {
+                ItemStack preview = storage.extractItem(slot, amount, true);
+                return withoutRefrigeratingTrait(preview);
             }
+
+            ItemStack before = storage.getStackInSlot(slot);
+            if (!before.isEmpty() && FoodRefrigeratorMachine.this.currentlyWorking) {
+                ItemStack traitless = withoutRefrigeratingTrait(before);
+                setNotifying(slot, traitless);
+            }
+
+            ItemStack result = storage.extractItem(slot, amount, false);
+
+            if (FoodRefrigeratorMachine.this.currentlyWorking) {
+                ItemStack leftover = storage.getStackInSlot(slot);
+                if (!leftover.isEmpty()) {
+                    ItemStack cooled = leftover.copy();
+                    FoodCapability.applyTrait(cooled, TFGFoodTraits.REFRIGERATING);
+                    setNotifying(slot, cooled);
+                }
+            }
+
+            unifyFoodDates();
+            combineStacks();
+            compactInventory();
+            onContentsChanged();
+            updateSubscription();
+
             return result;
         }
 
