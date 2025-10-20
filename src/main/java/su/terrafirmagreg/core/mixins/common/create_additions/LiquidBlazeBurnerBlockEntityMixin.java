@@ -49,7 +49,7 @@ public abstract class LiquidBlazeBurnerBlockEntityMixin extends BlockEntity {
                     if (remainingBurnTime <= 1000) {
                         try {
                             remainingBurnTime += ((LiquidBurningRecipe) this.recipeCache.get()).getBurnTime(); // BurnTime()
-                                                                                                              // / 10
+                                                                                                               // / 10
                             activeFuel = ((LiquidBurningRecipe) this.recipeCache.get()).isSuperheated()
                                     ? LiquidBlazeBurnerBlockEntity.FuelType.SPECIAL
                                     : LiquidBlazeBurnerBlockEntity.FuelType.NORMAL;
