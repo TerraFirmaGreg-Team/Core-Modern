@@ -33,7 +33,7 @@ public class TFGWindManager {
 
     public static class Mars implements IWindTicker {
         @Setter
-        private static int particleMultiplier = 16;
+        private static int particleMultiplier = 32;
 
         @Setter
         private static float windThreshold = 0.2f;

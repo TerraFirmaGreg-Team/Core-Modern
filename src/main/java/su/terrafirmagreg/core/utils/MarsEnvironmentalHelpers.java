@@ -30,8 +30,8 @@ import su.terrafirmagreg.core.config.TFGConfig;
 
 public final class MarsEnvironmentalHelpers {
 
-    public static final float DUST_SETTLE_SPEED = 0.25f; // sand piles will build at this speed or lower
-    public static final float DUST_LOOSEN_SPEED = 0.55f; // sand piles will erode at this speed or higher
+    public static final float DUST_SETTLE_SPEED = 0.4f; // sand piles will build at this speed or lower
+    public static final float DUST_LOOSEN_SPEED = 0.19f; // sand piles will erode at this speed or higher
 
     public static Vec2 wind_override = Vec2.ZERO;
     public static float dustiness_override = 0.0f;
@@ -65,7 +65,7 @@ public final class MarsEnvironmentalHelpers {
         final RandomSource random = level.random;
         final float windLength = wind.length();
         final int expectedLayers = (int) getExpectedSandLayerHeight(windLength);
-        if (windLength <= DUST_SETTLE_SPEED) {
+        if (windLength >= DUST_SETTLE_SPEED) {
             if (random.nextInt(TFGConfig.SERVER.sandAccumulateChance.get()) == 0) {
                 // Handle smoother snow placement: if there's an adjacent position with less snow, switch to that position instead
                 // Additionally, handle up to two block tall plants if they can be piled
@@ -76,7 +76,7 @@ public final class MarsEnvironmentalHelpers {
                     }
                 }
             }
-        } else if (windLength >= DUST_LOOSEN_SPEED) {
+        } else if (windLength <= DUST_LOOSEN_SPEED) {
             if (random.nextInt(TFGConfig.SERVER.sandDecumulateChance.get()) == 0) {
                 removeSandAt(level, surfacePos, expectedLayers);
                 if (random.nextFloat() < 0.2f) {
@@ -143,7 +143,17 @@ public final class MarsEnvironmentalHelpers {
         // moderately windy = 2 layers
         // extremely windy = 0 layers
         // let's try a cubic easing function where f(0) = 7
-        return (float) (3.0 / Math.pow(windStrength + 0.625, 2));
+        //return (float) (3.0 / Math.pow(windStrength + 0.625, 2));
+
+        if (windStrength <= DUST_LOOSEN_SPEED) {
+            return 0;
+        } else if (windStrength <= 0.25f) {
+            return 1;
+        } else if (windStrength <= 0.35f) {
+            return 2;
+        } else /*if (windStrength >= DUST_SETTLE_SPEED)*/ {
+            return 3;
+        }
     }
 
     private static BlockPos findOptimalSandLocation(LevelAccessor level, BlockPos pos, BlockState state, RandomSource random) {

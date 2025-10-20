@@ -76,17 +76,10 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
             return;
         }
         if (layers > 1 && expectedLayers != 0) {
-            // Remove layers, but keep the snow block intact
+            // Remove layers, but keep the sand block intact
             level.setBlock(pos, state.setValue(SandLayerBlock.LAYERS, expectedLayers == -1 ? layers - 1 : expectedLayers), Block.UPDATE_ALL);
-        }
-        // sand layer blocks are unable to turn into full sand blocks so we don't need or want this behavior
-        //        else if (state.getBlock() == Blocks.SNOW)
-        //        {
-        //            // Remove a single snow layer block
-        //            level.removeBlock(pos, false);
-        //        }
-        else {
-            // Otherwise, remove a snow pile, restoring the internal states
+        } else {
+            // Otherwise, remove a sand pile, restoring the internal states
             if (sandPile == null) {
                 sandPile = level.getBlockEntity(pos, TFCBlockEntities.PILE.get());
             }
@@ -99,7 +92,7 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
                     level.setBlock(above, pile.getAboveState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                 }
 
-                // Update neighbors shapes from the bottom block (this is important to get grass blocks to adjust to snowy/non-snowy states)
+                // Update neighbors shapes from the bottom block
                 pile.getInternalState().updateNeighbourShapes(level, pos, Block.UPDATE_CLIENTS);
                 level.getBlockState(above).updateNeighbourShapes(level, above, Block.UPDATE_CLIENTS);
 
