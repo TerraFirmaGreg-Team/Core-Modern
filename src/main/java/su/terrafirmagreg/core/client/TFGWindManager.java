@@ -80,7 +80,7 @@ public class TFGWindManager {
                 if (count == 0)
                     return;
 
-                final Vec2 offsetVec = wind.normalized().scale(-6);
+                final Vec2 offsetVec = wind.normalized().scale(-15);
 
                 final int particlesPerCheck = (int) Math.ceil((double) count / biomeChecks);
 
@@ -99,7 +99,7 @@ public class TFGWindManager {
                     for (int j = 0; j < particlesPerCheck; j++) {
                         final Vec2 randParticleVector = TFGClientHelpers.nextVec2InRadius(level.random, 12);
                         final double x = pos.getX() + offsetVec.x + randParticleVector.x;
-                        final double y = pos.getY() + Mth.nextDouble(level.random, -1, 6);
+                        final double y = pos.getY() + Mth.nextDouble(level.random, -1, 8);
                         final double z = pos.getZ() + offsetVec.y + randParticleVector.y;
 
                         if (level.canSeeSky(BlockPos.containing(x, y, z))) {
