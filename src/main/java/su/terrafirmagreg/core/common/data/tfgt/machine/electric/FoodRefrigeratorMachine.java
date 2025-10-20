@@ -524,8 +524,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
             IFood food = FoodCapability.get(result);
             if (food != null) {
-                long rounded = FoodCapability.getRoundedCreationDate(food.getCreationDate());
-                food.setCreationDate(rounded);
+                long orig = food.getCreationDate();
+                long rounded = FoodCapability.getRoundedCreationDate(orig);
+                food.setCreationDate(Math.min(orig, rounded));
             }
 
             if (!simulate) {

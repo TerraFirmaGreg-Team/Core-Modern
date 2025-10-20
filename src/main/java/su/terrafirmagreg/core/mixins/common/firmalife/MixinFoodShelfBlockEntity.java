@@ -96,8 +96,9 @@ public abstract class MixinFoodShelfBlockEntity extends InventoryBlockEntity<Ite
             FoodCapability.removeTrait(stack, getFoodTrait());
             IFood food = FoodCapability.get(stack);
             if (food != null) {
-                long rounded = FoodCapability.getRoundedCreationDate(food.getCreationDate());
-                food.setCreationDate(rounded);
+                long orig = food.getCreationDate();
+                long rounded = FoodCapability.getRoundedCreationDate(orig);
+                food.setCreationDate(Math.min(orig, rounded));
             }
 
             ItemHandlerHelper.giveItemToPlayer(player, stack);
