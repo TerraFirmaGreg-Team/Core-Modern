@@ -32,7 +32,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import lombok.Getter;
 
@@ -116,13 +115,20 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
     }
 
     public void updateSubscription() {
-        if (workingEnabled && consumeEnergy(true) && !inventory.isEmpty()) {
+        boolean canWork = workingEnabled && consumeEnergy(true);
+
+        if (canWork && !inventory.isEmpty()) {
             if (!currentlyWorking) {
                 inventory.changeTraitForAll(true);
                 currentlyWorking = true;
+
+                inventory.unifyFoodDates();
+                inventory.combineStacks();
+                inventory.compactInventory();
+                inventory.onContentsChanged();
+
                 markDirty();
             }
-
             tickSubscription = subscribeServerTick(tickSubscription, this::tick);
         } else {
             if (currentlyWorking) {
@@ -204,11 +210,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         var template = new WidgetGroup(0, 0, 18 * perRow + 8, 18 * perCol + 8);
         template.setBackground(GuiTextures.BACKGROUND_INVERSE);
         int index = 0;
-
-        IItemHandlerModifiable uiHandler = inventory.uiView();
         for (int y = 0; y < perCol; y++) {
             for (int x = 0; x < perRow; x++) {
-                template.addWidget(new SlotWidget(uiHandler, index++, 4 + x * 18, 4 + y * 18, true, true));
+                template.addWidget(new SlotWidget(inventory, index++, 4 + x * 18, 4 + y * 18, true, true));
             }
         }
         var editableUI = createEnergyBar();
@@ -227,7 +231,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             IGuiTexture overlayOn = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_on.png");
             IGuiTexture overlayOff = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_off.png");
 
-            var toggle = new ToggleButtonWidget(3, 2, 18, 18,
+            var toggle = new ToggleButtonWidget(4, 2, 18, 18,
                     this::isUnifyDatesEnabled,
                     this::setUnifyDatesEnabled) {
                 private void refreshTooltip() {
@@ -266,32 +270,8 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
         private boolean internalEdit = false;
 
-        private int uiEditDepth = 0;
-
-        private final UiView uiView = new UiView();
-
         public RefrigeratedStorage(MetaMachine machine, int slots) {
             super(machine, slots, IO.IN, IO.IN);
-        }
-
-        public IItemHandlerModifiable uiView() {
-            return uiView;
-        }
-
-        private void beginUiEdit() {
-            uiEditDepth++;
-        }
-
-        private void endUiEdit() {
-            if (--uiEditDepth == 0) {
-                if (!FoodRefrigeratorMachine.this.isRemote()) {
-                    unifyFoodDates();
-                    combineStacks();
-                    compactInventory();
-                    onContentsChanged();
-                    updateSubscription();
-                }
-            }
         }
 
         private void setNotifying(int slot, ItemStack stack) {
@@ -310,27 +290,12 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                     continue;
 
                 ItemStack copy = stack.copy();
-                boolean modified = false;
-
                 if (add) {
-                    if (!FoodCapability.hasTrait(copy, TFGFoodTraits.REFRIGERATING)) {
-                        FoodCapability.applyTrait(copy, TFGFoodTraits.REFRIGERATING);
-                        modified = true;
-                    }
+                    FoodCapability.applyTrait(copy, TFGFoodTraits.REFRIGERATING);
                 } else {
-                    if (FoodCapability.hasTrait(copy, TFGFoodTraits.REFRIGERATING)) {
-                        FoodCapability.removeTrait(copy, TFGFoodTraits.REFRIGERATING);
-                        modified = true;
-                    }
+                    FoodCapability.removeTrait(copy, TFGFoodTraits.REFRIGERATING);
                 }
-
-                if (modified) {
-                    setNotifying(i, copy);
-                }
-            }
-
-            if (!FoodRefrigeratorMachine.this.isRemote()) {
-                FoodRefrigeratorMachine.this.markDirty();
+                setNotifying(i, copy);
             }
         }
 
@@ -343,6 +308,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         private void unifyFoodDates() {
             if (FoodRefrigeratorMachine.this.isRemote())
                 return;
+
             if (!FoodRefrigeratorMachine.this.currentlyWorking)
                 return;
             if (!FoodRefrigeratorMachine.this.unifyDatesEnabled)
@@ -415,6 +381,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         private void combineStacks() {
             if (FoodRefrigeratorMachine.this.isRemote())
                 return;
+
             if (!FoodRefrigeratorMachine.this.currentlyWorking)
                 return;
 
@@ -517,20 +484,6 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             }
         }
 
-        private ItemStack withoutRefrigeratingTrait(ItemStack stack) {
-            if (stack.isEmpty())
-                return ItemStack.EMPTY;
-            ItemStack copy = stack.copy();
-            FoodCapability.removeTrait(copy, TFGFoodTraits.REFRIGERATING);
-            return copy;
-        }
-
-        @Override
-        @NotNull
-        public ItemStack getStackInSlot(int slot) {
-            return withoutRefrigeratingTrait(storage.getStackInSlot(slot));
-        }
-
         @Override
         @NotNull
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
@@ -542,12 +495,38 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                 return stack;
 
             ItemStack toInsert = stack.copy();
-            if (currentlyWorking) {
+            if (currentlyWorking)
                 FoodCapability.applyTrait(toInsert, TFGFoodTraits.REFRIGERATING);
-            }
 
             ItemStack result = storage.insertItem(slot, toInsert, simulate);
-            result = withoutRefrigeratingTrait(result);
+
+            if (!simulate) {
+                unifyFoodDates();
+                combineStacks();
+                compactInventory();
+                onContentsChanged();
+                updateSubscription();
+            }
+
+            if (currentlyWorking)
+                FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
+            return result;
+        }
+
+        @Override
+        @NotNull
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            if (amount == 0)
+                return ItemStack.EMPTY;
+
+            ItemStack result = storage.extractItem(slot, amount, simulate);
+            FoodCapability.removeTrait(result, TFGFoodTraits.REFRIGERATING);
+
+            IFood food = FoodCapability.get(result);
+            if (food != null) {
+                long rounded = FoodCapability.getRoundedCreationDate(food.getCreationDate());
+                food.setCreationDate(rounded);
+            }
 
             if (!simulate) {
                 unifyFoodDates();
@@ -560,51 +539,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         }
 
         @Override
-        @NotNull
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (amount == 0)
-                return ItemStack.EMPTY;
-
-            if (simulate) {
-                ItemStack preview = storage.extractItem(slot, amount, true);
-                return withoutRefrigeratingTrait(preview);
-            }
-
-            ItemStack before = storage.getStackInSlot(slot);
-            if (!before.isEmpty() && FoodRefrigeratorMachine.this.currentlyWorking) {
-                ItemStack traitless = withoutRefrigeratingTrait(before);
-                setNotifying(slot, traitless);
-            }
-
-            ItemStack result = storage.extractItem(slot, amount, false);
-            result = withoutRefrigeratingTrait(result);
-
-            if (FoodRefrigeratorMachine.this.currentlyWorking) {
-                ItemStack leftover = storage.getStackInSlot(slot);
-                if (!leftover.isEmpty()) {
-                    ItemStack cooled = leftover.copy();
-                    FoodCapability.applyTrait(cooled, TFGFoodTraits.REFRIGERATING);
-                    setNotifying(slot, cooled);
-                }
-            }
-
-            unifyFoodDates();
-            combineStacks();
-            compactInventory();
-            onContentsChanged();
-            updateSubscription();
-
-            return result;
-        }
-
-        @Override
         public void setStackInSlot(int slot, @NotNull ItemStack stack) {
             if (!internalEdit) {
                 if (stack.isEmpty()) {
-                    if (uiEditDepth > 0) {
-                        RefrigeratedStorage.super.setStackInSlot(slot, ItemStack.EMPTY);
-                        return;
-                    }
                     RefrigeratedStorage.super.setStackInSlot(slot, ItemStack.EMPTY);
                     unifyFoodDates();
                     combineStacks();
@@ -623,12 +560,8 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                     FoodCapability.applyTrait(toSet, TFGFoodTraits.REFRIGERATING);
                 }
 
-                if (uiEditDepth > 0) {
-                    RefrigeratedStorage.super.setStackInSlot(slot, toSet);
-                    return;
-                }
-
                 RefrigeratedStorage.super.setStackInSlot(slot, toSet);
+
                 unifyFoodDates();
                 combineStacks();
                 compactInventory();
@@ -637,95 +570,6 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             }
 
             RefrigeratedStorage.super.setStackInSlot(slot, stack);
-        }
-
-        private final class UiView implements IItemHandlerModifiable {
-            @Override
-            public int getSlots() {
-                return storage.getSlots();
-            }
-
-            @Override
-            @NotNull
-            public ItemStack getStackInSlot(int slot) {
-                ItemStack real = storage.getStackInSlot(slot);
-
-                if (FoodRefrigeratorMachine.this.isRemote()) {
-                    if (FoodRefrigeratorMachine.this.currentlyWorking && !real.isEmpty()) {
-                        ItemStack visual = real.copy();
-                        FoodCapability.removeTrait(visual, TFGFoodTraits.REFRIGERATING);
-                        FoodCapability.applyTrait(visual, TFGFoodTraits.REFRIGERATING);
-                        return visual;
-                    }
-                    return real;
-                }
-
-                return RefrigeratedStorage.this.withoutRefrigeratingTrait(real);
-            }
-
-            @Override
-            @NotNull
-            public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-                return RefrigeratedStorage.this.insertItem(slot, stack, simulate);
-            }
-
-            @Override
-            @NotNull
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                ItemStack inSlot = storage.getStackInSlot(slot);
-                if (inSlot.isEmpty() || amount == 0)
-                    return ItemStack.EMPTY;
-
-                if (simulate) {
-                    ItemStack simulated = inSlot.copy();
-                    simulated.setCount(Math.min(amount, inSlot.getCount()));
-                    FoodCapability.removeTrait(simulated, TFGFoodTraits.REFRIGERATING);
-                    return simulated;
-                }
-
-                ItemStack playerCopy = inSlot.copy();
-                playerCopy.setCount(Math.min(amount, playerCopy.getCount()));
-                FoodCapability.removeTrait(playerCopy, TFGFoodTraits.REFRIGERATING);
-
-                storage.extractItem(slot, playerCopy.getCount(), false);
-
-                if (FoodRefrigeratorMachine.this.currentlyWorking) {
-                    ItemStack remaining = storage.getStackInSlot(slot);
-                    if (!remaining.isEmpty()) {
-                        ItemStack cooled = remaining.copy();
-                        FoodCapability.applyTrait(cooled, TFGFoodTraits.REFRIGERATING);
-                        setNotifying(slot, cooled);
-                    }
-                }
-
-                unifyFoodDates();
-                combineStacks();
-                compactInventory();
-                onContentsChanged();
-                updateSubscription();
-
-                return playerCopy;
-            }
-
-            @Override
-            public int getSlotLimit(int slot) {
-                return storage.getStackInSlot(slot).getMaxStackSize();
-            }
-
-            @Override
-            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-                return RefrigeratedStorage.this.isItemValid(slot, stack);
-            }
-
-            @Override
-            public void setStackInSlot(int slot, @NotNull ItemStack stack) {
-                beginUiEdit();
-                try {
-                    RefrigeratedStorage.this.setStackInSlot(slot, stack);
-                } finally {
-                    endUiEdit();
-                }
-            }
         }
     }
 
