@@ -13,7 +13,6 @@ import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -40,7 +39,7 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
         final BlockPos posAbove = pos.above();
         final BlockState aboveState = level.getBlockState(posAbove);
         final BlockState savedAboveState = Helpers.isBlock(aboveState.getBlock(), TFCTags.Blocks.CAN_BE_SNOW_PILED) ? aboveState : null;
-        final BlockState sandPile = PlanetEnvironmentalHelpers.getSandBlockForBiome(level, pos, true).defaultBlockState();
+        final BlockState sandPile = PlanetEnvironmentalHelpers.getSandBlockForBiome(level, pos).defaultBlockState();
 
         level.setBlock(pos, sandPile, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
         level.getBlockEntity(pos, TFCBlockEntities.PILE.get()).ifPresent(entity -> entity.setHiddenStates(state, savedAboveState, byPlayer));
@@ -54,10 +53,6 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
         if (savedAboveState != null) {
             level.blockUpdated(posAbove, Blocks.AIR);
         }
-
-        // TODO: update grass with the sandy property
-        //        final BlockPos posBelow = pos.below();
-        //        level.setBlock(posBelow, Helpers.setProperty(level.getBlockState(posBelow), SnowyDirtBlock.SNOWY, true), 2);
     }
 
     public static void removePileOrSand(LevelAccessor level, BlockPos pos, BlockState state) {
@@ -92,8 +87,10 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
         //        }
         else {
             // Otherwise, remove a snow pile, restoring the internal states
-            if (sandPile == null)
+            if (sandPile == null) {
                 sandPile = level.getBlockEntity(pos, TFCBlockEntities.PILE.get());
+            }
+
             sandPile.ifPresent(pile -> {
                 final BlockPos above = pos.above();
 
@@ -116,12 +113,6 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
     }
 
     private final ExtendedProperties properties;
-    private Block originBlock;
-
-    public SandPileBlock(ExtendedProperties properties, Block originBlock) {
-        this(properties);
-        this.originBlock = originBlock;
-    }
 
     public SandPileBlock(ExtendedProperties properties) {
         super(properties.properties());
@@ -149,18 +140,7 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
 
     @Override
     public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
-        // Handle clicking on a snow pile with snow layers - increment the layer count
-        // We have to handle the getStateForPlacement in a mixin to snow layer block
-        // TODO: remove before modpack release
-        // want to replace with logic like, "if item in hand has the same root type as the clicked block, then increment"
-        if (context.getItemInHand().getItem() == TFGBlocks.MARS_SAND_LAYER_BLOCK.get().asItem() && state.getValue(LAYERS) < 8) {
-            if (context.replacingClickedOnBlock()) {
-                return context.getClickedFace() == Direction.UP;
-            } else {
-                return true;
-            }
-        }
-        return false; // Don't allow replacement of single layers with anything (unlike vanilla snow)
+        return true;
     }
 
     @Nullable
@@ -169,12 +149,4 @@ public class SandPileBlock extends SandLayerBlock implements IForgeBlockExtensio
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState();
     }
-
-    //    @Override
-    //    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
-    //    {
-    //        // TODO: remove before modpack release
-    //        return new ItemStack(Blocks.SNOW);
-    //    }
-
 }

@@ -41,6 +41,7 @@ public final class ServerConfig {
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
 
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
+    public final ForgeConfigSpec.IntValue sandDecumulateChance;
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.push("hang_glider");
@@ -101,8 +102,11 @@ public final class ServerConfig {
                 .comment("The chance that sand piles will accumulate during a sandstorm. Lower values = faster sand pile accumulation, but also more block updates (aka lag).")
                 .defineInRange("sandAccumulateChance", 20, 1, Integer.MAX_VALUE);
 
+        sandDecumulateChance = builder
+                .comment("The chance that sand piles will decumulate during a sandstoem. Lower values = faster sand dispersal, but also more block updates (aka lag).")
+                .defineInRange("sandDecumulateChance", 36, 1, Integer.MAX_VALUE);
+
         builder.pop();
     }
 
 }
-// The chance that snow will accumulate during a storm. Lower values = faster snow accumulation, but also more block updates (aka lag).").define("snowAccumulateChance", 20, 1, Integer.MAX_VALUE);

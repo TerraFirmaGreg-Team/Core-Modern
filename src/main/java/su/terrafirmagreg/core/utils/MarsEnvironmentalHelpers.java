@@ -6,10 +6,8 @@
 package su.terrafirmagreg.core.utils;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.Climate;
-import net.dries007.tfc.util.tracker.WorldTracker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -18,7 +16,6 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -33,26 +30,16 @@ import su.terrafirmagreg.core.config.TFGConfig;
 
 public final class MarsEnvironmentalHelpers {
 
-    public static final float DUST_SETTLE_SPEED = 0.5f; // sand piles will build at this speed or lower
-    public static final float DUST_LOOSEN_SPEED = 2.0f; // sand piles will erode at this speed or higher
-    public static final int DUST_SETTLE_RANDOM_TICK_CHANCE = 50;
-    public static final int DUST_LOOSEN_RANDOM_TICK_CHANCE = 50;
+    public static final float DUST_SETTLE_SPEED = 0.25f; // sand piles will build at this speed or lower
+    public static final float DUST_LOOSEN_SPEED = 0.55f; // sand piles will erode at this speed or higher
 
     public static Vec2 wind_override = Vec2.ZERO;
     public static float dustiness_override = 0.0f;
 
-    // fuck it we're doing sand rain overrides
-    public static boolean isAtmosphereDusty(Level level, BlockPos pos) {
-        return level.isRaining() && WorldTracker.get(level).isRaining(level, pos);
-        //        return true;
-    }
-
     public static boolean isSand(BlockState state) {
-        final Block blockStateBlock = state.getBlock();
-        return blockStateBlock instanceof AbstractLayerBlock || blockStateBlock instanceof SandPileBlock;
+        return state.getBlock() instanceof SandPileBlock;
     }
 
-    // TODO: get working
     public static void tickChunk(ServerLevel level, LevelChunk chunk, ProfilerFiller profiler) {
         if (!level.dimension().equals(Planet.MARS))
             return;
@@ -61,18 +48,24 @@ public final class MarsEnvironmentalHelpers {
         final BlockPos lcgPos = level.getBlockRandomPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), 15);
         final BlockPos surfacePos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, lcgPos);
         final float temperature = Climate.getTemperature(level, surfacePos);
+
+        // Skip sand stuff on the poles
+        if (temperature < -108f)
+            return;
+
         final Vec2 wind = Climate.getWindVector(level, surfacePos);
 
         profiler.push("tfgSand");
-        doSand(level, surfacePos, temperature, wind);
+        doSand(level, surfacePos, wind);
         profiler.pop();
     }
 
-    private static void doSand(Level level, BlockPos surfacePos, float temperature, Vec2 wind) {
+    private static void doSand(Level level, BlockPos surfacePos, Vec2 wind) {
         // Snow only accumulates during rain
         final RandomSource random = level.random;
-        final int expectedLayers = (int) getExpectedSandLayerHeight(wind.length());
-        if (wind.length() <= DUST_SETTLE_SPEED /* && isAtmosphereDusty(level, surfacePos)*/) {
+        final float windLength = wind.length();
+        final int expectedLayers = (int) getExpectedSandLayerHeight(windLength);
+        if (windLength <= DUST_SETTLE_SPEED) {
             if (random.nextInt(TFGConfig.SERVER.sandAccumulateChance.get()) == 0) {
                 // Handle smoother snow placement: if there's an adjacent position with less snow, switch to that position instead
                 // Additionally, handle up to two block tall plants if they can be piled
@@ -83,40 +76,36 @@ public final class MarsEnvironmentalHelpers {
                     }
                 }
             }
-        } else {
-            if (random.nextInt(TFCConfig.SERVER.snowMeltChance.get()) == 0) {
-                removeSandAt(level, surfacePos, temperature, expectedLayers);
+        } else if (windLength >= DUST_LOOSEN_SPEED) {
+            if (random.nextInt(TFGConfig.SERVER.sandDecumulateChance.get()) == 0) {
+                removeSandAt(level, surfacePos, expectedLayers);
                 if (random.nextFloat() < 0.2f) {
-                    removeSandAt(level, surfacePos.relative(Direction.Plane.HORIZONTAL.getRandomDirection(random)), temperature, expectedLayers);
+                    removeSandAt(level, surfacePos.relative(Direction.Plane.HORIZONTAL.getRandomDirection(random)), expectedLayers);
                 }
             }
         }
     }
 
-    // TODO: after adding sand piles
-    private static void removeSandAt(LevelAccessor level, BlockPos surfacePos, float temperature, int expectedLayers) {
-        // Snow melting - both snow and snow piles
+    private static void removeSandAt(LevelAccessor level, BlockPos surfacePos, int expectedLayers) {
         final BlockState state = level.getBlockState(surfacePos);
         if (isSand(state)) {
-            // When melting snow, we melt layers at +2 from expected, while the temperature is still below zero
-            // This slowly reduces massive excess amounts of snow, if they're present, but doesn't actually start melting snow a lot when we're still below freezing.
-            SandPileBlock.removePileOrSand(level, surfacePos, state, temperature > 0f ? expectedLayers : expectedLayers + 2);
+            SandPileBlock.removePileOrSand(level, surfacePos, state, expectedLayers);
         }
     }
 
     private static boolean placeSandOrSandPile(Level level, BlockPos initialPos, RandomSource random, int expectedLayers) {
         if (expectedLayers < 1) {
-            // Don't place snow if we're < 1 expected layers
+            // Don't place sand if we're < 1 expected layers
             return false;
         }
-        //
-        // First, try and find an optimal position, to smoothen out snow accumulation
-        // This will only move to the side, if we're currently at a snow location
+
+        // First, try and find an optimal position, to smoothen out sand accumulation
+        // This will only move to the side, if we're currently at a sand location
         final BlockPos pos = findOptimalSandLocation(level, initialPos, level.getBlockState(initialPos), random);
         final BlockState state = level.getBlockState(pos);
 
         // If we didn't move to the side, then we still need to pass a can see sky check
-        // If we did, we might've moved under an overhang from a previously valid snow location
+        // If we did, we might've moved under an overhang from a previously valid sand location
         if (initialPos.equals(pos) && !level.canSeeSky(pos)) {
             return false;
         }
@@ -126,10 +115,10 @@ public final class MarsEnvironmentalHelpers {
     private static boolean placeSandOrSandPileAt(LevelAccessor level, BlockPos pos, BlockState state, RandomSource random, int expectedLayers) {
         // Then, handle possibilities
         if (isSand(state) && state.getValue(AbstractLayerBlock.LAYERS) < 7) {
-            // Snow and snow layers can accumulate snow
+            // Sand and sand layers can accumulate sand
             // The chance that this works is reduced the higher the pile is
             final int currentLayers = state.getValue(AbstractLayerBlock.LAYERS);
-            final BlockState newState = state.setValue(AbstractLayerBlock.LAYERS, Integer.valueOf(currentLayers + 1));
+            final BlockState newState = state.setValue(AbstractLayerBlock.LAYERS, currentLayers + 1);
             if (newState.canSurvive(level, pos) && random.nextInt(1 + 3 * currentLayers) == 0 && expectedLayers > currentLayers) {
                 level.setBlock(pos, newState, 3);
             }
@@ -138,15 +127,11 @@ public final class MarsEnvironmentalHelpers {
             SandPileBlock.placeSandPile(level, pos, state, false);
             return true;
         } else if (state.isAir() && TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState().canSurvive(level, pos)) {
-            // Vanilla snow placement (single layers)
-            level.setBlock(pos, PlanetEnvironmentalHelpers.getSandBlockForBiome(level, pos, false).defaultBlockState(), 3);
+            // Vanilla sand placement (single layers)
+            level.setBlock(pos, PlanetEnvironmentalHelpers.getSandBlockForBiome(level, pos).defaultBlockState(), 3);
             return true;
         }
-        //        else if (level instanceof Level fullLevel)
-        //        {
-        //            // Fills cauldrons with snow
-        //            state.getBlock().handlePrecipitation(state, fullLevel, pos, Biome.Precipitation.SNOW);
-        //        }
+
         return false;
     }
 
@@ -185,7 +170,7 @@ public final class MarsEnvironmentalHelpers {
         return pos;
     }
 
-    //region Debug Commands
+    // Debug Commands
     public static void setDustIntensity(float intensity) {
         dustiness_override = intensity;
     }
@@ -199,6 +184,4 @@ public final class MarsEnvironmentalHelpers {
     public static void setWind(Vec2 vector) {
         wind_override = vector;
     }
-
-    //endregion
 }
