@@ -36,7 +36,7 @@ public class TFGWindManager {
         private static int particleMultiplier = 32;
 
         @Setter
-        private static float windThreshold = 0.2f;
+        private static float windThreshold = MarsEnvironmentalHelpers.DUST_LOOSEN_SPEED;
 
         @Setter
         private static int biomeChecks = 4;

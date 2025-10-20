@@ -28,10 +28,12 @@ import su.terrafirmagreg.core.common.data.blocks.AbstractLayerBlock;
 import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+// Most of this code is from TFC's EnvironmentHelpers class for its snow stuff
+
 public final class MarsEnvironmentalHelpers {
 
     public static final float DUST_SETTLE_SPEED = 0.4f; // sand piles will build at this speed or lower
-    public static final float DUST_LOOSEN_SPEED = 0.19f; // sand piles will erode at this speed or higher
+    public static final float DUST_LOOSEN_SPEED = 0.2f; // sand piles will erode at this speed or higher
 
     public static Vec2 wind_override = Vec2.ZERO;
     public static float dustiness_override = 0.0f;

@@ -19,7 +19,7 @@ import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
 
 public class TFGInteractionManager {
     public static void init(FMLCommonSetupEvent event) {
-        InteractionManager.register(
+        /*InteractionManager.register(
                 Ingredient.of(TFGBlocks.MARS_SAND_LAYER_BLOCK.get().asItem()),
                 false,
                 (stack, context) -> {
@@ -61,7 +61,8 @@ public class TFGInteractionManager {
                         }
                         return InteractionResult.FAIL;
                     }
-                });
+                });*/
+
         //		InteractionManager.register(Ingredient.of(TFCItems.POWDERS.get(Powder.WOOD_ASH).get()), false, (stack, context) -> {
         //			Player player = context.getPlayer();
         //			if (player != null && !player.getAbilities().mayBuild)
