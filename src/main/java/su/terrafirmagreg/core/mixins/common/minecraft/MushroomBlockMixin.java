@@ -1,9 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.minecraft;
 
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,7 +7,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.MushroomBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -30,7 +30,7 @@ public class MushroomBlockMixin {
 
     @Inject(method = "canSurvive", at = @At("HEAD"), cancellable = true)
     public void tfg$canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
-       cir.setReturnValue(Block.isFaceFull(pState.getCollisionShape(pLevel, pPos.below()), Direction.UP));
+        cir.setReturnValue(Block.isFaceFull(pState.getCollisionShape(pLevel, pPos.below()), Direction.UP));
     }
 
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
