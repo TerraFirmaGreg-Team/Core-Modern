@@ -37,13 +37,27 @@ import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
 
+/**
+ * Creates the GT Food Refrigerator Machine.
+ * This machine has custom logic to give the 'REFRIGERATING' trait to food items stored within it,
+ * and sort and unify food stacks by their expiration date.
+ */
 public class FoodRefrigeratorMachine extends TieredEnergyMachine
         implements IControllable, IFancyUIMachine, IMachineLife {
 
+    /**
+     * Inventory size int.
+     *
+     * @param tier GT tier.
+     * @return the tier int.
+     */
     public static int INVENTORY_SIZE(int tier) {
         return 9 * tier;
     }
 
+    /**
+     * The constant MANAGED_FIELD_HOLDER.
+     */
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             FoodRefrigeratorMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
 
@@ -51,22 +65,34 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
-
     @Persisted
     private boolean currentlyWorking;
-
     @Persisted
     private final RefrigeratedStorage inventory;
-
     private final int inventorySize;
-
     protected ISubscription energySubscription;
     protected TickableSubscription tickSubscription;
+
+    /**
+     * Is actively refrigerating boolean.
+     *
+     * @return boolean
+     */
+    public boolean isActivelyRefrigerating() {
+        return currentlyWorking;
+    }
 
     @Getter
     @Persisted
     private boolean unifyDatesEnabled = true;
 
+    /**
+     * Instantiates a New Food Refrigerator Machine.
+     *
+     * @param holder IMachineBlockEntity holder.
+     * @param tier   int GT tier.
+     * @param args   Object args.
+     */
     public FoodRefrigeratorMachine(IMachineBlockEntity holder, int tier, Object... args) {
         super(holder, tier, args);
 
@@ -114,6 +140,23 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         clearInventory(inventory);
     }
 
+    /**
+     * Update subscription.
+     * <p>
+     * Re-evaluates whether the machine should be actively refrigerating based on the
+     * current workingEnabled flag and available energy.
+     * <p>
+     * If it can work and the inventory is not empty:
+     * - When starting: apply the REFRIGERATING trait to all stored food, unify dates,
+     *     combine stacks, compact the inventory, mark dirty and subscribe to server ticks.
+     * - Ensure a tick subscription exists to consume energy each tick.
+     * <p>
+     * If it cannot work:
+     * - If it was previously working: remove the REFRIGERATING trait from all items and mark dirty.
+     * - Unsubscribe any existing tick subscription.
+     * <p>
+     * This runs on the server side and is triggered by energy or setting changes.
+     */
     public void updateSubscription() {
         boolean canWork = workingEnabled && consumeEnergy(true);
 
@@ -143,6 +186,11 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         }
     }
 
+    /**
+     * Tick.
+     * <p>
+     * Called each server tick while the machine has an active tick subscription.
+     */
     public void tick() {
         if (workingEnabled && !inventory.isEmpty())
             consumeEnergy(false);
@@ -184,6 +232,18 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         updateSubscription();
     }
 
+    /**
+     * Set Unify Dates Enabled.
+     * <p>
+     * Enables or disables automatic unification of food creation dates.
+     * When enabled and the refrigerator is actively refrigerating on the server,
+     * the machine will:
+     *  - set partially-filled compatible stacks to the earliest creation date found,
+     *  - compact the inventory to remove gaps,
+     *  - and notify that contents changed.
+     *
+     * @param enabled true to enable automatic date unification, false to disable it.
+     */
     public void setUnifyDatesEnabled(boolean enabled) {
         if (this.unifyDatesEnabled == enabled)
             return;
@@ -266,10 +326,26 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
     // #endregion
 
     // #region Refrigerated trait
+    /**
+     * Refrigerated Storage.
+     * <p>
+     * Storage handler for the Food Refrigerator.
+     * Manages the machine's inventory and enforces refrigeration behaviour:
+     * - accepts only non-rotten food items,
+     * - applies/removes the 'REFRIGERATING' trait while the machine is active,
+     * - unifies food creation dates, combines partial stacks and compacts slots when contents change,
+     * - intercepts insert/extract/set operations to maintain traits.
+     */
     public class RefrigeratedStorage extends NotifiableItemStackHandler {
 
         private boolean internalEdit = false;
 
+        /**
+         * Instantiates a New Refrigerated Storage.
+         *
+         * @param machine MetaMachine.
+         * @param slots   int slots.
+         */
         public RefrigeratedStorage(MetaMachine machine, int slots) {
             super(machine, slots, IO.IN, IO.IN);
         }
@@ -283,6 +359,11 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             }
         }
 
+        /**
+         * Change trait for All.
+         *
+         * @param add boolean add.
+         */
         public void changeTraitForAll(boolean add) {
             for (int i = 0; i < storage.getSlots(); i++) {
                 ItemStack stack = storage.getStackInSlot(i);
