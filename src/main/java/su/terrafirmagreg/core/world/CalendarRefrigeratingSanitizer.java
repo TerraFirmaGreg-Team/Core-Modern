@@ -44,7 +44,7 @@ import su.terrafirmagreg.core.mixins.common.minecraft.AccessorServerChunkCache;
 public final class CalendarRefrigeratingSanitizer {
 
     private static long LAST_SERVER_TICK = Long.MIN_VALUE;
-    private static final int SANITIZE_INTERVAL_TICKS = 40;
+    private static final int SANITIZE_INTERVAL_TICKS = 100;
     private static final int LARGE_JUMP_THRESHOLD = 20;
     private static long ACCUMULATED_CAL_TICKS = 0L;
 

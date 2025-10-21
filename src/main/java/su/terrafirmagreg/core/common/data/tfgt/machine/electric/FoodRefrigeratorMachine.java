@@ -65,6 +65,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
+
     @Persisted
     private boolean currentlyWorking;
     @Persisted
@@ -291,7 +292,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             IGuiTexture overlayOn = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_on.png");
             IGuiTexture overlayOff = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_off.png");
 
-            var toggle = new ToggleButtonWidget(4, 2, 18, 18,
+            var toggle = new ToggleButtonWidget(3, 2, 18, 18,
                     this::isUnifyDatesEnabled,
                     this::setUnifyDatesEnabled) {
                 private void refreshTooltip() {
