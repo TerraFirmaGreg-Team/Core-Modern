@@ -36,7 +36,8 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.BATH);
 
     public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
-            "tfg:textures/gui/progress_bar/progress_bar_dna.png");
+            "tfg:textures/gui/progress_bar/progress_bar_dna.png"); // I might move this later if we end up making/using
+                                                                                                                                             // more custom progress bars.
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)

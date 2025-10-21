@@ -7,19 +7,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 import earth.terrarium.adastra.common.entities.vehicles.Lander;
 
 @Mixin(value = Lander.class, remap = false)
-public class LanderMixin {
+public abstract class LanderMixin extends Entity {
+
+    public LanderMixin(EntityType<?> type, Level level) {
+        super(type, level);
+    }
 
     /**
-     * Prevents the rocket from exploding, since the auto lander mod was causing issues
+     * Prevents the rocket from exploding when landing due to server lag
      */
 
     @Inject(method = "explode", at = @At("HEAD"), remap = false, cancellable = true)
     public void tfg$explode(CallbackInfo ci) {
-        ci.cancel();
+        if (this.getY() < 400) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "causeFallDamage", at = @At("HEAD"), remap = true, cancellable = true)
