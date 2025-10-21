@@ -1,21 +1,6 @@
 package su.terrafirmagreg.core.common;
 
-import net.dries007.tfc.util.InteractionManager;
-import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
 
 public class TFGInteractionManager {
     public static void init(FMLCommonSetupEvent event) {
@@ -45,14 +30,14 @@ public class TFGInteractionManager {
                             if (player == null || !player.getAbilities().instabuild) {
                                 stack.shrink(1);
                             }
-
+        
                             InteractionResult result = InteractionResult.sidedSuccess(level.isClientSide);
                             if (player != null && result.consumesAction()) {
                                 player.awardStat(Stats.ITEM_USED.get(TFGBlocks.MARS_SAND_LAYER_BLOCK.get().asItem()));
                             }
                             return result;
                         }
-
+        
                         // Default behavior
                         // Handles layering behavior of both snow piles and snow layers via the
                         // blocks replacement / getStateForPlacement
