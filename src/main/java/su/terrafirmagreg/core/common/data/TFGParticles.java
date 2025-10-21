@@ -29,6 +29,11 @@ public class TFGParticles {
     public static final RegistryObject<SimpleParticleType> COOLING_STEAM = PARTICLES.register("cooling_steam",
             () -> new SimpleParticleType(true));
 
+    // Martian wind dust
+    public static final RegistryObject<SimpleParticleType> DARK_MARS_WIND = PARTICLES.register("dark_mars_wind", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> MEDIUM_MARS_WIND = PARTICLES.register("medium_mars_wind", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> LIGHT_MARS_WIND = PARTICLES.register("light_mars_wind", () -> new SimpleParticleType(false));
+
     public static void register(IEventBus bus) {
         PARTICLES.register(bus);
     }

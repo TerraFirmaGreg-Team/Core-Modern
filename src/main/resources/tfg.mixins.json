@@ -2,6 +2,7 @@
     "mixins": [
         "client.create.ChainConveyorRendererMixin",
         "client.minecraft.IBlockModelGeneratorsInvoker",
+        "client.tfc.ClientForgeEventHandlerMixin",
         "common.ad_astra.EnvironmentEffectsMixin",
         "common.ad_astra.GasTankItemMixin",
         "common.ad_astra.LanderMixin",
@@ -79,6 +80,7 @@
         "common.minecraft.MonsterMixin",
         "common.minecraft.MushroomBlockMixin",
         "common.minecraft.ServerAdvancementManagerMixin",
+        "common.minecraft.ServerLevelMixin",
         "common.minecraft.ServerLifecycleHooksMixin",
         "common.minecraft.SnifferEggBlockMixin",
         "common.sandworms.WormSignHandlerMixin",
