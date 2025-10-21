@@ -74,6 +74,8 @@
         "common.hang_glider.GliderItemMixin",
         "common.immersive_aircraft.BambooHopperEntityMixin",
         "common.ldlib.ModularUIContainerMixin",
+        "common.minecraft.AccessorChunkMap",
+        "common.minecraft.AccessorServerChunkCache",
         "common.minecraft.HeightmapMixin",
         "common.minecraft.IBlockLootSubProviderAccessor",
         "common.minecraft.MinecartFurnaceMixin",
