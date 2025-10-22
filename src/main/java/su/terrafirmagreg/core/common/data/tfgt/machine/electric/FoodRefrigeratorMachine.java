@@ -138,7 +138,14 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
     @Override
     public void onMachineRemoved() {
-        clearInventory(inventory);
+        if (!isRemote() && getLevel() instanceof ServerLevel serverLevel) {
+            var pos = getPos();
+            for (ItemStack drop : inventory.drainAllForDrop()) {
+                if (!drop.isEmpty()) {
+                    net.minecraft.world.Containers.dropItemStack(serverLevel, pos.getX(), pos.getY(), pos.getZ(), drop);
+                }
+            }
+        }
     }
 
     /**
@@ -653,6 +660,39 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             }
 
             RefrigeratedStorage.super.setStackInSlot(slot, stack);
+        }
+
+        public java.util.List<ItemStack> drainAllForDrop() {
+            java.util.List<ItemStack> drops = new java.util.ArrayList<>();
+            final int slots = storage.getSlots();
+            for (int i = 0; i < slots; i++) {
+                ItemStack st = storage.getStackInSlot(i);
+                if (st.isEmpty())
+                    continue;
+
+                ItemStack copy = st.copy();
+                FoodCapability.removeTrait(copy, TFGFoodTraits.REFRIGERATING);
+
+                // Round expiration date.
+                IFood food = FoodCapability.get(copy);
+                if (food != null) {
+                    long orig = food.getCreationDate();
+                    long rounded = FoodCapability.getRoundedCreationDate(orig);
+                    food.setCreationDate(Math.min(orig, rounded));
+                }
+                drops.add(copy);
+            }
+
+            // Clear slots without triggering unification.
+            internalEdit = true;
+            try {
+                for (int i = 0; i < slots; i++) {
+                    RefrigeratedStorage.super.setStackInSlot(i, ItemStack.EMPTY);
+                }
+            } finally {
+                internalEdit = false;
+            }
+            return drops;
         }
     }
 
