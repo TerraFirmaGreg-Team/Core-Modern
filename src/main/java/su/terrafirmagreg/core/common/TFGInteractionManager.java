@@ -4,6 +4,50 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class TFGInteractionManager {
     public static void init(FMLCommonSetupEvent event) {
+        /*InteractionManager.register(
+                Ingredient.of(TFGBlocks.MARS_SAND_LAYER_BLOCK.get().asItem()),
+                false,
+                (stack, context) -> {
+                    Player player = context.getPlayer();
+                    if (player != null && !player.getAbilities().mayBuild) {
+                        return InteractionResult.PASS;
+                    } else {
+                        final BlockPlaceContext blockContext = new BlockPlaceContext(context);
+                        final Level level = blockContext.getLevel();
+                        final BlockPos pos = blockContext.getClickedPos();
+                        final BlockState stateAt = level.getBlockState(blockContext.getClickedPos());
+                        if (SandPileBlock.canPlaceSandPile(level, pos, stateAt)) {
+                            SandPileBlock.placeSandPile(level, pos, stateAt, true);
+                            final BlockState placedState = level.getBlockState(pos);
+                            final SoundType placementSound = placedState.getSoundType(level, pos, player);
+                            level.playSound(
+                                    player,
+                                    pos,
+                                    placedState.getSoundType(level, pos, player).getPlaceSound(),
+                                    SoundSource.BLOCKS,
+                                    (placementSound.getVolume() + 1.0F) / 2.0F,
+                                    placementSound.getPitch() * 0.8F);
+                            if (player == null || !player.getAbilities().instabuild) {
+                                stack.shrink(1);
+                            }
+        
+                            InteractionResult result = InteractionResult.sidedSuccess(level.isClientSide);
+                            if (player != null && result.consumesAction()) {
+                                player.awardStat(Stats.ITEM_USED.get(TFGBlocks.MARS_SAND_LAYER_BLOCK.get().asItem()));
+                            }
+                            return result;
+                        }
+        
+                        // Default behavior
+                        // Handles layering behavior of both snow piles and snow layers via the
+                        // blocks replacement / getStateForPlacement
+                        if (TFGBlocks.MARS_SAND_LAYER_BLOCK.get().asItem() instanceof BlockItem blockItem) {
+                            return blockItem.place(blockContext);
+                        }
+                        return InteractionResult.FAIL;
+                    }
+                });*/
+
         //		InteractionManager.register(Ingredient.of(TFCItems.POWDERS.get(Powder.WOOD_ASH).get()), false, (stack, context) -> {
         //			Player player = context.getPlayer();
         //			if (player != null && !player.getAbilities().mayBuild)
