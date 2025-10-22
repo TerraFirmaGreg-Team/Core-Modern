@@ -39,14 +39,14 @@ import su.terrafirmagreg.core.common.data.TFGFoodTraits;
 
 /**
  * Creates the GT Food Refrigerator Machine.
- * This machine has custom logic to give the 'REFRIGERATING' trait to food items stored within it,
+ * This machine has custom logic to give the \'REFRIGERATING\' trait to food items stored within it,
  * and sort and unify food stacks by their expiration date.
  */
 public class FoodRefrigeratorMachine extends TieredEnergyMachine
         implements IControllable, IFancyUIMachine, IMachineLife {
 
     public static int INVENTORY_SIZE(int tier) {
-        return 9 * tier;
+        return 9 * (tier + (tier + 1) / 2);
     }
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
@@ -131,6 +131,8 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
      * Update subscription.
      */
     public void updateSubscription() {
+        if (isRemote())
+            return;
         boolean canWork = workingEnabled && consumeEnergy(true);
 
         if (canWork && !inventory.isEmpty()) {
@@ -165,7 +167,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
     private long getEnergyAmount() {
         // 1A of LV per inventory row
-        return (long) GTValues.VA[GTValues.LV] * tier;
+        return (long) GTValues.VA[GTValues.LV] * (inventorySize / 9);
     }
 
     private boolean consumeEnergy(boolean simulate) {
@@ -193,8 +195,13 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
     @Override
     public void setWorkingEnabled(boolean isWorkingAllowed) {
-        workingEnabled = isWorkingAllowed;
-        updateSubscription();
+        if (this.workingEnabled == isWorkingAllowed)
+            return;
+        this.workingEnabled = isWorkingAllowed;
+        markDirty();
+        if (!isRemote()) {
+            updateSubscription();
+        }
     }
 
     /**
@@ -218,26 +225,46 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
     @Override
     public Widget createUIWidget() {
+        /*
+          Energy bar aligned with the size of the inventory automatically.
+          Essentially multiplies the rows of the inventory by the pixel size of slots and adjusts to fit
+          Anchored to the bottom of the sort button.
+         */
         int perRow = 9;
-        int perCol = inventorySize / 9;
+        int slots = inventory.getSlots();
+        int perCol = Math.max(1, (slots + perRow - 1) / perRow);
 
         var template = new WidgetGroup(0, 0, 18 * perRow + 8, 18 * perCol + 8);
         template.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        int index = 0;
-        for (int y = 0; y < perCol; y++) {
-            for (int x = 0; x < perRow; x++) {
-                template.addWidget(new SlotWidget(inventory, index++, 4 + x * 18, 4 + y * 18, true, true));
-            }
+
+        for (int i = 0; i < slots; i++) {
+            int x = i % perRow;
+            int y = i / perRow;
+            template.addWidget(new SlotWidget(inventory, i, 4 + x * 18, 4 + y * 18, true, true));
         }
+
         var editableUI = createEnergyBar();
         var energyBar = editableUI.createDefault();
-        var group = new WidgetGroup(0, 0, Math.max(energyBar.getSize().width + template.getSize().width + 4 + 8, 172),
-                Math.max(template.getSize().height + 8, energyBar.getSize().height + 8));
+
+        int energyBarX = 3, toggleY = 2, toggleH = 18;
+        int energyBarY = toggleY + toggleH + 4;
+
+        int gridHeight = template.getSize().height;
+        int energyBarHeight = Math.max(0, gridHeight - 20);
+        energyBar.setSize(energyBar.getSize().width, energyBarHeight);
+
+        int groupWidth = Math.max(energyBar.getSize().width + template.getSize().width + 4 + 8, 172);
+        int groupHeight = Math.max(template.getSize().height + 8, energyBarY + energyBar.getSize().height + 8);
+        var group = new WidgetGroup(0, 0, groupWidth, groupHeight);
+
+        energyBar.setSelfPosition(new Position(energyBarX, energyBarY));
+
         var size = group.getSize();
-        energyBar.setSelfPosition(new Position(3, (size.height - energyBar.getSize().height) / 2));
-        template.setSelfPosition(
-                new Position((size.width - energyBar.getSize().width - 4 - template.getSize().width) / 2 + 2
-                        + energyBar.getSize().width + 2, (size.height - template.getSize().height) / 2));
+        int templateX = (size.width - energyBar.getSize().width - 4 - template.getSize().width) / 2
+                + 2 + energyBar.getSize().width + 2;
+        int templateY = (size.height - template.getSize().height) / 2;
+        template.setSelfPosition(new Position(templateX, templateY));
+
         group.addWidget(energyBar);
         group.addWidget(template);
 
@@ -256,9 +283,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                 {
                     IGuiTexture backDisabled = GuiTextures.TOGGLE_BUTTON_BACK.getSubTexture(0, 0, 1, 0.5);
                     IGuiTexture backEnabled = GuiTextures.TOGGLE_BUTTON_BACK.getSubTexture(0, 0.5, 1, 0.5);
-
-                    setTexture(
-                            new GuiTextureGroup(backDisabled, overlayOff),
+                    setTexture(new GuiTextureGroup(backDisabled, overlayOff),
                             new GuiTextureGroup(backEnabled, overlayOn));
                     refreshTooltip();
                 }
