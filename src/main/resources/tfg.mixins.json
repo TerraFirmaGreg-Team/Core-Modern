@@ -134,7 +134,8 @@
         "client.minecraft.CreateWorldScreenMixin",
         "client.tfc.DoubleIngotPileBlockModelMixin",
         "client.tfc.IngotPileBlockModelMixin",
-        "client.tfc.SheetPileBlockModelMixin"
+        "client.tfc.SheetPileBlockModelMixin",
+        "common.ad_astra.PlanetsScreenMixin"
     ],
     "required": true,
     "refmap": "tfg.refmap.json"
