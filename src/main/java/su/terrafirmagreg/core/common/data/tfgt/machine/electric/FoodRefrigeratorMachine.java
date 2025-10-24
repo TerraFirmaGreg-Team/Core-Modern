@@ -461,7 +461,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             IFood food = FoodCapability.get(stack);
-            return food != null && !food.isRotten();
+            return food != null;
         }
 
         private void unifyFoodDates() {
@@ -650,7 +650,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                 return ItemStack.EMPTY;
 
             IFood incoming = FoodCapability.get(stack);
-            if (incoming == null || incoming.isRotten())
+            if (incoming == null)
                 return stack;
 
             ItemStack toInsert = stack.copy();
@@ -706,7 +706,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                 }
 
                 IFood food = FoodCapability.get(stack);
-                if (food == null || food.isRotten())
+                if (food == null)
                     return;
 
                 ItemStack toSet = stack;
