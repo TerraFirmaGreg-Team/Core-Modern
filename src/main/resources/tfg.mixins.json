@@ -121,6 +121,7 @@
         "common.wab.EaterMixin",
         "common.wab.QuickSandMixin",
         "common.wab.SoarerMixin",
+        "common.wab.SoarerScreenMixin",
         "common.wab.ToxlacanthMixin"
     ],
     "minVersion": "0.8",
