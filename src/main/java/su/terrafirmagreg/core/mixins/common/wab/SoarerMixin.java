@@ -137,6 +137,6 @@ public abstract class SoarerMixin extends TamableAnimal {
     // Buffs how far they can glide for
     @ModifyArg(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/wanmine/wab/entity/Soarer;setDeltaMovement(DDD)V", ordinal = 2), index = 1)
     public double tfg$tick(double par1) {
-        return par1 / 2.0;
+        return par1 / 1.5;
     }
 }
