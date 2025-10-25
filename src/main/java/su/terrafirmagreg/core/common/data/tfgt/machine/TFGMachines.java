@@ -218,22 +218,30 @@ public class TFGMachines {
             .register();
 
     // LV super tank is 4K, same as a bronze multiblock tank, so this being the same as the wood one feels appropriate
-    public static final MachineDefinition ULV_SUPER_TANK = GTRegistration.REGISTRATE.machine("ulv_super_tank",
-            MachineDefinition::new, (holder) -> new QuantumTankMachine(holder, GTValues.ULV, 1000 * FluidType.BUCKET_VOLUME),
-            MetaMachineBlock::new, QuantumTankMachineItem::new, MetaMachineBlockEntity::new)
-            .langValue("ULV Super Tank")
-            .blockProp(BlockBehaviour.Properties::dynamicShape)
-            .rotationState(RotationState.ALL)
-            .allowExtendedFacing(true)
-            .model(createTieredHullMachineModel(GTCEu.id("block/machine/template/quantum/quantum_tank"))
-                    .andThen(b -> b.addDynamicRenderer(DynamicRenderHelper::createQuantumTankRender)))
-            .hasBER(true)
-            .tooltipBuilder(GTMachineUtils.TANK_TOOLTIPS)
-            .tooltips(Component.translatable("gtceu.machine.quantum_tank.tooltip"),
-                    Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
-                            FormattingUtil.formatNumbers(1000 * FluidType.BUCKET_VOLUME)))
-            .tier(GTValues.ULV)
-            .register();
+    public static final MachineDefinition ULV_SUPER_TANK = createULVTank();
+
+    private static MachineDefinition createULVTank() {
+        long maxAmount = 1000 * FluidType.BUCKET_VOLUME;
+        var definition = GTRegistration.REGISTRATE.machine("ulv_super_tank",
+                MachineDefinition::new, (holder) -> new QuantumTankMachine(holder, GTValues.ULV, maxAmount),
+                MetaMachineBlock::new, QuantumTankMachineItem::new, MetaMachineBlockEntity::new)
+                .langValue("ULV Super Tank")
+                .blockProp(BlockBehaviour.Properties::dynamicShape)
+                .rotationState(RotationState.ALL)
+                .allowExtendedFacing(true)
+                .model(createTieredHullMachineModel(GTCEu.id("block/machine/template/quantum/quantum_tank"))
+                        .andThen(b -> b.addDynamicRenderer(DynamicRenderHelper::createQuantumTankRender)))
+                .hasBER(true)
+                .tooltipBuilder(GTMachineUtils.TANK_TOOLTIPS)
+                .tooltips(Component.translatable("gtceu.machine.quantum_tank.tooltip"),
+                        Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
+                                FormattingUtil.formatNumbers(maxAmount)))
+                .tier(GTValues.ULV)
+                .register();
+
+        QuantumTankMachine.TANK_CAPACITY.put(ULV_SUPER_TANK, maxAmount);
+        return definition;
+    }
 
     public static final BlockEntry<Block> HERMETIC_CASING_ULV = GTRegistration.REGISTRATE.block("ulv_hermetic_casing", Block::new)
             .lang("Basic Hermetic Casing")
