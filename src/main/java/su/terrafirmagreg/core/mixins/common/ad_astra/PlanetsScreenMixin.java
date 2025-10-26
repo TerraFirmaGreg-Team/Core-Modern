@@ -31,6 +31,8 @@ public class PlanetsScreenMixin {
     private static final ResourceLocation ASTEROID_BELT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/asteroid_belt.png");
     @Unique
     private static final ResourceLocation MOON_ORBIT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/moon_orbit.png");
+    @Unique
+    private static final ResourceLocation EUROPA_ORBIT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/europa_orbit.png");
 
     @ModifyArg(method = "lambda$static$11", at = @At(value = "INVOKE", target = "Learth/terrarium/adastra/client/screens/PlanetsScreen;drawCircles(IIILcom/mojang/blaze3d/vertex/BufferBuilder;II)V", ordinal = 0), index = 0, remap = false)
     private static int tfg$modifySolarOrbits0(int value) {
@@ -50,8 +52,9 @@ public class PlanetsScreenMixin {
                 RenderSystem.setShader(GameRenderer::getPositionColorShader);
                 bufferBuilder.begin(VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
                 int color = 0xff24327b;
-                PlanetsScreen.drawCircle(bufferBuilder, (float) width / 2.0F, (float) height / 2.0F, 190, 75, color);
-                PlanetsScreen.drawCircle(bufferBuilder, (float) width / 2.0F, (float) height / 2.0F, 250, 75, color);
+                int jupiterDist = 190;
+                PlanetsScreen.drawCircle(bufferBuilder, (float) width / 2.0F, (float) height / 2.0F, jupiterDist, 75, color);
+                //For Saturn//PlanetsScreen.drawCircle(bufferBuilder, (float) width / 2.0F, (float) height / 2.0F, 250, 75, color);
 
                 tessellator.end();
 
@@ -83,7 +86,7 @@ public class PlanetsScreenMixin {
                 graphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation));
                 graphics.pose().translate(-8, -8, 0);
                 graphics.pose().translate((31 * 3 - 10), 0, 0);
-                graphics.pose().rotateAround(Axis.ZP.rotationDegrees(rotation * 4 / 2), 14, 14, 0);
+                graphics.pose().rotateAround(Axis.ZP.rotationDegrees(rotation * 3 / 2), 14, 14, 0);
                 graphics.blit(MOON_ORBIT_TEXTURE, 0, 0, 0, 0, 28, 28, 28, 28);
                 graphics.pose().popPose();
 
@@ -91,17 +94,27 @@ public class PlanetsScreenMixin {
                 graphics.pose().pushPose();
                 graphics.pose().translate(width / 2f, height / 2f, 0);
                 graphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation / 5 / 2));
-                graphics.pose().translate(190 - 10, 0, 0);
+                graphics.pose().translate(jupiterDist - 8, 0, 0);
                 graphics.blit(JUPITER_TEXTURE, 0, 0, 0, 0, 16, 16, 16, 16);
                 graphics.pose().popPose();
 
-                // Saturn
+                // Europa
+                graphics.pose().pushPose();
+                graphics.pose().translate((float) width / 2f, (float) height / 2f, 0);
+                graphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation / 5 / 2));
+                graphics.pose().translate(-10, -10, 0);
+                graphics.pose().translate(jupiterDist - 8, 0, 0);
+                graphics.pose().rotateAround(Axis.ZP.rotationDegrees(rotation * 6 / 2), 18, 18, 0);
+                graphics.blit(MOON_ORBIT_TEXTURE, 0, 0, 0, 0, 36, 36, 36, 36);
+                graphics.pose().popPose();
+
+                /*// Saturn
                 graphics.pose().pushPose();
                 graphics.pose().translate(width / 2f, height / 2f, 0);
                 graphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation / 6 / 2));
                 graphics.pose().translate(250 - 10, 0, 0);
                 graphics.blit(JUPITER_TEXTURE, 0, 0, 0, 0, 16, 16, 16, 16);
-                graphics.pose().popPose();
+                graphics.pose().popPose();*/
 
             }
 
