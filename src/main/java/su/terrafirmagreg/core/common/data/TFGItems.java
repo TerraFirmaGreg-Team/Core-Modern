@@ -17,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import appeng.api.upgrades.Upgrades;
+import de.mennomax.astikorcarts.item.CartItem;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.items.*;
@@ -84,4 +85,7 @@ public class TFGItems {
         return register("spawn_egg/" + entity.getId().getPath(),
                 () -> new ForgeSpawnEggItem(entity, color1, color2, new Item.Properties()));
     }
+
+    public static final RegistryObject<Item> RNR_PLOW = ITEMS.register("rnr_plow",
+            () -> new CartItem(new Item.Properties().stacksTo(1)));
 }
