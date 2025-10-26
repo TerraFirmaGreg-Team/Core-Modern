@@ -1,19 +1,28 @@
 package su.terrafirmagreg.core.common;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.data.chemical.material.ItemMaterialData;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import it.unimi.dsi.fastutil.objects.Reference2LongOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.mixins.common.tfc.IIngotPileBlockEntityEntryAccessor;
@@ -55,5 +64,26 @@ public final class TFGHelpers {
                         Component.translatable("tfg.disabled_portal").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
+    }
+
+    public static void registerMaterialInfo(ResourceLocation itemId, Map<String, Double> materialStacks) {
+        Item item = ForgeRegistries.ITEMS.getValue(itemId);
+        if (item == null) {
+            TFGCore.LOGGER.error("Error in registerMaterialInfo - item not found: {}", itemId);
+            return;
+        }
+
+        Reference2LongOpenHashMap<Material> matStacks = new Reference2LongOpenHashMap<>();
+        for (var tuple : materialStacks.entrySet()) {
+            var material = getMaterial(tuple.getKey());
+            if (material == null) {
+                TFGCore.LOGGER.error("Error in registerMaterialInfo - material not found: {}", tuple.getKey());
+                return;
+            }
+
+            matStacks.addTo(material, Math.round(tuple.getValue() * GTValues.M));
+        }
+
+        ItemMaterialData.registerMaterialInfo(item, new ItemMaterialInfo(matStacks));
     }
 }
