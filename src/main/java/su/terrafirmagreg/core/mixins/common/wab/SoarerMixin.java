@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -105,12 +106,25 @@ public abstract class SoarerMixin extends TamableAnimal {
             if (!level().isClientSide) {
                 final long ticks = Calendars.SERVER.getTicks();
                 if (ticks > tfg$nextFeedTime) {
-                    tfg$setFamiliarity(tfg$getFamiliarity() + 0.1f);
+                    tfg$setFamiliarity(tfg$getFamiliarity() + 0.07f);
                     tfg$nextFeedTime = ticks + ICalendar.TICKS_IN_DAY;
                     usePlayerItem(player, hand, held);
-                    playSound(SoundEvents.FROG_EAT);
+                    playSound(SoundEvents.PLAYER_BURP);
+
+                    // If it's now familiar enough, set the owner
+                    if (isTame()) {
+                        tame(player);
+                    }
                 }
             }
+
+            // Extra food restores flaps
+            if (isTame()) {
+                ((Soarer) (Object) this).addFlaps(10);
+                usePlayerItem(player, hand, held);
+                playSound(SoundEvents.PLAYER_BURP);
+            }
+
             cir.setReturnValue(InteractionResult.SUCCESS);
         }
     }
@@ -118,5 +132,11 @@ public abstract class SoarerMixin extends TamableAnimal {
     @Override
     public boolean isTame() {
         return tfg$getFamiliarity() > HorseProperties.TAMED_FAMILIARITY;
+    }
+
+    // Buffs how far they can glide for
+    @ModifyArg(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/wanmine/wab/entity/Soarer;setDeltaMovement(DDD)V", ordinal = 2), index = 1)
+    public double tfg$tick(double par1) {
+        return par1 / 1.5;
     }
 }
