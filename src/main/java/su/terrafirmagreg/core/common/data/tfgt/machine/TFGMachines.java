@@ -239,7 +239,7 @@ public class TFGMachines {
                 .tier(GTValues.ULV)
                 .register();
 
-        QuantumTankMachine.TANK_CAPACITY.put(ULV_SUPER_TANK, maxAmount);
+        QuantumTankMachine.TANK_CAPACITY.put(definition, maxAmount);
         return definition;
     }
 
