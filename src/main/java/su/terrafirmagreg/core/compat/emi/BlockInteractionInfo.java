@@ -14,6 +14,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
@@ -104,7 +105,7 @@ public class BlockInteractionInfo {
 
             //Insulation Add
             new BlockInteractionRecipe(incoloy_frame, aes_frame.get(), aes_roll.get()),
-            new BlockInteractionRecipe(incoloy_frame, glacian_frame.get(), glacian_wool.get()),
+            new BlockInteractionRecipe(incoloy_frame, glacian_frame.get(), new ItemStack(glacian_wool.get(), 2)),
             new BlockInteractionRecipe(incoloy_frame, impure_moderate_frame.get(), impure_moderator.get()),
             new BlockInteractionRecipe(incoloy_frame, moderate_frame.get(), moderator.get()),
 
