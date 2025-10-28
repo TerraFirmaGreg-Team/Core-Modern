@@ -189,4 +189,7 @@ dependencies {
 
     //Create Picky Waterwheels
     implementation fg.deobf("curse.maven:create-picky-waterwheels-866839:6932328")
+
+    //Astikor Carts
+    implementation fg.deobf("curse.maven:astikor-carts-redux-916493:4988266")
 }
