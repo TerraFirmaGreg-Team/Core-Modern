@@ -59,7 +59,13 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
     private static final double BLADEOFFSET = 1.7D;
 
+    private static final int MIN_PLOW_WIDTH = 1;
+    private static final int MAX_PLOW_WIDTH = 5;
+    private static final int DEFAULT_PLOW_WIDTH = 3;
+    private static final float HALF_SPREAD_DEGREES = 38.0F;
+
     private static final EntityDataAccessor<Boolean> PLOWING = SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> PLOW_WIDTH = SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.INT);
 
     private static final ImmutableList<EntityDataAccessor<ItemStack>> TOOLS = ImmutableList.of(
             SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.ITEM_STACK),
@@ -123,6 +129,14 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         return this.entityData.get(PLOWING);
     }
 
+    public int getPlowWidth() {
+        return Mth.clamp(this.entityData.get(PLOW_WIDTH), MIN_PLOW_WIDTH, MAX_PLOW_WIDTH);
+    }
+
+    public void setPlowWidth(int width) {
+        this.entityData.set(PLOW_WIDTH, Mth.clamp(width, MIN_PLOW_WIDTH, MAX_PLOW_WIDTH));
+    }
+
     @Override
     public void pulledTick() {
         super.pulledTick();
@@ -184,12 +198,24 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
             }
         }
 
-        for (int i = 0; i < TOOL_SLOT_COUNT; i++) {
-            final float offset = 38.0F - i * 38.0F;
-            final float yaw = (float) Math.toRadians(this.getYRot() - offset);
+        final int lanes = this.getPlowWidth();
+        if (lanes <= 0)
+            return;
 
-            final double x = this.getX() + Mth.sin(yaw) * BLADEOFFSET;
-            final double z = this.getZ() - Mth.cos(yaw) * BLADEOFFSET;
+        final double yawRad = Math.toRadians(this.getYRot());
+        final double fx = Math.sin(yawRad);
+        final double fz = -Math.cos(yawRad);
+        final double px = Math.cos(yawRad);
+        final double pz = Math.sin(yawRad);
+        final double centerX = this.getX() + fx * BLADEOFFSET;
+        final double centerZ = this.getZ() + fz * BLADEOFFSET;
+        final double mid = (lanes - 1) / 2.0;
+        final double laneSpacing = 1.0;
+
+        for (int i = 0; i < lanes; i++) {
+            final double lateral = (i - mid) * laneSpacing;
+            final double x = centerX + px * lateral;
+            final double z = centerZ + pz * lateral;
             final Vec3 v = new Vec3(x, this.getY() - 0.5D, z);
             final BlockPos top = BlockPos.containing(v);
             final BlockPos below = top.below();
@@ -211,6 +237,21 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         }
     }
 
+    private static float computeOffsetDegrees(int index, int count) {
+        if (count == 1)
+            return 0.0F;
+        float spread = 2.0F * HALF_SPREAD_DEGREES;
+        if ((count & 1) == 1) {
+            // Odd: center at 0.
+            int mid = count / 2;
+            return (index - mid) * (spread / (count - 1));
+        } else {
+            // Even: no 0.
+            float step = spread / count;
+            return -HALF_SPREAD_DEGREES + step / 2 + index * step;
+        }
+    }
+
     private boolean hasAnyCrushedInLowerInventory(final Item crushed) {
         if (crushed == null)
             return false;
@@ -226,21 +267,15 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         return false;
     }
 
-    private boolean placeBaseCourseIfValid(final ServerLevel server,
-            final BlockPos pos,
-            final Block baseCourse,
-            final Item crushedItem) {
+    private boolean placeBaseCourseIfValid(final ServerLevel server, final BlockPos pos, final Block baseCourse, final Item crushedItem) {
         final BlockState in = server.getBlockState(pos);
 
-        if (!isAnyTagged(in)) {
+        if (!isAnyTagged(in))
             return false;
-        }
-        if (!isAboveClearOrPlant(server, pos)) {
+        if (!isAboveClearOrPlant(server, pos))
             return false;
-        }
-        if (!consumeCrushedBaseCourse(crushedItem)) {
+        if (!consumeCrushedBaseCourse(crushedItem))
             return false;
-        }
 
         server.setBlock(pos, baseCourse.defaultBlockState(), 3);
         server.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 0.2f, 1.0f);
@@ -424,6 +459,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(PLOWING, false);
+        this.entityData.define(PLOW_WIDTH, DEFAULT_PLOW_WIDTH);
         for (final EntityDataAccessor<ItemStack> param : TOOLS) {
             this.entityData.define(param, ItemStack.EMPTY);
         }
@@ -433,12 +469,16 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     protected void readAdditionalSaveData(final CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(PLOWING, compound.getBoolean("Plowing"));
+        if (compound.contains("PlowWidth")) {
+            this.setPlowWidth(compound.getInt("PlowWidth"));
+        }
     }
 
     @Override
     protected void addAdditionalSaveData(final CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Plowing", this.entityData.get(PLOWING));
+        compound.putInt("PlowWidth", this.getPlowWidth());
     }
 
     private void openContainer(final Player player) {

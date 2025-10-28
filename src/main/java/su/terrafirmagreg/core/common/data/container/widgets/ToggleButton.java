@@ -28,8 +28,6 @@ public final class ToggleButton extends Button {
     @Override
     protected void renderWidget(GuiGraphics gg, int mouseX, int mouseY, float delta) {
         final boolean on = this.isOnSupplier != null && this.isOnSupplier.getAsBoolean();
-
-        // Texture has two frames side-by-side: left \= off, right \= on.
         final int frameW = this.texWidth / 2;
         final int frameH = this.texHeight;
         final int drawW = Math.min(this.width, frameW);
@@ -40,11 +38,9 @@ public final class ToggleButton extends Button {
 
         gg.blit(this.texture, this.getX(), this.getY(), u, v, drawW, drawH, this.texWidth, this.texHeight);
 
-        // Hover highlight (do not include focus to avoid sticky highlight after click)
         if (this.active && this.isMouseOver(mouseX, mouseY)) {
             gg.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x40FFFFFF);
         }
-        // Disabled dim
         if (!this.active) {
             gg.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x80000000);
         }

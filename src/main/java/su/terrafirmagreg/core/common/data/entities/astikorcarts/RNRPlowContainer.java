@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.DataSlot;
@@ -25,6 +26,7 @@ public final class RNRPlowContainer extends CartContainer {
     private static final ResourceLocation CRUSHED_BASE_COURSE_ID = ResourceLocation.fromNamespaceAndPath("rnr", "crushed_base_course");
 
     private int randomModeClient = 0;
+    private int widthClient = 3;
 
     public RNRPlowContainer(final int id, final Inventory playerInv, final AbstractDrawnInventoryEntity cart) {
         super(TFGContainers.RNR_PLOW_MENU.get(), id, cart);
@@ -43,12 +45,7 @@ public final class RNRPlowContainer extends CartContainer {
         final int lowerStartY = 18 + 2 * 18 + 10;
         for (int row = 0; row < 2; ++row) {
             for (int col = 0; col < 9; ++col) {
-                this.addSlot(new CrushedBaseCourseSlot(
-                        this.cartInv,
-                        lowerStartIndex + col + row * 9,
-                        8 + col * 18,
-                        lowerStartY + row * 18,
-                        crushedBaseCourse));
+                this.addSlot(new CrushedBaseCourseSlot(this.cartInv, lowerStartIndex + col + row * 9, 8 + col * 18, lowerStartY + row * 18, crushedBaseCourse));
             }
         }
 
@@ -76,6 +73,21 @@ public final class RNRPlowContainer extends CartContainer {
                 randomModeClient = value & 1;
             }
         });
+
+        this.addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                if (RNRPlowContainer.this.cart instanceof RNRPlow plow) {
+                    return plow.getPlowWidth();
+                }
+                return 3;
+            }
+
+            @Override
+            public void set(int value) {
+                widthClient = Mth.clamp(value, 1, 5);
+            }
+        });
     }
 
     @Override
@@ -86,11 +98,21 @@ public final class RNRPlowContainer extends CartContainer {
                 return true;
             }
         }
+        if (id >= 1 && id <= 5) {
+            if (this.cart instanceof RNRPlow plow) {
+                plow.setPlowWidth(id);
+                return true;
+            }
+        }
         return super.clickMenuButton(player, id);
     }
 
     public boolean isRandomModeClient() {
         return this.randomModeClient != 0;
+    }
+
+    public int getPlowWidthClient() {
+        return this.widthClient;
     }
 
     // Top inventory.
