@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -40,9 +41,17 @@ public class BlockInteractionRecipe implements EmiRecipe {
     }
 
     public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, Item CONSUMABLE) {
+        new BlockInteractionRecipe(INPUT, OUTPUT, CONSUMABLE.getDefaultInstance());
+    }
+
+    public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, ItemStack CONSUMABLE) {
         INPUTS.add(EmiIngredient.of(INPUT));
         ForgeRegistries.ITEMS.tags().getTag(OUTPUT).forEach(i -> OUTPUTS.add(EmiStack.of(i)));
         this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
+    }
+
+    public BlockInteractionRecipe(Item INPUT, Item OUTPUT, Item CONSUMABLE) {
+        new BlockInteractionRecipe(INPUT, OUTPUT, CONSUMABLE.getDefaultInstance());
     }
 
     public BlockInteractionRecipe(Item INPUT, Item OUTPUT, TagKey<Item> TOOL) {
@@ -51,7 +60,7 @@ public class BlockInteractionRecipe implements EmiRecipe {
         this.TOOL.add(EmiIngredient.of(TOOL));
     }
 
-    public BlockInteractionRecipe(Item INPUT, Item OUTPUT, Item CONSUMABLE) {
+    public BlockInteractionRecipe(Item INPUT, Item OUTPUT, ItemStack CONSUMABLE) {
         INPUTS.add(EmiIngredient.of(Ingredient.of(INPUT)));
         OUTPUTS.add(EmiStack.of(OUTPUT));
         this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
