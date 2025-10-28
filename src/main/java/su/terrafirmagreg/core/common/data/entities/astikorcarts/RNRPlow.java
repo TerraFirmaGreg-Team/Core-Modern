@@ -82,6 +82,8 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
     private int lastNoCrushedWarnTick = -100;
 
+    private boolean isRandom = true;
+
     public RNRPlow(final EntityType<? extends RNRPlow> type, final Level level) {
         super(type, level);
         this.spacing = 1.3D;
@@ -348,15 +350,32 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         final int start = Math.max(UPPER_START, 0);
         final int end = Math.min(UPPER_END_EXCLUSIVE, slots);
 
-        for (int i = start; i < end; i++) {
-            final ItemStack stack = this.inventory.getStackInSlot(i);
-            if (!stack.isEmpty()) {
-                final ItemStack one = stack.copy();
-                one.setCount(1);
-                return new InvPeek(i, one);
+        if (!this.isRandom) {
+            for (int i = start; i < end; i++) {
+                final ItemStack stack = this.inventory.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    final ItemStack one = stack.copy();
+                    one.setCount(1);
+                    return new InvPeek(i, one);
+                }
             }
+            return null;
+        } else {
+            final List<Integer> filledIndices = new ArrayList<>();
+            for (int i = start; i < end; i++) {
+                final ItemStack stack = this.inventory.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    filledIndices.add(i);
+                }
+            }
+            if (filledIndices.isEmpty()) {
+                return null;
+            }
+            final int chosenIndex = filledIndices.get(this.random.nextInt(filledIndices.size()));
+            final ItemStack one = this.inventory.getStackInSlot(chosenIndex).copy();
+            one.setCount(1);
+            return new InvPeek(chosenIndex, one);
         }
-        return null;
     }
 
     private void shrinkUpperSlot(int slot, int count) {
