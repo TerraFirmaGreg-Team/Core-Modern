@@ -44,6 +44,12 @@ public class PlanetsScreenMixin {
         return 3;
     }
 
+    @ModifyConstant(method = "lambda$static$11", constant = @Constant(intValue = 31), remap = false)
+    private static int tfg$modifyOrbitDist0(int value) { return 30; }
+
+    @ModifyConstant(method = "lambda$static$11", constant = @Constant(intValue = 10), remap = false)
+    private static int tfg$modifyOrbitDist1(int value) { return 6; }
+
     static {
         AdAstraClientEvents.RenderSolarSystemEvent.register((graphics, solarSystem, width, height) -> {
             if (PlanetConstants.SOLAR_SYSTEM.equals(solarSystem)) {
@@ -85,7 +91,7 @@ public class PlanetsScreenMixin {
                 graphics.pose().translate((float) width / 2f, (float) height / 2f, 0);
                 graphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation));
                 graphics.pose().translate(-8, -8, 0);
-                graphics.pose().translate((31 * 3 - 10), 0, 0);
+                graphics.pose().translate((30 * 3 - 6), 0, 0);
                 graphics.pose().rotateAround(Axis.ZP.rotationDegrees(rotation * 3 / 2), 14, 14, 0);
                 graphics.blit(MOON_ORBIT_TEXTURE, 0, 0, 0, 0, 28, 28, 28, 28);
                 graphics.pose().popPose();
