@@ -1,16 +1,18 @@
 package su.terrafirmagreg.core.common.data.entities.astikorcarts;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.authlib.GameProfile;
+import com.therighthon.rnr.common.recipe.BlockModRecipe;
 
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -20,21 +22,21 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
@@ -43,6 +45,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import de.mennomax.astikorcarts.config.AstikorCartsConfig;
 import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 import de.mennomax.astikorcarts.util.CartItemStackHandler;
+
+import su.terrafirmagreg.core.common.data.TFGItems;
 
 public final class RNRPlow extends AbstractDrawnInventoryEntity {
     private static final int TOOL_SLOT_COUNT = 3;
@@ -54,26 +58,38 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     private static final int LOWER_END_EXCLUSIVE = CART_SLOT_COUNT;
 
     private static final double BLADEOFFSET = 1.7D;
+
     private static final EntityDataAccessor<Boolean> PLOWING = SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.BOOLEAN);
+
     private static final ImmutableList<EntityDataAccessor<ItemStack>> TOOLS = ImmutableList.of(
             SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.ITEM_STACK),
             SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.ITEM_STACK),
             SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.ITEM_STACK));
 
-    @SuppressWarnings({ "removal" })
-    private static final ResourceLocation CRUSHED_BASE_COURSE_ID = new ResourceLocation("rnr", "crushed_base_course");
-    @SuppressWarnings({ "removal" })
-    private static final ResourceLocation BASE_COURSE_BLOCK_ID = new ResourceLocation("rnr", "base_course");
+    private static final ResourceLocation CRUSHED_BASE_COURSE_ID = ResourceLocation.fromNamespaceAndPath("rnr", "crushed_base_course");
+    private static final ResourceLocation BASE_COURSE_BLOCK_ID = ResourceLocation.fromNamespaceAndPath("rnr", "base_course");
+
+    private static final List<TagKey<Block>> BASE_COURSE_SOURCE_TAGS = List.of(
+            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfg", "base_course_sources")),
+            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("minecraft", "dirt")),
+            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "mud")),
+            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "grass")));
+
+    public ItemStackHandler inventory;
 
     private final List<BlockPos> delayedActivations = new ArrayList<>();
     private final List<BlockPos> queuedActivations = new ArrayList<>();
 
-    private static final UUID FP_UUID = UUID.nameUUIDFromBytes("rnr_plow_fake_player".getBytes());
-    private static final GameProfile FP_PROFILE = new GameProfile(FP_UUID, "[RNR_Plow]");
+    private int lastNoCrushedWarnTick = -100;
 
-    public RNRPlow(final EntityType<? extends Entity> entityTypeIn, final Level worldIn) {
-        super(entityTypeIn, worldIn);
+    public RNRPlow(final EntityType<? extends RNRPlow> type, final Level level) {
+        super(type, level);
         this.spacing = 1.3D;
+    }
+
+    @Override
+    public @NotNull Item getCartItem() {
+        return TFGItems.RNR_PLOW.get();
     }
 
     @Override
@@ -83,19 +99,22 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
     @Override
     protected ItemStackHandler initInventory() {
-        return new CartItemStackHandler<RNRPlow>(CART_SLOT_COUNT, this) {
+        this.inventory = new CartItemStackHandler<RNRPlow>(CART_SLOT_COUNT, this) {
             @Override
             protected void onLoad() {
-                for (int i = 0; i < Math.min(TOOLS.size(), this.getSlots()); i++) {
-                    RNRPlow.this.updateSlot(i);
+                for (int i = 0; i < TOOL_SLOT_COUNT; i++) {
+                    updateSlot(i);
                 }
             }
 
             @Override
             protected void onContentsChanged(final int slot) {
-                RNRPlow.this.updateSlot(slot);
+                if (slot >= 0 && slot < TOOL_SLOT_COUNT) {
+                    updateSlot(slot);
+                }
             }
         };
+        return this.inventory;
     }
 
     public boolean getPlowing() {
@@ -108,71 +127,126 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
         if (!this.level().isClientSide) {
             processDelayedActivations();
-            if (!this.queuedActivations.isEmpty()) {
-                this.delayedActivations.addAll(this.queuedActivations);
-                this.queuedActivations.clear();
+
+            if (this.getPulling() == null) {
+                return;
             }
-        }
 
-        if (this.getPulling() == null)
-            return;
-
-        if (!this.level().isClientSide) {
             Player player = null;
             if (this.getPulling() instanceof Player pl) {
                 player = pl;
+            } else if (this.getPulling().getControllingPassenger() instanceof Player pl) {
+                player = pl;
             }
-            if (this.entityData.get(PLOWING) && player != null) {
-                this.plow(player);
+            if (player != null && this.getPlowing()) {
+                if (this.xo != this.getX() || this.zo != this.getZ()) {
+                    this.plow(player);
+                }
             }
         }
     }
 
-    @SuppressWarnings({ "removal" })
-    private void plow(final Player player) {
-        final TagKey<Block> dirtTag = TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "dirt"));
-        final TagKey<Block> mudTag = TagKey.create(Registries.BLOCK, new ResourceLocation("tfc", "mud"));
+    private boolean isPlantish(final BlockState state) {
+        return state.isAir()
+                || state.is(BlockTags.REPLACEABLE)
+                || state.is(TFCTags.Blocks.CAN_BE_SNOW_PILED)
+                || state.is(TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE);
+    }
 
-        final Block baseCourse = ForgeRegistries.BLOCKS.getValue(BASE_COURSE_BLOCK_ID);
-        if (baseCourse == null)
+    private boolean isAboveClearOrPlant(final ServerLevel server, final BlockPos pos) {
+        final BlockState above = server.getBlockState(pos.above());
+        return isPlantish(above);
+    }
+
+    private static boolean isAnyTagged(final BlockState state) {
+        for (final TagKey<Block> tag : RNRPlow.BASE_COURSE_SOURCE_TAGS) {
+            if (state.is(tag))
+                return true;
+        }
+        return false;
+    }
+
+    private void plow(final Player player) {
+        if (!(this.level() instanceof ServerLevel server))
             return;
 
+        final Block baseCourse = ForgeRegistries.BLOCKS.getValue(BASE_COURSE_BLOCK_ID);
         final Item crushedItem = ForgeRegistries.ITEMS.getValue(CRUSHED_BASE_COURSE_ID);
+        if (baseCourse == null || crushedItem == null)
+            return;
 
-        boolean ranOut = false;
-
-        for (int i = 0; i < TOOL_SLOT_COUNT; i++) {
-            final float offset = 38.0F - i * 38.0F;
-            final double blockPosX = this.getX() + Mth.sin((float) Math.toRadians(this.getYRot() - offset)) * BLADEOFFSET;
-            final double blockPosZ = this.getZ() - Mth.cos((float) Math.toRadians(this.getYRot() - offset)) * BLADEOFFSET;
-            final Vec3 vec3 = new Vec3(blockPosX, this.getY() - 0.5D, blockPosZ);
-            final BlockPos surfacePos = BlockPos.containing(vec3);
-
-            final BlockPos[] targets = new BlockPos[] { surfacePos, surfacePos.below() };
-            for (final BlockPos pos : targets) {
-                final BlockState state = this.level().getBlockState(pos);
-
-                if (state.getBlock() == baseCourse) {
-                    queueActivation(pos);
-                    continue;
-                }
-
-                if (state.is(dirtTag) || state.is(mudTag)) {
-                    if (!ranOut && consumeCrushedBaseCourse(crushedItem)) {
-                        if (!this.level().isClientSide) {
-                            this.level().setBlock(pos, baseCourse.defaultBlockState(), 3);
-                            queueActivation(pos);
-                        }
-                    } else {
-                        ranOut = true;
-                    }
-                }
+        if (!hasAnyCrushedInLowerInventory(crushedItem) && player instanceof ServerPlayer sp) {
+            if (this.tickCount - lastNoCrushedWarnTick >= 20) {
+                sp.displayClientMessage(Component.translatable("tfg.gui.empty_crushed_base_course"), true);
+                lastNoCrushedWarnTick = this.tickCount;
             }
         }
 
-        if (ranOut && player instanceof ServerPlayer sp) {
-            sp.displayClientMessage(Component.literal("Out of crushed base course"), true);
+        for (int i = 0; i < TOOL_SLOT_COUNT; i++) {
+            final float offset = 38.0F - i * 38.0F;
+            final float yaw = (float) Math.toRadians(this.getYRot() - offset);
+
+            final double x = this.getX() + Mth.sin(yaw) * BLADEOFFSET;
+            final double z = this.getZ() - Mth.cos(yaw) * BLADEOFFSET;
+            final Vec3 v = new Vec3(x, this.getY() - 0.5D, z);
+            final BlockPos top = BlockPos.containing(v);
+            final BlockPos below = top.below();
+
+            if (server.getBlockState(top).is(baseCourse)) {
+                if (!tryApplyTopInventoryTransformation(server, top)) {
+                    queueActivation(top);
+                }
+            }
+            if (server.getBlockState(below).is(baseCourse)) {
+                if (!tryApplyTopInventoryTransformation(server, below)) {
+                    queueActivation(below);
+                }
+            }
+
+            if (!placeBaseCourseIfValid(server, top, baseCourse, crushedItem)) {
+                placeBaseCourseIfValid(server, below, baseCourse, crushedItem);
+            }
         }
+    }
+
+    private boolean hasAnyCrushedInLowerInventory(final Item crushed) {
+        if (crushed == null)
+            return false;
+        final int slots = this.inventory.getSlots();
+        final int start = Math.max(LOWER_START, 0);
+        final int end = Math.min(LOWER_END_EXCLUSIVE, slots);
+        for (int i = start; i < end; i++) {
+            final ItemStack stack = this.inventory.getStackInSlot(i);
+            if (!stack.isEmpty() && stack.is(crushed)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean placeBaseCourseIfValid(final ServerLevel server,
+            final BlockPos pos,
+            final Block baseCourse,
+            final Item crushedItem) {
+        final BlockState in = server.getBlockState(pos);
+
+        if (!isAnyTagged(in)) {
+            return false;
+        }
+        if (!isAboveClearOrPlant(server, pos)) {
+            return false;
+        }
+        if (!consumeCrushedBaseCourse(crushedItem)) {
+            return false;
+        }
+
+        server.setBlock(pos, baseCourse.defaultBlockState(), 3);
+        server.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 0.2f, 1.0f);
+
+        if (!tryApplyTopInventoryTransformation(server, pos)) {
+            queueActivation(pos);
+        }
+        return true;
     }
 
     private boolean consumeCrushedBaseCourse(final Item crushed) {
@@ -184,65 +258,89 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
         for (int i = start; i < end; i++) {
             final ItemStack stack = this.inventory.getStackInSlot(i);
-            if (stack.isEmpty())
-                continue;
-            if (!stack.is(crushed))
-                continue;
-
-            final ItemStack newStack = stack.copy();
-            newStack.shrink(1);
-            this.inventory.setStackInSlot(i, newStack.isEmpty() ? ItemStack.EMPTY : newStack);
-            return true;
+            if (!stack.isEmpty() && stack.is(crushed)) {
+                final ItemStack copy = stack.copy();
+                copy.shrink(1);
+                this.inventory.setStackInSlot(i, copy.isEmpty() ? ItemStack.EMPTY : copy);
+                return true;
+            }
         }
         return false;
     }
 
     private void queueActivation(final BlockPos pos) {
-        if (!this.queuedActivations.contains(pos)) {
-            this.queuedActivations.add(pos.immutable());
+        final BlockPos imm = pos.immutable();
+        if (!this.queuedActivations.contains(imm) && !this.delayedActivations.contains(imm)) {
+            this.queuedActivations.add(imm);
         }
     }
 
     private void processDelayedActivations() {
-        if (this.delayedActivations.isEmpty())
+        if (!(this.level() instanceof ServerLevel server))
             return;
-        if (!(this.level() instanceof ServerLevel server)) {
-            this.delayedActivations.clear();
-            return;
-        }
 
         final Block baseCourse = ForgeRegistries.BLOCKS.getValue(BASE_COURSE_BLOCK_ID);
-        if (baseCourse == null) {
-            this.delayedActivations.clear();
+        if (baseCourse == null)
             return;
-        }
 
-        for (final BlockPos pos : this.delayedActivations) {
-            final BlockState state = server.getBlockState(pos);
-            if (state.getBlock() != baseCourse)
-                continue;
+        final List<BlockPos> batch = new ArrayList<>(this.queuedActivations);
+        this.queuedActivations.clear();
+        batch.addAll(this.delayedActivations);
+        this.delayedActivations.clear();
 
-            final InvPeek peek = peekOneFromUpperInventory();
-            if (peek == null)
-                continue;
+        final Set<BlockPos> unique = new HashSet<>(batch);
 
-            final boolean used = simulateRightClickOnBlock(server, pos, peek.one);
-            if (used) {
-                shrinkUpperSlot(peek.slot, 1);
+        for (final BlockPos pos : unique) {
+            if (server.getBlockState(pos).is(baseCourse)) {
+                if (!tryApplyTopInventoryTransformation(server, pos)) {
+                    this.delayedActivations.add(pos);
+                }
             }
         }
-
-        this.delayedActivations.clear();
     }
 
-    private static final class InvPeek {
-        final int slot;
-        final ItemStack one;
+    private boolean tryApplyTopInventoryTransformation(final ServerLevel server, final BlockPos pos) {
+        final Block baseCourse = ForgeRegistries.BLOCKS.getValue(BASE_COURSE_BLOCK_ID);
+        if (baseCourse == null)
+            return false;
+        final BlockState in = server.getBlockState(pos);
+        if (in.getBlock() != baseCourse)
+            return false;
 
-        InvPeek(int slot, ItemStack one) {
-            this.slot = slot;
-            this.one = one;
+        final InvPeek peek = peekOneFromUpperInventory();
+        if (peek == null || peek.one.isEmpty())
+            return false;
+
+        final Boolean result = tryRnrBlockModRecipe(server, pos, peek.one);
+        if (result == null)
+            return false;
+        if (result) {
+            shrinkUpperSlot(peek.slot, 1);
         }
+        return true;
+    }
+
+    @Nullable
+    private Boolean tryRnrBlockModRecipe(final ServerLevel level, final BlockPos pos, final ItemStack held) {
+        if (held.isEmpty())
+            return null;
+
+        final BlockState in = level.getBlockState(pos);
+        final BlockModRecipe recipe = BlockModRecipe.getRecipe(in, held);
+        if (recipe == null) {
+            return null;
+        }
+
+        final BlockState out = recipe.getOutputBlock();
+        if (out == null || out == in) {
+            return null;
+        }
+
+        level.setBlock(pos, out, 3);
+        return Boolean.TRUE.equals(recipe.consumesItem());
+    }
+
+    private record InvPeek(int slot, ItemStack one) {
     }
 
     private InvPeek peekOneFromUpperInventory() {
@@ -252,40 +350,25 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
         for (int i = start; i < end; i++) {
             final ItemStack stack = this.inventory.getStackInSlot(i);
-            if (stack.isEmpty())
-                continue;
-
-            final ItemStack one = stack.copy();
-            one.setCount(1);
-            return new InvPeek(i, one);
+            if (!stack.isEmpty()) {
+                final ItemStack one = stack.copy();
+                one.setCount(1);
+                return new InvPeek(i, one);
+            }
         }
         return null;
     }
 
     private void shrinkUpperSlot(int slot, int count) {
-        if (slot < 0 || slot >= this.inventory.getSlots())
+        if (slot < 0 || slot >= this.inventory.getSlots() || count <= 0)
             return;
         final ItemStack stack = this.inventory.getStackInSlot(slot);
-        if (stack.isEmpty() || count <= 0)
+        if (stack.isEmpty())
             return;
 
         final ItemStack remaining = stack.copy();
         remaining.shrink(count);
         this.inventory.setStackInSlot(slot, remaining.isEmpty() ? ItemStack.EMPTY : remaining);
-    }
-
-    private boolean simulateRightClickOnBlock(final ServerLevel server, final BlockPos pos, final ItemStack one) {
-        if (one.isEmpty())
-            return false;
-
-        final Vec3 hit = Vec3.atCenterOf(pos);
-        final BlockHitResult bhr = new BlockHitResult(hit, Direction.UP, pos, false);
-
-        final UseOnContext ctx = new UseOnContext(server, null, InteractionHand.MAIN_HAND, one, bhr);
-
-        final InteractionResult result = one.useOn(ctx);
-
-        return result.consumesAction() || result == InteractionResult.SUCCESS;
     }
 
     public @NotNull InteractionResult interact(final Player player, final @NotNull InteractionHand hand) {
@@ -300,21 +383,14 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     }
 
     public void updateSlot(final int slot) {
-        if (!this.level().isClientSide) {
-            if (slot < TOOLS.size()) {
-                final ItemStack stack = this.inventory.getStackInSlot(slot);
-                this.entityData.set(TOOLS.get(slot), stack.copy());
-            }
+        if (!this.level().isClientSide && slot >= 0 && slot < TOOL_SLOT_COUNT) {
+            final ItemStack s = this.inventory.getStackInSlot(slot);
+            this.entityData.set(TOOLS.get(slot), s.isEmpty() ? ItemStack.EMPTY : s);
         }
     }
 
     public ItemStack getStackInSlot(final int i) {
         return this.entityData.get(TOOLS.get(i));
-    }
-
-    @Override
-    public Item getCartItem() {
-        return su.terrafirmagreg.core.common.data.TFGItems.RNR_PLOW.get();
     }
 
     @Override
