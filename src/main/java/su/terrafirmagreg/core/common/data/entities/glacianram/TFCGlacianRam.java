@@ -36,16 +36,15 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
 
     static double familiarityCap = 0.35;
-    static int adulthoodDays = 40;
-    static int uses = 100;
+    static int adulthoodDays = 35;
+    static int uses = 160;
     static boolean eatsRottenFood = false;
     static int produceTicks = 96000;
     static double produceFamiliarity = 0.15;
     static int childCount = 1;
     static long gestationDays = 30;
 
-    public TFCGlacianRam(EntityType<? extends ProducingMammal> type, Level level, TFCSounds.EntitySound sounds,
-            ProducingMammalConfig config) {
+    public TFCGlacianRam(EntityType<? extends ProducingMammal> type, Level level, TFCSounds.EntitySound sounds, ProducingMammalConfig config) {
         super(type, level, sounds, config);
     }
 
@@ -55,16 +54,14 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
     }
 
     public static AttributeSupplier.Builder createMobAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double) 32.0F).add(Attributes.MOVEMENT_SPEED,
-                (double) 0.2F);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double) 32.0F).add(Attributes.MOVEMENT_SPEED, (double) 0.2F);
     }
 
-    public static boolean spawnRules(EntityType<? extends TFCGlacianRam> type, LevelAccessor level, MobSpawnType spawn,
-            BlockPos pos, RandomSource rand) {
+    public static boolean spawnRules(EntityType<? extends TFCGlacianRam> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand) {
         return level.getBlockState(pos).isAir();
     }
 
-    // This region is for bypasing config
+    //This region is for bypasing config
     @Override
     public float getAdultFamiliarityCap() {
         return (float) familiarityCap;
@@ -104,7 +101,7 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
     public long getGestationDays() {
         return gestationDays;
     }
-    // End of config override
+    //End of config override
 
     @Override
     public TagKey<Item> getFoodTag() {
@@ -116,15 +113,14 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
         return (getProducedTick() <= 0 || getProductsCooldown() <= 0) && getAgeType() == Age.ADULT;
     }
 
-    // Stuff from IForgeShearable
+    //Stuff from IForgeShearable
     @Override
     public boolean isShearable(@NotNull ItemStack item, Level level, BlockPos pos) {
         return isReadyForAnimalProduct();
     }
 
     @Override
-    public @NotNull List<ItemStack> onSheared(@Nullable Player player, @NotNull ItemStack item, Level level,
-            BlockPos pos, int fortune) {
+    public @NotNull List<ItemStack> onSheared(@Nullable Player player, @NotNull ItemStack item, Level level, BlockPos pos, int fortune) {
 
         setProductsCooldown();
         playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
@@ -138,7 +134,8 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
     }
 
     public ItemStack getWoolItem() {
-        final int amount = getFamiliarity() > 0.99f ? 2 : 1;
+        final int amount = (int) Math.floor(3 * getFamiliarity() + 1);
+
         return new ItemStack(TFGItems.GLACIAN_WOOL.get(), amount);
     }
 
@@ -154,8 +151,7 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
 
-        if (other != this && this.getGender() == Gender.FEMALE && other instanceof TFCGlacianRam otherFertile
-                && !isFertilized()) {
+        if (other != this && this.getGender() == Gender.FEMALE && other instanceof TFCGlacianRam otherFertile && !isFertilized()) {
             this.onFertilized(otherFertile);
         } else if (other == this) {
             final Entity baby = getEntityTypeForBaby().create(level);

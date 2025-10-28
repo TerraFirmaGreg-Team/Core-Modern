@@ -45,10 +45,14 @@ public class PlanetsScreenMixin {
     }
 
     @ModifyConstant(method = "lambda$static$11", constant = @Constant(intValue = 31), remap = false)
-    private static int tfg$modifyOrbitDist0(int value) { return 30; }
+    private static int tfg$modifyOrbitDist0(int value) {
+        return 30;
+    }
 
     @ModifyConstant(method = "lambda$static$11", constant = @Constant(intValue = 10), remap = false)
-    private static int tfg$modifyOrbitDist1(int value) { return 6; }
+    private static int tfg$modifyOrbitDist1(int value) {
+        return 6;
+    }
 
     static {
         AdAstraClientEvents.RenderSolarSystemEvent.register((graphics, solarSystem, width, height) -> {
