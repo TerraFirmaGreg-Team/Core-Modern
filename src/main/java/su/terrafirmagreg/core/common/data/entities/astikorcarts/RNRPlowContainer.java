@@ -1,9 +1,13 @@
 package su.terrafirmagreg.core.common.data.entities.astikorcarts;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +23,8 @@ import su.terrafirmagreg.core.common.data.TFGContainers;
 public final class RNRPlowContainer extends CartContainer {
     private static final TagKey<Item> ROAD_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("rnr", "road_materials"));
     private static final ResourceLocation CRUSHED_BASE_COURSE_ID = ResourceLocation.fromNamespaceAndPath("rnr", "crushed_base_course");
+
+    private int randomModeClient = 0;
 
     public RNRPlowContainer(final int id, final Inventory playerInv, final AbstractDrawnInventoryEntity cart) {
         super(TFGContainers.RNR_PLOW_MENU.get(), id, cart);
@@ -55,6 +61,36 @@ public final class RNRPlowContainer extends CartContainer {
         for (int x = 0; x < 9; ++x) {
             this.addSlot(new Slot(playerInv, x, 8 + x * 18, 172));
         }
+
+        this.addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                if (RNRPlowContainer.this.cart instanceof RNRPlow plow) {
+                    return plow.isRandomMode() ? 1 : 0;
+                }
+                return 0;
+            }
+
+            @Override
+            public void set(int value) {
+                randomModeClient = value & 1;
+            }
+        });
+    }
+
+    @Override
+    public boolean clickMenuButton(@NotNull Player player, int id) {
+        if (id == 0) {
+            if (this.cart instanceof RNRPlow plow) {
+                plow.setRandomMode(!plow.isRandomMode());
+                return true;
+            }
+        }
+        return super.clickMenuButton(player, id);
+    }
+
+    public boolean isRandomModeClient() {
+        return this.randomModeClient != 0;
     }
 
     // Top inventory.

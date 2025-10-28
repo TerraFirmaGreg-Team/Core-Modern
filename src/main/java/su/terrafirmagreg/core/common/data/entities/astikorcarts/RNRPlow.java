@@ -82,7 +82,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
     private int lastNoCrushedWarnTick = -100;
 
-    private boolean isRandom = true;
+    private boolean isRandom = false;
 
     public RNRPlow(final EntityType<? extends RNRPlow> type, final Level level) {
         super(type, level);
@@ -179,7 +179,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
         if (!hasAnyCrushedInLowerInventory(crushedItem) && player instanceof ServerPlayer sp) {
             if (this.tickCount - lastNoCrushedWarnTick >= 20) {
-                sp.displayClientMessage(Component.translatable("tfg.gui.empty_crushed_base_course"), true);
+                sp.displayClientMessage(Component.translatable("tfg.gui.rnr_plow.empty_crushed_base_course"), true);
                 lastNoCrushedWarnTick = this.tickCount;
             }
         }
@@ -388,6 +388,14 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         final ItemStack remaining = stack.copy();
         remaining.shrink(count);
         this.inventory.setStackInSlot(slot, remaining.isEmpty() ? ItemStack.EMPTY : remaining);
+    }
+
+    public boolean isRandomMode() {
+        return this.isRandom;
+    }
+
+    public void setRandomMode(boolean value) {
+        this.isRandom = value;
     }
 
     public @NotNull InteractionResult interact(final Player player, final @NotNull InteractionHand hand) {
