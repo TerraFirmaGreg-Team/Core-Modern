@@ -22,7 +22,6 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggHandler;
-import su.terrafirmagreg.core.common.data.tfgt.TFGFissionComponents;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
@@ -72,8 +71,6 @@ public final class TFGCommonEventHandler {
             addUpgrades(AE2wtlib.PATTERN_ACCESS_TERMINAL);
             addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
         });
-        TFGFissionComponents.addComponents();
-
     }
 
     private static void addUpgrades(ItemLike item) {
