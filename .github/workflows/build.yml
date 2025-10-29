@@ -150,7 +150,7 @@ jobs:
           fi
 
       - name: 🚀 Upload Artifact Jar
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: ${{ needs.info.outputs.project_full_name }}
           path: build/libs/${{ needs.info.outputs.project_full_name }}.jar
@@ -174,7 +174,7 @@ jobs:
             fi  
 
         - name: 📦 Download artifact
-          uses: actions/download-artifact@v5.0.0
+          uses: actions/download-artifact@v6.0.0
           with:
             merge-multiple: true
 
