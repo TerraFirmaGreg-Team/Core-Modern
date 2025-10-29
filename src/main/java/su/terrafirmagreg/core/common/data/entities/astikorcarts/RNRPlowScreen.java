@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.container.widgets.TexturedIntSlider;
+import su.terrafirmagreg.core.common.data.container.widgets.Slider;
 import su.terrafirmagreg.core.common.data.container.widgets.ToggleButton;
 
 public final class RNRPlowScreen extends AbstractContainerScreen<RNRPlowContainer> {
@@ -18,10 +18,7 @@ public final class RNRPlowScreen extends AbstractContainerScreen<RNRPlowContaine
     private static final ResourceLocation SLIDER_HANDLE_TEX = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/rnr_plow_slider_handle.png");
 
     private Button randomToggleButton;
-    private TexturedIntSlider widthSlider;
-
-    private int checkX;
-    private int checkY;
+    private Slider widthSlider;
 
     public RNRPlowScreen(RNRPlowContainer menu, Inventory inv, Component title) {
         super(menu, inv, title);
@@ -32,13 +29,13 @@ public final class RNRPlowScreen extends AbstractContainerScreen<RNRPlowContaine
     @Override
     protected void init() {
         super.init();
-        this.checkX = this.leftPos + this.imageWidth - 22;
-        this.checkY = this.topPos + 6;
+        int checkX = this.leftPos + 131;
+        int checkY = this.topPos + 141;
 
         this.randomToggleButton = new ToggleButton(
-                this.checkX, this.checkY, 16, 16,
+                checkX, checkY, 16, 16,
                 TOGGLE_TEX, 32, 16,
-                () -> this.menu.isRandomModeClient(),
+                this.menu::isRandomModeClient,
                 btn -> {
                     if (this.minecraft != null && this.minecraft.gameMode != null) {
                         this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
@@ -49,15 +46,15 @@ public final class RNRPlowScreen extends AbstractContainerScreen<RNRPlowContaine
         // Width slider: 1-5
         final int sliderW = 90;
         final int sliderH = 16;
-        final int sliderX = this.leftPos + 8;
-        final int sliderY = this.topPos + 6;
+        final int sliderX = this.leftPos + 29;
+        final int sliderY = this.topPos + 141;
 
-        this.widthSlider = new TexturedIntSlider(
+        this.widthSlider = new Slider(
                 sliderX, sliderY, sliderW, sliderH,
                 SLIDER_BG_TEX, sliderW, sliderH,
                 SLIDER_HANDLE_TEX, 8, 16,
                 1, 5,
-                () -> this.menu.getPlowWidthClient(),
+                this.menu::getPlowWidthClient,
                 v -> {
                     if (this.minecraft != null && this.minecraft.gameMode != null) {
                         this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, v);
@@ -75,8 +72,8 @@ public final class RNRPlowScreen extends AbstractContainerScreen<RNRPlowContaine
 
     @Override
     protected void renderLabels(GuiGraphics gg, int mouseX, int mouseY) {
-        gg.drawString(this.font, this.title, 8, 6 + 18, 0x404040, false);
-        gg.drawString(this.font, this.playerInventoryTitle, 8, 106, 0x404040, false);
+        gg.drawString(this.font, this.title, 8, 6, 0x404040, false);
+        gg.drawString(this.font, this.playerInventoryTitle, 8, 159, 0x404040, false);
     }
 
     @Override

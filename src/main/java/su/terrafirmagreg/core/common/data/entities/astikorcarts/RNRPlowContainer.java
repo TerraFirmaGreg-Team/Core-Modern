@@ -34,16 +34,16 @@ public final class RNRPlowContainer extends CartContainer {
         final Item crushedBaseCourse = ForgeRegistries.ITEMS.getValue(CRUSHED_BASE_COURSE_ID);
 
         // Upper section.
-        for (int row = 0; row < 2; ++row) {
+        for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
                 this.addSlot(new RoadMaterialsSlot(this.cartInv, col + row * 9, 8 + col * 18, 18 + row * 18, crushedBaseCourse));
             }
         }
 
         // Lower section.
-        final int lowerStartIndex = 18;
-        final int lowerStartY = 18 + 2 * 18 + 10;
-        for (int row = 0; row < 2; ++row) {
+        final int lowerStartIndex = 27;
+        final int lowerStartY = 18 + 3 * 18 + 10;
+        for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
                 this.addSlot(new CrushedBaseCourseSlot(this.cartInv, lowerStartIndex + col + row * 9, 8 + col * 18, lowerStartY + row * 18, crushedBaseCourse));
             }
@@ -52,11 +52,11 @@ public final class RNRPlowContainer extends CartContainer {
         // Player inventory (3 rows + hotbar).
         for (int k = 0; k < 3; ++k) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInv, l + k * 9 + 9, 8 + l * 18, 114 + k * 18));
+                this.addSlot(new Slot(playerInv, l + k * 9 + 9, 8 + l * 18, 170 + k * 18));
             }
         }
         for (int x = 0; x < 9; ++x) {
-            this.addSlot(new Slot(playerInv, x, 8 + x * 18, 172));
+            this.addSlot(new Slot(playerInv, x, 8 + x * 18, 228));
         }
 
         this.addDataSlot(new DataSlot() {
@@ -88,6 +88,11 @@ public final class RNRPlowContainer extends CartContainer {
                 widthClient = Mth.clamp(value, 1, 5);
             }
         });
+
+        if (this.cart instanceof RNRPlow plow) {
+            this.widthClient = plow.getPlowWidth();
+            this.randomModeClient = plow.isRandomMode() ? 1 : 0;
+        }
     }
 
     @Override

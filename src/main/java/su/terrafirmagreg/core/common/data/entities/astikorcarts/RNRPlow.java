@@ -50,11 +50,11 @@ import su.terrafirmagreg.core.common.data.TFGItems;
 
 public final class RNRPlow extends AbstractDrawnInventoryEntity {
     private static final int TOOL_SLOT_COUNT = 3;
-    private static final int CART_SLOT_COUNT = 36;
+    private static final int CART_SLOT_COUNT = 54;
 
     private static final int UPPER_START = 0;
-    private static final int UPPER_END_EXCLUSIVE = 18;
-    private static final int LOWER_START = 18;
+    private static final int UPPER_END_EXCLUSIVE = CART_SLOT_COUNT / 2;
+    private static final int LOWER_START = UPPER_END_EXCLUSIVE;
     private static final int LOWER_END_EXCLUSIVE = CART_SLOT_COUNT;
 
     private static final double BLADEOFFSET = 1.7D;
@@ -221,12 +221,12 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
             final BlockPos below = top.below();
 
             if (server.getBlockState(top).is(baseCourse)) {
-                if (!tryApplyTopInventoryTransformation(server, top)) {
+                if (tryApplyTopInventoryTransformation(server, top)) {
                     queueActivation(top);
                 }
             }
             if (server.getBlockState(below).is(baseCourse)) {
-                if (!tryApplyTopInventoryTransformation(server, below)) {
+                if (tryApplyTopInventoryTransformation(server, below)) {
                     queueActivation(below);
                 }
             }
@@ -280,7 +280,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         server.setBlock(pos, baseCourse.defaultBlockState(), 3);
         server.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 0.2f, 1.0f);
 
-        if (!tryApplyTopInventoryTransformation(server, pos)) {
+        if (tryApplyTopInventoryTransformation(server, pos)) {
             queueActivation(pos);
         }
         return true;
@@ -329,7 +329,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
         for (final BlockPos pos : unique) {
             if (server.getBlockState(pos).is(baseCourse)) {
-                if (!tryApplyTopInventoryTransformation(server, pos)) {
+                if (tryApplyTopInventoryTransformation(server, pos)) {
                     this.delayedActivations.add(pos);
                 }
             }
@@ -339,22 +339,22 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     private boolean tryApplyTopInventoryTransformation(final ServerLevel server, final BlockPos pos) {
         final Block baseCourse = ForgeRegistries.BLOCKS.getValue(BASE_COURSE_BLOCK_ID);
         if (baseCourse == null)
-            return false;
+            return true;
         final BlockState in = server.getBlockState(pos);
         if (in.getBlock() != baseCourse)
-            return false;
+            return true;
 
         final InvPeek peek = peekOneFromUpperInventory();
         if (peek == null || peek.one.isEmpty())
-            return false;
+            return true;
 
         final Boolean result = tryRnrBlockModRecipe(server, pos, peek.one);
         if (result == null)
-            return false;
+            return true;
         if (result) {
             shrinkUpperSlot(peek.slot, 1);
         }
-        return true;
+        return false;
     }
 
     @Nullable
@@ -382,7 +382,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
     private InvPeek peekOneFromUpperInventory() {
         final int slots = this.inventory.getSlots();
-        final int start = Math.max(UPPER_START, 0);
+        final int start = UPPER_START;
         final int end = Math.min(UPPER_END_EXCLUSIVE, slots);
 
         if (!this.isRandom) {

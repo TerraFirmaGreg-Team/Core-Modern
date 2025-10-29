@@ -11,22 +11,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public final class TexturedIntSlider extends AbstractSliderButton {
+public final class Slider extends AbstractSliderButton {
     private final ResourceLocation bgTex;
     private final int bgTexW;
     private final int bgTexH;
-
     private final ResourceLocation handleTex;
     private final int handleW;
     private final int handleH;
-
     private final int min;
     private final int max;
-
     private final IntSupplier valueSupplier;
     private final IntConsumer onReleased;
 
-    public TexturedIntSlider(
+    public Slider(
             int x, int y, int width, int height,
             ResourceLocation backgroundTex, int bgTexWidth, int bgTexHeight,
             ResourceLocation handleTex, int handleWidth, int handleHeight,
@@ -44,32 +41,25 @@ public final class TexturedIntSlider extends AbstractSliderButton {
         this.max = max;
         this.valueSupplier = valueSupplier;
         this.onReleased = onReleased;
-        this.value = toNorm(snapToStep(valueSupplier.getAsInt()));
+        int supplied = valueSupplier != null ? valueSupplier.getAsInt() : min;
+        this.value = toSliderValue(supplied);
         this.updateMessage();
     }
 
-    private int steps() {
-        return this.max - this.min;
+    private int getIntValue() {
+        int range = max - min;
+        return Mth.clamp(min + (int) Math.round(this.value * range), min, max);
+    }
+
+    private double toSliderValue(int v) {
+        int range = max - min;
+        if (range == 0)
+            return 0.0D;
+        return (double) (Mth.clamp(v, min, max) - min) / (double) range;
     }
 
     public int getDisplayValue() {
-        return toValue(this.value);
-    }
-
-    private int snapToStep(int v) {
-        return Mth.clamp(v, this.min, this.max);
-    }
-
-    private double toNorm(int v) {
-        int clamped = snapToStep(v);
-        int range = steps();
-        return (double) (clamped - this.min) / (double) range;
-    }
-
-    private int toValue(double norm) {
-        int range = steps();
-        int nearest = (int) Math.round(norm * range);
-        return Mth.clamp(this.min + nearest, this.min, this.max);
+        return getIntValue();
     }
 
     @Override
@@ -82,42 +72,45 @@ public final class TexturedIntSlider extends AbstractSliderButton {
     }
 
     @Override
+    public void onClick(double mouseX, double mouseY) {
+        setValueFromMouse(mouseX);
+    }
+
+    @Override
     protected void onDrag(double mouseX, double mouseY, double dragX, double dragY) {
-        double norm = (mouseX - (double) (this.getX())) / (double) (this.width - 1);
-        norm = Mth.clamp(norm, 0.0D, 1.0D);
+        setValueFromMouse(mouseX);
+        super.onDrag(mouseX, mouseY, dragX, dragY);
+    }
 
-        int steps = steps();
-        int nearest = (int) Math.round(norm * steps);
-        this.value = (double) nearest / (double) steps;
-
+    private void setValueFromMouse(double mouseX) {
+        this.value = Mth.clamp((mouseX - (double) (this.getX() + 4)) / (double) (this.width - 8), 0.0D, 1.0D);
         this.updateMessage();
-
-        if (this.onReleased != null) {
-            this.onReleased.accept(toValue(this.value));
-        }
     }
 
     @Override
     public void onRelease(double mouseX, double mouseY) {
         super.onRelease(mouseX, mouseY);
         if (this.onReleased != null) {
-            this.onReleased.accept(toValue(this.value));
+            this.onReleased.accept(getIntValue());
         }
     }
 
     @Override
     public void renderWidget(@NotNull GuiGraphics gg, int mouseX, int mouseY, float partialTick) {
-        if (!this.isFocused()) {
-            int v = this.valueSupplier != null ? snapToStep(this.valueSupplier.getAsInt()) : toValue(this.value);
-            double snappedNorm = toNorm(v);
-            this.value = snappedNorm;
+        if (!this.active) {
+            int v = valueSupplier != null ? valueSupplier.getAsInt() : getIntValue();
+            double newValue = toSliderValue(v);
+            if (Double.compare(this.value, newValue) != 0) {
+                this.value = newValue;
+            }
         }
         final int drawBgW = Math.min(this.width, this.bgTexW);
         final int drawBgH = Math.min(this.height, this.bgTexH);
         gg.blit(this.bgTex, this.getX(), this.getY(), 0, 0, drawBgW, drawBgH, this.bgTexW, this.bgTexH);
         final int travel = Math.max(0, this.width - this.handleW);
-        final int handleX = this.getX() + Mth.clamp((int) Math.round(this.value * travel), 0, travel);
-        final int handleY = this.getY() + Math.max(0, (this.height - this.handleH) / 2);
+        int handleTravel = this.width - 8;
+        int handleX = this.getX() + 4 + Mth.clamp((int) Math.round(this.value * (handleTravel - this.handleW)), 0, handleTravel - this.handleW);
+        int handleY = this.getY() + Math.max(0, (this.height - this.handleH) / 2);
 
         gg.blit(this.handleTex, handleX, handleY, 0, 0, this.handleW, this.handleH, this.handleW, this.handleH);
 
