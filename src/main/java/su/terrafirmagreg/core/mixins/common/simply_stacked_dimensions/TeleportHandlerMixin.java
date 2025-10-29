@@ -6,80 +6,52 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.simplystacked.SimplyStackedDimensions;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.simplystacked.Teleporting.TeleportHandler;
 
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(value = TeleportHandler.class)
 public abstract class TeleportHandlerMixin {
 
-    @WrapOperation(method = "onLivingTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
-    private static boolean tfg$onLivingTick(ServerLevel instance, BlockPos pos, BlockState blockState,
-            Operation<Boolean> original) {
+    @Unique
+    private final static BlockState m_air = Blocks.AIR.defaultBlockState();
 
-        BlockState air = Blocks.AIR.defaultBlockState();
-        BlockState cloud = SimplyStackedDimensions.CLOUD.get().defaultBlockState();
-        BlockState lava = Blocks.LAVA.defaultBlockState();
+    @WrapOperation(method = "onLivingTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
+    private static boolean tfg$expandAirPocket(ServerLevel level, BlockPos pos, BlockState blockState, Operation<Boolean> original, @Local LivingEntity entity) {
 
         // Expand the hole outwards into a 3x3
-        instance.setBlockAndUpdate(pos.north(), air);
-        instance.setBlockAndUpdate(pos.north().east(), air);
+        tfg$clearRock(level, pos.north());
+        tfg$clearRock(level, pos.north().east());
 
-        instance.setBlockAndUpdate(pos.east(), air);
-        instance.setBlockAndUpdate(pos.east().south(), air);
+        tfg$clearRock(level, pos.east());
+        tfg$clearRock(level, pos.east().south());
 
-        instance.setBlockAndUpdate(pos.south(), air);
-        instance.setBlockAndUpdate(pos.south().west(), air);
+        tfg$clearRock(level, pos.south());
+        tfg$clearRock(level, pos.south().west());
 
-        instance.setBlockAndUpdate(pos.west(), air);
-        instance.setBlockAndUpdate(pos.west().north(), air);
+        tfg$clearRock(level, pos.west());
+        tfg$clearRock(level, pos.west().north());
 
-        // Then put a layer of cloud above, to block lava
-        tfg$placeCloudIfLava(instance, pos.above(), lava, cloud);
+        // Add some slow falling and fire res
+        entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 30 * 20));
+        entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 30 * 20));
 
-        tfg$placeCloudIfLava(instance, pos.north().above(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.north().east().above(), lava, cloud);
-
-        tfg$placeCloudIfLava(instance, pos.east().above(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.east().south().above(), lava, cloud);
-
-        tfg$placeCloudIfLava(instance, pos.south().above(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.south().west().above(), lava, cloud);
-
-        tfg$placeCloudIfLava(instance, pos.west().above(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.west().north().above(), lava, cloud);
-
-        // And then a layer of cloud underneath in case of lava because I can't mixin to generateCloudPlatform for some
-        // reason
-        tfg$placeCloudIfLava(instance, pos.below().below(), lava, cloud);
-
-        tfg$placeCloudIfLava(instance, pos.north().below(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.north().below().below(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.north().east().below().below(), lava, cloud);
-
-        tfg$placeCloudIfLava(instance, pos.east().above().below(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.east().above().below().below(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.east().south().above().below().below(), lava, cloud);
-
-        tfg$placeCloudIfLava(instance, pos.south().above().below(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.south().above().below().below(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.south().west().above().below().below(), lava, cloud);
-
-        tfg$placeCloudIfLava(instance, pos.west().above().below(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.west().above().below().below(), lava, cloud);
-        tfg$placeCloudIfLava(instance, pos.west().north().above().below().below(), lava, cloud);
-
-        return original.call(instance, pos, blockState);
+        return original.call(level, pos, blockState);
     }
 
     @Unique
-    private static void tfg$placeCloudIfLava(ServerLevel instance, BlockPos pos, BlockState lava, BlockState cloud) {
-        if (instance.getBlockState(pos) == lava) {
-            instance.setBlockAndUpdate(pos, cloud);
+    private static void tfg$clearRock(ServerLevel level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (state.is(TFCTags.Blocks.CAN_COLLAPSE) || state.is(TFCTags.Blocks.CAN_LANDSLIDE)) {
+            level.setBlockAndUpdate(pos, m_air);
         }
     }
 }
