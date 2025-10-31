@@ -107,11 +107,8 @@ public class BlockInteractionRecipe implements EmiRecipe {
     }
 
     private void createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
-
         SlotWidget widget = new SlotWidget(stack, offsetX, offsetY);
         holder.add(widget);
-
-        widget.getBounds();
     }
 
     private int createArrowWidget(WidgetHolder holder, int offsetY, int offsetX, int length) {
