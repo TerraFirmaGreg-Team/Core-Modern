@@ -10,6 +10,7 @@
         "common.ad_astra.ModSkyRendererMixin",
         "common.ad_astra.OxygenDistributorMixin",
         "common.ad_astra.OxygenLoaderMixin",
+        "common.ad_astra.PlanetResourceUtilsMixin",
         "common.ad_astra.RocketMixin",
         "common.ad_astra.SlidingDoorBlockMixin",
         "common.ad_astra.SpaceSuitItemMixin",
@@ -135,7 +136,8 @@
         "client.minecraft.CreateWorldScreenMixin",
         "client.tfc.DoubleIngotPileBlockModelMixin",
         "client.tfc.IngotPileBlockModelMixin",
-        "client.tfc.SheetPileBlockModelMixin"
+        "client.tfc.SheetPileBlockModelMixin",
+        "common.ad_astra.PlanetsScreenMixin"
     ],
     "required": true,
     "refmap": "tfg.refmap.json"
