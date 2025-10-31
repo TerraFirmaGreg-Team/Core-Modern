@@ -41,7 +41,9 @@ public class BlockInteractionRecipe implements EmiRecipe {
     }
 
     public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, Item CONSUMABLE) {
-        new BlockInteractionRecipe(INPUT, OUTPUT, CONSUMABLE.getDefaultInstance());
+        INPUTS.add(EmiIngredient.of(INPUT));
+        ForgeRegistries.ITEMS.tags().getTag(OUTPUT).forEach(i -> OUTPUTS.add(EmiStack.of(i)));
+        this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
     }
 
     public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, ItemStack CONSUMABLE) {
@@ -51,7 +53,9 @@ public class BlockInteractionRecipe implements EmiRecipe {
     }
 
     public BlockInteractionRecipe(Item INPUT, Item OUTPUT, Item CONSUMABLE) {
-        new BlockInteractionRecipe(INPUT, OUTPUT, CONSUMABLE.getDefaultInstance());
+        INPUTS.add(EmiIngredient.of(Ingredient.of(INPUT)));
+        OUTPUTS.add(EmiStack.of(OUTPUT));
+        this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
     }
 
     public BlockInteractionRecipe(Item INPUT, Item OUTPUT, TagKey<Item> TOOL) {
@@ -102,12 +106,9 @@ public class BlockInteractionRecipe implements EmiRecipe {
 
     }
 
-    private int createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
-
+    private void createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
         SlotWidget widget = new SlotWidget(stack, offsetX, offsetY);
         holder.add(widget);
-
-        return widget.getBounds().bottom() + 2;
     }
 
     private int createArrowWidget(WidgetHolder holder, int offsetY, int offsetX, int length) {
