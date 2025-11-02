@@ -82,6 +82,8 @@ public class TFGCreativeTab {
         //accept(out, TFGItems.ELECTRIC_EXTENDO_GRIP);
 
         accept(out, TFGItems.WIRELESS_CARD);
+
+        accept(out, TFGItems.RNR_PLOW);
     }
 
     private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out,

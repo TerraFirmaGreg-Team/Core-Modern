@@ -17,6 +17,9 @@ import net.wanmine.wab.entity.render.EntityRenderer;
 import net.wanmine.wab.entity.render.model.SurferModel;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
+import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
+import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowRenderer;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamModel;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamRenderer;
@@ -109,6 +112,7 @@ public class TFGEntities {
         event.registerEntityRenderer(WRAPTOR.get(), TFCWraptorRenderer::new);
 
         event.registerEntityRenderer(SURFER.get(), EntityRenderer.create(SurferModel::new, 0.6F));
+        event.registerEntityRenderer(RNR_PLOW.get(), RNRPlowRenderer::new);
 
         // event.registerBlockEntityRenderer(TFGBlockEntities.LARGE_NEST_BOX.get(), ctx -> new
         // LargeNestBoxBlockEntityRenderer());
@@ -116,6 +120,11 @@ public class TFGEntities {
 
     public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(TFCGlacianRamModel.LAYER_LOCATION, TFCGlacianRamModel::createBodyLayer);
-
+        event.registerLayerDefinition(RNRPlowModel.LAYER_LOCATION, RNRPlowModel::createLayer);
     }
+
+    public static final RegistryObject<EntityType<RNRPlow>> RNR_PLOW = ENTITIES.register("rnr_plow",
+            () -> EntityType.Builder.of(RNRPlow::new, MobCategory.MISC)
+                    .sized(1.3F, 1.4F)
+                    .build(TFGCore.MOD_ID + ":rnr_plow"));
 }
