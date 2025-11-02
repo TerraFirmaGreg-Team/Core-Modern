@@ -8,7 +8,6 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.google.common.collect.ImmutableList;
 import com.therighthon.rnr.common.recipe.BlockModRecipe;
 
 import net.dries007.tfc.common.TFCTags;
@@ -48,17 +47,21 @@ import de.mennomax.astikorcarts.util.CartItemStackHandler;
 
 import su.terrafirmagreg.core.common.data.TFGItems;
 
+/**
+ * The RNR Plow entity, an extension of the Astikor Carts mod which
+ * uses logic similar to its plow cart but adapted for use with the
+ * Roads and Roofs mod's road construction mechanics.
+ */
 public final class RNRPlow extends AbstractDrawnInventoryEntity {
-    private static final int TOOL_SLOT_COUNT = 3;
+    // Inventory slot configuration.
     private static final int CART_SLOT_COUNT = 54;
-
     private static final int UPPER_START = 0;
     private static final int UPPER_END_EXCLUSIVE = CART_SLOT_COUNT / 2;
     private static final int LOWER_START = UPPER_END_EXCLUSIVE;
     private static final int LOWER_END_EXCLUSIVE = CART_SLOT_COUNT;
 
+    // Plow configuration.
     private static final double BLADEOFFSET = 1.7D;
-
     private static final int MIN_PLOW_WIDTH = 1;
     private static final int MAX_PLOW_WIDTH = 5;
     private static final int DEFAULT_PLOW_WIDTH = 3;
@@ -68,14 +71,11 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     private static final EntityDataAccessor<Integer> PLOW_WIDTH = SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> PLOW_TEXTURE = SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.INT);
 
-    private static final ImmutableList<EntityDataAccessor<ItemStack>> TOOLS = ImmutableList.of(
-            SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.ITEM_STACK),
-            SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.ITEM_STACK),
-            SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.ITEM_STACK));
-
     private static final ResourceLocation CRUSHED_BASE_COURSE_ID = ResourceLocation.fromNamespaceAndPath("rnr", "crushed_base_course");
     private static final ResourceLocation BASE_COURSE_BLOCK_ID = ResourceLocation.fromNamespaceAndPath("rnr", "base_course");
 
+    // Array of block tags that can be converted into base course by the plow.
+    // Added `#tfg:base_course_sources` to have an easy way to add more.
     private static final List<TagKey<Block>> BASE_COURSE_SOURCE_TAGS = List.of(
             TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfg", "base_course_sources")),
             TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("minecraft", "dirt")),
@@ -91,16 +91,25 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
     private boolean isRandom = false;
 
+    /**
+     * Instantiates a new RNR plow.
+     *
+     * @param type  the type
+     * @param level the level
+     */
     public RNRPlow(final EntityType<? extends RNRPlow> type, final Level level) {
         super(type, level);
         this.spacing = 1.3D;
     }
 
+    // Item representation of the entity.
     @Override
     public @NotNull Item getCartItem() {
         return TFGItems.RNR_PLOW.get();
     }
 
+    // Retrieves the configuration for the plow cart.
+    // As far as I can tell, this doesn't cause any issues.
     @Override
     protected AstikorCartsConfig.CartConfig getConfig() {
         return AstikorCartsConfig.get().plow;
@@ -109,19 +118,6 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     @Override
     protected ItemStackHandler initInventory() {
         this.inventory = new CartItemStackHandler<RNRPlow>(CART_SLOT_COUNT, this) {
-            @Override
-            protected void onLoad() {
-                for (int i = 0; i < TOOL_SLOT_COUNT; i++) {
-                    updateSlot(i);
-                }
-            }
-
-            @Override
-            protected void onContentsChanged(final int slot) {
-                if (slot >= 0 && slot < TOOL_SLOT_COUNT) {
-                    updateSlot(slot);
-                }
-            }
         };
         return this.inventory;
     }
@@ -171,18 +167,21 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         }
     }
 
-    private boolean isPlantish(final BlockState state) {
+    // Array of blocks that can be ignored when checking for clear space above.
+    private boolean ignoredCeilings(final BlockState state) {
         return state.isAir()
                 || state.is(BlockTags.REPLACEABLE)
                 || state.is(TFCTags.Blocks.CAN_BE_SNOW_PILED)
                 || state.is(TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE);
     }
 
-    private boolean isAboveClearOrPlant(final ServerLevel server, final BlockPos pos) {
+    // Uses ignoredCeilings to check if the block above is clear.
+    private boolean isAboveClear(final ServerLevel server, final BlockPos pos) {
         final BlockState above = server.getBlockState(pos.above());
-        return isPlantish(above);
+        return ignoredCeilings(above);
     }
 
+    // Check if the block state is tagged with any of the base course source tags.
     private static boolean isAnyTagged(final BlockState state) {
         for (final TagKey<Block> tag : RNRPlow.BASE_COURSE_SOURCE_TAGS) {
             if (state.is(tag))
@@ -199,6 +198,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         final Item crushedItem = ForgeRegistries.ITEMS.getValue(CRUSHED_BASE_COURSE_ID);
         if (baseCourse == null || crushedItem == null)
             return;
+        // Warn the player if there is no crushed base course in the lower inventory.
         if (!hasAnyCrushedInLowerInventory(crushedItem) && player instanceof ServerPlayer sp) {
             if (this.tickCount - lastNoCrushedWarnTick >= 20) {
                 sp.displayClientMessage(Component.translatable("tfg.gui.rnr_plow.empty_crushed_base_course"), true);
@@ -210,6 +210,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         if (lanes <= 0)
             return;
 
+        // Fun math to calculate the positions for plowing.
         final double yawRad = Math.toRadians(this.getYRot());
         final double fx = Math.sin(yawRad);
         final double fz = -Math.cos(yawRad);
@@ -245,21 +246,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         }
     }
 
-    private static float computeOffsetDegrees(int index, int count) {
-        if (count == 1)
-            return 0.0F;
-        float spread = 2.0F * HALF_SPREAD_DEGREES;
-        if ((count & 1) == 1) {
-            // Odd: center at 0.
-            int mid = count / 2;
-            return (index - mid) * (spread / (count - 1));
-        } else {
-            // Even: no 0.
-            float step = spread / count;
-            return -HALF_SPREAD_DEGREES + step / 2 + index * step;
-        }
-    }
-
+    // Check if there is any crushed base course item in the lower inventory.
     private boolean hasAnyCrushedInLowerInventory(final Item crushed) {
         if (crushed == null)
             return false;
@@ -275,16 +262,19 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         return false;
     }
 
+    // Attempt to place a base course block at the specified position if valid.
     private boolean placeBaseCourseIfValid(final ServerLevel server, final BlockPos pos, final Block baseCourse, final Item crushedItem) {
         final BlockState in = server.getBlockState(pos);
 
+        // Check if the block can be converted to base course.
         if (!isAnyTagged(in))
             return false;
-        if (!isAboveClearOrPlant(server, pos))
+        if (!isAboveClear(server, pos))
             return false;
         if (!consumeCrushedBaseCourse(crushedItem))
             return false;
 
+        // Place the base course block. And play sound.
         server.setBlock(pos, baseCourse.defaultBlockState(), 3);
         server.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 0.2f, 1.0f);
 
@@ -294,6 +284,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         return true;
     }
 
+    // Consume one crushed base course item from the lower inventory.
     private boolean consumeCrushedBaseCourse(final Item crushed) {
         if (crushed == null)
             return false;
@@ -344,6 +335,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         }
     }
 
+    // Try to apply a block modification from the top inventory at the given position.
     private boolean tryApplyTopInventoryTransformation(final ServerLevel server, final BlockPos pos) {
         final Block baseCourse = ForgeRegistries.BLOCKS.getValue(BASE_COURSE_BLOCK_ID);
         if (baseCourse == null)
@@ -365,6 +357,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         return false;
     }
 
+    // Try to apply a Roads and Roofs block modification recipe at the specified position.
     @Nullable
     private Boolean tryRnrBlockModRecipe(final ServerLevel level, final BlockPos pos, final ItemStack held) {
         if (held.isEmpty())
@@ -393,6 +386,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         final int start = UPPER_START;
         final int end = Math.min(UPPER_END_EXCLUSIVE, slots);
 
+        // Non-random mode: return the first non-empty slot.
         if (!this.isRandom) {
             for (int i = start; i < end; i++) {
                 final ItemStack stack = this.inventory.getStackInSlot(i);
@@ -403,6 +397,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
                 }
             }
             return null;
+            // Random mode: collect all non-empty slots and pick one at random.
         } else {
             final List<Integer> filledIndices = new ArrayList<>();
             for (int i = start; i < end; i++) {
@@ -433,6 +428,11 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         this.inventory.setStackInSlot(slot, remaining.isEmpty() ? ItemStack.EMPTY : remaining);
     }
 
+    /**
+     * Boolean to randomize road placement.
+     *
+     * @return boolean
+     */
     public boolean isRandomMode() {
         return this.isRandom;
     }
@@ -452,22 +452,12 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
-    public void updateSlot(final int slot) {
-        if (!this.level().isClientSide && slot >= 0 && slot < TOOL_SLOT_COUNT) {
-            final ItemStack s = this.inventory.getStackInSlot(slot);
-            this.entityData.set(TOOLS.get(slot), s.isEmpty() ? ItemStack.EMPTY : s);
-        }
-    }
-
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(PLOWING, false);
         this.entityData.define(PLOW_WIDTH, DEFAULT_PLOW_WIDTH);
         this.entityData.define(PLOW_TEXTURE, 0); // default variant 0
-        for (final EntityDataAccessor<ItemStack> param : TOOLS) {
-            this.entityData.define(param, ItemStack.EMPTY);
-        }
     }
 
     @Override
@@ -490,6 +480,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         compound.putInt("PlowTexture", this.getPlowTextureVariant());
     }
 
+    // Opens the plow's inventory container for the player.
     private void openContainer(final Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             NetworkHooks.openScreen(

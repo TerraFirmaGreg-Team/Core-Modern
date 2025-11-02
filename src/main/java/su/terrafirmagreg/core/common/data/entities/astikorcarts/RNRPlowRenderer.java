@@ -16,6 +16,11 @@ import de.mennomax.astikorcarts.client.renderer.entity.DrawnRenderer;
 
 import su.terrafirmagreg.core.TFGCore;
 
+/**
+ * Renderer for the RNR Plow entity. This class handles rendering the plow's
+ * components with their textures and ensures proper alignment
+ * with the entity's model positions.
+ */
 public final class RNRPlowRenderer extends DrawnRenderer<RNRPlow, RNRPlowModel> {
 
     private static final ResourceLocation TEX_WHEEL = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_wheel.png");
@@ -25,22 +30,42 @@ public final class RNRPlowRenderer extends DrawnRenderer<RNRPlow, RNRPlowModel> 
     private static final ResourceLocation TEX_SHAFTS = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_shafts.png");
     private static final ResourceLocation TEX_BLADES = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_blades.png");
 
+    /**
+     * Constructs the RNR Plow renderer.
+     *
+     * @param renderManager EntityRendererProvider context.
+     */
     public RNRPlowRenderer(final EntityRendererProvider.Context renderManager) {
         super(renderManager, new RNRPlowModel(renderManager.bakeLayer(RNRPlowModel.LAYER_LOCATION)));
         this.shadowRadius = 1.0F;
     }
 
+    /**
+     * Retrieves the texture location for the RNR Plow entity.
+     *
+     * @param entity The entity being rendered.
+     * @return The texture resource location for the wheels.
+     */
     @Override
     public @NotNull ResourceLocation getTextureLocation(final @NotNull RNRPlow entity) {
-        // Default texture which gets applied to the second render pass (wheels).
         return TEX_WHEEL;
     }
 
+    /**
+     * Renders the contents of the RNR Plow entity, applying textures to its components.
+     *
+     * @param entity      The RNR Plow entity being rendered.
+     * @param delta       The partial tick time.
+     * @param stack       The pose stack for transformations.
+     * @param source      The buffer source for rendering.
+     * @param packedLight The lightmap coordinates.
+     */
     @Override
     protected void renderContents(final RNRPlow entity, final float delta, final PoseStack stack, final MultiBufferSource source, final int packedLight) {
         stack.pushPose();
         this.model.getBody().translateAndRotate(stack);
 
+        // Render each part of the plow with its texture.
         renderPartForceVisible(this.model.getAxis(), TEX_AXIS, stack, source, packedLight);
         renderPartForceVisible(this.model.getTriangle0(), TEX_HOPPER_0, stack, source, packedLight);
         renderPartForceVisible(this.model.getTriangle1(), TEX_HOPPER_1, stack, source, packedLight);
@@ -52,6 +77,15 @@ public final class RNRPlowRenderer extends DrawnRenderer<RNRPlow, RNRPlowModel> 
         stack.popPose();
     }
 
+    /**
+     * Renders a specific part of the model, temporarily forcing it to be visible.
+     *
+     * @param part        The model part to render.
+     * @param tex         The texture to apply to the part.
+     * @param stack       The pose stack for transformations.
+     * @param source      The buffer source for rendering.
+     * @param light       The lightmap coordinates.
+     */
     private static void renderPartForceVisible(ModelPart part, ResourceLocation tex, PoseStack stack, MultiBufferSource source, int light) {
         final boolean old = part.visible;
         part.visible = true;

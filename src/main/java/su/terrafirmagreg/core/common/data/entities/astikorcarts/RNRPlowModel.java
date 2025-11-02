@@ -14,7 +14,14 @@ import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
 
+/**
+ * The model for the RNR Plow entity, defining its geometry and animations.
+ * This model is composed of multiple parts, which are rendered separately with different textures.
+ */
 public final class RNRPlowModel extends CartModel<RNRPlow> {
+    /**
+     * The layer location for the RNR Plow model.
+     */
     @SuppressWarnings({ "removal" })
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
             new ResourceLocation(TFGCore.MOD_ID + ":rnr_plow"), "main");
@@ -22,6 +29,7 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
     private final ModelPart[] plowShaftUpper = new ModelPart[3];
     private final ModelPart[] plowShaftLower = new ModelPart[3];
 
+    // Key components of the model, exposed for rendering and animation.
     @Getter
     private final ModelPart axis;
     @Getter
@@ -31,6 +39,11 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
     @Getter
     private final ModelPart triangle1;
 
+    /**
+     * Constructs the RNR Plow model by initializing its parts from the root ModelPart.
+     *
+     * @param root The root ModelPart containing all child parts of the model.
+     */
     public RNRPlowModel(final ModelPart root) {
         super(root);
         final ModelPart body = root.getChild("body");
@@ -40,20 +53,39 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
         this.triangle0 = partsGroup.getChild("triangle_0");
         this.triangle1 = partsGroup.getChild("triangle_1");
 
+        // Initialize the upper and lower plow shafts.
         for (int i = 0; i < this.plowShaftUpper.length; i++) {
             this.plowShaftUpper[i] = partsGroup.getChild("plow_shaft_upper_" + i);
             this.plowShaftLower[i] = this.plowShaftUpper[i].getChild("plow_shaft_lower_" + i);
         }
     }
 
+    /**
+     * Retrieves the upper part of a specific plow shaft.
+     *
+     * @param i The index of the plow shaft (0-2).
+     * @return The upper part of the specified plow shaft.
+     */
     public ModelPart getUpperShaft(final int i) {
         return this.plowShaftUpper[i];
     }
 
+    /**
+     * Sets up animations for the RNR Plow model, including hiding specific parts
+     * to prevent them from being rendered by the default renderer.
+     *
+     * @param entity         The RNR Plow entity being rendered.
+     * @param delta          The partial tick time.
+     * @param limbSwingAmount The amount of limb swing.
+     * @param ageInTicks     The age of the entity in ticks.
+     * @param netHeadYaw     The yaw of the entity's head.
+     * @param pitch          The pitch of the entity's head.
+     */
     @Override
     public void setupAnim(final @NotNull RNRPlow entity, final float delta, final float limbSwingAmount, final float ageInTicks, final float netHeadYaw, final float pitch) {
         super.setupAnim(entity, delta, limbSwingAmount, ageInTicks, netHeadYaw, pitch);
 
+        // Animate the upper plow shafts based on the entity's plowing state.
         for (final ModelPart upper : this.plowShaftUpper) {
             upper.xRot = (float) (entity.getPlowing() ? Math.PI / 4.0D - Math.toRadians(pitch) : Math.PI / 2.5D);
         }
@@ -68,12 +100,19 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
         }
     }
 
+    /**
+     * Creates the layer definition for the RNR Plow model, defining its geometry and UV mapping.
+     *
+     * @return The LayerDefinition for the RNR Plow model.
+     */
     public static LayerDefinition createLayer() {
         final MeshDefinition def = CartModel.createDefinition();
 
+        // Define the axis part of the model.
         final EasyMeshBuilder axis = new EasyMeshBuilder("axis", 0, 0);
         axis.addBox(-12.5F, -1.0F, -1.0F, 25, 2, 2);
 
+        // Define the "hopper" looking parts of the model.
         final EasyMeshBuilder[] triangle = new EasyMeshBuilder[3];
         triangle[0] = new EasyMeshBuilder("triangle_0", 0, 4);
         triangle[0].addBox(-7.5F, -5.0F, -10.0F, 15, 4, 22);
@@ -81,6 +120,7 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
         triangle[1] = new EasyMeshBuilder("triangle_1", 0, 11);
         triangle[1].addBox(-6.5F, -3.0F, -9.0F, 13, 13, 20);
 
+        // Define the shaft parts of the model.
         final EasyMeshBuilder shaft = new EasyMeshBuilder("shaft", 0, 8);
         shaft.zRot = -0.07F;
         shaft.addBox(0.0F, 0.0F, -8.0F, 20, 2, 1);
@@ -91,12 +131,14 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
         shaftConnector.addBox(-16.0F, 0.0F, -8.0F, 16, 2, 1);
         shaftConnector.addBox(-16.0F, 0.0F, 7.0F, 16, 2, 1);
 
+        // Group the shafts together.
         final EasyMeshBuilder shafts = new EasyMeshBuilder("shafts");
         shafts.setRotationPoint(0.0F, 0.0F, -14.0F);
         shafts.yRot = (float) Math.PI / 2.0F;
         shafts.addChild(shaft);
         shafts.addChild(shaftConnector);
 
+        // Define the upper and lower plow shafts.
         final EasyMeshBuilder[] plowShaftUpper = new EasyMeshBuilder[3];
         final EasyMeshBuilder[] plowShaftLower = new EasyMeshBuilder[3];
         for (int i = 0; i < plowShaftUpper.length; i++) {
@@ -113,6 +155,7 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
             plowShaftUpper[i].addChild(plowShaftLower[i]);
         }
 
+        // Group all parts together under "parts".
         final EasyMeshBuilder parts = new EasyMeshBuilder("parts");
         parts.setRotationPoint(0.0F, -5.0F, -1.0F);
         parts.addChild(shafts);
@@ -122,6 +165,7 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
         parts.addChild(plowShaftUpper[1]);
         parts.addChild(plowShaftUpper[2]);
 
+        // Define the body of the model and add all parts to it.
         final EasyMeshBuilder body = CartModel.createBody();
         body.addChild(axis);
         body.addChild(parts);
