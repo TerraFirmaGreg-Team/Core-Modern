@@ -3,23 +3,27 @@ package su.terrafirmagreg.core.common.data.entities.astikorcarts;
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 
-import de.mennomax.astikorcarts.AstikorCarts;
 import de.mennomax.astikorcarts.client.renderer.entity.DrawnRenderer;
 
+import su.terrafirmagreg.core.TFGCore;
+
 public final class RNRPlowRenderer extends DrawnRenderer<RNRPlow, RNRPlowModel> {
-    @SuppressWarnings({ "removal" })
-    private static final ResourceLocation TEXTURE = new ResourceLocation(AstikorCarts.ID + ":textures/entity/plow.png");
+
+    private static final ResourceLocation TEX_WHEEL = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_wheel.png");
+    private static final ResourceLocation TEX_AXIS = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_axis.png");
+    private static final ResourceLocation TEX_HOPPER_0 = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_hopper_0.png");
+    private static final ResourceLocation TEX_HOPPER_1 = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_hopper_1.png");
+    private static final ResourceLocation TEX_SHAFTS = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_shafts.png");
+    private static final ResourceLocation TEX_BLADES = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/entity/rnr_plow/rnr_plow_blades.png");
 
     public RNRPlowRenderer(final EntityRendererProvider.Context renderManager) {
         super(renderManager, new RNRPlowModel(renderManager.bakeLayer(RNRPlowModel.LAYER_LOCATION)));
@@ -28,28 +32,31 @@ public final class RNRPlowRenderer extends DrawnRenderer<RNRPlow, RNRPlowModel> 
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(final @NotNull RNRPlow entity) {
-        return TEXTURE;
+        // Default texture which gets applied to the second render pass (wheels).
+        return TEX_WHEEL;
     }
 
     @Override
     protected void renderContents(final RNRPlow entity, final float delta, final PoseStack stack, final MultiBufferSource source, final int packedLight) {
-        super.renderContents(entity, delta, stack, source, packedLight);
-        // Render only the first 3 tool slots on the shafts
-        for (int i = 0; i < Math.min(3, entity.inventory.getSlots()); i++) {
-            final ItemStack itemStack = entity.getStackInSlot(i);
-            if (itemStack.isEmpty())
-                continue;
-            this.attach(this.model.getBody(), this.model.getShaft(i), s -> {
-                s.mulPose(Axis.XP.rotationDegrees(-90.0F));
-                s.mulPose(Axis.YP.rotationDegrees(90.0F));
-                s.translate(-4.0D / 16.0D, 1.0D / 16.0D, 0.0D);
-                if (itemStack.getItem() instanceof BlockItem) {
-                    s.translate(0.0D, -0.1D, 0.0D);
-                    s.mulPose(Axis.ZP.rotationDegrees(180.0F));
-                }
-                Minecraft.getInstance().getItemRenderer()
-                        .renderStatic(itemStack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, s, source, entity.level(), 0);
-            }, stack);
-        }
+        stack.pushPose();
+        this.model.getBody().translateAndRotate(stack);
+
+        renderPartForceVisible(this.model.getAxis(), TEX_AXIS, stack, source, packedLight);
+        renderPartForceVisible(this.model.getTriangle0(), TEX_HOPPER_0, stack, source, packedLight);
+        renderPartForceVisible(this.model.getTriangle1(), TEX_HOPPER_1, stack, source, packedLight);
+        renderPartForceVisible(this.model.getShaftsGroup(), TEX_SHAFTS, stack, source, packedLight);
+        renderPartForceVisible(this.model.getUpperShaft(0), TEX_BLADES, stack, source, packedLight);
+        renderPartForceVisible(this.model.getUpperShaft(1), TEX_BLADES, stack, source, packedLight);
+        renderPartForceVisible(this.model.getUpperShaft(2), TEX_BLADES, stack, source, packedLight);
+
+        stack.popPose();
+    }
+
+    private static void renderPartForceVisible(ModelPart part, ResourceLocation tex, PoseStack stack, MultiBufferSource source, int light) {
+        final boolean old = part.visible;
+        part.visible = true;
+        final VertexConsumer vc = source.getBuffer(RenderType.entityCutoutNoCull(tex));
+        part.render(stack, vc, light, OverlayTexture.NO_OVERLAY);
+        part.visible = old;
     }
 }

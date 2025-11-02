@@ -66,6 +66,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
 
     private static final EntityDataAccessor<Boolean> PLOWING = SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> PLOW_WIDTH = SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> PLOW_TEXTURE = SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.INT);
 
     private static final ImmutableList<EntityDataAccessor<ItemStack>> TOOLS = ImmutableList.of(
             SynchedEntityData.defineId(RNRPlow.class, EntityDataSerializers.ITEM_STACK),
@@ -137,6 +138,14 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         this.entityData.set(PLOW_WIDTH, Mth.clamp(width, MIN_PLOW_WIDTH, MAX_PLOW_WIDTH));
     }
 
+    public int getPlowTextureVariant() {
+        return Math.max(0, this.entityData.get(PLOW_TEXTURE));
+    }
+
+    public void setPlowTextureVariant(int variant) {
+        this.entityData.set(PLOW_TEXTURE, Math.max(0, variant));
+    }
+
     @Override
     public void pulledTick() {
         super.pulledTick();
@@ -190,7 +199,6 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         final Item crushedItem = ForgeRegistries.ITEMS.getValue(CRUSHED_BASE_COURSE_ID);
         if (baseCourse == null || crushedItem == null)
             return;
-
         if (!hasAnyCrushedInLowerInventory(crushedItem) && player instanceof ServerPlayer sp) {
             if (this.tickCount - lastNoCrushedWarnTick >= 20) {
                 sp.displayClientMessage(Component.translatable("tfg.gui.rnr_plow.empty_crushed_base_course"), true);
@@ -451,15 +459,12 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         }
     }
 
-    public ItemStack getStackInSlot(final int i) {
-        return this.entityData.get(TOOLS.get(i));
-    }
-
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(PLOWING, false);
         this.entityData.define(PLOW_WIDTH, DEFAULT_PLOW_WIDTH);
+        this.entityData.define(PLOW_TEXTURE, 0); // default variant 0
         for (final EntityDataAccessor<ItemStack> param : TOOLS) {
             this.entityData.define(param, ItemStack.EMPTY);
         }
@@ -472,6 +477,9 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         if (compound.contains("PlowWidth")) {
             this.setPlowWidth(compound.getInt("PlowWidth"));
         }
+        if (compound.contains("PlowTexture")) {
+            this.setPlowTextureVariant(compound.getInt("PlowTexture"));
+        }
     }
 
     @Override
@@ -479,6 +487,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Plowing", this.entityData.get(PLOWING));
         compound.putInt("PlowWidth", this.getPlowWidth());
+        compound.putInt("PlowTexture", this.getPlowTextureVariant());
     }
 
     private void openContainer(final Player player) {

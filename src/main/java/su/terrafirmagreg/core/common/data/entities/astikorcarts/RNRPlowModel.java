@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import de.mennomax.astikorcarts.client.renderer.entity.model.CartModel;
 import de.mennomax.astikorcarts.client.renderer.entity.model.EasyMeshBuilder;
+import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
 
@@ -21,24 +22,49 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
     private final ModelPart[] plowShaftUpper = new ModelPart[3];
     private final ModelPart[] plowShaftLower = new ModelPart[3];
 
+    @Getter
+    private final ModelPart axis;
+    @Getter
+    private final ModelPart shaftsGroup;
+    @Getter
+    private final ModelPart triangle0;
+    @Getter
+    private final ModelPart triangle1;
+
     public RNRPlowModel(final ModelPart root) {
         super(root);
-        ModelPart parts = root.getChild("body").getChild("parts");
+        final ModelPart body = root.getChild("body");
+        this.axis = body.getChild("axis");
+        ModelPart partsGroup = body.getChild("parts");
+        this.shaftsGroup = partsGroup.getChild("shafts");
+        this.triangle0 = partsGroup.getChild("triangle_0");
+        this.triangle1 = partsGroup.getChild("triangle_1");
+
         for (int i = 0; i < this.plowShaftUpper.length; i++) {
-            this.plowShaftUpper[i] = parts.getChild("plow_shaft_upper_" + i);
+            this.plowShaftUpper[i] = partsGroup.getChild("plow_shaft_upper_" + i);
             this.plowShaftLower[i] = this.plowShaftUpper[i].getChild("plow_shaft_lower_" + i);
         }
     }
 
-    public ModelPart getShaft(final int original) {
-        return this.plowShaftLower[original];
+    public ModelPart getUpperShaft(final int i) {
+        return this.plowShaftUpper[i];
     }
 
     @Override
     public void setupAnim(final @NotNull RNRPlow entity, final float delta, final float limbSwingAmount, final float ageInTicks, final float netHeadYaw, final float pitch) {
         super.setupAnim(entity, delta, limbSwingAmount, ageInTicks, netHeadYaw, pitch);
-        for (final ModelPart renderer : this.plowShaftUpper) {
-            renderer.xRot = (float) (entity.getPlowing() ? Math.PI / 4.0D - Math.toRadians(pitch) : Math.PI / 2.5D);
+
+        for (final ModelPart upper : this.plowShaftUpper) {
+            upper.xRot = (float) (entity.getPlowing() ? Math.PI / 4.0D - Math.toRadians(pitch) : Math.PI / 2.5D);
+        }
+
+        // Hide all base plow geometry so DrawnRenderer's default pass renders none of it.
+        this.axis.visible = false;
+        this.triangle0.visible = false;
+        this.triangle1.visible = false;
+        this.shaftsGroup.visible = false;
+        for (final ModelPart upper : this.plowShaftUpper) {
+            upper.visible = false;
         }
     }
 
@@ -50,16 +76,10 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
 
         final EasyMeshBuilder[] triangle = new EasyMeshBuilder[3];
         triangle[0] = new EasyMeshBuilder("triangle_0", 0, 4);
-        triangle[0].addBox(-7.5F, -9.0F, 0.0F, 15, 2, 2);
+        triangle[0].addBox(-7.5F, -5.0F, -10.0F, 15, 4, 22);
 
         triangle[1] = new EasyMeshBuilder("triangle_1", 0, 11);
-        triangle[1].addBox(-5.0F, -9.0F, 0.5F, 2, 14, 2);
-        triangle[1].zRot = -0.175F;
-
-        triangle[2] = new EasyMeshBuilder("triangle_2", 0, 11);
-        triangle[2].mirror(true);
-        triangle[2].addBox(3.0F, -9.0F, 0.5F, 2, 14, 2);
-        triangle[2].zRot = 0.175F;
+        triangle[1].addBox(-6.5F, -3.0F, -9.0F, 13, 13, 20);
 
         final EasyMeshBuilder shaft = new EasyMeshBuilder("shaft", 0, 8);
         shaft.zRot = -0.07F;
@@ -81,35 +101,23 @@ public final class RNRPlowModel extends CartModel<RNRPlow> {
         final EasyMeshBuilder[] plowShaftLower = new EasyMeshBuilder[3];
         for (int i = 0; i < plowShaftUpper.length; i++) {
             plowShaftUpper[i] = new EasyMeshBuilder("plow_shaft_upper_" + i, 56, 0);
-            plowShaftUpper[i].addBox(-1.0F, -2.0F, -2.0F, 2, 30, 2);
-            plowShaftUpper[i].setRotationPoint(-3.0F + 3 * i, -7.0F, 0.0F);
+            plowShaftUpper[i].addBox(-1.0F, 2.0F, -2.0F, 1, 20, 6);
+            plowShaftUpper[i].setRotationPoint(-3.0F + 3.5F * i, -1.0F, 0.0F);
             plowShaftUpper[i].yRot = -0.523599F + (float) Math.PI / 6.0F * i;
 
+            // Just making these size 0 since it's too much work to remove them :3
             plowShaftLower[i] = new EasyMeshBuilder("plow_shaft_lower_" + i, 42, 4);
-            plowShaftLower[i].addBox(-1.0F, -0.7F, -0.7F, 2, 10, 2);
+            plowShaftLower[i].addBox(-1.0F, -0.7F, -0.7F, 0, 0, 0);
             plowShaftLower[i].setRotationPoint(0.0F, 28.0F, -1.0F);
             plowShaftLower[i].xRot = (float) Math.PI / 4.0F;
             plowShaftUpper[i].addChild(plowShaftLower[i]);
         }
-
-        final EasyMeshBuilder plowHandle = new EasyMeshBuilder("plow_handle", 50, 4);
-        plowHandle.addBox(-0.5F, 0.0F, -0.5F, 1, 18, 1);
-        plowHandle.setRotationPoint(0.0F, 33.0F, 5.0F);
-        plowHandle.xRot = (float) Math.PI / 2.0F;
-        plowShaftUpper[1].addChild(plowHandle);
-
-        final EasyMeshBuilder plowHandleGrip = new EasyMeshBuilder("plow_handle_grip", 50, 23);
-        plowHandleGrip.addBox(-0.5F, 0.0F, -1.0F, 1, 5, 1);
-        plowHandleGrip.setRotationPoint(0.0F, 32.8F, 21.0F);
-        plowHandleGrip.xRot = (float) Math.PI / 4.0F;
-        plowShaftUpper[1].addChild(plowHandleGrip);
 
         final EasyMeshBuilder parts = new EasyMeshBuilder("parts");
         parts.setRotationPoint(0.0F, -5.0F, -1.0F);
         parts.addChild(shafts);
         parts.addChild(triangle[0]);
         parts.addChild(triangle[1]);
-        parts.addChild(triangle[2]);
         parts.addChild(plowShaftUpper[0]);
         parts.addChild(plowShaftUpper[1]);
         parts.addChild(plowShaftUpper[2]);
