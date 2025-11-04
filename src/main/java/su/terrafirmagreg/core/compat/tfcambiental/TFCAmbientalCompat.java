@@ -101,8 +101,8 @@ public final class TFCAmbientalCompat {
                     return cap != null && cap.isActive() && cap.isWorkingEnabled() && isTargetBlock;
                 }));
 
-        AmbientalRegistry.BLOCKS.register(
-                (player, blockPos, state) -> Optional.of(new TempModifier("arc_furnace", 12.0F, 3.0F)).filter((mod) -> {
+        AmbientalRegistry.BLOCKS.register((player, blockPos, state) -> Optional
+                .of(new TempModifier("arc_furnace", 12.0F, 3.0F)).filter((mod) -> {
                     var isTargetBlock = Arrays.stream(GTMachines.ARC_FURNACE).anyMatch(element -> {
                         if (element != null)
                             return element.getBlock() == state.getBlock();
@@ -194,51 +194,48 @@ public final class TFCAmbientalCompat {
         AmbientalRegistry.EQUIPMENT.register(
                 (player, stack) -> Optional.of(new TempModifier("copper_diving_equipment", -1f, 0.1f)).filter((mod) -> {
                     var item = stack.getItem();
-                    return (item == AllItems.COPPER_DIVING_HELMET.asItem()
-                            || item == AllItems.COPPER_DIVING_BOOTS.asItem()
-                            || item == AllItems.COPPER_BACKTANK.asItem());
+                    return (item == AllItems.COPPER_DIVING_HELMET.get()
+                            || item == AllItems.COPPER_DIVING_BOOTS.get()
+                            || item == AllItems.COPPER_BACKTANK.get());
                 }));
 
         AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional
                 .of(new TempModifier("blue_steel_diving_equipment", -3f, HEATPROOF)).filter((mod) -> {
                     var item = stack.getItem();
-                    return (item == AllItems.NETHERITE_DIVING_HELMET.asItem()
-                            || item == AllItems.NETHERITE_DIVING_BOOTS.asItem()
-                            || item == AllItems.NETHERITE_BACKTANK.asItem()
-                            || item == Items.NETHERITE_LEGGINGS.asItem());
+                    return (item == AllItems.NETHERITE_DIVING_HELMET.get()
+                            || item == AllItems.NETHERITE_DIVING_BOOTS.get()
+                            || item == AllItems.NETHERITE_BACKTANK.get()
+                            || item == Items.NETHERITE_LEGGINGS
+                            || item == Items.NETHERITE_BOOTS);
                 }));
 
         AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional
                 .of(new TempModifier("nanomuscle_armor", 0f, FULLY_INSULATED)).filter((mod) -> {
                     var item = stack.getItem();
-                    return (item == GTItems.NANO_HELMET.asItem()
-                            || item == GTItems.NANO_CHESTPLATE.asItem()
-                            || item == GTItems.NANO_LEGGINGS.asItem()
-                            || item == GTItems.NANO_BOOTS.asItem()
-                            || item == GTItems.NANO_CHESTPLATE_ADVANCED.asItem());
+                    return (item == GTItems.NANO_HELMET.get()
+                            || item == GTItems.NANO_CHESTPLATE.get()
+                            || item == GTItems.NANO_LEGGINGS.get()
+                            || item == GTItems.NANO_BOOTS.get()
+                            || item == GTItems.NANO_CHESTPLATE_ADVANCED.get());
                 }));
 
         AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional
                 .of(new TempModifier("quarktech_armor", 0f, FULLY_INSULATED)).filter((mod) -> {
                     var item = stack.getItem();
-                    return (item == GTItems.QUANTUM_HELMET.asItem()
-                            || item == GTItems.QUANTUM_CHESTPLATE.asItem()
-                            || item == GTItems.QUANTUM_LEGGINGS.asItem()
-                            || item == GTItems.QUANTUM_BOOTS.asItem()
-                            || item == GTItems.QUANTUM_CHESTPLATE_ADVANCED.asItem());
+                    return (item == GTItems.QUANTUM_HELMET.get()
+                            || item == GTItems.QUANTUM_CHESTPLATE.get()
+                            || item == GTItems.QUANTUM_LEGGINGS.get()
+                            || item == GTItems.QUANTUM_BOOTS.get()
+                            || item == GTItems.QUANTUM_CHESTPLATE_ADVANCED.get());
                 }));
 
-        AmbientalRegistry.EQUIPMENT.register(
-                (player, stack) -> Optional.of(new TempModifier("space_suit", 0f, FULLY_INSULATED)).filter((mod) -> {
+        AmbientalRegistry.EQUIPMENT.register((player, stack) -> Optional
+                .of(new TempModifier("space_suit", 0f, FULLY_INSULATED)).filter((mod) -> {
                     var item = stack.getItem();
-                    return (item == ModItems.SPACE_HELMET.get() || item == ModItems.NETHERITE_SPACE_HELMET.get()
-                            || item == ModItems.JET_SUIT_HELMET.get()
-                            || item == ModItems.SPACE_SUIT.get() || item == ModItems.NETHERITE_SPACE_SUIT.get()
-                            || item == ModItems.JET_SUIT.get()
-                            || item == ModItems.SPACE_PANTS.get() || item == ModItems.NETHERITE_SPACE_PANTS.get()
-                            || item == ModItems.JET_SUIT_PANTS.get()
-                            || item == ModItems.SPACE_BOOTS.get() || item == ModItems.NETHERITE_SPACE_BOOTS.get()
-                            || item == ModItems.JET_SUIT_BOOTS.get());
+                    return (item == ModItems.SPACE_HELMET.get() || item == ModItems.NETHERITE_SPACE_HELMET.get() || item == ModItems.JET_SUIT_HELMET.get()
+                            || item == ModItems.SPACE_SUIT.get() || item == ModItems.NETHERITE_SPACE_SUIT.get() || item == ModItems.JET_SUIT.get()
+                            || item == ModItems.SPACE_PANTS.get() || item == ModItems.NETHERITE_SPACE_PANTS.get() || item == ModItems.JET_SUIT_PANTS.get()
+                            || item == ModItems.SPACE_BOOTS.get() || item == ModItems.NETHERITE_SPACE_BOOTS.get() || item == ModItems.JET_SUIT_BOOTS.get());
                 }));
     }
 
