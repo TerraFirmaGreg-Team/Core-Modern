@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.material.Fluids;
 
 import earth.terrarium.adastra.common.registry.ModItems;
+
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 
 public final class TFCAmbientalCompat {
@@ -136,26 +137,26 @@ public final class TFCAmbientalCompat {
                 }));
 
         AmbientalRegistry.BLOCKS.register((player, blockPos, state) -> Optional
-               .of(new TempModifier("food_oven", 7.0F, 2.0F)).filter((mod) -> {
-                var isTargetBlock = Arrays.stream(TFGMachines.FOOD_OVEN).anyMatch(element -> {
-                    if (element != null)
-                        return element.getBlock() == state.getBlock();
-                    return false;
-                });
-                var cap = GTCapabilityHelper.getRecipeLogic(player.level(), blockPos, null);
-                return cap != null && cap.isActive() && cap.isWorkingEnabled() && isTargetBlock;
-            }));
+                .of(new TempModifier("food_oven", 7.0F, 2.0F)).filter((mod) -> {
+                    var isTargetBlock = Arrays.stream(TFGMachines.FOOD_OVEN).anyMatch(element -> {
+                        if (element != null)
+                            return element.getBlock() == state.getBlock();
+                        return false;
+                    });
+                    var cap = GTCapabilityHelper.getRecipeLogic(player.level(), blockPos, null);
+                    return cap != null && cap.isActive() && cap.isWorkingEnabled() && isTargetBlock;
+                }));
 
         AmbientalRegistry.BLOCKS.register((player, blockPos, state) -> Optional
-               .of(new TempModifier("refrigerator", 5.0F, 1.0F)).filter((mod) -> {
-                var isTargetBlock = Arrays.stream(TFGMachines.FOOD_REFRIGERATOR).anyMatch(element -> {
-                    if (element != null)
-                        return element.getBlock() == state.getBlock();
-                    return false;
-                });
-                var cap = GTCapabilityHelper.getRecipeLogic(player.level(), blockPos, null);
-                return cap != null && cap.isActive() && cap.isWorkingEnabled() && isTargetBlock;
-            }));
+                .of(new TempModifier("refrigerator", 5.0F, 1.0F)).filter((mod) -> {
+                    var isTargetBlock = Arrays.stream(TFGMachines.FOOD_REFRIGERATOR).anyMatch(element -> {
+                        if (element != null)
+                            return element.getBlock() == state.getBlock();
+                        return false;
+                    });
+                    var cap = GTCapabilityHelper.getRecipeLogic(player.level(), blockPos, null);
+                    return cap != null && cap.isActive() && cap.isWorkingEnabled() && isTargetBlock;
+                }));
 
         /* Койлы доменной печи */
         AmbientalRegistry.BLOCKS
