@@ -31,7 +31,7 @@ public class ProgenitorCellsItem extends Item {
             EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(rl);
 
             if (type != null) {
-                tooltip.add(Component.translatable("tfg.tooltip.proginator_cells.mob")
+                tooltip.add(Component.translatable("tfg.tooltip.progenitor_cells.mob")
                         .append(Component.translatable("entity." + mobId.replace(":", ".")))
                         .withStyle(ChatFormatting.GOLD));
             }
