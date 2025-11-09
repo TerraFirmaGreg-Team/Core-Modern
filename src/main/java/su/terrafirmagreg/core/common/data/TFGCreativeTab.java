@@ -68,6 +68,7 @@ public class TFGCreativeTab {
         accept(out, TFGItems.TROWEL);
         accept(out, TFGItems.EMPTY_DNA_SYRINGE);
         accept(out, TFGItems.DIRTY_DNA_SYRINGE);
+        accept(out, TFGItems.PROGENITOR_CELLS);
 
         accept(out, TFGItems.MARS_WATER_BUCKET);
 
