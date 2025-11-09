@@ -150,7 +150,9 @@ public class TFGMultiMachines {
                     .or(Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())))
                 .where('X', Predicates.blockTag(Tags.Blocks.GLASS)
                     .or(Predicates.blocks(ForgeRegistries.BLOCKS
-                        .getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_glass")))))
+                        .getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_glass"))))
+                    .or(Predicates.blocks(ForgeRegistries.BLOCKS
+                        .getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_vibrant_glass")))))
                 .where('D', Predicates.blockTag(BlockTags.DIRT)
                     .or(Predicates.blockTag(TFCTags.Blocks.GRASS))
                     .or(Predicates.blockTag(BlockTags.SAND))
