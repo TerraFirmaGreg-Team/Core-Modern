@@ -112,6 +112,7 @@
         "common.tfc.RockSpikeBlockMixin",
         "common.tfc.TFCBlocksMixin",
         "common.tfc.TFCChainBlockMixin",
+        "common.tfc.TFCFallingBlockEntityMixin",
         "common.tfcambiental.TemperatureCapabilityMixin",
         "common.vintageimprovements.CurvingRecipeMixin",
         "common.vintageimprovements.HelveItemsRendererMixin",

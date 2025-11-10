@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.container.BlockEntityContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.Level;
@@ -15,13 +16,23 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxContainer;
+import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowContainer;
 
 public class TFGContainers {
-    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES,
-            TFGCore.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, TFGCore.MOD_ID);
+
+    public static final RegistryObject<MenuType<RNRPlowContainer>> RNR_PLOW_MENU = registerContainer("rnr_plow", (windowId, inv, buf) -> {
+        final int entityId = buf.readInt();
+        final Entity e = inv.player.level().getEntity(entityId);
+        if (!(e instanceof AbstractDrawnInventoryEntity cart))
+            return null;
+        return new RNRPlowContainer(windowId, inv, cart);
+    });
 
     public static final RegistryObject<MenuType<LargeNestBoxContainer>> LARGE_NEST_BOX = TFGContainers
             .<LargeNestBoxBlockEntity, LargeNestBoxContainer>registerBlockEntityContainer("large_nest_box",
