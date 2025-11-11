@@ -1,9 +1,6 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.trait;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +44,7 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
     private static final Map<String, TFCRecipeData> TFCRecipes = new HashMap<>();
 
+    @SuppressWarnings("unused")
     public static void RegisterRecipeData(String id, List<Ingredient> inputs, ItemStackProvider output,
             List<ItemStack> secondaryOutputs) {
         List<SizedIngredient> sizedIngredients = new ArrayList<>();
@@ -257,16 +255,22 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         if (currentRecipe.outputISP == null)
             return true;
 
-        if ((simulate && currentItemsSimulated.isEmpty()) || (!simulate && currentItems.isEmpty()))
-            return false;
+        // Use the consumed inputs if present. Otherwise, seed a dummy input.
+        List<ItemStack> ctx = simulate ? currentItemsSimulated : currentItems;
+        if (ctx.isEmpty()) {
+            // Allow 0 item input recipes to still generate a proper food date.
+            ctx = java.util.List.of(ItemStack.EMPTY);
+        }
 
         List<IRecipeHandler<?>> outputHandlers = new ArrayList<>();
         getCapHolder().getCapabilitiesForIO(IO.OUT)
                 .forEach(v -> outputHandlers.addAll(v.getCapability(ItemRecipeCapability.CAP)));
         outputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
 
-        RecipeHelpers.setCraftingInput(new SimulatedCraftingContainer(simulate ? currentItemsSimulated : currentItems));
-        var ispResult = currentRecipe.outputISP.getStack(simulate ? currentItemsSimulated.get(0) : currentItems.get(0));
+        // Seed crafting input so ISPs can compute "now".
+        RecipeHelpers.setCraftingInput(new SimulatedCraftingContainer(ctx));
+        ItemStack ispResult = currentRecipe.outputISP.getStack(ctx.get(0));
+
         List<ItemStack> allOutputs = new ArrayList<>(currentRecipe.secondaryOutputs);
         allOutputs.add(0, ispResult);
         // Logic to allow food items with similar creation dates to stack properly
@@ -283,11 +287,10 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                             itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
                         } else if (FoodCapability.has(itemStack) && FoodCapability.has(inSlot)
                                 && FoodCapability.areStacksStackableExceptCreationDate(itemStack, inSlot)) {
-                            var date1 = FoodCapability.get(inSlot).getCreationDate();
-                            var date2 = FoodCapability.get(itemStack).getCreationDate();
-                            if (FoodCapability.getRoundedCreationDate(date1) == FoodCapability
-                                    .getRoundedCreationDate(date2)) {
-                                FoodCapability.get(itemStack).setCreationDate(date1);
+                            var date1 = Objects.requireNonNull(FoodCapability.get(inSlot)).getCreationDate();
+                            var date2 = Objects.requireNonNull(FoodCapability.get(itemStack)).getCreationDate();
+                            if (FoodCapability.getRoundedCreationDate(date1) == FoodCapability.getRoundedCreationDate(date2)) {
+                                Objects.requireNonNull(FoodCapability.get(itemStack)).setCreationDate(date1);
                                 itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
                             }
                         }
