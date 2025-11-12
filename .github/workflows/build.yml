@@ -129,13 +129,6 @@ jobs:
           cache-write-only: false
           add-job-summary: 'on-failure'
           cache-disabled: true
-          gradle-home-cache-includes: |
-            caches
-            notifications
-            jdks
-          gradle-home-cache-excludes: |
-            caches/build-cache-1
-            caches/keyrings
 
       - name: 🔄 Grant Execute Permission For Gradlew
         run: chmod +x gradlew
