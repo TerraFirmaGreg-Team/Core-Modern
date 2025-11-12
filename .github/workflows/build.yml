@@ -119,15 +119,13 @@ jobs:
       - name: 📁 Setup JDK
         uses: actions/setup-java@v5.0.0
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: ${{ needs.info.outputs.java_version }}
-          cache: 'gradle'
 
       - name: 📁 Setup Gradle
         uses: gradle/actions/setup-gradle@v5.0.0
         with:
-          cache-write-only: false
-          add-job-summary: 'on-failure'
+          cache-cleanup: always
           cache-disabled: true
 
       - name: 🔄 Grant Execute Permission For Gradlew
