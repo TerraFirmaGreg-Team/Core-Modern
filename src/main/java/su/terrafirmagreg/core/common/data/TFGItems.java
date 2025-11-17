@@ -17,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import appeng.api.upgrades.Upgrades;
+import de.mennomax.astikorcarts.item.CartItem;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.items.*;
@@ -41,6 +42,8 @@ public class TFGItems {
             () -> new DirtyDnaSyringeItem(new Item.Properties()));
     public static final RegistryObject<Item> FILLED_DNA_SYRINGE = ITEMS.register("filled_dna_syringe",
             () -> new FilledDnaSyringeItem(new Item.Properties()));
+    public static final RegistryObject<Item> PROGENITOR_CELLS = ITEMS.register("progenitor_cells",
+            () -> new ProgenitorCellsItem(new Item.Properties()));
 
     public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
     public static final RegistryObject<Item> GLACIAN_RAM_EGG = registerSpawnEgg(TFGEntities.GLACIAN_RAM, 16772607, 3997758);
@@ -84,4 +87,7 @@ public class TFGItems {
         return register("spawn_egg/" + entity.getId().getPath(),
                 () -> new ForgeSpawnEggItem(entity, color1, color2, new Item.Properties()));
     }
+
+    public static final RegistryObject<Item> RNR_PLOW = ITEMS.register("rnr_plow",
+            () -> new CartItem(new Item.Properties().stacksTo(1)));
 }

@@ -40,7 +40,7 @@ public class TFGRecipeTypes {
                                                                                                                                              // more custom progress bars.
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
-            .setMaxIOSize(6, 6, 3, 3)
+            .setMaxIOSize(6, 6, 6, 6)
             .setProgressBar(PROGRESS_BAR_DNA, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.BATH)
             .setUiBuilder((recipe, widgetGroup) -> {
@@ -80,7 +80,7 @@ public class TFGRecipeTypes {
     public static final GTRecipeType FOOD_PROCESSOR_RECIPES = GTRecipeTypes
             .register("food_processor", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
-            .setMaxIOSize(6, 2, 2, 1)
+            .setMaxIOSize(9, 2, 3, 1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.MIXER)
             .setUiBuilder((recipe, widgetGroup) -> {

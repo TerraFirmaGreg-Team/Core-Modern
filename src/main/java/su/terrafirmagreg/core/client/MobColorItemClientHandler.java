@@ -14,7 +14,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class SyringeClientHandler {
+public class MobColorItemClientHandler {
 
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
@@ -23,7 +23,7 @@ public class SyringeClientHandler {
             if (tintIndex == 0)
                 return 0xFFFFFF;
 
-            // Applies color tints to filled dna syringes.
+            // Applies color tints.
             if (stack.hasTag()) {
                 assert stack.getTag() != null;
                 if (stack.getTag().contains("mob_type")) {
@@ -71,5 +71,6 @@ public class SyringeClientHandler {
 
         // Register the color provider for the filled syringe item.
         event.register(colorProvider, TFGItems.FILLED_DNA_SYRINGE.get());
+        event.register(colorProvider, TFGItems.PROGENITOR_CELLS.get());
     }
 }

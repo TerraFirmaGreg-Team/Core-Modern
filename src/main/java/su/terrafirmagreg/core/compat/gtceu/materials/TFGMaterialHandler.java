@@ -5,6 +5,8 @@ import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix.*;
 
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
@@ -23,7 +25,10 @@ import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Metal;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import earth.terrarium.adastra.common.registry.ModBlocks;
 import earth.terrarium.adastra.common.registry.ModItems;
@@ -151,6 +156,44 @@ public final class TFGMaterialHandler {
         var kaolinite = TFGHelpers.getMaterial("kaolinite");
         if (kaolinite != null) {
             dust.setIgnored(kaolinite, () -> TFCItems.POWDERS.get(Powder.KAOLINITE).get());
+        }
+
+        //Holder Materials
+        //    Used to allow us to give material components to non-material items
+        final Supplier<Item> nitrocellulose_item = () -> Objects.requireNonNull(ForgeRegistries.ITEMS
+                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "nitrocellulose"))).asItem();
+
+        var nitrocellulose = TFGHelpers.getMaterial("nitrocellulose");
+        if (nitrocellulose != null) {
+            dust.setIgnored(nitrocellulose, nitrocellulose_item::get);
+            dustSmall.setIgnored(nitrocellulose);
+            dustTiny.setIgnored(nitrocellulose);
+        }
+
+        final Supplier<Item> celluloseM_item = () -> Objects.requireNonNull(ForgeRegistries.ITEMS
+                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "cellulose_matrix"))).asItem();
+
+        var cellulose_matrix = TFGHelpers.getMaterial("cellulose_matrix");
+        if (cellulose_matrix != null) {
+            dust.setIgnored(cellulose_matrix, celluloseM_item::get);
+            dustSmall.setIgnored(cellulose_matrix);
+            dustTiny.setIgnored(cellulose_matrix);
+        }
+
+        final Supplier<Item> polycaprolactam_fabric_item = () -> Objects.requireNonNull(ForgeRegistries.ITEMS
+                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "polycaprolactam_fabric"))).asItem();
+        final Supplier<Item> polycaprolactam_string_item = () -> Objects.requireNonNull(ForgeRegistries.ITEMS
+                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "polycaprolactam_string"))).asItem();
+
+        var polycaprolactam = TFGHelpers.getMaterial("tfg_polycaprolactam");
+        if (polycaprolactam != null) {
+            ingot.setIgnored(polycaprolactam, polycaprolactam_fabric_item::get);
+            nugget.setIgnored(polycaprolactam, polycaprolactam_string_item::get);
+            dust.setIgnored(polycaprolactam);
+            dustSmall.setIgnored(polycaprolactam);
+            dustTiny.setIgnored(polycaprolactam);
+            block.setIgnored(polycaprolactam);
+
         }
 
         // Tool-only metals

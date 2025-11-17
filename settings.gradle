@@ -1,6 +1,9 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         mavenCentral()
+        maven { url "https://maven.neoforged.net/" }
+        maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 
         maven {
             name 'MinecraftForge'

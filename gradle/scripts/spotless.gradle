@@ -1,0 +1,35 @@
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    dependsOn tasks.named('spotlessApply')
+}
+
+spotless {
+
+    java {
+        target project.fileTree(project.rootDir) {
+            include 'src/*/java/su/**/*.java'
+            exclude 'src/**/compat/emi/ExportedOreVeinInfo.java'
+        }
+
+        endWithNewline()
+        indentWithSpaces()
+        removeUnusedImports()
+        toggleOffOn()
+        eclipse().configFile 'codeformat/codeformat.xml'
+        importOrderFile 'codeformat/tfg.importorder'
+
+        bumpThisNumberIfACustomStepChanges(1)
+    }
+
+    json {
+        target 'src/*/resources/**/*.json'
+        targetExclude 'src/generated/resources/**'
+        simple()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+}
+
+tasks.named("build") {
+    dependsOn("spotlessApply")
+}

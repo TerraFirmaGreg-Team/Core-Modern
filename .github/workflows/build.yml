@@ -119,22 +119,14 @@ jobs:
       - name: 📁 Setup JDK
         uses: actions/setup-java@v5.0.0
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: ${{ needs.info.outputs.java_version }}
-          cache: 'gradle'
 
       - name: 📁 Setup Gradle
         uses: gradle/actions/setup-gradle@v5.0.0
         with:
-          cache-write-only: false
-          gradle-home-cache-includes: |
-            caches
-            notifications
-            jdks
-            wrapper
-
-      - name: 🔄 Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v5.0.0
+          cache-cleanup: always
+          cache-disabled: true
 
       - name: 🔄 Grant Execute Permission For Gradlew
         run: chmod +x gradlew
@@ -150,7 +142,7 @@ jobs:
           fi
 
       - name: 🚀 Upload Artifact Jar
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: ${{ needs.info.outputs.project_full_name }}
           path: build/libs/${{ needs.info.outputs.project_full_name }}.jar
@@ -174,7 +166,7 @@ jobs:
             fi  
 
         - name: 📦 Download artifact
-          uses: actions/download-artifact@v5.0.0
+          uses: actions/download-artifact@v6.0.0
           with:
             merge-multiple: true
 
