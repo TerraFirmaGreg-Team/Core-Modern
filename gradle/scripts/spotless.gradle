@@ -1,7 +1,7 @@
-//tasks.withType(JavaCompile).configureEach {
-//    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-//    dependsOn tasks.named('spotlessApply')
-//}
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    dependsOn tasks.named('spotlessApply')
+}
 
 spotless {
 
@@ -30,6 +30,6 @@ spotless {
     }
 }
 
-//tasks.named("build") {
-//    dependsOn("spotlessApply")
-//}
+tasks.named("build") {
+    dependsOn("spotlessApply")
+}

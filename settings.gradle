@@ -2,7 +2,8 @@ pluginManagement {
     repositories {
         mavenLocal()
         mavenCentral()
-
+        maven { url "https://maven.neoforged.net/" }
+        maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 
         maven {
             name 'MinecraftForge'
@@ -13,7 +14,11 @@ pluginManagement {
             url 'https://maven.parchmentmc.org'
         }
 
-        gradlePluginPortal()
+        gradlePluginPortal() {
+            content {
+                excludeGroup("org.apache.logging.log4j")
+            }
+        }
     }
     plugins {
         id 'com.diffplug.spotless' version '7.2.1'

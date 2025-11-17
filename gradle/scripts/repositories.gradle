@@ -1,12 +1,9 @@
 repositories {
     mavenLocal()
     mavenCentral()
-    flatDir {
-        dir 'libs'
-    }
     maven {
         name "Tterrag"
-        url  "https://modmaven.dev/"
+        url "https://modmaven.dev/"
         content {
             includeGroup("com.tterrag.registrate")
         }
@@ -16,8 +13,10 @@ repositories {
         url "https://maven.terraformersmc.com/"
     }
     maven { // Mixin²
-        url = "https://maven.bawnorton.com/releases"
+        url "https://maven.bawnorton.com/releases"
     }
+    // Mirror
+    maven { url "https://maven.enjarai.dev/mirrors" }
     maven {
         name 'CurseMaven'
         url 'https://cursemaven.com'
