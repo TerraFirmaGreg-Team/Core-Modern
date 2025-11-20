@@ -52,6 +52,7 @@
         "common.greate.TieredMillingRecipeMixin",
         "common.gtceu.CleanroomConditionMixin",
         "common.gtceu.FisherMachineMixin",
+        "common.gtceu.GTCleanroomMixin",
         "common.gtceu.GTMultiMachinesMixin",
         "common.gtceu.GTRecipeTypesMixin",
         "common.gtceu.GTToolTypeMixin",
@@ -128,7 +129,9 @@
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",
-    "injectors": {"defaultRequire": 1},
+    "injectors": {
+        "defaultRequire": 1
+    },
     "compatibilityLevel": "JAVA_17",
     "client": [
         "client.ftb.ClientTeamManagerImplMixin",
