@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: 🔍 Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.0
         with:
           fetch-depth: 0
 
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔍 Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.0
 
       - name: 📁 Setup JDK
         uses: actions/setup-java@v5.0.0
@@ -156,7 +156,7 @@ jobs:
 
       steps:
         - name: 📦 Checkout
-          uses: actions/checkout@v5.0.0
+          uses: actions/checkout@v6.0.0
 
         - name: 🔒 Check if CURSEFORGE_TOKEN exist
           shell: bash
