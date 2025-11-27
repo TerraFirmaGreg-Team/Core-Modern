@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
+import static com.gregtechceu.gtceu.api.GTValues.EV;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.PARALLEL_HATCH;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
@@ -28,7 +29,6 @@ import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.gcym.LargeMixerMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMachine;
 
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
@@ -221,7 +221,7 @@ public class TFGMultiMachines {
             .register();
 
     public static final MultiblockMachineDefinition NUCLEAR_TURBINE = REGISTRATE
-            .multiblock("nuclear_turbine", (holder) -> new LargeTurbineMachine(holder, GTValues.EV))
+            .multiblock("nuclear_turbine", (holder) -> new NuclearLargeTurbineMachine(holder, EV))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.NUCLEAR_TURBINE)
             .recipeModifier(NuclearLargeTurbineMachine::recipeModifier, true)
@@ -245,7 +245,7 @@ public class TFGMultiMachines {
                 .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ad_astra", "vent"))))
                 .where("E", Predicates.blocks(GTBlocks.COIL_CUPRONICKEL.get()))
                 .where("F", Predicates.blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
-                .where("G", Predicates.blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new)))
+                .where("G", Predicates.blocks(PartAbility.ROTOR_HOLDER.getBlockRange(EV, GTValues.UHV).toArray(Block[]::new)))
                 .where("H", Predicates.blocks(GTBlocks.CASING_TITANIUM_GEARBOX.get()))
                 .build())
             .register();
@@ -337,7 +337,7 @@ public class TFGMultiMachines {
 
 
     public static final MultiblockMachineDefinition COOLING_TOWER = REGISTRATE
-            .multiblock("cooling_tower", (holder) -> new LargeMixerMachine(holder, GTValues.EV))
+            .multiblock("cooling_tower", (holder) -> new LargeMixerMachine(holder, EV))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.COOLING_TOWER)
             .appearanceBlock(tower_casing)

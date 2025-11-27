@@ -1,7 +1,12 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
-import com.gregtechceu.gtceu.api.GTValues;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
+import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -15,23 +20,17 @@ import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachine implements ITieredMachine, ITurbineMachine {
+public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachine
+        implements ITieredMachine, ITurbineMachine {
 
     public static final int MIN_DURABILITY_TO_WARN = 10;
 
@@ -42,7 +41,7 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
     public NuclearLargeTurbineMachine(IMachineBlockEntity holder, int tier) {
         super(holder);
         this.tier = tier;
-        this.BASE_EU_OUTPUT = 6144;
+        this.BASE_EU_OUTPUT = 8192;
     }
 
     @Nullable
@@ -71,7 +70,8 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
         if (rotorHolder != null && rotorHolder.hasRotor()) {
             int maxSpeed = rotorHolder.getMaxRotorHolderSpeed();
             int currentSpeed = rotorHolder.getRotorSpeed();
-            if (currentSpeed >= maxSpeed) return 1;
+            if (currentSpeed >= maxSpeed)
+                return 1;
             return Math.pow(1.0 * currentSpeed / maxSpeed, 2);
         }
         return 0;
@@ -112,8 +112,7 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
 
     @Override
     public long getCurrentProduction() {
-        return isActive() && recipeLogic.getLastRecipe() != null ?
-                recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
+        return isActive() && recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
     }
 
     @Override
@@ -128,41 +127,38 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
     //////////////////////////////////////
     // ****** Recipe Logic *******//
     //////////////////////////////////////
+
     /**
-     * Recipe Modifier for <b>Large Turbine Multi blocks</b> - can be used as a valid {@link RecipeModifier}
+     * Recipe Modifier for <b>Large Turbine Multiblocks</b> - can be used as a valid {@link RecipeModifier}
      * <p>
      * Recipe is fast parallelized up to {@code (baseEUt * power) / recipeEUt} times.
      * Duration is then multiplied by the holder efficiency.
      * </p>
      *
-     * @param machine a {@link NuclearLargeTurbineMachine}
+     * @param machine a {@link LargeTurbineMachine}
      * @param recipe  recipe
      * @return A {@link ModifierFunction} for the given Turbine Multiblock and recipe
      */
-    public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
+    public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof NuclearLargeTurbineMachine turbineMachine)) {
             return RecipeModifier.nullWrongType(NuclearLargeTurbineMachine.class, machine);
         }
 
         var rotorHolder = turbineMachine.getRotorHolder();
-        if (rotorHolder == null) return ModifierFunction.NULL;
+        if (rotorHolder == null)
+            return ModifierFunction.NULL;
 
         EnergyStack EUt = recipe.getOutputEUt();
         long turbineMaxVoltage = turbineMachine.getOverclockVoltage();
         double holderEfficiency = rotorHolder.getTotalEfficiency() / 100.0;
 
-        if (EUt.isEmpty() || turbineMaxVoltage <= EUt.voltage() || holderEfficiency <= 0) return ModifierFunction.NULL;
+        if (EUt.isEmpty() || turbineMaxVoltage <= EUt.voltage() || holderEfficiency <= 0)
+            return ModifierFunction.NULL;
 
         // get the amount of parallel required to match the desired output voltage
-        // Max Parallel is Ceilinged not Floored to ensure the output voltage is actually met,
-        // at the cost of slightly increased fuel
         int maxParallel = (int) (turbineMaxVoltage / EUt.getTotalEU());
-        if (turbineMaxVoltage % EUt.getTotalEU() != 0) maxParallel++;
-
         int actualParallel = ParallelLogic.getParallelAmountFast(turbineMachine, recipe, maxParallel);
-        double eutMultiplier = (maxParallel == actualParallel) ?
-                turbineMachine.productionBoost() * turbineMaxVoltage / EUt.voltage() :
-                turbineMachine.productionBoost() * actualParallel;
+        double eutMultiplier = turbineMachine.productionBoost() * actualParallel;
 
         return ModifierFunction.builder()
                 .inputModifier(ContentModifier.multiplier(actualParallel))
@@ -180,8 +176,7 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
 
     @Override
     public boolean canVoidRecipeOutputs(RecipeCapability<?> capability) {
-        // void both eu and fluid tick outputs
-        return true;
+        return capability != EURecipeCapability.CAP;
     }
 
     //////////////////////////////////////
