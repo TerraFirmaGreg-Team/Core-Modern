@@ -42,10 +42,12 @@ public class TFGEmiPlugin implements EmiPlugin {
         // These two aren't normal ores so add them separately
         emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_anthracite", "minecraft:the_nether",
                 35, 0.8, 48, 127, 13, 4, 0, new String[] { "minecraft:deepslate" },
-                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("cursecoal", 100) }));
-        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_sylvite", "minecraft:the_nether",
-                75, 0.6, 0, 64, 17, 0, 0, new String[] { "minecraft:blackstone" },
-                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("sylvite", 100) }));
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("cursecoal", 100) },
+                null));
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("rose_quartz", "minecraft:overworld",
+                80, 1, 60, 80, 10, 0, 0, new String[] { "minecraft:blue_ice", "minecraft:snow_block" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("rose_quartz", 60), new OreVeinInfoRecipe.WeightedBlock("quartzite", 40) },
+                new String[] { "ore_vein.tfg.rose_quartz.emi.0", "ore_vein.tfg.rose_quartz.emi.1", "ore_vein.tfg.rose_quartz.emi.2" }));
 
         emiRegistry.addCategory(BLAZE_BURNER);
         emiRegistry.addWorkstation(BLAZE_BURNER, EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
