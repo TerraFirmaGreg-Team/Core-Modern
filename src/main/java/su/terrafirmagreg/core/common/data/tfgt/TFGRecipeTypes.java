@@ -152,6 +152,6 @@ public class TFGRecipeTypes {
             .register("ostrum_linear_accelerator", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 9, 6, 6)
             .setSound(GTSoundEntries.BATH)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, FillDirection.LEFT_TO_RIGHT);
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, FillDirection.UP_TO_DOWN);
 
 }
