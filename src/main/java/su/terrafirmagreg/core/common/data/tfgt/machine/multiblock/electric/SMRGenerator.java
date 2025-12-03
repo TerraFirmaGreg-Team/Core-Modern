@@ -58,6 +58,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
     // TODO: CosmicCore Lubricants for efficiency bonus
 
     private FluidStack currentLubricant;
+
     private FluidStack currentBooster;
     @Getter
     private final int tier;
@@ -69,9 +70,9 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
     private int runningTimer = 0;
     static {
         // Boosting Tiers
-        boostingTiers.put(GTMaterials.Oxygen.getFluid(1), 1);
+        boostingTiers.put(GTMaterials.Oxygen.getFluid(1), 2);
         boostingTiers.put(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1), 4);
-        boostingTiers.put(TFGHelpers.getMaterial("booster_t3").getFluid(1), 16);
+        boostingTiers.put(TFGHelpers.getMaterial("booster_t3").getFluid(1), 8);
         // Lubricant Tiers
         lubricantTiers.put(GTMaterials.Lubricant.getFluid(1), 2);
         lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
@@ -150,13 +151,13 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
             if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty()) {
                 eutMultiplier = actualParallel;
             } else {
-                consumptionMult = boostingTiers.getInt(engineMachine.currentBooster) * 2;
+                consumptionMult = boostingTiers.getInt(engineMachine.currentBooster);
                 eutMultiplier = actualParallel * (boostingTiers.getInt(engineMachine.currentBooster));
             }
 
             return ModifierFunction.builder()
                     .inputModifier(ContentModifier.multiplier(consumptionMult * actualParallel))
-                    .outputModifier(ContentModifier.multiplier(actualParallel))
+                    .outputModifier(ContentModifier.multiplier(consumptionMult * actualParallel))
                     .durationMultiplier(durationModifier)
                     .eutMultiplier(eutMultiplier)
                     .parallels(actualParallel)
@@ -188,8 +189,8 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
                 consumptionRate = 4;
                 tickCycle = 1;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
-                tickCycle = 2;
                 consumptionRate = 1;
+                tickCycle = 2;
             }
             if (tickCycle != -1 && runningTimer % tickCycle == 0) {
                 if (consumptionRate != -1 && currentBooster.getAmount() >= consumptionRate) {
@@ -290,22 +291,50 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
                 .append(Component.literal(")").withStyle(ChatFormatting.GRAY))));
 
         // Cycle duration
-        builder.addCustom(t -> t.add(Component.literal("Cycle duration: ")
-                .append(Component.literal(duration + " ticks").withStyle(ChatFormatting.AQUA))));
+        builder.addCustom(t -> {
+            double seconds = duration / 20.0; // convertir ticks en secondes
+            t.add(Component.literal("Cycle duration: ")
+                    .append(Component.literal(duration + " ticks").withStyle(ChatFormatting.AQUA))
+                    .append(Component.literal(" (≈" + String.format("%.2f", seconds) + " s)").withStyle(ChatFormatting.GREEN)));
+        });
 
         // Booster line
         if (isFormed && currentBooster != null && !currentBooster.isEmpty()) {
+            int boosterTier = boostingTiers.getInt(currentBooster); // récupérer le tier
             builder.addCustom(tl -> tl.add(
                     Component.translatable("tfg.gui.smr_generator.booster_used",
-                            Component.translatable(currentBooster.getTranslationKey()))
+                            Component.translatable(currentBooster.getTranslationKey()),
+                            Component.literal("x" + boosterTier).withStyle(ChatFormatting.AQUA))
                             .withStyle(ChatFormatting.AQUA)));
         }
-
+        /*
         // Lubricant line
         if (isFormed && currentLubricant != null && !currentLubricant.isEmpty()) {
+            int lubricantTier = lubricantTiers.getInt(currentLubricant); // récupérer le tier
             builder.addCustom(tl -> tl.add(
                     Component.translatable("tfg.gui.smr_generator.lubricant_used",
-                            Component.translatable(currentLubricant.getTranslationKey()))
+                            Component.translatable(currentLubricant.getTranslationKey()),
+                            Component.literal("x" + lubricantTier).withStyle(ChatFormatting.YELLOW))
+                            .withStyle(ChatFormatting.YELLOW)));
+        }*/
+
+        if (isFormed && currentLubricant != null && !currentLubricant.isEmpty()) {
+            int tier = lubricantTiers.getInt(currentLubricant); // récupère le tier
+
+            // Détermine combien de ticks chaque unité de lubricant dure
+            int ticksPerUnit = currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1)) ? 72
+                    : currentLubricant.containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1)) ? 288
+                    : 1;
+
+            long initialLubricantAmount = 0;
+            long totalTicks = initialLubricantAmount * ticksPerUnit;
+            double hours = totalTicks / 72000.0; // convertit en heures
+
+            builder.addCustom(tl -> tl.add(
+                    Component.translatable("tfg.gui.smr_generator.lubricant_used",
+                                    Component.translatable(currentLubricant.getTranslationKey()))
+                            .append(Component.literal(" [Boost: x" + tier + ", Lasts: " +
+                                    String.format("%.2f h", hours) + "]").withStyle(ChatFormatting.YELLOW))
                             .withStyle(ChatFormatting.YELLOW)));
         }
 
