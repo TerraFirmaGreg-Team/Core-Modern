@@ -503,7 +503,7 @@ public class TFGMultiMachines {
     private static final Supplier<Block> DESH_PTFE = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_desh_ptfe"));
     public static final MultiblockMachineDefinition SMR_GENERATOR = REGISTRATE
-            .multiblock("smr_generator", (holder) -> new SMRGenerator(holder, EV))
+            .multiblock("smr_generator", (holder) -> new SMRGenerator(holder, GTValues.EV))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.SMR_GENERATOR)
             .recipeModifier(SMRGenerator::recipeModifier, true)

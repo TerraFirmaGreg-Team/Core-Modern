@@ -189,7 +189,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
             } else if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1))) {
                 consumptionRate = 4;
                 tickCycle = 1;
-            } else if (currentBooster.isFluidEqual(GTMaterials.Acetone.getFluid(1))) {
+            } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
                 tickCycle = 2;
                 consumptionRate = 1;
             }
@@ -239,7 +239,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
         MultiblockDisplayText.Builder builder = MultiblockDisplayText.builder(textList, isFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive());
         var voltageName = Component.literal(GTValues.VNF[GTUtil.getFloorTierByVoltage(getOverclockVoltage())]);
-        var amperageName = currentBooster != null ? boostingTiers.getInt(currentBooster) * 3 : 1;
+        var amperageName = currentBooster != null ? boostingTiers.getInt(currentBooster) : 1;
         if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()) {
             builder.addCustom(t -> t.add(recipeLogic.getFancyTooltip().get(0)));
             return;
@@ -256,7 +256,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
 
         if (isFormed && currentBooster != null) {
             builder.addCustom(tl -> tl.add(Component
-                    .translatable("tfg.guid.smr_generator.booster_used",
+                    .translatable("tfg.gui.smr_generator.booster_used",
                             Component.translatable(currentBooster.getTranslationKey()))
                     .withStyle(ChatFormatting.AQUA)));
         }
