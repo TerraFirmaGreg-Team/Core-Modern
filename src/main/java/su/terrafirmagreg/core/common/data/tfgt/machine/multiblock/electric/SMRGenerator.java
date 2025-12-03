@@ -73,6 +73,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
         boostingTiers.put(GTMaterials.Oxygen.getFluid(1), 2);
         boostingTiers.put(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1), 4);
         boostingTiers.put(TFGHelpers.getMaterial("booster_t3").getFluid(1), 8);
+
         lubricantTiers.put(GTMaterials.Lubricant.getFluid(1), 2);
         lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
     }
@@ -132,9 +133,6 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
                     if (engineMachine.currentLubricant == null || engineMachine.currentLubricant.isEmpty() ||
                             lubricantTiers.getInt(fluidStack) > lubricantTiers.getInt(engineMachine.currentLubricant)) {
                         engineMachine.currentLubricant = fluidStack;
-
-                        // --- Réinitialise la quantité initiale au début de la recette ---
-                        engineMachine.initialLubricantAmount = fluidStack.getAmount();
                     }
                 }
             }
@@ -152,8 +150,8 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
             if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty()) {
                 eutMultiplier = actualParallel;
             } else {
-                consumptionMult = boostingTiers.getInt(engineMachine.currentBooster);
-                eutMultiplier = actualParallel * (boostingTiers.getInt(engineMachine.currentBooster));
+                consumptionMult = boostingTiers.getInt(engineMachine.currentBooster) * 2;
+                eutMultiplier = actualParallel * (boostingTiers.getInt(engineMachine.currentBooster) * 3);
             }
 
             return ModifierFunction.builder()
@@ -177,6 +175,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
             int duration = recipe.duration;
             if ((EUt / recipe.parallels) * duration < 1) {
                 this.getRecipeLogic().setWaiting(Component.translatable("cosmiccore.errors.bad_fuel"));
+
             }
         }
         if (currentBooster != null && !currentBooster.isEmpty()) {
@@ -205,11 +204,11 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
             int tickCycle = -1;
             if (currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1))) {
                 tickCycle = 72;
-                consumptionRate = 1; // 1000mb/hr = 1mb every 72 ticks so
+                consumptionRate = 1; // 1000/hr
             } else if (currentLubricant
                     .containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1))) {
                 tickCycle = 288;
-                consumptionRate = 1; // 500mb/hr
+                consumptionRate = 1; // 250/hr
             }
             if (tickCycle != -1 && runningTimer % tickCycle == 0) {
                 if (consumptionRate != -1 && currentLubricant.getAmount() >= consumptionRate) {
