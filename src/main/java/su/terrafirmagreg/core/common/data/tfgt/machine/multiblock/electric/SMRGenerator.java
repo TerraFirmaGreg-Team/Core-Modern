@@ -65,6 +65,10 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
     // --- Nouveau champ pour stocker la quantité initiale de lubricant ---
     private long initialLubricantAmount = 0;
 
+    // --- Nouveau champ synchrone pour afficher la quantité actuelle côté GUI ---
+    @DescSynced
+    private long lubricantAmountForDisplay = 0;
+
     static {
         boostingTiers.put(GTMaterials.Oxygen.getFluid(1), 2);
         boostingTiers.put(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1), 4);
@@ -182,11 +186,11 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
                 consumptionRate = 1;
                 tickCycle = 1;
             } else if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1))) {
-                consumptionRate = 4;
-                tickCycle = 1;
+                consumptionRate = 1;
+                tickCycle = 72; // 1mb consumed every 72 ticks
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 2;
+                tickCycle = 144; // 1mb consumed every 144 ticks
             }
             if (tickCycle != -1 && runningTimer % tickCycle == 0) {
                 if (consumptionRate != -1 && currentBooster.getAmount() >= consumptionRate) {
@@ -201,7 +205,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
             int tickCycle = -1;
             if (currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1))) {
                 tickCycle = 72;
-                consumptionRate = 1; // 1000mb/hr
+                consumptionRate = 1; // 1000mb/hr = 1mb every 72 ticks so
             } else if (currentLubricant
                     .containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1))) {
                 tickCycle = 288;
@@ -217,6 +221,14 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
         } else if (currentLubricant != null) {
             recipeLogic.interruptRecipe();
         }
+
+        // --- Met à jour la quantité synchrone pour l'affichage ---
+        if (currentLubricant != null && !currentLubricant.isEmpty()) {
+            lubricantAmountForDisplay = currentLubricant.getAmount();
+        } else {
+            lubricantAmountForDisplay = 0;
+        }
+
         runningTimer++;
         if (runningTimer > 72000)
             runningTimer %= 72000;
@@ -310,13 +322,18 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
 
             // Temps restant basé sur la quantité actuelle
             long totalTicksRemaining = lubricantAmountForDisplay * ticksPerUnit;
-            double hoursRemaining = totalTicksRemaining / 72000.0;
+
+            long totalSeconds = totalTicksRemaining / 20;
+            long hours = totalSeconds / 3600;
+            long minutes = (totalSeconds % 3600) / 60;
+
+            String timeFormatted = String.format("%dh %02dm", hours, minutes);
 
             builder.addCustom(tl -> tl.add(
                     Component.translatable("tfg.gui.smr_generator.lubricant_used",
                             Component.translatable(currentLubricant.getTranslationKey()))
                             .append(Component.literal(" [Boost: x" + (tier / 2) + ", Lasts: " +
-                                    String.format("%.2f h", hoursRemaining) + "]").withStyle(ChatFormatting.YELLOW))
+                                    timeFormatted + "]").withStyle(ChatFormatting.YELLOW))
                             .withStyle(ChatFormatting.YELLOW)));
         }
 
