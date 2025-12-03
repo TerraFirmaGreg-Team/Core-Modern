@@ -308,20 +308,14 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
                     : currentLubricant.containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1)) ? 288
                             : 1;
 
-            // Multiplicateur de durée basé sur le tier
-            float durationModifier = tier / 2.0F;
-
-            // Temps restant réel en ticks
-            long totalTicksRemaining = (long) (currentLubricant.getAmount() * ticksPerUnit * durationModifier);
+            // Temps restant basé sur la quantité actuelle
+            long totalTicksRemaining = lubricantAmountForDisplay * ticksPerUnit;
             double hoursRemaining = totalTicksRemaining / 72000.0;
-
-            // Boost réel basé sur le multiplicateur
-            int actualBoost = Math.round(durationModifier);
 
             builder.addCustom(tl -> tl.add(
                     Component.translatable("tfg.gui.smr_generator.lubricant_used",
                             Component.translatable(currentLubricant.getTranslationKey()))
-                            .append(Component.literal(" [Boost: x" + actualBoost + ", Lasts: " +
+                            .append(Component.literal(" [Boost: x" + (tier / 2) + ", Lasts: " +
                                     String.format("%.2f h", hoursRemaining) + "]").withStyle(ChatFormatting.YELLOW))
                             .withStyle(ChatFormatting.YELLOW)));
         }
