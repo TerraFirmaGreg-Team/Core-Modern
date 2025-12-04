@@ -318,7 +318,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         long totalFluid = Math.round(requiredFluid.getAmount() * actualParallel * 1F);
 
         builder.addCustom(t -> t.add(
-                Component.translatable("tfg.gui.consumes ")
+                Component.translatable("tfg.gui.consumes")
                         .append(Component.literal(FormattingUtil.formatNumbers(totalFluid) + " mB ").withStyle(ChatFormatting.RED))
                         .append(Component.translatable("tfg.gui.per_cycle").withStyle(ChatFormatting.GRAY))));
 
@@ -327,7 +327,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         int duration = recipe.duration;
         builder.addCustom(t -> {
             double seconds = duration / 20.0;
-            t.add(Component.translatable("tfg.gui.cycle_duration ")
+            t.add(Component.translatable("tfg.gui.cycle_duration")
                     .append(Component.literal(duration + " ticks").withStyle(ChatFormatting.AQUA))
                     .append(Component.literal(" (≈" + String.format("%.2f", seconds) + " s)").withStyle(ChatFormatting.GREEN)));
         });
