@@ -503,10 +503,10 @@ public class TFGMultiMachines {
     private static final Supplier<Block> DESH_PTFE = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_desh_ptfe"));
     public static final MultiblockMachineDefinition SMR_GENERATOR = REGISTRATE
-            .multiblock("smr_generator", (holder) -> new SMRGenerator(holder, GTValues.EV))
+            .multiblock("smr_generator", (holder) -> new SMRGenerator2(holder, GTValues.EV))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.SMR_GENERATOR)
-            .recipeModifier(SMRGenerator::recipeModifier, true)
+            .recipeModifier(SMRGenerator2::recipeModifier, true)
             .appearanceBlock(DESH_PTFE)
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_ostrum_carbon"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
             .pattern(definition -> FactoryBlockPattern.start()
@@ -516,8 +516,8 @@ public class TFGMultiMachines {
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where("A", Predicates.blocks(OSTRUM_CASING.get()))
                     .where("B", Predicates.blocks(DESH_PTFE.get()).setMinGlobalLimited(1)
-                            .or(Predicates.abilities((PartAbility.IMPORT_FLUIDS_4X)))
-                            .or(Predicates.abilities((PartAbility.EXPORT_FLUIDS_4X)))
+                            .or(Predicates.abilities((PartAbility.IMPORT_FLUIDS)))
+                            .or(Predicates.abilities((PartAbility.EXPORT_FLUIDS)))
                             .or(Predicates.autoAbilities(true, false, false))
                             .or(Predicates.abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
                     .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/heat_pipe_casing"))))
