@@ -9,9 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
-import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
@@ -25,14 +22,11 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
-import com.gregtechceu.gtceu.utils.GTUtil;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 
 import lombok.Getter;
 
@@ -48,8 +42,8 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
     @Getter
     private final int tier;
 
-    static List<GTRecipe> lubricantRecipes = List.of(new GTRecipe[0]);
-    static List<GTRecipe> boostRecipes = List.of(new GTRecipe[0]);
+    static List<GTRecipe> lubricantRecipes = new ArrayList<>();
+    static List<GTRecipe> boostRecipes = new ArrayList<>();
 
     public static final String LUBRICATION_KEY = "lubrication";
     public static final String BOOST_KEY = "boost";
@@ -85,7 +79,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
                 .buildRawRecipe());
     }
 
-    private Optional<GTRecipe> activeBoost;
+    private Optional<GTRecipe> activeBoost = Optional.empty();
     private int runningTimer = 0;
     private int boostDuration = 0, lubeDuration = 0;
 
@@ -124,8 +118,9 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
         if (EUt * recipe.duration < 1)
             return ModifierFunction.NULL;
 
-        Optional<GTRecipe> lubeRecipe = lubricantRecipes.stream().filter(
-                (lr) -> RecipeHelper.matchRecipe(engineMachine, lr).isSuccess()).findFirst();
+        Optional<GTRecipe> lubeRecipe = lubricantRecipes.stream()
+                .filter(lr -> RecipeHelper.matchRecipe(engineMachine, lr).isSuccess())
+                .findFirst();
 
         if (EUt > 0 && !engineMachine.isIntakesObstructed() && lubeRecipe.isPresent()) {
             int maxParallel = (int) (engineMachine.getOverclockVoltage() / EUt);
@@ -134,6 +129,7 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
             float durationModifier = (tier / 2.0F);
             double eutMultiplier;
             int consumptionMult = 1;
+
             if (engineMachine.activeBoost.isPresent()) {
                 consumptionMult = engineMachine.activeBoost.get().data.getInt(BOOST_KEY);
                 eutMultiplier = actualParallel * (consumptionMult * 3);
@@ -151,13 +147,6 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
         }
 
         return ModifierFunction.NULL;
-    }
-
-    // Méthode utilitaire pour consommer un fluide et mettre à jour la FluidStack locale
-
-    public int maxBoostsAllowed() {
-        int machineLimitedBoosts = GTUtil.getTierByVoltage(getMaxVoltage()) - getTier() - 1;
-        return Math.min(machineLimitedBoosts, boostRecipes.size());
     }
 
     @Override
@@ -183,32 +172,27 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
                     break;
                 }
             }
-            // handle no lube
             if (lubeDuration == 0) {
                 recipeLogic.interruptRecipe();
                 return false;
             }
         }
 
+        // Booster — un seul booster
         if (boostDuration <= 0) {
             activeBoost = Optional.empty();
             boostDuration = 1;
-            for (int i = maxBoostsAllowed(); i >= 0; i--) {
-                if (RecipeHelper.matchRecipe(this, boostRecipes.get(i)).isSuccess() &&
-                        RecipeHelper.handleRecipeIO(this, boostRecipes.get(i), IO.IN, getRecipeLogic().getChanceCaches()).isSuccess()) {
-                    activeBoost = Optional.of(boostRecipes.get(i));
-                    boostDuration = activeBoost.get().data.getInt(DURATION_KEY);
-                    break;
-                }
+            GTRecipe candidate = boostRecipes.get(boostRecipes.size() - 1);
+            if (RecipeHelper.matchRecipe(this, candidate).isSuccess() &&
+                    RecipeHelper.handleRecipeIO(this, candidate, IO.IN, getRecipeLogic().getChanceCaches()).isSuccess()) {
+                activeBoost = Optional.of(candidate);
+                boostDuration = candidate.data.getInt(DURATION_KEY);
             }
         }
 
-        // Met à jour l'affichage côté GUI
-        // lubricantAmountForDisplay = (currentLubricant != null && !currentLubricant.isEmpty()) ? currentLubricant.getAmount() : 0;
-
         runningTimer++;
-        boostDuration--;
-        lubeDuration--;
+        boostDuration = Math.max(0, boostDuration - 1);
+        lubeDuration = Math.max(0, lubeDuration - 1);
         if (runningTimer > 72000)
             runningTimer %= 72000;
 
@@ -218,124 +202,6 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
     @Override
     public boolean regressWhenWaiting() {
         return false;
-    }
-
-    // GUI for the Combustion Generator
-
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        /*
-        MultiblockDisplayText.Builder builder = MultiblockDisplayText.builder(textList, isFormed())
-                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive());
-
-        if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()) {
-            builder.addCustom(t -> t.add(recipeLogic.getFancyTooltip().get(0)));
-            return;
-        }
-
-        GTRecipe recipe = recipeLogic.getLastRecipe();
-        if (recipe == null) {
-            Iterator<GTRecipe> iterator = recipeLogic.searchRecipe();
-            recipe = iterator != null && iterator.hasNext() ? iterator.next() : null;
-            if (recipe == null)
-                return;
-        }
-
-        int duration = recipe.duration;
-        long EUt = recipe.getOutputEUt().voltage();
-        long absEUt = Math.abs(EUt);
-
-        FluidStack requiredFluid = RecipeHelper.getInputFluids(recipe).isEmpty() ? FluidStack.EMPTY : RecipeHelper.getInputFluids(recipe).get(0);
-        long baseFluidPerCycle = requiredFluid.getAmount();
-
-        long maxVoltage = getMaxVoltage();
-        long ocAmount = absEUt == 0 ? 1 : maxVoltage / absEUt;
-        ocAmount = Math.max(1, ocAmount);
-        long finalEUPt = absEUt * ocAmount;
-
-        // Consumes working
-
-        builder.addCustom(t -> t.add(Component.literal("Consumes ")
-                .append(Component.literal(FormattingUtil.formatNumbers(baseFluidPerCycle) + " mB ").withStyle(ChatFormatting.RED))
-                .append(Component.literal("per cycle").withStyle(ChatFormatting.GRAY))));
-
-        // Generates
-
-        int voltageTier = GTUtil.getTierByVoltage(finalEUPt); //.getFloorTierByVoltage
-
-        builder.addCustom(t -> t.add(Component.literal("Generates ")
-                .append(Component.literal(FormattingUtil.formatNumbers(finalEUPt) + " EU/t").withStyle(ChatFormatting.GOLD))
-                .append(Component.literal(" (").withStyle(ChatFormatting.GRAY))
-                .append(Component.literal(GTValues.VNF[voltageTier]).setStyle(Style.EMPTY.withColor(ChatFormatting.AQUA)))
-                .append(Component.literal(")").withStyle(ChatFormatting.GRAY))));
-
-        // Cycle Duration
-
-        builder.addCustom(t -> {
-            double seconds = duration / 20.0;
-            t.add(Component.literal("Cycle duration: ")
-                    .append(Component.literal(duration + " ticks").withStyle(ChatFormatting.AQUA))
-                    .append(Component.literal(" (≈" + String.format("%.2f", seconds) + " s)").withStyle(ChatFormatting.GREEN)));
-        });
-
-        // Booster
-
-        if (isFormed && activeBoost.isPresent()) {
-            int boosterTier = activeBoost.get().data.getInt(BOOST_KEY);
-            FluidStack booster = (FluidStack) activeBoost.get().inputs.get(FluidRecipeCapability.CAP).get(0).getContent();
-            builder.addCustom(tl -> tl.add(
-                    Component.translatable("tfg.gui.smr_generator.booster_used",
-                            Component.translatable(booster.getTranslationKey()),
-                            Component.literal("x" + boosterTier).withStyle(ChatFormatting.AQUA))
-                            .withStyle(ChatFormatting.AQUA)));
-        }
-
-        // Lubricant
-
-        if (isFormed && currentLubricant != null && !currentLubricant.isEmpty()) {
-            int tier = lubricantTiers.getInt(currentLubricant);
-
-            int ticksPerUnit = currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1)) ? 72
-                    : currentLubricant.containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1)) ? 288
-                            : 1;
-
-            long totalTicksRemaining = lubricantAmountForDisplay * ticksPerUnit;
-
-            long totalSeconds = totalTicksRemaining / 20;
-            long hours = totalSeconds / 3600;
-            long minutes = (totalSeconds % 3600) / 60;
-            String timeFormatted = String.format("%dh %02dm", hours, minutes);
-
-            builder.addCustom(tl -> tl.add(
-                    Component.translatable("tfg.gui.smr_generator.lubricant_used",
-                            Component.translatable(currentLubricant.getTranslationKey()))
-                            .append(Component.literal(" [Boost: x" + (tier / 2) + ", Lasts: " +
-                                    timeFormatted + "]").withStyle(ChatFormatting.YELLOW))
-                            .withStyle(ChatFormatting.YELLOW)));
-        }
-
-        // Idle or Running Perfectly
-
-        builder.addWorkingStatusLine();
-
-        // Credit to Frontiers Team for the code
-
-        builder.addCustom(tl -> tl.add(
-                Component.translatable("tfg.gui.smr_generator.credit")
-                        .withStyle(ChatFormatting.GRAY)));
-
-         */
-    }
-
-    @Override
-    public void attachTooltips(TooltipsPanel tooltipsPanel) {
-        super.attachTooltips(tooltipsPanel);
-        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
-                () -> GuiTextures.INDICATOR_NO_STEAM.get(false),
-                () -> List.of(Component.translatable("gtceu.multiblock.large_combustion_engine.obstructed")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
-                this::isIntakesObstructed,
-                () -> null));
     }
 
     @Override
