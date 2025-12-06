@@ -212,7 +212,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
 
         GTRecipe recipe = recipeLogic.getLastRecipe();
         if (recipe != null) {
-            lastUsedRecipe = recipe; // <-- mémorise la dernière recette active
+            lastUsedRecipe = recipe;
         }
         if (currentBooster != null && !currentBooster.isEmpty()) {
             int consumptionRate = -1;
