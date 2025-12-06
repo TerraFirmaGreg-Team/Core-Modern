@@ -102,6 +102,43 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         return false;
     }
 
+    private void updateFluids() {
+
+        if (currentBooster != null && currentBooster.isEmpty()) {
+            currentBooster = null;
+        }
+
+        if (currentLubricant != null && currentLubricant.isEmpty()) {
+            currentLubricant = null;
+        }
+
+        var fluidHolders = Objects
+                .requireNonNullElseGet(getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP),
+                        Collections::<IRecipeHandler<?>>emptyList)
+                .stream()
+                .map(container -> container.getContents().stream().filter(FluidStack.class::isInstance)
+                        .map(FluidStack.class::cast).toList())
+                .filter(container -> !container.isEmpty())
+                .toList();
+
+        currentBooster = null;
+        currentLubricant = null;
+
+        for (var fluidHolder : fluidHolders) {
+            for (var fluidStack : fluidHolder) {
+                if (boostingTiers.containsKey(fluidStack)) {
+                    if (currentBooster == null || boostingTiers.getInt(fluidStack) > boostingTiers.getInt(currentBooster)) {
+                        currentBooster = fluidStack;
+                    }
+                } else if (lubricantTiers.containsKey(fluidStack)) {
+                    if (currentLubricant == null || lubricantTiers.getInt(fluidStack) > lubricantTiers.getInt(currentLubricant)) {
+                        currentLubricant = fluidStack;
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public long getOverclockVoltage() {
         return GTValues.V[tier];
@@ -170,6 +207,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
 
     @Override
     public boolean onWorking() {
+        updateFluids();
         boolean value = super.onWorking();
 
         GTRecipe recipe = recipeLogic.getLastRecipe();
