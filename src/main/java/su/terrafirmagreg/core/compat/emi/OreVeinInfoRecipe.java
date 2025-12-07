@@ -32,6 +32,8 @@ public class OreVeinInfoRecipe implements EmiRecipe {
     }
 
     private final String ID;
+    @Nullable
+    private final String[] emiInfo;
     private final ResourceLocation dimension;
     private final int rarity, minY, maxY, size, height, radius;
     private final double density;
@@ -40,7 +42,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
     private final WeightedItem[] oreItems;
 
     public OreVeinInfoRecipe(String ID, String dimension, int rarity, double density, int minY, int maxY, int size,
-            int height, int radius, String[] types, WeightedBlock[] blocks) {
+            int height, int radius, String[] types, WeightedBlock[] blocks, @Nullable String[] emiInfo) {
         this.ID = ID;
         this.dimension = ResourceLocation.parse(dimension);
         this.rarity = rarity;
@@ -52,6 +54,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
         this.radius = radius;
         this.rockTypes = types;
         this.ores = blocks;
+        this.emiInfo = emiInfo;
 
         var tagRegistry = ForgeRegistries.ITEMS.tags();
         if (tagRegistry == null) {
@@ -104,6 +107,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
         offsetY = createOreItemWidgets(widgets, offsetY);
         offsetY = createVeinInfoText(widgets, offsetY);
         offsetY = createRockTypesWidget(widgets, offsetY);
+        offsetY = createInfoWidget(widgets, offsetY);
         createDimensionMarker(widgets, offsetY);
     }
 
@@ -127,8 +131,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
             widget.recipeContext(this);
             holder.add(widget);
 
-            var oreChance = Component.literal((oreItem.weightPercent == 0 ? 1 : oreItem.weightPercent) + "%")
-                    .getVisualOrderText();
+            var oreChance = Component.literal((oreItem.weightPercent == 0 ? 1 : oreItem.weightPercent) + "%").getVisualOrderText();
             var textOffset = (20 - font.width(oreChance)) / 2;
             holder.addText(oreChance, offsetX + textOffset, offsetY + 18, 0, false);
 
@@ -194,13 +197,27 @@ public class OreVeinInfoRecipe implements EmiRecipe {
         return offsetY;
     }
 
+    private int createInfoWidget(WidgetHolder holder, int offsetY) {
+        if (emiInfo == null)
+            return offsetY;
+
+        var lineH = Minecraft.getInstance().font.lineHeight;
+        offsetY += (lineH * 2) + 2;
+
+        for (String part : emiInfo) {
+            holder.addText(Component.translatable(part), 2, offsetY, 0, false);
+            offsetY += lineH;
+        }
+
+        return offsetY + lineH + 2;
+    }
+
     private void createDimensionMarker(WidgetHolder holder, int offsetY) {
         var marker = GTRegistries.DIMENSION_MARKERS.get(dimension);
         if (marker == null)
             return;
         var icon = marker.getIcon();
-        var slot = new SlotWidget(EmiIngredient.of(Ingredient.of(icon)), getDisplayWidth() - 26,
-                getDisplayHeight() - 26);
+        var slot = new SlotWidget(EmiIngredient.of(Ingredient.of(icon)), getDisplayWidth() - 26, getDisplayHeight() - 26);
         slot.large(true);
         slot.drawBack(false);
         slot.recipeContext(this);

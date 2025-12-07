@@ -47,7 +47,7 @@ public class LiquidBlazeBurnerRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return TFGCore.id(ID + "_emi");
+        return TFGCore.id(ID.replace(':', '_') + "_emi");
     }
 
     @Override

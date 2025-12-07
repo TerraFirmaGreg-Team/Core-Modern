@@ -148,4 +148,16 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.CHEMICAL)
             .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.LEFT_TO_RIGHT);
 
+    public final static GTRecipeType OSTRUM_LINEAR_ACCELERATOR = GTRecipeTypes
+            .register("ostrum_linear_accelerator", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(6, 9, 6, 6)
+            .setSound(GTSoundEntries.BATH)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, FillDirection.UP_TO_DOWN);
+
+    public static final GTRecipeType SMR_GENERATOR = GTRecipeTypes
+            .register("smr_generator", GTRecipeTypes.GENERATOR)
+            .setMaxIOSize(0, 0, 1, 1)
+            .setSound(GTSoundEntries.TURBINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
+
 }
