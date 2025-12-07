@@ -154,4 +154,10 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.BATH)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, FillDirection.UP_TO_DOWN);
 
+    public static final GTRecipeType SMR_GENERATOR = GTRecipeTypes
+            .register("smr_generator", GTRecipeTypes.GENERATOR)
+            .setMaxIOSize(0, 0, 1, 1)
+            .setSound(GTSoundEntries.TURBINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
+
 }

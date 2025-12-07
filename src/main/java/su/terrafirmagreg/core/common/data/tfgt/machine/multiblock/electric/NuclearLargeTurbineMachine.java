@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
-import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -176,7 +175,7 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
 
     @Override
     public boolean canVoidRecipeOutputs(RecipeCapability<?> capability) {
-        return capability != EURecipeCapability.CAP;
+        return true;
     }
 
     //////////////////////////////////////
