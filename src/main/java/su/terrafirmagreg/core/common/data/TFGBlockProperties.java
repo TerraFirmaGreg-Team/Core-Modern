@@ -10,10 +10,12 @@ import net.minecraft.world.level.material.Fluids;
 public class TFGBlockProperties {
 
     public static final FluidProperty SPACE_WATER = FluidProperty.create("fluid",
-            Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER, TFGFluids.MARS_WATER));
+            Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER,
+                    TFGFluids.MARS_WATER, TFGFluids.SULFUR_FUMES, TFGFluids.GEYSER_SLURRY));
 
     public static final FluidProperty SPACE_WATER_AND_LAVA = FluidProperty.create("fluid",
-            Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER, TFGFluids.MARS_WATER, Fluids.LAVA));
+            Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER, TFGFluids.MARS_WATER, Fluids.LAVA,
+                    TFGFluids.SULFUR_FUMES, TFGFluids.GEYSER_SLURRY));
 
     public static final IntegerProperty HEIGHT = IntegerProperty.create("height", 0, 5);
 }

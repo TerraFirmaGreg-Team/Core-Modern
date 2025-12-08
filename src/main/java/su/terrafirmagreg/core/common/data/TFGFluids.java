@@ -8,6 +8,7 @@ import java.util.function.Function;
 import net.dries007.tfc.common.fluids.*;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
@@ -37,6 +38,50 @@ public class TFGFluids {
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
 
+    public static final FluidRegistryObject<ForgeFlowingFluid> SULFUR_FUMES = register(
+            "sulfur_fumes",
+            properties -> properties
+                    .block(TFGBlocks.SULFUR_FUMES)
+                    .bucket(TFGItems.SULFUR_FUMES_BUCKET),
+            gasLike()
+                    .temperature(737)
+                    .viscosity(0)
+                    .density(0)
+                    .descriptionId("fluid.tfg.sulfur_fumes"),
+            new FluidTypeClientProperties(ALPHA_MASK | 0xFFFFFF,
+                    ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/sulfur_fumes_still"),
+                    ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/sulfur_fumes_flow"),
+                    null, null),
+            MixingFluid.Source::new,
+            MixingFluid.Flowing::new);
+
+    public static final FluidRegistryObject<ForgeFlowingFluid> GEYSER_SLURRY = register(
+            "geyser_slurry",
+            properties -> properties
+                    .block(TFGBlocks.GEYSER_SLURRY)
+                    .bucket(TFGItems.GEYSER_SLURRY_BUCKET),
+            FluidType.Properties.create()
+                    .adjacentPathType(BlockPathTypes.LAVA)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
+                    .density(3000)
+                    .viscosity(6000)
+                    .canConvertToSource(false)
+                    .canExtinguish(true)
+                    .canHydrate(false)
+                    .supportsBoating(false)
+                    .canDrown(true)
+                    .canSwim(true)
+                    .temperature(1300)
+                    .canPushEntity(true)
+                    .descriptionId("fluid.tfg.geyser_slurry"),
+            new FluidTypeClientProperties(ALPHA_MASK | 0xFFFFFF,
+                    ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/geyser_slurry_still"),
+                    ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/geyser_slurry_flow"),
+                    null, null),
+            MixingFluid.Source::new,
+            MixingFluid.Flowing::new);
+
     // TFC, why did you have to make this private
 
     private static FluidType.Properties waterLike() {
@@ -51,6 +96,19 @@ public class TFGFluids {
                 .canPushEntity(true)
                 .canSwim(true)
                 .supportsBoating(true);
+    }
+
+    private static FluidType.Properties gasLike() {
+        return FluidType.Properties.create()
+                .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+                .canConvertToSource(true)
+                .canDrown(false)
+                .canExtinguish(false)
+                .canHydrate(false)
+                .canPushEntity(false)
+                .canSwim(false)
+                .supportsBoating(false);
     }
 
     // Registration helpers
