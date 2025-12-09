@@ -83,6 +83,9 @@ dependencies {
     implementation fg.deobf("curse.maven:astikor-carts-redux-916493:4988266") { transitive = false }
     implementation fg.deobf("curse.maven:astikor-carts-tfc-844019:5141430") { transitive = false }
 
+    // TFC hot or not
+    implementation fg.deobf("curse.maven:tfc-hot-or-not-499096:6047294") { transitive = false }
+
     // AE2
     implementation fg.deobf("curse.maven:guideme-1173950:7013686")
     implementation fg.deobf(jarJar("appeng:appliedenergistics2-forge:$ae2_version")) {

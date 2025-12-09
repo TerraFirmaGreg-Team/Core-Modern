@@ -31,6 +31,8 @@ public final class TFGTags {
         public static final TagKey<Item> SnifferFood = createItemTag("tfg:sniffer_food");
         public static final TagKey<Item> WraptorFood = createItemTag("tfg:wraptor_food");
         public static final TagKey<Item> EmptySyringe = createItemTag("tfg:empty_dna_syringes");
+        public static final TagKey<Item> InsulatingContainer = createItemTag("tfg:insulating_container");
+        public static final TagKey<Item> PreventsGasFloating = createItemTag("tfg:prevents_gas_floating");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");
