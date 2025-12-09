@@ -71,6 +71,8 @@ public class TFGCreativeTab {
         accept(out, TFGItems.PROGENITOR_CELLS);
 
         accept(out, TFGItems.MARS_WATER_BUCKET);
+        accept(out, TFGItems.SULFUR_FUMES_BUCKET);
+        accept(out, TFGItems.GEYSER_SLURRY_BUCKET);
 
         accept(out, TFGItems.RAILGUN_AMMO_SHELL);
 

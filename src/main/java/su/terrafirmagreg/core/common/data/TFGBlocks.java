@@ -179,6 +179,12 @@ public final class TFGBlocks {
     public static final RegistryObject<LiquidBlock> MARS_WATER = registerNoItem("fluid/semiheavy_ammoniacal_water",
             () -> new LiquidBlock(TFGFluids.MARS_WATER.source(),
                     BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.WARPED_WART_BLOCK).noLootTable()));
+    public static final RegistryObject<LiquidBlock> SULFUR_FUMES = registerNoItem("fluid/sulfur_fumes",
+            () -> new LiquidBlock(TFGFluids.SULFUR_FUMES.source(),
+                    BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.NONE).noLootTable().noCollission()));
+    public static final RegistryObject<LiquidBlock> GEYSER_SLURRY = registerNoItem("fluid/geyser_slurry",
+            () -> new LiquidBlock(TFGFluids.GEYSER_SLURRY.source(),
+                    BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable()));
 
     // Misc blocks
 

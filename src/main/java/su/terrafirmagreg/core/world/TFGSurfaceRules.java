@@ -7,6 +7,7 @@ import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraftforge.registries.DeferredRegister;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.world.surface_rule.BadlandsSurfaceRuleSource;
 import su.terrafirmagreg.core.world.surface_rule.NeedsPostProcessingSurfaceRuleSource;
 
 public class TFGSurfaceRules {
@@ -15,5 +16,6 @@ public class TFGSurfaceRules {
 
     static {
         SURFACE_RULES.register("needs_post_processing", NeedsPostProcessingSurfaceRuleSource.CODEC::codec);
+        SURFACE_RULES.register("badlands", BadlandsSurfaceRuleSource.CODEC::codec);
     }
 }

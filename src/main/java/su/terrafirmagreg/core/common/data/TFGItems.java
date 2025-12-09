@@ -55,6 +55,14 @@ public class TFGItems {
     public static final RegistryObject<BucketItem> MARS_WATER_BUCKET = register("semiheavy_ammoniacal_water_bucket",
             () -> new BucketItem(TFGFluids.MARS_WATER.getSource(),
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    @SuppressWarnings("deprecation")
+    public static final RegistryObject<BucketItem> SULFUR_FUMES_BUCKET = register("sulfur_fumes_bucket",
+            () -> new BucketItem(TFGFluids.SULFUR_FUMES.getSource(),
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    @SuppressWarnings("deprecation")
+    public static final RegistryObject<BucketItem> GEYSER_SLURRY_BUCKET = register("geyser_slurry_bucket",
+            () -> new BucketItem(TFGFluids.GEYSER_SLURRY.getSource(),
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static final RegistryObject<Item> RAILGUN_AMMO_SHELL = ITEMS.register("railgun_ammo_shell",
             () -> new Item(new Item.Properties().stacksTo(16)));

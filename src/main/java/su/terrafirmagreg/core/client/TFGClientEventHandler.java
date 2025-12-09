@@ -134,6 +134,10 @@ public final class TFGClientEventHandler {
 
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getSource(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGFluids.SULFUR_FUMES.getFlowing(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGFluids.SULFUR_FUMES.getSource(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getFlowing(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getSource(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICICLE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
