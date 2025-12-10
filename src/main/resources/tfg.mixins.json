@@ -118,7 +118,6 @@
         "common.tfcambiental.TemperatureCapabilityMixin",
         "common.tfchotornot.ClientEventHandlerMixin",
         "common.tfchotornot.EventHandlerMixin",
-        "common.tfchotornot.FluidEffectMixin",
         "common.vintageimprovements.CurvingRecipeMixin",
         "common.vintageimprovements.HelveItemsRendererMixin",
         "common.vintageimprovements.LatheMovingBlockMixin",
