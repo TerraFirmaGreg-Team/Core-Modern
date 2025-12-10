@@ -69,6 +69,8 @@
         "common.gtceu.materials.MaterialPropertiesMixin",
         "common.gtceu.materials.OrePropertyMixin",
         "common.gtceu.materials.SecondDegreeMixin",
+        "common.gtceu.medical.MedicalConditionTrackerMixin",
+        "common.gtceu.medical.SymptomMixin",
         "common.gtceu.recipes.ArcFurnaceLogicMixin",
         "common.gtceu.recipes.MaceratorLogicMixin",
         "common.gtceu.recipes.MaterialInfoLoaderMixin",
