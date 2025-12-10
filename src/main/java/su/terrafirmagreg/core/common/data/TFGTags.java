@@ -16,23 +16,25 @@ public final class TFGTags {
         public static final TagKey<Item> Chains = createItemTag("forge:chains");
         public static final TagKey<Item> Strings = createItemTag("forge:string");
         public static final TagKey<Item> Harvester = createItemTag("tfg:harvester");
+
         public static final TagKey<Item> CannotLaunchInRailgun = createItemTag("tfg:cannot_launch_in_railgun");
         public static final TagKey<Item> OreProspectorsCopper = createItemTag("tfg:tools/ore_prospectors/copper");
         public static final TagKey<Item> OreProspectorsBronze = createItemTag("tfg:tools/ore_prospectors/bronze");
-        public static final TagKey<Item> OreProspectorsWroughtIron = createItemTag(
-                "tfg:tools/ore_prospectors/wrought_iron");
+        public static final TagKey<Item> OreProspectorsWroughtIron = createItemTag("tfg:tools/ore_prospectors/wrought_iron");
         public static final TagKey<Item> OreProspectorsSteel = createItemTag("tfg:tools/ore_prospectors/steel");
-        public static final TagKey<Item> OreProspectorsBlackSteel = createItemTag(
-                "tfg:tools/ore_prospectors/black_steel");
-        public static final TagKey<Item> OreProspectorsBlueSteel = createItemTag(
-                "tfg:tools/ore_prospectors/blue_steel");
+        public static final TagKey<Item> OreProspectorsBlackSteel = createItemTag("tfg:tools/ore_prospectors/black_steel");
+        public static final TagKey<Item> OreProspectorsBlueSteel = createItemTag("tfg:tools/ore_prospectors/blue_steel");
         public static final TagKey<Item> OreProspectorsRedSteel = createItemTag("tfg:tools/ore_prospectors/red_steel");
+
         public static final TagKey<Item> GlacianRamFood = createItemTag("tfg:glacian_ram_food");
         public static final TagKey<Item> SnifferFood = createItemTag("tfg:sniffer_food");
         public static final TagKey<Item> WraptorFood = createItemTag("tfg:wraptor_food");
         public static final TagKey<Item> EmptySyringe = createItemTag("tfg:empty_dna_syringes");
+
         public static final TagKey<Item> InsulatingContainer = createItemTag("tfg:insulating_container");
-        public static final TagKey<Item> PreventsGasFloating = createItemTag("tfg:prevents_gas_floating");
+        public static final TagKey<Item> HotProtectionEquipment = createItemTag("tfg:hot_protection_equipment");
+        public static final TagKey<Item> ColdProtectionEquipment = createItemTag("tfg:cold_protection_equipment");
+        public static final TagKey<Item> FloatingProtectionEquipment = createItemTag("tfg:floating_protection_equipment");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");
