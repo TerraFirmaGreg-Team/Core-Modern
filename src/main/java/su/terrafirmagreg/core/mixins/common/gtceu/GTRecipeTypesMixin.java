@@ -47,6 +47,7 @@ public abstract class GTRecipeTypesMixin {
 
     /**
      * Нужно для того, чтобы настроить доп. рецепты. Расширяет кол-во слотов в некоторых машинах.
+     * Required to configure additional recipes. Increases the number of slots in some machines.
      */
     @Inject(method = "init", at = @At(value = "TAIL"), remap = false)
     private static void tfg$init(CallbackInfo ci) {
