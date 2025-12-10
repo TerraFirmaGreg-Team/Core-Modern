@@ -1,13 +1,13 @@
 package su.terrafirmagreg.core.mixins.common.tfchotornot;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.dries007.tfc.common.TFCEffects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -36,7 +36,7 @@ public class FluidEffectMixin {
         }
 
         // Increase levitation duration, by default it's 10-25 ticks, which means the player never stays airborne
-        player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40, 0));
+        player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 50, 0));
 
         ci.cancel();
     }
