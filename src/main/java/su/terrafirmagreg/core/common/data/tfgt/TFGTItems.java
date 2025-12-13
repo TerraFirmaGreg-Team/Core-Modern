@@ -111,7 +111,6 @@ public class TFGTItems {
             .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.IRRITANT)))
             .register();
 
-    
     public static final ItemEntry<ComponentItem> ABSORPTION_SALVO = TFGCore.REGISTRATE.item("absorption_salvo", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, shortBuff, 0), 1).build()))
             .onRegister(attach(new AntidoteBehavior(30, GTMedicalConditions.CHEMICAL_BURNS)))
