@@ -17,7 +17,7 @@ public class CoolingSteamProvider implements ParticleProvider<SimpleParticleType
     public Particle createParticle(SimpleParticleType type, ClientLevel level,
             double x, double y, double z,
             double dx, double dy, double dz) {
-        CoolingSteam particle = new CoolingSteam(level, x, y, z);
+        CoolingSteam particle = new CoolingSteam(level, x, y, z, spriteSet);
         particle.pickSprite(spriteSet);
         return particle;
     }
