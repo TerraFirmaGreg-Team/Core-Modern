@@ -83,6 +83,9 @@ public class TFGItems {
     public static final RegistryObject<Item> WIRELESS_CARD = ITEMS.register("wireless_card",
             () -> Upgrades.createUpgradeCardItem(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 
+    public static final RegistryObject<Item> RNR_PLOW = ITEMS.register("rnr_plow",
+            () -> new CartItem(new Item.Properties().stacksTo(1)));
+
     private static RegistryObject<Item> register(String name) {
         return register(name, () -> new Item(new Item.Properties()));
     }
@@ -95,7 +98,4 @@ public class TFGItems {
         return register("spawn_egg/" + entity.getId().getPath(),
                 () -> new ForgeSpawnEggItem(entity, color1, color2, new Item.Properties()));
     }
-
-    public static final RegistryObject<Item> RNR_PLOW = ITEMS.register("rnr_plow",
-            () -> new CartItem(new Item.Properties().stacksTo(1)));
 }

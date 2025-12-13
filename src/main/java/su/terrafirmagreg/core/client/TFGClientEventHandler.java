@@ -13,6 +13,9 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.util.StringUtil;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -149,6 +152,10 @@ public final class TFGClientEventHandler {
         event.register(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern"));
     }
 
+    @SubscribeEvent
+    public void modConstruct(FMLConstructModEvent event) {
+    }
+
     @SuppressWarnings("ConstantConditions")
     private static void onItemTooltip(ItemTooltipEvent event) {
         final ItemStack stack = event.getItemStack();
@@ -157,12 +164,32 @@ public final class TFGClientEventHandler {
             final @Nullable ILargeEgg egg = LargeEggCapability.get(stack);
             if (egg != null) {
                 egg.addTooltipInfo(text);
+                return;
+            }
+
+            var foodProperties = stack.getFoodProperties(event.getEntity());
+            if (foodProperties != null) {
+                foodProperties.getEffects().forEach(effect -> event.getToolTip().add(getTooltip(effect.getFirst())));
             }
         }
     }
 
-    @SubscribeEvent
-    public void modConstruct(FMLConstructModEvent event) {
+    // These are taken from TFC Aged Alcohol
 
+    private static Component getTooltip(MobEffectInstance effectInstance) {
+        return Component.literal(effectInstance.getEffect().getDisplayName().getString()
+                + displayedPotency(effectInstance.getAmplifier()) + "(" + formatDuration(effectInstance) + ")").withStyle(effectInstance.getEffect().getCategory().getTooltipFormatting());
+    }
+
+    private static String displayedPotency(int amplifier) {
+        return switch (amplifier + 1) {
+            case 2 -> " II ";
+            case 3 -> " III ";
+            default -> " ";
+        };
+    }
+
+    private static String formatDuration(MobEffectInstance effect) {
+        return StringUtil.formatTickDuration(Mth.floor(effect.getDuration()));
     }
 }
