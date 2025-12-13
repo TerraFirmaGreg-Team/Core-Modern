@@ -1,9 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.tfchotornot;
 
-import net.dries007.tfc.common.TFCTags;
-import net.minecraft.data.tags.TagsProvider;
-import net.minecraftforge.common.data.ForgeItemTagsProvider;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
