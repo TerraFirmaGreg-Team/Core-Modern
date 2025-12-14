@@ -237,6 +237,13 @@ public final class TFGBlocks {
                     .strength(5.5f)
                     .sound(SoundType.COPPER)));
 
+    public static final RegistryObject<Block> MACHINE_CASING_POWER_CASING = register(
+            "machine_casing_power_casing",
+            () -> new SimpleBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_CYAN)
+                    .strength(5.5f)
+                    .sound(SoundType.METAL)));
+
     public static final RegistryObject<ReflectorBlock> REFLECTOR_BLOCK = register("reflector", ReflectorBlock::new);
 
     // Mars animal related

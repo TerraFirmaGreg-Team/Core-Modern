@@ -37,6 +37,7 @@ public class TFGCreativeTab {
         accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK);
         accept(out, TFGBlocks.SUPERCONDUCTOR_COIL_SMALL_BLOCK);
         accept(out, TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL);
+        accept(out, TFGBlocks.MACHINE_CASING_POWER_CASING);
         accept(out, TFGBlocks.REFLECTOR_BLOCK);
         accept(out, TFGBlocks.DRY_ICE);
 
