@@ -58,6 +58,7 @@
         "common.gtceu.GTUtilMixin",
         "common.gtceu.LootDataManagerMixin",
         "common.gtceu.ModelManagerMixin",
+        "common.gtceu.MultiblockInfoEmiCategoryMixin",
         "common.gtceu.NotifiableItemStackHandlerMixin",
         "common.gtceu.SteamBoilerMachineMixin",
         "common.gtceu.SurfaceRockBlockMixin",
