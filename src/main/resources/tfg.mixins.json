@@ -41,6 +41,7 @@
         "common.create.WindmillBearingBlockMixin",
         "common.create_additions.LiquidBlazeBurnerBlockEntityMixin",
         "common.emi.ItemEmiStackMixin",
+        "common.fallingtrees.GenericTreeMixin",
         "common.firmalife.HydroponicPlanterBlockEntityMixin",
         "common.firmalife.MixinFoodShelfBlockEntity",
         "common.firmalife.MixinGreenhousePortBlock",
