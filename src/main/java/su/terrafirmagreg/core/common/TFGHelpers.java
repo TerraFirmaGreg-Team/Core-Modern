@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,8 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.ItemMaterialData;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -85,5 +88,10 @@ public final class TFGHelpers {
         }
 
         ItemMaterialData.registerMaterialInfo(item, new ItemMaterialInfo(matStacks));
+    }
+
+    public static void registerCobbleBlock(String tagPrefix, ResourceLocation cobbleBlock) {
+        GTBlocks.registerCobbleBlock(TagPrefix.get(tagPrefix),
+                () -> Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(cobbleBlock)).defaultBlockState());
     }
 }
