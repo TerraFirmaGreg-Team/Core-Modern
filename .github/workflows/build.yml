@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: 🔍 Checkout
-        uses: actions/checkout@v6.0.0
+        uses: actions/checkout@v6.0.1
         with:
           fetch-depth: 0
 
@@ -71,7 +71,7 @@ jobs:
 
 
       - name: 🔍 Check If Tag Exists
-        uses: mukunku/tag-exists-action@v1.6.0
+        uses: mukunku/tag-exists-action@v1.7.0
         id: check_tag
         with:
           tag: ${{ steps.project_version.outputs.value }}
@@ -114,10 +114,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔍 Checkout
-        uses: actions/checkout@v6.0.0
+        uses: actions/checkout@v6.0.1
 
       - name: 📁 Setup JDK
-        uses: actions/setup-java@v5.0.0
+        uses: actions/setup-java@v5.1.0
         with:
           distribution: 'temurin'
           java-version: ${{ needs.info.outputs.java_version }}
@@ -142,7 +142,7 @@ jobs:
           fi
 
       - name: 🚀 Upload Artifact Jar
-        uses: actions/upload-artifact@v5.0.0
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: ${{ needs.info.outputs.project_full_name }}
           path: build/libs/${{ needs.info.outputs.project_full_name }}.jar
@@ -156,7 +156,7 @@ jobs:
 
       steps:
         - name: 📦 Checkout
-          uses: actions/checkout@v6.0.0
+          uses: actions/checkout@v6.0.1
 
         - name: 🔒 Check if CURSEFORGE_TOKEN exist
           shell: bash
@@ -166,7 +166,7 @@ jobs:
             fi  
 
         - name: 📦 Download artifact
-          uses: actions/download-artifact@v6.0.0
+          uses: actions/download-artifact@v7.0.0
           with:
             merge-multiple: true
 
