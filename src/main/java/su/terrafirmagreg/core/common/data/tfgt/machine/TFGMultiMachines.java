@@ -561,7 +561,7 @@ public class TFGMultiMachines {
                     .where('S', controller(blocks(definition.getBlock())))
                     .where('X', blocks(TFGBlocks.MACHINE_CASING_POWER_CASING.get()).setMinGlobalLimited(12)
                             .or(ActiveTransformerMachine.getHatchPredicates()))
-                    .where('C', blocks(TFGBlocks.ELECTROMAGNETIC_ACCELERATOR_BLOCK.get()))
+                    .where('C', blocks(TFGBlocks.SUPERCONDUCTOR_COIL_LARGE_BLOCK.get()))
                     .build())
             .workableCasingModel(TFGCore.id("block/casings/machine_casing_power_casing"),
                     GTCEu.id("block/multiblock/data_bank"))
