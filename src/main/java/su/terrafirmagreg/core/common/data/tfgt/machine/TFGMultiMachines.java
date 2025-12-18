@@ -2,7 +2,8 @@ package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import static com.gregtechceu.gtceu.api.GTValues.EV;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.PARALLEL_HATCH;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
+
+import org.joml.Vector3f;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -20,13 +23,19 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
+import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
+import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.gcym.LargeMixerMachine;
 
@@ -135,8 +144,17 @@ public class TFGMultiMachines {
             .recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
             .recipeModifier(GTRecipeModifiers.OC_PERFECT)
             .appearanceBlock(GTBlocks.STEEL_HULL)
-            .workableCasingModel(GTCEu.id("block/casings/steam/steel"),
-                    GTCEu.id("block/multiblock/implosion_compressor"))
+            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
+            .model(GTMachineModels.createWorkableCasingMachineModel(
+                GTCEu.id("block/casings/steam/steel/side"),
+                GTCEu.id("block/multiblock/implosion_compressor"))
+                   .andThen(b -> b.addDynamicRenderer(() -> DynamicRenderHelper.makeGrowingPlantRender(List.of(
+                       new Vector3f(-2, 1, -1), new Vector3f(-1, 1, -1), new Vector3f(0, 1, -1), new Vector3f(1, 1, -1), new Vector3f(2, 1, -1),
+                       new Vector3f(-2, 1, -2), new Vector3f(-1, 1, -2), new Vector3f(0, 1, -2), new Vector3f(1, 1, -2), new Vector3f(2, 1, -2),
+                       new Vector3f(-2, 1, -3), new Vector3f(-1, 1, -3), new Vector3f(0, 1, -3), new Vector3f(1, 1, -3), new Vector3f(2, 1, -3),
+                       new Vector3f(-2, 1, -4), new Vector3f(-1, 1, -4), new Vector3f(0, 1, -4), new Vector3f(1, 1, -4), new Vector3f(2, 1, -4),
+                       new Vector3f(-2, 1, -5), new Vector3f(-1, 1, -5), new Vector3f(0, 1, -5), new Vector3f(1, 1, -5), new Vector3f(2, 1, -5)
+                   )))))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
                     .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
@@ -167,18 +185,16 @@ public class TFGMultiMachines {
                 var builder = MultiblockShapeInfo.builder()
                         .aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
                         .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", "#XXFXX#")
-                        .aisle("CDDDDDC", "F##W##F", "F##W##F", "F##W##F", "F#LWL#F", "F#LWL#F", "F#LLL#F", "F#####F", "FFFFFFF")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X##L##X", "X#LLL#X", "X##L##X", "X#####X", "#XXFXX#")
+                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
+                        .aisle("CDDDDDC", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "FFFFFFF")
+                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
                         .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
                         .aisle("mitYfee", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
                         .where('Y', definition, Direction.SOUTH)
                         .where('C', GTBlocks.STEEL_HULL.getDefaultState())
-                        .where('D', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfc", "grass/loam")))
+                        .where('D', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfc", "dirt/loam")))
                         .where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel))
                         .where('X', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("create", "framed_glass")))
-                        .where('W', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfc", "wood/wood/oak")))
-                        .where('L', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfc", "wood/leaves/oak")))
                         .where('#', Blocks.AIR)
                         .where('i', GTMachines.ITEM_IMPORT_BUS[GTValues.ULV], Direction.SOUTH)
                         .where('t', GTMachines.ITEM_EXPORT_BUS[GTValues.MV], Direction.SOUTH)
@@ -346,7 +362,7 @@ public class TFGMultiMachines {
             .recipeType(TFGRecipeTypes.COOLING_TOWER)
             .appearanceBlock(tower_casing)
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("********A  A  A********", "********A  A  A********", "********BBBCBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                    .aisle("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
                     .aisle("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
                     .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
                     .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
@@ -368,7 +384,7 @@ public class TFGMultiMachines {
                     .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
                     .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
                     .aisle("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
-                    .aisle("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                    .aisle("********A  A  A********", "********A  A  A********", "********BBBCBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
                     .where("*", Predicates.any())
                     .where(" ", Predicates.air())
                     .where("A", Predicates.frames(GTMaterials.TungstenSteel))
@@ -523,6 +539,32 @@ public class TFGMultiMachines {
                     .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/heat_pipe_casing"))))
                     .where("E", Predicates.blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
                     .build())
+            .register();
+
+
+    public static final MultiblockMachineDefinition ACTIVE_POWER_TRANSFORMER = REGISTRATE
+            .multiblock("active_power_transformer", ActiveTransformerMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .appearanceBlock(TFGBlocks.MACHINE_CASING_POWER_CASING)
+            .tooltips(Component.translatable("gtceu.machine.active_transformer.tooltip.0"),
+                    Component.translatable("gtceu.machine.active_transformer.tooltip.1"))
+            .tooltipBuilder(
+                    (stack,
+                     components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
+                            .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
+                                    .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+            .pattern((definition) -> FactoryBlockPattern.start()
+                    .aisle("XXX", "XXX", "XXX")
+                    .aisle("XXX", "XCX", "XXX")
+                    .aisle("XXX", "XSX", "XXX")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('X', blocks(TFGBlocks.MACHINE_CASING_POWER_CASING.get()).setMinGlobalLimited(12)
+                            .or(ActiveTransformerMachine.getHatchPredicates()))
+                    .where('C', blocks(TFGBlocks.ELECTROMAGNETIC_ACCELERATOR_BLOCK.get()))
+                    .build())
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_power_casing"),
+                    GTCEu.id("block/multiblock/data_bank"))
             .register();
 
     // spotless:on

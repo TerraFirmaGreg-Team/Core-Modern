@@ -10,13 +10,16 @@ public class CoolingSteam extends TextureSheetParticle {
     private final float zWind;
     private final float verticalSpeed = 0.6f;
     private final float speed = 0.4f;
+    private final SpriteSet spriteSet;
 
     public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    public CoolingSteam(ClientLevel level, double x, double y, double z) {
+    public CoolingSteam(ClientLevel level, double x, double y, double z, SpriteSet spriteSet) {
         super(level, x, y, z);
+        this.spriteSet = spriteSet;
+
         Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
         this.lifetime = 100;
         this.gravity = 0;
@@ -25,12 +28,15 @@ public class CoolingSteam extends TextureSheetParticle {
         xWind = wind.x;
         zWind = wind.y;
 
-        this.scale(this.random.nextFloat() * 8F + 2F);
-        System.out.println("Cooling Steam Constructor");
+        this.scale(this.random.nextFloat() * 8F + 20F);
+
+        this.setSpriteFromAge(this.spriteSet);
     }
 
     public void tick() {
         super.tick();
+
+        this.setSpriteFromAge(this.spriteSet);
 
         this.yd = (age * -0.01f + 1) * verticalSpeed;
 
