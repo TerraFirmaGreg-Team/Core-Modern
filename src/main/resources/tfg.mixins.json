@@ -39,7 +39,6 @@
         "common.create.WaterWheelBlockMixin",
         "common.create.WindmillBearingBlockEntityMixin",
         "common.create.WindmillBearingBlockMixin",
-        "common.create_additions.LiquidBlazeBurnerBlockEntityMixin",
         "common.emi.ItemEmiStackMixin",
         "common.firmalife.HydroponicPlanterBlockEntityMixin",
         "common.firmalife.MixinFoodShelfBlockEntity",
