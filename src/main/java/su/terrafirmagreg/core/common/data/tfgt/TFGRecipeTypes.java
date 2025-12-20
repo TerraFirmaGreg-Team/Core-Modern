@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
+import static su.terrafirmagreg.core.common.data.container.ProgressBars.*;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +18,6 @@ import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 
 import net.minecraft.core.HolderSet;
@@ -32,12 +33,13 @@ public class TFGRecipeTypes {
     public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register("greenhouse", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(3, 4, 1, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
             .setSound(GTSoundEntries.BATH);
 
-    public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
-            "tfg:textures/gui/progress_bar/progress_bar_dna.png"); // I might move this later if we end up making/using
-                                                                                                                                             // more custom progress bars.
+    //    public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
+    //            "tfg:textures/gui/progress_bar/progress_bar_dna.png");
+    // I might move this later if we end up making/using
+    // more custom progress bars.
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 6, 6)
@@ -53,8 +55,8 @@ public class TFGRecipeTypes {
                 }
             });
 
-    public static final ResourceTexture PROGRESS_BAR_PETRI = new ResourceTexture(
-            "tfg:textures/gui/progress_bar/progress_bar_petri.png");
+    //    public static final ResourceTexture PROGRESS_BAR_PETRI = new ResourceTexture(
+    //            "tfg:textures/gui/progress_bar/progress_bar_petri.png");
     public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
             .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
