@@ -111,6 +111,7 @@
         "common.tfc.EnvironmentHelpersMixin",
         "common.tfc.FarmlandBlockMixin",
         "common.tfc.FluidHelpersMixin",
+        "common.tfc.FoodHandlerDynamicMixin",
         "common.tfc.ForgeEventHandlerMixin",
         "common.tfc.GroundcoverBlockMixin",
         "common.tfc.IceCaveFeatureMixin",
