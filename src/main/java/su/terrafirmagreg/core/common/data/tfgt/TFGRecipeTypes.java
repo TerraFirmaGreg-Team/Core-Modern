@@ -18,7 +18,6 @@ import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 
 import net.minecraft.core.HolderSet;
@@ -33,10 +32,14 @@ public class TFGRecipeTypes {
 
     public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register("greenhouse", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
-            .setMaxIOSize(6, 6, 3, 3)
+            .setMaxIOSize(3, 4, 1, 0)
             .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
-            .setSound(GTSoundEntries.MINER);
+            .setSound(GTSoundEntries.BATH);
 
+    //    public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
+    //            "tfg:textures/gui/progress_bar/progress_bar_dna.png");
+    // I might move this later if we end up making/using
+    // more custom progress bars.
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 6, 6)
@@ -52,6 +55,8 @@ public class TFGRecipeTypes {
                 }
             });
 
+    //    public static final ResourceTexture PROGRESS_BAR_PETRI = new ResourceTexture(
+    //            "tfg:textures/gui/progress_bar/progress_bar_petri.png");
     public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
             .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
@@ -70,7 +75,7 @@ public class TFGRecipeTypes {
 
     public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
-            .setMaxIOSize(1, 2, 1, 0)
+            .setMaxIOSize(1, 1, 1, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.FURNACE);
 
@@ -156,12 +161,5 @@ public class TFGRecipeTypes {
             .setMaxIOSize(0, 0, 1, 1)
             .setSound(GTSoundEntries.TURBINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
-
-    public static final GTRecipeType HYDROPONICS_FACILITY_RECIPES = GTRecipeTypes
-            .register("hydroponics_facility", GTRecipeTypes.MULTIBLOCK)
-            .setEUIO(IO.IN)
-            .setMaxIOSize(6, 6, 3, 3)
-            .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
-            .setSound(GTSoundEntries.MINER);
 
 }
