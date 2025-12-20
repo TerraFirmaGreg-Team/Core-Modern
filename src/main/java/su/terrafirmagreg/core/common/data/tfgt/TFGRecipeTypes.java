@@ -18,6 +18,7 @@ import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
+import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 
 import net.minecraft.core.HolderSet;
