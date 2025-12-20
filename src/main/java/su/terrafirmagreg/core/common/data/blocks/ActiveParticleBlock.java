@@ -35,6 +35,7 @@ import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 /**
  * Particle emitter block with active/inactive states.
  * Adds the ability to have different particle effects based on the active state.
+ * Also supports configurable light levels for active and inactive states.
  */
 public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -45,6 +46,8 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     private final ParticleConfig activeConfig;
     private final boolean hasTicker;
     private final int emitDelay;
+    private final int inactiveLight;
+    private final int activeLight;
 
     public ActiveParticleBlock(
             Properties properties,
@@ -53,16 +56,29 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
             ParticleConfig inactiveConfig,
             ParticleConfig activeConfig,
             boolean hasTicker,
-            int emitDelay) {
+            int emitDelay,
+            int inactiveLight,
+            int activeLight) {
         super(properties);
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
         this.inactiveConfig = inactiveConfig;
         this.activeConfig = activeConfig;
         this.hasTicker = hasTicker;
         this.emitDelay = Math.max(0, emitDelay);
+        this.inactiveLight = clampLight(inactiveLight);
+        this.activeLight = clampLight(activeLight);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(GTBlockStateProperties.ACTIVE, false));
+    }
+
+    // Clamps light level to valid range 0-15. Floats are for losers.
+    private static int clampLight(int v) {
+        if (v < 0)
+            return 0;
+        if (v > 15)
+            return 15;
+        return v;
     }
 
     private boolean shouldEmit(RandomSource random) {
@@ -107,6 +123,12 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
         ParticleConfig cfg = state.getValue(GTBlockStateProperties.ACTIVE) ? activeConfig : inactiveConfig;
         if (cfg != null)
             cfg.spawnClient(level, pos, random);
+    }
+
+    // Return configured light level depending on active state.
+    @Override
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getValue(GTBlockStateProperties.ACTIVE) ? activeLight : inactiveLight;
     }
 
     // Creates ticker entity if enabled.

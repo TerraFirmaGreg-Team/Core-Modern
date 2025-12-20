@@ -41,6 +41,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     private transient boolean inactiveForced = false;
     private transient boolean inactiveUseDust = false;
     private transient float inactiveDustRed, inactiveDustGreen, inactiveDustBlue, inactiveDustScale;
+    private transient int inactiveLight = 0;
 
     // Active defaults
     private transient Supplier<SimpleParticleType> activeParticle = () -> (SimpleParticleType) net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
@@ -52,6 +53,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
     private transient boolean activeForced = false;
     private transient boolean activeUseDust = false;
     private transient float activeDustRed, activeDustGreen, activeDustBlue, activeDustScale;
+    private transient int activeLight = 0;
 
     private transient boolean hasTicker = false;
     private transient int emitDelay = 0;
@@ -129,6 +131,12 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
         return this;
     }
 
+    @Info("Inactive light level (0-15).")
+    public GTActiveParticleBuilder inactiveLight(int level) {
+        this.inactiveLight = Math.max(0, Math.min(15, level));
+        return this;
+    }
+
     /**
      * Active particle configuration.
      */
@@ -185,6 +193,12 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
         return this;
     }
 
+    @Info("Active light level (0-15).")
+    public GTActiveParticleBuilder activeLight(int level) {
+        this.activeLight = Math.max(0, Math.min(15, level));
+        return this;
+    }
+
     @HideFromJS
     public VoxelShape getShape() {
         if (customShape.isEmpty())
@@ -229,7 +243,9 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
                 inactiveCfg,
                 activeCfg,
                 hasTicker,
-                emitDelay);
+                emitDelay,
+                inactiveLight,
+                activeLight);
         if (hasTicker) {
             REGISTERED_BLOCKS.add(block);
         }
