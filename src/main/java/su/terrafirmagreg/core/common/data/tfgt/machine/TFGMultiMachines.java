@@ -142,7 +142,6 @@ public class TFGMultiMachines {
             .multiblock("electric_greenhouse", GreenhouseMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
-            .recipeModifier(GTRecipeModifiers.OC_PERFECT)
             .appearanceBlock(GTBlocks.STEEL_HULL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(
@@ -565,6 +564,53 @@ public class TFGMultiMachines {
                     .build())
             .workableCasingModel(TFGCore.id("block/casings/machine_casing_power_casing"),
                     GTCEu.id("block/multiblock/data_bank"))
+            .register();
+
+    private static final Supplier<Block> HORTICULTURE_CASING = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_egh"));
+    public static final MultiblockMachineDefinition HYDROPONICS_FACILITY = REGISTRATE
+            .multiblock("hydroponics_facility", GreenhouseMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
+            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .appearanceBlock(HORTICULTURE_CASING)
+            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
+            .model(GTMachineModels.createWorkableCasingMachineModel(
+            ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_egh"),
+                GTCEu.id("block/machines/implosion_compressor"))
+                    .andThen(b -> b.addDynamicRenderer(() -> DynamicRenderHelper.makeGrowingPlantRender(List.of(
+                        // Layer 1
+                        new Vector3f(-1, 0, -5), new Vector3f(-1,0,-6),new Vector3f(-1,0,-7),new Vector3f(-1,0,-8),new Vector3f(-1,0,-9),new Vector3f(-1,0,-10),
+                        new Vector3f(1, 0, -5), new Vector3f(1,0,-6),new Vector3f(1,0,-7),new Vector3f(1,0,-8),new Vector3f(1,0,-9),new Vector3f(1,0,-10),
+                        // Layer 2
+                        new Vector3f(-1, 3, -5), new Vector3f(-1,3,-6),new Vector3f(-1,3,-7),new Vector3f(-1,3,-8),new Vector3f(-1,3,-9),new Vector3f(-1,3,-10),
+                        new Vector3f(1, 3, -5), new Vector3f(1,3,-6),new Vector3f(1,3,-7),new Vector3f(1,3,-8),new Vector3f(1,3,-9),new Vector3f(1,3,-10),
+                        // Layer 3
+                        new Vector3f(-1, 6, -5), new Vector3f(-1,6,-6),new Vector3f(-1,6,-7),new Vector3f(-1,6,-8),new Vector3f(-1,6,-9),new Vector3f(-1,6,-10),
+                        new Vector3f(1, 6, -5), new Vector3f(1,6,-6),new Vector3f(1,6,-7),new Vector3f(1,6,-8),new Vector3f(1,6,-9),new Vector3f(1,6,-10)
+                    )))))
+            .pattern((definition) -> FactoryBlockPattern.start()
+                    .aisle("AGGGA", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", " BBB ")
+                    .aisle("AHIHA", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "B A B", " BBB ").setRepeatable(2)
+                    .aisle("EHIHE", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "B A B", " BBB ").setRepeatable(2)
+                    .aisle("AHIHA", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "B A B", " BBB ").setRepeatable(2)
+                    .aisle("AAAAA", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", "B A B", " BBB ").setRepeatable(2)
+                    .aisle(" AAA ", " B B ", " B B ", " B B ", " B B ", " B B ", " BFB ", " B B ", " B B ", " BBB ")
+                    .aisle(" EEE ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " B B ", " BBB ")
+                    .aisle(" AAA ", " BCB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ")
+                    .where(" ", Predicates.any())
+                    .where("A", Predicates.blocks(HORTICULTURE_CASING.get()))
+                    .where("B", Predicates.blocks(GTBlocks.CLEANROOM_GLASS.get()))
+                    .where("C", controller(blocks(definition.getBlock())))
+                    .where("E", Predicates.blocks(GTBlocks.FILTER_CASING.get()))
+                    .where("F", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "cultivation_monitor"))))
+                    .where("G", Predicates.blocks(HORTICULTURE_CASING.get())
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, false, true))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2)))
+                    .where("H", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "egh_planter"))))
+                    .where("I", Predicates.blocks(GTBlocks.PLASTCRETE.get()))
+                    .build())
             .register();
 
     // spotless:on
