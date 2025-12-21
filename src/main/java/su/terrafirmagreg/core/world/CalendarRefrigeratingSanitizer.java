@@ -112,7 +112,8 @@ public final class CalendarRefrigeratingSanitizer {
                     continue;
 
                 // Block entities.
-                for (BlockEntity be : chunk.getBlockEntities().values()) {
+                // Cache to avoid ConcurrentModificationException.
+                for (BlockEntity be : new ArrayList<>(chunk.getBlockEntities().values())) {
                     if (isActiveFridge(be))
                         continue;
                     be.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(handler -> {
