@@ -10,12 +10,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -52,9 +55,7 @@ public class TallDecorativePlantBlock extends ExtendedBlock implements IFluidLog
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockPos pos = context.getClickedPos();
-        FluidState fluidState = context.getLevel().getFluidState(pos);
-
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         BlockState state = super.getStateForPlacement(context);
         if (getFluidProperty().canContain(fluidState.getType())) {
             state = state.setValue(getFluidProperty(), getFluidProperty().keyForOrEmpty(fluidState.getType()));
@@ -63,8 +64,32 @@ public class TallDecorativePlantBlock extends ExtendedBlock implements IFluidLog
     }
 
     @Override
+    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+        if (fluid instanceof FlowingFluid && !getFluidProperty().canContain(fluid)) {
+            return true;
+        }
+        return IFluidLoggable.super.canPlaceLiquid(level, pos, state, fluid);
+    }
+
+    @Override
+    public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
+        if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
+            level.destroyBlock(pos, true);
+            level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
+            return true;
+        }
+        return IFluidLoggable.super.placeLiquid(level, pos, state, fluidStateIn);
+    }
+
+    @Override
     public FluidProperty getFluidProperty() {
         return FLUID;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public FluidState getFluidState(BlockState state) {
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override
@@ -131,11 +156,5 @@ public class TallDecorativePlantBlock extends ExtendedBlock implements IFluidLog
         }
 
         return level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public FluidState getFluidState(BlockState state) {
-        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 }

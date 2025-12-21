@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import java.util.Map;
 
+import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableMap;
@@ -80,11 +81,17 @@ public class DecorativeAttachedPlantBlock extends DecorativePlantBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+        BlockState state = this.defaultBlockState();
+        if (getFluidProperty().canContain(fluidState.getType())) {
+            state = state.setValue(getFluidProperty(), getFluidProperty().keyForOrEmpty(fluidState.getType()));
+        }
+
         Direction direction = context.getClickedFace();
         if (!allowVertical && (direction == Direction.DOWN || direction == Direction.UP)) {
             return null;
         }
 
-        return defaultBlockState().setValue(FACING, direction);
+        return state.setValue(FACING, direction);
     }
 }
