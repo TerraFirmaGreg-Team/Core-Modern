@@ -47,6 +47,7 @@
         "common.flywheel.AnimatedBlazeBurnerMixin",
         "common.grappling_hook.AirFrictionControllerMixin",
         "common.grappling_hook.GrappleControllerMixin",
+        "common.grappling_hook.GrapplehookItemMixin",
         "common.greate.TieredCrushingRecipeMixin",
         "common.greate.TieredMillingRecipeMixin",
         "common.gtceu.CleanroomConditionMixin",
