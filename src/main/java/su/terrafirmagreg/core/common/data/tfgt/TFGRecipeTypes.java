@@ -34,7 +34,11 @@ public class TFGRecipeTypes {
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
             .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
-            .setSound(GTSoundEntries.MINER);
+            .setSound(GTSoundEntries.MINER)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var size = widgetGroup.getSize();
+                widgetGroup.setSize(size.width, size.height + 30);
+            });
 
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
@@ -161,6 +165,10 @@ public class TFGRecipeTypes {
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
             .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
-            .setSound(GTSoundEntries.MINER);
+            .setSound(GTSoundEntries.MINER)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var size = widgetGroup.getSize();
+                widgetGroup.setSize(size.width, size.height + 30);
+            });
 
 }
