@@ -6,6 +6,8 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 
+import net.dries007.tfc.common.recipes.outputs.ItemStackModifiers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,6 +25,7 @@ import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggHandler;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialHandler;
+import su.terrafirmagreg.core.compat.tfc.modifier.CopyNbtModifier;
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
@@ -62,6 +65,10 @@ public final class TFGCommonEventHandler {
     }
 
     private static void onCommonSetup(final FMLCommonSetupEvent event) {
+        ItemStackModifiers.register(
+                new ResourceLocation("tfg", "copy_nbt"),
+                CopyNbtModifier.INSTANCE);
+
         event.enqueueWork(() -> {
             if (TFGConfig.COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get() && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
                 TFCAmbientalCompat.register();
