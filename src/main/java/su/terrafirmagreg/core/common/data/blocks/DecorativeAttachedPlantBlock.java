@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -80,11 +81,17 @@ public class DecorativeAttachedPlantBlock extends DecorativePlantBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+        BlockState state = this.defaultBlockState();
+        if (getFluidProperty().canContain(fluidState.getType())) {
+            state = state.setValue(getFluidProperty(), getFluidProperty().keyForOrEmpty(fluidState.getType()));
+        }
+
         Direction direction = context.getClickedFace();
         if (!allowVertical && (direction == Direction.DOWN || direction == Direction.UP)) {
             return null;
         }
 
-        return defaultBlockState().setValue(FACING, direction);
+        return state.setValue(FACING, direction);
     }
 }

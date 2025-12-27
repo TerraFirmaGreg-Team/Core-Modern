@@ -10,7 +10,8 @@ public enum TFGModsResolver {
     FIRMA_CIV("firmaciv"),
     CREATE("create"),
     TFC_AMBIENTAL("tfcambiental"),
-    TFC("tfc");
+    TFC("tfc"),
+    GRAPPLEMOD("grapplemod");
 
     private final String name;
     private Boolean modLoaded;

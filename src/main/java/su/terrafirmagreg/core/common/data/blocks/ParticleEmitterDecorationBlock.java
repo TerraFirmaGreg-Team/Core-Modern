@@ -4,6 +4,8 @@ import java.util.function.Supplier;
 
 import org.joml.Vector3f;
 
+import net.dries007.tfc.common.fluids.FluidProperty;
+import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -14,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,17 +25,23 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import dev.latvian.mods.kubejs.typings.Info;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 
 // Decoration variant particle emitter.
-public class ParticleEmitterDecorationBlock extends Block implements EntityBlock {
+public class ParticleEmitterDecorationBlock extends Block implements EntityBlock, IFluidLoggable {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(2.0F, 0.0F, 2.0F, 14.0F, 16.0F, 14.0F);
 
     private final VoxelShape shape;
@@ -61,8 +70,11 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
             float red, float green, float blue, float scale,
             boolean hasTicker,
             int emitDelay) {
+
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
         this.particleType = particleType != null ? particleType : () -> ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
         this.baseX = baseX;
@@ -95,6 +107,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
+        builder.add(getFluidProperty());
     }
 
     @Override
@@ -104,7 +117,44 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+
+        BlockState state = this.defaultBlockState();
+        if (getFluidProperty().canContain(fluidState.getType())) {
+            state = state.setValue(getFluidProperty(), getFluidProperty().keyForOrEmpty(fluidState.getType()));
+        }
+
+        state = state.setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return state;
+    }
+
+    @Override
+    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+        if (fluid instanceof FlowingFluid && !getFluidProperty().canContain(fluid)) {
+            return true;
+        }
+        return IFluidLoggable.super.canPlaceLiquid(level, pos, state, fluid);
+    }
+
+    @Override
+    public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
+        if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
+            level.destroyBlock(pos, true);
+            level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
+            return true;
+        }
+        return IFluidLoggable.super.placeLiquid(level, pos, state, fluidStateIn);
+    }
+
+    @Override
+    public FluidProperty getFluidProperty() {
+        return FLUID;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public FluidState getFluidState(BlockState state) {
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override
