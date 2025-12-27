@@ -36,6 +36,8 @@ public final class TFGTags {
         public static final TagKey<Item> ColdProtectionEquipment = createItemTag("tfg:cold_protection_equipment");
         public static final TagKey<Item> FloatingProtectionEquipment = createItemTag("tfg:floating_protection_equipment");
 
+        public static final TagKey<Item> AutoEatBlacklist = createItemTag("tfg:auto_eat_blacklist");
+
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");
         public static final TagKey<Item> INTERACTIONBRICKSTAIR = createItemTag("tfg:interaction/brick_stairs");
