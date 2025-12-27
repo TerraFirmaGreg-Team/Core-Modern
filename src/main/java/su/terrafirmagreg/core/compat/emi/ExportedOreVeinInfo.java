@@ -86,7 +86,7 @@ package su.terrafirmagreg.core.compat.emi;
 			new OreVeinInfoRecipe("normal_cassiterite", "minecraft:overworld", 
 				170, 0.4, -32, 75, 40, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("cassiterite", 40),new OreVeinInfoRecipe.WeightedBlock("tin", 60),},
+				new OreVeinInfoRecipe.WeightedBlock("cassiterite", 35),new OreVeinInfoRecipe.WeightedBlock("tin", 55),new OreVeinInfoRecipe.WeightedBlock("saltpeter", 10),},
 				null),
 			new OreVeinInfoRecipe("normal_coal", "minecraft:overworld", 
 				215, 0.55, 0, 210, 60, 0, 0, new String[] {
@@ -231,7 +231,7 @@ package su.terrafirmagreg.core.compat.emi;
 			new OreVeinInfoRecipe("surface_cassiterite", "minecraft:overworld", 
 				135, 0.25, 60, 210, 50, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("cassiterite", 60),new OreVeinInfoRecipe.WeightedBlock("tin", 40),},
+				new OreVeinInfoRecipe.WeightedBlock("cassiterite", 55),new OreVeinInfoRecipe.WeightedBlock("tin", 35),new OreVeinInfoRecipe.WeightedBlock("saltpeter", 10),},
 				null),
 			new OreVeinInfoRecipe("surface_copper", "minecraft:overworld", 
 				200, 0.25, 20, 217, 50, 0, 0, new String[] {
@@ -541,7 +541,7 @@ package su.terrafirmagreg.core.compat.emi;
 			new OreVeinInfoRecipe("nether_cassiterite", "minecraft:the_nether", 
 				170, 0.5, 32, 128, 45, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/gneiss","tfc:rock/raw/schist","minecraft:blackstone",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("cassiterite", 40),new OreVeinInfoRecipe.WeightedBlock("tin", 60),},
+				new OreVeinInfoRecipe.WeightedBlock("cassiterite", 36),new OreVeinInfoRecipe.WeightedBlock("tin", 54),new OreVeinInfoRecipe.WeightedBlock("saltpeter", 9),},
 				null),
 			new OreVeinInfoRecipe("nether_sheldonite", "minecraft:the_nether", 
 				250, 0.4, 0, 128, 35, 0, 0, new String[] {

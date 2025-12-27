@@ -45,6 +45,7 @@ public final class TFGTagPrefix {
     public static final TagPrefix richRawOre;
     public static final TagPrefix oreSmall;
     public static final TagPrefix oreSmallNative;
+    public static final TagPrefix budIndicator;
 
     public static final TagPrefix dustyRawOre;
 
@@ -326,6 +327,12 @@ public final class TFGTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_SMALL_NATIVE_TFC_ORE));
+
+        budIndicator = new TagPrefix("bud_indicator")
+                .idPattern("%s_bud_indicator")
+                .defaultTagPath("bud_indicators/%s")
+                .unformattedTagPath("bud_indicators")
+                .materialAmount(GTValues.M / 4);
 
         dustyRawOre = new TagPrefix("dusty_raw", true)
                 .idPattern("dusty_raw_%s")

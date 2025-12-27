@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -48,6 +49,7 @@ import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.data.buds.BudIndicator;
 import su.terrafirmagreg.core.common.data.buds.BudIndicatorItem;
+import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
 
 @SuppressWarnings({ "unused" })
 public final class TFGBlocks {
@@ -314,6 +316,7 @@ public final class TFGBlocks {
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .transform(GTBlocks.unificationBlock(TFGTagPrefix.budIndicator, material))
                 // "deprecated" but gregtech uses it too
                 .addLayer(() -> RenderType::cutoutMipped)
                 .color(() -> BudIndicator::tintedBlockColor)

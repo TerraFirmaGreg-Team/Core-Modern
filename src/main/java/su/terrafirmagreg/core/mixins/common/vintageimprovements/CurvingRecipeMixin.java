@@ -12,6 +12,6 @@ public class CurvingRecipeMixin {
 
     @Inject(method = "getMaxInputCount", at = @At("HEAD"), cancellable = true)
     protected void tfg$getMaxInputCount(CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(2);
+        cir.setReturnValue(12);
     }
 }
