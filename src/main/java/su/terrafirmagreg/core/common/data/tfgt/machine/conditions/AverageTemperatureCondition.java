@@ -81,15 +81,19 @@ public class AverageTemperatureCondition extends RecipeCondition {
         Component label = Component.translatable("tfg.tooltip.recipe_condition.climate_temp");
         switch (mode) {
             case GT -> {
-                return label.copy().append(Component.literal(" > " + value));
+                long rounded = Math.round(value);
+                return label.copy().append(Component.literal(" > " + rounded));
             }
             case LT -> {
-                return label.copy().append(Component.literal(" < " + value));
+                long rounded = Math.round(value);
+                return label.copy().append(Component.literal(" < " + rounded));
             }
             case BETWEEN -> {
                 float s = Math.min(start, end);
                 float e = Math.max(start, end);
-                return Component.literal(s + " < ").append(label).append(Component.literal(" < " + e));
+                long rs = Math.round(s);
+                long re = Math.round(e);
+                return label.copy().append(Component.literal(": " + rs + " - " + re));
             }
             default -> {
                 return label;

@@ -4,11 +4,7 @@ import java.util.Arrays;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema.GTRecipeJS;
 
-import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.AverageRainfallCondition;
-import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.AverageTemperatureCondition;
-import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.MonthCondition;
-import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.OxygenatedCondition;
-import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.SeasonCondition;
+import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.*;
 
 public final class TFGRecipeSchemaBindings {
     public static GTRecipeJS isOxygenated(GTRecipeJS recipe, boolean isOxygenated) {
@@ -81,5 +77,21 @@ public final class TFGRecipeSchemaBindings {
 
     public static GTRecipeJS climateAvgRainfallLessThan(GTRecipeJS recipe, float value) {
         return recipe.addCondition(AverageRainfallCondition.lessThan(value));
+    }
+
+    public static GTRecipeJS climateGravityGreaterThan(GTRecipeJS recipe, float value) {
+        return recipe.addCondition(GravityCondition.greaterThan(value));
+    }
+
+    public static GTRecipeJS climateGravityLessThan(GTRecipeJS recipe, float value) {
+        return recipe.addCondition(GravityCondition.lessThan(value));
+    }
+
+    public static GTRecipeJS climateGravityRange(GTRecipeJS recipe, float start, float end) {
+        return recipe.addCondition(GravityCondition.ofRange(false, start, end));
+    }
+
+    public static GTRecipeJS climateGravityRange(GTRecipeJS recipe, float start, float end, boolean reverse) {
+        return recipe.addCondition(GravityCondition.ofRange(reverse, start, end));
     }
 }
