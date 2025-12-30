@@ -6,20 +6,17 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 import org.joml.Vector3f;
 
+import com.eerussianguy.firmalife.common.FLTags;
+import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.IMachineBlock;
 import com.gregtechceu.gtceu.api.data.RotationState;
-import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -43,10 +40,9 @@ import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.Tags;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import fi.dea.mc.deafission.common.data.FissionMachines;
@@ -63,6 +59,20 @@ public class TFGMultiMachines {
 
     public static void init() {
     }
+
+    private static net.minecraft.world.level.block.state.BlockState orientedBlockState(String namespace, String path, Direction dir) {
+        Block block = ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(namespace, path));
+        if (block == null)
+            return Blocks.AIR.defaultBlockState();
+        net.minecraft.world.level.block.state.BlockState state = block.defaultBlockState();
+        if (dir.getAxis().isHorizontal() && state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+            return state.setValue(BlockStateProperties.HORIZONTAL_FACING, dir);
+        }
+        if (state.hasProperty(BlockStateProperties.FACING)) {
+            return state.setValue(BlockStateProperties.FACING, dir);
+        }
+        return state;
+    };
 
     // spotless:off
     public static final MultiblockMachineDefinition INTERPLANETARY_ITEM_LAUNCHER = REGISTRATE
@@ -147,60 +157,59 @@ public class TFGMultiMachines {
             .model(GTMachineModels.createWorkableCasingMachineModel(
                 GTCEu.id("block/casings/steam/steel/side"),
                 GTCEu.id("block/multiblock/implosion_compressor"))
-                   .andThen(b -> b.addDynamicRenderer(() -> DynamicRenderHelper.makeGrowingPlantRender(List.of(
-                       new Vector3f(-2, 1, -1), new Vector3f(-1, 1, -1), new Vector3f(0, 1, -1), new Vector3f(1, 1, -1), new Vector3f(2, 1, -1),
-                       new Vector3f(-2, 1, -2), new Vector3f(-1, 1, -2), new Vector3f(0, 1, -2), new Vector3f(1, 1, -2), new Vector3f(2, 1, -2),
-                       new Vector3f(-2, 1, -3), new Vector3f(-1, 1, -3), new Vector3f(0, 1, -3), new Vector3f(1, 1, -3), new Vector3f(2, 1, -3),
-                       new Vector3f(-2, 1, -4), new Vector3f(-1, 1, -4), new Vector3f(0, 1, -4), new Vector3f(1, 1, -4), new Vector3f(2, 1, -4),
-                       new Vector3f(-2, 1, -5), new Vector3f(-1, 1, -5), new Vector3f(0, 1, -5), new Vector3f(1, 1, -5), new Vector3f(2, 1, -5)
+                    .andThen(b -> b.addDynamicRenderer(() -> DynamicRenderHelper.makeGrowingPlantRender(List.of(
+                       new Vector3f(-1f, 1.4f, -1f), new Vector3f(1f, 1.4f, -1f),
+                       new Vector3f(-1f, 1.4f, -2f), new Vector3f(1f, 1.4f, -2f),
+                       new Vector3f(-1f, 1.4f, -3f), new Vector3f(1f, 1.4f, -3f),
+                       new Vector3f(-1f, 1.4f, -4f), new Vector3f(1f, 1.4f, -4f),
+                       new Vector3f(-1f, 1.4f, -5f), new Vector3f(1f, 1.4f, -5f)
                    )))))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
-                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
-                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
-                    .aisle("CDDDDDC", "F     F", "F     F", "F     F", "F     F", "F     F", "F     F", "F     F", "FFFFFFF")
-                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
-                    .aisle("CDDDDDC", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", "X     X", " XXFXX ")
-                    .aisle("CCCYCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "   F   ")
-                    .where('Y', Predicates.controller(Predicates.blocks(definition.get())))
-                    .where('C', Predicates.blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(15)
-                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
-                            .or(Predicates.autoAbilities(true, false, false)))
-                    .where(' ', Predicates.any())
-                    .where('F', Predicates.frames(GTMaterials.Steel)
-                            .or(Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())))
-                    .where('X', Predicates.blockTag(Tags.Blocks.GLASS)
-                            .or(Predicates.blocks(ForgeRegistries.BLOCKS
-                                    .getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_glass"))))
-                            .or(Predicates.blocks(ForgeRegistries.BLOCKS
-                                    .getValue(ResourceLocation.fromNamespaceAndPath("ae2", "quartz_vibrant_glass")))))
-                    .where('D', Predicates.blockTag(BlockTags.DIRT)
-                            .or(Predicates.blockTag(TFCTags.Blocks.GRASS))
-                            .or(Predicates.blockTag(BlockTags.SAND))
-                            .or(Predicates.blockTag(TFCTags.Blocks.FARMLAND)))
+                .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAAAA", "BBBBB", "BBBBB", "BBBBB", "BBBBB")
+                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .aisle("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
+                    .aisle("AAIAA", "BBBBB", "BBBBB", "BBBBB", "BBBBB")
+                    .where("I", Predicates.controller(Predicates.blocks(definition.get())))
+                    .where(" ", Predicates.any())
+                    .where('A', Predicates.blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(10)
+                        .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                        .or(Predicates.autoAbilities(true, false, false)))
+                    .where("B", Predicates.blockTag(FLTags.Blocks.ALL_IRON_GREENHOUSE))
+                    .where("G", Predicates.blocks(FLBlocks.LARGE_PLANTER.get()))
+                    .where("F", Predicates.blockTag(TFCTags.Blocks.FORGE_INSULATION))
+                    .where("H", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","grow_light"))))
                     .build())
-            .shapeInfos(definition -> {
-                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-                var builder = MultiblockShapeInfo.builder()
-                        .aisle("CCCCCCC", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
-                        .aisle("CDDDDDC", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "F#####F", "FFFFFFF")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
-                        .aisle("CDDDDDC", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "X#####X", "#XXFXX#")
-                        .aisle("mitYfee", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "XXXFXXX", "###F###")
-                        .where('Y', definition, Direction.SOUTH)
-                        .where('C', GTBlocks.STEEL_HULL.getDefaultState())
-                        .where('D', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfc", "dirt/loam")))
-                        .where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel))
-                        .where('X', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("create", "framed_glass")))
-                        .where('#', Blocks.AIR)
-                        .where('i', GTMachines.ITEM_IMPORT_BUS[GTValues.ULV], Direction.SOUTH)
-                        .where('t', GTMachines.ITEM_EXPORT_BUS[GTValues.MV], Direction.SOUTH)
-                        .where('f', GTMachines.FLUID_IMPORT_HATCH[GTValues.ULV], Direction.SOUTH)
-                        .where('e', GTMachines.ENERGY_INPUT_HATCH[GTValues.LV], Direction.SOUTH)
-                        .where('m', GTMachines.MAINTENANCE_HATCH, Direction.SOUTH);
-                shapeInfo.add(builder.build());
+                .shapeInfos(definition -> {
+                    List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+                    var builder = MultiblockShapeInfo.builder()
+                        .aisle("itmfx", "BBBBB", "BBBBB", "BBBBB", "WDDDE")
+                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WBBBE")
+                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WDDDE")
+                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WBBBE")
+                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WDDDE")
+                        .aisle("AFFFA", "CG GC", "D   D", "CH HC", "WBBBE")
+                        .aisle("eAIAe", "BBBBB", "BBBBB", "BBBBB", "WDDDE")
+                        .where('I', definition.get(), Direction.SOUTH)
+                        .where('A', GTBlocks.STEEL_HULL.getDefaultState())
+                        .where('B', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","casings/greenhouse/iron_greenhouse_casing_1")))
+                        .where('C', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","casings/greenhouse/iron_greenhouse_casing_2")))
+                        .where('D', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","casings/greenhouse/iron_greenhouse_casing_3")))
+                        .where('F', GTBlocks.CASING_COKE_BRICKS.getDefaultState())
+                        .where(' ', Blocks.AIR)
+                        .where('E', orientedBlockState("firmalife", "iron_greenhouse_panel_roof", Direction.EAST))
+                        .where('W', orientedBlockState("firmalife", "iron_greenhouse_panel_roof", Direction.WEST))
+                        .where('G', FLBlocks.LARGE_PLANTER.get())
+                        .where('H', orientedBlockState("tfg", "grow_light", Direction.SOUTH))
+                        .where('i', GTMachines.ITEM_IMPORT_BUS[GTValues.ULV], Direction.NORTH)
+                        .where('t', GTMachines.ITEM_EXPORT_BUS[GTValues.MV], Direction.NORTH)
+                        .where('f', GTMachines.FLUID_IMPORT_HATCH[GTValues.ULV], Direction.NORTH)
+                        .where('x', GTMachines.FLUID_EXPORT_HATCH[GTValues.ULV], Direction.NORTH)
+                        .where('e', GTMachines.ENERGY_INPUT_HATCH[GTValues.LV], Direction.NORTH)
+                        .where('m', GTMachines.MAINTENANCE_HATCH, Direction.NORTH);
+                    shapeInfo.add(builder.build());
                 return shapeInfo;
             })
             .register();

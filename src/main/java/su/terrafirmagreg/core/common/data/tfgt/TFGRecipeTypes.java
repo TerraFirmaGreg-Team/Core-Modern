@@ -37,7 +37,21 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.MINER)
             .setUiBuilder((recipe, widgetGroup) -> {
                 var size = widgetGroup.getSize();
-                widgetGroup.setSize(size.width, size.height + 30);
+                widgetGroup.setSize(size.width, size.height + 5);
+
+                // Dimension widget that's in a better spot.
+                // Disabled for now since I cant figure out how to remove the old one.
+                //                for (RecipeCondition condition : recipe.conditions) {
+                //                    if (condition.getTooltips() == null) continue;
+                //                    if (condition instanceof DimensionCondition dimCondition) {
+                //                        int width = recipe.recipeType.getRecipeUI().getJEISize().width - 44;
+                //                        int baseHeight = recipe.recipeType.getRecipeUI().getJEISize().height - 32;
+                //                        int yPos = baseHeight - 5;
+                //                        widgetGroup.addWidget(dimCondition
+                //                                .setupDimensionMarkers(width, yPos - 5)
+                //                                .setBackgroundTexture(IGuiTexture.EMPTY));
+                //                    }
+                //                }
             });
 
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
@@ -168,7 +182,7 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.MINER)
             .setUiBuilder((recipe, widgetGroup) -> {
                 var size = widgetGroup.getSize();
-                widgetGroup.setSize(size.width, size.height + 30);
+                widgetGroup.setSize(size.width, size.height + 5);
             });
 
 }
