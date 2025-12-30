@@ -1,24 +1,8 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.gregtechceu.gtceu.client.renderer.machine.impl.GrowingPlantRender;
-
-import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
-import net.dries007.tfc.common.blocks.crop.DoubleCropBlock;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 @Mixin(value = GrowingPlantRender.RenderFunction.class, remap = false)
 public interface GrowingPlantRenderMixin {
