@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.simibubi.create.content.contraptions.bearing.WindmillBearingBlockEntity;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.simibubi.create.foundation.utility.CreateLang;
@@ -18,8 +19,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import electrolyte.greate.content.gtceu.material.GreatePropertyKeys;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
-import electrolyte.greate.infrastructure.config.GConfigUtility;
 
 @Mixin(value = WindmillBearingBlockEntity.class, remap = false)
 public class WindmillBearingBlockEntityMixin extends GeneratingKineticBlockEntity implements ITieredKineticBlockEntity {
@@ -43,7 +44,7 @@ public class WindmillBearingBlockEntityMixin extends GeneratingKineticBlockEntit
         Lang.builder("tfg").translate("greate.windmill_hint_3").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
 
         Lang.builder("greate").translate("tooltip.capacity").style(ChatFormatting.GRAY).forGoggles(tooltip);
-        Lang.builder("greate").add(CreateLang.number(GConfigUtility.getMaxCapacityFromTier(1)).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space()
+        Lang.builder("greate").add(CreateLang.number(GTMaterials.Steel.getProperty(GreatePropertyKeys.KINETIC).getMaxCapacity()).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space()
                 .add(CreateLang.text("at current shaft tier").style(ChatFormatting.DARK_GRAY))).forGoggles(tooltip, 1);
 
         Lang.builder("greate").translate("tooltip.networkStatistics").style(ChatFormatting.GRAY).forGoggles(tooltip);

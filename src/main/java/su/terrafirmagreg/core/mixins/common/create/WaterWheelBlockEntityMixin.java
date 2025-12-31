@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.waterwheel.LargeWaterWheelBlockEntity;
 import com.simibubi.create.content.kinetics.waterwheel.WaterWheelBlockEntity;
@@ -19,8 +20,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import electrolyte.greate.content.gtceu.material.GreatePropertyKeys;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
-import electrolyte.greate.infrastructure.config.GConfigUtility;
+import electrolyte.greate.registry.GreateMaterials;
 
 @Mixin(value = WaterWheelBlockEntity.class, remap = false, priority = 2000)
 public class WaterWheelBlockEntityMixin extends GeneratingKineticBlockEntity implements ITieredKineticBlockEntity {
@@ -37,10 +39,11 @@ public class WaterWheelBlockEntityMixin extends GeneratingKineticBlockEntity imp
             CreateLang.builder().space();
         }
 
-        int tier = (Object) this instanceof LargeWaterWheelBlockEntity ? 1 : 0;
+        var tierMaterial = (Object) this instanceof LargeWaterWheelBlockEntity ? GTMaterials.Steel : GreateMaterials.AndesiteAlloy;
+        float capacity = tierMaterial.getProperty(GreatePropertyKeys.KINETIC).getMaxCapacity();
 
         Lang.builder("greate").translate("tooltip.capacity").style(ChatFormatting.GRAY).forGoggles(tooltip);
-        Lang.builder("greate").add(CreateLang.number(GConfigUtility.getMaxCapacityFromTier(tier)).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space()
+        Lang.builder("greate").add(CreateLang.number(capacity).style(ChatFormatting.AQUA).add(CreateLang.text("su")).space()
                 .add(CreateLang.text("at current shaft tier").style(ChatFormatting.DARK_GRAY))).forGoggles(tooltip, 1);
 
         Lang.builder("greate").translate("tooltip.networkStatistics").style(ChatFormatting.GRAY).forGoggles(tooltip);
