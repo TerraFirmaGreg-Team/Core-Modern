@@ -128,6 +128,8 @@ public final class TFGClientEventHandler {
         event.registerSpriteSet(TFGParticles.DARK_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xbe6621))); // avg color of red sand
         event.registerSpriteSet(TFGParticles.MEDIUM_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xc48456))); // avg color of ad astra mars sand
         event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
+        // Other
+        event.registerSpriteSet(TFGParticles.FISH_SCHOOL.get(), FishSchoolProvider::new);
     }
 
     @SuppressWarnings("removal")

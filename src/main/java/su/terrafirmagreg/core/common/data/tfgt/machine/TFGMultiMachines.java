@@ -179,7 +179,7 @@ public class TFGMultiMachines {
                         .or(Predicates.autoAbilities(true, false, false)))
                     .where("B", Predicates.blockTag(FLTags.Blocks.ALL_IRON_GREENHOUSE))
                     .where("G", Predicates.blocks(FLBlocks.LARGE_PLANTER.get()))
-                    .where("F", Predicates.blockTag(TFCTags.Blocks.FORGE_INSULATION))
+                    .where("F", Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION))
                     .where("H", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","grow_light"))))
                     .build())
                 .shapeInfos(definition -> {
