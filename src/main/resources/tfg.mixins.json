@@ -98,6 +98,7 @@
         "common.simply_stacked_dimensions.TeleportHandlerMixin",
         "common.sophisticatedbackpacks.FeedingUpgradeWrapperMixin",
         "common.species.BirtMixin",
+        "common.species.CliffHangerMixin",
         "common.species.CruncherMixin",
         "common.species.DeepfishMixin",
         "common.species.GooberMixin",
