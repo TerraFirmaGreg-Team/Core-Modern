@@ -143,6 +143,8 @@ public final class TFGBlocks {
 
     public static final RegistryObject<SandLayerBlock> ASH_LAYER_BLOCK = register("ash_pile",
             () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)));
+    public static final RegistryObject<SandLayerBlock> VOLCANIC_ASH_LAYER_BLOCK = register("pile/volcanic_ash",
+            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.BLACK).get()).noOcclusion().mapColor(MapColor.NONE)));
     public static final RegistryObject<SandLayerBlock> BLACK_SAND_LAYER_BLOCK = register("pile/black_sand",
             () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.BLACK).get()).noOcclusion().mapColor(MapColor.NONE)));
     public static final RegistryObject<SandLayerBlock> WHITE_SAND_LAYER_BLOCK = register("pile/white_sand",
