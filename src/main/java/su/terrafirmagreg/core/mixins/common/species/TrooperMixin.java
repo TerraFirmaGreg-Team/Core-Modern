@@ -1,9 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.species;
 
-import earth.terrarium.adastra.common.tags.ModBlockTags;
-import net.dries007.tfc.common.TFCTags;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,6 +14,10 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+
+import earth.terrarium.adastra.common.tags.ModBlockTags;
 
 @Mixin(value = Trooper.class, remap = false)
 public abstract class TrooperMixin extends TamableAnimal {
