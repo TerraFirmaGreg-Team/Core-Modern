@@ -96,6 +96,7 @@
         "common.minecraft.ServerLifecycleHooksMixin",
         "common.minecraft.SmallFireballMixin",
         "common.minecraft.SnifferEggBlockMixin",
+        "common.minecraft.StriderMixin",
         "common.sandworms.WormSignHandlerMixin",
         "common.simply_stacked_dimensions.TeleportHandlerMixin",
         "common.sophisticatedbackpacks.FeedingUpgradeWrapperMixin",

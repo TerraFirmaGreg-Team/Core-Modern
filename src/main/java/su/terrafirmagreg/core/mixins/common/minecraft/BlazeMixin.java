@@ -18,4 +18,11 @@ public class BlazeMixin {
     protected void tfg$getAmbientSound(CallbackInfoReturnable<SoundEvent> cir) {
         cir.setReturnValue(SoundEvents.FIRE_AMBIENT);
     }
+
+    // Acid rain still counts as rain apparently
+
+    @Inject(method = "isSensitiveToWater", at = @At("HEAD"), cancellable = true)
+    public void tfg$isSensitiveToWater(CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(false);
+    }
 }
