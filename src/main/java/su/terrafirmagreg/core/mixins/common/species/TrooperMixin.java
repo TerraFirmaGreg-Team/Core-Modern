@@ -1,5 +1,9 @@
 package su.terrafirmagreg.core.mixins.common.species;
 
+import earth.terrarium.adastra.common.tags.ModBlockTags;
+import net.dries007.tfc.common.TFCTags;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +29,9 @@ public abstract class TrooperMixin extends TamableAnimal {
 
     @Inject(method = "canSpawn", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$canSpawn(EntityType<Trooper> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(true);
+        BlockState thisBlock = world.getBlockState(pos);
+        BlockState belowBlock = world.getBlockState(pos.below());
+        cir.setReturnValue(thisBlock.is(Blocks.AIR) && belowBlock.is(ModBlockTags.VENUS_STONE_REPLACEABLES));
     }
 
     @Override
