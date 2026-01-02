@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 @Mixin(targets = "dev.dh.arthropocolypse.entity.Ice_Crawler")
 public class IceCrawlerMixin {
 
-	// registerGoals
+    // registerGoals
     @SuppressWarnings("DataFlowIssue")
     @Inject(method = "m_8099_", at = @At("TAIL"))
     protected void tfg$registerGoals(CallbackInfo ci) {
