@@ -19,9 +19,11 @@ import earth.terrarium.adastra.api.systems.OxygenApi;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 
 /**
- * Checks for oxygen on any adjacent side using ad_astra API.
- * Set `requiresOxygen` to true for "Oxygenated Environment"
- * or false for "Deoxygenated Environment".
+ * Recipe condition that requires oxygen adjacency using ad_astra's OxygenApi.
+ * <p>
+ * <p>- isOxygenated = true: passes when any adjacent block has oxygen.
+ * <p>- isOxygenated = false: passes when no adjacent block has oxygen.
+ * <p>
  */
 public class OxygenatedCondition extends RecipeCondition {
 
@@ -36,6 +38,12 @@ public class OxygenatedCondition extends RecipeCondition {
         this.isOxygenated = true;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param isReverse invert result.
+     * @param requiresOxygen true to require oxygen. False to require none.
+     */
     public OxygenatedCondition(boolean isReverse, boolean requiresOxygen) {
         super(isReverse);
         this.isOxygenated = requiresOxygen;
@@ -51,6 +59,7 @@ public class OxygenatedCondition extends RecipeCondition {
         return true;
     }
 
+    // Tooltip.
     @Override
     public Component getTooltips() {
         return Component.translatable(
@@ -58,6 +67,10 @@ public class OxygenatedCondition extends RecipeCondition {
                         : "tfg.tooltip.recipe_condition.oxygenated.false");
     }
 
+    /**
+     * Checks oxygen on server.
+     * Returns false on client.
+     */
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine.self();
@@ -71,6 +84,9 @@ public class OxygenatedCondition extends RecipeCondition {
         return isReverse != passes;
     }
 
+    /**
+     * Checks all faces for oxygen.
+     */
     private static boolean hasOxygenOnAnySide(ServerLevel level, BlockPos pos) {
         for (Direction dir : Direction.values()) {
             if (OxygenApi.API.hasOxygen(level, pos.relative(dir))) {

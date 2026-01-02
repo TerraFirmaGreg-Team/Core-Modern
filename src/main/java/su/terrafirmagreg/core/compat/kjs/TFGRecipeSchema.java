@@ -11,12 +11,16 @@ import lombok.experimental.Accessors;
 
 import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.*;
 
+/**
+ * KubeJS recipe schema extensions for TFG.
+ */
 public interface TFGRecipeSchema {
 
     @SuppressWarnings({ "unused", "UnusedReturnValue" })
     @Accessors(chain = true, fluent = true)
     class TFGRecipeJS extends GTRecipeSchema.GTRecipeJS {
 
+        // Oxygenated Conditions.
         public GTRecipeSchema.GTRecipeJS isOxygenated(boolean isOxygenated) {
             return this.addCondition(new OxygenatedCondition(false, isOxygenated));
         }
@@ -25,6 +29,7 @@ public interface TFGRecipeSchema {
             return this.addCondition(new OxygenatedCondition(reverse, isOxygenated));
         }
 
+        // Month Conditions.
         public GTRecipeSchema.GTRecipeJS months(String... monthNames) {
             return this.addCondition(MonthCondition.ofMonths(false, Arrays.asList(monthNames)));
         }
@@ -41,6 +46,7 @@ public interface TFGRecipeSchema {
             return this.addCondition(MonthCondition.ofRange(reverse, start, end));
         }
 
+        // Season Conditions.
         public GTRecipeSchema.GTRecipeJS seasons(String... seasonNames) {
             return this.addCondition(SeasonCondition.ofSeasons(false, Arrays.asList(seasonNames)));
         }
@@ -57,6 +63,7 @@ public interface TFGRecipeSchema {
             return this.addCondition(SeasonCondition.ofRange(reverse, start, end));
         }
 
+        // Temperature Conditions.
         public GTRecipeSchema.GTRecipeJS climateAvgTemperatureRange(float start, float end) {
             return this.addCondition(AverageTemperatureCondition.ofRange(false, start, end));
         }
@@ -73,6 +80,7 @@ public interface TFGRecipeSchema {
             return this.addCondition(AverageTemperatureCondition.lessThan(value));
         }
 
+        // Rainfall Conditions.
         public GTRecipeSchema.GTRecipeJS climateAvgRainfallRange(float start, float end) {
             return this.addCondition(AverageRainfallCondition.ofRange(false, start, end));
         }
@@ -89,19 +97,20 @@ public interface TFGRecipeSchema {
             return this.addCondition(AverageRainfallCondition.lessThan(value));
         }
 
-        public GTRecipeSchema.GTRecipeJS climateGravityGreaterThan(float value) {
+        // Gravity Conditions.
+        public GTRecipeSchema.GTRecipeJS gravityGreaterThan(float value) {
             return this.addCondition(su.terrafirmagreg.core.common.data.tfgt.machine.conditions.GravityCondition.greaterThan(value));
         }
 
-        public GTRecipeSchema.GTRecipeJS climateGravityLessThan(float value) {
+        public GTRecipeSchema.GTRecipeJS gravityLessThan(float value) {
             return this.addCondition(su.terrafirmagreg.core.common.data.tfgt.machine.conditions.GravityCondition.lessThan(value));
         }
 
-        public GTRecipeSchema.GTRecipeJS climateGravityRange(float start, float end) {
+        public GTRecipeSchema.GTRecipeJS gravityRange(float start, float end) {
             return this.addCondition(su.terrafirmagreg.core.common.data.tfgt.machine.conditions.GravityCondition.ofRange(false, start, end));
         }
 
-        public GTRecipeSchema.GTRecipeJS climateGravityRange(float start, float end, boolean reverse) {
+        public GTRecipeSchema.GTRecipeJS gravityRange(float start, float end, boolean reverse) {
             return this.addCondition(su.terrafirmagreg.core.common.data.tfgt.machine.conditions.GravityCondition.ofRange(reverse, start, end));
         }
     }

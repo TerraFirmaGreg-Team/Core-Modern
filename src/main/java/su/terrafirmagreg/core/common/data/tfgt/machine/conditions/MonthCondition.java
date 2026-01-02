@@ -22,10 +22,22 @@ import net.minecraft.server.level.ServerLevel;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 
+/**
+ * Recipe condition that matches specific months or a month range
+ * <p>
+ * <p>Options:
+ * <p>- Whitelist months
+ * <p>- Start/end range. Supports wrap around (example: september-march)
+ */
 public class MonthCondition extends RecipeCondition {
 
     private static final Codec<Month> MONTH_CODEC = Codec.INT.xmap(Month::valueOf, Month::ordinal);
 
+    /**
+     * Codec for serializing recipes.
+     * <p>- optional months list
+     * <p>- optional start/end bounds
+     */
     public static final Codec<MonthCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)
             .and(Codec.list(MONTH_CODEC)
                     .optionalFieldOf("months")
@@ -38,6 +50,7 @@ public class MonthCondition extends RecipeCondition {
     private final @Nullable Month start;
     private final @Nullable Month end;
 
+    // Default template.
     public MonthCondition() {
         super(false);
         this.months = List.of();
@@ -45,6 +58,14 @@ public class MonthCondition extends RecipeCondition {
         this.end = null;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param isReverse invert result.
+     * @param months month list.
+     * @param start range start.
+     * @param end range end.
+     */
     public MonthCondition(boolean isReverse, List<Month> months, @Nullable Month start, @Nullable Month end) {
         super(isReverse);
         this.months = months == null ? List.of() : List.copyOf(months);
@@ -62,6 +83,7 @@ public class MonthCondition extends RecipeCondition {
         return true;
     }
 
+    // Tooltips.
     @Override
     public Component getTooltips() {
         if (!months.isEmpty()) {
@@ -75,6 +97,9 @@ public class MonthCondition extends RecipeCondition {
         return Component.literal(startName + " - " + endName);
     }
 
+    /**
+     * Gets current month from the TFC calendar.
+     */
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine.self();
@@ -91,6 +116,9 @@ public class MonthCondition extends RecipeCondition {
         return isReverse != passes;
     }
 
+    /**
+     * Matches the current month against list or range.
+     */
     private boolean matches(Month current) {
         if (!months.isEmpty()) {
             return months.contains(current);
@@ -112,6 +140,8 @@ public class MonthCondition extends RecipeCondition {
     public RecipeCondition createTemplate() {
         return new MonthCondition();
     }
+
+    // Template factories.
 
     public static MonthCondition ofMonths(boolean reverse, List<String> monthNames) {
         List<Month> list = new ArrayList<>();

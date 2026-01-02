@@ -23,9 +23,31 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import earth.terrarium.adastra.api.systems.OxygenApi;
 
+/**
+ * Enforces oxygen adjacency for Firmalife's Climate Station.
+ * <p>
+ * <p>Behavior:
+ * <p>- On use: checks the adjacent positions for oxygen availability via ad_astra's OxygenApi.
+ * <p>- If no oxygen is present:
+ * <p>  - Clears tracked greenhouse positions and marks the station invalid.
+ * <p>  - Disables stasis mode if active.
+ * <p>  - Shows a tooltip popup to the player.
+ * <p>  - Cancels the original interaction by returning a sided success.
+ */
 @Mixin(ClimateStationBlock.class)
 public class ClimateStationOxygenatedMixin {
 
+    /**
+     * Gate Climate Station interaction on oxygen presence.
+     *
+     * @param state  current block state.
+     * @param level  world level.
+     * @param pos    block position.
+     * @param player interacting player.
+     * @param hand   interaction hand.
+     * @param hit    block hit result.
+     * @param cir    callback for returning and cancellation. Set when oxygen is missing.
+     */
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     private void tfg$oxygenGate(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
         if (!(level instanceof ServerLevel serverLevel)) {

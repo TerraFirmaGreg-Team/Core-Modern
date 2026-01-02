@@ -16,14 +16,26 @@ import net.minecraft.server.level.ServerLevel;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 
+/**
+ * Recipe condition that checks TFC average rainfall at the machine position.
+ * <p>Modes:
+ * <p>- GT: passes when rainfall > value
+ * <p>- LT: passes when rainfall < value
+ * <p>- BETWEEN: passes when start < rainfall < end
+ */
 public class AverageRainfallCondition extends RecipeCondition {
 
     public enum Mode {
-        GT, // climate > value
-        LT, // climate < value
-        BETWEEN // start < climate < end
+        GT,
+        LT,
+        BETWEEN
     }
 
+    /**
+     * Codec for serializing recipes.
+     * <p>- mode: GT|LT|BETWEEN
+     * <p>- optional value, start, end bounds
+     */
     public static final Codec<AverageRainfallCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)
             .and(Codec.STRING.xmap(Mode::valueOf, Enum::name).fieldOf("mode").forGetter(c -> c.mode))
             .and(Codec.FLOAT.optionalFieldOf("value").forGetter(c -> c.valuePresent ? java.util.Optional.of(c.value) : java.util.Optional.empty()))
@@ -44,6 +56,7 @@ public class AverageRainfallCondition extends RecipeCondition {
     private final float end;
     private final boolean endPresent;
 
+    // Default template.
     public AverageRainfallCondition() {
         super(false);
         this.mode = Mode.BETWEEN;
@@ -55,6 +68,18 @@ public class AverageRainfallCondition extends RecipeCondition {
         this.endPresent = true;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param isReverse invert result.
+     * @param mode comparison mode.
+     * @param value single bound.
+     * @param valuePresent whether value is provided.
+     * @param start range start.
+     * @param startPresent whether start is provided.
+     * @param end range end.
+     * @param endPresent whether end is provided.
+     */
     public AverageRainfallCondition(boolean isReverse, Mode mode, float value, boolean valuePresent, float start, boolean startPresent, float end, boolean endPresent) {
         super(isReverse);
         this.mode = mode;
@@ -76,6 +101,7 @@ public class AverageRainfallCondition extends RecipeCondition {
         return true;
     }
 
+    // Tooltip (with rounded values)
     @Override
     public Component getTooltips() {
         Component label = Component.translatable("tfg.tooltip.recipe_condition.climate_rain");
@@ -101,6 +127,13 @@ public class AverageRainfallCondition extends RecipeCondition {
         }
     }
 
+    /**
+     * Condition at the machine position.
+     *
+     * @param recipe current recipe.
+     * @param recipeLogic machine recipe logic.
+     * @return result with reverse applied.
+     */
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine.self();
@@ -130,16 +163,14 @@ public class AverageRainfallCondition extends RecipeCondition {
         return new AverageRainfallCondition();
     }
 
+    // Template factories.
+
     public static AverageRainfallCondition greaterThan(float value) {
         return new AverageRainfallCondition(false, Mode.GT, value, true, 0f, false, 0f, false);
     }
 
     public static AverageRainfallCondition lessThan(float value) {
         return new AverageRainfallCondition(false, Mode.LT, value, true, 0f, false, 0f, false);
-    }
-
-    public static AverageRainfallCondition between(float start, float end) {
-        return new AverageRainfallCondition(false, Mode.BETWEEN, 0f, false, start, true, end, true);
     }
 
     public static AverageRainfallCondition ofRange(boolean reverse, float start, float end) {

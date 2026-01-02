@@ -7,6 +7,9 @@ import com.mojang.serialization.Codec;
 
 import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.*;
 
+/**
+ * Registry class for TFG custom recipe conditions.
+ */
 public class TFGTRecipeConditions {
 
     private TFGTRecipeConditions() {

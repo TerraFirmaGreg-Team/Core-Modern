@@ -20,6 +20,15 @@ import earth.terrarium.adastra.common.constants.PlanetConstants;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 
+/**
+ * Recipe condition that checks ad_astra's gravity at the machine position.
+ * Compares configured values against Earth ratio.
+ * <p>
+ * <p>- Modes:
+ * <p>- GT: passes when gravity > value
+ * <p>- LT: passes when gravity < value
+ * <p>- BETWEEN: passes when start < gravity < end
+ */
 public class GravityCondition extends RecipeCondition {
 
     private static final float EARTH_GRAVITY = PlanetConstants.EARTH_GRAVITY;
@@ -30,6 +39,11 @@ public class GravityCondition extends RecipeCondition {
         BETWEEN
     }
 
+    /**
+     * Codec for serializing recipes.
+     * <p>- mode: GT|LT|BETWEEN
+     * <p>- optional value, start, end bounds
+     */
     public static final Codec<GravityCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)
             .and(Codec.STRING.xmap(Mode::valueOf, Enum::name).optionalFieldOf("mode").forGetter(c -> c.mode == null ? java.util.Optional.empty() : java.util.Optional.of(c.mode)))
             .and(Codec.FLOAT.optionalFieldOf("value").forGetter(c -> c.valuePresent ? java.util.Optional.of(c.value) : java.util.Optional.empty()))
@@ -51,6 +65,7 @@ public class GravityCondition extends RecipeCondition {
     private final float end;
     private final boolean endPresent;
 
+    // Default template.
     public GravityCondition() {
         super(false);
         this.mode = Mode.BETWEEN;
@@ -62,6 +77,18 @@ public class GravityCondition extends RecipeCondition {
         this.endPresent = true;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param isReverse invert result.
+     * @param mode comparison mode.
+     * @param value single bound.
+     * @param valuePresent whether value is provided.
+     * @param start range start.
+     * @param startPresent whether start is provided.
+     * @param end range end.
+     * @param endPresent whether end is provided.
+     */
     public GravityCondition(boolean isReverse, Mode mode, float value, boolean valuePresent, float start, boolean startPresent, float end, boolean endPresent) {
         super(isReverse);
         this.mode = mode == null ? Mode.BETWEEN : mode;
@@ -83,6 +110,7 @@ public class GravityCondition extends RecipeCondition {
         return true;
     }
 
+    // Tooltip with 2 decimal places.
     @Override
     public Component getTooltips() {
         Component label = Component.translatable("tfg.tooltip.recipe_condition.gravity");
@@ -108,6 +136,9 @@ public class GravityCondition extends RecipeCondition {
         }
     }
 
+    /**
+     * Evaluates gravity ratio at the machine position.
+     */
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine.self();
@@ -121,6 +152,9 @@ public class GravityCondition extends RecipeCondition {
         return isReverse != passes;
     }
 
+    /**
+     * Compares the current gravity ratio against configured ranges.
+     */
     private boolean isPasses(float gravityRatio) {
         boolean passes;
         switch (mode) {
@@ -157,16 +191,14 @@ public class GravityCondition extends RecipeCondition {
         return new GravityCondition();
     }
 
+    // Template factories.
+
     public static GravityCondition greaterThan(float value) {
         return new GravityCondition(false, Mode.GT, value, true, 0f, false, 0f, false);
     }
 
     public static GravityCondition lessThan(float value) {
         return new GravityCondition(false, Mode.LT, value, true, 0f, false, 0f, false);
-    }
-
-    public static GravityCondition between(float start, float end) {
-        return new GravityCondition(false, Mode.BETWEEN, 0f, false, start, true, end, true);
     }
 
     public static GravityCondition ofRange(boolean reverse, float start, float end) {

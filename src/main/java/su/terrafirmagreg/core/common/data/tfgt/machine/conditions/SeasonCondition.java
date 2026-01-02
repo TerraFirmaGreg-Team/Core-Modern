@@ -23,10 +23,22 @@ import net.minecraft.server.level.ServerLevel;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 
+/**
+ * Recipe condition that matches specific seasons or a season range.
+ * <p>
+ * <p>Options:
+ * <p>- Whitelist months.
+ * <p>- start/end range. Supports wrap around (example: fall-spring).
+ */
 public class SeasonCondition extends RecipeCondition {
 
     private static final Codec<Season> SEASON_CODEC = Codec.INT.xmap(i -> Season.values()[i], Season::ordinal);
 
+    /**
+     * Codec for serializing recipes.
+     * <p>- optional seasons list
+     * <p>- optional start/end bounds
+     */
     public static final Codec<SeasonCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)
             .and(Codec.list(SEASON_CODEC)
                     .optionalFieldOf("seasons")
@@ -39,6 +51,7 @@ public class SeasonCondition extends RecipeCondition {
     private final @Nullable Season start;
     private final @Nullable Season end;
 
+    // Default template.
     public SeasonCondition() {
         super(false);
         this.seasons = List.of();
@@ -46,6 +59,14 @@ public class SeasonCondition extends RecipeCondition {
         this.end = null;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param isReverse invert result.
+     * @param seasons seasons list.
+     * @param start range start.
+     * @param end range end.
+     */
     public SeasonCondition(boolean isReverse, List<Season> seasons, @Nullable Season start, @Nullable Season end) {
         super(isReverse);
         this.seasons = seasons == null ? List.of() : List.copyOf(seasons);
@@ -63,6 +84,7 @@ public class SeasonCondition extends RecipeCondition {
         return true;
     }
 
+    // Tooltips.
     @Override
     public Component getTooltips() {
         if (!seasons.isEmpty()) {
@@ -76,6 +98,9 @@ public class SeasonCondition extends RecipeCondition {
         return Component.literal(startName + " - " + endName);
     }
 
+    /**
+     * Gets current season from the TFC calendar.
+     */
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine.self();
@@ -93,6 +118,9 @@ public class SeasonCondition extends RecipeCondition {
         return isReverse != passes;
     }
 
+    /**
+     * Matches the current season against list or range.
+     */
     private boolean matches(Season current) {
         if (!seasons.isEmpty()) {
             return seasons.contains(current);
@@ -110,6 +138,7 @@ public class SeasonCondition extends RecipeCondition {
         return false;
     }
 
+    // Season map.
     private static Season fromMonth(Month m) {
         switch (m) {
             case DECEMBER, JANUARY, FEBRUARY -> {
@@ -128,8 +157,11 @@ public class SeasonCondition extends RecipeCondition {
         return Season.SPRING;
     }
 
+    /**
+     * Returns a display name with a capitalized first letter.
+     */
     private static String displayName(Season s) {
-        String n = s.getSerializedName(); // spring, summer, fall, winter
+        String n = s.getSerializedName();
         return Character.toUpperCase(n.charAt(0)) + n.substring(1);
     }
 
@@ -137,6 +169,8 @@ public class SeasonCondition extends RecipeCondition {
     public RecipeCondition createTemplate() {
         return new SeasonCondition();
     }
+
+    // Template factories.
 
     public static SeasonCondition ofSeasons(boolean reverse, List<String> seasonNames) {
         List<Season> list = new ArrayList<>();
