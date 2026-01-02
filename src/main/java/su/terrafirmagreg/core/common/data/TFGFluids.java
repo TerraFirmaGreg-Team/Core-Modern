@@ -47,6 +47,7 @@ public class TFGFluids {
                     .temperature(737)
                     .viscosity(0)
                     .density(0)
+                    .canSwim(true)
                     .descriptionId("fluid.tfg.sulfur_fumes"),
             new FluidTypeClientProperties(ALPHA_MASK | 0xFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/sulfur_fumes_still"),
