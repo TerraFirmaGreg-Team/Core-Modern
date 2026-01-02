@@ -175,11 +175,6 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
             return this;
         }
 
-        // Legacy alias
-        public ParticleSetBuilder base(double x, double y, double z) {
-            return position(x, y, z);
-        }
-
         /**
          * Set random spread range for particle spawn.
          * @return builder
@@ -189,11 +184,6 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
             this.rangeY = y;
             this.rangeZ = z;
             return this;
-        }
-
-        // Legacy alias
-        public ParticleSetBuilder offset(double x, double y, double z) {
-            return range(x, y, z);
         }
 
         /**
