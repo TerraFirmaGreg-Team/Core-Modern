@@ -11,6 +11,7 @@
         "common.ad_astra.OxygenDistributorMixin",
         "common.ad_astra.OxygenLoaderMixin",
         "common.ad_astra.PlanetResourceUtilsMixin",
+        "common.ad_astra.RoverMixin",
         "common.ad_astra.SlidingDoorBlockMixin",
         "common.ad_astra.SpaceSuitItemMixin",
         "common.ae2.ConfigMenuInventoryMixin",
