@@ -699,14 +699,14 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("blue_topaz", 35),new OreVeinInfoRecipe.WeightedBlock("topaz", 25),new OreVeinInfoRecipe.WeightedBlock("chalcocite", 25),new OreVeinInfoRecipe.WeightedBlock("bornite", 15),},
 				null),
 			new OreVeinInfoRecipe("venus_manual_salt", "ad_astra:venus", 
-				100, 0.2, 40, 65, 20, 6, 0, new String[] {
+				30, 0.2, 40, 65, 20, 6, 0, new String[] {
 				"minecraft:dripstone_block","ad_astra:venus_stone","tfc:rock/raw/basalt","tfc:rock/raw/rhyolite","tfc:rock/raw/dacite","tfc:rock/raw/andesite",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("salt", 50),new OreVeinInfoRecipe.WeightedBlock("rock_salt", 20),new OreVeinInfoRecipe.WeightedBlock("lepidolite", 15),new OreVeinInfoRecipe.WeightedBlock("spodumene", 15),},
+				new OreVeinInfoRecipe.WeightedBlock("salt", 80),new OreVeinInfoRecipe.WeightedBlock("rock_salt", 10),new OreVeinInfoRecipe.WeightedBlock("lepidolite", 5),new OreVeinInfoRecipe.WeightedBlock("spodumene", 5),},
 				new String[] {"ore_vein.tfg.venus_manual_salt.emi.0"}),
 			new OreVeinInfoRecipe("venus_manual_sulfur", "ad_astra:venus", 
-				100, 0.2, 40, 65, 15, 0, 0, new String[] {
+				30, 0.2, 40, 65, 20, 0, 0, new String[] {
 				"minecraft:dripstone_block","ad_astra:venus_stone","tfc:rock/raw/basalt","tfc:rock/raw/rhyolite","tfc:rock/raw/dacite","tfc:rock/raw/andesite",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("sulfur", 50),new OreVeinInfoRecipe.WeightedBlock("pyrite", 35),new OreVeinInfoRecipe.WeightedBlock("sphalerite", 15),},
+				new OreVeinInfoRecipe.WeightedBlock("sulfur", 80),new OreVeinInfoRecipe.WeightedBlock("pyrite", 15),new OreVeinInfoRecipe.WeightedBlock("sphalerite", 5),},
 				new String[] {"ore_vein.tfg.venus_manual_sulfur.emi.0"}),
 	};
 }
