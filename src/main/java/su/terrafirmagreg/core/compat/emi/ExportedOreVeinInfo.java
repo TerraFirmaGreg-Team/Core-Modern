@@ -308,6 +308,11 @@ package su.terrafirmagreg.core.compat.emi;
 				"ad_astra:mars_stone","gtceu:red_granite","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/basalt","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("hematite", 50),new OreVeinInfoRecipe.WeightedBlock("yellow_limonite", 30),new OreVeinInfoRecipe.WeightedBlock("goethite", 15),new OreVeinInfoRecipe.WeightedBlock("gold", 5),},
 				null),
+			new OreVeinInfoRecipe("mars_lapis", "ad_astra:mars", 
+				200, 0.25, 0, 70, 30, 0, 0, new String[] {
+				"ad_astra:mars_stone","tfc:rock/raw/shale","tfc:rock/raw/limestone","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				new OreVeinInfoRecipe.WeightedBlock("lazurite", 35),new OreVeinInfoRecipe.WeightedBlock("sodalite", 25),new OreVeinInfoRecipe.WeightedBlock("lapis", 25),new OreVeinInfoRecipe.WeightedBlock("calcite", 15),},
+				null),
 			new OreVeinInfoRecipe("mars_lubricant", "ad_astra:mars", 
 				220, 0.25, 0, 70, 40, 0, 0, new String[] {
 				"ad_astra:mars_stone","gtceu:red_granite","tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
