@@ -49,6 +49,8 @@ public class TFGEffects {
             () -> new MedicalConditionEffect(0xde599e));
     public static final RegistryObject<MobEffect> CARBON_MONOXIDE_POISONING_WARNING = register("carbon_monoxide_poisoning_warning",
             () -> new MedicalConditionEffect(0x45bad1));
+    public static final RegistryObject<MobEffect> RADIOACTIVE_WARNING = register("radioactive_warning",
+            () -> new MedicalConditionEffect(0x00ff00));
 
     public static <T extends MobEffect> RegistryObject<T> register(String name, Supplier<T> supplier) {
         return EFFECTS.register(name, supplier);
