@@ -21,7 +21,7 @@ public class FoodHandlerDynamicMixin {
             return ingredients;
         }
         List<ItemStack> sorted = new ArrayList<>(ingredients);
-        sorted.sort(Comparator.comparing(ItemStack::toString));
+        sorted.sort(Comparator.nullsFirst(Comparator.comparing(ItemStack::toString)));
         return sorted;
     }
 }
