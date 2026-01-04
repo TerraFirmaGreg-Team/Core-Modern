@@ -38,8 +38,10 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.gcym.LargeMixerM
 
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -583,7 +585,6 @@ public class TFGMultiMachines {
             .recipeType(TFGRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(HORTICULTURE_CASING)
-            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(
             ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_egh"),
                 GTCEu.id("block/machines/implosion_compressor"))
@@ -609,7 +610,7 @@ public class TFGMultiMachines {
                     .aisle(" AAA ", " BCB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ", " BBB ")
                     .where(" ", Predicates.any())
                     .where("A", Predicates.blocks(HORTICULTURE_CASING.get()))
-                    .where("B", Predicates.blockTag(TFGTags.Blocks.StainlessSteelGreenhouseCasings))
+                    .where("B", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfg", "stainless_steel_greenhouse_casings"))))
                     .where("C", controller(blocks(definition.getBlock())))
                     .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "grow_light"))))
                     .where("E", Predicates.blocks(GTBlocks.FILTER_CASING.get()))
@@ -620,6 +621,77 @@ public class TFGMultiMachines {
                     .where("H", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "egh_planter"))))
                     .where("I", Predicates.blocks(GTBlocks.PLASTCRETE.get()))
                     .build())
+            .register();
+
+    public static final MultiblockMachineDefinition PISCICULTURE_FISHERY = REGISTRATE
+            .multiblock("pisciculture_fishery", GreenhouseMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
+            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .appearanceBlock(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
+            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
+            .workableCasingModel(
+                    ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_aluminium_plated_steel"),
+                    GTCEu.id("block/multiblock/implosion_compressor"))
+            .pattern((definition) -> FactoryBlockPattern.start()
+                    .aisle("    AAAAA    ", "    BBBBB    ", "    BBBBB    ", "    CCCCC    ")
+                    .aisle("   ACCECCA   ", "   CFFFFFC   ", "   CFFFFFC   ", "   CFFFFFC   ")
+                    .aisle("  ACGCECGCA  ", "  BFFFFFFFB  ", "  BFFFFFFFB  ", "  CFFFFFFFC  ")
+                    .aisle(" ACCGCECGCCA ", " CFFFFFFFFFC ", " CFFFFFFFFFC ", " CFFFFFFFFFC ")
+                    .aisle("ACGGGCECGGGCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .aisle("ACCCCCECCCCCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .aisle("AEEEEEIEEEEEA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .aisle("ACCCCCECCCCCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .aisle("ACGGGCECGGGCA", "BFFFFFFFFFFFB", "BFFFFFFFFFFFB", "CFFFFFFFFFFFC")
+                    .aisle(" ACCGCECGCCA ", " CFFFFFFFFFC ", " CFFFFFFFFFC ", " CFFFFFFFFFC ")
+                    .aisle("  ACGCECGCA  ", "  BFFFFFFFB  ", "  BFFFFFFFB  ", "  CFFFFFFFC  ")
+                    .aisle("   ACCECCA   ", "   CFFFFFC   ", "   CFFFFFC   ", "   CFFFFFC   ")
+                    .aisle("    AAAAA    ", "    BBBBB    ", "    BBBBB    ", "    CCJCC    ")
+                    .where(' ', Predicates.any())
+                    .where('A', Predicates.blocks(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()).setMinGlobalLimited(20)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, false, true)))
+                    .where('B', Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfg", "stainless_steel_greenhouse_casings"))))
+                    .where('C', Predicates.blocks(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL.get()))
+                    .where('E', Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
+                    .where('F', Predicates.fluidTag(TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "pisciculture_fishery_fluids"))))
+                    .where('G', Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfg", "gtceu_concrete_blocks"))))
+                    .where('I', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","pisciculture_core"))))
+                    .where('J', controller(blocks(definition.getBlock())))
+                    .build())
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+                var builder = MultiblockShapeInfo.builder()
+                        .aisle("    ABCDE    ", "    FFFFF    ", "    FFFFF    ", "    CCCCC    ")
+                        .aisle("   CCCGCCC   ", "   CHHHHHC   ", "   CHHHHHC   ", "   CHHHHHC   ")
+                        .aisle("  CCICGCICC  ", "  FHHHHHHHF  ", "  FHHHHHHHF  ", "  CHHHHHHHC  ")
+                        .aisle(" CCCICGCICCC ", " CHHHHHHHHHC ", " CHHHHHHHHHC ", " CHHHHHHHHHC ")
+                        .aisle("CCIIICGCIIICC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
+                        .aisle("CCCCCCGCCCCCC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
+                        .aisle("CGGGGGNGGGGGC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
+                        .aisle("CCCCCCGCCCCCC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
+                        .aisle("CCIIICGCIIICC", "FHHHHHHHHHHHF", "FHHHHHHHHHHHF", "CHHHHHHHHHHHC")
+                        .aisle(" CCCICGCICCC ", " CHHHHHHHHHC ", " CHHHHHHHHHC ", " CHHHHHHHHHC ")
+                        .aisle("  CCICGCICC  ", "  FHHHHHHHF  ", "  FHHHHHHHF  ", "  CHHHHHHHC  ")
+                        .aisle("   CCCGCCC   ", "   CHHHHHC   ", "   CHHHHHC   ", "   CHHHHHC   ")
+                        .aisle("    CCLMC    ", "    FFFFF    ", "    FFFFF    ", "    CCJCC    ")
+                        .where(' ', Blocks.AIR)
+                        .where('A', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
+                        .where('B', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.NORTH)
+                        .where('C', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","machine_casing_aluminium_plated_steel")))
+                        .where('D', GTMachines.FLUID_EXPORT_HATCH[GTValues.HV], Direction.NORTH)
+                        .where('E', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.NORTH)
+                        .where('F', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","casings/greenhouse/stainless_greenhouse_casing_0")))
+                        .where('G', GTBlocks.CASING_PTFE_INERT.get())
+                        .where('H', Blocks.WATER)
+                        .where('I', GTBlocks.LIGHT_CONCRETE.get())
+                        .where('J', definition.get(), Direction.SOUTH)
+                        .where('L', GTMachines.MAINTENANCE_HATCH, Direction.SOUTH)
+                        .where('M', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
+                        .where('N', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","pisciculture_core")));
+                shapeInfo.add(builder.build());
+                return shapeInfo;
+            })
             .register();
 
     // spotless:on

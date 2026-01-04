@@ -185,4 +185,15 @@ public class TFGRecipeTypes {
                 widgetGroup.setSize(size.width, size.height + 5);
             });
 
+    public static final GTRecipeType PISCICULTURE_FISHERY_RECIPES = GTRecipeTypes
+            .register("pisciculture_fishery", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(6, 6, 3, 3)
+            .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var size = widgetGroup.getSize();
+                widgetGroup.setSize(size.width, size.height + 5);
+            });
+
 }

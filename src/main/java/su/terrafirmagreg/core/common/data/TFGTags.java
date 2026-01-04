@@ -76,7 +76,6 @@ public final class TFGTags {
         public static final TagKey<Block> HeightmapIgnore = createBlockTag("tfg:heightmap_ignore");
         public static final TagKey<Block> DecorativePlantAttachable = createBlockTag("tfg:decorative_plant_attachable");
         public static final TagKey<Block> TitaniumConcrete = createBlockTag("tfg:titanium_concrete");
-        public static final TagKey<Block> StainlessSteelGreenhouseCasings = createBlockTag("tfg:stainless_steel_greenhouse_casings");
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));
