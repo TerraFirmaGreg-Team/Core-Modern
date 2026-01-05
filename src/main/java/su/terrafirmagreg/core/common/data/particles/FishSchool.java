@@ -38,28 +38,28 @@ public class FishSchool extends TextureSheetParticle {
      * @param z            The initial Z position.
      * @param sprite       The texture sprite for the particle.
      * @param radius       The radius of the orbit.
-     * @param angularSpeed The angular speed of the orbit.
+     * @param linearSpeed  The constant tangential speed.
      */
     public FishSchool(ClientLevel level, double x, double y, double z,
-            TextureAtlasSprite sprite, float radius, float angularSpeed) {
+            TextureAtlasSprite sprite, float radius, float linearSpeed) {
         super(level, x, y, z, 0.0, 0.0, 0.0);
         this.cx = x;
         this.cz = z;
         this.radius = radius;
-        this.angularSpeed = angularSpeed;
+        this.angularSpeed = radius > 0.0f ? (linearSpeed / radius) : 0.0f;
         this.angle = level.random.nextFloat() * (float) (Math.PI * 2.0);
         this.sprite = sprite;
         this.gravity = 0.0f;
         this.hasPhysics = false;
         this.quadSize = 0.5f;
 
-        // Random scale multiplier between 0.8 and 1.1
-        this.scale = 0.8f + level.random.nextFloat() * 0.3f;
+        // Random scale multiplier between 0.4 and 1.5
+        this.scale = 0.4f + level.random.nextFloat() * 1.1f;
 
         this.setSprite(sprite);
 
-        // Calculate the lifetime to ensure one full revolution.
-        this.lifetime = Math.max(1, (int) Math.ceil((Math.PI * 2.0) / angularSpeed));
+        // Lifetime based on circumference and constant linear speed.
+        this.lifetime = Math.max(1, (int) Math.ceil(((Math.PI * 2.0) * radius) / Math.max(1.0e-6f, linearSpeed)));
 
         this.x = cx + radius * Math.cos(angle);
         this.y = y;

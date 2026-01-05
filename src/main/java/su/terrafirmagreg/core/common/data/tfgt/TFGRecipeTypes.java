@@ -189,7 +189,7 @@ public class TFGRecipeTypes {
             .register("pisciculture_fishery", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 3, 3)
-            .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
+            .setProgressBar(PROGRESS_BAR_FISH, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.CHEMICAL)
             .setUiBuilder((recipe, widgetGroup) -> {
                 var size = widgetGroup.getSize();

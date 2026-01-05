@@ -14,4 +14,7 @@ public class ProgressBars {
     public static final ResourceTexture PROGRESS_BAR_EGH = new ResourceTexture(
             "tfg:textures/gui/progress_bar/progress_bar_egh.png");
 
+    public static final ResourceTexture PROGRESS_BAR_FISH = new ResourceTexture(
+            "tfg:textures/gui/progress_bar/progress_bar_fish.png");
+
 }

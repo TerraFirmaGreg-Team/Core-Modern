@@ -70,6 +70,7 @@ public class TFGCreativeTab {
         accept(out, TFGItems.EMPTY_DNA_SYRINGE);
         accept(out, TFGItems.DIRTY_DNA_SYRINGE);
         accept(out, TFGItems.PROGENITOR_CELLS);
+        accept(out, TFGItems.FISH_ROE);
 
         accept(out, TFGItems.MARS_WATER_BUCKET);
         accept(out, TFGItems.SULFUR_FUMES_BUCKET);

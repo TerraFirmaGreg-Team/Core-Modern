@@ -57,6 +57,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
 
+@SuppressWarnings({"unused", "SpellCheckingInspection"})
 public class TFGMultiMachines {
 
     public static void init() {
@@ -74,7 +75,7 @@ public class TFGMultiMachines {
             return state.setValue(BlockStateProperties.FACING, dir);
         }
         return state;
-    };
+    }
 
     // spotless:off
     public static final MultiblockMachineDefinition INTERPLANETARY_ITEM_LAUNCHER = REGISTRATE
@@ -624,7 +625,7 @@ public class TFGMultiMachines {
             .register();
 
     public static final MultiblockMachineDefinition PISCICULTURE_FISHERY = REGISTRATE
-            .multiblock("pisciculture_fishery", GreenhouseMachine::new)
+            .multiblock("pisciculture_fishery", BioreactorMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
