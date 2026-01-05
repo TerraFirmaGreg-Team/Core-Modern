@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 
 import su.terrafirmagreg.core.common.data.TFGEffects;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTMedicalConditions;
 
 @Mixin(value = MedicalConditionTracker.class, remap = false)
 public abstract class MedicalConditionTrackerMixin {
@@ -49,7 +50,8 @@ public abstract class MedicalConditionTrackerMixin {
             Map.entry(GTMedicalConditions.SILICOSIS, TFGEffects.SILICOSIS_WARNING.get()),
             Map.entry(GTMedicalConditions.BERYLLIOSIS, TFGEffects.BERYLLIOSIS_WARNING.get()),
             Map.entry(GTMedicalConditions.METHANOL_POISONING, TFGEffects.METHANOL_POISONING_WARNING.get()),
-            Map.entry(GTMedicalConditions.CARBON_MONOXIDE_POISONING, TFGEffects.CARBON_MONOXIDE_POISONING_WARNING.get()));
+            Map.entry(GTMedicalConditions.CARBON_MONOXIDE_POISONING, TFGEffects.CARBON_MONOXIDE_POISONING_WARNING.get()),
+            Map.entry(TFGTMedicalConditions.RADIOACTIVE, TFGEffects.RADIOACTIVE_WARNING.get()));
 
     @Inject(method = "updateActiveSymptoms", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;getFloat(Ljava/lang/Object;)F"), remap = false)
     private void tfg$updateActiveSymptoms(CallbackInfo ci, @Local MedicalCondition condition) {

@@ -160,4 +160,9 @@ public class TFGRecipeTypes {
             .setSound(GTSoundEntries.TURBINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
 
+    public static final GTRecipeType STEAM_BLOOMERY = GTRecipeTypes
+            .register("steam_bloomery", GTRecipeTypes.STEAM)
+            .setMaxIOSize(2, 1, 0, 0)
+            .setSound(GTSoundEntries.FIRE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT);
 }
