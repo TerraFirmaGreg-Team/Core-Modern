@@ -29,6 +29,9 @@ import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
+import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
@@ -611,8 +614,15 @@ public class TFGMultiMachines {
             .multiblock("steam_thermal_centrifuge", SteamParallelMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeTypes(GTRecipeTypes.THERMAL_CENTRIFUGE_RECIPES)
-            .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
-            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+            .recipeModifier((machine, recipe) -> {
+                int parallelAmount = ParallelLogic.getParallelAmount(machine, recipe, 8);
+                return ModifierFunction.builder()
+                           .inputModifier(ContentModifier.multiplier(parallelAmount))
+                           .outputModifier(ContentModifier.multiplier(parallelAmount))
+                           .eutMultiplier(parallelAmount)
+                           .parallels(parallelAmount)
+                           .build();
+            }, true)
             .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" FFF ", "BBBBB", " BBB ")
