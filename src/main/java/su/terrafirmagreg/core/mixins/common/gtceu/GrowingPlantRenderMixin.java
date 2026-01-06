@@ -37,7 +37,7 @@ public class GrowingPlantRenderMixin {
             topState = topState.trySetValue(ageProp, ageValue);
 
             return Arrays.asList(
-					new GrowingPlantRender.StateWithOffset(bottomState),
+                    new GrowingPlantRender.StateWithOffset(bottomState),
                     new GrowingPlantRender.StateWithOffset(topState, new Vector3f(0, 1, 0)));
         } else {
             return Collections.singleton(new GrowingPlantRender.StateWithOffset(bottomState));
