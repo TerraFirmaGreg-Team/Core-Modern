@@ -57,7 +57,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
 
-@SuppressWarnings({"unused", "SpellCheckingInspection"})
+@SuppressWarnings({ "unused", "SpellCheckingInspection" })
 public class TFGMultiMachines {
 
     public static void init() {
@@ -625,7 +625,7 @@ public class TFGMultiMachines {
             .register();
 
     public static final MultiblockMachineDefinition PISCICULTURE_FISHERY = REGISTRATE
-            .multiblock("pisciculture_fishery", BioreactorMachine::new)
+            .multiblock("pisciculture_fishery", GreenhouseMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
