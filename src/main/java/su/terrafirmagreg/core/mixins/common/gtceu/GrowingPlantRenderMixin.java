@@ -1,31 +1,57 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
+import java.util.*;
+
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.gregtechceu.gtceu.client.renderer.machine.impl.GrowingPlantRender;
 
-@Mixin(value = GrowingPlantRender.RenderFunction.class, remap = false)
-public interface GrowingPlantRenderMixin {
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.blocks.crop.DoubleCropBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-    // TODO: This doesn't work at the moment.
-    // Revisit whenever the next version of GTM is out, because the target changed a bunch.
-    // Basically, we need to tell it about TFC's double-crop-part block property, because it's
-    // different from the one vanilla tall plants use
+@Mixin(value = GrowingPlantRender.class, remap = false)
+public class GrowingPlantRenderMixin {
 
-    /*@Inject(method = "lambda$static$4", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;trySetValue(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;", ordinal = 0, shift = At.Shift.AFTER), remap = false, cancellable = true)
-    private static void tfg$addPartProperty(Integer min, Integer max, int minValue, IntegerProperty property, int maxValue, BlockAndTintGetter level, BlockState state, double progress,
-            CallbackInfoReturnable<Collection> cir) {
-        if (state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
-            final var topState = state.trySetValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER);
-            cir.setReturnValue(List.of(new GrowingPlantRender.StateWithOffset(state), new GrowingPlantRender.StateWithOffset(topState, new Vector3f(0, 1, 0))));
+    // Add support for TFC's double crops
+
+    @Unique
+    private static final GrowingPlantRender.RenderFunction.ConfigureOnly TFC_DOUBLE_CROP_RENDER = (level, state, progress) -> {
+        DoubleCropBlock block = (DoubleCropBlock) state.getBlock();
+        IntegerProperty ageProp = block.getAgeProperty();
+        int ageValue = (int) (progress * (block.getMaxAge() + 1));
+
+        BlockState bottomState = state;
+        bottomState = bottomState.trySetValue(ageProp, ageValue);
+
+        if (progress > 0.5) {
+            BlockState topState = state;
+            topState = topState.trySetValue(TFCBlockStateProperties.DOUBLE_CROP_PART, DoubleCropBlock.Part.TOP);
+            topState = topState.trySetValue(ageProp, ageValue);
+
+            return Arrays.asList(
+					new GrowingPlantRender.StateWithOffset(bottomState),
+                    new GrowingPlantRender.StateWithOffset(topState, new Vector3f(0, 1, 0)));
+        } else {
+            return Collections.singleton(new GrowingPlantRender.StateWithOffset(bottomState));
         }
-        if (state.hasProperty(BlockStateProperties.HALF)) {
-            final var topState = state.trySetValue(BlockStateProperties.HALF, Half.TOP);
-            cir.setReturnValue(List.of(new GrowingPlantRender.StateWithOffset(state), new GrowingPlantRender.StateWithOffset(topState, new Vector3f(0, 1, 0))));
+    };
+
+    @Unique
+    private static final GrowingPlantRender.GrowthMode TFC_DOUBLE_CROP_MODE = new GrowingPlantRender.GrowthMode("double_crop",
+            block -> block instanceof DoubleCropBlock, TFC_DOUBLE_CROP_RENDER);
+
+    @Inject(method = "getGrowthModeForBlock", at = @At("HEAD"), remap = false, cancellable = true)
+    private void tfg$getGrowthModeForBlock(Block block, CallbackInfoReturnable<GrowingPlantRender.GrowthMode> cir) {
+        if (block instanceof DoubleCropBlock) {
+            cir.setReturnValue(TFC_DOUBLE_CROP_MODE);
         }
-        if (state.hasProperty(TFCBlockStateProperties.DOUBLE_CROP_PART)) {
-            final var topState = state.trySetValue(TFCBlockStateProperties.DOUBLE_CROP_PART, DoubleCropBlock.Part.TOP);
-            cir.setReturnValue(List.of(new GrowingPlantRender.StateWithOffset(state), new GrowingPlantRender.StateWithOffset(topState, new Vector3f(0, 1, 0))));
-        }
-    }*/
+    }
 }
