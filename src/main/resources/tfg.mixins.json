@@ -96,6 +96,8 @@
         "common.minecraft.AccessorServerChunkCache",
         "common.minecraft.BlazeMixin",
         "common.minecraft.HeightmapMixin",
+        "common.minecraft.HugeFungusFeatureInvoker",
+        "common.minecraft.HugeFungusFeatureMixin",
         "common.minecraft.IBlockLootSubProviderAccessor",
         "common.minecraft.ItemStackMixin",
         "common.minecraft.MinecartFurnaceMixin",
