@@ -49,4 +49,11 @@ public class HugeFungusFeatureMixin {
             ((HugeFungusFeatureInvoker) instance).callPlaceHatBlock(level, random, config, below, 0.0F, 1.0F, 0.0F);
         }
     }
+
+    // Make bells taller on average
+    //  Changes arg of nextInt in `int bellHeight = Math.min(pRandom.nextInt(1 + stemHeight / 3) + 5, stemHeight);`
+    @ModifyArg(method = "placeHat", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 0))
+    private int biggerBell(int original, @Local(argsOnly = true) int stemHeight) {
+        return 1 + (stemHeight * 2 / 3);
+    }
 }
