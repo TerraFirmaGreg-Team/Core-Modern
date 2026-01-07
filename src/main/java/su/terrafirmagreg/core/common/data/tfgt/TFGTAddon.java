@@ -12,6 +12,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGTCraftingComponents;
 
 @GTAddon
+@SuppressWarnings("unused")
 public class TFGTAddon implements IGTAddon {
     @Override
     public GTRegistrate getRegistrate() {
@@ -19,8 +20,12 @@ public class TFGTAddon implements IGTAddon {
     }
 
     @Override
-    public void initializeAddon() {
+    public void registerCovers() {
+        TFGTCovers.init();
+    }
 
+    @Override
+    public void initializeAddon() {
     }
 
     @Override

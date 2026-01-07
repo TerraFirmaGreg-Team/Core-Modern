@@ -14,6 +14,7 @@ import net.minecraft.world.food.FoodProperties;
 
 import su.terrafirmagreg.core.TFGCore;
 
+@SuppressWarnings("unused")
 public class TFGTItems {
 
     private static final int shortBuff = 8 * 60 * 20;
@@ -141,6 +142,10 @@ public class TFGTItems {
     public static final ItemEntry<ComponentItem> RESISTANCE_SALVO = TFGCore.REGISTRATE.item("resistance_salvo", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, shortBuff, 0), 1).build()))
             .onRegister(attach(new AntidoteBehavior(40, GTMedicalConditions.IRRITANT)))
+            .register();
+
+    public static ItemEntry<ComponentItem> COVER_ROTTEN_VOIDING = TFGCore.REGISTRATE
+            .item("rotten_voiding_cover", ComponentItem::create)
             .register();
 
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent components) {

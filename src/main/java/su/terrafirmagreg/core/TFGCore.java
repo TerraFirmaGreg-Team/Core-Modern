@@ -30,6 +30,7 @@ import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTSetupHooks;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
@@ -60,6 +61,8 @@ public final class TFGCore {
         setupFixForGlobalServerConfig();
 
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        REGISTRATE.registerEventListeners(bus);
 
         TFGNetworkHandler.init();
         TFGBlocks.BLOCKS.register(bus);
@@ -92,6 +95,8 @@ public final class TFGCore {
         bus.addListener(TFGEntities::onEntityRenderers);
         bus.addListener(TFGEntities::onEntityLayerRegister);
         bus.addListener(CustomArmInteractionPointTypes::onRegister);
+
+        TFGTSetupHooks.register(bus);
 
         AdAstraCompat.RegisterEvents();
     }
