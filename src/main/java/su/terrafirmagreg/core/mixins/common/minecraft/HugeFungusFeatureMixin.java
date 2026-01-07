@@ -33,11 +33,13 @@ public class HugeFungusFeatureMixin {
             @Local(ordinal = 5) int x,
             @Local(ordinal = 6) int z,
             @Local(ordinal = 4) int radius) {
-        original.call(instance, level, random, config, pos, decorChance, hatChance, vineChance);
 
-        // Only for edges (0.98F) and corners (0.7F), skip interior (0.2F)
-        if (hatChance < 0.5F)
+        if (hatChance == 0.2F) { // Interior blocks
+            original.call(instance, level, random, config, pos, 0.4F, hatChance, vineChance);
             return;
+        } else {
+            original.call(instance, level, random, config, pos, decorChance, hatChance, vineChance);
+        }
 
         int outX = x == radius ? 1 : (x == -radius ? -1 : 0);
         int outZ = z == radius ? 1 : (z == -radius ? -1 : 0);
@@ -56,4 +58,52 @@ public class HugeFungusFeatureMixin {
     private int biggerBell(int original, @Local(argsOnly = true) int stemHeight) {
         return 1 + (stemHeight * 2 / 3);
     }
+
+    // De-obfuscated method for reference:
+
+    //    private void placeHat(WorldGenLevel pLevel, RandomSource pRandom, HugeFungusConfiguration pConfig, BlockPos rootPos, int stemHeight, boolean pHuge) {
+    //        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+    //        boolean isNetherWart = pConfig.hatState.is(Blocks.NETHER_WART_BLOCK);
+    //        int bellHeight = Math.min(pRandom.nextInt(1 + stemHeight / 3) + 5, stemHeight);
+    //        int bellBottom = stemHeight - bellHeight;
+    //
+    //        for (int y = bellBottom; y <= stemHeight; ++y) {
+    //            int radius = y < stemHeight - pRandom.nextInt(3) ? 2 : 1;  // radius: 2 for most layers, 1 near top
+    //            if (bellHeight > 8 && y < bellBottom + 4) {
+    //                radius = 3;  // radius 3 for bottom layers of tall mushrooms
+    //            }
+    //            if (pHuge) {
+    //                ++radius;  // extra radius for huge variant
+    //            }
+    //
+    //            for (int x = -radius; x <= radius; ++x) {
+    //                for (int z = -radius; z <= radius; ++z) {
+    //                    boolean isOnEdgeX = x == -radius || x == radius;
+    //                    boolean isOnEdgeZ = z == -radius || z == radius;
+    //                    boolean isInterior = !isOnEdgeX && !isOnEdgeZ && y != stemHeight;
+    //                    boolean isCorner = isOnEdgeX && isOnEdgeZ;
+    //                    boolean isBellBottom3 = y < bellBottom + 3;
+    //                    blockpos$mutableblockpos.setWithOffset(rootPos, x, y, z);
+    //                    if (isReplaceable(pLevel, blockpos$mutableblockpos, pConfig, false)) {
+    //                        if (pConfig.planted && !pLevel.getBlockState(blockpos$mutableblockpos.below()).isAir()) {
+    //                            pLevel.destroyBlock(blockpos$mutableblockpos, true);
+    //                        }
+    //
+    //                        if (isBellBottom3) {
+    //                            if (!isInterior) {
+    //                                this.placeHatDropBlock(pLevel, pRandom, blockpos$mutableblockpos, pConfig.hatState, isNetherWart);
+    //                            }
+    //                        } else if (isInterior) {
+    //                            this.placeHatBlock(pLevel, pRandom, pConfig, blockpos$mutableblockpos, 0.1F, 0.2F, isNetherWart ? 0.1F : 0.0F);
+    //                        } else if (isCorner) {
+    //                            this.placeHatBlock(pLevel, pRandom, pConfig, blockpos$mutableblockpos, 0.01F, 0.7F, isNetherWart ? 0.083F : 0.0F);
+    //                        } else {
+    //                            this.placeHatBlock(pLevel, pRandom, pConfig, blockpos$mutableblockpos, 5.0E-4F, 0.98F, isNetherWart ? 0.07F : 0.0F);
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //
+    //    }
 }
