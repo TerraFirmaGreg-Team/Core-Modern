@@ -26,6 +26,7 @@ import net.dries007.tfc.common.blocks.IcicleBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.*;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
+import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
@@ -210,6 +211,8 @@ public final class TFGBlocks {
     public static final RegistryObject<Block> DRY_ICE = register("dry_ice",
             () -> new DryIceBlock(BlockBehaviour.Properties.copy(Blocks.ICE)
                     .sound(SoundType.BONE_BLOCK)));
+    public static final RegistryObject<Block> SMITHING_TABLE = register("smithing_table",
+            () -> new SmithingTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())));
 
     // Multi block casings
 
