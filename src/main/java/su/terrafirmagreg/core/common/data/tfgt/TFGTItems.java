@@ -164,9 +164,10 @@ public class TFGTItems {
                     GTMedicalConditions.CARCINOGEN,
                     TFGTMedicalConditions.RADIOACTIVE)))
             .register();
-  
+
     public static ItemEntry<ComponentItem> COVER_ROTTEN_VOIDING = TFGCore.REGISTRATE
             .item("rotten_voiding_cover", ComponentItem::create)
+            .register();
 
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent components) {
         return item -> item.attachComponents(components);
