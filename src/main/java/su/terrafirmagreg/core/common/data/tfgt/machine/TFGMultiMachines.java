@@ -207,7 +207,7 @@ public class TFGMultiMachines {
                         .where('B', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","casings/greenhouse/iron_greenhouse_casing_1")))
                         .where('C', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","casings/greenhouse/iron_greenhouse_casing_2")))
                         .where('D', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","casings/greenhouse/iron_greenhouse_casing_3")))
-                        .where('F', GTBlocks.CASING_COKE_BRICKS.getDefaultState())
+                        .where('F', Blocks.BRICKS)
                         .where(' ', Blocks.AIR)
                         .where('E', orientedBlockState("firmalife", "iron_greenhouse_panel_roof", Direction.EAST))
                         .where('W', orientedBlockState("firmalife", "iron_greenhouse_panel_roof", Direction.WEST))
