@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -27,12 +26,10 @@ public class AttachedDecorativePlantFeature extends Feature<AttachedDecorativePl
     public boolean place(FeaturePlaceContext<AttachedDecorativePlantConfig> context) {
         final RandomSource random = context.random();
         final WorldGenLevel level = context.level();
-        final Block block = context.config().block();
+        BlockState blockState = context.config().blockState();
 
-        if (!(block instanceof DecorativeAttachedPlantBlock)) {
-            TFGCore.LOGGER.error(
-                    "AttachedDecorativePlantFeature was passed a block that isn't a DecorativeAttachedPlantBlock! Was: {}",
-                    block);
+        if (!(blockState.getBlock() instanceof DecorativeAttachedPlantBlock)) {
+            TFGCore.LOGGER.error("AttachedDecorativePlantFeature was passed a block that isn't a DecorativeAttachedPlantBlock! Was: {}", blockState);
             return false;
         }
 
@@ -40,11 +37,10 @@ public class AttachedDecorativePlantFeature extends Feature<AttachedDecorativePl
         if (!EnvironmentHelpers.isWorldgenReplaceable(level, pos))
             return false;
 
-        BlockState state = block.defaultBlockState();
         for (Direction direction : Direction.Plane.HORIZONTAL) {
-            state = state.setValue(DecorativeAttachedPlantBlock.FACING, direction);
-            if (state.canSurvive(level, pos)) {
-                setBlock(level, pos, state);
+            blockState = blockState.setValue(DecorativeAttachedPlantBlock.FACING, direction);
+            if (blockState.canSurvive(level, pos)) {
+                setBlock(level, pos, blockState);
                 return true;
             }
         }

@@ -37,8 +37,8 @@ public abstract class ToolHelperMixin {
 
     /*
      * Fixes forging bonuses not affecting GTCEU tools. Essentially just copies how TFC applies its mixin to vanilla
-     * mechanics and applies it instead to GT's ToolHelper class Now rewritten to not rely on obfuscated methods and use
-     * local random provider
+     * mechanics and applies it instead to GT's ToolHelper class.
+     * Now rewritten to not rely on obfuscated methods and use local random provider
      */
 
     @Inject(method = "damageItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;I)V", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/item/IGTTool;isElectric()Z", shift = At.Shift.AFTER), cancellable = true)

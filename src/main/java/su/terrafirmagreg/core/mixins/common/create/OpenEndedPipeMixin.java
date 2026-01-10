@@ -14,12 +14,13 @@ import net.minecraftforge.fluids.FluidStack;
 @Mixin(value = OpenEndedPipe.class, remap = false)
 public class OpenEndedPipeMixin {
 
+    // Converts river water into minecraft water when it's pumped
+
     @Inject(method = "removeFluidFromSpace", at = @At("RETURN"), cancellable = true, remap = false)
     private void tfg$removeFluidFromSpace(CallbackInfoReturnable<FluidStack> cir) {
         FluidStack stack = cir.getReturnValue();
 
         if (stack.getFluid() == TFCFluids.RIVER_WATER.get()) {
-            //System.out.println("Found River Water");
             cir.setReturnValue(new FluidStack(Fluids.WATER.getSource(), stack.getAmount()));
         }
     }
