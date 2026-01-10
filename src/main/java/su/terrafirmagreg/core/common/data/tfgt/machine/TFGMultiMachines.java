@@ -49,7 +49,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import fi.dea.mc.deafission.common.data.FissionMachines;
 import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
 import fi.dea.mc.deafission.common.data.machine.AuxExchangerMachine;
 
@@ -327,7 +326,7 @@ public class TFGMultiMachines {
                 middle.add("SSS");
                 List<String> back = new ArrayList<>(15);
                 back.add("MES");
-                back.add("FSS");
+                back.add("SFS");
                 for (int i = 1; i <= 11; ++i) {
                     front.add("SSS");
                     middle.add(1, "S#S");
@@ -463,12 +462,14 @@ public class TFGMultiMachines {
             .appearanceBlock(MARS_CASING)
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_mars"),
                     GTCEu.id("block/machines/thermal_centrifuge"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA", "         ", "         ")
-                    .aisle("BAAAAAAAA", "B#######D", "BBBBBBBAA", " BCCCB   ", " BBBBB   ")
-                    .aisle("AAAAAAAAA", "K#######D", "BB###BBAA", " C###C   ", " BHHHB   ")
-                    .aisle("BEBEBEAAA", "BEBEBEA#D", "BBBBBBBAA", " BCCCB   ", " BBBBB   ")
-                    .aisle("A     AFA", "A     AXA", "AAAAAAAFA", "         ", "         ")
+            .pattern(definition -> {
+                return FactoryBlockPattern.start(RelativeDirection.LEFT, RelativeDirection.BACK, RelativeDirection.UP)
+                        .aisle("A     AFA", "BEBEBEAAA", "AAAAAAAAA", "BAAAAAAAA", "AAAAAAAAA")
+                        .aisle("A     AXA", "BEBEBEA#D", "K#######D", "B#######D", "AAAAAAAAA")
+                        .aisle("A     AFA", "BEBEBEA#D", "K#######D", "B#######D", "AAAAAAAAA").setRepeatable(0,4)
+                        .aisle("AAAAAAAAA", "BBBBBBBAA", "BB###BBAA", "BBBBBBBAA", "AAAAAAAAA")
+                        .aisle("         ", " BCCCB   ", " C###C   ", " BCCCB   ", "         ")
+                        .aisle("         ", " BBBBB   ", " BHHHB   ", " BBBBB   ", "         ")
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('A', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars")))
                             .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
@@ -476,8 +477,8 @@ public class TFGMultiMachines {
                     .where('C', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_vacuum_engine_intake"))))
                     .where('D', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("gtceu", "heat_vent"))))
                     .where('E', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars")))
-                            .or(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(6))
-                            .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(6)))
+                            .or(abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(abilities(PartAbility.IMPORT_ITEMS)))
                     .where('F', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars")))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('H', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars")))
@@ -487,7 +488,8 @@ public class TFGMultiMachines {
                         .or(Predicates.abilities(FisssionGtPartAbilities.USE_HEAT)))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
-                    .build())
+                    .build();
+            })/*
             .shapeInfos(definition -> {
                 List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
                 var builder = MultiblockShapeInfo.builder()
@@ -511,7 +513,7 @@ public class TFGMultiMachines {
                         .where(' ', Blocks.AIR);
                 shapeInfo.add(builder.build());
                 return shapeInfo;
-            })
+            })*/
             .register();
 
     private static final Supplier<Block> OSTRUM_CASING = () -> ForgeRegistries.BLOCKS

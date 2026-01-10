@@ -162,6 +162,7 @@ public class TFGRecipeTypes {
 
     public static final GTRecipeType SMR_GENERATOR = GTRecipeTypes
             .register("smr_generator", GTRecipeTypes.GENERATOR)
+            .setEUIO(IO.OUT)
             .setMaxIOSize(0, 0, 1, 1)
             .setSound(GTSoundEntries.TURBINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
