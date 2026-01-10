@@ -5,11 +5,16 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 import com.gregtechceu.gtceu.utils.GTUtil;
 
+import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
+
+import earth.terrarium.adastra.api.planets.Planet;
+import earth.terrarium.adastra.api.planets.PlanetApi;
+
+import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
 
 @Mixin(value = GTUtil.class, remap = false)
 public abstract class GTUtilMixin {
@@ -26,18 +31,27 @@ public abstract class GTUtilMixin {
         if (!world.canSeeSky(bLockPosAbove)) {
             return false;
         } else {
-            Biome biome = (Biome) world.getBiome(bLockPosAbove).value();
-            // for tfc overworld: EnvironmentHelpers.isRainingOrSnowing(world,blockPos) instead of world.isRaining()
+            // world.isDay() sometimes gives false due to skyDarken not being < 4 sometimes during day
+            // (maybe smth to do with vanilla or tfc rain logic idk)
+            boolean isDay = Calendars.get(world).getCalendarDayTime() <= 12000;
+            boolean isRaining = EnvironmentHelpers.isRainingOrSnowing(world, blockPos);
+
+            // For tfc overworld: EnvironmentHelpers.isRainingOrSnowing(world,blockPos) instead of world.isRaining()
             // just incase I left it how it was before for other dimensions
-            if (world.dimension() == Level.OVERWORLD) {
-                // world.isDay() sometimes gives false due to skyDarken not being < 4 sometimes during day
-                // (maybe smth to do with vanilla or tfc rain logic idk)
-                return Calendars.get(world).getCalendarDayTime() <= 12000
-                        && !EnvironmentHelpers.isRainingOrSnowing(world, blockPos);
-            } else if (!world.isRaining()
-                    || !biome.warmEnoughToRain(bLockPosAbove) && !biome.coldEnoughToSnow(bLockPosAbove)) {
-                return world.isDay();
-            } else {
+            if (world.dimension() == Level.OVERWORLD || world.dimension() == Planet.VENUS) {
+                return isDay && !isRaining;
+            }
+            // No solar power during mars sandstorms
+            else if (world.dimension() == Planet.MARS) {
+                final float windStrength = ClimateRenderCache.INSTANCE.getWind().length();
+                return windStrength < MarsEnvironmentalHelpers.DUST_LOOSEN_SPEED && isDay;
+            }
+            // Other planets just use day/night only (orbits count as planets)
+            else if (PlanetApi.API.isPlanet(world)) {
+                return isDay;
+            }
+            // Any weird edge cases
+            else {
                 return false;
             }
         }

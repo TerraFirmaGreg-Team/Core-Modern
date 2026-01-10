@@ -184,4 +184,9 @@ public class TFGRecipeTypes {
                 return "";
             });
 
+    public static final GTRecipeType STEAM_BLOOMERY = GTRecipeTypes
+            .register("steam_bloomery", GTRecipeTypes.STEAM)
+            .setMaxIOSize(2, 1, 0, 0)
+            .setSound(GTSoundEntries.FIRE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT);
 }

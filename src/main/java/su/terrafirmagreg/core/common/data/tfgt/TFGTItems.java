@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.common.data.GTMedicalConditions;
+import com.gregtechceu.gtceu.common.data.materials.GTFoods;
 import com.gregtechceu.gtceu.common.item.AntidoteBehavior;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
@@ -141,6 +142,26 @@ public class TFGTItems {
     public static final ItemEntry<ComponentItem> RESISTANCE_SALVO = TFGCore.REGISTRATE.item("resistance_salvo", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, shortBuff, 0), 1).build()))
             .onRegister(attach(new AntidoteBehavior(40, GTMedicalConditions.IRRITANT)))
+            .register();
+
+    public static final ItemEntry<ComponentItem> PARACETAMOL_PILL = TFGCore.REGISTRATE.item("paracetamol_pill", ComponentItem::create)
+            .properties(p -> p.food(GTFoods.ANTIDOTE))
+            .onRegister(attach(new AntidoteBehavior(20,
+                    GTMedicalConditions.CHEMICAL_BURNS,
+                    GTMedicalConditions.WEAK_POISON,
+                    GTMedicalConditions.POISON,
+                    GTMedicalConditions.NAUSEA,
+                    GTMedicalConditions.IRRITANT,
+                    GTMedicalConditions.METHANOL_POISONING,
+                    GTMedicalConditions.CARBON_MONOXIDE_POISONING,
+                    GTMedicalConditions.CARCINOGEN)))
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAD_AWAY_PILL = TFGCore.REGISTRATE.item("rad_away_pill", ComponentItem::create)
+            .properties(p -> p.food(GTFoods.ANTIDOTE))
+            .onRegister(attach(new AntidoteBehavior(50,
+                    GTMedicalConditions.CARCINOGEN,
+                    TFGTMedicalConditions.RADIOACTIVE)))
             .register();
 
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent components) {

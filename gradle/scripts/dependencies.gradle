@@ -141,4 +141,7 @@ dependencies {
 
     //Create Picky Waterwheels
     implementation fg.deobf("curse.maven:create-picky-waterwheels-866839:6932328")
+
+    //Panda's Falling Trees
+    implementation fg.deobf("curse.maven:pandas-falling-trees-880630:5653236")
 }

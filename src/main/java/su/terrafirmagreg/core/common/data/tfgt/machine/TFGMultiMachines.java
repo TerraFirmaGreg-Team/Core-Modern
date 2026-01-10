@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
-import static com.gregtechceu.gtceu.api.GTValues.EV;
-import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.PARALLEL_HATCH;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
@@ -17,6 +15,7 @@ import org.joml.Vector3f;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.IMachineBlock;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
@@ -30,16 +29,24 @@ import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
+import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
+import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.gcym.LargeMixerMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
+import com.simibubi.create.AllBlocks;
 
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.rock.Rock;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -240,7 +247,7 @@ public class TFGMultiMachines {
             .register();
 
     public static final MultiblockMachineDefinition NUCLEAR_TURBINE = REGISTRATE
-            .multiblock("nuclear_turbine", (holder) -> new NuclearLargeTurbineMachine(holder, EV))
+            .multiblock("nuclear_turbine", (holder) -> new NuclearLargeTurbineMachine(holder, GTValues.EV))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.NUCLEAR_TURBINE)
             .recipeModifier(NuclearLargeTurbineMachine::recipeModifier, true)
@@ -264,7 +271,7 @@ public class TFGMultiMachines {
                     .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("ad_astra", "vent"))))
                     .where("E", Predicates.blocks(GTBlocks.COIL_CUPRONICKEL.get()))
                     .where("F", Predicates.blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
-                    .where("G", Predicates.blocks(PartAbility.ROTOR_HOLDER.getBlockRange(EV, GTValues.UHV).toArray(Block[]::new)))
+                    .where("G", Predicates.blocks(PartAbility.ROTOR_HOLDER.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new)))
                     .where("H", Predicates.blocks(GTBlocks.CASING_TITANIUM_GEARBOX.get()))
                     .build())
             .register();
@@ -356,7 +363,7 @@ public class TFGMultiMachines {
 
 
     public static final MultiblockMachineDefinition COOLING_TOWER = REGISTRATE
-            .multiblock("cooling_tower", (holder) -> new LargeMixerMachine(holder, EV))
+            .multiblock("cooling_tower", (holder) -> new LargeMixerMachine(holder, GTValues.EV))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.COOLING_TOWER)
             .appearanceBlock(tower_casing)
@@ -440,7 +447,7 @@ public class TFGMultiMachines {
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1))
-                            .or(abilities(PARALLEL_HATCH).setMaxGlobalLimited(1)))
+                            .or(abilities(PartAbility.PARALLEL_HATCH).setMaxGlobalLimited(1)))
                     .where("N", Predicates.blocks(TFGMachines.SINGLE_ITEMSTACK_BUS.get()))
                     .where(" ", Predicates.any())
                     .where("H", Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
@@ -503,10 +510,10 @@ public class TFGMultiMachines {
                         .where('B', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_ostrum_carbon")))
                         .where('C', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_vacuum_engine_intake")))
                         .where('D', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("gtceu", "heat_vent")))
-                        .where('E', GTMachines.FLUID_IMPORT_HATCH[EV], Direction.SOUTH)
-                        .where('F', GTMachines.ITEM_IMPORT_BUS[EV], Direction.SOUTH)
-                        .where('H', GTMachines.ITEM_EXPORT_BUS[EV], Direction.UP)
-                        .where('I', GTMachines.FLUID_EXPORT_HATCH[EV], Direction.UP)
+                        .where('E', GTMachines.FLUID_IMPORT_HATCH[GTValues.EV], Direction.SOUTH)
+                        .where('F', GTMachines.ITEM_IMPORT_BUS[GTValues.EV], Direction.SOUTH)
+                        .where('H', GTMachines.ITEM_EXPORT_BUS[GTValues.EV], Direction.UP)
+                        .where('I', GTMachines.FLUID_EXPORT_HATCH[GTValues.EV], Direction.UP)
                         .where('M', GTMachines.AUTO_MAINTENANCE_HATCH, Direction.SOUTH)
                         .where('K', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.NORTH)
                         .where('Z', FissionMachines.HeatInputHatchEv, Direction.WEST)
@@ -569,5 +576,156 @@ public class TFGMultiMachines {
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
 
+    public static final MultiblockMachineDefinition STEAM_BLOOMERY = REGISTRATE
+            .multiblock("steam_bloomery", SteamParallelMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGRecipeTypes.STEAM_BLOOMERY)
+            .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
+            .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
+            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    ResourceLocation.fromNamespaceAndPath("tfg", "block/steam_bloomery"))
+            .pattern((definition) -> FactoryBlockPattern.start()
+                    .aisle(" F ", " C ", " E ", " E ", " E ")
+                    .aisle("FCF", "C#C", "E#E", "E#E", "E#E")
+                    .aisle(" F ", "CXC", " E ", " E ", " E ")
+                    .where('X', controller(blocks(definition.getBlock())))
+                    .where('C', Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION))
+                    .where('F', Predicates.blocks(GTBlocks.FIREBOX_BRONZE.get())
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+                    .where('E', Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(2)
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
+                            .or(Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION)))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .build())
+                    .shapeInfo(controller -> MultiblockShapeInfo.builder()
+                            .aisle(" F ", " C ", " C ", " C ", " C ")
+                            .aisle("FCF", "C#C", "C#C", "C#C", "C#C")
+                            .aisle(" i ", "CXC", " O ", " I ", " C ")
+                            .where('X', controller, Direction.SOUTH)
+                            .where('C', TFCBlocks.ROCK_BLOCKS.get(Rock.RHYOLITE).get(Rock.BlockType.BRICKS).get())
+                            .where('F', GTBlocks.FIREBOX_BRONZE.get())
+                            .where('i', GTMachines.STEAM_HATCH, Direction.SOUTH)
+                            .where('O', GTMachines.STEAM_EXPORT_BUS, Direction.SOUTH)
+                            .where('I', GTMachines.STEAM_IMPORT_BUS, Direction.SOUTH)
+                            .build())
+            .register();
+
+    public final static MultiblockMachineDefinition STEAM_THERMAL_CENTRIFUGE = REGISTRATE
+            .multiblock("steam_thermal_centrifuge", SteamParallelMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeTypes(GTRecipeTypes.THERMAL_CENTRIFUGE_RECIPES)
+            .recipeModifier((machine, recipe) -> {
+                int parallelAmount = ParallelLogic.getParallelAmount(machine, recipe, 8);
+                return ModifierFunction.builder()
+                           .inputModifier(ContentModifier.multiplier(parallelAmount))
+                           .outputModifier(ContentModifier.multiplier(parallelAmount))
+                           .eutMultiplier(parallelAmount)
+                           .parallels(parallelAmount)
+                           .build();
+            }, true)
+            .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle(" FFF ", "BBBBB", " BBB ")
+                    .aisle("FXXXF", "B#P#B", "BBBBB")
+                    .aisle("FXXXF", "BPGPB", "BBBBB")
+                    .aisle("FXXXF", "B#P#B", "BBBBB")
+                    .aisle(" FFF ", "BBSBB", " BBB ")
+                    .where('S', controller(blocks(definition.get())))
+                    .where('F', Predicates.blocks(GTBlocks.FIREBOX_STEEL.get())
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+                    .where('X', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .where('P', blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .where('B', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1)))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .build())
+            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
+            .model(GTMachineModels.createWorkableCasingMachineModel(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
+                    GTCEu.id("block/machines/thermal_centrifuge/overlay_front"))
+                            .andThen(b -> b.addDynamicRenderer(
+                                    () -> DynamicRenderHelper.makeBoilerPartRender(BoilerFireboxType.STEEL_FIREBOX, GTBlocks.CASING_STEEL_SOLID))))
+            .register();
+
+    public static final MultiblockMachineDefinition STEAM_FUSER = REGISTRATE
+            .multiblock("steam_fuser", SteamParallelMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
+            .recipeType(GTRecipeTypes.ALLOY_SMELTER_RECIPES)
+            .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
+            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("FFF", "XXX", "   ")
+                    .aisle("FFF", "X#X", "XXX")
+                    .aisle("FFF", "XSX", "   ")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .where('X', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(6)
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1)))
+                    .where('F', blocks(GTBlocks.FIREBOX_BRONZE.get())
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+                    .build())
+            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
+            .model(GTMachineModels.createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    GTCEu.id("block/machines/alloy_smelter/overlay_front"))
+                            .andThen(b -> b.addDynamicRenderer(
+                                    () -> DynamicRenderHelper.makeBoilerPartRender(BoilerFireboxType.BRONZE_FIREBOX, GTBlocks.CASING_BRONZE_BRICKS))))
+            .register();
+
+    public static final MultiblockMachineDefinition STEAM_SQUASHER = REGISTRATE
+            .multiblock("steam_squasher", SteamParallelMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
+            .recipeType(GTRecipeTypes.COMPRESSOR_RECIPES)
+            .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
+            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("XXX", "FXF", "   ")
+                    .aisle("XXX", "A#A", "FAF")
+                    .aisle("XXX", "FSF", "   ")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .where('A', blocks(GTBlocks.BRONZE_HULL.get()))
+                    .where('F', Predicates.frames(GTMaterials.Steel))
+                    .where('X', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(7)
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+                    .build())
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    GTCEu.id("block/machines/compressor/overlay_front"))
+            .register();
+
+    public static final MultiblockMachineDefinition STEAM_PRESSER = REGISTRATE
+            .multiblock("steam_presser", SteamParallelMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
+            .recipeType(GTRecipeTypes.FORGE_HAMMER_RECIPES)
+            .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
+            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("XXX", "G G", "G G", "XXX")
+                    .aisle("XAX", " A ", " A ", "XAX")
+                    .aisle("XSX", "G G", "G G", "XXX")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where(' ', Predicates.any())
+                    .where('A', blocks(GTBlocks.STEEL_HULL.get()))
+                    .where('G', blocks(AllBlocks.METAL_GIRDER.get()))
+                    .where('X', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(12)
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+                    .build())
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    GTCEu.id("block/machines/forge_hammer/overlay_front"))
+            .register();
     // spotless:on
 }

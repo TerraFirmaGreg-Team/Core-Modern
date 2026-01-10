@@ -23,7 +23,7 @@ public abstract class BlastFurnaceBlockEntityMixin {
 
     @Inject(method = "light", at = @At("HEAD"), remap = false, cancellable = true)
     public void tfg$light(Level level, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (!OxygenApi.API.hasOxygen(level, pos)) {
+        if (!OxygenApi.API.hasOxygen(level, pos.above())) {
             Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
             cir.setReturnValue(false);
         }

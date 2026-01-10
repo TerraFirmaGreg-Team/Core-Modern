@@ -17,6 +17,10 @@ public class FoodStackingHelpers {
         if (IN_FOOD_CHECK.get())
             return null;
 
+        // Don't mess with empty stacks or stacks that aren't fully constructed
+        if (a.isEmpty() || b.isEmpty())
+            return null;
+
         // Check if it's food
         if (!FoodCapability.has(a) || !FoodCapability.has(b))
             return null;
