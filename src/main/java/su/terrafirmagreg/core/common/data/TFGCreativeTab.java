@@ -17,6 +17,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
 
 @SuppressWarnings("unused")
 public class TFGCreativeTab {
@@ -70,6 +71,7 @@ public class TFGCreativeTab {
         accept(out, TFGItems.EMPTY_DNA_SYRINGE);
         accept(out, TFGItems.DIRTY_DNA_SYRINGE);
         accept(out, TFGItems.PROGENITOR_CELLS);
+        accept(out, TFGItems.FISH_ROE);
 
         accept(out, TFGItems.MARS_WATER_BUCKET);
         accept(out, TFGItems.SULFUR_FUMES_BUCKET);
@@ -88,6 +90,8 @@ public class TFGCreativeTab {
         accept(out, TFGItems.WIRELESS_CARD);
 
         accept(out, TFGItems.RNR_PLOW);
+
+        accept(out, TFGTItems.COVER_ROTTEN_VOIDING);
     }
 
     private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out,
