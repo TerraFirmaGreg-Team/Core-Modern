@@ -88,6 +88,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition INTERPLANETARY_ITEM_LAUNCHER = REGISTRATE
             .multiblock("interplanetary_item_launcher", InterplanetaryItemLauncherMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .noRecipeModifier()
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
@@ -161,6 +162,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition ELECTRIC_GREENHOUSE = REGISTRATE
             .multiblock("electric_greenhouse", GreenhouseMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
             .recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
             .appearanceBlock(GTBlocks.STEEL_HULL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
@@ -229,6 +231,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition BIOREACTOR = REGISTRATE
             .multiblock("bioreactor", BioreactorMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
             .recipeType(TFGRecipeTypes.BIOREACTOR_RECIPES)
             .appearanceBlock(BIOCULTURE_CASING)
             .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
@@ -426,6 +429,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition GROWTH_CHAMBER = REGISTRATE
             .multiblock("growth_chamber", GrowthChamberMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
             .recipeType(TFGRecipeTypes.GROWTH_CHAMBER_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(BIOCULTURE_CASING)
@@ -590,6 +594,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition HYDROPONICS_FACILITY = REGISTRATE
             .multiblock("hydroponics_facility", GreenhouseMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
             .recipeType(TFGRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(HORTICULTURE_CASING)
@@ -634,6 +639,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition PISCICULTURE_FISHERY = REGISTRATE
             .multiblock("pisciculture_fishery", GreenhouseMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
             .recipeType(TFGRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
