@@ -377,7 +377,7 @@ public final class TFGTagPrefix {
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
 
         bars = new TagPrefix("bars")
-                .materialAmount(GTValues.M / 9)
+                .materialAmount(GTValues.M / 4)
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
@@ -401,7 +401,7 @@ public final class TFGTagPrefix {
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_PLATED_BLOCK));
 
         slabPlated = new TagPrefix("plated_slab")
-                .materialAmount(GTValues.M)
+                .materialAmount(GTValues.M / 2)
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_PLATED_BLOCK));
