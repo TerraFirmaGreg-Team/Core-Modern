@@ -62,7 +62,6 @@
         "common.greate.TieredMillingRecipeMixin",
         "common.gtceu.CleanroomConditionMixin",
         "common.gtceu.EntityDamageUtilMixin",
-        "common.gtceu.FisherMachineMixin",
         "common.gtceu.GrowingPlantRenderMixin",
         "common.gtceu.GTCleanroomMixin",
         "common.gtceu.GTMultiMachinesMixin",

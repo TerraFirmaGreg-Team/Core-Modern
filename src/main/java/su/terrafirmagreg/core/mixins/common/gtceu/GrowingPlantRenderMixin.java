@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.mixins.common.gtceu;
 
 import java.util.*;
 
-import com.gregtechceu.gtceu.client.util.RenderUtil;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,6 +16,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.client.renderer.machine.impl.GrowingPlantRender;
+import com.gregtechceu.gtceu.client.util.RenderUtil;
 
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.crop.DoubleCropBlock;
