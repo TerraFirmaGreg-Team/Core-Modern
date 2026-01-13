@@ -226,8 +226,7 @@ public final class TFCAmbientalCompat {
             ModItems.JET_SUIT_HELMET.get(),
             ModItems.JET_SUIT.get(),
             ModItems.JET_SUIT_PANTS.get(),
-            ModItems.JET_SUIT_BOOTS.get()
-    );
+            ModItems.JET_SUIT_BOOTS.get());
 
     /**
      * Determines if the given block should modify player temperature
