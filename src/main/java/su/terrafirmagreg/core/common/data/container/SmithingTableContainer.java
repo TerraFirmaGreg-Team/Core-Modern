@@ -102,6 +102,8 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
                     .orElse(ItemStack.EMPTY);
 
             System.out.println(level.getRecipeManager().getRecipeFor(TFGRecipeTypes.SMITHING.get(), recipeHandler, level));
+            System.out.println(level.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.SMITHING.get()));
+
             System.out.println(resultStack);
             slot.set(resultStack);
         }

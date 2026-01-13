@@ -92,6 +92,7 @@ public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.Reci
             final ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             final @Nullable Ingredient ingredient = json.has("ingredient") ? Ingredient.fromJson(json.get("ingredient")) : null;
             final SmithingPattern pattern = SmithingPattern.fromJson(json);
+            System.out.println("Test123" + result);
             return new SmithingRecipe(recipeId, pattern, result, ingredient);
         }
 

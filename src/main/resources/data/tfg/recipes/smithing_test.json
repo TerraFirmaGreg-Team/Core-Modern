@@ -1,9 +1,6 @@
 {
     "result": {"item": "minecraft:leather_leggings"},
-    "input": {
-        "ingredient": {"item": "gtceu:empty_mold"},
-        "count": 1
-    },
+    "ingredient": {"item": "gtceu:empty_mold"},
     "pattern": [
         "XXXXXX",
         "XXXXXX",
@@ -11,5 +8,6 @@
         "XX  XX",
         "XX  XX",
         "XX  XX"
-    ]
+    ],
+    "type": "tfg:smithing"
 }
