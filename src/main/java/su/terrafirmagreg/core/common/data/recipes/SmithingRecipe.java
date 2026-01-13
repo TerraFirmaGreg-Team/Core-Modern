@@ -42,8 +42,8 @@ public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.Reci
 
     @Override
     public boolean matches(SmithingTableContainer.RecipeHandler recipeHandler, Level level) {
-        return recipeHandler.container().getPattern().matches(pattern)
-                && matchesItem(recipeHandler.container().getInputItem())
+        //recipeHandler.container().getPattern().matches(pattern) &&
+        return matchesItem(recipeHandler.container().getInputItem())
                 && matchesTool(recipeHandler.container().getToolItem());
     }
 

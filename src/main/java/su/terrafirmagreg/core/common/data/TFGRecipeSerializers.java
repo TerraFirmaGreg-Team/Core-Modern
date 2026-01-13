@@ -12,5 +12,5 @@ public class TFGRecipeSerializers {
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TFGCore.MOD_ID);
 
-    public static final RegistryObject<SmithingRecipe.Serializer> SMITHING = RECIPE_SERIALIZERS.register("smithing", SmithingRecipe.Serializer::new);
+    public static final RegistryObject<SmithingRecipe.Serializer> SMITHING = RECIPE_SERIALIZERS.register("tfg_smithing", SmithingRecipe.Serializer::new);
 }

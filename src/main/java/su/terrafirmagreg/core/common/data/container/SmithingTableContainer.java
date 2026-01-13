@@ -20,6 +20,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import lombok.Getter;
+
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.TFGTags;
@@ -30,6 +32,8 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
     private final Inventory playerInventory;
     private final ContainerLevelAccess access;
     private final RecipeHandler recipeHandler;
+    //Pattern Related
+    @Getter
     private final SmithingPattern pattern;
 
     public static final int SLOT_TOT = 3;
@@ -57,11 +61,6 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
         pattern = new SmithingPattern();
         hasConsumedIngredient = false;
 
-    }
-
-    //Pattern Related
-    public SmithingPattern getPattern() {
-        return pattern;
     }
 
     public ItemStack getInputItem() {
@@ -92,13 +91,19 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
     public void onButtonPress(int buttonID, @Nullable CompoundTag extraNBT) {
         // Set the matching patterns slot to clicked
         pattern.set(buttonID, false);
-
+        System.out.println("Button");
         // Update the output slot based on the recipe
         final Slot slot = slots.get(RESULT_SLOT);
         if (player.level() instanceof ServerLevel level) {
-            slot.set(level.getRecipeManager().getRecipeFor(TFGRecipeTypes.SMITHING.get(), recipeHandler, level)
+            System.out.println("ugh");
+
+            ItemStack resultStack = level.getRecipeManager().getRecipeFor(TFGRecipeTypes.SMITHING.get(), recipeHandler, level)
                     .map(recipe -> recipe.assemble(recipeHandler, level.registryAccess()))
-                    .orElse(ItemStack.EMPTY));
+                    .orElse(ItemStack.EMPTY);
+
+            System.out.println(level.getRecipeManager().getRecipeFor(TFGRecipeTypes.SMITHING.get(), recipeHandler, level));
+            System.out.println(resultStack);
+            slot.set(resultStack);
         }
     }
 
