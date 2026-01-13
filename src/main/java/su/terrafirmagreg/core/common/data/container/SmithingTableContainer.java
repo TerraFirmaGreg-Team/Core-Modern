@@ -9,26 +9,35 @@ import net.dries007.tfc.common.container.ButtonHandlerContainer;
 import net.dries007.tfc.common.container.CallbackSlot;
 import net.dries007.tfc.common.container.Container;
 import net.dries007.tfc.common.container.ISlotCallback;
+import net.dries007.tfc.common.recipes.inventory.EmptyInventory;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import su.terrafirmagreg.core.common.data.TFGContainers;
+import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.recipes.SmithingPattern;
 
 public class SmithingTableContainer extends Container implements ISlotCallback, ButtonHandlerContainer {
     private final ItemStackHandler inventory;
     private final Inventory playerInventory;
     private final ContainerLevelAccess access;
+    private final RecipeHandler recipeHandler;
+    private final SmithingPattern pattern;
 
     public static final int SLOT_TOT = 3;
     public static final int MAT_SLOT = 0;
     public static final int TOOL_SLOT = 1;
     public static final int RESULT_SLOT = 2;
+
+    private boolean hasConsumedIngredient;
 
     public static SmithingTableContainer create(Inventory playerInventory, int windowId, ContainerLevelAccess access) {
         return new SmithingTableContainer(playerInventory, windowId, access).init(playerInventory, 19);
@@ -43,13 +52,54 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
         this.playerInventory = playerInventory;
         this.access = access;
         this.inventory = new InventoryItemHandler(this, SLOT_TOT);
+        this.recipeHandler = new RecipeHandler(this);
 
+        pattern = new SmithingPattern();
+        hasConsumedIngredient = false;
+
+    }
+
+    //Pattern Related
+    public SmithingPattern getPattern() {
+        return pattern;
+    }
+
+    public ItemStack getInputItem() {
+        return inventory.getStackInSlot(MAT_SLOT);
+    }
+
+    public ItemStack getToolItem() {
+        return inventory.getStackInSlot(TOOL_SLOT);
+    }
+
+    @Override
+    public void onSlotTake(Player player, int slot, ItemStack stack) {
+        if (slot == RESULT_SLOT)
+            resetPattern(stack);
+    }
+
+    private void resetPattern(ItemStack stack) {
+        pattern.setAll(false);
+        //setRequiresReset(true); tbd what this does
+        if (!hasConsumedIngredient) {
+            stack.shrink(1);
+            hasConsumedIngredient = true;
+        }
     }
 
     //Button Handler
     @Override
     public void onButtonPress(int buttonID, @Nullable CompoundTag extraNBT) {
-        System.out.println("button");
+        // Set the matching patterns slot to clicked
+        pattern.set(buttonID, false);
+
+        // Update the output slot based on the recipe
+        final Slot slot = slots.get(RESULT_SLOT);
+        if (player.level() instanceof ServerLevel level) {
+            slot.set(level.getRecipeManager().getRecipeFor(TFGRecipeTypes.SMITHING.get(), recipeHandler, level)
+                    .map(recipe -> recipe.assemble(recipeHandler, level.registryAccess()))
+                    .orElse(ItemStack.EMPTY));
+        }
     }
 
     @Override
@@ -127,5 +177,8 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
         public boolean mayPickup(Player player) {
             return callback.canPickup(getItem()) && super.mayPickup(player);
         }
+    }
+
+    public record RecipeHandler(SmithingTableContainer container) implements EmptyInventory {
     }
 }

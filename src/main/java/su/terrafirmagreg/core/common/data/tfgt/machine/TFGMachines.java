@@ -44,7 +44,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.fluids.FluidType;
 
-import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
@@ -79,13 +79,13 @@ public class TFGMachines {
             SimpleFoodProcessingMachine::new, (tier, builder) -> builder
                     .langValue("%s Food Processor %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .recipeType(TFGRecipeTypes.FOOD_PROCESSOR_RECIPES)
+                    .recipeType(TFGTRecipeTypes.FOOD_PROCESSOR_RECIPES)
                     .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("food_processor"),
-                            TFGRecipeTypes.FOOD_PROCESSOR_RECIPES))
+                            TFGTRecipeTypes.FOOD_PROCESSOR_RECIPES))
                     .workableTieredHullModel(GTCEu.id("block/machines/food_processor"))
                     .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
-                            TFGRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier),
+                            TFGTRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier),
                             true))
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
@@ -94,13 +94,13 @@ public class TFGMachines {
             SimpleFoodProcessingMachine::new, (tier, builder) -> builder
                     .langValue("%s Electric Oven %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .recipeType(TFGRecipeTypes.FOOD_OVEN_RECIPES)
+                    .recipeType(TFGTRecipeTypes.FOOD_OVEN_RECIPES)
                     .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
                     .workableTieredHullModel(GTCEu.id("block/machines/food_oven"))
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("food_oven"),
-                            TFGRecipeTypes.FOOD_OVEN_RECIPES))
+                            TFGTRecipeTypes.FOOD_OVEN_RECIPES))
                     .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
-                            TFGRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier),
+                            TFGTRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier),
                             true))
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
@@ -126,13 +126,13 @@ public class TFGMachines {
             AqueousAccumulatorMachine::new, (tier, builder) -> builder
                     .langValue("%s Aqueous Accumulator %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("aqueous_accumulator"),
-                            TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES))
+                            TFGTRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .recipeType(TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES)
+                    .recipeType(TFGTRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES)
                     .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
                     .workableTieredHullModel(GTCEu.id("block/machines/aqueous_accumulator"))
                     .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
-                            TFGRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES,
+                            TFGTRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES,
                             GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
                     .tooltips(GTMachineUtils.explosion())
                     .register(),
@@ -142,13 +142,13 @@ public class TFGMachines {
             GasPressurizerMachine::new, (tier, builder) -> builder
                     .langValue("%s Gas Pressurizer %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .recipeType(TFGRecipeTypes.GAS_PRESSURIZER_RECIPES)
+                    .recipeType(TFGTRecipeTypes.GAS_PRESSURIZER_RECIPES)
                     .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("gas_pressurizer"),
-                            TFGRecipeTypes.GAS_PRESSURIZER_RECIPES))
+                            TFGTRecipeTypes.GAS_PRESSURIZER_RECIPES))
                     .workableTieredHullModel(GTCEu.id("block/machines/gas_pressurizer"))
                     .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
-                            TFGRecipeTypes.GAS_PRESSURIZER_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier),
+                            TFGTRecipeTypes.GAS_PRESSURIZER_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier),
                             true))
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
