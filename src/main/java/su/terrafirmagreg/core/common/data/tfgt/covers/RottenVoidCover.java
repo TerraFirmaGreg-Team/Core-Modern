@@ -13,6 +13,7 @@ import net.dries007.tfc.common.capabilities.food.IFood;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 /**
  * A voiding cover for GT that only voids rotten food.
@@ -34,12 +35,12 @@ public class RottenVoidCover extends ItemVoidingCover {
     @Override
     protected void doVoidItems() {
         IItemHandler handler = getOwnItemHandler();
-        if (handler == null)
+        if (!(handler instanceof IItemHandlerModifiable modifiable))
             return;
 
         ItemFilter filter = filterHandler.getFilter();
         for (int slot = 0; slot < handler.getSlots(); slot++) {
-            ItemStack sourceStack = handler.extractItem(slot, Integer.MAX_VALUE, true);
+            ItemStack sourceStack = handler.getStackInSlot(slot);
             if (sourceStack.isEmpty())
                 continue;
 
@@ -50,7 +51,7 @@ public class RottenVoidCover extends ItemVoidingCover {
             if (!filter.test(sourceStack))
                 continue;
 
-            handler.extractItem(slot, Integer.MAX_VALUE, false);
+            modifiable.setStackInSlot(slot, ItemStack.EMPTY);
         }
     }
 }
