@@ -322,6 +322,7 @@ public final class TFGMaterialHandler {
         powder.setIgnored(Saltpeter, () -> TFCItems.POWDERS.get(Powder.SALTPETER).get());
         powder.setIgnored(Sulfur, () -> TFCItems.POWDERS.get(Powder.SULFUR).get());
         powder.setIgnored(RockSalt, () -> TFCItems.POWDERS.get(Powder.SYLVITE).get());
+        powder.setIgnored(SodaAsh, () -> TFCItems.POWDERS.get(Powder.SODA_ASH).get());
         powder.setIgnored(Amethyst, () -> TFCItems.GEM_DUST.get(Gem.AMETHYST).get());
         powder.setIgnored(Diamond, () -> TFCItems.GEM_DUST.get(Gem.DIAMOND).get());
         powder.setIgnored(Emerald, () -> TFCItems.GEM_DUST.get(Gem.EMERALD).get());
