@@ -1,6 +1,5 @@
 {
     "result": {"item": "gtceu:resin_printed_circuit_board"},
-    "ingredient": {"item": "gtceu:resin_circuit_board"},
     "pattern": [
         "XXXXXX",
         "X    X",
@@ -9,9 +8,6 @@
         "X    X",
         "XXXXXX"
     ],
-    "type": "tfg:smithing",
-    "tools": [
-        "forge:tools/wire_cutters",
-        "forge:tools/screwdrivers"
-    ]
+    "smithingType": "tfg:resin_board",
+    "type": "tfg:smithing"
 }

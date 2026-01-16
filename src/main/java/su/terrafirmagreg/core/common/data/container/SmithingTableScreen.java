@@ -3,7 +3,9 @@ package su.terrafirmagreg.core.common.data.container;
 import java.util.ArrayList;
 
 import net.dries007.tfc.client.screen.TFCContainerScreen;
+import net.minecraft.client.gui.components.ImageWidget;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -15,6 +17,7 @@ public class SmithingTableScreen extends TFCContainerScreen<SmithingTableContain
     public final ArrayList<SmithingButton> allButtons = new ArrayList<>();
 
     private SmithingType activeType;
+    private ImageWidget borderImage;
 
     public SmithingTableScreen(SmithingTableContainer container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TFGCore.id("textures/gui/smithing_test.png"));
@@ -38,6 +41,13 @@ public class SmithingTableScreen extends TFCContainerScreen<SmithingTableContain
                 addRenderableWidget(button);
             }
         }
+        ResourceLocation borderTexture = activeType.getBorderTexture();
+        if (borderTexture != null) {
+            //78 is a 3 pixel buffer around the button area
+            borderImage = new ImageWidget((width - getXSize()) / 2 + 14, (height - getYSize()) / 2 + 14, 78, 78, borderTexture);
+            addRenderableWidget(borderImage);
+        }
+
         this.getMenu().setScreenState(true);
     }
 
@@ -49,6 +59,8 @@ public class SmithingTableScreen extends TFCContainerScreen<SmithingTableContain
             button.visible = false;
         }
         allButtons.clear();
+        if (borderImage != null)
+            borderImage.visible = false;
         //This technically works but until I find a way to actually delete them as long as the screen is open they will keep stacking ontop of each other
         //Making new buttons does allow for much easier switching of the button textures
     }

@@ -115,10 +115,9 @@ public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.Reci
         @Override
         public SmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             final ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-            final @Nullable Ingredient ingredient = json.has("ingredient") ? Ingredient.fromJson(json.get("ingredient")) : null;
             final SmithingPattern pattern = SmithingPattern.fromJson(json);
-            final ArrayList<TagKey<Item>> tools = jsonToTags(json);
-            return new SmithingRecipe(recipeId, pattern, result, ingredient, tools);
+            final SmithingType type = SmithingType.SMITHING_TYPES.get(ResourceLocation.parse(GsonHelper.getAsString(json, "smithingType")));
+            return new SmithingRecipe(recipeId, pattern, result, Ingredient.of(type.getInputItems().stream()), type.getToolTags());
         }
 
         @Nullable

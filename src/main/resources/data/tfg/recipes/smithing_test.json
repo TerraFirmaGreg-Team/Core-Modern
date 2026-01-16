@@ -1,6 +1,5 @@
 {
     "result": {"item": "gtceu:cylinder_casting_mold"},
-    "ingredient": {"item": "gtceu:empty_mold"},
     "pattern": [
         "XXXXXX",
         "X    X",
@@ -9,9 +8,6 @@
         "X    X",
         "XXXXXX"
     ],
-    "type": "tfg:smithing",
-    "tools": [
-        "forge:tools/hammers",
-        "forge:tools/mallets"
-    ]
+    "smithingType": "tfg:casting_mold",
+    "type": "tfg:smithing"
 }

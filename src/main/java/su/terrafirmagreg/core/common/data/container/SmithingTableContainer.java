@@ -85,7 +85,6 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
     public void setAndUpdateSlots(int slot) {
         ISlotCallback.super.setAndUpdateSlots(slot);
         if (slot != RESULT_SLOT) {
-
             ItemStack inputItemA = inventory.getStackInSlot(MAT_SLOTA);
             ItemStack inputItemB = inventory.getStackInSlot(MAT_SLOTB);
             ItemStack toolA = inventory.getStackInSlot(TOOL_SLOTA);
@@ -96,7 +95,7 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
                 return;
 
             if (!activeScreen) {
-                for (SmithingType type : SmithingType.SMITHING_TYPES) {
+                for (SmithingType type : SmithingType.SMITHING_TYPES.values()) {
                     Item testItem1 = type.getInputItems().get(0).getItem();
                     Item testItem2 = type.getInputItems().get(1).getItem();
 
@@ -117,6 +116,48 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
             }
         }
     }
+
+    /*//Catches a weird interaction if you replace an item in slot since onSlotTake doesn't get called
+    @Override
+    public void onCarried(ItemStack stack) {
+        System.out.println("onCarried");
+        if (activeScreen) {
+            ItemStack inputItemA = inventory.getStackInSlot(MAT_SLOTA);
+            ItemStack inputItemB = inventory.getStackInSlot(MAT_SLOTB);
+            ItemStack toolA = inventory.getStackInSlot(TOOL_SLOTA);
+            ItemStack toolB = inventory.getStackInSlot(TOOL_SLOTB);
+    
+            Item testItem1 = currentType.getInputItems().get(0).getItem();
+            Item testItem2 = currentType.getInputItems().get(1).getItem();
+    
+            System.out.println("Debugging");
+            System.out.println(inputItemA);
+            System.out.println(inputItemB);
+            System.out.println(testItem1);
+            System.out.println(testItem2);
+    
+            if (!((inputItemA.is(testItem1) || inputItemB.is(testItem1)) &&
+                    (inputItemA.is(testItem2) || inputItemB.is(testItem2)))) {
+                System.out.println("Items don't match current type");
+                resetPattern();
+            }
+            TagKey<Item> testTool1 = currentType.getToolTags().get(0);
+            TagKey<Item> testTool2 = currentType.getToolTags().get(1);
+    
+            System.out.println("Debugging");
+            System.out.println(toolA);
+            System.out.println(toolB);
+            System.out.println(testTool1);
+            System.out.println(testTool2);
+    
+            if (!(toolA.is(testTool1) || toolB.is(testTool1)) &&
+                    (toolA.is(testTool2) || toolB.is(testTool2))) {
+                System.out.println("Tools don't match current type");
+                resetPattern();
+            }
+        }
+    
+    }*/
 
     @Override
     public void onSlotTake(Player player, int slot, ItemStack stack) {
@@ -241,6 +282,11 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
         @Override
         public boolean mayPickup(Player player) {
             return callback.canPickup(getItem()) && super.mayPickup(player);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return !callback.activeScreen && super.mayPlace(stack);
         }
     }
 

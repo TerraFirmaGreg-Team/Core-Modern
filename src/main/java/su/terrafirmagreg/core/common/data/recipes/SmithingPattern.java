@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.common.data.recipes;
 
-import java.nio.ByteBuffer;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -105,7 +103,8 @@ public class SmithingPattern {
         return ((data >> index) & 0b1) == 1;
     }
 
-    public void output() {
+    //I had to use AI to help me write this since I was too pissed off to figure it out
+    /*public void output() {
         // Allocate an 8-byte buffer, the size of a long
         ByteBuffer buffers = ByteBuffer.allocate(Long.BYTES);
         // Put the long into the buffer
@@ -113,7 +112,7 @@ public class SmithingPattern {
         // Return the underlying byte array
         System.out.println(bytesToBinaryString(buffers.array()));
     }
-
+    
     public void outputOther(SmithingPattern other) {
         // Allocate an 8-byte buffer, the size of a long
         ByteBuffer buffers = ByteBuffer.allocate(Long.BYTES);
@@ -122,30 +121,30 @@ public class SmithingPattern {
         // Return the underlying byte array
         System.out.println(bytesToBinaryString(buffers.array()));
     }
-
+    
     public static String bytesToBinaryString(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {
             // Convert the byte to an integer, mask with 0xFF to handle signedness
             // and get the unsigned integer value (0-255).
             int unsignedInt = b & 0xFF;
-
+    
             // Convert the unsigned integer to a binary string.
             String binaryString = Integer.toBinaryString(unsignedInt);
-
+    
             // Pad with leading zeros to ensure an 8-bit representation.
             String paddedBinaryString = String.format("%8s", binaryString).replace(' ', '0');
-
+    
             sb.append(paddedBinaryString); // Add a space for readability
         }
         sb.delete(0, 28);
-
+    
         for (int i = 6; i < sb.length(); i += 6 + "\n".length()) {
             sb.insert(i, "\n");
         }
         sb.insert(0, "\n");
         return sb.toString();
-    }
+    }*/
 
     public void toNetwork(FriendlyByteBuf buffer) {
         buffer.writeVarInt(width);
@@ -166,8 +165,8 @@ public class SmithingPattern {
     }
 
     public boolean matches(SmithingPattern other) {
-        output();
-        outputOther(other);
+        //output();
+        //outputOther(other);
         for (int dx = 0; dx <= this.width - other.width; dx++) {
             for (int dy = 0; dy <= this.height - other.height; dy++) {
                 if (matches(other, dx, dy, false) || matches(other, dx, dy, true)) {
@@ -175,7 +174,7 @@ public class SmithingPattern {
                 }
             }
         }
-        System.out.println("no match");
+        //System.out.println("no match");
         return false;
     }
 
@@ -202,7 +201,7 @@ public class SmithingPattern {
                 }
             }
         }
-        System.out.println("Pattern Match");
+        //System.out.println("Pattern Match");
         return true;
     }
 }
