@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.utils;
 
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.IFood;
 import net.minecraft.world.item.ItemStack;
@@ -12,13 +13,18 @@ public class FoodStackingHelpers {
     // If they're not identical foods then this does nothing.
     // If they are stacked, one of the decay values will win leading to sometimes getting a little bit of freshness for free.
     public static Boolean checkFoodStacking(ItemStack a, ItemStack b) {
+        // Cheap exits
+        if (a.isEmpty() || b.isEmpty())
+            return null;
+        if (a.getItem() != b.getItem())
+            return null;
+        if (!a.is(TFCTags.Items.FOODS))
+            return null;
+
+        // Expensive paths
 
         // Don't recurse
         if (IN_FOOD_CHECK.get())
-            return null;
-
-        // Don't mess with empty stacks or stacks that aren't fully constructed
-        if (a.isEmpty() || b.isEmpty())
             return null;
 
         // Check if it's food
