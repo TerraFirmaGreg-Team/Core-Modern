@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.common.data.container.widgets;
 
 import java.awt.*;
 
+import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.dries007.tfc.client.RenderHelpers;
@@ -20,34 +22,52 @@ import net.minecraftforge.network.PacketDistributor;
 
 import lombok.Getter;
 
+import su.terrafirmagreg.core.common.data.recipes.SmithingType;
+
 public class SmithingButton extends Button {
     public int id;
     @Getter
     private final ResourceLocation texture;
+    @Nullable
+    @Getter
+    private final ResourceLocation inactiveTexture;
+    @Getter
+    private final SmithingType currentType;
     private final SoundEvent sound;
     private final int texWidth;
     private final int texHeight;
 
-    public SmithingButton(int id, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, SoundEvent sound) {
-        this(id, x, y, width, height, texWidth, texHeight, texture, sound, (button) -> {
+    public SmithingButton(int id, SmithingType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, SoundEvent sound) {
+        this(id, type, x, y, width, height, texWidth, texHeight, texture, null, sound, (button) -> {
         });
     }
 
-    public SmithingButton(int id, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, SoundEvent sound,
+    public SmithingButton(int id, SmithingType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound) {
+        this(id, type, x, y, width, height, texWidth, texHeight, texture, inactiveTexture, sound, (button) -> {
+        });
+    }
+
+    public SmithingButton(int id, SmithingType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound,
             net.minecraft.client.gui.components.Button.OnPress onPress) {
         super(x, y, width, height, Component.empty(), onPress, RenderHelpers.NARRATION);
         this.texWidth = texWidth;
         this.texHeight = texHeight;
         this.id = id;
         this.texture = texture;
+        this.inactiveTexture = inactiveTexture;
         this.sound = sound;
+        this.currentType = type;
     }
 
     @Override
     public void onPress() {
         this.onPress.onPress(this);
         if (this.active) {
-            this.visible = false;
+            if (inactiveTexture == null) {
+                this.visible = false;
+
+            }
+            this.active = false;
             PacketHandler.send(PacketDistributor.SERVER.noArg(), new ScreenButtonPacket(this.id, (CompoundTag) null));
             this.playDownSound(Minecraft.getInstance().getSoundManager());
         }
@@ -61,12 +81,18 @@ public class SmithingButton extends Button {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        if (this.visible) {
-            int x = this.getX();
-            int y = this.getY();
+        if (!this.visible)
+            return;
+
+        int x = this.getX();
+        int y = this.getY();
+        if (this.active) {
             RenderSystem.setShaderTexture(0, this.texture);
             this.isHovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + this.height;
             graphics.blit(this.texture, x, y, 0.0F, 0.0F, width, height, texWidth, texHeight);
+        } else if (inactiveTexture != null) {
+            RenderSystem.setShaderTexture(0, this.inactiveTexture);
+            graphics.blit(this.inactiveTexture, x, y, 0.0F, 0.0F, width, height, texWidth, texHeight);
         }
 
     }

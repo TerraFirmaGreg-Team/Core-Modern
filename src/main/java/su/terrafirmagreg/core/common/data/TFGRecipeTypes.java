@@ -16,7 +16,11 @@ public class TFGRecipeTypes {
     public static final RegistryObject<RecipeType<SmithingRecipe>> SMITHING = register("smithing");
 
     private static <R extends Recipe<?>> RegistryObject<RecipeType<R>> register(String name) {
-        return RECIPE_TYPES.register(name, () -> new RecipeType<>() {
+        return RECIPE_TYPES.register(name, () -> new RecipeType<R>() {
+            @Override
+            public String toString() {
+                return name;
+            }
         });
     }
 

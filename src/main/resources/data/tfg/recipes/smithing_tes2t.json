@@ -1,5 +1,5 @@
 {
-    "result": {"item": "gtceu:cylinder_casting_mold"},
+    "result": {"item": "gtceu:ring_extruder_mold"},
     "ingredient": {"item": "gtceu:empty_mold"},
     "pattern": [
         "XXXXXX",
@@ -11,7 +11,7 @@
     ],
     "type": "tfg:smithing",
     "tools": [
-        "forge:tools/hammers",
-        "forge:tools/mallets"
+        "forge:tools/wire_cutters",
+        "forge:tools/files"
     ]
 }

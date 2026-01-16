@@ -39,6 +39,7 @@ public final class TFGTags {
 
         public static final TagKey<Item> AutoEatBlacklist = createItemTag("tfg:auto_eat_blacklist");
         public static final TagKey<Item> SmithingTableInputs = createItemTag("tfg:smithing_table_input");
+        public static final TagKey<Item> SmithingTools = createItemTag("tfg:smithing_tools");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");

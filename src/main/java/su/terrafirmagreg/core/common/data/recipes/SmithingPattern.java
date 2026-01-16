@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.recipes;
 
+import java.nio.ByteBuffer;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -12,8 +14,8 @@ import lombok.Getter;
 //Took this from TFC KnappingPattern since I didn't want to deal with rewriting this when it works
 
 public class SmithingPattern {
-    public static final int MAX_WIDTH = 5;
-    public static final int MAX_HEIGHT = 5;
+    public static final int MAX_WIDTH = 6;
+    public static final int MAX_HEIGHT = 6;
 
     public static SmithingPattern fromJson(JsonObject json) {
         final JsonArray array = json.getAsJsonArray("pattern");
@@ -44,7 +46,7 @@ public class SmithingPattern {
     public static SmithingPattern fromNetwork(FriendlyByteBuf buffer) {
         final int width = buffer.readVarInt();
         final int height = buffer.readVarInt();
-        final int data = buffer.readInt();
+        final long data = buffer.readLong();
         final boolean empty = buffer.readBoolean();
         return new SmithingPattern(width, height, data, empty);
     }
@@ -55,17 +57,18 @@ public class SmithingPattern {
     private final int height;
     private final boolean empty;
 
-    private int data; // on = 1, off = 0
+    //The data for the pattern is encoded as indexed binary in a long. This allows for 64 bits to be stored. on = 1, off = 0
+    private long data;
 
     public SmithingPattern() {
         this(MAX_WIDTH, MAX_HEIGHT, false);
     }
 
     public SmithingPattern(int width, int height, boolean empty) {
-        this(width, height, (1 << (width * height)) - 1, empty);
+        this(width, height, (1L << (width * height)) - 1, empty);
     }
 
-    private SmithingPattern(int width, int height, int data, boolean empty) {
+    private SmithingPattern(int width, int height, long data, boolean empty) {
         this.width = width;
         this.height = height;
         this.data = data;
@@ -77,35 +80,77 @@ public class SmithingPattern {
     }
 
     public void setAll(boolean value) {
-        data = value ? (1 << (width * height)) - 1 : 0;
+        data = value ? (1L << (width * height)) - 1 : 0;
     }
 
     public void set(int x, int y, boolean value) {
-        set(x + y * width, value);
+        set(x + (long) y * width, value);
     }
 
-    public void set(int index, boolean value) {
-        assert index >= 0 && index < 32;
+    public void set(long index, boolean value) {
+        assert index >= 0 && index < 64;
         if (value) {
-            data |= 1 << index;
+            data |= 1L << index;
         } else {
-            data &= ~(1 << index);
+            data &= ~(1L << index);
         }
     }
 
     public boolean get(int x, int y) {
-        return get(x + y * width);
+        return get(x + (long) y * width);
     }
 
-    public boolean get(int index) {
-        assert index >= 0 && index < 32;
+    public boolean get(long index) {
+        assert index >= 0 && index < 64;
         return ((data >> index) & 0b1) == 1;
+    }
+
+    public void output() {
+        // Allocate an 8-byte buffer, the size of a long
+        ByteBuffer buffers = ByteBuffer.allocate(Long.BYTES);
+        // Put the long into the buffer
+        buffers.putLong(data);
+        // Return the underlying byte array
+        System.out.println(bytesToBinaryString(buffers.array()));
+    }
+
+    public void outputOther(SmithingPattern other) {
+        // Allocate an 8-byte buffer, the size of a long
+        ByteBuffer buffers = ByteBuffer.allocate(Long.BYTES);
+        // Put the long into the buffer
+        buffers.putLong(other.data);
+        // Return the underlying byte array
+        System.out.println(bytesToBinaryString(buffers.array()));
+    }
+
+    public static String bytesToBinaryString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            // Convert the byte to an integer, mask with 0xFF to handle signedness
+            // and get the unsigned integer value (0-255).
+            int unsignedInt = b & 0xFF;
+
+            // Convert the unsigned integer to a binary string.
+            String binaryString = Integer.toBinaryString(unsignedInt);
+
+            // Pad with leading zeros to ensure an 8-bit representation.
+            String paddedBinaryString = String.format("%8s", binaryString).replace(' ', '0');
+
+            sb.append(paddedBinaryString); // Add a space for readability
+        }
+        sb.delete(0, 28);
+
+        for (int i = 6; i < sb.length(); i += 6 + "\n".length()) {
+            sb.insert(i, "\n");
+        }
+        sb.insert(0, "\n");
+        return sb.toString();
     }
 
     public void toNetwork(FriendlyByteBuf buffer) {
         buffer.writeVarInt(width);
         buffer.writeVarInt(height);
-        buffer.writeInt(data);
+        buffer.writeLong(data);
         buffer.writeBoolean(empty);
     }
 
@@ -114,13 +159,15 @@ public class SmithingPattern {
         if (this == other)
             return true;
         if (other instanceof SmithingPattern p) {
-            final int mask = (1 << (width * height)) - 1;
+            final long mask = (1L << (width * height)) - 1;
             return width == p.width && height == p.height && empty == p.empty && (data & mask) == (p.data & mask);
         }
         return false;
     }
 
     public boolean matches(SmithingPattern other) {
+        output();
+        outputOther(other);
         for (int dx = 0; dx <= this.width - other.width; dx++) {
             for (int dy = 0; dy <= this.height - other.height; dy++) {
                 if (matches(other, dx, dy, false) || matches(other, dx, dy, true)) {
@@ -128,6 +175,7 @@ public class SmithingPattern {
                 }
             }
         }
+        System.out.println("no match");
         return false;
     }
 
