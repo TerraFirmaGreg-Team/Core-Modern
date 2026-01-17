@@ -97,7 +97,7 @@ public class SmithingType {
             CustomTags.WIRE_CUTTERS,
             CustomTags.FILES,
             textureLocation("mold_active"),
-            GTSoundEntries.FORGE_HAMMER.getMainEvent(),
+            GTSoundEntries.WIRECUTTER_TOOL.getMainEvent(),
             textureLocation("mold_border"));
     public static final SmithingType RESIN_BOARD = new SmithingType(
             "resin_board",

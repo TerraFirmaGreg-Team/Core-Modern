@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common.data.container;
 import java.util.ArrayList;
 
 import net.dries007.tfc.client.screen.TFCContainerScreen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -63,6 +64,18 @@ public class SmithingTableScreen extends TFCContainerScreen<SmithingTableContain
             borderImage.visible = false;
         //This technically works but until I find a way to actually delete them as long as the screen is open they will keep stacking ontop of each other
         //Making new buttons does allow for much easier switching of the button textures
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics guiGraphics, int pMouseX, int pMouseY) {
+        super.renderLabels(guiGraphics, pMouseX, pMouseY);
+        if (this.menu.getScreenState()) {
+            renderSlotHighlight(guiGraphics, 123, 25, 1);
+            renderSlotHighlight(guiGraphics, 145, 25, 1);
+            renderSlotHighlight(guiGraphics, 123, 46, 1);
+            renderSlotHighlight(guiGraphics, 145, 46, 1);
+        }
+
     }
 
     @Override

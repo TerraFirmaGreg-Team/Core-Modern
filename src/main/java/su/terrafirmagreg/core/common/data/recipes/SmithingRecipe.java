@@ -38,41 +38,52 @@ public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.Reci
     private final ResourceLocation id;
     @Getter
     private final SmithingPattern pattern;
+    @Getter
     private final ItemStack result;
+    @Getter
     private final @Nullable Ingredient ingredient;
+    @Getter
     private final ArrayList<TagKey<Item>> tools;
+    @Getter
+    private final SmithingType smithingType;
 
-    public SmithingRecipe(ResourceLocation id, SmithingPattern pattern, ItemStack result, @Nullable Ingredient ingredient, ArrayList<TagKey<Item>> tools) {
+    public SmithingRecipe(ResourceLocation id, SmithingPattern pattern, ItemStack result, @Nullable Ingredient ingredient, ArrayList<TagKey<Item>> tools, SmithingType type) {
         this.id = id;
         this.pattern = pattern;
         this.result = result;
         this.ingredient = ingredient;
         this.tools = tools;
+        this.smithingType = type;
     }
 
     @Override
     public boolean matches(SmithingTableContainer.RecipeHandler recipeHandler, Level level) {
         boolean patternMatch = recipeHandler.container().getPattern().matches(pattern);
-        boolean inputMatch = matchesItem(recipeHandler.container().getInputItem());
+        boolean inputsMatch = matchesItems(recipeHandler.container().getInputItems());
         boolean toolsMatch = matchesTools(recipeHandler.container().getToolItems());
 
         /*System.out.println(patternMatch);
         System.out.println(inputMatch);
         System.out.println(toolsMatch);*/
 
-        return patternMatch && inputMatch && toolsMatch;
+        return patternMatch && inputsMatch && toolsMatch;
     }
 
-    public boolean matchesOnlyItems(ItemStack inputStack, ArrayList<ItemStack> toolStacks) {
-        return matchesItem(inputStack) && matchesTools(toolStacks);
-    }
+    public boolean matchesItems(ArrayList<ItemStack> stacks) {
+        var stdStacks = stacks.stream().filter(itemStack -> !itemStack.isEmpty()).toList();
 
-    public boolean matchesItem(ItemStack stack) {
-        if (ingredient == null || ingredient.test(stack)) {
-            System.out.println("Ingredient Matches");
-            return true;
+        if (stdStacks.size() == 1) {
+            if (ingredient.test(stdStacks.get(0))) {
+                //System.out.println("Ingredient Matches");
+                return true;
+            }
+        } else if (stdStacks.size() == 2) {
+            if (ingredient.test(stdStacks.get(0)) && ingredient.test(stdStacks.get(1))) {
+                //System.out.println("Ingredients Match");
+                return true;
+            }
         }
-        System.out.println("No Ingredient Match");
+        //System.out.println("No Ingredient Match");
         return false;
     }
 
@@ -117,7 +128,7 @@ public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.Reci
             final ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             final SmithingPattern pattern = SmithingPattern.fromJson(json);
             final SmithingType type = SmithingType.SMITHING_TYPES.get(ResourceLocation.parse(GsonHelper.getAsString(json, "smithingType")));
-            return new SmithingRecipe(recipeId, pattern, result, Ingredient.of(type.getInputItems().stream()), type.getToolTags());
+            return new SmithingRecipe(recipeId, pattern, result, Ingredient.of(type.getInputItems().stream()), type.getToolTags(), type);
         }
 
         @Nullable
@@ -128,7 +139,7 @@ public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.Reci
             final @Nullable Ingredient ingredient = Helpers.decodeNullable(buffer, Ingredient::fromNetwork);
             final ArrayList<TagKey<Item>> tools = pathsToTags(buffer.readCollection(c -> new ArrayList<>(), FriendlyByteBuf::readUtf));
 
-            return new SmithingRecipe(recipeId, pattern, stack, ingredient, tools);
+            return new SmithingRecipe(recipeId, pattern, stack, ingredient, tools, null);
         }
 
         @Override

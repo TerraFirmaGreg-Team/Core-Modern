@@ -73,8 +73,8 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
 
     }
 
-    public ItemStack getInputItem() {
-        return inventory.getStackInSlot(MAT_SLOTA);
+    public ArrayList<ItemStack> getInputItems() {
+        return new ArrayList<>(Arrays.asList(inventory.getStackInSlot(MAT_SLOTA), inventory.getStackInSlot(MAT_SLOTB)));
     }
 
     public ArrayList<ItemStack> getToolItems() {
@@ -117,59 +117,31 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
         }
     }
 
-    /*//Catches a weird interaction if you replace an item in slot since onSlotTake doesn't get called
-    @Override
-    public void onCarried(ItemStack stack) {
-        System.out.println("onCarried");
-        if (activeScreen) {
-            ItemStack inputItemA = inventory.getStackInSlot(MAT_SLOTA);
-            ItemStack inputItemB = inventory.getStackInSlot(MAT_SLOTB);
-            ItemStack toolA = inventory.getStackInSlot(TOOL_SLOTA);
-            ItemStack toolB = inventory.getStackInSlot(TOOL_SLOTB);
-    
-            Item testItem1 = currentType.getInputItems().get(0).getItem();
-            Item testItem2 = currentType.getInputItems().get(1).getItem();
-    
-            System.out.println("Debugging");
-            System.out.println(inputItemA);
-            System.out.println(inputItemB);
-            System.out.println(testItem1);
-            System.out.println(testItem2);
-    
-            if (!((inputItemA.is(testItem1) || inputItemB.is(testItem1)) &&
-                    (inputItemA.is(testItem2) || inputItemB.is(testItem2)))) {
-                System.out.println("Items don't match current type");
-                resetPattern();
-            }
-            TagKey<Item> testTool1 = currentType.getToolTags().get(0);
-            TagKey<Item> testTool2 = currentType.getToolTags().get(1);
-    
-            System.out.println("Debugging");
-            System.out.println(toolA);
-            System.out.println(toolB);
-            System.out.println(testTool1);
-            System.out.println(testTool2);
-    
-            if (!(toolA.is(testTool1) || toolB.is(testTool1)) &&
-                    (toolA.is(testTool2) || toolB.is(testTool2))) {
-                System.out.println("Tools don't match current type");
-                resetPattern();
-            }
-        }
-    
-    }*/
-
     @Override
     public void onSlotTake(Player player, int slot, ItemStack stack) {
         if (slot == RESULT_SLOT) {
             resetPattern();
 
             if (!hasConsumedIngredient) {
-                this.getInputItem().shrink(1);
+                consumeItems();
                 hasConsumedIngredient = true;
             }
         } else {
             resetPattern();
+        }
+    }
+
+    private void consumeItems() {
+        ItemStack matA = this.inventory.getStackInSlot(MAT_SLOTA);
+        ItemStack matB = this.inventory.getStackInSlot(MAT_SLOTB);
+        ArrayList<ItemStack> ingredients = this.currentType.getInputItems();
+
+        for (ItemStack stack : ingredients) {
+            if (stack.is(matA.getItem())) {
+                matA.shrink(stack.getCount());
+            } else if (stack.is(matB.getItem())) {
+                matB.shrink(stack.getCount());
+            }
         }
     }
 

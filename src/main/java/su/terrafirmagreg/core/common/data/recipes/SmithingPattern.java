@@ -56,6 +56,7 @@ public class SmithingPattern {
     private final boolean empty;
 
     //The data for the pattern is encoded as indexed binary in a long. This allows for 64 bits to be stored. on = 1, off = 0
+    @Getter
     private long data;
 
     public SmithingPattern() {
