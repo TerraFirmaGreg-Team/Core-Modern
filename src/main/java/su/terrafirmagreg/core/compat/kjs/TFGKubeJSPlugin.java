@@ -4,8 +4,12 @@ import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
+
+import net.minecraft.resources.ResourceLocation;
 
 import dev.latvian.mods.kubejs.KubeJSPlugin;
+import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import earth.terrarium.adastra.api.events.AdAstraEvents;
@@ -25,27 +29,35 @@ import su.terrafirmagreg.core.compat.kjs.events.TFGStartupEvents;
 public final class TFGKubeJSPlugin extends KubeJSPlugin {
 
     @Override
-    public void init() {
+    public void initStartup() {
+        super.initStartup();
+    }
 
-        RegistryInfo.BLOCK.addType("tfg:decorative_plant", DecorativePlantBlockBuilder.class,
-                DecorativePlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:tall_decorative_plant", TallDecorativePlantBlockBuilder.class,
-                TallDecorativePlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:floating_decorative_plant", DecorativeFloatingPlantBlockBuilder.class,
-                DecorativeFloatingPlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:attached_decorative_plant", DecorativeAttachedPlantBlockBuilder.class,
-                DecorativeAttachedPlantBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:particle_emitter_decoration", ParticleEmitterDecorationBlockBuilder.class,
-                ParticleEmitterDecorationBlockBuilder::new);
-        RegistryInfo.BLOCK.addType("tfg:particle_emitter", ParticleEmitterBlockBuilder.class,
-                ParticleEmitterBlockBuilder::new);
+    @Override
+    public void init() {
+        RegistryInfo.BLOCK.addType("tfg:decorative_plant", DecorativePlantBlockBuilder.class, DecorativePlantBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:tall_decorative_plant", TallDecorativePlantBlockBuilder.class, TallDecorativePlantBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:floating_decorative_plant", DecorativeFloatingPlantBlockBuilder.class, DecorativeFloatingPlantBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:attached_decorative_plant", DecorativeAttachedPlantBlockBuilder.class, DecorativeAttachedPlantBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:particle_emitter_decoration", ParticleEmitterDecorationBlockBuilder.class, ParticleEmitterDecorationBlockBuilder::new);
+        RegistryInfo.BLOCK.addType("tfg:particle_emitter", ParticleEmitterBlockBuilder.class, ParticleEmitterBlockBuilder::new);
         RegistryInfo.BLOCK.addType("tfg:active_cardinal", GTActiveCardinalBuilder.class, GTActiveCardinalBuilder::new);
         RegistryInfo.BLOCK.addType("tfg:active_particle_emitter", GTActiveParticleBuilder.class, GTActiveParticleBuilder::new);
     }
 
     @Override
+    public void registerRecipeSchemas(RegisterRecipeSchemasEvent event) {
+        for (var entry : GTRegistries.RECIPE_TYPES.entries()) {
+            event.register(entry.getKey(), TFGRecipeSchema.SCHEMA);
+        }
+        event.register(ResourceLocation.parse("gtceu:greenhouse"), TFGRecipeSchema.SCHEMA);
+    }
+
+    @Override
     public void registerBindings(BindingsEvent event) {
         super.registerBindings(event);
+        event.add("TFGRecipeSchemaBindings", TFGRecipeSchemaBindings.class);
+
         event.add("TFGTagPrefix", TFGTagPrefix.class);
         event.add("TFGPropertyKey", TFGPropertyKeys.class);
         event.add("TFGMaterialFlags", TFGMaterialFlags.class);

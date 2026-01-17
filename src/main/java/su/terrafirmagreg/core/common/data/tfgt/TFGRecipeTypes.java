@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
+import static su.terrafirmagreg.core.common.data.container.ProgressBars.*;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +18,6 @@ import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
@@ -34,13 +35,28 @@ public class TFGRecipeTypes {
 
     public static final GTRecipeType GREENHOUSE_RECIPES = GTRecipeTypes.register("greenhouse", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
-            .setMaxIOSize(3, 4, 1, 0)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
-            .setSound(GTSoundEntries.BATH);
+            .setMaxIOSize(6, 6, 3, 3)
+            .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.MINER)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var size = widgetGroup.getSize();
+                widgetGroup.setSize(size.width, size.height + 5);
 
-    public static final ResourceTexture PROGRESS_BAR_DNA = new ResourceTexture(
-            "tfg:textures/gui/progress_bar/progress_bar_dna.png"); // I might move this later if we end up making/using
-                                                                                                                                             // more custom progress bars.
+                // Dimension widget that's in a better spot.
+                // Disabled for now since I cant figure out how to remove the old one.
+                //                for (RecipeCondition condition : recipe.conditions) {
+                //                    if (condition.getTooltips() == null) continue;
+                //                    if (condition instanceof DimensionCondition dimCondition) {
+                //                        int width = recipe.recipeType.getRecipeUI().getJEISize().width - 44;
+                //                        int baseHeight = recipe.recipeType.getRecipeUI().getJEISize().height - 32;
+                //                        int yPos = baseHeight - 5;
+                //                        widgetGroup.addWidget(dimCondition
+                //                                .setupDimensionMarkers(width, yPos - 5)
+                //                                .setBackgroundTexture(IGuiTexture.EMPTY));
+                //                    }
+                //                }
+            });
+
     public static final GTRecipeType BIOREACTOR_RECIPES = GTRecipeTypes.register("bioreactor", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 6, 6, 6)
@@ -56,8 +72,6 @@ public class TFGRecipeTypes {
                 }
             });
 
-    public static final ResourceTexture PROGRESS_BAR_PETRI = new ResourceTexture(
-            "tfg:textures/gui/progress_bar/progress_bar_petri.png");
     public static final GTRecipeType GROWTH_CHAMBER_RECIPES = GTRecipeTypes
             .register("growth_chamber", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
@@ -182,6 +196,26 @@ public class TFGRecipeTypes {
                             "tfg.nuclear.average_heat.text", heatText1, heatText2);
                 }
                 return "";
+    public static final GTRecipeType HYDROPONICS_FACILITY_RECIPES = GTRecipeTypes
+            .register("hydroponics_facility", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(6, 6, 3, 3)
+            .setProgressBar(PROGRESS_BAR_EGH, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.MINER)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var size = widgetGroup.getSize();
+                widgetGroup.setSize(size.width, size.height + 5);
+            });
+
+    public static final GTRecipeType PISCICULTURE_FISHERY_RECIPES = GTRecipeTypes
+            .register("pisciculture_fishery", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(6, 6, 3, 3)
+            .setProgressBar(PROGRESS_BAR_FISH, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var size = widgetGroup.getSize();
+                widgetGroup.setSize(size.width, size.height + 5);
             });
 
     public static final GTRecipeType STEAM_BLOOMERY = GTRecipeTypes

@@ -293,7 +293,7 @@ package su.terrafirmagreg.core.compat.emi;
 				"ad_astra:mars_stone","gtceu:red_granite","tfc:rock/raw/granite","tfc:rock/raw/gabbro","tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/chert","tfc:rock/raw/chalk","tfc:rock/raw/basalt","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("galena", 40),new OreVeinInfoRecipe.WeightedBlock("silver", 20),new OreVeinInfoRecipe.WeightedBlock("lead", 33),new OreVeinInfoRecipe.WeightedBlock("hematite", 6),},
 				null),
-			new OreVeinInfoRecipe("mars_sapphire", "ad_astra:mars", 
+			new OreVeinInfoRecipe("mars_gold", "ad_astra:mars", 
 				230, 0.4, 0, 70, 40, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/chert","tfc:rock/raw/chalk",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("green_sapphire", 5),new OreVeinInfoRecipe.WeightedBlock("bauxite", 20),new OreVeinInfoRecipe.WeightedBlock("electrotine", 20),new OreVeinInfoRecipe.WeightedBlock("gold", 55),},

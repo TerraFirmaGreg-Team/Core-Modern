@@ -15,6 +15,7 @@ import net.minecraft.world.food.FoodProperties;
 
 import su.terrafirmagreg.core.TFGCore;
 
+@SuppressWarnings("unused")
 public class TFGTItems {
 
     private static final int shortBuff = 8 * 60 * 20;
@@ -162,6 +163,10 @@ public class TFGTItems {
             .onRegister(attach(new AntidoteBehavior(50,
                     GTMedicalConditions.CARCINOGEN,
                     TFGTMedicalConditions.RADIOACTIVE)))
+            .register();
+
+    public static ItemEntry<ComponentItem> COVER_ROTTEN_VOIDING = TFGCore.REGISTRATE
+            .item("rotten_voiding_cover", ComponentItem::create)
             .register();
 
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent components) {

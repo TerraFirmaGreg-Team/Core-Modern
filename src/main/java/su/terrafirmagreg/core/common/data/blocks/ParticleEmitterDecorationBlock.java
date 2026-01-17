@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import net.dries007.tfc.common.fluids.FluidProperty;
@@ -32,13 +33,23 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import dev.latvian.mods.kubejs.typings.Info;
-
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 
-// Decoration variant particle emitter.
+/**
+ * Decoration variant particle emitter with fluid logging support.
+ *
+ * <p>Emits a single configured particle set using client-side animateTick
+ * or via a ticker block entity when {@code hasTicker} is true.
+ *
+ * <p>Features:
+ * <p>- Horizontal FACING.
+ * <p>- Fluid logging {@link net.dries007.tfc.common.fluids.IFluidLoggable}.
+ * <p>- Requires a sturdy block beneath to survive.
+ * <p>- Configuration with base {@code position} and random {@code range}.
+ */
+@SuppressWarnings({ "deprecation", "unused" })
 public class ParticleEmitterDecorationBlock extends Block implements EntityBlock, IFluidLoggable {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER;
@@ -46,8 +57,8 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
 
     private final VoxelShape shape;
     private final Supplier<SimpleParticleType> particleType;
-    private final double baseX, baseY, baseZ;
-    private final double offsetX, offsetY, offsetZ;
+    private final double posX, posY, posZ;
+    private final double rangeX, rangeY, rangeZ;
     private final double velocityX, velocityY, velocityZ;
     private final int particleCount;
     private final boolean particleForced;
@@ -56,13 +67,39 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     private final boolean hasTicker;
     private final int emitDelay;
 
+    /**
+     * Create a decoration particle emitter.
+     *
+     * @param properties    Default properties.
+     * @param shape         Collision shape. If null, a default slim shape is used.
+     * @param itemSupplier  Supplier for the block item. Can be null.
+     * @param particleType  Particle type supplier (SimpleParticleType).
+     * @param posX          Base local position X.
+     * @param posY          Base local position Y.
+     * @param posZ          Base local position Z.
+     * @param rangeX        Random range X.
+     * @param rangeY        Random range Y.
+     * @param rangeZ        Random range Z.
+     * @param velocityX     Particle velocity X.
+     * @param velocityY     Particle velocity Y.
+     * @param velocityZ     Particle velocity Z.
+     * @param particleCount Particles per emission (>= 1).
+     * @param particleForced Always visible when true.
+     * @param useDustOptions Enable DustParticleOptions (use {@code red, green, blue, scale}).
+     * @param red           Dust red channel.
+     * @param green         Dust green channel.
+     * @param blue          Dust blue channel.
+     * @param scale         Dust scale.
+     * @param hasTicker     Whether a ticker entity controls emission frequency.
+     * @param emitDelay     Random delay scaling (0 = every tick).
+     */
     public ParticleEmitterDecorationBlock(
             Properties properties,
             VoxelShape shape,
             Supplier<Item> itemSupplier,
             Supplier<SimpleParticleType> particleType,
-            double baseX, double baseY, double baseZ,
-            double offsetX, double offsetY, double offsetZ,
+            double posX, double posY, double posZ,
+            double rangeX, double rangeY, double rangeZ,
             double velocityX, double velocityY, double velocityZ,
             int particleCount,
             boolean particleForced,
@@ -77,12 +114,12 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
                 .setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
         this.particleType = particleType != null ? particleType : () -> ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
-        this.baseX = baseX;
-        this.baseY = baseY;
-        this.baseZ = baseZ;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.offsetZ = offsetZ;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+        this.rangeX = rangeX;
+        this.rangeY = rangeY;
+        this.rangeZ = rangeZ;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
         this.velocityZ = velocityZ;
@@ -111,7 +148,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return shape;
     }
 
@@ -129,7 +166,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     }
 
     @Override
-    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canPlaceLiquid(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Fluid fluid) {
         if (fluid instanceof FlowingFluid && !getFluidProperty().canContain(fluid)) {
             return true;
         }
@@ -137,7 +174,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     }
 
     @Override
-    public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
+    public boolean placeLiquid(@NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState state, FluidState fluidStateIn) {
         if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
             level.destroyBlock(pos, true);
             level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
@@ -147,59 +184,74 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     }
 
     @Override
-    public FluidProperty getFluidProperty() {
+    public @NotNull FluidProperty getFluidProperty() {
         return FLUID;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public FluidState getFluidState(BlockState state) {
+    public @NotNull FluidState getFluidState(@NotNull BlockState state) {
         return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     // Needs sturdy block below.
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, LevelReader level, BlockPos pos) {
         BlockPos below = pos.below();
         return level.getBlockState(below).isFaceSturdy(level, below, Direction.UP);
     }
 
-    @Info("Client display tick. Cannot be every tick. Use ticker for adjustable frequency.")
+    /**
+     * Client display tick. Emits particles on the client side.
+     *
+     * <p>Uses random tick logic. When {@code hasTicker} is true and a block
+     * entity exists at the position, animation is deferred to the ticker.
+     */
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         if (hasTicker && level.getBlockEntity(pos) != null)
             return;
         if (shouldEmit(random))
             spawnClient(level, pos, random);
     }
 
-    private double randOffset(RandomSource r, double range) {
+    /**
+     * Compute a symmetric random offset in [-range, +range].
+     */
+    private double randRange(RandomSource r, double range) {
         if (range <= 0)
             return 0;
         return r.nextDouble() * range * (r.nextBoolean() ? 1 : -1);
     }
 
+    /**
+     * Spawn the configured particles client side around the base {@code position}
+     * with the given {@code range} and velocity.
+     */
     private void spawnClient(Level level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide)
             return;
         for (int i = 0; i < particleCount; i++) {
-            double x = pos.getX() + baseX + randOffset(random, offsetX);
-            double y = pos.getY() + baseY + (offsetY > 0 ? random.nextDouble() * offsetY : 0);
-            double z = pos.getZ() + baseZ + randOffset(random, offsetZ);
+            double x = pos.getX() + posX + randRange(random, rangeX);
+            double y = pos.getY() + posY + (rangeY > 0 ? random.nextDouble() * rangeY : 0);
+            double z = pos.getZ() + posZ + randRange(random, rangeZ);
             emitClient(level, x, y, z);
         }
     }
 
+    /**
+     * Emit a single particle (dust or simple type) with configured velocity.
+     */
     private void emitClient(Level level, double x, double y, double z) {
         if (useDustOptions) {
             var dust = new DustParticleOptions(new Vector3f(red, green, blue), scale);
@@ -218,13 +270,13 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
 
     // Creates ticker entity if enabled.
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return hasTicker ? new TickerBlockEntity(pos, state) : null;
     }
 
     // Client ticker setting emission each tick when enabled.
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         if (!hasTicker || !level.isClientSide)
             return null;
         return type == TFGBlockEntities.TICKER_ENTITY.get()
@@ -237,7 +289,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos,
+    public void neighborChanged(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Block neighborBlock, @NotNull BlockPos neighborPos,
             boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (!canSurvive(state, level, pos)) {
