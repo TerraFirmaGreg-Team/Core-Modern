@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -71,7 +72,7 @@ public final class TFGHelpers {
 
     public static void registerMaterialInfo(ResourceLocation itemId, Map<String, Double> materialStacks) {
         Item item = ForgeRegistries.ITEMS.getValue(itemId);
-        if (item == null) {
+        if (item == Items.AIR || item == null) {
             TFGCore.LOGGER.error("Error in registerMaterialInfo - item not found: {}", itemId);
             return;
         }
