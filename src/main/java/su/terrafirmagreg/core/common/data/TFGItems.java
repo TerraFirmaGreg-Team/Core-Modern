@@ -44,6 +44,8 @@ public class TFGItems {
             () -> new FilledDnaSyringeItem(new Item.Properties()));
     public static final RegistryObject<Item> PROGENITOR_CELLS = ITEMS.register("progenitor_cells",
             () -> new ProgenitorCellsItem(new Item.Properties()));
+    public static final RegistryObject<Item> FISH_ROE = ITEMS.register("fish_roe",
+            () -> new FishRoeItem(new Item.Properties()));
 
     public static final RegistryObject<Item> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
     public static final RegistryObject<Item> GLACIAN_RAM_EGG = registerSpawnEgg(TFGEntities.GLACIAN_RAM, 16772607, 3997758);

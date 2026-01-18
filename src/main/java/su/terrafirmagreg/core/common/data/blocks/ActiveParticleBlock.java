@@ -1,7 +1,9 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import java.util.List;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
@@ -34,35 +36,70 @@ import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 
 /**
  * Particle emitter block with active/inactive states.
- * Adds the ability to have different particle effects based on the active state.
+ *
+ * <p>This block can emit particles according to two separate
+ * configuration lists. One for the inactive state and one for the active
+ * state. Emission can be performed either from the block's client-side
+ * animateTick or via a ticker block entity when {@code hasTicker} is true.
+ *
+ * <p>Extra Features:
+ * <p>- AXIS orientable.
+ * <p>- Activity is controlled by GTBlockStateProperties.ACTIVE.
+ * <p>- Light level is configurable independently for active and inactive.
  */
+@SuppressWarnings({ "deprecation", "unused" })
 public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
     private final VoxelShape shape;
-    private final ParticleConfig inactiveConfig;
-    private final ParticleConfig activeConfig;
+    private final List<ParticleConfig> inactiveConfigs;
+    private final List<ParticleConfig> activeConfigs;
     private final boolean hasTicker;
     private final int emitDelay;
+    private final int inactiveLight;
+    private final int activeLight;
 
+    /**
+     * Create a new ActiveParticleBlock.
+     *
+     * @param properties      Default properties.
+     * @param shape           Collision shape. If null, a full cube is used.
+     * @param itemSupplier    Supplier for the block item. Can be null.
+     * @param inactiveConfigs List of particle configs used when the block is inactive.
+     * @param activeConfigs   List of particle configs used when the block is active.
+     * @param hasTicker       Whether the block uses a block entity ticker for controlled emission.
+     * @param emitDelay       Average delay for emission (0 = every tick).
+     * @param inactiveLight   Light level when inactive (0-15).
+     * @param activeLight     Light level when active (0-15).
+     */
     public ActiveParticleBlock(
             Properties properties,
             VoxelShape shape,
             Supplier<Item> itemSupplier,
-            ParticleConfig inactiveConfig,
-            ParticleConfig activeConfig,
+            List<ParticleConfig> inactiveConfigs,
+            List<ParticleConfig> activeConfigs,
             boolean hasTicker,
-            int emitDelay) {
+            int emitDelay,
+            int inactiveLight,
+            int activeLight) {
         super(properties);
         this.shape = shape != null ? shape : DEFAULT_SHAPE;
-        this.inactiveConfig = inactiveConfig;
-        this.activeConfig = activeConfig;
+        this.inactiveConfigs = inactiveConfigs != null ? inactiveConfigs : List.of();
+        this.activeConfigs = activeConfigs != null ? activeConfigs : List.of();
         this.hasTicker = hasTicker;
         this.emitDelay = Math.max(0, emitDelay);
+        this.inactiveLight = clampLight(inactiveLight);
+        this.activeLight = clampLight(activeLight);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(GTBlockStateProperties.ACTIVE, false));
+    }
+
+    private static int clampLight(int v) {
+        if (v < 0)
+            return 0;
+        return Math.min(v, 15);
     }
 
     private boolean shouldEmit(RandomSource random) {
@@ -78,7 +115,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return shape;
     }
 
@@ -88,54 +125,84 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
+    /**
+     * Client display tick. Emits particles on the client side.
+     *
+     * <p>This method uses random tick logic for emission. When {@code hasTicker} is true and a block
+     * entity exists at the position, animation is deferred to the ticker.
+     *
+     * @param state  Current block state (used to determine active/inactive).
+     * @param level  Client instance.
+     * @param pos    Block position.
+     * @param random Random source.
+     */
     @Info("Client display tick. Cannot be every tick. Use ticker for adjustable frequency.")
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         if (hasTicker && level.getBlockEntity(pos) != null)
             return;
         if (!shouldEmit(random))
             return;
-        ParticleConfig cfg = state.getValue(GTBlockStateProperties.ACTIVE) ? activeConfig : inactiveConfig;
-        if (cfg != null)
-            cfg.spawnClient(level, pos, random);
+        var list = state.getValue(GTBlockStateProperties.ACTIVE) ? activeConfigs : inactiveConfigs;
+        if (!list.isEmpty()) {
+            for (var cfg : list) {
+                cfg.spawnClient(level, pos, random);
+            }
+        }
     }
 
-    // Creates ticker entity if enabled.
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getValue(GTBlockStateProperties.ACTIVE) ? activeLight : inactiveLight;
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return hasTicker ? new TickerBlockEntity(pos, state) : null;
     }
 
-    // Client ticker setting emission each tick when enabled.
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         if (!hasTicker || !level.isClientSide)
             return null;
         if (type != TFGBlockEntities.TICKER_ENTITY.get())
             return null;
         return (lvl, p, s, be) -> {
             if (be instanceof TickerBlockEntity && shouldEmit(lvl.random)) {
-                ParticleConfig cfg = s.getValue(GTBlockStateProperties.ACTIVE) ? activeConfig : inactiveConfig;
-                if (cfg != null)
-                    cfg.spawnClient(lvl, p, lvl.random);
+                var list = s.getValue(GTBlockStateProperties.ACTIVE) ? activeConfigs : inactiveConfigs;
+                if (!list.isEmpty()) {
+                    for (var cfg : list) {
+                        cfg.spawnClient(lvl, p, lvl.random);
+                    }
+                }
             }
         };
     }
 
-    // Immutable particle emission configuration.
+    /**
+     * Immutable configuration.
+     *
+     * <p>Each instance defines:
+     * <p>- particle type (or useDust + RGB for DustParticleOptions).
+     * <p>- base local offset position (posX/posY/posZ).
+     * <p>- randomization ranges on each axis.
+     * <p>- particle velocity.
+     * <p>- particle count.
+     * <p>- whether the particle is forced (always visible) or standard.
+     */
     public static class ParticleConfig {
         private final Supplier<SimpleParticleType> type;
-        private final double baseX, baseY, baseZ;
-        private final double offsetX, offsetY, offsetZ;
+        private final double posX, posY, posZ;
+        private final double rangeX, rangeY, rangeZ;
         private final double velocityX, velocityY, velocityZ;
         private final int count;
         private final boolean forced;
@@ -144,20 +211,20 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
 
         public ParticleConfig(
                 Supplier<SimpleParticleType> type,
-                double baseX, double baseY, double baseZ,
-                double offsetX, double offsetY, double offsetZ,
+                double posX, double posY, double posZ,
+                double rangeX, double rangeY, double rangeZ,
                 double velocityX, double velocityY, double velocityZ,
                 int count,
                 boolean forced,
                 boolean useDust,
                 float r, float g, float b, float scale) {
             this.type = type != null ? type : () -> ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
-            this.baseX = baseX;
-            this.baseY = baseY;
-            this.baseZ = baseZ;
-            this.offsetX = offsetX;
-            this.offsetY = offsetY;
-            this.offsetZ = offsetZ;
+            this.posX = posX;
+            this.posY = posY;
+            this.posZ = posZ;
+            this.rangeX = rangeX;
+            this.rangeY = rangeY;
+            this.rangeZ = rangeZ;
             this.velocityX = velocityX;
             this.velocityY = velocityY;
             this.velocityZ = velocityZ;
@@ -170,7 +237,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
             this.scale = scale;
         }
 
-        private double randOffset(RandomSource rdn, double range) {
+        private double randRange(RandomSource rdn, double range) {
             if (range <= 0)
                 return 0;
             return rdn.nextDouble() * range * (rdn.nextBoolean() ? 1 : -1);
@@ -180,26 +247,35 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
             if (useDust) {
                 var dust = new DustParticleOptions(new Vector3f(r, g, b), scale);
                 if (forced)
-                    level.addAlwaysVisibleParticle(dust, true, x, y, z, velocityX, velocityY, velocityZ);
+                    level.addAlwaysVisibleParticle(dust, x, y, z, velocityX, velocityY, velocityZ);
                 else
                     level.addParticle(dust, x, y, z, velocityX, velocityY, velocityZ);
             } else {
                 var p = type.get();
                 if (forced)
-                    level.addAlwaysVisibleParticle(p, true, x, y, z, velocityX, velocityY, velocityZ);
+                    level.addAlwaysVisibleParticle(p, x, y, z, velocityX, velocityY, velocityZ);
                 else
                     level.addParticle(p, x, y, z, velocityX, velocityY, velocityZ);
             }
         }
 
-        // Spawns configured particle batch.
+        /**
+         * Spawn configured particles on the client.
+         *
+         * <p>Only executes when {@code level.isClientSide} is true. Particles are
+         * spawned around the block position + configured offsets and ranges.
+         *
+         * @param level  The client Level where particles should be spawned.
+         * @param pos    Block position used as the base.
+         * @param random Random source used for position jitter.
+         */
         public void spawnClient(Level level, BlockPos pos, RandomSource random) {
             if (!level.isClientSide)
                 return;
             for (int i = 0; i < count; i++) {
-                double x = pos.getX() + baseX + randOffset(random, offsetX);
-                double y = pos.getY() + baseY + (offsetY > 0 ? random.nextDouble() * offsetY : 0);
-                double z = pos.getZ() + baseZ + randOffset(random, offsetZ);
+                double x = pos.getX() + posX + randRange(random, rangeX);
+                double y = pos.getY() + posY + (rangeY > 0 ? random.nextDouble() * rangeY : 0);
+                double z = pos.getZ() + posZ + randRange(random, rangeZ);
                 emitClient(level, x, y, z);
             }
         }

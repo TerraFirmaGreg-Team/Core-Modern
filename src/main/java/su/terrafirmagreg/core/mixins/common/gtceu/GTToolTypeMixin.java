@@ -14,15 +14,6 @@ import su.terrafirmagreg.core.compat.gtceu.behaviors.CanoeCreatorBehavior;
 @Mixin(value = GTToolType.class, remap = false)
 public abstract class GTToolTypeMixin {
 
-    // TODO: ПОЧИНИТЬ!
-    /**
-     *
-     */
-    //    @Redirect(method = "lambda$static$7", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/item/tool/ToolDefinitionBuilder;behaviors([Lcom/gregtechceu/gtceu/api/item/tool/behavior/IToolBehavior;)Lcom/gregtechceu/gtceu/api/item/tool/ToolDefinitionBuilder;"), remap = false)
-    //    private static ToolDefinitionBuilder tfg$clinit7(ToolDefinitionBuilder instance, IToolBehavior[] behaviours) {
-    //        return instance.behaviors(HarvestCropsBehavior.INSTANCE);
-    //    }
-
     /**
      * Устанавливает новое поведение для пилы, чтобы та могла создавать лодки каное из FirmaCiv.
      * Sets new behaviour for the saw so that it can create canoes from FirmaCiv.
