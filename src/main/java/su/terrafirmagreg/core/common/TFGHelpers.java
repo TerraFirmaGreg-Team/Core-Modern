@@ -72,7 +72,7 @@ public final class TFGHelpers {
 
     public static void registerMaterialInfo(ResourceLocation itemId, Map<String, Double> materialStacks) {
         Item item = ForgeRegistries.ITEMS.getValue(itemId);
-        System.out.println(item);
+        //System.out.println(item);
         if (item == Items.AIR || item == null) {
             TFGCore.LOGGER.error("Error in registerMaterialInfo - item not found: {}", itemId);
             return;
