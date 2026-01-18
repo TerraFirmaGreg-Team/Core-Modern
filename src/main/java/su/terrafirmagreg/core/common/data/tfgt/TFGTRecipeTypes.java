@@ -25,7 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
 
 @SuppressWarnings("deprecation")
-public class TFGRecipeTypes {
+public class TFGTRecipeTypes {
 
     public static void init() {
     }
@@ -201,4 +201,5 @@ public class TFGRecipeTypes {
             .setMaxIOSize(2, 1, 0, 0)
             .setSound(GTSoundEntries.FIRE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT);
+
 }
