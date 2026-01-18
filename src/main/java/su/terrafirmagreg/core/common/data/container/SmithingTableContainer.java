@@ -28,8 +28,8 @@ import lombok.Getter;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.recipes.SmithingPattern;
-import su.terrafirmagreg.core.common.data.recipes.SmithingType;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
 public class SmithingTableContainer extends Container implements ISlotCallback, ButtonHandlerContainer {
     private final ItemStackHandler inventory;
@@ -38,9 +38,9 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
     private final RecipeHandler recipeHandler;
     //Pattern Related
     @Getter
-    private final SmithingPattern pattern;
+    private final ArtisanPattern pattern;
     @Getter
-    private SmithingType currentType;
+    private ArtisanType currentType;
 
     public static final int SLOT_TOT = 5;
     public static final int MAT_SLOTA = 0;
@@ -68,7 +68,7 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
         this.inventory = new InventoryItemHandler(this, SLOT_TOT);
         this.recipeHandler = new RecipeHandler(this);
 
-        pattern = new SmithingPattern();
+        pattern = new ArtisanPattern();
         hasConsumedIngredient = false;
 
     }
@@ -95,7 +95,7 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
                 return;
 
             if (!activeScreen) {
-                for (SmithingType type : SmithingType.SMITHING_TYPES.values()) {
+                for (ArtisanType type : ArtisanType.SMITHING_TYPES.values()) {
                     Item testItem1 = type.getInputItems().get(0).getItem();
                     Item testItem2 = type.getInputItems().get(1).getItem();
 

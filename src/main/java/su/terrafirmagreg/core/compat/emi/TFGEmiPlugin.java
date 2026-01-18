@@ -19,7 +19,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
-import su.terrafirmagreg.core.common.data.recipes.SmithingRecipe;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -73,7 +73,7 @@ public class TFGEmiPlugin implements EmiPlugin {
 
         emiRegistry.addCategory(ARTISAN_TABLE);
         emiRegistry.addWorkstation(ARTISAN_TABLE, EmiStack.of(TFGBlocks.SMITHING_TABLE.get().asItem()));
-        for (SmithingRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.SMITHING.get()).stream().toList()) {
+        for (ArtisanRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.SMITHING.get()).stream().toList()) {
             emiRegistry.addRecipe(new ArtisanTableEmiRecipe(recipe));
         }
 

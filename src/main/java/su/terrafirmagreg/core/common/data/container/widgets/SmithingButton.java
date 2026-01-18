@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.common.data.container.widgets;
 
-import java.awt.*;
-
 import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,7 +20,7 @@ import net.minecraftforge.network.PacketDistributor;
 
 import lombok.Getter;
 
-import su.terrafirmagreg.core.common.data.recipes.SmithingType;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
 public class SmithingButton extends Button {
     public int id;
@@ -32,23 +30,23 @@ public class SmithingButton extends Button {
     @Getter
     private final ResourceLocation inactiveTexture;
     @Getter
-    private final SmithingType currentType;
+    private final ArtisanType currentType;
     private final SoundEvent sound;
     private final int texWidth;
     private final int texHeight;
 
-    public SmithingButton(int id, SmithingType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, SoundEvent sound) {
+    public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, SoundEvent sound) {
         this(id, type, x, y, width, height, texWidth, texHeight, texture, null, sound, (button) -> {
         });
     }
 
-    public SmithingButton(int id, SmithingType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound) {
+    public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound) {
         this(id, type, x, y, width, height, texWidth, texHeight, texture, inactiveTexture, sound, (button) -> {
         });
     }
 
-    public SmithingButton(int id, SmithingType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound,
-            net.minecraft.client.gui.components.Button.OnPress onPress) {
+    public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound,
+                          net.minecraft.client.gui.components.Button.OnPress onPress) {
         super(x, y, width, height, Component.empty(), onPress, RenderHelpers.NARRATION);
         this.texWidth = texWidth;
         this.texHeight = texHeight;

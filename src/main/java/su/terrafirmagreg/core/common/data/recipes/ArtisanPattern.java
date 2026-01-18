@@ -11,11 +11,11 @@ import lombok.Getter;
 
 //Took this from TFC KnappingPattern since I didn't want to deal with rewriting this when it works
 
-public class SmithingPattern {
+public class ArtisanPattern {
     public static final int MAX_WIDTH = 6;
     public static final int MAX_HEIGHT = 6;
 
-    public static SmithingPattern fromJson(JsonObject json) {
+    public static ArtisanPattern fromJson(JsonObject json) {
         final JsonArray array = json.getAsJsonArray("pattern");
         final boolean empty = GsonHelper.getAsBoolean(json, "outside_slot_required", true);
 
@@ -29,7 +29,7 @@ public class SmithingPattern {
         if (width > MAX_WIDTH)
             throw new JsonSyntaxException("Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum");
 
-        final SmithingPattern pattern = new SmithingPattern(width, height, empty);
+        final ArtisanPattern pattern = new ArtisanPattern(width, height, empty);
         for (int r = 0; r < height; ++r) {
             String row = GsonHelper.convertToString(array.get(r), "pattern[" + r + "]");
             if (r > 0 && width != row.length())
@@ -41,12 +41,12 @@ public class SmithingPattern {
         return pattern;
     }
 
-    public static SmithingPattern fromNetwork(FriendlyByteBuf buffer) {
+    public static ArtisanPattern fromNetwork(FriendlyByteBuf buffer) {
         final int width = buffer.readVarInt();
         final int height = buffer.readVarInt();
         final long data = buffer.readLong();
         final boolean empty = buffer.readBoolean();
-        return new SmithingPattern(width, height, data, empty);
+        return new ArtisanPattern(width, height, data, empty);
     }
 
     @Getter
@@ -59,15 +59,15 @@ public class SmithingPattern {
     @Getter
     private long data;
 
-    public SmithingPattern() {
+    public ArtisanPattern() {
         this(MAX_WIDTH, MAX_HEIGHT, false);
     }
 
-    public SmithingPattern(int width, int height, boolean empty) {
+    public ArtisanPattern(int width, int height, boolean empty) {
         this(width, height, (1L << (width * height)) - 1, empty);
     }
 
-    private SmithingPattern(int width, int height, long data, boolean empty) {
+    private ArtisanPattern(int width, int height, long data, boolean empty) {
         this.width = width;
         this.height = height;
         this.data = data;
@@ -158,14 +158,14 @@ public class SmithingPattern {
     public boolean equals(Object other) {
         if (this == other)
             return true;
-        if (other instanceof SmithingPattern p) {
+        if (other instanceof ArtisanPattern p) {
             final long mask = (1L << (width * height)) - 1;
             return width == p.width && height == p.height && empty == p.empty && (data & mask) == (p.data & mask);
         }
         return false;
     }
 
-    public boolean matches(SmithingPattern other) {
+    public boolean matches(ArtisanPattern other) {
         //output();
         //outputOther(other);
         for (int dx = 0; dx <= this.width - other.width; dx++) {
@@ -179,7 +179,7 @@ public class SmithingPattern {
         return false;
     }
 
-    private boolean matches(SmithingPattern other, int startX, int startY, boolean mirror) {
+    private boolean matches(ArtisanPattern other, int startX, int startY, boolean mirror) {
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
                 int patternIdx = y * width + x;

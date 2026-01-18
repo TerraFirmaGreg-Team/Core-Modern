@@ -33,11 +33,11 @@ import su.terrafirmagreg.core.common.data.TFGRecipeSerializers;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.container.SmithingTableContainer;
 
-public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.RecipeHandler> {
+public class ArtisanRecipe implements ISimpleRecipe<SmithingTableContainer.RecipeHandler> {
 
     private final ResourceLocation id;
     @Getter
-    private final SmithingPattern pattern;
+    private final ArtisanPattern pattern;
     @Getter
     private final ItemStack result;
     @Getter
@@ -45,15 +45,15 @@ public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.Reci
     @Getter
     private final ArrayList<TagKey<Item>> tools;
     @Getter
-    private final SmithingType smithingType;
+    private final ArtisanType artisanType;
 
-    public SmithingRecipe(ResourceLocation id, SmithingPattern pattern, ItemStack result, @Nullable Ingredient ingredient, ArrayList<TagKey<Item>> tools, SmithingType type) {
+    public ArtisanRecipe(ResourceLocation id, ArtisanPattern pattern, ItemStack result, @Nullable Ingredient ingredient, ArrayList<TagKey<Item>> tools, ArtisanType type) {
         this.id = id;
         this.pattern = pattern;
         this.result = result;
         this.ingredient = ingredient;
         this.tools = tools;
-        this.smithingType = type;
+        this.artisanType = type;
     }
 
     @Override
@@ -121,29 +121,29 @@ public class SmithingRecipe implements ISimpleRecipe<SmithingTableContainer.Reci
         return TFGRecipeTypes.SMITHING.get();
     }
 
-    public static class Serializer extends RecipeSerializerImpl<SmithingRecipe> {
+    public static class Serializer extends RecipeSerializerImpl<ArtisanRecipe> {
 
         @Override
-        public SmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        public ArtisanRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             final ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-            final SmithingPattern pattern = SmithingPattern.fromJson(json);
-            final SmithingType type = SmithingType.SMITHING_TYPES.get(ResourceLocation.parse(GsonHelper.getAsString(json, "smithingType")));
-            return new SmithingRecipe(recipeId, pattern, result, Ingredient.of(type.getInputItems().stream()), type.getToolTags(), type);
+            final ArtisanPattern pattern = ArtisanPattern.fromJson(json);
+            final ArtisanType type = ArtisanType.SMITHING_TYPES.get(ResourceLocation.parse(GsonHelper.getAsString(json, "smithingType")));
+            return new ArtisanRecipe(recipeId, pattern, result, Ingredient.of(type.getInputItems().stream()), type.getToolTags(), type);
         }
 
         @Nullable
         @Override
-        public SmithingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            final SmithingPattern pattern = SmithingPattern.fromNetwork(buffer);
+        public ArtisanRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+            final ArtisanPattern pattern = ArtisanPattern.fromNetwork(buffer);
             final ItemStack stack = buffer.readItem();
             final @Nullable Ingredient ingredient = Helpers.decodeNullable(buffer, Ingredient::fromNetwork);
             final ArrayList<TagKey<Item>> tools = pathsToTags(buffer.readCollection(c -> new ArrayList<>(), FriendlyByteBuf::readUtf));
 
-            return new SmithingRecipe(recipeId, pattern, stack, ingredient, tools, null);
+            return new ArtisanRecipe(recipeId, pattern, stack, ingredient, tools, null);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, SmithingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, ArtisanRecipe recipe) {
             recipe.getPattern().toNetwork(buffer);
             buffer.writeItem(recipe.result);
             Helpers.encodeNullable(recipe.ingredient, buffer, Ingredient::toNetwork);

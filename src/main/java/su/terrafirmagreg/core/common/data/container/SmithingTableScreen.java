@@ -11,13 +11,13 @@ import net.minecraft.world.entity.player.Inventory;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.container.widgets.SmithingButton;
-import su.terrafirmagreg.core.common.data.recipes.SmithingType;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
 public class SmithingTableScreen extends TFCContainerScreen<SmithingTableContainer> {
 
     public final ArrayList<SmithingButton> allButtons = new ArrayList<>();
 
-    private SmithingType activeType;
+    private ArtisanType activeType;
     private ImageWidget borderImage;
 
     public SmithingTableScreen(SmithingTableContainer container, Inventory playerInventory, Component name) {

@@ -26,7 +26,7 @@ import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
 
-public class SmithingType {
+public class ArtisanType {
 
     @Getter
     private final ResourceLocation id;
@@ -49,22 +49,22 @@ public class SmithingType {
 
     //This is cursed
 
-    public SmithingType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture, SoundEvent clickSound,
-            ResourceLocation borderTexture) {
+    public ArtisanType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture, SoundEvent clickSound,
+                       ResourceLocation borderTexture) {
         this(name, inputItemA, ItemStack.EMPTY, toolA, toolB, activeTexture, inactiveTexture, clickSound, borderTexture);
     }
 
-    public SmithingType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, SoundEvent clickSound, ResourceLocation borderTexture) {
+    public ArtisanType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, SoundEvent clickSound, ResourceLocation borderTexture) {
         this(name, inputItemA, ItemStack.EMPTY, toolA, toolB, activeTexture, null, clickSound, borderTexture);
     }
 
-    public SmithingType(String name, ItemStack inputItemA, ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture,
-            SoundEvent clickSound) {
+    public ArtisanType(String name, ItemStack inputItemA, ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture,
+                       SoundEvent clickSound) {
         this(name, inputItemA, inputItemB, toolA, toolB, activeTexture, inactiveTexture, clickSound, null);
     }
 
-    public SmithingType(String name, ItemStack inputItemA, @Nullable ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture,
-            @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture) {
+    public ArtisanType(String name, ItemStack inputItemA, @Nullable ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture,
+                       @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture) {
         this.id = TFGCore.id(name);
         inputItems = new ArrayList<>(Stream.of(inputItemA, inputItemB).filter(Objects::nonNull).toList());
         toolTags = new ArrayList<>(Arrays.asList(toolA, toolB));
@@ -80,9 +80,9 @@ public class SmithingType {
         return TFGCore.id(TEXTURE_PREFIX + name);
     }
 
-    public static HashMap<ResourceLocation, SmithingType> SMITHING_TYPES = new HashMap<>();
+    public static HashMap<ResourceLocation, ArtisanType> SMITHING_TYPES = new HashMap<>();
 
-    public static final SmithingType CASTING_MOLD = new SmithingType(
+    public static final ArtisanType CASTING_MOLD = new ArtisanType(
             "casting_mold",
             GTItems.SHAPE_EMPTY.get().getDefaultInstance(),
             CustomTags.HAMMERS,
@@ -91,7 +91,7 @@ public class SmithingType {
             textureLocation("mold_inactive"),
             TFCSounds.ANVIL_HIT.get(),
             textureLocation("mold_border"));
-    public static final SmithingType EXTRUDER_MOLD = new SmithingType(
+    public static final ArtisanType EXTRUDER_MOLD = new ArtisanType(
             "extruder_mold",
             GTItems.SHAPE_EMPTY.get().getDefaultInstance(),
             CustomTags.WIRE_CUTTERS,
@@ -99,7 +99,7 @@ public class SmithingType {
             textureLocation("mold_active"),
             GTSoundEntries.WIRECUTTER_TOOL.getMainEvent(),
             textureLocation("mold_border"));
-    public static final SmithingType RESIN_BOARD = new SmithingType(
+    public static final ArtisanType RESIN_BOARD = new ArtisanType(
             "resin_board",
             GTItems.COATED_BOARD.get().getDefaultInstance(),
             new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Copper).getItem(), 9),
@@ -107,9 +107,19 @@ public class SmithingType {
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_resin_board"),
             textureLocation("printed_resin_board"),
-            GTSoundEntries.ELECTROLYZER.getMainEvent());
+            GTSoundEntries.COMPRESSOR.getMainEvent());
+    public static final ArtisanType PHENOL_BOARD = new ArtisanType(
+            "phenol_board",
+            GTItems.PHENOLIC_BOARD.get().getDefaultInstance(),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Silver).getItem(), 9),
+            CustomTags.SCREWDRIVERS,
+            CustomTags.WIRE_CUTTERS,
+            textureLocation("blank_phenol_board"),
+            textureLocation("printed_phenol_board"),
+            GTSoundEntries.COMPRESSOR.getMainEvent());
 
-    private static void initNewType(SmithingType type) {
+
+    private static void initNewType(ArtisanType type) {
         SMITHING_TYPES.put(type.id, type);
     }
 
