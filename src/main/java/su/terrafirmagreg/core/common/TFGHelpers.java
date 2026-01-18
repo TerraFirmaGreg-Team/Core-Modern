@@ -1,9 +1,6 @@
 package su.terrafirmagreg.core.common;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +10,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.ItemMaterialData;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
@@ -20,13 +18,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import it.unimi.dsi.fastutil.objects.Reference2LongOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.mixins.common.tfc.IIngotPileBlockEntityEntryAccessor;
@@ -70,26 +64,29 @@ public final class TFGHelpers {
         }
     }
 
-    public static void registerMaterialInfo(ResourceLocation itemId, Map<String, Double> materialStacks) {
-        Item item = ForgeRegistries.ITEMS.getValue(itemId);
-        //System.out.println(item);
-        if (item == Items.AIR || item == null) {
-            TFGCore.LOGGER.error("Error in registerMaterialInfo - item not found: {}", itemId);
+    // Second parameter should be like [Material, double, Material, double, ...]
+    public static void registerMaterialInfo(ItemStack itemStack, Object[] materialStacks) {
+        if (itemStack.isEmpty()) {
+            TFGCore.LOGGER.error("Error in registerMaterialInfoAdv - item not found: {}", itemStack);
             return;
         }
 
-        Reference2LongOpenHashMap<Material> matStacks = new Reference2LongOpenHashMap<>();
-        for (var tuple : materialStacks.entrySet()) {
-            var material = getMaterial(tuple.getKey());
-            if (material == null) {
-                TFGCore.LOGGER.error("Error in registerMaterialInfo - material not found: {}", tuple.getKey());
-                return;
-            }
-
-            matStacks.addTo(material, Math.round(tuple.getValue() * GTValues.M));
+        if (materialStacks.length % 2 != 0) {
+            TFGCore.LOGGER.error("Error in registerMaterialInfoAdv - input array length is not a multiple of 2: {}", itemStack);
+            return;
         }
 
-        ItemMaterialData.registerMaterialInfo(item, new ItemMaterialInfo(matStacks));
+        var matStacks = new ArrayList<MaterialStack>();
+        for (int i = 0; i < materialStacks.length; i += 2) {
+            if (materialStacks[i] instanceof Material mat && materialStacks[i + 1] instanceof Double count) {
+                matStacks.add(new MaterialStack(mat, Math.round(count * GTValues.M)));
+            } else {
+                TFGCore.LOGGER.error("Error in registerMaterialInfoAdv - input item is not a material or double: {}", itemStack);
+                return;
+            }
+        }
+
+        ItemMaterialData.registerMaterialInfo(itemStack.getItem(), new ItemMaterialInfo(matStacks));
     }
 
     public static void registerCobbleBlock(String tagPrefix, ResourceLocation cobbleBlock) {
