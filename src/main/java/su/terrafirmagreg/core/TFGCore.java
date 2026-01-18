@@ -27,9 +27,9 @@ import su.terrafirmagreg.core.common.*;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
-import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTSetupHooks;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
@@ -77,6 +77,8 @@ public final class TFGCore {
         TFGContainers.CONTAINERS.register(bus);
         TFGEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(bus);
         TFGEffects.EFFECTS.register(bus);
+        TFGRecipeTypes.RECIPE_TYPES.register(bus);
+        TFGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
 
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);
@@ -120,7 +122,7 @@ public final class TFGCore {
 
     @SubscribeEvent
     public void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
-        TFGRecipeTypes.init();
+        TFGTRecipeTypes.init();
     }
 
     @SubscribeEvent

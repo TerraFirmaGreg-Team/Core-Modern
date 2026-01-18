@@ -61,7 +61,7 @@ import fi.dea.mc.deafission.common.data.machine.AuxExchangerMachine;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
 
 @SuppressWarnings({ "unused", "SpellCheckingInspection" })
@@ -163,7 +163,7 @@ public class TFGMultiMachines {
             .multiblock("electric_greenhouse", GreenhouseMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
-            .recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
+            .recipeType(TFGTRecipeTypes.GREENHOUSE_RECIPES)
             .appearanceBlock(GTBlocks.STEEL_HULL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(
@@ -233,7 +233,7 @@ public class TFGMultiMachines {
             .multiblock("bioreactor", BioreactorMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
-            .recipeType(TFGRecipeTypes.BIOREACTOR_RECIPES)
+            .recipeType(TFGTRecipeTypes.BIOREACTOR_RECIPES)
             .appearanceBlock(BIOCULTURE_CASING)
             .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
@@ -265,7 +265,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition NUCLEAR_TURBINE = REGISTRATE
             .multiblock("nuclear_turbine", (holder) -> new NuclearLargeTurbineMachine(holder, GTValues.EV))
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(TFGRecipeTypes.NUCLEAR_TURBINE)
+            .recipeType(TFGTRecipeTypes.NUCLEAR_TURBINE)
             .recipeModifier(NuclearLargeTurbineMachine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
             .workableCasingModel(GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
@@ -297,7 +297,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition EVAPORATION_TOWER = REGISTRATE
             .multiblock("evaporation_tower", DistillationTowerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(TFGRecipeTypes.EVAPORATION_TOWER)
+            .recipeType(TFGTRecipeTypes.EVAPORATION_TOWER)
             .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(EVAPORATION_CASING)
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_bioculture"), GTCEu.id("block/multiblock/implosion_compressor"))
@@ -381,7 +381,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition COOLING_TOWER = REGISTRATE
             .multiblock("cooling_tower", (holder) -> new LargeMixerMachine(holder, GTValues.EV))
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(TFGRecipeTypes.COOLING_TOWER)
+            .recipeType(TFGTRecipeTypes.COOLING_TOWER)
             .appearanceBlock(tower_casing)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
@@ -431,7 +431,7 @@ public class TFGMultiMachines {
             .multiblock("growth_chamber", GrowthChamberMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
-            .recipeType(TFGRecipeTypes.GROWTH_CHAMBER_RECIPES)
+            .recipeType(TFGTRecipeTypes.GROWTH_CHAMBER_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(BIOCULTURE_CASING)
             .tooltips(Component.translatable("tfg.tooltip.machine.parallel"),
@@ -482,7 +482,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition OSTRUM_LINEAR_ACCELERATOR = REGISTRATE
             .multiblock("ostrum_linear_accelerator", AuxExchangerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(TFGRecipeTypes.OSTRUM_LINEAR_ACCELERATOR)
+            .recipeType(TFGTRecipeTypes.OSTRUM_LINEAR_ACCELERATOR)
             .appearanceBlock(MARS_CASING)
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_mars"),
                     GTCEu.id("block/machines/thermal_centrifuge"))
@@ -544,7 +544,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition SMR_GENERATOR = REGISTRATE
             .multiblock("smr_generator", (holder) -> new SMRGenerator2(holder, GTValues.EV))
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(TFGRecipeTypes.SMR_GENERATOR)
+            .recipeType(TFGTRecipeTypes.SMR_GENERATOR)
             .recipeModifier(SMRGenerator2::recipeModifier, true)
             .appearanceBlock(DESH_PTFE)
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_ostrum_carbon"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
@@ -596,7 +596,7 @@ public class TFGMultiMachines {
             .multiblock("hydroponics_facility", GreenhouseMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
-            .recipeType(TFGRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
+            .recipeType(TFGTRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(HORTICULTURE_CASING)
             .model(GTMachineModels.createWorkableCasingMachineModel(
@@ -642,7 +642,7 @@ public class TFGMultiMachines {
             .multiblock("pisciculture_fishery", GreenhouseMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
-            .recipeType(TFGRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
+            .recipeType(TFGTRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
             .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
@@ -714,7 +714,7 @@ public class TFGMultiMachines {
     public static final MultiblockMachineDefinition STEAM_BLOOMERY = REGISTRATE
             .multiblock("steam_bloomery", SteamParallelMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(TFGRecipeTypes.STEAM_BLOOMERY)
+            .recipeType(TFGTRecipeTypes.STEAM_BLOOMERY)
             .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
             .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
