@@ -145,6 +145,7 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
 
         int unusedBits = 64 - patternWidth * patternHeight;
         builder.delete(0, unusedBits);
+        builder.reverse();
         return builder.toString();
     }
 }
