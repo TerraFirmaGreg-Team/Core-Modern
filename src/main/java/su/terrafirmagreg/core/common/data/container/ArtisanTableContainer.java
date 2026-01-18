@@ -31,7 +31,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
-public class SmithingTableContainer extends Container implements ISlotCallback, ButtonHandlerContainer {
+public class ArtisanTableContainer extends Container implements ISlotCallback, ButtonHandlerContainer {
     private final ItemStackHandler inventory;
     private final Inventory playerInventory;
     private final ContainerLevelAccess access;
@@ -53,16 +53,16 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
 
     private boolean hasConsumedIngredient;
 
-    public static SmithingTableContainer create(Inventory playerInventory, int windowId, ContainerLevelAccess access) {
-        return new SmithingTableContainer(playerInventory, windowId, access).init(playerInventory, 19);
+    public static ArtisanTableContainer create(Inventory playerInventory, int windowId, ContainerLevelAccess access) {
+        return new ArtisanTableContainer(playerInventory, windowId, access).init(playerInventory, 19);
     }
 
-    public SmithingTableContainer(Inventory playerInventory, int windowId) {
+    public ArtisanTableContainer(Inventory playerInventory, int windowId) {
         this(playerInventory, windowId, ContainerLevelAccess.NULL);
     }
 
-    public SmithingTableContainer(Inventory playerInventory, int windowId, ContainerLevelAccess access) {
-        super(TFGContainers.SMITHING_TABLE.get(), windowId);
+    public ArtisanTableContainer(Inventory playerInventory, int windowId, ContainerLevelAccess access) {
+        super(TFGContainers.ARTISAN_TABLE.get(), windowId);
         this.playerInventory = playerInventory;
         this.access = access;
         this.inventory = new InventoryItemHandler(this, SLOT_TOT);
@@ -95,7 +95,7 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
                 return;
 
             if (!activeScreen) {
-                for (ArtisanType type : ArtisanType.SMITHING_TYPES.values()) {
+                for (ArtisanType type : ArtisanType.ARTISAN_TYPES.values()) {
                     Item testItem1 = type.getInputItems().get(0).getItem();
                     Item testItem2 = type.getInputItems().get(1).getItem();
 
@@ -169,7 +169,7 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
         final Slot slot = slots.get(RESULT_SLOT);
 
         if (player.level() instanceof ServerLevel level) {
-            ItemStack resultStack = level.getRecipeManager().getRecipeFor(TFGRecipeTypes.SMITHING.get(), recipeHandler, level)
+            ItemStack resultStack = level.getRecipeManager().getRecipeFor(TFGRecipeTypes.ARTISAN.get(), recipeHandler, level)
                     .map(recipe -> recipe.assemble(recipeHandler, level.registryAccess()))
                     .orElse(ItemStack.EMPTY);
 
@@ -244,9 +244,9 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
     }
 
     public static class SmithingInputSlot extends CallbackSlot {
-        private final SmithingTableContainer callback;
+        private final ArtisanTableContainer callback;
 
-        public SmithingInputSlot(SmithingTableContainer callback, IItemHandler inventory, int index, int x, int y) {
+        public SmithingInputSlot(ArtisanTableContainer callback, IItemHandler inventory, int index, int x, int y) {
             super(callback, inventory, index, x, y);
             this.callback = callback;
         }
@@ -262,6 +262,6 @@ public class SmithingTableContainer extends Container implements ISlotCallback, 
         }
     }
 
-    public record RecipeHandler(SmithingTableContainer container) implements EmptyInventory {
+    public record RecipeHandler(ArtisanTableContainer container) implements EmptyInventory {
     }
 }

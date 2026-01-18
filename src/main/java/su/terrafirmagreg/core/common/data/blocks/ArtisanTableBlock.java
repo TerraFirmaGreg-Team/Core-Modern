@@ -26,14 +26,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import su.terrafirmagreg.core.common.data.container.SmithingTableContainer;
+import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 
-public class SmithingTableBlock extends Block implements IForgeBlockExtension {
+public class ArtisanTableBlock extends Block implements IForgeBlockExtension {
     public static final VoxelShape SHAPE = Shapes.box(0, 0, 0, 1, 1, 1);
     private static final Component CONTAINER_TITLE = Component.translatable("tfg.screen.smithing_table");
     private final ExtendedProperties properties;
 
-    public SmithingTableBlock(ExtendedProperties properties) {
+    public ArtisanTableBlock(ExtendedProperties properties) {
         super(properties.properties());
         this.properties = properties;
         registerDefaultState(getStateDefinition().any()
@@ -54,7 +54,7 @@ public class SmithingTableBlock extends Block implements IForgeBlockExtension {
     @Override
     @SuppressWarnings("deprecation")
     public @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
-        return new SimpleMenuProvider((windowId, inv, player) -> SmithingTableContainer.create(inv, windowId, ContainerLevelAccess.create(level, pos)), CONTAINER_TITLE);
+        return new SimpleMenuProvider((windowId, inv, player) -> ArtisanTableContainer.create(inv, windowId, ContainerLevelAccess.create(level, pos)), CONTAINER_TITLE);
     }
 
     @Override

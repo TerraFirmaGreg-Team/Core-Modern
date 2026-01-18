@@ -31,9 +31,9 @@ import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.TFGRecipeSerializers;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
-import su.terrafirmagreg.core.common.data.container.SmithingTableContainer;
+import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 
-public class ArtisanRecipe implements ISimpleRecipe<SmithingTableContainer.RecipeHandler> {
+public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.RecipeHandler> {
 
     private final ResourceLocation id;
     @Getter
@@ -57,7 +57,7 @@ public class ArtisanRecipe implements ISimpleRecipe<SmithingTableContainer.Recip
     }
 
     @Override
-    public boolean matches(SmithingTableContainer.RecipeHandler recipeHandler, Level level) {
+    public boolean matches(ArtisanTableContainer.RecipeHandler recipeHandler, Level level) {
         boolean patternMatch = recipeHandler.container().getPattern().matches(pattern);
         boolean inputsMatch = matchesItems(recipeHandler.container().getInputItems());
         boolean toolsMatch = matchesTools(recipeHandler.container().getToolItems());
@@ -113,12 +113,12 @@ public class ArtisanRecipe implements ISimpleRecipe<SmithingTableContainer.Recip
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return TFGRecipeSerializers.SMITHING.get();
+        return TFGRecipeSerializers.ARTISAN.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return TFGRecipeTypes.SMITHING.get();
+        return TFGRecipeTypes.ARTISAN.get();
     }
 
     public static class Serializer extends RecipeSerializerImpl<ArtisanRecipe> {
@@ -127,7 +127,7 @@ public class ArtisanRecipe implements ISimpleRecipe<SmithingTableContainer.Recip
         public ArtisanRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             final ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             final ArtisanPattern pattern = ArtisanPattern.fromJson(json);
-            final ArtisanType type = ArtisanType.SMITHING_TYPES.get(ResourceLocation.parse(GsonHelper.getAsString(json, "smithingType")));
+            final ArtisanType type = ArtisanType.ARTISAN_TYPES.get(ResourceLocation.parse(GsonHelper.getAsString(json, "artisanType")));
             return new ArtisanRecipe(recipeId, pattern, result, Ingredient.of(type.getInputItems().stream()), type.getToolTags(), type);
         }
 

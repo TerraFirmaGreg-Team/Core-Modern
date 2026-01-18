@@ -13,14 +13,14 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.container.widgets.SmithingButton;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
-public class SmithingTableScreen extends TFCContainerScreen<SmithingTableContainer> {
+public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer> {
 
     public final ArrayList<SmithingButton> allButtons = new ArrayList<>();
 
     private ArtisanType activeType;
     private ImageWidget borderImage;
 
-    public SmithingTableScreen(SmithingTableContainer container, Inventory playerInventory, Component name) {
+    public ArtisanTableScreen(ArtisanTableContainer container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TFGCore.id("textures/gui/smithing_test.png"));
         this.imageHeight = 186;
         this.inventoryLabelY += 21;
@@ -81,8 +81,10 @@ public class SmithingTableScreen extends TFCContainerScreen<SmithingTableContain
     @Override
     protected void init() {
         super.init();
-        System.out.println("screen init");
-        //AddButtons();
+        if (this.menu.activeScreen) {
+            AddButtons();
+        }
+
     }
 
     int counter = 0;

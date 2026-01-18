@@ -50,7 +50,7 @@ public class ArtisanType {
     //This is cursed
 
     public ArtisanType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture, SoundEvent clickSound,
-                       ResourceLocation borderTexture) {
+            ResourceLocation borderTexture) {
         this(name, inputItemA, ItemStack.EMPTY, toolA, toolB, activeTexture, inactiveTexture, clickSound, borderTexture);
     }
 
@@ -59,12 +59,12 @@ public class ArtisanType {
     }
 
     public ArtisanType(String name, ItemStack inputItemA, ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture,
-                       SoundEvent clickSound) {
+            SoundEvent clickSound) {
         this(name, inputItemA, inputItemB, toolA, toolB, activeTexture, inactiveTexture, clickSound, null);
     }
 
     public ArtisanType(String name, ItemStack inputItemA, @Nullable ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture,
-                       @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture) {
+            @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture) {
         this.id = TFGCore.id(name);
         inputItems = new ArrayList<>(Stream.of(inputItemA, inputItemB).filter(Objects::nonNull).toList());
         toolTags = new ArrayList<>(Arrays.asList(toolA, toolB));
@@ -80,7 +80,7 @@ public class ArtisanType {
         return TFGCore.id(TEXTURE_PREFIX + name);
     }
 
-    public static HashMap<ResourceLocation, ArtisanType> SMITHING_TYPES = new HashMap<>();
+    public static HashMap<ResourceLocation, ArtisanType> ARTISAN_TYPES = new HashMap<>();
 
     public static final ArtisanType CASTING_MOLD = new ArtisanType(
             "casting_mold",
@@ -118,14 +118,14 @@ public class ArtisanType {
             textureLocation("printed_phenol_board"),
             GTSoundEntries.COMPRESSOR.getMainEvent());
 
-
     private static void initNewType(ArtisanType type) {
-        SMITHING_TYPES.put(type.id, type);
+        ARTISAN_TYPES.put(type.id, type);
     }
 
     static {
         initNewType(CASTING_MOLD);
         initNewType(EXTRUDER_MOLD);
         initNewType(RESIN_BOARD);
+        initNewType(PHENOL_BOARD);
     }
 }

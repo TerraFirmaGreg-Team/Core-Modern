@@ -46,7 +46,7 @@ public class SmithingButton extends Button {
     }
 
     public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound,
-                          net.minecraft.client.gui.components.Button.OnPress onPress) {
+            net.minecraft.client.gui.components.Button.OnPress onPress) {
         super(x, y, width, height, Component.empty(), onPress, RenderHelpers.NARRATION);
         this.texWidth = texWidth;
         this.texHeight = texHeight;

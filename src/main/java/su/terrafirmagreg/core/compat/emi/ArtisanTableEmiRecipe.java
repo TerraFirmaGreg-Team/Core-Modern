@@ -78,7 +78,6 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
         int yDiff = 21;
 
         ArrayList<EmiIngredient> stdInputs = new ArrayList<>(this.getInputs());
-        System.out.println(stdInputs);
         if (stdInputs.size() < 4)
             stdInputs.add(1, EmiStack.EMPTY);
 

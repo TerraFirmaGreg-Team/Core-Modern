@@ -13,7 +13,7 @@ public class TFGRecipeTypes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister
             .create(ForgeRegistries.RECIPE_TYPES, TFGCore.MOD_ID);
 
-    public static final RegistryObject<RecipeType<ArtisanRecipe>> SMITHING = register("smithing");
+    public static final RegistryObject<RecipeType<ArtisanRecipe>> ARTISAN = register("artisan");
 
     private static <R extends Recipe<?>> RegistryObject<RecipeType<R>> register(String name) {
         return RECIPE_TYPES.register(name, () -> new RecipeType<R>() {
