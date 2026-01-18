@@ -39,10 +39,11 @@ import net.minecraft.world.phys.Vec3;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.TFGParticles;
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
+import su.terrafirmagreg.core.common.interdim_logistics.InterplanetaryLogisticsNetwork;
+import su.terrafirmagreg.core.common.interdim_logistics.InterplanetaryLogisticsNetwork.*;
+import su.terrafirmagreg.core.common.interdim_logistics.NetworkSenderConfigEntry;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 
 public class InterplanetaryItemLauncherMachine extends WorkableElectricMultiblockMachine

@@ -28,8 +28,10 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
+import su.terrafirmagreg.core.common.interdim_logistics.InterplanetaryLogisticsNetwork;
+import su.terrafirmagreg.core.common.interdim_logistics.NetworkPart;
+import su.terrafirmagreg.core.common.interdim_logistics.NetworkReceiverConfigEntry;
+import su.terrafirmagreg.core.common.interdim_logistics.NetworkSenderConfigEntry;
 
 public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implements IUIMachine {
     public InterplanetaryLogisticsMonitorMachine(IMachineBlockEntity holder) {
@@ -49,7 +51,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
         private void updateIfServer() {
             if (network == null)
                 return;
-            network.markDirty();
+            network.setDirty();
         }
 
         public InterplanetaryLogisticsManagerWidget(Player accessor) {

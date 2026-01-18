@@ -22,8 +22,9 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
+import su.terrafirmagreg.core.common.interdim_logistics.InterplanetaryLogisticsNetwork.*;
+import su.terrafirmagreg.core.common.interdim_logistics.NetworkReceiverConfigEntry;
 
 public class InterplanetaryItemReceiverMachine extends WorkableElectricMultiblockMachine
         implements ILogisticsNetworkReceiver, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
