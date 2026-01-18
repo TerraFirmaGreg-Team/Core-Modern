@@ -33,7 +33,7 @@ public class QuarkTechSuiteMixin {
     // Only eat food, don't eat blacklisted food
     @WrapOperation(method = "supplyFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getFoodProperties(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/food/FoodProperties;", remap = true), remap = false)
     private FoodProperties tfg$checkFoodTag(ItemStack stack, LivingEntity player, Operation<FoodProperties> original) {
-        if (stack.is(TFCTags.Items.FOODS) || !stack.is(TFGTags.Items.AutoEatBlacklist)) {
+        if (stack.is(TFCTags.Items.FOODS) && !stack.is(TFGTags.Items.AutoEatBlacklist)) {
             return original.call(stack, player);
         }
         return null;

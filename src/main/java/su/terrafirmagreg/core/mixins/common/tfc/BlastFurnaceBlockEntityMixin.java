@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.dries007.tfc.common.blockentities.BlastFurnaceBlockEntity;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,7 +24,15 @@ public abstract class BlastFurnaceBlockEntityMixin {
 
     @Inject(method = "light", at = @At("HEAD"), remap = false, cancellable = true)
     public void tfg$light(Level level, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (!OxygenApi.API.hasOxygen(level, pos.above())) {
+        boolean foundOxygen = false;
+        for (Direction dir : Direction.values()) {
+            if (OxygenApi.API.hasOxygen(level, pos.relative(dir))) {
+                foundOxygen = true;
+                break;
+            }
+        }
+
+        if (!foundOxygen) {
             Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
             cir.setReturnValue(false);
         }

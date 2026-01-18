@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.common.data.GTItems;
 
@@ -27,6 +28,8 @@ import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
+import su.terrafirmagreg.core.common.data.tfgt.TFGTSetupHooks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
@@ -59,6 +62,8 @@ public final class TFGCore {
 
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        REGISTRATE.registerEventListeners(bus);
+
         TFGNetworkHandler.init();
         TFGBlocks.BLOCKS.register(bus);
         TFGBlockEntities.BLOCK_ENTITIES.register(bus);
@@ -86,11 +91,14 @@ public final class TFGCore {
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         bus.addGenericListener(GTItems.class, this::registerGTItems);
+        bus.addGenericListener(RecipeConditionType.class, this::registerRecipeConditions);
         bus.addListener(TFGEntities::onAttributes);
         bus.addListener(TFGEntities::onSpawnPlacement);
         bus.addListener(TFGEntities::onEntityRenderers);
         bus.addListener(TFGEntities::onEntityLayerRegister);
         bus.addListener(CustomArmInteractionPointTypes::onRegister);
+
+        TFGTSetupHooks.register(bus);
 
         AdAstraCompat.RegisterEvents();
     }
@@ -120,5 +128,10 @@ public final class TFGCore {
     @SubscribeEvent
     public void registerGTItems(GTCEuAPI.RegisterEvent<ResourceLocation, GTItems> event) {
         TFGTItems.init();
+    }
+
+    @SubscribeEvent
+    public void registerRecipeConditions(GTCEuAPI.RegisterEvent<ResourceLocation, RecipeConditionType<?>> event) {
+        TFGTRecipeConditions.init();
     }
 }
