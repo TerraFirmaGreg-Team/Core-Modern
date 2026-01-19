@@ -90,6 +90,9 @@ public class SmithingButton extends Button {
             RenderSystem.setShaderTexture(0, this.texture);
             this.isHovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + this.height;
             graphics.blit(this.texture, x, y, 0.0F, 0.0F, width, height, texWidth, texHeight);
+            if (this.isHovered) {
+                graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x40FFFFFF);
+            }
         } else if (inactiveTexture != null) {
             RenderSystem.setShaderTexture(0, this.inactiveTexture);
             graphics.blit(this.inactiveTexture, x, y, 0.0F, 0.0F, width, height, texWidth, texHeight);
