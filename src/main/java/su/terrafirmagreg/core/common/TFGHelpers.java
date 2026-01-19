@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common;
 
 import java.util.*;
 
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,12 +33,12 @@ public final class TFGHelpers {
     public static boolean isMaterialRegistrationFinished;
 
     /**
-     * Used in KubeJS!
+     * Returns GTMaterials.NULL when the material isn't found
      */
-    @Nullable
+    @NotNull
     public static Material getMaterial(@NotNull String materialName) {
         var material = GTCEuAPI.materialManager.getMaterial(materialName);
-        if (material == null) {
+        if (material == GTMaterials.NULL) {
             material = GTCEuAPI.materialManager.getMaterial(TFGCore.MOD_ID + ":" + materialName);
         }
 
