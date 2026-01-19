@@ -29,7 +29,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import su.terrafirmagreg.core.common.data.container.SmithingTableContainer;
 
 public class SmithingTableBlock extends Block implements IForgeBlockExtension {
-    public static final VoxelShape SHAPE = Shapes.box(0, 0, 0, 1, 1, 1);
+    public static final VoxelShape SHAPE = Shapes.box(0.125, 0, 0.125, 0.875, 1, 0.875);
     private static final Component CONTAINER_TITLE = Component.translatable("tfg.screen.smithing_table");
     private final ExtendedProperties properties;
 

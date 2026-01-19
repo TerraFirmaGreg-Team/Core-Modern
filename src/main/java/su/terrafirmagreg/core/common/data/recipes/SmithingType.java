@@ -58,11 +58,6 @@ public class SmithingType {
         this(name, inputItemA, ItemStack.EMPTY, toolA, toolB, activeTexture, null, clickSound, borderTexture);
     }
 
-    public SmithingType(String name, ItemStack inputItemA, ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture,
-            SoundEvent clickSound) {
-        this(name, inputItemA, inputItemB, toolA, toolB, activeTexture, inactiveTexture, clickSound, null);
-    }
-
     public SmithingType(String name, ItemStack inputItemA, @Nullable ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture,
             @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture) {
         this.id = TFGCore.id(name);
@@ -91,6 +86,7 @@ public class SmithingType {
             textureLocation("mold_inactive"),
             TFCSounds.ANVIL_HIT.get(),
             textureLocation("mold_border"));
+
     public static final SmithingType EXTRUDER_MOLD = new SmithingType(
             "extruder_mold",
             GTItems.SHAPE_EMPTY.get().getDefaultInstance(),
@@ -99,6 +95,7 @@ public class SmithingType {
             textureLocation("mold_active"),
             GTSoundEntries.WIRECUTTER_TOOL.getMainEvent(),
             textureLocation("mold_border"));
+
     public static final SmithingType RESIN_BOARD = new SmithingType(
             "resin_board",
             GTItems.COATED_BOARD.get().getDefaultInstance(),
@@ -107,7 +104,19 @@ public class SmithingType {
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_resin_board"),
             textureLocation("printed_resin_board"),
-            GTSoundEntries.ELECTROLYZER.getMainEvent());
+            GTSoundEntries.ELECTROLYZER.getMainEvent(),
+            textureLocation("resin_board_border"));
+
+    public static final SmithingType PHENOLIC_BOARD = new SmithingType(
+            "phenolic_board",
+            GTItems.PHENOLIC_BOARD.get().getDefaultInstance(),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Silver).getItem(), 9),
+            CustomTags.SCREWDRIVERS,
+            CustomTags.WIRE_CUTTERS,
+            textureLocation("blank_phenolic_board"),
+            textureLocation("printed_phenolic_board"),
+            GTSoundEntries.ELECTROLYZER.getMainEvent(),
+            textureLocation("phenolic_board_border"));
 
     private static void initNewType(SmithingType type) {
         SMITHING_TYPES.put(type.id, type);
@@ -117,5 +126,6 @@ public class SmithingType {
         initNewType(CASTING_MOLD);
         initNewType(EXTRUDER_MOLD);
         initNewType(RESIN_BOARD);
+        initNewType(PHENOLIC_BOARD);
     }
 }
