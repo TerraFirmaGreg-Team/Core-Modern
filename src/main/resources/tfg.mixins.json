@@ -42,6 +42,7 @@
         "common.create.LargeWaterWheelBlockMixin",
         "common.create.OpenEndedPipeMixin",
         "common.create.ProcessingRecipeMixin",
+        "common.create.StationBlockEntityMixin",
         "common.create.SchematicPrinterMixin",
         "common.create.WaterWheelBlockEntityMixin",
         "common.create.WaterWheelBlockMixin",
