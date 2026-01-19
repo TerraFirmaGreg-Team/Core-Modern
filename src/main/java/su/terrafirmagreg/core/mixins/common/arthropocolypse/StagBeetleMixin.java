@@ -16,7 +16,7 @@ public class StagBeetleMixin {
 
     // registerGoals
     @SuppressWarnings("DataFlowIssue")
-    @Inject(method = "m_8099_", at = @At("TAIL"))
+    @Inject(method = "m_8099_", at = @At("TAIL"), remap = false)
     protected void tfg$registerGoals(CallbackInfo ci) {
         Animal mob = (Animal) (Object) this;
 
