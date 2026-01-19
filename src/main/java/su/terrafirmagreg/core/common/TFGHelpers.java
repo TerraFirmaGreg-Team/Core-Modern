@@ -2,9 +2,7 @@ package su.terrafirmagreg.core.common;
 
 import java.util.*;
 
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -14,6 +12,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -32,13 +31,10 @@ public final class TFGHelpers {
 
     public static boolean isMaterialRegistrationFinished;
 
-    /**
-     * Returns GTMaterials.NULL when the material isn't found
-     */
     @NotNull
     public static Material getMaterial(@NotNull String materialName) {
         var material = GTCEuAPI.materialManager.getMaterial(materialName);
-        if (material == GTMaterials.NULL) {
+        if (material == null) {
             material = GTCEuAPI.materialManager.getMaterial(TFGCore.MOD_ID + ":" + materialName);
         }
 
