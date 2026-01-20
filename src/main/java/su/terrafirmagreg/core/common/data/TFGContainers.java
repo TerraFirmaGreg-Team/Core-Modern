@@ -21,6 +21,7 @@ import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
+import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxContainer;
 import su.terrafirmagreg.core.common.data.container.SmithingTableContainer;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowContainer;
@@ -40,8 +41,8 @@ public class TFGContainers {
             .<LargeNestBoxBlockEntity, LargeNestBoxContainer>registerBlockEntityContainer("large_nest_box",
                     TFGBlockEntities.LARGE_NEST_BOX, LargeNestBoxContainer::create);
 
-    public static final RegistryObject<MenuType<SmithingTableContainer>> SMITHING_TABLE = TFGContainers
-            .registerContainer("smithing_table", ((windowId, inv, data) -> SmithingTableContainer.create(inv, windowId, ContainerLevelAccess.NULL)));
+    public static final RegistryObject<MenuType<ArtisanTableContainer>> ARTISAN_TABLE = TFGContainers
+            .registerContainer("artisan_table", ((windowId, inv, data) -> ArtisanTableContainer.create(inv, windowId, ContainerLevelAccess.NULL)));
 
     public static <T extends InventoryBlockEntity<?>, C extends BlockEntityContainer<T>> RegistryObject<MenuType<C>> registerBlockEntityContainer(
             String name, Supplier<BlockEntityType<T>> type, BlockEntityContainer.Factory<T, C> factory) {

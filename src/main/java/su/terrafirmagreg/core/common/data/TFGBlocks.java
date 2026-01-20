@@ -211,8 +211,8 @@ public final class TFGBlocks {
     public static final RegistryObject<Block> DRY_ICE = register("dry_ice",
             () -> new DryIceBlock(BlockBehaviour.Properties.copy(Blocks.ICE)
                     .sound(SoundType.BONE_BLOCK)));
-    public static final RegistryObject<Block> SMITHING_TABLE = register("smithing_table",
-            () -> new SmithingTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())));
+    public static final RegistryObject<Block> ARTISAN_TABLE = register("artisan_table",
+            () -> new ArtisanTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())));
 
     // Multi block casings
 
