@@ -151,6 +151,7 @@
         "common.tfchotornot.ClientEventHandlerMixin",
         "common.tfchotornot.EventHandlerMixin",
         "common.tfchotornot.FluidEffectMixin",
+        "common.tfcimprovedbadlands.IBEventHandlerMixin",
         "common.vintageimprovements.CurvingRecipeMixin",
         "common.vintageimprovements.HelveItemsRendererMixin",
         "common.vintageimprovements.LatheMovingBlockMixin",
