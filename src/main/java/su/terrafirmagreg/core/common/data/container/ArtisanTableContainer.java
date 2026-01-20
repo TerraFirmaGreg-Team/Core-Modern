@@ -121,7 +121,6 @@ public class ArtisanTableContainer extends Container implements ISlotCallback, B
     public void onSlotTake(Player player, int slot, ItemStack stack) {
         if (slot == RESULT_SLOT) {
             resetPattern();
-
             if (!hasConsumedIngredient) {
                 consumeItems();
                 hasConsumedIngredient = true;
@@ -163,6 +162,7 @@ public class ArtisanTableContainer extends Container implements ISlotCallback, B
     public void onButtonPress(int buttonID, @Nullable CompoundTag extraNBT) {
         // Set the matching patterns slot to clicked
         pattern.set(buttonID, false);
+        System.out.println(this);
 
         //System.out.println("Button");
         // Update the output slot based on the recipe
@@ -173,7 +173,7 @@ public class ArtisanTableContainer extends Container implements ISlotCallback, B
                     .map(recipe -> recipe.assemble(recipeHandler, level.registryAccess()))
                     .orElse(ItemStack.EMPTY);
 
-            System.out.println(resultStack);
+            //System.out.println(resultStack);
             slot.set(resultStack);
         }
     }

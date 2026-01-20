@@ -108,15 +108,6 @@ public class ArtisanType {
             textureLocation("blank_resin_board"),
             textureLocation("printed_resin_board"),
             GTSoundEntries.COMPRESSOR.getMainEvent());
-    public static final ArtisanType PHENOL_BOARD = new ArtisanType(
-            "phenol_board",
-            GTItems.PHENOLIC_BOARD.get().getDefaultInstance(),
-            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Silver).getItem(), 9),
-            CustomTags.SCREWDRIVERS,
-            CustomTags.WIRE_CUTTERS,
-            textureLocation("blank_phenol_board"),
-            textureLocation("printed_phenol_board"),
-            GTSoundEntries.COMPRESSOR.getMainEvent());
 
     private static void initNewType(ArtisanType type) {
         ARTISAN_TYPES.put(type.id, type);
@@ -126,6 +117,5 @@ public class ArtisanType {
         initNewType(CASTING_MOLD);
         initNewType(EXTRUDER_MOLD);
         initNewType(RESIN_BOARD);
-        initNewType(PHENOL_BOARD);
     }
 }

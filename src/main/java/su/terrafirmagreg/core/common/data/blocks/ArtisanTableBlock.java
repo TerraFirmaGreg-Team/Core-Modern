@@ -30,7 +30,7 @@ import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 
 public class ArtisanTableBlock extends Block implements IForgeBlockExtension {
     public static final VoxelShape SHAPE = Shapes.box(0, 0, 0, 1, 1, 1);
-    private static final Component CONTAINER_TITLE = Component.translatable("tfg.screen.smithing_table");
+    private static final Component CONTAINER_TITLE = Component.translatable("tfg.screen.artisan_table");
     private final ExtendedProperties properties;
 
     public ArtisanTableBlock(ExtendedProperties properties) {

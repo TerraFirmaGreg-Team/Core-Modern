@@ -61,15 +61,18 @@ public class SmithingButton extends Button {
     public void onPress() {
         this.onPress.onPress(this);
         if (this.active) {
-            if (inactiveTexture == null) {
-                this.visible = false;
-
-            }
-            this.active = false;
+            activateButton();
             PacketHandler.send(PacketDistributor.SERVER.noArg(), new ScreenButtonPacket(this.id, (CompoundTag) null));
             this.playDownSound(Minecraft.getInstance().getSoundManager());
         }
 
+    }
+
+    public void activateButton() {
+        if (inactiveTexture == null) {
+            this.visible = false;
+        }
+        this.active = false;
     }
 
     @Override

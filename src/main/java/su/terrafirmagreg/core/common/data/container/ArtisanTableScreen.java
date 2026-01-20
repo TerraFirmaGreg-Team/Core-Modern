@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.container;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import net.dries007.tfc.client.screen.TFCContainerScreen;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.container.widgets.SmithingButton;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
 public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer> {
@@ -45,16 +47,69 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         ResourceLocation borderTexture = activeType.getBorderTexture();
         if (borderTexture != null) {
             //78 is a 3 pixel buffer around the button area
-            borderImage = new ImageWidget((width - getXSize()) / 2 + 14, (height - getYSize()) / 2 + 14, 78, 78, borderTexture);
+            borderImage = new ImageWidget((width - getXSize()) / 2 + 14, (height - getYSize()) / 2 + 14, 78, 78, borderTexture) {
+                @Override
+                public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+                    return false;
+                }
+            };
+
             addRenderableWidget(borderImage);
         }
 
         this.getMenu().setScreenState(true);
     }
 
+    private void AddAndUpdateButtons() {
+        AddButtons();
+        ArtisanPattern pattern = getMenu().getPattern();
+        output(pattern);
+        for (SmithingButton button : allButtons) {
+            //System.out.println(button.id);
+            //System.out.println(!pattern.get((long) button.id));
+            if (!pattern.get(button.id)) {
+                System.out.println("button " + button.id + " activated");
+                button.activateButton();
+            }
+        }
+    }
+
+    public void output(ArtisanPattern pattern) {
+        // Allocate an 8-byte buffer, the size of a long
+        ByteBuffer buffers = ByteBuffer.allocate(Long.BYTES);
+        // Put the long into the buffer
+        buffers.putLong(pattern.getData());
+        // Return the underlying byte array
+        System.out.println(bytesToBinaryString(buffers.array()));
+    }
+
+    public static String bytesToBinaryString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            // Convert the byte to an integer, mask with 0xFF to handle signedness
+            // and get the unsigned integer value (0-255).
+            int unsignedInt = b & 0xFF;
+
+            // Convert the unsigned integer to a binary string.
+            String binaryString = Integer.toBinaryString(unsignedInt);
+
+            // Pad with leading zeros to ensure an 8-bit representation.
+            String paddedBinaryString = String.format("%8s", binaryString).replace(' ', '0');
+
+            sb.append(paddedBinaryString); // Add a space for readability
+        }
+        sb.delete(0, 28);
+
+        for (int i = 6; i < sb.length(); i += 6 + "\n".length()) {
+            sb.insert(i, "\n");
+        }
+        sb.insert(0, "\n");
+        return sb.toString();
+    }
+
     public void RemoveButtons() {
         for (SmithingButton button : allButtons) {
-            if (button.isActive()) {
+            if (button.active) {
                 button.active = false;
             }
             button.visible = false;
@@ -81,10 +136,13 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
     @Override
     protected void init() {
         super.init();
+        System.out.println(getMenu());
+        System.out.println(this.menu.activeScreen);
+        output(this.menu.getPattern());
         if (this.menu.activeScreen) {
-            AddButtons();
+            RemoveButtons();
+            AddAndUpdateButtons();
         }
-
     }
 
     int counter = 0;
@@ -103,5 +161,4 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
         counter = 0;
     }
-
 }
