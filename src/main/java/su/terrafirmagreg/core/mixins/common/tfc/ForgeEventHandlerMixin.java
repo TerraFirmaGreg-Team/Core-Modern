@@ -16,13 +16,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.level.BlockEvent;
 
-@Mixin(value = ForgeEventHandler.class, remap = false)
+@Mixin(value = ForgeEventHandler.class)
 public class ForgeEventHandlerMixin {
 
     // Forcibly disable nether portals because there's some funky mod conflict going on with
     // settings overwriting each other
 
-    @Inject(method = "onCreateNetherPortal", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "onCreateNetherPortal", at = @At("HEAD"), cancellable = true, remap = false)
     private static void tfg$onCreateNetherPortal(BlockEvent.PortalSpawnEvent event, CallbackInfo ci) {
         event.setCanceled(true);
         ci.cancel();
@@ -31,7 +31,7 @@ public class ForgeEventHandlerMixin {
     // Don't create water source blocks when hot items melt the ice
     // target = ServerLevel.setBlockAndUpdate(BlockPos, BlockState)
     // There's a few of those in the method so have to check which blocks are being melted.
-    @WrapOperation(method = "onItemExpire", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;m_46597_(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z", remap = true), remap = false)
+    @WrapOperation(method = "onItemExpire", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z", remap = true), remap = false)
     private static boolean tfg$preventHotIceWater(ServerLevel level, BlockPos pos, BlockState newState, Operation<Boolean> original) {
         Block currentBlock = level.getBlockState(pos).getBlock();
 

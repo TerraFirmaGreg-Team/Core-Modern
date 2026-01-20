@@ -7,11 +7,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
-import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.*;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -22,6 +18,8 @@ import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 
+import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -48,6 +46,35 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
         }
 
         @Override
+        protected ActionResult checkRecipe(GTRecipe recipe) {
+            ActionResult base = super.checkRecipe(recipe);
+            if (!base.isSuccess())
+                return base;
+
+            // Fail if any input stack is rotten
+            List<IRecipeHandler<?>> inputHandlers = new ArrayList<>();
+            ((IRecipeCapabilityHolder) getMachine()).getCapabilitiesForIO(IO.IN)
+                    .forEach(v -> inputHandlers.addAll(v.getCapability(ItemRecipeCapability.CAP)));
+            inputHandlers.sort(IRecipeHandler.ENTRY_COMPARATOR);
+
+            for (IRecipeHandler<?> handler : inputHandlers) {
+                if (handler instanceof com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler stackHandler) {
+                    for (int i = 0; i < stackHandler.getSlots(); i++) {
+                        ItemStack stack = stackHandler.getStackInSlot(i);
+                        IFood food = FoodCapability.get(stack);
+                        if (food != null && food.isRotten()) {
+                            return ActionResult.fail(
+                                    net.minecraft.network.chat.Component.translatable("gtceu.recipe_logic.insufficient_in")
+                                            .append(": ").append(ItemRecipeCapability.CAP.getName()),
+                                    ItemRecipeCapability.CAP, IO.IN);
+                        }
+                    }
+                }
+            }
+            return base;
+        }
+
+        @Override
         protected ActionResult handleRecipeIO(GTRecipe recipe, IO io) {
             if (io == IO.IN)
                 return super.handleRecipeIO(recipe, io);
@@ -59,11 +86,21 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
             for (Content content : recipe.getOutputContents(ItemRecipeCapability.CAP)) {
                 Object obj = content.content;
                 if (obj instanceof SizedIngredient sized) {
-                    ItemStackProvider isp = ItemStackProvider
-                            .of(new ItemStack(sized.getInner().getItems()[0].getItem(), sized.getAmount()));
-                    modifiedItemOutputs.add(
-                            new Content(SizedIngredient.create(Ingredient.of(isp.getEmptyStack()), sized.getAmount()),
-                                    content.chance, content.maxChance, content.tierChanceBoost));
+                    ItemStack[] matches = sized.getInner().getItems();
+                    ItemStack template = matches.length > 0 ? matches[0].copy() : ItemStack.EMPTY;
+                    if (!template.isEmpty()) {
+                        ItemStackProvider isp = ItemStackProvider.of(template);
+                        ItemStack regenerated = isp.getStack(template);
+                        regenerated.setCount(sized.getAmount());
+                        modifiedItemOutputs.add(
+                                new Content(
+                                        SizedIngredient.create(Ingredient.of(regenerated), sized.getAmount()),
+                                        content.chance, content.maxChance, content.tierChanceBoost));
+                    } else {
+                        modifiedItemOutputs.add(content);
+                    }
+                } else {
+                    modifiedItemOutputs.add(content);
                 }
             }
             contents.put(ItemRecipeCapability.CAP, modifiedItemOutputs);

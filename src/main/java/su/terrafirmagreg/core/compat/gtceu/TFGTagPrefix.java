@@ -44,8 +44,8 @@ public final class TFGTagPrefix {
     public static final TagPrefix poorRawOre;
     public static final TagPrefix richRawOre;
     public static final TagPrefix oreSmall;
-    public static final TagPrefix oreSmallNative;
     public static final TagPrefix budIndicator;
+    public static final TagPrefix powder;
 
     public static final TagPrefix dustyRawOre;
 
@@ -226,9 +226,7 @@ public final class TFGTagPrefix {
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadPropick)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+                .unificationEnabled(true);
 
         toolHeadJavelin = new TagPrefix("javelinHead")
                 .defaultTagPath("javelin_heads/%s")
@@ -237,9 +235,7 @@ public final class TFGTagPrefix {
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadJavelin)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+                .unificationEnabled(true);
 
         toolHeadChisel = new TagPrefix("chiselHead")
                 .defaultTagPath("chisel_heads/%s")
@@ -248,9 +244,7 @@ public final class TFGTagPrefix {
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadChisel)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+                .unificationEnabled(true);
 
         toolHeadMace = new TagPrefix("maceHead")
                 .defaultTagPath("mace_heads/%s")
@@ -259,9 +253,7 @@ public final class TFGTagPrefix {
                 .materialAmount(GTValues.M * 2)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadMace)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+                .unificationEnabled(true);
 
         toolHeadMattock = new TagPrefix("mattockHead")
                 .defaultTagPath("mattock_heads/%s")
@@ -270,9 +262,7 @@ public final class TFGTagPrefix {
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadMattock)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+                .unificationEnabled(true);
 
         toolHeadHook = new TagPrefix("fishHook")
                 .defaultTagPath("fish_hooks/%s")
@@ -281,16 +271,14 @@ public final class TFGTagPrefix {
                 .materialAmount(GTValues.M)
                 .maxStackSize(16)
                 .materialIconType(TFGMaterialIconType.toolHeadHook)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_TOOL));
+                .unificationEnabled(true);
 
         /* Other */
         ingotDouble = new TagPrefix("doubleIngot")
                 .defaultTagPath("double_ingots/%s")
                 .unformattedTagPath("double_ingots")
                 .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
-                .materialAmount(GTValues.M)
+                .materialAmount(GTValues.M * 2)
                 .materialIconType(MaterialIconType.ingotDouble)
                 .unificationEnabled(true)
                 .generateItem(true)
@@ -319,20 +307,20 @@ public final class TFGTagPrefix {
         oreSmall = new TagPrefix("smallOre")
                 .materialAmount(GTValues.M / 4)
                 .unificationEnabled(true)
-                .generateItem(true)
                 .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_SMALL_TFC_ORE));
-
-        oreSmallNative = new TagPrefix("smallNativeOre")
-                .materialAmount(GTValues.M / 4)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_SMALL_NATIVE_TFC_ORE));
 
         budIndicator = new TagPrefix("bud_indicator")
                 .idPattern("%s_bud_indicator")
                 .defaultTagPath("bud_indicators/%s")
                 .unformattedTagPath("bud_indicators")
                 .materialAmount(GTValues.M / 4);
+
+        powder = new TagPrefix("powder")
+                .idPattern("%s_powder")
+                .defaultTagPath("powders/%s")
+                .unformattedTagPath("powders")
+                .materialAmount(GTValues.M / 4)
+                .unificationEnabled(false);
 
         dustyRawOre = new TagPrefix("dusty_raw", true)
                 .idPattern("dusty_raw_%s")
@@ -346,65 +334,45 @@ public final class TFGTagPrefix {
 
         anvil = new TagPrefix("anvil")
                 .materialAmount(GTValues.M * 14)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
+                .unificationEnabled(true);
 
         lamp = new TagPrefix("lamp")
                 .materialAmount(GTValues.M)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
+                .unificationEnabled(true);
 
         lampUnfinished = new TagPrefix("unfinishedLamp")
                 .materialAmount(GTValues.M)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
+                .unificationEnabled(true);
 
         trapdoor = new TagPrefix("trapdoor")
                 .materialAmount(GTValues.M)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
+                .unificationEnabled(true);
 
         chain = new TagPrefix("chain")
                 .defaultTagPath("chains/%s")
                 .unformattedTagPath("chains")
                 .materialAmount(GTValues.M / 16)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
+                .unificationEnabled(true);
 
         bars = new TagPrefix("bars")
-                .materialAmount(GTValues.M / 9)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_TFC_UTILITY));
+                .materialAmount(GTValues.M / 4)
+                .unificationEnabled(true);
 
         bell = new TagPrefix("bell")
                 .materialAmount(GTValues.M)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_BELL));
+                .unificationEnabled(true);
 
         blockPlated = new TagPrefix("plated_block")
                 .materialAmount(GTValues.M)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_PLATED_BLOCK));
+                .unificationEnabled(true);
 
         stairPlated = new TagPrefix("plated_stair")
                 .materialAmount(GTValues.M)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_PLATED_BLOCK));
+                .unificationEnabled(true);
 
         slabPlated = new TagPrefix("plated_slab")
-                .materialAmount(GTValues.M)
-                .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.HAS_PLATED_BLOCK));
+                .materialAmount(GTValues.M / 2)
+                .unificationEnabled(true);
     }
 
     public static void init() {
