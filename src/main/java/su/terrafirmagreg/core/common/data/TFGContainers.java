@@ -23,6 +23,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxContainer;
+import su.terrafirmagreg.core.common.data.container.SmithingTableContainer;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowContainer;
 
 public class TFGContainers {
