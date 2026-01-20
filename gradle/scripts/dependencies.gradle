@@ -147,4 +147,7 @@ dependencies {
 
     // ArborFirmaCraft
     implementation fg.deobf("curse.maven:arborfirmacraft-877545:7200580")
+
+    // TFC Improved Badlands
+    implementation fg.deobf("curse.maven:tfc-improved-badlands-969207:5126426")
 }
