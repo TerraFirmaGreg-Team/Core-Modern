@@ -17,26 +17,26 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 
-import su.terrafirmagreg.core.common.data.recipes.SmithingPattern;
-import su.terrafirmagreg.core.common.data.recipes.SmithingRecipe;
-import su.terrafirmagreg.core.common.data.recipes.SmithingType;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
 public class ArtisanTableEmiRecipe implements EmiRecipe {
 
     private final List<EmiIngredient> tools;
     private final List<EmiStack> items;
 
-    private final SmithingRecipe recipe;
+    private final ArtisanRecipe recipe;
 
-    private final SmithingType type;
-    private final SmithingPattern pattern;
+    private final ArtisanType type;
+    private final ArtisanPattern pattern;
 
-    public ArtisanTableEmiRecipe(SmithingRecipe recipe) {
+    public ArtisanTableEmiRecipe(ArtisanRecipe recipe) {
         this.recipe = recipe;
         tools = recipe.getTools().stream().map(EmiIngredient::of).toList();
         items = Arrays.stream(recipe.getIngredient().getItems()).map(EmiStack::of).toList();
 
-        type = recipe.getSmithingType();
+        type = recipe.getArtisanType();
         pattern = recipe.getPattern();
     }
 
@@ -78,7 +78,6 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
         int yDiff = 21;
 
         ArrayList<EmiIngredient> stdInputs = new ArrayList<>(this.getInputs());
-        System.out.println(stdInputs);
         if (stdInputs.size() < 4)
             stdInputs.add(1, EmiStack.EMPTY);
 

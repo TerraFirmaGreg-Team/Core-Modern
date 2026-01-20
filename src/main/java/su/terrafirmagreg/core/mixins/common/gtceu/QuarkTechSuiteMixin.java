@@ -18,20 +18,21 @@ import net.minecraft.world.item.ItemStack;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
-@Mixin(value = QuarkTechSuite.class, remap = false)
+@Mixin(value = QuarkTechSuite.class)
 public class QuarkTechSuiteMixin {
 
     // Cancel QuarkTech helmet feeding when player is in PlayerRevive bleeding state
     // This prevents food from being consumed without effect
+    @SuppressWarnings("resource") // Don't want to close player.level() in a `finally` clause
     @Inject(method = "supplyFood", at = @At("HEAD"), remap = false, cancellable = true)
     private void tfg$preventQuarkFeedingWhenBleeding(IElectricItem item, Player player, CallbackInfoReturnable<Boolean> cir) {
-        if (player.getPersistentData().getBoolean("playerrevive:bleeding") || player.level().isClientSide) {
+        if (player.getPersistentData().getBoolean("playerrevive:bleeding")) {
             cir.setReturnValue(false);
         }
     }
 
     // Only eat food, don't eat blacklisted food
-    @WrapOperation(method = "supplyFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getFoodProperties(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/food/FoodProperties;", remap = true), remap = false)
+    @WrapOperation(method = "supplyFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getFoodProperties(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/food/FoodProperties;"), remap = false)
     private FoodProperties tfg$checkFoodTag(ItemStack stack, LivingEntity player, Operation<FoodProperties> original) {
         if (stack.is(TFCTags.Items.FOODS) && !stack.is(TFGTags.Items.AutoEatBlacklist)) {
             return original.call(stack, player);

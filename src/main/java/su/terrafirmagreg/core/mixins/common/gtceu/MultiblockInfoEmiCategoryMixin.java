@@ -26,7 +26,10 @@ public class MultiblockInfoEmiCategoryMixin {
             GTCEu.id("primitive_pump"),
             GTCEu.id("charcoal_pile_igniter"),
             GTCEu.id("active_transformer"),
-            GTCEu.id("primitive_blast_furnace"));
+            GTCEu.id("primitive_blast_furnace"),
+            GTCEu.id("mv_bedrock_ore_miner"),
+            GTCEu.id("hv_bedrock_ore_miner"),
+            GTCEu.id("ev_bedrock_ore_miner"));
 
     @Inject(method = "registerDisplays", at = @At(value = "HEAD"), remap = false, cancellable = true)
     private static void tfg$registerDisplays(EmiRegistry registry, CallbackInfo ci) {

@@ -34,6 +34,7 @@ import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
+import su.terrafirmagreg.core.common.data.container.ArtisanTableScreen;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.container.SmithingTableScreen;
 import su.terrafirmagreg.core.common.data.events.AdvancedOreProspectorEventHelper;
@@ -137,7 +138,7 @@ public final class TFGClientEventHandler {
     public static void clientSetup(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
             MenuScreens.register(TFGContainers.LARGE_NEST_BOX.get(), LargeNestBoxScreen::new);
-            MenuScreens.register(TFGContainers.SMITHING_TABLE.get(), SmithingTableScreen::new);
+            MenuScreens.register(TFGContainers.ARTISAN_TABLE.get(), ArtisanTableScreen::new);
 
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getSource(), RenderType.translucent());

@@ -10,13 +10,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.blocks.plant.GrapeStringWithPlantBlock;
 import com.eerussianguy.firmalife.common.items.FLItems;
 import com.eerussianguy.firmalife.common.items.GrapeSeedItem;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.client.renderer.machine.impl.GrowingPlantRender;
-import com.gregtechceu.gtceu.client.util.RenderUtil;
 
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.crop.DoubleCropBlock;
@@ -56,23 +56,33 @@ public class GrowingPlantRenderMixin {
     };
 
     @Unique
-    private static final GrowingPlantRender.RenderFunction TFC_BERRY_BUSH_RENDER = (level, pos, offset, state, progress, bufferSource, poseStack) -> {
+    private static final GrowingPlantRender.RenderFunction.ConfigureOnly TFC_BERRY_BUSH_RENDER = (level, state, progress) -> {
 
-        Lifecycle lc;
         if (progress < 0.33) {
-            lc = Lifecycle.HEALTHY;
+            state = state.trySetValue(TFCBlockStateProperties.STAGE_2, 0);
+            state = state.trySetValue(TFCBlockStateProperties.LIFECYCLE, Lifecycle.HEALTHY);
         } else if (progress < 0.67) {
-            lc = Lifecycle.FLOWERING;
+            state = state.trySetValue(TFCBlockStateProperties.STAGE_2, 1);
+            state = state.trySetValue(TFCBlockStateProperties.LIFECYCLE, Lifecycle.FLOWERING);
         } else {
-            lc = Lifecycle.FRUITING;
+            state = state.trySetValue(TFCBlockStateProperties.STAGE_2, 2);
+            state = state.trySetValue(TFCBlockStateProperties.LIFECYCLE, Lifecycle.FRUITING);
         }
 
-        state = state.trySetValue(TFCBlockStateProperties.LIFECYCLE, lc);
+        return Collections.singleton(new GrowingPlantRender.StateWithOffset(state));
+    };
 
-        poseStack.last().pose().scaleAround((float) progress, 0.5f, 0.0f, 0.5f);
-        poseStack.last().normal().scale((float) progress);
+    @Unique
+    private static final GrowingPlantRender.RenderFunction.ConfigureOnly FL_GRAPE_RENDER = (level, state, progress) -> {
+        if (progress < 0.33) {
+            state = state.trySetValue(GrapeStringWithPlantBlock.LIFECYCLE, Lifecycle.HEALTHY);
+        } else if (progress < 0.67) {
+            state = state.trySetValue(GrapeStringWithPlantBlock.LIFECYCLE, Lifecycle.FLOWERING);
+        } else {
+            state = state.trySetValue(GrapeStringWithPlantBlock.LIFECYCLE, Lifecycle.FRUITING);
+        }
 
-        RenderUtil.drawBlock(level, pos, state, bufferSource, poseStack);
+        return Collections.singleton(new GrowingPlantRender.StateWithOffset(state));
     };
 
     @Unique
@@ -81,7 +91,11 @@ public class GrowingPlantRenderMixin {
 
     @Unique
     private static final GrowingPlantRender.GrowthMode TFC_BERRY_BUSH_MODE = new GrowingPlantRender.GrowthMode("berry_bush",
-            block -> block instanceof DoubleCropBlock, TFC_BERRY_BUSH_RENDER);
+            block -> block instanceof StationaryBerryBushBlock, TFC_BERRY_BUSH_RENDER);
+
+    @Unique
+    private static final GrowingPlantRender.GrowthMode FL_GRAPE_MODE = new GrowingPlantRender.GrowthMode("grape",
+            block -> block == FLBlocks.GRAPE_STRING_RED.get() || block == FLBlocks.GRAPE_STRING_WHITE.get(), FL_GRAPE_RENDER);
 
     @Inject(method = "getGrowthModeForBlock", at = @At("HEAD"), remap = false, cancellable = true)
     private void tfg$getGrowthModeForBlock(Block block, CallbackInfoReturnable<GrowingPlantRender.GrowthMode> cir) {
@@ -89,6 +103,8 @@ public class GrowingPlantRenderMixin {
             cir.setReturnValue(TFC_DOUBLE_CROP_MODE);
         } else if (block instanceof StationaryBerryBushBlock) {
             cir.setReturnValue(TFC_BERRY_BUSH_MODE);
+        } else if (block == FLBlocks.GRAPE_STRING_RED.get() || block == FLBlocks.GRAPE_STRING_WHITE.get()) {
+            cir.setReturnValue(FL_GRAPE_MODE);
         }
     }
 
@@ -109,9 +125,9 @@ public class GrowingPlantRenderMixin {
 
         if (inputGrapes.isPresent()) {
             if (inputGrapes.get() == FLItems.RED_GRAPE_SEEDS.get()) {
-                cir.setReturnValue(Optional.of(FLBlocks.WILD_RED_GRAPES.get()));
+                cir.setReturnValue(Optional.of(FLBlocks.GRAPE_STRING_RED.get()));
             } else if (inputGrapes.get() == FLItems.WHITE_GRAPE_SEEDS.get()) {
-                cir.setReturnValue(Optional.of(FLBlocks.WILD_WHITE_GRAPES.get()));
+                cir.setReturnValue(Optional.of(FLBlocks.GRAPE_STRING_WHITE.get()));
             }
         }
     }

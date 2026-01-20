@@ -32,9 +32,13 @@ public class FeedingUpgradeWrapperMixin {
         }
     }
 
-    // Only eat food, don't eat blacklisted food
+    /**
+     * @author Mqrius
+     * @reason Need to make sure that the Feeding Upgrade doesn't eat all edible things such as medicine
+     */
     @Overwrite(remap = false)
     private static boolean isEdible(ItemStack stack, LivingEntity player) {
+        //  Only eat food, don't eat blacklisted food
         return stack.is(TFCTags.Items.FOODS) && !stack.is(TFGTags.Items.AutoEatBlacklist);
     }
 }
