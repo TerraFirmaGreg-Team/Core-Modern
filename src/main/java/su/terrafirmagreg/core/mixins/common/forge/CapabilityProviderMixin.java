@@ -16,12 +16,12 @@ import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.capabilities.CapabilityProvider;
 
 @SuppressWarnings("UnstableApiUsage")
-@Mixin(CapabilityProvider.class)
+@Mixin(value = CapabilityProvider.class)
 public abstract class CapabilityProviderMixin {
     @Unique
     private static final ThreadLocal<Boolean> IN_FOOD_CHECK = ThreadLocal.withInitial(() -> false);
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract CapabilityDispatcher getCapabilities();
 
     @SuppressWarnings({ "ConstantConditions", "UnstableApiUsage" })

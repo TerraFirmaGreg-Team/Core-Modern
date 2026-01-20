@@ -48,10 +48,6 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSLAB, TFGTags.Items.INTERACTIONCRACKEDSLAB, CustomTags.HAMMERS),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKWALL, TFGTags.Items.INTERACTIONCRACKEDWALL, CustomTags.HAMMERS),
             //Brick -> Mossy
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONMOSSYBRICK, GTItems.PLANT_BALL.asItem()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSTAIR, TFGTags.Items.INTERACTIONMOSSYSTAIR, GTItems.PLANT_BALL.asItem()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSLAB, TFGTags.Items.INTERACTIONMOSSYSLAB, GTItems.PLANT_BALL.asItem()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKWALL, TFGTags.Items.INTERACTIONMOSSYWALL, GTItems.PLANT_BALL.asItem()),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONMOSSYBRICK, TFCTags.Items.COMPOST_GREENS_LOW),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSTAIR, TFGTags.Items.INTERACTIONMOSSYSTAIR, TFCTags.Items.COMPOST_GREENS_LOW),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSLAB, TFGTags.Items.INTERACTIONMOSSYSLAB, TFCTags.Items.COMPOST_GREENS_LOW),
@@ -79,16 +75,7 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCRACKEDBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
-            //smooth -> brick
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONSMOOTHBRICK, TFGTags.Items.INTERACTIONBRICK, CustomTags.FILES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONSMOOTHBRICK, TFGTags.Items.INTERACTIONMOSSYBRICK, GTItems.PLANT_BALL.asItem()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONSMOOTHBRICK, TFGTags.Items.INTERACTIONMOSSYBRICK, TFCTags.Items.COMPOST_GREENS_LOW),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONSMOOTHBRICK, TFGTags.Items.INTERACTIONCRACKEDBRICK, CustomTags.HAMMERS),
             //cobble -> mossy
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLE, TFGTags.Items.INTERACTIONMOSSYCOBBLE, GTItems.PLANT_BALL.asItem()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLESTAIR, TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, GTItems.PLANT_BALL.asItem()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLESLAB, TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, GTItems.PLANT_BALL.asItem()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLEWALL, TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, GTItems.PLANT_BALL.asItem()),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLE, TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFCTags.Items.COMPOST_GREENS_LOW),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLESTAIR, TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFCTags.Items.COMPOST_GREENS_LOW),
             new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLESLAB, TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFCTags.Items.COMPOST_GREENS_LOW),

@@ -16,7 +16,7 @@ public class IceCrawlerMixin {
 
     // registerGoals
     @SuppressWarnings("DataFlowIssue")
-    @Inject(method = "m_8099_", at = @At("TAIL"))
+    @Inject(method = "m_8099_", at = @At("TAIL"), remap = false)
     protected void tfg$registerGoals(CallbackInfo ci) {
         PathfinderMob mob = (PathfinderMob) (Object) this;
 

@@ -144,4 +144,10 @@ dependencies {
 
     //Panda's Falling Trees
     implementation fg.deobf("curse.maven:pandas-falling-trees-880630:5653236")
+
+    // ArborFirmaCraft
+    implementation fg.deobf("curse.maven:arborfirmacraft-877545:7200580")
+
+    // TFC Improved Badlands
+    implementation fg.deobf("curse.maven:tfc-improved-badlands-969207:5126426")
 }
