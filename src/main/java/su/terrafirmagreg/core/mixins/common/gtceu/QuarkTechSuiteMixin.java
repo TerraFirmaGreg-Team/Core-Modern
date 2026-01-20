@@ -26,7 +26,7 @@ public class QuarkTechSuiteMixin {
     @SuppressWarnings("resource") // Don't want to close player.level() in a `finally` clause
     @Inject(method = "supplyFood", at = @At("HEAD"), remap = false, cancellable = true)
     private void tfg$preventQuarkFeedingWhenBleeding(IElectricItem item, Player player, CallbackInfoReturnable<Boolean> cir) {
-        if (player.getPersistentData().getBoolean("playerrevive:bleeding") || player.level().isClientSide) {
+        if (player.getPersistentData().getBoolean("playerrevive:bleeding")) {
             cir.setReturnValue(false);
         }
     }
