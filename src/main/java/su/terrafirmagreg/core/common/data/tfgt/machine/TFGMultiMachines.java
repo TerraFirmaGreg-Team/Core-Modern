@@ -55,7 +55,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
-import fi.dea.mc.deafission.common.data.machine.AuxExchangerMachine;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
@@ -479,7 +478,7 @@ public class TFGMultiMachines {
     private static final Supplier<Block> MARS_CASING = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars"));
     public static final MultiblockMachineDefinition OSTRUM_LINEAR_ACCELERATOR = REGISTRATE
-            .multiblock("ostrum_linear_accelerator", AuxExchangerMachine::new)
+            .multiblock("ostrum_linear_accelerator", CustomAuxExchangerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGRecipeTypes.OSTRUM_LINEAR_ACCELERATOR)
             .appearanceBlock(MARS_CASING)
