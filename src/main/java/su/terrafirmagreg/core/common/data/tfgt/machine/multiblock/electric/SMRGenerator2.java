@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
@@ -15,12 +16,10 @@ import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
@@ -28,11 +27,10 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.syncsystem.annotations.SyncToClient;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTMath;
 import com.gregtechceu.gtceu.utils.GTUtil;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -52,13 +50,10 @@ import su.terrafirmagreg.core.common.TFGHelpers;
 @MethodsReturnNonnullByDefault
 public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements ITieredMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            SMRGenerator2.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
-
     // TODO: CosmicCore Lubricants for efficiency bonus
 
     private long lubricantAmountForDisplay = 0;
-    @DescSynced
+    @SyncToClient
     private GTRecipe lastUsedRecipe = null;
 
     private FluidStack currentLubricant;
@@ -66,9 +61,9 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
     @Getter
     private final int tier;
     // Probably a bad idea, most likely a better way to do this
-    @DescSynced
+    @SyncToClient
     private static final Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
-    @DescSynced
+    @SyncToClient
     private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
     private int runningTimer = 0;
     static {
@@ -80,15 +75,15 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
     }
 
-    public SMRGenerator2(IMachineBlockEntity holder, int tier) {
-        super(holder);
+    public SMRGenerator2(BlockEntityCreationInfo info, int tier) {
+        super(info);
         this.tier = tier;
     }
 
     private boolean isIntakesObstructed() {
         var dir = this.getFrontFacing();
         boolean mutableXZ = dir.getAxis() == Direction.Axis.Z;
-        var centerPos = this.getPos().relative(dir);
+        var centerPos = this.getBlockPos().relative(dir);
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 if (x == 0 && y == 0)
@@ -481,10 +476,5 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
                         .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
                 this::isIntakesObstructed,
                 () -> null));
-    }
-
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
     }
 }

@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
@@ -40,7 +39,7 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
 
     public final Map<DimensionalBlockPos, NetworkPart> parts = new HashMap<>();
 
-    public static InterplanetaryLogisticsNetwork get(IMachineBlockEntity entity) {
+    public static InterplanetaryLogisticsNetwork get(MetaMachine entity) {
         return Objects.requireNonNull(Objects.requireNonNull(entity.self().getLevel()).getServer()).overworld().getDataStorage().computeIfAbsent(InterplanetaryLogisticsNetwork::new,
                 InterplanetaryLogisticsNetwork::new, DATA_ID);
     }
@@ -115,7 +114,7 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
         }
 
         default InterplanetaryLogisticsNetwork getLogisticsNetwork() {
-            return InterplanetaryLogisticsNetwork.get(getMachine().getHolder());
+            return InterplanetaryLogisticsNetwork.get(getMachine());
         }
 
         MetaMachine getMachine();

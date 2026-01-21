@@ -141,7 +141,7 @@ public class AverageTemperatureCondition extends RecipeCondition {
         if (!(level instanceof ServerLevel serverLevel))
             return false;
 
-        BlockPos pos = machine.getPos();
+        BlockPos pos = machine.getBlockPos();
         float climate = Climate.getAverageTemperature(serverLevel, pos);
 
         boolean passes;

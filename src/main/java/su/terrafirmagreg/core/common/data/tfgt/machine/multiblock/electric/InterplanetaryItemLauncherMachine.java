@@ -7,23 +7,21 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+import com.gregtechceu.gtceu.syncsystem.annotations.SaveField;
+import com.gregtechceu.gtceu.syncsystem.annotations.SyncToClient;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,11 +46,9 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 
 public class InterplanetaryItemLauncherMachine extends WorkableElectricMultiblockMachine
         implements ILogisticsNetworkSender, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            InterplanetaryItemLauncherMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     @Getter
     public long energyBuffer;
     public static long energyCapacity = GTValues.V[GTValues.HV] * 32;
@@ -67,18 +63,13 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     private RailgunAmmoLoaderMachine ammoLoaderPart;
 
-    public InterplanetaryItemLauncherMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public InterplanetaryItemLauncherMachine(BlockEntityCreationInfo info) {
+        super(info);
         energyBuffer = 0;
     }
 
     public InterplanetaryItemLauncherMachine getMachine() {
         return this;
-    }
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
     }
 
     @Override
@@ -113,7 +104,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     @Override
     public boolean isMachineInvalid() {
-        return !isFormed() || isInValid();
+        return !isFormed() || isRemoved();
     }
 
     @Override
@@ -239,7 +230,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         } else if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.REDSTONE_SIGNAL) {
             boolean hasAnySignal = false;
             for (var bus : itemBuses) {
-                if (Objects.requireNonNull(getLevel()).hasNeighborSignal(bus.getPos())) {
+                if (Objects.requireNonNull(getLevel()).hasNeighborSignal(bus.getBlockPos())) {
                     hasAnySignal = true;
                     break;
                 }
@@ -292,7 +283,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         if (extracted)
             receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20 * travelTime);
         if (getLevel() instanceof ServerLevel serverLevel) {
-            BlockPos basePos = this.getPos();
+            BlockPos basePos = this.getBlockPos();
             BlockState state = this.getBlockState();
             Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
 

@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
-import static com.gregtechceu.gtceu.common.data.GTMachines.ITEM_IMPORT_BUS;
-
 import java.util.function.Consumer;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
@@ -111,28 +109,6 @@ public class TFGTRecipes {
                 .duration(5 * 20)
                 .EUt(GTValues.VA[GTValues.MV])
                 .save(provider);
-
-        for (int i = 0; i < TFGMachines.RAILGUN_ITEM_LOADER_IN.length; i++) {
-            if (TFGMachines.RAILGUN_ITEM_LOADER_IN[i] != null && TFGMachines.RAILGUN_ITEM_LOADER_OUT[i] != null) {
-                VanillaRecipeHelper.addShapedRecipe(provider, true,
-                        TFGCore.id("railgun_input_bus_create_" + TFGMachines.RAILGUN_ITEM_LOADER_IN[i].getTier()),
-                        TFGMachines.RAILGUN_ITEM_LOADER_IN[i].asStack(),
-                        " d ", "rBx", " w ",
-                        'B', ITEM_IMPORT_BUS[i].asStack());
-
-                VanillaRecipeHelper.addShapedRecipe(provider, true,
-                        TFGCore.id("railgun_input_convert_" + TFGMachines.RAILGUN_ITEM_LOADER_IN[i].getTier()),
-                        TFGMachines.RAILGUN_ITEM_LOADER_IN[i].asStack(),
-                        "d", "B",
-                        'B', TFGMachines.RAILGUN_ITEM_LOADER_OUT[i].asStack());
-
-                VanillaRecipeHelper.addShapedRecipe(provider, true,
-                        TFGCore.id("railgun_output_convert_" + TFGMachines.RAILGUN_ITEM_LOADER_OUT[i].getTier()),
-                        TFGMachines.RAILGUN_ITEM_LOADER_OUT[i].asStack(),
-                        "d", "B",
-                        'B', TFGMachines.RAILGUN_ITEM_LOADER_IN[i].asStack());
-            }
-        }
 
     }
 }

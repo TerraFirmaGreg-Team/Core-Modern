@@ -146,7 +146,7 @@ public class GravityCondition extends RecipeCondition {
         if (!(level instanceof ServerLevel serverLevel))
             return false;
 
-        BlockPos pos = machine.getPos();
+        BlockPos pos = machine.getBlockPos();
         float gravityRatio = GravityApi.API.getGravity(serverLevel, pos);
         boolean passes = isPasses(gravityRatio);
         return isReverse != passes;

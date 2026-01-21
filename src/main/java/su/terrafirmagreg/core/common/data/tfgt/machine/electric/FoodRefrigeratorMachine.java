@@ -3,12 +3,12 @@ package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.gui.widget.ToggleButtonWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
@@ -16,14 +16,14 @@ import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.syncsystem.annotations.SaveField;
+import com.gregtechceu.gtceu.utils.ISubscription;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
@@ -55,20 +55,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         return 9 * (tier + (tier + 1) / 2);
     }
 
-    /**
-     * The constant MANAGED_FIELD_HOLDER.
-     */
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            FoodRefrigeratorMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Persisted
+    @SaveField
     private boolean currentlyWorking;
-    @Persisted
+    @SaveField
     private final RefrigeratedStorage inventory;
     private final int inventorySize;
     protected ISubscription energySubscription;
@@ -84,18 +73,11 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
     }
 
     @Getter
-    @Persisted
+    @SaveField
     private boolean unifyDatesEnabled = true;
 
-    /**
-     * Instantiates a New Food Refrigerator Machine.
-     *
-     * @param holder IMachineBlockEntity holder.
-     * @param tier   int GT tier.
-     * @param args   Object args.
-     */
-    public FoodRefrigeratorMachine(IMachineBlockEntity holder, int tier, Object... args) {
-        super(holder, tier, args);
+    public FoodRefrigeratorMachine(BlockEntityCreationInfo info, int tier) {
+        super(info, tier, FoodRefrigeratorMachine::createEnergyContainer);
 
         inventorySize = INVENTORY_SIZE(tier);
 
@@ -103,9 +85,8 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         currentlyWorking = false;
     }
 
-    @Override
-    protected @NotNull NotifiableEnergyContainer createEnergyContainer(Object @NotNull... args) {
-        return new NotifiableEnergyContainer(this, GTValues.V[tier] * 64, GTValues.V[tier], 2L, 0L, 0L);
+    private static NotifiableEnergyContainer createEnergyContainer(TieredEnergyMachine machine) {
+        return new NotifiableEnergyContainer(machine, GTValues.V[machine.getTier()] * 64, GTValues.V[machine.getTier()], 2L, 0L, 0L);
     }
 
     // #region Logic
@@ -139,7 +120,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
     @Override
     public void onMachineRemoved() {
         if (!isRemote() && getLevel() instanceof ServerLevel serverLevel) {
-            var pos = getPos();
+            var pos = getBlockPos();
             for (ItemStack drop : inventory.drainAllForDrop()) {
                 if (!drop.isEmpty()) {
                     net.minecraft.world.Containers.dropItemStack(serverLevel, pos.getX(), pos.getY(), pos.getZ(), drop);
@@ -177,14 +158,14 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
                 // Initial maintenance when transitioning to working state.
                 inventory.maintainNow();
-                markDirty();
+                markAsChanged();
             }
             tickSubscription = subscribeServerTick(tickSubscription, this::tick);
         } else {
             if (currentlyWorking) {
                 inventory.changeTraitForAll(false);
                 currentlyWorking = false;
-                markDirty();
+                markAsChanged();
             }
             if (tickSubscription != null) {
                 tickSubscription.unsubscribe();
@@ -238,7 +219,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         if (this.workingEnabled == isWorkingAllowed)
             return;
         this.workingEnabled = isWorkingAllowed;
-        markDirty();
+        markAsChanged();
         if (!isRemote()) {
             updateSubscription();
         }
@@ -403,7 +384,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             if (FoodRefrigeratorMachine.this.getLevel() instanceof ServerLevel serverLevel) {
                 serverLevel.getServer().tell(new TickTask(0, this::runMaintenanceIfPending));
             }
-            FoodRefrigeratorMachine.this.markDirty();
+            markAsChanged();
         }
 
         /**
@@ -433,7 +414,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             } finally {
                 internalEdit = false;
             }
-            FoodRefrigeratorMachine.this.markDirty();
+            markAsChanged();
             FoodRefrigeratorMachine.this.updateSubscription();
         }
 
@@ -665,7 +646,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             if (!simulate) {
                 // Defer reordering until end of tick.
                 scheduleMaintenance();
-                FoodRefrigeratorMachine.this.markDirty();
+                markAsChanged();
             }
             return result;
         }
@@ -689,7 +670,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             if (!simulate) {
                 // Defer reordering until end of tick.
                 scheduleMaintenance();
-                FoodRefrigeratorMachine.this.markDirty();
+                markAsChanged();
             }
             return result;
         }
@@ -701,7 +682,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                     RefrigeratedStorage.super.setStackInSlot(slot, ItemStack.EMPTY);
                     // Defer reordering until end of tick.
                     scheduleMaintenance();
-                    FoodRefrigeratorMachine.this.markDirty();
+                    markAsChanged();
                     return;
                 }
 
@@ -718,7 +699,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                 RefrigeratedStorage.super.setStackInSlot(slot, toSet);
                 // Defer reordering until end of tick.
                 scheduleMaintenance();
-                FoodRefrigeratorMachine.this.markDirty();
+                markAsChanged();
                 return;
             }
 

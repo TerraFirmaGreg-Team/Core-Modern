@@ -13,7 +13,6 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.IFood;
@@ -29,14 +28,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import su.terrafirmagreg.core.TFGCore;
 
 public class ISPOutputRecipeLogic extends RecipeLogic {
-
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(ISPOutputRecipeLogic.class,
-            RecipeLogic.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     // There is probably a better way to expose the TFC recipe data
     record TFCRecipeData(List<SizedIngredient> inputs, ItemStackProvider outputISP, List<ItemStack> secondaryOutputs) {

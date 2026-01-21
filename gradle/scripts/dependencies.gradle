@@ -50,7 +50,8 @@ dependencies {
     implementation fg.deobf("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
-    implementation fg.deobf("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
+    implementation files("libs/gtceu-1.20.1-7.4.1.jar")
+    //implementation fg.deobf("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
     implementation fg.deobf("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
 
     // KJS

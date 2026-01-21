@@ -2,9 +2,8 @@ package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
@@ -17,13 +16,8 @@ import net.minecraft.world.item.ItemStack;
  */
 public class SingleItemstackBus extends ItemBusPartMachine {
 
-    /**
-     * Instantiates a new Single itemstack bus.
-     *
-     * @param holder the holder
-     */
-    public SingleItemstackBus(IMachineBlockEntity holder) {
-        super(holder, 0, IO.IN);
+    public SingleItemstackBus(BlockEntityCreationInfo info) {
+        super(info, 0, IO.IN);
     }
 
     @Override
@@ -32,12 +26,8 @@ public class SingleItemstackBus extends ItemBusPartMachine {
     }
 
     @Override
-    protected @NotNull NotifiableItemStackHandler createInventory(Object @NotNull... args) {
+    protected @NotNull NotifiableItemStackHandler createInventory() {
         return new ObjectHolderHandler(this);
-    }
-
-    @Override
-    public void attachConfigurators(@NotNull ConfiguratorPanel configuratorPanel) {
     }
 
     // Inner handler that enforces a stacksize of 1 in 1 item slot.

@@ -2,17 +2,13 @@ package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
 import java.util.*;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
-import com.lowdragmc.lowdraglib.syncdata.ITagSerializable;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -21,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.INBTSerializable;
 
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.common.interdim_logistics.InterplanetaryLogisticsNetwork.*;
@@ -28,21 +25,14 @@ import su.terrafirmagreg.core.common.interdim_logistics.NetworkReceiverConfigEnt
 
 public class InterplanetaryItemReceiverMachine extends WorkableElectricMultiblockMachine
         implements ILogisticsNetworkReceiver, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            InterplanetaryItemReceiverMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     private final List<ItemPayload> payloads = new ArrayList<>();
 
     private final List<RailgunItemBusMachine> itemOutputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
 
-    public InterplanetaryItemReceiverMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public InterplanetaryItemReceiverMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     public InterplanetaryItemReceiverMachine getMachine() {
@@ -51,7 +41,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     @Override
     public boolean isMachineInvalid() {
-        return !isFormed() || isInValid();
+        return !isFormed() || isRemoved();
     }
 
     @Override
@@ -125,13 +115,13 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
             return false;
         } else if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.REDSTONE_DISABLE) {
             for (var bus : withCircuit) {
-                if (getLevel().hasNeighborSignal(bus.getPos()))
+                if (getLevel().hasNeighborSignal(bus.getBlockPos()))
                     return false;
             }
         } else if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.REDSTONE_ENABLE) {
             var hasFoundSignal = false;
             for (var bus : withCircuit) {
-                if (getLevel().hasNeighborSignal(bus.getPos())) {
+                if (getLevel().hasNeighborSignal(bus.getBlockPos())) {
                     hasFoundSignal = true;
                     break;
                 }
@@ -206,32 +196,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         return null;
     }
 
-    @Override
-    public void saveCustomPersistedData(@NotNull CompoundTag tag, boolean forDrop) {
-        super.saveCustomPersistedData(tag, forDrop);
-        if (forDrop)
-            return;
-        var newTag = new ListTag();
-        for (var payload : payloads) {
-            newTag.add(payload.serializeNBT());
-        }
-        tag.put("payloads", newTag);
-    }
-
-    @Override
-    public void loadCustomPersistedData(@NotNull CompoundTag tag) {
-        super.loadCustomPersistedData(tag);
-        var listTag = tag.getList("payloads", Tag.TAG_COMPOUND);
-        for (var entry : listTag) {
-            if (!(entry instanceof CompoundTag ctag))
-                return;
-            var saved = new ItemPayload();
-            saved.deserializeNBT(ctag);
-            payloads.add(saved);
-        }
-    }
-
-    private static class ItemPayload implements ITagSerializable<CompoundTag> {
+    private static class ItemPayload implements INBTSerializable<CompoundTag> {
         public int travelDuration;
         public List<ItemStack> items;
         public int inventoryIndex;

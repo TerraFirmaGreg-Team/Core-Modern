@@ -1,12 +1,9 @@
 package su.terrafirmagreg.core.common.data.tfgt.covers;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.gregtechceu.gtceu.api.capability.ICoverable;
 import com.gregtechceu.gtceu.api.cover.CoverDefinition;
 import com.gregtechceu.gtceu.api.cover.filter.ItemFilter;
 import com.gregtechceu.gtceu.common.cover.voiding.ItemVoidingCover;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.IFood;
@@ -20,16 +17,8 @@ import net.minecraftforge.items.IItemHandlerModifiable;
  */
 public class RottenVoidCover extends ItemVoidingCover {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            RottenVoidCover.class, ItemVoidingCover.MANAGED_FIELD_HOLDER);
-
     public RottenVoidCover(CoverDefinition definition, ICoverable coverHolder, Direction attachedSide) {
         super(definition, coverHolder, attachedSide);
-    }
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
     }
 
     @Override

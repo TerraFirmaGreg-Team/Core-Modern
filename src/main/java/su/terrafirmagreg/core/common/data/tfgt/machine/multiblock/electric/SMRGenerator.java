@@ -7,13 +7,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
@@ -22,7 +21,6 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
@@ -35,9 +33,6 @@ import su.terrafirmagreg.core.common.TFGHelpers;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SMRGenerator extends WorkableElectricMultiblockMachine implements ITieredMachine {
-
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            SMRGenerator.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Getter
     private final int tier;
@@ -83,15 +78,15 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
     private int runningTimer = 0;
     private int boostDuration = 0, lubeDuration = 0;
 
-    public SMRGenerator(IMachineBlockEntity holder, int tier) {
-        super(holder);
+    public SMRGenerator(BlockEntityCreationInfo info, int tier) {
+        super(info);
         this.tier = tier;
     }
 
     private boolean isIntakesObstructed() {
         var dir = this.getFrontFacing();
         boolean mutableXZ = dir.getAxis() == Direction.Axis.Z;
-        var centerPos = this.getPos().relative(dir);
+        var centerPos = this.getBlockPos().relative(dir);
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 if (x == 0 && y == 0)
@@ -202,10 +197,5 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
     @Override
     public boolean regressWhenWaiting() {
         return false;
-    }
-
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
     }
 }

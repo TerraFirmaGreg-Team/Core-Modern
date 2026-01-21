@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createTieredHullMachineModel;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
@@ -12,11 +11,9 @@ import java.util.function.BiFunction;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
-import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.item.QuantumTankMachineItem;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
@@ -47,7 +44,6 @@ import net.minecraftforge.fluids.FluidType;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.SingleItemstackBus;
 
 public class TFGMachines {
@@ -67,8 +63,8 @@ public class TFGMachines {
     //				.register());
 
     public static final MachineDefinition BISMUTH_BRONZE_CRATE = GTMachineUtils.registerCrate(GTMaterials.BismuthBronze,
-            54, "Bismuth Bronze Crate");
-    public static final MachineDefinition BLACK_BRONZE_CRATE = GTMachineUtils.registerCrate(GTMaterials.BlackBronze, 54,
+            54, 9, "Bismuth Bronze Crate");
+    public static final MachineDefinition BLACK_BRONZE_CRATE = GTMachineUtils.registerCrate(GTMaterials.BlackBronze, 54, 9,
             "Black Bronze Crate");
     public static final MachineDefinition BISMUTH_BRONZE_DRUM = GTMachineUtils.registerDrum(GTMaterials.BismuthBronze,
             32000, "Bismuth Bronze Drum");
@@ -153,36 +149,6 @@ public class TFGMachines {
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] RAILGUN_ITEM_LOADER_IN = registerTieredMachines(REGISTRATE, "railgun_item_loader_in",
-            (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.IN),
-            (tier, builder) -> builder
-                    .langValue(
-                            "%s Interplanetary Railgun Loader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
-                    .rotationState(RotationState.ALL)
-                    .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
-                            GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
-                    .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
-                            Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
-                                    (1 + Math.min(9, tier)) * (1 + Math.min(9, tier))))
-                    .allowCoverOnFront(true)
-                    .register(),
-            GTMachineUtils.ALL_TIERS);
-
-    public static final MachineDefinition[] RAILGUN_ITEM_LOADER_OUT = registerTieredMachines(REGISTRATE, "railgun_item_loader_out",
-            (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.OUT),
-            (tier, builder) -> builder
-                    .langValue(
-                            "%s Interplanetary Railgun Unloader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
-                    .rotationState(RotationState.ALL)
-                    .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
-                            GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
-                    .tooltips(Component.translatable("gtceu.machine.item_bus.export.tooltip"),
-                            Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
-                                    (1 + Math.min(9, tier)) * (1 + Math.min(9, tier))))
-                    .allowCoverOnFront(true)
-                    .register(),
-            GTMachineUtils.ALL_TIERS);
-
     public static final MachineDefinition SINGLE_ITEMSTACK_BUS = REGISTRATE
             .machine("single_itemstack_bus", SingleItemstackBus::new)
             .rotationState(RotationState.ALL)
@@ -223,8 +189,7 @@ public class TFGMachines {
     private static MachineDefinition createULVTank() {
         long maxAmount = 1000 * FluidType.BUCKET_VOLUME;
         var definition = GTRegistration.REGISTRATE.machine("ulv_super_tank",
-                MachineDefinition::new, (holder) -> new QuantumTankMachine(holder, GTValues.ULV, maxAmount),
-                MetaMachineBlock::new, QuantumTankMachineItem::new, MetaMachineBlockEntity::new)
+                MachineDefinition::new, MetaMachineBlock::new, QuantumTankMachineItem::new, (holder) -> new QuantumTankMachine(holder, GTValues.ULV, maxAmount))
                 .langValue("ULV Super Tank")
                 .blockProp(BlockBehaviour.Properties::dynamicShape)
                 .rotationState(RotationState.ALL)
@@ -273,7 +238,7 @@ public class TFGMachines {
             .register();
 
     public static MachineDefinition[] registerTieredMachines(GTRegistrate registrate, String name,
-            BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
+            BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
             BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
             int... tiers) {
 
@@ -288,7 +253,7 @@ public class TFGMachines {
     }
 
     public static MachineDefinition registerSteamMachine(String name,
-            BiFunction<IMachineBlockEntity, Boolean, MetaMachine> factory,
+            BiFunction<BlockEntityCreationInfo, Boolean, MetaMachine> factory,
             BiFunction<Boolean, MachineBuilder<MachineDefinition>, MachineDefinition> builder) {
         return builder.apply(true,
                 REGISTRATE.machine("hp_%s".formatted(name), holder -> factory.apply(holder, true))

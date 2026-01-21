@@ -78,7 +78,7 @@ public class OxygenatedCondition extends RecipeCondition {
         if (!(level instanceof ServerLevel serverLevel))
             return false;
 
-        BlockPos pos = machine.getPos();
+        BlockPos pos = machine.getBlockPos();
         boolean hasAdjOxygen = hasOxygenOnAnySide(serverLevel, pos);
         boolean passes = isOxygenated == hasAdjOxygen;
         return isReverse != passes;
