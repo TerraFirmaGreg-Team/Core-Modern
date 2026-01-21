@@ -198,7 +198,7 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
 
             textList.add(labeledValue(
                     "tfg.machine.aux_exchanger.hu_consumed",
-                    FormattingUtil.formatNumbers(heatRequired) + " HU/cycle",
+                    FormattingUtil.formatNumbers(heatRequired) + " HU/recipe",
                     ChatFormatting.RED,
                     "tfg.machine.aux_exchanger.hu_consumed.desc"));
 
@@ -247,6 +247,11 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
     @Override
     public ModularUI createUI(Player entityPlayer) {
         return super.createUI(entityPlayer);
+    }
+
+    @Override
+    public boolean hasPlayerInventory() {
+        return true;
     }
 
     //////////////////////////////////////
