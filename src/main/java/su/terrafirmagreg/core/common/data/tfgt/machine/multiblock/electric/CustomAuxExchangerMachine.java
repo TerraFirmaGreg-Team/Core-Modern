@@ -142,6 +142,8 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
 
         textList.add(Component.empty());
 
+        textList.add(Component.translatable("tfg.machine.aux_echanger.output.title"));
+
         builder.addOutputLines(recipeLogic.getLastRecipe());
 
         getDefinition().getAdditionalDisplay().accept(this, textList);
@@ -238,6 +240,12 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
 
     //////////////////////////////////////
     // ********** UI ***********//
+
+    @Override
+    public ModularUI createUI(Player entityPlayer) {
+        return super.createUI(entityPlayer);
+    }
+
     //////////////////////////////////////
 
     @Override
@@ -253,12 +261,6 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
                         .clickHandler(this::handleDisplayClick)));
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
-    }
-
-    @Override
-    public ModularUI createUI(Player player) {
-        return new ModularUI(198, 208, this, player)
-                .widget(new FancyMachineUIWidget(this, 198, 208));
     }
 
     @Override
