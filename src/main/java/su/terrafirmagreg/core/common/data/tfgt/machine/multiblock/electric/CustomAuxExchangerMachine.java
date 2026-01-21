@@ -250,8 +250,8 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
 
     @Override
     public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 190, 125);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117)
+        var group = new WidgetGroup(0, 0, 190, 170);
+        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 162)
                 .setBackground(getScreenTexture())
                 .addWidget(new LabelWidget(4, 5,
                         self().getBlockState().getBlock().getDescriptionId()))
