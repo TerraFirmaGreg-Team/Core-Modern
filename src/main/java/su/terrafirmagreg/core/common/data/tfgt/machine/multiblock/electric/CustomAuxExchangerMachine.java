@@ -142,7 +142,10 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
 
         textList.add(Component.empty());
 
-        textList.add(Component.translatable("tfg.machine.aux_echanger.output.title"));
+        if (recipeLogic.isActive()) {
+            textList.add(Component.translatable("tfg.machine.aux_echanger.output.title"));
+            builder.addOutputLines(recipeLogic.getLastRecipe());
+        }
 
         builder.addOutputLines(recipeLogic.getLastRecipe());
 
@@ -250,8 +253,8 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
 
     @Override
     public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 190, 170);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 162)
+        var group = new WidgetGroup(0, 0, 210, 180);
+        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 202, 172)
                 .setBackground(getScreenTexture())
                 .addWidget(new LabelWidget(4, 5,
                         self().getBlockState().getBlock().getDescriptionId()))
