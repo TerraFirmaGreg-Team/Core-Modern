@@ -113,10 +113,12 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
 
     public static class ResultSlot extends CallbackSlot {
         private final ArtisanTableBlockEntity blockEntity;
+        private final ArtisanTableContainer container;
 
         public ResultSlot(ArtisanTableContainer container, ArtisanTableBlockEntity blockEntity, int index, int x, int y) {
             super(blockEntity, blockEntity.getInventory(), index, x, y);
             this.blockEntity = blockEntity;
+            this.container = container;
         }
 
         @Override
@@ -140,12 +142,19 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
 
         @Override
         public void onTake(Player player, ItemStack stack) {
+            blockEntity.damageTools(player);
             if (!blockEntity.isHasConsumedIngredient()) {
                 blockEntity.consumeItems();
-                blockEntity.damageTools(player);
                 blockEntity.resetPattern();
             }
             super.onTake(player, stack);
+
+            if (blockEntity.canConsumeIngredients()) {
+                blockEntity.resetPattern();
+                blockEntity.checkForActiveScreen();
+                blockEntity.markForSync();
+                blockEntity.setChanged();
+            }
         }
     }
 
