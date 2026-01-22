@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.InventoryItemHandler;
 import net.dries007.tfc.util.Helpers;
@@ -90,11 +92,10 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
     }
 
     @Override
-    public boolean isItemValid(int slot, ItemStack stack) {
+    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
         return switch (slot) {
             case MAT_SLOTA, MAT_SLOTB -> stack.is(TFGTags.Items.SmithingTableInputs);
             case TOOL_SLOTA, TOOL_SLOTB -> stack.is(TFGTags.Items.SmithingTools);
-            case RESULT_SLOT -> false;
             default -> false;
         };
     }
@@ -163,40 +164,28 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
 
         TagKey<Item> testTool1 = currentType.getToolTags().get(0);
         TagKey<Item> testTool2 = currentType.getToolTags().get(1);
-
         boolean toolsValid = !toolA.isEmpty() && !toolB.isEmpty() &&
                 ((toolA.is(testTool1) || toolB.is(testTool1)) &&
                         (toolA.is(testTool2) || toolB.is(testTool2)));
-
         if (!toolsValid)
             return false;
-
-        Item testItem1 = currentType.getInputItems().get(0).getItem();
-        Item testItem2 = currentType.getInputItems().size() > 1 ? currentType.getInputItems().get(1).getItem() : null;
-
-        int requiredCount1 = currentType.getInputItems().get(0).getCount();
-        int requiredCount2 = testItem2 != null ? currentType.getInputItems().get(1).getCount() : 0;
-
-        int available1 = 0;
-        int available2 = 0;
-
-        if (inputA.is(testItem1))
-            available1 += inputA.getCount();
-        if (inputB.is(testItem1))
-            available1 += inputB.getCount();
-
-        if (testItem2 != null) {
-            if (inputA.is(testItem2))
-                available2 += inputA.getCount();
-            if (inputB.is(testItem2))
-                available2 += inputB.getCount();
+        var requiredInputs = currentType.getInputItems();
+        ArrayList<ItemStack> inputStacks = new ArrayList<>();
+        inputStacks.add(inputA);
+        inputStacks.add(inputB);
+        for (ItemStack required : requiredInputs) {
+            int requiredCount = required.getCount();
+            int found = 0;
+            for (ItemStack input : inputStacks) {
+                if (!input.isEmpty() && input.is(required.getItem())) {
+                    found += input.getCount();
+                }
+            }
+            if (found < requiredCount) {
+                return false;
+            }
         }
-
-        if (testItem2 == null) {
-            return available1 >= requiredCount1;
-        }
-
-        return available1 >= requiredCount1 && available2 >= requiredCount2;
+        return true;
     }
 
     public boolean canConsumeIngredients() {
@@ -242,25 +231,13 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         ItemStack toolB = inventory.getStackInSlot(TOOL_SLOTB);
 
         if (!toolA.isEmpty() && toolA.isDamageableItem()) {
-            if (player != null) {
-                toolA.hurtAndBreak(1, player, (p) -> inventory.setStackInSlot(TOOL_SLOTA, ItemStack.EMPTY));
-            } else {
-                toolA.setDamageValue(toolA.getDamageValue() + 1);
-                if (toolA.getDamageValue() >= toolA.getMaxDamage()) {
-                    inventory.setStackInSlot(TOOL_SLOTA, ItemStack.EMPTY);
-                }
-            }
+            assert player != null;
+            toolA.hurtAndBreak(1, player, (p) -> inventory.setStackInSlot(TOOL_SLOTA, ItemStack.EMPTY));
         }
 
         if (!toolB.isEmpty() && toolB.isDamageableItem()) {
-            if (player != null) {
-                toolB.hurtAndBreak(1, player, (p) -> inventory.setStackInSlot(TOOL_SLOTB, ItemStack.EMPTY));
-            } else {
-                toolB.setDamageValue(toolB.getDamageValue() + 1);
-                if (toolB.getDamageValue() >= toolB.getMaxDamage()) {
-                    inventory.setStackInSlot(TOOL_SLOTB, ItemStack.EMPTY);
-                }
-            }
+            assert player != null;
+            toolB.hurtAndBreak(1, player, (p) -> inventory.setStackInSlot(TOOL_SLOTB, ItemStack.EMPTY));
         }
         markForSync();
         setChanged();
@@ -280,12 +257,12 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+    public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory inv, @NotNull Player player) {
         return ArtisanTableContainer.create(this, inv, windowId);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.putLong("patternData", pattern.getData());
         tag.putBoolean("activeScreen", activeScreen);

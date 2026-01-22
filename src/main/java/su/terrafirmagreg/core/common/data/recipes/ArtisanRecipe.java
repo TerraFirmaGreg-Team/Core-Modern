@@ -6,6 +6,8 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -62,9 +64,9 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
         boolean inputsMatch = matchesItems(recipeHandler.container().getInputItems());
         boolean toolsMatch = matchesTools(recipeHandler.container().getToolItems());
 
-        /*System.out.println(patternMatch);
-        System.out.println(inputMatch);
-        System.out.println(toolsMatch);*/
+        //System.out.println(patternMatch);
+        //System.out.println(inputMatch);
+        //System.out.println(toolsMatch);
 
         return patternMatch && inputsMatch && toolsMatch;
     }
@@ -73,11 +75,13 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
         var stdStacks = stacks.stream().filter(itemStack -> !itemStack.isEmpty()).toList();
 
         if (stdStacks.size() == 1) {
+            assert ingredient != null;
             if (ingredient.test(stdStacks.get(0))) {
                 //System.out.println("Ingredient Matches");
                 return true;
             }
         } else if (stdStacks.size() == 2) {
+            assert ingredient != null;
             if (ingredient.test(stdStacks.get(0)) && ingredient.test(stdStacks.get(1))) {
                 //System.out.println("Ingredients Match");
                 return true;
@@ -100,29 +104,29 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
         return result;
     }
 
     @Override
-    public ResourceLocation getId() {
+    public @NotNull ResourceLocation getId() {
         return this.id;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return TFGRecipeSerializers.ARTISAN.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         return TFGRecipeTypes.ARTISAN.get();
     }
 
     public static class Serializer extends RecipeSerializerImpl<ArtisanRecipe> {
 
         @Override
-        public ArtisanRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        public @NotNull ArtisanRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
             final ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             final ArtisanPattern pattern = ArtisanPattern.fromJson(json);
             final ArtisanType type = ArtisanType.ARTISAN_TYPES.get(ResourceLocation.parse(GsonHelper.getAsString(json, "artisanType")));
@@ -131,7 +135,7 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
 
         @Nullable
         @Override
-        public ArtisanRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        public ArtisanRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
             final ArtisanPattern pattern = ArtisanPattern.fromNetwork(buffer);
             final ItemStack stack = buffer.readItem();
             final @Nullable Ingredient ingredient = Helpers.decodeNullable(buffer, Ingredient::fromNetwork);
@@ -141,7 +145,7 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, ArtisanRecipe recipe) {
+        public void toNetwork(@NotNull FriendlyByteBuf buffer, ArtisanRecipe recipe) {
             recipe.getPattern().toNetwork(buffer);
             buffer.writeItem(recipe.result);
             Helpers.encodeNullable(recipe.ingredient, buffer, Ingredient::toNetwork);

@@ -9,8 +9,6 @@ import net.minecraft.util.GsonHelper;
 
 import lombok.Getter;
 
-//Took this from TFC KnappingPattern since I didn't want to deal with rewriting this when it works
-
 public class ArtisanPattern {
     public static final int MAX_WIDTH = 6;
     public static final int MAX_HEIGHT = 6;
@@ -55,7 +53,6 @@ public class ArtisanPattern {
     private final int height;
     private final boolean empty;
 
-    //The data for the pattern is encoded as indexed binary in a long. This allows for 64 bits to be stored. on = 1, off = 0
     @Getter
     private long data;
 
@@ -104,49 +101,6 @@ public class ArtisanPattern {
         return ((data >> index) & 0b1) == 1;
     }
 
-    //I had to use AI to help me write this since I was too pissed off to figure it out
-    /*public void output() {
-        // Allocate an 8-byte buffer, the size of a long
-        ByteBuffer buffers = ByteBuffer.allocate(Long.BYTES);
-        // Put the long into the buffer
-        buffers.putLong(data);
-        // Return the underlying byte array
-        System.out.println(bytesToBinaryString(buffers.array()));
-    }
-    
-    public void outputOther(SmithingPattern other) {
-        // Allocate an 8-byte buffer, the size of a long
-        ByteBuffer buffers = ByteBuffer.allocate(Long.BYTES);
-        // Put the long into the buffer
-        buffers.putLong(other.data);
-        // Return the underlying byte array
-        System.out.println(bytesToBinaryString(buffers.array()));
-    }
-    
-    public static String bytesToBinaryString(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            // Convert the byte to an integer, mask with 0xFF to handle signedness
-            // and get the unsigned integer value (0-255).
-            int unsignedInt = b & 0xFF;
-    
-            // Convert the unsigned integer to a binary string.
-            String binaryString = Integer.toBinaryString(unsignedInt);
-    
-            // Pad with leading zeros to ensure an 8-bit representation.
-            String paddedBinaryString = String.format("%8s", binaryString).replace(' ', '0');
-    
-            sb.append(paddedBinaryString); // Add a space for readability
-        }
-        sb.delete(0, 28);
-    
-        for (int i = 6; i < sb.length(); i += 6 + "\n".length()) {
-            sb.insert(i, "\n");
-        }
-        sb.insert(0, "\n");
-        return sb.toString();
-    }*/
-
     public void toNetwork(FriendlyByteBuf buffer) {
         buffer.writeVarInt(width);
         buffer.writeVarInt(height);
@@ -166,8 +120,6 @@ public class ArtisanPattern {
     }
 
     public boolean matches(ArtisanPattern other) {
-        //output();
-        //outputOther(other);
         for (int dx = 0; dx <= this.width - other.width; dx++) {
             for (int dy = 0; dy <= this.height - other.height; dy++) {
                 if (matches(other, dx, dy, false) || matches(other, dx, dy, true)) {

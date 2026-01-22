@@ -47,8 +47,6 @@ public class ArtisanType {
 
     private static final String TEXTURE_PREFIX = "textures/gui/smithing/";
 
-    //This is cursed
-
     public ArtisanType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture, SoundEvent clickSound,
             ResourceLocation borderTexture) {
         this(name, inputItemA, ItemStack.EMPTY, toolA, toolB, activeTexture, inactiveTexture, clickSound, borderTexture);
@@ -56,11 +54,6 @@ public class ArtisanType {
 
     public ArtisanType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, SoundEvent clickSound, ResourceLocation borderTexture) {
         this(name, inputItemA, ItemStack.EMPTY, toolA, toolB, activeTexture, null, clickSound, borderTexture);
-    }
-
-    public ArtisanType(String name, ItemStack inputItemA, ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture,
-            SoundEvent clickSound) {
-        this(name, inputItemA, inputItemB, toolA, toolB, activeTexture, inactiveTexture, clickSound, null);
     }
 
     public ArtisanType(String name, ItemStack inputItemA, @Nullable ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture,
@@ -107,7 +100,18 @@ public class ArtisanType {
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_resin_board"),
             textureLocation("printed_resin_board"),
-            GTSoundEntries.COMPRESSOR.getMainEvent());
+            GTSoundEntries.COMPRESSOR.getMainEvent(),
+            textureLocation("resin_board_border"));
+    public static final ArtisanType PHENOLIC_BOARD = new ArtisanType(
+            "phenolic_board",
+            GTItems.PHENOLIC_BOARD.get().getDefaultInstance(),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Silver).getItem(), 9),
+            CustomTags.SCREWDRIVERS,
+            CustomTags.WIRE_CUTTERS,
+            textureLocation("blank_phenolic_board"),
+            textureLocation("printed_phenolic_board"),
+            GTSoundEntries.COMPRESSOR.getMainEvent(),
+            textureLocation("phenolic_board_border"));
 
     private static void initNewType(ArtisanType type) {
         ARTISAN_TYPES.put(type.id, type);
@@ -117,5 +121,6 @@ public class ArtisanType {
         initNewType(CASTING_MOLD);
         initNewType(EXTRUDER_MOLD);
         initNewType(RESIN_BOARD);
+        initNewType(PHENOLIC_BOARD);
     }
 }
