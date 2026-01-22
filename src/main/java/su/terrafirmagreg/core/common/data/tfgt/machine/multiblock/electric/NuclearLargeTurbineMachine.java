@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
+import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
@@ -23,8 +26,11 @@ import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMac
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.level.Level;
 
 import lombok.Getter;
 
@@ -41,6 +47,66 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
         super(holder);
         this.tier = tier;
         this.BASE_EU_OUTPUT = 8192;
+    }
+
+    @Nullable
+    private BlockPos getRotorHolderPos() {
+        IRotorHolderMachine holder = getRotorHolder();
+        if (holder instanceof MetaMachine meta) {
+            return meta.getPos();
+        }
+        return null;
+    }
+
+    private boolean isIntakesObstructed() {
+        BlockPos rotorPos = getRotorHolderPos();
+        if (rotorPos == null)
+            return false;
+
+        Level level = getLevel();
+        Direction front = getFrontFacing();
+        Direction right = front.getClockWise();
+
+        boolean obstructed = false;
+
+        for (int yOffset = -1; yOffset >= -2; yOffset--) {
+            BlockPos planeOrigin = rotorPos.offset(0, yOffset, 0);
+
+            System.out.println("=== Checking intake plane at Y offset " + yOffset + " ===");
+
+            for (int z = -2; z <= 2; z++) {
+                StringBuilder row = new StringBuilder();
+
+                for (int x = -2; x <= 2; x++) {
+
+                    // Coins (X) ignorés
+                    if (Math.abs(x) == 2 && Math.abs(z) == 2) {
+                        row.append('X');
+                        continue;
+                    }
+
+                    BlockPos pos = planeOrigin
+                            .relative(right, x)
+                            .relative(front, z);
+
+                    boolean isAir = level.getBlockState(pos).isAir();
+                    row.append(isAir ? '.' : 'O');
+
+                    if (!isAir)
+                        obstructed = true;
+                }
+
+                System.out.println(row);
+            }
+            for (int y = 5; y <= 8; y++) {
+                BlockPos pos = rotorPos.above(y);
+                if (!level.getBlockState(pos).isAir()) {
+                    return true;
+                }
+            }
+        }
+
+        return obstructed;
     }
 
     @Nullable
@@ -213,5 +279,16 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
                 }
             }
         }
+    }
+
+    @Override
+    public void attachTooltips(TooltipsPanel tooltipsPanel) {
+        super.attachTooltips(tooltipsPanel);
+        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
+                () -> GuiTextures.INDICATOR_NO_STEAM.get(false),
+                () -> List.of(Component.translatable("gtceu.multiblock.turbine.obstructed")
+                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
+                this::isIntakesObstructed,
+                () -> null));
     }
 }

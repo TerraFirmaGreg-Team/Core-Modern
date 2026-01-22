@@ -184,7 +184,7 @@ public class TFGRecipeTypes {
     public static final GTRecipeType NUCLEAR_FUEL_FACTORY = GTRecipeTypes
             .register("nuclear_fuel_factory", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
-            .setMaxIOSize(6, 3, 1, 1)
+            .setMaxIOSize(6, 3, 1, 2)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSlotOverlay(false, false, GuiTextures.ATOMIC_OVERLAY_1)
             .setSound(GTSoundEntries.CUT)
