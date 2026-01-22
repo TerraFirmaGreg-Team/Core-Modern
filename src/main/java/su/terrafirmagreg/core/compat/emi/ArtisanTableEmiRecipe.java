@@ -34,6 +34,7 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
     public ArtisanTableEmiRecipe(ArtisanRecipe recipe) {
         this.recipe = recipe;
         tools = recipe.getTools().stream().map(EmiIngredient::of).toList();
+        assert recipe.getIngredient() != null;
         items = Arrays.stream(recipe.getIngredient().getItems()).map(EmiStack::of).toList();
 
         type = recipe.getArtisanType();

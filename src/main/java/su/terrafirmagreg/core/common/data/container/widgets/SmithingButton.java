@@ -1,8 +1,8 @@
 package su.terrafirmagreg.core.common.data.container.widgets;
 
-import java.awt.*;
-
 import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -36,11 +36,6 @@ public class SmithingButton extends Button {
     private final SoundEvent sound;
     private final int texWidth;
     private final int texHeight;
-
-    public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, SoundEvent sound) {
-        this(id, type, x, y, width, height, texWidth, texHeight, texture, null, sound, (button) -> {
-        });
-    }
 
     public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound) {
         this(id, type, x, y, width, height, texWidth, texHeight, texture, inactiveTexture, sound, (button) -> {
@@ -83,7 +78,7 @@ public class SmithingButton extends Button {
     }
 
     @Override
-    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         if (!this.visible)
             return;
 

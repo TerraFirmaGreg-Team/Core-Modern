@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.dries007.tfc.common.container.BlockEntityContainer;
 import net.dries007.tfc.common.container.ButtonHandlerContainer;
 import net.dries007.tfc.common.container.CallbackSlot;
@@ -28,9 +30,11 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
     public static final int TOOL_SLOTA = ArtisanTableBlockEntity.TOOL_SLOTA;
     public static final int TOOL_SLOTB = ArtisanTableBlockEntity.TOOL_SLOTB;
     public static final int RESULT_SLOT = ArtisanTableBlockEntity.RESULT_SLOT;
+    // Sets the gap between vertical sections of the GUI.
+    public static final int SCREEN_SPACING = 6;
 
     public static ArtisanTableContainer create(ArtisanTableBlockEntity blockEntity, Inventory playerInventory, int windowId) {
-        return new ArtisanTableContainer(blockEntity, playerInventory, windowId).init(playerInventory, 19);
+        return new ArtisanTableContainer(blockEntity, playerInventory, windowId).init(playerInventory, 19 + SCREEN_SPACING + SCREEN_SPACING);
     }
 
     public ArtisanTableContainer(ArtisanTableBlockEntity blockEntity, Inventory playerInventory, int windowId) {
@@ -79,6 +83,7 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
         // Update the output slot based on the recipe
         final Slot slot = slots.get(RESULT_SLOT);
         RecipeHandler handler = new RecipeHandler(this);
+        assert player != null;
         if (player.level() instanceof ServerLevel level) {
             ItemStack resultStack = level.getRecipeManager().getRecipeFor(TFGRecipeTypes.ARTISAN.get(), handler, level)
                     .map(recipe -> recipe.assemble(handler, level.registryAccess()))
@@ -89,12 +94,12 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
     }
 
     @Override
-    public void removed(Player player) {
+    public void removed(@NotNull Player player) {
         super.removed(player);
     }
 
     @Override
-    protected boolean moveStack(ItemStack stack, int slotIndex) {
+    protected boolean moveStack(@NotNull ItemStack stack, int slotIndex) {
         return switch (typeOf(slotIndex)) {
             case MAIN_INVENTORY, HOTBAR -> !moveItemStackTo(stack, MAT_SLOTA, SLOT_TOT, false);
             case CONTAINER -> !moveItemStackTo(stack, containerSlots, slots.size(), false);
@@ -104,21 +109,19 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
     @Override
     protected void addContainerSlots() {
         super.addContainerSlots();
-        addSlot(new SmithingInputSlot(this, blockEntity, MAT_SLOTA, 123, 25));
-        addSlot(new SmithingInputSlot(this, blockEntity, MAT_SLOTB, 123, 46));
-        addSlot(new SmithingInputSlot(this, blockEntity, TOOL_SLOTA, 145, 25));
-        addSlot(new SmithingInputSlot(this, blockEntity, TOOL_SLOTB, 145, 46));
-        addSlot(new ResultSlot(this, blockEntity, RESULT_SLOT, 134, 72));
+        addSlot(new SmithingInputSlot(this, blockEntity, MAT_SLOTA, 123, 25 + SCREEN_SPACING));
+        addSlot(new SmithingInputSlot(this, blockEntity, MAT_SLOTB, 123, 46 + SCREEN_SPACING));
+        addSlot(new SmithingInputSlot(this, blockEntity, TOOL_SLOTA, 145, 25 + SCREEN_SPACING));
+        addSlot(new SmithingInputSlot(this, blockEntity, TOOL_SLOTB, 145, 46 + SCREEN_SPACING));
+        addSlot(new ResultSlot(blockEntity, RESULT_SLOT, 134, 72 + SCREEN_SPACING));
     }
 
     public static class ResultSlot extends CallbackSlot {
         private final ArtisanTableBlockEntity blockEntity;
-        private final ArtisanTableContainer container;
 
-        public ResultSlot(ArtisanTableContainer container, ArtisanTableBlockEntity blockEntity, int index, int x, int y) {
+        public ResultSlot(ArtisanTableBlockEntity blockEntity, int index, int x, int y) {
             super(blockEntity, blockEntity.getInventory(), index, x, y);
             this.blockEntity = blockEntity;
-            this.container = container;
         }
 
         @Override
@@ -136,12 +139,12 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
         }
 
         @Override
-        public boolean mayPlace(ItemStack stack) {
+        public boolean mayPlace(@NotNull ItemStack stack) {
             return false;
         }
 
         @Override
-        public void onTake(Player player, ItemStack stack) {
+        public void onTake(@NotNull Player player, @NotNull ItemStack stack) {
             blockEntity.damageTools(player);
             if (!blockEntity.isHasConsumedIngredient()) {
                 blockEntity.consumeItems();
@@ -172,7 +175,7 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
         }
 
         @Override
-        public boolean mayPlace(ItemStack stack) {
+        public boolean mayPlace(@NotNull ItemStack stack) {
             return !blockEntity.isActiveScreen() && super.mayPlace(stack);
         }
     }
