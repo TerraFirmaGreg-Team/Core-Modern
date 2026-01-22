@@ -47,7 +47,7 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return recipe.getId().withSuffix("artisan_table");
+        return recipe.getId().withPath(recipe.getId().getPath());
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
             holder.addSlot(input, xPos, yPos);
             yPos += yDiff;
         }
-        holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, yPos + 5);
+        holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, yPos + 5).recipeContext(this);
 
         displayPattern(holder);
     }

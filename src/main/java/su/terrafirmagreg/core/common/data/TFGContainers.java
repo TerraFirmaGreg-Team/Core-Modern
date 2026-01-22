@@ -7,7 +7,6 @@ import net.dries007.tfc.common.container.BlockEntityContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -20,10 +19,10 @@ import net.minecraftforge.registries.RegistryObject;
 import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxContainer;
-import su.terrafirmagreg.core.common.data.container.SmithingTableContainer;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowContainer;
 
 public class TFGContainers {
@@ -42,7 +41,8 @@ public class TFGContainers {
                     TFGBlockEntities.LARGE_NEST_BOX, LargeNestBoxContainer::create);
 
     public static final RegistryObject<MenuType<ArtisanTableContainer>> ARTISAN_TABLE = TFGContainers
-            .registerContainer("artisan_table", ((windowId, inv, data) -> ArtisanTableContainer.create(inv, windowId, ContainerLevelAccess.NULL)));
+            .<ArtisanTableBlockEntity, ArtisanTableContainer>registerBlockEntityContainer("artisan_table",
+                    TFGBlockEntities.ARTISAN_TABLE, ArtisanTableContainer::create);
 
     public static <T extends InventoryBlockEntity<?>, C extends BlockEntityContainer<T>> RegistryObject<MenuType<C>> registerBlockEntityContainer(
             String name, Supplier<BlockEntityType<T>> type, BlockEntityContainer.Factory<T, C> factory) {
