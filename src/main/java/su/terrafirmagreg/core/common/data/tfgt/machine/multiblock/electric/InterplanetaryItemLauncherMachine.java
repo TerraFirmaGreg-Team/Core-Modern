@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -38,7 +39,6 @@ import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.common.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.interdim_logistics.NetworkSenderConfigEntry;
@@ -58,7 +58,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     private EnergyContainerList energyInputs;
 
-    private final List<RailgunItemBusMachine> itemInputs = new ArrayList<>();
+    private final List<ItemBusPartMachine> itemInputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
 
     private RailgunAmmoLoaderMachine ammoLoaderPart;
@@ -123,7 +123,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 ammoLoaderPart = ammo;
             }
 
-            if (part instanceof RailgunItemBusMachine bus) {
+            if (part instanceof ItemBusPartMachine bus) {
                 itemInputs.add(bus);
                 bus.getInventory()
                         .addChangedListener(() -> lastActiveTime[IntCircuitBehaviour
@@ -147,12 +147,12 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public List<RailgunItemBusMachine> getInventories() {
+    public List<ItemBusPartMachine> getInventories() {
         if (isMachineInvalid())
             return List.of();
-        List<RailgunItemBusMachine> parts = new ArrayList<>();
+        List<ItemBusPartMachine> parts = new ArrayList<>();
         for (var part : getParts()) {
-            if (part instanceof RailgunItemBusMachine r)
+            if (part instanceof ItemBusPartMachine r)
                 parts.add(r);
         }
         return parts;
@@ -393,7 +393,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 (c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == circuit
                         && c.isWorkingEnabled())
                 .toList();
-        for (RailgunItemBusMachine bus : itemBuses) {
+        for (ItemBusPartMachine bus : itemBuses) {
             tryExtractFromInventory(remainingItems, bus.getInventory().storage, simulated);
             if (remainingItems.isEmpty())
                 return true;

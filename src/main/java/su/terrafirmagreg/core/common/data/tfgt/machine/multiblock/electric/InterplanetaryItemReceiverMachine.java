@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -19,7 +20,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.common.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.interdim_logistics.NetworkReceiverConfigEntry;
 
@@ -28,7 +28,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     private final List<ItemPayload> payloads = new ArrayList<>();
 
-    private final List<RailgunItemBusMachine> itemOutputs = new ArrayList<>();
+    private final List<ItemBusPartMachine> itemOutputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
 
     public InterplanetaryItemReceiverMachine(BlockEntityCreationInfo info) {
@@ -86,12 +86,12 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public List<RailgunItemBusMachine> getInventories() {
+    public List<ItemBusPartMachine> getInventories() {
         if (isMachineInvalid())
             return List.of();
-        List<RailgunItemBusMachine> parts = new ArrayList<>();
+        List<ItemBusPartMachine> parts = new ArrayList<>();
         for (var part : getParts()) {
-            if (part instanceof RailgunItemBusMachine r)
+            if (part instanceof ItemBusPartMachine r)
                 parts.add(r);
         }
         return parts;
@@ -136,7 +136,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
             remaining.add(stack.copy());
         }
 
-        for (RailgunItemBusMachine outputBus : withCircuit) {
+        for (ItemBusPartMachine outputBus : withCircuit) {
             var inventory = outputBus.getInventory();
             CustomItemStackHandler simulatedInsert = new CustomItemStackHandler(outputBus.getInventory().getSlots());
             for (int i = 0; i < inventory.getSlots(); i++) {
@@ -167,7 +167,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
         for (ItemStack itemToInsert : payload.items) {
             var amountLeft = itemToInsert.copy();
-            for (RailgunItemBusMachine outputBus : withCircuit) {
+            for (ItemBusPartMachine outputBus : withCircuit) {
                 var inventory = outputBus.getInventory();
                 for (int i = 0; i < inventory.getSlots(); i++) {
                     amountLeft = inventory.insertItemInternal(i, amountLeft, false);

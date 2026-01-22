@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.annotation.Nullable;
 
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -19,7 +20,6 @@ import net.minecraft.world.level.saveddata.SavedData;
 import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
 public class InterplanetaryLogisticsNetwork extends SavedData {
     private static final String DATA_ID = "tfg_interdim_logistics";
@@ -121,7 +121,7 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
 
         boolean isMachineInvalid();
 
-        List<RailgunItemBusMachine> getInventories();
+        List<ItemBusPartMachine> getInventories();
 
         Component getCurrentStatusText();
     }
