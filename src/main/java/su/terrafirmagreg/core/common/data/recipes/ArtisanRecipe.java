@@ -93,11 +93,9 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
             boolean matchToolB = toolStacks.get(1).is(toolTag);
 
             if (!matchToolA && !matchToolB) {
-                System.out.println("No Tool Match");
                 return false;
             }
         }
-        System.out.println("Tool Match");
         return true;
     }
 

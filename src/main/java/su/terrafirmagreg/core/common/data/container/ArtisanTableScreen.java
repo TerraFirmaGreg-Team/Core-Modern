@@ -1,11 +1,13 @@
 package su.terrafirmagreg.core.common.data.container;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import net.dries007.tfc.client.screen.TFCContainerScreen;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageWidget;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,13 +23,42 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
 
     private ArtisanType activeType;
     private ImageWidget borderImage;
+    private InvisibleButton emiButton;
+    private boolean buttonsInitialized = false;
 
     public ArtisanTableScreen(ArtisanTableContainer container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TFGCore.id("textures/gui/smithing_test.png"));
         this.imageHeight = 186;
         this.inventoryLabelY += 21;
         this.titleLabelY -= 2;
+    }
 
+    private static class InvisibleButton extends AbstractWidget {
+        private final Runnable onClick;
+
+        public InvisibleButton(int x, int y, int width, int height, Component tooltip, Runnable onClick) {
+            super(x, y, width, height, Component.empty());
+            this.onClick = onClick;
+            this.setTooltip(Tooltip.create(tooltip));
+        }
+
+        @Override
+        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            if (this.isMouseOver(mouseX, mouseY) && button == 0) {
+                onClick.run();
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        protected void updateWidgetNarration(NarrationElementOutput output) {
+            this.defaultButtonNarrationText(output);
+        }
     }
 
     public void AddButtons() {
@@ -58,53 +89,17 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
 
         this.getMenu().setScreenState(true);
+        buttonsInitialized = true;
     }
 
     private void AddAndUpdateButtons() {
         AddButtons();
         ArtisanPattern pattern = getMenu().getPattern();
-        output(pattern);
         for (SmithingButton button : allButtons) {
-            //System.out.println(button.id);
-            //System.out.println(!pattern.get((long) button.id));
             if (!pattern.get(button.id)) {
-                System.out.println("button " + button.id + " activated");
                 button.activateButton();
             }
         }
-    }
-
-    public void output(ArtisanPattern pattern) {
-        // Allocate an 8-byte buffer, the size of a long
-        ByteBuffer buffers = ByteBuffer.allocate(Long.BYTES);
-        // Put the long into the buffer
-        buffers.putLong(pattern.getData());
-        // Return the underlying byte array
-        System.out.println(bytesToBinaryString(buffers.array()));
-    }
-
-    public static String bytesToBinaryString(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            // Convert the byte to an integer, mask with 0xFF to handle signedness
-            // and get the unsigned integer value (0-255).
-            int unsignedInt = b & 0xFF;
-
-            // Convert the unsigned integer to a binary string.
-            String binaryString = Integer.toBinaryString(unsignedInt);
-
-            // Pad with leading zeros to ensure an 8-bit representation.
-            String paddedBinaryString = String.format("%8s", binaryString).replace(' ', '0');
-
-            sb.append(paddedBinaryString); // Add a space for readability
-        }
-        sb.delete(0, 28);
-
-        for (int i = 6; i < sb.length(); i += 6 + "\n".length()) {
-            sb.insert(i, "\n");
-        }
-        sb.insert(0, "\n");
-        return sb.toString();
     }
 
     public void RemoveButtons() {
@@ -117,8 +112,19 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         allButtons.clear();
         if (borderImage != null)
             borderImage.visible = false;
-        //This technically works but until I find a way to actually delete them as long as the screen is open they will keep stacking ontop of each other
-        //Making new buttons does allow for much easier switching of the button textures
+        buttonsInitialized = false;
+    }
+
+    private void updateButtonStatesFromPattern() {
+        ArtisanPattern pattern = getMenu().getPattern();
+        for (SmithingButton button : allButtons) {
+            if (!pattern.get(button.id)) {
+                button.activateButton();
+            } else {
+                button.active = true;
+                button.visible = true;
+            }
+        }
     }
 
     @Override
@@ -130,18 +136,40 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
             renderSlotHighlight(guiGraphics, 123, 46, 1);
             renderSlotHighlight(guiGraphics, 145, 46, 1);
         }
-
     }
 
     @Override
     protected void init() {
         super.init();
-        System.out.println(getMenu());
-        System.out.println(this.menu.activeScreen);
-        output(this.menu.getPattern());
-        if (this.menu.activeScreen) {
-            RemoveButtons();
-            AddAndUpdateButtons();
+
+        int emiButtonX = leftPos + 134 - 20;
+        int emiButtonY = topPos + 72;
+        emiButton = new InvisibleButton(emiButtonX, emiButtonY, 16, 16,
+                Component.translatable("tfg.tooltip.show_recipes"), this::openEmiRecipes);
+        addRenderableWidget(emiButton);
+
+        if (this.menu.getScreenState()) {
+            activeType = this.menu.getCurrentType();
+            if (activeType != null) {
+                RemoveButtons();
+                AddAndUpdateButtons();
+                updateButtonStatesFromPattern();
+            }
+        }
+    }
+
+    private void openEmiRecipes() {
+        try {
+            Class<?> emiApiClass = Class.forName("dev.emi.emi.api.EmiApi");
+            var displayRecipes = emiApiClass.getMethod("displayRecipeCategory",
+                    Class.forName("dev.emi.emi.api.recipe.EmiRecipeCategory"));
+
+            Class<?> pluginClass = Class.forName("su.terrafirmagreg.core.compat.emi.TFGEmiPlugin");
+            var categoryField = pluginClass.getField("ARTISAN_TABLE");
+            var category = categoryField.get(null);
+
+            displayRecipes.invoke(null, category);
+        } catch (Exception e) {
         }
     }
 
@@ -155,9 +183,14 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
         if (this.menu.getScreenState()) {
             activeType = this.menu.getCurrentType();
-            AddButtons();
+            if (activeType != null && !buttonsInitialized) {
+                AddAndUpdateButtons();
+            }
+            updateButtonStatesFromPattern();
         } else {
-            RemoveButtons();
+            if (buttonsInitialized) {
+                RemoveButtons();
+            }
         }
         counter = 0;
     }
