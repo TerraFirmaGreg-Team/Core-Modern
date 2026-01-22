@@ -30,7 +30,6 @@ public final class TFGHelpers {
 
     public static boolean isMaterialRegistrationFinished;
 
-    @NotNull
     public static Material getMaterial(@NotNull String materialName) {
         var material = GTCEuAPI.materialManager.getMaterial(materialName);
         if (material == null) {
