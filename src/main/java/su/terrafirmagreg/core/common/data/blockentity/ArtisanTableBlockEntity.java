@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.InventoryItemHandler;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -251,6 +252,18 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
             });
         }
         markForSync();
+    }
+
+    public void ejectInventory() {
+        assert this.level != null;
+
+        for (int i = 0; i < RESULT_SLOT; ++i) {
+            ItemStack stack = Helpers.removeStack(this.inventory, i);
+            if (!stack.isEmpty()) {
+                Helpers.spawnItem(this.level, this.worldPosition, stack, 0.7);
+            }
+        }
+
     }
 
     @Nullable

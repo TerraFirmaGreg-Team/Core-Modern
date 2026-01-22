@@ -28,6 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
+@SuppressWarnings("deprecation")
 public class ArtisanTableBlock extends Block implements IForgeBlockExtension, EntityBlock {
     public static final VoxelShape SHAPE = Shapes.box(0, 0, 0, 1, 1, 1);
     private final ExtendedProperties properties;
@@ -76,7 +77,18 @@ public class ArtisanTableBlock extends Block implements IForgeBlockExtension, En
     }
 
     @Override
-    public ExtendedProperties getExtendedProperties() {
+    public @NotNull ExtendedProperties getExtendedProperties() {
         return properties;
+    }
+
+    @Override
+    public void onRemove(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
+        if (!level.isClientSide && state.getBlock() != newState.getBlock()) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity artisanTable) {
+                artisanTable.ejectInventory();
+            }
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 }
