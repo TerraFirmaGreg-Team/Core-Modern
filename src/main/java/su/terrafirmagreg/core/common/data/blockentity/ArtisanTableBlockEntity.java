@@ -110,7 +110,8 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         }
     }
 
-    private void checkForActiveScreen() {
+    // Make this public so the container can trigger the drawing interface after output is taken
+    public void checkForActiveScreen() {
         ItemStack inputItemA = inventory.getStackInSlot(MAT_SLOTA);
         ItemStack inputItemB = inventory.getStackInSlot(MAT_SLOTB);
         ItemStack toolA = inventory.getStackInSlot(TOOL_SLOTA);
@@ -241,17 +242,28 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         ItemStack toolB = inventory.getStackInSlot(TOOL_SLOTB);
 
         if (!toolA.isEmpty() && toolA.isDamageableItem()) {
-            toolA.hurtAndBreak(1, player, (p) -> {
-                inventory.setStackInSlot(TOOL_SLOTA, ItemStack.EMPTY);
-            });
+            if (player != null) {
+                toolA.hurtAndBreak(1, player, (p) -> inventory.setStackInSlot(TOOL_SLOTA, ItemStack.EMPTY));
+            } else {
+                toolA.setDamageValue(toolA.getDamageValue() + 1);
+                if (toolA.getDamageValue() >= toolA.getMaxDamage()) {
+                    inventory.setStackInSlot(TOOL_SLOTA, ItemStack.EMPTY);
+                }
+            }
         }
 
         if (!toolB.isEmpty() && toolB.isDamageableItem()) {
-            toolB.hurtAndBreak(1, player, (p) -> {
-                inventory.setStackInSlot(TOOL_SLOTB, ItemStack.EMPTY);
-            });
+            if (player != null) {
+                toolB.hurtAndBreak(1, player, (p) -> inventory.setStackInSlot(TOOL_SLOTB, ItemStack.EMPTY));
+            } else {
+                toolB.setDamageValue(toolB.getDamageValue() + 1);
+                if (toolB.getDamageValue() >= toolB.getMaxDamage()) {
+                    inventory.setStackInSlot(TOOL_SLOTB, ItemStack.EMPTY);
+                }
+            }
         }
         markForSync();
+        setChanged();
     }
 
     public void ejectInventory() {
