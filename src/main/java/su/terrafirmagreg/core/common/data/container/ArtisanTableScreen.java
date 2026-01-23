@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.dries007.tfc.client.screen.TFCContainerScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -19,26 +21,47 @@ import su.terrafirmagreg.core.common.data.container.widgets.SmithingButton;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
+/**
+ * The GUI screen for the Artisan Table.
+ */
 public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer> {
 
     public final ArrayList<SmithingButton> allButtons = new ArrayList<>();
     // Sets the gap between vertical sections of the GUI.
-    public static final int SCREEN_SPACING = 6;
+    public static final int SCREEN_SPACING = 5;
 
     private ArtisanType activeType;
     private ImageWidget borderImage;
     private boolean buttonsInitialized = false;
 
+    /**
+     * Constructs a new ArtisanTableScreen.
+     * @param container The ArtisanTableContainer.
+     * @param playerInventory The player's inventory.
+     * @param name The screen title.
+     */
     public ArtisanTableScreen(ArtisanTableContainer container, Inventory playerInventory, Component name) {
-        super(container, playerInventory, name, TFGCore.id("textures/gui/smithing_test.png"));
+        super(container, playerInventory, name, TFGCore.id("textures/gui/artisan_table/artisan_table.png"));
         this.imageHeight = 186 + SCREEN_SPACING + SCREEN_SPACING;
-        this.inventoryLabelY += 21 + SCREEN_SPACING + SCREEN_SPACING;
-        this.titleLabelY -= 2;
+        this.inventoryLabelY += 20 + SCREEN_SPACING + SCREEN_SPACING;
+        this.titleLabelY -= 1;
     }
 
+    /**
+     * EMI recipe viewer button.
+     */
     private static class InvisibleButton extends AbstractWidget {
         private final Runnable onClick;
 
+        /**
+         * Constructs an InvisibleButton.
+         * @param x The x position.
+         * @param y The y position.
+         * @param width The width.
+         * @param height The height.
+         * @param tooltip The tooltip to display.
+         * @param onClick The action to perform on click.
+         */
         public InvisibleButton(int x, int y, int width, int height, Component tooltip, Runnable onClick) {
             super(x, y, width, height, Component.empty());
             this.onClick = onClick;
@@ -64,6 +87,10 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
     }
 
+    /**
+     * Adds all smithing buttons and the border image to the screen.
+     * Only runs once per screen state.
+     */
     public void AddButtons() {
         if (!allButtons.isEmpty())
             return;
@@ -78,7 +105,15 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
         ResourceLocation borderTexture = activeType.getBorderTexture();
         if (borderTexture != null) {
-            borderImage = new ImageWidget((width - getXSize()) / 2 + 14, (height - getYSize()) / 2 + 14 + SCREEN_SPACING, 78, 78, borderTexture) {
+            borderImage = new ImageWidget((width - getXSize()) / 2 + 12, (height - getYSize()) / 2 + 12 + SCREEN_SPACING, 82, 82, borderTexture) {
+                @Override
+                public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+                    RenderSystem.enableBlend();
+                    RenderSystem.defaultBlendFunc();
+                    super.renderWidget(graphics, mouseX, mouseY, partialTick);
+                    RenderSystem.disableBlend();
+                }
+
                 @Override
                 public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
                     return false;
@@ -90,6 +125,9 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         buttonsInitialized = true;
     }
 
+    /**
+     * Adds and updates smithing buttons based on the current artisan pattern.
+     */
     private void AddAndUpdateButtons() {
         AddButtons();
         ArtisanPattern pattern = getMenu().getPattern();
@@ -100,6 +138,9 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
     }
 
+    /**
+     * Removes all smithing buttons and the border image from the screen.
+     */
     public void RemoveButtons() {
         for (SmithingButton button : allButtons) {
             if (button.active) {
@@ -113,6 +154,9 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         buttonsInitialized = false;
     }
 
+    /**
+     * Updates the state of smithing buttons based on the current pattern.
+     */
     private void updateButtonStatesFromPattern() {
         ArtisanPattern pattern = getMenu().getPattern();
         for (SmithingButton button : allButtons) {
@@ -125,6 +169,9 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
     }
 
+    /**
+     * Renders slot highlights when the artisan table is active.
+     */
     @Override
     protected void renderLabels(@NotNull GuiGraphics guiGraphics, int pMouseX, int pMouseY) {
         super.renderLabels(guiGraphics, pMouseX, pMouseY);
@@ -136,13 +183,16 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
     }
 
+    /**
+     * Initializes the screen, adding widgets and updating buttons.
+     */
     @Override
     protected void init() {
         super.init();
         int emiButtonX = leftPos + 134 - 40;
         int emiButtonY = topPos + 72 + SCREEN_SPACING;
         InvisibleButton emiButton = new InvisibleButton(emiButtonX, emiButtonY, 32, 16,
-                Component.translatable(TFGCore.MOD_ID + "tooltip.show_recipes"), this::openEmiRecipes);
+                Component.translatable(TFGCore.MOD_ID + ".tooltip.show_recipes"), this::openEmiRecipes);
         addRenderableWidget(emiButton);
 
         if (this.menu.getScreenState()) {
@@ -155,6 +205,9 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
     }
 
+    /**
+     * Opens the EMI recipe viewer.
+     */
     private void openEmiRecipes() {
         try {
             Class<?> emiApiClass = Class.forName("dev.emi.emi.api.EmiApi");
@@ -172,6 +225,9 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
 
     int counter = 0;
 
+    /**
+     * Handles ticking logic for the container.
+     */
     @Override
     protected void containerTick() {
         if (counter != 2) {

@@ -26,6 +26,9 @@ import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
 
+/**
+ * Defines Artisan Table Recipe Types.
+ */
 public class ArtisanType {
 
     @Getter
@@ -44,20 +47,30 @@ public class ArtisanType {
     private final ResourceLocation borderTexture;
     @Getter
     private final SoundEvent clickSound;
+    @Getter
+    private final float clickVolume;
+    @Getter
+    private final float clickPitch;
 
-    private static final String TEXTURE_PREFIX = "textures/gui/smithing/";
+    private static final String TEXTURE_PREFIX = "textures/gui/artisan_table/";
 
-    public ArtisanType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, ResourceLocation inactiveTexture, SoundEvent clickSound,
-            ResourceLocation borderTexture) {
-        this(name, inputItemA, ItemStack.EMPTY, toolA, toolB, activeTexture, inactiveTexture, clickSound, borderTexture);
-    }
-
-    public ArtisanType(String name, ItemStack inputItemA, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture, SoundEvent clickSound, ResourceLocation borderTexture) {
-        this(name, inputItemA, ItemStack.EMPTY, toolA, toolB, activeTexture, null, clickSound, borderTexture);
-    }
-
+    /**
+     * Constructs a new ArtisanType.
+     *
+     * @param name The name for this recipe type.
+     * @param inputItemA The primary input item.
+     * @param inputItemB The secondary input item (nullable).
+     * @param toolA The primary tool tag required.
+     * @param toolB The secondary tool tag required.
+     * @param activeTexture The texture when active.
+     * @param inactiveTexture The texture when inactive (nullable).
+     * @param clickSound The sound event played on click.
+     * @param borderTexture The border texture (nullable).
+     * @param clickVolume The volume of the click sound.
+     * @param clickPitch The pitch of the click sound.
+     */
     public ArtisanType(String name, ItemStack inputItemA, @Nullable ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture,
-            @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture) {
+            @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture, float clickVolume, float clickPitch) {
         this.id = TFGCore.id(name);
         inputItems = new ArrayList<>(Stream.of(inputItemA, inputItemB).filter(Objects::nonNull).toList());
         toolTags = new ArrayList<>(Arrays.asList(toolA, toolB));
@@ -65,8 +78,15 @@ public class ArtisanType {
         this.inactiveTexture = inactiveTexture;
         this.clickSound = clickSound;
         this.borderTexture = borderTexture;
+        this.clickVolume = clickVolume;
+        this.clickPitch = clickPitch;
     }
 
+    /**
+     * Returns a ResourceLocation for a texture with the given name.
+     * @param name The texture name.
+     * @return The ResourceLocation for the texture.
+     */
     private static ResourceLocation textureLocation(String name) {
         if (!name.endsWith(".png"))
             name += ".png";
@@ -78,20 +98,27 @@ public class ArtisanType {
     public static final ArtisanType CASTING_MOLD = new ArtisanType(
             "casting_mold",
             GTItems.SHAPE_EMPTY.get().getDefaultInstance(),
+            ItemStack.EMPTY,
             CustomTags.HAMMERS,
             CustomTags.MALLETS,
-            textureLocation("mold_active"),
-            textureLocation("mold_inactive"),
+            textureLocation("casting_mold_active"),
+            textureLocation("casting_mold_inactive"),
             TFCSounds.ANVIL_HIT.get(),
-            textureLocation("mold_border"));
+            textureLocation("casting_mold_border"),
+            0.1f,
+            2.0f);
     public static final ArtisanType EXTRUDER_MOLD = new ArtisanType(
             "extruder_mold",
             GTItems.SHAPE_EMPTY.get().getDefaultInstance(),
+            ItemStack.EMPTY,
             CustomTags.WIRE_CUTTERS,
             CustomTags.FILES,
-            textureLocation("mold_active"),
+            textureLocation("extruder_mold_active"),
+            null,
             GTSoundEntries.WIRECUTTER_TOOL.getMainEvent(),
-            textureLocation("mold_border"));
+            textureLocation("extruder_mold_border"),
+            0.5f,
+            0.7f);
     public static final ArtisanType RESIN_BOARD = new ArtisanType(
             "resin_board",
             GTItems.COATED_BOARD.get().getDefaultInstance(),
@@ -100,8 +127,10 @@ public class ArtisanType {
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_resin_board"),
             textureLocation("printed_resin_board"),
-            GTSoundEntries.COMPRESSOR.getMainEvent(),
-            textureLocation("resin_board_border"));
+            GTSoundEntries.WRENCH_TOOL.getMainEvent(),
+            textureLocation("resin_board_border"),
+            0.8f,
+            2.0f);
     public static final ArtisanType PHENOLIC_BOARD = new ArtisanType(
             "phenolic_board",
             GTItems.PHENOLIC_BOARD.get().getDefaultInstance(),
@@ -111,8 +140,14 @@ public class ArtisanType {
             textureLocation("blank_phenolic_board"),
             textureLocation("printed_phenolic_board"),
             GTSoundEntries.COMPRESSOR.getMainEvent(),
-            textureLocation("phenolic_board_border"));
+            textureLocation("phenolic_board_border"),
+            0.8f,
+            2.0f);
 
+    /**
+     * Registers a new ArtisanType in the ARTISAN_TYPES map.
+     * @param type The ArtisanType to register.
+     */
     private static void initNewType(ArtisanType type) {
         ARTISAN_TYPES.put(type.id, type);
     }

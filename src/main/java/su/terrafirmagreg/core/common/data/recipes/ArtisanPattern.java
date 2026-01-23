@@ -9,10 +9,19 @@ import net.minecraft.util.GsonHelper;
 
 import lombok.Getter;
 
+/**
+ * Creates a boolean pattern for Artisan Table recipes.
+ */
 public class ArtisanPattern {
     public static final int MAX_WIDTH = 6;
     public static final int MAX_HEIGHT = 6;
 
+    /**
+     * Creates an ArtisanPattern from a JSON object.
+     * @param json The JSON object containing the pattern.
+     * @return The parsed ArtisanPattern.
+     * @throws JsonSyntaxException if the pattern is invalid.
+     */
     public static ArtisanPattern fromJson(JsonObject json) {
         final JsonArray array = json.getAsJsonArray("pattern");
         final boolean empty = GsonHelper.getAsBoolean(json, "outside_slot_required", true);
@@ -39,6 +48,11 @@ public class ArtisanPattern {
         return pattern;
     }
 
+    /**
+     * Reads an ArtisanPattern from a network buffer.
+     * @param buffer The buffer to read from.
+     * @return The deserialized ArtisanPattern.
+     */
     public static ArtisanPattern fromNetwork(FriendlyByteBuf buffer) {
         final int width = buffer.readVarInt();
         final int height = buffer.readVarInt();
@@ -60,6 +74,13 @@ public class ArtisanPattern {
         this(MAX_WIDTH, MAX_HEIGHT, false);
     }
 
+    /**
+     * Constructs an ArtisanPattern with the given width, height, and empty slot requirement.
+     * All cells are set to true.
+     * @param width The width of the pattern.
+     * @param height The height of the pattern.
+     * @param empty Whether outside slots are required to be empty.
+     */
     public ArtisanPattern(int width, int height, boolean empty) {
         this(width, height, (1L << (width * height)) - 1, empty);
     }
@@ -71,18 +92,37 @@ public class ArtisanPattern {
         this.empty = empty;
     }
 
+    /**
+     * Returns whether outside slots are required to be empty.
+     * @return true if outside slots must be empty, false otherwise.
+     */
     public boolean isOutsideSlotRequired() {
         return empty;
     }
 
+    /**
+     * Sets all cells in the pattern to the given value.
+     * @param value The value to set all cells to.
+     */
     public void setAll(boolean value) {
         data = value ? (1L << (width * height)) - 1 : 0;
     }
 
+    /**
+     * Sets the value of the cell at (x, y).
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param value The value to set.
+     */
     public void set(int x, int y, boolean value) {
         set(x + (long) y * width, value);
     }
 
+    /**
+     * Sets the value of the cell at the given index.
+     * @param index The linear index.
+     * @param value The value to set.
+     */
     public void set(long index, boolean value) {
         assert index >= 0 && index < 64;
         if (value) {
@@ -92,15 +132,30 @@ public class ArtisanPattern {
         }
     }
 
+    /**
+     * Gets the value of the cell at (x, y).
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @return The value at the specified cell.
+     */
     public boolean get(int x, int y) {
         return get(x + (long) y * width);
     }
 
+    /**
+     * Gets the value of the cell at the given index.
+     * @param index The linear index.
+     * @return The value at the specified index.
+     */
     public boolean get(long index) {
         assert index >= 0 && index < 64;
         return ((data >> index) & 0b1) == 1;
     }
 
+    /**
+     * Writes this ArtisanPattern to a network buffer.
+     * @param buffer The buffer to write to.
+     */
     public void toNetwork(FriendlyByteBuf buffer) {
         buffer.writeVarInt(width);
         buffer.writeVarInt(height);
@@ -108,6 +163,11 @@ public class ArtisanPattern {
         buffer.writeBoolean(empty);
     }
 
+    /**
+     * Checks if this pattern is equal to another object.
+     * @param other The object to compare to.
+     * @return true if equal, false otherwise.
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other)
@@ -119,6 +179,11 @@ public class ArtisanPattern {
         return false;
     }
 
+    /**
+     * Checks if this pattern matches another pattern, considering all possible positions and mirrored states.
+     * @param other The pattern to match against.
+     * @return true if a match is found, false otherwise.
+     */
     public boolean matches(ArtisanPattern other) {
         for (int dx = 0; dx <= this.width - other.width; dx++) {
             for (int dy = 0; dy <= this.height - other.height; dy++) {
@@ -136,7 +201,6 @@ public class ArtisanPattern {
             for (int y = 0; y < this.height; y++) {
                 int patternIdx = y * width + x;
                 if (x < startX || y < startY || x - startX >= other.width || y - startY >= other.height) {
-                    // If the current position in the matrix is outside the pattern, the value should be set by other.empty
                     if (get(patternIdx) != other.empty) {
                         return false;
                     }

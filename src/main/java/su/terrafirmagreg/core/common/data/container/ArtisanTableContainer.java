@@ -23,6 +23,9 @@ import su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
+/**
+ * Container for the Artisan Table block entity.
+ */
 public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBlockEntity> implements ButtonHandlerContainer {
     public static final int SLOT_TOT = ArtisanTableBlockEntity.SLOT_TOT;
     public static final int MAT_SLOTA = ArtisanTableBlockEntity.MAT_SLOTA;
@@ -31,50 +34,89 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
     public static final int TOOL_SLOTB = ArtisanTableBlockEntity.TOOL_SLOTB;
     public static final int RESULT_SLOT = ArtisanTableBlockEntity.RESULT_SLOT;
     // Sets the gap between vertical sections of the GUI.
-    public static final int SCREEN_SPACING = 6;
+    public static final int SCREEN_SPACING = 5;
 
+    /**
+     * Initializes a new ArtisanTableContainer.
+     * @param blockEntity The artisan table block entity.
+     * @param playerInventory The player's inventory.
+     * @param windowId The window ID.
+     * @return The initialized ArtisanTableContainer.
+     */
     public static ArtisanTableContainer create(ArtisanTableBlockEntity blockEntity, Inventory playerInventory, int windowId) {
         return new ArtisanTableContainer(blockEntity, playerInventory, windowId).init(playerInventory, 19 + SCREEN_SPACING + SCREEN_SPACING);
     }
 
+    /**
+     * Constructs a new ArtisanTableContainer.
+     * @param blockEntity The artisan table block entity.
+     * @param playerInventory The player's inventory.
+     * @param windowId The window ID.
+     */
     public ArtisanTableContainer(ArtisanTableBlockEntity blockEntity, Inventory playerInventory, int windowId) {
         super(TFGContainers.ARTISAN_TABLE.get(), windowId, blockEntity);
         this.activeScreen = blockEntity.isActiveScreen();
     }
 
+    /**
+     * @return The artisan pattern.
+     */
     public ArtisanPattern getPattern() {
         return blockEntity.getPattern();
     }
 
+    /**
+     * @return The artisan type.
+     */
     public ArtisanType getCurrentType() {
         return blockEntity.getCurrentType();
     }
 
+    /**
+     * @return True if the artisan table is in the active screen state.
+     */
     public boolean getScreenState() {
         return blockEntity.isActiveScreen();
     }
 
+    /**
+     * @param value The new screen state.
+     */
     public void setScreenState(boolean value) {
         blockEntity.setActiveScreen(value);
     }
 
+    /**
+     * @return The list of input item stacks.
+     */
     public ArrayList<ItemStack> getInputItems() {
         return blockEntity.getInputItems();
     }
 
+    /**
+     * @return The list of tool item stacks.
+     */
     public ArrayList<ItemStack> getToolItems() {
         return blockEntity.getToolItems();
     }
 
     public boolean activeScreen = false;
 
+    /**
+     * Broadcasts changes to the container and updates the active screen state.
+     */
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
         this.activeScreen = blockEntity.isActiveScreen();
     }
 
-    //Button Handler
+    /**
+     * Handles button presses in the GUI.
+     * Updates the artisan pattern and output slot.
+     * @param buttonID The ID of the pressed button.
+     * @param extraNBT Additional data.
+     */
     @Override
     public void onButtonPress(int buttonID, @Nullable CompoundTag extraNBT) {
         // Set the matching patterns slot to clicked
@@ -93,11 +135,21 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
         }
     }
 
+    /**
+     * Called when the container is closed.
+     * @param player The player closing the container.
+     */
     @Override
     public void removed(@NotNull Player player) {
         super.removed(player);
     }
 
+    /**
+     * Handles moving item stacks between slots.
+     * @param stack The item stack to move.
+     * @param slotIndex The index of the slot.
+     * @return True if the move was successful.
+     */
     @Override
     protected boolean moveStack(@NotNull ItemStack stack, int slotIndex) {
         return switch (typeOf(slotIndex)) {
@@ -106,6 +158,9 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
         };
     }
 
+    /**
+     * Adds the container's custom slots (inputs, tools, output).
+     */
     @Override
     protected void addContainerSlots() {
         super.addContainerSlots();
@@ -116,14 +171,29 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
         addSlot(new ResultSlot(blockEntity, RESULT_SLOT, 134, 72 + SCREEN_SPACING));
     }
 
+    /**
+     * Slot for the output of the artisan table.
+     */
     public static class ResultSlot extends CallbackSlot {
         private final ArtisanTableBlockEntity blockEntity;
 
+        /**
+         * Constructs a ResultSlot.
+         * @param blockEntity The artisan table block entity.
+         * @param index The slot index.
+         * @param x The x position.
+         * @param y The y position.
+         */
         public ResultSlot(ArtisanTableBlockEntity blockEntity, int index, int x, int y) {
             super(blockEntity, blockEntity.getInventory(), index, x, y);
             this.blockEntity = blockEntity;
         }
 
+        /**
+         * Determines if the player can pick up the output item.
+         * @param player The player.
+         * @return True if the item can be picked up.
+         */
         @Override
         public boolean mayPickup(Player player) {
             ItemStack result = getItem();
@@ -138,11 +208,21 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
             return blockEntity.canConsumeIngredients();
         }
 
+        /**
+         * Stops items from entering the output slot.
+         * @param stack The item stack.
+         * @return False.
+         */
         @Override
         public boolean mayPlace(@NotNull ItemStack stack) {
             return false;
         }
 
+        /**
+         * Handles logic when the player takes the output item.
+         * @param player The player.
+         * @param stack The item stack taken.
+         */
         @Override
         public void onTake(@NotNull Player player, @NotNull ItemStack stack) {
             blockEntity.damageTools(player);
@@ -161,25 +241,51 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
         }
     }
 
+    /**
+     * Slot for artisan table inputs and tools.
+     */
     public static class SmithingInputSlot extends CallbackSlot {
         private final ArtisanTableBlockEntity blockEntity;
 
+        /**
+         * Constructs a SmithingInputSlot.
+         * @param container The artisan table container.
+         * @param blockEntity The artisan table block entity.
+         * @param index The slot index.
+         * @param x The x position.
+         * @param y The y position.
+         */
         public SmithingInputSlot(ArtisanTableContainer container, ArtisanTableBlockEntity blockEntity, int index, int x, int y) {
             super(blockEntity, blockEntity.getInventory(), index, x, y);
             this.blockEntity = blockEntity;
         }
 
+        /**
+         * Determines if the player can pick up an item from this slot.
+         * @param player The player.
+         * @return True if the item can be picked up.
+         */
         @Override
         public boolean mayPickup(Player player) {
             return super.mayPickup(player);
         }
 
+        /**
+         * Determines if an item can be placed in this slot.
+         * Only allows placement if the artisan table is not in the active screen state.
+         * @param stack The item stack.
+         * @return True if the item can be placed.
+         */
         @Override
         public boolean mayPlace(@NotNull ItemStack stack) {
             return !blockEntity.isActiveScreen() && super.mayPlace(stack);
         }
     }
 
+    /**
+     * Handler for recipe matching and crafting logic.
+     * @param container The artisan table container.
+     */
     public record RecipeHandler(ArtisanTableContainer container) implements EmptyInventory {
     }
 }

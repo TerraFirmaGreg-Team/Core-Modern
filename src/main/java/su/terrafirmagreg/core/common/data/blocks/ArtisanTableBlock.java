@@ -28,6 +28,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
+/**
+ * Artisan Table Block class which behaves similar to knapping.
+ */
 @SuppressWarnings("deprecation")
 public class ArtisanTableBlock extends Block implements IForgeBlockExtension, EntityBlock {
     public static final VoxelShape SHAPE = Shapes.box(0, 0, 0, 1, 1, 1);
@@ -41,6 +44,16 @@ public class ArtisanTableBlock extends Block implements IForgeBlockExtension, En
 
     }
 
+    /**
+     * Handles player interaction
+     * @param state The current block state.
+     * @param level The world level.
+     * @param pos The block position.
+     * @param player The player interacting.
+     * @param hand The hand used.
+     * @param hit The hit result.
+     * @return The interaction result.
+     */
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (level.isClientSide) {
@@ -54,33 +67,66 @@ public class ArtisanTableBlock extends Block implements IForgeBlockExtension, En
         }
     }
 
+    /**
+     * Creates a new block entity.
+     * @param pos The block position.
+     * @param state The block state.
+     * @return The new block entity.
+     */
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return TFGBlockEntities.ARTISAN_TABLE.get().create(pos, state);
     }
 
+    /**
+     * Returns the shape of the block.
+     * @param state The block state.
+     * @param level The block getter.
+     * @param pos The block position.
+     * @param context The collision context.
+     * @return The voxel shape.
+     */
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return SHAPE;
     }
 
+    /**
+     * @param builder The state definition builder.
+     */
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder
                 .add(BlockStateProperties.HORIZONTAL_FACING));
     }
 
+    /**
+     * Determines the block state for placement.
+     * @param context The block place context.
+     * @return The block state to place.
+     */
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection());
     }
 
+    /**
+     * @return The extended properties.
+     */
     @Override
     public @NotNull ExtendedProperties getExtendedProperties() {
         return properties;
     }
 
+    /**
+     * Handles block removal with inventory ejection.
+     * @param state The current block state.
+     * @param level The world level.
+     * @param pos The block position.
+     * @param newState The new block state.
+     * @param isMoving Whether the block is moving.
+     */
     @Override
     public void onRemove(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
         if (!level.isClientSide && state.getBlock() != newState.getBlock()) {

@@ -32,6 +32,10 @@ import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
+/**
+ * Block entity for the Artisan Table.
+ * Handles inventory, pattern, recipe types, and crafting logic.
+ */
 public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemHandler> {
 
     public static final int SLOT_TOT = 5;
@@ -60,27 +64,51 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
 
     private boolean isLoading = false;
 
+    /**
+     * Constructs a new ArtisanTableBlockEntity.
+     * @param pos   The block position.
+     * @param state The block state.
+     */
     public ArtisanTableBlockEntity(BlockPos pos, BlockState state) {
         super(TFGBlockEntities.ARTISAN_TABLE.get(), pos, state, ArtisanTableBlockEntity::createInventory, NAME);
         this.pattern = new ArtisanPattern();
     }
 
+    /**
+     * Creates the inventory handler.
+     * @param entity The block entity.
+     * @return The inventory item handler.
+     */
     private static InventoryItemHandler createInventory(InventoryBlockEntity<?> entity) {
         return new InventoryItemHandler(entity, SLOT_TOT);
     }
 
+    /**
+     * @return The inventory handler.
+     */
     public IItemHandler getInventory() {
         return inventory;
     }
 
+    /**
+     * @return A list containing the input item stacks.
+     */
     public ArrayList<ItemStack> getInputItems() {
         return new ArrayList<>(Arrays.asList(inventory.getStackInSlot(MAT_SLOTA), inventory.getStackInSlot(MAT_SLOTB)));
     }
 
+    /**
+     * @return A list containing the tool item stacks.
+     */
     public ArrayList<ItemStack> getToolItems() {
         return new ArrayList<>(Arrays.asList(inventory.getStackInSlot(TOOL_SLOTA), inventory.getStackInSlot(TOOL_SLOTB)));
     }
 
+    /**
+     * Gets the stack limit for a given slot.
+     * @param slot The slot index.
+     * @return The stack limit.
+     */
     @Override
     public int getSlotStackLimit(int slot) {
         return switch (slot) {
@@ -91,6 +119,12 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         };
     }
 
+    /**
+     * Checks if an item is valid for a given slot.
+     * @param slot  The slot index.
+     * @param stack The item stack.
+     * @return True if the item is valid for the slot.
+     */
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
         return switch (slot) {
@@ -100,6 +134,9 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         };
     }
 
+    /**
+     * @param slot The slot index.
+     */
     @Override
     public void setAndUpdateSlots(int slot) {
         super.setAndUpdateSlots(slot);
@@ -111,7 +148,10 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         }
     }
 
-    // Make this public so the container can trigger the drawing interface after output is taken
+    /**
+     * Checks and updates whether the artisan table should display the active screen.
+     * Resets the pattern if the inputs are no longer valid.
+     */
     public void checkForActiveScreen() {
         ItemStack inputItemA = inventory.getStackInSlot(MAT_SLOTA);
         ItemStack inputItemB = inventory.getStackInSlot(MAT_SLOTB);
@@ -131,33 +171,24 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         }
 
         for (ArtisanType type : ArtisanType.ARTISAN_TYPES.values()) {
-            Item testItem1 = type.getInputItems().get(0).getItem();
-            Item testItem2 = type.getInputItems().size() > 1 ? type.getInputItems().get(1).getItem() : null;
-
-            boolean inputMatch;
-            if (testItem2 != null) {
-                inputMatch = (inputItemA.is(testItem1) || inputItemB.is(testItem1)) &&
-                        (inputItemA.is(testItem2) || inputItemB.is(testItem2));
-            } else {
-                inputMatch = inputItemA.is(testItem1) || inputItemB.is(testItem1);
-            }
-
-            if (!inputMatch)
-                continue;
-
-            TagKey<Item> testTool1 = type.getToolTags().get(0);
-            TagKey<Item> testTool2 = type.getToolTags().get(1);
-
-            if ((toolA.is(testTool1) || toolB.is(testTool1)) &&
-                    (toolA.is(testTool2) || toolB.is(testTool2))) {
+            this.currentType = type;
+            if (areInputsValidForCurrentType(inputItemA, inputItemB, toolA, toolB)) {
                 activeScreen = true;
-                this.currentType = type;
                 hasConsumedIngredient = false;
                 return;
             }
         }
+        this.currentType = null;
     }
 
+    /**
+     * Checks if the current inputs are valid for the current recipe type.
+     * @param inputA The first input item stack.
+     * @param inputB The second input item stack.
+     * @param toolA  The first tool item stack.
+     * @param toolB  The second tool item stack.
+     * @return True if the inputs are valid for the current type.
+     */
     private boolean areInputsValidForCurrentType(ItemStack inputA, ItemStack inputB, ItemStack toolA, ItemStack toolB) {
         if (currentType == null)
             return false;
@@ -169,25 +200,33 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
                         (toolA.is(testTool2) || toolB.is(testTool2)));
         if (!toolsValid)
             return false;
-        var requiredInputs = currentType.getInputItems();
-        ArrayList<ItemStack> inputStacks = new ArrayList<>();
-        inputStacks.add(inputA);
-        inputStacks.add(inputB);
-        for (ItemStack required : requiredInputs) {
-            int requiredCount = required.getCount();
-            int found = 0;
-            for (ItemStack input : inputStacks) {
-                if (!input.isEmpty() && input.is(required.getItem())) {
-                    found += input.getCount();
+        var requiredInputs = new ArrayList<>(currentType.getInputItems());
+        int[] needed = new int[requiredInputs.size()];
+        for (int i = 0; i < requiredInputs.size(); i++) {
+            needed[i] = requiredInputs.get(i).getCount();
+        }
+        ItemStack[] inputStacks = { inputA, inputB };
+        for (ItemStack input : inputStacks) {
+            if (input.isEmpty())
+                continue;
+            for (int i = 0; i < requiredInputs.size(); i++) {
+                ItemStack required = requiredInputs.get(i);
+                if (needed[i] > 0 && input.is(required.getItem())) {
+                    int toUse = Math.min(input.getCount(), needed[i]);
+                    needed[i] -= toUse;
                 }
             }
-            if (found < requiredCount) {
+        }
+        for (int n : needed) {
+            if (n > 0)
                 return false;
-            }
         }
         return true;
     }
 
+    /**
+     * @return True if the ingredients can be consumed.
+     */
     public boolean canConsumeIngredients() {
         if (currentType == null)
             return false;
@@ -200,6 +239,9 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         return areInputsValidForCurrentType(inputA, inputB, toolA, toolB);
     }
 
+    /**
+     * Resets the artisan pattern and screen state.
+     */
     public void resetPattern() {
         pattern.setAll(true);
         activeScreen = false;
@@ -208,6 +250,9 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         markForSync();
     }
 
+    /**
+     * Consumes the required input items from the inventory for the current recipe.
+     */
     public void consumeItems() {
         if (currentType == null)
             return;
@@ -226,6 +271,10 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         markForSync();
     }
 
+    /**
+     * Damages the tools used in crafting, breaking them if necessary.
+     * @param player The player using the tools.
+     */
     public void damageTools(@Nullable Player player) {
         ItemStack toolA = inventory.getStackInSlot(TOOL_SLOTA);
         ItemStack toolB = inventory.getStackInSlot(TOOL_SLOTB);
@@ -243,6 +292,10 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         setChanged();
     }
 
+    /**
+     * Ejects all inventory items (except the result slot) into the world.
+     * Called when the block is destroyed.
+     */
     public void ejectInventory() {
         assert this.level != null;
 
@@ -255,12 +308,22 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
 
     }
 
+    /**
+     * Creates the ui for the artisan table.
+     * @param windowId The window ID.
+     * @param inv      The player inventory.
+     * @param player   The player.
+     * @return The container menu.
+     */
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory inv, @NotNull Player player) {
         return ArtisanTableContainer.create(this, inv, windowId);
     }
 
+    /**
+     * @param tag The NBT tag.
+     */
     @Override
     public void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
@@ -272,6 +335,9 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         }
     }
 
+    /**
+     * @param tag The NBT tag.
+     */
     @Override
     public void loadAdditional(CompoundTag tag) {
         isLoading = true;
