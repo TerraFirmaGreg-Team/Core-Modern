@@ -24,6 +24,9 @@ import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
 
+/**
+ * Custom button widget for the Artisan Table.
+ */
 public class SmithingButton extends Button {
     public int id;
     @Getter
@@ -37,11 +40,40 @@ public class SmithingButton extends Button {
     private final int texWidth;
     private final int texHeight;
 
+    /**
+     * Constructs a SmithingButton.
+     * @param id The button ID.
+     * @param type The associated ArtisanType.
+     * @param x The x position.
+     * @param y The y position.
+     * @param width The button width.
+     * @param height The button height.
+     * @param texWidth The texture width.
+     * @param texHeight The texture height.
+     * @param texture The active texture.
+     * @param inactiveTexture The inactive texture (nullable).
+     * @param sound The sound to play on press.
+     */
     public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound) {
         this(id, type, x, y, width, height, texWidth, texHeight, texture, inactiveTexture, sound, (button) -> {
         });
     }
 
+    /**
+     * Constructs a SmithingButton with a onPress handler.
+     * @param id The button ID.
+     * @param type The associated ArtisanType.
+     * @param x The x position.
+     * @param y The y position.
+     * @param width The button width.
+     * @param height The button height.
+     * @param texWidth The texture width.
+     * @param texHeight The texture height.
+     * @param texture The active texture.
+     * @param inactiveTexture The inactive texture (nullable).
+     * @param sound The sound to play on press.
+     * @param onPress The action to perform when pressed.
+     */
     public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound,
             net.minecraft.client.gui.components.Button.OnPress onPress) {
         super(x, y, width, height, Component.empty(), onPress, RenderHelpers.NARRATION);
@@ -54,6 +86,9 @@ public class SmithingButton extends Button {
         this.currentType = type;
     }
 
+    /**
+     * Sends a packet to the server and plays the click sound if active.
+     */
     @Override
     public void onPress() {
         this.onPress.onPress(this);
@@ -65,6 +100,9 @@ public class SmithingButton extends Button {
 
     }
 
+    /**
+     * Activates the button, making it inactive or invisible depending on the ArtisanType.
+     */
     public void activateButton() {
         if (inactiveTexture == null) {
             this.visible = false;
@@ -72,11 +110,21 @@ public class SmithingButton extends Button {
         this.active = false;
     }
 
+    /**
+     * @param handler The sound manager.
+     */
     @Override
     public void playDownSound(SoundManager handler) {
-        handler.play(SimpleSoundInstance.forUI(this.sound, 1.0F));
+        handler.play(SimpleSoundInstance.forUI(this.sound, currentType.getClickVolume(), currentType.getClickPitch()));
     }
 
+    /**
+     * Renders the button widget with states.
+     * @param graphics The GUI graphics context.
+     * @param mouseX The mouse X position.
+     * @param mouseY The mouse Y position.
+     * @param partialTicks The partial tick time.
+     */
     @Override
     public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         if (!this.visible)
