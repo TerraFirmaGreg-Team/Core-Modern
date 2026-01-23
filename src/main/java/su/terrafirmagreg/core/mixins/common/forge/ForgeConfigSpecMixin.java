@@ -10,6 +10,6 @@ import javax.annotation.CheckForNull;
 /// This can be removed if TFC hot or not fixes its issues
 @Mixin(ForgeConfigSpec.ConfigValue.class)
 public class ForgeConfigSpecMixin {
-    @Redirect(method = "get", at = @At(value = "INVOKE", target = "Lcom/google/common/base/Preconditions;checkState(ZLjava/lang/Object;)V"))
+    @Redirect(method = "get", at = @At(value = "INVOKE", target = "Lcom/google/common/base/Preconditions;checkState(ZLjava/lang/Object;)V"), remap = false)
     public void tfg$cancelError(boolean expression, @CheckForNull Object errorMessage) {}
 }
