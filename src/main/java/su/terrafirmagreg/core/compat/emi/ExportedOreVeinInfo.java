@@ -688,11 +688,6 @@ package su.terrafirmagreg.core.compat.emi;
 				"tfc:rock/raw/diorite","tfc:rock/raw/basalt","minecraft:blackstone","tfc:rock/raw/schist",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("sulfur", 50),new OreVeinInfoRecipe.WeightedBlock("pyrite", 35),new OreVeinInfoRecipe.WeightedBlock("sphalerite", 15),},
 				null),
-			new OreVeinInfoRecipe("nether_sylvite", "minecraft:the_nether", 
-				75, 0.6, 0, 64, 17, 0, 0, new String[] {
-				"minecraft:blackstone",}, new OreVeinInfoRecipe.WeightedBlock[] {
-				new OreVeinInfoRecipe.WeightedBlock("sylvite", 100),},
-				null),
 			new OreVeinInfoRecipe("nether_tetrahedrite", "minecraft:the_nether", 
 				170, 0.5, 32, 128, 45, 0, 0, new String[] {
 				"minecraft:deepslate","minecraft:dripstone_block","tfc:rock/raw/schist","tfc:rock/raw/gneiss","minecraft:blackstone",}, new OreVeinInfoRecipe.WeightedBlock[] {
