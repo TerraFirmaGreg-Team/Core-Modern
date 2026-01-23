@@ -128,8 +128,8 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
         return switch (slot) {
-            case MAT_SLOTA, MAT_SLOTB -> stack.is(TFGTags.Items.SmithingTableInputs);
-            case TOOL_SLOTA, TOOL_SLOTB -> stack.is(TFGTags.Items.SmithingTools);
+            case MAT_SLOTA, MAT_SLOTB -> stack.is(TFGTags.Items.ArtisanTableInputs);
+            case TOOL_SLOTA, TOOL_SLOTB -> stack.is(TFGTags.Items.ArtisanTableTools);
             default -> false;
         };
     }

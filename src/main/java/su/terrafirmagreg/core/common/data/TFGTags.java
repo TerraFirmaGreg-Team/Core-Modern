@@ -38,8 +38,8 @@ public final class TFGTags {
         public static final TagKey<Item> FloatingProtectionEquipment = createItemTag("tfg:floating_protection_equipment");
 
         public static final TagKey<Item> AutoEatBlacklist = createItemTag("tfg:auto_eat_blacklist");
-        public static final TagKey<Item> SmithingTableInputs = createItemTag("tfg:smithing_table_input");
-        public static final TagKey<Item> SmithingTools = createItemTag("tfg:smithing_tools");
+        public static final TagKey<Item> ArtisanTableInputs = createItemTag("tfg:artisan_table_inputs");
+        public static final TagKey<Item> ArtisanTableTools = createItemTag("tfg:artisan_table_tools");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");
