@@ -69,19 +69,15 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
 
         boolean obstructed = false;
 
+        // Vérifie les deux couches sous le rotor (-1 et -2)
         for (int yOffset = -1; yOffset >= -2; yOffset--) {
             BlockPos planeOrigin = rotorPos.offset(0, yOffset, 0);
 
-            System.out.println("=== Checking intake plane at Y offset " + yOffset + " ===");
-
             for (int z = -2; z <= 2; z++) {
-                StringBuilder row = new StringBuilder();
-
                 for (int x = -2; x <= 2; x++) {
 
                     // Coins (X) ignorés
                     if (Math.abs(x) == 2 && Math.abs(z) == 2) {
-                        row.append('X');
                         continue;
                     }
 
@@ -89,20 +85,18 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
                             .relative(right, x)
                             .relative(front, z);
 
-                    boolean isAir = level.getBlockState(pos).isAir();
-                    row.append(isAir ? '.' : 'O');
-
-                    if (!isAir)
+                    if (!level.getBlockState(pos).isAir()) {
                         obstructed = true;
+                    }
                 }
-
-                System.out.println(row);
             }
-            for (int y = 5; y <= 8; y++) {
-                BlockPos pos = rotorPos.above(y);
-                if (!level.getBlockState(pos).isAir()) {
-                    return true;
-                }
+        }
+
+        // Vérifie les blocs uniques au-dessus du rotor (+5 à +8)
+        for (int y = 5; y <= 8; y++) {
+            BlockPos pos = rotorPos.above(y);
+            if (!level.getBlockState(pos).isAir()) {
+                return true;
             }
         }
 
@@ -208,7 +202,9 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
         if (!(machine instanceof NuclearLargeTurbineMachine turbineMachine)) {
             return RecipeModifier.nullWrongType(NuclearLargeTurbineMachine.class, machine);
         }
-
+        if (turbineMachine.isIntakesObstructed()) {
+            return ModifierFunction.NULL;
+        }
         var rotorHolder = turbineMachine.getRotorHolder();
         if (rotorHolder == null)
             return ModifierFunction.NULL;
@@ -286,7 +282,7 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
         super.attachTooltips(tooltipsPanel);
         tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
                 () -> GuiTextures.INDICATOR_NO_STEAM.get(false),
-                () -> List.of(Component.translatable("gtceu.multiblock.turbine.obstructed")
+                () -> List.of(Component.translatable("tfg.multiblock.turbine.obstructed")
                         .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
                 this::isIntakesObstructed,
                 () -> null));
