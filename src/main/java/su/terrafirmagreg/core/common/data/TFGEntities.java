@@ -16,6 +16,10 @@ import net.minecraftforge.registries.RegistryObject;
 import net.wanmine.wab.entity.render.EntityRenderer;
 import net.wanmine.wab.entity.render.model.SurferModel;
 
+import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
+import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
+import earth.terrarium.adastra.common.entities.vehicles.Rocket;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
@@ -47,6 +51,12 @@ public class TFGEntities {
             .of(TFCWraptor::makeTFCWraptor, MobCategory.CREATURE).sized(0.8F, 2.2F).clientTrackingRange(10));
     public static final RegistryObject<EntityType<TFCSurfer>> SURFER = register("surfer", EntityType.Builder
             .of(TFCSurfer::makeTFCSurfer, MobCategory.WATER_CREATURE).sized(1.2F, 0.7F).clientTrackingRange(10));
+
+    public static final RegistryObject<EntityType<Rocket>> TIER_1_DOUBLE_ROCKET = register("tier_1_double_rocket", EntityType.Builder
+            .<Rocket>of(Rocket::new, MobCategory.MISC)
+            .sized(1.1F, 4.8F)
+            .clientTrackingRange(10)
+            .fireImmune());
 
     public static <E extends Entity> RegistryObject<EntityType<E>> register(String name,
             EntityType.Builder<E> builder) {
@@ -113,6 +123,8 @@ public class TFGEntities {
 
         event.registerEntityRenderer(SURFER.get(), EntityRenderer.create(SurferModel::new, 0.6F));
         event.registerEntityRenderer(RNR_PLOW.get(), RNRPlowRenderer::new);
+
+        event.registerEntityRenderer(TIER_1_DOUBLE_ROCKET.get(), c -> new RocketRenderer(c, RocketModel.TIER_1_LAYER, RocketRenderer.TIER_1_TEXTURE));
 
         // event.registerBlockEntityRenderer(TFGBlockEntities.LARGE_NEST_BOX.get(), ctx -> new
         // LargeNestBoxBlockEntityRenderer());
