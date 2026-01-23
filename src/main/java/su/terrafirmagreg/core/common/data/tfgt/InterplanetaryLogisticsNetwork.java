@@ -200,13 +200,8 @@ public class InterplanetaryLogisticsNetwork {
             tag.putBoolean("isReceiverPart", isReceiverPart);
             var sendConfigs = new ListTag();
             var receiveConfigs = new ListTag();
-            if (isReceiverPart)
-                receiverLogisticsConfigs.forEach(c -> receiveConfigs.add(c.save()));
-            else
-                senderLogisticsConfigs.forEach(c -> {
-                    if (c.receiverPartID != null)
-                        sendConfigs.add(c.save());
-                });
+            if (isReceiverPart) receiverLogisticsConfigs.forEach(c -> receiveConfigs.add(c.save()));
+            else senderLogisticsConfigs.forEach(c -> sendConfigs.add(c.save()));
             tag.put("senderLogisticsConfigs", sendConfigs);
             tag.put("receiverLogisticsConfigs", receiveConfigs);
             return tag;
@@ -306,7 +301,9 @@ public class InterplanetaryLogisticsNetwork {
 
         public NetworkSenderConfigEntry(CompoundTag tag) {
             senderPartID = new DimensionalBlockPos(tag.getCompound("senderPartID"));
-            receiverPartID = new DimensionalBlockPos(tag.getCompound("receiverPartID"));
+            if (tag.contains("receiverPartID")) {
+                receiverPartID = new DimensionalBlockPos(tag.getCompound("receiverPartID"));
+            }
             senderDistinctInventory = tag.getInt("senderDistinctInventory");
             receiverDistinctInventory = tag.getInt("receiverDistinctInventory");
             currentSendTrigger = TriggerMode.values()[tag.getInt("currentSendTrigger")];
@@ -318,7 +315,9 @@ public class InterplanetaryLogisticsNetwork {
         public CompoundTag save() {
             var tag = new CompoundTag();
             tag.put("senderPartID", senderPartID.save());
-            tag.put("receiverPartID", receiverPartID.save());
+            if (receiverPartID != null) {
+                 tag.put("receiverPartID", receiverPartID.save());
+            }
             tag.put("currentSendFilter", currentSendFilter.serializeNBT());
             tag.putInt("currentInactivityTimeout", currentInactivityTimeout);
             tag.putInt("senderDistinctInventory", senderDistinctInventory);

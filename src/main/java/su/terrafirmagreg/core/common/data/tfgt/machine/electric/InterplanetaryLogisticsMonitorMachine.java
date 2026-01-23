@@ -206,9 +206,13 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                         .filter((p) -> p.isReceiverPart() && !Objects.equals(p.getUiLabel(), "[unnamed]"))
                         .map(NetworkPart::getUiLabel).toList());
             destinationSelector.setValue("[none]");
-            for (var rPart : parts) {
-                if (rPart.getPartId() == config.getReceiverPartID())
-                    destinationSelector.setValue(rPart.getUiLabel());
+            DimensionalBlockPos receiver = config.getReceiverPartID();
+            if (receiver != null) {
+                for (var rPart : parts) {
+                    if (rPart.getPartId() == receiver) {
+                        destinationSelector.setValue(rPart.getUiLabel());
+                    }
+                }
             }
 
             destinationSelector.setOnChanged((v) -> {
@@ -251,13 +255,12 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             group.addWidget(new LabelWidget(0, 27, "Sender:"));
 
             var senderCircuitInv = new CustomItemStackHandler(1);
-            var receiverCircuitInv = new CustomItemStackHandler(1);
 
             var senderDistinctCircuit = new GhostCircuitSlotWidget();
             senderDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY).setSelfPosition(40,
                     25);
             senderDistinctCircuit.setCircuitInventory(senderCircuitInv);
-            senderDistinctCircuit.setCircuitValue(config.getSenderDistinctInventory());
+            senderDistinctCircuit.getCircuitInventory().setStackInSlot(0, IntCircuitBehaviour.stack(config.getSenderDistinctInventory()));
             senderCircuitInv.setOnContentsChanged(() -> {
                 config.setSenderDistinctInventory(
                         IntCircuitBehaviour.getCircuitConfiguration(senderCircuitInv.getStackInSlot(0)));
@@ -267,11 +270,13 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
             group.addWidget(new LabelWidget(65, 27, "Receiver:"));
 
+            var receiverCircuitInv = new CustomItemStackHandler(1);
+
             var receiverDistinctCircuit = new GhostCircuitSlotWidget();
             receiverDistinctCircuit.setBackground(GuiTextures.SLOT, GuiTextures.INT_CIRCUIT_OVERLAY)
                     .setSelfPosition(115, 25);
             receiverDistinctCircuit.setCircuitInventory(receiverCircuitInv);
-            receiverDistinctCircuit.setCircuitValue(config.getReceiverDistinctInventory());
+            receiverDistinctCircuit.getCircuitInventory().setStackInSlot(0, IntCircuitBehaviour.stack(config.getReceiverDistinctInventory()));
             receiverCircuitInv.setOnContentsChanged(() -> {
                 config.setReceiverDistinctInventory(
                         IntCircuitBehaviour.getCircuitConfiguration(receiverCircuitInv.getStackInSlot(0)));

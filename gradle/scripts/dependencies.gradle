@@ -44,7 +44,7 @@ dependencies {
     implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
 
     // Create: Vintage Improvements
-    implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:6708676") { transitive = false }
+    implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:7436235") { transitive = false }
 
     // Greate
     implementation fg.deobf("maven.modrinth:greate:${greate_version}") { transitive = false }
@@ -91,8 +91,8 @@ dependencies {
     implementation fg.deobf("curse.maven:applied-energistics-2-wireless-terminals-459929:7014805")
 
     // ComputerCraft
-    implementation fg.deobf("cc.tweaked:cc-tweaked-1.20.1-core-api:${cc_tweaked_version}")
-    implementation fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge-api:${cc_tweaked_version}")
+    compileOnly fg.deobf("cc.tweaked:cc-tweaked-1.20.1-core-api:${cc_tweaked_version}")
+    compileOnly fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge-api:${cc_tweaked_version}")
     implementation fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge:${cc_tweaked_version}")
 
     // FTB
@@ -144,10 +144,12 @@ dependencies {
 
     //Panda's Falling Trees
     implementation fg.deobf("curse.maven:pandas-falling-trees-880630:5653236")
+    implementation fg.deobf("curse.maven:pandalib-975460:5653131")
 
     // ArborFirmaCraft
     implementation fg.deobf("curse.maven:arborfirmacraft-877545:7200580")
 
     // TFC Improved Badlands
     implementation fg.deobf("curse.maven:tfc-improved-badlands-969207:5126426")
+
 }

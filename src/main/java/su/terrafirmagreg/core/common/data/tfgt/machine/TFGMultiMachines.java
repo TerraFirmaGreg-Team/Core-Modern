@@ -164,6 +164,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGRecipeTypes.GREENHOUSE_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(GTBlocks.STEEL_HULL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(
@@ -597,7 +598,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
-            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(HORTICULTURE_CASING)
             .model(GTMachineModels.createWorkableCasingMachineModel(
             ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_egh"),
@@ -643,7 +644,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
-            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .workableCasingModel(
