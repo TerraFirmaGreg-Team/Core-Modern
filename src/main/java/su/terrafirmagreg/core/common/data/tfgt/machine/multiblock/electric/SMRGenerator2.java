@@ -189,7 +189,8 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty()) {
                 eutMultiplier = actualParallel;
             } else {
-                consumptionMult = boostingTiers.getInt(engineMachine.currentBooster);
+                consumptionMult = 1;
+                //boostingTiers.getInt(engineMachine.currentBooster); - AJOUTER SI BESOIN QUE LE GENERATEUR CONSOMME PLUS
                 eutMultiplier = actualParallel * (boostingTiers.getInt(engineMachine.currentBooster) * 2);
             }
 
@@ -219,13 +220,13 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             int tickCycle = -1;
             if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("ozone").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 1;
+                tickCycle = 144;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 1;
+                tickCycle = 288;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 1;
+                tickCycle = 288;
             }
             if (tickCycle != -1 && runningTimer % tickCycle == 0) {
                 if (consumptionRate != -1 && currentBooster.getAmount() >= consumptionRate) {
@@ -385,13 +386,13 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
 
             if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("ozone").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 1;
+                tickCycle = 144;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 1;
+                tickCycle = 288;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 1;
+                tickCycle = 288;
             }
 
             // Durée restante
