@@ -59,6 +59,7 @@ import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.tfgt.TFGPartAbility;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
 
@@ -556,7 +557,7 @@ public class TFGMultiMachines {
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where("A", Predicates.blocks(OSTRUM_CASING.get()))
                     .where("B", Predicates.blocks(DESH_PTFE.get()).setMinGlobalLimited(1)
-                            .or(Predicates.abilities((PartAbility.IMPORT_FLUIDS)))
+                            .or(Predicates.abilities((TFGPartAbility.SMR_FLUID_INPUT)))
                             .or(Predicates.abilities((PartAbility.EXPORT_FLUIDS)))
                             .or(Predicates.autoAbilities(true, false, false))
                             .or(Predicates.abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))

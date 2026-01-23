@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
+import static com.gregtechceu.gtceu.api.GTValues.VNF;
+import static com.gregtechceu.gtceu.api.capability.recipe.IO.IN;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
@@ -21,6 +23,7 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
@@ -44,10 +47,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.fluids.FluidType;
 
+import su.terrafirmagreg.core.common.data.tfgt.TFGPartAbility;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.SMRFluidImportHatchPartMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.SingleItemstackBus;
 
 public class TFGMachines {
@@ -111,7 +116,7 @@ public class TFGMachines {
                     .rotationState(RotationState.NON_Y_AXIS)
                     .tooltips(
                             Component.translatable("gtceu.universal.tooltip.voltage_in",
-                                    FormattingUtil.formatNumbers(GTValues.V[tier]), GTValues.VNF[tier]),
+                                    FormattingUtil.formatNumbers(GTValues.V[tier]), VNF[tier]),
                             Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
                                     FormattingUtil.formatNumbers(GTValues.V[tier] * 64)),
                             Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
@@ -154,7 +159,7 @@ public class TFGMachines {
             GTMachineUtils.ELECTRIC_TIERS);
 
     public static final MachineDefinition[] RAILGUN_ITEM_LOADER_IN = registerTieredMachines(REGISTRATE, "railgun_item_loader_in",
-            (holder, tier) -> new RailgunItemBusMachine(holder, tier, IO.IN),
+            (holder, tier) -> new RailgunItemBusMachine(holder, tier, IN),
             (tier, builder) -> builder
                     .langValue(
                             "%s Interplanetary Railgun Loader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
@@ -257,12 +262,12 @@ public class TFGMachines {
     // Needed so you can get the full 2A of EV out of the large solar array mk1 while in HV.
     public static final MachineDefinition HV_ENERGY_OUTPUT_HATCH_4A = GTRegistration.REGISTRATE.machine("hv_energy_output_hatch_4a",
             (holder) -> new EnergyHatchPartMachine(holder, GTValues.HV, OUT, 4))
-            .langValue(GTValues.VNF[GTValues.HV] + " 4A Dynamo Hatch")
+            .langValue(VNF[GTValues.HV] + " 4A Dynamo Hatch")
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.OUTPUT_ENERGY)
             .modelProperty(IS_FORMED, false)
             .tooltips(Component.translatable("gtceu.universal.tooltip.voltage_out",
-                    FormattingUtil.formatNumbers(GTValues.V[GTValues.HV]), GTValues.VNF[GTValues.HV]),
+                    FormattingUtil.formatNumbers(GTValues.V[GTValues.HV]), VNF[GTValues.HV]),
                     Component.translatable("gtceu.universal.tooltip.amperage_out", 4),
                     Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
                             FormattingUtil
@@ -294,4 +299,40 @@ public class TFGMachines {
                 REGISTRATE.machine("hp_%s".formatted(name), holder -> factory.apply(holder, true))
                         .tier(1));
     }
+
+    public static final MachineDefinition[] SMR_FLUID_IMPORT_HATCH = registerSMRFluidImportHatch(
+            "smr_fluid_import_hatch",
+            "SMR Fluid Import Hatch",
+            new int[] { GTValues.HV, GTValues.EV, GTValues.IV },
+            TFGPartAbility.SMR_FLUID_INPUT);
+
+    private static MachineDefinition[] registerSMRFluidImportHatch(
+            String name,
+            String displayName,
+            int[] tiers,
+            PartAbility... abilities) {
+        return registerTieredMachines(
+                REGISTRATE,
+                name,
+                SMRFluidImportHatchPartMachine::new,
+
+                (Integer tier, MachineBuilder<MachineDefinition> builder) -> builder
+                        .langValue(GTValues.VNF[tier] + " " + displayName)
+                        .rotationState(RotationState.ALL)
+                        .abilities(abilities)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                        .overlayTieredHullModel("overlay_pipe_in_emissive")
+                        .tooltips(
+                                Component.translatable("gtceu.machine.fluid_hatch.import.tooltip"),
+                                Component.translatable(
+                                        "gtceu.universal.tooltip.fluid_storage_capacity",
+                                        FormattingUtil.formatNumbers(
+                                                SMRFluidImportHatchPartMachine.BASE_CAPACITY
+                                                        * (1 << Math.min(6, tier)))))
+                        .allowCoverOnFront(true)
+                        .register(),
+                tiers);
+
+    }
+
 }

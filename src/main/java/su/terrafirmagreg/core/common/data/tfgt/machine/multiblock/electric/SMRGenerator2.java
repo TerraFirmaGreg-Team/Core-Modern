@@ -223,10 +223,10 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
                 tickCycle = 144;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 288;
+                tickCycle = 36;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 288;
+                tickCycle = 36;
             }
             if (tickCycle != -1 && runningTimer % tickCycle == 0) {
                 if (consumptionRate != -1 && currentBooster.getAmount() >= consumptionRate) {
@@ -389,10 +389,10 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
                 tickCycle = 144;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 288;
+                tickCycle = 36;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 288;
+                tickCycle = 36;
             }
 
             // Durée restante
@@ -429,7 +429,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             int tierLubricant = lubricantTiers.getInt(currentLubricant);
 
             int ticksPerUnit = currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1)) ? 72
-                    : currentLubricant.containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1)) ? 288
+                    : currentLubricant.containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1)) ? 144
                             : 1;
 
             long totalTicksRemaining = lubricantAmountForDisplay * ticksPerUnit;
