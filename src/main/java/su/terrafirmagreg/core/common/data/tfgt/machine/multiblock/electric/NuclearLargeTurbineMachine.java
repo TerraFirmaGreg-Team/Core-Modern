@@ -247,6 +247,9 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
     @Override
     public void addDisplayText(List<Component> textList) {
         super.addDisplayText(textList);
+
+        textList.removeIf(component -> component.getString().contains("Max Recipe Tier"));
+
         if (isFormed()) {
             var rotorHolder = getRotorHolder();
 
