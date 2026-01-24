@@ -131,6 +131,18 @@ public class ArtisanType {
             textureLocation("resin_board_border"),
             0.8f,
             2.0f);
+    public static final ArtisanType RESIN_BOARD_FOUR = new ArtisanType(
+            "resin_board_4x",
+            new ItemStack(GTItems.COATED_BOARD.get().getDefaultInstance().getItem(), 4),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtQuadruple, GTMaterials.Copper).getItem(), 9),
+            CustomTags.SCREWDRIVERS,
+            CustomTags.WIRE_CUTTERS,
+            textureLocation("blank_resin_board"),
+            textureLocation("printed_resin_board"),
+            GTSoundEntries.WRENCH_TOOL.getMainEvent(),
+            textureLocation("resin_board_border_4x"),
+            0.8f,
+            2.0f);
     public static final ArtisanType PHENOLIC_BOARD = new ArtisanType(
             "phenolic_board",
             GTItems.PHENOLIC_BOARD.get().getDefaultInstance(),
@@ -139,8 +151,20 @@ public class ArtisanType {
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_phenolic_board"),
             textureLocation("printed_phenolic_board"),
-            GTSoundEntries.COMPRESSOR.getMainEvent(),
+            GTSoundEntries.WRENCH_TOOL.getMainEvent(),
             textureLocation("phenolic_board_border"),
+            0.8f,
+            2.0f);
+    public static final ArtisanType PHENOLIC_BOARD_FOUR = new ArtisanType(
+            "phenolic_board_4x",
+            new ItemStack(GTItems.PHENOLIC_BOARD.get().getDefaultInstance().getItem(), 4),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtQuadruple, GTMaterials.Silver).getItem(), 9),
+            CustomTags.SCREWDRIVERS,
+            CustomTags.WIRE_CUTTERS,
+            textureLocation("blank_phenolic_board"),
+            textureLocation("printed_phenolic_board"),
+            GTSoundEntries.WRENCH_TOOL.getMainEvent(),
+            textureLocation("phenolic_board_border_4x"),
             0.8f,
             2.0f);
 
@@ -156,6 +180,8 @@ public class ArtisanType {
         initNewType(CASTING_MOLD);
         initNewType(EXTRUDER_MOLD);
         initNewType(RESIN_BOARD);
+        initNewType(RESIN_BOARD_FOUR);
         initNewType(PHENOLIC_BOARD);
+        initNewType(PHENOLIC_BOARD_FOUR);
     }
 }

@@ -115,7 +115,7 @@ public class SmithingButton extends Button {
      */
     @Override
     public void playDownSound(SoundManager handler) {
-        handler.play(SimpleSoundInstance.forUI(this.sound, currentType.getClickVolume(), currentType.getClickPitch()));
+        handler.play(SimpleSoundInstance.forUI(this.sound, currentType.getClickPitch(), currentType.getClickVolume()));
     }
 
     /**

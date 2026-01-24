@@ -33,7 +33,7 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
  */
 @SuppressWarnings("deprecation")
 public class ArtisanTableBlock extends Block implements IForgeBlockExtension, EntityBlock {
-    public static final VoxelShape SHAPE = Shapes.box(0, 0, 0, 1, 1, 1);
+    public static final VoxelShape SHAPE = Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375);
     private final ExtendedProperties properties;
 
     public ArtisanTableBlock(ExtendedProperties properties) {
