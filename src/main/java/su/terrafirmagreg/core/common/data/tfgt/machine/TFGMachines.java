@@ -4,8 +4,7 @@ import static com.gregtechceu.gtceu.api.GTValues.VNF;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.IN;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createTieredHullMachineModel;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.Locale;
@@ -303,7 +302,7 @@ public class TFGMachines {
     public static final MachineDefinition[] SMR_FLUID_IMPORT_HATCH = registerSMRFluidImportHatch(
             "smr_fluid_import_hatch",
             "SMR Fluid Import Hatch",
-            new int[] { GTValues.HV, GTValues.EV, GTValues.IV },
+            new int[] { GTValues.UV },
             TFGPartAbility.SMR_FLUID_INPUT);
 
     private static MachineDefinition[] registerSMRFluidImportHatch(
@@ -321,7 +320,8 @@ public class TFGMachines {
                         .rotationState(RotationState.ALL)
                         .abilities(abilities)
                         .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-                        .overlayTieredHullModel("overlay_pipe_in_emissive")
+                        .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
+                                GTCEu.id("block/overlay/machine/" + OVERLAY_FLUID_HATCH_INPUT))
                         .tooltips(
                                 Component.translatable("gtceu.machine.fluid_hatch.import.tooltip"),
                                 Component.translatable(

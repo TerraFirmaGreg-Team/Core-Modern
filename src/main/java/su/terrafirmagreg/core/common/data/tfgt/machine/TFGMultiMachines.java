@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.common.data.GCYMBlocks.MOLYBDENUM_DISILICIDE_COIL_BLOCK;
+import static fi.dea.mc.deafission.common.data.FissionMachines.HeatPortEv;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.*;
@@ -54,7 +56,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import fi.dea.mc.deafission.common.data.FissionGtRecipeTypes;
+import fi.dea.mc.deafission.common.data.FissionTags;
 import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
+import fi.dea.mc.deafission.common.data.machine.hb.HbMachine;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
@@ -411,6 +416,7 @@ public class TFGMultiMachines {
                     .where("A", Predicates.frames(GTMaterials.TungstenSteel))
                     .where("B", Predicates.blocks(tower_casing.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                             .or(Predicates.autoAbilities(true, false, false)))
                     .where("C", Predicates.controller(Predicates.blocks(definition.getBlock())))
                     .where("D", Predicates.blocks(titanium_concrete.get())
@@ -562,7 +568,7 @@ public class TFGMultiMachines {
                             .or(Predicates.autoAbilities(true, false, false))
                             .or(Predicates.abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
                     .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/heat_pipe_casing"))))
-                    .where("E", Predicates.blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                    .where("E", Predicates.blocks(MOLYBDENUM_DISILICIDE_COIL_BLOCK.get()))
                     .build())
             .register();
 
@@ -863,6 +869,40 @@ public class TFGMultiMachines {
                     .build())
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     GTCEu.id("block/machines/forge_hammer/overlay_front"))
+            .register();
+
+    public static final MultiblockMachineDefinition HeatBatteryMk1 = REGISTRATE
+            .multiblock("heat_battery_mk1", HbMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
+            .recipeType(FissionGtRecipeTypes.HbImportRecipe)
+            .recipeType(FissionGtRecipeTypes.HbExportRecipe)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .appearanceBlock(MARS_CASING)
+            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
+            .workableCasingModel(
+                    ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_mars"),
+                    GTCEu.id("block/multiblock/implosion_compressor"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("##BBB##", "##CCC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
+                    .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
+                    .aisle("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
+                    .aisle("BBFFFBB", "CAFFFAC", "DAAGAAD", "DAAGAAD", "DAAGAAD", "CAFFFAC", "BBFFFBB")
+                    .aisle("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
+                    .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
+                    .aisle("##BBB##", "##CYC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
+                    .where("Y", Predicates.controller(blocks(definition.getBlock())))
+                    .where("#", Predicates.any())
+                    .where("A", Predicates.air())
+                    .where("B", Predicates.blocks(OSTRUM_CASING.get()))
+                    .where("C", Predicates.blocks(MARS_CASING.get())
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(2).setPreviewCount(1)))
+                    .where("D", Predicates.blocks(GTBlocks.CASING_LAMINATED_GLASS.get())
+                            .or(Predicates.blocks(HeatPortEv.get()).setMaxGlobalLimited(1).setPreviewCount(1)))
+                    .where("F", Predicates.blocks(heat_pipe.get()))
+                    .where("G", (Predicates.blockTag(FissionTags.COMPONENT_HB)))
+                    .build())
             .register();
     // spotless:on
 }
