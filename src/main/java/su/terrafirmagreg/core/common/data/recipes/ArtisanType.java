@@ -122,7 +122,7 @@ public class ArtisanType {
     public static final ArtisanType RESIN_BOARD = new ArtisanType(
             "resin_board",
             GTItems.COATED_BOARD.get().getDefaultInstance(),
-            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Copper).getItem(), 9),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Copper).getItem(), 8),
             CustomTags.SCREWDRIVERS,
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_resin_board"),
@@ -134,7 +134,7 @@ public class ArtisanType {
     public static final ArtisanType RESIN_BOARD_FOUR = new ArtisanType(
             "resin_board_4x",
             new ItemStack(GTItems.COATED_BOARD.get().getDefaultInstance().getItem(), 4),
-            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtQuadruple, GTMaterials.Copper).getItem(), 9),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtQuadruple, GTMaterials.Copper).getItem(), 8),
             CustomTags.SCREWDRIVERS,
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_resin_board"),
@@ -146,7 +146,7 @@ public class ArtisanType {
     public static final ArtisanType PHENOLIC_BOARD = new ArtisanType(
             "phenolic_board",
             GTItems.PHENOLIC_BOARD.get().getDefaultInstance(),
-            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Silver).getItem(), 9),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtSingle, GTMaterials.Silver).getItem(), 8),
             CustomTags.SCREWDRIVERS,
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_phenolic_board"),
@@ -158,7 +158,7 @@ public class ArtisanType {
     public static final ArtisanType PHENOLIC_BOARD_FOUR = new ArtisanType(
             "phenolic_board_4x",
             new ItemStack(GTItems.PHENOLIC_BOARD.get().getDefaultInstance().getItem(), 4),
-            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtQuadruple, GTMaterials.Silver).getItem(), 9),
+            new ItemStack(ChemicalHelper.get(TagPrefix.wireGtQuadruple, GTMaterials.Silver).getItem(), 8),
             CustomTags.SCREWDRIVERS,
             CustomTags.WIRE_CUTTERS,
             textureLocation("blank_phenolic_board"),
