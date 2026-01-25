@@ -83,10 +83,6 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
         boolean inputsMatch = matchesItems(recipeHandler.container().getInputItems());
         boolean toolsMatch = matchesTools(recipeHandler.container().getToolItems());
 
-        //System.out.println(patternMatch);
-        //System.out.println(inputMatch);
-        //System.out.println(toolsMatch);
-
         return patternMatch && inputsMatch && toolsMatch;
     }
 
@@ -100,18 +96,11 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
 
         if (stdStacks.size() == 1) {
             assert ingredient != null;
-            if (ingredient.test(stdStacks.get(0))) {
-                //System.out.println("Ingredient Matches");
-                return true;
-            }
+            return ingredient.test(stdStacks.get(0));
         } else if (stdStacks.size() == 2) {
             assert ingredient != null;
-            if (ingredient.test(stdStacks.get(0)) && ingredient.test(stdStacks.get(1))) {
-                //System.out.println("Ingredients Match");
-                return true;
-            }
+            return ingredient.test(stdStacks.get(0)) && ingredient.test(stdStacks.get(1));
         }
-        //System.out.println("No Ingredient Match");
         return false;
     }
 
