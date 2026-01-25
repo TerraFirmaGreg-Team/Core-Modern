@@ -247,4 +247,59 @@ public class ArtisanTableScreen extends TFCContainerScreen<ArtisanTableContainer
         }
         counter = 0;
     }
+
+    /**
+     * Handles mouse dragging to activate smithing buttons.
+     */
+    private boolean isDragging = false;
+    private SmithingButton lastDraggedButton = null;
+
+    /**
+     * Handles mouse click events for smithing buttons.
+     */
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0) {
+            isDragging = true;
+            for (SmithingButton smithingButton : allButtons) {
+                if (smithingButton.active && smithingButton.isMouseOver(mouseX, mouseY)) {
+                    smithingButton.onPress();
+                    lastDraggedButton = smithingButton;
+                    break;
+                }
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /**
+     * Handles mouse release events to stop dragging.
+     */
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0) {
+            isDragging = false;
+            lastDraggedButton = null;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    /**
+     * Handles mouse dragging to activate smithing buttons.
+     */
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (isDragging && button == 0) {
+            for (SmithingButton smithingButton : allButtons) {
+                if (smithingButton.active && smithingButton.isMouseOver(mouseX, mouseY)) {
+                    if (smithingButton != lastDraggedButton) {
+                        smithingButton.onPress();
+                        lastDraggedButton = smithingButton;
+                        break;
+                    }
+                }
+            }
+        }
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    }
 }

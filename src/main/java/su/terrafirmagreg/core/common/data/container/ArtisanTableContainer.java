@@ -6,10 +6,12 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.container.BlockEntityContainer;
 import net.dries007.tfc.common.container.ButtonHandlerContainer;
 import net.dries007.tfc.common.container.CallbackSlot;
 import net.dries007.tfc.common.recipes.inventory.EmptyInventory;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
@@ -132,6 +134,13 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
                     .orElse(ItemStack.EMPTY);
 
             slot.set(resultStack);
+
+            var pos = blockEntity.getBlockPos();
+            double x = pos.getX() + 0.5;
+            double y = pos.getY() + 1.0;
+            double z = pos.getZ() + 0.5;
+            level.sendParticles(ParticleTypes.CRIT, x, y, z, 3, 0.5, 0.3, 0.5, 0.3);
+
         }
     }
 
@@ -232,11 +241,19 @@ public class ArtisanTableContainer extends BlockEntityContainer<ArtisanTableBloc
             }
             super.onTake(player, stack);
 
+            player.level().playSound(null, blockEntity.getBlockPos(), TFCSounds.BELLOWS_BLOW.get(), player.getSoundSource(), 1, 2);
+
+            if (player.level() instanceof ServerLevel serverLevel) {
+                var pos = blockEntity.getBlockPos();
+                double x = pos.getX() + 0.5;
+                double y = pos.getY() + 1.0;
+                double z = pos.getZ() + 0.5;
+                serverLevel.sendParticles(ParticleTypes.SCRAPE, x, y, z, 10, 0.5, 0.3, 0.5, 0.3);
+            }
+
             if (blockEntity.canConsumeIngredients()) {
                 blockEntity.resetPattern();
                 blockEntity.checkForActiveScreen();
-                blockEntity.markForSync();
-                blockEntity.setChanged();
             }
         }
     }

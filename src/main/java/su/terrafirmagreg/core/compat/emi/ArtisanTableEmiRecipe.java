@@ -9,12 +9,16 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
@@ -122,6 +126,27 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
         holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, yPos + 5).recipeContext(this);
 
         displayPattern(holder);
+
+        // Add border texture over all widgets, with translucency.
+        ResourceLocation borderTexture = type.getBorderTexture();
+        if (borderTexture != null) {
+            int borderX = 3;
+            int borderY = 5;
+            int borderW = 82;
+            int borderH = 82;
+            TextureWidget borderWidget = new TextureWidget(borderTexture, borderX, borderY, borderW, borderH, 0, 0, borderW, borderH, borderW, borderH) {
+                @Override
+                public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+                    RenderSystem.enableBlend();
+                    RenderSystem.defaultBlendFunc();
+                    graphics.setColor(1.0F, 1.0F, 1.0F, 0.5F);
+                    super.render(graphics, mouseX, mouseY, delta);
+                    graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                    RenderSystem.disableBlend();
+                }
+            };
+            holder.add(borderWidget);
+        }
     }
 
     /**
