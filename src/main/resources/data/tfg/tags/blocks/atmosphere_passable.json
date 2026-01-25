@@ -1,0 +1,13 @@
+{
+    "values": [
+        "#minecraft:fences",
+        "#minecraft:leaves",
+        "minecraft:ladder",
+        "minecraft:iron_bars",
+        "minecraft:tnt",
+        "ad_astra:vent",
+        "ad_astra:oxygen_distributor",
+        "ad_astra:gravity_normalizer"
+    ],
+    "replace": false
+}

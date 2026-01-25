@@ -81,6 +81,10 @@ public final class TFGTags {
         public static final TagKey<Block> TitaniumConcrete = createBlockTag("tfg:titanium_concrete");
         public static final TagKey<Block> SolidLeaves = createBlockTag("tfg:solid_leaves");
 
+        // Atmosphere system tags
+        public static final TagKey<Block> AtmospherePassable = createBlockTag("tfg:atmosphere_passable");
+        public static final TagKey<Block> AtmosphereImpassable = createBlockTag("tfg:atmosphere_impassable");
+
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));
         }
