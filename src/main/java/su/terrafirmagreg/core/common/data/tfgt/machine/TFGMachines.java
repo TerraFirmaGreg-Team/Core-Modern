@@ -1,12 +1,10 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
-import static com.gregtechceu.gtceu.api.GTValues.VNF;
-import static com.gregtechceu.gtceu.api.capability.recipe.IO.IN;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createTieredHullMachineModel;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.Locale;

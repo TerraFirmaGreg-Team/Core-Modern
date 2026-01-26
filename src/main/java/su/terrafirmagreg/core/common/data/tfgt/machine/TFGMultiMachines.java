@@ -59,7 +59,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import fi.dea.mc.deafission.common.data.FissionGtRecipeTypes;
 import fi.dea.mc.deafission.common.data.FissionTags;
 import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
-import fi.dea.mc.deafission.common.data.machine.AuxExchangerMachine;
 import fi.dea.mc.deafission.common.data.machine.hb.HbMachine;
 
 import su.terrafirmagreg.core.TFGCore;
