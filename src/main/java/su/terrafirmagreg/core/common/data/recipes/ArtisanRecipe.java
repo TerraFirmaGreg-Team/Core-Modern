@@ -1,21 +1,15 @@
 package su.terrafirmagreg.core.common.data.recipes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.gregtechceu.gtceu.api.data.tag.TagUtil;
 
 import net.dries007.tfc.common.recipes.ISimpleRecipe;
 import net.dries007.tfc.common.recipes.RecipeSerializerImpl;
-import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -185,10 +179,9 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
         public ArtisanRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
             final ArtisanPattern pattern = ArtisanPattern.fromNetwork(buffer);
             final ItemStack stack = buffer.readItem();
-            final @Nullable Ingredient ingredient = Helpers.decodeNullable(buffer, Ingredient::fromNetwork);
-            final ArrayList<TagKey<Item>> tools = pathsToTags(buffer.readCollection(c -> new ArrayList<>(), FriendlyByteBuf::readUtf));
+            final ArtisanType type = ArtisanType.ARTISAN_TYPES.get(buffer.readResourceLocation());
 
-            return new ArtisanRecipe(recipeId, pattern, stack, ingredient, tools, null);
+            return new ArtisanRecipe(recipeId, pattern, stack, Ingredient.of(type.getInputItems().stream()), type.getToolTags(), type);
         }
 
         /**
@@ -200,41 +193,7 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
         public void toNetwork(@NotNull FriendlyByteBuf buffer, ArtisanRecipe recipe) {
             recipe.getPattern().toNetwork(buffer);
             buffer.writeItem(recipe.result);
-            Helpers.encodeNullable(recipe.ingredient, buffer, Ingredient::toNetwork);
-            buffer.writeCollection(tagsToPaths(recipe.tools), FriendlyByteBuf::writeUtf);
-        }
-
-        /**
-         * Converts tool tags to their path strings.
-         * @param tools The tool tags.
-         * @return A collection of tag paths.
-         */
-        private Collection<String> tagsToPaths(ArrayList<TagKey<Item>> tools) {
-            return tools.stream().map(TagKey::location).map(ResourceLocation::getPath).toList();
-        }
-
-        /**
-         * Converts a list of tag paths to TagKey<Item> objects.
-         * @param paths The tag paths.
-         * @return The list of TagKey<Item>.
-         */
-        private ArrayList<TagKey<Item>> pathsToTags(ArrayList<String> paths) {
-            return new ArrayList<>(Arrays.asList(TagUtil.createItemTag(paths.get(0)), TagUtil.createItemTag(paths.get(1))));
-        }
-
-        /**
-         * Parses tool tags from a JSON object.
-         * @param json The JSON object.
-         * @return The list of TagKey<Item>.
-         */
-        private ArrayList<TagKey<Item>> jsonToTags(JsonObject json) {
-            final JsonArray baseArray = GsonHelper.getAsJsonArray(json, "tools");
-            ArrayList<TagKey<Item>> tags = new ArrayList<>();
-            for (JsonElement element : baseArray) {
-                String path = element.getAsString().split(":")[1];
-                tags.add(TagUtil.createItemTag(path));
-            }
-            return tags;
+            buffer.writeResourceLocation(recipe.artisanType.getId());
         }
     }
 }
