@@ -1,9 +1,12 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine;
 
+import static com.gregtechceu.gtceu.api.GTValues.VNF;
+import static com.gregtechceu.gtceu.api.capability.recipe.IO.IN;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createTieredHullMachineModel;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.Locale;
@@ -21,6 +24,7 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
@@ -44,10 +48,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.fluids.FluidType;
 
+import su.terrafirmagreg.core.common.data.tfgt.TFGPartAbility;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.SMRFluidImportHatchPartMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.SingleItemstackBus;
 
 public class TFGMachines {
@@ -294,4 +300,41 @@ public class TFGMachines {
                 REGISTRATE.machine("hp_%s".formatted(name), holder -> factory.apply(holder, true))
                         .tier(1));
     }
+
+    public static final MachineDefinition[] SMR_FLUID_IMPORT_HATCH = registerSMRFluidImportHatch(
+            "smr_fluid_import_hatch",
+            "SMR Fluid Import Hatch",
+            new int[] { GTValues.UV },
+            TFGPartAbility.SMR_FLUID_INPUT);
+
+    private static MachineDefinition[] registerSMRFluidImportHatch(
+            String name,
+            String displayName,
+            int[] tiers,
+            PartAbility... abilities) {
+        return registerTieredMachines(
+                REGISTRATE,
+                name,
+                SMRFluidImportHatchPartMachine::new,
+
+                (Integer tier, MachineBuilder<MachineDefinition> builder) -> builder
+                        .langValue(GTValues.VNF[tier] + " " + displayName)
+                        .rotationState(RotationState.ALL)
+                        .abilities(abilities)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                        .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
+                                GTCEu.id("block/overlay/machine/" + OVERLAY_FLUID_HATCH_INPUT))
+                        .tooltips(
+                                Component.translatable("gtceu.machine.fluid_hatch.import.tooltip"),
+                                Component.translatable(
+                                        "gtceu.universal.tooltip.fluid_storage_capacity",
+                                        FormattingUtil.formatNumbers(
+                                                SMRFluidImportHatchPartMachine.BASE_CAPACITY
+                                                        * (1 << Math.min(6, tier)))))
+                        .allowCoverOnFront(true)
+                        .register(),
+                tiers);
+
+    }
+
 }

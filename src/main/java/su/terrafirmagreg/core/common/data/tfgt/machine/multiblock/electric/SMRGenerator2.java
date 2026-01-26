@@ -72,8 +72,8 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
     private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
     private int runningTimer = 0;
     static {
-        boostingTiers.put(GTMaterials.Oxygen.getFluid(1), 2);
-        boostingTiers.put(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1), 4);
+        boostingTiers.put(TFGHelpers.getMaterial("ozone").getFluid(1), 1);
+        boostingTiers.put(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1), 4);
         boostingTiers.put(TFGHelpers.getMaterial("booster_t3").getFluid(1), 8);
 
         lubricantTiers.put(GTMaterials.Lubricant.getFluid(1), 2);
@@ -189,7 +189,8 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty()) {
                 eutMultiplier = actualParallel;
             } else {
-                consumptionMult = boostingTiers.getInt(engineMachine.currentBooster);
+                consumptionMult = 1;
+                //boostingTiers.getInt(engineMachine.currentBooster); - AJOUTER SI BESOIN QUE LE GENERATEUR CONSOMME PLUS
                 eutMultiplier = actualParallel * (boostingTiers.getInt(engineMachine.currentBooster) * 2);
             }
 
@@ -217,15 +218,15 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         if (currentBooster != null && !currentBooster.isEmpty()) {
             int consumptionRate = -1;
             int tickCycle = -1;
-            if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(1))) {
+            if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("ozone").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 1;
-            } else if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1))) {
-                consumptionRate = 4;
-                tickCycle = 1;
+                tickCycle = 144;
+            } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1))) {
+                consumptionRate = 1;
+                tickCycle = 36;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 2;
+                tickCycle = 36;
             }
             if (tickCycle != -1 && runningTimer % tickCycle == 0) {
                 if (consumptionRate != -1 && currentBooster.getAmount() >= consumptionRate) {
@@ -239,7 +240,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             int consumptionRate = -1;
             int tickCycle = -1;
             if (currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1))) {
-                tickCycle = 72;
+                tickCycle = 72; // 72000 ticks per hour divide by tickCycle to know how much is getting consummed
                 consumptionRate = 1; // 1000/hr
             } else if (currentLubricant.containsFluid(
                     (TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1)))) {
@@ -383,15 +384,15 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             int consumptionRate = -1;
             int tickCycle = -1;
 
-            if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(1))) {
+            if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("ozone").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 1;
-            } else if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1))) {
-                consumptionRate = 4;
-                tickCycle = 1;
+                tickCycle = 144;
+            } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1))) {
+                consumptionRate = 1;
+                tickCycle = 36;
             } else if (currentBooster.isFluidEqual(TFGHelpers.getMaterial("booster_t3").getFluid(1))) {
                 consumptionRate = 1;
-                tickCycle = 2;
+                tickCycle = 36;
             }
 
             // Durée restante
@@ -428,7 +429,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             int tierLubricant = lubricantTiers.getInt(currentLubricant);
 
             int ticksPerUnit = currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1)) ? 72
-                    : currentLubricant.containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1)) ? 288
+                    : currentLubricant.containsFluid(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(FluidStorageKeys.LIQUID, 1)) ? 144
                             : 1;
 
             long totalTicksRemaining = lubricantAmountForDisplay * ticksPerUnit;
