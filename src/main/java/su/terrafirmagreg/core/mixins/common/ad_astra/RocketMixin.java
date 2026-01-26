@@ -2,6 +2,9 @@ package su.terrafirmagreg.core.mixins.common.ad_astra;
 
 import java.util.Map;
 
+import earth.terrarium.adastra.common.registry.ModItems;
+import earth.terrarium.adastra.common.tags.ModFluidTags;
+import net.minecraft.world.item.Item;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +18,7 @@ import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 import earth.terrarium.adastra.common.registry.ModEntityTypes;
 
 import su.terrafirmagreg.core.common.data.TFGEntities;
+import su.terrafirmagreg.core.common.data.TFGItems;
 
 @Mixin(value = Rocket.class, remap = false)
 public abstract class RocketMixin extends Entity {
@@ -30,6 +34,9 @@ public abstract class RocketMixin extends Entity {
     @Final
     @Shadow
     private static Rocket.RocketProperties TIER_1_PROPERTIES;
+
+    @Unique
+    private static final Rocket.RocketProperties TIER_1_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_1_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_1_ROCKET_FUEL);
 
     @Final
     @Shadow
@@ -50,7 +57,7 @@ public abstract class RocketMixin extends Entity {
                 ModEntityTypes.TIER_2_ROCKET.get(), TIER_2_PROPERTIES,
                 ModEntityTypes.TIER_3_ROCKET.get(), TIER_3_PROPERTIES,
                 ModEntityTypes.TIER_4_ROCKET.get(), TIER_4_PROPERTIES,
-                TFGEntities.TIER_1_DOUBLE_ROCKET.get(), TIER_1_PROPERTIES);
+                TFGEntities.TIER_1_DOUBLE_ROCKET.get(), TIER_1_DOUBLE_PROPERTIES);
     }
 
     @Unique

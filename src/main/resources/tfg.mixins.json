@@ -8,6 +8,7 @@
         "common.ad_astra.LanderMixin",
         "common.ad_astra.MartianRaptorMixin",
         "common.ad_astra.ModSkyRendererMixin",
+        "common.ad_astra.ModUtilsMixin",
         "common.ad_astra.OxygenDistributorMixin",
         "common.ad_astra.OxygenLoaderMixin",
         "common.ad_astra.PlanetResourceUtilsMixin",
