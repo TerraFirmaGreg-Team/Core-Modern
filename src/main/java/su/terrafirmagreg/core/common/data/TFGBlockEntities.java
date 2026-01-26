@@ -13,6 +13,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
@@ -46,6 +47,10 @@ public class TFGBlockEntities {
     public static final RegistryObject<BlockEntityType<LargeNestBoxBlockEntity>> LARGE_NEST_BOX = BLOCK_ENTITIES
             .register("large_nest_box", () -> BlockEntityType.Builder.of(LargeNestBoxBlockEntity::new,
                     TFGBlocks.LARGE_NEST_BOX.get(), TFGBlocks.LARGE_NEST_BOX_WARPED.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<ArtisanTableBlockEntity>> ARTISAN_TABLE = BLOCK_ENTITIES
+            .register("artisan_table", () -> BlockEntityType.Builder.of(ArtisanTableBlockEntity::new,
+                    TFGBlocks.ARTISAN_TABLE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<ReflectorBlockEntity>> REFLECTOR_BLOCK_ENTITY = BLOCK_ENTITIES
             .register("reflector",
