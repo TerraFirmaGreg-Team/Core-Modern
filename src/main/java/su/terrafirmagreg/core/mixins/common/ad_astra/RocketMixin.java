@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.mixins.common.ad_astra;
 
 import java.util.Map;
 
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,7 +16,7 @@ import earth.terrarium.adastra.common.registry.ModEntityTypes;
 
 import su.terrafirmagreg.core.common.data.TFGEntities;
 
-@Mixin(Rocket.class)
+@Mixin(value = Rocket.class, remap = false)
 public abstract class RocketMixin extends Entity {
     public RocketMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -42,7 +43,7 @@ public abstract class RocketMixin extends Entity {
     @Shadow
     private static Rocket.RocketProperties TIER_4_PROPERTIES;
 
-    @Redirect(method = "<clinit>", at = @At(value = "FIELD", target = "earth/terrarium/adastra/common/entities/vehicles/Rocket.ROCKET_TO_PROPERTIES : Ljava/util/Map;"))
+    @Redirect(method = "<clinit>", at = @At(value = "FIELD", target = "earth/terrarium/adastra/common/entities/vehicles/Rocket.ROCKET_TO_PROPERTIES : Ljava/util/Map;", opcode = Opcodes.PUTSTATIC))
     private static void tfg$modifyPropertiesMap(Map<EntityType<?>, Rocket.RocketProperties> value) {
         ROCKET_TO_PROPERTIES = Map.of(
                 ModEntityTypes.TIER_1_ROCKET.get(), TIER_1_PROPERTIES,
