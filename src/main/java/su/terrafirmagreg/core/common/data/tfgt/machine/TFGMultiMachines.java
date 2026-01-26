@@ -776,7 +776,7 @@ public class TFGMultiMachines {
                     .where('B', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1)))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .build())

@@ -13,6 +13,8 @@ import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLItems;
 import com.eerussianguy.firmalife.common.util.FLMetal;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
+import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.negodya1.vintageimprovements.VintageBlocks;
 import com.negodya1.vintageimprovements.VintageImprovements;
 import com.negodya1.vintageimprovements.VintageItems;
@@ -23,6 +25,7 @@ import com.therighthon.rnr.common.item.RNRItems;
 import net.dries007.tfc.common.blocks.Gem;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Metal;
@@ -332,5 +335,18 @@ public final class TFGMaterialHandler {
         powder.setIgnored(Ruby, () -> TFCItems.GEM_DUST.get(Gem.RUBY).get());
         powder.setIgnored(Sapphire, () -> TFCItems.GEM_DUST.get(Gem.SAPPHIRE).get());
         powder.setIgnored(Topaz, () -> TFCItems.GEM_DUST.get(Gem.TOPAZ).get());
+
+        var weakRedSteel = TFGHelpers.getMaterial("weak_red_steel");
+        if (weakRedSteel != null) {
+            ingot.setIgnored(weakRedSteel, TFCItems.METAL_ITEMS.get(Metal.Default.WEAK_RED_STEEL).get(Metal.ItemType.INGOT));
+            weakRedSteel.getProperty(PropertyKey.FLUID).getStorage().store(FluidStorageKeys.LIQUID,
+                    () -> TFCFluids.METALS.get(Metal.Default.WEAK_RED_STEEL).getSource(), null);
+        }
+        var weakBlueSteel = TFGHelpers.getMaterial("weak_blue_steel");
+        if (weakBlueSteel != null) {
+            ingot.setIgnored(weakBlueSteel, TFCItems.METAL_ITEMS.get(Metal.Default.WEAK_BLUE_STEEL).get(Metal.ItemType.INGOT));
+            weakBlueSteel.getProperty(PropertyKey.FLUID).getStorage().store(FluidStorageKeys.LIQUID,
+                    () -> TFCFluids.METALS.get(Metal.Default.WEAK_BLUE_STEEL).getSource(), null);
+        }
     }
 }

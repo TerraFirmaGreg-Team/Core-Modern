@@ -200,8 +200,10 @@ public class InterplanetaryLogisticsNetwork {
             tag.putBoolean("isReceiverPart", isReceiverPart);
             var sendConfigs = new ListTag();
             var receiveConfigs = new ListTag();
-            if (isReceiverPart) receiverLogisticsConfigs.forEach(c -> receiveConfigs.add(c.save()));
-            else senderLogisticsConfigs.forEach(c -> sendConfigs.add(c.save()));
+            if (isReceiverPart)
+                receiverLogisticsConfigs.forEach(c -> receiveConfigs.add(c.save()));
+            else
+                senderLogisticsConfigs.forEach(c -> sendConfigs.add(c.save()));
             tag.put("senderLogisticsConfigs", sendConfigs);
             tag.put("receiverLogisticsConfigs", receiveConfigs);
             return tag;
@@ -316,7 +318,7 @@ public class InterplanetaryLogisticsNetwork {
             var tag = new CompoundTag();
             tag.put("senderPartID", senderPartID.save());
             if (receiverPartID != null) {
-                 tag.put("receiverPartID", receiverPartID.save());
+                tag.put("receiverPartID", receiverPartID.save());
             }
             tag.put("currentSendFilter", currentSendFilter.serializeNBT());
             tag.putInt("currentInactivityTimeout", currentInactivityTimeout);
