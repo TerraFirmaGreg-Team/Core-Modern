@@ -13,6 +13,7 @@ public final class TFGTags {
 
     public static final class Items {
         public static final TagKey<Item> Hammers = createItemTag("forge:tools/hammers");
+
         public static final TagKey<Item> Chains = createItemTag("forge:chains");
         public static final TagKey<Item> Strings = createItemTag("forge:string");
         public static final TagKey<Item> Harvester = createItemTag("tfg:harvester");
@@ -37,6 +38,8 @@ public final class TFGTags {
         public static final TagKey<Item> FloatingProtectionEquipment = createItemTag("tfg:floating_protection_equipment");
 
         public static final TagKey<Item> AutoEatBlacklist = createItemTag("tfg:auto_eat_blacklist");
+        public static final TagKey<Item> ArtisanTableInputs = createItemTag("tfg:artisan_table_inputs");
+        public static final TagKey<Item> ArtisanTableTools = createItemTag("tfg:artisan_table_tools");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");

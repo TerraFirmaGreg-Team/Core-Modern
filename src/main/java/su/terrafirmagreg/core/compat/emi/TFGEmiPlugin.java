@@ -17,6 +17,9 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -29,6 +32,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory BLOCK_INTERACTION = new EmiRecipeCategory(TFGCore.id("block_interaction"),
             EmiStack.of(TFCItems.MORTAR.get()));
+
+    public static final EmiRecipeCategory ARTISAN_TABLE = new EmiRecipeCategory(TFGCore.id("artisan_table"),
+            EmiStack.of(TFGBlocks.ARTISAN_TABLE.get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -64,5 +70,12 @@ public class TFGEmiPlugin implements EmiPlugin {
 
         emiRegistry.addCategory(BLOCK_INTERACTION);
         Arrays.stream(BlockInteractionInfo.RECIPES).forEach(emiRegistry::addRecipe);
+
+        emiRegistry.addCategory(ARTISAN_TABLE);
+        emiRegistry.addWorkstation(ARTISAN_TABLE, EmiStack.of(TFGBlocks.ARTISAN_TABLE.get().asItem()));
+        for (ArtisanRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(TFGRecipeTypes.ARTISAN.get()).stream().toList()) {
+            emiRegistry.addRecipe(new ArtisanTableEmiRecipe(recipe));
+        }
+
     }
 }
