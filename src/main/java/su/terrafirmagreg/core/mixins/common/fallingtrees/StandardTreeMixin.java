@@ -14,13 +14,16 @@ import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.wood.BranchDirection;
 import net.dries007.tfc.common.blocks.wood.LogBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
+import me.pandamods.fallingtrees.api.Tree;
+import me.pandamods.fallingtrees.config.common.tree.StandardTreeConfig;
 import me.pandamods.fallingtrees.trees.StandardTree;
 
 @Mixin(value = StandardTree.class, remap = false)
-public class StandardTreeMixin {
+public abstract class StandardTreeMixin implements Tree<StandardTreeConfig> {
 
     // Check TFC's distance property on the leaves
     @Inject(method = "loopLeaves", at = @At(value = "INVOKE", target = "Ljava/util/Set;add(Ljava/lang/Object;)Z", ordinal = 0), cancellable = true)
@@ -43,5 +46,18 @@ public class StandardTreeMixin {
     @Redirect(method = "getTreeData", at = @At(value = "INVOKE", target = "Ljava/util/Set;isEmpty()Z", ordinal = 0))
     private boolean allowLeaflessTrees(Set<BlockPos> leavesBlocks) {
         return false; // false here means we don't care if the Set is empty, we allow the tree either way
+    }
+
+    /** Don't try to process manually placed blocks if we can tell the difference */
+    @Override
+    public boolean willTreeFall(BlockPos blockPos, BlockGetter level, Player player) {
+        BlockState blockState = level.getBlockState(blockPos);
+
+        if (blockState.hasProperty(LogBlock.BRANCH_DIRECTION) && blockState.getValue(LogBlock.BRANCH_DIRECTION) == BranchDirection.NONE) {
+            return false;
+        }
+
+        // Call interface default method
+        return Tree.super.willTreeFall(blockPos, level, player);
     }
 }
