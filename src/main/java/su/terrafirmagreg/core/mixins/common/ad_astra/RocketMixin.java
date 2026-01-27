@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.ad_astra;
 
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.asm.Opcodes;
@@ -19,6 +20,7 @@ import earth.terrarium.adastra.common.tags.ModFluidTags;
 
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.entities.RocketHelper;
 
 @Mixin(value = Rocket.class, remap = false)
 @Debug(export = true)
@@ -27,11 +29,8 @@ public abstract class RocketMixin extends Entity {
         super(pEntityType, pLevel);
     }
 
-    /* Other things we could change for the double rockets:
-    * Make them consume 2x the amount of fuel, would need 2x the tank size
-    *
-    *
-    * */
+    @Unique
+    private final Rocket tfg$self = (Rocket) (Object) this;
 
     @Mutable
     @Final
@@ -57,6 +56,17 @@ public abstract class RocketMixin extends Entity {
     @Shadow
     private static Rocket.RocketProperties TIER_4_PROPERTIES;
 
+    @Redirect(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;Learth/terrarium/adastra/common/entities/vehicles/Rocket$RocketProperties;)V", at = @At(value = "INVOKE", target = "earth/terrarium/botarium/common/fluid/FluidConstants.fromMillibuckets (J)J"))
+    private long tfg$modifyFuelTank(long amount) {
+        return RocketHelper.ROCKET_FUEL_CAP.get(tfg$self.getType());
+    }
+
+    @Redirect(method = "consumeFuel", at = @At(value = "INVOKE", target = "earth/terrarium/botarium/common/fluid/FluidConstants.fromMillibuckets (J)J"))
+    private long tfg$modifyLaunchFuel(long amount) {
+        List<Long> fuelUsage = RocketHelper.ROCKET_FUEL_USAGE.get(tfg$self.getType());
+        return tfg$self.fluidContainer().getFirstFluid().is(ModFluidTags.EFFICIENT_FUEL) ? fuelUsage.get(0) : fuelUsage.get(1);
+    }
+
     @Inject(method = "<clinit>", at = @At("HEAD"))
     private static void tfg$injectToClinit(CallbackInfo ci) {
         TIER_1_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_1_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_1_ROCKET_FUEL);
@@ -72,14 +82,12 @@ public abstract class RocketMixin extends Entity {
                 TFGEntities.TIER_1_DOUBLE_ROCKET.get(), TIER_1_DOUBLE_PROPERTIES);
     }
 
-    @Unique
-    private final Rocket tfg$self = (Rocket) (Object) this;
-
     @Override
     protected boolean canAddPassenger(Entity pPassenger) {
         System.out.println(tfg$self.getPassengers().size());
         if (this.getType() == TFGEntities.TIER_1_DOUBLE_ROCKET.get()) {
             return tfg$self.getPassengers().size() < 2;
+
         }
 
         return super.canAddPassenger(pPassenger);
