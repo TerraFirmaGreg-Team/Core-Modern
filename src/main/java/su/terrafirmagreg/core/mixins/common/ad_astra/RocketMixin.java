@@ -2,13 +2,12 @@ package su.terrafirmagreg.core.mixins.common.ad_astra;
 
 import java.util.Map;
 
-import earth.terrarium.adastra.common.registry.ModItems;
-import earth.terrarium.adastra.common.tags.ModFluidTags;
-import net.minecraft.world.item.Item;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,15 +15,23 @@ import net.minecraft.world.level.Level;
 
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 import earth.terrarium.adastra.common.registry.ModEntityTypes;
+import earth.terrarium.adastra.common.tags.ModFluidTags;
 
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGItems;
 
 @Mixin(value = Rocket.class, remap = false)
+@Debug(export = true)
 public abstract class RocketMixin extends Entity {
     public RocketMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
+
+    /* Other things we could change for the double rockets:
+    * Make them consume 2x the amount of fuel, would need 2x the tank size
+    *
+    *
+    * */
 
     @Mutable
     @Final
@@ -36,7 +43,7 @@ public abstract class RocketMixin extends Entity {
     private static Rocket.RocketProperties TIER_1_PROPERTIES;
 
     @Unique
-    private static final Rocket.RocketProperties TIER_1_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_1_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_1_ROCKET_FUEL);
+    private static Rocket.RocketProperties TIER_1_DOUBLE_PROPERTIES;
 
     @Final
     @Shadow
@@ -49,6 +56,11 @@ public abstract class RocketMixin extends Entity {
     @Final
     @Shadow
     private static Rocket.RocketProperties TIER_4_PROPERTIES;
+
+    @Inject(method = "<clinit>", at = @At("HEAD"))
+    private static void tfg$injectToClinit(CallbackInfo ci) {
+        TIER_1_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_1_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_1_ROCKET_FUEL);
+    }
 
     @Redirect(method = "<clinit>", at = @At(value = "FIELD", target = "earth/terrarium/adastra/common/entities/vehicles/Rocket.ROCKET_TO_PROPERTIES : Ljava/util/Map;", opcode = Opcodes.PUTSTATIC))
     private static void tfg$modifyPropertiesMap(Map<EntityType<?>, Rocket.RocketProperties> value) {
