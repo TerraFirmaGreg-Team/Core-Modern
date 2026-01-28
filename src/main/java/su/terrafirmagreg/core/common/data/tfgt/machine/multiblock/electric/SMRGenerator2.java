@@ -178,8 +178,10 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         }
 
         // Has a variant of lubricant
-        if (EUt > 0 && !engineMachine.isIntakesObstructed() && engineMachine.currentLubricant != null &&
+        if (EUt > 0 &&
+                engineMachine.currentLubricant != null &&
                 !engineMachine.currentLubricant.isEmpty()) {
+
             int maxParallel = (int) (engineMachine.getOverclockVoltage() / EUt);
             int actualParallel = ParallelLogic.getParallelAmount(engineMachine, recipe, maxParallel);
             int tier = lubricantTiers.getInt(engineMachine.currentLubricant);
