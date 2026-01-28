@@ -53,7 +53,25 @@ public class TFGEntities {
 
     public static final RegistryObject<EntityType<Rocket>> TIER_1_DOUBLE_ROCKET = register("tier_1_double_rocket", EntityType.Builder
             .of(RocketHelper::makeRocket, MobCategory.MISC)
+            .sized(1.1F, 4.6F)
+            .clientTrackingRange(10)
+            .fireImmune());
+
+    public static final RegistryObject<EntityType<Rocket>> TIER_2_DOUBLE_ROCKET = register("tier_2_double_rocket", EntityType.Builder
+            .of(RocketHelper::makeRocket, MobCategory.MISC)
             .sized(1.1F, 4.8F)
+            .clientTrackingRange(10)
+            .fireImmune());
+
+    public static final RegistryObject<EntityType<Rocket>> TIER_3_DOUBLE_ROCKET = register("tier_3_double_rocket", EntityType.Builder
+            .of(RocketHelper::makeRocket, MobCategory.MISC)
+            .sized(1.1F, 5.5F)
+            .clientTrackingRange(10)
+            .fireImmune());
+
+    public static final RegistryObject<EntityType<Rocket>> TIER_4_DOUBLE_ROCKET = register("tier_4_double_rocket", EntityType.Builder
+            .of(RocketHelper::makeRocket, MobCategory.MISC)
+            .sized(1.1F, 7.0F)
             .clientTrackingRange(10)
             .fireImmune());
 
@@ -123,7 +141,10 @@ public class TFGEntities {
         event.registerEntityRenderer(SURFER.get(), EntityRenderer.create(SurferModel::new, 0.6F));
         event.registerEntityRenderer(RNR_PLOW.get(), RNRPlowRenderer::new);
 
-        event.registerEntityRenderer(TIER_1_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRenderer);
+        event.registerEntityRenderer(TIER_1_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT1);
+        event.registerEntityRenderer(TIER_2_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT2);
+        event.registerEntityRenderer(TIER_3_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT3);
+        event.registerEntityRenderer(TIER_4_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT4);
 
         // event.registerBlockEntityRenderer(TFGBlockEntities.LARGE_NEST_BOX.get(), ctx -> new
         // LargeNestBoxBlockEntityRenderer());

@@ -48,13 +48,22 @@ public abstract class RocketMixin extends Entity {
     @Shadow
     private static Rocket.RocketProperties TIER_2_PROPERTIES;
 
+    @Unique
+    private static Rocket.RocketProperties TIER_2_DOUBLE_PROPERTIES;
+
     @Final
     @Shadow
     private static Rocket.RocketProperties TIER_3_PROPERTIES;
 
+    @Unique
+    private static Rocket.RocketProperties TIER_3_DOUBLE_PROPERTIES;
+
     @Final
     @Shadow
     private static Rocket.RocketProperties TIER_4_PROPERTIES;
+
+    @Unique
+    private static Rocket.RocketProperties TIER_4_DOUBLE_PROPERTIES;
 
     @Redirect(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;Learth/terrarium/adastra/common/entities/vehicles/Rocket$RocketProperties;)V", at = @At(value = "INVOKE", target = "earth/terrarium/botarium/common/fluid/FluidConstants.fromMillibuckets (J)J"))
     private long tfg$modifyFuelTank(long amount) {
@@ -70,6 +79,10 @@ public abstract class RocketMixin extends Entity {
     @Inject(method = "<clinit>", at = @At("HEAD"))
     private static void tfg$injectToClinit(CallbackInfo ci) {
         TIER_1_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_1_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_1_ROCKET_FUEL);
+        TIER_2_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_2_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_2_ROCKET_FUEL);
+        TIER_3_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_3_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_3_ROCKET_FUEL);
+        TIER_4_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_4_DOUBLE_ROCKET.get(), 1.7F, ModFluidTags.TIER_4_ROCKET_FUEL);
+
     }
 
     @Redirect(method = "<clinit>", at = @At(value = "FIELD", target = "earth/terrarium/adastra/common/entities/vehicles/Rocket.ROCKET_TO_PROPERTIES : Ljava/util/Map;", opcode = Opcodes.PUTSTATIC))
@@ -79,15 +92,18 @@ public abstract class RocketMixin extends Entity {
                 ModEntityTypes.TIER_2_ROCKET.get(), TIER_2_PROPERTIES,
                 ModEntityTypes.TIER_3_ROCKET.get(), TIER_3_PROPERTIES,
                 ModEntityTypes.TIER_4_ROCKET.get(), TIER_4_PROPERTIES,
-                TFGEntities.TIER_1_DOUBLE_ROCKET.get(), TIER_1_DOUBLE_PROPERTIES);
+                TFGEntities.TIER_1_DOUBLE_ROCKET.get(), TIER_1_DOUBLE_PROPERTIES,
+                TFGEntities.TIER_2_DOUBLE_ROCKET.get(), TIER_2_DOUBLE_PROPERTIES,
+                TFGEntities.TIER_3_DOUBLE_ROCKET.get(), TIER_3_DOUBLE_PROPERTIES,
+                TFGEntities.TIER_4_DOUBLE_ROCKET.get(), TIER_4_DOUBLE_PROPERTIES);
     }
 
     @Override
     protected boolean canAddPassenger(Entity pPassenger) {
         System.out.println(tfg$self.getPassengers().size());
-        if (this.getType() == TFGEntities.TIER_1_DOUBLE_ROCKET.get()) {
+        if (this.getType() == TFGEntities.TIER_1_DOUBLE_ROCKET.get() || this.getType() == TFGEntities.TIER_2_DOUBLE_ROCKET.get() || this.getType() == TFGEntities.TIER_3_DOUBLE_ROCKET.get()
+                || this.getType() == TFGEntities.TIER_4_DOUBLE_ROCKET.get()) {
             return tfg$self.getPassengers().size() < 2;
-
         }
 
         return super.canAddPassenger(pPassenger);

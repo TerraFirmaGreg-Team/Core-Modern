@@ -22,20 +22,38 @@ public class RocketHelper {
             ModEntityTypes.TIER_2_ROCKET.get(), 3000L,
             ModEntityTypes.TIER_3_ROCKET.get(), 3000L,
             ModEntityTypes.TIER_4_ROCKET.get(), 3000L,
-            TFGEntities.TIER_1_DOUBLE_ROCKET.get(), 6000L);
+            TFGEntities.TIER_1_DOUBLE_ROCKET.get(), 6000L,
+            TFGEntities.TIER_2_DOUBLE_ROCKET.get(), 6000L,
+            TFGEntities.TIER_3_DOUBLE_ROCKET.get(), 6000L,
+            TFGEntities.TIER_4_DOUBLE_ROCKET.get(), 6000L);
 
     public static final Map<EntityType<?>, List<Long>> ROCKET_FUEL_USAGE = Map.of(
             ModEntityTypes.TIER_1_ROCKET.get(), new ArrayList<>(List.of(1000L, 3000L)),
             ModEntityTypes.TIER_2_ROCKET.get(), new ArrayList<>(List.of(1000L, 3000L)),
             ModEntityTypes.TIER_3_ROCKET.get(), new ArrayList<>(List.of(1000L, 3000L)),
             ModEntityTypes.TIER_4_ROCKET.get(), new ArrayList<>(List.of(1000L, 3000L)),
-            TFGEntities.TIER_1_DOUBLE_ROCKET.get(), new ArrayList<>(List.of(2000L, 6000L)));
+            TFGEntities.TIER_1_DOUBLE_ROCKET.get(), new ArrayList<>(List.of(2000L, 6000L)),
+            TFGEntities.TIER_2_DOUBLE_ROCKET.get(), new ArrayList<>(List.of(2000L, 6000L)),
+            TFGEntities.TIER_3_DOUBLE_ROCKET.get(), new ArrayList<>(List.of(2000L, 6000L)),
+            TFGEntities.TIER_4_DOUBLE_ROCKET.get(), new ArrayList<>(List.of(2000L, 6000L)));
 
     public static Rocket makeRocket(EntityType<?> type, Level level) {
         return new Rocket(type, level);
     }
 
-    public static RocketRenderer makeRocketRenderer(final EntityRendererProvider.Context renderManager) {
+    public static RocketRenderer makeRocketRendererT1(final EntityRendererProvider.Context renderManager) {
         return new RocketRenderer(renderManager, RocketModel.TIER_1_LAYER, RocketRenderer.TIER_1_TEXTURE);
+    }
+
+    public static RocketRenderer makeRocketRendererT2(final EntityRendererProvider.Context renderManager) {
+        return new RocketRenderer(renderManager, RocketModel.TIER_2_LAYER, RocketRenderer.TIER_2_TEXTURE);
+    }
+
+    public static RocketRenderer makeRocketRendererT3(final EntityRendererProvider.Context renderManager) {
+        return new RocketRenderer(renderManager, RocketModel.TIER_3_LAYER, RocketRenderer.TIER_3_TEXTURE);
+    }
+
+    public static RocketRenderer makeRocketRendererT4(final EntityRendererProvider.Context renderManager) {
+        return new RocketRenderer(renderManager, RocketModel.TIER_4_LAYER, RocketRenderer.TIER_4_TEXTURE);
     }
 }
