@@ -58,10 +58,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import earth.terrarium.adastra.common.registry.ModBlocks;
 import fi.dea.mc.deafission.common.data.FissionGtRecipeTypes;
 import fi.dea.mc.deafission.common.data.FissionTags;
-import earth.terrarium.adastra.common.registry.ModBlocks;
-import fi.dea.mc.deafission.common.data.FissionMachines;
 import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
 import fi.dea.mc.deafission.common.data.machine.hb.HbMachine;
 
