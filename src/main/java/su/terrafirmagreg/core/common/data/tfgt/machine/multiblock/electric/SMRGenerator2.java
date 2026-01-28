@@ -12,9 +12,6 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
-import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
@@ -39,7 +36,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraftforge.fluids.FluidStack;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -284,36 +280,56 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         MultiblockDisplayText.Builder builder = MultiblockDisplayText.builder(textList, isFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive());
 
-        var voltageName = Component.literal(GTValues.VNF[GTUtil.getFloorTierByVoltage(getOverclockVoltage())]);
-        int amperageName = 1;
+        long rawVoltage = getOverclockVoltage();
+        int baseTier = GTUtil.getFloorTierByVoltage(rawVoltage);
+        long baseVoltage = GTValues.VEX[baseTier];
+
+        int amperage = 1;
 
         if (currentBooster != null && !currentBooster.isEmpty()) {
             int tier = boostingTiers.getInt(currentBooster);
             if (tier > 0)
-                amperageName = tier * 2;
+                amperage = tier * 2;
         }
-        final int amperageNameFinal = amperageName;
+
+        /* ===== MODIFICATION NECESSAIRE (FIX) ===== */
+        long totalEUt = rawVoltage * amperage;
+
+        int displayTier = GTUtil.getFloorTierByVoltage(totalEUt);
+        long displayVoltage = GTValues.VEX[displayTier];
+
+        amperage = (int) (totalEUt / displayVoltage);
+        if (amperage < 1) {
+            amperage = 1;
+        }
+        /* ======================================== */
+
+        final int amperageFinal = amperage;
+        final long displayVoltageFinal = displayVoltage;
+        final Component voltageNameFinal = Component.literal(GTValues.VNF[displayTier]);
 
         if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()) {
             builder.addCustom(t -> t.add(recipeLogic.getFancyTooltip().get(0)));
             return;
         }
-        builder.addCustom(t -> {
 
+        builder.addCustom(t -> {
             var combined = Component.empty();
 
             Component prefix = Component.translatable("tfg.gui.max_energy_per_tick_amps.prefix")
                     .withStyle(ChatFormatting.WHITE);
 
             Component middle = Component.literal(
-                    FormattingUtil.formatNumbers(getOverclockVoltage() * amperageNameFinal) + " (" + amperageNameFinal + "A ").withStyle(ChatFormatting.GRAY);
+                    FormattingUtil.formatNumbers(displayVoltageFinal * amperageFinal)
+                            + " (" + amperageFinal + "A ")
+                    .withStyle(ChatFormatting.GRAY);
 
             Component suffix = Component.literal(")").withStyle(ChatFormatting.GRAY);
 
             combined.append(prefix)
                     .append(Component.literal(" "))
                     .append(middle)
-                    .append(voltageName)
+                    .append(voltageNameFinal)
                     .append(suffix);
 
             t.add(combined);
@@ -475,6 +491,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         return ChatFormatting.RED + FormattingUtil.formatNumbers(neededAmount) + "mB";
     }
 
+    /* Useless for now
     @Override
     public void attachTooltips(TooltipsPanel tooltipsPanel) {
         super.attachTooltips(tooltipsPanel);
@@ -485,7 +502,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
                 this::isIntakesObstructed,
                 () -> null));
     }
-
+    */
     @Override
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
