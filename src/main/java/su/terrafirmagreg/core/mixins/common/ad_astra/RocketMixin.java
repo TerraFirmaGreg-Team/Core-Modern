@@ -23,7 +23,6 @@ import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
 
 @Mixin(value = Rocket.class, remap = false)
-@Debug(export = true)
 public abstract class RocketMixin extends Entity {
     public RocketMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);

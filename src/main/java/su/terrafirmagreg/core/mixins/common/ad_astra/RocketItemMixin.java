@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.mixins.common.ad_astra;
 
 import java.util.function.Supplier;
 
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -18,7 +17,6 @@ import earth.terrarium.botarium.common.fluid.impl.WrappedItemFluidContainer;
 import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
 
 @Mixin(value = RocketItem.class, remap = false)
-@Debug(export = true)
 public abstract class RocketItemMixin extends VehicleItem {
 
     @Unique
