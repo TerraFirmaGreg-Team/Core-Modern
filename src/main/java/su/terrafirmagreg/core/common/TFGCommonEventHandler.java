@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -27,6 +28,7 @@ import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
+import su.terrafirmagreg.core.utils.commands.TFGCommands;
 
 public final class TFGCommonEventHandler {
 
@@ -36,6 +38,7 @@ public final class TFGCommonEventHandler {
         final IEventBus otherBus = MinecraftForge.EVENT_BUS;
 
         otherBus.addGenericListener(ItemStack.class, TFGCommonEventHandler::attachItemCapabilities);
+        otherBus.addListener((RegisterCommandsEvent event) -> TFGCommands.register(event.getDispatcher()));
 
         bus.addListener(TFGConfig::onLoad);
         bus.addListener(TFGCommonEventHandler::onCommonSetup);

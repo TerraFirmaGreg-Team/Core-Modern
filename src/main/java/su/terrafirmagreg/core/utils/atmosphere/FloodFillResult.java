@@ -10,34 +10,6 @@ import net.minecraft.world.phys.AABB;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 /**
- * Status of the flood fill operation.
- */
-enum FloodFillStatus {
-    /** Fill completed, room fully enclosed */
-    SEALED,
-    /** Fill found escape via horizontal dimension limit */
-    ESCAPED_DIMENSION,
-    /** Fill found escape via world height limit */
-    ESCAPED_BUILD_HEIGHT,
-    /** Fill stopped at unloaded chunk (escape assumed) */
-    ESCAPED_UNLOADED,
-    /** Fill stopped at block limit (seal status unknown) */
-    BLOCK_LIMIT;
-
-    public boolean isSealed() {
-        return this == SEALED;
-    }
-
-    public boolean isComplete() {
-        return this != BLOCK_LIMIT;
-    }
-
-    public boolean hasEscape() {
-        return this != SEALED && this != BLOCK_LIMIT;
-    }
-}
-
-/**
  * Result of a flood fill operation.
  *
  * @param interior Set of block positions (as longs) that are part of the room interior (passable blocks)
