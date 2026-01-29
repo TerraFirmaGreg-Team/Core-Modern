@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.cc_tweaked;
 
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,7 +11,6 @@ import dan200.computercraft.shared.ModRegistry;
 import dan200.computercraft.shared.turtle.items.TurtleItem;
 
 @Mixin(value = ModRegistry.class, remap = false)
-@Debug(export = true)
 public class ModRegistryMixin {
 
     @Inject(method = "addTurtle", at = @At(value = "INVOKE", target = "dan200/computercraft/impl/TurtleUpgrades.getVanillaUpgrades ()Ljava/util/stream/Stream;"), cancellable = true)

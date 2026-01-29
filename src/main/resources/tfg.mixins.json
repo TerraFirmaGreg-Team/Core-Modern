@@ -18,6 +18,7 @@
         "common.ad_astra.RoverMixin",
         "common.ad_astra.SlidingDoorBlockMixin",
         "common.ad_astra.SpaceSuitItemMixin",
+        "common.advanced_peripherals.APCreativeTabMixin",
         "common.ae2.ConfigMenuInventoryMixin",
         "common.ae2.InitP2PAttunementsMixin",
         "common.ae2.StorageHelperMixin",
