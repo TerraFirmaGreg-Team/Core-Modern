@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.entities;
+package su.terrafirmagreg.core.common.data.entities.rocket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.Map;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 
 import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
@@ -56,4 +57,9 @@ public class RocketHelper {
     public static RocketRenderer makeRocketRendererT4(final EntityRendererProvider.Context renderManager) {
         return new RocketRenderer(renderManager, RocketModel.TIER_4_LAYER, RocketRenderer.TIER_4_TEXTURE);
     }
+
+    public static void register(EntityRenderersEvent.RegisterLayerDefinitions registry) {
+        //registry.registerLayerDefinition(DoubleRocketModel.TIER_1_DOUBLE_LAYER, DoubleRocketModel::createTier1DoubleLayer);
+    }
+
 }

@@ -15,7 +15,7 @@ import earth.terrarium.adastra.common.tags.ModFluidTags;
 import earth.terrarium.botarium.common.fluid.impl.SimpleFluidContainer;
 import earth.terrarium.botarium.common.fluid.impl.WrappedItemFluidContainer;
 
-import su.terrafirmagreg.core.common.data.entities.RocketHelper;
+import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
 
 @Mixin(value = RocketItem.class, remap = false)
 @Debug(export = true)

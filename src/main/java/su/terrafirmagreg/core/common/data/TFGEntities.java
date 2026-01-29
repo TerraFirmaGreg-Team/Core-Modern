@@ -19,7 +19,6 @@ import net.wanmine.wab.entity.render.model.SurferModel;
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.entities.RocketHelper;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowRenderer;
@@ -28,6 +27,7 @@ import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamModel
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamRenderer;
 import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbitRenderer;
+import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSnifferRenderer;
 import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
@@ -151,6 +151,7 @@ public class TFGEntities {
     }
 
     public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        //RocketHelper.register(event);
         event.registerLayerDefinition(TFCGlacianRamModel.LAYER_LOCATION, TFCGlacianRamModel::createBodyLayer);
         event.registerLayerDefinition(RNRPlowModel.LAYER_LOCATION, RNRPlowModel::createLayer);
     }
