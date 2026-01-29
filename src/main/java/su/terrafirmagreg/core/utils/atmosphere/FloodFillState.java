@@ -135,4 +135,30 @@ public class FloodFillState {
     boolean hasEscapePoint() {
         return escapePoint != null;
     }
+
+    /**
+     * Adds an interior block to the FloodFillState, adding it to both interior representing passable blocks
+     *  as well as envelope representing all visited blocks.
+     * @return whether the volume limit was exceeded
+     */
+    public boolean addInteriorBlock(long posLong) {
+        interior.add(posLong);
+        envelope.add(posLong);
+    }
+
+    public void addEnvelopeBlock(long posLong) {
+        envelope.add(posLong);
+    }
+
+    public void addPendingShellBlock(long posLong) {
+        pendingShell.add(posLong);
+    }
+
+    public void removePendingShellBlock(long posLong) {
+        pendingShell.remove(posLong);
+    }
+
+    public void removeQueuedDirections(long posLong) {
+        visitDirections.remove(posLong);
+    }
 }

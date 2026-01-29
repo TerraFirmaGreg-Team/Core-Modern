@@ -76,8 +76,8 @@ public class FloodFill {
 
         // Init
         long startLong = start.asLong();
-        addInteriorBlock(state, startLong, config);
-        addEnvelopeBlock(state, startLong);
+        state.addInteriorBlock(startLong);
+        state.addEnvelopeBlock(startLong);
         queueNeighbors(level, state, start, startLong, ALL_DIRECTIONS);
 
         // Main DFS loop
@@ -101,7 +101,9 @@ public class FloodFill {
             PassableResult result = PassabilityChecker.isPassable(level, pos, blockState, state.visitDirections.get(posLong));
             switch (result) {
                 case PASSABLE:
-                    if (!addInteriorBlock(state, posLong, config)) {
+                    state.addInteriorBlock(posLong);
+                    if (state.interior.size() > config.maxBlocks()) {
+                        state.hitBlockLimit = true;
                         return buildResult(state);
                     }
                     recordParent(state, pos, posLong);
@@ -109,22 +111,24 @@ public class FloodFill {
                     break;
 
                 case BLOCKED:
-                    addEnvelopeBlock(state, posLong);
+                    state.addEnvelopeBlock(posLong);
                     break;
 
                 case NO_OPEN_FACES:
                 case BLOCKED_WINDOW_PANE:
-                    addPendingShellBlock(state, posLong);
-                    removeQueuedDirections(state, posLong);
+                    state.addPendingShellBlock(posLong);
+                    state.removeQueuedDirections(posLong);
                     break;
 
                 case OPEN_FACES_WITH_OPEN_CROSS_SECTIONS:
                 case PASSABLE_WINDOW_PANE:
-                    if (!addInteriorBlock(state, posLong, config)) {
+                    state.addInteriorBlock(posLong);
+                    if (state.interior.size() > config.maxBlocks()) {
+                        state.hitBlockLimit = true;
                         return buildResult(state);
                     }
                     recordParent(state, pos, posLong);
-                    removePendingShellBlock(state, posLong);
+                    state.removePendingShellBlock(posLong);
                     queueAccessibleNeighbors(level, state, pos, posLong, blockState);
                     break;
 
@@ -134,33 +138,6 @@ public class FloodFill {
         }
         // Fill complete without escape
         return buildResult(state);
-    }
-
-    /**
-     * Adds an interior block to the FloodFillState, adding it to both interior representing passable blocks
-     *  as well as envelope representing all visited blocks.
-     * @return whether the volume limit was exceeded
-     */
-    private static boolean addInteriorBlock(FloodFillState state, long posLong, FloodFillConfig config) {
-        state.interior.add(posLong);
-        state.envelope.add(posLong);
-        return state.interior.size() <= config.maxBlocks();
-    }
-
-    private static void addEnvelopeBlock(FloodFillState state, long posLong) {
-        state.envelope.add(posLong);
-    }
-
-    private static void addPendingShellBlock(FloodFillState state, long posLong) {
-        state.pendingShell.add(posLong);
-    }
-
-    private static void removePendingShellBlock(FloodFillState state, long posLong) {
-        state.pendingShell.remove(posLong);
-    }
-
-    private static void removeQueuedDirections(FloodFillState state, long posLong) {
-        state.visitDirections.remove(posLong);
     }
 
     /**
@@ -181,7 +158,7 @@ public class FloodFill {
     }
 
     private static void queueAccessibleNeighbors(Level level, FloodFillState state, BlockPos currentPos, long currentPosLong, BlockState blockState) {
-        byte closedFacesIncoming = PassabilityChecker.getPassableInfo(blockState).faces();
+        byte closedFacesIncoming = PassabilityChecker.getPassableInfo(level, blockState).faces();
         byte openFacesIncoming = (byte) (~closedFacesIncoming & 0b111111);
         byte openFacesOutgoing = flipMaskDirections(openFacesIncoming);
         queueNeighbors(level, state, currentPos, currentPosLong, openFacesOutgoing);
@@ -263,12 +240,12 @@ public class FloodFill {
     protected static boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor, FloodFillState state, BlockPos pos, FloodFillConfig config) {
 
         if (pos.getX() < state.minX || pos.getX() > state.maxX
-                || pos.getY() < state.minZ || pos.getY() > state.minZ) {
+                || pos.getZ() < state.minZ || pos.getZ() > state.maxZ) {
             // Horizontal bounds expanded
             state.minX = Math.min(state.minX, pos.getX());
             state.maxX = Math.max(state.maxX, pos.getX());
-            state.minZ = Math.min(state.minZ, pos.getX());
-            state.minZ = Math.max(state.minZ, pos.getX());
+            state.minZ = Math.min(state.minZ, pos.getZ());
+            state.maxZ = Math.max(state.maxZ, pos.getZ());
 
             if (state.maxX - state.minX > config.maxHorizontalDimension() || state.maxZ - state.minZ > config.maxHorizontalDimension()) {
                 // Horizontal dimension limit exceeded
@@ -286,8 +263,8 @@ public class FloodFill {
 
         } else if (pos.getY() < state.minY || pos.getY() > state.maxY) {
             // Vertical bounds expanded
-            state.minY = Math.min(state.minY, pos.getX());
-            state.maxY = Math.max(state.maxY, pos.getX());
+            state.minY = Math.min(state.minY, pos.getY());
+            state.maxY = Math.max(state.maxY, pos.getY());
 
             if (heightAccessor.isOutsideBuildHeight(pos.getY())) {
                 // Build height exceeded
@@ -301,9 +278,14 @@ public class FloodFill {
     }
 
     /** Swap adjacent bit pairs: DOWN<->UP, NORTH<->SOUTH, WEST<->EAST */
-    private static byte flipMaskDirections(byte mask) {
+    public static byte flipMaskDirections(byte mask) {
         int even = mask & 0b010101;  // bits 0, 2, 4 (DOWN, NORTH, WEST)
         int odd = mask & 0b101010;   // bits 1, 3, 5 (UP, SOUTH, EAST)
         return (byte) ((even << 1) | (odd >> 1));
+    }
+
+    /** Turn a direction into a bitmask representing the direction */
+    public static byte dir2byte(Direction dir) {
+        return (byte) (1 << dir.ordinal());
     }
 }

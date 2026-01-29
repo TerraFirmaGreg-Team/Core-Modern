@@ -9,9 +9,14 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.utils.atmosphere.FloodFill;
 import su.terrafirmagreg.core.utils.atmosphere.FloodFillConfig;
 import su.terrafirmagreg.core.utils.atmosphere.FloodFillResult;
@@ -39,6 +44,13 @@ public class FloodFillCommand {
                                                     int tier = IntegerArgumentType.getInteger(c, "tier");
                                                     return runFloodFill(c.getSource(), pos, FloodFillConfig.forTier(tier));
                                                 })))));
+        dispatcher.register(
+                literal("tfg").then(
+                        literal("uncacheable")
+                                .executes(c -> {
+                                    findUncacheableBlocks();
+                                    return 1;
+                                })));
     }
 
     private static int runFloodFill(CommandSourceStack source, BlockPos start, FloodFillConfig config) {
@@ -67,5 +79,19 @@ public class FloodFillCommand {
         }
 
         return 1;
+    }
+
+    public static void findUncacheableBlocks() {
+        for (Block block : BuiltInRegistries.BLOCK) {
+            BlockState state = block.defaultBlockState();
+            if (state.is(TFGTags.Blocks.AtmospherePassable) || state.is(TFGTags.Blocks.AtmosphereImpassable)) {
+                continue;
+            }
+            try {
+                state.getCollisionShape(null, BlockPos.ZERO);
+            } catch (NullPointerException e) {
+                TFGCore.LOGGER.warn("Uncacheable block: {}", BuiltInRegistries.BLOCK.getKey(block));
+            }
+        }
     }
 }

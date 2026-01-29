@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.utils.atmosphere;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.BlockPos;
@@ -7,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -14,6 +16,7 @@ import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
+
 
 // Passability sketch:
 // If simple passable (cache, air, passable tag, collision bounding square never full from any axis)
@@ -170,14 +173,14 @@ public final class PassabilityChecker {
     /**
      * Gets the (cached) passability info for a BlockState.
      */
-    public static PassableInfo getPassableInfo(BlockState blockState) {
-        return CACHE.computeIfAbsent(blockState, PassabilityChecker::computePassableInfo);
+    public static PassableInfo getPassableInfo(Level level, BlockState blockState) {
+        return CACHE.computeIfAbsent(blockState, bs -> computePassableInfo(level, bs));
     }
 
     /**
      * Computes quick passability for a block state (called once per unique state).
      */
-    private static PassableInfo computePassableInfo(BlockState blockState) {
+    private static PassableInfo computePassableInfo(Level level, BlockState blockState) {
         // Air
         if (blockState.isAir()) {
             return PassableInfo.passable();
@@ -196,8 +199,18 @@ public final class PassabilityChecker {
             return PassableInfo.noCache();
         }
 
-        // CollisionShape based
-        VoxelShape shape = blockState.getCollisionShape(null, BlockPos.ZERO);
+        // CollisionShape based. Try with null level content to catch uncacheable blocks.
+        VoxelShape shape;
+        try {
+            if (blockState.isCollisionShapeFullBlock(null, BlockPos.ZERO)) {
+                return PassableInfo.blocked();
+            }
+            shape = blockState.getCollisionShape(null, BlockPos.ZERO);
+        } catch (NullPointerException e) {
+            // Block needs level context (e.g. moving piston, shulker box, bellows, GT pipes (though pipes are tagged passable))
+            //TFGCore.LOGGER.warn("FloodFill: Can't cache block {}", blockState.getBlock().getName());
+            return PassableInfo.noCache();
+        }
 
         return computeWithFacesAndCrossSections(shape);
     }
@@ -248,7 +261,7 @@ public final class PassabilityChecker {
      * @return PassableResult indicating if atmosphere can pass
      */
     public static PassableResult isPassable(Level level, BlockPos pos, BlockState blockState, byte visitedFrom) {
-        PassableInfo passableInfo = getPassableInfo(blockState);
+        PassableInfo passableInfo = getPassableInfo(level, blockState);
         assert passableInfo != null;
 
         if (passableInfo.simple == SimplePassableResult.NO_CACHE) {
@@ -280,11 +293,12 @@ public final class PassabilityChecker {
                 // Now we process window panes: Block has incoming directions with open faces but closed cross-sections.
                 // Air flows around window panes if they have simple passable blocks next to them.
                 // This is a simplification that's necessary to process walls entirely made of window panes.
-
+                // TODO: make function for bitshift ordinal
                 byte perpendicularUnion = 0;
                 for (Direction incomingDir : DIRECTIONS) {
                     if ((openFaces & (1 << incomingDir.ordinal())) != 0) {
-                        perpendicularUnion |= PERPENDICULAR_MASK[incomingDir.getAxis().ordinal()];
+                        // Open face found for incoming direction. Check perpendiculars
+                        perpendicularUnion |= PERPENDICULAR_MASK[incomingDir.ordinal()];
                     }
                 }
 
@@ -292,7 +306,7 @@ public final class PassabilityChecker {
                 for (Direction perpDir : DIRECTIONS) {
                     if ((perpendicularUnion & (1 << perpDir.ordinal())) != 0) {
                         var adjacentState = level.getBlockState(pos.relative(perpDir));
-                        if (getPassableInfo(adjacentState).simple == SimplePassableResult.ALWAYS_PASSABLE) {
+                        if (getPassableInfo(level, adjacentState).simple == SimplePassableResult.ALWAYS_PASSABLE) {
                             yield PassableResult.PASSABLE_WINDOW_PANE; // add to interior, queue only directions where outgoing face not blocked
                         }
                     }
@@ -321,38 +335,73 @@ public final class PassabilityChecker {
         return Block.isFaceFull(faceShape, dir.getOpposite()); // getOpposite because minecraft uses direction from center of block
     }
 
+    private static final double SUBPIXEL_SIZE = (double) 1 / 16;
+    private static final double EDGE_OFFSET = SUBPIXEL_SIZE / 2;
+
     /**
      * Checks if a shape creates a filled cross-section in a specific direction.
-     * A cross-section exists if the bounding box spans full 0-1 in both perpendicular crossSections.
-     * This is for blocks like glass panes that don't touch the faces but still block.
+     * Uses edge sampling to detect gaps in the projection - if any point on the
+     * perimeter of the perpendicular plane isn't covered by the shape's projection,
+     * air can pass through.
      *
      * @param shape The voxel shape to check
      * @param axis The axis to check for a cross-section
      * @return true if the shape has a full cross-section as seen from the given direction
      */
     public static boolean hasFullCrossSection(VoxelShape shape, Direction.Axis axis) {
+        List<AABB> boxes = shape.toAabbs();
+        if (boxes.isEmpty())
+            return false;
+
+        // Check all points along the 4 edges of the perpendicular plane
+        for (double t = EDGE_OFFSET; t < 1.0; t += SUBPIXEL_SIZE) {
+            if (!isPointCovered(boxes, axis, EDGE_OFFSET, t))
+                return false;  // left edge
+            if (!isPointCovered(boxes, axis, 1.0 - EDGE_OFFSET, t))
+                return false;  // right edge
+            if (!isPointCovered(boxes, axis, t, EDGE_OFFSET))
+                return false;  // bottom edge
+            if (!isPointCovered(boxes, axis, t, 1.0 - EDGE_OFFSET))
+                return false;  // top edge
+        }
+        return true;
+    }
+
+    /**
+     * Checks if a point (u, v) on the perpendicular plane is covered by any box's projection.
+     */
+    private static boolean isPointCovered(List<AABB> boxes, Direction.Axis axis, double u, double v) {
+        for (AABB box : boxes) {
+            if (coversPoint(box, axis, u, v)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if a single AABB's projection onto the perpendicular plane covers point (u, v).
+     */
+    private static boolean coversPoint(AABB box, Direction.Axis axis, double u, double v) {
         return switch (axis) {
-            case X -> shape.min(Direction.Axis.Y) <= 0 && shape.max(Direction.Axis.Y) >= 1 &&
-                    shape.min(Direction.Axis.Z) <= 0 && shape.max(Direction.Axis.Z) >= 1;
-            case Y -> shape.min(Direction.Axis.X) <= 0 && shape.max(Direction.Axis.X) >= 1 &&
-                    shape.min(Direction.Axis.Z) <= 0 && shape.max(Direction.Axis.Z) >= 1;
-            case Z -> shape.min(Direction.Axis.X) <= 0 && shape.max(Direction.Axis.X) >= 1 &&
-                    shape.min(Direction.Axis.Y) <= 0 && shape.max(Direction.Axis.Y) >= 1;
+            case X -> u >= box.minY && u <= box.maxY && v >= box.minZ && v <= box.maxZ;
+            case Y -> u >= box.minX && u <= box.maxX && v >= box.minZ && v <= box.maxZ;
+            case Z -> u >= box.minX && u <= box.maxX && v >= box.minY && v <= box.maxY;
         };
     }
 
     /**
-     * Computes PassableInfo in cases where the result can't be cached
+     * Computes PassableInfo in cases where the result can't be cached.
+     * Used for blocks that need level context (airlocks, pipes with dynamic connections, etc.)
      */
     private static PassableInfo computeNoCache(Level level, BlockPos pos, BlockState blockState, byte visitedFrom) {
         if (blockState.getBlock() instanceof SlidingDoorBlock sdb) {
             return computeWithFacesAndCrossSections(sdb.getCollisionShape(blockState, level, pos, CollisionContext.empty()));
         }
 
-        TFGCore.LOGGER.error("Invalid state reached in computeNoCache");
-        TFGCore.LOGGER.error("BlockPos: {}", pos);
-        TFGCore.LOGGER.error("BlockState: {}", blockState);
-        return null;
+        // Generic fallback: get collision shape with level context
+        VoxelShape shape = blockState.getCollisionShape(level, pos, CollisionContext.empty());
+        return computeWithFacesAndCrossSections(shape);
     }
 
     /**
