@@ -18,6 +18,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import appeng.api.upgrades.Upgrades;
 import de.mennomax.astikorcarts.item.CartItem;
+import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.items.*;
@@ -87,6 +88,18 @@ public class TFGItems {
 
     public static final RegistryObject<Item> RNR_PLOW = ITEMS.register("rnr_plow",
             () -> new CartItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> TIER_1_DOUBLE_ROCKET = ITEMS.register("tier_1_double_rocket",
+            () -> new RocketItem(TFGEntities.TIER_1_DOUBLE_ROCKET::get, (new Item.Properties()).stacksTo(1).fireResistant()));
+
+    public static final RegistryObject<Item> TIER_2_DOUBLE_ROCKET = ITEMS.register("tier_2_double_rocket",
+            () -> new RocketItem(TFGEntities.TIER_2_DOUBLE_ROCKET::get, (new Item.Properties()).stacksTo(1).fireResistant()));
+
+    public static final RegistryObject<Item> TIER_3_DOUBLE_ROCKET = ITEMS.register("tier_3_double_rocket",
+            () -> new RocketItem(TFGEntities.TIER_3_DOUBLE_ROCKET::get, (new Item.Properties()).stacksTo(1).fireResistant()));
+
+    public static final RegistryObject<Item> TIER_4_DOUBLE_ROCKET = ITEMS.register("tier_4_double_rocket",
+            () -> new RocketItem(TFGEntities.TIER_4_DOUBLE_ROCKET::get, (new Item.Properties()).stacksTo(1).fireResistant()));
 
     private static RegistryObject<Item> register(String name) {
         return register(name, () -> new Item(new Item.Properties()));
