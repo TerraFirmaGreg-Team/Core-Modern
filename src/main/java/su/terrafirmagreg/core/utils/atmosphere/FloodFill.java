@@ -45,6 +45,15 @@ public class FloodFill {
             Direction.UP
     };
 
+    private static final long[] DIR_LONG_OFFSETS = {
+            -1L,              // DOWN (y-1)
+            1L,               // UP (y+1)
+            -(1L << 12),      // NORTH (z-1)
+            (1L << 12),       // SOUTH (z+1)
+            -(1L << 38),      // WEST (x-1)
+            (1L << 38)        // EAST (x+1)
+    };
+
     protected FloodFill() {
     }
 
@@ -72,13 +81,13 @@ public class FloodFill {
     static FloodFillResult fillWithState(Level level, LevelHeightAccessor heightAccessor,
             BlockPos start, FloodFillConfig config, FloodFillState state) {
 
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-
         // Init
         long startLong = start.asLong();
         state.addInteriorBlock(startLong);
         state.addEnvelopeBlock(startLong);
         queueNeighbors(level, state, start, startLong, ALL_DIRECTIONS);
+
+        BlockPos.MutableBlockPos pos = start.mutable();
 
         // Main DFS loop
         while (!state.frontier.isEmpty()) {
@@ -98,7 +107,7 @@ public class FloodFill {
 
             BlockState blockState = level.getBlockState(pos);
 
-            PassableResult result = PassabilityChecker.isPassable(level, pos, blockState, state.visitDirections.get(posLong));
+            PassableResult result = PassabilityChecker.isPassable(level, pos, posLong, blockState, state);
             switch (result) {
                 case PASSABLE:
                     state.addInteriorBlock(posLong);
@@ -150,7 +159,7 @@ public class FloodFill {
         }
         byte visitedFrom = state.visitDirections.get(posLong);
         for (Direction dir : Direction.values()) {
-            if ((visitedFrom & (1 << dir.ordinal())) != 0) {
+            if ((visitedFrom & dir2byte(dir)) != 0) {
                 state.parentMap.put(posLong, pos.relative(dir).asLong());
                 return;
             }
@@ -158,19 +167,34 @@ public class FloodFill {
     }
 
     private static void queueAccessibleNeighbors(Level level, FloodFillState state, BlockPos currentPos, long currentPosLong, BlockState blockState) {
-        byte closedFacesIncoming = PassabilityChecker.getPassableInfo(level, blockState).faces();
+        byte closedFacesIncoming = PassabilityChecker.getPassableInfo(level, blockState).closedFaces();
         byte openFacesIncoming = (byte) (~closedFacesIncoming & 0b111111);
         byte openFacesOutgoing = flipMaskDirections(openFacesIncoming);
         queueNeighbors(level, state, currentPos, currentPosLong, openFacesOutgoing);
     }
 
+    /**
+     * Add neighbors to the current block to the stack
+     * @param level level
+     * @param state FloodFill state
+     * @param currentPos Current block pos
+     * @param currentPosLong Current block pos as long
+     * @param neighbors Bitmask representing which directions to add
+     */
     private static void queueNeighbors(Level level, FloodFillState state, BlockPos currentPos, long currentPosLong, byte neighbors) {
+
+        // Filter out the directions we came from to get to the current block, leaving just toQueue
         byte visitDirections = state.visitDirections.get(currentPosLong);
         byte toQueue = (byte) (neighbors & ~flipMaskDirections(visitDirections));
-        for (Direction dir : DFS_DIRECTIONS) {
-            if ((toQueue & (1 << dir.ordinal())) != 0) {
-                long neighborPosLong = currentPos.relative(dir).asLong();
-                state.markVisitDirection(neighborPosLong, dir);
+
+        // i represents Direction Enum ordinals
+        for (int i = 0; i < 6; i++) {
+            // if (toQueue contains Direction i)
+            if ((toQueue & (1 << i)) != 0) {
+                long neighborPosLong = currentPosLong + DIR_LONG_OFFSETS[i]; // primitive coordinate move on long for performance reasons
+                if (state.envelope.contains(neighborPosLong))
+                    continue;
+                state.markVisitDirection(neighborPosLong, (byte) (1 << i));
                 state.frontier.push(neighborPosLong);
             }
         }

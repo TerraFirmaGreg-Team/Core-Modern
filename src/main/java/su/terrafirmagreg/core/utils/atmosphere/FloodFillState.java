@@ -79,9 +79,12 @@ public class FloodFillState {
      * Marks a position as visited in a specific direction.
      */
     void markVisitDirection(long posLong, Direction dir) {
-        byte checkedDirs = visitDirections.get(posLong);
         byte dirBit = (byte) (1 << dir.ordinal());
-        visitDirections.put(posLong, (byte) (checkedDirs | dirBit));
+        markVisitDirection(posLong, dirBit);
+    }
+
+    void markVisitDirection(long posLong, byte dirBit) {
+        visitDirections.merge(posLong, dirBit, (oldVal, newVal) -> (byte) (oldVal | newVal));
     }
 
     /**
@@ -139,9 +142,8 @@ public class FloodFillState {
     /**
      * Adds an interior block to the FloodFillState, adding it to both interior representing passable blocks
      *  as well as envelope representing all visited blocks.
-     * @return whether the volume limit was exceeded
      */
-    public boolean addInteriorBlock(long posLong) {
+    public void addInteriorBlock(long posLong) {
         interior.add(posLong);
         envelope.add(posLong);
     }

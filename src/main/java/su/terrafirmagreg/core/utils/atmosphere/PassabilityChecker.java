@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.utils.atmosphere;
 
+import static su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.SimplePassable.*;
+
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,7 +18,6 @@ import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
-
 
 // Passability sketch:
 // If simple passable (cache, air, passable tag, collision bounding square never full from any axis)
@@ -38,7 +39,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 //
 //     else // axis collision square filled (every unblocked face direction)
 //       for each unblocked face direction, for each perpendicular direction (overlap?)
-//         if simple passable
+//         if simple passable or empty face
 //           then block itself is also passable, so
 //           add to interior, check volume
 //           queue only directions where outgoing face not blocked
@@ -89,10 +90,10 @@ public final class PassabilityChecker {
          * From a direction we checked, we found an open face with an open cross-section, which means air can pass freely through outgoing faces that are open
          * Example: bottom slab accessed from the side
          */
-        OPEN_FACES_WITH_OPEN_CROSS_SECTIONS, // eg
+        OPEN_FACES_WITH_OPEN_CROSS_SECTIONS,
 
         /**
-         * From a directions with an open face, there was a solid cross-section but a neighboring block is ALWAYS_PASSABLE so air flowed around the barrier
+         * From a directions with an open face, there was a solid cross-section but a neighboring block is ALWAYS_PASSABLE or had an empty face so air flowed around the barrier
          *  This means air can pass freely through outgoing faces that are open.
          *  Example: window pane from front or bottom slab from top, but only if a surrounding block is ALWAYS_PASSABLE
          */
@@ -120,7 +121,7 @@ public final class PassabilityChecker {
      * Also used for checking neighbors of blocks with an open face but a closed bounding square (window panes),
      *  as air might flow around them if they're neighbored by passable blocks.
      */
-    public enum SimplePassableResult {
+    public enum SimplePassable {
         /** Always passable: empty/air, passable tag, collision bounding square never full from any axis */
         ALWAYS_PASSABLE,
         /** Always blocked: impassable tag or 3d collision box full */
@@ -135,32 +136,31 @@ public final class PassabilityChecker {
      * Record to cache whether this BlockState is passable, and if necessary from which directions
      * If PassableInfo.simple == CHECK_DIRECTION then .face and .axis are populated
      * @param simple Whether this BlockState is a simple block that's passable or blocked from every direction
-     * @param faces Bitmask representing which incoming directions hit a fully sealed face
+     * @param closedFaces Bitmask representing which incoming directions hit a fully sealed face
      * @param crossSections Bitmask representing which directions present a fully filled cross-section
+     * @param emptyFaces Bitmask representing which incoming directions hit a completely empty face. Only used for passability of blocks like windowpanes.
      */
+    // TODO: add functions for open faces or inverted direction faces
     public record PassableInfo(
-            SimplePassableResult simple,
-            byte faces,
-            byte crossSections) {
+            SimplePassable simple,
+            byte closedFaces,
+            byte crossSections,
+            byte emptyFaces) {
 
         private static PassableInfo passable() {
-            return new PassableInfo(SimplePassableResult.ALWAYS_PASSABLE, (byte) 0, (byte) 0);
+            return new PassableInfo(ALWAYS_PASSABLE, (byte) 0, (byte) 0, (byte) 0);
         }
 
         private static PassableInfo blocked() {
-            return new PassableInfo(SimplePassableResult.ALWAYS_BLOCKED, (byte) 0, (byte) 0);
+            return new PassableInfo(ALWAYS_BLOCKED, (byte) 0, (byte) 0, (byte) 0);
         }
 
         private static PassableInfo noCache() {
-            return new PassableInfo(SimplePassableResult.NO_CACHE, (byte) 0, (byte) 0);
+            return new PassableInfo(NO_CACHE, (byte) 0, (byte) 0, (byte) 0);
         }
 
-        boolean isFaceBlocked(Direction dir) {
-            return (faces & (1 << dir.ordinal())) != 0;
-        }
-
-        boolean isCrossSectionBlocked(Direction dir) {
-            return (crossSections & (1 << dir.ordinal())) != 0;
+        boolean isFaceEmpty(Direction dir) {
+            return (emptyFaces & (1 << dir.ordinal())) != 0;
         }
     }
 
@@ -225,20 +225,28 @@ public final class PassabilityChecker {
         }
 
         // Compute face and axis closedness
-        byte faces = 0;
+        byte closedFaces = 0;
         byte crossSections = 0;
+        byte emptyFaces = 0;
 
         for (Direction.Axis axis : AXES) {
             Direction positive = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
             Direction negative = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE);
+            byte posByte = dir2byte(positive);
+            byte negByte = dir2byte(negative);
 
             if (hasFullFace(shape, positive))
-                faces |= (byte) ((1 << positive.ordinal()));
+                closedFaces |= posByte;
             if (hasFullFace(shape, negative))
-                faces |= (byte) ((1 << negative.ordinal()));
+                closedFaces |= negByte;
+
+            if (hasEmptyFace(shape, positive))
+                emptyFaces |= posByte;
+            if (hasEmptyFace(shape, negative))
+                emptyFaces |= negByte;
 
             if (hasFullCrossSection(shape, axis)) {
-                crossSections |= (byte) ((1 << positive.ordinal()) | (1 << negative.ordinal()));
+                crossSections |= posByte | negByte;
             }
         }
 
@@ -248,7 +256,7 @@ public final class PassabilityChecker {
         }
 
         // Can't tell with simple checks, depends on direction
-        return new PassableInfo(SimplePassableResult.CHECK_DIRECTION, faces, crossSections);
+        return new PassableInfo(CHECK_DIRECTION, closedFaces, crossSections, emptyFaces);
     }
 
     /**
@@ -260,11 +268,12 @@ public final class PassabilityChecker {
      * @param visitedFrom Bitmask with directions we're entering from that are currently on the frontier stack
      * @return PassableResult indicating if atmosphere can pass
      */
-    public static PassableResult isPassable(Level level, BlockPos pos, BlockState blockState, byte visitedFrom) {
+    public static PassableResult isPassable(Level level, BlockPos pos, long posLong, BlockState blockState, FloodFillState state) {
         PassableInfo passableInfo = getPassableInfo(level, blockState);
         assert passableInfo != null;
 
-        if (passableInfo.simple == SimplePassableResult.NO_CACHE) {
+        if (passableInfo.simple == NO_CACHE) {
+            byte visitedFrom = state.visitDirections.get(posLong);
             passableInfo = computeNoCache(level, pos, blockState, visitedFrom);
         }
 
@@ -273,12 +282,13 @@ public final class PassabilityChecker {
             case ALWAYS_BLOCKED -> PassableResult.BLOCKED;
             case CHECK_DIRECTION -> {
                 // Get all queued directions
+                byte visitedFrom = state.visitDirections.get(posLong);
                 if (visitedFrom == 0) {
                     // already processed all directions, the fact that we're here means it wasn't in the envelope
                     yield PassableResult.ALREADY_CHECKED;
                 }
 
-                byte openFaces = (byte) (visitedFrom & ~passableInfo.faces); // all incoming directions with open faces
+                byte openFaces = (byte) (visitedFrom & ~passableInfo.closedFaces); // all incoming directions with open Faces
 
                 if (openFaces == 0) {
                     yield PassableResult.NO_OPEN_FACES; // add to pendingShell, remove visitedFrom
@@ -291,12 +301,11 @@ public final class PassabilityChecker {
                 }
 
                 // Now we process window panes: Block has incoming directions with open faces but closed cross-sections.
-                // Air flows around window panes if they have simple passable blocks next to them.
+                // Air flows around window panes if they have simple passable blocks or a completely empty face next to them.
                 // This is a simplification that's necessary to process walls entirely made of window panes.
-                // TODO: make function for bitshift ordinal
                 byte perpendicularUnion = 0;
                 for (Direction incomingDir : DIRECTIONS) {
-                    if ((openFaces & (1 << incomingDir.ordinal())) != 0) {
+                    if ((openFaces & dir2byte(incomingDir)) != 0) {
                         // Open face found for incoming direction. Check perpendiculars
                         perpendicularUnion |= PERPENDICULAR_MASK[incomingDir.ordinal()];
                     }
@@ -304,9 +313,12 @@ public final class PassabilityChecker {
 
                 // Check perpendicular directions to find a potential path for the partial block.
                 for (Direction perpDir : DIRECTIONS) {
-                    if ((perpendicularUnion & (1 << perpDir.ordinal())) != 0) {
+                    if ((perpendicularUnion & dir2byte(perpDir)) != 0) {
                         var adjacentState = level.getBlockState(pos.relative(perpDir));
-                        if (getPassableInfo(level, adjacentState).simple == SimplePassableResult.ALWAYS_PASSABLE) {
+                        PassableInfo perpInfo = getPassableInfo(level, adjacentState);
+
+                        if (perpInfo.simple == ALWAYS_PASSABLE
+                                || (perpInfo.simple == CHECK_DIRECTION && perpInfo.isFaceEmpty(perpDir))) {
                             yield PassableResult.PASSABLE_WINDOW_PANE; // add to interior, queue only directions where outgoing face not blocked
                         }
                     }
@@ -331,8 +343,12 @@ public final class PassabilityChecker {
      * @return true if the face is fully covered
      */
     public static boolean hasFullFace(VoxelShape shape, Direction dir) {
-        VoxelShape faceShape = shape.getFaceShape(dir);
-        return Block.isFaceFull(faceShape, dir.getOpposite()); // getOpposite because minecraft uses direction from center of block
+        return Block.isFaceFull(shape, dir.getOpposite()); // getOpposite because minecraft uses direction from center of block
+    }
+
+    public static boolean hasEmptyFace(VoxelShape shape, Direction dir) {
+        VoxelShape faceShape = shape.getFaceShape(dir.getOpposite());
+        return faceShape.isEmpty();
     }
 
     private static final double SUBPIXEL_SIZE = (double) 1 / 16;
@@ -410,5 +426,10 @@ public final class PassabilityChecker {
     //TODO: world unload handling
     public static void clearCache() {
         CACHE.clear();
+    }
+
+    /** Turn a direction into a bitmask representing the direction */
+    public static byte dir2byte(Direction dir) {
+        return (byte) (1 << dir.ordinal());
     }
 }
