@@ -2,17 +2,11 @@ package su.terrafirmagreg.core.utils.atmosphere;
 
 import static su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassableResult;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-
-import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
 
 /**
  * Flood fill algorithm for atmosphere room detection.
@@ -26,8 +20,6 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
  * method to provide additional functionality like path tracking.
  */
 public class FloodFill {
-    private static final Direction[] DIRECTIONS = Direction.values();
-
     /** All directions as a bitmask */
     protected static final byte ALL_DIRECTIONS = 0b111111;
 
@@ -36,13 +28,13 @@ public class FloodFill {
      * UP is last so it's pushed last and popped first (stack is LIFO).
      * This prioritizes upward expansion for fast escape detection.
      */
-    protected static final Direction[] DFS_DIRECTIONS = {
-            Direction.DOWN,
-            Direction.WEST,
-            Direction.SOUTH,
-            Direction.EAST,
-            Direction.NORTH,
-            Direction.UP
+    protected static final int[] DFS_DIRECTIONS = {
+            Direction.DOWN.ordinal(),  // 0
+            Direction.WEST.ordinal(),  // 4
+            Direction.SOUTH.ordinal(), // 3
+            Direction.EAST.ordinal(),  // 5
+            Direction.NORTH.ordinal(), // 2
+            Direction.UP.ordinal()     // 1
     };
 
     private static final long[] DIR_LONG_OFFSETS = {
@@ -71,15 +63,7 @@ public class FloodFill {
      */
     public static FloodFillResult fill(Level level, LevelHeightAccessor heightAccessor,
             BlockPos start, FloodFillConfig config) {
-        return fillWithState(level, heightAccessor, start, config, new FloodFillState());
-    }
-
-    /**
-     * Performs a DFS flood fill with a pre-initialized state.
-     * Used by DiagnosticFloodFill to enable parent tracking.
-     */
-    static FloodFillResult fillWithState(Level level, LevelHeightAccessor heightAccessor,
-            BlockPos start, FloodFillConfig config, FloodFillState state) {
+        FloodFillState state = new FloodFillState();
 
         // Init
         long startLong = start.asLong();
@@ -101,7 +85,6 @@ public class FloodFill {
             pos.set(posLong);
 
             if (!updateAndCheckBounds(level, heightAccessor, state, pos, config)) {
-                recordParent(state, pos, posLong);
                 return buildResult(state);
             }
 
@@ -115,7 +98,6 @@ public class FloodFill {
                         state.hitBlockLimit = true;
                         return buildResult(state);
                     }
-                    recordParent(state, pos, posLong);
                     queueNeighbors(level, state, pos, posLong, ALL_DIRECTIONS);
                     break;
 
@@ -136,7 +118,6 @@ public class FloodFill {
                         state.hitBlockLimit = true;
                         return buildResult(state);
                     }
-                    recordParent(state, pos, posLong);
                     state.removePendingShellBlock(posLong);
                     queueAccessibleNeighbors(level, state, pos, posLong, blockState);
                     break;
@@ -147,23 +128,6 @@ public class FloodFill {
         }
         // Fill complete without escape
         return buildResult(state);
-    }
-
-    /**
-     * Records the parent for path building (diagnostic mode only).
-     * Called after passability confirms we can enter the block.
-     */
-    private static void recordParent(FloodFillState state, BlockPos pos, long posLong) {
-        if (state.parentMap == null) {
-            return;
-        }
-        byte visitedFrom = state.visitDirections.get(posLong);
-        for (Direction dir : Direction.values()) {
-            if ((visitedFrom & dir2byte(dir)) != 0) {
-                state.parentMap.put(posLong, pos.relative(dir).asLong());
-                return;
-            }
-        }
     }
 
     private static void queueAccessibleNeighbors(Level level, FloodFillState state, BlockPos currentPos, long currentPosLong, BlockState blockState) {
@@ -187,8 +151,7 @@ public class FloodFill {
         byte visitDirections = state.visitDirections.get(currentPosLong);
         byte toQueue = (byte) (neighbors & ~flipMaskDirections(visitDirections));
 
-        // i represents Direction Enum ordinals
-        for (int i = 0; i < 6; i++) {
+        for (int i : DFS_DIRECTIONS) {
             // if (toQueue contains Direction i)
             if ((toQueue & (1 << i)) != 0) {
                 long neighborPosLong = currentPosLong + DIR_LONG_OFFSETS[i]; // primitive coordinate move on long for performance reasons
@@ -220,41 +183,13 @@ public class FloodFill {
             status = FloodFillStatus.SEALED;
         }
 
-        // Build escape path if diagnostic mode and there's an escape point
-        List<BlockPos> escapePath = null;
-        if (state.parentMap != null && state.escapePoint != null) {
-            escapePath = buildPath(state.parentMap, state.escapePoint.asLong());
-        }
-
         return new FloodFillResult(
                 state.interior,
                 state.envelope,
                 status,
                 state.escapePoint,
-                escapePath,
+                null,
                 state.getBounds());
-    }
-
-    /**
-     * Builds the path from start to the given position using the parent map.
-     */
-    private static List<BlockPos> buildPath(Long2LongOpenHashMap parentMap, long endLong) {
-        long noParent = parentMap.defaultReturnValue();
-        LongArrayList pathLongs = new LongArrayList();
-        long current = endLong;
-
-        while (current != noParent) {
-            pathLongs.add(current);
-            current = parentMap.get(current);
-        }
-
-        // Reverse to get start-to-end order
-        List<BlockPos> path = new ArrayList<>(pathLongs.size());
-        for (int i = pathLongs.size() - 1; i >= 0; i--) {
-            path.add(BlockPos.of(pathLongs.getLong(i)));
-        }
-
-        return path;
     }
 
     /**
@@ -306,10 +241,5 @@ public class FloodFill {
         int even = mask & 0b010101;  // bits 0, 2, 4 (DOWN, NORTH, WEST)
         int odd = mask & 0b101010;   // bits 1, 3, 5 (UP, SOUTH, EAST)
         return (byte) ((even << 1) | (odd >> 1));
-    }
-
-    /** Turn a direction into a bitmask representing the direction */
-    public static byte dir2byte(Direction dir) {
-        return (byte) (1 << dir.ordinal());
     }
 }

@@ -7,7 +7,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
@@ -43,13 +42,6 @@ public class FloodFillState {
      *  of the shell.
      */
     final LongOpenHashSet pendingShell = new LongOpenHashSet();
-
-    /**
-     * Parent tracking for diagnostic path building. Null for normal fills.
-     * Maps position -> parent position (the block we came from).
-     */
-    @Nullable
-    Long2LongOpenHashMap parentMap = null;
 
     /**
      * Pos where the DFS reaches a termination condition (build height, dimension, volume, unloaded chunk, etc)

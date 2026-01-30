@@ -17,51 +17,60 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.utils.atmosphere.FloodFill;
-import su.terrafirmagreg.core.utils.atmosphere.FloodFillConfig;
-import su.terrafirmagreg.core.utils.atmosphere.FloodFillResult;
+import su.terrafirmagreg.core.utils.atmosphere.*;
 
 public class FloodFillCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // /tfg floodfill - run from player position with default config
         dispatcher.register(
-                literal("tfg").then(
-                        literal("floodfill").requires(c -> c.hasPermission(2))
+                literal("tfg")
+                        .then(literal("floodfill").requires(c -> c.hasPermission(2))
                                 .executes(c -> {
                                     BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-                                    return runFloodFill(c.getSource(), pos, FloodFillConfig.TIER_0);
+                                    return runFloodFill(c.getSource(), pos, FloodFillConfig.TIER_0, false);
                                 })
-                                // /tfg floodfill <pos>
-                                .then(argument("pos", BlockPosArgument.blockPos())
+                                // /tfg floodfill <tier>
+                                .then(argument("tier", IntegerArgumentType.integer(0, 2))
                                         .executes(c -> {
-                                            BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
-                                            return runFloodFill(c.getSource(), pos, FloodFillConfig.TIER_0);
+                                            BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                                            int tier = IntegerArgumentType.getInteger(c, "tier");
+                                            return runFloodFill(c.getSource(), pos, FloodFillConfig.forTier(tier), false);
                                         })
-                                        // /tfg floodfill <pos> <tier>
-                                        .then(argument("tier", IntegerArgumentType.integer(0, 2))
+                                        // /tfg floodfill <tier> <pos>
+                                        .then(argument("pos", BlockPosArgument.blockPos())
                                                 .executes(c -> {
                                                     BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
                                                     int tier = IntegerArgumentType.getInteger(c, "tier");
-                                                    return runFloodFill(c.getSource(), pos, FloodFillConfig.forTier(tier));
-                                                })))));
-        dispatcher.register(
-                literal("tfg").then(
-                        literal("uncacheable")
+                                                    return runFloodFill(c.getSource(), pos, FloodFillConfig.forTier(tier), false);
+                                                })
+                                                .then(literal("diag").requires(c -> c.hasPermission(2))
+                                                        .executes(c -> {
+                                                            BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
+                                                            int tier = IntegerArgumentType.getInteger(c, "tier");
+                                                            return runFloodFill(c.getSource(), pos, FloodFillConfig.forTier(tier), true);
+
+                                                        })))))
+                        .then(literal("uncacheable")
                                 .executes(c -> {
                                     findUncacheableBlocks();
                                     return 1;
                                 })));
     }
 
-    private static int runFloodFill(CommandSourceStack source, BlockPos start, FloodFillConfig config) {
+    private static int runFloodFill(CommandSourceStack source, BlockPos start, FloodFillConfig config, boolean diagnostic) {
         ServerLevel level = source.getLevel();
 
         source.sendSuccess(() -> Component.literal(String.format(
                 "Running flood fill from %s with max %d blocks...",
                 start.toShortString(), config.maxBlocks())), false);
 
+        FloodFillResult result;
         long startTime = System.nanoTime();
-        FloodFillResult result = FloodFill.fill(level, level, start, config);
+        if (diagnostic) {
+            result = DiagnosticFloodFill.fill(level, level, start, config);
+        } else {
+            result = FloodFill.fill(level, level, start, config);
+        }
         long elapsed = System.nanoTime() - startTime;
 
         source.sendSuccess(() -> Component.literal(String.format(
@@ -76,6 +85,9 @@ public class FloodFillCommand {
             BlockPos escape = result.escapePoint();
             source.sendSuccess(() -> Component.literal(String.format(
                     "Escape point: %s", escape.toShortString())), false);
+            if (diagnostic && result.escapePath() != null) {
+                LeakTrace.spawn(level, result.escapePath());
+            }
         }
 
         return 1;

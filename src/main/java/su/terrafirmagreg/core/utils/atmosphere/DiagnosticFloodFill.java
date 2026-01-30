@@ -1,15 +1,23 @@
 package su.terrafirmagreg.core.utils.atmosphere;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Function;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 /**
- * Diagnostic version of flood fill that tracks the path to the escape point.
- * Slightly slower than regular FloodFill due to parent tracking overhead.
- * Use only for debugging or showing players where the breach is.
+ * Diagnostic version of flood fill that finds the shortest path to the escape point.
+ * Uses regular DFS flood fill first, then BFS through the interior to find shortest path.
  *
  * <p>Returns a {@link FloodFillResult} with the {@code escapePath} field populated.
  */
@@ -17,12 +25,24 @@ public final class DiagnosticFloodFill {
 
     private static final long NO_PARENT = Long.MIN_VALUE;
 
+    /** Direction offsets for packed long positions */
+    private static final long[] DIR_OFFSETS = {
+            -1L,              // DOWN (y-1)
+            1L,               // UP (y+1)
+            -(1L << 12),      // NORTH (z-1)
+            (1L << 12),       // SOUTH (z+1)
+            -(1L << 38),      // WEST (x-1)
+            (1L << 38)        // EAST (x+1)
+    };
+
     private DiagnosticFloodFill() {
     }
 
     /**
-     * Performs a diagnostic flood fill with path tracking.
-     * Same as {@link FloodFill#fill} but populates the escape path in the result.
+     * Performs a diagnostic flood fill with shortest path tracking.
+     *
+     * <p>First runs regular DFS to find the room and escape point, then uses BFS
+     * through the interior blocks to find the shortest path to the escape.
      *
      * @param level Block getter
      * @param heightAccessor Height accessor for build height limits
@@ -32,12 +52,116 @@ public final class DiagnosticFloodFill {
      */
     public static FloodFillResult fill(Level level, LevelHeightAccessor heightAccessor,
             BlockPos start, FloodFillConfig config) {
-        // Create state with parent tracking enabled
-        FloodFillState state = new FloodFillState();
-        state.parentMap = new Long2LongOpenHashMap();
-        state.parentMap.defaultReturnValue(NO_PARENT);
+        // Run regular flood fill to find the room and escape point
+        FloodFillResult result = FloodFill.fill(level, heightAccessor, start, config);
 
-        // Use the regular fill logic with parent tracking active
-        return FloodFill.fillWithState(level, heightAccessor, start, config, state);
+        // If no escape point, return as-is (sealed room or block limit)
+        if (result.escapePoint() == null) {
+            return result;
+        }
+
+        // Find shortest path through interior using BFS
+        List<BlockPos> shortestPath = findShortestPath(
+                result.interior(),
+                start.asLong(),
+                result.escapePoint().asLong());
+
+        // Return new result with the path
+        return new FloodFillResult(
+                result.interior(),
+                result.envelope(),
+                result.status(),
+                result.escapePoint(),
+                shortestPath,
+                result.bounds());
+    }
+
+    /**
+     * Finds the shortest path from start to escape through interior blocks using BFS.
+     */
+    private static List<BlockPos> findShortestPath(LongOpenHashSet interior, long startLong, long escapeLong) {
+        Long2LongOpenHashMap parent = new Long2LongOpenHashMap();
+        parent.defaultReturnValue(NO_PARENT);
+
+        LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
+
+        queue.enqueue(startLong);
+        parent.put(startLong, NO_PARENT);
+
+        Random random = new Random();
+
+        while (!queue.isEmpty()) {
+            long current = queue.dequeueLong();
+
+            // Check all 6 neighbors
+            forEachRandomDirection(random, dir -> {
+                long neighbor = current + DIR_OFFSETS[dir.ordinal()];
+
+                // Already visited?
+                if (parent.containsKey(neighbor)) {
+                    return true;
+                }
+
+                // Is this the escape point? (might be just outside interior)
+                if (neighbor == escapeLong) {
+                    parent.put(neighbor, current);
+                    return false;
+                }
+
+                // Only traverse through interior blocks
+                if (interior.contains(neighbor)) {
+                    parent.put(neighbor, current);
+                    queue.enqueue(neighbor);
+                }
+
+                return true;
+            });
+        }
+        if (parent.size() > 1) {
+            return reconstructPath(parent, escapeLong);
+        }
+
+        // No path found (shouldn't happen if escape point is adjacent to interior)
+        return List.of();
+    }
+
+    /**
+     * Reconstructs the path from start to end using the parent map.
+     */
+    private static List<BlockPos> reconstructPath(Long2LongOpenHashMap parent, long endLong) {
+        LongArrayList pathLongs = new LongArrayList();
+        long current = endLong;
+
+        while (current != NO_PARENT) {
+            pathLongs.add(current);
+            current = parent.get(current);
+        }
+
+        // Reverse to get start-to-end order
+        List<BlockPos> path = new ArrayList<>(pathLongs.size());
+        for (int i = pathLongs.size() - 1; i >= 0; i--) {
+            path.add(BlockPos.of(pathLongs.getLong(i)));
+        }
+
+        return path;
+    }
+
+    private static final Direction[] SHUFFLED = Direction.values().clone();
+
+    public static void forEachRandomDirection(Random random, Function<Direction, Boolean> action) {
+        for (int i = SHUFFLED.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            Direction tmp = SHUFFLED[i];
+            SHUFFLED[i] = SHUFFLED[j];
+            SHUFFLED[j] = tmp;
+        }
+
+        boolean cont;
+        for (Direction d : SHUFFLED) {
+            cont = action.apply(d);
+            if (!cont) {
+                return;
+            }
+        }
     }
 }
