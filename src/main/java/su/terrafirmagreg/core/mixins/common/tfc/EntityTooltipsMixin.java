@@ -34,9 +34,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.wanmine.wab.entity.Soarer;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.entities.axolotl.AxolotlData;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
@@ -69,6 +71,7 @@ public abstract class EntityTooltipsMixin {
         registry.register("rabbit", TFG_RABBIT, Rabbit.class);
         registry.register("surfer", TFG_SURFER, TFCSurfer.class);
         registry.register("soarer", TFG_SOARER, Soarer.class);
+        registry.register("axolotl", TFG_AXOLOTL, Axolotl.class);
     }
 
     @Unique
@@ -105,6 +108,13 @@ public abstract class EntityTooltipsMixin {
             float familiarity = Math.max(0.0F, Math.min(1.0F, SoarerData.getFamiliarity(soarer)));
             String familiarityPercent = String.format("%.2f", familiarity * 100.0F);
             tooltip.accept(Component.translatable("tfc.jade.familiarity", familiarityPercent));
+        }
+    };
+
+    @Unique
+    private static final EntityTooltip TFG_AXOLOTL = (level, entity, tooltip) -> {
+        if (entity instanceof Axolotl axolotl) {
+            tooltip.accept(Helpers.translateEnum(AxolotlData.isMale(axolotl) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
         }
     };
 
