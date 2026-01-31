@@ -292,9 +292,7 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
         }
     }
 
-    //////////////////////////////////////
-    // ****** ENERGY ********//
-    //////////////////////////////////////
+    // Energy
 
     public EnergyContainerList getEnergyContainer() {
         List<IEnergyContainer> containers = new ArrayList<>();
