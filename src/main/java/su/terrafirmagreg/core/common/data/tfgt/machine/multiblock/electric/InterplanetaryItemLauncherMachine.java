@@ -233,7 +233,13 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             return false;
         if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM) {
             for (int i = 0; i < config.getCurrentSendFilter().getSlots(); i++) {
-                itemsToExtract.add(config.getCurrentSendFilter().getStackInSlot(i));
+                var stack = config.getCurrentSendFilter().getStackInSlot(i);
+                if (!stack.isEmpty()) { // empty slots are "0 air"
+                    itemsToExtract.add(config.getCurrentSendFilter().getStackInSlot(i));
+                    if (!receiver.canAcceptItems(config.getReceiverDistinctInventory(), itemsToExtract)) {
+                        itemsToExtract.remove(stack);
+                    }
+                }
             }
         } else if (config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.REDSTONE_SIGNAL) {
             boolean hasAnySignal = false;
