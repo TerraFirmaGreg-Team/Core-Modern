@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.utils.atmosphere;
 
+import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,16 +26,6 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 public final class DiagnosticFloodFill {
 
     private static final long NO_PARENT = Long.MIN_VALUE;
-
-    /** Direction offsets for packed long positions */
-    private static final long[] DIR_OFFSETS = {
-            -1L,              // DOWN (y-1)
-            1L,               // UP (y+1)
-            -(1L << 12),      // NORTH (z-1)
-            (1L << 12),       // SOUTH (z+1)
-            -(1L << 38),      // WEST (x-1)
-            (1L << 38)        // EAST (x+1)
-    };
 
     private DiagnosticFloodFill() {
     }
@@ -95,7 +87,7 @@ public final class DiagnosticFloodFill {
 
             // Check all 6 neighbors
             forEachRandomDirection(random, dir -> {
-                long neighbor = current + DIR_OFFSETS[dir.ordinal()];
+                long neighbor = relativeLong(current, dir);
 
                 // Already visited?
                 if (parent.containsKey(neighbor)) {

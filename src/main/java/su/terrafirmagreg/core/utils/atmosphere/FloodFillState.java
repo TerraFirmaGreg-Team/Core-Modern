@@ -1,9 +1,10 @@
 package su.terrafirmagreg.core.utils.atmosphere;
 
+import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
@@ -70,13 +71,8 @@ public class FloodFillState {
     /**
      * Marks a position as visited in a specific direction.
      */
-    void markVisitDirection(long posLong, Direction dir) {
-        byte dirBit = (byte) (1 << dir.ordinal());
-        markVisitDirection(posLong, dirBit);
-    }
-
-    void markVisitDirection(long posLong, byte dirBit) {
-        visitDirections.merge(posLong, dirBit, (oldVal, newVal) -> (byte) (oldVal | newVal));
+    void markVisitDirection(long posLong, int dirInt) {
+        visitDirections.merge(posLong, int2byte(dirInt), AtmosphereHelpers::unionDirs);
     }
 
     /**

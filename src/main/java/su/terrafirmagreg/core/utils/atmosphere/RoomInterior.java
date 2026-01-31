@@ -13,6 +13,7 @@ import net.minecraft.world.phys.AABB;
 
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import lombok.Getter;
 
 /**
  * Efficient storage for room interior using section-based bitmaps.
@@ -40,21 +41,25 @@ public class RoomInterior {
     /**
      * Bounds of the room.
      */
+    @Getter
     private final AABB bounds;
 
     /**
      * Set of chunks this room touches (for listener registration).
      */
+    @Getter
     private final Set<ChunkPos> touchedChunks;
 
     /**
      * Total number of interior blocks.
      */
+    @Getter
     private final int interiorSize;
 
     /**
      * Total number of envelope blocks.
      */
+    @Getter
     private final int envelopeSize;
 
     private RoomInterior(Map<Long, BitSet> interiorBitmaps, Map<Long, BitSet> envelopeBitmaps,
@@ -177,34 +182,6 @@ public class RoomInterior {
      */
     public boolean containsShell(BlockPos pos) {
         return containsEnvelope(pos) && !containsInterior(pos);
-    }
-
-    /**
-     * @return Set of chunks this room touches
-     */
-    public Set<ChunkPos> getTouchedChunks() {
-        return touchedChunks;
-    }
-
-    /**
-     * @return Bounding box of the room
-     */
-    public AABB getBounds() {
-        return bounds;
-    }
-
-    /**
-     * @return Number of interior blocks
-     */
-    public int getInteriorSize() {
-        return interiorSize;
-    }
-
-    /**
-     * @return Number of envelope blocks (interior + shell)
-     */
-    public int getEnvelopeSize() {
-        return envelopeSize;
     }
 
     /**

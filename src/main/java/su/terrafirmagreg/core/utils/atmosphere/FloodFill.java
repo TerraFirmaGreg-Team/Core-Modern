@@ -1,9 +1,9 @@
 package su.terrafirmagreg.core.utils.atmosphere;
 
+import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
 import static su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassableResult;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,31 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
  * method to provide additional functionality like path tracking.
  */
 public class FloodFill {
-    /** All directions as a bitmask */
-    protected static final byte ALL_DIRECTIONS = 0b111111;
-
-    /**
-     * Direction order for DFS traversal.
-     * UP is last so it's pushed last and popped first (stack is LIFO).
-     * This prioritizes upward expansion for fast escape detection.
-     */
-    protected static final int[] DFS_DIRECTIONS = {
-            Direction.DOWN.ordinal(),  // 0
-            Direction.WEST.ordinal(),  // 4
-            Direction.SOUTH.ordinal(), // 3
-            Direction.EAST.ordinal(),  // 5
-            Direction.NORTH.ordinal(), // 2
-            Direction.UP.ordinal()     // 1
-    };
-
-    private static final long[] DIR_LONG_OFFSETS = {
-            -1L,              // DOWN (y-1)
-            1L,               // UP (y+1)
-            -(1L << 12),      // NORTH (z-1)
-            (1L << 12),       // SOUTH (z+1)
-            -(1L << 38),      // WEST (x-1)
-            (1L << 38)        // EAST (x+1)
-    };
 
     protected FloodFill() {
     }
@@ -92,7 +67,7 @@ public class FloodFill {
 
             PassableResult result = PassabilityChecker.isPassable(level, pos, posLong, blockState, state);
             switch (result) {
-                case PASSABLE:
+                case EMPTY:
                     state.addInteriorBlock(posLong);
                     if (state.interior.size() > config.maxBlocks()) {
                         state.hitBlockLimit = true;
@@ -101,7 +76,7 @@ public class FloodFill {
                     queueNeighbors(level, state, pos, posLong, ALL_DIRECTIONS);
                     break;
 
-                case BLOCKED:
+                case FULL:
                     state.addEnvelopeBlock(posLong);
                     break;
 
@@ -111,7 +86,7 @@ public class FloodFill {
                     state.removeQueuedDirections(posLong);
                     break;
 
-                case OPEN_FACES_WITH_OPEN_CROSS_SECTIONS:
+                case OPEN_SILHOUETTE:
                 case PASSABLE_WINDOW_PANE:
                     state.addInteriorBlock(posLong);
                     if (state.interior.size() > config.maxBlocks()) {
@@ -131,10 +106,9 @@ public class FloodFill {
     }
 
     private static void queueAccessibleNeighbors(Level level, FloodFillState state, BlockPos currentPos, long currentPosLong, BlockState blockState) {
-        byte closedFacesIncoming = PassabilityChecker.getPassableInfo(level, blockState).closedFaces();
-        byte openFacesIncoming = (byte) (~closedFacesIncoming & 0b111111);
-        byte openFacesOutgoing = flipMaskDirections(openFacesIncoming);
-        queueNeighbors(level, state, currentPos, currentPosLong, openFacesOutgoing);
+        byte openFacesInward = PassabilityChecker.getPassCache(blockState).openFaces();
+        byte openFacesOutward = mirrorDirs(openFacesInward);
+        queueNeighbors(level, state, currentPos, currentPosLong, openFacesOutward);
     }
 
     /**
@@ -149,64 +123,33 @@ public class FloodFill {
 
         // Filter out the directions we came from to get to the current block, leaving just toQueue
         byte visitDirections = state.visitDirections.get(currentPosLong);
-        byte toQueue = (byte) (neighbors & ~flipMaskDirections(visitDirections));
+        byte toQueue = subtractDirs(neighbors, mirrorDirs(visitDirections));
 
-        for (int i : DFS_DIRECTIONS) {
-            // if (toQueue contains Direction i)
-            if ((toQueue & (1 << i)) != 0) {
-                long neighborPosLong = currentPosLong + DIR_LONG_OFFSETS[i]; // primitive coordinate move on long for performance reasons
-                if (state.envelope.contains(neighborPosLong))
-                    continue;
-                state.markVisitDirection(neighborPosLong, (byte) (1 << i));
-                state.frontier.push(neighborPosLong);
-            }
+        for (int dirInt : mask2DFSDirections(toQueue)) {
+            long neighborPosLong = relativeLong(currentPosLong, dirInt);
+            if (state.envelope.contains(neighborPosLong))
+                continue;
+            state.markVisitDirection(neighborPosLong, dirInt);
+            state.frontier.push(neighborPosLong);
         }
-    }
-
-    /**
-     * Builds the final result from the current state.
-     */
-    protected static FloodFillResult buildResult(FloodFillState state) {
-        state.envelope.addAll(state.pendingShell);
-        state.pendingShell.clear();
-
-        FloodFillStatus status;
-        if (state.hitBlockLimit) {
-            status = FloodFillStatus.BLOCK_LIMIT;
-        } else if (state.hitBuildHeight) {
-            status = FloodFillStatus.ESCAPED_BUILD_HEIGHT;
-        } else if (state.hitDimensionLimit) {
-            status = FloodFillStatus.ESCAPED_DIMENSION;
-        } else if (state.hitUnloadedChunk) {
-            status = FloodFillStatus.ESCAPED_UNLOADED;
-        } else {
-            status = FloodFillStatus.SEALED;
-        }
-
-        return new FloodFillResult(
-                state.interior,
-                state.envelope,
-                status,
-                state.escapePoint,
-                null,
-                state.getBounds());
     }
 
     /**
      * Updates bounds to include the given position.
      * @return whether the position got processed without crossing any limits.
      */
-    protected static boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor, FloodFillState state, BlockPos pos, FloodFillConfig config) {
+    protected static boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor,
+            FloodFillState state, BlockPos pos, FloodFillConfig config) {
 
-        if (pos.getX() < state.minX || pos.getX() > state.maxX
-                || pos.getZ() < state.minZ || pos.getZ() > state.maxZ) {
+        if (pos.getX() < state.minX || pos.getX() > state.maxX || pos.getZ() < state.minZ || pos.getZ() > state.maxZ) {
             // Horizontal bounds expanded
             state.minX = Math.min(state.minX, pos.getX());
             state.maxX = Math.max(state.maxX, pos.getX());
             state.minZ = Math.min(state.minZ, pos.getZ());
             state.maxZ = Math.max(state.maxZ, pos.getZ());
 
-            if (state.maxX - state.minX > config.maxHorizontalDimension() || state.maxZ - state.minZ > config.maxHorizontalDimension()) {
+            if (state.maxX - state.minX > config.maxHorizontalDimension()
+                    || state.maxZ - state.minZ > config.maxHorizontalDimension()) {
                 // Horizontal dimension limit exceeded
                 state.hitDimensionLimit = true;
                 state.setEscapePoint(pos.immutable());
@@ -236,10 +179,32 @@ public class FloodFill {
         return true;
     }
 
-    /** Swap adjacent bit pairs: DOWN<->UP, NORTH<->SOUTH, WEST<->EAST */
-    public static byte flipMaskDirections(byte mask) {
-        int even = mask & 0b010101;  // bits 0, 2, 4 (DOWN, NORTH, WEST)
-        int odd = mask & 0b101010;   // bits 1, 3, 5 (UP, SOUTH, EAST)
-        return (byte) ((even << 1) | (odd >> 1));
+    /**
+     * Builds the final result from the current state.
+     */
+    protected static FloodFillResult buildResult(FloodFillState state) {
+        state.envelope.addAll(state.pendingShell);
+        state.pendingShell.clear();
+
+        FloodFillStatus status;
+        if (state.hitBlockLimit) {
+            status = FloodFillStatus.BLOCK_LIMIT;
+        } else if (state.hitBuildHeight) {
+            status = FloodFillStatus.ESCAPED_BUILD_HEIGHT;
+        } else if (state.hitDimensionLimit) {
+            status = FloodFillStatus.ESCAPED_DIMENSION;
+        } else if (state.hitUnloadedChunk) {
+            status = FloodFillStatus.ESCAPED_UNLOADED;
+        } else {
+            status = FloodFillStatus.SEALED;
+        }
+
+        return new FloodFillResult(
+                state.interior,
+                state.envelope,
+                status,
+                state.escapePoint,
+                null,
+                state.getBounds());
     }
 }

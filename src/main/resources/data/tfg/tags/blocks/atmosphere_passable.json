@@ -1,10 +1,15 @@
 {
     "values": [
-        "#minecraft:fences",
         "#minecraft:leaves",
-        "minecraft:ladder",
+        "#minecraft:climbable",
         "minecraft:iron_bars",
         "minecraft:tnt",
+        "#minecraft:fences",
+        "#minecraft:fence_gates",
+        "#forge:fences",
+        "#forge:fence_gates",
+        "#tfg:metal_bars",
+        "#forge:frames",
         "ad_astra:vent",
         "ad_astra:oxygen_distributor",
         "ad_astra:gravity_normalizer",
