@@ -292,7 +292,6 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
                 amperage = tier * 2;
         }
 
-        /* ===== MODIFICATION NECESSAIRE (FIX) ===== */
         long totalEUt = rawVoltage * amperage;
 
         int displayTier = GTUtil.getFloorTierByVoltage(totalEUt);
@@ -302,7 +301,6 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         if (amperage < 1) {
             amperage = 1;
         }
-        /* ======================================== */
 
         final int amperageFinal = amperage;
         final long displayVoltageFinal = displayVoltage;
