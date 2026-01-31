@@ -117,14 +117,8 @@ public final class PassabilityChecker {
      * @param state Current FloodFill state, necessary for checking which directions we're visiting from.
      * @return PassableResult indicating if atmosphere can pass
      */
-    public static PassableResult isPassable(Level level, BlockPos pos, long posLong, BlockState blockState, FloodFillState state) {
-        PassCache passCache = getPassCache(blockState);
-        assert passCache != null;
-
-        if (passCache.type == NO_CACHE) {
-            // BlockState's passability can't be cached, compute it live with current world state.
-            passCache = computeNoCache(level, pos, blockState);
-        }
+    public static PassableResult isPassable(Level level, BlockPos.MutableBlockPos pos, long posLong, BlockState blockState, FloodFillState state) {
+        PassCache passCache = getPassCache(level, pos, blockState);
 
         return switch (passCache.type) {
             case EMPTY -> PassableResult.EMPTY;
@@ -133,7 +127,7 @@ public final class PassabilityChecker {
             default -> {
                 TFGCore.LOGGER.error("Invalid state reached in PassabilityChecker");
                 TFGCore.LOGGER.error("PassCache: {}", passCache);
-                yield null;
+                yield PassableResult.ALREADY_CHECKED;
             }
         };
     }
@@ -148,7 +142,7 @@ public final class PassabilityChecker {
      * @param state Current FloodFill state, necessary for checking which directions we're visiting from.
      * @return PassableResult indicating if atmosphere can pass
      */
-    public static PassableResult isPassableFromDirections(Level level, BlockPos pos, long posLong, PassCache passCache, FloodFillState state) {
+    public static PassableResult isPassableFromDirections(Level level, BlockPos.MutableBlockPos pos, long posLong, PassCache passCache, FloodFillState state) {
 
         // Get all queued directions
         byte incomingDirs = state.visitDirections.get(posLong);
@@ -171,12 +165,14 @@ public final class PassabilityChecker {
         // Air flows around window panes if they have empty blocks or a completely empty face next to them.
         // This is a simplification that's necessary to process walls entirely made of window panes.
         for (Direction perpDir : mask2perpendicularDirections(openIncomingFaces)) {
-            var perpState = level.getBlockState(pos.relative(perpDir));
-            PassCache perpCache = getPassCache(perpState);
+            pos.move(perpDir);
+            var perpState = level.getBlockState(pos);
+            PassCache perpCache = getPassCache(level, pos, perpState);
 
             if (perpCache.type == EMPTY || (perpCache.type == COLLISION && perpCache.isFaceEmpty(perpDir))) {
                 return PassableResult.PASSABLE_WINDOW_PANE;
             }
+            pos.move(perpDir.getOpposite());
         }
 
         return PassableResult.BLOCKED_WINDOW_PANE;
@@ -268,8 +264,12 @@ public final class PassabilityChecker {
     /**
      * Gets the (cached) passability info for a BlockState.
      */
-    public static PassCache getPassCache(BlockState blockState) {
-        return CACHE.computeIfAbsent(blockState, PassabilityChecker::computePassCache);
+    public static PassCache getPassCache(Level level, BlockPos pos, BlockState blockState) {
+        PassCache passCache = CACHE.computeIfAbsent(blockState, PassabilityChecker::computePassCache);
+        if (passCache.type == NO_CACHE) {
+            return computeNoCache(level, pos, blockState);
+        }
+        return passCache;
     }
 
     /**

@@ -106,7 +106,7 @@ public class FloodFill {
     }
 
     private static void queueAccessibleNeighbors(Level level, FloodFillState state, BlockPos currentPos, long currentPosLong, BlockState blockState) {
-        byte openFacesInward = PassabilityChecker.getPassCache(blockState).openFaces();
+        byte openFacesInward = PassabilityChecker.getPassCache(level, currentPos, blockState).openFaces();
         byte openFacesOutward = mirrorDirs(openFacesInward);
         queueNeighbors(level, state, currentPos, currentPosLong, openFacesOutward);
     }
