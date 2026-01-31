@@ -70,6 +70,7 @@
         "common.greate.TieredCrushingRecipeMixin",
         "common.greate.TieredMillingRecipeMixin",
         "common.gtceu.CleanroomConditionMixin",
+        "common.gtceu.DimensionConditionMixin",
         "common.gtceu.EntityDamageUtilMixin",
         "common.gtceu.GrowingPlantRenderMixin",
         "common.gtceu.GTCleanroomMixin",

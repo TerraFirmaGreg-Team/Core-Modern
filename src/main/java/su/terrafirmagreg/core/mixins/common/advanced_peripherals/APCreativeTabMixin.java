@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.mixins.common.advanced_peripherals;
 
 import java.util.Collection;
 
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +15,5 @@ public class APCreativeTabMixin {
 
     @Redirect(method = "lambda$populateCreativeTabBuilder$0(Lnet/minecraft/world/item/CreativeModeTab$ItemDisplayParameters;Lnet/minecraft/world/item/CreativeModeTab$Output;)V", at = @At(value = "INVOKE", target = "net/minecraft/world/item/CreativeModeTab$Output.m_246601_ (Ljava/util/Collection;)V"))
     private static void tfg$removeTurtles(CreativeModeTab.Output instance, Collection collection) {
-
     }
 }
