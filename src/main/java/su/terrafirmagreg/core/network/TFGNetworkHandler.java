@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -11,6 +12,9 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.AtmosphereClientCache.AtmosphereState;
+import su.terrafirmagreg.core.network.packet.AtmosphereQueryPacket;
+import su.terrafirmagreg.core.network.packet.AtmosphereResponsePacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
 import su.terrafirmagreg.core.network.packet.ParticlePacket;
@@ -55,6 +59,18 @@ public class TFGNetworkHandler {
                 OreHighlightVeinPacket::encode,
                 OreHighlightVeinPacket::decode,
                 OreHighlightVeinPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                AtmosphereQueryPacket.class,
+                AtmosphereQueryPacket::encode,
+                AtmosphereQueryPacket::decode,
+                AtmosphereQueryPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                AtmosphereResponsePacket.class,
+                AtmosphereResponsePacket::encode,
+                AtmosphereResponsePacket::decode,
+                AtmosphereResponsePacket::handle);
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {
@@ -95,5 +111,27 @@ public class TFGNetworkHandler {
                 volume,
                 pitch);
         sendToAllAround(level, pos, packet);
+    }
+
+    /**
+     * Sends an atmosphere query from client to server.
+     * Called from client side only.
+     *
+     * @param pos The position to query
+     */
+    public static void sendAtmosphereQuery(BlockPos pos) {
+        INSTANCE.sendToServer(new AtmosphereQueryPacket(pos));
+    }
+
+    /**
+     * Sends an atmosphere response from server to a specific client.
+     *
+     * @param player The player to send to
+     * @param pos The position that was queried
+     * @param state The atmosphere state at that position
+     */
+    public static void sendAtmosphereResponse(ServerPlayer player, BlockPos pos, AtmosphereState state) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
+                new AtmosphereResponsePacket(pos, state));
     }
 }
