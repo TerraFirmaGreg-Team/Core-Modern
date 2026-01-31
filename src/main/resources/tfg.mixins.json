@@ -76,6 +76,7 @@
         "common.gtceu.GTCleanroomMixin",
         "common.gtceu.GTMultiMachinesMixin",
         "common.gtceu.GTRecipeTypesMixin",
+        "common.gtceu.GTRecipeWidgetMixin",
         "common.gtceu.GTToolTypeMixin",
         "common.gtceu.GTUtilMixin",
         "common.gtceu.LootDataManagerMixin",
@@ -188,6 +189,7 @@
         "client.tfc.FarmlandBlockMixin",
         "client.tfc.IngotPileBlockModelMixin",
         "client.tfc.SheetPileBlockModelMixin",
+        "client.carryon.ClientEventsMixin",
         "common.ad_astra.PlanetsScreenMixin"
     ],
     "required": true,
