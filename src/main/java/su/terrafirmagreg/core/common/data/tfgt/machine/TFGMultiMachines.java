@@ -69,6 +69,8 @@ import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.tfgt.TFGPartAbility;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine.InterplanetaryItemLauncherMachine;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine.InterplanetaryItemReceiverMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
 
 @SuppressWarnings({ "unused", "SpellCheckingInspection" })
