@@ -163,6 +163,7 @@ public class TFGMachines {
                     .langValue(
                             "%s Interplanetary Railgun Loader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.ALL)
+                    .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
                             GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
                     .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
@@ -178,6 +179,7 @@ public class TFGMachines {
                     .langValue(
                             "%s Interplanetary Railgun Unloader %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.ALL)
+                    .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
                             GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
                     .tooltips(Component.translatable("gtceu.machine.item_bus.export.tooltip"),
@@ -190,13 +192,16 @@ public class TFGMachines {
     public static final MachineDefinition SINGLE_ITEMSTACK_BUS = REGISTRATE
             .machine("single_itemstack_bus", SingleItemstackBus::new)
             .rotationState(RotationState.ALL)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
                     Component.translatable("tfg.tooltip.single_itemstack_bus.0"),
                     Component.translatable("tfg.tooltip.single_itemstack_bus.1"))
             .register();
 
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE
-            .machine("railgun_ammo_loader", RailgunAmmoLoaderMachine::new).register();
+            .machine("railgun_ammo_loader", RailgunAmmoLoaderMachine::new)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .register();
 
     public static final MachineDefinition INTERPLANETARY_LOGISTICS_MONITOR = REGISTRATE
             .machine("interplanetary_logistics_monitor", InterplanetaryLogisticsMonitorMachine::new)
