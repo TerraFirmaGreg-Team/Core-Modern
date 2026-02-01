@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
+package su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
 public class InterplanetaryItemReceiverMachine extends WorkableElectricMultiblockMachine

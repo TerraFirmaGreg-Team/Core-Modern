@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
+package su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +39,8 @@ import net.minecraft.world.phys.Vec3;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.TFGParticles;
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
-import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
