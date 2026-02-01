@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.wab;
 
+import net.minecraftforge.common.Tags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -13,17 +14,13 @@ import net.dries007.tfc.common.entities.livestock.horse.HorseProperties;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.ShoulderRidingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.wanmine.wab.entity.Snatcher;
@@ -39,9 +36,6 @@ public abstract class SnatcherMixin extends ShoulderRidingEntity {
 
     @Unique
     private long tfg$nextFeedTime = Long.MIN_VALUE;
-
-    @Unique
-    private TagKey<Item> tfg$barrelTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "barrels"));
 
     protected SnatcherMixin(EntityType<? extends ShoulderRidingEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -120,7 +114,7 @@ public abstract class SnatcherMixin extends ShoulderRidingEntity {
             cir.setReturnValue(InteractionResult.sidedSuccess(this.level().isClientSide));
         } else if (this.isTame() && player.getUUID().equals(this.getOwnerUUID())) {
             if (player.isShiftKeyDown()) {
-                if (held.is(tfg$barrelTag) && !this.hasBarrel()) {
+                if (held.is(Tags.Items.CHESTS) && !this.hasBarrel()) {
                     ((Snatcher) (Object) this).setBarrel(true);
                     held.shrink(1);
                     cir.setReturnValue(InteractionResult.CONSUME);
