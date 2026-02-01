@@ -1,12 +1,12 @@
 package su.terrafirmagreg.core.common.atmosphere;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Nullable;
 
@@ -59,9 +59,13 @@ public class DimensionAtmosphereManager {
     private final ConcurrentLinkedQueue<PendingResult> pendingResults = new ConcurrentLinkedQueue<>();
 
     /**
-     * Rooms currently being filled asynchronously.
+     * Executor for async flood fills. Bounded to prevent overload.
      */
-    private final Set<BlockPos> asyncFillsInProgress = new HashSet<>();
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(2, r -> {
+        Thread t = new Thread(r, "AtmosphereFloodFill");
+        t.setDaemon(true);
+        return t;
+    });
 
     public DimensionAtmosphereManager(ServerLevel level) {
         this.level = level;
@@ -95,21 +99,26 @@ public class DimensionAtmosphereManager {
         AtmosphereRoom room = rooms.remove(pos);
         if (room != null) {
             // Remove from chunk index
-            for (ChunkPos chunkPos : room.getScan().touchedChunks()) {
-                Set<AtmosphereRoom> roomsInChunk = chunkIndex.get(chunkPos);
-                if (roomsInChunk != null) {
-                    roomsInChunk.remove(room);
-                    if (roomsInChunk.isEmpty()) {
-                        chunkIndex.remove(chunkPos);
-                    }
-                }
-            }
+            removeFromChunkIndex(room);
 
             // Notify the room it's being removed
             room.setInactive();
         }
+    }
 
-        asyncFillsInProgress.remove(pos);
+    /**
+     * Removes a room from all chunks in the index.
+     */
+    private void removeFromChunkIndex(AtmosphereRoom room) {
+        for (ChunkPos chunkPos : room.getScan().touchedChunks()) {
+            Set<AtmosphereRoom> roomsInChunk = chunkIndex.get(chunkPos);
+            if (roomsInChunk != null) {
+                roomsInChunk.remove(room);
+                if (roomsInChunk.isEmpty()) {
+                    chunkIndex.remove(chunkPos);
+                }
+            }
+        }
     }
 
     /**
@@ -232,29 +241,18 @@ public class DimensionAtmosphereManager {
         // Process pending async results first
         processPendingResults();
 
-        // Process dirty rooms
-        List<AtmosphereRoom> roomsToValidate = new ArrayList<>();
+        // Submit rooms that need validation
         for (AtmosphereRoom room : rooms.values()) {
-            if (room.canRevalidate(currentTick) && !asyncFillsInProgress.contains(room.getProvider().getPosition())) {
-                roomsToValidate.add(room);
-            }
-        }
-
-        // Stagger validation to avoid lag spikes
-        // Use position hash to distribute work across ticks
-        for (AtmosphereRoom room : roomsToValidate) {
-            BlockPos pos = room.getProvider().getPosition();
-            int hash = pos.hashCode();
-            if ((hash & 0xF) == (currentTick & 0xF)) {
-                validateRoom(room, currentTick);
+            if (room.shouldValidate(currentTick)) {
+                submitValidation(room, currentTick);
             }
         }
     }
 
     /**
-     * Validates a room by performing a flood fill.
+     * Submits a room for async validation.
      */
-    private void validateRoom(AtmosphereRoom room, long currentTick) {
+    private void submitValidation(AtmosphereRoom room, long currentTick) {
         IAtmosphereProvider provider = room.getProvider();
 
         // Check if provider is still active
@@ -264,43 +262,39 @@ public class DimensionAtmosphereManager {
         }
 
         room.onRevalidationStarted(currentTick);
+        room.setValidating(true);
 
-        // Determine start position (one block from machine)
-        BlockPos machinePos = provider.getPosition();
-        BlockPos startPos = machinePos.above(); // Start above the machine
-
-        // Create config for this provider
-        FloodFillConfig config = new FloodFillConfig(
-                provider.getMaxRoomSize(),
-                provider.getMaxHorizontalDimension());
-
-        // Perform flood fill synchronously for now
-        // TODO: Make async for large rooms
-        RoomScan result = FloodFill.fill(level, level, startPos, config);
-
-        // Update room from result
-        room.updateFromResult(result);
-
-        // Update chunk index
-        updateChunkIndex(room);
+        // Submit async flood fill
+        EXECUTOR.submit(() -> {
+            try {
+                RoomScan result = room.runFloodFill(level);
+                pendingResults.add(new PendingResult(room, result));
+            } catch (Exception e) {
+                TFGCore.LOGGER.error("Flood fill failed for room at {}", provider.getPosition(), e);
+                room.setValidating(false);
+            }
+        });
     }
 
     /**
-     * Updates the chunk index for a room after its interior changes.
+     * Updates the chunk index using a diff (more efficient than full rebuild).
+     *
+     * @param room The room being updated
+     * @param diff The chunk diff from updateFromResult
      */
-    private void updateChunkIndex(AtmosphereRoom room) {
-        // First, remove from all chunks
-        for (Map.Entry<ChunkPos, Set<AtmosphereRoom>> entry : chunkIndex.entrySet()) {
-            entry.getValue().remove(room);
+    private void updateChunkIndex(AtmosphereRoom room, AtmosphereRoom.ChunkDiff diff) {
+        for (ChunkPos chunk : diff.toRemove()) {
+            Set<AtmosphereRoom> set = chunkIndex.get(chunk);
+            if (set != null) {
+                set.remove(room);
+                if (set.isEmpty()) {
+                    chunkIndex.remove(chunk);
+                }
+            }
         }
-
-        // Then add to new chunks
-        for (ChunkPos chunkPos : room.getScan().touchedChunks()) {
-            chunkIndex.computeIfAbsent(chunkPos, k -> new HashSet<>()).add(room);
+        for (ChunkPos chunk : diff.toAdd()) {
+            chunkIndex.computeIfAbsent(chunk, k -> new HashSet<>()).add(room);
         }
-
-        // Clean up empty entries
-        chunkIndex.entrySet().removeIf(e -> e.getValue().isEmpty());
     }
 
     /**
@@ -309,13 +303,11 @@ public class DimensionAtmosphereManager {
     private void processPendingResults() {
         PendingResult pending;
         while ((pending = pendingResults.poll()) != null) {
-            BlockPos pos = pending.machinePos;
-            asyncFillsInProgress.remove(pos);
-
-            AtmosphereRoom room = rooms.get(pos);
-            if (room != null) {
-                room.updateFromResult(pending.result);
-                updateChunkIndex(room);
+            AtmosphereRoom room = pending.room;
+            // Check room is still registered (might have been removed during async fill)
+            if (rooms.containsKey(room.getProvider().getPosition())) {
+                AtmosphereRoom.ChunkDiff diff = room.updateFromResult(pending.result);
+                updateChunkIndex(room, diff);
             }
         }
     }
@@ -407,7 +399,7 @@ public class DimensionAtmosphereManager {
     /**
      * Pending async result holder.
      */
-    private record PendingResult(BlockPos machinePos, RoomScan result) {
+    private record PendingResult(AtmosphereRoom room, RoomScan result) {
     }
 
     /**

@@ -1,11 +1,18 @@
 package su.terrafirmagreg.core.common.atmosphere;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.Nullable;
 
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 
+import su.terrafirmagreg.core.utils.atmosphere.FloodFill;
+import su.terrafirmagreg.core.utils.atmosphere.FloodFillConfig;
 import su.terrafirmagreg.core.utils.atmosphere.FloodFillStatus;
 
 /**
@@ -49,6 +56,11 @@ public class AtmosphereRoom {
     @Getter
     private boolean isDirty = true;
 
+    /** Whether an async validation is in progress */
+    @Getter
+    @Setter
+    private boolean isValidating = false;
+
     // Revalidation timing
     private long lastRevalidationTick = 0;
     private long earliestRevalidationTick = 0;
@@ -90,6 +102,38 @@ public class AtmosphereRoom {
     }
 
     /**
+     * Checks if this room should be validated this tick (includes stagger check).
+     *
+     * @param currentTick Current game tick
+     * @return true if should validate now
+     */
+    public boolean shouldValidate(long currentTick) {
+        if (!canRevalidate(currentTick) || isValidating) {
+            return false;
+        }
+        // Stagger based on position hash
+        int hash = provider.getPosition().hashCode();
+        return (hash & 0xF) == (currentTick & 0xF);
+    }
+
+    /**
+     * Runs the flood fill algorithm. Can be called from async thread.
+     *
+     * @param level The server level
+     * @return The room scan result
+     */
+    public RoomScan runFloodFill(ServerLevel level) {
+        BlockPos machinePos = provider.getPosition();
+        BlockPos startPos = machinePos.above(); // Start above the machine
+
+        FloodFillConfig config = new FloodFillConfig(
+                provider.getMaxRoomSize(),
+                provider.getMaxHorizontalDimension());
+
+        return FloodFill.fill(level, level, startPos, config);
+    }
+
+    /**
      * Gets the revalidation delay based on room size.
      * Larger rooms get longer delays to avoid excessive recalculation.
      *
@@ -118,12 +162,29 @@ public class AtmosphereRoom {
     }
 
     /**
+     * Chunk index update info.
+     */
+    public record ChunkDiff(Set<ChunkPos> toRemove, Set<ChunkPos> toAdd) {}
+
+    /**
      * Updates the room state from a room scan.
      *
      * @param result The room scan result
+     * @return ChunkDiff for updating the manager's chunk index
      */
-    public void updateFromResult(RoomScan result) {
+    public ChunkDiff updateFromResult(RoomScan result) {
         this.isDirty = false;
+        this.isValidating = false;
+
+        // Compute chunk diff before updating scan
+        Set<ChunkPos> oldChunks = this.scan.touchedChunks();
+        Set<ChunkPos> newChunks = result.touchedChunks();
+
+        Set<ChunkPos> toRemove = new HashSet<>(oldChunks);
+        toRemove.removeAll(newChunks);
+
+        Set<ChunkPos> toAdd = new HashSet<>(newChunks);
+        toAdd.removeAll(oldChunks);
 
         // Track previous sealed state for breach detection
         boolean previouslySealed = this.wasSealed;
@@ -162,6 +223,8 @@ public class AtmosphereRoom {
 
         // Notify provider of state change
         provider.onRoomStateChanged(this);
+
+        return new ChunkDiff(toRemove, toAdd);
     }
 
     /**
