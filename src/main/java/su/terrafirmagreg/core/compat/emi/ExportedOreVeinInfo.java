@@ -120,7 +120,7 @@ package su.terrafirmagreg.core.compat.emi;
 				null),
 			new OreVeinInfoRecipe("normal_graphite", "minecraft:overworld", 
 				80, 0.4, -64, -16, 16, 6, 0, new String[] {
-				"tfc:rock/raw/gabbro","tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/quartzite","tfc:rock/raw/phyllite","tfc:rock/raw/slate","tfc:rock/raw/marble","tfc:rock/raw/dacite","tfc:rock/raw/rhyolite","tfc:rock/raw/andesite","tfc:rock/raw/basalt","tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"tfc:rock/raw/gabbro","tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/quartzite","tfc:rock/raw/phyllite","tfc:rock/raw/slate","tfc:rock/raw/marble","tfc:rock/raw/dacite","tfc:rock/raw/rhyolite","tfc:rock/raw/andesite","tfc:rock/raw/basalt",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("graphite", 45),new OreVeinInfoRecipe.WeightedBlock("diamond", 25),new OreVeinInfoRecipe.WeightedBlock("coal", 30),},
 				null),
 			new OreVeinInfoRecipe("normal_gypsum", "minecraft:overworld", 
