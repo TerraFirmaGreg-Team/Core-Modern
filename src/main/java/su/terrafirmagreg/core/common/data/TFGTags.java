@@ -27,9 +27,8 @@ public final class TFGTags {
         public static final TagKey<Item> OreProspectorsBlueSteel = createItemTag("tfg:tools/ore_prospectors/blue_steel");
         public static final TagKey<Item> OreProspectorsRedSteel = createItemTag("tfg:tools/ore_prospectors/red_steel");
 
-        public static final TagKey<Item> GlacianRamFood = createItemTag("tfg:glacian_ram_food");
-        public static final TagKey<Item> SnifferFood = createItemTag("tfg:sniffer_food");
-        public static final TagKey<Item> WraptorFood = createItemTag("tfg:wraptor_food");
+        public static final TagKey<Item> MartianHerbivoreFoods = createItemTag("tfg:martian_herbivore_foods");
+        public static final TagKey<Item> MartianPiscivoreFoods = createItemTag("tfg:martian_piscivore_foods");
         public static final TagKey<Item> EmptySyringe = createItemTag("tfg:empty_dna_syringes");
 
         public static final TagKey<Item> InsulatingContainer = createItemTag("tfg:insulating_container");
