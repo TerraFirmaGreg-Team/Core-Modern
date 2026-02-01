@@ -21,7 +21,7 @@ import net.wanmine.wab.init.data.WabTags;
 @Mixin(value = Raider.class)
 public abstract class RaiderMixin extends Animal {
 
-    @Shadow
+    @Shadow(remap = false)
     private int neutralTick;
 
     protected RaiderMixin(EntityType<? extends Animal> pEntityType, Level pLevel) {

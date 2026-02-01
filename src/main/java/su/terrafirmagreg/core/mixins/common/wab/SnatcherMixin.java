@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.wab;
 
-import net.minecraftforge.common.Tags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,6 +22,7 @@ import net.minecraft.world.entity.animal.ShoulderRidingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.Tags;
 import net.wanmine.wab.entity.Snatcher;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
@@ -31,7 +31,7 @@ import su.terrafirmagreg.core.common.data.entities.snatcher.SnatcherData;
 @Mixin(value = Snatcher.class)
 public abstract class SnatcherMixin extends ShoulderRidingEntity {
 
-    @Shadow
+    @Shadow(remap = false)
     public abstract boolean hasBarrel();
 
     @Unique
@@ -83,7 +83,7 @@ public abstract class SnatcherMixin extends ShoulderRidingEntity {
 
     @Unique
     public boolean tfg$isFood(ItemStack stack) {
-        return !FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFGTags.Items.MartianCarnivoreFoods);
+        return !FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFGTags.Items.MartianPiscivoreFoods);
     }
 
     @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)

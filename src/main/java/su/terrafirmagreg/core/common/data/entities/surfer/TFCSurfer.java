@@ -169,7 +169,7 @@ public class TFCSurfer extends Surfer implements BrainBreeder {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return !FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFGTags.Items.MartianCarnivoreFoods);
+        return !FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFGTags.Items.MartianPiscivoreFoods);
     }
 
     @Override

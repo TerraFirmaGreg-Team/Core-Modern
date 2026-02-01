@@ -96,7 +96,7 @@ public abstract class SoarerMixin extends TamableAnimal {
     // Soarers eat the same thing as Surfers
     @Inject(method = "isFood", at = @At("HEAD"), cancellable = true)
     public void tfg$isFood(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(!FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFGTags.Items.MartianCarnivoreFoods));
+        cir.setReturnValue(!FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFGTags.Items.MartianPiscivoreFoods));
     }
 
     @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)
