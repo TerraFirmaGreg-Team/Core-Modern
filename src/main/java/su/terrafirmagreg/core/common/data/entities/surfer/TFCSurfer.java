@@ -35,10 +35,10 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.ForgeMod;
 import net.wanmine.wab.entity.Surfer;
 import net.wanmine.wab.entity.Toxlacanth;
-import net.wanmine.wab.init.data.WabTags;
 
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGEntities;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 /**
  * Most of this code is copied and pasted from TFCFrog, because it's a very simple animal that only has
@@ -67,15 +67,15 @@ public class TFCSurfer extends Surfer implements BrainBreeder {
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, SpawnGroupData groupData, CompoundTag tag) {
         float r = random.nextFloat();
         if (r > 0.9)
-            this.setCoralColor("brain");
+            this.setVariant(Variant.BRAIN);
         else if (r > 0.8)
-            this.setCoralColor("bubble");
+            this.setVariant(Variant.BUBBLE);
         else if (r > 0.7)
-            this.setCoralColor("tube");
+            this.setVariant(Variant.TUBE);
         else if (r > 0.6)
-            this.setCoralColor("fire");
+            this.setVariant(Variant.FIRE);
         else if (r > 0.5)
-            this.setCoralColor("horn");
+            this.setVariant(Variant.HORN);
 
         setIsMale(random.nextBoolean());
         return super.finalizeSpawn(level, difficulty, spawnType, groupData, tag);
@@ -169,7 +169,7 @@ public class TFCSurfer extends Surfer implements BrainBreeder {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return !FoodCapability.isRotten(stack) && Helpers.isItem(stack, WabTags.Items.SURFER_FOOD);
+        return !FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFGTags.Items.MartianPiscivoreFoods);
     }
 
     @Override
@@ -190,7 +190,7 @@ public class TFCSurfer extends Surfer implements BrainBreeder {
                     playSound(SoundEvents.FROG_EAT);
                 }
             }
-            return InteractionResult.SUCCESS;
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         return super.mobInteract(player, hand);
     }
