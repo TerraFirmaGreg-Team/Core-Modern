@@ -48,6 +48,7 @@ import net.minecraftforge.fluids.FluidType;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGPartAbility;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine.InterplanetaryLogisticsMonitorMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
