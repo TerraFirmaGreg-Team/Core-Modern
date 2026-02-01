@@ -1,6 +1,6 @@
-package su.terrafirmagreg.core.utils.atmosphere;
+package su.terrafirmagreg.core.common.atmosphere;
 
-import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
+import static su.terrafirmagreg.core.common.atmosphere.AtmosphereHelpers.*;
 
 import javax.annotation.Nullable;
 

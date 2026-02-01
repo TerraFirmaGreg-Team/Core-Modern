@@ -1,13 +1,12 @@
-package su.terrafirmagreg.core.utils.atmosphere;
+package su.terrafirmagreg.core.common.atmosphere;
 
-import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
-import static su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassableResult;
+import static su.terrafirmagreg.core.common.atmosphere.AtmosphereHelpers.*;
+import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassableResult;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import su.terrafirmagreg.core.common.atmosphere.RoomScan;
 
 /**
  * Flood fill algorithm for atmosphere room detection.

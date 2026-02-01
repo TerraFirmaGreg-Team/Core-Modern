@@ -1,7 +1,7 @@
-package su.terrafirmagreg.core.utils.atmosphere;
+package su.terrafirmagreg.core.common.atmosphere;
 
-import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
-import static su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassCache.PassType.*;
+import static su.terrafirmagreg.core.common.atmosphere.AtmosphereHelpers.*;
+import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassCache.PassType.*;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;

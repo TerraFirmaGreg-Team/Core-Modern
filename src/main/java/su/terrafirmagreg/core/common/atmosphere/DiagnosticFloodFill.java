@@ -1,6 +1,6 @@
-package su.terrafirmagreg.core.utils.atmosphere;
+package su.terrafirmagreg.core.common.atmosphere;
 
-import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
+import static su.terrafirmagreg.core.common.atmosphere.AtmosphereHelpers.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,6 @@ import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import su.terrafirmagreg.core.common.atmosphere.RoomScan;
 
 /**
  * Diagnostic version of flood fill that finds the shortest path to the escape point.

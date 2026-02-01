@@ -12,7 +12,6 @@ import net.minecraft.world.phys.AABB;
 
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import su.terrafirmagreg.core.utils.atmosphere.FloodFillStatus;
 
 /**
  * Represents a scanned room's spatial data and seal status.

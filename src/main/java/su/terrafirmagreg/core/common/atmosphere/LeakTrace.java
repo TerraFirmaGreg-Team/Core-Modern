@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.utils.atmosphere;
+package su.terrafirmagreg.core.common.atmosphere;
 
 import java.util.ArrayList;
 import java.util.List;

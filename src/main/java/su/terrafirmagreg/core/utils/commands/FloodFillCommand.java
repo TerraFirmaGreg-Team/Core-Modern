@@ -16,9 +16,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.atmosphere.DiagnosticFloodFill;
+import su.terrafirmagreg.core.common.atmosphere.FloodFill;
+import su.terrafirmagreg.core.common.atmosphere.FloodFillConfig;
+import su.terrafirmagreg.core.common.atmosphere.LeakTrace;
 import su.terrafirmagreg.core.common.atmosphere.RoomScan;
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.utils.atmosphere.*;
 
 public class FloodFillCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

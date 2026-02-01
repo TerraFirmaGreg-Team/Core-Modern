@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.utils.atmosphere;
+package su.terrafirmagreg.core.common.atmosphere;
 
 /**
  * Configuration for flood fill operations.
