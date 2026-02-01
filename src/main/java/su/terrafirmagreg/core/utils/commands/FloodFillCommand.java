@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.atmosphere.RoomScan;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.utils.atmosphere.*;
 

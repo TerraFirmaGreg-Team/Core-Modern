@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 
 import su.terrafirmagreg.core.utils.atmosphere.FloodFillStatus;
-import su.terrafirmagreg.core.utils.atmosphere.RoomScan;
 
 /**
  * Tracks the state of an atmosphere room for a single machine.

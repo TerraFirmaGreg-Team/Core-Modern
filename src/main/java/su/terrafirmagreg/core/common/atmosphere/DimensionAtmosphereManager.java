@@ -22,7 +22,6 @@ import net.minecraftforge.event.level.BlockEvent;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.utils.atmosphere.FloodFill;
 import su.terrafirmagreg.core.utils.atmosphere.FloodFillConfig;
-import su.terrafirmagreg.core.utils.atmosphere.RoomScan;
 import su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassCache;
 import su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassCache.PassType;
 

@@ -16,6 +16,7 @@ import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import su.terrafirmagreg.core.common.atmosphere.RoomScan;
 
 /**
  * Diagnostic version of flood fill that finds the shortest path to the escape point.
