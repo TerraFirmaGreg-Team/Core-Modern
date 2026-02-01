@@ -21,8 +21,6 @@ import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.BlockPos;
@@ -36,11 +34,10 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import lombok.Getter;
-
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.NetworkSenderConfigEntry;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
@@ -50,13 +47,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             InterplanetaryItemLauncherMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    @Persisted
-    @DescSynced
-    @Getter
-    public long energyBuffer;
-    public static long energyCapacity = GTValues.V[GTValues.HV] * 32;
-
-    protected TickableSubscription energyTickSubscription;
     protected TickableSubscription tickSubscription;
 
     private EnergyContainerList energyInputs;
@@ -68,7 +58,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     public InterplanetaryItemLauncherMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
-        energyBuffer = 0;
     }
 
     public InterplanetaryItemLauncherMachine getMachine() {
@@ -83,7 +72,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     @Override
     public void setWorkingEnabled(boolean isWorkingAllowed) {
         super.setWorkingEnabled(isWorkingAllowed);
-        updateEnergySubscription();
         updateSubscription();
     }
 
@@ -141,7 +129,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         }
 
         energyInputs = new EnergyContainerList(energyHatches);
-        updateEnergySubscription();
         updateSubscription();
     }
 
@@ -149,7 +136,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     public void onStructureInvalid() {
         super.onStructureInvalid();
         energyInputs = null;
-        energyBuffer = 0;
         ammoLoaderPart = null;
         itemInputs.clear();
     }
@@ -166,17 +152,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         return parts;
     }
 
-    private void updateEnergySubscription() {
-        if (isRemote())
-            return;
-        if (isFormed()) {
-            energyTickSubscription = subscribeServerTick(energyTickSubscription, this::energyTick);
-        } else {
-            if (energyTickSubscription != null)
-                energyTickSubscription.unsubscribe();
-        }
-    }
-
     private void updateSubscription() {
         if (isRemote())
             return;
@@ -186,14 +161,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             if (tickSubscription != null)
                 tickSubscription.unsubscribe();
         }
-    }
-
-    private void energyTick() {
-        // Transfer energy from inputs into the multiblock
-        if (isWorkingEnabled() && isFormed() && energyInputs != null && energyBuffer < energyCapacity) {
-            energyBuffer += energyInputs.removeEnergy(Math.min(energyCapacity - energyBuffer, GTValues.V[GTValues.MV]));
-        }
-        updateEnergySubscription();
     }
 
     private void tick() {
@@ -292,10 +259,69 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 || itemsToExtract.isEmpty() || itemsToExtract.stream().allMatch(ItemStack::isEmpty))
             return false;
         ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
-        energyBuffer -= 16 * GTValues.V[GTValues.HV];
+        energyInputs.removeEnergy(16 * GTValues.V[GTValues.HV]);
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
-        if (extracted)
-            receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20 * travelTime);
+        if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20 * travelTime);
+        launchEffects();
+        return true;
+    }
+
+    @Override
+    public Component getCurrentStatusText() {
+        if (!isFormed())
+            return Component.literal("§cMultiblock not formed");
+        return null;
+    }
+
+    @Override
+    public void addDisplayText(@NotNull List<Component> textList) {
+        MultiblockDisplayText.builder(textList, isFormed())
+                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
+                .addWorkingStatusLine();
+
+        textList.add(Component.literal("Power stored: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyStored()))));
+        textList.add(Component.literal("Power capacity: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyCapacity()))));
+
+        for (var part : this.getParts()) {
+            part.addMultiText(textList);
+        }
+    }
+
+    private boolean tryExtractFromCircuitInventory(List<ItemStack> toExtract, int circuit, boolean simulated) {
+        List<ItemStack> remainingItems = new ArrayList<>();
+        for (var v : toExtract) {
+            remainingItems.add(v.copy());
+        }
+        var itemBuses = itemInputs.stream().filter(
+                (c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == circuit
+                        && c.isWorkingEnabled())
+                .toList();
+        for (RailgunItemBusMachine bus : itemBuses) {
+            tryExtractFromInventory(remainingItems, bus.getInventory().storage, simulated);
+            if (remainingItems.isEmpty())
+                return true;
+        }
+        return false;
+    }
+
+    private static void tryExtractFromInventory(List<ItemStack> remainingItems, CustomItemStackHandler inventory,
+            boolean simulated) {
+        for (var iter = remainingItems.listIterator(); iter.hasNext();) {
+            var stack = iter.next();
+            for (int slotIndex = 0; slotIndex < inventory.getSlots(); slotIndex++) {
+                if (ItemStack.isSameItem(inventory.getStackInSlot(slotIndex), stack)) {
+                    var extracted = inventory.extractItem(slotIndex, stack.getCount(), simulated);
+                    stack.setCount(stack.getCount() - extracted.getCount());
+                }
+                if (stack.getCount() == 0) {
+                    iter.remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void launchEffects() {
         if (getLevel() instanceof ServerLevel serverLevel) {
             BlockPos basePos = this.getPos();
             BlockState state = this.getBlockState();
@@ -373,62 +399,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                     explosionSound,
                     10.0f,
                     2.0f);
-        }
-        return true;
-    }
-
-    @Override
-    public Component getCurrentStatusText() {
-        if (!isFormed())
-            return Component.literal("§cMultiblock not formed");
-        return null;
-    }
-
-    @Override
-    public void addDisplayText(@NotNull List<Component> textList) {
-        MultiblockDisplayText.builder(textList, isFormed())
-                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                .addWorkingStatusLine();
-
-        textList.add(Component.literal("Power stored: %s".formatted(FormattingUtil.formatNumbers(energyBuffer))));
-        textList.add(Component.literal("Power capacity: %s".formatted(FormattingUtil.formatNumbers(energyCapacity))));
-
-        for (var part : this.getParts()) {
-            part.addMultiText(textList);
-        }
-    }
-
-    private boolean tryExtractFromCircuitInventory(List<ItemStack> toExtract, int circuit, boolean simulated) {
-        List<ItemStack> remainingItems = new ArrayList<>();
-        for (var v : toExtract) {
-            remainingItems.add(v.copy());
-        }
-        var itemBuses = itemInputs.stream().filter(
-                (c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == circuit
-                        && c.isWorkingEnabled())
-                .toList();
-        for (RailgunItemBusMachine bus : itemBuses) {
-            tryExtractFromInventory(remainingItems, bus.getInventory().storage, simulated);
-            if (remainingItems.isEmpty())
-                return true;
-        }
-        return false;
-    }
-
-    private static void tryExtractFromInventory(List<ItemStack> remainingItems, CustomItemStackHandler inventory,
-            boolean simulated) {
-        for (var iter = remainingItems.listIterator(); iter.hasNext();) {
-            var stack = iter.next();
-            for (int slotIndex = 0; slotIndex < inventory.getSlots(); slotIndex++) {
-                if (ItemStack.isSameItem(inventory.getStackInSlot(slotIndex), stack)) {
-                    var extracted = inventory.extractItem(slotIndex, stack.getCount(), simulated);
-                    stack.setCount(stack.getCount() - extracted.getCount());
-                }
-                if (stack.getCount() == 0) {
-                    iter.remove();
-                    break;
-                }
-            }
         }
     }
 }
