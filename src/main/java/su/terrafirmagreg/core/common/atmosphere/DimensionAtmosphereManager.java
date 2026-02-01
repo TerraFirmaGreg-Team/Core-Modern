@@ -10,13 +10,23 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.Nullable;
 
+import appeng.api.networking.events.GridSpatialEvent;
+import appeng.api.networking.spatial.ISpatialService;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.event.level.BlockEvent;
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.utils.atmosphere.FloodFill;
 import su.terrafirmagreg.core.utils.atmosphere.FloodFillConfig;
-import su.terrafirmagreg.core.utils.atmosphere.FloodFillResult;
+import su.terrafirmagreg.core.utils.atmosphere.RoomScan;
+import su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassCache;
+import su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassCache.PassType;
+
+import static su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.getPassCache;
 
 /**
  * Manages atmosphere providers for a single dimension.
@@ -24,6 +34,8 @@ import su.terrafirmagreg.core.utils.atmosphere.FloodFillResult;
  */
 public class DimensionAtmosphereManager {
 
+    /** The level this manager is for */
+    @Getter
     private final ServerLevel level;
 
     /**
@@ -84,7 +96,7 @@ public class DimensionAtmosphereManager {
         AtmosphereRoom room = rooms.remove(pos);
         if (room != null) {
             // Remove from chunk index
-            for (ChunkPos chunkPos : room.getInterior().getTouchedChunks()) {
+            for (ChunkPos chunkPos : room.getScan().touchedChunks()) {
                 Set<AtmosphereRoom> roomsInChunk = chunkIndex.get(chunkPos);
                 if (roomsInChunk != null) {
                     roomsInChunk.remove(room);
@@ -123,18 +135,77 @@ public class DimensionAtmosphereManager {
      * Called when a block changes in this dimension.
      * Marks affected rooms as dirty for revalidation.
      *
-     * @param pos Position of the changed block
+     * @param event The event that changes the block
      */
-    public void onBlockChanged(BlockPos pos) {
+    public void onBlockChanged(BlockEvent event) {
+        BlockPos pos = event.getPos();
         ChunkPos chunkPos = new ChunkPos(pos);
         Set<AtmosphereRoom> roomsInChunk = chunkIndex.get(chunkPos);
         if (roomsInChunk == null) {
             return;
         }
+        if (event instanceof BlockEvent.BreakEvent breakEvent) {
+            TFGCore.LOGGER.warn("breakEvent {}", breakEvent.getState());
+            PassCache before = getPassCache(level, pos, breakEvent.getState());
+            if (before.type() == PassType.EMPTY) {
+                TFGCore.LOGGER.warn("Ignored");
+                return;
+            }
 
+        } else if (event instanceof BlockEvent.EntityPlaceEvent placeEvent) {
+            TFGCore.LOGGER.warn("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
+            PassCache before = getPassCache(level, pos, placeEvent.getBlockSnapshot().getReplacedBlock());
+            PassCache after = getPassCache(level, pos, placeEvent.getPlacedBlock());
+            if (before.equals(after)) {
+                TFGCore.LOGGER.warn("Ignored");
+                return;
+            }
+
+
+        } else if (event instanceof BlockEvent.NeighborNotifyEvent nighEvent) {
+            TFGCore.LOGGER.warn("nighEvent {}", nighEvent.getState());
+            PassCache current = getPassCache(level, pos, nighEvent.getState());
+            if (current.type() == PassType.EMPTY || current.type() == PassType.FULL) {
+                TFGCore.LOGGER.warn("Ignored");
+                // Assuming that EMPTY and FULL blocks never change from EMPTY or FULL.
+                return;
+            }
+        }
+
+        TFGCore.LOGGER.warn("Mark Dirty");
         for (AtmosphereRoom room : roomsInChunk) {
             if (room.isPositionRelevant(pos)) {
                 room.markDirty();
+            }
+        }
+    }
+
+    /**
+     * Called when an AE2 spatial IO event happens.
+     * Marks affected rooms as dirty for revalidation.
+     *
+     * @param spatialService Object that provides information on the spatial bounds
+     * @param event The spatial IO event itself
+     */
+    public void onGridSpatialEvent(ISpatialService spatialService, GridSpatialEvent event) {
+        BlockPos min = spatialService.getMin();
+        BlockPos max = spatialService.getMax();
+        ChunkPos minChunk = new ChunkPos(min);
+        ChunkPos maxChunk = new ChunkPos(max);
+
+        for (int cx = minChunk.x; cx <= maxChunk.x; cx++) {
+            for (int cz = minChunk.z; cz <= maxChunk.z; cz++) {
+                Set<AtmosphereRoom> rooms = chunkIndex.get(new ChunkPos(cx, cz));
+                if (rooms == null) continue;
+
+                AABB spatialAabb = new AABB(min, max);
+                for (AtmosphereRoom room : rooms) {
+                    if (spatialAabb.intersects(room.getScan().bounds())) {
+                        // Technically the AABB can overlap without any of the room being in the spatial event.
+                        //  However this is way faster and spatial events are rare anyway.
+                        room.markDirty();
+                    }
+                }
             }
         }
     }
@@ -206,7 +277,7 @@ public class DimensionAtmosphereManager {
 
         // Perform flood fill synchronously for now
         // TODO: Make async for large rooms
-        FloodFillResult result = FloodFill.fill(level, level, startPos, config);
+        RoomScan result = FloodFill.fill(level, level, startPos, config);
 
         // Update room from result
         room.updateFromResult(result);
@@ -225,7 +296,7 @@ public class DimensionAtmosphereManager {
         }
 
         // Then add to new chunks
-        for (ChunkPos chunkPos : room.getInterior().getTouchedChunks()) {
+        for (ChunkPos chunkPos : room.getScan().touchedChunks()) {
             chunkIndex.computeIfAbsent(chunkPos, k -> new HashSet<>()).add(room);
         }
 
@@ -321,13 +392,6 @@ public class DimensionAtmosphereManager {
     }
 
     /**
-     * @return The level this manager is for
-     */
-    public ServerLevel getLevel() {
-        return level;
-    }
-
-    /**
      * @return Number of registered flood-fill rooms
      */
     public int getRoomCount() {
@@ -344,7 +408,7 @@ public class DimensionAtmosphereManager {
     /**
      * Pending async result holder.
      */
-    private record PendingResult(BlockPos machinePos, FloodFillResult result) {
+    private record PendingResult(BlockPos machinePos, RoomScan result) {
     }
 
     /**

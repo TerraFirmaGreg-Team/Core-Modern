@@ -21,7 +21,7 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
  * Diagnostic version of flood fill that finds the shortest path to the escape point.
  * Uses regular DFS flood fill first, then BFS through the interior to find shortest path.
  *
- * <p>Returns a {@link FloodFillResult} with the {@code escapePath} field populated.
+ * <p>Returns a {@link RoomScan} with the {@code escapePath} field populated.
  */
 public final class DiagnosticFloodFill {
 
@@ -40,12 +40,12 @@ public final class DiagnosticFloodFill {
      * @param heightAccessor Height accessor for build height limits
      * @param start Starting position
      * @param config Configuration for limits
-     * @return FloodFillResult with escapePath populated if there's an escape
+     * @return RoomScan with escapePath populated if there's an escape
      */
-    public static FloodFillResult fill(Level level, LevelHeightAccessor heightAccessor,
-            BlockPos start, FloodFillConfig config) {
+    public static RoomScan fill(Level level, LevelHeightAccessor heightAccessor,
+                                BlockPos start, FloodFillConfig config) {
         // Run regular flood fill to find the room and escape point
-        FloodFillResult result = FloodFill.fill(level, heightAccessor, start, config);
+        RoomScan result = FloodFill.fill(level, heightAccessor, start, config);
 
         // If no escape point, return as-is (sealed room or block limit)
         if (result.escapePoint() == null) {
@@ -59,13 +59,14 @@ public final class DiagnosticFloodFill {
                 result.escapePoint().asLong());
 
         // Return new result with the path
-        return new FloodFillResult(
+        return new RoomScan(
                 result.interior(),
                 result.envelope(),
                 result.status(),
                 result.escapePoint(),
                 shortestPath,
-                result.bounds());
+                result.bounds(),
+                result.touchedChunks());
     }
 
     /**

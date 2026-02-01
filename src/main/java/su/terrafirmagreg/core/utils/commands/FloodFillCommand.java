@@ -64,7 +64,7 @@ public class FloodFillCommand {
                 "Running flood fill from %s with max %d blocks...",
                 start.toShortString(), config.maxBlocks())), false);
 
-        FloodFillResult result;
+        RoomScan result;
         long startTime = System.nanoTime();
         if (diagnostic) {
             result = DiagnosticFloodFill.fill(level, level, start, config);

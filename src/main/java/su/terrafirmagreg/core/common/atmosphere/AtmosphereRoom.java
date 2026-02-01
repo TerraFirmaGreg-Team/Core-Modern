@@ -1,48 +1,53 @@
 package su.terrafirmagreg.core.common.atmosphere;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.annotation.Nullable;
 
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 
-import su.terrafirmagreg.core.utils.atmosphere.FloodFillResult;
-import su.terrafirmagreg.core.utils.atmosphere.RoomInterior;
+import su.terrafirmagreg.core.utils.atmosphere.FloodFillStatus;
+import su.terrafirmagreg.core.utils.atmosphere.RoomScan;
 
 /**
  * Tracks the state of an atmosphere room for a single machine.
  * Handles sealed/bubble/inactive modes, revalidation timing, and dirty state.
  */
+//TODO: All of this
 public class AtmosphereRoom {
 
     /**
      * Current operational mode of the room.
      */
     public enum Mode {
-        /**
-         * Room is fully sealed and providing atmosphere.
-         */
+        /** Room is fully sealed and providing atmosphere. */
         SEALED,
-        /**
-         * Room exceeds size limits, operating in bubble mode.
-         */
+        /** Room exceeds size limits, operating in bubble mode. */
         BUBBLE,
-        /**
-         * Machine is inactive (no power, disabled, etc.)
-         */
+        /** Machine is inactive (no power, disabled, etc.) */
         INACTIVE,
-        /**
-         * Room has incomplete data (unloaded chunks, pending fill, etc.)
-         */
+        /** Room has incomplete data (unloaded chunks, pending fill, etc.) */
         INCOMPLETE
     }
 
+    /** The provider (machine) for this room */
+    @Getter
     private final IAtmosphereProvider provider;
+
+    /** Current operational mode */
+    @Getter
     private Mode mode = Mode.INCOMPLETE;
-    private RoomInterior interior = RoomInterior.empty();
-    private float atmosphereLevel = 0.0f; // 0.0 = vacuum, 1.0 = full atmosphere
+
+    /** The room scan data (blocks, status, bounds) */
+    @Getter
+    private RoomScan scan = RoomScan.empty();
+
+    /** Current atmosphere level (0.0-1.0) */
+    @Getter
+    private float atmosphereLevel = 0.0f;
+
+    /** Whether this room needs revalidation */
+    @Getter
     private boolean isDirty = true;
 
     // Revalidation timing
@@ -51,9 +56,6 @@ public class AtmosphereRoom {
     private static final int MIN_REVALIDATION_DELAY = 1;
     private static final int BASE_REVALIDATION_DELAY = 10;
 
-    // Tracking for incomplete rooms
-    private final Set<ChunkPos> pendingChunks = new HashSet<>();
-
     // Escape point for vortex spawning (null if sealed)
     @Nullable
     private BlockPos escapePoint = null;
@@ -61,41 +63,6 @@ public class AtmosphereRoom {
 
     public AtmosphereRoom(IAtmosphereProvider provider) {
         this.provider = provider;
-    }
-
-    /**
-     * @return The provider (machine) for this room
-     */
-    public IAtmosphereProvider getProvider() {
-        return provider;
-    }
-
-    /**
-     * @return Current operational mode
-     */
-    public Mode getMode() {
-        return mode;
-    }
-
-    /**
-     * @return The room interior data
-     */
-    public RoomInterior getInterior() {
-        return interior;
-    }
-
-    /**
-     * @return Current atmosphere level (0.0-1.0)
-     */
-    public float getAtmosphereLevel() {
-        return atmosphereLevel;
-    }
-
-    /**
-     * @return Whether this room needs revalidation
-     */
-    public boolean isDirty() {
-        return isDirty;
     }
 
     /**
@@ -130,7 +97,7 @@ public class AtmosphereRoom {
      * @return Delay in ticks
      */
     public int getRevalidationDelay() {
-        int size = interior.getInteriorSize();
+        int size = scan.interiorSize();
         if (size < 1000) {
             return MIN_REVALIDATION_DELAY;
         } else if (size < 10000) {
@@ -152,36 +119,32 @@ public class AtmosphereRoom {
     }
 
     /**
-     * Updates the room state from a flood fill result.
+     * Updates the room state from a room scan.
      *
-     * @param result The flood fill result
+     * @param result The room scan result
      */
-    public void updateFromResult(FloodFillResult result) {
+    public void updateFromResult(RoomScan result) {
         this.isDirty = false;
 
         // Track previous sealed state for breach detection
         boolean previouslySealed = this.wasSealed;
 
-        // Update interior and escape point
-        this.interior = RoomInterior.fromFloodFillResult(result);
+        // Update scan and escape point
+        this.scan = result;
         this.escapePoint = result.escapePoint();
-
-        // Update pending chunks
-        this.pendingChunks.clear();
-        this.pendingChunks.addAll(result.unloadedChunks());
 
         // Determine new mode
         if (!provider.isActive()) {
             this.mode = Mode.INACTIVE;
             this.wasSealed = false;
-        } else if (result.hasUnloadedChunks()) {
+        } else if (result.status() == FloodFillStatus.ESCAPED_UNLOADED) {
             this.mode = Mode.INCOMPLETE;
             this.wasSealed = false;
-        } else if (!result.complete()) {
+        } else if (!result.isComplete()) {
             // Block limit exceeded - fall back to bubble mode
             this.mode = Mode.BUBBLE;
             this.wasSealed = false;
-        } else if (result.sealed()) {
+        } else if (result.isSealed()) {
             this.mode = Mode.SEALED;
             this.wasSealed = true;
         } else {
@@ -236,7 +199,7 @@ public class AtmosphereRoom {
         }
 
         return switch (mode) {
-            case SEALED -> interior.containsEnvelope(pos);
+            case SEALED -> scan.containsEnvelope(pos);
             case BUBBLE -> {
                 // In bubble mode, use distance-based check
                 BlockPos center = provider.getPosition();
@@ -249,24 +212,19 @@ public class AtmosphereRoom {
     }
 
     /**
-     * @return Set of chunks that were unloaded during the last fill
-     */
-    public Set<ChunkPos> getPendingChunks() {
-        return pendingChunks;
-    }
-
-    /**
      * Checks if a chunk becoming loaded might affect this room.
+     * If the room hit an unloaded chunk and this chunk is within bounds, revalidate.
      *
      * @param chunkPos Chunk that was loaded
-     * @return true if this room should be revalidated
      */
-    public boolean onChunkLoaded(ChunkPos chunkPos) {
-        if (pendingChunks.remove(chunkPos)) {
-            markDirty();
-            return true;
+    public void onChunkLoaded(ChunkPos chunkPos) {
+        if (mode != Mode.INCOMPLETE || scan.status() != FloodFillStatus.ESCAPED_UNLOADED) {
+            return;
         }
-        return false;
+
+        if (scan.touchedChunks().contains(chunkPos)) {
+            markDirty();
+        }
     }
 
     /**
@@ -277,13 +235,13 @@ public class AtmosphereRoom {
      */
     public boolean isPositionRelevant(BlockPos pos) {
         // Check if position is in envelope (block changes inside or on boundary matter)
-        if (interior.containsEnvelope(pos)) {
+        if (scan.containsEnvelope(pos)) {
             return true;
         }
 
         // Also check if position is adjacent to envelope (new blocks placed next to room)
         for (net.minecraft.core.Direction dir : net.minecraft.core.Direction.values()) {
-            if (interior.containsEnvelope(pos.relative(dir))) {
+            if (scan.containsEnvelope(pos.relative(dir))) {
                 return true;
             }
         }

@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.utils.atmosphere;
 /**
  * Status of the flood fill operation.
  */
+//TODO: Refactor
 public enum FloodFillStatus {
     /** Fill completed, room fully enclosed */
     SEALED,

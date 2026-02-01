@@ -5,11 +5,17 @@ import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.phys.AABB;
 
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Tracks state during a flood fill operation.
@@ -58,6 +64,8 @@ public class FloodFillState {
     int maxY = Integer.MIN_VALUE;
     int maxZ = Integer.MIN_VALUE;
 
+    Set<ChunkPos> touchedChunks = new HashSet<>();
+
     // Termination flags
     boolean hitBlockLimit = false;
     boolean hitDimensionLimit = false;
@@ -104,6 +112,52 @@ public class FloodFillState {
             return new AABB(0, 0, 0, 0, 0, 0);
         }
         return new AABB(minX, minY, minZ, maxX + 1, maxY + 1, maxZ + 1);
+    }
+
+    /**
+     * Updates bounds to include the given position.
+     * @return whether the position got processed without crossing any limits.
+     */
+    protected boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor, BlockPos pos, FloodFillConfig config) {
+
+        if (pos.getX() < minX || pos.getX() > maxX || pos.getZ() < minZ || pos.getZ() > maxZ) {
+            // Horizontal bounds expanded
+            minX = Math.min(minX, pos.getX());
+            maxX = Math.max(maxX, pos.getX());
+            minZ = Math.min(minZ, pos.getZ());
+            maxZ = Math.max(maxZ, pos.getZ());
+
+            touchedChunks.add(new ChunkPos(pos));
+
+            if (maxX - minX > config.maxHorizontalDimension()
+                    || maxZ - minZ > config.maxHorizontalDimension()) {
+                // Horizontal dimension limit exceeded
+                hitDimensionLimit = true;
+                setEscapePoint(pos.immutable());
+                return false;
+            }
+
+            if (!level.hasChunkAt(pos)) {
+                // Unloaded chunk encountered
+                hitUnloadedChunk = true;
+                setEscapePoint(pos.immutable());
+                return false;
+            }
+
+        } else if (pos.getY() < minY || pos.getY() > maxY) {
+            // Vertical bounds expanded
+            minY = Math.min(minY, pos.getY());
+            maxY = Math.max(maxY, pos.getY());
+
+            if (heightAccessor.isOutsideBuildHeight(pos.getY())) {
+                // Build height exceeded
+                hitBuildHeight = true;
+                setEscapePoint(pos.immutable());
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

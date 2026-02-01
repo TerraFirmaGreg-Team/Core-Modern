@@ -3,10 +3,15 @@ package su.terrafirmagreg.core.utils.atmosphere;
 import static su.terrafirmagreg.core.utils.atmosphere.AtmosphereHelpers.*;
 import static su.terrafirmagreg.core.utils.atmosphere.PassabilityChecker.PassableResult;
 
+import it.unimi.dsi.fastutil.longs.LongIterator;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Flood fill algorithm for atmosphere room detection.
@@ -34,10 +39,10 @@ public class FloodFill {
      * @param heightAccessor Height accessor for build height limits
      * @param start Starting position (typically one block from machine)
      * @param config Configuration for limits
-     * @return FloodFillResult containing the room data
+     * @return RoomScan containing the room data
      */
-    public static FloodFillResult fill(Level level, LevelHeightAccessor heightAccessor,
-            BlockPos start, FloodFillConfig config) {
+    public static RoomScan fill(Level level, LevelHeightAccessor heightAccessor,
+                                BlockPos start, FloodFillConfig config) {
         FloodFillState state = new FloodFillState();
 
         // Init
@@ -59,7 +64,7 @@ public class FloodFill {
 
             pos.set(posLong);
 
-            if (!updateAndCheckBounds(level, heightAccessor, state, pos, config)) {
+            if (!state.updateAndCheckBounds(level, heightAccessor, pos, config)) {
                 return buildResult(state);
             }
 
@@ -135,54 +140,9 @@ public class FloodFill {
     }
 
     /**
-     * Updates bounds to include the given position.
-     * @return whether the position got processed without crossing any limits.
-     */
-    protected static boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor,
-            FloodFillState state, BlockPos pos, FloodFillConfig config) {
-
-        if (pos.getX() < state.minX || pos.getX() > state.maxX || pos.getZ() < state.minZ || pos.getZ() > state.maxZ) {
-            // Horizontal bounds expanded
-            state.minX = Math.min(state.minX, pos.getX());
-            state.maxX = Math.max(state.maxX, pos.getX());
-            state.minZ = Math.min(state.minZ, pos.getZ());
-            state.maxZ = Math.max(state.maxZ, pos.getZ());
-
-            if (state.maxX - state.minX > config.maxHorizontalDimension()
-                    || state.maxZ - state.minZ > config.maxHorizontalDimension()) {
-                // Horizontal dimension limit exceeded
-                state.hitDimensionLimit = true;
-                state.setEscapePoint(pos.immutable());
-                return false;
-            }
-
-            if (!level.hasChunkAt(pos)) {
-                // Unloaded chunk encountered
-                state.hitUnloadedChunk = true;
-                state.setEscapePoint(pos.immutable());
-                return false;
-            }
-
-        } else if (pos.getY() < state.minY || pos.getY() > state.maxY) {
-            // Vertical bounds expanded
-            state.minY = Math.min(state.minY, pos.getY());
-            state.maxY = Math.max(state.maxY, pos.getY());
-
-            if (heightAccessor.isOutsideBuildHeight(pos.getY())) {
-                // Build height exceeded
-                state.hitBuildHeight = true;
-                state.setEscapePoint(pos.immutable());
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Builds the final result from the current state.
      */
-    protected static FloodFillResult buildResult(FloodFillState state) {
+    protected static RoomScan buildResult(FloodFillState state) {
         state.envelope.addAll(state.pendingShell);
         state.pendingShell.clear();
 
@@ -199,12 +159,13 @@ public class FloodFill {
             status = FloodFillStatus.SEALED;
         }
 
-        return new FloodFillResult(
+        return new RoomScan(
                 state.interior,
                 state.envelope,
                 status,
                 state.escapePoint,
                 null,
-                state.getBounds());
+                state.getBounds(),
+                state.touchedChunks);
     }
 }

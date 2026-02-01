@@ -20,15 +20,12 @@ public final class TFGAtmosphereApi {
      * @param pos The position to check
      * @return true if the position has oxygen
      */
-    // TODO: Think of how we can make this data accessible to the clientside. Is it possible? It's helpful for tooltips on machines, and player GUI.
     public static boolean hasOxygen(Level level, BlockPos pos) {
-        // On client side, we can't check - return false to be safe
-        // The server will handle actual damage/effects
         if (level.isClientSide()) {
             return false;
         }
 
-        return AtmosphereSystem.get().hasOxygen(level, pos);
+        return AtmosphereSystem.hasOxygen(level, pos);
     }
 
     /**
@@ -43,7 +40,7 @@ public final class TFGAtmosphereApi {
             return false;
         }
 
-        return AtmosphereSystem.get().hasNormalGravity(level, pos);
+        return AtmosphereSystem.hasNormalGravity(level, pos);
     }
 
     /**
@@ -58,7 +55,7 @@ public final class TFGAtmosphereApi {
             return false;
         }
 
-        return AtmosphereSystem.get().hasNormalTemperature(level, pos);
+        return AtmosphereSystem.hasNormalTemperature(level, pos);
     }
 
     /**
@@ -76,7 +73,7 @@ public final class TFGAtmosphereApi {
             return false;
         }
 
-        return AtmosphereSystem.get().hasOxygen(level, pos);
+        return AtmosphereSystem.hasOxygen(level, pos);
     }
 
     /**
@@ -92,9 +89,8 @@ public final class TFGAtmosphereApi {
             return false;
         }
 
-        AtmosphereSystem system = AtmosphereSystem.get();
-        return system.hasOxygen(level, pos) ||
-                system.hasNormalGravity(level, pos) ||
-                system.hasNormalTemperature(level, pos);
+        return AtmosphereSystem.hasOxygen(level, pos) ||
+                AtmosphereSystem.hasNormalGravity(level, pos) ||
+                AtmosphereSystem.hasNormalTemperature(level, pos);
     }
 }

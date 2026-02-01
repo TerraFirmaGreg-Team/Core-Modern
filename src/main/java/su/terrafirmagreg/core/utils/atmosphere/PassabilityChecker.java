@@ -47,6 +47,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 //           add to pendingShell
 //           remove incoming directions from memory
 
+// TODO: Waterlocks?
 /**
  * Handles checking whether atmosphere can pass through blocks.
  * Uses direction-aware passability for partial blocks like stairs.
@@ -55,6 +56,8 @@ import su.terrafirmagreg.core.common.data.TFGTags;
  */
 public final class PassabilityChecker {
 
+    private PassabilityChecker() {
+    }
     /**
      * Result of checking passability from specific directions.
      */
@@ -193,6 +196,9 @@ public final class PassabilityChecker {
         return computeFacesAndSilhouettes(shape);
     }
 
+    /** Cache of collision info per BlockState (Empty or full, or if neither faces/silhouettes full or not). */
+    private static final ConcurrentHashMap<BlockState, PassCache> CACHE = new ConcurrentHashMap<>();
+
     /**
      * Record to cache whether this BlockState is passable, and if necessary from which directions
      * If PassCache.type == COLLISION then .face and .axis are guaranteed to be populated
@@ -253,12 +259,6 @@ public final class PassabilityChecker {
         public byte openSilhouettes() {
             return invertValues(closedSilhouettes);
         }
-    }
-
-    /** Cache of passability results per BlockState. */
-    private static final ConcurrentHashMap<BlockState, PassCache> CACHE = new ConcurrentHashMap<>();
-
-    private PassabilityChecker() {
     }
 
     /**
