@@ -13,6 +13,7 @@ import org.joml.Vector3f;
 
 import com.eerussianguy.firmalife.common.FLTags;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.IMachineBlock;
@@ -201,7 +202,10 @@ public class TFGMultiMachines {
                         .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
                     .where("B", Predicates.blockTag(FLTags.Blocks.ALL_IRON_GREENHOUSE))
                     .where("G", Predicates.blocks(FLBlocks.LARGE_PLANTER.get()))
-                    .where("F", Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION))
+                    .where("F", Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION)
+                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfg", "iron_greenhouse_casings"))))
+                            .or(Predicates.blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.IRON).get(Greenhouse.BlockType.TRAPDOOR).get()))
+                            .or(Predicates.blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.RUSTED_IRON).get(Greenhouse.BlockType.TRAPDOOR).get())))
                     .where("H", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","grow_light"))))
                     .build())
                 .shapeInfos(definition -> {
