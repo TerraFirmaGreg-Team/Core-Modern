@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,10 +21,12 @@ import earth.terrarium.adastra.common.planets.AdAstraData;
 import su.terrafirmagreg.core.common.data.utils.LaunchPositionHandler;
 
 @Mixin(value = PlanetsMenuProvider.class, remap = false)
+@Debug(export = true)
 public class PlanetsMenuProviderMixin {
 
     @Inject(method = "writeExtraData", at = @At("TAIL"))
     private void tfg$addNewLandingCords(ServerPlayer player, FriendlyByteBuf buffer, CallbackInfo ci) {
+        System.out.println("tfg$addNewLandingCords was called");
         ServerLevel level = player.serverLevel();
 
         List<CompoundTag> planetsData = new ArrayList<>();
@@ -32,9 +35,12 @@ public class PlanetsMenuProviderMixin {
             planetPosData.ifPresent(planetsData::add);
         });
         if (!planetsData.isEmpty()) {
+            System.out.println(planetsData.size());
+            planetsData.forEach(System.out::println);
             buffer.writeInt(planetsData.size());
             planetsData.forEach(buffer::writeNbt);
         }
 
+        System.out.println("tfg$addNewLandingCords finished");
     }
 }

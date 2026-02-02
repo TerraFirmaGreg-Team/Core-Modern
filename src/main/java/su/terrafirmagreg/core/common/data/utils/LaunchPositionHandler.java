@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -14,6 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+
+import earth.terrarium.adastra.api.planets.Planet;
 
 public class LaunchPositionHandler extends SaveHandler {
     /**
@@ -65,13 +68,13 @@ public class LaunchPositionHandler extends SaveHandler {
 
     @Override
     public void saveData(CompoundTag compoundTag) {
-        /*List<Object> posData = new ArrayList<>(List.of(
+        List<Object> posData = new ArrayList<>(List.of(
                 GlobalPos.of(Planet.MOON, new BlockPos(20, 20, 20)), false, "test"));
         List<List<Object>> tempList = new ArrayList<>(List.of(posData));
         Map<ResourceKey<Level>, List<List<Object>>> tempMap = new HashMap<>();
         tempMap.put(Planet.MOON, tempList);
         data.put(UUID.fromString("eebb8358-cda4-4cb6-9c8c-c7a17eaa58b3"), new LaunchPositionHolder(tempMap));
-        */
+
         this.data.forEach((uuid, launchPositions) -> {
             CompoundTag planetsTag = new CompoundTag();
 
@@ -113,8 +116,8 @@ public class LaunchPositionHandler extends SaveHandler {
     }
 
     private static LaunchPositionHolder getPlayerData(Player player, ServerLevel level) {
-        Map<UUID, LaunchPositionHolder> data = read(level).data;
-        return data.getOrDefault(player.getUUID(), null);
+        Map<UUID, LaunchPositionHolder> newData = read(level).data;
+        return newData.getOrDefault(player.getUUID(), null);
     }
 
     public static Optional<CompoundTag> getPosDataNBT(Player player, ServerLevel level, ResourceKey<Level> planet) {
@@ -128,6 +131,7 @@ public class LaunchPositionHandler extends SaveHandler {
             return Optional.empty();
 
         List<List<Object>> playerPlanetPosList = playerData.planets.getOrDefault(planet, null);
+
         if (playerPlanetPosList == null)
             return Optional.empty();
 
@@ -151,6 +155,7 @@ public class LaunchPositionHandler extends SaveHandler {
 
     //Tangentally related methods
     public static Set<CompoundTag> getPlanetPosDataFromBuffer(FriendlyByteBuf buf) {
+        System.out.println("getPlanetPosDataFromBuffer was called");
         Set<CompoundTag> locations = new HashSet<>();
         int locationCount = buf.readVarInt();
 
@@ -158,6 +163,7 @@ public class LaunchPositionHandler extends SaveHandler {
             locations.add(buf.readNbt());
         }
 
+        System.out.println(locations.toString());
         return Collections.unmodifiableSet(locations);
     }
 }

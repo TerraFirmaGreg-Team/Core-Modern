@@ -10,8 +10,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -23,7 +21,6 @@ import earth.terrarium.adastra.common.tags.ModFluidTags;
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
-import su.terrafirmagreg.core.common.data.utils.LaunchPositionHandler;
 
 @Mixin(value = Rocket.class, remap = false)
 public abstract class RocketMixin extends Entity {
@@ -74,11 +71,6 @@ public abstract class RocketMixin extends Entity {
 
     @Redirect(method = "consumeFuel", at = @At(value = "INVOKE", target = "earth/terrarium/botarium/common/fluid/FluidConstants.fromMillibuckets (J)J"))
     private long tfg$modifyLaunchFuel(long amount) {
-        if (tfg$self.getControllingPassenger() instanceof ServerPlayer player) {
-            var test = LaunchPositionHandler.getPosData(player, (ServerLevel) tfg$self.level(), tfg$self.level().dimension());
-            System.out.println(test.toString());
-        }
-
         List<Long> fuelUsage = RocketHelper.ROCKET_FUEL_USAGE.get(tfg$self.getType());
         return tfg$self.fluidContainer().getFirstFluid().is(ModFluidTags.EFFICIENT_FUEL) ? fuelUsage.get(0) : fuelUsage.get(1);
     }
