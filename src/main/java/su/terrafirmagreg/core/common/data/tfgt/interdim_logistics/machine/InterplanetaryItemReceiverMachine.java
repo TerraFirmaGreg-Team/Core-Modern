@@ -2,10 +2,10 @@ package su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine;
 
 import java.util.*;
 
-import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
@@ -66,7 +66,8 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     @Override
     public void onUnload() {
         super.onUnload();
-        if (!isRemote()) getLogisticsNetwork().unloadPart(this);
+        if (!isRemote())
+            getLogisticsNetwork().unloadPart(this);
     }
 
     @Override
@@ -90,7 +91,8 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     @Override
     public void onMachineRemoved() {
-        if (!isRemote()) getLogisticsNetwork().destroyPart(this);
+        if (!isRemote())
+            getLogisticsNetwork().destroyPart(this);
     }
 
     @Override
@@ -214,7 +216,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     private void tick() {
         if (Objects.requireNonNull(getLevel()).getGameTime() % 20 != 0) {
-            for (var payload: payloads) {
+            for (var payload : payloads) {
                 if (payload.launchTick + payload.travelDuration >= getLevel().getGameTime()) {
                     onPackageArrival(payload);
                 }
@@ -252,6 +254,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         public List<ItemStack> items;
         public int inventoryIndex;
         public long launchTick;
+
         public ItemPayload() {
             travelDuration = 0;
             items = new ArrayList<>();

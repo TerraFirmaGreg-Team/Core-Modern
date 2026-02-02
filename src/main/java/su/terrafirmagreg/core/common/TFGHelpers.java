@@ -84,6 +84,10 @@ public final class TFGHelpers {
         ItemMaterialData.registerMaterialInfo(itemStack.getItem(), new ItemMaterialInfo(matStacks));
     }
 
+    public static void clearMaterialInfo(ItemStack itemStack) {
+        ItemMaterialData.clearMaterialInfo(itemStack.getItem());
+    }
+
     public static void registerCobbleBlock(String tagPrefix, ResourceLocation cobbleBlock) {
         GTBlocks.registerCobbleBlock(TagPrefix.get(tagPrefix),
                 () -> Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(cobbleBlock)).defaultBlockState());

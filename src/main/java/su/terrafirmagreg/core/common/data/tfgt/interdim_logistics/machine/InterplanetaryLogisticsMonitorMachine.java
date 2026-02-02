@@ -96,7 +96,8 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
         private void createUI() {
 
-            if (!isRemote()) return;
+            if (!isRemote())
+                return;
             var container = new WidgetGroup(0, 0, INNER_WIDTH, 0);
             container.setLayout(Layout.VERTICAL_CENTER);
             container.setDynamicSized(true);
