@@ -12,7 +12,6 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
-import com.gregtechceu.gtceu.common.network.GTNetwork;
 import com.lowdragmc.lowdraglib.gui.editor.ColorPattern;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
@@ -24,13 +23,12 @@ import com.lowdragmc.lowdraglib.gui.widget.layout.Layout;
 import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.*;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 
 public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implements IUIMachine {
@@ -43,17 +41,22 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
     private static final int INNER_WIDTH = GUI_WIDTH - 8;
     private static final int INNER_HEIGHT = GUI_HEIGHT - 8;
 
-    private List<NetworkPart> parts = new ArrayList<>();
-
     private class InterplanetaryLogisticsManagerWidget extends WidgetGroup {
 
+        private final List<NetworkPart> parts;
         private InterplanetaryLogisticsNetwork network;
+
+        private void updateIfServer() {
+            if (network == null)
+                return;
+            network.markDirty();
+        }
 
         public InterplanetaryLogisticsManagerWidget(Player accessor) {
             super(0, 0, GUI_WIDTH, GUI_HEIGHT);
 
             if (!InterplanetaryLogisticsMonitorMachine.this.isRemote()) {
-                network = InterplanetaryLogisticsNetwork.get((ServerLevel) getLevel());
+                network = InterplanetaryLogisticsNetwork.get(getHolder());
                 parts = network.getPartsVisibleToPlayer(accessor);
                 createUI();
             } else {
@@ -95,8 +98,6 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
         }
 
         private void createUI() {
-
-            if (!isRemote()) return;
             var container = new WidgetGroup(0, 0, INNER_WIDTH, 0);
             container.setLayout(Layout.VERTICAL_CENTER);
             container.setDynamicSized(true);
@@ -113,7 +114,10 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 WidgetGroup rowGroup = new WidgetGroup(0, 0, INNER_WIDTH - 5, 22);
                 rowGroup.setLayout(Layout.HORIZONTAL_CENTER);
                 rowGroup.setLayoutPadding(2);
-                rowGroup.addWidget(new TextFieldWidget(0, 0, 80, 16, part::getUiLabel, part::setUiLabel));
+                rowGroup.addWidget(new TextFieldWidget(0, 0, 80, 16, part::getUiLabel, (s) -> {
+                    part.setUiLabel(s);
+                    updateIfServer();
+                }));
 
                 var lbl = new LabelWidget(0, 0, part.getPartId().getUiString());
                 rowGroup.addWidget(lbl);
@@ -153,7 +157,10 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                     .addWidget(new ButtonWidget(2, 2, 16, 16, GuiTextures.BUTTON_LEFT, (v) -> {
                         removeWidget(dragContainer);
                         mainPage.setVisible(true);
-                    })).addWidget(new TextFieldWidget(18, 2, 80, 16, part::getUiLabel, part::setUiLabel)).addWidget(new LabelWidget(102, 5, () -> part.getPartId().getUiString()));
+                    })).addWidget(new TextFieldWidget(18, 2, 80, 16, part::getUiLabel, (s) -> {
+                        part.setUiLabel(s);
+                        updateIfServer();
+                    })).addWidget(new LabelWidget(102, 5, () -> part.getPartId().getUiString()));
 
             var configListContainer = new WidgetGroup(0, 0, INNER_WIDTH - 5, 20);
             configListContainer.setDynamicSized(true);
@@ -169,6 +176,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 containerPadding.setDynamicSized(true);
                 var newEntry = new NetworkSenderConfigEntry(part.getPartId());
                 part.senderLogisticsConfigs.add(newEntry);
+                updateIfServer();
                 configListContainer.addWidget(configListContainer.widgets.size() - 1,
                         createSenderLogisticsConfigRow(part, newEntry));
             }));
@@ -185,6 +193,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
 
             group.addWidget(new ButtonWidget(262, 19, 12, 12, GuiTextures.BUTTON_INT_CIRCUIT_MINUS, (c) -> {
                 part.senderLogisticsConfigs.remove(config);
+                updateIfServer();
                 group.getParent().removeWidget(group);
             }));
 
@@ -206,17 +215,26 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                 }
             }
 
-            destinationSelector.setOnChanged((v) -> parts.stream().filter(p -> Objects.equals(p.getUiLabel(), v)).findFirst()
-                    .ifPresent(s -> config.setReceiverPartID(s.getPartId())));
+            destinationSelector.setOnChanged((v) -> {
+                parts.stream().filter(p -> Objects.equals(p.getUiLabel(), v)).findFirst()
+                        .ifPresent(s -> config.setReceiverPartID(s.getPartId()));
+                updateIfServer();
+            });
 
             group.addWidget(destinationSelector);
 
-            var inactivityIntInput = new IntInputWidget(160, 1, 100, 20, config::getCurrentInactivityTimeout, config::setCurrentInactivityTimeout);
+            var inactivityIntInput = new IntInputWidget(160, 1, 100, 20, config::getCurrentInactivityTimeout, (v) -> {
+                config.setCurrentInactivityTimeout(v);
+                updateIfServer();
+            });
 
             var itemFilterGroup = new WidgetGroup(Position.of(160, 2))
-                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 0, 0, 0))
-                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 1, 18, 0))
-                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 2, 36, 0));
+                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 0, 0, 0)
+                            .setChangeListener(this::updateIfServer))
+                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 1, 18, 0)
+                            .setChangeListener(this::updateIfServer))
+                    .addWidget(new PhantomSlotWidget(config.getCurrentSendFilter(), 2, 36, 0)
+                            .setChangeListener((this::updateIfServer)));
 
             inactivityIntInput
                     .setVisible(config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.INACTIVITY);
@@ -229,6 +247,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                                 config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.INACTIVITY);
                         itemFilterGroup.setVisible(
                                 config.getCurrentSendTrigger() == NetworkSenderConfigEntry.TriggerMode.ITEM);
+                        updateIfServer();
                     });
 
             group.addWidget(inactivityIntInput).addWidget(itemFilterGroup).addWidget(modeSelector);
@@ -242,8 +261,12 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                     25);
             senderDistinctCircuit.setCircuitInventory(senderCircuitInv);
             senderDistinctCircuit.getCircuitInventory().setStackInSlot(0, IntCircuitBehaviour.stack(config.getSenderDistinctInventory()));
-            senderCircuitInv.setOnContentsChanged(() -> config.setSenderDistinctInventory(
-                    IntCircuitBehaviour.getCircuitConfiguration(senderCircuitInv.getStackInSlot(0))));
+            senderCircuitInv.setOnContentsChanged(() -> {
+                config.setSenderDistinctInventory(
+                        IntCircuitBehaviour.getCircuitConfiguration(senderCircuitInv.getStackInSlot(0)));
+                updateIfServer();
+
+            });
 
             group.addWidget(new LabelWidget(65, 27, "Receiver:"));
 
@@ -254,8 +277,12 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                     .setSelfPosition(115, 25);
             receiverDistinctCircuit.setCircuitInventory(receiverCircuitInv);
             receiverDistinctCircuit.getCircuitInventory().setStackInSlot(0, IntCircuitBehaviour.stack(config.getReceiverDistinctInventory()));
-            receiverCircuitInv.setOnContentsChanged(() -> config.setReceiverDistinctInventory(
-                    IntCircuitBehaviour.getCircuitConfiguration(receiverCircuitInv.getStackInSlot(0))));
+            receiverCircuitInv.setOnContentsChanged(() -> {
+                config.setReceiverDistinctInventory(
+                        IntCircuitBehaviour.getCircuitConfiguration(receiverCircuitInv.getStackInSlot(0)));
+                updateIfServer();
+
+            });
 
             group.addWidget(senderDistinctCircuit).addWidget(receiverDistinctCircuit);
 
@@ -276,7 +303,10 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                         dragContainer.setVisible(false);
                         mainPage.setVisible(true);
                     }))
-                    .addWidget(new TextFieldWidget(18, 2, 80, 16, part::getUiLabel, part::setUiLabel))
+                    .addWidget(new TextFieldWidget(18, 2, 80, 16, part::getUiLabel, (s) -> {
+                        part.setUiLabel(s);
+                        updateIfServer();
+                    }))
                     .addWidget(new LabelWidget(102, 5, part.getPartId().getUiString()));
 
             var configListContainer = new WidgetGroup(0, 0, INNER_WIDTH - 5, 20);
@@ -296,7 +326,11 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                             new ItemStackTexture(IntCircuitBehaviour.stack(config.getDistinctInventory())));
                 var circuitWidget = new ImageWidget(6, 6, 18, 18, circuitTexture);
 
-                var cooldownIntInput = new IntInputWidget(160, 5, 100, 20, config::getCurrentCooldown, config::setCurrentCooldown);
+                var cooldownIntInput = new IntInputWidget(160, 5, 100, 20, config::getCurrentCooldown, (v) -> {
+                    config.setCurrentCooldown(v);
+                    updateIfServer();
+
+                });
                 cooldownIntInput.setMin(0).setMax(1800);
                 cooldownIntInput.setVisible(config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.COOLDOWN);
 
@@ -304,6 +338,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                         NetworkReceiverConfigEntry.LogicMode.values(), config.getCurrentMode(), (v) -> {
                             config.setCurrentMode(v);
                             cooldownIntInput.setVisible(v == NetworkReceiverConfigEntry.LogicMode.COOLDOWN);
+                            updateIfServer();
                         });
 
                 logisticsConfigGroup.addWidget(circuitWidget).addWidget(modeSelector).addWidget(cooldownIntInput);
@@ -319,12 +354,6 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
     @Override
     public ModularUI createUI(Player entityPlayer) {
         var gui = new ModularUI(GUI_WIDTH, GUI_HEIGHT, this, entityPlayer);
-        if (isRemote()) {
-            gui.registerCloseListener(() -> {
-                GTNetwork.sendToServer(new RailgunConfigUpdatePacket(parts));
-                parts.clear();
-            });
-        }
         return gui.widget(new InterplanetaryLogisticsManagerWidget(entityPlayer));
     }
 }

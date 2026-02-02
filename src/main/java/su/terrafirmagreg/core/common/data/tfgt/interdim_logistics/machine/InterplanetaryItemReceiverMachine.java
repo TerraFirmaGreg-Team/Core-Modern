@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine;
 
 import java.util.*;
 
-import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -24,7 +23,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
-import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.NetworkReceiverConfigEntry;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 
 public class InterplanetaryItemReceiverMachine extends WorkableElectricMultiblockMachine
@@ -41,7 +39,6 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     private final List<RailgunItemBusMachine> itemOutputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
-    protected TickableSubscription tickSubscription;
 
     public InterplanetaryItemReceiverMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -60,13 +57,17 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     public void onLoad() {
         super.onLoad();
         if (getLevel() instanceof ServerLevel sLvl)
-            sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
+            sLvl.getServer().tell(new TickTask(0, () -> {
+                getLogisticsNetwork().loadOrCreatePart(this);
+                payloads.forEach(p -> sLvl.getServer().tell(new TickTask(p.travelDuration, () -> onPackageArrival(p))));
+            }));
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
-        if (!isRemote()) getLogisticsNetwork().unloadPart(this);
+        if (!isRemote())
+            getLogisticsNetwork().unloadPart(this);
     }
 
     @Override
@@ -78,19 +79,19 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         Arrays.fill(lastActiveTime, getLevel().getGameTime());
         itemOutputs.clear();
         itemOutputs.addAll(getInventories());
-        updateSubscription();
+
     }
 
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
-        updateSubscription();
         itemOutputs.clear();
     }
 
     @Override
     public void onMachineRemoved() {
-        if (!isRemote()) getLogisticsNetwork().destroyPart(this);
+        if (!isRemote())
+            getLogisticsNetwork().destroyPart(this);
     }
 
     @Override
@@ -190,8 +191,11 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     @Override
     public void onPackageSent(int inventoryIndex, List<ItemStack> items, int travelDuration) {
-        var payload = new ItemPayload(getLevel().getGameTime(), travelDuration, items, inventoryIndex);
+        var server = Objects.requireNonNull(getLevel()).getServer();
+        var payload = new ItemPayload(travelDuration, items, inventoryIndex);
         payloads.add(payload);
+        assert server != null;
+        server.tell(new TickTask(travelDuration, () -> onPackageArrival(payload)));
     }
 
     @Override
@@ -199,27 +203,6 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         if (!isFormed())
             return Component.literal("§cMultiblock not formed");
         return null;
-    }
-
-    private void updateSubscription() {
-        if (isRemote())
-            return;
-        if (isFormed() && isWorkingEnabled()) {
-            tickSubscription = subscribeServerTick(tickSubscription, this::tick);
-        } else {
-            if (tickSubscription != null)
-                tickSubscription.unsubscribe();
-        }
-    }
-
-    private void tick() {
-        if (Objects.requireNonNull(getLevel()).getGameTime() % 20 != 0) {
-            for (var payload: payloads) {
-                if (payload.launchTick + payload.travelDuration >= getLevel().getGameTime()) {
-                    onPackageArrival(payload);
-                }
-            }
-        }
     }
 
     @Override
@@ -251,15 +234,14 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         public int travelDuration;
         public List<ItemStack> items;
         public int inventoryIndex;
-        public long launchTick;
+
         public ItemPayload() {
             travelDuration = 0;
             items = new ArrayList<>();
             inventoryIndex = 0;
         }
 
-        public ItemPayload(long launchTick, int travelDuration, List<ItemStack> items, int inventoryIndex) {
-            this.launchTick = launchTick;
+        public ItemPayload(int travelDuration, List<ItemStack> items, int inventoryIndex) {
             this.travelDuration = travelDuration;
             this.items = items;
             this.inventoryIndex = inventoryIndex;
@@ -270,7 +252,6 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
             var tag = new CompoundTag();
             tag.putInt("travelDuration", travelDuration);
             tag.putInt("inventoryIndex", inventoryIndex);
-            tag.putLong("launchTick", launchTick);
             var list = new ListTag();
             for (var s : items) {
                 list.add(s.save(new CompoundTag()));
@@ -283,7 +264,6 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         public void deserializeNBT(CompoundTag nbt) {
             travelDuration = nbt.getInt("travelDuration");
             inventoryIndex = nbt.getInt("inventoryIndex");
-            launchTick = nbt.getLong("launchTick");
             var list = nbt.getList("items", Tag.TAG_COMPOUND);
             for (Tag tag : list) {
                 items.add(ItemStack.of((CompoundTag) tag));
