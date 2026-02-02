@@ -120,7 +120,7 @@ public final class PassabilityChecker {
      * @param state Current FloodFill state, necessary for checking which directions we're visiting from.
      * @return PassableResult indicating if atmosphere can pass
      */
-    public static PassableResult isPassable(Level level, BlockPos.MutableBlockPos pos, long posLong, BlockState blockState, FloodFillState state) {
+    public static PassableResult isPassable(Level level, BlockPos.MutableBlockPos pos, long posLong, BlockState blockState, FloodFill.State state) {
         PassCache passCache = getPassCache(level, pos, blockState);
 
         return switch (passCache.type) {
@@ -136,7 +136,7 @@ public final class PassabilityChecker {
     }
 
     /**
-     * Checks if atmosphere can pass through a block given the incoming directions registered in the FloodFillState.
+     * Checks if atmosphere can pass through a block given the incoming directions registered in the FloodFill.State.
      * Read also the PassableResult enum javadoc for further information on what they mean.
      * @param level Block getter for accessing block states
      * @param pos Position of the block to check
@@ -145,7 +145,7 @@ public final class PassabilityChecker {
      * @param state Current FloodFill state, necessary for checking which directions we're visiting from.
      * @return PassableResult indicating if atmosphere can pass
      */
-    public static PassableResult isPassableFromDirections(Level level, BlockPos.MutableBlockPos pos, long posLong, PassCache passCache, FloodFillState state) {
+    public static PassableResult isPassableFromDirections(Level level, BlockPos.MutableBlockPos pos, long posLong, PassCache passCache, FloodFill.State state) {
 
         // Get all queued directions
         byte incomingDirs = state.visitDirections.get(posLong);
