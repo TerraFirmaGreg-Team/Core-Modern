@@ -963,7 +963,8 @@ public class TFGMultiMachines {
                     .where("D", Predicates.blocks(GTBlocks.CASING_LAMINATED_GLASS.get())
                             .or(Predicates.blocks(HeatPortEv.get()).setMaxGlobalLimited(1).setPreviewCount(1)))
                     .where("F", Predicates.blocks(heat_pipe.get()))
-                    .where("G", (Predicates.blockTag(FissionTags.COMPONENT_HB)))
+                    .where("G", (Predicates.blockTag(FissionTags.COMPONENT_HB))
+                            .or(Predicates.air()))
                     .build())
             .register();
     // spotless:on

@@ -169,7 +169,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             return;
         }
         for (var config : getSendConfigurations()) {
-            if (ammoLoaderPart.getInventory().isEmpty())
+            if (ammoLoaderPart == null || ammoLoaderPart.getInventory().isEmpty())
                 break;
             var withCircuit = itemInputs.stream()
                     .filter((c) -> IntCircuitBehaviour.getCircuitConfiguration(
@@ -280,10 +280,20 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
                 .addWorkingStatusLine();
 
-        textList.add(Component.literal("Power stored: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyStored()))));
-        textList.add(Component.literal("Power capacity: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyCapacity()))));
+        if (!isFormed() || energyInputs == null) {
+            textList.add(Component.literal("Power stored: N/A"));
+            textList.add(Component.literal("Power capacity: N/A"));
+            return;
+        }
 
-        for (var part : this.getParts()) {
+        textList.add(Component.literal(
+                "Power stored: %s".formatted(
+                        FormattingUtil.formatNumbers(energyInputs.getEnergyStored()))));
+        textList.add(Component.literal(
+                "Power capacity: %s".formatted(
+                        FormattingUtil.formatNumbers(energyInputs.getEnergyCapacity()))));
+
+        for (var part : getParts()) {
             part.addMultiText(textList);
         }
     }
