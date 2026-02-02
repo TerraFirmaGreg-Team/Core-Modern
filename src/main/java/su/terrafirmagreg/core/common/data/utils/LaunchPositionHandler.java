@@ -158,12 +158,12 @@ public class LaunchPositionHandler extends SaveHandler {
         System.out.println("getPlanetPosDataFromBuffer was called");
         Set<CompoundTag> locations = new HashSet<>();
         int locationCount = buf.readVarInt();
-
+        System.out.println(locationCount);
         for (int i = 0; i < locationCount; ++i) {
-            locations.add(buf.readNbt());
+            locations.add(buf.readAnySizeNbt());
         }
 
-        System.out.println(locations.toString());
+        System.out.println(locations);
         return Collections.unmodifiableSet(locations);
     }
 }
