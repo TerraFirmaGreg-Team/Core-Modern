@@ -3,11 +3,9 @@ package su.terrafirmagreg.core.common.data.tfgt.interdim_logistics;
 import com.gregtechceu.gtceu.api.gui.widget.EnumSelectorWidget;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
-
-import net.minecraft.nbt.CompoundTag;
-
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.nbt.CompoundTag;
 
 public class NetworkReceiverConfigEntry {
     @Getter

@@ -1,15 +1,13 @@
 package su.terrafirmagreg.core.common.data.tfgt.interdim_logistics;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.gregtechceu.gtceu.common.network.GTNetwork;
-
+import lombok.AllArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
-import lombok.AllArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 public class RailgunConfigUpdatePacket implements GTNetwork.INetPacket {
@@ -40,7 +38,7 @@ public class RailgunConfigUpdatePacket implements GTNetwork.INetPacket {
     @Override
     public void execute(NetworkEvent.Context context) {
         InterplanetaryLogisticsNetwork network = InterplanetaryLogisticsNetwork.get(context.getSender().getServer().overworld());
-        for (var part : parts) {
+        for (var part: parts) {
             if (network.parts.containsKey(part.getPartId())) {
                 network.parts.put(part.getPartId(), part);
             }

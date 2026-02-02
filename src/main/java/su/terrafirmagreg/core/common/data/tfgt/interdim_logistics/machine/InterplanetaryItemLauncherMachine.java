@@ -261,8 +261,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         ammoLoaderPart.getInventory().extractItemInternal(0, 1, false);
         energyInputs.removeEnergy(16 * GTValues.V[GTValues.HV]);
         var extracted = tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), false);
-        if (extracted)
-            receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20 * travelTime);
+        if (extracted) receiver.onPackageSent(config.getReceiverDistinctInventory(), itemsToExtract, 20 * travelTime);
         launchEffects();
         return true;
     }
