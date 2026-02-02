@@ -3,8 +3,6 @@ package su.terrafirmagreg.core.common.data;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import com.gregtechceu.gtceu.api.item.ComponentItem;
-
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BucketItem;
@@ -79,9 +77,6 @@ public class TFGItems {
             () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> WRAPTOR_EGG = ITEMS.register("wraptor_egg",
             () -> new Item(new Item.Properties().stacksTo(32)));
-
-    public static final RegistryObject<ComponentItem> ELECTRIC_EXTENDO_GRIP = ITEMS.register("electric_extendo_grip",
-            () -> new ElectricExtendoGrip(new Item.Properties()));
 
     public static final RegistryObject<Item> WIRELESS_CARD = ITEMS.register("wireless_card",
             () -> Upgrades.createUpgradeCardItem(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));

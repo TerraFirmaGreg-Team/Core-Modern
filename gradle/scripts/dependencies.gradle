@@ -99,6 +99,7 @@ dependencies {
     implementation fg.deobf("curse.maven:ftb-teams-forge-404468:6130786") { transitive = false }
     implementation fg.deobf("curse.maven:ftb-library-forge-404465:6164053") { transitive = false }
     implementation fg.deobf("curse.maven:ftb-quests-forge-289412:6431737") { transitive = false }
+    implementation fg.deobf("curse.maven:ftb-chunks-forge-314906:6431735") { transitive = false }
 
     // Jade
     implementation fg.deobf("curse.maven:jade-324717:6271651")
@@ -127,8 +128,8 @@ dependencies {
     implementation fg.deobf("maven.modrinth:hang-glider:${hangglider_version}")
 
     // Wan's ancient beasts
-    implementation fg.deobf("curse.maven:wans-ancient-beasts-1108604:7023583")
-    implementation fg.deobf("curse.maven:geckolib-388172:6789487")
+    implementation fg.deobf("curse.maven:wans-ancient-beasts-1108604:7552366")
+    implementation fg.deobf("curse.maven:geckolib-388172:7553267")
 
     // Immersive Aircraft
     implementation fg.deobf("curse.maven:immersive-aircraft-666014:6742170")

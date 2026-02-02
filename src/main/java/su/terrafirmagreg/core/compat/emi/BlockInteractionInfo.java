@@ -31,6 +31,10 @@ public class BlockInteractionInfo {
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "impure_moderate_core_frame")).asItem();
     private static final Supplier<Item> moderate_frame = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "moderate_core_frame")).asItem();
+    private static final Supplier<Item> copper_sandy_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "copper_sandy_frame")).asItem();
+    private static final Supplier<Item> beryllium_sandy_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "beryllium_sandy_frame")).asItem();
 
     private static final Supplier<Item> glacian_wool = () -> ForgeRegistries.ITEMS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool")).asItem();
@@ -40,6 +44,10 @@ public class BlockInteractionInfo {
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "impure_graphite_moderator")).asItem();
     private static final Supplier<Item> moderator = () -> ForgeRegistries.ITEMS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "graphite_moderator")).asItem();
+    private static final Supplier<Item> copper_sandy = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "copper_sandy")).asItem();
+    private static final Supplier<Item> beryllium_sandy = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "beryllium_sandy")).asItem();
 
     public static BlockInteractionRecipe[] RECIPES = {
             //Brick -> cracked
@@ -95,12 +103,16 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe("insulation_glacian", incoloy_frame, glacian_frame.get(), new ItemStack(glacian_wool.get(), 2)),
             new BlockInteractionRecipe("insulation_impure_moderate", incoloy_frame, impure_moderate_frame.get(), impure_moderator.get()),
             new BlockInteractionRecipe("insulation_moderate", incoloy_frame, moderate_frame.get(), moderator.get()),
+            new BlockInteractionRecipe("insulation_copper_sandy", incoloy_frame, copper_sandy_frame.get(), copper_sandy.get()),
+            new BlockInteractionRecipe("insulation_beryllium_sandy", incoloy_frame, beryllium_sandy_frame.get(), beryllium_sandy.get()),
 
             //Insulation Remove
             new BlockInteractionRecipe("insulation_aes_remove", aes_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
             new BlockInteractionRecipe("insulation_glacian_remove", glacian_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
             new BlockInteractionRecipe("insulation_impure_moderate_remove", impure_moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
             new BlockInteractionRecipe("insulation_moderate_remove", moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_copper_sandy_remove", copper_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_beryllium_sandy_remove",beryllium_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
     };
 
 }
