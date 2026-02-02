@@ -194,7 +194,7 @@ public class AtmosphereRoom {
         if (!provider.isActive()) {
             this.mode = Mode.INACTIVE;
             this.wasSealed = false;
-        } else if (result.status() == FloodFillStatus.ESCAPED_UNLOADED) {
+        } else if (result.status() == RoomScan.Status.ESCAPED_UNLOADED) {
             this.mode = Mode.INCOMPLETE;
             this.wasSealed = false;
         } else if (!result.isComplete()) {
@@ -277,7 +277,7 @@ public class AtmosphereRoom {
      * @param chunkPos Chunk that was loaded
      */
     public void onChunkLoaded(ChunkPos chunkPos) {
-        if (mode != Mode.INCOMPLETE || scan.status() != FloodFillStatus.ESCAPED_UNLOADED) {
+        if (mode != Mode.INCOMPLETE || scan.status() != RoomScan.Status.ESCAPED_UNLOADED) {
             return;
         }
 

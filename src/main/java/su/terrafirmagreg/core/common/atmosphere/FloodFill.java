@@ -141,17 +141,17 @@ public class FloodFill {
         state.envelope.addAll(state.pendingShell);
         state.pendingShell.clear();
 
-        FloodFillStatus status;
+        RoomScan.Status status;
         if (state.hitBlockLimit) {
-            status = FloodFillStatus.BLOCK_LIMIT;
+            status = RoomScan.Status.BLOCK_LIMIT;
         } else if (state.hitBuildHeight) {
-            status = FloodFillStatus.ESCAPED_BUILD_HEIGHT;
+            status = RoomScan.Status.ESCAPED_BUILD_HEIGHT;
         } else if (state.hitDimensionLimit) {
-            status = FloodFillStatus.ESCAPED_DIMENSION;
+            status = RoomScan.Status.ESCAPED_DIMENSION;
         } else if (state.hitUnloadedChunk) {
-            status = FloodFillStatus.ESCAPED_UNLOADED;
+            status = RoomScan.Status.ESCAPED_UNLOADED;
         } else {
-            status = FloodFillStatus.SEALED;
+            status = RoomScan.Status.SEALED;
         }
 
         return new RoomScan(

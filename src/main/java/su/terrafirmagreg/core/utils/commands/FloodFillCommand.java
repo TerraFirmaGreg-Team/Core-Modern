@@ -19,7 +19,6 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.atmosphere.DiagnosticFloodFill;
 import su.terrafirmagreg.core.common.atmosphere.FloodFill;
 import su.terrafirmagreg.core.common.atmosphere.FloodFillConfig;
-import su.terrafirmagreg.core.common.atmosphere.LeakTrace;
 import su.terrafirmagreg.core.common.atmosphere.RoomScan;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -90,7 +89,7 @@ public class FloodFillCommand {
             source.sendSuccess(() -> Component.literal(String.format(
                     "Escape point: %s", escape.toShortString())), false);
             if (diagnostic && result.escapePath() != null) {
-                LeakTrace.spawn(level, result.escapePath());
+                DiagnosticFloodFill.spawnTrace(level, result.escapePath());
             }
         }
 

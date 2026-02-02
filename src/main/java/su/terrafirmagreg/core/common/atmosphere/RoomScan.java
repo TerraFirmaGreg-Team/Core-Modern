@@ -27,11 +27,39 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 public record RoomScan(
         LongOpenHashSet interior,
         LongOpenHashSet envelope,
-        FloodFillStatus status,
+        Status status,
         @Nullable BlockPos escapePoint,
         @Nullable List<BlockPos> escapePath,
         AABB bounds,
         Set<ChunkPos> touchedChunks) {
+
+    /**
+     * Status of the flood fill / room scan.
+     */
+    public enum Status {
+        /** Fill completed, room fully enclosed */
+        SEALED,
+        /** Fill found escape via horizontal dimension limit */
+        ESCAPED_DIMENSION,
+        /** Fill found escape via world height limit */
+        ESCAPED_BUILD_HEIGHT,
+        /** Fill stopped at unloaded chunk (escape assumed, may recover on chunk load) */
+        ESCAPED_UNLOADED,
+        /** Fill stopped at block limit (seal status unknown) */
+        BLOCK_LIMIT;
+
+        public boolean isSealed() {
+            return this == SEALED;
+        }
+
+        public boolean isComplete() {
+            return this != BLOCK_LIMIT;
+        }
+
+        public boolean hasEscape() {
+            return this != SEALED && this != BLOCK_LIMIT;
+        }
+    }
 
     /**
      * @return Whether the room is fully sealed
@@ -65,7 +93,7 @@ public record RoomScan(
      * @return Whether this result represents a valid sealed room
      */
     public boolean isValidSealedRoom() {
-        return status == FloodFillStatus.SEALED;
+        return status == Status.SEALED;
     }
 
     /**
@@ -142,7 +170,7 @@ public record RoomScan(
         return new RoomScan(
                 new LongOpenHashSet(),
                 new LongOpenHashSet(),
-                FloodFillStatus.BLOCK_LIMIT,
+                Status.BLOCK_LIMIT,
                 null,
                 null,
                 new AABB(0, 0, 0, 0, 0, 0),

@@ -9,26 +9,95 @@ import java.util.function.Function;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import su.terrafirmagreg.core.TFGCore;
 
 /**
  * Diagnostic version of flood fill that finds the shortest path to the escape point.
  * Uses regular DFS flood fill first, then BFS through the interior to find shortest path.
  *
  * <p>Returns a {@link RoomScan} with the {@code escapePath} field populated.
+ * <p>Also handles particle visualization of leak paths via {@link #spawnTrace}.
  */
+@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class DiagnosticFloodFill {
 
     private static final long NO_PARENT = Long.MIN_VALUE;
+    private static final List<ActiveTrace> ACTIVE_TRACES = new ArrayList<>();
 
     private DiagnosticFloodFill() {
     }
+
+    // ==================== Leak Trace Visualization ====================
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END)
+            return;
+        ACTIVE_TRACES.removeIf(ActiveTrace::tick);
+    }
+
+    /**
+     * Spawns a particle trace along the given path.
+     */
+    public static void spawnTrace(ServerLevel level, List<BlockPos> path) {
+        ACTIVE_TRACES.add(new ActiveTrace(level, path));
+    }
+
+    private static class ActiveTrace {
+        private final ServerLevel level;
+        private final List<BlockPos> path;
+        private int index = 0;
+        private static final int SEGMENTS_PER_TICK = 1;
+
+        ActiveTrace(ServerLevel level, List<BlockPos> path) {
+            this.level = level;
+            this.path = path;
+        }
+
+        boolean tick() {
+            int spawned = 0;
+            while (spawned < SEGMENTS_PER_TICK && index < path.size() - 1) {
+                spawnSegment(index++);
+                spawned++;
+            }
+            return index >= path.size() - 3;
+        }
+
+        private void spawnSegment(int i) {
+            for (int j = i; j < i + 3 && j < path.size() - 1; j++) {
+                BlockPos a = path.get(j);
+                BlockPos b = path.get(j + 1);
+
+                Vec3 from = Vec3.atCenterOf(a);
+                Vec3 to = Vec3.atCenterOf(b);
+                Vec3 dir = to.subtract(from).normalize();
+
+                level.sendParticles(
+                        ParticleTypes.CLOUD,
+                        from.x, from.y, from.z,
+                        3,
+                        dir.x * 0.15,
+                        dir.y * 0.15,
+                        dir.z * 0.15,
+                        0);
+            }
+        }
+    }
+
+    // ==================== Diagnostic Flood Fill ====================
 
     /**
      * Performs a diagnostic flood fill with shortest path tracking.
