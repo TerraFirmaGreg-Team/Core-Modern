@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.interdim_logistics;
+package su.terrafirmagreg.core.common.data.tfgt;
 
 import java.util.*;
 

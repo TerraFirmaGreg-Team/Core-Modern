@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine;
+package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 
 import java.util.*;
 
@@ -28,8 +28,8 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
-import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
+import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork;
+import su.terrafirmagreg.core.common.data.tfgt.InterplanetaryLogisticsNetwork.*;
 
 public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implements IUIMachine {
     public InterplanetaryLogisticsMonitorMachine(IMachineBlockEntity holder) {
