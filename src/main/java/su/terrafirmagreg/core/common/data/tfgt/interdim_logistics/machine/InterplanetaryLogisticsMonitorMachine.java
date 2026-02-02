@@ -43,28 +43,25 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
     private static final int INNER_WIDTH = GUI_WIDTH - 8;
     private static final int INNER_HEIGHT = GUI_HEIGHT - 8;
 
-    private List<NetworkPart> parts = new ArrayList<>();
+    private List<NetworkPart> uiParts = new ArrayList<>();
 
     private class InterplanetaryLogisticsManagerWidget extends WidgetGroup {
-
-        private InterplanetaryLogisticsNetwork network;
 
         public InterplanetaryLogisticsManagerWidget(Player accessor) {
             super(0, 0, GUI_WIDTH, GUI_HEIGHT);
 
             if (!InterplanetaryLogisticsMonitorMachine.this.isRemote()) {
-                network = InterplanetaryLogisticsNetwork.get((ServerLevel) getLevel());
-                parts = network.getPartsVisibleToPlayer(accessor);
+                uiParts = InterplanetaryLogisticsNetwork.get((ServerLevel) getLevel()).getPartsVisibleToPlayer(accessor);
                 createUI();
             } else {
-                parts = new ArrayList<>();
+                uiParts = new ArrayList<>();
             }
         }
 
         @Override
         public void writeInitialData(FriendlyByteBuf buffer) {
-            buffer.writeInt(parts.size());
-            for (var part : parts) {
+            buffer.writeInt(uiParts.size());
+            for (var part : uiParts) {
                 buffer.writeNbt(part.save());
             }
         }
@@ -89,15 +86,12 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                     continue;
 
                 var part = new NetworkPart(nbt);
-                parts.add(part);
+                uiParts.add(part);
             }
             createUI();
         }
 
         private void createUI() {
-
-            if (!isRemote())
-                return;
             var container = new WidgetGroup(0, 0, INNER_WIDTH, 0);
             container.setLayout(Layout.VERTICAL_CENTER);
             container.setDynamicSized(true);
@@ -107,10 +101,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             addWidget(mainPage);
             List<WidgetGroup> senderPages = new ArrayList<>();
             List<WidgetGroup> receiverPages = new ArrayList<>();
-            for (var part : parts) {
-                if (part.getUiLabel().isBlank())
-                    part.setUiLabel("[unnamed]");
-
+            for (var part : uiParts) {
                 WidgetGroup rowGroup = new WidgetGroup(0, 0, INNER_WIDTH - 5, 22);
                 rowGroup.setLayout(Layout.HORIZONTAL_CENTER);
                 rowGroup.setLayoutPadding(2);
@@ -194,20 +185,20 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
             var destinationSelector = new SelectorWidget(57, 2, 80, 18, new ArrayList<>(), -1)
                     .setButtonBackground(GuiTextures.BUTTON);
             if (!isRemote())
-                destinationSelector.setCandidatesSupplier(() -> parts.stream()
+                destinationSelector.setCandidatesSupplier(() -> uiParts.stream()
                         .filter((p) -> p.isReceiverPart() && !Objects.equals(p.getUiLabel(), "[unnamed]"))
                         .map(NetworkPart::getUiLabel).toList());
             destinationSelector.setValue("[none]");
             DimensionalBlockPos receiver = config.getReceiverPartID();
             if (receiver != null) {
-                for (var rPart : parts) {
+                for (var rPart : uiParts) {
                     if (rPart.getPartId().equals(receiver)) {
                         destinationSelector.setValue(rPart.getUiLabel());
                     }
                 }
             }
 
-            destinationSelector.setOnChanged((v) -> parts.stream().filter(p -> Objects.equals(p.getUiLabel(), v)).findFirst()
+            destinationSelector.setOnChanged((v) -> uiParts.stream().filter(p -> Objects.equals(p.getUiLabel(), v)).findFirst()
                     .ifPresent(s -> config.setReceiverPartID(s.getPartId())));
 
             group.addWidget(destinationSelector);
@@ -320,10 +311,9 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
     @Override
     public ModularUI createUI(Player entityPlayer) {
         var gui = new ModularUI(GUI_WIDTH, GUI_HEIGHT, this, entityPlayer);
-        if (isRemote()) {
+        if (!isRemote()) {
             gui.registerCloseListener(() -> {
-                GTNetwork.sendToServer(new RailgunConfigUpdatePacket(parts));
-                parts.clear();
+                InterplanetaryLogisticsNetwork.get((ServerLevel) getLevel()).setDirty();
             });
         }
         return gui.widget(new InterplanetaryLogisticsManagerWidget(entityPlayer));
