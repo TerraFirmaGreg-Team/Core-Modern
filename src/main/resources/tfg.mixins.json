@@ -13,6 +13,8 @@
         "common.ad_astra.OxygenDistributorMixin",
         "common.ad_astra.OxygenLoaderMixin",
         "common.ad_astra.PlanetResourceUtilsMixin",
+        "common.ad_astra.PlanetsMenuMixin",
+        "common.ad_astra.PlanetsMenuProviderMixin",
         "common.ad_astra.RocketItemMixin",
         "common.ad_astra.RocketMixin",
         "common.ad_astra.RoverMixin",

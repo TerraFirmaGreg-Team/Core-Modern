@@ -8,6 +8,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -85,7 +86,7 @@ public class LaunchPositionHandler extends SaveHandler {
 
     }
 
-    public static CompoundTag packagePlanetPosData(List<List<Object>> planetList){
+    public static CompoundTag packagePlanetPosData(List<List<Object>> planetList) {
         CompoundTag singlePlanetTag = new CompoundTag();
 
         int i = 0;
@@ -116,6 +117,11 @@ public class LaunchPositionHandler extends SaveHandler {
         return data.getOrDefault(player.getUUID(), null);
     }
 
+    public static Optional<CompoundTag> getPosDataNBT(Player player, ServerLevel level, ResourceKey<Level> planet) {
+        Optional<List<List<Object>>> playerPlanetPosList = getPosData(player, level, planet);
+        return playerPlanetPosList.map(LaunchPositionHandler::packagePlanetPosData);
+    }
+
     public static Optional<List<List<Object>>> getPosData(Player player, ServerLevel level, ResourceKey<Level> planet) {
         LaunchPositionHolder playerData = getPlayerData(player, level);
         if (playerData == null)
@@ -141,5 +147,17 @@ public class LaunchPositionHandler extends SaveHandler {
         public LaunchPositionHolder() {
             this(new HashMap<>());
         }
+    }
+
+    //Tangentally related methods
+    public static Set<CompoundTag> getPlanetPosDataFromBuffer(FriendlyByteBuf buf) {
+        Set<CompoundTag> locations = new HashSet<>();
+        int locationCount = buf.readVarInt();
+
+        for (int i = 0; i < locationCount; ++i) {
+            locations.add(buf.readNbt());
+        }
+
+        return Collections.unmodifiableSet(locations);
     }
 }
