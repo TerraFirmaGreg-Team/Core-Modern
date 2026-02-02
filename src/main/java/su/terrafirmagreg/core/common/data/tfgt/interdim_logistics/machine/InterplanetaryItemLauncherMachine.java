@@ -124,7 +124,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 bus.getInventory()
                         .addChangedListener(() -> lastActiveTime[IntCircuitBehaviour
                                 .getCircuitConfiguration(bus.getCircuitInventory().getStackInSlot(0))] = Objects
-                                .requireNonNull(getLevel()).getGameTime());
+                                        .requireNonNull(getLevel()).getGameTime());
             }
         }
 
@@ -294,8 +294,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
             remainingItems.add(v.copy());
         }
         var itemBuses = itemInputs.stream().filter(
-                        (c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == circuit
-                                && c.isWorkingEnabled())
+                (c) -> IntCircuitBehaviour.getCircuitConfiguration(c.getCircuitInventory().getStackInSlot(0)) == circuit
+                        && c.isWorkingEnabled())
                 .toList();
         for (RailgunItemBusMachine bus : itemBuses) {
             tryExtractFromInventory(remainingItems, bus.getInventory().storage, simulated);
@@ -306,7 +306,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     private static void tryExtractFromInventory(List<ItemStack> remainingItems, CustomItemStackHandler inventory,
-                                                boolean simulated) {
+            boolean simulated) {
         for (var iter = remainingItems.listIterator(); iter.hasNext();) {
             var stack = iter.next();
             for (int slotIndex = 0; slotIndex < inventory.getSlots(); slotIndex++) {
