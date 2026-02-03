@@ -41,23 +41,9 @@ public class LaunchPositionHandler extends SaveHandler {
             Map<ResourceKey<Level>, List<List<Object>>> planetsMap = new HashMap<>();
 
             for (String planetKey : allPlanetsTag.getAllKeys()) {
-                List<List<Object>> singlePlanetPositions = new ArrayList<>();
-
                 CompoundTag singlePlanetTag = allPlanetsTag.getCompound(planetKey);
-                for (String posIndex : singlePlanetTag.getAllKeys()) {
-                    List<Object> singlePosList = new ArrayList<>();
 
-                    CompoundTag singlePosTag = singlePlanetTag.getCompound(posIndex);
-                    GlobalPos.CODEC.parse(NbtOps.INSTANCE, singlePosTag.getCompound("pos"))
-                            .result().ifPresent((parsedPos) -> {
-                                singlePosList.add(parsedPos);
-                                singlePosList.add(singlePosTag.getBoolean("locked"));
-                                singlePosList.add(singlePosTag.getString("name"));
-                            });
-                    if (!singlePosList.isEmpty()) {
-                        singlePlanetPositions.add(singlePosList);
-                    }
-                }
+                List<List<Object>> singlePlanetPositions = unpackagePlanetPosData(singlePlanetTag);
 
                 planetsMap.put(ResourceKey.create(Registries.DIMENSION, Objects.requireNonNull(ResourceLocation.tryParse(planetKey))), singlePlanetPositions);
             }
@@ -70,7 +56,9 @@ public class LaunchPositionHandler extends SaveHandler {
     public void saveData(CompoundTag compoundTag) {
         List<Object> posData = new ArrayList<>(List.of(
                 GlobalPos.of(Planet.MOON, new BlockPos(20, 20, 20)), false, "test"));
-        List<List<Object>> tempList = new ArrayList<>(List.of(posData));
+        List<Object> posData2 = new ArrayList<>(List.of(
+                GlobalPos.of(Planet.MOON, new BlockPos(40, 20, 40)), false, "test2"));
+        List<List<Object>> tempList = new ArrayList<>(List.of(posData, posData2));
         Map<ResourceKey<Level>, List<List<Object>>> tempMap = new HashMap<>();
         tempMap.put(Planet.MOON, tempList);
         data.put(UUID.fromString("eebb8358-cda4-4cb6-9c8c-c7a17eaa58b3"), new LaunchPositionHolder(tempMap));
@@ -113,6 +101,27 @@ public class LaunchPositionHandler extends SaveHandler {
         }
 
         return singlePlanetTag;
+    }
+
+    public static List<List<Object>> unpackagePlanetPosData(CompoundTag singlePlanetTag) {
+        List<List<Object>> singlePlanetPositions = new ArrayList<>();
+
+        for (String posIndex : singlePlanetTag.getAllKeys()) {
+            List<Object> singlePosList = new ArrayList<>();
+
+            CompoundTag singlePosTag = singlePlanetTag.getCompound(posIndex);
+            GlobalPos.CODEC.parse(NbtOps.INSTANCE, singlePosTag.getCompound("pos"))
+                    .result().ifPresent((parsedPos) -> {
+                        singlePosList.add(parsedPos);
+                        singlePosList.add(singlePosTag.getBoolean("locked"));
+                        singlePosList.add(singlePosTag.getString("name"));
+                    });
+            if (!singlePosList.isEmpty()) {
+                singlePlanetPositions.add(singlePosList);
+            }
+        }
+
+        return singlePlanetPositions;
     }
 
     private static LaunchPositionHolder getPlayerData(Player player, ServerLevel level) {

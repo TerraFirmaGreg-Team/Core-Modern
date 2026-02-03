@@ -46,7 +46,7 @@ public class PlanetsMenuProviderMixin implements MenuConstructor {
         if (!planetsData.isEmpty()) {
             System.out.println(planetsData.size());
             planetsData.forEach(System.out::println);
-            buffer.writeInt(planetsData.size());
+            buffer.writeVarInt(planetsData.size());
             planetsData.forEach(buffer::writeNbt);
         }
 
