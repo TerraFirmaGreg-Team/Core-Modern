@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import org.jetbrains.annotations.Nullable;
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
@@ -49,7 +50,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     protected TickableSubscription tickSubscription;
 
-    private EnergyContainerList energyInputs;
+    private @Nullable EnergyContainerList energyInputs;
 
     private final List<RailgunItemBusMachine> itemInputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
@@ -186,6 +187,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     private boolean tryLaunchItemPayload(NetworkSenderConfigEntry config) {
+        if (energyInputs == null || !isFormed || !isWorkingEnabled()) return false;
+        if (config.getReceiverPartID().dimension().equals(config.getSenderPartID().dimension())) return false;
         var destination = getLogisticsNetwork().getNetworkMachine(config.getReceiverPartID());
         if (!(destination instanceof ILogisticsNetworkReceiver receiver))
             return false;
@@ -280,8 +283,10 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
                 .addWorkingStatusLine();
 
-        textList.add(Component.literal("Power stored: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyStored()))));
-        textList.add(Component.literal("Power capacity: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyCapacity()))));
+        if (energyInputs != null) {
+            textList.add(Component.literal("Power stored: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyStored()))));
+            textList.add(Component.literal("Power capacity: %s".formatted(FormattingUtil.formatNumbers(energyInputs.getEnergyCapacity()))));
+        }
 
         for (var part : this.getParts()) {
             part.addMultiText(textList);

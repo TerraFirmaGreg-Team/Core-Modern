@@ -87,8 +87,6 @@ public class TFGCreativeTab {
         accept(out, TFGItems.WRAPTOR_SPAWN_EGG);
         accept(out, TFGItems.SURFER_SPAWN_EGG);
 
-        //accept(out, TFGItems.ELECTRIC_EXTENDO_GRIP);
-
         accept(out, TFGItems.WIRELESS_CARD);
 
         accept(out, TFGItems.RNR_PLOW);

@@ -99,6 +99,7 @@ dependencies {
     implementation fg.deobf("curse.maven:ftb-teams-forge-404468:6130786") { transitive = false }
     implementation fg.deobf("curse.maven:ftb-library-forge-404465:6164053") { transitive = false }
     implementation fg.deobf("curse.maven:ftb-quests-forge-289412:6431737") { transitive = false }
+    implementation fg.deobf("curse.maven:ftb-chunks-forge-314906:6431735") { transitive = false }
 
     // Jade
     implementation fg.deobf("curse.maven:jade-324717:6271651")

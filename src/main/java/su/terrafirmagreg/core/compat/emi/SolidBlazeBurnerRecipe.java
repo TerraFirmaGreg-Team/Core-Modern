@@ -48,7 +48,7 @@ public class SolidBlazeBurnerRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return TFGCore.id(ITEM.getDefaultInstance().getDisplayName() + "_blaze_burner_emi");
+        return TFGCore.id(ITEM.getDefaultInstance().getItem() + "_blaze_burner_emi");
     }
 
     @Override

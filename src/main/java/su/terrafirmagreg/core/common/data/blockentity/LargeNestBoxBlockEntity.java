@@ -145,49 +145,48 @@ public class LargeNestBoxBlockEntity
             return Helpers.mightHaveCapability(stack, LargeEggCapability.CAPABILITY);
         }
 
+        /**
+         * Updates the visual egg BlockState for the nest part corresponding to the changed slot.
+         * The 2x2 nest stores its inventory at part 0 (origin), but each part displays a different inventory slot.
+         */
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             Level level = this.entity.getLevel();
+            assert level != null;
             BlockState state = this.entity.getBlockState();
             BlockPos pos = this.entity.getBlockPos();
             final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos().set(pos);
 
             final Direction forward = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             final Direction right = forward.getClockWise();
-            for (int i = 0; i < getSlots(); i++) {
-                int newEggState = 0;
 
-                ItemStack stack = getStackInSlot(slot);
-                if (!stack.isEmpty()) {
-                    newEggState = switch (stack.getItem().toString()) {
-                        case "sniffer_egg" -> 1;
-                        case "wraptor_egg" -> 2;
-                        default -> newEggState;
-                    };
-                }
-                switch (slot) {
-                    case 0:
-                        cursor.move(forward);
-                        break;
-                    case 1:
-                        cursor.move(forward).move(right);
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        cursor.move(right);
-                        break;
-                }
+            int newEggState = 0;
+            ItemStack stack = getStackInSlot(slot);
+            if (!stack.isEmpty()) {
+                newEggState = switch (stack.getItem().toString()) {
+                    case "sniffer_egg" -> 1;
+                    case "wraptor_egg" -> 2;
+                    default -> newEggState;
+                };
+            }
 
-                if (!(level.getBlockState(cursor).getBlock() instanceof LargeNestBoxBlock))
-                    break;
-                int eggState = level.getBlockState(cursor).getValue(LargeNestBoxBlock.HAS_EGG_TYPE);
-
-                if (eggState != newEggState) {
-                    BlockState targetState = level.getBlockState(cursor);
-                    level.setBlockAndUpdate(cursor, targetState.setValue(LargeNestBoxBlock.HAS_EGG_TYPE, newEggState));
+            // Navigate from origin to the block that displays this slot's egg
+            switch (slot) {
+                case 0 -> cursor.move(forward);
+                case 1 -> cursor.move(forward).move(right);
+                case 2 -> {
                 }
+                case 3 -> cursor.move(right);
+            }
+
+            BlockState targetState = level.getBlockState(cursor);
+            if (!(targetState.getBlock() instanceof LargeNestBoxBlock))
+                return;
+
+            int eggState = targetState.getValue(LargeNestBoxBlock.HAS_EGG_TYPE);
+            if (eggState != newEggState) {
+                level.setBlockAndUpdate(cursor, targetState.setValue(LargeNestBoxBlock.HAS_EGG_TYPE, newEggState));
             }
         }
     }

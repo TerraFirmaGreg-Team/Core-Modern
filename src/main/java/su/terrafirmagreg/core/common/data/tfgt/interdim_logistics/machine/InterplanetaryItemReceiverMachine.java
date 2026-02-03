@@ -167,7 +167,6 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     }
 
     private void onPackageArrival(ItemPayload payload) {
-        payloads.remove(payload);
         lastActiveTime[payload.inventoryIndex] = Objects.requireNonNull(getLevel()).getGameTime();
         var withCircuit = itemOutputs.stream()
                 .filter((c) -> IntCircuitBehaviour
@@ -216,9 +215,12 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
 
     private void tick() {
         if (Objects.requireNonNull(getLevel()).getGameTime() % 20 != 0) {
-            for (var payload : payloads) {
-                if (payload.launchTick + payload.travelDuration >= getLevel().getGameTime()) {
+            var payloadIter = payloads.iterator();
+            while (payloadIter.hasNext()) {
+                var payload = payloadIter.next();
+                if (payload.launchTick + payload.travelDuration <= getLevel().getGameTime()) {
                     onPackageArrival(payload);
+                    payloadIter.remove();
                 }
             }
         }
