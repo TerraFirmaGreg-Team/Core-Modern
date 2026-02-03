@@ -84,6 +84,8 @@
         "common.gtceu.LootDataManagerMixin",
         "common.gtceu.ModelManagerMixin",
         "common.gtceu.MultiblockInfoEmiCategoryMixin",
+        "common.gtceu.NBTPredicateIngredientAccessor",
+        "common.gtceu.NBTPredicateIngredientSerializerMixin",
         "common.gtceu.NotifiableItemStackHandlerMixin",
         "common.gtceu.QuarkTechSuiteMixin",
         "common.gtceu.SteamBoilerMachineMixin",
