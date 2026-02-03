@@ -81,7 +81,7 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe("cracked_to_normal_walls", TFGTags.Items.INTERACTIONCRACKEDWALL, TFGTags.Items.INTERACTIONBRICKWALL, TFCItems.MORTAR.get()),
             //brick -> smooth
             new BlockInteractionRecipe("normal_to_smooth_bricks", TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
-            new BlockInteractionRecipe("mossy_to_smooth_bricks",TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
+            new BlockInteractionRecipe("mossy_to_smooth_bricks", TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
             new BlockInteractionRecipe("cracked_to_normal_bricks", TFGTags.Items.INTERACTIONCRACKEDBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
             //cobble -> mossy
             new BlockInteractionRecipe("cobble_to_mossy", TFGTags.Items.INTERACTIONCOBBLE, TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFCTags.Items.COMPOST_GREENS_LOW),
@@ -112,7 +112,7 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe("insulation_impure_moderate_remove", impure_moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
             new BlockInteractionRecipe("insulation_moderate_remove", moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
             new BlockInteractionRecipe("insulation_copper_sandy_remove", copper_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
-            new BlockInteractionRecipe("insulation_beryllium_sandy_remove",beryllium_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_beryllium_sandy_remove", beryllium_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
     };
 
 }
