@@ -1,6 +1,9 @@
 package su.terrafirmagreg.core.client;
 
+import static earth.terrarium.adastra.client.forge.AdAstraClientForge.ITEM_RENDERERS;
+
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
 
@@ -9,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -16,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -28,12 +33,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.TFGContainers;
-import su.terrafirmagreg.core.common.data.TFGFluids;
-import su.terrafirmagreg.core.common.data.TFGParticles;
+import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
+import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
+
+import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
+import su.terrafirmagreg.core.common.data.container.ArtisanTableScreen;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.events.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.NormalOreProspectorEventHelper;
@@ -136,6 +142,7 @@ public final class TFGClientEventHandler {
     public static void clientSetup(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
             MenuScreens.register(TFGContainers.LARGE_NEST_BOX.get(), LargeNestBoxScreen::new);
+            MenuScreens.register(TFGContainers.ARTISAN_TABLE.get(), ArtisanTableScreen::new);
 
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getSource(), RenderType.translucent());
@@ -148,6 +155,15 @@ public final class TFGClientEventHandler {
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
         });
+
+        onRegisterItemRenderers(ITEM_RENDERERS::put);
+    }
+
+    public static void onRegisterItemRenderers(BiConsumer<Item, BlockEntityWithoutLevelRenderer> consumer) {
+        consumer.accept(TFGItems.TIER_1_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_1_LAYER, RocketRenderer.TIER_1_TEXTURE));
+        consumer.accept(TFGItems.TIER_2_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_2_LAYER, RocketRenderer.TIER_2_TEXTURE));
+        consumer.accept(TFGItems.TIER_3_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_3_LAYER, RocketRenderer.TIER_3_TEXTURE));
+        consumer.accept(TFGItems.TIER_4_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_4_LAYER, RocketRenderer.TIER_4_TEXTURE));
     }
 
     private static void registerSpecialModels(ModelEvent.RegisterAdditional event) {

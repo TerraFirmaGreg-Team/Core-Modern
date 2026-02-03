@@ -44,6 +44,9 @@ public abstract class GTRecipeTypesMixin {
     @Shadow
     @Final
     public static GTRecipeType AUTOCLAVE_RECIPES;
+    @Shadow
+    @Final
+    public static GTRecipeType CRACKING_RECIPES;
 
     /**
      * Нужно для того, чтобы настроить доп. рецепты. Расширяет кол-во слотов в некоторых машинах.
@@ -77,5 +80,7 @@ public abstract class GTRecipeTypesMixin {
         PYROLYSE_RECIPES.setMaxIOSize(3, 2, 1, 1);
 
         AUTOCLAVE_RECIPES.setMaxIOSize(2, 2, 2, 1);
+
+        CRACKING_RECIPES.setMaxIOSize(1, 1, 2, 2);
     }
 }

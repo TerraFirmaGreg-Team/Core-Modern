@@ -13,6 +13,7 @@ public final class TFGTags {
 
     public static final class Items {
         public static final TagKey<Item> Hammers = createItemTag("forge:tools/hammers");
+
         public static final TagKey<Item> Chains = createItemTag("forge:chains");
         public static final TagKey<Item> Strings = createItemTag("forge:string");
         public static final TagKey<Item> Harvester = createItemTag("tfg:harvester");
@@ -26,9 +27,8 @@ public final class TFGTags {
         public static final TagKey<Item> OreProspectorsBlueSteel = createItemTag("tfg:tools/ore_prospectors/blue_steel");
         public static final TagKey<Item> OreProspectorsRedSteel = createItemTag("tfg:tools/ore_prospectors/red_steel");
 
-        public static final TagKey<Item> GlacianRamFood = createItemTag("tfg:glacian_ram_food");
-        public static final TagKey<Item> SnifferFood = createItemTag("tfg:sniffer_food");
-        public static final TagKey<Item> WraptorFood = createItemTag("tfg:wraptor_food");
+        public static final TagKey<Item> MartianHerbivoreFoods = createItemTag("tfg:martian_herbivore_foods");
+        public static final TagKey<Item> MartianPiscivoreFoods = createItemTag("tfg:martian_piscivore_foods");
         public static final TagKey<Item> EmptySyringe = createItemTag("tfg:empty_dna_syringes");
 
         public static final TagKey<Item> InsulatingContainer = createItemTag("tfg:insulating_container");
@@ -37,6 +37,8 @@ public final class TFGTags {
         public static final TagKey<Item> FloatingProtectionEquipment = createItemTag("tfg:floating_protection_equipment");
 
         public static final TagKey<Item> AutoEatBlacklist = createItemTag("tfg:auto_eat_blacklist");
+        public static final TagKey<Item> ArtisanTableInputs = createItemTag("tfg:artisan_table_inputs");
+        public static final TagKey<Item> ArtisanTableTools = createItemTag("tfg:artisan_table_tools");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");
