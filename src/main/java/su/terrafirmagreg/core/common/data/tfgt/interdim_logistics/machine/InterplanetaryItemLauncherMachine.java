@@ -188,7 +188,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
 
     private boolean tryLaunchItemPayload(NetworkSenderConfigEntry config) {
         if (energyInputs == null || !isFormed || !isWorkingEnabled()) return false;
-
+        if (config.getReceiverPartID().dimension().equals(config.getSenderPartID().dimension())) return false;
         var destination = getLogisticsNetwork().getNetworkMachine(config.getReceiverPartID());
         if (!(destination instanceof ILogisticsNetworkReceiver receiver))
             return false;
