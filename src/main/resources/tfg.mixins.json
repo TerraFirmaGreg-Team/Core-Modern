@@ -75,6 +75,7 @@
         "common.gtceu.EntityDamageUtilMixin",
         "common.gtceu.GrowingPlantRenderMixin",
         "common.gtceu.GTCleanroomMixin",
+        "common.gtceu.GTMachineUtilsMixin",
         "common.gtceu.GTMultiMachinesMixin",
         "common.gtceu.GTRecipeTypesMixin",
         "common.gtceu.GTRecipeWidgetMixin",
