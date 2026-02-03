@@ -25,7 +25,7 @@ public class RailgunItemBusMachine extends ItemBusPartMachine implements IRedsto
     protected @NotNull NotifiableItemStackHandler createInventory(Object @NotNull... args) {
         return new NotifiableItemStackHandler(this, getInventorySize(), io)
                 .setFilter(v -> !v.getTags().toList().contains(TFGTags.Items.CannotLaunchInRailgun)
-                        && v.getItem().canFitInsideContainerItems() && (!(v.getItem() instanceof BlockItem)));
+                        && v.getItem().canFitInsideContainerItems());
     }
 
     @Override
