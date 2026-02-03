@@ -218,7 +218,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
             var payloadIter = payloads.iterator();
             while (payloadIter.hasNext()) {
                 var payload = payloadIter.next();
-                if (payload.launchTick + payload.travelDuration >= getLevel().getGameTime()) {
+                if (payload.launchTick + payload.travelDuration <= getLevel().getGameTime()) {
                     onPackageArrival(payload);
                     payloadIter.remove();
                 }
