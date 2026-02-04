@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
@@ -34,7 +35,6 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import org.jetbrains.annotations.Nullable;
 import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
@@ -187,8 +187,10 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     private boolean tryLaunchItemPayload(NetworkSenderConfigEntry config) {
-        if (energyInputs == null || !isFormed || !isWorkingEnabled()) return false;
-        if (config.getReceiverPartID().dimension().equals(config.getSenderPartID().dimension())) return false;
+        if (energyInputs == null || !isFormed || !isWorkingEnabled())
+            return false;
+        if (config.getReceiverPartID().dimension().equals(config.getSenderPartID().dimension()))
+            return false;
         var destination = getLogisticsNetwork().getNetworkMachine(config.getReceiverPartID());
         if (!(destination instanceof ILogisticsNetworkReceiver receiver))
             return false;

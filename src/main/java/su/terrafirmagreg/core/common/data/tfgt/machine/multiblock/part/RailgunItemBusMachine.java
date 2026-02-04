@@ -1,22 +1,20 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part;
 
-import com.gregtechceu.gtceu.api.machine.MachineDefinition;
-import com.gregtechceu.gtceu.common.data.GTMachines;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CircuitFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.feature.IRedstoneSignalMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
@@ -61,7 +59,8 @@ public class RailgunItemBusMachine extends ItemBusPartMachine implements IRedsto
             newDefinition = TFGMachines.RAILGUN_ITEM_LOADER_IN[this.getTier()];
         }
 
-        if (newDefinition == null) return false;
+        if (newDefinition == null)
+            return false;
         BlockState newBlockState = newDefinition.getBlock().defaultBlockState();
 
         getLevel().setBlockAndUpdate(blockPos, newBlockState);
