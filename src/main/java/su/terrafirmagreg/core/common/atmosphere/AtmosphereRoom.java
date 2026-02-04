@@ -67,7 +67,7 @@ public class AtmosphereRoom {
     // Escape point for vortex spawning (null if sealed)
     @Nullable
     private BlockPos escapePoint = null;
-    private boolean wasSealed = false; // Track for breach detection
+    private boolean wasSealed = false;
 
     public AtmosphereRoom(IAtmosphereProvider provider) {
         this.provider = provider;
@@ -104,7 +104,7 @@ public class AtmosphereRoom {
      * @param currentTick Current game tick
      * @return true if should validate now
      */
-    public boolean shouldValidate(long currentTick) {
+    public boolean shouldRevalidate(long currentTick) {
         if (!canRevalidate(currentTick) || isValidating) {
             return false;
         }
@@ -121,13 +121,13 @@ public class AtmosphereRoom {
      */
     public RoomScan runFloodFill(ServerLevel level) {
         BlockPos machinePos = provider.getPosition();
-        BlockPos startPos = machinePos.above(); // Start above the machine
+        //TODO: maybe the machine outputs air on one specific side, and we should use the neighbor block?
 
         FloodFillConfig config = new FloodFillConfig(
                 provider.getMaxRoomSize(),
                 provider.getMaxHorizontalDimension());
 
-        return FloodFill.fill(level, level, startPos, config);
+        return FloodFill.fill(level, level, machinePos, config);
     }
 
     /**
