@@ -45,7 +45,7 @@ public class FloodFill {
      * @return RoomScan containing the room data
      */
     public static RoomScan fill(Level level, LevelHeightAccessor heightAccessor,
-                                BlockPos start, FloodFillConfig config) {
+            BlockPos start, FloodFillConfig config) {
         State state = new State();
 
         // Init
@@ -194,7 +194,8 @@ public class FloodFill {
         final LongOpenHashSet pendingShell = new LongOpenHashSet();
 
         /** Position where the DFS reaches a termination condition */
-        @Nullable BlockPos escapePoint = null;
+        @Nullable
+        BlockPos escapePoint = null;
 
         // Bounds tracking
         int minX = Integer.MAX_VALUE;

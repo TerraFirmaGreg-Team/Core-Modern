@@ -5,10 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
-import appeng.api.networking.GridHelper;
-import appeng.api.networking.IGrid;
-import appeng.api.networking.events.GridSpatialEvent;
-import appeng.api.networking.spatial.ISpatialService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -22,6 +18,11 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
+
+import appeng.api.networking.GridHelper;
+import appeng.api.networking.IGrid;
+import appeng.api.networking.events.GridSpatialEvent;
+import appeng.api.networking.spatial.ISpatialService;
 
 import su.terrafirmagreg.core.TFGCore;
 
@@ -215,13 +216,24 @@ public final class AtmosphereSystem {
     }
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent e) {onBlockChange(e);}
+    public static void onBlockBreak(BlockEvent.BreakEvent e) {
+        onBlockChange(e);
+    }
+
     @SubscribeEvent
-    public static void EntityPlaceEvent(BlockEvent.EntityPlaceEvent e) {onBlockChange(e);}
+    public static void EntityPlaceEvent(BlockEvent.EntityPlaceEvent e) {
+        onBlockChange(e);
+    }
+
     @SubscribeEvent
-    public static void NeighborNotifyEvent(BlockEvent.NeighborNotifyEvent e) {onBlockChange(e);}
+    public static void NeighborNotifyEvent(BlockEvent.NeighborNotifyEvent e) {
+        onBlockChange(e);
+    }
+
     @SubscribeEvent
-    public static void FluidPlaceBlockEvent(BlockEvent.FluidPlaceBlockEvent e) {onBlockChange(e);}
+    public static void FluidPlaceBlockEvent(BlockEvent.FluidPlaceBlockEvent e) {
+        onBlockChange(e);
+    }
 
     /**
      * Called when a block has potentially changed state

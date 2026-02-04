@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 
 // If I want to change a boolean to a float
@@ -34,7 +35,6 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 //  3. Update the server-side query in AtmosphereQueryPacket to compute floats instead of booleans
 //  4. Remove toByte()/fromByte() - they don't make sense for floats
 
-
 /**
  * Client-side cache for atmosphere query results.
  * Used for tooltips and other client-side display.
@@ -53,10 +53,14 @@ public final class AtmosphereClientCache {
         /** Encodes to a single byte for network transmission. */
         public byte toByte() {
             byte flags = 0;
-            if (hasOxygen) flags |= 0x01;
-            if (hasNormalGravity) flags |= 0x02;
-            if (hasNormalTemperature) flags |= 0x04;
-            if (hasNormalPressure) flags |= 0x08;
+            if (hasOxygen)
+                flags |= 0x01;
+            if (hasNormalGravity)
+                flags |= 0x02;
+            if (hasNormalTemperature)
+                flags |= 0x04;
+            if (hasNormalPressure)
+                flags |= 0x08;
             return flags;
         }
 

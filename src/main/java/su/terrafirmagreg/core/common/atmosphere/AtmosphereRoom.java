@@ -5,12 +5,12 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Tracks the state of an atmosphere room for a single machine.
@@ -161,7 +161,8 @@ public class AtmosphereRoom {
     /**
      * Chunk index update info.
      */
-    public record ChunkDiff(Set<ChunkPos> toRemove, Set<ChunkPos> toAdd) {}
+    public record ChunkDiff(Set<ChunkPos> toRemove, Set<ChunkPos> toAdd) {
+    }
 
     /**
      * Updates the room state from a room scan.

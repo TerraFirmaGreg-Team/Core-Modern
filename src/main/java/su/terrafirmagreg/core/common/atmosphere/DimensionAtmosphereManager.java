@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.atmosphere;
 
+import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.getPassCache;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,20 +12,19 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.Nullable;
 
-import appeng.api.networking.events.GridSpatialEvent;
-import appeng.api.networking.spatial.ISpatialService;
-import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.level.BlockEvent;
+
+import appeng.api.networking.events.GridSpatialEvent;
+import appeng.api.networking.spatial.ISpatialService;
+import lombok.Getter;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassCache;
 import su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassCache.PassType;
-
-import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.getPassCache;
 
 /**
  * Manages atmosphere providers for a single dimension.
@@ -167,7 +168,6 @@ public class DimensionAtmosphereManager {
                 return;
             }
 
-
         } else if (event instanceof BlockEvent.NeighborNotifyEvent nighEvent) {
             TFGCore.LOGGER.warn("nighEvent {}", nighEvent.getState());
             PassCache current = getPassCache(level, pos, nighEvent.getState());
@@ -202,7 +202,8 @@ public class DimensionAtmosphereManager {
         for (int cx = minChunk.x; cx <= maxChunk.x; cx++) {
             for (int cz = minChunk.z; cz <= maxChunk.z; cz++) {
                 Set<AtmosphereRoom> rooms = chunkIndex.get(new ChunkPos(cx, cz));
-                if (rooms == null) continue;
+                if (rooms == null)
+                    continue;
 
                 AABB spatialAabb = new AABB(min, max);
                 for (AtmosphereRoom room : rooms) {
