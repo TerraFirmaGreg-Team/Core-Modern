@@ -37,11 +37,10 @@ public class AtmosphereQueryPacket {
             }
 
             // Query all atmosphere properties
-            AtmosphereSystem system = AtmosphereSystem.get();
             AtmosphereState state = new AtmosphereState(
-                    system.hasOxygen(player.level(), pkt.pos),
-                    system.hasNormalGravity(player.level(), pkt.pos),
-                    system.hasNormalTemperature(player.level(), pkt.pos),
+                    AtmosphereSystem.hasOxygen(player.level(), pkt.pos),
+                    AtmosphereSystem.hasNormalGravity(player.level(), pkt.pos),
+                    AtmosphereSystem.hasNormalTemperature(player.level(), pkt.pos),
                     false // TODO: hasNormalPressure when implemented
             );
 
