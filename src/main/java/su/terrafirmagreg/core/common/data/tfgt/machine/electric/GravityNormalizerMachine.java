@@ -23,10 +23,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
 import lombok.Getter;
-
-import su.terrafirmagreg.core.compat.atmosphere.AtmosphereSystem;
-import su.terrafirmagreg.core.compat.atmosphere.DimensionAtmosphereManager;
-import su.terrafirmagreg.core.compat.atmosphere.IBubbleProvider;
+import su.terrafirmagreg.core.common.atmosphere.AtmosphereSystem;
+import su.terrafirmagreg.core.common.atmosphere.DimensionAtmosphereManager;
+import su.terrafirmagreg.core.common.atmosphere.IBubbleProvider;
 
 /**
  * Gravity Normalizer Machine - provides normal gravity in a spherical bubble.
@@ -128,7 +127,7 @@ public class GravityNormalizerMachine extends TieredEnergyMachine
         energySubscription = energyContainer.addChangedListener(this::updateSubscription);
 
         // Register with atmosphere system
-        AtmosphereSystem.get().registerBubbleProvider(this);
+        AtmosphereSystem.registerBubbleProvider(this);
     }
 
     @Override
@@ -136,7 +135,7 @@ public class GravityNormalizerMachine extends TieredEnergyMachine
         super.onUnload();
 
         // Unregister from atmosphere system
-        AtmosphereSystem.get().unregisterBubbleProvider(this);
+        AtmosphereSystem.unregisterBubbleProvider(this);
 
         if (energySubscription != null) {
             energySubscription.unsubscribe();
@@ -150,7 +149,7 @@ public class GravityNormalizerMachine extends TieredEnergyMachine
 
     @Override
     public void onMachineRemoved() {
-        AtmosphereSystem.get().unregisterBubbleProvider(this);
+        AtmosphereSystem.unregisterBubbleProvider(this);
     }
 
     // ==================== Working Logic ====================

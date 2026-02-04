@@ -26,10 +26,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
 import lombok.Getter;
-
-import su.terrafirmagreg.core.compat.atmosphere.AtmosphereRoom;
-import su.terrafirmagreg.core.compat.atmosphere.AtmosphereSystem;
-import su.terrafirmagreg.core.compat.atmosphere.IAtmosphereProvider;
+import su.terrafirmagreg.core.common.atmosphere.AtmosphereRoom;
+import su.terrafirmagreg.core.common.atmosphere.AtmosphereSystem;
+import su.terrafirmagreg.core.common.atmosphere.IAtmosphereProvider;
 
 /**
  * Oxygen Distributor Machine - provides oxygen via flood fill in sealed rooms.
@@ -83,6 +82,7 @@ public class OxygenDistributorMachine extends TieredEnergyMachine
     @Getter
     private AtmosphereRoom.Mode currentMode = AtmosphereRoom.Mode.INACTIVE;
 
+    @Getter
     private final NotifiableFluidTank oxygenTank;
     protected ISubscription energySubscription;
     protected ISubscription fluidSubscription;
@@ -135,7 +135,7 @@ public class OxygenDistributorMachine extends TieredEnergyMachine
             currentMode = AtmosphereRoom.Mode.INACTIVE;
             isCurrentlyProviding = false;
         } else {
-            currentRoomSize = room.getInterior().getInteriorSize();
+            currentRoomSize = room.getScan().interiorSize();
             currentMode = room.getMode();
             isCurrentlyProviding = room.getMode() == AtmosphereRoom.Mode.SEALED ||
                     room.getMode() == AtmosphereRoom.Mode.BUBBLE;
@@ -168,7 +168,7 @@ public class OxygenDistributorMachine extends TieredEnergyMachine
         fluidSubscription = oxygenTank.addChangedListener(this::updateSubscription);
 
         // Register with atmosphere system
-        AtmosphereSystem.get().registerProvider(this);
+        AtmosphereSystem.registerProvider(this);
     }
 
     @Override
@@ -176,7 +176,7 @@ public class OxygenDistributorMachine extends TieredEnergyMachine
         super.onUnload();
 
         // Unregister from atmosphere system
-        AtmosphereSystem.get().unregisterProvider(this);
+        AtmosphereSystem.unregisterProvider(this);
 
         if (energySubscription != null) {
             energySubscription.unsubscribe();
@@ -194,7 +194,7 @@ public class OxygenDistributorMachine extends TieredEnergyMachine
 
     @Override
     public void onMachineRemoved() {
-        AtmosphereSystem.get().unregisterProvider(this);
+        AtmosphereSystem.unregisterProvider(this);
     }
 
     // ==================== Working Logic ====================
@@ -266,9 +266,5 @@ public class OxygenDistributorMachine extends TieredEnergyMachine
                         String.format("%,d", maxRoomSize(tier))),
                 Component.translatable("tfg.machine.oxygen_distributor.tooltip.energy",
                         GTValues.VNF[tier]));
-    }
-
-    public NotifiableFluidTank getOxygenTank() {
-        return oxygenTank;
     }
 }
