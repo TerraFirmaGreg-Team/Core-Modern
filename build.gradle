@@ -81,7 +81,7 @@ minecraft {
             workingDirectory project.file('run/server')
 
             property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
+            //args '--nogui'
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -195,4 +195,49 @@ gradle.projectsEvaluated {
     // Fallbacks if reobf tasks are not present in this environment
     tasks.findByName('jarJar')?.finalizedBy('renameAllJar')
     tasks.findByName('jar')?.finalizedBy('renameAllJar')
+}
+
+sourceSets {
+    dev {
+        java.srcDir("src/dev/java")
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+}
+
+// Fix a bug in Species that only shows up when running from dev env
+// Compile our patched Species.class, and use it instead of the normal one in the species-3.5.jar.
+// Put the result in run/server/mods
+tasks.register("patchSpeciesForDev", Jar) {
+    dependsOn compileDevJava
+
+    archiveFileName = 'species-3.5.jar'
+    destinationDirectory = file("run/server/mods")
+
+    from({
+        configurations.compileClasspath
+                .filter { it.name.contains("species-3.5") }
+                .collect { zipTree(it) }
+    }) {
+        exclude "com/ninni/species/Species.class"
+    }
+
+    from(sourceSets.dev.output.classesDirs) {
+        include 'com/ninni/species/Species.class'
+    }
+
+    manifest {
+        attributes(
+                'MixinConfigs': 'species.mixins.json',
+                'Specification-Title': 'species',
+                'Implementation-Title': 'species',
+                'Implementation-Version': '3.5'
+        )
+    }
+}
+
+// Runs Species patch before runServer.
+allprojects {
+    tasks.matching { it.name == "prepareRunServer" }.configureEach {
+        dependsOn("patchSpeciesForDev")
+    }
 }
