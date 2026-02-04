@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -58,6 +59,7 @@ public final class PassabilityChecker {
 
     private PassabilityChecker() {
     }
+
     /**
      * Result of checking passability from specific directions.
      */
@@ -120,13 +122,13 @@ public final class PassabilityChecker {
      * @param state Current FloodFill state, necessary for checking which directions we're visiting from.
      * @return PassableResult indicating if atmosphere can pass
      */
-    public static PassableResult isPassable(Level level, BlockPos.MutableBlockPos pos, long posLong, BlockState blockState, FloodFill.State state) {
+    public static PassableResult isPassable(Level level, MutableBlockPos pos, long posLong, BlockState blockState, FloodFill.State state) {
         PassCache passCache = getPassCache(level, pos, blockState);
 
         return switch (passCache.type) {
             case EMPTY -> PassableResult.EMPTY;
             case FULL -> PassableResult.FULL;
-            case COLLISION -> isPassableFromDirections(level, pos, posLong, passCache, state);
+            case COLLISION -> isPassableFromDirections(level, pos, passCache, state.visitDirections.get(posLong));
             default -> {
                 TFGCore.LOGGER.error("Invalid state reached in PassabilityChecker");
                 TFGCore.LOGGER.error("PassCache: {}", passCache);
@@ -136,20 +138,15 @@ public final class PassabilityChecker {
     }
 
     /**
-     * Checks if atmosphere can pass through a block given the incoming directions registered in the FloodFill.State.
-     * Read also the PassableResult enum javadoc for further information on what they mean.
+     * Checks if atmosphere can pass through a block given specific incoming directions.
+     * Read also the {@link PassableResult} values javadoc for further information on what they mean.
      * @param level Block getter for accessing block states
      * @param pos Position of the block to check
-     * @param posLong Position as long
      * @param passCache Cached information on the passability of faces and silhouettes
-     * @param state Current FloodFill state, necessary for checking which directions we're visiting from.
+     * @param incomingDirs Bitmask of directions we're checking passability from
      * @return PassableResult indicating if atmosphere can pass
      */
-    public static PassableResult isPassableFromDirections(Level level, BlockPos.MutableBlockPos pos, long posLong, PassCache passCache, FloodFill.State state) {
-
-        // Get all queued directions
-        byte incomingDirs = state.visitDirections.get(posLong);
-
+    public static PassableResult isPassableFromDirections(Level level, MutableBlockPos pos, PassCache passCache, byte incomingDirs) {
         if (incomingDirs == 0) {
             return PassableResult.ALREADY_CHECKED;
         }
@@ -171,11 +168,11 @@ public final class PassabilityChecker {
             pos.move(perpDir);
             var perpState = level.getBlockState(pos);
             PassCache perpCache = getPassCache(level, pos, perpState);
+            pos.move(perpDir.getOpposite());
 
             if (perpCache.type == EMPTY || (perpCache.type == COLLISION && perpCache.isFaceEmpty(perpDir))) {
                 return PassableResult.PASSABLE_WINDOW_PANE;
             }
-            pos.move(perpDir.getOpposite());
         }
 
         return PassableResult.BLOCKED_WINDOW_PANE;

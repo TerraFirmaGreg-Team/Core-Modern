@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.common.atmosphere;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.function.Consumer;
 
 import net.minecraft.core.Direction;
 
@@ -120,6 +122,15 @@ public class AtmosphereHelpers {
         return relativeLong(posLong, dir.ordinal());
     }
 
+    /**
+     * Equivalent to `blockPos.relative(dir)`. Returns the relative of the pos in the given direction using a bitmask.
+     * The direction used is the lowest Direction ordinal set in dirByte. Don't call this with 0b000000.
+     */
+    public static long relativeLong(long posLong, byte dirByte) {
+        assert dirByte != 0;
+        return relativeLong(posLong, Integer.numberOfTrailingZeros(dirByte));
+    }
+
     /** Return a List of Directions specified by the mask */
     public static Direction[] mask2directions(byte mask) {
         return MASK2DIRECTIONS[mask & 0b111111];
@@ -197,5 +208,30 @@ public class AtmosphereHelpers {
     /** Whether this mask has no directions */
     public static boolean hasNoDirs(byte mask) {
         return mask == 0;
+    }
+
+    /**
+     * Executes action for each direction in mask, in a random order.
+     * @param mask bitmask containing directions to do an action with
+     * @param random random source
+     * @param action function that consumes a direction ordinal int
+     */
+    public static void forEachDirRandomly(byte mask, Random random, Consumer<Integer> action) {
+        byte remaining = mask;
+        while (remaining != 0) {
+            int count = Integer.bitCount(remaining);
+            int pick = random.nextInt(count);
+
+            // Find the pick-th set bit by clearing the lowest 'pick' times
+            int temp = remaining;
+            for (int i = 0; i < pick; i++) {
+                temp &= (temp - 1); // clear lowest set bit
+            }
+            int bitIndex = Integer.numberOfTrailingZeros(temp);
+
+            action.accept(bitIndex);
+
+            remaining &= (byte) ~(1 << bitIndex); // clear this bit
+        }
     }
 }
