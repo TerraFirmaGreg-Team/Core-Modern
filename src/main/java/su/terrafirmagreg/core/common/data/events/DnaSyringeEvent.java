@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.data.events;
 
 import java.util.List;
+import java.util.Objects;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -71,6 +72,24 @@ public class DnaSyringeEvent {
         if (id == null)
             return;
         filled.getOrCreateTag().putString("mob_type", id.toString());
+
+        // Handling for Starcatcher fish entities.
+        if ("starcatcher:fish".equals(id.toString())) {
+            try {
+                Class<?> fishEntityClass = Class.forName("com.wdiscute.starcatcher.fishentity.FishEntity");
+                if (fishEntityClass.isInstance(target)) {
+                    java.lang.reflect.Method getFishItemMethod = fishEntityClass.getMethod("getFishItem");
+                    ItemStack fishItem = (ItemStack) getFishItemMethod.invoke(target);
+
+                    if (!fishItem.isEmpty()) {
+                        String fishItemId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(fishItem.getItem())).toString();
+                        filled.getOrCreateTag().putString("mob_type", fishItemId);
+                    }
+                }
+            } catch (Exception e) {
+                TFGCore.LOGGER.warn("Could not extract fish item data from Starcatcher fish entity: {}", e.getMessage());
+            }
+        }
 
         // Shrinks the stack if the player isn't in creative.
         if (!player.isCreative())

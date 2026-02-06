@@ -11,9 +11,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import su.terrafirmagreg.core.common.data.StarcatcherFishVariants;
 
 /**
  * Item for fish roe which can store a mob id in its NBT data.
@@ -30,10 +33,25 @@ public class FishRoeItem extends Item {
 
         if (stack.hasTag() && Objects.requireNonNull(stack.getTag()).contains("mob_type")) {
             String mobId = stack.getTag().getString("mob_type");
-            if (!mobId.isEmpty()) {
-                EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(mobId));
-                if (type != null) {
-                    placeholder = type.getDescription();
+
+            // Check if this is a Starcatcher fish and use the fish item translation.
+            String fishName = StarcatcherFishVariants.getFishName(stack);
+            if (fishName != null) {
+                placeholder = Component.translatable("item.starcatcher." + fishName);
+            } else {
+                if (!mobId.isEmpty()) {
+                    ResourceLocation itemId = ResourceLocation.parse(mobId);
+                    Item item = ForgeRegistries.ITEMS.getValue(itemId);
+
+                    if (item != null && item != Items.AIR) {
+                        ItemStack itemStack = new ItemStack(item);
+                        placeholder = itemStack.getDisplayName();
+                    } else {
+                        EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(itemId);
+                        if (type != null) {
+                            placeholder = type.getDescription();
+                        }
+                    }
                 }
             }
         }
