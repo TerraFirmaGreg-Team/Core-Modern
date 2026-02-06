@@ -8,22 +8,7 @@ import net.minecraft.world.level.Level;
  * No flood fill required - just a simple radius check.
  * Used for Gravity Normalizers, Temperature Regulators, etc.
  */
-public interface IBubbleProvider {
-
-    /**
-     * @return Position of the machine (center of the bubble)
-     */
-    BlockPos getPosition();
-
-    /**
-     * @return The level this provider is in
-     */
-    Level getLevel();
-
-    /**
-     * @return Whether the machine is currently active
-     */
-    boolean isActive();
+public interface IBubbleMachine extends IAtmosphereMachine {
 
     /**
      * @return Radius of the bubble in blocks
@@ -37,7 +22,7 @@ public interface IBubbleProvider {
      * @return true if the position is within the bubble
      */
     default boolean containsPosition(BlockPos pos) {
-        if (!isActive()) {
+        if (!isWorking()) {
             return false;
         }
 

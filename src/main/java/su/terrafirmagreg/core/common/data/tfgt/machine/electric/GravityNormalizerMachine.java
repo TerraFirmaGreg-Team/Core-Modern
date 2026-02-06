@@ -25,7 +25,7 @@ import net.minecraft.world.level.Level;
 import lombok.Getter;
 import su.terrafirmagreg.core.common.atmosphere.AtmosphereSystem;
 import su.terrafirmagreg.core.common.atmosphere.DimensionAtmosphereManager;
-import su.terrafirmagreg.core.common.atmosphere.IBubbleProvider;
+import su.terrafirmagreg.core.common.atmosphere.IBubbleMachine;
 
 /**
  * Gravity Normalizer Machine - provides normal gravity in a spherical bubble.
@@ -36,9 +36,10 @@ import su.terrafirmagreg.core.common.atmosphere.IBubbleProvider;
  * - HV: 32 block radius
  * - EV+: 64 block radius
  */
+// TODO: Rewrite all of this
 public class GravityNormalizerMachine extends TieredEnergyMachine
         implements IControllable, IFancyUIMachine, IMachineLife,
-        IBubbleProvider, DimensionAtmosphereManager.IGravityProvider {
+        IBubbleMachine, DimensionAtmosphereManager.IGravityProvider {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             GravityNormalizerMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
@@ -90,7 +91,7 @@ public class GravityNormalizerMachine extends TieredEnergyMachine
         return new NotifiableEnergyContainer(this, capacity, GTValues.V[tier], 2L, 0L, 0L);
     }
 
-    // ==================== IBubbleProvider ====================
+    // ==================== IBubbleMachine ====================
 
     @Override
     public BlockPos getPosition() {

@@ -1,7 +1,10 @@
 package su.terrafirmagreg.core.common.atmosphere;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Nullable;
 
@@ -36,8 +39,8 @@ public final class AtmosphereSystem {
     /** Per-dimension managers */
     private static final Map<ResourceKey<Level>, DimensionAtmosphereManager> managers = new ConcurrentHashMap<>();
 
-    /** Whether the system is initialized */
-    private static boolean initialized = false;
+//    /** Whether the system is initialized */
+//    private static boolean initialized = false;
 
     private AtmosphereSystem() {
     }
@@ -47,12 +50,12 @@ public final class AtmosphereSystem {
      * Should be called during mod initialization.
      */
     public static void init() {
-        if (initialized) {
-            return;
-        }
+//        if (initialized) {
+//            return;
+//        }
 
         GridHelper.addEventHandler(GridSpatialEvent.class, AtmosphereSystem::onGridSpatialEvent);
-        initialized = true;
+//        initialized = true;
         TFGCore.LOGGER.info("Atmosphere system initialized");
     }
 
@@ -77,61 +80,6 @@ public final class AtmosphereSystem {
         return managers.get(dimension);
     }
 
-    // ==================== Public API Methods ====================
-
-    /**
-     * Registers a flood-fill atmosphere provider (eg Oxygen Distributor).
-     *
-     * @param provider The provider to register
-     */
-    public static void registerProvider(IAtmosphereProvider provider) {
-        Level level = provider.getLevel();
-        if (level instanceof ServerLevel serverLevel) {
-            getManager(serverLevel).addProvider(provider);
-        }
-    }
-
-    /**
-     * Unregisters a flood-fill atmosphere provider.
-     *
-     * @param provider The provider to remove
-     */
-    public static void unregisterProvider(IAtmosphereProvider provider) {
-        Level level = provider.getLevel();
-        if (level instanceof ServerLevel serverLevel) {
-            DimensionAtmosphereManager manager = managers.get(serverLevel.dimension());
-            if (manager != null) {
-                manager.removeProvider(provider);
-            }
-        }
-    }
-
-    /**
-     * Registers a bubble provider (eg Gravity Normalizer).
-     *
-     * @param provider The provider to register
-     */
-    public static void registerBubbleProvider(IBubbleProvider provider) {
-        Level level = provider.getLevel();
-        if (level instanceof ServerLevel serverLevel) {
-            getManager(serverLevel).addBubbleProvider(provider);
-        }
-    }
-
-    /**
-     * Unregisters a bubble provider.
-     *
-     * @param provider The provider to remove
-     */
-    public static void unregisterBubbleProvider(IBubbleProvider provider) {
-        Level level = provider.getLevel();
-        if (level instanceof ServerLevel serverLevel) {
-            DimensionAtmosphereManager manager = managers.get(serverLevel.dimension());
-            if (manager != null) {
-                manager.removeBubbleProvider(provider);
-            }
-        }
-    }
 
     /**
      * Checks if a position has oxygen (server-side only).
@@ -154,47 +102,71 @@ public final class AtmosphereSystem {
         return manager.hasOxygen(pos);
     }
 
-    /**
-     * Checks if a position has normal gravity.
-     *
-     * @param level The level to check in
-     * @param pos The position to check
-     * @return true if gravity is normalized
-     */
-    public static boolean hasNormalGravity(Level level, BlockPos pos) {
-        if (!(level instanceof ServerLevel)) {
-            return false;
-        }
-
-        DimensionAtmosphereManager manager = managers.get(level.dimension());
-        if (manager == null) {
-            return false;
-        }
-
-        return manager.hasNormalGravity(pos);
+    // ==================== Interfaces ========================
+    // TODO: Should this live here??
+    public interface IOxygenProvider extends IAtmosphereMachine {
+        boolean hasOxygen(BlockPos pos);
     }
 
     /**
-     * Checks if a position has normal temperature.
-     *
-     * @param level The level to check in
-     * @param pos The position to check
-     * @return true if temperature is normalized
+     * Marker interface for gravity-normalizing bubble providers.
      */
-    public static boolean hasNormalTemperature(Level level, BlockPos pos) {
-        if (!(level instanceof ServerLevel)) {
-            return false;
-        }
-
-        DimensionAtmosphereManager manager = managers.get(level.dimension());
-        if (manager == null) {
-            return false;
-        }
-
-        return manager.hasNormalTemperature(pos);
+    public interface IGravityProvider extends IAtmosphereMachine {
     }
 
-    // ==================== Event Handlers ====================
+    /**
+     * Marker interface for temperature-regulating bubble providers.
+     */
+    public interface ITemperatureProvider extends IAtmosphereMachine {
+    }
+
+
+    // ==================== Async Handling ====================
+
+    /** Executor for async jobs. */
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(2, r -> {
+        Thread t = new Thread(r, "FloodFill");
+        t.setDaemon(true);
+        return t;
+    });
+
+    public record ValidationJob(
+            IFloodFillMachine machine,
+            long earliestTick
+    ) {}
+
+    static PriorityQueue<ValidationJob> validationQueue = new PriorityQueue<>(Comparator.comparingLong(ValidationJob::earliestTick));
+    static Set<IFloodFillMachine> validationRequested = new HashSet<>();
+    static Queue<IFloodFillMachine> doneValidating = new ConcurrentLinkedQueue<>();
+
+    public static void requestValidation(IFloodFillMachine machine, long earliestTick) {
+        if (!validationRequested.add(machine))
+            return;
+
+        validationQueue.add(new ValidationJob(machine, earliestTick));
+    }
+
+    private static void dispatchValidation(IFloodFillMachine machine) {
+        EXECUTOR.submit(() -> {
+            try {
+                machine.validateAsync();
+                doneValidating.add(machine); // Memory visibility guarantee
+            } catch (Exception e) {
+                TFGCore.LOGGER.error("Flood fill failed for room at {}", machine.getPos(), e);
+            }
+        });
+
+        // Mark the room as clean to catch the case where the room is modified during the floodfill.
+        // The floodfill result might be stale before it finishes, in which case we want to run a new floodfill.
+        machine.setDirty(false);
+    }
+
+    private static void finalizeValidation(IFloodFillMachine machine) {
+        validationRequested.remove(machine);
+        machine.processValidationResult();
+    }
+
+    // ==================== Event Handling ====================
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
@@ -207,11 +179,19 @@ public final class AtmosphereSystem {
             return;
         }
 
+        // Enqueue validation jobs
         long currentTick = server.getTickCount();
+        ValidationJob job = validationQueue.peek();
+        if (job != null && job.earliestTick() <= currentTick) {
+            validationQueue.poll();
+            dispatchValidation(job.machine());
 
-        // Tick all dimension managers
-        for (DimensionAtmosphereManager manager : managers.values()) {
-            manager.tick(currentTick);
+        }
+
+        // Process finished validation jobs
+        IFloodFillMachine machine;
+        while ((machine = doneValidating.poll()) != null) {
+            finalizeValidation(machine);
         }
     }
 
@@ -237,6 +217,7 @@ public final class AtmosphereSystem {
 
     /**
      * Called when a block has potentially changed state
+     * Dispatches to the applicable dimension manager
      * @param event The event that changes the block
      */
     public static void onBlockChange(BlockEvent event) {
@@ -246,10 +227,16 @@ public final class AtmosphereSystem {
 
         DimensionAtmosphereManager manager = managers.get(serverLevel.dimension());
         if (manager != null) {
-            manager.onBlockChanged(event);
+            manager.onBlockChange(event);
         }
     }
 
+    /**
+     * Called when an AE2 Spatial IO event happens
+     * Dispatches to the applicable dimension manager
+     * @param grid The AE2 grid
+     * @param event The Spatial Event
+     */
     public static void onGridSpatialEvent(IGrid grid, GridSpatialEvent event) {
         ISpatialService spatialService = grid.getSpatialService();
 
@@ -264,7 +251,7 @@ public final class AtmosphereSystem {
 
         DimensionAtmosphereManager manager = managers.get(serverLevel.dimension());
         if (manager != null) {
-            manager.onGridSpatialEvent(spatialService, event);
+            manager.onGridSpatialEvent(spatialService.getMin(), spatialService.getMax());
         }
     }
 
@@ -288,12 +275,14 @@ public final class AtmosphereSystem {
         }
 
         // Remove the manager for this dimension
+        // TODO: Do we want to do this at all?
         managers.remove(serverLevel.dimension());
     }
 
     /**
      * Clears all managers. Called on server shutdown.
      */
+    // TODO: Call on server shutdown?
     public void clear() {
         managers.clear();
     }

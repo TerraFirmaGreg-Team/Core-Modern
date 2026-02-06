@@ -154,6 +154,7 @@ public final class DiagnosticFloodFill {
      *
      * <p>The parentDir map tracks visited blocks and stores the direction we successfully entered from.
      */
+    // TODO: This should be A* from both sides instead of BFS
     private static List<BlockPos> findShortestPath(Level level, LongOpenHashSet interior, long startLong, long escapeLong) {
         Long2ByteOpenHashMap parentDir = new Long2ByteOpenHashMap();
         parentDir.defaultReturnValue(NO_PARENT);

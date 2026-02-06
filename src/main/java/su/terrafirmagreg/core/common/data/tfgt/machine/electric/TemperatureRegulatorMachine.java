@@ -25,7 +25,7 @@ import net.minecraft.world.level.Level;
 import lombok.Getter;
 import su.terrafirmagreg.core.common.atmosphere.AtmosphereSystem;
 import su.terrafirmagreg.core.common.atmosphere.DimensionAtmosphereManager;
-import su.terrafirmagreg.core.common.atmosphere.IBubbleProvider;
+import su.terrafirmagreg.core.common.atmosphere.IBubbleMachine;
 
 /**
  * Temperature Regulator Machine - provides normal temperature in a spherical bubble.
@@ -38,9 +38,10 @@ import su.terrafirmagreg.core.common.atmosphere.IBubbleProvider;
  * - HV: 32 block radius
  * - EV+: 64 block radius
  */
+// TODO: Rewrite all of this
 public class TemperatureRegulatorMachine extends TieredEnergyMachine
         implements IControllable, IFancyUIMachine, IMachineLife,
-        IBubbleProvider, DimensionAtmosphereManager.ITemperatureProvider {
+        IBubbleMachine, DimensionAtmosphereManager.ITemperatureProvider {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             TemperatureRegulatorMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
@@ -92,7 +93,7 @@ public class TemperatureRegulatorMachine extends TieredEnergyMachine
         return new NotifiableEnergyContainer(this, capacity, GTValues.V[tier], 2L, 0L, 0L);
     }
 
-    // ==================== IBubbleProvider ====================
+    // ==================== IBubbleMachine ====================
 
     @Override
     public BlockPos getPosition() {

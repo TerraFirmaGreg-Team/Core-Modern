@@ -10,21 +10,20 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import earth.terrarium.adastra.api.systems.OxygenApi;
-
+import su.terrafirmagreg.core.common.atmosphere.AtmosphereSystem;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 
 /**
  * Recipe condition that requires oxygen adjacency using ad_astra's OxygenApi.
  * <p>
- * <p>- isOxygenated = true: passes when any adjacent block has oxygen.
- * <p>- isOxygenated = false: passes when no adjacent block has oxygen.
+ * <p>- isOxygenated = true: passes when block has oxygen.
+ * <p>- isOxygenated = false: passes when block does not have oxygen.
  * <p>
  */
+//TODO: wth is going on here some of this smells bad
 public class OxygenatedCondition extends RecipeCondition {
 
     public static final Codec<OxygenatedCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)
@@ -79,21 +78,10 @@ public class OxygenatedCondition extends RecipeCondition {
             return false;
 
         BlockPos pos = machine.getPos();
-        boolean hasAdjOxygen = hasOxygenOnAnySide(serverLevel, pos);
-        boolean passes = isOxygenated == hasAdjOxygen;
+        // Check the machine position directly - envelope includes shell blocks
+        boolean hasOxygen = AtmosphereSystem.hasOxygen(serverLevel, pos);
+        boolean passes = isOxygenated == hasOxygen;
         return isReverse != passes;
-    }
-
-    /**
-     * Checks all faces for oxygen.
-     */
-    private static boolean hasOxygenOnAnySide(ServerLevel level, BlockPos pos) {
-        for (Direction dir : Direction.values()) {
-            if (OxygenApi.API.hasOxygen(level, pos.relative(dir))) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

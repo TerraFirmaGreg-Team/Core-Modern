@@ -6,6 +6,7 @@ package su.terrafirmagreg.core.common.atmosphere;
  * @param maxBlocks Maximum number of blocks to fill before stopping (room size limit)
  * @param maxHorizontalDimension Maximum horizontal distance from start position
  */
+// Todo: screw all of this this shouldn't exist.
 public record FloodFillConfig(
         int maxBlocks,
         int maxHorizontalDimension) {
