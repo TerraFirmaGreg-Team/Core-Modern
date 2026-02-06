@@ -16,7 +16,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import su.terrafirmagreg.core.common.data.StarcatcherFishVariants;
+import su.terrafirmagreg.core.common.data.constants.StarcatcherFishVariants;
 
 /**
  * Item for fish roe which can store a mob id in its NBT data.

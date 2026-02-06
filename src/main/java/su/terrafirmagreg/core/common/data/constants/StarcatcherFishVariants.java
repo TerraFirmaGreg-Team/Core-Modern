@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data;
+package su.terrafirmagreg.core.common.data.constants;
 
 import java.util.*;
 
