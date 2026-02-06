@@ -117,13 +117,14 @@ public final class DiagnosticFloodFill {
      * @param level Block getter
      * @param heightAccessor Height accessor for build height limits
      * @param start Starting position
-     * @param config Configuration for limits
+     * @param maxBlocks Maximum number of interior blocks we should find
+     * @param maxHorizontalDimension Maximum horizontal distance this room can span, including walls (make sure it's in render distance)
      * @return RoomScan with escapePath populated if there's an escape
      */
     public static RoomScan fill(Level level, LevelHeightAccessor heightAccessor,
-            BlockPos start, FloodFillConfig config) {
+            BlockPos start, int maxBlocks, int maxHorizontalDimension) {
         // Run regular flood fill to find the room and escape point
-        RoomScan result = FloodFill.fill(level, heightAccessor, start, config);
+        RoomScan result = FloodFill.fill(level, heightAccessor, start, maxBlocks, maxHorizontalDimension);
 
         // If no escape point, return as-is (sealed room or block limit)
         if (result.escapePoint() == null) {

@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.atmosphere.DiagnosticFloodFill;
 import su.terrafirmagreg.core.common.atmosphere.FloodFill;
-import su.terrafirmagreg.core.common.atmosphere.FloodFillConfig;
 import su.terrafirmagreg.core.common.atmosphere.RoomScan;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -30,27 +29,27 @@ public class FloodFillCommand {
                         .then(literal("floodfill").requires(c -> c.hasPermission(2))
                                 .executes(c -> {
                                     BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-                                    return runFloodFill(c.getSource(), pos, FloodFillConfig.TIER_0, false);
+                                    return runFloodFill(c.getSource(), pos, 1_000_000, 128, false);
                                 })
-                                // /tfg floodfill <tier>
-                                .then(argument("tier", IntegerArgumentType.integer(0, 2))
+                                // /tfg floodfill <maxBlocks>
+                                .then(argument("maxBlocks", IntegerArgumentType.integer(0, 1_000_000))
                                         .executes(c -> {
                                             BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-                                            int tier = IntegerArgumentType.getInteger(c, "tier");
-                                            return runFloodFill(c.getSource(), pos, FloodFillConfig.forTier(tier), false);
+                                            int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                                            return runFloodFill(c.getSource(), pos, maxBlocks, 128, false);
                                         })
-                                        // /tfg floodfill <tier> <pos>
+                                        // /tfg floodfill <maxBlocks> <pos>
                                         .then(argument("pos", BlockPosArgument.blockPos())
                                                 .executes(c -> {
                                                     BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
-                                                    int tier = IntegerArgumentType.getInteger(c, "tier");
-                                                    return runFloodFill(c.getSource(), pos, FloodFillConfig.forTier(tier), false);
+                                                    int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                                                    return runFloodFill(c.getSource(), pos, maxBlocks, 128, false);
                                                 })
                                                 .then(literal("diag").requires(c -> c.hasPermission(2))
                                                         .executes(c -> {
                                                             BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
-                                                            int tier = IntegerArgumentType.getInteger(c, "tier");
-                                                            return runFloodFill(c.getSource(), pos, FloodFillConfig.forTier(tier), true);
+                                                            int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                                                            return runFloodFill(c.getSource(), pos, maxBlocks, 128, true);
 
                                                         })))))
                         .then(literal("uncacheable")
@@ -60,19 +59,19 @@ public class FloodFillCommand {
                                 })));
     }
 
-    private static int runFloodFill(CommandSourceStack source, BlockPos start, FloodFillConfig config, boolean diagnostic) {
+    private static int runFloodFill(CommandSourceStack source, BlockPos start, int maxBlocks, int maxHorizontalDistance, boolean diagnostic) {
         ServerLevel level = source.getLevel();
 
         source.sendSuccess(() -> Component.literal(String.format(
                 "Running flood fill from %s with max %d blocks...",
-                start.toShortString(), config.maxBlocks())), false);
+                start.toShortString(), maxBlocks)), false);
 
         RoomScan result;
         long startTime = System.nanoTime();
         if (diagnostic) {
-            result = DiagnosticFloodFill.fill(level, level, start, config);
+            result = DiagnosticFloodFill.fill(level, level, start, maxBlocks, maxHorizontalDistance);
         } else {
-            result = FloodFill.fill(level, level, start, config);
+            result = FloodFill.fill(level, level, start, maxBlocks, maxHorizontalDistance);
         }
         long elapsed = System.nanoTime() - startTime;
 

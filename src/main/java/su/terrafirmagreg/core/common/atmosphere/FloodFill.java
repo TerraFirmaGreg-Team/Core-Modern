@@ -41,11 +41,12 @@ public class FloodFill {
      * @param level Block getter (should be a Level or ChunkAccess)
      * @param heightAccessor Height accessor for build height limits
      * @param start Starting position (typically one block from machine)
-     * @param config Configuration for limits
+     * @param maxBlocks Maximum number of interior blocks we should find
+     * @param maxHorizontalDimension Maximum horizontal distance this room can span, including walls (make sure it's in render distance)
      * @return RoomScan containing the room data
      */
     public static RoomScan fill(Level level, LevelHeightAccessor heightAccessor,
-            BlockPos start, FloodFillConfig config) {
+            BlockPos start, int maxBlocks, int maxHorizontalDimension) {
         State state = new State();
 
         // Init
@@ -67,7 +68,7 @@ public class FloodFill {
 
             pos.set(posLong);
 
-            if (!state.updateAndCheckBounds(level, heightAccessor, pos, config)) {
+            if (!state.updateAndCheckBounds(level, heightAccessor, pos, maxHorizontalDimension)) {
                 return buildResult(state);
             }
 
@@ -77,7 +78,7 @@ public class FloodFill {
             switch (result) {
                 case EMPTY:
                     state.addInteriorBlock(posLong);
-                    if (state.interior.size() > config.maxBlocks()) {
+                    if (state.interior.size() > maxBlocks) {
                         state.hitBlockLimit = true;
                         return buildResult(state);
                     }
@@ -97,7 +98,7 @@ public class FloodFill {
                 case OPEN_SILHOUETTE:
                 case PASSABLE_WINDOW_PANE:
                     state.addInteriorBlock(posLong);
-                    if (state.interior.size() > config.maxBlocks()) {
+                    if (state.interior.size() > maxBlocks) {
                         state.hitBlockLimit = true;
                         return buildResult(state);
                     }
@@ -232,7 +233,7 @@ public class FloodFill {
          * Updates bounds to include the given position.
          * @return whether the position got processed without crossing any limits.
          */
-        boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor, BlockPos pos, FloodFillConfig config) {
+        boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor, BlockPos pos, int maxHorizontalDimension) {
             if (pos.getX() < minX || pos.getX() > maxX || pos.getZ() < minZ || pos.getZ() > maxZ) {
                 // Horizontal bounds expanded
                 minX = Math.min(minX, pos.getX());
@@ -242,8 +243,8 @@ public class FloodFill {
 
                 touchedChunks.add(new ChunkPos(pos));
 
-                if (maxX - minX > config.maxHorizontalDimension()
-                        || maxZ - minZ > config.maxHorizontalDimension()) {
+                if (maxX - minX > maxHorizontalDimension
+                        || maxZ - minZ > maxHorizontalDimension) {
                     hitDimensionLimit = true;
                     escapePoint = pos.immutable();
                     return false;
