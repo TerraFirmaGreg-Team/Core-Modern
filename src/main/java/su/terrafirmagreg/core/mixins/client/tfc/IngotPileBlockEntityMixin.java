@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 
 import net.dries007.tfc.common.blockentities.IngotPileBlockEntity;
 import net.dries007.tfc.util.Metal;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -87,10 +88,10 @@ public abstract class IngotPileBlockEntityMixin {
 
         mapMetals.forEach((metalItem, quantity) -> tooltip.accept(Component.literal(quantity + "x ").append(metalItem.getDisplayName())));
         mapMaterials.forEach((material, quantity) -> tooltip.accept(Component.literal(quantity + "x ").append(material.getLocalizedName())));
-        mapComponents.forEach((component, quantity) -> tooltip.accept(Component.literal(quantity + "x ").append(component)));
+        mapComponents.forEach((hoverNameComponent, quantity) -> tooltip.accept(Component.literal(quantity + "x ").append(hoverNameComponent)));
 
         if (numberOfUnknown > 0) {
-            tooltip.accept(Component.literal(numberOfUnknown + "x ").append(Component.literal("unknown?")));
+            tooltip.accept(Component.literal(numberOfUnknown + "x ").append(Metal.unknown().getDisplayName().copy().withStyle(ChatFormatting.RED)));
         }
     }
 }
