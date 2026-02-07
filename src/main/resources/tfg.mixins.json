@@ -200,6 +200,7 @@
         "client.tfc.ClimateRenderCacheMixin",
         "client.tfc.DoubleIngotPileBlockModelMixin",
         "client.tfc.FarmlandBlockMixin",
+        "client.tfc.IngotPileBlockEntityMixin",
         "client.tfc.IngotPileBlockModelMixin",
         "client.tfc.SheetPileBlockModelMixin",
         "common.ad_astra.PlanetsScreenMixin"
