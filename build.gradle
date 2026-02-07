@@ -204,6 +204,7 @@ gradle.projectsEvaluated {
 sourceSets {
     dev {
         java.srcDir("src/dev/java")
+        resources.srcDir("src/dev/resources")
         compileClasspath += sourceSets.main.compileClasspath
     }
 }
@@ -239,36 +240,53 @@ tasks.register("patchSpeciesJar", Jar) {
     }
 }
 
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
-// Accepts EULA for runServer
-// Sets server.properties online-mode=false so Idea doesn't need to auth with microsoft servers
-tasks.register("prepareServerPatches") {
-    dependsOn("patchSpeciesJar")
-    def eulaSource = file("src/dev/resources/eula.txt")
-    def serverPropertiesSource = file("src/dev/resources/server.properties")
-    def serverDest = file("run/server")
-    serverDest.mkdirs()
-    Files.copy(eulaSource.toPath(), new File(serverDest, "eula.txt").toPath(), StandardCopyOption.REPLACE_EXISTING)
-    Files.copy(serverPropertiesSource.toPath(), new File(serverDest, "server.properties").toPath(), StandardCopyOption.REPLACE_EXISTING)
+// Prepare server: patch Species, accept EULA, set offline mode
+tasks.register("prepareServerDev") {
+    dependsOn patchSpeciesJar
+
+    def serverDir = file("run/server")
+    def eulaFile = file("${serverDir}/eula.txt")
+    def propsFile = file("${serverDir}/server.properties")
+
+    outputs.file(eulaFile)
+    outputs.file(propsFile)
+
+    doLast {
+        serverDir.mkdirs()
+
+        copy {
+            from "src/dev/resources"
+            include "eula.txt", "server.properties"
+            into serverDir
+        }
+    }
 }
 
-// Fix missing WAN lang files in dev env
-tasks.register("prepareClientPatches") {
-    def langSource = file("src/dev/resources/assets/jade/lang/en_us.json")
-    def serverDest = file("run/client/kubejs/assets/jade/lang")
-    serverDest.mkdirs()
-    Files.copy(langSource.toPath(), new File(serverDest, "en_us.json").toPath(), StandardCopyOption.REPLACE_EXISTING)
+// Prepare client: fix missing Jade lang files
+tasks.register("prepareClientDev") {
+    def langDir = file("run/client/kubejs/assets/jade/lang")
+    def langFile = file("${langDir}/en_us.json")
 
+    outputs.file(langFile)
+
+    doLast {
+        langDir.mkdirs()
+
+        copy {
+            from "src/dev/resources/assets/jade/lang"
+            include "en_us.json"
+            into langDir
+        }
+    }
 }
 
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
-        dependsOn("prepareServerPatches")
+        dependsOn("prepareServerDev")
     }
     tasks.matching { it.name == "prepareRunClient" }.configureEach {
-        dependsOn("prepareClientPatches")
+        dependsOn("prepareClientDev")
     }
 
 }
