@@ -40,6 +40,8 @@ java {
     }
 }
 
+
+
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
 
@@ -81,6 +83,8 @@ minecraft {
             workingDirectory project.file('run/server')
 
             property 'forge.enabledGameTestNamespaces', mod_id
+
+            //Turned on the gui so you can input server commands ~Mqrius
             //args '--nogui'
         }
 
@@ -207,7 +211,7 @@ sourceSets {
 // Fix a bug in Species that only shows up when running from dev env
 // Compile our patched Species.class, and use it instead of the normal one in the species-3.5.jar.
 // Put the result in run/server/mods
-tasks.register("patchSpeciesForDev", Jar) {
+tasks.register("patchSpeciesJar", Jar) {
     dependsOn compileDevJava
 
     archiveFileName = 'species-3.5.jar'
@@ -235,9 +239,38 @@ tasks.register("patchSpeciesForDev", Jar) {
     }
 }
 
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+// Accepts EULA for runServer
+// Sets server.properties online-mode=false so Idea doesn't need to auth with microsoft servers
+tasks.register("prepareServerPatches") {
+    dependsOn("patchSpeciesJar")
+    def eulaSource = file("src/dev/resources/eula.txt")
+    def serverPropertiesSource = file("src/dev/resources/server.properties")
+    def serverDest = file("run/server")
+    serverDest.mkdirs()
+    Files.copy(eulaSource.toPath(), new File(serverDest, "eula.txt").toPath(), StandardCopyOption.REPLACE_EXISTING)
+    Files.copy(serverPropertiesSource.toPath(), new File(serverDest, "server.properties").toPath(), StandardCopyOption.REPLACE_EXISTING)
+}
+
+// Fix missing WAN lang files in dev env
+tasks.register("prepareClientPatches") {
+    def langSource = file("src/dev/resources/assets/jade/lang/en_us.json")
+    def serverDest = file("run/client/kubejs/assets/jade/lang")
+    serverDest.mkdirs()
+    Files.copy(langSource.toPath(), new File(serverDest, "en_us.json").toPath(), StandardCopyOption.REPLACE_EXISTING)
+
+}
+
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
-        dependsOn("patchSpeciesForDev")
+        dependsOn("prepareServerPatches")
     }
+    tasks.matching { it.name == "prepareRunClient" }.configureEach {
+        dependsOn("prepareClientPatches")
+    }
+
 }
+
+
