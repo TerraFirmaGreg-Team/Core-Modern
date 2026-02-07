@@ -40,8 +40,6 @@ java {
     }
 }
 
-
-
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
 
@@ -83,7 +81,6 @@ minecraft {
             workingDirectory project.file('run/server')
 
             property 'forge.enabledGameTestNamespaces', mod_id
-
             args '--nogui'
         }
 
