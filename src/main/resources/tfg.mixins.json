@@ -141,7 +141,7 @@
         "common.species.TrooperMixin",
         "common.tfc.BlastFurnaceBlockEntityMixin",
         "common.tfc.BloomeryBlockEntityMixin",
-        "common.tfc.CaveSpikesFeatureMixin",
+      "common.tfc.features.CaveSpikesFeatureMixin",
         "common.tfc.CharcoalForgeBlockMixin",
         "common.tfc.ChunkDataMixin",
         "common.tfc.CrucibleBlockMixin",
