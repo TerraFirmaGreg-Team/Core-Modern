@@ -40,6 +40,8 @@ public final class ServerConfig {
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
 
+    public final ForgeConfigSpec.BooleanValue enableNewTFCWorldgen;
+
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
     public final ForgeConfigSpec.IntValue sandDecumulateChance;
 
@@ -96,6 +98,12 @@ public final class ServerConfig {
                             }
                             return true;
                         });
+
+        builder.pop().push("world_generation");
+        enableNewTFCWorldgen = builder
+                .comment("Enable experimental Overworld world generation (porting 1.21 TFC)")
+                // TODO: change this to false before pulling into dev!
+                .define("enableNewTFCWorldgen", true);
 
         builder.pop().push("mars_climate");
         sandAccumulateChance = builder

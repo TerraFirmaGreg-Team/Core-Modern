@@ -33,11 +33,9 @@ import net.minecraft.data.loot.packs.VanillaBlockLoot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -270,6 +268,63 @@ public final class TFGBlocks {
                     .sound(TFCSounds.THATCH)
                     .blockEntity(TFGBlockEntities.LARGE_NEST_BOX)
                     .serverTicks(LargeNestBoxBlockEntity::serverTick)));
+
+    // New TFC Worldgen
+    public static final RegistryObject<SlabBlock> TUFF_SLAB = register("tuff_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.TERRACOTTA_GRAY)
+                    .sound(SoundType.TUFF)
+                    .strength(1.5f, 10)
+                    .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<StairBlock> TUFF_STAIRS = register("tuff_stairs",
+            () -> new StairBlock(Blocks.TUFF::defaultBlockState,
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.TERRACOTTA_GRAY)
+                            .sound(SoundType.TUFF)
+                            .strength(1.5f, 10)
+                            .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<WallBlock> TUFF_WALL = register("tuff_wall",
+            () -> new WallBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.TERRACOTTA_GRAY)
+                    .sound(SoundType.TUFF)
+                    .strength(1.5f, 10)
+                    .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block> TUFF_GRAVEL = register("tuff_gravel",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.TERRACOTTA_GRAY)
+                    .sound(SoundType.GRAVEL)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(1.6f, 5)));
+
+    public static final RegistryObject<Block> COARSE_SILTY_LOAM_DIRT = register("coarse_silty_loam_dirt",
+            () -> new Block(BlockBehaviour.Properties.copy(TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get())));
+
+    public static final RegistryObject<Block> COARSE_SANDY_LOAM_DIRT = register("coarse_sandy_loam_dirt",
+            () -> new Block(BlockBehaviour.Properties.copy(TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get())));
+
+    public static final RegistryObject<Block> COARSE_SILT_DIRT = register("coarse_silt_dirt",
+            () -> new Block(BlockBehaviour.Properties.copy(TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get())));
+
+    public static final RegistryObject<Block> COARSE_LOAM_DIRT = register("coarse_loam_dirt",
+            () -> new Block(BlockBehaviour.Properties.copy(TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get())));
+
+    public static final RegistryObject<Block> HARDENED_CLAY = register("hardened_clay",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.TERRACOTTA_ORANGE)
+                    .strength(7.0F)
+                    .sound(SoundType.PACKED_MUD)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block> HALITE = register("rock/halite",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.QUARTZ)
+                    .strength(6.0F)
+                    .sound(SoundType.DEEPSLATE)
+                    .requiresCorrectToolForDrops()));
 
     // These are done separately to avoid cyclic references
 

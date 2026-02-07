@@ -62,6 +62,17 @@ public class TFGCreativeTab {
 
         accept(out, TFGBlocks.ARTISAN_TABLE);
 
+        accept(out, TFGBlocks.TUFF_SLAB);
+        accept(out, TFGBlocks.TUFF_STAIRS);
+        accept(out, TFGBlocks.TUFF_WALL);
+        accept(out, TFGBlocks.TUFF_GRAVEL);
+        accept(out, TFGBlocks.COARSE_SILTY_LOAM_DIRT);
+        accept(out, TFGBlocks.COARSE_SANDY_LOAM_DIRT);
+        accept(out, TFGBlocks.COARSE_SILT_DIRT);
+        accept(out, TFGBlocks.COARSE_LOAM_DIRT);
+        accept(out, TFGBlocks.HARDENED_CLAY);
+        accept(out, TFGBlocks.HALITE);
+
         accept(out, TFGItems.GLACIAN_WOOL);
         accept(out, TFGItems.SNIFFER_WOOL);
         accept(out, TFGItems.SNIFFER_EGG);
