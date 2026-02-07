@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.tfc;
+package su.terrafirmagreg.core.mixins.common.tfc.features;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

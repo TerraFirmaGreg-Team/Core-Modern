@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.tfc;
+package su.terrafirmagreg.core.mixins.common.tfc.features;
 
 import java.util.function.ToIntFunction;
 
