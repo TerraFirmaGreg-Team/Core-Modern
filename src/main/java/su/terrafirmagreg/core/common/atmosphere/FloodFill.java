@@ -22,10 +22,6 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 /**
  * Flood fill algorithm for atmosphere room detection.
  * Uses DFS with UP-first direction order for fast escape detection.
- *
- * <p>Uses lazy evaluation: neighbors are added to the frontier with minimal checks,
- * and expensive checks (block state lookup, passability) are deferred until pop time.
- * This reduces wasted work for unsealed rooms that escape quickly.
  */
 public class FloodFill {
 
@@ -34,9 +30,6 @@ public class FloodFill {
 
     /**
      * Performs a DFS flood fill starting from the given position.
-     *
-     * <p>Uses lazy evaluation: expensive checks (block state lookup, passability) are
-     * deferred until we pop from the frontier. This reduces work for unsealed rooms.
      *
      * @param level Block getter (should be a Level or ChunkAccess)
      * @param heightAccessor Height accessor for build height limits

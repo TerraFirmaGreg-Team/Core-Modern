@@ -46,7 +46,9 @@ public record RoomScan(
         /** Fill stopped at unloaded chunk (escape assumed, may recover on chunk load) */
         ESCAPED_UNLOADED,
         /** Fill stopped at block limit (seal status unknown) */
-        BLOCK_LIMIT;
+        BLOCK_LIMIT,
+        /** Fill doesn't exist, used for init values */
+        NULL;
 
         public boolean isSealed() {
             return this == SEALED;
@@ -57,7 +59,7 @@ public record RoomScan(
         }
 
         public boolean hasEscape() {
-            return this != SEALED && this != BLOCK_LIMIT;
+            return this != SEALED && this != BLOCK_LIMIT && this != NULL;
         }
     }
 
@@ -170,7 +172,7 @@ public record RoomScan(
         return new RoomScan(
                 new LongOpenHashSet(),
                 new LongOpenHashSet(),
-                Status.BLOCK_LIMIT,
+                Status.NULL,
                 null,
                 null,
                 new AABB(0, 0, 0, 0, 0, 0),

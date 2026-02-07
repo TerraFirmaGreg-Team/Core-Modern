@@ -159,18 +159,26 @@ public class DimensionAtmosphereManager {
 
         public void add(T machine, Set<ChunkPos> chunks) {
             for (ChunkPos chunk : chunks) {
-                map.computeIfAbsent(chunk, k -> new HashSet<>())
-                        .add(machine);
+                addSingle(machine, chunk);
             }
         }
 
         public void remove(T machine, Set<ChunkPos> chunks) {
             for (ChunkPos chunk : chunks) {
-                Set<T> set = map.get(chunk);
-                if (set != null) {
-                    set.remove(machine);
-                    if (set.isEmpty()) map.remove(chunk);
-                }
+                removeSingle(machine, chunk);
+            }
+        }
+
+        public void addSingle(T machine, ChunkPos chunk) {
+            map.computeIfAbsent(chunk, k -> new HashSet<>())
+                    .add(machine);
+        }
+
+        public void removeSingle(T machine, ChunkPos chunk) {
+            Set<T> set = map.get(chunk);
+            if (set != null) {
+                set.remove(machine);
+                if (set.isEmpty()) map.remove(chunk);
             }
         }
 
@@ -178,6 +186,4 @@ public class DimensionAtmosphereManager {
             return map.get(chunk);
         }
     }
-
-
 }
