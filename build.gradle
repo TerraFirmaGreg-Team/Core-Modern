@@ -84,8 +84,7 @@ minecraft {
 
             property 'forge.enabledGameTestNamespaces', mod_id
 
-            //Turned on the gui so you can input server commands ~Mqrius
-            //args '--nogui'
+            args '--nogui'
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -256,8 +255,21 @@ tasks.register("prepareServerDev") {
 
         copy {
             from "src/dev/resources"
-            include "eula.txt", "server.properties"
+            include "eula.txt"
             into serverDir
+        }
+
+        // Create or patch server.properties to set online-mode=false
+        if (propsFile.exists()) {
+            def content = propsFile.text
+            if (content.contains('online-mode=')) {
+                content = content.replaceAll(/online-mode=\w+/, 'online-mode=false')
+            } else {
+                content += '\nonline-mode=false'
+            }
+            propsFile.text = content
+        } else {
+            propsFile.text = 'online-mode=false\n'
         }
     }
 }
