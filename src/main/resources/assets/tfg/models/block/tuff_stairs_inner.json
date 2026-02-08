@@ -1,0 +1,9 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "minecraft:block/tuff",
+        "top": "minecraft:block/tuff",
+        "bottom": "minecraft:block/tuff"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

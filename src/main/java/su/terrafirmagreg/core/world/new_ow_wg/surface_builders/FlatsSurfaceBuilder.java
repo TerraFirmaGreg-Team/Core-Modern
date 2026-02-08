@@ -26,7 +26,7 @@ public class FlatsSurfaceBuilder implements SurfaceBuilder {
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
         if (startY < 66 && context.rainfall() < 25) {
-        NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, mid, water, water);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, mid, water, water);
         } else {
             NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_SAND, complexStates.MID_DIRT_TO_SAND, complexStates.UNDER_GRAVEL);
         }

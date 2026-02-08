@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "type=bottom": {"model": "tfg:block/tuff_slab"},
+        "type=double": {"model": "minecraft:block/tuff"},
+        "type=top": {"model": "tfg:block/tuff_slab_top"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

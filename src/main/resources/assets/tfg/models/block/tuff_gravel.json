@@ -1,0 +1,5 @@
+{
+    "parent": "block/cube_all",
+    "textures": {"all": "tfg:block/tuff_gravel"},
+    "__comment__": "This file was automatically created by mcresources"
+}

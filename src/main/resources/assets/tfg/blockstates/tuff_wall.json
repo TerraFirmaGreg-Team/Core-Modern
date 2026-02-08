@@ -1,0 +1,71 @@
+{
+    "multipart": [
+        {
+            "apply": {"model": "tfg:block/tuff_wall_post"},
+            "when": {"up": "true"}
+        },
+        {
+            "apply": {
+                "uvlock": true,
+                "model": "tfg:block/tuff_wall_side"
+            },
+            "when": {"north": "low"}
+        },
+        {
+            "apply": {
+                "uvlock": true,
+                "y": 90,
+                "model": "tfg:block/tuff_wall_side"
+            },
+            "when": {"east": "low"}
+        },
+        {
+            "apply": {
+                "uvlock": true,
+                "y": 180,
+                "model": "tfg:block/tuff_wall_side"
+            },
+            "when": {"south": "low"}
+        },
+        {
+            "apply": {
+                "uvlock": true,
+                "y": 270,
+                "model": "tfg:block/tuff_wall_side"
+            },
+            "when": {"west": "low"}
+        },
+        {
+            "apply": {
+                "uvlock": true,
+                "model": "tfg:block/tuff_wall_side_tall"
+            },
+            "when": {"north": "tall"}
+        },
+        {
+            "apply": {
+                "uvlock": true,
+                "y": 90,
+                "model": "tfg:block/tuff_wall_side_tall"
+            },
+            "when": {"east": "tall"}
+        },
+        {
+            "apply": {
+                "uvlock": true,
+                "y": 180,
+                "model": "tfg:block/tuff_wall_side_tall"
+            },
+            "when": {"south": "tall"}
+        },
+        {
+            "apply": {
+                "uvlock": true,
+                "y": 270,
+                "model": "tfg:block/tuff_wall_side_tall"
+            },
+            "when": {"west": "tall"}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

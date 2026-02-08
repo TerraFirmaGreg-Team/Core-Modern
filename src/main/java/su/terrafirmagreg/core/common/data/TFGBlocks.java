@@ -319,7 +319,7 @@ public final class TFGBlocks {
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops()));
 
-    public static final RegistryObject<Block> HALITE = register("rock/halite",
+    public static final RegistryObject<Block> HALITE = register("halite",
             () -> new Block(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.QUARTZ)
                     .strength(6.0F)
