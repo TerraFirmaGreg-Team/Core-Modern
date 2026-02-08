@@ -27,6 +27,10 @@ import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuffRingsSurfaceBuilder;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuyasSurfaceBuilder;
 
+/**
+ * Adds additional data to biome builders that are new in 1.21
+ */
+
 @Mixin(value = BiomeBuilder.class, remap = false)
 public class BiomeBuilderMixin implements IBiomeBuilder {
     @Shadow

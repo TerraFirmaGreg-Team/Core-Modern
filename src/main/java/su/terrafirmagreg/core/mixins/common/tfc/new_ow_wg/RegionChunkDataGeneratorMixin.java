@@ -25,10 +25,9 @@ public class RegionChunkDataGeneratorMixin {
         if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
             final float distance = (float) fractal.intersectDistance(gridX, gridZ);
             final float distanceInfluence = Mth.clampedMap(distance, 0f, RIVER_INFLUENCE_SQ, 1f, 0f);
-            final float targetValue = Math.min(originalRainfall + 300f, 500f);
 
-            // Take the max of any influence with adjacent rivers
-            cir.setReturnValue(Math.max(originalRainfall, Mth.lerp(distanceInfluence * widthInfluence, originalRainfall, targetValue)));
+			// Take the max of any influence with adjacent rivers
+			cir.setReturnValue(Math.max(currentRainfall, distanceInfluence * widthInfluence * 300f));
         }
     }
 }

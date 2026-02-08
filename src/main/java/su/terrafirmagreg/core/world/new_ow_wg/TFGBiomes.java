@@ -1,7 +1,9 @@
 package su.terrafirmagreg.core.world.new_ow_wg;
 
+import net.dries007.tfc.world.biome.BiomeBlendType;
 import net.dries007.tfc.world.biome.BiomeBuilder;
 import net.dries007.tfc.world.biome.BiomeExtension;
+import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.river.RiverBlendType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -16,9 +18,33 @@ import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.DuneSurfaceBuilde
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.FlatsSurfaceBuilder;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.GrassyDunesSurfaceBuilder;
 
+import static net.dries007.tfc.world.biome.BiomeBuilder.builder;
+
 public class TFGBiomes {
 
-    // Dry Biomes
+	// Aquatic biomes
+	// BiomeNoise.ocean and BiomeNoise.oceanRidge are identical between 1.20 and 1.21
+
+	// Ocean biome found near continents.
+	public static final BiomeExtension OCEAN = register("ocean",
+		builder().heightmap(seed -> BiomeNoise.ocean(seed, -26, -12))
+			.surface(ShoreAndOceanSurfaceBuilder.OCEAN)
+			.aquiferHeightOffset(-24).salty().type(BiomeBlendType.OCEAN).noRivers());
+	// Ocean biome with reefs depending on climate. Could be interpreted as either barrier, fringe, or platform reefs.
+	public static final BiomeExtension OCEAN_REEF = register("ocean_reef",
+		builder().heightmap(seed -> BiomeNoise.ocean(seed, -16, -8))
+			.surface(ShoreAndOceanSurfaceBuilder.OCEAN).aquiferHeightOffset(-24).salty().type(BiomeBlendType.OCEAN).noRivers());
+	// Deep ocean biome covering most all oceans.
+	public static final BiomeExtension DEEP_OCEAN = register("deep_ocean",
+		builder().heightmap(seed -> BiomeNoise.ocean(seed, -30, -16))
+			.surface(ShoreAndOceanSurfaceBuilder.OCEAN).aquiferHeightOffset(-24).type(BiomeBlendType.OCEAN).salty().noRivers());
+	// Deeper ocean with sharp relief carving to create very deep trenches
+	public static final BiomeExtension DEEP_OCEAN_TRENCH = register("deep_ocean_trench",
+		builder().heightmap(seed -> BiomeNoise.oceanRidge(seed, -30, -16))
+			.surface(ShoreAndOceanSurfaceBuilder.OCEAN).aquiferHeightOffset(-24).type(BiomeBlendType.OCEAN).salty().noRivers());
+
+
+	// Dry Biomes
     public static final BiomeExtension MUD_FLATS = register("mud_flats",
             BiomeBuilder.builder().heightmap(TFGBiomeNoise::flats)
                     .surface(seed -> new FlatsSurfaceBuilder(true))

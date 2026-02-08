@@ -9,6 +9,10 @@ import net.dries007.tfc.world.layer.TFCLayers;
 
 import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
 
+/**
+ * Exists to ensure that biome layers are initialized at the right time
+ */
+
 @Mixin(value = TFCLayers.class, remap = false)
 public class TFCLayersMixin {
 

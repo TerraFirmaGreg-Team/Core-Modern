@@ -2,6 +2,10 @@ package su.terrafirmagreg.core.world.new_ow_wg;
 
 import net.dries007.tfc.world.biome.BiomeBuilder;
 
+/**
+ * Accessor interface to work with BiomeBuilderMixin
+ */
+
 public interface IBiomeBuilder {
 
     BiomeBuilder tfg$type(ShoreBlendType type);

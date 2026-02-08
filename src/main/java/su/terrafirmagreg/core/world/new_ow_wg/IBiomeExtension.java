@@ -1,5 +1,9 @@
 package su.terrafirmagreg.core.world.new_ow_wg;
 
+/**
+ * Accessor interface to work with BiomeExtensionMixin
+ */
+
 public interface IBiomeExtension {
     void tfg$init(ShoreBlendType shoreBlendType, boolean hasTuffCones, boolean hasTuyas, int tuffRingRarity, int tuyaRarity, int shoreBaseHeight);
 

@@ -8,6 +8,10 @@ import net.dries007.tfc.world.biome.BiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.ShoreBlendType;
 
+/**
+ * Adds additional data to biome extensions that are new in 1.21
+ */
+
 @Mixin(value = BiomeExtension.class, remap = false)
 public class BiomeExtensionMixin implements IBiomeExtension {
 
