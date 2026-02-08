@@ -1,6 +1,7 @@
-package su.terrafirmagreg.core.common.data.constants;
+package su.terrafirmagreg.core.compat.starcatcher;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -14,9 +15,37 @@ public class StarcatcherFishVariants {
     }
 
     /**
-     * Registry of all Starcatcher fish variants with their colors.
+     * Cached fish info.
      */
+    public record CachedFishInfo(String mobType, boolean isStarcatcherFish, String fishName) {
+    }
+
     private static final Map<String, FishVariant> FISH_VARIANTS = new HashMap<>();
+    private static final Map<Integer, CachedFishInfo> FISH_INFO_CACHE = new ConcurrentHashMap<>();
+
+    private static CachedFishInfo getCachedFishInfo(ItemStack stack) {
+        if (!stack.hasTag()) {
+            return new CachedFishInfo("", false, null);
+        }
+
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.contains("mob_type")) {
+            return new CachedFishInfo("", false, null);
+        }
+
+        int nbtHash = tag.hashCode();
+        return FISH_INFO_CACHE.computeIfAbsent(nbtHash, key -> {
+            String mobType = tag.getString("mob_type");
+            boolean isStarcatcher = FISH_VARIANTS.containsKey(mobType);
+            String fishName = null;
+
+            if (isStarcatcher && mobType.startsWith("starcatcher:")) {
+                fishName = mobType.substring("starcatcher:".length());
+            }
+
+            return new CachedFishInfo(mobType, isStarcatcher, fishName);
+        });
+    }
 
     public static void initializeFishVariants() {
         addFishVariant("starcatcher:obidontiee", 0x4682B4, 0xC0C0C0);
@@ -131,17 +160,7 @@ public class StarcatcherFishVariants {
      * Check if an item contains a Starcatcher fish mob type nbt.
      */
     public static boolean isStarcatcherFish(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return false;
-        }
-
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains("mob_type")) {
-            return false;
-        }
-
-        String mobType = tag.getString("mob_type");
-        return FISH_VARIANTS.containsKey(mobType);
+        return getCachedFishInfo(stack).isStarcatcherFish;
     }
 
     /**
@@ -151,15 +170,12 @@ public class StarcatcherFishVariants {
      * @return The color for this layer.
      */
     public static int getStarcatcherFishColor(ItemStack stack, int tintIndex) {
-        if (!isStarcatcherFish(stack)) {
+        CachedFishInfo fishInfo = getCachedFishInfo(stack);
+        if (!fishInfo.isStarcatcherFish) {
             return 0xFFFFFF;
         }
 
-        CompoundTag tag = stack.getTag();
-        assert tag != null;
-        String fishId = tag.getString("mob_type");
-
-        FishVariant variant = getFishVariant(fishId);
+        FishVariant variant = getFishVariant(fishInfo.mobType);
         if (variant != null) {
             return (tintIndex == 1) ? variant.baseColor : variant.overlayColor;
         }
@@ -173,20 +189,6 @@ public class StarcatcherFishVariants {
      * @return The fish name for translation.
      */
     public static String getFishName(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return null;
-        }
-
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains("mob_type")) {
-            return null;
-        }
-
-        String mobType = tag.getString("mob_type");
-
-        if (FISH_VARIANTS.containsKey(mobType)) {
-            return mobType.substring("starcatcher:".length());
-        }
-        return null;
+        return getCachedFishInfo(stack).fishName;
     }
 }

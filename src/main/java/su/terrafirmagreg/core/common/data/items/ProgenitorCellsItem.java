@@ -1,7 +1,9 @@
 package su.terrafirmagreg.core.common.data.items;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,14 +14,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import su.terrafirmagreg.core.common.data.constants.StarcatcherFishVariants;
+import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
 
 public class ProgenitorCellsItem extends Item {
+
+    private static final Map<Integer, Component> TOOLTIP_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, Component> ENTITY_DISPLAY_CACHE = new ConcurrentHashMap<>();
+
     public ProgenitorCellsItem(Properties props) {
         super(props);
     }
@@ -29,33 +34,52 @@ public class ProgenitorCellsItem extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level level,
             @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         if (stack.hasTag() && Objects.requireNonNull(stack.getTag()).contains("mob_type")) {
-            String mobId = stack.getTag().getString("mob_type");
+            int nbtHash = stack.getTag().hashCode();
+            Component cachedTooltip = TOOLTIP_CACHE.get(nbtHash);
 
-            // Check if this is a Starcatcher fish and use the fish item translation.
-            String fishName = StarcatcherFishVariants.getFishName(stack);
-            if (fishName != null) {
-                Component fishDisplayName = Component.translatable("item.starcatcher." + fishName);
-                tooltip.add(Component.translatable("tfg.tooltip.progenitor_cells.mob")
-                        .append(fishDisplayName)
-                        .withStyle(ChatFormatting.GOLD));
+            if (cachedTooltip != null) {
+                tooltip.add(cachedTooltip);
             } else {
-                ResourceLocation itemId = ResourceLocation.parse(mobId);
-                Item item = ForgeRegistries.ITEMS.getValue(itemId);
-
-                if (item != null && item != Items.AIR) {
-                    ItemStack itemStack = new ItemStack(item);
-                    tooltip.add(Component.translatable("tfg.tooltip.progenitor_cells.mob")
-                            .append(itemStack.getDisplayName())
-                            .withStyle(ChatFormatting.GOLD));
-                } else {
-                    EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(itemId);
-                    if (type != null) {
-                        tooltip.add(Component.translatable("tfg.tooltip.progenitor_cells.mob")
-                                .append(Component.translatable("entity." + mobId.replace(":", ".")))
-                                .withStyle(ChatFormatting.GOLD));
-                    }
-                }
+                Component mobTooltip = computeMobTooltip(stack);
+                TOOLTIP_CACHE.put(nbtHash, mobTooltip);
+                tooltip.add(mobTooltip);
             }
+        }
+    }
+
+    private Component computeMobTooltip(ItemStack stack) {
+        if (stack.getTag() == null) {
+            return Component.translatable("tfg.tooltip.progenitor_cells.mob")
+                    .append(Component.empty())
+                    .withStyle(ChatFormatting.GOLD);
+        }
+
+        String mobId = stack.getTag().getString("mob_type");
+
+        // Check if this is a Starcatcher fish and use the fish item translation.
+        String fishName = StarcatcherFishVariants.getFishName(stack);
+        if (fishName != null) {
+            Component fishDisplayName = Component.translatable("item.starcatcher." + fishName);
+            return Component.translatable("tfg.tooltip.progenitor_cells.mob")
+                    .append(fishDisplayName)
+                    .withStyle(ChatFormatting.GOLD);
+        } else {
+            // Use cached entity name translation.
+            Component entityName = ENTITY_DISPLAY_CACHE.computeIfAbsent(mobId, id -> {
+                try {
+                    ResourceLocation entityId = ResourceLocation.parse(id);
+                    EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(entityId);
+                    if (type != null) {
+                        return Component.translatable("entity." + id.replace(":", "."));
+                    }
+                } catch (Exception ignored) {
+                }
+                return Component.empty();
+            });
+
+            return Component.translatable("tfg.tooltip.progenitor_cells.mob")
+                    .append(entityName)
+                    .withStyle(ChatFormatting.GOLD);
         }
     }
 }
