@@ -33,38 +33,45 @@ public class BlockInteractionRecipe implements EmiRecipe {
     private final List<EmiStack> OUTPUTS = new ArrayList<>();
     //TOOL refers to the item(s) used to transform the block
     private final List<EmiIngredient> TOOL = new ArrayList<>();
+    private final String recipeID;
 
-    public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, TagKey<Item> TOOL) {
+    public BlockInteractionRecipe(String id, TagKey<Item> INPUT, TagKey<Item> OUTPUT, TagKey<Item> TOOL) {
+        recipeID = id;
         INPUTS.add(EmiIngredient.of(INPUT));
         ForgeRegistries.ITEMS.tags().getTag(OUTPUT).forEach(i -> OUTPUTS.add(EmiStack.of(i)));
         this.TOOL.add(EmiIngredient.of(TOOL));
     }
 
-    public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, Item CONSUMABLE) {
+    public BlockInteractionRecipe(String id, TagKey<Item> INPUT, TagKey<Item> OUTPUT, Item CONSUMABLE) {
+        recipeID = id;
         INPUTS.add(EmiIngredient.of(INPUT));
         ForgeRegistries.ITEMS.tags().getTag(OUTPUT).forEach(i -> OUTPUTS.add(EmiStack.of(i)));
         this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
     }
 
-    public BlockInteractionRecipe(TagKey<Item> INPUT, TagKey<Item> OUTPUT, ItemStack CONSUMABLE) {
+    public BlockInteractionRecipe(String id, TagKey<Item> INPUT, TagKey<Item> OUTPUT, ItemStack CONSUMABLE) {
+        recipeID = id;
         INPUTS.add(EmiIngredient.of(INPUT));
         ForgeRegistries.ITEMS.tags().getTag(OUTPUT).forEach(i -> OUTPUTS.add(EmiStack.of(i)));
         this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
     }
 
-    public BlockInteractionRecipe(Item INPUT, Item OUTPUT, Item CONSUMABLE) {
+    public BlockInteractionRecipe(String id, Item INPUT, Item OUTPUT, Item CONSUMABLE) {
+        recipeID = id;
         INPUTS.add(EmiIngredient.of(Ingredient.of(INPUT)));
         OUTPUTS.add(EmiStack.of(OUTPUT));
         this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
     }
 
-    public BlockInteractionRecipe(Item INPUT, Item OUTPUT, TagKey<Item> TOOL) {
+    public BlockInteractionRecipe(String id, Item INPUT, Item OUTPUT, TagKey<Item> TOOL) {
+        recipeID = id;
         INPUTS.add(EmiIngredient.of(Ingredient.of(INPUT)));
         OUTPUTS.add(EmiStack.of(OUTPUT));
         this.TOOL.add(EmiIngredient.of(TOOL));
     }
 
-    public BlockInteractionRecipe(Item INPUT, Item OUTPUT, ItemStack CONSUMABLE) {
+    public BlockInteractionRecipe(String id, Item INPUT, Item OUTPUT, ItemStack CONSUMABLE) {
+        recipeID = id;
         INPUTS.add(EmiIngredient.of(Ingredient.of(INPUT)));
         OUTPUTS.add(EmiStack.of(OUTPUT));
         this.TOOL.add(EmiIngredient.of(Ingredient.of(CONSUMABLE)));
@@ -77,7 +84,7 @@ public class BlockInteractionRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return TFGCore.id(INPUTS.toString() + "_" + OUTPUTS.toString() + "_block_interaction_emi");
+        return TFGCore.id(recipeID + "_block_interaction_emi");
     }
 
     @Override

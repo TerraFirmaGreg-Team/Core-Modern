@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.common.data.tfgt.machine;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.common.data.GCYMBlocks.MOLYBDENUM_DISILICIDE_COIL_BLOCK;
+import static fi.dea.mc.deafission.common.data.FissionMachines.HeatPortEv;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import java.util.*;
@@ -11,11 +13,14 @@ import org.joml.Vector3f;
 
 import com.eerussianguy.firmalife.common.FLTags;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.IMachineBlock;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -54,14 +59,19 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import fi.dea.mc.deafission.common.data.FissionMachines;
+import earth.terrarium.adastra.common.registry.ModBlocks;
+import fi.dea.mc.deafission.common.data.FissionGtRecipeTypes;
+import fi.dea.mc.deafission.common.data.FissionTags;
 import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
-import fi.dea.mc.deafission.common.data.machine.AuxExchangerMachine;
+import fi.dea.mc.deafission.common.data.machine.hb.HbMachine;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.tfgt.TFGPartAbility;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine.InterplanetaryItemLauncherMachine;
+import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine.InterplanetaryItemReceiverMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
 
 @SuppressWarnings({ "unused", "SpellCheckingInspection" })
@@ -164,6 +174,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGTRecipeTypes.GREENHOUSE_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(GTBlocks.STEEL_HULL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(
@@ -192,7 +203,10 @@ public class TFGMultiMachines {
                         .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
                     .where("B", Predicates.blockTag(FLTags.Blocks.ALL_IRON_GREENHOUSE))
                     .where("G", Predicates.blocks(FLBlocks.LARGE_PLANTER.get()))
-                    .where("F", Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION))
+                    .where("F", Predicates.blockTag(TFCTags.Blocks.BLOOMERY_INSULATION)
+                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfg", "iron_greenhouse_casings"))))
+                            .or(Predicates.blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.IRON).get(Greenhouse.BlockType.TRAPDOOR).get()))
+                            .or(Predicates.blocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.RUSTED_IRON).get(Greenhouse.BlockType.TRAPDOOR).get())))
                     .where("H", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg","grow_light"))))
                     .build())
                 .shapeInfos(definition -> {
@@ -271,9 +285,9 @@ public class TFGMultiMachines {
             .workableCasingModel(GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("A   A", "A   A", "CCCCC", "CDCDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
-                    .aisle(" *** ", " *** ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
-                    .aisle(" *** ", " *** ", "CCGCC", "CFHFC", "CFHFC", "CAFAC", "BAFAB", " A*A ", " A*A ", " A*A ", " A*A ")
-                    .aisle(" *** ", " *** ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
+                    .aisle("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
+                    .aisle("     ", "     ", "CCGCC", "CFHFC", "CFHFC", "CAFAC", "BAFAB", " A A ", " A A ", " A A ", " A A ")
+                    .aisle("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
                     .aisle("A   A", "A   A", "CCCCC", "CDYDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
                     .where("*", Predicates.air())
                     .where(" ", Predicates.any())
@@ -349,7 +363,7 @@ public class TFGMultiMachines {
                 middle.add("SSS");
                 List<String> back = new ArrayList<>(15);
                 back.add("MES");
-                back.add("FSS");
+                back.add("SFS");
                 for (int i = 1; i <= 11; ++i) {
                     front.add("SSS");
                     middle.add(1, "S#S");
@@ -389,19 +403,19 @@ public class TFGMultiMachines {
                     .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
                     .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
                     .aisle("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDDDDDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
-                    .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F        D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEE   EEEE******")
-                    .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEE   D*", "**D F  F       F    D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEE       EEE*****")
-                    .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EE         EE*****")
-                    .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EE           EE****")
-                    .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EE           EE****")
-                    .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EE             EE***")
-                    .aisle("A      DBBBBBBBD      A", "A      DKKKKKKKD      A", "BEE    DK  H  KD    EEB", "D  EEEEDK  H  KDEEEE  D", "D  F   KKKKHKKKK   F  D", "*D GGGGGGGGGGGGGGGGG D*", "*D         G         D*", "**D        G        D**", "**D        G        D**", "**D                 D**", "***D               D***", "***D   H H L H H   D***", "***D              D****", "****D             D****", "****D             D****", "****DJJJJJJJJJJJJJD****", "****D             D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "****D             D****", "***EE             EE***")
-                    .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EE             EE***")
-                    .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EE           EE****")
-                    .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EE           EE****")
-                    .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EE         EE*****")
-                    .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEEF  D*", "**D F  F       F  F D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEE       EEE*****")
-                    .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F    F   D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEE   EEEE******")
+                    .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F        D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
+                    .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEE   D*", "**D F  F       F    D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
+                    .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
+                    .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
+                    .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
+                    .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                    .aisle("A      DBBBBBBBD      A", "A      DKKKKKKKD      A", "BEE    DK  H  KD    EEB", "D  EEEEDK  H  KDEEEE  D", "D  F   KKKKHKKKK   F  D", "*D GGGGGGGGGGGGGGGGG D*", "*D         G         D*", "**D        G        D**", "**D        G        D**", "**D                 D**", "***D               D***", "***D   H H L H H   D***", "***D              D****", "****D             D****", "****D             D****", "****DJJJJJJJJJJJJJD****", "****D             D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                    .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                    .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
+                    .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
+                    .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
+                    .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEEF  D*", "**D F  F       F  F D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
+                    .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F    F   D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
                     .aisle("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
                     .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
                     .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
@@ -412,6 +426,7 @@ public class TFGMultiMachines {
                     .where("A", Predicates.frames(GTMaterials.TungstenSteel))
                     .where("B", Predicates.blocks(tower_casing.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                             .or(Predicates.autoAbilities(true, false, false)))
                     .where("C", Predicates.controller(Predicates.blocks(definition.getBlock())))
                     .where("D", Predicates.blocks(titanium_concrete.get())
@@ -424,7 +439,60 @@ public class TFGMultiMachines {
                     .where("J", Predicates.blocks(steel_catwalk.get()))
                     .where("K", Predicates.blocks(GCYMBlocks.CASING_CORROSION_PROOF.get()))
                     .where("L", Predicates.blocks(titanium_exhaust.get()))
+                    .where("M", Predicates.air()
+                            .or(Predicates.blocks(ModBlocks.VENT.get())))
                     .build())
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
+                var builder = MultiblockShapeInfo.builder()
+                        .aisle("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                        .aisle("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                        .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                        .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
+                        .aisle("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDDDDDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
+                        .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F        D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
+                        .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEE   D*", "**D F  F       F    D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
+                        .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
+                        .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
+                        .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
+                        .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                        .aisle("A      DBBBBBBBD      A", "A      DKKKKKKKD      A", "BEE    DK  H  KD    EEB", "D  EEEEDK  H  KDEEEE  D", "D  F   KKKKHKKKK   F  D", "*D GGGGGGGGGGGGGGGGG D*", "*D         G         D*", "**D        G        D**", "**D        G        D**", "**D                 D**", "***D               D***", "***D   H H L H H   D***", "***D              D****", "****D             D****", "****D             D****", "****DJJJJJJJJJJJJJD****", "****D             D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                        .aisle("       DBBBBBBBD       ", "       DKKKKKKKD       ", "BEE    DK     KD    EEB", "D  EEEEDK     KDEEEE  D", "*D   F KKKKKKKKK F   D*", "*D  GFG G G G G GFG  D*", "*D   F           F   D*", "**D  F           F  D**", "**D  GGGGGGGGGGGGG  D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D             D****", "****D             D****", "****D             D****", "****D JJJJJJJJJJJ D****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****EE         EE*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****D             D****", "****D             D****", "***EEMMMMMMMMMMMMMEE***")
+                        .aisle("        DBBBBBD        ", "        DKKKKKD        ", "BEE     DK   KD     EEB", "D  EEEEEDK   KDEEEEE  D", "*D      KKKKKKK      D*", "*D  G G G GFG G G G  D*", "**D        F        D**", "**D        F        D**", "**D        G        D**", "***D               D***", "***D               D***", "***D   H H H H H   D***", "****D  I       I  D****", "****D  I       I  D****", "****D  I       I  D****", "*****DJIJJJJJJJIJD*****", "*****D I       I D*****", "*****D I       I D*****", "*****D I       I D*****", "*****DDI       IDD*****", "*****EEE       EEE*****", "*****DD         DD*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****DD           DD****", "****EEMMMMMMMMMMMEE****")
+                        .aisle("A       DDBBBDD       A", "A       DDKKKDD       A", "BEEE    DDKKKDD    EEEB", "*D  EEEEDDKKKDDEEEE  D*", "*D   F  KKKKKKK  F   D*", "*D  GFG G G G G GFG  D*", "**D  F           F  D**", "**D  F           F  D**", "***D GGGGGGGGGGGGG D***", "***D               D***", "***D               D***", "****D  H H H H H  D****", "****D             D****", "****D             D****", "*****D           D*****", "*****DJJJJJJJJJJJD*****", "*****D           D*****", "*****D           D*****", "******D         D******", "******DD       DD******", "******EEE     EEE******", "******DD       DD******", "******D         D******", "*****D           D*****", "*****D           D*****", "*****D           D*****", "*****D           D*****", "****EEMMMMMMMMMMMEE****")
+                        .aisle("*         DDD         *", "*         DDD         *", "*BEE      DDD      EEB*", "*D  EEEEEEDDDEEEEEE  D*", "*D        KKK        D*", "**D G G G G G G G G D**", "**D                 D**", "***D               D***", "***D       G       D***", "****D             D****", "****D             D****", "****D    H H H    D****", "*****D   I   I   D*****", "*****D   I   I   D*****", "*****D   I   I   D*****", "******DJJIJJJIJJD******", "******D  I   I  D******", "******DD I   I DD******", "******DD I   I DD******", "*******DDI   IDD*******", "*******EEE   EEE*******", "*******DD     DD*******", "******DD       DD******", "******DD       DD******", "******D         D******", "******D         D******", "*****DD         DD*****", "*****EEMMMMMMMMMEE*****")
+                        .aisle("*A                   A*", "*A                   A*", "*BEEE             EEEB*", "*D  FEEEEEEEEEEEEEF  D*", "**D F  F       F  F D**", "**D G GFG G G GFG G D**", "***D   F       F   D***", "***D   F       F   D***", "****D  GGGGGGGGG  D****", "****D             D****", "****D             D****", "*****D   H H H   D*****", "*****D     I     D*****", "******D    I    D******", "******D    I    D******", "*******DJJJIJJJD*******", "*******D   I   D*******", "*******D   I   D*******", "*******DD  I  DD*******", "********DD I DD********", "********EEEEEEE********", "********DD   DD********", "*******DD     DD*******", "*******D       D*******", "*******D       D*******", "*******D       D*******", "******DD       DD******", "*****EEEMMMMMMMEEE*****")
+                        .aisle("**                   **", "**                   **", "**BEEE           EEEB**", "**D   EEEEEEEEEEE   D**", "**D   F    F    F   D**", "***D  G G GFG G G  D***", "***D       F       D***", "****D      F      D****", "****D      G      D****", "*****D           D*****", "*****D           D*****", "******D    H    D******", "******DD       DD******", "*******D       D*******", "*******DD     DD*******", "********DD   DD********", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "*********DDDDD*********", "*********EEEEE*********", "*********DDDDD*********", "*********DDDDD*********", "********DDDDDDD********", "********DDD DDD********", "********DD   DD********", "*******DDD   DDD*******", "******EEEEMMMEEEE******")
+                        .aisle("**A                 A**", "**A                 A**", "**BEEEE         EEEEB**", "***D   EEEEEEEEE   D***", "***D    F     F    D***", "****D   G G G G   D****", "****D             D****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "**********DDD**********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********D***********", "**********DDD**********", "*********DDDDD*********", "********EEEEEEE********")
+                        .aisle("***                 ***", "***                 ***", "***BEEEEE     EEEEEB***", "***DD    EEEEE    DD***", "****D     F F     D****", "*****D    G G    D*****", "*****DD         DD*****", "******DD       DD******", "*******DD     DD*******", "********DDD DDD********", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "**********EEE**********")
+                        .aisle("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                        .aisle("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                        .aisle("********A  A  A********", "********A  A  A********", "********BBBCBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
+                        .where('*', Blocks.AIR.defaultBlockState())
+                        .where(' ', Blocks.AIR.defaultBlockState())
+                        .where('A', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.TungstenSteel))
+                        .where('B', tower_casing.get())
+                        .where('C', definition, Direction.NORTH)
+                        .where('D', titanium_concrete.get())
+                        .where('E', tower_casing.get())
+                        .where('F', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.WatertightSteel))
+                        .where('G', heat_pipe.get())
+                        .where('H', GTBlocks.CASING_TITANIUM_PIPE.get())
+                        .where('I', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
+                        .where('J', steel_catwalk.get())
+                        .where('K', GCYMBlocks.CASING_CORROSION_PROOF.get())
+                        .where('L', titanium_exhaust.get());
+
+                var airCopy = builder.shallowCopy()
+                        .where('M', Blocks.AIR.defaultBlockState());
+                shapeInfos.add(airCopy.build());
+
+                var ventCopy = builder.shallowCopy()
+                        .where('M', ModBlocks.VENT.get());
+                shapeInfos.add(ventCopy.build());
+
+                return shapeInfos;
+            })
             .register();
 
     public static final MultiblockMachineDefinition GROWTH_CHAMBER = REGISTRATE
@@ -432,7 +500,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGTRecipeTypes.GROWTH_CHAMBER_RECIPES)
-            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(BIOCULTURE_CASING)
             .tooltips(Component.translatable("tfg.tooltip.machine.parallel"),
                     Component.translatable("tfg.tooltip.growth_chamber"))
@@ -480,18 +548,20 @@ public class TFGMultiMachines {
     private static final Supplier<Block> MARS_CASING = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars"));
     public static final MultiblockMachineDefinition OSTRUM_LINEAR_ACCELERATOR = REGISTRATE
-            .multiblock("ostrum_linear_accelerator", AuxExchangerMachine::new)
+            .multiblock("ostrum_linear_accelerator", CustomAuxExchangerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.OSTRUM_LINEAR_ACCELERATOR)
             .appearanceBlock(MARS_CASING)
             .workableCasingModel(ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_mars"),
                     GTCEu.id("block/machines/thermal_centrifuge"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA", "         ", "         ")
-                    .aisle("BAAAAAAAA", "B#######D", "BBBBBBBAA", " BCCCB   ", " BBBBB   ")
-                    .aisle("AAAAAAAAA", "K#######D", "BB###BBAA", " C###C   ", " BHHHB   ")
-                    .aisle("BEBEBEAAA", "BEBEBEA#D", "BBBBBBBAA", " BCCCB   ", " BBBBB   ")
-                    .aisle("A     AFA", "A     AXA", "AAAAAAAFA", "         ", "         ")
+            .pattern(definition -> {
+                return FactoryBlockPattern.start(RelativeDirection.LEFT, RelativeDirection.BACK, RelativeDirection.UP)
+                        .aisle("A     AFA", "BEBEBEAAA", "AAAAAAAAA", "BAAAAAAAA", "AAAAAAAAA")
+                        .aisle("A     AXA", "BEBEBEA#D", "K#######D", "B#######D", "AAAAAAAAA")
+                        .aisle("A     AFA", "BEBEBEA#D", "K#######D", "B#######D", "AAAAAAAAA").setRepeatable(0,4)
+                        .aisle("AAAAAAAAA", "BBBBBBBAA", "BB###BBAA", "BBBBBBBAA", "AAAAAAAAA")
+                        .aisle("         ", " BCCCB   ", " C###C   ", " BCCCB   ", "         ")
+                        .aisle("         ", " BBBBB   ", " BHHHB   ", " BBBBB   ", "         ")
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('A', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars")))
                             .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
@@ -499,8 +569,8 @@ public class TFGMultiMachines {
                     .where('C', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_vacuum_engine_intake"))))
                     .where('D', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("gtceu", "heat_vent"))))
                     .where('E', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars")))
-                            .or(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(6))
-                            .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(6)))
+                            .or(abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(abilities(PartAbility.IMPORT_ITEMS)))
                     .where('F', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars")))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('H', Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/machine_casing_mars")))
@@ -510,7 +580,8 @@ public class TFGMultiMachines {
                         .or(Predicates.abilities(FisssionGtPartAbilities.USE_HEAT)))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
-                    .build())
+                    .build();
+            })/*
             .shapeInfos(definition -> {
                 List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
                 var builder = MultiblockShapeInfo.builder()
@@ -534,7 +605,7 @@ public class TFGMultiMachines {
                         .where(' ', Blocks.AIR);
                 shapeInfo.add(builder.build());
                 return shapeInfo;
-            })
+            })*/
             .register();
 
     private static final Supplier<Block> OSTRUM_CASING = () -> ForgeRegistries.BLOCKS
@@ -555,12 +626,12 @@ public class TFGMultiMachines {
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where("A", Predicates.blocks(OSTRUM_CASING.get()))
                     .where("B", Predicates.blocks(DESH_PTFE.get()).setMinGlobalLimited(1)
-                            .or(Predicates.abilities((PartAbility.IMPORT_FLUIDS)))
+                            .or(Predicates.abilities((TFGPartAbility.SMR_FLUID_INPUT)))
                             .or(Predicates.abilities((PartAbility.EXPORT_FLUIDS)))
                             .or(Predicates.autoAbilities(true, false, false))
                             .or(Predicates.abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1)))
                     .where("D", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "casings/heat_pipe_casing"))))
-                    .where("E", Predicates.blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                    .where("E", Predicates.blocks(MOLYBDENUM_DISILICIDE_COIL_BLOCK.get()))
                     .build())
             .register();
 
@@ -597,7 +668,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGTRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
-            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(HORTICULTURE_CASING)
             .model(GTMachineModels.createWorkableCasingMachineModel(
             ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_egh"),
@@ -643,7 +714,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGTRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
-            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(TFGBlocks.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .workableCasingModel(
@@ -776,7 +847,7 @@ public class TFGMultiMachines {
                     .where('B', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setMinGlobalLimited(1)))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())
                     .build())
@@ -861,6 +932,41 @@ public class TFGMultiMachines {
                     .build())
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     GTCEu.id("block/machines/forge_hammer/overlay_front"))
+            .register();
+
+    public static final MultiblockMachineDefinition HeatBatteryMk1 = REGISTRATE
+            .multiblock("heat_battery_mk1", HbMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
+            .recipeType(FissionGtRecipeTypes.HbImportRecipe)
+            .recipeType(FissionGtRecipeTypes.HbExportRecipe)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .appearanceBlock(MARS_CASING)
+            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
+            .workableCasingModel(
+                    ResourceLocation.fromNamespaceAndPath("tfg", "block/casings/machine_casing_mars"),
+                    GTCEu.id("block/multiblock/implosion_compressor"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("##BBB##", "##CCC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
+                    .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
+                    .aisle("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
+                    .aisle("BBFFFBB", "CAFFFAC", "DAAGAAD", "DAAGAAD", "DAAGAAD", "CAFFFAC", "BBFFFBB")
+                    .aisle("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
+                    .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
+                    .aisle("##BBB##", "##CYC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
+                    .where("Y", Predicates.controller(blocks(definition.getBlock())))
+                    .where("#", Predicates.any())
+                    .where("A", Predicates.air())
+                    .where("B", Predicates.blocks(OSTRUM_CASING.get()))
+                    .where("C", Predicates.blocks(MARS_CASING.get())
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(6).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(6).setPreviewCount(1)))
+                    .where("D", Predicates.blocks(GTBlocks.CASING_LAMINATED_GLASS.get())
+                            .or(Predicates.blocks(HeatPortEv.get()).setMaxGlobalLimited(1).setPreviewCount(1)))
+                    .where("F", Predicates.blocks(heat_pipe.get()))
+                    .where("G", Predicates.blockTag(FissionTags.COMPONENT_HB)
+                            .or(Predicates.air()))
+                    .build())
             .register();
     // spotless:on
 }

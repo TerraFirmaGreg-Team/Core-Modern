@@ -3,8 +3,6 @@ package su.terrafirmagreg.core.common.data;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import com.gregtechceu.gtceu.api.item.ComponentItem;
-
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BucketItem;
@@ -18,6 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import appeng.api.upgrades.Upgrades;
 import de.mennomax.astikorcarts.item.CartItem;
+import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.items.*;
@@ -79,14 +78,23 @@ public class TFGItems {
     public static final RegistryObject<Item> WRAPTOR_EGG = ITEMS.register("wraptor_egg",
             () -> new Item(new Item.Properties().stacksTo(32)));
 
-    public static final RegistryObject<ComponentItem> ELECTRIC_EXTENDO_GRIP = ITEMS.register("electric_extendo_grip",
-            () -> new ElectricExtendoGrip(new Item.Properties()));
-
     public static final RegistryObject<Item> WIRELESS_CARD = ITEMS.register("wireless_card",
             () -> Upgrades.createUpgradeCardItem(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 
     public static final RegistryObject<Item> RNR_PLOW = ITEMS.register("rnr_plow",
             () -> new CartItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> TIER_1_DOUBLE_ROCKET = ITEMS.register("tier_1_double_rocket",
+            () -> new RocketItem(TFGEntities.TIER_1_DOUBLE_ROCKET::get, (new Item.Properties()).stacksTo(1).fireResistant()));
+
+    public static final RegistryObject<Item> TIER_2_DOUBLE_ROCKET = ITEMS.register("tier_2_double_rocket",
+            () -> new RocketItem(TFGEntities.TIER_2_DOUBLE_ROCKET::get, (new Item.Properties()).stacksTo(1).fireResistant()));
+
+    public static final RegistryObject<Item> TIER_3_DOUBLE_ROCKET = ITEMS.register("tier_3_double_rocket",
+            () -> new RocketItem(TFGEntities.TIER_3_DOUBLE_ROCKET::get, (new Item.Properties()).stacksTo(1).fireResistant()));
+
+    public static final RegistryObject<Item> TIER_4_DOUBLE_ROCKET = ITEMS.register("tier_4_double_rocket",
+            () -> new RocketItem(TFGEntities.TIER_4_DOUBLE_ROCKET::get, (new Item.Properties()).stacksTo(1).fireResistant()));
 
     private static RegistryObject<Item> register(String name) {
         return register(name, () -> new Item(new Item.Properties()));

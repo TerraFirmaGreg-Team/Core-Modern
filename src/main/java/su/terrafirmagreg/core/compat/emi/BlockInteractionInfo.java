@@ -31,6 +31,10 @@ public class BlockInteractionInfo {
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "impure_moderate_core_frame")).asItem();
     private static final Supplier<Item> moderate_frame = () -> ForgeRegistries.BLOCKS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "moderate_core_frame")).asItem();
+    private static final Supplier<Item> copper_sandy_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "copper_sandy_frame")).asItem();
+    private static final Supplier<Item> beryllium_sandy_frame = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "beryllium_sandy_frame")).asItem();
 
     private static final Supplier<Item> glacian_wool = () -> ForgeRegistries.ITEMS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool")).asItem();
@@ -40,67 +44,75 @@ public class BlockInteractionInfo {
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "impure_graphite_moderator")).asItem();
     private static final Supplier<Item> moderator = () -> ForgeRegistries.ITEMS
             .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "graphite_moderator")).asItem();
+    private static final Supplier<Item> copper_sandy = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "copper_sandy")).asItem();
+    private static final Supplier<Item> beryllium_sandy = () -> ForgeRegistries.BLOCKS
+            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "beryllium_sandy")).asItem();
 
     public static BlockInteractionRecipe[] RECIPES = {
             //Brick -> cracked
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONCRACKEDBRICK, CustomTags.HAMMERS),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSTAIR, TFGTags.Items.INTERACTIONCRACKEDSTAIR, CustomTags.HAMMERS),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSLAB, TFGTags.Items.INTERACTIONCRACKEDSLAB, CustomTags.HAMMERS),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKWALL, TFGTags.Items.INTERACTIONCRACKEDWALL, CustomTags.HAMMERS),
+            new BlockInteractionRecipe("cracked_bricks", TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONCRACKEDBRICK, CustomTags.HAMMERS),
+            new BlockInteractionRecipe("cracked_brick_stairs", TFGTags.Items.INTERACTIONBRICKSTAIR, TFGTags.Items.INTERACTIONCRACKEDSTAIR, CustomTags.HAMMERS),
+            new BlockInteractionRecipe("cracked_brick_slabs", TFGTags.Items.INTERACTIONBRICKSLAB, TFGTags.Items.INTERACTIONCRACKEDSLAB, CustomTags.HAMMERS),
+            new BlockInteractionRecipe("cracked_brick_walls", TFGTags.Items.INTERACTIONBRICKWALL, TFGTags.Items.INTERACTIONCRACKEDWALL, CustomTags.HAMMERS),
             //Brick -> Mossy
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONMOSSYBRICK, TFCTags.Items.COMPOST_GREENS_LOW),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSTAIR, TFGTags.Items.INTERACTIONMOSSYSTAIR, TFCTags.Items.COMPOST_GREENS_LOW),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKSLAB, TFGTags.Items.INTERACTIONMOSSYSLAB, TFCTags.Items.COMPOST_GREENS_LOW),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICKWALL, TFGTags.Items.INTERACTIONMOSSYWALL, TFCTags.Items.COMPOST_GREENS_LOW),
+            new BlockInteractionRecipe("mossy_bricks", TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONMOSSYBRICK, TFCTags.Items.COMPOST_GREENS_LOW),
+            new BlockInteractionRecipe("mossy_brick_stairs", TFGTags.Items.INTERACTIONBRICKSTAIR, TFGTags.Items.INTERACTIONMOSSYSTAIR, TFCTags.Items.COMPOST_GREENS_LOW),
+            new BlockInteractionRecipe("mossy_brick_slabs", TFGTags.Items.INTERACTIONBRICKSLAB, TFGTags.Items.INTERACTIONMOSSYSLAB, TFCTags.Items.COMPOST_GREENS_LOW),
+            new BlockInteractionRecipe("mossy_brick_walls", TFGTags.Items.INTERACTIONBRICKWALL, TFGTags.Items.INTERACTIONMOSSYWALL, TFCTags.Items.COMPOST_GREENS_LOW),
             //Mossy -> cracked
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONCRACKEDBRICK, CustomTags.HAMMERS),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYSTAIR, TFGTags.Items.INTERACTIONCRACKEDSTAIR, CustomTags.HAMMERS),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYSLAB, TFGTags.Items.INTERACTIONCRACKEDSLAB, CustomTags.HAMMERS),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYWALL, TFGTags.Items.INTERACTIONCRACKEDWALL, CustomTags.HAMMERS),
+            new BlockInteractionRecipe("mossy_to_cracked_bricks", TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONCRACKEDBRICK, CustomTags.HAMMERS),
+            new BlockInteractionRecipe("mossy_to_cracked_stairs", TFGTags.Items.INTERACTIONMOSSYSTAIR, TFGTags.Items.INTERACTIONCRACKEDSTAIR, CustomTags.HAMMERS),
+            new BlockInteractionRecipe("mossy_to_cracked_slabs", TFGTags.Items.INTERACTIONMOSSYSLAB, TFGTags.Items.INTERACTIONCRACKEDSLAB, CustomTags.HAMMERS),
+            new BlockInteractionRecipe("mossy_to_cracked_walls", TFGTags.Items.INTERACTIONMOSSYWALL, TFGTags.Items.INTERACTIONCRACKEDWALL, CustomTags.HAMMERS),
             //Mossy -> brick
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONBRICK, CustomTags.KNIVES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYSTAIR, TFGTags.Items.INTERACTIONBRICKSTAIR, CustomTags.KNIVES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYSLAB, TFGTags.Items.INTERACTIONBRICKSLAB, CustomTags.KNIVES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYWALL, TFGTags.Items.INTERACTIONBRICKWALL, CustomTags.KNIVES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONBRICK, pumice_item),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYSTAIR, TFGTags.Items.INTERACTIONBRICKSTAIR, pumice_item),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYSLAB, TFGTags.Items.INTERACTIONBRICKSLAB, pumice_item),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYWALL, TFGTags.Items.INTERACTIONBRICKWALL, pumice_item),
+            new BlockInteractionRecipe("mossy_to_normal_bricks", TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONBRICK, CustomTags.KNIVES),
+            new BlockInteractionRecipe("mossy_to_normal_stairs", TFGTags.Items.INTERACTIONMOSSYSTAIR, TFGTags.Items.INTERACTIONBRICKSTAIR, CustomTags.KNIVES),
+            new BlockInteractionRecipe("mossy_to_normal_slabs", TFGTags.Items.INTERACTIONMOSSYSLAB, TFGTags.Items.INTERACTIONBRICKSLAB, CustomTags.KNIVES),
+            new BlockInteractionRecipe("mossy_to_normal_walls", TFGTags.Items.INTERACTIONMOSSYWALL, TFGTags.Items.INTERACTIONBRICKWALL, CustomTags.KNIVES),
+            new BlockInteractionRecipe("mossy_to_normal_bricks_pumice", TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONBRICK, pumice_item),
+            new BlockInteractionRecipe("mossy_to_normal_stairs_pumice", TFGTags.Items.INTERACTIONMOSSYSTAIR, TFGTags.Items.INTERACTIONBRICKSTAIR, pumice_item),
+            new BlockInteractionRecipe("mossy_to_normal_slabs_pumice", TFGTags.Items.INTERACTIONMOSSYSLAB, TFGTags.Items.INTERACTIONBRICKSLAB, pumice_item),
+            new BlockInteractionRecipe("mossy_to_normal_walls_pumice", TFGTags.Items.INTERACTIONMOSSYWALL, TFGTags.Items.INTERACTIONBRICKWALL, pumice_item),
             //cracked -> brick
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCRACKEDBRICK, TFGTags.Items.INTERACTIONBRICK, TFCItems.MORTAR.get()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCRACKEDSTAIR, TFGTags.Items.INTERACTIONBRICKSTAIR, TFCItems.MORTAR.get()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCRACKEDSLAB, TFGTags.Items.INTERACTIONBRICKSLAB, TFCItems.MORTAR.get()),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCRACKEDWALL, TFGTags.Items.INTERACTIONBRICKWALL, TFCItems.MORTAR.get()),
+            new BlockInteractionRecipe("cracked_to_normal_bricks", TFGTags.Items.INTERACTIONCRACKEDBRICK, TFGTags.Items.INTERACTIONBRICK, TFCItems.MORTAR.get()),
+            new BlockInteractionRecipe("cracked_to_normal_stairs", TFGTags.Items.INTERACTIONCRACKEDSTAIR, TFGTags.Items.INTERACTIONBRICKSTAIR, TFCItems.MORTAR.get()),
+            new BlockInteractionRecipe("cracked_to_normal_slabs", TFGTags.Items.INTERACTIONCRACKEDSLAB, TFGTags.Items.INTERACTIONBRICKSLAB, TFCItems.MORTAR.get()),
+            new BlockInteractionRecipe("cracked_to_normal_walls", TFGTags.Items.INTERACTIONCRACKEDWALL, TFGTags.Items.INTERACTIONBRICKWALL, TFCItems.MORTAR.get()),
             //brick -> smooth
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCRACKEDBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
+            new BlockInteractionRecipe("normal_to_smooth_bricks", TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
+            new BlockInteractionRecipe("mossy_to_smooth_bricks", TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
+            new BlockInteractionRecipe("cracked_to_normal_bricks", TFGTags.Items.INTERACTIONCRACKEDBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
             //cobble -> mossy
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLE, TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFCTags.Items.COMPOST_GREENS_LOW),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLESTAIR, TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFCTags.Items.COMPOST_GREENS_LOW),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLESLAB, TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFCTags.Items.COMPOST_GREENS_LOW),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONCOBBLEWALL, TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFCTags.Items.COMPOST_GREENS_LOW),
+            new BlockInteractionRecipe("cobble_to_mossy", TFGTags.Items.INTERACTIONCOBBLE, TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFCTags.Items.COMPOST_GREENS_LOW),
+            new BlockInteractionRecipe("cobble_to_mossy_stairs", TFGTags.Items.INTERACTIONCOBBLESTAIR, TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFCTags.Items.COMPOST_GREENS_LOW),
+            new BlockInteractionRecipe("cobble_to_mossy_slabs", TFGTags.Items.INTERACTIONCOBBLESLAB, TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFCTags.Items.COMPOST_GREENS_LOW),
+            new BlockInteractionRecipe("cobble_to_mossy_walls", TFGTags.Items.INTERACTIONCOBBLEWALL, TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFCTags.Items.COMPOST_GREENS_LOW),
             //mossy -> cobble
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFGTags.Items.INTERACTIONCOBBLE, CustomTags.KNIVES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFGTags.Items.INTERACTIONCOBBLESTAIR, CustomTags.KNIVES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFGTags.Items.INTERACTIONCOBBLESLAB, CustomTags.KNIVES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, CustomTags.KNIVES),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFGTags.Items.INTERACTIONCOBBLE, pumice_item),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFGTags.Items.INTERACTIONCOBBLESTAIR, pumice_item),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFGTags.Items.INTERACTIONCOBBLESLAB, pumice_item),
-            new BlockInteractionRecipe(TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, pumice_item),
+            new BlockInteractionRecipe("mossy_to_cobble", TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFGTags.Items.INTERACTIONCOBBLE, CustomTags.KNIVES),
+            new BlockInteractionRecipe("mossy_to_cobble_stairs", TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFGTags.Items.INTERACTIONCOBBLESTAIR, CustomTags.KNIVES),
+            new BlockInteractionRecipe("mossy_to_cobble_slabs", TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFGTags.Items.INTERACTIONCOBBLESLAB, CustomTags.KNIVES),
+            new BlockInteractionRecipe("mossy_to_cobble_walls", TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, CustomTags.KNIVES),
+            new BlockInteractionRecipe("mossy_to_cobble_pumice", TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFGTags.Items.INTERACTIONCOBBLE, pumice_item),
+            new BlockInteractionRecipe("mossy_to_cobble_stairs_pumice", TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFGTags.Items.INTERACTIONCOBBLESTAIR, pumice_item),
+            new BlockInteractionRecipe("mossy_to_cobble_slabs_pumice", TFGTags.Items.INTERACTIONMOSSYCOBBLESLAB, TFGTags.Items.INTERACTIONCOBBLESLAB, pumice_item),
+            new BlockInteractionRecipe("mossy_to_cobble_walls_pumice", TFGTags.Items.INTERACTIONMOSSYCOBBLEWALL, TFGTags.Items.INTERACTIONCOBBLEWALL, pumice_item),
 
             //Insulation Add
-            new BlockInteractionRecipe(incoloy_frame, aes_frame.get(), aes_roll.get()),
-            new BlockInteractionRecipe(incoloy_frame, glacian_frame.get(), new ItemStack(glacian_wool.get(), 2)),
-            new BlockInteractionRecipe(incoloy_frame, impure_moderate_frame.get(), impure_moderator.get()),
-            new BlockInteractionRecipe(incoloy_frame, moderate_frame.get(), moderator.get()),
+            new BlockInteractionRecipe("insulation_aes", incoloy_frame, aes_frame.get(), aes_roll.get()),
+            new BlockInteractionRecipe("insulation_glacian", incoloy_frame, glacian_frame.get(), new ItemStack(glacian_wool.get(), 2)),
+            new BlockInteractionRecipe("insulation_impure_moderate", incoloy_frame, impure_moderate_frame.get(), impure_moderator.get()),
+            new BlockInteractionRecipe("insulation_moderate", incoloy_frame, moderate_frame.get(), moderator.get()),
+            new BlockInteractionRecipe("insulation_copper_sandy", incoloy_frame, copper_sandy_frame.get(), copper_sandy.get()),
+            new BlockInteractionRecipe("insulation_beryllium_sandy", incoloy_frame, beryllium_sandy_frame.get(), beryllium_sandy.get()),
 
             //Insulation Remove
-            new BlockInteractionRecipe(aes_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
-            new BlockInteractionRecipe(glacian_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
-            new BlockInteractionRecipe(impure_moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
-            new BlockInteractionRecipe(moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_aes_remove", aes_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_glacian_remove", glacian_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_impure_moderate_remove", impure_moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_moderate_remove", moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_copper_sandy_remove", copper_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+            new BlockInteractionRecipe("insulation_beryllium_sandy_remove", beryllium_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
     };
 
 }
