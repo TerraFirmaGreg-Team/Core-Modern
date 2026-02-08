@@ -37,7 +37,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.client.TFGClientEventHandler;
+import su.terrafirmagreg.core.client.ClientProxy;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
 
 @ParametersAreNonnullByDefault
@@ -79,7 +79,7 @@ public abstract class SheetPileBlockModelMixin
 
                 boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && !material.isEmpty());
                 ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getTextureId()
-                        : TFGClientEventHandler.TFCMetalBlockTexturePattern;
+                        : TFGClientHelpers.TFCMetalBlockTexturePattern;
 
                 sprite = (TextureAtlasSprite) textureAtlas.apply(metalResource);
                 this.tfg$renderSheet(poseStack, sprite, buffer, direction, packedLight, packedOverlay,
