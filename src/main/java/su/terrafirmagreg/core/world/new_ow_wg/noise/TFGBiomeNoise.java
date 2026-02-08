@@ -3,10 +3,7 @@ package su.terrafirmagreg.core.world.new_ow_wg.noise;
 import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
 
 import net.dries007.tfc.world.biome.BiomeNoise;
-import net.dries007.tfc.world.noise.Noise2D;
-import net.dries007.tfc.world.noise.Noise3D;
-import net.dries007.tfc.world.noise.OpenSimplex2D;
-import net.dries007.tfc.world.noise.OpenSimplex3D;
+import net.dries007.tfc.world.noise.*;
 
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 
@@ -98,5 +95,32 @@ public class TFGBiomeNoise {
      */
     public static Noise2D shoreTideLevelNoise(Seed seed) {
         return new OpenSimplex2D(seed.seed()).octaves(3).spread(0.005f).scaled(SEA_LEVEL_Y - 6, SEA_LEVEL_Y + 6).clamped(SEA_LEVEL_Y, SEA_LEVEL_Y + 4).add(new OpenSimplex2D(seed.seed()).spread(0.03));
+    }
+
+    /**
+     * Simple f2 - f1 cellular noise, with slightly fuzzy edges
+     */
+    public static Noise2D seaIceNoise(long seed) {
+        final Cellular2D cells = new TFGCellular2D(seed, 0.21f, 1).spread(0.03);
+        final Noise2D wiggle = new OpenSimplex2D(seed).scaled(-0.04, 0.04).spread(0.12);
+        return (x, z) -> {
+            Cellular2D.Cell cell = cells.cell(x, z);
+
+            return cell.f2() - cell.f1() + wiggle.noise(x, z);
+        };
+    }
+
+    /**
+     * Ridged noise used to place simulated lava flows on surfaces
+     */
+    public static Noise2D lavaFlow(long seed) {
+        return new OpenSimplex2D(seed + 23891L).ridged().spread(0.01);
+    }
+
+    /**
+     * Small scale noise used to vary the material of lava flows
+     */
+    public static Noise2D lavaFlowMaterial(long seed) {
+        return new OpenSimplex2D(seed).octaves(2).spread(0.25);
     }
 }

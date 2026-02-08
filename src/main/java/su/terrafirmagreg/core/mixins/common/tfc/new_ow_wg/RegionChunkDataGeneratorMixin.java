@@ -26,8 +26,8 @@ public class RegionChunkDataGeneratorMixin {
             final float distance = (float) fractal.intersectDistance(gridX, gridZ);
             final float distanceInfluence = Mth.clampedMap(distance, 0f, RIVER_INFLUENCE_SQ, 1f, 0f);
 
-			// Take the max of any influence with adjacent rivers
-			cir.setReturnValue(Math.max(currentRainfall, distanceInfluence * widthInfluence * 300f));
+            // Take the max of any influence with adjacent rivers
+            cir.setReturnValue(Math.max(currentRainfall, distanceInfluence * widthInfluence * 300f));
         }
     }
 }

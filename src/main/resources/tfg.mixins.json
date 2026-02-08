@@ -168,6 +168,7 @@
         "common.tfc.new_ow_wg.BiomeExtensionMixin",
         "common.tfc.new_ow_wg.ChooseBiomesMixin",
         "common.tfc.new_ow_wg.RegionChunkDataGeneratorMixin",
+        "common.tfc.new_ow_wg.RockSettingsAccessor",
         "common.tfc.new_ow_wg.SoilSurfaceStateAccessor",
         "common.tfc.new_ow_wg.TFCBiomesAccessor",
         "common.tfc.new_ow_wg.TFCLayersMixin",

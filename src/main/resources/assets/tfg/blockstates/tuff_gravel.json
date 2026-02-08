@@ -1,22 +1,18 @@
 {
-	"variants": {
-		"": [
-			{
-				"model": "tfg:block/tuff_gravel"
-			},
-			{
-				"model": "tfg:block/tuff_gravel",
-				"y": 90
-			},
-			{
-				"model": "tfg:block/tuff_gravel",
-				"y": 180
-			},
-			{
-				"model": "tfg:block/tuff_gravel",
-				"y": 270
-			}
-		]
-	},
-	"__comment__": "This file was automatically created by mcresources"
+    "variants": {"": [
+        {"model": "tfg:block/tuff_gravel"},
+        {
+            "y": 90,
+            "model": "tfg:block/tuff_gravel"
+        },
+        {
+            "y": 180,
+            "model": "tfg:block/tuff_gravel"
+        },
+        {
+            "y": 270,
+            "model": "tfg:block/tuff_gravel"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
 }

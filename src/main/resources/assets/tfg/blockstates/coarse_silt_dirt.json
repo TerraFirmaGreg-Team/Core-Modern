@@ -1,19 +1,18 @@
 {
-	"variants": {
-		"": [
-			{
-				"model": "tfg:block/coarse_silt_dirt"
-			},
-			{
-				"model": "tfg:block/coarse_silt_dirt", "y": 90
-			},
-			{
-				"model": "tfg:block/coarse_silt_dirt", "y": 180
-			},
-			{
-				"model": "tfg:block/coarse_silt_dirt", "y": 270
-			}
-		]
-	},
-	"__comment__": "This file was automatically created by mcresources"
+    "variants": {"": [
+        {"model": "tfg:block/coarse_silt_dirt"},
+        {
+            "y": 90,
+            "model": "tfg:block/coarse_silt_dirt"
+        },
+        {
+            "y": 180,
+            "model": "tfg:block/coarse_silt_dirt"
+        },
+        {
+            "y": 270,
+            "model": "tfg:block/coarse_silt_dirt"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
 }
