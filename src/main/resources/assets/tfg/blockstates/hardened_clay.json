@@ -1,4 +1,19 @@
 {
-    "variants": {"": [{"model": "tfg:block/hardened_clay"}]},
-    "__comment__": "This file was automatically created by mcresources"
+	"variants": {
+		"": [
+			{
+				"model": "tfg:block/hardened_clay"
+			},
+			{
+				"model": "tfg:block/hardened_clay", "y": 90
+			},
+			{
+				"model": "tfg:block/hardened_clay", "y": 180
+			},
+			{
+				"model": "tfg:block/hardened_clay", "y": 270
+			}
+		]
+	},
+	"__comment__": "This file was automatically created by mcresources"
 }
