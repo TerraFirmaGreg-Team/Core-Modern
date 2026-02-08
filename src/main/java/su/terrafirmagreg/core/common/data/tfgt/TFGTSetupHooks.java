@@ -15,7 +15,7 @@ import su.terrafirmagreg.core.TFGCore;
 public class TFGTSetupHooks {
 
     @SubscribeEvent
-    private static void onCommonSetup(FMLCommonSetupEvent event) {
+    public static void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             TFGTItems.COVER_ROTTEN_VOIDING.get().attachComponents(new CoverPlaceBehavior(TFGTCovers.ITEM_VOIDING_ROTTEN));
         });

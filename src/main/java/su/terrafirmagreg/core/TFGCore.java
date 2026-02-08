@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
-import com.gregtechceu.gtceu.client.ClientProxy;
-import com.gregtechceu.gtceu.common.CommonProxy;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
@@ -15,6 +13,8 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkConstants;
 
+import su.terrafirmagreg.core.client.ClientProxy;
+import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mod(TFGCore.MOD_ID)

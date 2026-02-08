@@ -87,7 +87,7 @@ public class ForgeClientEventListener {
 
     @SuppressWarnings("ConstantConditions")
     @SubscribeEvent
-    private static void onItemTooltip(ItemTooltipEvent event) {
+    public static void onItemTooltip(ItemTooltipEvent event) {
         final ItemStack stack = event.getItemStack();
         final List<Component> text = event.getToolTip();
         if (!stack.isEmpty()) {

@@ -80,18 +80,18 @@ public class CommonProxy {
     }
 
     @SubscribeEvent
-    private static void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
+    public static void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
         TFGCore.MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(TFGCore.MOD_ID);
     }
 
     @SubscribeEvent
-    private static void onPostRegisterMaterials(final PostMaterialEvent event) {
+    public static void onPostRegisterMaterials(final PostMaterialEvent event) {
         TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
     }
 
     @SubscribeEvent
-    private static void onCommonSetup(final FMLCommonSetupEvent event) {
+    public static void onCommonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             if (TFGConfig.COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get() && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
                 TFCAmbientalCompat.register();
