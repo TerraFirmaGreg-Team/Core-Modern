@@ -20,8 +20,8 @@ public class DrinkableMixin {
     private static void tfg$postFilterAlcohol(Fluid fluid, CallbackInfoReturnable<Drinkable> cir) {
         final String TFC_ALCOHOL_ID = "tfc:alcohol";
         Drinkable original = cir.getReturnValue();
-        if (original == null)
-            return; // Nothing to do
+        if (original == null || !original.getId().toString().equals(TFC_ALCOHOL_ID))
+            return;
 
         // Get all Drinkables for this fluid
         Collection<Drinkable> cachedMatchingDrinkables = Drinkable.CACHE.getAll(fluid);
