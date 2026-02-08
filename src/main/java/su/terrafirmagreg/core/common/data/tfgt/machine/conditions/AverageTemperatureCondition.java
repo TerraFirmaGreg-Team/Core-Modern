@@ -23,7 +23,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
  * <p>- LT: passes when temperature < value
  * <p>- BETWEEN: passes when start < temperature < end
  */
-public class AverageTemperatureCondition extends RecipeCondition {
+public class AverageTemperatureCondition extends RecipeCondition<AverageTemperatureCondition> {
 
     public enum Mode {
         GT,
@@ -92,7 +92,7 @@ public class AverageTemperatureCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<AverageTemperatureCondition> getType() {
         return TFGTRecipeConditions.CLIMATE_AVG_TEMPERATURE;
     }
 
@@ -159,7 +159,7 @@ public class AverageTemperatureCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public AverageTemperatureCondition createTemplate() {
         return new AverageTemperatureCondition();
     }
 
