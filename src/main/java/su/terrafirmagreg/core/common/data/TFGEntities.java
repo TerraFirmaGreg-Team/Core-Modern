@@ -5,34 +5,20 @@ import java.util.Locale;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.wanmine.wab.entity.render.EntityRenderer;
-import net.wanmine.wab.entity.render.model.SurferModel;
 
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowRenderer;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamModel;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamRenderer;
 import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
-import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbitRenderer;
 import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
-import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSnifferRenderer;
 import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
-import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
 
 public class TFGEntities {
 

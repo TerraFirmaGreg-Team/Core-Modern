@@ -1,15 +1,15 @@
 package su.terrafirmagreg.core;
 
-import com.gregtechceu.gtceu.client.ClientProxy;
-import com.gregtechceu.gtceu.common.CommonProxy;
-import net.minecraftforge.fml.DistExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.gregtechceu.gtceu.client.ClientProxy;
+import com.gregtechceu.gtceu.common.CommonProxy;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -37,7 +37,6 @@ public final class TFGCore {
 
         DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     }
-
 
     @SuppressWarnings("removal")
     private static void setupFixForGlobalServerConfig() {
