@@ -3,8 +3,10 @@ package su.terrafirmagreg.core.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.RenderHelpers;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -15,6 +17,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public final class TFGClientHelpers {
+
+    public static final ResourceLocation TFCMetalBlockTexturePattern = ResourceLocation
+            .fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern");
+
     /**
      * Просто скопированный метод из RenderHelper.java (TFC) + добавленный аргумент для цвета.
      */
