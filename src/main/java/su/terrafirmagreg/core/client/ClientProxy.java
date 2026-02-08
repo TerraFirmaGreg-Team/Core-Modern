@@ -87,7 +87,6 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
         });
-
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }
 
@@ -166,7 +165,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    private void registerSpecialModels(ModelEvent.RegisterAdditional event) {
+    public void registerSpecialModels(ModelEvent.RegisterAdditional event) {
         event.register(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern"));
     }
 }

@@ -14,7 +14,7 @@ import su.terrafirmagreg.core.common.data.capabilities.LargeEggHandler;
 public class ForgeCommonEventListener {
 
     @SubscribeEvent
-    private static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
+    public static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
         ItemStack stack = event.getObject();
         if (!stack.isEmpty()) {
             if (stack.getItem() == TFGItems.SNIFFER_EGG.get() || stack.getItem() == TFGItems.WRAPTOR_EGG.get()) {
@@ -22,5 +22,4 @@ public class ForgeCommonEventListener {
             }
         }
     }
-
 }
