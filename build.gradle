@@ -201,6 +201,7 @@ tasks.register("prepareServerDev") {
         copy {
             from "src/dev/resources"
             include "eula.txt"
+            duplicatesStrategy DuplicatesStrategy.INCLUDE
             into serverDir
         }
 
@@ -232,6 +233,7 @@ tasks.register("prepareClientDev") {
         copy {
             from "src/dev/resources/assets/jade/lang"
             include "en_us.json"
+            duplicatesStrategy DuplicatesStrategy.INCLUDE
             into langDir
         }
     }

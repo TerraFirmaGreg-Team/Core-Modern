@@ -2,10 +2,10 @@ package su.terrafirmagreg.core.common.data.tfgt;
 
 import com.gregtechceu.gtceu.common.item.CoverPlaceBehavior;
 
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+
 import su.terrafirmagreg.core.TFGCore;
 
 /**

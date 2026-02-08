@@ -5,13 +5,6 @@ import static su.terrafirmagreg.core.common.data.TFGEntities.*;
 
 import java.util.function.BiConsumer;
 
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
-import net.wanmine.wab.entity.render.EntityRenderer;
-import net.wanmine.wab.entity.render.model.SurferModel;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.TerraFirmaCraft;
@@ -20,11 +13,18 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.wanmine.wab.entity.render.EntityRenderer;
+import net.wanmine.wab.entity.render.model.SurferModel;
 
 import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
