@@ -310,3 +310,9 @@ tasks.register('copyJarToCustomFolder', Copy) {
 
 // Uncomment to enable
 //tasks.build.finalizedBy('copyJarToCustomFolder')
+
+configurations.all {
+    resolutionStrategy {
+        cacheChangingModulesFor 0, 'seconds'
+    }
+}
