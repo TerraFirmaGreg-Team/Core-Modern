@@ -262,7 +262,7 @@ public final class AtmosphereSystem {
         DimensionAtmosphereManager manager = managers.get(serverLevel.dimension());
         if (manager != null) {
             ChunkPos chunkPos = event.getChunk().getPos();
-            manager.onChunkLoaded(chunkPos);
+            manager.onChunkLoad(chunkPos);
         }
     }
 

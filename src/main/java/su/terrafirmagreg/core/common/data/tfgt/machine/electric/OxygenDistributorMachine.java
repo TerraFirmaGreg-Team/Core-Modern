@@ -27,6 +27,7 @@ import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import lombok.Getter;
 import lombok.Setter;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.atmosphere.*;
 import su.terrafirmagreg.core.common.atmosphere.RoomScan.Status;
 
@@ -116,6 +117,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
      * Stores the result in newRoomScan which gets processed on the main thread in {@link #processValidationResult()}.
      */
     public void validateAsync() {
+        TFGCore.LOGGER.info("validateAsync running, pos={}", getPos());
         int maxBlocks = 1_000_000;
         int maxHorizontalDimension = 128;
         newRoomScan = FloodFill.fill(level, level, getPos(), maxBlocks, maxHorizontalDimension);
@@ -128,6 +130,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
      * - Update provider and registries
      */
     public void processValidationResult() {
+        TFGCore.LOGGER.info("processValidationResult: provider={}, newRoomScan={}", provider != null,
+                newRoomScan != null);
         if (provider == null || newRoomScan == null) {
             return;
         }
@@ -150,19 +154,21 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
             return;
         }
 
-        // Compute chunk diff for block change listeners
-        // TODO: This gets done twice, once here and once in provider
-        Set<ChunkPos> oldChunks = oldScan.touchedChunks();
+        // Compute chunk diff for block change listeners.
+        // SAVED_DATA means this machine is new (loaded from disk) and wasn't in blockChangeListeners yet,
+        // so treat old chunks as empty to force a full registration.
+        Set<ChunkPos> oldListenerChunks = oldScan.status() == Status.SAVED_DATA ? Set.of() : oldScan.touchedChunks();
         Set<ChunkPos> newChunks = newScan.touchedChunks();
 
-        Set<ChunkPos> toRemove = new HashSet<>(oldChunks);
+        Set<ChunkPos> toRemove = new HashSet<>(oldListenerChunks);
         toRemove.removeAll(newChunks);
 
         Set<ChunkPos> toAdd = new HashSet<>(newChunks);
-        toAdd.removeAll(oldChunks);
+        toAdd.removeAll(oldListenerChunks);
 
         // Update block change listener registry
         manager.blockChangeListeners.update(this, toRemove, toAdd);
+        TFGCore.LOGGER.info("Registered in {} chunks for block change listening", newChunks.size());
 
         // Update provider's room scan and oxygen chunk registry
         manager.updateProvider(provider, oldScan, newScan);
@@ -225,9 +231,12 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
             BlockPos pos = event.getPos();
             RoomScan roomScan = provider.getRoomScan();
 
+            TFGCore.LOGGER.info("Sealed {}, inEnvelope {}, inInterior {}", roomScan.isSealed(), roomScan.containsEnvelope(pos), roomScan.containsInterior(pos));
             if ((roomScan.isSealed() && roomScan.containsEnvelope(pos))
                     || roomScan.containsInterior(pos)) {
                 requestValidation();
+            } else {
+                TFGCore.LOGGER.info("Ignored");
             }
         }
     }
@@ -242,11 +251,12 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         }
     }
 
-    public void onChunkLoaded(ChunkPos chunkPos) {
+    public void onChunkLoad(ChunkPos chunkPos) {
         requestValidation();
     }
 
     private void requestValidation() {
+        TFGCore.LOGGER.info("requestValidation, pos={}", getPos());
         setDirty(true);
         //TODO: Set earliest tick interval dependent on current room size
         AtmosphereSystem.requestValidation(this, calculateEarliestTick(1));

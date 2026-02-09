@@ -140,13 +140,13 @@ public class OxygenProvider {
                 chunks.add(new ChunkPos(chunkLong));
             }
 
-            // Reconstruct RoomScan from cached data
+            // Reconstruct RoomScan from cached data with SAVED_DATA status
             // Interior is not persisted - we only need envelope for oxygen queries
             // On next validation, we'll get the full data
             provider.roomScan = new RoomScan(
                     new LongOpenHashSet(),
                     envelope,
-                    status,
+                    RoomScan.Status.SAVED_DATA,
                     null,
                     null,
                     new AABB(0, 0, 0, 0, 0, 0),

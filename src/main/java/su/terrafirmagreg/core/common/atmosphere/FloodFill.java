@@ -227,14 +227,14 @@ public class FloodFill {
          * @return whether the position got processed without crossing any limits.
          */
         boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor, BlockPos pos, int maxHorizontalDimension) {
+            touchedChunks.add(new ChunkPos(pos));
+
             if (pos.getX() < minX || pos.getX() > maxX || pos.getZ() < minZ || pos.getZ() > maxZ) {
                 // Horizontal bounds expanded
                 minX = Math.min(minX, pos.getX());
                 maxX = Math.max(maxX, pos.getX());
                 minZ = Math.min(minZ, pos.getZ());
                 maxZ = Math.max(maxZ, pos.getZ());
-
-                touchedChunks.add(new ChunkPos(pos));
 
                 if (maxX - minX > maxHorizontalDimension
                         || maxZ - minZ > maxHorizontalDimension) {

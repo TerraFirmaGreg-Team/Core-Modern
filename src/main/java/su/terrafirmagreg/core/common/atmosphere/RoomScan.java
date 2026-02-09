@@ -47,11 +47,13 @@ public record RoomScan(
         ESCAPED_UNLOADED,
         /** Fill stopped at block limit (seal status unknown) */
         BLOCK_LIMIT,
+        /** Restored from saved data, not from a real flood fill. Treated as sealed for oxygen queries. */
+        SAVED_DATA,
         /** Fill doesn't exist, used for init values */
         NULL;
 
         public boolean isSealed() {
-            return this == SEALED;
+            return this == SEALED || this == SAVED_DATA;
         }
 
         public boolean isComplete() {

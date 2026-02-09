@@ -6,15 +6,12 @@ import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.event.level.BlockEvent;
 
@@ -23,7 +20,6 @@ import lombok.Getter;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassCache;
 import su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassCache.PassType;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.OxygenDistributorMachine;
 
 /**
  * Manages atmosphere providers for a single dimension.
@@ -138,9 +134,10 @@ public class DimensionAtmosphereManager extends SavedData {
      * Called when a machine loads and needs to attach.
      */
     public OxygenProvider getOrCreateProvider(BlockPos machinePos) {
-        OxygenProvider provider = providers.computeIfAbsent(machinePos, OxygenProvider::new);
-        setSavedDataDirty();
-        return provider;
+        return providers.computeIfAbsent(machinePos, pos -> {
+            setSavedDataDirty();
+            return new OxygenProvider(pos);
+        });
     }
 
     /**
@@ -213,32 +210,32 @@ public class DimensionAtmosphereManager extends SavedData {
             return;
 
         if (event instanceof BlockEvent.BreakEvent breakEvent) {
-            TFGCore.LOGGER.debug("breakEvent {}", breakEvent.getState());
+            TFGCore.LOGGER.info("breakEvent {}", breakEvent.getState());
             PassCache before = getPassCache(level, pos, breakEvent.getState());
             if (before.type() == PassType.EMPTY) {
-                TFGCore.LOGGER.debug("Ignored - empty block");
+                TFGCore.LOGGER.info("Ignored - empty block");
                 return;
             }
 
         } else if (event instanceof BlockEvent.EntityPlaceEvent placeEvent) {
-            TFGCore.LOGGER.debug("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
+            TFGCore.LOGGER.info("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
             PassCache before = getPassCache(level, pos, placeEvent.getBlockSnapshot().getReplacedBlock());
             PassCache after = getPassCache(level, pos, placeEvent.getPlacedBlock());
             if (before.equals(after) && before.type() != PassType.NO_CACHE) {
-                TFGCore.LOGGER.debug("Ignored - passability unchanged");
+                TFGCore.LOGGER.info("Ignored - passability unchanged");
                 return;
             }
 
         } else if (event instanceof BlockEvent.NeighborNotifyEvent nighEvent) {
-            TFGCore.LOGGER.debug("neighborNotifyEvent {}", nighEvent.getState());
+            TFGCore.LOGGER.info("neighborNotifyEvent {}", nighEvent.getState());
             PassCache current = getPassCache(level, pos, nighEvent.getState());
             if (current.type() == PassType.EMPTY || current.type() == PassType.FULL) {
-                TFGCore.LOGGER.debug("Ignored - stable block type");
+                TFGCore.LOGGER.info("Ignored - stable block type");
                 return;
             }
         }
 
-        TFGCore.LOGGER.debug("Dispatching block change to {} machines", machinesInChunk.size());
+        TFGCore.LOGGER.info("Dispatching block change to {} machines", machinesInChunk.size());
         for (IFloodFillMachine machine : machinesInChunk) {
             machine.onBlockChange(event);
         }
@@ -272,42 +269,50 @@ public class DimensionAtmosphereManager extends SavedData {
      *
      * @param chunkPos Position of the loaded chunk
      */
-    public void onChunkLoaded(ChunkPos chunkPos) {
+    public void onChunkLoad(ChunkPos chunkPos) {
         // Notify machines waiting for this chunk
         Set<IFloodFillMachine> listeners = chunkLoadListeners.get(chunkPos);
         if (listeners != null) {
             for (IFloodFillMachine machine : listeners) {
-                machine.onChunkLoaded(chunkPos);
+                machine.onChunkLoad(chunkPos);
             }
         }
 
-        // Check for orphaned providers in this chunk
-        List<BlockPos> orphaned = new ArrayList<>();
-        for (var entry : providers.entrySet()) {
-            BlockPos machinePos = entry.getKey();
-            if (new ChunkPos(machinePos).equals(chunkPos)) {
-                // This provider's machine is in the chunk that just loaded
-                if (!isMachineAt(machinePos)) {
-                    orphaned.add(machinePos);
-                    TFGCore.LOGGER.debug("Removing orphaned oxygen provider at {}", machinePos);
-                }
-            }
-        }
-
-        for (BlockPos pos : orphaned) {
-            removeProvider(pos);
-        }
+        checkOrphanedProviders(chunkPos);
     }
 
     /**
-     * Checks if there's an oxygen distributor machine at the given position.
+     * Defers orphan check to the next tick. By then, machine onLoad() has already fired
+     * and attached to its provider. Any provider still without a machine is orphaned.
      */
-    private boolean isMachineAt(BlockPos pos) {
-        BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof IMachineBlockEntity mbe) {
-            return mbe.getMetaMachine() instanceof OxygenDistributorMachine;
+    private void checkOrphanedProviders(ChunkPos chunkPos) {
+        // Check if any providers have machines in this chunk
+        boolean hasProvidersInChunk = false;
+        for (BlockPos machinePos : providers.keySet()) {
+            if (new ChunkPos(machinePos).equals(chunkPos)) {
+                hasProvidersInChunk = true;
+                break;
+            }
         }
-        return false;
+        if (!hasProvidersInChunk)
+            return;
+
+        level.getServer().tell(new net.minecraft.server.TickTask(
+                level.getServer().getTickCount() + 1,
+                () -> {
+                    List<BlockPos> orphaned = new ArrayList<>();
+                    for (var entry : providers.entrySet()) {
+                        BlockPos machinePos = entry.getKey();
+                        if (new ChunkPos(machinePos).equals(chunkPos) && !entry.getValue().isMachineLoaded()) {
+                            orphaned.add(machinePos);
+                            TFGCore.LOGGER.debug("Removing orphaned oxygen provider at {}", machinePos);
+                        }
+                    }
+
+                    for (BlockPos pos : orphaned) {
+                        removeProvider(pos);
+                    }
+                }));
     }
 
     // ==================== MachineRegistry ====================

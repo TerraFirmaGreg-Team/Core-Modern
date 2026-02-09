@@ -24,5 +24,5 @@ public interface IFloodFillMachine extends IAtmosphereMachine {
 
     void onGridSpatialEvent(BlockPos min, BlockPos max);
 
-    void onChunkLoaded(ChunkPos chunkPos);
+    void onChunkLoad(ChunkPos chunkPos);
 }
