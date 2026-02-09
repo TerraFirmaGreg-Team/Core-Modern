@@ -12,12 +12,11 @@ spotless {
         }
 
         endWithNewline()
-        indentWithSpaces()
+        leadingTabsToSpaces()
         removeUnusedImports()
         toggleOffOn()
         eclipse().configFile 'codeformat/codeformat.xml'
         importOrderFile 'codeformat/tfg.importorder'
-
         bumpThisNumberIfACustomStepChanges(1)
     }
 
@@ -25,7 +24,7 @@ spotless {
         target 'src/*/resources/**/*.json'
         targetExclude 'src/generated/resources/**'
         simple()
-        indentWithSpaces(2)
+        leadingTabsToSpaces(2)
         endWithNewline()
     }
 }
