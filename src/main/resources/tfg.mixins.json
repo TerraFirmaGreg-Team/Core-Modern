@@ -4,6 +4,7 @@
         "client.minecraft.IBlockModelGeneratorsInvoker",
         "client.tfc.ClientForgeEventHandlerMixin",
         "client.waterflasks.FlaskItemMixin",
+        "client.tfc.DrinkableMixin",
         "common.ad_astra.EnvironmentEffectsMixin",
         "common.ad_astra.GasTankItemMixin",
         "common.ad_astra.LanderMixin",
