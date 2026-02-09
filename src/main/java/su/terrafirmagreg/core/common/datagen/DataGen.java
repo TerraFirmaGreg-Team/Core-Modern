@@ -17,7 +17,6 @@ public class DataGen {
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        generator.addProvider(event.includeClient(), new TFGLanguageProvider(packOutput, "en_us"));
         generator.addProvider(event.includeClient(), new TFGSoundProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new TFGItemModelProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new TFGBlockModelProvider(packOutput, existingFileHelper));

@@ -39,5 +39,6 @@ run
 runs
 libs
 src/generated/resources/.cache/*
+src/generated/resources/assets/tfg/lang/*
 
 *.jar
