@@ -1,38 +1,40 @@
 buildscript {
     repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+        // These repositories are only for Gradle plugins
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        maven {
+            name = "NeoForged"
+            url = 'https://maven.neoforged.net/releases'
+            content {
+                includeGroup "net.neoforged"
+            }
+        }
     }
 }
 
 plugins {
     id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'com.diffplug.spotless' version '7.2.1'
+    id 'net.neoforged.moddev.legacyforge' version "${mdg_legacy_version}"
+    id 'com.diffplug.spotless' version "${spotless_version}"
 }
 
-apply from: 'gradle/scripts/helpers.gradle'
-apply plugin: 'org.spongepowered.mixin'
-
-
-// Early Assertions
-assertProperty 'mod_version'
-assertProperty 'mod_package'
-assertProperty 'mod_id'
-assertProperty 'mod_name'
-assertProperty 'mod_name_suffix'
+apply from: 'gradle/scripts/repositories.gradle'
+apply from: 'gradle/scripts/dependencies.gradle'
+apply from: 'gradle/scripts/spotless.gradle'
 
 base {
-    version = propertyString('mod_version')
-    group = propertyString('mod_package')
-    archivesName = propertyString('mod_name', 'mod_name_suffix')
+    version = "$mod_version"
+    group = "$mod_package"
+    archivesName = "$mod_name-$mod_name_suffix"
 }
 
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
 
 java {
     toolchain {
@@ -40,99 +42,81 @@ java {
     }
 }
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
 
-    enableIdeaPrepareRuns = true
-    copyIdeResources = true
+sourceSets {
+    main.resources {
+        srcDir 'src/generated/resources'
+    }
 
-    // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
-    // The folder name can be set on a run configuration using the "folderName" property.
-    // By default, the folder name of a run configuration is the name of the Gradle project containing it.
-    // generateRunFolders = true
+    dev {
+        java.srcDir("src/dev/java")
+        resources.srcDir("src/dev/resources")
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+}
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+legacyForge {
+    version = project.minecraft_version + '-' + project.forge_version
 
     runs {
         configureEach {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'INFO'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
+            gameDirectory = project.file('run')
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'forge.logging.console.level', 'INFO'
         }
 
         client {
-            workingDirectory project.file('run/client')
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', mod_id
+            client()
+            gameDirectory = project.file('run/client')
+            systemProperty 'mixin.env.remapRefMap', 'true'
+            systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         server {
-            workingDirectory project.file('run/server')
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            workingDirectory project.file('run/game-test')
-
-            property 'forge.enabledGameTestNamespaces', mod_id
+            server()
+            gameDirectory = project.file('run/server')
+            programArgument '--nogui'
         }
 
         data {
-            workingDirectory project.file('run/data')
+            data()
+            gameDirectory = project.file('run/data')
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            programArguments.addAll('--mod', "$mod_id", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath())
+        }
+
+    }
+
+    mods {
+        "$mod_id" {
+            sourceSet(sourceSets.main)
         }
     }
 }
 
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-
-    config "${mod_id}.mixins.json"
-
-    // THIS PRODUCES A TON OF LOG SPAM THAT DOESN'T NEED TO BE SEEN BY PLAYERS
-    // ONLY ENABLE THIS WHEN WORKING WITH MIXINS! DISABLE IN ALL OTHER CASES
-    debug.verbose = false
-}
-
-apply from: 'gradle/scripts/repositories.gradle'
-apply from: 'gradle/scripts/dependencies.gradle'
-
 processResources {
     var replaceProperties = [
-            'mod_id': propertyString('mod_id'),
-            'mod_name': propertyString('mod_name'),
-            'mod_version': propertyString('mod_version'),
-            'mod_description': propertyString('mod_description'),
-            'mod_authors': propertyString('mod_authors'),
-            'mod_credits': propertyString('mod_credits'),
-            'mod_url': propertyString('mod_url'),
-            'mod_update_json': propertyString('mod_update_json'),
-            'mod_logo_path': propertyString('mod_logo_path'),
+            'mod_id': "$mod_id",
+            'mod_name': "$mod_name",
+            'mod_version': "$mod_version",
+            'mod_description': "$mod_description",
+            'mod_authors': "$mod_authors",
+            'mod_credits': "$mod_credits",
+            'mod_url': "$mod_url",
+            'mod_update_json': "$mod_update_json",
+            'mod_logo_path': "$mod_logo_path",
 
-            'minecraft_version': propertyString('minecraft_version'),
-            'minecraft_version_range': propertyString('minecraft_version_range'),
+            'minecraft_version': "$minecraft_version",
+            'minecraft_version_range': "$minecraft_version_range",
 
-            'forge_version': propertyString('forge_version'),
-            'forge_version_range': propertyString('forge_version_range'),
-            'loader_version_range': propertyString('loader_version_range')
+            'forge_version': "$forge_version",
+            'forge_version_range': "$forge_version_range",
+            'loader_version_range': "$loader_version_range"
     ]
     var filterList = [
             'META-INF/mods.toml',
@@ -145,27 +129,18 @@ processResources {
     }
 }
 
-
-
 // Example for how to get properties into the manifest for reading at runtime.
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                "Specification-Title":  propertyString('mod_id'),
-                "Specification-Vendor": propertyString('mod_authors'),
+tasks.withType(org.gradle.jvm.tasks.Jar).configureEach {
+    manifest.attributes([
+                "Specification-Title":  "$mod_id",
+                "Specification-Vendor": "$mod_authors",
                 "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": propertyString('mod_name'),
-                "Implementation-Version":  propertyString('mod_version'),
-                "Implementation-Vendor": propertyString('mod_authors'),
+                "Implementation-Title": "$mod_name",
+                "Implementation-Version":  "$mod_version",
+                "Implementation-Vendor": "$mod_authors",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
-    }
-
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
 }
-
-apply from: 'gradle/scripts/spotless.gradle'
 
 // Rename the final file: delete regular *.jar (if produced) and strip the -all suffix from the shaded jar
 tasks.register('renameAllJar') {
