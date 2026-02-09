@@ -32,7 +32,7 @@ public abstract class BlazeBurnerBlockMixin {
     @Inject(method = "tryInsert", at = @At("HEAD"), cancellable = true, remap = false)
     private static void doNotInsertInSpace(BlockState state, Level level, BlockPos pos, ItemStack stack, boolean doNotConsume, boolean forceOverflow, boolean simulate,
             CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
-        if (level.dimension() != net.minecraft.world.level.Level.OVERWORLD && level.dimension() != net.minecraft.world.level.Level.NETHER) {
+        if (level.dimension() != Level.OVERWORLD && level.dimension() != Level.NETHER) {
             cir.setReturnValue(InteractionResultHolder.fail(ItemStack.EMPTY));
         }
     }
