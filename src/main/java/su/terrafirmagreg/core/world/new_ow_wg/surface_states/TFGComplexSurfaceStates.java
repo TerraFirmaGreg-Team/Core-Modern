@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.world.new_ow_wg;
+package su.terrafirmagreg.core.world.new_ow_wg.surface_states;
 
 import java.util.function.Supplier;
 
@@ -15,6 +15,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import su.terrafirmagreg.core.world.new_ow_wg.RockSettingsHelpers;
 
 public class TFGComplexSurfaceStates {
     private static TFGComplexSurfaceStates instance = null;

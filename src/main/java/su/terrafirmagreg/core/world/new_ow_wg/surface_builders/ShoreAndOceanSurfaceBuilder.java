@@ -6,7 +6,6 @@ import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
-import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.minecraft.core.BlockPos;
@@ -19,30 +18,30 @@ import net.minecraft.world.level.levelgen.SurfaceSystem;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.TFGComplexSurfaceStates;
-import su.terrafirmagreg.core.world.new_ow_wg.TFGSimpleSurfaceStates;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGSimpleSurfaceStates;
 
 public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
     private static TFGComplexSurfaceStates complexStates = TFGComplexSurfaceStates.INSTANCE();
 
     public static final SurfaceBuilderFactory NORMAL = seed -> new ShoreAndOceanSurfaceBuilder(
-            seed, complexStates.SHORE_SURFACE, complexStates.SHORE_UNDERLAYER, 6, false, false, NormalSurfaceBuilder.ROCKY.apply(seed));
+            seed, complexStates.SHORE_SURFACE, complexStates.SHORE_UNDERLAYER, 6, false, false, TFGNormalSurfaceBuilder.ROCKY.apply(seed));
 
     public static final SurfaceBuilderFactory SANDY = seed -> new ShoreAndOceanSurfaceBuilder(
-            seed, complexStates.SHORE_SAND, complexStates.SHORE_SANDSTONE, 6, false, false, NormalSurfaceBuilder.ROCKY.apply(seed));
+            seed, complexStates.SHORE_SAND, complexStates.SHORE_SANDSTONE, 6, false, false, TFGNormalSurfaceBuilder.ROCKY.apply(seed));
 
     public static final SurfaceBuilderFactory FORCE_RARE_SAND = seed -> new ShoreAndOceanSurfaceBuilder(
-            seed, complexStates.RARE_SHORE_SAND, complexStates.RARE_SHORE_SANDSTONE, 6, false, false, NormalSurfaceBuilder.ROCKY.apply(seed));
+            seed, complexStates.RARE_SHORE_SAND, complexStates.RARE_SHORE_SANDSTONE, 6, false, false, TFGNormalSurfaceBuilder.ROCKY.apply(seed));
 
     public static final SurfaceBuilderFactory GRAVELLY = seed -> new ShoreAndOceanSurfaceBuilder(
-            seed, SurfaceStates.GRAVEL, SurfaceStates.RAW, 6, false, false, NormalSurfaceBuilder.ROCKY.apply(seed));
+            seed, SurfaceStates.GRAVEL, SurfaceStates.RAW, 6, false, false, TFGNormalSurfaceBuilder.ROCKY.apply(seed));
 
     public static final SurfaceBuilderFactory OCEAN = seed -> new ShoreAndOceanSurfaceBuilder(
             seed, complexStates.SHORE_SURFACE, complexStates.SHORE_UNDERLAYER, 6, false, false, SimpleSurfaceBuilder.OCEAN_MUD.apply(seed));
 
     public static final SurfaceBuilderFactory SEA_CLIFFS = seed -> new ShoreAndOceanSurfaceBuilder(
-            seed, complexStates.SHORE_SURFACE, complexStates.SHORE_UNDERLAYER, 2, false, false, NormalSurfaceBuilder.ROCKY.apply(seed));
+            seed, complexStates.SHORE_SURFACE, complexStates.SHORE_UNDERLAYER, 2, false, false, TFGNormalSurfaceBuilder.ROCKY.apply(seed));
 
     public static final SurfaceBuilderFactory OLD_SHIELD_VOLCANO = seed -> new ShoreAndOceanSurfaceBuilder(
             seed, complexStates.VOLCANIC_SHORE_SAND, complexStates.VOLCANIC_SHORE_SANDSTONE, 6, true, false, ShieldVolcanoSurfaceBuilder.ACTIVE.apply(seed));
@@ -51,7 +50,7 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
             seed, complexStates.VOLCANIC_SHORE_SAND, complexStates.VOLCANIC_SHORE_SANDSTONE, 2, false, true, ShieldVolcanoSurfaceBuilder.DORMANT.apply(seed));
 
     public static final SurfaceBuilderFactory MOUNTAINS = seed -> new ShoreAndOceanSurfaceBuilder(
-            seed, SurfaceStates.GRAVEL, SurfaceStates.RAW, 2, false, false, NormalSurfaceBuilder.ROCKY);
+            seed, SurfaceStates.GRAVEL, SurfaceStates.RAW, 2, false, false, TFGNormalSurfaceBuilder.ROCKY);
 
     public static final SurfaceBuilderFactory VOLCANIC_MOUNTAINS = seed -> new ShoreAndOceanSurfaceBuilder(
             seed, SurfaceStates.GRAVEL, SurfaceStates.RAW, 2, false, false, SimpleSurfaceBuilder.ROCKY_VOLCANIC_SOIL.apply(seed));
@@ -115,7 +114,8 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
 
         // If below beach level, ocean decorator can take over. Guaranteed below water level
         if (oceanFloorY < tideLevel - 5) {
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD);
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD,
+                    simpleStates.OCEAN_MUD);
         } else if (oceanFloorY <= sandHeightAbsolute) {
             // Special cases for shield volcano
             if (isShieldVolcano) {
@@ -127,7 +127,7 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
                 }
             } else {
                 // Otherwise, make a shore from the specified materials
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, surface, surface, subsurface, surface, surface);
+                TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, surface, surface, subsurface, surface, surface);
             }
         }
 
@@ -151,24 +151,25 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
         final double flowValue = lavaFlows.noise(x, z);
 
         if (flowValue < 0.40)
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, surface, surface, subsurface, surface, surface);
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, surface, surface, subsurface, surface, surface);
         else if (flowValue < 0.50) {
             if (noiseValue > 0)
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT_GRAVEL, surface, subsurface, surface, surface);
+                TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT_GRAVEL, surface, subsurface, surface, surface);
             else
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, surface, surface, subsurface, surface, surface);
+                TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, surface, surface, subsurface, surface, surface);
         } else if (flowValue < 0.75) {
             if (noiseValue > 0)
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT_GRAVEL, simpleStates.BASALT_GRAVEL, simpleStates.BASALT, simpleStates.BASALT_GRAVEL,
+                TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT_GRAVEL, simpleStates.BASALT_GRAVEL, simpleStates.BASALT, simpleStates.BASALT_GRAVEL,
                         surface);
             else
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT_COBBLE, simpleStates.BASALT_COBBLE, simpleStates.BASALT, simpleStates.BASALT_COBBLE,
+                TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT_COBBLE, simpleStates.BASALT_COBBLE, simpleStates.BASALT, simpleStates.BASALT_COBBLE,
                         surface);
         } else {
             if (noiseValue > -0.6)
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT, simpleStates.BASALT, simpleStates.BASALT, simpleStates.BASALT, simpleStates.BASALT_COBBLE);
+                TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT, simpleStates.BASALT, simpleStates.BASALT, simpleStates.BASALT,
+                        simpleStates.BASALT_COBBLE);
             else
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT_COBBLE, simpleStates.BASALT_COBBLE, simpleStates.BASALT, simpleStates.BASALT,
+                TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, simpleStates.SNOWY_BASALT_COBBLE, simpleStates.BASALT_COBBLE, simpleStates.BASALT, simpleStates.BASALT,
                         simpleStates.BASALT_COBBLE);
         }
     }

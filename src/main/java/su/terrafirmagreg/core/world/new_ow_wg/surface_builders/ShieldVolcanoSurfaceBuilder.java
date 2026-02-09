@@ -7,9 +7,9 @@ import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.world.new_ow_wg.TFGComplexSurfaceStates;
-import su.terrafirmagreg.core.world.new_ow_wg.TFGSimpleSurfaceStates;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGSimpleSurfaceStates;
 
 public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder {
     public static final SurfaceBuilderFactory ACTIVE = seed -> new ShieldVolcanoSurfaceBuilder(seed, true, false);

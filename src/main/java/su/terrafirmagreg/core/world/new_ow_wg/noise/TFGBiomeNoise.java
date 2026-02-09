@@ -4,6 +4,7 @@ import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
 
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.*;
+import net.minecraft.util.Mth;
 
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 
@@ -122,5 +123,104 @@ public class TFGBiomeNoise {
      */
     public static Noise2D lavaFlowMaterial(long seed) {
         return new OpenSimplex2D(seed).octaves(2).spread(0.25);
+    }
+
+    public static double sharpHillsMap(double in) {
+        final double in0 = 1.0f, in1 = 0.67f, in2 = 0.15f, in3 = -0.15f, in4 = -0.67f, in5 = -1.0f;
+        final double out0 = 1.0f, out1 = 0.7f, out2 = 0.5f, out3 = -0.5f, out4 = -0.7f, out5 = -1.0f;
+
+        if (in > in1)
+            return Mth.map(in, in1, in0, out1, out0);
+        if (in > in2)
+            return Mth.map(in, in2, in1, out2, out1);
+        if (in > in3)
+            return Mth.map(in, in3, in2, out3, out2);
+        if (in > in4)
+            return Mth.map(in, in4, in3, out4, out3);
+        else
+            return Mth.map(in, in5, in4, out5, out4);
+    }
+
+    /**
+     * Effectively a {@code lerp(noiseA(), noiseB(), piecewise(noiseB()) + noiseC()} with the following additional techniques:
+     * <ul>
+     *     <li>{@code noiseA} is scaled to outside it's range, then biased towards 1.0, to expose more cliffs, as opposed to hills </li>
+     *     <li>{@code piecewise()} is a piecewise linear function that creates cliff shapes from the standard noise distribution.</li>
+     *     <li>{@code noiseC} is added on top to provide additional variance (in places where the piecewise function would otherwise flatten areas.</li>
+     * </ul>
+     */
+    public static Noise2D sharpHills(long seed, float minMeight, float maxHeight) {
+        final Noise2D base = new OpenSimplex2D(seed)
+                .octaves(4)
+                .spread(0.08f);
+
+        final Noise2D lerp = new OpenSimplex2D(seed + 7198234123L)
+                .spread(0.013f)
+                .scaled(-0.3f, 1.6f)
+                .clamped(0, 1);
+
+        final Noise2D lerpMapped = (x, z) -> {
+            double in = base.noise(x, z);
+            return Mth.lerp(lerp.noise(x, z), in, sharpHillsMap(in));
+        };
+
+        final OpenSimplex2D variance = new OpenSimplex2D(seed + 67981832123L)
+                .octaves(3)
+                .spread(0.06f)
+                .scaled(-0.2f, 0.2f);
+
+        return lerpMapped
+                .add(variance)
+                .scaled(-0.75f, 0.7f, SEA_LEVEL_Y - minMeight, SEA_LEVEL_Y + maxHeight);
+    }
+
+    /**
+     * Generates a flat base with twisting carved canyons using many smaller terraces.
+     * Inspired by imagery of Drumheller, Alberta
+     */
+    public static Noise2D badlands(long seed, int height, float depth) {
+        return new OpenSimplex2D(seed)
+                .octaves(4)
+                .spread(0.025f)
+                .scaled(SEA_LEVEL_Y + height, SEA_LEVEL_Y + height + 10)
+                .add(new OpenSimplex2D(seed + 1)
+                        .octaves(4)
+                        .spread(0.04f)
+                        .ridged()
+                        .map(x -> 1.3f * -(x > 0 ? x * x * x : 0.5f * x))
+                        .scaled(-1f, 0.3f, -1f, 1f)
+                        .terraces(15)
+                        .scaled(-depth, 0))
+                .map(x -> x < SEA_LEVEL_Y ? SEA_LEVEL_Y - 0.3f * (SEA_LEVEL_Y - x) : x);
+    }
+
+    /**
+     * Similar to mountains, but cliffs closer to sea level
+     */
+    public static Noise2D rockyIslands(long seed) {
+        final Noise2D baseNoise = new OpenSimplex2D(seed) // A simplex noise forms the majority of the base
+                .octaves(4)
+                .spread(0.14f)
+                .map(x -> {
+                    final double x0 = 0.125f * (x + 1) * (x + 1) * (x + 1); // Power scaled, flattens most areas but maximizes peaks
+                    return SEA_LEVEL_Y - 15 + 50 * x0; // Scale the entire thing
+                });
+
+        // Cliff noise consists of noise that's been artificially clamped over half the domain, which is then selectively added above a base height level
+        final Noise2D cliffNoise = new OpenSimplex2D(seed + 2).octaves(2).spread(0.01f).scaled(-10, 18).map(x -> x > 0 ? x : 0);
+        final Noise2D cliffHeightNoise = new OpenSimplex2D(seed + 3).octaves(2).spread(0.01f).scaled(SEA_LEVEL_Y - 5, SEA_LEVEL_Y + 5);
+
+        return (x, z) -> {
+            double height = baseNoise.noise(x, z);
+            if (height > SEA_LEVEL_Y - 10) // Only sample each cliff noise layer if the base noise could be influenced by it
+            {
+                final double cliffHeight = cliffHeightNoise.noise(x, z) - height;
+                if (cliffHeight < 0) {
+                    final double mappedCliffHeight = Mth.clampedMap(cliffHeight, 0, -1, 0, 1);
+                    height += mappedCliffHeight * cliffNoise.noise(x, z);
+                }
+            }
+            return height;
+        };
     }
 }

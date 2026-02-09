@@ -24,6 +24,8 @@ import net.minecraft.world.level.biome.Biome;
 
 import su.terrafirmagreg.core.world.new_ow_wg.*;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
+import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuffRingsSurfaceBuilder;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuyasSurfaceBuilder;
 
@@ -45,7 +47,11 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
     private boolean volcanic;
     @Shadow
     private int volcanoFrequency;
+    @Shadow
+    private boolean sandyRiverShores;
 
+    @Unique
+    private TFGRiverBlendType tfg$riverBlendType;
     @Unique
     private ShoreBlendType tfg$shoreBlendType;
     @Unique
@@ -62,6 +68,7 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
     @Inject(method = "<init>", at = @At("TAIL"), remap = false)
     private void tfg$init(CallbackInfo ci) {
         tfg$shoreBlendType = ShoreBlendType.NONE;
+        tfg$riverBlendType = TFGRiverBlendType.NONE;
 
         tfg$hasTuffRings = false;
         tfg$hasTuyas = false;
@@ -74,6 +81,18 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
 
     public BiomeBuilder tfg$type(ShoreBlendType type) {
         this.tfg$shoreBlendType = type;
+        return (BiomeBuilder) (Object) this;
+    }
+
+    public BiomeBuilder tfg$type(TFGRiverBlendType type) {
+        this.tfg$riverBlendType = type;
+        if (type == TFGRiverBlendType.CAVE)
+            this.sandyRiverShores = false;
+        return (BiomeBuilder) (Object) this;
+    }
+
+    public BiomeBuilder tfg$setShoreBaseHeight(int height) {
+        this.tfg$shoreBaseHeight = SEA_LEVEL_Y + height;
         return (BiomeBuilder) (Object) this;
     }
 
@@ -135,7 +154,7 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
     @Inject(method = "build", at = @At("RETURN"), remap = false, cancellable = true)
     public void tfg$build(ResourceKey<Biome> key, CallbackInfoReturnable<BiomeExtension> cir) {
         var extension = cir.getReturnValue();
-        ((IBiomeExtension) extension).tfg$init(tfg$shoreBlendType, tfg$hasTuffRings, tfg$hasTuyas, tfg$tuffRingFrequency, tfg$tuyaFrequency, tfg$shoreBaseHeight);
+        ((IBiomeExtension) extension).tfg$init(tfg$shoreBlendType, tfg$riverBlendType, tfg$hasTuffRings, tfg$hasTuyas, tfg$tuffRingFrequency, tfg$tuyaFrequency, tfg$shoreBaseHeight);
         cir.setReturnValue(extension);
     }
 }

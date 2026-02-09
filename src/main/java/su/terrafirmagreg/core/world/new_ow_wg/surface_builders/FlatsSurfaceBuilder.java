@@ -3,11 +3,10 @@ package su.terrafirmagreg.core.world.new_ow_wg.surface_builders;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
-import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 
-import su.terrafirmagreg.core.world.new_ow_wg.TFGComplexSurfaceStates;
-import su.terrafirmagreg.core.world.new_ow_wg.TFGSimpleSurfaceStates;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGSimpleSurfaceStates;
 
 public class FlatsSurfaceBuilder implements SurfaceBuilder {
     private final TFGComplexSurfaceStates complexStates;
@@ -26,9 +25,9 @@ public class FlatsSurfaceBuilder implements SurfaceBuilder {
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
         if (startY < 66 && context.rainfall() < 25) {
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, mid, water, water);
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, mid, water, water);
         } else {
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_SAND, complexStates.MID_DIRT_TO_SAND, complexStates.UNDER_GRAVEL);
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_SAND, complexStates.MID_DIRT_TO_SAND, complexStates.UNDER_GRAVEL);
         }
     }
 }

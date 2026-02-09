@@ -1,7 +1,8 @@
-package su.terrafirmagreg.core.world.new_ow_wg;
+package su.terrafirmagreg.core.world.new_ow_wg.shores;
 
 import java.util.function.Function;
 
+import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.ShoreNoise;
 
 public enum ShoreBlendType {

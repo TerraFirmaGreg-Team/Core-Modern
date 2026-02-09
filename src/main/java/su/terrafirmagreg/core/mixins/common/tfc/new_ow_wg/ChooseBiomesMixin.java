@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
-import static net.dries007.tfc.world.layer.TFCLayers.*;
 import static su.terrafirmagreg.core.world.new_ow_wg.TFGLayers.*;
 
 import org.spongepowered.asm.mixin.*;
@@ -67,11 +66,11 @@ public abstract class ChooseBiomesMixin {
                         } else if (point.land()) {
                             point.biome = randomSeededFrom(rngSeed, areaSeed, TFG_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
                         } else if (point.baseOceanDepth < 3) {
-                            point.biome = TFGLayers.OCEAN;
+                            point.biome = OCEAN;
                         } else if (point.baseOceanDepth > 9) {
-                            point.biome = TFGLayers.DEEP_OCEAN_TRENCH;
+                            point.biome = DEEP_OCEAN_TRENCH;
                         } else if (point.baseOceanDepth >= 5 || point.distanceToEdge < 2) {
-                            point.biome = TFGLayers.DEEP_OCEAN;
+                            point.biome = DEEP_OCEAN;
                         } else {
                             point.biome = randomSeededFrom(rngSeed, areaSeed, TFG_MID_DEPTH_OCEAN_BIOMES);
                         }
@@ -91,7 +90,7 @@ public abstract class ChooseBiomesMixin {
                         if (point.rainfall > maxRainfallForBadlands) {
                             if (point.biome == BADLANDS)
                                 point.biome = HIGHLANDS;
-                            else if (point.biome == INVERTED_BADLANDS)
+                            else if (point.biome == CANYONS)
                                 point.biome = ROLLING_HILLS;
                         }
                     }

@@ -11,7 +11,7 @@ import net.minecraft.util.Mth;
 
 import su.terrafirmagreg.core.world.new_ow_wg.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.ShoreNoiseSampler;
+import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreNoiseSampler;
 
 public final class ShoreNoise {
     // Typical monoslope beach

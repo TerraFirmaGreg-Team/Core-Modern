@@ -6,7 +6,8 @@ import org.spongepowered.asm.mixin.Unique;
 import net.dries007.tfc.world.biome.BiomeExtension;
 
 import su.terrafirmagreg.core.world.new_ow_wg.IBiomeExtension;
-import su.terrafirmagreg.core.world.new_ow_wg.ShoreBlendType;
+import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
+import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 
 /**
  * Adds additional data to biome extensions that are new in 1.21
@@ -18,6 +19,8 @@ public class BiomeExtensionMixin implements IBiomeExtension {
     @Unique
     private ShoreBlendType tfg$shoreBlendType;
     @Unique
+    private TFGRiverBlendType tfg$riverBlendType;
+    @Unique
     private boolean tfg$hasTuffCones;
     @Unique
     private boolean tfg$hasTuyas;
@@ -28,8 +31,9 @@ public class BiomeExtensionMixin implements IBiomeExtension {
     @Unique
     private int tfg$shoreBaseHeight;
 
-    public void tfg$init(ShoreBlendType shoreBlendType, boolean hasTuffCones, boolean hasTuyas, int tuffRingRarity, int tuyaRarity, int shoreBaseHeight) {
+    public void tfg$init(ShoreBlendType shoreBlendType, TFGRiverBlendType riverBlendType, boolean hasTuffCones, boolean hasTuyas, int tuffRingRarity, int tuyaRarity, int shoreBaseHeight) {
         this.tfg$shoreBlendType = shoreBlendType;
+        this.tfg$riverBlendType = riverBlendType;
         this.tfg$hasTuffCones = hasTuffCones;
         this.tfg$hasTuyas = hasTuyas;
         this.tfg$tuffRingRarity = tuffRingRarity;
@@ -64,5 +68,9 @@ public class BiomeExtensionMixin implements IBiomeExtension {
 
     public ShoreBlendType tfg$getShoreBlendType() {
         return this.tfg$shoreBlendType;
+    }
+
+    public TFGRiverBlendType tfg$getRiverBlendType() {
+        return this.tfg$riverBlendType;
     }
 }

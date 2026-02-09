@@ -3,12 +3,11 @@ package su.terrafirmagreg.core.world.new_ow_wg.surface_builders;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
-import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 
-import su.terrafirmagreg.core.world.new_ow_wg.TFGComplexSurfaceStates;
-import su.terrafirmagreg.core.world.new_ow_wg.TFGSimpleSurfaceStates;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGSimpleSurfaceStates;
 
 public class SimpleSurfaceBuilder implements SurfaceBuilder {
     private static TFGSimpleSurfaceStates simpleStates = TFGSimpleSurfaceStates.INSTANCE();
@@ -41,9 +40,9 @@ public class SimpleSurfaceBuilder implements SurfaceBuilder {
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
         if (rockySurfaceBuilder) {
-            NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, top, mid, mid, water, water);
+            TFGNormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, top, mid, mid, water, water);
         } else {
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, mid, water, water);
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, mid, water, water);
         }
     }
 }
