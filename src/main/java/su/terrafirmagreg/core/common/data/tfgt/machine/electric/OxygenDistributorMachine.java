@@ -81,7 +81,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
 
     /** @return Whether this machine is currently executing a recipe */
     public boolean isWorking() {
-        return recipeLogic != null && recipeLogic.isWorking();
+        // TODO: restore recipe check: recipeLogic != null && recipeLogic.isWorking()
+        return true; // Temporary for testing without recipes
     }
 
     /**

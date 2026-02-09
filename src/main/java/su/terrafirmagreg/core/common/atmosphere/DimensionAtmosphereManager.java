@@ -124,6 +124,13 @@ public class DimensionAtmosphereManager extends SavedData {
         setDirty();
     }
 
+    /**
+     * @return All oxygen providers in this dimension (for debug/commands)
+     */
+    public Map<BlockPos, OxygenProvider> getProviders() {
+        return Collections.unmodifiableMap(providers);
+    }
+
     // ==================== Oxygen Provider Management ====================
 
     /**
