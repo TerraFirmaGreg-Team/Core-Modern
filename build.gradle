@@ -130,7 +130,6 @@ processResources {
     ]
 
     inputs.properties replaceProperties
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     filesMatching(filterList) { fcd ->
         fcd.expand(replaceProperties + [project: project])
     }
