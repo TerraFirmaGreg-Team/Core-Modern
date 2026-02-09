@@ -59,13 +59,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     @Nullable
     private ChunkPos pendingChunkLoad = null;
 
-    public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction, Object... args) {
-        super(holder, tier, tankScalingFunction, args);
-        if (holder.level() instanceof ServerLevel serverLevel) {
-            level = serverLevel;
-            manager = AtmosphereSystem.getManager(level);
-            tickOffset = holder.pos().hashCode();
-        }
+    public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction) {
+        super(holder, tier, tankScalingFunction);
     }
 
     /**
@@ -226,10 +221,10 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         if (provider == null)
             return;
 
-        BlockPos pos = event.getPos();
-        RoomScan roomScan = provider.getRoomScan();
-
         if (!dirty) {
+            BlockPos pos = event.getPos();
+            RoomScan roomScan = provider.getRoomScan();
+
             if ((roomScan.isSealed() && roomScan.containsEnvelope(pos))
                     || roomScan.containsInterior(pos)) {
                 requestValidation();
@@ -254,7 +249,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     private void requestValidation() {
         setDirty(true);
         //TODO: Set earliest tick interval dependent on current room size
-        AtmosphereSystem.requestValidation(this, calculateEarliestTick(100));
+        AtmosphereSystem.requestValidation(this, calculateEarliestTick(1));
 
         if (provider != null && provider.getRoomScan().status() == Status.ESCAPED_UNLOADED) {
             BlockPos escapePoint = provider.getRoomScan().escapePoint();
@@ -271,8 +266,13 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     @Override
     public void onLoad() {
         super.onLoad();
-        if (level == null)
+        if (!(getLevel() instanceof ServerLevel serverLevel))
             return;
+
+        tickOffset = getPos().hashCode();
+
+        level = serverLevel;
+        manager = AtmosphereSystem.getManager(level);
 
         provider = manager.getOrCreateProvider(getPos());
         provider.attach(this);

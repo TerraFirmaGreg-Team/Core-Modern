@@ -273,7 +273,6 @@ public final class AtmosphereSystem {
         }
 
         // Remove the manager for this dimension
-        // TODO: Do we want to do this at all?
         managers.remove(serverLevel.dimension());
     }
 

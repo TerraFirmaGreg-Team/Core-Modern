@@ -61,12 +61,12 @@ public class OxygenProvider {
         return roomScan.containsEnvelope(pos);
     }
 
-    //    /**
-    //     * @return Whether the machine is currently loaded and attached
-    //     */
-    //    public boolean isMachineLoaded() {
-    //        return attachedMachine != null;
-    //    }
+    /**
+     * @return Whether the machine is currently loaded and attached
+     */
+    public boolean isMachineLoaded() {
+        return attachedMachine != null;
+    }
     //
     //    /**
     //     * @return Whether the machine is loaded and actively working

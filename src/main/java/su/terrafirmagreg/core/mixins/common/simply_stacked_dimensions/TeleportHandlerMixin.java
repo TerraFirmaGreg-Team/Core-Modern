@@ -61,7 +61,7 @@ public abstract class TeleportHandlerMixin {
         }
     }
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private static HashMap<UUID, Integer> cooldownCache;
 

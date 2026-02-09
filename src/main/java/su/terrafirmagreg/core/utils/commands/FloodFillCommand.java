@@ -29,27 +29,27 @@ public class FloodFillCommand {
                         .then(literal("floodfill").requires(c -> c.hasPermission(2))
                                 .executes(c -> {
                                     BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-                                    return runFloodFill(c.getSource(), pos, 1_000_000, 128, false);
+                                    return runFloodFill(c.getSource(), pos, 1_000_000, 256, false);
                                 })
                                 // /tfg floodfill <maxBlocks>
                                 .then(argument("maxBlocks", IntegerArgumentType.integer(0, 1_000_000))
                                         .executes(c -> {
                                             BlockPos pos = BlockPos.containing(c.getSource().getPosition());
                                             int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
-                                            return runFloodFill(c.getSource(), pos, maxBlocks, 128, false);
+                                            return runFloodFill(c.getSource(), pos, maxBlocks, 256, false);
                                         })
                                         // /tfg floodfill <maxBlocks> <pos>
                                         .then(argument("pos", BlockPosArgument.blockPos())
                                                 .executes(c -> {
                                                     BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
                                                     int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
-                                                    return runFloodFill(c.getSource(), pos, maxBlocks, 128, false);
+                                                    return runFloodFill(c.getSource(), pos, maxBlocks, 256, false);
                                                 })
                                                 .then(literal("diag").requires(c -> c.hasPermission(2))
                                                         .executes(c -> {
                                                             BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
                                                             int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
-                                                            return runFloodFill(c.getSource(), pos, maxBlocks, 128, true);
+                                                            return runFloodFill(c.getSource(), pos, maxBlocks, 256, true);
 
                                                         })))))
                         .then(literal("uncacheable")
