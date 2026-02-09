@@ -90,7 +90,10 @@ legacyForge {
             gameDirectory = project.file('run/data')
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll('--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath())
+            programArguments.addAll "--mod", "$mod_id", "--all"
+            programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
+            programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
+            programArguments.addAll '--existing-mod', 'gtceu'
         }
 
     }
@@ -152,6 +155,11 @@ tasks.withType(Jar).configureEach {
     ])
 }
 
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-Aquiet=true" // Suppress mixin notes
+}
 
 // Fix a bug in Species that only shows up when running from dev env
 // Compile our patched Species.class, and use it instead of the normal one in the species-3.5.jar.
