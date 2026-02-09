@@ -24,6 +24,7 @@ plugins {
 apply from: 'gradle/scripts/repositories.gradle'
 apply from: 'gradle/scripts/dependencies.gradle'
 apply from: 'gradle/scripts/spotless.gradle'
+apply from: file("moveToInstance.gradle").exists() ? "moveToInstance.gradle" : null
 
 base {
     version = "${mod_version}"
@@ -189,7 +190,6 @@ tasks.register("prepareServerDev") {
     dependsOn patchSpeciesJar
 
     def serverDir = file("run/server")
-    def eulaFile = file("${serverDir}/eula.txt")
     def propsFile = file("${serverDir}/server.properties")
 
     outputs.file(eulaFile)
@@ -197,12 +197,6 @@ tasks.register("prepareServerDev") {
 
     doLast {
         serverDir.mkdirs()
-
-        copy {
-            from "src/dev/resources"
-            include "eula.txt"
-            into serverDir
-        }
 
         // Create or patch server.properties to set online-mode=false
         if (propsFile.exists()) {
@@ -219,43 +213,9 @@ tasks.register("prepareServerDev") {
     }
 }
 
-// Prepare client: fix missing Jade lang files
-tasks.register("prepareClientDev") {
-    def langDir = file("run/client/kubejs/assets/jade/lang")
-    def langFile = file("${langDir}/en_us.json")
-
-    outputs.file(langFile)
-
-    doLast {
-        langDir.mkdirs()
-
-        copy {
-            from "src/dev/resources/assets/jade/lang"
-            include "en_us.json"
-            into langDir
-        }
-    }
-}
-
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
         dependsOn("prepareServerDev")
     }
-    tasks.matching { it.name == "prepareRunClient" }.configureEach {
-        dependsOn("prepareClientDev")
-    }
-
-}
-
-
-// Moving the core jar to a custom folder
-tasks.register('copyJarToCustomFolder', Copy) {
-    group = 'mod development/internal'
-
-    from("${buildDir}/libs") {
-        include("*${version}.jar")
-        exclude("*-sources.jar", "*-javadoc.jar")
-    }
-    into("${modpack_mods}")
 }
