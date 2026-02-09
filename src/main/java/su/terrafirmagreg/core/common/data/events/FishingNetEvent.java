@@ -65,24 +65,13 @@ public class FishingNetEvent {
 
         // Get entity's loot table and generate drops.
         if (target instanceof net.minecraft.world.entity.LivingEntity livingEntity) {
-            try {
-                LootTable lootTable = serverLevel.getServer().getLootData().getLootTable(livingEntity.getLootTable());
-                LootParams.Builder builder = new LootParams.Builder(serverLevel)
-                        .withParameter(LootContextParams.THIS_ENTITY, target)
-                        .withParameter(LootContextParams.ORIGIN, target.position())
-                        .withParameter(LootContextParams.DAMAGE_SOURCE, level.damageSources().playerAttack(player));
 
-                List<ItemStack> drops = lootTable.getRandomItems(builder.create(lootTable.getParamSet()));
-
-                // Drop the items at the players position.
-                for (ItemStack drop : drops) {
-                    if (!drop.isEmpty()) {
-                        ItemEntity itemEntity = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), drop);
-                        level.addFreshEntity(itemEntity);
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("Failed to generate loot for entity " + target.getType() + ": " + e.getMessage());
+            // Special handling for Starcatcher fish which use custom drop logic.
+            if (target.getType().toString().equals("entity.starcatcher.fish")) {
+                handleStarcatcherFish(target, player, level);
+            } else {
+                // Standard loot table handling for other entities.
+                handleStandardLootTable(livingEntity, serverLevel, player, level);
             }
         }
 
@@ -95,5 +84,117 @@ public class FishingNetEvent {
         }
 
         event.setCanceled(true);
+    }
+
+    private void handleStarcatcherFish(Entity target, Player player, Level level) {
+        try {
+            var fishItemMethod = target.getClass().getMethod("getFishItem");
+            ItemStack fishItem = (ItemStack) fishItemMethod.invoke(target);
+
+            if (fishItem.isEmpty()) {
+                try {
+                    var tickMethod = target.getClass().getMethod("tick");
+                    tickMethod.invoke(target);
+
+                    fishItem = (ItemStack) fishItemMethod.invoke(target);
+                } catch (Exception tickException) {
+                    // Tick failed.
+                }
+            }
+
+            if (!fishItem.isEmpty()) {
+                // Give the fish item to the player.
+                ItemStack itemToGive = fishItem.copy();
+                if (!player.getInventory().add(itemToGive)) {
+                    // If inventory is full, drop at players location.
+                    ItemEntity itemEntity = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), itemToGive);
+                    itemEntity.setDefaultPickUpDelay();
+                    level.addFreshEntity(itemEntity);
+                }
+            }
+
+        } catch (Exception e) {
+            try {
+                // Use reflection to get the FISH_ITEM from the Starcatcher fish entity.
+                var entityClass = target.getClass();
+                var entityDataField = entityClass.getDeclaredField("entityData");
+                entityDataField.setAccessible(true);
+                var entityData = entityDataField.get(target);
+                var synchedEntityDataClass = entityData.getClass();
+                var getMethod = synchedEntityDataClass.getMethod("get", net.minecraft.network.syncher.EntityDataAccessor.class);
+                var fishItemField = entityClass.getDeclaredField("FISH_ITEM");
+                fishItemField.setAccessible(true);
+                var fishItemAccessor = fishItemField.get(null);
+
+                ItemStack fishItem = (ItemStack) getMethod.invoke(entityData, fishItemAccessor);
+
+                if (!fishItem.isEmpty()) {
+                    // Give the fish item to the player.
+                    ItemStack itemToGive = fishItem.copy();
+                    if (!player.getInventory().add(itemToGive)) {
+                        // If inventory is full, drop at players location.
+                        ItemEntity itemEntity = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), itemToGive);
+                        itemEntity.setDefaultPickUpDelay();
+                        level.addFreshEntity(itemEntity);
+                    }
+                }
+
+            } catch (Exception reflectionError) {
+                // All methods failed.
+            }
+        }
+    }
+
+    private void handleStandardLootTable(net.minecraft.world.entity.LivingEntity livingEntity, ServerLevel serverLevel, Player player, Level level) {
+        try {
+            LootTable lootTable = serverLevel.getServer().getLootData().getLootTable(livingEntity.getLootTable());
+            LootParams.Builder builder = new LootParams.Builder(serverLevel);
+
+            var paramSet = lootTable.getParamSet();
+            var allParams = paramSet.getAllowed();
+
+            // Basic parameters.
+            if (allParams.contains(LootContextParams.THIS_ENTITY)) {
+                builder.withParameter(LootContextParams.THIS_ENTITY, livingEntity);
+            }
+            if (allParams.contains(LootContextParams.ORIGIN)) {
+                builder.withParameter(LootContextParams.ORIGIN, livingEntity.position());
+            }
+            if (allParams.contains(LootContextParams.DAMAGE_SOURCE)) {
+                builder.withParameter(LootContextParams.DAMAGE_SOURCE, level.damageSources().playerAttack(player));
+            }
+
+            // Optional parameters.
+            if (allParams.contains(LootContextParams.KILLER_ENTITY)) {
+                builder.withOptionalParameter(LootContextParams.KILLER_ENTITY, player);
+            }
+            if (allParams.contains(LootContextParams.DIRECT_KILLER_ENTITY)) {
+                builder.withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, player);
+            }
+            if (allParams.contains(LootContextParams.LAST_DAMAGE_PLAYER)) {
+                builder.withOptionalParameter(LootContextParams.LAST_DAMAGE_PLAYER, player);
+            }
+
+            builder.withLuck(player.getLuck());
+
+            LootParams lootParams = builder.create(lootTable.getParamSet());
+            List<ItemStack> drops = lootTable.getRandomItems(lootParams);
+
+            // Give items directly to player.
+            for (ItemStack drop : drops) {
+                if (!drop.isEmpty()) {
+                    // Try to add to inventory first.
+                    if (!player.getInventory().add(drop)) {
+                        // If inventory is full, drop at players location.
+                        ItemEntity itemEntity = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), drop);
+                        itemEntity.setDefaultPickUpDelay();
+                        level.addFreshEntity(itemEntity);
+                    }
+                }
+            }
+
+        } catch (Exception lootException) {
+            // Loot table generation failed.
+        }
     }
 }
