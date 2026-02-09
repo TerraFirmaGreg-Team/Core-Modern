@@ -24,6 +24,7 @@ plugins {
 apply from: 'gradle/scripts/repositories.gradle'
 apply from: 'gradle/scripts/dependencies.gradle'
 apply from: 'gradle/scripts/spotless.gradle'
+if (file("moveToInstance.gradle").exists()) apply from: "moveToInstance.gradle"
 
 base {
     version = "${mod_version}"
@@ -46,12 +47,14 @@ java {
 }
 
 mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
+    var refMap = add sourceSets.main, "${mod_id}.refmap.json"
+    jar.from refMap;
     config "${mod_id}.mixins.json"
 }
 
 sourceSets {
     main.resources {
+        srcDir 'src/main/resources'
         srcDir 'src/generated/resources'
     }
 
@@ -130,6 +133,7 @@ processResources {
     ]
 
     inputs.properties replaceProperties
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     filesMatching(filterList) { fcd ->
         fcd.expand(replaceProperties + [project: project])
     }
@@ -151,7 +155,8 @@ tasks.withType(Jar).configureEach {
             "Implementation-Title"    : "${mod_name}",
             "Implementation-Version"  : "${mod_version}",
             "Implementation-Vendor"   : "${mod_authors}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs"            : "${mod_id}.mixins.json"
     ])
 }
 
@@ -197,7 +202,6 @@ tasks.register("prepareServerDev") {
     dependsOn patchSpeciesJar
 
     def serverDir = file("run/server")
-    def eulaFile = file("${serverDir}/eula.txt")
     def propsFile = file("${serverDir}/server.properties")
 
     outputs.file(eulaFile)
@@ -205,13 +209,6 @@ tasks.register("prepareServerDev") {
 
     doLast {
         serverDir.mkdirs()
-
-        copy {
-            from "src/dev/resources"
-            include "eula.txt"
-            duplicatesStrategy DuplicatesStrategy.INCLUDE
-            into serverDir
-        }
 
         // Create or patch server.properties to set online-mode=false
         if (propsFile.exists()) {
@@ -228,44 +225,9 @@ tasks.register("prepareServerDev") {
     }
 }
 
-// Prepare client: fix missing Jade lang files
-tasks.register("prepareClientDev") {
-    def langDir = file("run/client/kubejs/assets/jade/lang")
-    def langFile = file("${langDir}/en_us.json")
-
-    outputs.file(langFile)
-
-    doLast {
-        langDir.mkdirs()
-
-        copy {
-            from "src/dev/resources/assets/jade/lang"
-            include "en_us.json"
-            duplicatesStrategy DuplicatesStrategy.INCLUDE
-            into langDir
-        }
-    }
-}
-
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
         dependsOn("prepareServerDev")
     }
-    tasks.matching { it.name == "prepareRunClient" }.configureEach {
-        dependsOn("prepareClientDev")
-    }
-
-}
-
-
-// Moving the core jar to a custom folder
-tasks.register('copyJarToCustomFolder', Copy) {
-    group = 'mod development/internal'
-
-    from("${buildDir}/libs") {
-        include("*${version}.jar")
-        exclude("*-sources.jar", "*-javadoc.jar")
-    }
-    into("${modpack_mods}")
 }
