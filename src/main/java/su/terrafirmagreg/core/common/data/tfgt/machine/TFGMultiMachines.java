@@ -24,6 +24,7 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
@@ -42,7 +43,6 @@ import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.electric.gcym.LargeMixerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
 import com.simibubi.create.AllBlocks;
 
@@ -393,9 +393,10 @@ public class TFGMultiMachines {
 
 
     public static final MultiblockMachineDefinition COOLING_TOWER = REGISTRATE
-            .multiblock("cooling_tower", (holder) -> new LargeMixerMachine(holder, GTValues.EV))
+            .multiblock("cooling_tower", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.COOLING_TOWER)
+            .recipeModifier(GTRecipeModifiers.OC_PERFECT_SUBTICK)
             .appearanceBlock(tower_casing)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")

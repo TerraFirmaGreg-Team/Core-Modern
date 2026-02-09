@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +12,8 @@ import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -54,9 +54,9 @@ public abstract class LighterBehaviorMixin {
                 return InteractionResult.PASS;
 
             boolean cancelled = StartFireEvent.startFire(level, pos, state, clickedFace, player, itemStack, StartFireEvent.FireStrength.STRONG);
-			if (!cancelled) {
-				level.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-			}
+            if (!cancelled) {
+                level.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+            }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
