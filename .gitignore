@@ -40,5 +40,5 @@ run
 runs
 libs
 
-moveToInstance.gradle
+*.ps1
 *.jar
