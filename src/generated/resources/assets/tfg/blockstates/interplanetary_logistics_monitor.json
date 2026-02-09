@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/machine/interplanetary_logistics_monitor",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/interplanetary_logistics_monitor"
+    },
+    "facing=south": {
+      "model": "tfg:block/machine/interplanetary_logistics_monitor",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tfg:block/machine/interplanetary_logistics_monitor",
+      "y": 270
+    }
+  }
+}

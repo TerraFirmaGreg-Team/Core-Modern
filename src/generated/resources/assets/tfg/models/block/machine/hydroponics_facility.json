@@ -1,0 +1,261 @@
+{
+  "parent": "minecraft:block/block",
+  "dynamic_renders": [
+    {
+      "type": "gtceu:growing_plant",
+      "offsets": [
+        [
+          -1.0,
+          0.0,
+          -5.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -6.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -7.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -8.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -9.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -10.0
+        ],
+        [
+          1.0,
+          0.0,
+          -5.0
+        ],
+        [
+          1.0,
+          0.0,
+          -6.0
+        ],
+        [
+          1.0,
+          0.0,
+          -7.0
+        ],
+        [
+          1.0,
+          0.0,
+          -8.0
+        ],
+        [
+          1.0,
+          0.0,
+          -9.0
+        ],
+        [
+          1.0,
+          0.0,
+          -10.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -5.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -6.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -7.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -8.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -9.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -10.0
+        ],
+        [
+          1.0,
+          3.0,
+          -5.0
+        ],
+        [
+          1.0,
+          3.0,
+          -6.0
+        ],
+        [
+          1.0,
+          3.0,
+          -7.0
+        ],
+        [
+          1.0,
+          3.0,
+          -8.0
+        ],
+        [
+          1.0,
+          3.0,
+          -9.0
+        ],
+        [
+          1.0,
+          3.0,
+          -10.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -5.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -6.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -7.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -8.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -9.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -10.0
+        ],
+        [
+          1.0,
+          6.0,
+          -5.0
+        ],
+        [
+          1.0,
+          6.0,
+          -6.0
+        ],
+        [
+          1.0,
+          6.0,
+          -7.0
+        ],
+        [
+          1.0,
+          6.0,
+          -8.0
+        ],
+        [
+          1.0,
+          6.0,
+          -9.0
+        ],
+        [
+          1.0,
+          6.0,
+          -10.0
+        ]
+      ]
+    }
+  ],
+  "loader": "gtceu:machine",
+  "machine": "tfg:hydroponics_facility",
+  "texture_overrides": {
+    "all": "tfg:block/casings/machine_casing_egh_inactive"
+  },
+  "variants": {
+    "is_formed=false,recipe_logic_status=idle": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh_inactive"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=suspend": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh_inactive"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=waiting": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh_inactive"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=working": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh_inactive"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=idle": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh_inactive"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=suspend": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh_inactive"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=waiting": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh_inactive"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=working": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh_inactive"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "facing=east,upwards_facing=east": {
+      "gtceu:z": 270,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 90
+    },
+    "facing=east,upwards_facing=north": {
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 90
+    },
+    "facing=east,upwards_facing=south": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 90
+    },
+    "facing=east,upwards_facing=west": {
+      "gtceu:z": 90,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 90
+    },
+    "facing=north,upwards_facing=east": {
+      "gtceu:z": 270,
+      "model": "tfg:block/machine/pisciculture_fishery"
+    },
+    "facing=north,upwards_facing=north": {
+      "model": "tfg:block/machine/pisciculture_fishery"
+    },
+    "facing=north,upwards_facing=south": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/pisciculture_fishery"
+    },
+    "facing=north,upwards_facing=west": {
+      "gtceu:z": 90,
+      "model": "tfg:block/machine/pisciculture_fishery"
+    },
+    "facing=south,upwards_facing=east": {
+      "gtceu:z": 270,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 180
+    },
+    "facing=south,upwards_facing=north": {
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 180
+    },
+    "facing=south,upwards_facing=south": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 180
+    },
+    "facing=south,upwards_facing=west": {
+      "gtceu:z": 90,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 180
+    },
+    "facing=west,upwards_facing=east": {
+      "gtceu:z": 270,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 270
+    },
+    "facing=west,upwards_facing=north": {
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 270
+    },
+    "facing=west,upwards_facing=south": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 270
+    },
+    "facing=west,upwards_facing=west": {
+      "gtceu:z": 90,
+      "model": "tfg:block/machine/pisciculture_fishery",
+      "y": 270
+    }
+  }
+}

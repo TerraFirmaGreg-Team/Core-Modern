@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "tfg:block/machine/single_itemstack_bus",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "tfg:block/machine/single_itemstack_bus",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/single_itemstack_bus"
+    },
+    "facing=south": {
+      "model": "tfg:block/machine/single_itemstack_bus",
+      "y": 180
+    },
+    "facing=up": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/single_itemstack_bus",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "tfg:block/machine/single_itemstack_bus",
+      "y": 270
+    }
+  }
+}
