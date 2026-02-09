@@ -117,22 +117,22 @@ apply from: 'gradle/scripts/dependencies.gradle'
 
 processResources {
     var replaceProperties = [
-            'mod_id': propertyString('mod_id'),
-            'mod_name': propertyString('mod_name'),
-            'mod_version': propertyString('mod_version'),
-            'mod_description': propertyString('mod_description'),
-            'mod_authors': propertyString('mod_authors'),
-            'mod_credits': propertyString('mod_credits'),
-            'mod_url': propertyString('mod_url'),
-            'mod_update_json': propertyString('mod_update_json'),
-            'mod_logo_path': propertyString('mod_logo_path'),
+            'mod_id'                 : propertyString('mod_id'),
+            'mod_name'               : propertyString('mod_name'),
+            'mod_version'            : propertyString('mod_version'),
+            'mod_description'        : propertyString('mod_description'),
+            'mod_authors'            : propertyString('mod_authors'),
+            'mod_credits'            : propertyString('mod_credits'),
+            'mod_url'                : propertyString('mod_url'),
+            'mod_update_json'        : propertyString('mod_update_json'),
+            'mod_logo_path'          : propertyString('mod_logo_path'),
 
-            'minecraft_version': propertyString('minecraft_version'),
+            'minecraft_version'      : propertyString('minecraft_version'),
             'minecraft_version_range': propertyString('minecraft_version_range'),
 
-            'forge_version': propertyString('forge_version'),
-            'forge_version_range': propertyString('forge_version_range'),
-            'loader_version_range': propertyString('loader_version_range')
+            'forge_version'          : propertyString('forge_version'),
+            'forge_version_range'    : propertyString('forge_version_range'),
+            'loader_version_range'   : propertyString('loader_version_range')
     ]
     var filterList = [
             'META-INF/mods.toml',
@@ -146,17 +146,16 @@ processResources {
 }
 
 
-
 // Example for how to get properties into the manifest for reading at runtime.
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-                "Specification-Title":  propertyString('mod_id'),
-                "Specification-Vendor": propertyString('mod_authors'),
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": propertyString('mod_name'),
-                "Implementation-Version":  propertyString('mod_version'),
-                "Implementation-Vendor": propertyString('mod_authors'),
+                "Specification-Title"     : propertyString('mod_id'),
+                "Specification-Vendor"    : propertyString('mod_authors'),
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : propertyString('mod_name'),
+                "Implementation-Version"  : propertyString('mod_version'),
+                "Implementation-Vendor"   : propertyString('mod_authors'),
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -303,10 +302,16 @@ allprojects {
 
 // Moving the core jar to a custom folder
 tasks.register('copyJarToCustomFolder', Copy) {
-    from("$buildDir/libs")
-    include("*${version}.jar")
-    into("D:/Modding/TerrafirmaGreg/Prism launcher/instances/TerrafirmaGreg-Modern/minecraft/mods/")
+
+    group = 'mod development/internal'
+
+    from("${buildDir}/libs") {
+        include("*${version}.jar")
+        exclude("*-sources.jar", "*-javadoc.jar")
+    }
+    into("${modpack_mods}")
 }
 
-// Uncomment to enable
-//tasks.build.finalizedBy('copyJarToCustomFolder')
+if (enable_copy_jar_to_custom_folde.toBoolean()) {
+    tasks.build.finalizedBy('copyJarToCustomFolder')
+}
