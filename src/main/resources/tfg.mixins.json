@@ -188,9 +188,7 @@
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",
-    "injectors": {
-        "defaultRequire": 1
-    },
+    "injectors": {"defaultRequire": 1},
     "compatibilityLevel": "JAVA_17",
     "client": [
         "client.afc.TapBlockEntityProviderMixin",
