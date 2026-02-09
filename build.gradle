@@ -47,14 +47,12 @@ java {
 }
 
 mixin {
-    var refMap = add sourceSets.main, "${mod_id}.refmap.json"
-    jar.from refMap;
+    add sourceSets.main, "${mod_id}.refmap.json"
     config "${mod_id}.mixins.json"
 }
 
 sourceSets {
     main.resources {
-        srcDir 'src/main/resources'
         srcDir 'src/generated/resources'
     }
 
