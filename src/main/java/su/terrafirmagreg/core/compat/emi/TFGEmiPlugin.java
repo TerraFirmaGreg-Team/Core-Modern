@@ -28,7 +28,7 @@ public class TFGEmiPlugin implements EmiPlugin {
             EmiStack.of(GTItems.PROSPECTOR_HV));
 
     public static final EmiRecipeCategory BLAZE_BURNER = new EmiRecipeCategory(TFGCore.id("blaze_burner"),
-            EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
+            EmiStack.of(AllBlocks.BLAZE_BURNER.get().asItem()));
 
     public static final EmiRecipeCategory BLOCK_INTERACTION = new EmiRecipeCategory(TFGCore.id("block_interaction"),
             EmiStack.of(TFCItems.MORTAR.get()));
@@ -56,7 +56,7 @@ public class TFGEmiPlugin implements EmiPlugin {
                 new String[] { "ore_vein.tfg.rose_quartz.emi.0", "ore_vein.tfg.rose_quartz.emi.1", "ore_vein.tfg.rose_quartz.emi.2" }));
 
         emiRegistry.addCategory(BLAZE_BURNER);
-        emiRegistry.addWorkstation(BLAZE_BURNER, EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
+        emiRegistry.addWorkstation(BLAZE_BURNER, EmiStack.of(AllBlocks.BLAZE_BURNER.get().asItem()));
         for (var liquid_fuel : BurnerStomachHandler.LIQUID_BURNER_FUEL_MAP.entrySet()) {
             emiRegistry.addRecipe(new LiquidBlazeBurnerRecipe(liquid_fuel));
         }

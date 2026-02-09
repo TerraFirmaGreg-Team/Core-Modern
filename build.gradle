@@ -1,31 +1,24 @@
-buildscript {
-    repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
+    id 'java'
+    id 'java-library'
     id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'com.diffplug.spotless' version '7.2.1'
+    id 'com.diffplug.spotless' version '7.2.+'
+    id 'io.freefair.lombok' version "6.6.+"
+    id 'xyz.wagyourtail.unimined' version "1.4.+"
 }
 
-apply from: 'gradle/scripts/helpers.gradle'
-apply plugin: 'org.spongepowered.mixin'
+
+apply from: rootProject.file('gradle/scripts/helpers.gradle')
 
 
-// Early Assertions
-assertProperty 'mod_version'
-assertProperty 'mod_package'
 assertProperty 'mod_id'
 assertProperty 'mod_name'
-assertProperty 'mod_name_suffix'
+assertProperty 'mod_version'
+assertProperty 'mod_package'
+
+assertProperty 'minecraft_version'
+assertProperty 'forge_version'
+assertProperty 'java_version'
 
 base {
     version = propertyString('mod_version')
@@ -36,103 +29,101 @@ base {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(java_version))
+        languageVersion = JavaLanguageVersion.of(
+                propertyString('java_version') as int
+        )
     }
 }
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
+configurations {
+    embed
+    contain
+    implementation.extendsFrom(embed)
+    implementation.extendsFrom(contain)
+    modCompileOnly
+    compileOnly.extendsFrom(modCompileOnly)
+    modRuntimeOnly
+    runtimeOnly.extendsFrom(modRuntimeOnly)
+}
 
-    enableIdeaPrepareRuns = true
-    copyIdeResources = true
 
-    // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
-    // The folder name can be set on a run configuration using the "folderName" property.
-    // By default, the folder name of a run configuration is the name of the Gradle project containing it.
-    // generateRunFolders = true
+unimined.minecraft {
+    version "1.20.1"
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    mappings {
 
-    runs {
-        configureEach {
-            workingDirectory project.file('run')
+        intermediary()
+        mojmap()
+        parchment("2023.09.03")
+        devNamespace("intermediary")
+    }
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'INFO'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
+    minecraftForge {
+        if (propertyBool('use_access_transformer')) {
+            accessTransformer "${rootProject.projectDir}/src/main/resources/META-INF/${propertyString('access_transformer_locations')}"
         }
 
-        client {
-            workingDirectory project.file('run/client')
+        loader(propertyString('forge_version'))
+        mixinConfig "${propertyString('mod_id')}.mixins.json"
+    }
 
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
+    defaultRemapJar = false
 
-        server {
-            workingDirectory project.file('run/server')
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            workingDirectory project.file('run/game-test')
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
-        data {
-            workingDirectory project.file('run/data')
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+    remap(tasks.jar) {
+        mixinRemap {
+            enableBaseMixin()
+            enableMixinExtra()
+            disableRefmap()
         }
     }
+
+    mods {
+        remap(configurations.modCompileOnly)
+        remap(configurations.modRuntimeOnly)
+    }
+
 }
 
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
 
-    config "${mod_id}.mixins.json"
+apply from: rootProject.file('gradle/scripts/repositories.gradle')
 
-    // THIS PRODUCES A TON OF LOG SPAM THAT DOESN'T NEED TO BE SEEN BY PLAYERS
-    // ONLY ENABLE THIS WHEN WORKING WITH MIXINS! DISABLE IN ALL OTHER CASES
-    debug.verbose = false
+dependencies {
+
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+
+    annotationProcessor 'org.jetbrains:annotations:26.0.+'
+    compileOnly 'org.jetbrains:annotations:26.0.+'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.+'
+    compileOnly 'org.projectlombok:lombok:1.18.+'
+
+    if (propertyBool('enable_junit_testing')) {
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
 }
+apply from: rootProject.file('gradle/scripts/dependencies.gradle')
 
-apply from: 'gradle/scripts/repositories.gradle'
-apply from: 'gradle/scripts/dependencies.gradle'
 
 processResources {
     var replaceProperties = [
-            'mod_id': propertyString('mod_id'),
-            'mod_name': propertyString('mod_name'),
-            'mod_version': propertyString('mod_version'),
-            'mod_description': propertyString('mod_description'),
-            'mod_authors': propertyString('mod_authors'),
-            'mod_credits': propertyString('mod_credits'),
-            'mod_url': propertyString('mod_url'),
-            'mod_update_json': propertyString('mod_update_json'),
-            'mod_logo_path': propertyString('mod_logo_path'),
+            'mod_id'                 : propertyString('mod_id'),
+            'mod_name'               : propertyString('mod_name'),
+            'mod_version'            : propertyString('mod_version'),
+            'mod_description'        : propertyString('mod_description'),
+            'mod_authors'            : propertyString('mod_authors'),
+            'mod_credits'            : propertyString('mod_credits'),
+            'mod_url'                : propertyString('mod_url'),
+            'mod_update_json'        : propertyString('mod_update_json'),
+            'mod_logo_path'          : propertyString('mod_logo_path'),
 
-            'minecraft_version': propertyString('minecraft_version'),
+            'minecraft_version'      : propertyString('minecraft_version'),
             'minecraft_version_range': propertyString('minecraft_version_range'),
 
-            'forge_version': propertyString('forge_version'),
-            'forge_version_range': propertyString('forge_version_range'),
-            'loader_version_range': propertyString('loader_version_range')
+            'forge_version'          : propertyString('forge_version'),
+            'forge_version_range'    : propertyString('forge_version_range'),
+            'loader_version_range'   : propertyString('loader_version_range')
     ]
     var filterList = [
             'META-INF/mods.toml',
@@ -146,53 +137,51 @@ processResources {
 }
 
 
-
-// Example for how to get properties into the manifest for reading at runtime.
-tasks.named('jar', Jar).configure {
+jar {
     manifest {
         attributes([
-                "Specification-Title":  propertyString('mod_id'),
-                "Specification-Vendor": propertyString('mod_authors'),
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": propertyString('mod_name'),
-                "Implementation-Version":  propertyString('mod_version'),
-                "Implementation-Vendor": propertyString('mod_authors'),
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                'Specification-Title'     : propertyString('mod_id'),
+                'Specification-Vendor'    : propertyString('mod_authors'),
+                'Specification-Version'   : '1',
+
+                'Implementation-Title'    : propertyString('mod_name'),
+                'Implementation-Version'  : propertyString('mod_version'),
+                'Implementation-Vendor'   : propertyString('mod_authors'),
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
+    finalizedBy(tasks.named("remapJar"))
 }
 
-apply from: 'gradle/scripts/spotless.gradle'
 
-// Rename the final file: delete regular *.jar (if produced) and strip the -all suffix from the shaded jar
-tasks.register('renameAllJar') {
-    doLast {
-        def libsDir = file("${buildDir}/libs")
-        if (!libsDir.exists()) return
-        // Delete a possible regular jar first
-        libsDir.listFiles()?.findAll { it.name == "${archivesBaseName}-${version}.jar" }?.each { File reg ->
-            reg.delete()
-        }
-        // Rename *-all.jar to *.jar
-        libsDir.listFiles()?.findAll { it.name.endsWith('-all.jar') }?.each { File f ->
-            def targetName = f.name.replace('-all.jar', '.jar')
-            def target = new File(f.parentFile, targetName)
-            if (target.exists()) target.delete()
-            if (!f.renameTo(target)) {
-                throw new GradleException("Failed to rename ${f.name} to ${target.name}")
-            }
-        }
-    }
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }
 
-// Run rename step after available packaging task (bind safely after tasks are created)
-gradle.projectsEvaluated {
-    tasks.findByName('reobfJarJar')?.finalizedBy('renameAllJar')
-    tasks.findByName('reobfJar')?.finalizedBy('renameAllJar')
-    // Fallbacks if reobf tasks are not present in this environment
-    tasks.findByName('jarJar')?.finalizedBy('renameAllJar')
-    tasks.findByName('jar')?.finalizedBy('renameAllJar')
-}
+
+apply from: rootProject.file('gradle/scripts/spotless.gradle')
+
+
+//tasks.register('renameAllJar') {
+//    doLast {
+//        def libsDir = file("$buildDir/libs")
+//        if (!libsDir.exists()) return
+//
+//        libsDir.listFiles()?.each { f ->
+//            if (f.name.endsWith('-all.jar')) {
+//                def target = new File(f.parentFile, f.name.replace('-all.jar', '.jar'))
+//                if (target.exists()) target.delete()
+//                f.renameTo(target)
+//            }
+//        }
+//    }
+//}
+//
+//gradle.projectsEvaluated {
+//    tasks.findByName('reobfJarJar')?.finalizedBy('renameAllJar')
+//    tasks.findByName('jarJar')?.finalizedBy('renameAllJar')
+//
+//    tasks.findByName('reobfJar')?.finalizedBy('renameAllJar')
+//    tasks.findByName('jar')?.finalizedBy('renameAllJar')
+//}
