@@ -28,8 +28,9 @@ public class FishingScreenTypeUtils {
             net.minecraft.core.registries.Registries.BIOME,
             ResourceLocation.fromNamespaceAndPath("starcatcher", "is_ocean"));
 
-    // Cave depth max Y threshold.
-    private static final int CAVE_THRESHOLD = 50;
+    private static final float CAVE_THRESHOLD = 50;
+    private static final float WARM_THRESHOLD = 30;
+    private static final float COLD_THRESHOLD = 0;
 
     /**
      * Determines the fishing screen type based on current environment.
@@ -37,28 +38,30 @@ public class FishingScreenTypeUtils {
     public static FishingScreenType determineScreenType() {
         ClientLevel level = Minecraft.getInstance().level;
         Player player = Minecraft.getInstance().player;
+        assert level != null;
+        assert player != null;
         final float temperature = Climate.getTemperature(level, player.blockPosition());
 
         ResourceKey<Level> dimension = level.dimension();
         double playerY = player.getY();
         Holder<Biome> biomeHolder = level.getBiome(player.blockPosition());
 
+        // Beneath.
         if (dimension.equals(Level.NETHER)) {
             return FishingScreenType.NETHER;
         }
 
-        if (dimension.equals(Level.END)) {
-            return FishingScreenType.END;
-        }
-
+        // Mars.
         if (dimension.equals(MARS_DIMENSION)) {
             return FishingScreenType.MARS;
         }
 
+        // Venus.
         if (dimension.equals(VENUS_DIMENSION)) {
             return FishingScreenType.VENUS;
         }
 
+        // Earth.
         if (dimension.equals(Level.OVERWORLD)) {
 
             if (playerY < CAVE_THRESHOLD) {
@@ -66,23 +69,25 @@ public class FishingScreenTypeUtils {
             }
 
             if (biomeHolder.is(IS_OCEAN)) {
-                if (temperature > 30) {
+                // Only Ocean has a warm screen type since it just adds coral.
+                if (temperature > WARM_THRESHOLD) {
                     return FishingScreenType.SURFACE_WARM;
                 }
-                if (temperature < 5) {
+                if (temperature < COLD_THRESHOLD) {
                     return FishingScreenType.SURFACE_COLD;
                 }
                 return FishingScreenType.SURFACE;
             }
 
             if (!biomeHolder.is(IS_OCEAN)) {
-                if (temperature < 5) {
+                if (temperature < COLD_THRESHOLD) {
                     return FishingScreenType.SURFACE_COLD;
                 }
                 return FishingScreenType.SURFACE;
             }
 
         }
+        // Default.
         return FishingScreenType.SURFACE;
     }
 }
