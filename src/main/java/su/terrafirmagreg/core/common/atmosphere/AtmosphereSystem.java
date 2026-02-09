@@ -39,8 +39,8 @@ public final class AtmosphereSystem {
     /** Per-dimension managers */
     private static final Map<ResourceKey<Level>, DimensionAtmosphereManager> managers = new ConcurrentHashMap<>();
 
-//    /** Whether the system is initialized */
-//    private static boolean initialized = false;
+    //    /** Whether the system is initialized */
+    //    private static boolean initialized = false;
 
     private AtmosphereSystem() {
     }
@@ -50,12 +50,12 @@ public final class AtmosphereSystem {
      * Should be called during mod initialization.
      */
     public static void init() {
-//        if (initialized) {
-//            return;
-//        }
+        //        if (initialized) {
+        //            return;
+        //        }
 
         GridHelper.addEventHandler(GridSpatialEvent.class, AtmosphereSystem::onGridSpatialEvent);
-//        initialized = true;
+        //        initialized = true;
         TFGCore.LOGGER.info("Atmosphere system initialized");
     }
 
@@ -79,7 +79,6 @@ public final class AtmosphereSystem {
     public static DimensionAtmosphereManager getManager(ResourceKey<Level> dimension) {
         return managers.get(dimension);
     }
-
 
     /**
      * Checks if a position has oxygen (server-side only).
@@ -120,7 +119,6 @@ public final class AtmosphereSystem {
     public interface ITemperatureProvider extends IAtmosphereMachine {
     }
 
-
     // ==================== Async Handling ====================
 
     /** Executor for async jobs. */
@@ -132,8 +130,8 @@ public final class AtmosphereSystem {
 
     public record ValidationJob(
             IFloodFillMachine machine,
-            long earliestTick
-    ) {}
+            long earliestTick) {
+    }
 
     static PriorityQueue<ValidationJob> validationQueue = new PriorityQueue<>(Comparator.comparingLong(ValidationJob::earliestTick));
     static Set<IFloodFillMachine> validationRequested = new HashSet<>();

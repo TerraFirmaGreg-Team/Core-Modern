@@ -1,5 +1,13 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 
+import java.util.HashSet;
+import java.util.OptionalLong;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
@@ -8,11 +16,6 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 
-import it.unimi.dsi.fastutil.ints.Int2IntFunction;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -20,15 +23,12 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.level.BlockEvent;
 
-import org.jetbrains.annotations.NotNull;
+import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import lombok.Getter;
+import lombok.Setter;
 
 import su.terrafirmagreg.core.common.atmosphere.*;
 import su.terrafirmagreg.core.common.atmosphere.RoomScan.Status;
-
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.OptionalLong;
-import java.util.Set;
 
 /**
  * Oxygen Distributor machine that maintains a sealed room with breathable atmosphere.
@@ -154,7 +154,6 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
             return;
         }
 
-
         // Compute chunk diff for block change listeners
         // TODO: This gets done twice, once here and once in provider
         Set<ChunkPos> oldChunks = oldScan.touchedChunks();
@@ -223,7 +222,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     }
 
     public void onBlockChange(BlockEvent event) {
-        if (provider == null) return;
+        if (provider == null)
+            return;
 
         BlockPos pos = event.getPos();
         RoomScan roomScan = provider.getRoomScan();
@@ -237,7 +237,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     }
 
     public void onGridSpatialEvent(BlockPos min, BlockPos max) {
-        if (provider == null) return;
+        if (provider == null)
+            return;
 
         RoomScan roomScan = provider.getRoomScan();
         if (roomScan.bounds().intersects(new AABB(min, max))) {
@@ -269,7 +270,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     @Override
     public void onLoad() {
         super.onLoad();
-        if (level == null) return;
+        if (level == null)
+            return;
 
         provider = manager.getOrCreateProvider(getPos());
         provider.attach(this);
@@ -280,7 +282,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     @Override
     public void onUnload() {
         super.onUnload();
-        if (provider == null) return;
+        if (provider == null)
+            return;
 
         provider.detach();
         deregisterMachineListeners();
@@ -289,7 +292,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     @Override
     public void onMachineRemoved() {
         super.onMachineRemoved();
-        if (manager == null) return;
+        if (manager == null)
+            return;
 
         deregisterMachineListeners();
         manager.removeProvider(getPos());
@@ -301,7 +305,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
      * Called on both unload and removal.
      */
     private void deregisterMachineListeners() {
-        if (provider == null) return;
+        if (provider == null)
+            return;
 
         RoomScan roomScan = provider.getRoomScan();
         manager.blockChangeListeners.remove(this, roomScan.touchedChunks());

@@ -4,6 +4,10 @@ import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.getPas
 
 import java.util.*;
 
+import org.jetbrains.annotations.NotNull;
+
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -13,10 +17,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.event.level.BlockEvent;
-
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-
-import org.jetbrains.annotations.NotNull;
 
 import lombok.Getter;
 
@@ -71,8 +71,7 @@ public class DimensionAtmosphereManager extends SavedData {
         return level.getDataStorage().computeIfAbsent(
                 tag -> load(level, tag),
                 () -> new DimensionAtmosphereManager(level),
-                DATA_NAME
-        );
+                DATA_NAME);
     }
 
     private static DimensionAtmosphereManager load(ServerLevel level, CompoundTag tag) {
@@ -104,7 +103,8 @@ public class DimensionAtmosphereManager extends SavedData {
 
         for (OxygenProvider provider : providers.values()) {
             // Only persist sealed providers
-            if (!provider.getRoomScan().isSealed()) continue;
+            if (!provider.getRoomScan().isSealed())
+                continue;
 
             try {
                 CompoundTag providerTag = new CompoundTag();
@@ -337,7 +337,8 @@ public class DimensionAtmosphereManager extends SavedData {
             Set<T> set = map.get(chunk);
             if (set != null) {
                 set.remove(item);
-                if (set.isEmpty()) map.remove(chunk);
+                if (set.isEmpty())
+                    map.remove(chunk);
             }
         }
 

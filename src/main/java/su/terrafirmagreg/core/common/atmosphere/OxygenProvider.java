@@ -5,15 +5,14 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
 
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Lightweight oxygen provider that persists independently of the GT machine.
@@ -62,19 +61,19 @@ public class OxygenProvider {
         return roomScan.containsEnvelope(pos);
     }
 
-//    /**
-//     * @return Whether the machine is currently loaded and attached
-//     */
-//    public boolean isMachineLoaded() {
-//        return attachedMachine != null;
-//    }
-//
-//    /**
-//     * @return Whether the machine is loaded and actively working
-//     */
-//    public boolean isMachineWorking() {
-//        return attachedMachine != null && attachedMachine.isWorking();
-//    }
+    //    /**
+    //     * @return Whether the machine is currently loaded and attached
+    //     */
+    //    public boolean isMachineLoaded() {
+    //        return attachedMachine != null;
+    //    }
+    //
+    //    /**
+    //     * @return Whether the machine is loaded and actively working
+    //     */
+    //    public boolean isMachineWorking() {
+    //        return attachedMachine != null && attachedMachine.isWorking();
+    //    }
 
     /**
      * Called when the machine's chunk loads and the machine attaches to this provider.
@@ -105,15 +104,15 @@ public class OxygenProvider {
         if (roomScan.isSealed()) {
             tag.putInt("status", roomScan.status().ordinal());
             tag.putLongArray("envelope", roomScan.envelope().toLongArray());
-//
-//            // Save bounds
-//            AABB bounds = roomScan.bounds();
-//            tag.putDouble("minX", bounds.minX);
-//            tag.putDouble("minY", bounds.minY);
-//            tag.putDouble("minZ", bounds.minZ);
-//            tag.putDouble("maxX", bounds.maxX);
-//            tag.putDouble("maxY", bounds.maxY);
-//            tag.putDouble("maxZ", bounds.maxZ);
+            //
+            //            // Save bounds
+            //            AABB bounds = roomScan.bounds();
+            //            tag.putDouble("minX", bounds.minX);
+            //            tag.putDouble("minY", bounds.minY);
+            //            tag.putDouble("minZ", bounds.minZ);
+            //            tag.putDouble("maxX", bounds.maxX);
+            //            tag.putDouble("maxY", bounds.maxY);
+            //            tag.putDouble("maxZ", bounds.maxZ);
 
             // Save touched chunks
             long[] chunkLongs = roomScan.touchedChunks().stream()
@@ -130,11 +129,11 @@ public class OxygenProvider {
         if (tag.contains("status")) {
             RoomScan.Status status = RoomScan.Status.values()[tag.getInt("status")];
             LongOpenHashSet envelope = new LongOpenHashSet(tag.getLongArray("envelope"));
-//
-//            AABB bounds = new AABB(
-//                    tag.getDouble("minX"), tag.getDouble("minY"), tag.getDouble("minZ"),
-//                    tag.getDouble("maxX"), tag.getDouble("maxY"), tag.getDouble("maxZ")
-//            );
+            //
+            //            AABB bounds = new AABB(
+            //                    tag.getDouble("minX"), tag.getDouble("minY"), tag.getDouble("minZ"),
+            //                    tag.getDouble("maxX"), tag.getDouble("maxY"), tag.getDouble("maxZ")
+            //            );
 
             Set<ChunkPos> chunks = new HashSet<>();
             for (long chunkLong : tag.getLongArray("chunks")) {
@@ -151,8 +150,7 @@ public class OxygenProvider {
                     null,
                     null,
                     new AABB(0, 0, 0, 0, 0, 0),
-                    chunks
-            );
+                    chunks);
         }
 
         return provider;

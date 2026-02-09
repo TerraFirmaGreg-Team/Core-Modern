@@ -44,7 +44,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.fluids.FluidType;
 
-import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
@@ -274,7 +273,7 @@ public class TFGMachines {
             .register();
 
     public static final MachineDefinition OXYGEN_DISTRIBUTOR = GTRegistration.REGISTRATE.machine("oxygen_distributor",
-                    (holder) -> new OxygenDistributorMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction))
+            (holder) -> new OxygenDistributorMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction))
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
             .recipeModifier(OxygenDistributorMachine::recipeModifier)
             .register();
