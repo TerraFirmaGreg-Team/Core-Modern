@@ -75,6 +75,11 @@ public class CommonProxy {
         TFGFoodTraits.init();
         TFGTItems.init();
 
+        bus.addGenericListener(MachineDefinition.class, this::registerMachines);
+        bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
+        bus.addGenericListener(GTItems.class, this::registerGTItems);
+        bus.addGenericListener(RecipeConditionType.class, this::registerRecipeConditions);
+
         AdAstraCompat.RegisterEvents();
         AE2Compat.registerEvents();
     }
@@ -109,23 +114,19 @@ public class CommonProxy {
         add(TFGItems.WIRELESS_CARD.get(), item, 1, GuiText.WirelessTerminals.getTranslationKey());
     }
 
-    @SubscribeEvent
     public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         TFGMachines.init();
         TFGMultiMachines.init();
     }
 
-    @SubscribeEvent
     public void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
         TFGTRecipeTypes.init();
     }
 
-    @SubscribeEvent
     public void registerGTItems(GTCEuAPI.RegisterEvent<ResourceLocation, GTItems> event) {
         TFGTItems.init();
     }
 
-    @SubscribeEvent
     public void registerRecipeConditions(GTCEuAPI.RegisterEvent<ResourceLocation, RecipeConditionType<?>> event) {
         TFGTRecipeConditions.init();
     }
