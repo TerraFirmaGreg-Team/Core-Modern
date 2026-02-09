@@ -66,7 +66,7 @@ public final class AtmosphereSystem {
      * @return The dimension manager
      */
     public static DimensionAtmosphereManager getManager(ServerLevel level) {
-        return managers.computeIfAbsent(level.dimension(), k -> new DimensionAtmosphereManager(level));
+        return managers.computeIfAbsent(level.dimension(), k -> DimensionAtmosphereManager.get(level));
     }
 
     /**

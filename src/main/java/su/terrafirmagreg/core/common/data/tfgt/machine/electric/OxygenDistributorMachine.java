@@ -7,16 +7,21 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+
 import lombok.Getter;
 import lombok.Setter;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraftforge.event.level.BlockEvent;
-import org.jetbrains.annotations.NotNull;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.event.level.BlockEvent;
+
+import org.jetbrains.annotations.NotNull;
+
 import su.terrafirmagreg.core.common.atmosphere.*;
 import su.terrafirmagreg.core.common.atmosphere.RoomScan.Status;
 
@@ -25,24 +30,35 @@ import java.util.HashSet;
 import java.util.OptionalLong;
 import java.util.Set;
 
-// Note: for testing purposes right now, it doesn't provide a bubble fallback, it's pure flood fill or nothing
-public class OxygenDistributorMachine extends SimpleTieredMachine implements IFloodFillMachine, AtmosphereSystem.IOxygenProvider {
+/**
+ * Oxygen Distributor machine that maintains a sealed room with breathable atmosphere.
+ * Uses flood fill to detect room boundaries and provides oxygen to all positions within.
+ * <p>
+ * The actual oxygen data is stored in {@link OxygenProvider} which persists independently
+ * of this machine's chunk load state, allowing oxygen queries even when this chunk is unloaded.
+ */
+public class OxygenDistributorMachine extends SimpleTieredMachine implements IFloodFillMachine, IAtmosphereMachine {
 
-    //TODO data persistence
+    /** The provider that holds our room data and handles oxygen queries */
+    @Nullable
+    private OxygenProvider provider;
 
-    public RoomScan roomScan = RoomScan.empty();
+    /** Pending scan result from async validation */
     private RoomScan newRoomScan;
+
+    /** Offset for staggering validation timing across machines */
     private long tickOffset;
+
     @Getter
     @Setter
     private boolean dirty;
+
     private ServerLevel level;
     private DimensionAtmosphereManager manager;
 
     @Nullable
     private ChunkPos pendingChunkLoad = null;
 
-    /** TODO: Javadoc goes here? */
     public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction, Object... args) {
         super(holder, tier, tankScalingFunction, args);
         if (holder.level() instanceof ServerLevel serverLevel) {
@@ -52,9 +68,11 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         }
     }
 
-    /** @return whether this machine is providing oxygen to the given BlockPos */
-    public boolean hasOxygen(BlockPos pos) {
-        return isWorking() && roomScan.containsEnvelope(pos);
+    /**
+     * @return The current room scan, or empty if no provider attached
+     */
+    public RoomScan getRoomScan() {
+        return provider != null ? provider.getRoomScan() : RoomScan.empty();
     }
 
     //////////////////////////////////////
@@ -78,7 +96,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
             return RecipeModifier.nullWrongType(OxygenDistributorMachine.class, machine);
         }
 
-        var roomSize = oxygenMachine.roomScan.interiorSize();
+        var roomSize = oxygenMachine.getRoomScan().interiorSize();
 
         return ModifierFunction.builder()
                 .eutMultiplier(roomSize)
@@ -102,7 +120,6 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
      * Stores the result in newRoomScan which gets processed on the main thread in {@link #processValidationResult()}.
      */
     public void validateAsync() {
-        // Maybe the machine outputs air on one specific side, and we should use the neighbor block? For now use the block itself, tag it passable
         int maxBlocks = 1_000_000;
         int maxHorizontalDimension = 128;
         newRoomScan = FloodFill.fill(level, level, getPos(), maxBlocks, maxHorizontalDimension);
@@ -111,12 +128,17 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     /**
      * Call this on the main thread to apply the revalidation results when they're ready.
      * Handles transition to the new RoomScan:
-     * Spawn vortex if status from sealed to escaped build height
-     * Update MachineRegistries (listeners, provider)
+     * - Spawn vortex if status from sealed to escaped build height
+     * - Update provider and registries
      */
     public void processValidationResult() {
-        RoomScan oldScan = roomScan;
+        if (provider == null || newRoomScan == null) {
+            return;
+        }
+
+        RoomScan oldScan = provider.getRoomScan();
         RoomScan newScan = newRoomScan;
+        newRoomScan = null;
 
         // Clean up if we were waiting for a chunk
         if (pendingChunkLoad != null) {
@@ -133,7 +155,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         }
 
 
-        // Compute chunk diff
+        // Compute chunk diff for block change listeners
+        // TODO: This gets done twice, once here and once in provider
         Set<ChunkPos> oldChunks = oldScan.touchedChunks();
         Set<ChunkPos> newChunks = newScan.touchedChunks();
 
@@ -143,26 +166,17 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         Set<ChunkPos> toAdd = new HashSet<>(newChunks);
         toAdd.removeAll(oldChunks);
 
-        // Update registries: remove old, add new
+        // Update block change listener registry
         manager.blockChangeListeners.update(this, toRemove, toAdd);
 
-        // Oxygen provider registration
-        if (oldScan.isSealed() && newScan.isSealed()) {
-            manager.oxygenMachines.update(this, toRemove, toAdd);
-        } else {
-            if (oldScan.isSealed()) {
-                manager.oxygenMachines.remove(this, oldChunks);
-            } else if (newScan.isSealed()) {
-                manager.oxygenMachines.add(this, newChunks);
-            }
-        }
+        // Update provider's room scan and oxygen chunk registry
+        manager.updateProvider(provider, oldScan, newScan);
 
         // Vortex: was sealed, now escaped to build height
         if (oldScan.isSealed() && newScan.status() == Status.ESCAPED_BUILD_HEIGHT) {
-
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
-                Direction breachDirection;
+                Direction breachDirection = null;
                 for (Direction dir : Direction.values()) {
                     if (oldScan.containsInterior(breachPoint.relative(dir))) {
                         breachDirection = dir.getOpposite();
@@ -172,9 +186,6 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
                 // TODO: spawn vortex at breach point and direction
             }
         }
-
-        roomScan = newScan;
-        newRoomScan = null;
     }
 
     /**
@@ -197,7 +208,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         return null;
     }
 
-    /** Calculate the earliest tick at which we want to revalidate.
+    /**
+     * Calculate the earliest tick at which we want to revalidate.
      * The purpose is to batch many blockchanges together instead of flood fill for each one.
      * @param interval The interval between revalidations, if it were always trying to revalidate
      * @return The next tick that's greater than the current getTickCount at which we want to start revalidating
@@ -211,7 +223,11 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     }
 
     public void onBlockChange(BlockEvent event) {
+        if (provider == null) return;
+
         BlockPos pos = event.getPos();
+        RoomScan roomScan = provider.getRoomScan();
+
         if (!dirty) {
             if ((roomScan.isSealed() && roomScan.containsEnvelope(pos))
                     || roomScan.containsInterior(pos)) {
@@ -221,9 +237,10 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     }
 
     public void onGridSpatialEvent(BlockPos min, BlockPos max) {
+        if (provider == null) return;
+
+        RoomScan roomScan = provider.getRoomScan();
         if (roomScan.bounds().intersects(new AABB(min, max))) {
-            // Technically the AABB can overlap without any of the room being in the spatial event.
-            //  However, this is way faster than iterating over all the blocks and spatial events are rare anyway.
             requestValidation();
         }
     }
@@ -237,9 +254,11 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         //TODO: Set earliest tick interval dependent on current room size
         AtmosphereSystem.requestValidation(this, calculateEarliestTick(100));
 
-        if (roomScan.status() == RoomScan.Status.ESCAPED_UNLOADED) {
-            assert roomScan.escapePoint() != null;
-            manager.chunkLoadListeners.remove(this, Set.of(new ChunkPos(roomScan.escapePoint())));
+        if (provider != null && provider.getRoomScan().status() == Status.ESCAPED_UNLOADED) {
+            BlockPos escapePoint = provider.getRoomScan().escapePoint();
+            if (escapePoint != null) {
+                manager.chunkLoadListeners.remove(this, Set.of(new ChunkPos(escapePoint)));
+            }
         }
     }
 
@@ -250,36 +269,46 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     @Override
     public void onLoad() {
         super.onLoad();
-        // TODO: How do I run this serverside only? I'm not getting any arguments with onLoad? Maybe I check if class attribute level != null?
-        // TODO: Maybe we have stored data? How does that work?
+        if (level == null) return;
+
+        provider = manager.getOrCreateProvider(getPos());
+        provider.attach(this);
+
         requestValidation();
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
-        deregister();
+        if (provider == null) return;
+
+        provider.detach();
+        deregisterMachineListeners();
     }
 
     @Override
     public void onMachineRemoved() {
         super.onMachineRemoved();
-        deregister();
+        if (manager == null) return;
+
+        deregisterMachineListeners();
+        manager.removeProvider(getPos());
+        provider = null;
     }
 
     /**
-     * Deregister from all registries
+     * Deregister machine-specific listeners (not oxygen provider).
+     * Called on both unload and removal.
      */
-    private void deregister() {
+    private void deregisterMachineListeners() {
+        if (provider == null) return;
+
+        RoomScan roomScan = provider.getRoomScan();
         manager.blockChangeListeners.remove(this, roomScan.touchedChunks());
 
-        if (roomScan.status() == RoomScan.Status.ESCAPED_UNLOADED) {
-            assert roomScan.escapePoint() != null;
-            manager.chunkLoadListeners.remove(this, Set.of(new ChunkPos(roomScan.escapePoint())));
-        }
-
-        if (roomScan.isSealed()) {
-            manager.oxygenMachines.remove(this, roomScan.touchedChunks());
+        if (pendingChunkLoad != null) {
+            manager.chunkLoadListeners.removeSingle(this, pendingChunkLoad);
+            pendingChunkLoad = null;
         }
     }
 }
