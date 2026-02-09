@@ -95,6 +95,7 @@ public final class TFGTags {
 
     public static final class Entities {
         public static final TagKey<EntityType<?>> IgnoresGravity = createEntityTag("tfg:ignores_gravity");
+        public static final TagKey<EntityType<?>> FishingNetScoopable = createEntityTag("tfg:fishing_net_scoopable");
 
         public static TagKey<EntityType<?>> createEntityTag(String path) {
             return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.parse(path));

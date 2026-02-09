@@ -21,7 +21,6 @@ import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MobColorItemClientHandler {
 
-
     private static final Map<String, Integer> COLOR_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, ResourceLocation> RESOURCE_LOCATION_CACHE = new ConcurrentHashMap<>();
     private static final Map<ResourceLocation, EntityType<?>> ENTITY_TYPE_CACHE = new ConcurrentHashMap<>();
