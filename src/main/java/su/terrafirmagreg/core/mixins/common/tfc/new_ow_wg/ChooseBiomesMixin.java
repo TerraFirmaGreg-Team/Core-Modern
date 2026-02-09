@@ -13,37 +13,33 @@ import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
 
 import su.terrafirmagreg.core.config.TFGConfig;
-import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
 
 @Mixin(value = ChooseBiomes.class, remap = false)
 public abstract class ChooseBiomesMixin {
-
-    // These are identical between 1.20 and 1.21
-    @Shadow
-    @Final
-    private static int[] MOUNTAIN_ALTITUDE_BIOMES;
-    @Shadow
-    @Final
-    private static int[] OCEANIC_MOUNTAIN_ALTITUDE_BIOMES;
-
     @Shadow
     protected abstract int randomSeededFrom(long rngSeed, int areaSeed, int[] choices);
 
     @Unique
+    private static final int[] MOUNTAIN_ALTITUDE_BIOMES = { MOUNTAINS, MOUNTAINS, MOUNTAINS, OLD_MOUNTAINS, OLD_MOUNTAINS, PLATEAU, HIGHLANDS };
+
+    @Unique
+    private static final int[] OCEANIC_MOUNTAIN_ALTITUDE_BIOMES = { VOLCANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS, OCEANIC_MOUNTAINS, OCEANIC_MOUNTAINS, ROLLING_HILLS };
+
+    @Unique
     private static final int[][] TFG_ALTITUDE_BIOMES = {
             { PLAINS, PLAINS, HILLS, ROLLING_HILLS, LOW_CANYONS, LOWLANDS, MUD_FLATS, SALT_FLATS }, // Low
-            { PLAINS, HILLS, TFGLayers.DEEP_OCEAN, TFGLayers.DEEP_OCEAN, TFGLayers.OCEAN, TFGLayers.OCEAN, PLATEAU, CANYONS, LOW_CANYONS }, // Mid
+            { PLAINS, HILLS, DEEP_OCEAN, DEEP_OCEAN, OCEAN, OCEAN, PLATEAU, CANYONS, LOW_CANYONS }, // Mid
             { HIGHLANDS, ROLLING_HILLS, BADLANDS, PLATEAU, PLATEAU, OLD_MOUNTAINS, OLD_MOUNTAINS, DUNE_SEA, GRASSY_DUNES }, // High
     };
 
     @Unique
-    private static final int[] TFG_MID_DEPTH_OCEAN_BIOMES = { TFGLayers.DEEP_OCEAN, TFGLayers.OCEAN, TFGLayers.OCEAN, TFGLayers.OCEAN_REEF, TFGLayers.OCEAN_REEF, TFGLayers.OCEAN_REEF };
+    private static final int[] TFG_MID_DEPTH_OCEAN_BIOMES = { DEEP_OCEAN, OCEAN, OCEAN, OCEAN_REEF, OCEAN_REEF, OCEAN_REEF };
 
     // TODO: add guano
     @Unique
     private static final int[] TFG_ISLAND_BIOMES = { PLAINS, HILLS, ROLLING_HILLS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS };
 
-    @Inject(method = "apply", at = @At("HEAD"), remap = false)
+    @Inject(method = "apply", at = @At("HEAD"), remap = false, cancellable = true)
     public void tfg$apply(RegionGenerator.Context context, CallbackInfo ci) {
         if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
 
@@ -96,6 +92,8 @@ public abstract class ChooseBiomesMixin {
                     }
                 }
             }
+
+            ci.cancel();
         }
     }
 }

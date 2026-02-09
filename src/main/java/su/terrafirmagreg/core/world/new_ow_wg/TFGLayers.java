@@ -72,6 +72,9 @@ public class TFGLayers {
     public static final int PLATEAU_LAKE;
 
     static {
+        BIOME_LAYERS = new BiomeExtension[128];
+        BIOME_LAYER_INDEX = new MutableInt(0);
+
         MUD_FLATS = TFGLayers.register(() -> TFGBiomes.MUD_FLATS);
         SALT_FLATS = TFGLayers.register(() -> TFGBiomes.SALT_FLATS);
         DUNE_SEA = TFGLayers.register(() -> TFGBiomes.DUNE_SEA);
@@ -115,9 +118,6 @@ public class TFGLayers {
         VOLCANIC_MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.VOLCANIC_MOUNTAIN_LAKE);
         VOLCANIC_OCEANIC_MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.VOLCANIC_OCEANIC_MOUNTAIN_LAKE);
         PLATEAU_LAKE = TFGLayers.register(() -> TFGBiomes.PLATEAU_LAKE);
-
-        BIOME_LAYERS = new BiomeExtension[128];
-        BIOME_LAYER_INDEX = new MutableInt(0);
     }
 
     public static BiomeExtension getFromLayerId(int id) {

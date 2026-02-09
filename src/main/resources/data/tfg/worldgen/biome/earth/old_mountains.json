@@ -1,0 +1,299 @@
+{
+    "features": [
+        "#tfc:in_biome/erosion",
+        "#tfc:in_biome/all_lakes",
+        "#tfc:in_biome/soil_discs/old_mountains",
+        "#tfc:in_biome/underground_structures",
+        "#tfc:in_biome/surface_structures",
+        "#tfc:in_biome/strongholds",
+        "#tfc:in_biome/veins",
+        "#tfc:in_biome/veins/kaolin",
+        "#tfc:in_biome/underground_decoration",
+        "#tfc:in_biome/large_features/old_mountains",
+        "#tfc:in_biome/surface_decoration/old_mountains",
+        "#tfc:in_biome/top_layer_modification"
+    ],
+    "effects": {
+        "sky_color": 8709887,
+        "water_fog_color": 329011,
+        "fog_color": 12638463,
+        "water_color": 4159204
+    },
+    "has_precipitation": true,
+    "temperature": 0.5,
+    "carvers": {
+        "liquid": [],
+        "air": [
+            "tfc:cave",
+            "tfc:canyon"
+        ]
+    },
+    "downfall": 0.5,
+    "spawn_costs": {},
+    "__comment__": "This file was automatically created by mcresources",
+    "spawners": {
+        "creature": [
+            {
+                "weight": 20,
+                "minCount": 1,
+                "type": "tfc:crocodile",
+                "maxCount": 1
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:pig",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:cow",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:goat",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:yak",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:alpaca",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:sheep",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:musk_ox",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfc:chicken",
+                "maxCount": 6
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfc:duck",
+                "maxCount": 6
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfc:quail",
+                "maxCount": 6
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:polar_bear",
+                "maxCount": 1
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:grizzly_bear",
+                "maxCount": 1
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:black_bear",
+                "maxCount": 1
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:lion",
+                "maxCount": 3
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:sabertooth",
+                "maxCount": 1
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:tiger",
+                "maxCount": 1
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfc:rabbit",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:fox",
+                "maxCount": 1
+            },
+            {
+                "weight": 1,
+                "minCount": 3,
+                "type": "tfc:panda",
+                "maxCount": 5
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:boar",
+                "maxCount": 2
+            },
+            {
+                "weight": 2,
+                "minCount": 3,
+                "type": "tfc:wildebeest",
+                "maxCount": 6
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:moose",
+                "maxCount": 1
+            },
+            {
+                "weight": 3,
+                "minCount": 2,
+                "type": "tfc:bongo",
+                "maxCount": 4
+            },
+            {
+                "weight": 3,
+                "minCount": 2,
+                "type": "tfc:caribou",
+                "maxCount": 4
+            },
+            {
+                "weight": 3,
+                "minCount": 2,
+                "type": "tfc:deer",
+                "maxCount": 4
+            },
+            {
+                "weight": 3,
+                "minCount": 2,
+                "type": "tfc:gazelle",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfc:grouse",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfc:pheasant",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfc:turkey",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfc:peafowl",
+                "maxCount": 4
+            },
+            {
+                "weight": 1,
+                "minCount": 6,
+                "type": "tfc:wolf",
+                "maxCount": 9
+            },
+            {
+                "weight": 1,
+                "minCount": 5,
+                "type": "tfc:hyena",
+                "maxCount": 9
+            },
+            {
+                "weight": 1,
+                "minCount": 3,
+                "type": "tfc:direwolf",
+                "maxCount": 7
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:donkey",
+                "maxCount": 3
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:horse",
+                "maxCount": 3
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfc:ocelot",
+                "maxCount": 3
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfc:frog",
+                "maxCount": 4
+            }
+        ],
+        "monster": [
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:spider",
+                "maxCount": 4
+            },
+            {
+                "weight": 95,
+                "minCount": 4,
+                "type": "minecraft:zombie",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:skeleton",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:creeper",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:slime",
+                "maxCount": 4
+            }
+        ]
+    },
+    "creature_spawn_probability": 0.1
+}
