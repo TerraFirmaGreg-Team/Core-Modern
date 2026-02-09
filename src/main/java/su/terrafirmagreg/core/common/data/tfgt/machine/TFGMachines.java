@@ -193,6 +193,8 @@ public class TFGMachines {
     public static final MachineDefinition SINGLE_ITEMSTACK_BUS = REGISTRATE
             .machine("single_itemstack_bus", SingleItemstackBus::new)
             .rotationState(RotationState.ALL)
+            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
+                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
                     Component.translatable("tfg.tooltip.single_itemstack_bus.0"),
@@ -201,11 +203,15 @@ public class TFGMachines {
 
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE
             .machine("railgun_ammo_loader", RailgunAmmoLoaderMachine::new)
+            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
+                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .register();
 
     public static final MachineDefinition INTERPLANETARY_LOGISTICS_MONITOR = REGISTRATE
             .machine("interplanetary_logistics_monitor", InterplanetaryLogisticsMonitorMachine::new)
+            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
+                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
             .rotationState(RotationState.NON_Y_AXIS)
             .register();
 
