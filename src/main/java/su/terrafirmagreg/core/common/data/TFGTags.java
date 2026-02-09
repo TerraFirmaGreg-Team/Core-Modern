@@ -12,6 +12,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public final class TFGTags {
 
     public static final class Items {
+
+        public static final TagKey<Item> Casings = createItemTag("tfg:casings");
         public static final TagKey<Item> Hammers = createItemTag("forge:tools/hammers");
 
         public static final TagKey<Item> Chains = createItemTag("forge:chains");
@@ -71,6 +73,7 @@ public final class TFGTags {
     }
 
     public static final class Blocks {
+        public static final TagKey<Block> Casings = createBlockTag("tfg:casings");
         public static final TagKey<Block> GrassPlantableOn = createBlockTag("tfc:grass_plantable_on");
         public static final TagKey<Block> Logs = createBlockTag("minecraft:logs");
         public static final TagKey<Block> HarvesterHarvestable = createBlockTag("tfg:harvester_harvestable");
