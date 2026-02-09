@@ -147,7 +147,23 @@ public class TFGTItems {
 
     public static final ItemEntry<ComponentItem> PARACETAMOL_PILL = TFGCore.REGISTRATE.item("paracetamol_pill", ComponentItem::create)
             .properties(p -> p.food(GTFoods.ANTIDOTE))
-            .onRegister(attach(new AntidoteBehavior(20,
+            .onRegister(attach(new AntidoteBehavior(30,
+                    GTMedicalConditions.CHEMICAL_BURNS,
+                    GTMedicalConditions.WEAK_POISON,
+                    GTMedicalConditions.POISON,
+                    GTMedicalConditions.NAUSEA,
+                    GTMedicalConditions.IRRITANT,
+                    GTMedicalConditions.METHANOL_POISONING,
+                    GTMedicalConditions.CARBON_MONOXIDE_POISONING)))
+            .onRegister(attach(new AntidoteBehavior(10,
+                    GTMedicalConditions.CARCINOGEN)))
+            .onRegister(attach(new AntidoteBehavior(5,
+                    TFGTMedicalConditions.RADIOACTIVE)))
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAD_AWAY_PILL = TFGCore.REGISTRATE.item("rad_away_pill", ComponentItem::create)
+            .properties(p -> p.food(GTFoods.ANTIDOTE))
+            .onRegister(attach(new AntidoteBehavior(-1,
                     GTMedicalConditions.CHEMICAL_BURNS,
                     GTMedicalConditions.WEAK_POISON,
                     GTMedicalConditions.POISON,
@@ -155,12 +171,10 @@ public class TFGTItems {
                     GTMedicalConditions.IRRITANT,
                     GTMedicalConditions.METHANOL_POISONING,
                     GTMedicalConditions.CARBON_MONOXIDE_POISONING,
-                    GTMedicalConditions.CARCINOGEN)))
-            .register();
-
-    public static final ItemEntry<ComponentItem> RAD_AWAY_PILL = TFGCore.REGISTRATE.item("rad_away_pill", ComponentItem::create)
-            .properties(p -> p.food(GTFoods.ANTIDOTE))
-            .onRegister(attach(new AntidoteBehavior(50,
+                    GTMedicalConditions.ASBESTOSIS,
+                    GTMedicalConditions.ARSENICOSIS,
+                    GTMedicalConditions.SILICOSIS,
+                    GTMedicalConditions.BERYLLIOSIS,
                     GTMedicalConditions.CARCINOGEN,
                     TFGTMedicalConditions.RADIOACTIVE)))
             .register();

@@ -156,8 +156,8 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
     }
 
     @Override
-    public TagKey<Item> getFoodTag() {
-        return TFGTags.Items.WraptorFood;
+    public @NotNull TagKey<Item> getFoodTag() {
+        return TFGTags.Items.MartianHerbivoreFoods;
     }
 
     // Sound Handlers

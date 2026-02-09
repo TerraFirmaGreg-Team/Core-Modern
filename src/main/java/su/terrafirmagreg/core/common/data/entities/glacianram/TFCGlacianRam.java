@@ -104,8 +104,8 @@ public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
     //End of config override
 
     @Override
-    public TagKey<Item> getFoodTag() {
-        return TFGTags.Items.GlacianRamFood;
+    public @NotNull TagKey<Item> getFoodTag() {
+        return TFGTags.Items.MartianHerbivoreFoods;
     }
 
     @Override

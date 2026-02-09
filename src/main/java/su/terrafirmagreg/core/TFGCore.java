@@ -35,6 +35,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGTSetupHooks;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
+import su.terrafirmagreg.core.compat.ae2.AE2Compat;
 import su.terrafirmagreg.core.compat.create.CustomArmInteractionPointTypes;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.*;
@@ -102,6 +103,7 @@ public final class TFGCore {
         TFGTSetupHooks.register(bus);
 
         AdAstraCompat.RegisterEvents();
+        AE2Compat.registerEvents();
         AtmosphereSystem.init();
     }
 

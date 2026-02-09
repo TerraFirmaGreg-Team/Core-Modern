@@ -87,13 +87,16 @@ public class TFGCreativeTab {
         accept(out, TFGItems.WRAPTOR_SPAWN_EGG);
         accept(out, TFGItems.SURFER_SPAWN_EGG);
 
-        //accept(out, TFGItems.ELECTRIC_EXTENDO_GRIP);
-
         accept(out, TFGItems.WIRELESS_CARD);
 
         accept(out, TFGItems.RNR_PLOW);
 
         accept(out, TFGTItems.COVER_ROTTEN_VOIDING);
+
+        accept(out, TFGItems.TIER_1_DOUBLE_ROCKET);
+        accept(out, TFGItems.TIER_2_DOUBLE_ROCKET);
+        accept(out, TFGItems.TIER_3_DOUBLE_ROCKET);
+        accept(out, TFGItems.TIER_4_DOUBLE_ROCKET);
     }
 
     private static <T extends ItemLike, R extends Supplier<T>, K1, K2> void accept(CreativeModeTab.Output out,

@@ -28,8 +28,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.wanmine.wab.entity.Soarer;
-import net.wanmine.wab.init.data.WabTags;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.entities.soarer.SoarerData;
 
 @Mixin(value = Soarer.class)
@@ -96,7 +96,7 @@ public abstract class SoarerMixin extends TamableAnimal {
     // Soarers eat the same thing as Surfers
     @Inject(method = "isFood", at = @At("HEAD"), cancellable = true)
     public void tfg$isFood(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(!FoodCapability.isRotten(stack) && Helpers.isItem(stack, WabTags.Items.SURFER_FOOD));
+        cir.setReturnValue(!FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFGTags.Items.MartianPiscivoreFoods));
     }
 
     @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)
@@ -118,14 +118,15 @@ public abstract class SoarerMixin extends TamableAnimal {
                 }
             }
 
-            // Extra food restores flaps
+            // Extra food restores flaps and heals
             if (isTame()) {
                 ((Soarer) (Object) this).addFlaps(10);
+                this.heal(4.0F);
                 usePlayerItem(player, hand, held);
                 playSound(SoundEvents.PLAYER_BURP);
             }
 
-            cir.setReturnValue(InteractionResult.SUCCESS);
+            cir.setReturnValue(InteractionResult.sidedSuccess(this.level().isClientSide));
         }
     }
 

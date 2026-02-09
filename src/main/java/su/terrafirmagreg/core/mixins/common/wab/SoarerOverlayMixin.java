@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RenderGuiEvent;
 import net.wanmine.wab.entity.Soarer;
-import net.wanmine.wab.screen.SoarerScreen;
+import net.wanmine.wab.overlay.SoarerOverlay;
 
 /**
  * This class contains code copied from Wan's Ancient Beasts, (c) WanMine, used with permission
@@ -21,8 +21,8 @@ import net.wanmine.wab.screen.SoarerScreen;
  * Mixin to make the GUI for soarer flaps not collide with the default position for the minimap
  */
 
-@Mixin(value = SoarerScreen.class, remap = false)
-public class SoarerScreenMixin {
+@Mixin(value = SoarerOverlay.class, remap = false)
+public class SoarerOverlayMixin {
 
     @Shadow
     @Final

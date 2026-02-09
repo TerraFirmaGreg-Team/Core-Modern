@@ -19,10 +19,13 @@ import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandl
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
+
+import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
 
 @SuppressWarnings("deprecation")
 public class TFGTRecipeTypes {
@@ -165,14 +168,35 @@ public class TFGTRecipeTypes {
     public final static GTRecipeType OSTRUM_LINEAR_ACCELERATOR = GTRecipeTypes
             .register("ostrum_linear_accelerator", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 9, 6, 6)
+            .setMaxSize(IO.IN, HeatRecipeCapability.CAP, 1)
+            .setMaxSize(IO.OUT, HeatRecipeCapability.CAP, 1)
             .setSound(GTSoundEntries.BATH)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, FillDirection.UP_TO_DOWN);
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, FillDirection.LEFT_TO_RIGHT)
+            .addDataInfo(data -> LocalizationUtils.format("tfg.nuclear.skip"));
 
     public static final GTRecipeType SMR_GENERATOR = GTRecipeTypes
             .register("smr_generator", GTRecipeTypes.GENERATOR)
+            .setEUIO(IO.OUT)
             .setMaxIOSize(0, 0, 1, 1)
             .setSound(GTSoundEntries.TURBINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
+
+    public static final GTRecipeType NUCLEAR_FUEL_FACTORY = GTRecipeTypes
+            .register("nuclear_fuel_factory", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(6, 3, 1, 2)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSlotOverlay(false, false, GuiTextures.ATOMIC_OVERLAY_1)
+            .setSound(GTSoundEntries.CUT)
+            .addDataInfo(data -> {
+                String heatText1 = data.getString("avgHeat1");
+                String heatText2 = data.getString("avgHeat2");
+                if (!heatText1.isEmpty()) {
+                    return LocalizationUtils.format(
+                            "tfg.nuclear.average_heat.text", heatText1, heatText2);
+                }
+                return "";
+            });
 
     public static final GTRecipeType HYDROPONICS_FACILITY_RECIPES = GTRecipeTypes
             .register("hydroponics_facility", GTRecipeTypes.MULTIBLOCK)

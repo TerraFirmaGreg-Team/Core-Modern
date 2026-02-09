@@ -120,7 +120,7 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
 
     @Override
     public @NotNull TagKey<Item> getFoodTag() {
-        return TFGTags.Items.SnifferFood;
+        return TFGTags.Items.MartianHerbivoreFoods;
     }
 
     @Override
