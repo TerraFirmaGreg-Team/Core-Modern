@@ -204,7 +204,8 @@
         "client.tfc.IngotPileBlockEntityMixin",
         "client.tfc.IngotPileBlockModelMixin",
         "client.tfc.SheetPileBlockModelMixin",
-        "common.ad_astra.PlanetsScreenMixin"
+        "common.ad_astra.PlanetsScreenMixin",
+        "common.starcatcher.FishingScreenTypeMixin"
     ],
     "required": true,
     "refmap": "tfg.refmap.json"
