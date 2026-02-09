@@ -5,21 +5,38 @@ import java.util.Locale;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 
+import net.wanmine.wab.entity.render.EntityRenderer;
+import net.wanmine.wab.entity.render.model.SurferModel;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
+import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
+import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowRenderer;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
+import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamModel;
+import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamRenderer;
 import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbitRenderer;
 import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
 import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
+import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSnifferRenderer;
 import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
+import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
 
+@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class TFGEntities {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES,
@@ -81,4 +98,72 @@ public class TFGEntities {
             () -> EntityType.Builder.of(RNRPlow::new, MobCategory.MISC)
                     .sized(1.3F, 1.4F)
                     .build(TFGCore.MOD_ID + ":rnr_plow"));
+
+
+    @SubscribeEvent
+    public static void onAttributes(EntityAttributeCreationEvent event) {
+        event.put(MOON_RABBIT.get(), MoonRabbit.createAttributes().build());
+        event.put(GLACIAN_RAM.get(), TFCGlacianRam.createMobAttributes().build());
+        event.put(SNIFFER.get(), TFCSniffer.createMobAttributes().build());
+        event.put(WRAPTOR.get(), TFCWraptor.createMobAttributes().build());
+        event.put(SURFER.get(), TFCSurfer.getDefaultAttributes().build());
+    }
+
+    @SubscribeEvent
+    public static void onSpawnPlacement(SpawnPlacementRegisterEvent event) {
+        event.register(
+                MOON_RABBIT.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                MoonRabbit::spawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(
+                GLACIAN_RAM.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                TFCGlacianRam::spawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(
+                SNIFFER.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                TFCSniffer::spawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(
+                WRAPTOR.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                TFCWraptor::spawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(
+                SURFER.get(),
+                SpawnPlacements.Type.IN_WATER,
+                Heightmap.Types.OCEAN_FLOOR,
+                TFCSurfer::spawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+    }
+
+    @SubscribeEvent
+    public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(MOON_RABBIT.get(), MoonRabbitRenderer::new);
+        event.registerEntityRenderer(GLACIAN_RAM.get(), TFCGlacianRamRenderer::new);
+        event.registerEntityRenderer(SNIFFER.get(), TFCSnifferRenderer::new);
+        event.registerEntityRenderer(WRAPTOR.get(), TFCWraptorRenderer::new);
+
+        event.registerEntityRenderer(SURFER.get(), EntityRenderer.create(SurferModel::new, 0.6F));
+        event.registerEntityRenderer(RNR_PLOW.get(), RNRPlowRenderer::new);
+
+        event.registerEntityRenderer(TIER_1_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT1);
+        event.registerEntityRenderer(TIER_2_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT2);
+        event.registerEntityRenderer(TIER_3_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT3);
+        event.registerEntityRenderer(TIER_4_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT4);
+
+    }
+
+    @SubscribeEvent
+    public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        //RocketHelper.register(event);
+        event.registerLayerDefinition(TFCGlacianRamModel.LAYER_LOCATION, TFCGlacianRamModel::createBodyLayer);
+        event.registerLayerDefinition(RNRPlowModel.LAYER_LOCATION, RNRPlowModel::createLayer);
+    }
 }
