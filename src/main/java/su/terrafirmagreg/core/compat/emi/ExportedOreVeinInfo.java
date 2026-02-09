@@ -705,12 +705,12 @@ package su.terrafirmagreg.core.compat.emi;
 				null),
 			new OreVeinInfoRecipe("venus_manual_salt", "ad_astra:venus", 
 				30, 0.2, 40, 65, 20, 6, 0, new String[] {
-				"minecraft:dripstone_block","ad_astra:venus_stone","tfc:rock/raw/basalt","tfc:rock/raw/rhyolite","tfc:rock/raw/dacite","tfc:rock/raw/andesite",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"minecraft:dripstone_block","ad_astra:venus_stone","tfc:rock/raw/basalt","tfc:rock/raw/rhyolite","tfc:rock/raw/dacite","tfc:rock/raw/andesite","betterend:flavolite","betterend:sandy_jadestone",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("salt", 80),new OreVeinInfoRecipe.WeightedBlock("rock_salt", 10),new OreVeinInfoRecipe.WeightedBlock("lepidolite", 5),new OreVeinInfoRecipe.WeightedBlock("spodumene", 5),},
 				new String[] {"ore_vein.tfg.venus_manual_salt.emi.0"}),
 			new OreVeinInfoRecipe("venus_manual_sulfur", "ad_astra:venus", 
 				30, 0.2, 40, 65, 20, 0, 0, new String[] {
-				"minecraft:dripstone_block","ad_astra:venus_stone","tfc:rock/raw/basalt","tfc:rock/raw/rhyolite","tfc:rock/raw/dacite","tfc:rock/raw/andesite",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"minecraft:dripstone_block","ad_astra:venus_stone","tfc:rock/raw/basalt","tfc:rock/raw/rhyolite","tfc:rock/raw/dacite","tfc:rock/raw/andesite","betterend:flavolite","betterend:sandy_jadestone",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("sulfur", 80),new OreVeinInfoRecipe.WeightedBlock("pyrite", 15),new OreVeinInfoRecipe.WeightedBlock("sphalerite", 5),},
 				new String[] {"ore_vein.tfg.venus_manual_sulfur.emi.0"}),
 	};
