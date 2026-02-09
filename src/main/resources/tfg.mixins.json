@@ -3,6 +3,7 @@
         "client.create.ChainConveyorRendererMixin",
         "client.minecraft.IBlockModelGeneratorsInvoker",
         "client.tfc.ClientForgeEventHandlerMixin",
+        "client.tfc.DrinkableMixin",
         "common.ad_astra.EnvironmentEffectsMixin",
         "common.ad_astra.GasTankItemMixin",
         "common.ad_astra.LanderMixin",
@@ -200,6 +201,7 @@
         "client.tfc.ClimateRenderCacheMixin",
         "client.tfc.DoubleIngotPileBlockModelMixin",
         "client.tfc.FarmlandBlockMixin",
+        "client.tfc.IngotPileBlockEntityMixin",
         "client.tfc.IngotPileBlockModelMixin",
         "client.tfc.SheetPileBlockModelMixin",
         "common.ad_astra.PlanetsScreenMixin"
