@@ -24,11 +24,34 @@ import net.minecraft.world.level.material.MapColor;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.blocks.ActiveCardinalBlock;
 
 public class TFGTBlocks {
 
     public static void init() {
     }
+
+    public static final BlockEntry<ActiveCardinalBlock> SAMPLE_RACK = TFGCore.REGISTRATE.block("sample_rack", ActiveCardinalBlock::new)
+            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion())
+            .addLayer(() -> RenderType::cutout)
+            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .item(BlockItem::new).build()
+            .register();
+
+    public static final BlockEntry<ActiveCardinalBlock> GROWTH_MONITOR = TFGCore.REGISTRATE.block("growth_monitor", ActiveCardinalBlock::new)
+            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion().lightLevel((state) -> (int)(0.8 * 15.0F)))
+            .addLayer(() -> RenderType::cutout)
+            .item(BlockItem::new).build()
+            .register();
+
+    public static final BlockEntry<ActiveCardinalBlock> CULTIVATION_MONITOR = TFGCore.REGISTRATE.block("cultivation_monitor", ActiveCardinalBlock::new)
+            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noCollission().noOcclusion().lightLevel((state) -> (int)(0.8 * 15.0F)))
+            .addLayer(() -> RenderType::cutout)
+            .item(BlockItem::new).build()
+            .register();
+
+
+    //// Casings
 
     public static final BlockEntry<Block> CLEAN_STAINLESS_STEEL_DESH_CASING = createCasingBlock("casings/casing_clean_stainless_steel_desh");
     public static final BlockEntry<Block> DESH_PTFE_CASING = createCasingBlock("casings/machine_casing_desh_ptfe");
@@ -75,6 +98,13 @@ public class TFGTBlocks {
     public static final BlockEntry<ActiveBlock> EGH_CASING = createActiveCasingBlock("casings/machine_casing_egh",
             p -> p.strength(6, 5).sound(SoundType.METAL).mapColor(MapColor.COLOR_LIGHT_GRAY));
 
+    public static final BlockEntry<ActiveCardinalBlock> STERILIZING_PIPE_CASING = TFGCore.REGISTRATE.block("casings/machine_casing_sterilizing_pipes", ActiveCardinalBlock::new)
+            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_BROWN))
+            .addLayer(() -> RenderType::cutout)
+            .tag(TFGTags.Blocks.Casings)
+            .item(BlockItem::new).tag(TFGTags.Items.Casings).build()
+            .register();
+
     public static final BlockEntry<Block>[] TREATED_WOOD_GREENHOUSE_CASINGS = createGreenhouseCasings("treated_wood",
             List.of(FLTags.Blocks.ALL_TREATED_WOOD_GREENHOUSE, TFGTags.Blocks.TreatedWoodGreenhouseCasings, BlockTags.MINEABLE_WITH_AXE),
             List.of(TFGTags.Items.TreatedWoodGreenhouseCasings));
@@ -90,7 +120,6 @@ public class TFGTBlocks {
     public static final BlockEntry<Block>[] STAINLESS_GREENHOUSE_CASINGS = createGreenhouseCasings("stainless",
             List.of(FLTags.Blocks.STAINLESS_STEEL_GREENHOUSE, TFGTags.Blocks.StainlessSteelGreenhouseCasings, BlockTags.MINEABLE_WITH_PICKAXE),
             List.of(TFGTags.Items.StainlessSteelGreenhouseCasings));
-
 
     public static BlockEntry<ActiveBlock> createActiveCasingBlock(String name, UnaryOperator<BlockBehaviour.Properties> properties) {
         return TFGCore.REGISTRATE.block("casings/machine_casing_vacuum_engine_intake", ActiveBlock::new)
@@ -120,8 +149,8 @@ public class TFGTBlocks {
     public static BlockEntry<Block> createCasingBlock(String name) {
         return createCasingBlock(name,
                 p -> p.isValidSpawn((state, level, pos, ent) -> false)
-                .sound(SoundType.COPPER).strength(5, 6)
-                .mapColor(MapColor.COLOR_LIGHT_GRAY));
+                        .sound(SoundType.COPPER).strength(5, 6)
+                        .mapColor(MapColor.COLOR_LIGHT_GRAY));
     }
 
     @SuppressWarnings("unchecked")
@@ -142,6 +171,6 @@ public class TFGTBlocks {
             blockItemBuilder.build();
             casings.add(blockBuilder.register());
         }
-        return (BlockEntry<Block>[])casings.toArray(BlockEntry[]::new);
+        return (BlockEntry<Block>[]) casings.toArray(BlockEntry[]::new);
     }
 }
