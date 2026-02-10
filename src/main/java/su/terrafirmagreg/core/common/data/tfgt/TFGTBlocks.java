@@ -39,17 +39,16 @@ public class TFGTBlocks {
             .register();
 
     public static final BlockEntry<ActiveCardinalBlock> GROWTH_MONITOR = TFGCore.REGISTRATE.block("growth_monitor", ActiveCardinalBlock::new)
-            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion().lightLevel((state) -> (int)(0.8 * 15.0F)))
+            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion().lightLevel((state) -> (int) (0.8 * 15.0F)))
             .addLayer(() -> RenderType::cutout)
             .item(BlockItem::new).build()
             .register();
 
     public static final BlockEntry<ActiveCardinalBlock> CULTIVATION_MONITOR = TFGCore.REGISTRATE.block("cultivation_monitor", ActiveCardinalBlock::new)
-            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noCollission().noOcclusion().lightLevel((state) -> (int)(0.8 * 15.0F)))
+            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noCollission().noOcclusion().lightLevel((state) -> (int) (0.8 * 15.0F)))
             .addLayer(() -> RenderType::cutout)
             .item(BlockItem::new).build()
             .register();
-
 
     //// Casings
 
