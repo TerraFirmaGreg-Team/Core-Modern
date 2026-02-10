@@ -139,14 +139,6 @@ processResources {
     }
 }
 
-sourceSets {
-    dev {
-        java.srcDir("src/dev/java")
-        resources.srcDir("src/dev/resources")
-        compileClasspath += sourceSets.main.compileClasspath
-    }
-}
-
 tasks.withType(Jar).configureEach {
     manifest.attributes([
             "Specification-Title"     : "${mod_id}",
@@ -163,7 +155,9 @@ tasks.withType(Jar).configureEach {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
+    options.compilerArgs << "-Xlint:-removal"
     options.compilerArgs << "-Aquiet=true" // Suppress mixin notes
+
 }
 
 // Fix a bug in Species that only shows up when running from dev env
@@ -202,6 +196,7 @@ tasks.register("prepareServerDev") {
     dependsOn patchSpeciesJar
 
     def serverDir = file("run/server")
+    def eulaFile = file("${serverDir}/eula.txt")
     def propsFile = file("${serverDir}/server.properties")
 
     outputs.file(eulaFile)
@@ -209,6 +204,12 @@ tasks.register("prepareServerDev") {
 
     doLast {
         serverDir.mkdirs()
+
+        copy {
+            from "src/patches"
+            include "eula.txt"
+            into serverDir
+        }
 
         // Create or patch server.properties to set online-mode=false
         if (propsFile.exists()) {
@@ -225,9 +226,31 @@ tasks.register("prepareServerDev") {
     }
 }
 
+// Prepare client: fix missing Jade lang files
+tasks.register("prepareClientDev") {
+    def langDir = file("run/client/kubejs/assets/jade/lang")
+    def langFile = file("${langDir}/en_us.json")
+
+    outputs.file(langFile)
+
+    doLast {
+        langDir.mkdirs()
+
+        copy {
+            from "src/patches"
+            include "en_us.json"
+            into langDir
+        }
+    }
+}
+
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
         dependsOn("prepareServerDev")
     }
+    tasks.matching { it.name == "prepareRunClient" }.configureEach {
+        dependsOn("prepareClientDev")
+    }
+
 }

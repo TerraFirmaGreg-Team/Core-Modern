@@ -6,6 +6,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
 import su.terrafirmagreg.core.TFGCore;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
