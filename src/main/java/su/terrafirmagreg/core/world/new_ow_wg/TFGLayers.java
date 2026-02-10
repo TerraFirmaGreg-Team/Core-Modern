@@ -15,6 +15,7 @@ import net.dries007.tfc.world.layer.framework.TypedAreaFactory;
 import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
 
+import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 import su.terrafirmagreg.core.world.new_ow_wg.layers.TFGMoreShoresLayer;
 import su.terrafirmagreg.core.world.new_ow_wg.layers.TFGRegionEdgeBiomeLayer;
 import su.terrafirmagreg.core.world.new_ow_wg.layers.TFGShoreLayer;

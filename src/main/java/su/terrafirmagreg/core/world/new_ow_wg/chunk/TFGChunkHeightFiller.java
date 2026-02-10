@@ -24,7 +24,7 @@ import net.minecraft.util.Mth;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 
-import su.terrafirmagreg.core.world.new_ow_wg.IBiomeExtension;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverNoiseSampler;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;

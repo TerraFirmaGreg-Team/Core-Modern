@@ -19,4 +19,11 @@ public class TFGNoiseHelpers {
         final double shift = min - oldMin * scale;
         return (x, y) -> Mth.clamp(noise.noise(x, y) * scale + shift, min, max);
     }
+
+    /**
+     * Maximum of two noises.
+     */
+    public static Noise2D max(Noise2D noise, Noise2D other) {
+        return (x, y) -> Math.max(noise.noise(x, y), other.noise(x, y));
+    }
 }

@@ -9,8 +9,8 @@ import net.dries007.tfc.world.noise.Noise3D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.minecraft.util.Mth;
 
-import su.terrafirmagreg.core.world.new_ow_wg.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreNoiseSampler;
 
 public final class ShoreNoise {

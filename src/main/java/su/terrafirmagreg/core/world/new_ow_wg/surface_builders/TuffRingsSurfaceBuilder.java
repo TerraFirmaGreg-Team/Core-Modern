@@ -6,8 +6,8 @@ import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.world.new_ow_wg.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TuffRingNoise;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGSimpleSurfaceStates;

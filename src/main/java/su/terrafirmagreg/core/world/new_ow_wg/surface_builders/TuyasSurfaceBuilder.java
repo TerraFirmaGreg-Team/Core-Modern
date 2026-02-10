@@ -8,8 +8,8 @@ import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.world.new_ow_wg.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TuyaNoise;
 
 public class TuyasSurfaceBuilder implements SurfaceBuilder {

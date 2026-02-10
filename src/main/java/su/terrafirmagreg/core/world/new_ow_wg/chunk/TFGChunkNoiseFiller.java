@@ -33,7 +33,7 @@ import net.minecraft.world.level.material.Fluids;
 
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 
-import su.terrafirmagreg.core.world.new_ow_wg.TFGBiomes;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverNoiseSampler;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;

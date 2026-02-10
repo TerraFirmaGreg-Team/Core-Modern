@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.world.new_ow_wg;
+package su.terrafirmagreg.core.world.new_ow_wg.biome;
 
 import net.dries007.tfc.world.biome.BiomeBuilder;
 

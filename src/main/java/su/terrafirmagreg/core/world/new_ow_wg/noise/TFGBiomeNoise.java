@@ -4,6 +4,7 @@ import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
 
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.*;
+import net.dries007.tfc.world.region.Units;
 import net.minecraft.util.Mth;
 
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
@@ -222,5 +223,120 @@ public class TFGBiomeNoise {
             }
             return height;
         };
+    }
+
+    /**
+     * Currently erupting location in a hotspot chain, used for biome noise and regional hotspot placement
+     */
+    public static Noise2D activeHotSpots(long seed) {
+        final double horizontalScale = 0.003;
+        final double cutoff = 0.75;
+        final double rescale = 7.2;
+
+        return new OpenSimplex2D(seed).map(y -> {
+            y = y > cutoff ? y - cutoff : 0;
+            y = (y * rescale);
+            return y;
+        }).octaves(3).spread(horizontalScale);
+    }
+
+    /**
+     * Second location in a hotspot chain, used for biome noise and regional hotspot placement
+     */
+    public static Noise2D dormantHotSpots(long seed) {
+        return hotSpotWarp(activeHotSpots(seed), plateRegions(seed), 1024, 0).map(y -> Math.max(y - 0.1, 0) * 1.111);
+    }
+
+    /**
+     * Third location in a hotspot chain, used for biome noise and regional hotspot placement
+     */
+    public static Noise2D extinctHotSpots(long seed) {
+        return hotSpotWarp(activeHotSpots(seed), plateRegions(seed), 2048, 0.25).map(y -> Math.max(y - 0.2, 0) * 1.25);
+    }
+
+    /**
+     * Fourth location in a hotspot chain, used for biome noise and regional hotspot placement
+     */
+    public static Noise2D ancientHotSpots(long seed) {
+        return hotSpotWarp(activeHotSpots(seed), plateRegions(seed), 3072, 0.5).map(y -> Math.max(y - 0.3, 0) * 1.4286);
+    }
+
+    /**
+     * All hotspot locations combined into one map
+     */
+    public static Noise2D hotSpotIntensity(long seed) {
+        return TFGNoiseHelpers.max(TFGNoiseHelpers.max(TFGNoiseHelpers.max(
+                activeHotSpots(seed), dormantHotSpots(seed)), extinctHotSpots(seed)), ancientHotSpots(seed));
+    }
+
+    /**
+     * This takes noise maps of each of the age categories of hotspots, and maps which one is dominant at every location in the world
+     */
+    public static Noise2D hotSpotAge(long seed) {
+        Noise2D active = activeHotSpots(seed);
+        Noise2D dormant = dormantHotSpots(seed);
+        Noise2D extinct = extinctHotSpots(seed);
+        Noise2D ancient = ancientHotSpots(seed);
+
+        return mapAges(active, dormant, extinct, ancient);
+    }
+
+    /**
+     * A domain-warp designed to warp the location of noise peaks without distorting their shapes
+     * From an input value, procedurally determines a displacement vector
+     *
+     * @param warp          noise map to generate offsets from, designed to be used with a cellular hash map
+     * @param velocityScale first-order distance scaling
+     * @param accelScale    second-order distance scaling
+     * @return this noise function, with a cellular domain warp effect
+     */
+    public static Noise2D hotSpotWarp(Noise2D noiseToWarp, Noise2D warp, int velocityScale, double accelScale) {
+        return (x, z) -> {
+            // Random vector
+            final double ux = warp.noise(x, z);
+            // Random magnitude from pev vector by multiplying and taking modulo, random direction based on magnitude
+            final double uz = (Math.abs(ux * 16) % 1 > 0.5 ? 1 : -1) * (ux * 256) % 1;
+
+            // Increase magnitude of vector to ensure islands in the same chain don't generate on top of each other
+            final int sx = ux > 0 ? 1 : -1;
+            final int sz = uz > 0 ? 1 : -1;
+            final double vx = (ux + sx) * velocityScale;
+            final double vz = (uz + sz) * velocityScale;
+
+            // Perpendicular acceleration vector to create curved chains
+            final double ax = -(vz) * accelScale;
+            final double az = vx * accelScale;
+
+            return noiseToWarp.noise(x + vx + ax, z + vz + az);
+        };
+    }
+
+    public static Noise2D mapAges(Noise2D activeNoise, Noise2D youngNoise, Noise2D oldNoise, Noise2D oldestNoise) {
+        return (x, z) -> {
+            final double active = activeNoise.noise(x, z);
+            final double young = youngNoise.noise(x, z);
+            final double old = oldNoise.noise(x, z);
+            final double oldest = oldestNoise.noise(x, z);
+
+            if (Math.max(Math.max(active, young), Math.max(old, oldest)) <= -0.8) {
+                return 0;
+            } else if (active > young && active > old && active > oldest) {
+                return 1;
+            } else if (young > active && young > old && young > oldest) {
+                return 2;
+            } else if (old > young && old > oldest && old > active) {
+                return 3;
+            } else if (oldest > young && oldest > old && oldest > active) {
+                return 4;
+            } else
+                return 0;
+        };
+    }
+
+    /**
+     * Not related to the region generator cells, this is used to randomize hotspot track directions within large scale regions
+     */
+    public static TFGCellular2D plateRegions(long seed) {
+        return new TFGCellular2D(seed).spread(0.00590625f / Units.CELL_WIDTH_IN_GRID);
     }
 }

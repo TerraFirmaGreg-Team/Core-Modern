@@ -14,6 +14,14 @@ public class TFGCellular2D extends Cellular2D {
     private final int sample;
     private double frequency;
 
+    public TFGCellular2D(long seed) {
+        this(seed, 0.43701595f, 1);
+    }
+
+    public TFGCellular2D(long seed, int sample) {
+        this(seed, 0.43701595f, sample);
+    }
+
     public TFGCellular2D(long seed, float jitter, int sample) {
         super(seed);
         this.seed = HashCommon.long2int(seed);
@@ -23,7 +31,7 @@ public class TFGCellular2D extends Cellular2D {
     }
 
     @Override
-    public @NotNull Cellular2D spread(double scaleFactor) {
+    public @NotNull TFGCellular2D spread(double scaleFactor) {
         frequency *= scaleFactor;
         return this;
     }

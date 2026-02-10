@@ -23,6 +23,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
 import su.terrafirmagreg.core.world.new_ow_wg.*;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeBuilder;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;

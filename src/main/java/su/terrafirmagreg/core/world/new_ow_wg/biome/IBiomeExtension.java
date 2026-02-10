@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.world.new_ow_wg;
+package su.terrafirmagreg.core.world.new_ow_wg.biome;
 
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;

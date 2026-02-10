@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 import net.dries007.tfc.world.biome.BiomeExtension;
 
-import su.terrafirmagreg.core.world.new_ow_wg.IBiomeExtension;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 
@@ -31,6 +31,7 @@ public class BiomeExtensionMixin implements IBiomeExtension {
     @Unique
     private int tfg$shoreBaseHeight;
 
+    @Unique
     public void tfg$init(ShoreBlendType shoreBlendType, TFGRiverBlendType riverBlendType, boolean hasTuffCones, boolean hasTuyas, int tuffRingRarity, int tuyaRarity, int shoreBaseHeight) {
         this.tfg$shoreBlendType = shoreBlendType;
         this.tfg$riverBlendType = riverBlendType;
@@ -66,10 +67,12 @@ public class BiomeExtensionMixin implements IBiomeExtension {
         return this.tfg$shoreBaseHeight;
     }
 
+    @Override
     public ShoreBlendType tfg$getShoreBlendType() {
         return this.tfg$shoreBlendType;
     }
 
+    @Override
     public TFGRiverBlendType tfg$getRiverBlendType() {
         return this.tfg$riverBlendType;
     }

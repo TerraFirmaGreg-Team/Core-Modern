@@ -1,6 +1,13 @@
-package su.terrafirmagreg.core.world.new_ow_wg;
+package su.terrafirmagreg.core.world.new_ow_wg.biome;
 
 import static net.dries007.tfc.world.biome.BiomeBuilder.builder;
+
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.world.biome.BiomeBlendType;
 import net.dries007.tfc.world.biome.BiomeBuilder;
@@ -9,20 +16,24 @@ import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.surface.builder.BadlandsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.LowlandsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.CommonLevelAccessor;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
-import su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg.TFCBiomesAccessor;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.*;
 
 public class TFGBiomes {
+    private static final Map<ResourceKey<Biome>, BiomeExtension> TFG_EXTENSIONS = new IdentityHashMap<>();
 
     // Aquatic biomes
     // BiomeNoise.ocean and BiomeNoise.oceanRidge are identical between 1.20 and 1.21
@@ -266,10 +277,44 @@ public class TFGBiomes {
         final ResourceKey<Biome> key = ResourceKey.create(Registries.BIOME, id);
         final BiomeExtension variants = builder.build(key);
 
-        if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
-            TFCBiomesAccessor.getExtensions().put(key, variants);
-        }
+		TFG_EXTENSIONS.put(key, variants);
 
         return variants;
+    }
+
+    public static BiomeExtension getExtensionOrThrow(LevelAccessor level, Biome biome) {
+        return Objects.requireNonNull(getExtension(level, biome), () -> "Biome: " + level.registryAccess().registryOrThrow(Registries.BIOME).getId(biome));
+    }
+
+    public static boolean hasExtension(CommonLevelAccessor level, Biome biome) {
+        return getExtension(level, biome) != null;
+    }
+
+    public static BiomeExtension getExtension(CommonLevelAccessor level, Biome biome) {
+        return ((IBiomeBridge) (Object) biome).tfg$getExtension(() -> findExtension(level, biome));
+    }
+
+    public static Collection<ResourceKey<Biome>> getAllKeys() {
+        return TFG_EXTENSIONS.keySet();
+    }
+
+    public static Collection<BiomeExtension> getExtensions() {
+        return TFG_EXTENSIONS.values();
+    }
+
+    public static Collection<ResourceLocation> getExtensionKeys() {
+        return TFG_EXTENSIONS.keySet().stream().map(ResourceKey::location).toList();
+    }
+
+    @Nullable
+    public static BiomeExtension getById(ResourceLocation id) {
+        return TFG_EXTENSIONS.get(ResourceKey.create(Registries.BIOME, id));
+    }
+
+    @Nullable
+    public static BiomeExtension findExtension(CommonLevelAccessor level, Biome biome) {
+        final RegistryAccess registryAccess = level.registryAccess();
+        final Registry<Biome> registry = registryAccess.registryOrThrow(Registries.BIOME);
+        return registry.getResourceKey(biome).map(TFG_EXTENSIONS::get).orElse(null);
     }
 }
