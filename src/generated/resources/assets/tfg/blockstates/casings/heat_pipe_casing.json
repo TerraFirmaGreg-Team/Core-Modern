@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "tfg:casings/heat_pipe_casing"
+    }
+  }
+}
