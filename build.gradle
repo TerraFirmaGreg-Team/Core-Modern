@@ -24,7 +24,6 @@ plugins {
 apply from: 'gradle/scripts/repositories.gradle'
 apply from: 'gradle/scripts/dependencies.gradle'
 apply from: 'gradle/scripts/spotless.gradle'
-if (file("moveToInstance.gradle").exists()) apply from: "moveToInstance.gradle"
 
 base {
     version = "${mod_version}"
@@ -244,6 +243,9 @@ tasks.register("prepareClientDev") {
     }
 }
 
+if (file("outputPath.gradle").exists()) apply from: "outputPath.gradle"
+
+def instanceDir = providers.gradleProperty("instancePath")
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
@@ -252,5 +254,27 @@ allprojects {
     tasks.matching { it.name == "prepareRunClient" }.configureEach {
         dependsOn("prepareClientDev")
     }
+}
 
+// Moving the core jar to a custom folder
+tasks.register('replaceInstanceJar', Copy) {
+    if (!instanceDir.isPresent()) return
+
+    fileTree(instanceDir.get()).matching {
+        include { file ->
+            file.name ==~ /TerraFirmaGreg-Core-Modern.+/
+        }
+    } each { it.delete() }
+
+    copy {
+        from "${buildDir}/libs"
+        into instanceDir.get()
+        include "TerraFirmaGreg-Core-Modern-${version}.jar"
+    }
+
+    outputs.cacheIf { false }
+}
+
+tasks.withType(Jar).configureEach {
+    if (instanceDir.isPresent()) finalizedBy(tasks.named("replaceInstanceJar"))
 }
