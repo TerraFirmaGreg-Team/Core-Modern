@@ -64,6 +64,10 @@ sourceSets {
     }
 }
 
+Properties localProperties = new Properties()
+localProperties.load(project.rootProject.file('gradle-local.properties').newDataInputStream())
+String instancePath = localProperties.get("instancePath")
+
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
 
@@ -94,7 +98,7 @@ legacyForge {
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
-            programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
+            programArguments.addAll '--existing', "$instancePath\\kubejs\\assets"
             programArguments.addAll '--existing-mod', 'gtceu'
         }
 
@@ -243,9 +247,6 @@ tasks.register("prepareClientDev") {
     }
 }
 
-if (file("outputPath.gradle").exists()) apply from: "outputPath.gradle"
-
-def instanceDir = providers.gradleProperty("instancePath")
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
@@ -258,9 +259,9 @@ allprojects {
 
 // Moving the core jar to a custom folder
 tasks.register('replaceInstanceJar', Copy) {
-    if (!instanceDir.isPresent()) return
+    String modsDir = "$instancePath\\mods"
 
-    fileTree(instanceDir.get()).matching {
+    fileTree(modsDir).matching {
         include { file ->
             file.name ==~ /TerraFirmaGreg-Core-Modern.+/
         }
@@ -268,7 +269,7 @@ tasks.register('replaceInstanceJar', Copy) {
 
     copy {
         from "${buildDir}/libs"
-        into instanceDir.get()
+        into modsDir
         include "TerraFirmaGreg-Core-Modern-${version}.jar"
     }
 
@@ -276,5 +277,5 @@ tasks.register('replaceInstanceJar', Copy) {
 }
 
 tasks.withType(Jar).configureEach {
-    if (instanceDir.isPresent()) finalizedBy(tasks.named("replaceInstanceJar"))
+    finalizedBy(tasks.named("replaceInstanceJar"))
 }

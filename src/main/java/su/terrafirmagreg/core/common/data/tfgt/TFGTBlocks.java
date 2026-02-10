@@ -53,24 +53,25 @@ public class TFGTBlocks {
 
     //// Casings
 
-    public static final BlockEntry<Block> CLEAN_STAINLESS_STEEL_DESH_CASING = createCasingBlock("machine_casing_clean_stainless_steel_desh", TFGCore.id("machine_casing_clean_stainless_steel_desh"));
-    public static final BlockEntry<Block> DESH_PTFE_CASING = createCasingBlock("machine_casing_desh_ptfe", TFGCore.id("casings/machine_casing_desh_ptfe"));
-    public static final BlockEntry<Block> IRON_DESH_CASING = createCasingBlock("machine_casing_iron_desh", TFGCore.id("casings/machine_casing_iron_desh"));
-    public static final BlockEntry<Block> PTFE_DESH_CASING = createCasingBlock("machine_casing_ptfe_desh", TFGCore.id("casings/machine_casing_ptfe_desh"));
-    public static final BlockEntry<Block> STAINLESS_STEEL_DESH_CASING = createCasingBlock("machine_casing_stainless_steel_desh", TFGCore.id("casings/machine_casing_stainless_steel_desh"));
-    public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_blue_solar_panel", TFGCore.id("casings/machine_casing_blue_solar_panel"));
-    public static final BlockEntry<Block> GREEN_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_green_solar_panel", TFGCore.id("casings/machine_casing_green_solar_panel"));
-    public static final BlockEntry<Block> RED_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_red_solar_panel", TFGCore.id("casings/machine_casing_red_solar_panel"));
-    public static final BlockEntry<Block> MARS_CASING = createCasingBlock("machine_casing_mars", TFGCore.id("casings/machine_casing_mars"));
-    public static final BlockEntry<Block> OSTRUM_CARBON_CASING = createCasingBlock("machine_casing_ostrum_carbon", TFGCore.id("casings/machine_casing_ostrum_carbon"));
-    public static final BlockEntry<Block> STAINLESS_EVAPORATION_CASING = createCasingBlock("machine_casing_stainless_evaporation", TFGCore.id("casings/machine_casing_stainless_evaporation"));
+    public static final BlockEntry<Block> CLEAN_STAINLESS_STEEL_DESH_CASING = createCasingBlock("machine_casing_clean_stainless_steel_desh",
+            TFGCore.id("block/casings/machine_casing_clean_stainless_steel_desh"));
+    public static final BlockEntry<Block> DESH_PTFE_CASING = createCasingBlock("machine_casing_desh_ptfe", TFGCore.id("block/casings/machine_casing_desh_ptfe"));
+    public static final BlockEntry<Block> IRON_DESH_CASING = createCasingBlock("machine_casing_iron_desh", TFGCore.id("block/casings/machine_casing_iron_desh"));
+    public static final BlockEntry<Block> PTFE_DESH_CASING = createCasingBlock("machine_casing_ptfe_desh", TFGCore.id("block/casings/machine_casing_ptfe_desh"));
+    public static final BlockEntry<Block> STAINLESS_STEEL_DESH_CASING = createCasingBlock("machine_casing_stainless_steel_desh", TFGCore.id("block/casings/machine_casing_stainless_steel_desh"));
+    public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_blue_solar_panel", TFGCore.id("block/casings/machine_casing_blue_solar_panel"));
+    public static final BlockEntry<Block> GREEN_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_green_solar_panel", TFGCore.id("block/casings/machine_casing_green_solar_panel"));
+    public static final BlockEntry<Block> RED_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_red_solar_panel", TFGCore.id("block/casings/machine_casing_red_solar_panel"));
+    public static final BlockEntry<Block> MARS_CASING = createCasingBlock("machine_casing_mars", TFGCore.id("block/casings/machine_casing_mars"));
+    public static final BlockEntry<Block> OSTRUM_CARBON_CASING = createCasingBlock("machine_casing_ostrum_carbon", TFGCore.id("block/casings/machine_casing_ostrum_carbon"));
+    public static final BlockEntry<Block> STAINLESS_EVAPORATION_CASING = createCasingBlock("machine_casing_stainless_evaporation", TFGCore.id("block/casings/machine_casing_stainless_evaporation"));
 
-    public static final BlockEntry<Block> HEAT_PIPE_CASING = createCasingBlock("heat_pipe_casing", TFGCore.id("casings/heat_pipe_casing"),
+    public static final BlockEntry<Block> HEAT_PIPE_CASING = createCasingBlock("heat_pipe_casing", TFGCore.id("block/casings/heat_pipe_casing"),
             p -> p.isValidSpawn((state, level, pos, ent) -> false)
                     .sound(SoundType.COPPER).strength(5, 6)
                     .mapColor(MapColor.COLOR_BLACK));
 
-    public static final BlockEntry<Block> BIOCULTURE_CASING = createCasingBlock("machine_casing_bioculture", TFGCore.id("casings/machine_casing_bioculture"),
+    public static final BlockEntry<Block> BIOCULTURE_CASING = createCasingBlock("machine_casing_bioculture", TFGCore.id("block/casings/machine_casing_bioculture"),
             p -> p.isValidSpawn((state, level, pos, ent) -> false)
                     .sound(SoundType.COPPER).strength(5, 6)
                     .mapColor(MapColor.COLOR_RED));
@@ -81,7 +82,7 @@ public class TFGTBlocks {
                     .sound(SoundType.GLASS).strength(5, 6)
                     .mapColor(MapColor.COLOR_ORANGE))
             .addLayer(() -> RenderType::translucent)
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_bioculture_glass")))
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/block/casings/machine_casing_bioculture_glass")))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW)
             .item(BlockItem::new).tag(TFGTags.Items.Casings).build()
             .register();

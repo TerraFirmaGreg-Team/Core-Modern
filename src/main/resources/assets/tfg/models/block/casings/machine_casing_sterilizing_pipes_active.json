@@ -1,7 +1,0 @@
-{
-    "parent": "tfg:block/casings/active_casing",
-    "textures": {
-        "active_overlay": "tfg:block/casings/machine_casing_sterilizing_pipes_active_emissive",
-        "active": "tfg:block/casings/machine_casing_sterilizing_pipes_active"
-    }
-}
