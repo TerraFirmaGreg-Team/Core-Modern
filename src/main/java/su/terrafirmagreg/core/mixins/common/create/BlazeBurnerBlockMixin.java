@@ -12,28 +12,23 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+/**
+ * Mixin to prevent solid fuel from being burned in the Blaze Burner by hand.
+ * Plays a sound when the interaction fails.
+ */
 @Mixin(value = BlazeBurnerBlock.class)
 public abstract class BlazeBurnerBlockMixin {
-    @Inject(method = "use", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "use", at = @At(value = "RETURN"), cancellable = true)
     private void injected(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockRayTraceResult, CallbackInfoReturnable<InteractionResult> cir) {
-        if (level.dimension() != Level.OVERWORLD && level.dimension() != Level.NETHER) {
+        if (cir.getReturnValue() == InteractionResult.SUCCESS
+                && level.dimension() != Level.OVERWORLD && level.dimension() != Level.NETHER) {
             Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
             cir.setReturnValue(InteractionResult.PASS);
-        }
-    }
-
-    @Inject(method = "tryInsert", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void doNotInsertInSpace(BlockState state, Level level, BlockPos pos, ItemStack stack, boolean doNotConsume, boolean forceOverflow, boolean simulate,
-            CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
-        if (level.dimension() != Level.OVERWORLD && level.dimension() != Level.NETHER) {
-            cir.setReturnValue(InteractionResultHolder.fail(ItemStack.EMPTY));
         }
     }
 }
