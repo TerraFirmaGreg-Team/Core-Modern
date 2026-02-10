@@ -8,6 +8,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import su.terrafirmagreg.core.TFGCore;
 
 public final class TFGTags {
@@ -138,7 +139,6 @@ public final class TFGTags {
         public static final TagKey<Biome> HasDarkSandWind = createBiomeTag("has_dark_sand_particles");
         public static final TagKey<Biome> HasMediumSandWind = createBiomeTag("has_medium_sand_particles");
         public static final TagKey<Biome> HasLightSandWind = createBiomeTag("has_light_sand_particles");
-
 
         private static TagKey<Biome> createBiomeTag(String path) {
             return createBiomeTag(TFGCore.id(path));

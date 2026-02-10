@@ -52,7 +52,7 @@ public class TFGTBlocks {
 
     //// Casings
 
-    public static final BlockEntry<Block> CLEAN_STAINLESS_STEEL_DESH_CASING = createCasingBlock("casings/casing_clean_stainless_steel_desh");
+    public static final BlockEntry<Block> CLEAN_STAINLESS_STEEL_DESH_CASING = createCasingBlock("casings/machine_casing_clean_stainless_steel_desh");
     public static final BlockEntry<Block> DESH_PTFE_CASING = createCasingBlock("casings/machine_casing_desh_ptfe");
     public static final BlockEntry<Block> IRON_DESH_CASING = createCasingBlock("casings/machine_casing_iron_desh");
     public static final BlockEntry<Block> PTFE_DESH_CASING = createCasingBlock("casings/machine_casing_ptfe_desh");
@@ -80,7 +80,7 @@ public class TFGTBlocks {
                     .sound(SoundType.GLASS).strength(5, 6)
                     .mapColor(MapColor.COLOR_ORANGE))
             .addLayer(() -> RenderType::translucent)
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_bioculture_glass/")))
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_bioculture_glass")))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW)
             .item(BlockItem::new).tag(TFGTags.Items.Casings).build()
             .register();
@@ -121,7 +121,7 @@ public class TFGTBlocks {
             List.of(TFGTags.Items.StainlessSteelGreenhouseCasings));
 
     public static BlockEntry<ActiveBlock> createActiveCasingBlock(String name, UnaryOperator<BlockBehaviour.Properties> properties) {
-        return TFGCore.REGISTRATE.block("casings/machine_casing_vacuum_engine_intake", ActiveBlock::new)
+        return TFGCore.REGISTRATE.block(name, ActiveBlock::new)
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .properties(properties::apply)
                 .addLayer(() -> RenderType::cutoutMipped)
@@ -138,7 +138,7 @@ public class TFGTBlocks {
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .properties(properties::apply)
                 .addLayer(() -> RenderType::solid)
-                .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/" + name)))
+                .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/" + name)))
                 .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
                 .item(BlockItem::new).tag(TFGTags.Items.Casings)
                 .build()
@@ -172,4 +172,5 @@ public class TFGTBlocks {
         }
         return (BlockEntry<Block>[]) casings.toArray(BlockEntry[]::new);
     }
+
 }
