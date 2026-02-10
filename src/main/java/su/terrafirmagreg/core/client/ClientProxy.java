@@ -13,18 +13,11 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.wanmine.wab.entity.render.EntityRenderer;
-import net.wanmine.wab.entity.render.model.SurferModel;
 
 import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
@@ -33,18 +26,7 @@ import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.container.ArtisanTableScreen;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowRenderer;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamModel;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamRenderer;
-import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
-import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbitRenderer;
-import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
 import su.terrafirmagreg.core.common.data.entities.sniffer.*;
-import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
-import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
-import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
 import su.terrafirmagreg.core.common.data.particles.*;
 
 public class ClientProxy extends CommonProxy {
@@ -96,7 +78,6 @@ public class ClientProxy extends CommonProxy {
         consumer.accept(TFGItems.TIER_3_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_3_LAYER, RocketRenderer.TIER_3_TEXTURE));
         consumer.accept(TFGItems.TIER_4_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_4_LAYER, RocketRenderer.TIER_4_TEXTURE));
     }
-
 
     @SubscribeEvent
     public void registerSpecialModels(ModelEvent.RegisterAdditional event) {

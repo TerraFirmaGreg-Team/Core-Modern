@@ -1,1 +1,4 @@
-{"parent":"minecraft:block/cube_all","textures":{"all":"tfg:block/casings/superconductor_coil_large"}}
+{
+    "parent": "minecraft:block/cube_all",
+    "textures": {"all": "tfg:block/casings/superconductor_coil_large"}
+}

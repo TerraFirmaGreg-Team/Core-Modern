@@ -30,14 +30,14 @@ public class TFGInteractionManager {
                             if (player == null || !player.getAbilities().instabuild) {
                                 stack.shrink(1);
                             }
-
+        
                             InteractionResult result = InteractionResult.sidedSuccess(level.isClientSide);
                             if (player != null && result.consumesAction()) {
                                 player.awardStat(Stats.ITEM_USED.get(TFGBlocks.MARS_SAND_LAYER_BLOCK.get().asItem()));
                             }
                             return result;
                         }
-
+        
                         // Default behavior
                         // Handles layering behavior of both snow piles and snow layers via the
                         // blocks replacement / getStateForPlacement

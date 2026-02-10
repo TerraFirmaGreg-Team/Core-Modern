@@ -1,24 +1,21 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
+import java.util.function.Supplier;
+
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
+
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
-
-import java.util.function.Supplier;
-
 
 public class TFGTBlocks {
 
@@ -39,25 +36,22 @@ public class TFGTBlocks {
 
     public static final BlockEntry<ActiveBlock> VACUUM_ENGINE_INTAKE = TFGCore.REGISTRATE.block("tfg:casings/machine_casing_vacuum_engine_intake", ActiveBlock::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
-            .properties(p -> p.strength(6,5).sound(SoundType.METAL).mapColor(MapColor.COLOR_LIGHT_GRAY))
+            .properties(p -> p.strength(6, 5).sound(SoundType.METAL).mapColor(MapColor.COLOR_LIGHT_GRAY))
             .addLayer(() -> RenderType::cutoutMipped)
             .blockstate(GTModels.createActiveModel(TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
-                .item(BlockItem::new).tag(TFGTags.Items.Casings)
-                .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")))
+            .item(BlockItem::new).tag(TFGTags.Items.Casings)
+            .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")))
             .build()
-                .register();
-
+            .register();
 
     public static BlockEntry<Block> createCasingBlock(String name,
-                                                      Supplier<Supplier<RenderType>> type) {
+            Supplier<Supplier<RenderType>> type) {
         return TFGCore.REGISTRATE.block(name, Block::new)
                 .initialProperties(() -> Blocks.IRON_BLOCK)
-                .properties(p ->
-                        p.isValidSpawn((state, level, pos, ent) -> false)
+                .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false)
                         .sound(SoundType.COPPER).strength(5, 6)
-                                .mapColor(MapColor.COLOR_LIGHT_GRAY)
-                )
+                        .mapColor(MapColor.COLOR_LIGHT_GRAY))
                 .addLayer(type)
                 .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/" + name)))
                 .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)

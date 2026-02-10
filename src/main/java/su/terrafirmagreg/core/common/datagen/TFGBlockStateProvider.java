@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common.datagen;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
 import su.terrafirmagreg.core.TFGCore;
 
 public class TFGBlockStateProvider extends BlockStateProvider {

@@ -15,11 +15,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.wanmine.wab.entity.render.EntityRenderer;
+import net.wanmine.wab.entity.render.model.SurferModel;
 
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 
-import net.wanmine.wab.entity.render.EntityRenderer;
-import net.wanmine.wab.entity.render.model.SurferModel;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
@@ -98,7 +98,6 @@ public class TFGEntities {
             () -> EntityType.Builder.of(RNRPlow::new, MobCategory.MISC)
                     .sized(1.3F, 1.4F)
                     .build(TFGCore.MOD_ID + ":rnr_plow"));
-
 
     @SubscribeEvent
     public static void onAttributes(EntityAttributeCreationEvent event) {

@@ -1,1 +1,4 @@
-{"parent":"minecraft:block/cube_all","textures":{"all":"tfg:block/casings/machine_casing_stainless_steel_desh"}}
+{
+    "parent": "minecraft:block/cube_all",
+    "textures": {"all": "tfg:block/casings/machine_casing_stainless_steel_desh"}
+}
