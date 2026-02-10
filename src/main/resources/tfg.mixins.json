@@ -57,6 +57,7 @@
         "common.create.WaterWheelBlockMixin",
         "common.create.WindmillBearingBlockEntityMixin",
         "common.create.WindmillBearingBlockMixin",
+        "common.createliquidfuel.LiquidBurnerFuelJsonLoaderMixin",
         "common.emi.ItemEmiStackMixin",
         "common.fallingtrees.StandardTreeMixin",
         "common.firmalife.ClimateStationOxygenatedMixin",
