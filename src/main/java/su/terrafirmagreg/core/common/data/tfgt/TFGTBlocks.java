@@ -26,6 +26,7 @@ import net.minecraft.world.level.material.MapColor;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.blocks.ActiveCardinalBlock;
+import su.terrafirmagreg.core.utils.TFGModelUtils;
 
 public class TFGTBlocks {
 
@@ -82,7 +83,7 @@ public class TFGTBlocks {
                     .sound(SoundType.GLASS).strength(5, 6)
                     .mapColor(MapColor.COLOR_ORANGE))
             .addLayer(() -> RenderType::translucent)
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/block/casings/machine_casing_bioculture_glass")))
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_bioculture_glass")))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW)
             .item(BlockItem::new).tag(TFGTags.Items.Casings).build()
             .register();
@@ -127,7 +128,7 @@ public class TFGTBlocks {
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .properties(properties::apply)
                 .addLayer(() -> RenderType::cutoutMipped)
-                .blockstate(GTModels.createActiveModel(TFGCore.id("block/" + name)))
+                .blockstate(TFGModelUtils.createActiveModel(TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")))
                 .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
                 .item(BlockItem::new).tag(TFGTags.Items.Casings)
                 .build()

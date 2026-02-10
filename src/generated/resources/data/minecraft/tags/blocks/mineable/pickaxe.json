@@ -1,16 +1,16 @@
 {
   "values": [
-    "tfg:casings/greenhouse/copper_greenhouse_casing_0",
-    "tfg:casings/greenhouse/copper_greenhouse_casing_1",
-    "tfg:casings/greenhouse/copper_greenhouse_casing_2",
-    "tfg:casings/greenhouse/copper_greenhouse_casing_3",
-    "tfg:casings/greenhouse/iron_greenhouse_casing_0",
-    "tfg:casings/greenhouse/iron_greenhouse_casing_1",
-    "tfg:casings/greenhouse/iron_greenhouse_casing_2",
-    "tfg:casings/greenhouse/iron_greenhouse_casing_3",
-    "tfg:casings/greenhouse/stainless_greenhouse_casing_0",
-    "tfg:casings/greenhouse/stainless_greenhouse_casing_1",
-    "tfg:casings/greenhouse/stainless_greenhouse_casing_2",
-    "tfg:casings/greenhouse/stainless_greenhouse_casing_3"
+    "tfg:copper_greenhouse_casing_0",
+    "tfg:copper_greenhouse_casing_1",
+    "tfg:copper_greenhouse_casing_2",
+    "tfg:copper_greenhouse_casing_3",
+    "tfg:iron_greenhouse_casing_0",
+    "tfg:iron_greenhouse_casing_1",
+    "tfg:iron_greenhouse_casing_2",
+    "tfg:iron_greenhouse_casing_3",
+    "tfg:stainless_greenhouse_casing_0",
+    "tfg:stainless_greenhouse_casing_1",
+    "tfg:stainless_greenhouse_casing_2",
+    "tfg:stainless_greenhouse_casing_3"
   ]
 }
