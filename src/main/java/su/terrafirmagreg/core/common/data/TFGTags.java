@@ -42,6 +42,12 @@ public final class TFGTags {
         public static final TagKey<Item> ArtisanTableInputs = createItemTag("tfg:artisan_table_inputs");
         public static final TagKey<Item> ArtisanTableTools = createItemTag("tfg:artisan_table_tools");
 
+        public static final TagKey<Item> GreenhouseCasings = createItemTag("tfg:all_greenhouse_casings");
+        public static final TagKey<Item> StainlessSteelGreenhouseCasings = createItemTag("tfg:stainless_steel_greenhouse_casings");
+        public static final TagKey<Item> IronGreenhouseCasings = createItemTag("tfg:iron_greenhouse_casings");
+        public static final TagKey<Item> CopperGreenhouseCasings = createItemTag("tfg:copper_greenhouse_casings");
+        public static final TagKey<Item> TreatedWoodGreenhouseCasings = createItemTag("tfg:treated_wood_greenhouse_casings");
+
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("tfg:interaction/brick");
         public static final TagKey<Item> INTERACTIONBRICKSTAIR = createItemTag("tfg:interaction/brick_stairs");
@@ -82,6 +88,11 @@ public final class TFGTags {
         public static final TagKey<Block> DecorativePlantAttachable = createBlockTag("tfg:decorative_plant_attachable");
         public static final TagKey<Block> TitaniumConcrete = createBlockTag("tfg:titanium_concrete");
         public static final TagKey<Block> SolidLeaves = createBlockTag("tfg:solid_leaves");
+        public static final TagKey<Block> GreenhouseCasings = createBlockTag("tfg:all_greenhouse_casings");
+        public static final TagKey<Block> StainlessSteelGreenhouseCasings = createBlockTag("tfg:stainless_steel_greenhouse_casings");
+        public static final TagKey<Block> IronGreenhouseCasings = createBlockTag("tfg:iron_greenhouse_casings");
+        public static final TagKey<Block> CopperGreenhouseCasings = createBlockTag("tfg:copper_greenhouse_casings");
+        public static final TagKey<Block> TreatedWoodGreenhouseCasings = createBlockTag("tfg:treated_wood_greenhouse_casings");
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));
