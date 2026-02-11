@@ -1,28 +1,24 @@
-{
-  "variants": {
-    "facing=down": {
-      "model": "tfg:block/machine/zpm_railgun_item_loader_out",
-      "x": 90
-    },
+{"variants": {
     "facing=east": {
-      "model": "tfg:block/machine/zpm_railgun_item_loader_out",
-      "y": 90
-    },
-    "facing=north": {
-      "model": "tfg:block/machine/zpm_railgun_item_loader_out"
+        "y": 90,
+        "model": "tfg:block/machine/zpm_railgun_item_loader_out"
     },
     "facing=south": {
-      "model": "tfg:block/machine/zpm_railgun_item_loader_out",
-      "y": 180
+        "y": 180,
+        "model": "tfg:block/machine/zpm_railgun_item_loader_out"
     },
+    "facing=down": {
+        "x": 90,
+        "model": "tfg:block/machine/zpm_railgun_item_loader_out"
+    },
+    "facing=north": {"model": "tfg:block/machine/zpm_railgun_item_loader_out"},
     "facing=up": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/zpm_railgun_item_loader_out",
-      "x": 270
+        "gtceu:z": 180,
+        "x": 270,
+        "model": "tfg:block/machine/zpm_railgun_item_loader_out"
     },
     "facing=west": {
-      "model": "tfg:block/machine/zpm_railgun_item_loader_out",
-      "y": 270
+        "y": 270,
+        "model": "tfg:block/machine/zpm_railgun_item_loader_out"
     }
-  }
-}
+}}

@@ -1,6 +1,4 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "tfg:item/absorption_salvo"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {"layer0": "tfg:item/absorption_salvo"}
 }

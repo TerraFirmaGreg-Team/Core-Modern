@@ -1,76 +1,72 @@
-{
-  "variants": {
-    "facing=east,upwards_facing=east": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 90
-    },
-    "facing=east,upwards_facing=north": {
-      "model": "tfg:block/machine/smr_generator",
-      "y": 90
-    },
-    "facing=east,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 90
-    },
-    "facing=east,upwards_facing=west": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 90
-    },
-    "facing=north,upwards_facing=east": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/smr_generator"
-    },
-    "facing=north,upwards_facing=north": {
-      "model": "tfg:block/machine/smr_generator"
+{"variants": {
+    "facing=north,upwards_facing=north": {"model": "tfg:block/machine/smr_generator"},
+    "facing=west,upwards_facing=east": {
+        "gtceu:z": 270,
+        "y": 270,
+        "model": "tfg:block/machine/smr_generator"
     },
     "facing=north,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/smr_generator"
+        "gtceu:z": 180,
+        "model": "tfg:block/machine/smr_generator"
     },
-    "facing=north,upwards_facing=west": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/smr_generator"
+    "facing=east,upwards_facing=west": {
+        "gtceu:z": 90,
+        "y": 90,
+        "model": "tfg:block/machine/smr_generator"
     },
     "facing=south,upwards_facing=east": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 180
+        "gtceu:z": 270,
+        "y": 180,
+        "model": "tfg:block/machine/smr_generator"
     },
-    "facing=south,upwards_facing=north": {
-      "model": "tfg:block/machine/smr_generator",
-      "y": 180
+    "facing=east,upwards_facing=east": {
+        "gtceu:z": 270,
+        "y": 90,
+        "model": "tfg:block/machine/smr_generator"
     },
-    "facing=south,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 180
+    "facing=east,upwards_facing=north": {
+        "y": 90,
+        "model": "tfg:block/machine/smr_generator"
     },
     "facing=south,upwards_facing=west": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 180
-    },
-    "facing=west,upwards_facing=east": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 270
+        "gtceu:z": 90,
+        "y": 180,
+        "model": "tfg:block/machine/smr_generator"
     },
     "facing=west,upwards_facing=north": {
-      "model": "tfg:block/machine/smr_generator",
-      "y": 270
+        "y": 270,
+        "model": "tfg:block/machine/smr_generator"
+    },
+    "facing=south,upwards_facing=north": {
+        "y": 180,
+        "model": "tfg:block/machine/smr_generator"
+    },
+    "facing=south,upwards_facing=south": {
+        "gtceu:z": 180,
+        "y": 180,
+        "model": "tfg:block/machine/smr_generator"
     },
     "facing=west,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 270
+        "gtceu:z": 180,
+        "y": 270,
+        "model": "tfg:block/machine/smr_generator"
+    },
+    "facing=east,upwards_facing=south": {
+        "gtceu:z": 180,
+        "y": 90,
+        "model": "tfg:block/machine/smr_generator"
+    },
+    "facing=north,upwards_facing=east": {
+        "gtceu:z": 270,
+        "model": "tfg:block/machine/smr_generator"
+    },
+    "facing=north,upwards_facing=west": {
+        "gtceu:z": 90,
+        "model": "tfg:block/machine/smr_generator"
     },
     "facing=west,upwards_facing=west": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/smr_generator",
-      "y": 270
+        "gtceu:z": 90,
+        "y": 270,
+        "model": "tfg:block/machine/smr_generator"
     }
-  }
-}
+}}

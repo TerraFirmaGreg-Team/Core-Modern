@@ -47,7 +47,7 @@ java {
 
 mixin {
     var refMap = add sourceSets.main, "${mod_id}.refmap.json"
-    jar.from refMap;
+    jar.from refMap
     config "${mod_id}.mixins.json"
 }
 
@@ -98,7 +98,7 @@ legacyForge {
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
-            programArguments.addAll '--existing', "$instancePath\\kubejs\\assets"
+            programArguments.addAll '--existing', file("src/dev/resources/").getAbsolutePath()
             programArguments.addAll '--existing-mod', 'gtceu'
         }
 
@@ -259,7 +259,7 @@ allprojects {
 
 // Moving the core jar to a custom folder
 tasks.register('replaceInstanceJar', Copy) {
-    String modsDir = "$instancePath\\mods"
+    String modsDir = "$instancePath/mods"
 
     fileTree(modsDir).matching {
         include { file ->

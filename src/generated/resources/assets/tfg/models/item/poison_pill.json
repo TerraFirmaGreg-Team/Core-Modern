@@ -1,6 +1,4 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "tfg:item/poison_pill"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {"layer0": "tfg:item/poison_pill"}
 }

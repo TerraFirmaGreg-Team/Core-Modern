@@ -39,6 +39,7 @@ gradle-local.properties
 run
 runs
 libs
+src/dev/resources/**
 src/generated/resources/.cache/*
 src/generated/resources/assets/tfg/lang/*
 *.jar

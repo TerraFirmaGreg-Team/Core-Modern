@@ -1,28 +1,24 @@
-{
-  "variants": {
-    "facing=down": {
-      "model": "tfg:block/machine/lv_railgun_item_loader_in",
-      "x": 90
-    },
+{"variants": {
     "facing=east": {
-      "model": "tfg:block/machine/lv_railgun_item_loader_in",
-      "y": 90
-    },
-    "facing=north": {
-      "model": "tfg:block/machine/lv_railgun_item_loader_in"
+        "y": 90,
+        "model": "tfg:block/machine/lv_railgun_item_loader_in"
     },
     "facing=south": {
-      "model": "tfg:block/machine/lv_railgun_item_loader_in",
-      "y": 180
+        "y": 180,
+        "model": "tfg:block/machine/lv_railgun_item_loader_in"
     },
+    "facing=down": {
+        "x": 90,
+        "model": "tfg:block/machine/lv_railgun_item_loader_in"
+    },
+    "facing=north": {"model": "tfg:block/machine/lv_railgun_item_loader_in"},
     "facing=up": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/lv_railgun_item_loader_in",
-      "x": 270
+        "gtceu:z": 180,
+        "x": 270,
+        "model": "tfg:block/machine/lv_railgun_item_loader_in"
     },
     "facing=west": {
-      "model": "tfg:block/machine/lv_railgun_item_loader_in",
-      "y": 270
+        "y": 270,
+        "model": "tfg:block/machine/lv_railgun_item_loader_in"
     }
-  }
-}
+}}

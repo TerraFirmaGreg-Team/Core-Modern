@@ -1,19 +1,15 @@
-{
-  "variants": {
+{"variants": {
     "facing=east": {
-      "model": "tfg:block/machine/uev_gas_pressurizer",
-      "y": 90
-    },
-    "facing=north": {
-      "model": "tfg:block/machine/uev_gas_pressurizer"
+        "y": 90,
+        "model": "tfg:block/machine/uev_gas_pressurizer"
     },
     "facing=south": {
-      "model": "tfg:block/machine/uev_gas_pressurizer",
-      "y": 180
+        "y": 180,
+        "model": "tfg:block/machine/uev_gas_pressurizer"
     },
+    "facing=north": {"model": "tfg:block/machine/uev_gas_pressurizer"},
     "facing=west": {
-      "model": "tfg:block/machine/uev_gas_pressurizer",
-      "y": 270
+        "y": 270,
+        "model": "tfg:block/machine/uev_gas_pressurizer"
     }
-  }
-}
+}}

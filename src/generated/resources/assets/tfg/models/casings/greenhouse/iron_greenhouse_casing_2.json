@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "tfg:block/casings/greenhouse/iron_greenhouse_casing_2"
-  }
-}

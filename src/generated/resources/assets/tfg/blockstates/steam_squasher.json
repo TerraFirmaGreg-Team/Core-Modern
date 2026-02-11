@@ -1,114 +1,110 @@
-{
-  "variants": {
-    "facing=down,upwards_facing=east": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/steam_squasher",
-      "x": 90
-    },
-    "facing=down,upwards_facing=north": {
-      "model": "tfg:block/machine/steam_squasher",
-      "x": 90
-    },
-    "facing=down,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/steam_squasher",
-      "x": 90
-    },
-    "facing=down,upwards_facing=west": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/steam_squasher",
-      "x": 90
-    },
-    "facing=east,upwards_facing=east": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 90
-    },
-    "facing=east,upwards_facing=north": {
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 90
-    },
-    "facing=east,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 90
-    },
-    "facing=east,upwards_facing=west": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 90
-    },
-    "facing=north,upwards_facing=east": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/steam_squasher"
-    },
-    "facing=north,upwards_facing=north": {
-      "model": "tfg:block/machine/steam_squasher"
+{"variants": {
+    "facing=north,upwards_facing=north": {"model": "tfg:block/machine/steam_squasher"},
+    "facing=west,upwards_facing=east": {
+        "gtceu:z": 270,
+        "y": 270,
+        "model": "tfg:block/machine/steam_squasher"
     },
     "facing=north,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/steam_squasher"
+        "gtceu:z": 180,
+        "model": "tfg:block/machine/steam_squasher"
     },
-    "facing=north,upwards_facing=west": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/steam_squasher"
+    "facing=down,upwards_facing=east": {
+        "gtceu:z": 90,
+        "x": 90,
+        "model": "tfg:block/machine/steam_squasher"
     },
-    "facing=south,upwards_facing=east": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 180
-    },
-    "facing=south,upwards_facing=north": {
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 180
-    },
-    "facing=south,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 180
-    },
-    "facing=south,upwards_facing=west": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 180
-    },
-    "facing=up,upwards_facing=east": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/steam_squasher",
-      "x": 270
-    },
-    "facing=up,upwards_facing=north": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/steam_squasher",
-      "x": 270
+    "facing=down,upwards_facing=north": {
+        "x": 90,
+        "model": "tfg:block/machine/steam_squasher"
     },
     "facing=up,upwards_facing=south": {
-      "model": "tfg:block/machine/steam_squasher",
-      "x": 270
+        "x": 270,
+        "model": "tfg:block/machine/steam_squasher"
     },
     "facing=up,upwards_facing=west": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/steam_squasher",
-      "x": 270
+        "gtceu:z": 270,
+        "x": 270,
+        "model": "tfg:block/machine/steam_squasher"
     },
-    "facing=west,upwards_facing=east": {
-      "gtceu:z": 270,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 270
+    "facing=east,upwards_facing=west": {
+        "gtceu:z": 90,
+        "y": 90,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=south,upwards_facing=east": {
+        "gtceu:z": 270,
+        "y": 180,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=east,upwards_facing=east": {
+        "gtceu:z": 270,
+        "y": 90,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=east,upwards_facing=north": {
+        "y": 90,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=up,upwards_facing=east": {
+        "gtceu:z": 90,
+        "x": 270,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=south,upwards_facing=west": {
+        "gtceu:z": 90,
+        "y": 180,
+        "model": "tfg:block/machine/steam_squasher"
     },
     "facing=west,upwards_facing=north": {
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 270
+        "y": 270,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=south,upwards_facing=north": {
+        "y": 180,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=down,upwards_facing=west": {
+        "gtceu:z": 270,
+        "x": 90,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=south,upwards_facing=south": {
+        "gtceu:z": 180,
+        "y": 180,
+        "model": "tfg:block/machine/steam_squasher"
     },
     "facing=west,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 270
+        "gtceu:z": 180,
+        "y": 270,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=down,upwards_facing=south": {
+        "gtceu:z": 180,
+        "x": 90,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=east,upwards_facing=south": {
+        "gtceu:z": 180,
+        "y": 90,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=north,upwards_facing=east": {
+        "gtceu:z": 270,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=north,upwards_facing=west": {
+        "gtceu:z": 90,
+        "model": "tfg:block/machine/steam_squasher"
+    },
+    "facing=up,upwards_facing=north": {
+        "gtceu:z": 180,
+        "x": 270,
+        "model": "tfg:block/machine/steam_squasher"
     },
     "facing=west,upwards_facing=west": {
-      "gtceu:z": 90,
-      "model": "tfg:block/machine/steam_squasher",
-      "y": 270
+        "gtceu:z": 90,
+        "y": 270,
+        "model": "tfg:block/machine/steam_squasher"
     }
-  }
-}
+}}

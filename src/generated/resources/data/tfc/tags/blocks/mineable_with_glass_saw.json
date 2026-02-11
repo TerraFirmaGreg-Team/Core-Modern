@@ -1,5 +1,4 @@
-{
-  "values": [
+{"values": [
     "tfg:machine_casing_bioculture_glass",
     "tfg:treated_wood_greenhouse_casing_0",
     "tfg:treated_wood_greenhouse_casing_1",
@@ -17,5 +16,4 @@
     "tfg:stainless_greenhouse_casing_1",
     "tfg:stainless_greenhouse_casing_2",
     "tfg:stainless_greenhouse_casing_3"
-  ]
-}
+]}

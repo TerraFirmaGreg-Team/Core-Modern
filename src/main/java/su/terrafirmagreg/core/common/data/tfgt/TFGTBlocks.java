@@ -103,6 +103,7 @@ public class TFGTBlocks {
     public static final BlockEntry<ActiveCardinalBlock> STERILIZING_PIPE_CASING = TFGCore.REGISTRATE.block("machine_casing_sterilizing_pipes", ActiveCardinalBlock::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_BROWN))
             .addLayer(() -> RenderType::cutout)
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_sterilizing_pipes")))
             .tag(TFGTags.Blocks.Casings)
             .item(BlockItem::new).tag(TFGTags.Items.Casings).build()
             .register();
@@ -159,9 +160,11 @@ public class TFGTBlocks {
         List<BlockEntry<Block>> casings = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            var blockBuilder = TFGCore.REGISTRATE.block("%s_greenhouse_casing_%s".formatted(tier, i), Block::new)
+            String blockId = "%s_greenhouse_casing_%s".formatted(tier, i);
+            var blockBuilder = TFGCore.REGISTRATE.block(blockId, Block::new)
                     .initialProperties(() -> Blocks.IRON_BLOCK)
                     .properties(p -> p.strength(0.3f, 0.3f).requiresCorrectToolForDrops().sound(SoundType.GLASS))
+                    .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/greenhouse/" + blockId)))
                     .tag(TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW, FLTags.Blocks.GREENHOUSE, FLTags.Blocks.GREENHOUSE_FULL_WALLS)
                     .addLayer(i > 2 ? () -> RenderType::translucent : () -> RenderType::cutout);
             blockTags.forEach(blockBuilder::tag);
