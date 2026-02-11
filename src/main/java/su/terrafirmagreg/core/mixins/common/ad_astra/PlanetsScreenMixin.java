@@ -1,7 +1,7 @@
 package su.terrafirmagreg.core.mixins.common.ad_astra;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Objects;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,6 +18,7 @@ import com.mojang.math.Axis;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -25,12 +26,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import earth.terrarium.adastra.api.client.events.AdAstraClientEvents;
 import earth.terrarium.adastra.api.planets.Planet;
 import earth.terrarium.adastra.client.components.LabeledImageButton;
 import earth.terrarium.adastra.client.screens.PlanetsScreen;
-import earth.terrarium.adastra.common.constants.ConstantComponents;
 import earth.terrarium.adastra.common.constants.PlanetConstants;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -45,6 +46,9 @@ public abstract class PlanetsScreenMixin extends Screen {
     @Shadow
     private int pageIndex;
 
+    @Shadow
+    private Button addSpaceStatonButton;
+
     @Unique
     private final PlanetsScreen tfg$self = (PlanetsScreen) (Object) this;
 
@@ -55,24 +59,34 @@ public abstract class PlanetsScreenMixin extends Screen {
     @Inject(method = "init", at = @At(value = "TAIL"))
     private void tfg$createLandingSelector(CallbackInfo ci) {
         if (pageIndex == 2 && selectedPlanet != null) {
+            //Remove space station buttons
+            if (selectedPlanet.dimension() != Level.OVERWORLD) {
+                addSpaceStatonButton.active = false;
+                addSpaceStatonButton.visible = false;
+            }
+
+            //New landing buttons
             TFGPlanetsMenu menu = (TFGPlanetsMenu) tfg$self.getMenu();
             List<List<Object>> selectedPlanetData = menu.getPlanetLandingPos().get(selectedPlanet.dimension());
 
-            AtomicInteger offset = new AtomicInteger(0);
-            selectedPlanetData.forEach((singlePosList) -> {
-                BlockPos landingPos = ((GlobalPos) singlePosList.get(0)).pos();
-                boolean locked = (boolean) singlePosList.get(1);
-                String name = (String) singlePosList.get(2);
+            if (Objects.nonNull(selectedPlanetData)) {
+                int offset = 0;
+                for (List<Object> singlePosList : selectedPlanetData) {
+                    BlockPos landingPos = ((GlobalPos) singlePosList.get(0)).pos();
+                    boolean locked = (boolean) singlePosList.get(1);
+                    String name = (String) singlePosList.get(2);
 
-                LabeledImageButton button = this.addRenderableWidget(new LabeledImageButton(250, tfg$self.height / 2 - 77 - offset.get(), 99, 20, 0, 0, 20, PlanetsScreen.BUTTON, 99, 40,
-                        (b) -> tfg$self.land(this.selectedPlanet.dimension()), ConstantComponents.LAND));
-                offset.addAndGet(25);
+                    LabeledImageButton button = this.addRenderableWidget(new LabeledImageButton(250, tfg$self.height / 2 - 77 - offset, 99, 20, 0, 0, 20, PlanetsScreen.BUTTON, 99, 40,
+                            (b) -> tfg$self.land(this.selectedPlanet.dimension()), Component.literal(name)));
+                    offset -= 25;
 
-                button.setTooltip(Tooltip.create(Component.translatable("tooltip.ad_astra.land",
-                        menu.getPlanetName(this.selectedPlanet.dimension()),
-                        landingPos.getX(),
-                        landingPos.getZ()).withStyle(ChatFormatting.AQUA)));
-            });
+                    button.setTooltip(Tooltip.create(Component.translatable("tooltip.ad_astra.land",
+                            menu.getPlanetName(this.selectedPlanet.dimension()),
+                            landingPos.getX(),
+                            landingPos.getZ()).withStyle(ChatFormatting.AQUA)));
+
+                }
+            }
         }
     }
 
