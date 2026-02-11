@@ -1,1 +1,10 @@
-{"variants": {"": {"model": "tfg:block/machine_casing_sterilizing_pipes"}}}
+{
+  "variants": {
+    "active=false": {
+      "model": "tfg:block/machine_casing_sterilizing_pipes"
+    },
+    "active=true": {
+      "model": "tfg:block/machine_casing_sterilizing_pipes_active"
+    }
+  }
+}

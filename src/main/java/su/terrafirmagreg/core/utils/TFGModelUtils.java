@@ -10,9 +10,27 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ModelFile;
 
+import su.terrafirmagreg.core.common.data.blocks.ActiveCardinalBlock;
+
 public class TFGModelUtils {
 
     public static NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> createActiveModel(ResourceLocation textureName) {
+        return (ctx, prov) -> {
+            String name = ctx.getName();
+            ActiveBlock block = ctx.getEntry();
+            ModelFile inactive = prov.models().cubeAll(name, textureName);
+            ModelFile active = prov.models().cubeAll(name + "_active", textureName.withSuffix("_active"));
+
+            prov.getVariantBuilder(block)
+                    .partialState().with(GTBlockStateProperties.ACTIVE, false)
+                    .modelForState().modelFile(inactive).addModel()
+                    .partialState().with(GTBlockStateProperties.ACTIVE, true)
+                    .modelForState().modelFile(active).addModel();
+        };
+    }
+
+    // has to be duplicated because of the different block type
+    public static NonNullBiConsumer<DataGenContext<Block, ActiveCardinalBlock>, RegistrateBlockstateProvider> createActiveCardinalModel(ResourceLocation textureName) {
         return (ctx, prov) -> {
             String name = ctx.getName();
             ActiveBlock block = ctx.getEntry();

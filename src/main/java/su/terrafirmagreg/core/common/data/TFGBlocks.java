@@ -1,25 +1,33 @@
 package su.terrafirmagreg.core.common.data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
 
+import com.eerussianguy.firmalife.common.FLTags;
 import com.google.common.collect.ImmutableMap;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
+import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.client.TFCSounds;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IcicleBlock;
@@ -31,6 +39,8 @@ import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -51,6 +61,7 @@ import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.data.buds.BudIndicator;
 import su.terrafirmagreg.core.common.data.buds.BudIndicatorItem;
 import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
+import su.terrafirmagreg.core.utils.TFGModelUtils;
 
 @SuppressWarnings({ "unused" })
 public final class TFGBlocks {
@@ -216,43 +227,6 @@ public final class TFGBlocks {
 
     // Multi block casings
 
-    public static final RegistryObject<Block> ELECTROMAGNETIC_ACCELERATOR_BLOCK = register(
-            "electromagnetic_accelerator",
-            () -> new ElectromagneticAcceleratorBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
-                    .strength(5.5f)
-                    .sound(SoundType.COPPER)
-                    .lightLevel(state -> 15)
-                    .speedFactor(1.5f)));
-
-    public static final RegistryObject<Block> SUPERCONDUCTOR_COIL_LARGE_BLOCK = register("superconductor_coil_large",
-            () -> new SimpleBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.COLOR_ORANGE)
-                    .strength(5.5f)
-                    .sound(SoundType.COPPER)));
-
-    public static final RegistryObject<Block> SUPERCONDUCTOR_COIL_SMALL_BLOCK = register("superconductor_coil_small",
-            () -> new SimpleBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.COLOR_ORANGE)
-                    .strength(5.5f)
-                    .sound(SoundType.COPPER)));
-
-    public static final RegistryObject<Block> MACHINE_CASING_ALUMINIUM_PLATED_STEEL = register(
-            "machine_casing_aluminium_plated_steel",
-            () -> new SimpleBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
-                    .strength(5.5f)
-                    .sound(SoundType.COPPER)));
-
-    public static final RegistryObject<Block> MACHINE_CASING_POWER_CASING = register(
-            "machine_casing_power_casing",
-            () -> new SimpleBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.COLOR_CYAN)
-                    .strength(5.5f)
-                    .sound(SoundType.METAL)));
-
-    public static final RegistryObject<ReflectorBlock> REFLECTOR_BLOCK = register("reflector", ReflectorBlock::new);
-
     // Mars animal related
     public static final RegistryObject<Block> LARGE_NEST_BOX = register("large_nest_box",
             () -> new LargeNestBoxBlock(ExtendedProperties.of()
@@ -284,6 +258,193 @@ public final class TFGBlocks {
                         .mapColor(MapColor.DIRT)
                         .strength(1.4f)
                         .sound(SoundType.GRAVEL), RUSTICUS_CLAY_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
+    }
+
+    //    public static final BlockEntry<ActiveCardinalBlock> SAMPLE_RACK = TFGCore.REGISTRATE.block("sample_rack", ActiveCardinalBlock::new)
+    //            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion())
+    //            .addLayer(() -> RenderType::cutout)
+    //            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+    //            .item(BlockItem::new).build()
+    //            .register();
+    //
+    //    public static final BlockEntry<ActiveCardinalBlock> GROWTH_MONITOR = TFGCore.REGISTRATE.block("growth_monitor", ActiveCardinalBlock::new)
+    //            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion().lightLevel((state) -> (int) (0.8 * 15.0F)))
+    //            .addLayer(() -> RenderType::cutout)
+    //            .item(BlockItem::new).build()
+    //            .register();
+    //
+    //    public static final BlockEntry<ActiveCardinalBlock> CULTIVATION_MONITOR = TFGCore.REGISTRATE.block("cultivation_monitor", ActiveCardinalBlock::new)
+    //            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noCollission().noOcclusion().lightLevel((state) -> (int) (0.8 * 15.0F)))
+    //            .addLayer(() -> RenderType::cutout)
+    //            .item(BlockItem::new).build()
+    //            .register();
+
+    //// Casings
+
+    public static final BlockEntry<Block> CLEAN_STAINLESS_STEEL_DESH_CASING = createCasingBlock("machine_casing_clean_stainless_steel_desh",
+            TFGCore.id("block/casings/machine_casing_clean_stainless_steel_desh"));
+    public static final BlockEntry<Block> DESH_PTFE_CASING = createCasingBlock("machine_casing_desh_ptfe", TFGCore.id("block/casings/machine_casing_desh_ptfe"));
+    public static final BlockEntry<Block> IRON_DESH_CASING = createCasingBlock("machine_casing_iron_desh", TFGCore.id("block/casings/machine_casing_iron_desh"));
+    public static final BlockEntry<Block> PTFE_DESH_CASING = createCasingBlock("machine_casing_ptfe_desh", TFGCore.id("block/casings/machine_casing_ptfe_desh"));
+    public static final BlockEntry<Block> STAINLESS_STEEL_DESH_CASING = createCasingBlock("machine_casing_stainless_steel_desh", TFGCore.id("block/casings/machine_casing_stainless_steel_desh"));
+    public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_blue_solar_panel", TFGCore.id("block/casings/machine_casing_blue_solar_panel"));
+    public static final BlockEntry<Block> GREEN_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_green_solar_panel", TFGCore.id("block/casings/machine_casing_green_solar_panel"));
+    public static final BlockEntry<Block> RED_SOLAR_PANEL_CASING = createCasingBlock("machine_casing_red_solar_panel", TFGCore.id("block/casings/machine_casing_red_solar_panel"));
+    public static final BlockEntry<Block> MARS_CASING = createCasingBlock("machine_casing_mars", TFGCore.id("block/casings/machine_casing_mars"));
+    public static final BlockEntry<Block> OSTRUM_CARBON_CASING = createCasingBlock("machine_casing_ostrum_carbon", TFGCore.id("block/casings/machine_casing_ostrum_carbon"));
+    public static final BlockEntry<Block> STAINLESS_EVAPORATION_CASING = createCasingBlock("machine_casing_stainless_evaporation", TFGCore.id("block/casings/machine_casing_stainless_evaporation"));
+
+    public static final BlockEntry<ElectromagneticAcceleratorBlock> ELECTROMAGNETIC_ACCELERATOR_BLOCK = TFGCore.REGISTRATE.block("electromagnetic_accelerator", ElectromagneticAcceleratorBlock::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .properties(p -> p.mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .strength(5.5f)
+                    .sound(SoundType.COPPER)
+                    .lightLevel(state -> 15)
+                    .speedFactor(1.5f))
+            .addLayer(() -> RenderType::solid)
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/electromagnetic_accelerator")))
+            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
+            .item(BlockItem::new).tag(TFGTags.Items.Casings)
+            .build()
+            .register();
+
+    public static final BlockEntry<Block> SUPERCONDUCTOR_COIL_LARGE_BLOCK = createCasingBlock("superconductor_coil_large", TFGCore.id("block/casings/superconductor_coil_large"),
+            p -> p
+                    .mapColor(MapColor.COLOR_ORANGE)
+                    .strength(5.5f)
+                    .sound(SoundType.COPPER));
+
+    public static final BlockEntry<Block> SUPERCONDUCTOR_COIL_SMALL_BLOCK = createCasingBlock("superconductor_coil_small", TFGCore.id("block/casings/superconductor_coil_small"),
+            p -> p
+                    .mapColor(MapColor.COLOR_ORANGE)
+                    .strength(5.5f)
+                    .sound(SoundType.COPPER));
+
+    public static final RegistryObject<ReflectorBlock> REFLECTOR_BLOCK = register("reflector", ReflectorBlock::new);
+
+    public static final BlockEntry<Block> MACHINE_CASING_ALUMINIUM_PLATED_STEEL = createCasingBlock(
+            "machine_casing_aluminium_plated_steel", TFGCore.id("block/casings/machine_casing_aluminium_plated_steel"),
+            p -> p
+                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .strength(5.5f)
+                    .sound(SoundType.COPPER));
+
+    public static final BlockEntry<Block> MACHINE_CASING_POWER_CASING = createCasingBlock(
+            "machine_casing_power_casing", TFGCore.id("block/casings/machine_casing_power_casing"),
+            p -> p
+                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .strength(5.5f)
+                    .sound(SoundType.COPPER));
+
+    public static final BlockEntry<Block> HEAT_PIPE_CASING = createCasingBlock("heat_pipe_casing", TFGCore.id("block/casings/heat_pipe_casing"),
+            p -> p.isValidSpawn((state, level, pos, ent) -> false)
+                    .sound(SoundType.COPPER).strength(5, 6)
+                    .mapColor(MapColor.COLOR_BLACK));
+
+    public static final BlockEntry<Block> BIOCULTURE_CASING = createCasingBlock("machine_casing_bioculture", TFGCore.id("block/casings/machine_casing_bioculture"),
+            p -> p.isValidSpawn((state, level, pos, ent) -> false)
+                    .sound(SoundType.COPPER).strength(5, 6)
+                    .mapColor(MapColor.COLOR_RED));
+
+    public static final BlockEntry<Block> BIOCULTURE_GLASS_CASING = TFGCore.REGISTRATE.block("machine_casing_bioculture_glass", Block::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false)
+                    .sound(SoundType.GLASS).strength(5, 6)
+                    .mapColor(MapColor.COLOR_ORANGE))
+            .addLayer(() -> RenderType::translucent)
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_bioculture_glass")))
+            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW)
+            .item(BlockItem::new).tag(TFGTags.Items.Casings).build()
+            .register();
+
+    public static final BlockEntry<ActiveBlock> BIOCULTURE_ROTOR_SECONDARY = createActiveCasingBlock("bioculture_rotor_secondary",
+            p -> p.strength(6, 5).sound(SoundType.COPPER).mapColor(MapColor.COLOR_LIGHT_GRAY));
+
+    public static final BlockEntry<ActiveBlock> VACUUM_ENGINE_INTAKE = createActiveCasingBlock("machine_casing_vacuum_engine_intake",
+            p -> p.strength(6, 5).sound(SoundType.METAL).mapColor(MapColor.COLOR_LIGHT_GRAY).requiresCorrectToolForDrops());
+
+    public static final BlockEntry<ActiveBlock> ULTRAVIOLET_CASING = createActiveCasingBlock("machine_casing_ultraviolet",
+            p -> p.strength(6, 5).sound(SoundType.GLASS).mapColor(MapColor.COLOR_LIGHT_GRAY));
+
+    public static final BlockEntry<ActiveBlock> EGH_CASING = createActiveCasingBlock("machine_casing_egh",
+            p -> p.strength(6, 5).sound(SoundType.METAL).mapColor(MapColor.COLOR_LIGHT_GRAY));
+
+    public static final BlockEntry<ActiveCardinalBlock> STERILIZING_PIPE_CASING = TFGCore.REGISTRATE.block("machine_casing_sterilizing_pipes", ActiveCardinalBlock::new)
+            .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_BROWN))
+            .addLayer(() -> RenderType::cutout)
+            .blockstate(TFGModelUtils.createActiveCardinalModel(TFGCore.id("block/casings/machine_casing_sterilizing_pipes")))
+            .tag(TFGTags.Blocks.Casings)
+            .item(BlockItem::new).tag(TFGTags.Items.Casings).build()
+            .register();
+
+    public static final BlockEntry<Block>[] TREATED_WOOD_GREENHOUSE_CASINGS = createGreenhouseCasings("treated_wood",
+            List.of(FLTags.Blocks.ALL_TREATED_WOOD_GREENHOUSE, TFGTags.Blocks.TreatedWoodGreenhouseCasings, BlockTags.MINEABLE_WITH_AXE),
+            List.of(TFGTags.Items.TreatedWoodGreenhouseCasings));
+
+    public static final BlockEntry<Block>[] COPPER_GREENHOUSE_CASINGS = createGreenhouseCasings("copper",
+            List.of(FLTags.Blocks.ALL_COPPER_GREENHOUSE, TFGTags.Blocks.CopperGreenhouseCasings, BlockTags.MINEABLE_WITH_PICKAXE),
+            List.of(TFGTags.Items.CopperGreenhouseCasings));
+
+    public static final BlockEntry<Block>[] IRON_GREENHOUSE_CASINGS = createGreenhouseCasings("iron",
+            List.of(FLTags.Blocks.ALL_IRON_GREENHOUSE, TFGTags.Blocks.IronGreenhouseCasings, BlockTags.MINEABLE_WITH_PICKAXE),
+            List.of(TFGTags.Items.IronGreenhouseCasings));
+
+    public static final BlockEntry<Block>[] STAINLESS_GREENHOUSE_CASINGS = createGreenhouseCasings("stainless",
+            List.of(FLTags.Blocks.STAINLESS_STEEL_GREENHOUSE, TFGTags.Blocks.StainlessSteelGreenhouseCasings, BlockTags.MINEABLE_WITH_PICKAXE),
+            List.of(TFGTags.Items.StainlessSteelGreenhouseCasings));
+
+    public static BlockEntry<ActiveBlock> createActiveCasingBlock(String name, UnaryOperator<BlockBehaviour.Properties> properties) {
+        return TFGCore.REGISTRATE.block(name, ActiveBlock::new)
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .properties(properties::apply)
+                .addLayer(() -> RenderType::cutoutMipped)
+                .blockstate(TFGModelUtils.createActiveModel(TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")))
+                .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
+                .item(BlockItem::new).tag(TFGTags.Items.Casings)
+                .build()
+                .register();
+    }
+
+    public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture, UnaryOperator<BlockBehaviour.Properties> properties) {
+        return TFGCore.REGISTRATE.block(name, Block::new)
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .properties(properties::apply)
+                .addLayer(() -> RenderType::solid)
+                .exBlockstate(GTModels.cubeAllModel(texture))
+                .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
+                .item(BlockItem::new).tag(TFGTags.Items.Casings)
+                .build()
+                .register();
+    }
+
+    public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
+        return createCasingBlock(name, texture,
+                p -> p.isValidSpawn((state, level, pos, ent) -> false)
+                        .sound(SoundType.COPPER).strength(5, 6)
+                        .mapColor(MapColor.COLOR_LIGHT_GRAY));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static BlockEntry<Block>[] createGreenhouseCasings(String tier, List<TagKey<Block>> blockTags, List<TagKey<Item>> itemTags) {
+        List<BlockEntry<Block>> casings = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            String blockId = "%s_greenhouse_casing_%s".formatted(tier, i);
+            var blockBuilder = TFGCore.REGISTRATE.block(blockId, Block::new)
+                    .initialProperties(() -> Blocks.IRON_BLOCK)
+                    .properties(p -> p.strength(0.3f, 0.3f).requiresCorrectToolForDrops().sound(SoundType.GLASS))
+                    .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/greenhouse/" + blockId)))
+                    .tag(TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW, FLTags.Blocks.GREENHOUSE, FLTags.Blocks.GREENHOUSE_FULL_WALLS)
+                    .addLayer(i > 2 ? () -> RenderType::translucent : () -> RenderType::cutout);
+            blockTags.forEach(blockBuilder::tag);
+
+            var blockItemBuilder = blockBuilder.item(BlockItem::new);
+            blockItemBuilder.tag(TFGTags.Items.GreenhouseCasings, TFGTags.Items.Casings);
+            itemTags.forEach(blockItemBuilder::tag);
+            blockItemBuilder.build();
+            casings.add(blockBuilder.register());
+        }
+        return (BlockEntry<Block>[]) casings.toArray(BlockEntry[]::new);
     }
 
     // Buds are generated automatically
