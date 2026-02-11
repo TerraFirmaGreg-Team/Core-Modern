@@ -259,6 +259,14 @@ public final class PassabilityChecker {
     }
 
     /**
+     * Returns the raw cached PassType without resolving NO_CACHE blocks.
+     * Useful for checking if a block has dynamic passability (like airlocks).
+     */
+    public static PassCache.PassType getCachedPassType(BlockState blockState) {
+        return CACHE.computeIfAbsent(blockState, PassabilityChecker::computePassCache).type();
+    }
+
+    /**
      * Gets the (cached) passability info for a BlockState.
      */
     public static PassCache getPassCache(Level level, BlockPos pos, BlockState blockState) {

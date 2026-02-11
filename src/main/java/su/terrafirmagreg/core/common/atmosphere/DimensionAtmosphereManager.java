@@ -200,7 +200,7 @@ public class DimensionAtmosphereManager extends SavedData {
     // ==================== Decompression Events ====================
 
     public DecompressionEvent startDecompression(BlockPos breachPoint, RoomScan oldRoomScan) {
-        DecompressionEvent event = new DecompressionEvent(breachPoint, oldRoomScan);
+        DecompressionEvent event = new DecompressionEvent(level, breachPoint, oldRoomScan);
         activeDecompressions.add(event);
         return event;
     }
@@ -209,6 +209,9 @@ public class DimensionAtmosphereManager extends SavedData {
      * Cancel all active decompression events (e.g. when dimension unloads).
      */
     public void cancelAllDecompressions() {
+        for (DecompressionEvent event : activeDecompressions) {
+            event.cancel(level);
+        }
         activeDecompressions.clear();
     }
 
@@ -253,10 +256,15 @@ public class DimensionAtmosphereManager extends SavedData {
 
         } else if (event instanceof BlockEvent.NeighborNotifyEvent nighEvent) {
             TFGCore.LOGGER.info("neighborNotifyEvent {}", nighEvent.getState());
-            PassCache current = getPassCache(level, pos, nighEvent.getState());
-            if (current.type() == PassType.EMPTY || current.type() == PassType.FULL) {
-                TFGCore.LOGGER.info("Ignored - stable block type");
-                return;
+            // NO_CACHE blocks (airlocks, pistons, etc.) have dynamic passability — always dispatch
+            if (PassabilityChecker.getCachedPassType(nighEvent.getState()) == PassType.NO_CACHE) {
+                TFGCore.LOGGER.info("Dynamic block (NO_CACHE) - always dispatching");
+            } else {
+                PassCache current = getPassCache(level, pos, nighEvent.getState());
+                if (current.type() == PassType.EMPTY || current.type() == PassType.FULL) {
+                    TFGCore.LOGGER.info("Ignored - stable block type");
+                    return;
+                }
             }
         }
 

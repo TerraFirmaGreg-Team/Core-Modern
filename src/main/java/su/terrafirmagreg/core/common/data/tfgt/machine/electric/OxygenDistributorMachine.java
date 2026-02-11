@@ -19,9 +19,12 @@ import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.level.BlockEvent;
 
+import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
+import earth.terrarium.adastra.common.blocks.properties.SlidingDoorPartProperty;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import lombok.Getter;
 import lombok.Setter;
@@ -84,7 +87,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     }
 
     /** Fixed high multiplier for unsealed rooms - makes the machine impractical to run without a sealed room */
-    private static final int UNSEALED_MULTIPLIER = 1000;
+    private static final int UNSEALED_MULTIPLIER = 10000;
 
     /**
      * Recipe Modifier for <b>Oxygen Distributors</b> - can be used as a valid {@link RecipeModifier}
@@ -108,7 +111,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         }
 
         return ModifierFunction.builder()
-                .eutMultiplier(multiplier)
+                //.eutMultiplier(multiplier)
                 .inputModifier(ContentModifier.multiplier(multiplier))
                 .build();
     }
@@ -191,18 +194,18 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
             recipeLogic.onRecipeFinish();
         }
 
-        // Cancel any existing decompression if the room re-sealed
-        if (activeDecompression != null && newScan.isSealed()) {
-            activeDecompression.cancel();
-            activeDecompression = null;
-        }
-
-        // Start decompression: was sealed, now escaped
+        // Decompression: sealed → escaped, start event
         if (oldScan.isSealed() && newScan.status().hasEscape()) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
                 activeDecompression = manager.startDecompression(breachPoint, oldScan);
             }
+        }
+
+        // Room fixed: escaped → sealed, cancel active decompression
+        if (!oldScan.isSealed() && newScan.isSealed() && activeDecompression != null) {
+            activeDecompression.cancel(level);
+            activeDecompression = null;
         }
     }
 
@@ -221,9 +224,28 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
                 .findAny();
 
         if (breach.isPresent()) {
-            return BlockPos.of(breach.getAsLong());
+            BlockPos pos = BlockPos.of(breach.getAsLong());
+            var state = level.getBlockState(pos);
+            if (state.getBlock() instanceof SlidingDoorBlock) {
+                pos = snapToAirlockCenter(pos, state);
+            }
+            return pos;
         }
         return null;
+    }
+
+    /**
+     * Snap to the center part of an airlock so the decompression force
+     * pulls toward the middle of the door opening.
+     */
+    private static BlockPos snapToAirlockCenter(BlockPos pos, BlockState state) {
+        SlidingDoorPartProperty part = state.getValue(SlidingDoorBlock.PART);
+        net.minecraft.core.Direction clockwise = state.getValue(SlidingDoorBlock.FACING).getClockWise();
+
+        // Center part is at xOffset=0, yOffset=1 relative to controller.
+        // Current part is at part.xOffset(), part.yOffset().
+        // Move by the difference to reach center.
+        return pos.relative(clockwise, part.xOffset()).above(1 - part.yOffset());
     }
 
     /**
@@ -345,7 +367,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         }
 
         if (activeDecompression != null) {
-            activeDecompression.cancel();
+            activeDecompression.cancel(level);
             activeDecompression = null;
         }
     }

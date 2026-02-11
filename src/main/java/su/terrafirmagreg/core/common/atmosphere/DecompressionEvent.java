@@ -10,6 +10,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import su.terrafirmagreg.core.network.TFGNetworkHandler;
+
 /**
  * Represents an active decompression event caused by a sealed room being breached.
  * Pulls entities toward the breach point with inverse-square force that decays over time.
@@ -25,7 +27,7 @@ public class DecompressionEvent {
     private int elapsed;
 
     // Tuning constants
-    private static final double TICKS_PER_BLOCK = 0.2;        // 1 tick of vortex per 5 blocks of room volume
+    private static final double TICKS_PER_BLOCK = 0.02;       // 1 second per 1000 blocks
     private static final int MIN_DURATION = 10;               // 0.5 seconds minimum
     private static final int MAX_DURATION = 600;              // 30 seconds cap
     private static final double BASE_FORCE = 0.4;             // force at distance = 1 block
@@ -33,16 +35,18 @@ public class DecompressionEvent {
     private static final double MAX_FORCE = 0.5;              // cap so collision doesn't freak out
     private static final double DAMAGE_DISTANCE = 2.0;        // damage within this range of breach
     private static final float DAMAGE_PER_TICK = 1.0f;        // half a heart per tick at point blank
+    private static final double FRICTION_DISTANCE = 5.0;      // dampen perpendicular velocity within this range
 
     /**
      * @param breachPoint The block where the room was breached
      * @param oldRoomScan The room scan from before the breach. Used to determine which entities are inside the old room.
      */
-    public DecompressionEvent(BlockPos breachPoint, RoomScan oldRoomScan) {
+    public DecompressionEvent(ServerLevel level, BlockPos breachPoint, RoomScan oldRoomScan) {
         this.breachPoint = breachPoint;
         this.oldRoomScan = oldRoomScan;
         this.durationTicks = Mth.clamp(Mth.floor(oldRoomScan.interiorSize() * TICKS_PER_BLOCK), MIN_DURATION, MAX_DURATION);
         this.elapsed = 0;
+        TFGNetworkHandler.sendDecompressionSoundStart(level, breachPoint, durationTicks);
     }
 
     /**
@@ -56,7 +60,7 @@ public class DecompressionEvent {
         double t = (double) elapsed / durationTicks;
         double timeScale = (1.0 - t) * (1.0 - t);
         if (timeScale < 0.01) {
-            elapsed = durationTicks;
+            finish(level);
             return false;
         }
 
@@ -68,7 +72,7 @@ public class DecompressionEvent {
 
         for (Entity entity : level.getEntities((Entity) null, searchBounds, this::shouldAffect)) {
             // Chunk pre-filter
-            ChunkPos chunk = new ChunkPos(entity.getBlockX(), entity.getBlockZ());
+            ChunkPos chunk = new ChunkPos(entity.blockPosition());
             if (!oldRoomScan.touchedChunks().contains(chunk))
                 continue;
 
@@ -110,7 +114,9 @@ public class DecompressionEvent {
     }
 
     private void applyForce(Entity entity, Vec3 target, double timeScale) {
-        Vec3 offset = target.subtract(entity.position());
+        // Use entity's head, not feet position
+        Vec3 entityCenter = entity.position().add(0, entity.getBbHeight() * 0.5, 0);
+        Vec3 offset = target.subtract(entityCenter);
         double distance = offset.length();
 
         if (distance < 0.1)
@@ -118,18 +124,34 @@ public class DecompressionEvent {
 
         Vec3 direction = offset.normalize();
 
-        // Inverse-square with distance, scaled by time decay
-        double force = BASE_FORCE / (distance * distance) * timeScale;
+        // Inverse falloff with distance, scaled by time decay
+        // Using 1/d instead of 1/d² for a more gradual, gameplay-friendly curve
+        double force = BASE_FORCE / distance * timeScale;
         force = Mth.clamp(force, 0, MAX_FORCE);
 
         if (force < MIN_FORCE)
             return;
 
+        // Near the breach, dampen velocity perpendicular to the force direction.
+        // This prevents oscillation when entities are pressed against the wall around the breach —
+        // the wall zeroes the toward-wall component but lateral velocity survives, causing bouncing.
+        // Dampening the perpendicular component simulates friction, making entities slide toward the hole.
+        if (distance < FRICTION_DISTANCE) {
+            Vec3 vel = entity.getDeltaMovement();
+            double parallelSpeed = vel.dot(direction);
+            Vec3 parallelVel = direction.scale(parallelSpeed);
+            Vec3 perpVel = vel.subtract(parallelVel);
+            // More damping when closer: at distance=0 perpendicular velocity is fully removed,
+            // at distance=FRICTION_DISTANCE no damping is applied
+            double dampFactor = distance / FRICTION_DISTANCE;
+            entity.setDeltaMovement(parallelVel.add(perpVel.scale(dampFactor)));
+        }
+
         entity.push(direction.x * force, direction.y * force, direction.z * force);
 
-        // Damage entities very close to the breach
+        // Damage scales with applied force — stronger pull = more damage
         if (distance < DAMAGE_DISTANCE) {
-            float damage = (float) (DAMAGE_PER_TICK * timeScale * (1.0 - distance / DAMAGE_DISTANCE));
+            float damage = (float) (DAMAGE_PER_TICK * (force / MAX_FORCE) * (1.0 - distance / DAMAGE_DISTANCE));
             if (damage > 0.1f) {
                 entity.hurt(entity.damageSources().generic(), damage);
             }
@@ -142,17 +164,26 @@ public class DecompressionEvent {
 
     private boolean shouldAffect(Entity entity) {
         // TODO: Tags
-        if (entity instanceof Player player &&
-                (player.isCreative() || player.isSpectator()))
+        if (entity instanceof Player player && false)
+            //        if (entity instanceof Player player &&
+            //                (player.isCreative() || player.isSpectator()))
             return false;
         return true;
     }
 
     /**
+     * Stop the sound and mark as expired.
+     */
+    private void finish(ServerLevel level) {
+        elapsed = durationTicks;
+        TFGNetworkHandler.sendDecompressionSoundStop(level, breachPoint);
+    }
+
+    /**
      * Cancel this decompression event early (e.g. room re-sealed, machine removed).
      */
-    public void cancel() {
-        elapsed = durationTicks;
+    public void cancel(ServerLevel level) {
+        finish(level);
     }
 
     public boolean isExpired() {

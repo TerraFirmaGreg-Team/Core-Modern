@@ -15,6 +15,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.AtmosphereClientCache.AtmosphereState;
 import su.terrafirmagreg.core.network.packet.AtmosphereQueryPacket;
 import su.terrafirmagreg.core.network.packet.AtmosphereResponsePacket;
+import su.terrafirmagreg.core.network.packet.DecompressionSoundPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
 import su.terrafirmagreg.core.network.packet.ParticlePacket;
@@ -71,6 +72,12 @@ public class TFGNetworkHandler {
                 AtmosphereResponsePacket::encode,
                 AtmosphereResponsePacket::decode,
                 AtmosphereResponsePacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                DecompressionSoundPacket.class,
+                DecompressionSoundPacket::encode,
+                DecompressionSoundPacket::decode,
+                DecompressionSoundPacket::handle);
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {
@@ -111,6 +118,14 @@ public class TFGNetworkHandler {
                 volume,
                 pitch);
         sendToAllAround(level, pos, packet);
+    }
+
+    public static void sendDecompressionSoundStart(ServerLevel level, BlockPos pos, int durationTicks) {
+        sendToAllAround(level, pos, DecompressionSoundPacket.start(pos, durationTicks));
+    }
+
+    public static void sendDecompressionSoundStop(ServerLevel level, BlockPos pos) {
+        sendToAllAround(level, pos, DecompressionSoundPacket.stop(pos));
     }
 
     /**
