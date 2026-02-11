@@ -67,13 +67,13 @@ public class OxygenProvider {
     public boolean isMachineLoaded() {
         return attachedMachine != null;
     }
-    //
-    //    /**
-    //     * @return Whether the machine is loaded and actively working
-    //     */
-    //    public boolean isMachineWorking() {
-    //        return attachedMachine != null && attachedMachine.isWorking();
-    //    }
+
+    /**
+     * @return Whether the machine is loaded and actively working
+     */
+    public boolean isMachineWorking() {
+        return attachedMachine != null && attachedMachine.isWorking();
+    }
 
     /**
      * Called when the machine's chunk loads and the machine attaches to this provider.

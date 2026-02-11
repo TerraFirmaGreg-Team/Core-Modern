@@ -38,12 +38,14 @@ public class OxygenCommand {
             providerCount++;
             BlockPos mPos = provider.getMachinePos();
             boolean loaded = provider.isMachineLoaded();
+            boolean working = provider.isMachineWorking();
             String status = provider.getRoomScan().status().name();
+            int intSize = provider.getRoomScan().interiorSize();
             int envSize = provider.getRoomScan().envelopeSize();
 
             source.sendSuccess(() -> Component.literal(String.format(
-                    "  Provider at %s: status=%s, envelope=%d, machineLoaded=%s",
-                    mPos.toShortString(), status, envSize, loaded)), false);
+                    "  Provider at %s: status=%s, interior=%d, envelope=%d, machineLoaded=%s, working=%s",
+                    mPos.toShortString(), status, intSize, envSize, loaded, working)), false);
         }
 
         if (providerCount == 0) {

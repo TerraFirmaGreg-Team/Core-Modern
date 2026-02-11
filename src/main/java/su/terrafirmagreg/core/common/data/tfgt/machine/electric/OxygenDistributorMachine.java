@@ -77,28 +77,36 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
 
     /** @return Whether this machine is currently executing a recipe */
     public boolean isWorking() {
-        // TODO: restore recipe check: recipeLogic != null && recipeLogic.isWorking()
-        return true; // Temporary for testing without recipes
+        return recipeLogic != null && recipeLogic.isWorking();
     }
+
+    /** Fixed high multiplier for unsealed rooms - makes the machine impractical to run without a sealed room */
+    private static final int UNSEALED_MULTIPLIER = 1000;
 
     /**
      * Recipe Modifier for <b>Oxygen Distributors</b> - can be used as a valid {@link RecipeModifier}
-     *
-     * @param machine an {@link OxygenDistributorMachine}
-     * @param recipe  recipe
-     * @return A {@link ModifierFunction} for the given OxygenDistributorMachine and recipe
+     * Sealed rooms scale cost by interior size. Unsealed rooms use a fixed high cost.
      */
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof OxygenDistributorMachine oxygenMachine)) {
             return RecipeModifier.nullWrongType(OxygenDistributorMachine.class, machine);
         }
 
-        var roomSize = oxygenMachine.getRoomScan().interiorSize();
+        RoomScan scan = oxygenMachine.getRoomScan();
+        int multiplier;
+        if (scan.isSealed()) {
+            multiplier = Math.max(1, scan.interiorSize());
+        } else if (scan.status() == RoomScan.Status.NULL) {
+            // Not yet validated - use base cost so the machine can start
+            multiplier = 1;
+        } else {
+            // Unsealed room - high cost to discourage running without sealed room
+            multiplier = UNSEALED_MULTIPLIER;
+        }
 
         return ModifierFunction.builder()
-                .eutMultiplier(roomSize)
-                .inputModifier(ContentModifier.multiplier(roomSize))
-                .tickInputModifier(ContentModifier.multiplier(roomSize)) // Not sure yet if I want a normal or a tick input recipe
+                .eutMultiplier(multiplier)
+                .inputModifier(ContentModifier.multiplier(multiplier))
                 .build();
     }
 
@@ -172,6 +180,13 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
 
         // Update provider's room scan and oxygen chunk registry
         manager.updateProvider(provider, oldScan, newScan);
+
+        // Room changed - finish current recipe early so it re-searches with the new room size.
+        // Safe because this recipe type has no outputs, so onRecipeFinish won't produce anything.
+        // It also resets runAttempt/runDelay and re-applies the modifier via alwaysTryModifyRecipe.
+        if (recipeLogic != null) {
+            recipeLogic.onRecipeFinish();
+        }
 
         // Vortex: was sealed, now escaped to build height
         if (oldScan.isSealed() && newScan.status() == Status.ESCAPED_BUILD_HEIGHT) {
@@ -327,4 +342,5 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
             pendingChunkLoad = null;
         }
     }
+
 }

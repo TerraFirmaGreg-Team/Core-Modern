@@ -162,6 +162,12 @@ public final class AtmosphereSystem {
     private static void finalizeValidation(IFloodFillMachine machine) {
         validationRequested.remove(machine);
         machine.processValidationResult();
+
+        // If the machine got dirty during the async fill (block changed while we were scanning),
+        // the result we just applied is stale. Re-request validation.
+        if (machine.isDirty()) {
+            requestValidation(machine, 0);
+        }
     }
 
     // ==================== Event Handling ====================

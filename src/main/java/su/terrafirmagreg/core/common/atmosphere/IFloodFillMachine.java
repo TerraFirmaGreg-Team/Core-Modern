@@ -7,6 +7,8 @@ import net.minecraftforge.event.level.BlockEvent;
 // TODO: Rename this to something more descriptive, like "BlockChangeListenerMachine"? "MachineThatCanBeMarkedDirtyAndWantsRevalidation"?
 public interface IFloodFillMachine extends IAtmosphereMachine {
 
+    boolean isDirty();
+
     void setDirty(boolean dirty);
 
     /**

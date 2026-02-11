@@ -134,5 +134,13 @@ public class TFGTRecipes {
             }
         }
 
+        // Oxygen Distributor: consumes air to provide oxygen to a sealed room
+        TFGTRecipeTypes.OXYGEN_DISTRIBUTION.recipeBuilder("oxygen_distribution")
+                .inputFluids(GTMaterials.Air.getFluid(1))
+                .duration(20) // 1 second base duration
+                //.EUt(GTValues.VA[GTValues.MV])
+                .EUt(1)
+                .save(provider);
+
     }
 }
