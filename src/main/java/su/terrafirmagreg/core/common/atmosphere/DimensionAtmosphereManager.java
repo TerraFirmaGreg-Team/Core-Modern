@@ -35,6 +35,10 @@ public class DimensionAtmosphereManager extends SavedData {
     @Getter
     private final ServerLevel level;
 
+    /** Natural environmental properties of this dimension */
+    @Getter
+    private final DimensionEnvironment environment;
+
     /** Oxygen providers keyed by machine position. Persisted to NBT. */
     private final Map<BlockPos, OxygenProvider> providers = new HashMap<>();
 
@@ -61,6 +65,7 @@ public class DimensionAtmosphereManager extends SavedData {
 
     public DimensionAtmosphereManager(ServerLevel level) {
         this.level = level;
+        this.environment = DimensionEnvironment.get(level.dimension());
     }
 
     /**
@@ -185,6 +190,10 @@ public class DimensionAtmosphereManager extends SavedData {
      * @return true if the position has oxygen
      */
     public boolean hasOxygen(BlockPos pos) {
+        if (environment.hasOxygen()) {
+            return true;
+        }
+
         ChunkPos chunkPos = new ChunkPos(pos);
         Set<OxygenProvider> providerSet = oxygenProviders.get(chunkPos);
         if (providerSet != null) {

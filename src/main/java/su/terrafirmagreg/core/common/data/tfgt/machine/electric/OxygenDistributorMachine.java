@@ -195,7 +195,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         }
 
         // Decompression: sealed → escaped, start event
-        if (oldScan.isSealed() && newScan.status().hasEscape()) {
+        // Skip in dimensions with atmosphere
+        if (oldScan.isSealed() && newScan.status().hasEscape() && !manager.getEnvironment().hasAtmosphere()) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
                 activeDecompression = manager.startDecompression(breachPoint, oldScan);
