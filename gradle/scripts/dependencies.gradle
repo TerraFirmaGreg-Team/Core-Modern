@@ -153,4 +153,6 @@ dependencies {
     // TFC Improved Badlands
     implementation fg.deobf("curse.maven:tfc-improved-badlands-969207:5126426")
 
+    // TFC Water Flasks
+    implementation fg.deobf("curse.maven:water-flasks-354353:7056478")
 }

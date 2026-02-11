@@ -117,22 +117,22 @@ apply from: 'gradle/scripts/dependencies.gradle'
 
 processResources {
     var replaceProperties = [
-            'mod_id': propertyString('mod_id'),
-            'mod_name': propertyString('mod_name'),
-            'mod_version': propertyString('mod_version'),
-            'mod_description': propertyString('mod_description'),
-            'mod_authors': propertyString('mod_authors'),
-            'mod_credits': propertyString('mod_credits'),
-            'mod_url': propertyString('mod_url'),
-            'mod_update_json': propertyString('mod_update_json'),
-            'mod_logo_path': propertyString('mod_logo_path'),
+            'mod_id'                 : propertyString('mod_id'),
+            'mod_name'               : propertyString('mod_name'),
+            'mod_version'            : propertyString('mod_version'),
+            'mod_description'        : propertyString('mod_description'),
+            'mod_authors'            : propertyString('mod_authors'),
+            'mod_credits'            : propertyString('mod_credits'),
+            'mod_url'                : propertyString('mod_url'),
+            'mod_update_json'        : propertyString('mod_update_json'),
+            'mod_logo_path'          : propertyString('mod_logo_path'),
 
-            'minecraft_version': propertyString('minecraft_version'),
+            'minecraft_version'      : propertyString('minecraft_version'),
             'minecraft_version_range': propertyString('minecraft_version_range'),
 
-            'forge_version': propertyString('forge_version'),
-            'forge_version_range': propertyString('forge_version_range'),
-            'loader_version_range': propertyString('loader_version_range')
+            'forge_version'          : propertyString('forge_version'),
+            'forge_version_range'    : propertyString('forge_version_range'),
+            'loader_version_range'   : propertyString('loader_version_range')
     ]
     var filterList = [
             'META-INF/mods.toml',
@@ -146,17 +146,16 @@ processResources {
 }
 
 
-
 // Example for how to get properties into the manifest for reading at runtime.
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-                "Specification-Title":  propertyString('mod_id'),
-                "Specification-Vendor": propertyString('mod_authors'),
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": propertyString('mod_name'),
-                "Implementation-Version":  propertyString('mod_version'),
-                "Implementation-Vendor": propertyString('mod_authors'),
+                "Specification-Title"     : propertyString('mod_id'),
+                "Specification-Vendor"    : propertyString('mod_authors'),
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : propertyString('mod_name'),
+                "Implementation-Version"  : propertyString('mod_version'),
+                "Implementation-Vendor"   : propertyString('mod_authors'),
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -195,4 +194,124 @@ gradle.projectsEvaluated {
     // Fallbacks if reobf tasks are not present in this environment
     tasks.findByName('jarJar')?.finalizedBy('renameAllJar')
     tasks.findByName('jar')?.finalizedBy('renameAllJar')
+}
+
+sourceSets {
+    dev {
+        java.srcDir("src/dev/java")
+        resources.srcDir("src/dev/resources")
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+}
+
+// Fix a bug in Species that only shows up when running from dev env
+// Compile our patched Species.class, and use it instead of the normal one in the species-3.5.jar.
+// Put the result in run/server/mods
+tasks.register("patchSpeciesJar", Jar) {
+    dependsOn compileDevJava
+
+    archiveFileName = 'species-3.5.jar'
+    destinationDirectory = file("run/server/mods")
+
+    from({
+        configurations.compileClasspath
+                .filter { it.name.contains("species-3.5") }
+                .collect { zipTree(it) }
+    }) {
+        exclude "com/ninni/species/Species.class"
+    }
+
+    from(sourceSets.dev.output.classesDirs) {
+        include 'com/ninni/species/Species.class'
+    }
+
+    manifest {
+        attributes(
+                'MixinConfigs': 'species.mixins.json',
+                'Specification-Title': 'species',
+                'Implementation-Title': 'species',
+                'Implementation-Version': '3.5'
+        )
+    }
+}
+
+// Prepare server: patch Species, accept EULA, set offline mode
+tasks.register("prepareServerDev") {
+    dependsOn patchSpeciesJar
+
+    def serverDir = file("run/server")
+    def eulaFile = file("${serverDir}/eula.txt")
+    def propsFile = file("${serverDir}/server.properties")
+
+    outputs.file(eulaFile)
+    outputs.file(propsFile)
+
+    doLast {
+        serverDir.mkdirs()
+
+        copy {
+            from "src/dev/resources"
+            include "eula.txt"
+            into serverDir
+        }
+
+        // Create or patch server.properties to set online-mode=false
+        if (propsFile.exists()) {
+            def content = propsFile.text
+            if (content.contains('online-mode=')) {
+                content = content.replaceAll(/online-mode=\w+/, 'online-mode=false')
+            } else {
+                content += '\nonline-mode=false'
+            }
+            propsFile.text = content
+        } else {
+            propsFile.text = 'online-mode=false\n'
+        }
+    }
+}
+
+// Prepare client: fix missing Jade lang files
+tasks.register("prepareClientDev") {
+    def langDir = file("run/client/kubejs/assets/jade/lang")
+    def langFile = file("${langDir}/en_us.json")
+
+    outputs.file(langFile)
+
+    doLast {
+        langDir.mkdirs()
+
+        copy {
+            from "src/dev/resources/assets/jade/lang"
+            include "en_us.json"
+            into langDir
+        }
+    }
+}
+
+// Runs Species patch before runServer.
+allprojects {
+    tasks.matching { it.name == "prepareRunServer" }.configureEach {
+        dependsOn("prepareServerDev")
+    }
+    tasks.matching { it.name == "prepareRunClient" }.configureEach {
+        dependsOn("prepareClientDev")
+    }
+
+}
+
+
+// Moving the core jar to a custom folder
+tasks.register('copyJarToCustomFolder', Copy) {
+
+    group = 'mod development/internal'
+
+    from("${buildDir}/libs") {
+        include("*${version}.jar")
+        exclude("*-sources.jar", "*-javadoc.jar")
+    }
+    into("${modpack_mods}")
+}
+
+if (propertyBool('enable_copy_jar_to_custom_folder')) {
+    tasks.build.finalizedBy('copyJarToCustomFolder')
 }
