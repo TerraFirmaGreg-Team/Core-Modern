@@ -18,4 +18,9 @@ public class GTRecipeWidgetMixin {
         tfg$dimensionOffset -= 17;
         return yOffset + tfg$dimensionOffset;
     }
+
+    @Inject(method = "setRecipeWidget", at = @At(value = "TAIL"))
+    private void tfg$resetOffset(CallbackInfo ci) {
+        tfg$dimensionOffset = 17;
+    }
 }
