@@ -3,7 +3,9 @@ package su.terrafirmagreg.core.mixins.common.gtceu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.gregtechceu.gtceu.integration.xei.widgets.GTRecipeWidget;
 
@@ -17,5 +19,10 @@ public class GTRecipeWidgetMixin {
     private int tfg$shift(int yOffset) {
         tfg$dimensionOffset -= 17;
         return yOffset + tfg$dimensionOffset;
+    }
+
+    @Inject(method = "setRecipeWidget", at = @At(value = "TAIL"))
+    private void tfg$resetOffset(CallbackInfo ci) {
+        tfg$dimensionOffset = 17;
     }
 }
