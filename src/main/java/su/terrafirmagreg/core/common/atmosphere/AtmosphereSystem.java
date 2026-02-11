@@ -197,6 +197,11 @@ public final class AtmosphereSystem {
         while ((machine = doneValidating.poll()) != null) {
             finalizeValidation(machine);
         }
+
+        // Tick decompression events in all dimensions
+        for (DimensionAtmosphereManager manager : managers.values()) {
+            manager.tickDecompressions();
+        }
     }
 
     @SubscribeEvent

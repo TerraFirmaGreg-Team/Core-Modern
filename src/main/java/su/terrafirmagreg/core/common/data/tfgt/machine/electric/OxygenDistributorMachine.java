@@ -17,7 +17,6 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
@@ -59,6 +58,10 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
 
     @Nullable
     private ChunkPos pendingChunkLoad = null;
+
+    /** Active decompression event for this machine's room, if any */
+    @Nullable
+    private DecompressionEvent activeDecompression = null;
 
     public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction) {
         super(holder, tier, tankScalingFunction);
@@ -188,18 +191,17 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
             recipeLogic.onRecipeFinish();
         }
 
-        // Vortex: was sealed, now escaped to build height
-        if (oldScan.isSealed() && newScan.status() == Status.ESCAPED_BUILD_HEIGHT) {
+        // Cancel any existing decompression if the room re-sealed
+        if (activeDecompression != null && newScan.isSealed()) {
+            activeDecompression.cancel();
+            activeDecompression = null;
+        }
+
+        // Start decompression: was sealed, now escaped
+        if (oldScan.isSealed() && newScan.status().hasEscape()) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
-                Direction breachDirection = null;
-                for (Direction dir : Direction.values()) {
-                    if (oldScan.containsInterior(breachPoint.relative(dir))) {
-                        breachDirection = dir.getOpposite();
-                        break;
-                    }
-                }
-                // TODO: spawn vortex at breach point and direction
+                activeDecompression = manager.startDecompression(breachPoint, oldScan);
             }
         }
     }
@@ -340,6 +342,11 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         if (pendingChunkLoad != null) {
             manager.chunkLoadListeners.removeSingle(this, pendingChunkLoad);
             pendingChunkLoad = null;
+        }
+
+        if (activeDecompression != null) {
+            activeDecompression.cancel();
+            activeDecompression = null;
         }
     }
 

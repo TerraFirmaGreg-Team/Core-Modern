@@ -53,6 +53,9 @@ public class DimensionAtmosphereManager extends SavedData {
     /** Map of Chunks to Machines that affect temperature in those Chunks */
     public final MachineRegistry<AtmosphereSystem.ITemperatureProvider> temperatureMachines = new MachineRegistry<>();
 
+    /** Active decompression events in this dimension */
+    private final List<DecompressionEvent> activeDecompressions = new ArrayList<>();
+
     // ==================== Construction & SavedData ====================
     private static final String DATA_NAME = "tfg_atmosphere_system";
 
@@ -192,6 +195,28 @@ public class DimensionAtmosphereManager extends SavedData {
             }
         }
         return false;
+    }
+
+    // ==================== Decompression Events ====================
+
+    public DecompressionEvent startDecompression(BlockPos breachPoint, RoomScan oldRoomScan) {
+        DecompressionEvent event = new DecompressionEvent(breachPoint, oldRoomScan);
+        activeDecompressions.add(event);
+        return event;
+    }
+
+    /**
+     * Cancel all active decompression events (e.g. when dimension unloads).
+     */
+    public void cancelAllDecompressions() {
+        activeDecompressions.clear();
+    }
+
+    /**
+     * Tick all active decompression events. Called from AtmosphereSystem.onServerTick.
+     */
+    public void tickDecompressions() {
+        activeDecompressions.removeIf(event -> !event.tick(level));
     }
 
     // ==================== Event Handling ====================
