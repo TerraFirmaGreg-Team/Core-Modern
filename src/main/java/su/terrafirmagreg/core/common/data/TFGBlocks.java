@@ -68,7 +68,7 @@ import su.terrafirmagreg.core.common.data.buds.BudIndicator;
 import su.terrafirmagreg.core.common.data.buds.BudIndicatorItem;
 import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
 import su.terrafirmagreg.core.compat.kjs.GTActiveParticleBuilder;
-import su.terrafirmagreg.core.utils.TFGModelUtils;
+import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings({ "unused" })
 public final class TFGBlocks {
@@ -220,7 +220,7 @@ public final class TFGBlocks {
                     .isViewBlocking((state, level, pos) -> false)
                     .isSuffocating((state, level, pos) -> false))
             .blockstate((ctx, prov) -> {
-                TFGModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/piglin_disguise_block")));
+                ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/piglin_disguise_block")));
             })
             .item(BlockItem::new).build()
             .register();
@@ -233,10 +233,10 @@ public final class TFGBlocks {
     public static final BlockEntry<IcicleBlock> MARS_ICICLE = TFGCore.REGISTRATE.block("mars_icicle", IcicleBlock::new)
             .initialProperties(TFCBlocks.ICICLE::get)
             .blockstate((ctx, prov) -> {
-                var main = prov.models().withExistingParent(prov.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/thin_spike"))
+                var main = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/thin_spike"))
                         .texture("0", TFGCore.id("block/mars_ice"))
                         .texture("particle", TFGCore.id("block/mars_ice"));
-                var tip = prov.models().withExistingParent(prov.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/thin_spike_tip"))
+                var tip = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/thin_spike_tip"))
                         .texture("0", TFGCore.id("block/mars_ice"))
                         .texture("particle", TFGCore.id("block/mars_ice"));
 
@@ -256,7 +256,7 @@ public final class TFGBlocks {
     public static final BlockEntry<ArtisanTableBlock> ARTISAN_TABLE = TFGCore.REGISTRATE.block("artisan_table",
             (p) -> new ArtisanTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())))
             .blockstate((ctx, prov) -> {
-                TFGModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/artisan_table")));
+                ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/artisan_table")));
             })
             .item(BlockItem::new).build()
             .register();
@@ -345,7 +345,7 @@ public final class TFGBlocks {
 
     public static final BlockEntry<ActiveCardinalBlock> CULTIVATION_MONITOR = TFGCore.REGISTRATE.block("cultivation_monitor", ActiveCardinalBlock::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noCollission().noOcclusion().lightLevel((state) -> (int) (0.8 * 15.0F)))
-            .blockstate(TFGModelUtils.existingActiveCardinalModel(TFGCore.id("block/machines/cultivation_monitor/cultivation_monitor")))
+            .blockstate(ModelUtils.existingActiveCardinalModel(TFGCore.id("block/machines/cultivation_monitor/cultivation_monitor")))
             .addLayer(() -> RenderType::cutout)
             .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("item/cultivation_monitor"))).build()
             .register();
@@ -364,7 +364,7 @@ public final class TFGBlocks {
                             .count(10)
                             .forced(false)
                             .build())))
-            .blockstate(TFGModelUtils.existingActiveParticleModel(TFGCore.id("block/casings/bioculture_rotor_primary")))
+            .blockstate(ModelUtils.existingActiveParticleModel(TFGCore.id("block/casings/bioculture_rotor_primary")))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
             .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/casings/bioculture_rotor_primary"))).build().register();
 
@@ -382,7 +382,7 @@ public final class TFGBlocks {
                             .forced(false)
                             .build()),
                     true, 200, 0, 12))
-            .blockstate(TFGModelUtils.existingActiveParticleModel(TFGCore.id("block/machines/egh_planter/egh_planter")))
+            .blockstate(ModelUtils.existingActiveParticleModel(TFGCore.id("block/machines/egh_planter/egh_planter")))
             .addLayer(() -> RenderType::cutout)
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFCTags.Blocks.FARMLAND, TFCTags.Blocks.TREE_GROWS_ON,
                     TFCTags.Blocks.BUSH_PLANTABLE_ON, TFCTags.Blocks.WILD_CROP_GROWS_ON, TFCTags.Blocks.SPREADING_FRUIT_GROWS_ON,
@@ -403,10 +403,10 @@ public final class TFGBlocks {
                             .forced(false)
                             .build()),
                     true, 200, 0, 12))
-            .blockstate(TFGModelUtils.existingActiveParticleModel(TFGCore.id("block/machines/egh_planter/grow_light")))
+            .blockstate(ModelUtils.existingActiveParticleModel(TFGCore.id("block/machines/egh_planter/grow_light")))
             .addLayer(() -> RenderType::cutout)
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
-            .item(BlockItem::new).model(TFGModelUtils.blockItemModel(TFGCore.id("block/machines/egh_planter/grow_light"))).build().register();
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/machines/egh_planter/grow_light"))).build().register();
 
     public static final BlockEntry<ActiveParticleBlock> PISCICULTURE_CORE = TFGCore.REGISTRATE
             .block("pisciculture_core", p -> new ActiveParticleBlock(p.sound(SoundType.COPPER).strength(5f, 6f).mapColor(MapColor.GRASS).noOcclusion(),
@@ -429,7 +429,7 @@ public final class TFGBlocks {
                                     .count(5)
                                     .forced(false).build()),
                     true, 20, 0, 12))
-            .blockstate(TFGModelUtils.existingActiveParticleModel(TFGCore.id("block/casings/pisciculture_core")))
+            .blockstate(ModelUtils.existingActiveParticleModel(TFGCore.id("block/casings/pisciculture_core")))
             .addLayer(() -> RenderType::cutout)
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
             .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/casings/pisciculture_core"))).build().register();
@@ -509,7 +509,7 @@ public final class TFGBlocks {
             .initialProperties(() -> Blocks.IRON_BLOCK)
             .properties(p -> p.sound(SoundType.COPPER).strength(6f, 5f).mapColor(MapColor.COLOR_LIGHT_GRAY).isValidSpawn((s, l, ps, e) -> false))
             .addLayer(() -> RenderType::cutoutMipped)
-            .blockstate(TFGModelUtils.existingActiveModel(TFGCore.id("block/casings/bioculture_rotor_secondary")))
+            .blockstate(ModelUtils.existingActiveModel(TFGCore.id("block/casings/bioculture_rotor_secondary")))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
             .item(BlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/casings/bioculture_rotor_secondary")))
@@ -517,21 +517,21 @@ public final class TFGBlocks {
             .build().register();
 
     public static final BlockEntry<ActiveBlock> VACUUM_ENGINE_INTAKE = createActiveCasingBlock("machine_casing_vacuum_engine_intake",
-            TFGModelUtils.createActiveModel(TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")),
+            ModelUtils.createActiveModel(TFGCore.id("block/casings/machine_casing_vacuum_engine_intake")),
             SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, true);
 
     public static final BlockEntry<ActiveBlock> ULTRAVIOLET_CASING = createActiveCasingBlock("machine_casing_ultraviolet",
-            TFGModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_ultraviolet")),
+            ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_ultraviolet")),
             SoundType.GLASS, 6, 5, MapColor.COLOR_LIGHT_GRAY, false);
 
     public static final BlockEntry<ActiveBlock> EGH_CASING = createActiveCasingBlock("machine_casing_egh",
-            TFGModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_egh")),
+            ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_egh")),
             SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, false);
 
     public static final BlockEntry<ActiveCardinalBlock> STERILIZING_PIPE_CASING = TFGCore.REGISTRATE.block("machine_casing_sterilizing_pipes", ActiveCardinalBlock::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_BROWN))
             .addLayer(() -> RenderType::cutout)
-            .blockstate(TFGModelUtils.createActiveCardinalCasingModel(TFGCore.id("block/casings/machine_casing_sterilizing_pipes")))
+            .blockstate(ModelUtils.createActiveCardinalCasingModel(TFGCore.id("block/casings/machine_casing_sterilizing_pipes")))
             .tag(TFGTags.Blocks.Casings)
             .item(BlockItem::new).tag(TFGTags.Items.Casings).build()
             .register();

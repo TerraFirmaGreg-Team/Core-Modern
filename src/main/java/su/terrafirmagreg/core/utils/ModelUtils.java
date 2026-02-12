@@ -14,13 +14,14 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 
 import su.terrafirmagreg.core.common.data.blocks.ActiveCardinalBlock;
 import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock;
 
-public class TFGModelUtils {
+public class ModelUtils {
 
     public static NonNullBiConsumer<DataGenContext<Item, BlockItem>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
         return (ctx, prov) -> prov.withExistingParent(ctx.getName(), blockModel);

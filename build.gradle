@@ -100,6 +100,7 @@ legacyForge {
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file("src/dev/resources/").getAbsolutePath()
             programArguments.addAll '--existing-mod', 'gtceu'
+            programArguments.addAll '--existing-mod', 'tfc'
         }
 
     }
