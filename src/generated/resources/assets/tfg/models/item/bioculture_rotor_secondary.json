@@ -1,1 +1,3 @@
-{"parent": "tfg:block/bioculture_rotor_secondary"}
+{
+  "parent": "tfg:block/casings/bioculture_rotor_secondary"
+}

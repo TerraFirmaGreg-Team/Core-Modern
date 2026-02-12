@@ -1,4 +1,5 @@
-{"values": [
+{
+  "values": [
     "tfg:sample_rack",
     "tfg:bioculture_rotor_primary",
     "tfg:egh_planter",
@@ -9,12 +10,12 @@
     "tfg:machine_casing_iron_desh",
     "tfg:machine_casing_ptfe_desh",
     "tfg:machine_casing_stainless_steel_desh",
-    "tfg:machine_casing_blue_solar_panel",
-    "tfg:machine_casing_green_solar_panel",
-    "tfg:machine_casing_red_solar_panel",
     "tfg:machine_casing_mars",
     "tfg:machine_casing_ostrum_carbon",
     "tfg:machine_casing_stainless_evaporation",
+    "tfg:machine_casing_blue_solar_panel",
+    "tfg:machine_casing_green_solar_panel",
+    "tfg:machine_casing_red_solar_panel",
     "tfg:electromagnetic_accelerator",
     "tfg:superconductor_coil_large",
     "tfg:superconductor_coil_small",
@@ -27,4 +28,5 @@
     "tfg:machine_casing_vacuum_engine_intake",
     "tfg:machine_casing_ultraviolet",
     "tfg:machine_casing_egh"
-]}
+  ]
+}
