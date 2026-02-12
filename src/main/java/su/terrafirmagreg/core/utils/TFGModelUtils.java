@@ -5,10 +5,13 @@ import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
+import com.tterrag.registrate.providers.RegistrateItemModelProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -18,6 +21,10 @@ import su.terrafirmagreg.core.common.data.blocks.ActiveCardinalBlock;
 import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock;
 
 public class TFGModelUtils {
+
+    public static NonNullBiConsumer<DataGenContext<Item, BlockItem>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
+        return (ctx, prov) -> prov.withExistingParent(ctx.getName(), blockModel);
+    }
 
     public static ModelFile cube2Layer(RegistrateBlockstateProvider prov, String name, ResourceLocation texture) {
         return prov.models().withExistingParent(name, GTCEu.id("block/cube_2_layer/all"))

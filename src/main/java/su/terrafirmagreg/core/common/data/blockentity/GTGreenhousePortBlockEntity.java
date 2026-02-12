@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.blockentity;
 
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,8 +21,8 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 public class GTGreenhousePortBlockEntity extends BlockEntity implements IFluidHandler {
     private final FluidTank tank = new FluidTank(4000); // 4 ведра
 
-    public GTGreenhousePortBlockEntity(BlockPos pos, BlockState state) {
-        super(TFGBlockEntities.GT_GREENHOUSE_PORT.get(), pos, state);
+    public GTGreenhousePortBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState);
     }
 
     @Override

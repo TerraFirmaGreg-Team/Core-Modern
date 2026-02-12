@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common.data.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
@@ -10,8 +11,8 @@ import su.terrafirmagreg.core.common.data.blocks.ReflectorBlock;
 
 public class ReflectorBlockEntity extends BlockEntity {
 
-    public ReflectorBlockEntity(BlockPos pos, BlockState state) {
-        super(TFGBlockEntities.REFLECTOR_BLOCK_ENTITY.get(), pos, state);
+    public ReflectorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState);
     }
 
     // Static tick method called each tick by the ticker

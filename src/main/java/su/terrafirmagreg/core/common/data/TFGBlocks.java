@@ -231,8 +231,6 @@ public final class TFGBlocks {
     public static final RegistryObject<Block> ARTISAN_TABLE = register("artisan_table",
             () -> new ArtisanTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())));
 
-    // Multi block casings
-
     // Mars animal related
     public static final RegistryObject<Block> LARGE_NEST_BOX = register("large_nest_box",
             () -> new LargeNestBoxBlock(ExtendedProperties.of()
@@ -378,7 +376,7 @@ public final class TFGBlocks {
             .blockstate(TFGModelUtils.existingActiveParticleModel(TFGCore.id("block/machines/egh_planter/grow_light")))
             .addLayer(() -> RenderType::cutout)
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
-            .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/machines/egh_planter/grow_light"))).build().register();
+            .item(BlockItem::new).model(TFGModelUtils.blockItemModel(TFGCore.id("block/machines/egh_planter/grow_light"))).build().register();
 
     public static final BlockEntry<ActiveParticleBlock> PISCICULTURE_CORE = TFGCore.REGISTRATE
             .block("pisciculture_core", p -> new ActiveParticleBlock(p.sound(SoundType.COPPER).strength(5f, 6f).mapColor(MapColor.GRASS).noOcclusion(),

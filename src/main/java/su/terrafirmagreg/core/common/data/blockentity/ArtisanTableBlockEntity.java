@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
@@ -69,8 +70,8 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
      * @param pos   The block position.
      * @param state The block state.
      */
-    public ArtisanTableBlockEntity(BlockPos pos, BlockState state) {
-        super(TFGBlockEntities.ARTISAN_TABLE.get(), pos, state, ArtisanTableBlockEntity::createInventory, NAME);
+    public ArtisanTableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state, ArtisanTableBlockEntity::createInventory, NAME);
         this.pattern = new ArtisanPattern();
     }
 
