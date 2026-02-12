@@ -1,19 +1,13 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.OptionalLong;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.google.common.collect.Tables;
-import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
@@ -21,13 +15,14 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-import com.gregtechceu.gtceu.api.recipe.ui.GTRecipeTypeUI;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
-import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.SlotWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
+import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
+import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
+import com.lowdragmc.lowdraglib.gui.widget.*;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.minecraft.ChatFormatting;
@@ -58,9 +53,22 @@ import su.terrafirmagreg.core.common.environment.RoomScan.Status;
  */
 public class OxygenDistributorMachine extends SimpleTieredMachine implements IBlockSensitiveMachine, IAtmosphereMachine {
 
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            OxygenDistributorMachine.class, SimpleTieredMachine.MANAGED_FIELD_HOLDER);
+
+    @Override
+    public ManagedFieldHolder getFieldHolder() {
+        return MANAGED_FIELD_HOLDER;
+    }
+
     /** The provider that holds our room data and handles oxygen queries */
     @Nullable
     private OxygenProvider provider;
+
+    /** Synced to client for UI button visibility */
+    @Persisted
+    @DescSynced
+    private boolean showTraceButton;
 
     /** Pending scan result from async validation */
     private RoomScan newRoomScan;
@@ -85,6 +93,9 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     /** Tick count of last breach trace request, for cooldown */
     private long lastTraceRequestTick = 0;
     private static final int TRACE_COOLDOWN_TICKS = 100;
+
+    private static final int MAX_BLOCKS = 1_000_000;
+    private static final int MAX_HORIZONTAL_DIMENSION = 128;
 
     public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction) {
         super(holder, tier, tankScalingFunction);
@@ -147,62 +158,51 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
     @Override
     public Widget createUIWidget() {
-        var recipeEditableUI = getRecipeType().getRecipeUI().createEditableUITemplate(false, false);
-        WidgetGroup recipeTemplate = recipeEditableUI.createDefault();
-        SlotWidget batterySlot = createBatterySlot().createDefault();
+        // Content area: 164x78 fills the standard 176x166 GT window (172-8 border, 86-8 border min)
+        int width = 164;
+        int height = 78;
+        int rightColX = width - 40; // 18px column + 4px margin from right edge
 
-        // Status panel on the left, recipe on the right
-        int panelWidth = 108;
-        int recipeWidth = recipeTemplate.getSize().width;
-        int totalWidth = panelWidth + recipeWidth + 4;
-        int totalHeight = Math.max(recipeTemplate.getSize().height, 78);
-
-        var group = new WidgetGroup(0, 0, totalWidth, totalHeight);
+        var group = new WidgetGroup(0, 0, width, height);
 
         // Status text panel
         group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
-                .textSupplier(this.getLevel().isClientSide ? null : this::addStatusText)
-                .setMaxWidthLimit(panelWidth - 8));
+                .textSupplier(getLevel().isClientSide ? null : this::addStatusText)
+                .setMaxWidthLimit(rightColX - 8));
 
-        // "Find Leak" button — bottom-left
-        group.addWidget(new ButtonWidget(4, totalHeight - 22, panelWidth - 8, 18,
-                GuiTextures.BUTTON, cd -> {
+        // "Find Leak" button, only visible when room is unsealed with an escape point
+        var traceButton = new ButtonWidget(41 - 18, height - 20, 18, 18,
+                new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture("💨")), cd -> {
                     if (!cd.isRemote) {
                         requestBreachTrace();
                     }
                 }) {
             @Override
-            public void drawInBackground(@NotNull net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-                setVisible(true);
-                super.drawInBackground(graphics, mouseX, mouseY, partialTicks);
+            public void updateScreen() {
+                super.updateScreen();
+                setVisible(showTraceButton);
             }
-        }.setHoverTooltips("tfg.machine.oxygen_distributor.find_leak"));
+        };
+        traceButton.setHoverTooltips(Component.translatable("tfg.machine.oxygen_distributor.find_leak"));
+        group.addWidget(traceButton);
 
-        // Recipe template on the right (progress bar + fluid slot)
-        recipeTemplate.setSelfPosition(new Position(panelWidth, (totalHeight - recipeTemplate.getSize().height) / 2));
-        group.addWidget(recipeTemplate);
+        // Progress bar
+        group.addWidget(new ProgressWidget(recipeLogic::getProgressPercent, rightColX, height - 19 - 20 - 8, 20, 20,
+                getRecipeType().getRecipeUI().getProgressBarTexture()));
 
-        // Battery slot at bottom-right
-        batterySlot.setSelfPosition(new Position(panelWidth + recipeWidth / 2 - 9, totalHeight - 18));
+        // Input slot
+        var fluidTank = new TankWidget(importFluids.getStorages()[0], rightColX + 1, height - 19, true, true);
+        fluidTank.setFillDirection(ProgressTexture.FillDirection.UP_TO_DOWN);
+        fluidTank.setBackground(GuiTextures.FLUID_SLOT);
+        group.addWidget(fluidTank);
+
+        // Battery slot
+        SlotWidget batterySlot = createBatterySlot().createDefault();
+        batterySlot.setSelfPosition(new Position(width / 2 - 9, height - 19));
         group.addWidget(batterySlot);
-
-        // Bind recipe fluid slots and battery
-        var storages = Tables.newCustomTable(new java.util.EnumMap<>(IO.class),
-                java.util.LinkedHashMap<RecipeCapability<?>, Object>::new);
-        storages.put(IO.IN, FluidRecipeCapability.CAP, importFluids);
-
-        recipeEditableUI.setupUI(recipeTemplate,
-                new GTRecipeTypeUI.RecipeHolder(recipeLogic::getProgressPercent,
-                        storages, new net.minecraft.nbt.CompoundTag(),
-                        java.util.Collections.emptyList(), false, false));
         createBatterySlot().setupUI(group, this);
 
         return group;
-    }
-
-    private boolean shouldShowTraceButton() {
-        RoomScan scan = getRoomScan();
-        return !scan.isSealed() && scan.status() != Status.NULL && scan.hasEscapePoint();
     }
 
     private void addStatusText(List<Component> textList) {
@@ -214,14 +214,15 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             case ESCAPED_BUILD_HEIGHT -> Component.translatable("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.RED);
             case ESCAPED_DIMENSION -> Component.translatable("tfg.machine.oxygen_distributor.status.too_wide").withStyle(ChatFormatting.YELLOW);
             case ESCAPED_UNLOADED -> Component.translatable("tfg.machine.oxygen_distributor.status.chunk_unloaded").withStyle(ChatFormatting.YELLOW);
-            case BLOCK_LIMIT -> Component.translatable("tfg.machine.oxygen_distributor.status.volume_limit").withStyle(ChatFormatting.YELLOW);
+            case BLOCK_LIMIT -> Component.translatable("tfg.machine.oxygen_distributor.status.volume_limit",
+                    FormattingUtil.formatNumbers(MAX_BLOCKS)).withStyle(ChatFormatting.YELLOW);
             case SAVED_DATA -> Component.translatable("tfg.machine.oxygen_distributor.status.restoring").withStyle(ChatFormatting.GREEN);
             case NULL -> Component.translatable("tfg.machine.oxygen_distributor.status.scanning").withStyle(ChatFormatting.GRAY);
         };
         textList.add(Component.translatable("tfg.machine.oxygen_distributor.status").append(statusText));
 
-        // Size
-        if (scan.interiorSize() > 0) {
+        // Size — only meaningful when sealed
+        if (scan.isSealed() && scan.interiorSize() > 0) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.size",
                     FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA));
         }
@@ -248,7 +249,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
         EnvironmentSystem.EXECUTOR.submit(() -> {
             try {
-                RoomScan result = DiagnosticFloodFill.fill(traceLevel, tracePos, 1_000_000, 128);
+                RoomScan result = DiagnosticFloodFill.fill(traceLevel, tracePos, MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
                 if (result.escapePath() != null && !result.escapePath().isEmpty()) {
                     DiagnosticFloodFill.spawnTrace(traceLevel, result.escapePath());
                 }
@@ -268,10 +269,12 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
      * Stores the result in newRoomScan which gets processed on the main thread in {@link #processValidationResult()}.
      */
     public void validateAsync() {
-        TFGCore.LOGGER.info("validateAsync running, pos={}", getPos());
-        int maxBlocks = 1_000_000;
-        int maxHorizontalDimension = 128;
-        newRoomScan = FloodFill.fill(level, getPos(), maxBlocks, maxHorizontalDimension);
+        TFGCore.LOGGER.info("[validation] validateAsync START, pos={}, identity={}", getPos(), System.identityHashCode(this));
+        long start = System.nanoTime();
+        newRoomScan = FloodFill.fill(level, getPos(), MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
+        long elapsed = (System.nanoTime() - start) / 1_000_000;
+        TFGCore.LOGGER.info("[validation] validateAsync DONE, pos={}, identity={}, elapsedMs={}, status={}, size={}",
+                getPos(), System.identityHashCode(this), elapsed, newRoomScan.status(), newRoomScan.interiorSize());
     }
 
     /**
@@ -281,11 +284,12 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
      * - Update provider and registries
      */
     public void processValidationResult() {
-        TFGCore.LOGGER.info("processValidationResult: provider={}, newRoomScan={}", provider != null,
-                newRoomScan != null);
+        TFGCore.LOGGER.info("[validation] processValidationResult, pos={}, identity={}, provider={}, newRoomScan={}",
+                getPos(), System.identityHashCode(this), provider != null, newRoomScan != null);
         if (provider == null || newRoomScan == null) {
             return;
         }
+        long start = System.nanoTime();
 
         RoomScan oldScan = provider.getRoomScan();
         RoomScan newScan = newRoomScan;
@@ -324,6 +328,9 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         // Update provider's room scan and oxygen chunk registry
         manager.updateProvider(provider, oldScan, newScan);
 
+        // Sync button visibility to client
+        showTraceButton = !newScan.isSealed() && newScan.status() != Status.NULL && newScan.hasEscapePoint();
+
         // Room changed: finish current recipe early so it re-searches with the new room size.
         // Also resets runAttempt/runDelay recomputes the recipe modifier.
         if (recipeLogic != null) {
@@ -345,6 +352,10 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             activeDecompression.cancel(level);
             activeDecompression = null;
         }
+
+        long elapsed = (System.nanoTime() - start) / 1_000_000;
+        TFGCore.LOGGER.info("[validation] processValidationResult DONE, pos={}, identity={}, elapsedMs={}, oldStatus={}, newStatus={}",
+                getPos(), System.identityHashCode(this), elapsed, oldScan.status(), newScan.status());
     }
 
     /**
@@ -406,6 +417,11 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
         if (!dirty) {
             BlockPos pos = event.getPos();
+
+            // Ignore our own block being broken — machine is about to be removed
+            if (pos.equals(getPos()))
+                return;
+
             RoomScan roomScan = provider.getRoomScan();
 
             TFGCore.LOGGER.info("Sealed {}, inEnvelope {}, inInterior {}", roomScan.isSealed(), roomScan.containsEnvelope(pos), roomScan.containsInterior(pos));
@@ -433,7 +449,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     }
 
     private void requestValidation() {
-        TFGCore.LOGGER.info("requestValidation, pos={}", getPos());
+        TFGCore.LOGGER.info("[validation] requestValidation, pos={}, identity={}", getPos(), System.identityHashCode(this));
         setDirty(true);
         //TODO: Set earliest tick interval dependent on current room size
         EnvironmentSystem.requestValidation(this, calculateEarliestTick(1));
@@ -456,6 +472,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         if (!(getLevel() instanceof ServerLevel serverLevel))
             return;
 
+        TFGCore.LOGGER.info("onLoad, pos={}, identity={}", getPos(), System.identityHashCode(this));
+
         tickOffset = getPos().hashCode();
 
         level = serverLevel;
@@ -470,16 +488,19 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     @Override
     public void onUnload() {
         super.onUnload();
+        TFGCore.LOGGER.info("onUnload, pos={}, identity={}, provider={}", getPos(), System.identityHashCode(this), provider != null);
         if (provider == null)
             return;
 
         provider.detach();
         deregisterMachineListeners();
+        provider = null;
     }
 
     @Override
     public void onMachineRemoved() {
         super.onMachineRemoved();
+        TFGCore.LOGGER.info("onMachineRemoved, pos={}, identity={}", getPos(), System.identityHashCode(this));
         if (manager == null)
             return;
 
@@ -493,6 +514,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
      * Called on both unload and removal.
      */
     private void deregisterMachineListeners() {
+        EnvironmentSystem.cancelValidation(this);
+
         if (provider == null)
             return;
 

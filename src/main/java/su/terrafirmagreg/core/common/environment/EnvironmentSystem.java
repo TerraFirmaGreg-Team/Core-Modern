@@ -99,17 +99,41 @@ public final class EnvironmentSystem {
     static Set<IBlockSensitiveMachine> validationRequested = new HashSet<>();
     static Queue<IBlockSensitiveMachine> doneValidating = new ConcurrentLinkedQueue<>();
 
-    public static void requestValidation(IBlockSensitiveMachine machine, long earliestTick) {
-        if (!validationRequested.add(machine))
-            return;
+    public static void cancelValidation(IBlockSensitiveMachine machine) {
+        if (validationRequested.remove(machine)) {
+            validationQueue.removeIf(job -> job.machine() == machine);
+            TFGCore.LOGGER.info("[validation] cancelValidation, pos={}, identity={}",
+                    machine.getPos(), System.identityHashCode(machine));
+        }
+    }
 
+    public static void requestValidation(IBlockSensitiveMachine machine, long earliestTick) {
+        if (!validationRequested.add(machine)) {
+            TFGCore.LOGGER.info("[validation] requestValidation SKIPPED (already requested), pos={}, identity={}, earliestTick={}",
+                    machine.getPos(), System.identityHashCode(machine), earliestTick);
+            return;
+        }
+
+        TFGCore.LOGGER.info("[validation] requestValidation QUEUED, pos={}, identity={}, earliestTick={}, queueSize={}",
+                machine.getPos(), System.identityHashCode(machine), earliestTick, validationQueue.size() + 1);
         validationQueue.add(new ValidationJob(machine, earliestTick));
     }
 
     private static void dispatchValidation(IBlockSensitiveMachine machine) {
+        TFGCore.LOGGER.info("[validation] dispatchValidation, pos={}, identity={}",
+                machine.getPos(), System.identityHashCode(machine));
+
+        long startTime = System.nanoTime();
         EXECUTOR.submit(() -> {
+            long threadStartTime = System.nanoTime();
+            TFGCore.LOGGER.info("[validation] async thread started, pos={}, identity={}, waitedMs={}",
+                    machine.getPos(), System.identityHashCode(machine),
+                    (threadStartTime - startTime) / 1_000_000);
             try {
                 machine.validateAsync();
+                long elapsed = (System.nanoTime() - threadStartTime) / 1_000_000;
+                TFGCore.LOGGER.info("[validation] async thread finished, pos={}, identity={}, elapsedMs={}",
+                        machine.getPos(), System.identityHashCode(machine), elapsed);
                 doneValidating.add(machine); // Memory visibility guarantee
             } catch (Exception e) {
                 TFGCore.LOGGER.error("Flood fill failed for room at {}", machine.getPos(), e);
@@ -121,12 +145,16 @@ public final class EnvironmentSystem {
     }
 
     private static void finalizeValidation(IBlockSensitiveMachine machine) {
+        TFGCore.LOGGER.info("[validation] finalizeValidation, pos={}, identity={}, isDirty={}",
+                machine.getPos(), System.identityHashCode(machine), machine.isDirty());
         validationRequested.remove(machine);
         machine.processValidationResult();
 
         // If the machine got dirty during the async fill (block changed while scanning),
         // the validation result is stale. Re-request validation.
         if (machine.isDirty()) {
+            TFGCore.LOGGER.info("[validation] re-requesting (dirty during async), pos={}, identity={}",
+                    machine.getPos(), System.identityHashCode(machine));
             requestValidation(machine, 0);
         }
     }
@@ -149,12 +177,16 @@ public final class EnvironmentSystem {
         ValidationJob job = validationQueue.peek();
         if (job != null && job.earliestTick() <= currentTick) {
             validationQueue.poll();
+            TFGCore.LOGGER.info("[validation] tick {} dispatching job, earliestTick={}, pos={}, identity={}",
+                    currentTick, job.earliestTick(), job.machine().getPos(), System.identityHashCode(job.machine()));
             dispatchValidation(job.machine());
         }
 
         // Process finished validation jobs
         IBlockSensitiveMachine machine;
         while ((machine = doneValidating.poll()) != null) {
+            TFGCore.LOGGER.info("[validation] tick {} finalizing, pos={}, identity={}",
+                    currentTick, machine.getPos(), System.identityHashCode(machine));
             finalizeValidation(machine);
         }
 

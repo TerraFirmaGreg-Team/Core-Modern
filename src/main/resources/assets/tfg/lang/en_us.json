@@ -1,6 +1,6 @@
 {
     "tfg.machine.oxygen_distributor.status.breached": "Breached",
-    "tfg.machine.oxygen_distributor.status.volume_limit": "Volume limit",
+    "tfg.machine.oxygen_distributor.status.volume_limit": "Volume limit (%s)",
     "tfg.machine.oxygen_distributor.status.restoring": "Restoring...",
     "tfg.machine.oxygen_distributor.status.too_wide": "Too wide",
     "tfg.machine.oxygen_distributor.status.scanning": "Scanning...",
