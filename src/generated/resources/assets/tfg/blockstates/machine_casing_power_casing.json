@@ -1,7 +1,1 @@
-{
-  "variants": {
-    "": {
-      "model": "tfg:block/machine_casing_power_casing"
-    }
-  }
-}
+{"variants": {"": {"model": "tfg:block/machine_casing_power_casing"}}}

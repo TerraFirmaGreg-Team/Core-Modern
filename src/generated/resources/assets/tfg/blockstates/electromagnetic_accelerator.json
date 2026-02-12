@@ -1,7 +1,1 @@
-{
-  "variants": {
-    "": {
-      "model": "tfg:block/electromagnetic_accelerator"
-    }
-  }
-}
+{"variants": {"": {"model": "tfg:block/electromagnetic_accelerator"}}}

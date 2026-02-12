@@ -672,7 +672,7 @@ public class TFGMultiMachines {
             .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
             .appearanceBlock(HORTICULTURE_CASING)
             .model(GTMachineModels.createWorkableCasingMachineModel(
-            TFGCore.id( "block/casings/machine_casing_egh_inactive"),
+            TFGCore.id( "block/casings/machine_casing_egh"),
                 GTCEu.id("block/machines/implosion_compressor"))
                     .andThen(b -> b.addDynamicRenderer(() -> DynamicRenderHelper.makeGrowingPlantRender(List.of(
                         // Layer 1

@@ -1,4 +1,7 @@
 {
-    "parent": "minecraft:block/cube_all",
-    "textures": {"all": "tfg:block/casings/machine_casing_vacuum_engine_intake_active"}
+  "parent": "gtceu:block/cube_2_layer/all",
+  "textures": {
+    "bot_all": "tfg:block/casings/machine_casing_egh_active",
+    "top_all": "tfg:block/casings/machine_casing_egh_active_emissive"
+  }
 }

@@ -59,7 +59,7 @@ sourceSets {
 
     dev {
         java.srcDir("src/dev/java")
-        resources.srcDir("src/dev/resources")
+        //resources.srcDir("src/dev/resources")
         compileClasspath += sourceSets.main.compileClasspath
     }
 }

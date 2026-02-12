@@ -1,0 +1,16 @@
+{"variants": {
+    "active=false": [
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v1"},
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v2"},
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v3"},
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v4"},
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v5"}
+    ],
+    "active=true": [
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v1_active"},
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v2_active"},
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v3_active"},
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v4_active"},
+        {"model": "tfg:block/machines/sample_racks/sample_rack_v5_active"}
+    ]
+}}
