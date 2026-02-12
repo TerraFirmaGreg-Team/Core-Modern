@@ -1,14 +1,10 @@
 package su.terrafirmagreg.core.common.data;
 
-import java.util.Locale;
-import java.util.function.Supplier;
-
 import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.util.entry.EntityEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
-import net.dries007.tfc.common.blocks.rock.Rock;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -17,7 +13,6 @@ import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import appeng.api.upgrades.Upgrades;
 import de.mennomax.astikorcarts.item.CartItem;
@@ -25,7 +20,6 @@ import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.items.*;
-import su.terrafirmagreg.core.utils.ModelUtils;
 
 /**
  * Uncomment TFGCreativeTab in TFGCore if you register anything new here
@@ -148,7 +142,7 @@ public class TFGItems {
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
-    private static <T extends EntityType<? extends Mob>> ItemEntry<ForgeSpawnEggItem> registerSpawnEgg(RegistryObject<T> entity, int color1, int color2) {
+    private static <T extends Mob> ItemEntry<ForgeSpawnEggItem> registerSpawnEgg(EntityEntry<T> entity, int color1, int color2) {
         return TFGCore.REGISTRATE.item("spawn_egg/" + entity.getId().getPath(),
                 (p) -> new ForgeSpawnEggItem(entity, color1, color2, p)).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).register();
     }
