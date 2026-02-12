@@ -35,6 +35,7 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IcicleBlock;
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.*;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
@@ -210,26 +211,55 @@ public final class TFGBlocks {
 
     // Misc blocks
 
-    public static final RegistryObject<Block> PIGLIN_DISGUISE_BLOCK = register("piglin_disguise_block",
-            () -> new PiglinDisguiseBlock(BlockBehaviour.Properties.of()
+    public static final BlockEntry<PiglinDisguiseBlock> PIGLIN_DISGUISE_BLOCK = TFGCore.REGISTRATE.block("piglin_disguise_block", PiglinDisguiseBlock::new)
+            .properties(p -> p
                     .mapColor(MapColor.COLOR_BROWN)
                     .strength(0.1f)
                     .sound(SoundType.DRIPSTONE_BLOCK)
                     .pushReaction(PushReaction.DESTROY)
                     .isViewBlocking((state, level, pos) -> false)
-                    .isSuffocating((state, level, pos) -> false)));
+                    .isSuffocating((state, level, pos) -> false))
+            .blockstate((ctx, prov) -> {
+                TFGModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/piglin_disguise_block")));
+            })
+            .item(BlockItem::new).build()
+            .register();
 
-    public static final RegistryObject<Block> MARS_ICE = register("mars_ice",
-            () -> new MarsIceBlock(BlockBehaviour.Properties.copy(Blocks.ICE)));
+    public static final BlockEntry<MarsIceBlock> MARS_ICE = TFGCore.REGISTRATE.block("mars_ice", MarsIceBlock::new)
+            .initialProperties(() -> Blocks.ICE)
+            .simpleItem()
+            .register();
 
-    public static final RegistryObject<Block> MARS_ICICLE = register("mars_icicle",
-            () -> new IcicleBlock(BlockBehaviour.Properties.copy(TFCBlocks.ICICLE.get())));
+    public static final BlockEntry<IcicleBlock> MARS_ICICLE = TFGCore.REGISTRATE.block("mars_icicle", IcicleBlock::new)
+            .initialProperties(TFCBlocks.ICICLE::get)
+            .blockstate((ctx, prov) -> {
+                var main = prov.models().withExistingParent(prov.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/thin_spike"))
+                        .texture("0", TFGCore.id("block/mars_ice"))
+                        .texture("particle", TFGCore.id("block/mars_ice"));
+                var tip = prov.models().withExistingParent(prov.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/thin_spike_tip"))
+                        .texture("0", TFGCore.id("block/mars_ice"))
+                        .texture("particle", TFGCore.id("block/mars_ice"));
 
-    public static final RegistryObject<Block> DRY_ICE = register("dry_ice",
-            () -> new DryIceBlock(BlockBehaviour.Properties.copy(Blocks.ICE)
-                    .sound(SoundType.BONE_BLOCK)));
-    public static final RegistryObject<Block> ARTISAN_TABLE = register("artisan_table",
-            () -> new ArtisanTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())));
+                prov.getVariantBuilder(ctx.getEntry()).partialState().with(TFCBlockStateProperties.TIP, false).modelForState().modelFile(main).addModel()
+                        .partialState().with(TFCBlockStateProperties.TIP, true).modelForState().modelFile(tip).addModel();
+            })
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.generated(ctx::getEntry, ResourceLocation.fromNamespaceAndPath("tfc", "item/icicle"))).build()
+            .register();
+
+    public static final BlockEntry<DryIceBlock> DRY_ICE = TFGCore.REGISTRATE.block("dry_ice", DryIceBlock::new)
+            .initialProperties(() -> Blocks.ICE)
+            .properties(p -> p.sound(SoundType.BONE_BLOCK))
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<ArtisanTableBlock> ARTISAN_TABLE = TFGCore.REGISTRATE.block("artisan_table",
+            (p) -> new ArtisanTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())))
+            .blockstate((ctx, prov) -> {
+                TFGModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/artisan_table")));
+            })
+            .item(BlockItem::new).build()
+            .register();
 
     // Mars animal related
     public static final RegistryObject<Block> LARGE_NEST_BOX = register("large_nest_box",

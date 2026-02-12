@@ -39,6 +39,17 @@ public class TFGModelUtils {
                 .modelForState().modelFile(active).addModel();
     }
 
+    public static void cardinalBlock(VariantBlockStateBuilder builder, ModelFile model) {
+        builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+                .modelForState().modelFile(model).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
+                .modelForState().modelFile(model).rotationY(180).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
+                .modelForState().modelFile(model).rotationY(270).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
+                .modelForState().modelFile(model).rotationY(90).addModel();
+    }
+
     public static void activeCardinalBlock(VariantBlockStateBuilder builder, ModelFile inactive, ModelFile active) {
         builder.partialState().with(GTBlockStateProperties.ACTIVE, false).with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
                 .modelForState().modelFile(inactive).addModel()
