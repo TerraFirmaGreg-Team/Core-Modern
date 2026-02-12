@@ -56,7 +56,7 @@ public class CommonProxy {
         TFGBlocks.BLOCKS.register(bus);
         TFGBlockEntities.BLOCK_ENTITIES.register(bus);
         TFGItems.ITEMS.register(bus);
-        TFGCreativeTab.TABS.register(bus);
+        TFGCreativeTab.init();
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.ENTITIES.register(bus);
         TFGParticles.register(bus);
