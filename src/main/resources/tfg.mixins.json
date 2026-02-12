@@ -91,6 +91,7 @@
         "common.gtceu.NBTPredicateIngredientAccessor",
         "common.gtceu.NBTPredicateIngredientSerializerMixin",
         "common.gtceu.NotifiableItemStackHandlerMixin",
+        "common.gtceu.ProtectionTypeMixin",
         "common.gtceu.QuarkTechSuiteMixin",
         "common.gtceu.SteamBoilerMachineMixin",
         "common.gtceu.SurfaceRockBlockMixin",
