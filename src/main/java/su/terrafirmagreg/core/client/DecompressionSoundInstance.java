@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * Client-side looping sound for decompression events.
  * Volume and pitch decay over the event's duration using quadratic falloff,
- * matching the force decay in {@link su.terrafirmagreg.core.common.atmosphere.DecompressionEvent}.
+ * matching the force decay in {@link su.terrafirmagreg.core.common.environment.DecompressionEvent}.
  */
 @OnlyIn(Dist.CLIENT)
 public class DecompressionSoundInstance extends AbstractTickableSoundInstance {

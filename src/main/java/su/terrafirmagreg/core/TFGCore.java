@@ -24,7 +24,6 @@ import net.minecraftforge.network.NetworkConstants;
 
 import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.common.*;
-import su.terrafirmagreg.core.common.atmosphere.AtmosphereSystem;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
@@ -34,6 +33,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTSetupHooks;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
 import su.terrafirmagreg.core.compat.create.CustomArmInteractionPointTypes;
@@ -104,7 +104,7 @@ public final class TFGCore {
 
         AdAstraCompat.RegisterEvents();
         AE2Compat.registerEvents();
-        AtmosphereSystem.init();
+        EnvironmentSystem.init();
     }
 
     public static ResourceLocation id(String name) {

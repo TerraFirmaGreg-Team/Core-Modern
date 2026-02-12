@@ -12,14 +12,9 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.client.AtmosphereClientCache.AtmosphereState;
-import su.terrafirmagreg.core.network.packet.AtmosphereQueryPacket;
-import su.terrafirmagreg.core.network.packet.AtmosphereResponsePacket;
-import su.terrafirmagreg.core.network.packet.DecompressionSoundPacket;
-import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
-import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
-import su.terrafirmagreg.core.network.packet.ParticlePacket;
-import su.terrafirmagreg.core.network.packet.SoundPacket;
+import su.terrafirmagreg.core.client.EnvironmentClientCache;
+import su.terrafirmagreg.core.network.packet.*;
+import su.terrafirmagreg.core.network.packet.EnvironmentResponsePacket;
 
 public class TFGNetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
@@ -62,16 +57,16 @@ public class TFGNetworkHandler {
                 OreHighlightVeinPacket::handle);
         INSTANCE.registerMessage(
                 id(),
-                AtmosphereQueryPacket.class,
-                AtmosphereQueryPacket::encode,
-                AtmosphereQueryPacket::decode,
-                AtmosphereQueryPacket::handle);
+                EnvironmentQueryPacket.class,
+                EnvironmentQueryPacket::encode,
+                EnvironmentQueryPacket::decode,
+                EnvironmentQueryPacket::handle);
         INSTANCE.registerMessage(
                 id(),
-                AtmosphereResponsePacket.class,
-                AtmosphereResponsePacket::encode,
-                AtmosphereResponsePacket::decode,
-                AtmosphereResponsePacket::handle);
+                EnvironmentResponsePacket.class,
+                EnvironmentResponsePacket::encode,
+                EnvironmentResponsePacket::decode,
+                EnvironmentResponsePacket::handle);
         INSTANCE.registerMessage(
                 id(),
                 DecompressionSoundPacket.class,
@@ -129,24 +124,24 @@ public class TFGNetworkHandler {
     }
 
     /**
-     * Sends an atmosphere query from client to server.
+     * Sends an environment query from client to server.
      * Called from client side only.
      *
      * @param pos The position to query
      */
     public static void sendAtmosphereQuery(BlockPos pos) {
-        INSTANCE.sendToServer(new AtmosphereQueryPacket(pos));
+        INSTANCE.sendToServer(new EnvironmentQueryPacket(pos));
     }
 
     /**
-     * Sends an atmosphere response from server to a specific client.
+     * Sends an environment response from server to a specific client.
      *
      * @param player The player to send to
      * @param pos The position that was queried
-     * @param state The atmosphere state at that position
+     * @param state The environment state at that position
      */
-    public static void sendAtmosphereResponse(ServerPlayer player, BlockPos pos, AtmosphereState state) {
+    public static void sendEnvironmentResponse(ServerPlayer player, BlockPos pos, EnvironmentClientCache.EnvironmentState state) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
-                new AtmosphereResponsePacket(pos, state));
+                new EnvironmentResponsePacket(pos, state));
     }
 }

@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import net.minecraft.core.Direction;
 
 /** Various helpers and static vars for dealing with directions as Directions, bitmasks, or longs */
 // Helper methods for all your bitfuckery, longfuckery, and any other fuckery you might want
-public class AtmosphereHelpers {
+public class FloodFillHelpers {
 
     /** Static copy of all directions */
     static final Direction[] DIRECTIONS = Direction.values();
@@ -32,15 +32,10 @@ public class AtmosphereHelpers {
     /** All directions represented as a bitmask */
     protected static final byte ALL_DIRECTIONS = 0b111111;
 
-    /**
-     * Precomputed set of Directions for each possible direction mask
-     * Makes things both faster and more readable when iterating over directions
-     */
+    /**Precomputed set of Directions for each possible direction mask */
     public static final Direction[][] MASK2DIRECTIONS = new Direction[64][];
 
-    /**
-     * Precomputed set of directions (as bitmask) that are perpendicular to the given directions
-     */
+    /** Precomputed set of directions (as bitmask) that are perpendicular to the given directions */
     public static final byte[] PERPENDICULAR_DIRECTIONS = new byte[64];
 
     /**
@@ -53,9 +48,7 @@ public class AtmosphereHelpers {
 
     // Fill out MASK2DIRECTIONS, PERPENDICULAR_UNION, and MASK2DFS_DIRECTIONS
     static {
-        /*
-         * Direction order for DFS traversal.
-         */
+        /* Direction order for DFS traversal */
         int[] DFS_ORDER = {
                 Direction.DOWN.ordinal(),
                 Direction.WEST.ordinal(),
@@ -141,7 +134,7 @@ public class AtmosphereHelpers {
         return mask2directions(PERPENDICULAR_DIRECTIONS[mask]);
     }
 
-    /** Return a List of ints representing directions specified by the mask, ordered by our preferred DFS order (UP first) */
+    /** Return a List of ints representing directions specified by the mask, ordered by preferred DFS order (UP first) */
     public static int[] mask2DFSDirections(byte mask) {
         return MASK2DFS_DIRECTIONS[mask & 0b111111];
     }
@@ -149,8 +142,8 @@ public class AtmosphereHelpers {
     /** Swap adjacent bit pairs: DOWN<->UP, NORTH<->SOUTH, WEST<->EAST */
     public static byte mirrorDirs(byte mask) {
         // 0b(EAST)(WEST)(SOUTH)(NORTH)(UP)(DOWN)
-        int even = mask & 0b010101;  // bits 4, 2, 0 (WEST, NORTH, DOWN)
-        int odd = mask & 0b101010;   // bits 5, 3, 1 (EAST, SOUTH, UP)
+        int even = mask & 0b010101;  // (WEST, NORTH, DOWN)
+        int odd = mask & 0b101010;   // (EAST, SOUTH, UP)
         // Shift even bits left, shift odd bits right, makes them swap places.
         return (byte) ((even << 1) | (odd >> 1));
     }

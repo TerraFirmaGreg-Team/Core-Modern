@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;

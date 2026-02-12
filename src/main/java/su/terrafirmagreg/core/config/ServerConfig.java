@@ -116,7 +116,7 @@ public final class ServerConfig {
         builder.pop().push("atmosphere_system");
 
         atmosphereMaxHorizontalDimension = builder
-                .comment("Maximum horizontal distance (in blocks) that atmosphere rooms can extend from the machine.")
+                .comment("Maximum horizontal distance (in blocks) that environment rooms can extend from the machine.")
                 .defineInRange("maxHorizontalDimension", 128, 16, 512);
 
         atmosphereRevalidationBaseTicks = builder

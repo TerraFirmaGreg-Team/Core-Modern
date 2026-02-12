@@ -221,11 +221,11 @@ public final class TFGClientEventHandler {
             return;
         }
         clientTicks++;
-        AtmosphereClientCache.tick(clientTicks);
+        EnvironmentClientCache.tick(clientTicks);
     }
 
     @SubscribeEvent
     public static void onClientDisconnect(ClientPlayerNetworkEvent.LoggingOut event) {
-        AtmosphereClientCache.clear();
+        EnvironmentClientCache.clear();
     }
 }

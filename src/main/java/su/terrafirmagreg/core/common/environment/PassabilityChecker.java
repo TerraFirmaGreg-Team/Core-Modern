@@ -1,9 +1,8 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
-import static su.terrafirmagreg.core.common.atmosphere.AtmosphereHelpers.*;
-import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassCache.PassType.*;
+import static su.terrafirmagreg.core.common.environment.FloodFillHelpers.*;
+import static su.terrafirmagreg.core.common.environment.PassabilityChecker.PassInfo.PassType.*;
 
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.BlockPos;
@@ -12,11 +11,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
+import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
@@ -50,10 +49,10 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 
 // TODO: Waterlocks?
 /**
- * Handles checking whether atmosphere can pass through blocks.
+ * Handles checking whether environment can pass through blocks.
  * Uses direction-aware passability for partial blocks like stairs.
  *
- * <p>Caches quick passability results per BlockState to avoid repeated shape analysis.
+ * <p>Caches quick passability results per BlockState to avoid repeated collision shape analysis.
  */
 public final class PassabilityChecker {
 
@@ -72,10 +71,10 @@ public final class PassabilityChecker {
         FULL,
 
         /**
-         * From the directions we checked, we found no open faces so no air can pass so far.
+         * From all directions we checked, we found no open faces so no air can pass so far.
          *  This means we add it to pending shell blocks. At the end they'll become part of the shell
          *  unless we later visit it from a different direction from which it's open.
-         *  Example: bottom slab only from below
+         *  Example: bottom slab visited only from below
          */
         NO_OPEN_FACES,
 
@@ -90,7 +89,7 @@ public final class PassabilityChecker {
          * From a directions with an open face, there was a filled silhouette but a neighboring block is
          *  ALWAYS_PASSABLE or had an empty face, so air flowed around the barrier.
          *  This means air can pass freely through outgoing faces that are open.
-         *  Example: window pane from front or bottom slab from top, but only if a surrounding block is ALWAYS_PASSABLE
+         *  Example: window pane from front or bottom slab from top, with a neighboring block that's air
          */
         PASSABLE_WINDOW_PANE,
 
@@ -113,50 +112,50 @@ public final class PassabilityChecker {
     }
 
     /**
-     * Checks if atmosphere can pass through a block.
+     * Checks if environment can pass through a block.
      *
-     * @param level Block getter for accessing block states
-     * @param pos Position of the block to check
-     * @param posLong Position as long
-     * @param blockState Block state at the position
-     * @param state Current FloodFill state, necessary for checking which directions we're visiting from.
-     * @return PassableResult indicating if atmosphere can pass
+     * @param level           Block getter for accessing block states
+     * @param pos             Position of the block to check
+     * @param posLong         Position as long
+     * @param blockState      Block state at the position
+     * @param visitDirections Current FloodFill state, necessary for checking which directions we're visiting from.
+     * @return PassableResult indicating if environment can pass
      */
-    public static PassableResult isPassable(Level level, MutableBlockPos pos, long posLong, BlockState blockState, FloodFill.State state) {
-        PassCache passCache = getPassCache(level, pos, blockState);
+    public static PassableResult isPassable(Level level, MutableBlockPos pos, long posLong, BlockState blockState, Long2ByteOpenHashMap visitDirections) {
+        PassInfo passInfo = getPassInfo(level, pos, blockState);
 
-        return switch (passCache.type) {
+        return switch (passInfo.type) {
             case EMPTY -> PassableResult.EMPTY;
             case FULL -> PassableResult.FULL;
-            case COLLISION -> isPassableFromDirections(level, pos, passCache, state.visitDirections.get(posLong));
+            case COLLISION -> isPassableFromDirections(level, pos, passInfo, visitDirections.get(posLong));
             default -> {
                 TFGCore.LOGGER.error("Invalid state reached in PassabilityChecker");
-                TFGCore.LOGGER.error("PassCache: {}", passCache);
+                TFGCore.LOGGER.error("PassInfo: {}", passInfo);
                 yield PassableResult.ALREADY_CHECKED;
             }
         };
     }
 
     /**
-     * Checks if atmosphere can pass through a block given specific incoming directions.
+     * Checks if environment can pass through a block given specific incoming directions.
      * Read also the {@link PassableResult} values javadoc for further information on what they mean.
      * @param level Block getter for accessing block states
      * @param pos Position of the block to check
-     * @param passCache Cached information on the passability of faces and silhouettes
+     * @param passInfo Cached information on the passability of faces and silhouettes
      * @param incomingDirs Bitmask of directions we're checking passability from
-     * @return PassableResult indicating if atmosphere can pass
+     * @return PassableResult indicating if environment can pass
      */
-    public static PassableResult isPassableFromDirections(Level level, MutableBlockPos pos, PassCache passCache, byte incomingDirs) {
+    public static PassableResult isPassableFromDirections(Level level, MutableBlockPos pos, PassInfo passInfo, byte incomingDirs) {
         if (incomingDirs == 0) {
             return PassableResult.ALREADY_CHECKED;
         }
 
-        byte openIncomingFaces = intersectDirs(incomingDirs, passCache.openFaces());
+        byte openIncomingFaces = intersectDirs(incomingDirs, passInfo.openFaces());
         if (hasNoDirs(openIncomingFaces)) {
             return PassableResult.NO_OPEN_FACES;
         }
 
-        byte openSilhouettes = intersectDirs(openIncomingFaces, passCache.openSilhouettes());
+        byte openSilhouettes = intersectDirs(openIncomingFaces, passInfo.openSilhouettes());
         if (hasAnyDir(openSilhouettes)) {
             return PassableResult.OPEN_SILHOUETTE;
         }
@@ -167,10 +166,10 @@ public final class PassabilityChecker {
         for (Direction perpDir : mask2perpendicularDirections(openIncomingFaces)) {
             pos.move(perpDir);
             var perpState = level.getBlockState(pos);
-            PassCache perpCache = getPassCache(level, pos, perpState);
+            PassInfo perpInfo = getPassInfo(level, pos, perpState);
             pos.move(perpDir.getOpposite());
 
-            if (perpCache.type == EMPTY || (perpCache.type == COLLISION && perpCache.isFaceEmpty(perpDir))) {
+            if (perpInfo.type == EMPTY || (perpInfo.type == COLLISION && perpInfo.isFaceEmpty(perpDir))) {
                 return PassableResult.PASSABLE_WINDOW_PANE;
             }
         }
@@ -182,7 +181,7 @@ public final class PassabilityChecker {
      * Computes face and silhouette data in cases where the result can't be cached.
      * Used for blocks that need level context (airlocks, pipes with dynamic connections, etc.)
      */
-    private static PassCache computeNoCache(Level level, BlockPos pos, BlockState blockState) {
+    private static PassInfo computeNoCache(Level level, BlockPos pos, BlockState blockState) {
         // Airlock door needs reference to controller block
         if (blockState.getBlock() instanceof SlidingDoorBlock sdb) {
             return computeFacesAndSilhouettes(sdb.getCollisionShape(blockState, level, pos, CollisionContext.empty()));
@@ -193,21 +192,23 @@ public final class PassabilityChecker {
         return computeFacesAndSilhouettes(shape);
     }
 
+    // ==================== Passability info cache ====================
+
     /** Cache of collision info per BlockState (Empty or full, or if neither faces/silhouettes full or not). */
-    private static final ConcurrentHashMap<BlockState, PassCache> CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<BlockState, PassInfo> CACHE = new ConcurrentHashMap<>();
 
     /**
      * Record to cache whether this BlockState is passable, and if necessary from which directions
-     * If PassCache.type == COLLISION then .face and .axis are guaranteed to be populated
+     * If PassInfo.type == COLLISION then .face and .axis are guaranteed to be populated
      * @param type Whether this BlockState is a full, empty, or a more complex block, or whether it can't be cached and depends on the world state.
-     * @param closedFaces Bitmask representing which incoming directions hit a fully sealed face. This does not include partially sealed faces.
-     * @param closedSilhouettes Bitmask representing which directions present a fully filled silhouette.
+     * @param fullFaces Bitmask representing which incoming directions hit a fully sealed face. This does not include partially sealed faces.
+     * @param fullSilhouettes Bitmask representing which directions present a fully filled silhouette.
      * @param emptyFaces Bitmask representing which incoming directions hit a completely empty face. Only used for passability of blocks like windowpanes. This does not include partially sealed faces.
      */
-    public record PassCache(
+    public record PassInfo(
             PassType type,
-            byte closedFaces,
-            byte closedSilhouettes,
+            byte fullFaces,
+            byte fullSilhouettes,
             byte emptyFaces) {
 
         /**
@@ -226,16 +227,16 @@ public final class PassabilityChecker {
             NO_CACHE
         }
 
-        private static PassCache empty() {
-            return new PassCache(PassType.EMPTY, (byte) 0, (byte) 0, (byte) 0);
+        private static PassInfo empty() {
+            return new PassInfo(PassType.EMPTY, (byte) 0, (byte) 0, (byte) 0);
         }
 
-        private static PassCache full() {
-            return new PassCache(PassType.FULL, (byte) 0, (byte) 0, (byte) 0);
+        private static PassInfo full() {
+            return new PassInfo(PassType.FULL, (byte) 0, (byte) 0, (byte) 0);
         }
 
-        private static PassCache noCache() {
-            return new PassCache(NO_CACHE, (byte) 0, (byte) 0, (byte) 0);
+        private static PassInfo noCache() {
+            return new PassInfo(NO_CACHE, (byte) 0, (byte) 0, (byte) 0);
         }
 
         boolean isFaceEmpty(Direction dir) {
@@ -244,59 +245,58 @@ public final class PassabilityChecker {
 
         /**
          * Bitmask representing which incoming directions hit a face is not completely full.
-         * This is different from closedFaces and from emptyFaces, because it includes partially open faces.
+         * This is different from fullFaces and from emptyFaces, because it includes partially open faces.
          */
         public byte openFaces() {
-            return invertValues(closedFaces);
+            return invertValues(fullFaces);
         }
 
         /**
          * Bitmask representing which incoming directions show a silhouette that is not completely full.
          */
         public byte openSilhouettes() {
-            return invertValues(closedSilhouettes);
+            return invertValues(fullSilhouettes);
         }
     }
 
     /**
-     * Returns the raw cached PassType without resolving NO_CACHE blocks.
-     * Useful for checking if a block has dynamic passability (like airlocks).
+     * Gets the raw passability info for a BlockState.
      */
-    public static PassCache.PassType getCachedPassType(BlockState blockState) {
-        return CACHE.computeIfAbsent(blockState, PassabilityChecker::computePassCache).type();
+    public static PassInfo getCachedPassInfo(BlockState blockState) {
+        return CACHE.computeIfAbsent(blockState, PassabilityChecker::computePassInfo);
     }
 
     /**
-     * Gets the (cached) passability info for a BlockState.
+     * Gets the passability info for a BlockState, computing current state for no_cache blocks
      */
-    public static PassCache getPassCache(Level level, BlockPos pos, BlockState blockState) {
-        PassCache passCache = CACHE.computeIfAbsent(blockState, PassabilityChecker::computePassCache);
-        if (passCache.type == NO_CACHE) {
+    public static PassInfo getPassInfo(Level level, BlockPos pos, BlockState blockState) {
+        PassInfo passInfo = getCachedPassInfo(blockState);
+        if (passInfo.type == NO_CACHE) {
             return computeNoCache(level, pos, blockState);
         }
-        return passCache;
+        return passInfo;
     }
 
     /**
-     * Computes the Passability cache for a block state (called once per unique state).
+     * Computes the Passability info for a block state (called once per unique state).
      */
-    private static PassCache computePassCache(BlockState blockState) {
+    private static PassInfo computePassInfo(BlockState blockState) {
         // Air
         if (blockState.isAir()) {
-            return PassCache.empty();
+            return PassInfo.empty();
         }
 
         // Tagged blocks
         if (blockState.is(TFGTags.Blocks.AtmospherePassable)) {
-            return PassCache.empty();
+            return PassInfo.empty();
         }
         if (blockState.is(TFGTags.Blocks.AtmosphereImpassable)) {
-            return PassCache.full();
+            return PassInfo.full();
         }
 
         // Airlocks
         if (blockState.getBlock() instanceof SlidingDoorBlock) {
-            return PassCache.noCache();
+            return PassInfo.noCache();
         }
 
         // CollisionShape based. Try with null level content to catch uncacheable blocks.
@@ -305,30 +305,31 @@ public final class PassabilityChecker {
             shape = blockState.getCollisionShape(null, BlockPos.ZERO);
         } catch (NullPointerException e) {
             // Block needs level context (e.g. moving piston, shulker box, bellows, GT pipes (though pipes are tagged passable))
-            return PassCache.noCache();
+            return PassInfo.noCache();
         }
 
         return computeFacesAndSilhouettes(shape);
     }
 
     /**
-     * Compute the closed faces and silhouettes of the given shape. This is used for the cache but also during the isPassable check for uncacheable blocks
-     * @param shape The BlockState's current VoxelShape
-     * @return A PassCache object that has data on faces and silhouettes populated
+     * Compute the faces and silhouettes of the given shape. This is used for the cache but also during the isPassable check for uncacheable blocks
+     * @param shape The BlockState's current VoxelShape (collisionshape)
+     * @return A PassInfo object that has data on faces and silhouettes populated
      */
-    private static PassCache computeFacesAndSilhouettes(VoxelShape shape) {
+    private static PassInfo computeFacesAndSilhouettes(VoxelShape shape) {
         // Simple collision shapes
         if (shape.isEmpty()) {
-            return PassCache.empty();
+            return PassInfo.empty();
         }
         if (Block.isShapeFullBlock(shape)) {
-            return PassCache.full();
+            return PassInfo.full();
         }
 
-        byte closedFaces = 0;
+        byte fullFaces = 0;
         byte silhouettes = 0;
         byte emptyFaces = 0;
 
+        // For every axis, compute front and back face, and silhouette
         for (Direction.Axis axis : AXES) {
             Direction positive = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
             Direction negative = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE);
@@ -342,13 +343,13 @@ public final class PassabilityChecker {
             VoxelShape negativeFaceShape = shape.getFaceShape(positive);
 
             if (isFullFace(positiveFaceShape)) {
-                closedFaces |= posByte;
+                fullFaces |= posByte;
             } else if (isEmptyFace(positiveFaceShape)) {
                 emptyFaces |= posByte;
             }
 
             if (isFullFace(negativeFaceShape)) {
-                closedFaces |= negByte;
+                fullFaces |= negByte;
             } else if (isEmptyFace(negativeFaceShape)) {
                 emptyFaces |= negByte;
             }
@@ -360,11 +361,11 @@ public final class PassabilityChecker {
 
         // No full silhouette on any axis (fences, pipes, etc) means it's always passable
         if (silhouettes == 0) {
-            return PassCache.empty();
+            return PassInfo.empty();
         }
 
         // Can't tell with type checks, depends on direction
-        return new PassCache(COLLISION, closedFaces, silhouettes, emptyFaces);
+        return new PassInfo(COLLISION, fullFaces, silhouettes, emptyFaces);
     }
 
     public static boolean isFullFace(VoxelShape faceShape) {
@@ -377,11 +378,13 @@ public final class PassabilityChecker {
 
     private static final double SUBPIXEL_SIZE = (double) 1 / 16;
     private static final double EDGE_OFFSET = SUBPIXEL_SIZE / 2;
+    private static final double NO_RAY_COLLISION = Double.POSITIVE_INFINITY;
 
     /**
      * Checks if a shape creates a filled silhouette in a specific direction.
-     * Uses edge sampling to detect gaps in the projection - if any point on the
-     * perimeter of the perpendicular plane isn't covered by the shape's projection,
+     * Assumes silhouettes can't have holes in them.
+     * Sample along the outside edge to detect gaps in the projection. If any point on the
+     * perimeter of the perpendicular plane isn't covered by the shape's silhouette,
      * air can pass through.
      *
      * @param shape The voxel shape to check
@@ -389,44 +392,23 @@ public final class PassabilityChecker {
      * @return true if the shape has a full silhouette as seen from the given direction
      */
     public static boolean hasFullSilhouette(VoxelShape shape, Direction.Axis axis) {
-        List<AABB> boxes = shape.toAabbs();
-        if (boxes.isEmpty())
+        if (shape.isEmpty())
             return false;
 
-        // Check all points along the 4 edges of the perpendicular plane
+        // shape.min(axis, u, v) raycasts along `axis` at perpendicular coordinates (u, v)
+        //  and returns the coordinate of the first filled voxel, or POSITIVE_INFINITY if empty.
+        // We cast rays along all 4 edges to see if there's any holes anywhere.
         for (double t = EDGE_OFFSET; t < 1.0; t += SUBPIXEL_SIZE) {
-            if (isPointOpen(boxes, axis, EDGE_OFFSET, t)
-                    || isPointOpen(boxes, axis, 1.0 - EDGE_OFFSET, t)
-                    || isPointOpen(boxes, axis, t, EDGE_OFFSET)
-                    || isPointOpen(boxes, axis, t, 1.0 - EDGE_OFFSET)) {
+            // spotless:off
+            if (shape.min(axis, EDGE_OFFSET, t)                       == NO_RAY_COLLISION
+             || shape.min(axis, 1.0 - EDGE_OFFSET, t)   == NO_RAY_COLLISION
+             || shape.min(axis, t, EDGE_OFFSET)                       == NO_RAY_COLLISION
+             || shape.min(axis, t, 1.0 - EDGE_OFFSET) == NO_RAY_COLLISION) {
                 return false;
             }
+            // spotless:on
         }
         return true;
-    }
-
-    /**
-     * Checks if a point (u, v) on the perpendicular plane is covered by no collision box. If that's the case, there's
-     *  a hole in the silhouette through to the other side where air can pass through.
-     */
-    private static boolean isPointOpen(List<AABB> boxes, Direction.Axis axis, double u, double v) {
-        for (AABB box : boxes) {
-            if (boxTouchesPoint(box, axis, u, v)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Checks if a single AABB's projection onto the perpendicular plane covers point (u, v).
-     */
-    private static boolean boxTouchesPoint(AABB box, Direction.Axis axis, double u, double v) {
-        return switch (axis) {
-            case X -> u >= box.minY && u <= box.maxY && v >= box.minZ && v <= box.maxZ;
-            case Y -> u >= box.minX && u <= box.maxX && v >= box.minZ && v <= box.maxZ;
-            case Z -> u >= box.minX && u <= box.maxX && v >= box.minY && v <= box.maxY;
-        };
     }
 
     /**

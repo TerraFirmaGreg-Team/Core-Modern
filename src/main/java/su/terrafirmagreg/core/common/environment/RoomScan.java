@@ -1,7 +1,6 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -10,12 +9,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
 
-import it.unimi.dsi.fastutil.longs.LongIterator;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 /**
  * Represents a scanned room's spatial data and seal status.
- * Created by flood fill analysis, used for atmosphere containment checks.
+ * Created by flood fill analysis, used for environment containment checks.
  *
  * @param interior Set of block positions (as longs) that are passable (air, torches, etc.)
  * @param envelope Set of block positions (as longs) for interior + shell - used for oxygen checks
@@ -29,7 +28,7 @@ public record RoomScan(
         LongOpenHashSet envelope,
         Status status,
         @Nullable BlockPos escapePoint,
-        @Nullable List<BlockPos> escapePath,
+        @Nullable LongArrayList escapePath,
         AABB bounds,
         Set<ChunkPos> touchedChunks) {
 
@@ -56,10 +55,6 @@ public record RoomScan(
             return this == SEALED || this == SAVED_DATA;
         }
 
-        public boolean isComplete() {
-            return this != BLOCK_LIMIT;
-        }
-
         public boolean hasEscape() {
             return this != SEALED && this != BLOCK_LIMIT && this != NULL;
         }
@@ -70,13 +65,6 @@ public record RoomScan(
      */
     public boolean isSealed() {
         return status.isSealed();
-    }
-
-    /**
-     * @return Whether the fill completed (didn't hit block limit)
-     */
-    public boolean isComplete() {
-        return status.isComplete();
     }
 
     /**
@@ -94,24 +82,10 @@ public record RoomScan(
     }
 
     /**
-     * @return Whether this result represents a valid sealed room
-     */
-    public boolean isValidSealedRoom() {
-        return status == Status.SEALED;
-    }
-
-    /**
      * @return Whether there is an escape point (room is breached)
      */
     public boolean hasEscapePoint() {
         return escapePoint != null;
-    }
-
-    /**
-     * @return Whether there is an escape path (only from diagnostic fills)
-     */
-    public boolean hasEscapePath() {
-        return escapePath != null && !escapePath.isEmpty();
     }
 
     /**
@@ -123,48 +97,10 @@ public record RoomScan(
 
     /**
      * Checks if a position is in the envelope (interior + shell).
-     * This is the primary method for atmosphere/oxygen checks.
+     * This is the primary method for environment/oxygen checks.
      */
     public boolean containsEnvelope(BlockPos pos) {
         return envelope.contains(pos.asLong());
-    }
-
-    /**
-     * Checks if a position is in the shell (envelope but not interior).
-     */
-    public boolean containsShell(BlockPos pos) {
-        long posLong = pos.asLong();
-        return envelope.contains(posLong) && !interior.contains(posLong);
-    }
-
-    /**
-     * @return Number of shell blocks (envelope - interior)
-     */
-    public int shellSize() {
-        return envelope.size() - interior.size();
-    }
-
-    /**
-     * Checks if a specific chunk intersects with this room.
-     *
-     * @param chunkPos Chunk position to check
-     * @return true if the chunk is touched by this room
-     */
-    public boolean touchesChunk(ChunkPos chunkPos) {
-        return touchedChunks.contains(chunkPos);
-    }
-
-    /**
-     * Checks if any of the given positions intersect with the envelope.
-     */
-    public boolean containsAnyEnvelope(LongOpenHashSet positions) {
-        LongIterator iter = positions.iterator();
-        while (iter.hasNext()) {
-            if (envelope.contains(iter.nextLong())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

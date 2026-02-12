@@ -9,9 +9,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import su.terrafirmagreg.core.common.atmosphere.AtmosphereSystem;
-import su.terrafirmagreg.core.common.atmosphere.DimensionAtmosphereManager;
-import su.terrafirmagreg.core.common.atmosphere.OxygenProvider;
+import su.terrafirmagreg.core.common.environment.DimEnvManager;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
+import su.terrafirmagreg.core.common.environment.OxygenProvider;
 
 public class OxygenCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -26,13 +26,13 @@ public class OxygenCommand {
     }
 
     private static int checkOxygen(CommandSourceStack source, ServerLevel level, BlockPos pos) {
-        boolean hasOxygen = AtmosphereSystem.hasOxygen(level, pos);
+        boolean hasOxygen = EnvironmentSystem.hasOxygen(level, pos);
 
         source.sendSuccess(() -> Component.literal(String.format(
                 "Oxygen at %s: %s", pos.toShortString(), hasOxygen ? "YES" : "NO")), false);
 
         // Show provider details
-        DimensionAtmosphereManager manager = AtmosphereSystem.getManager(level);
+        DimEnvManager manager = EnvironmentSystem.getManager(level);
         int providerCount = 0;
         for (OxygenProvider provider : manager.getProviders().values()) {
             providerCount++;

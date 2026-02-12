@@ -30,17 +30,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.atmosphere.*;
-import su.terrafirmagreg.core.common.atmosphere.RoomScan.Status;
+import su.terrafirmagreg.core.common.environment.*;
+import su.terrafirmagreg.core.common.environment.RoomScan.Status;
 
 /**
- * Oxygen Distributor machine that maintains a sealed room with breathable atmosphere.
+ * Oxygen Distributor machine that maintains a sealed room with breathable environment.
  * Uses flood fill to detect room boundaries and provides oxygen to all positions within.
  * <p>
  * The actual oxygen data is stored in {@link OxygenProvider} which persists independently
  * of this machine's chunk load state, allowing oxygen queries even when this chunk is unloaded.
  */
-public class OxygenDistributorMachine extends SimpleTieredMachine implements IFloodFillMachine, IAtmosphereMachine {
+public class OxygenDistributorMachine extends SimpleTieredMachine implements IBlockSensitiveMachine, IAtmosphereMachine {
 
     /** The provider that holds our room data and handles oxygen queries */
     @Nullable
@@ -57,7 +57,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
     private boolean dirty;
 
     private ServerLevel level;
-    private DimensionAtmosphereManager manager;
+    private DimEnvManager manager;
 
     @Nullable
     private ChunkPos pendingChunkLoad = null;
@@ -134,7 +134,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         TFGCore.LOGGER.info("validateAsync running, pos={}", getPos());
         int maxBlocks = 1_000_000;
         int maxHorizontalDimension = 128;
-        newRoomScan = FloodFill.fill(level, level, getPos(), maxBlocks, maxHorizontalDimension);
+        newRoomScan = FloodFill.fill(level, getPos(), maxBlocks, maxHorizontalDimension);
     }
 
     /**
@@ -187,15 +187,14 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         // Update provider's room scan and oxygen chunk registry
         manager.updateProvider(provider, oldScan, newScan);
 
-        // Room changed - finish current recipe early so it re-searches with the new room size.
-        // Safe because this recipe type has no outputs, so onRecipeFinish won't produce anything.
-        // It also resets runAttempt/runDelay and re-applies the modifier via alwaysTryModifyRecipe.
+        // Room changed: finish current recipe early so it re-searches with the new room size.
+        // Also resets runAttempt/runDelay recomputes the recipe modifier.
         if (recipeLogic != null) {
             recipeLogic.onRecipeFinish();
         }
 
         // Decompression: sealed → escaped, start event
-        // Skip in dimensions with atmosphere
+        // Skip in dimensions with environment
         if (oldScan.isSealed() && newScan.status().hasEscape() && !manager.getEnvironment().hasAtmosphere()) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
@@ -299,7 +298,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         TFGCore.LOGGER.info("requestValidation, pos={}", getPos());
         setDirty(true);
         //TODO: Set earliest tick interval dependent on current room size
-        AtmosphereSystem.requestValidation(this, calculateEarliestTick(1));
+        EnvironmentSystem.requestValidation(this, calculateEarliestTick(1));
 
         if (provider != null && provider.getRoomScan().status() == Status.ESCAPED_UNLOADED) {
             BlockPos escapePoint = provider.getRoomScan().escapePoint();
@@ -322,7 +321,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IFl
         tickOffset = getPos().hashCode();
 
         level = serverLevel;
-        manager = AtmosphereSystem.getManager(level);
+        manager = EnvironmentSystem.getManager(level);
 
         provider = manager.getOrCreateProvider(getPos());
         provider.attach(this);

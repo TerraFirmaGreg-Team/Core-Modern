@@ -1,6 +1,6 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
-import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.getPassCache;
+import static su.terrafirmagreg.core.common.environment.PassabilityChecker.getPassInfo;
 
 import java.util.*;
 
@@ -18,18 +18,16 @@ import net.minecraftforge.event.level.BlockEvent;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassCache;
-import su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassCache.PassType;
+import su.terrafirmagreg.core.common.environment.PassabilityChecker.PassInfo;
+import su.terrafirmagreg.core.common.environment.PassabilityChecker.PassInfo.PassType;
 
 /**
- * Manages atmosphere providers for a single dimension.
+ * Manages environment providers for a single dimension.
  * Extends SavedData to persist oxygen provider data across world saves.
  */
-public class DimensionAtmosphereManager extends SavedData {
+public class DimEnvManager extends SavedData {
 
-    // TODO: Normalize machine vs provider naming
-    // TODO: Refactor "Atmosphere" to "Environment"
-    // TODO: Rename DimensionAtmosphereManager to something shorter
+    // TODO: Normalize machine vs provider naming?
 
     /** The level this manager is for */
     @Getter
@@ -43,43 +41,45 @@ public class DimensionAtmosphereManager extends SavedData {
     private final Map<BlockPos, OxygenProvider> providers = new HashMap<>();
 
     /** Map of Chunks to Machines that want to be notified of block change events in those chunks */
-    public final MachineRegistry<IFloodFillMachine> blockChangeListeners = new MachineRegistry<>();
+    public final MachineRegistry<IBlockSensitiveMachine> blockChangeListeners = new MachineRegistry<>();
 
     /** Map of Chunks to Machines that want to be notified of chunk loads */
-    public final MachineRegistry<IFloodFillMachine> chunkLoadListeners = new MachineRegistry<>();
+    public final MachineRegistry<IBlockSensitiveMachine> chunkLoadListeners = new MachineRegistry<>();
 
     /** Map of Chunks to OxygenProviders that affect oxygen in those Chunks */
     public final MachineRegistry<OxygenProvider> oxygenProviders = new MachineRegistry<>();
 
     /** Map of Chunks to Machines that affect gravity in those Chunks */
-    public final MachineRegistry<AtmosphereSystem.IGravityProvider> gravityMachines = new MachineRegistry<>();
+    //public final MachineRegistry<EnvironmentSystem.IGravityProvider> gravityMachines = new MachineRegistry<>();
 
     /** Map of Chunks to Machines that affect temperature in those Chunks */
-    public final MachineRegistry<AtmosphereSystem.ITemperatureProvider> temperatureMachines = new MachineRegistry<>();
+    //public final MachineRegistry<EnvironmentSystem.ITemperatureProvider> temperatureMachines = new MachineRegistry<>();
 
     /** Active decompression events in this dimension */
     private final List<DecompressionEvent> activeDecompressions = new ArrayList<>();
 
     // ==================== Construction & SavedData ====================
+
     private static final String DATA_NAME = "tfg_atmosphere_system";
 
-    public DimensionAtmosphereManager(ServerLevel level) {
+    public DimEnvManager(ServerLevel level) {
         this.level = level;
         this.environment = DimensionEnvironment.get(level.dimension());
     }
 
-    /**
-     * Gets or creates the manager for a level via Minecraft's data storage.
-     */
-    public static DimensionAtmosphereManager get(ServerLevel level) {
+    /** Gets or creates the manager for a level via Minecraft's data storage. */
+    public static DimEnvManager get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(
                 tag -> load(level, tag),
-                () -> new DimensionAtmosphereManager(level),
+                () -> new DimEnvManager(level),
                 DATA_NAME);
     }
 
-    private static DimensionAtmosphereManager load(ServerLevel level, CompoundTag tag) {
-        DimensionAtmosphereManager manager = new DimensionAtmosphereManager(level);
+    /**
+     * Load stored providers from SavedData.
+     */
+    private static DimEnvManager load(ServerLevel level, CompoundTag tag) {
+        DimEnvManager manager = new DimEnvManager(level);
 
         ListTag list = tag.getList("providers", Tag.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
@@ -106,7 +106,7 @@ public class DimensionAtmosphereManager extends SavedData {
         ListTag list = new ListTag();
 
         for (OxygenProvider provider : providers.values()) {
-            // Only persist sealed providers
+            // Only persist sealed providers, the rest are irrelevant and will register themselves on chunkload
             if (!provider.getRoomScan().isSealed())
                 continue;
 
@@ -120,7 +120,7 @@ public class DimensionAtmosphereManager extends SavedData {
         }
 
         tag.put("providers", list);
-        TFGCore.LOGGER.debug("Saved {} sealed oxygen providers", list.size());
+        TFGCore.LOGGER.info("Saved {} sealed oxygen providers", list.size());
         return tag;
     }
 
@@ -129,7 +129,7 @@ public class DimensionAtmosphereManager extends SavedData {
     }
 
     /**
-     * @return All oxygen providers in this dimension (for debug/commands)
+     * @return All oxygen providers in this dimension
      */
     public Map<BlockPos, OxygenProvider> getProviders() {
         return Collections.unmodifiableMap(providers);
@@ -225,7 +225,7 @@ public class DimensionAtmosphereManager extends SavedData {
     }
 
     /**
-     * Tick all active decompression events. Called from AtmosphereSystem.onServerTick.
+     * Tick all active decompression events. Called from EnvironmentSystem.onServerTick.
      */
     public void tickDecompressions() {
         activeDecompressions.removeIf(event -> !event.tick(level));
@@ -242,13 +242,13 @@ public class DimensionAtmosphereManager extends SavedData {
     public void onBlockChange(BlockEvent event) {
         BlockPos pos = event.getPos();
         ChunkPos chunkPos = new ChunkPos(pos);
-        Set<IFloodFillMachine> machinesInChunk = blockChangeListeners.get(chunkPos);
+        Set<IBlockSensitiveMachine> machinesInChunk = blockChangeListeners.get(chunkPos);
         if (machinesInChunk == null)
             return;
 
         if (event instanceof BlockEvent.BreakEvent breakEvent) {
             TFGCore.LOGGER.info("breakEvent {}", breakEvent.getState());
-            PassCache before = getPassCache(level, pos, breakEvent.getState());
+            PassInfo before = getPassInfo(level, pos, breakEvent.getState());
             if (before.type() == PassType.EMPTY) {
                 TFGCore.LOGGER.info("Ignored - empty block");
                 return;
@@ -256,8 +256,8 @@ public class DimensionAtmosphereManager extends SavedData {
 
         } else if (event instanceof BlockEvent.EntityPlaceEvent placeEvent) {
             TFGCore.LOGGER.info("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
-            PassCache before = getPassCache(level, pos, placeEvent.getBlockSnapshot().getReplacedBlock());
-            PassCache after = getPassCache(level, pos, placeEvent.getPlacedBlock());
+            PassInfo before = getPassInfo(level, pos, placeEvent.getBlockSnapshot().getReplacedBlock());
+            PassabilityChecker.PassInfo after = getPassInfo(level, pos, placeEvent.getPlacedBlock());
             if (before.equals(after) && before.type() != PassType.NO_CACHE) {
                 TFGCore.LOGGER.info("Ignored - passability unchanged");
                 return;
@@ -265,12 +265,12 @@ public class DimensionAtmosphereManager extends SavedData {
 
         } else if (event instanceof BlockEvent.NeighborNotifyEvent nighEvent) {
             TFGCore.LOGGER.info("neighborNotifyEvent {}", nighEvent.getState());
-            // NO_CACHE blocks (airlocks, pistons, etc.) have dynamic passability — always dispatch
-            if (PassabilityChecker.getCachedPassType(nighEvent.getState()) == PassType.NO_CACHE) {
-                TFGCore.LOGGER.info("Dynamic block (NO_CACHE) - always dispatching");
+            PassabilityChecker.PassInfo passInfo = PassabilityChecker.getCachedPassInfo(nighEvent.getState());
+            // NO_CACHE blocks (airlocks, pistons, etc.) have dynamic passability, always dispatch
+            if (passInfo.type() == PassType.NO_CACHE) {
+                TFGCore.LOGGER.info("Dynamic block (NO_CACHE), always dispatching");
             } else {
-                PassCache current = getPassCache(level, pos, nighEvent.getState());
-                if (current.type() == PassType.EMPTY || current.type() == PassType.FULL) {
+                if (passInfo.type() == PassType.EMPTY || passInfo.type() == PassType.FULL) {
                     TFGCore.LOGGER.info("Ignored - stable block type");
                     return;
                 }
@@ -278,7 +278,7 @@ public class DimensionAtmosphereManager extends SavedData {
         }
 
         TFGCore.LOGGER.info("Dispatching block change to {} machines", machinesInChunk.size());
-        for (IFloodFillMachine machine : machinesInChunk) {
+        for (IBlockSensitiveMachine machine : machinesInChunk) {
             machine.onBlockChange(event);
         }
     }
@@ -290,7 +290,7 @@ public class DimensionAtmosphereManager extends SavedData {
         ChunkPos minChunk = new ChunkPos(min);
         ChunkPos maxChunk = new ChunkPos(max);
 
-        Set<IFloodFillMachine> machinesAffected = new HashSet<>();
+        Set<IBlockSensitiveMachine> machinesAffected = new HashSet<>();
         for (int cx = minChunk.x; cx <= maxChunk.x; cx++) {
             for (int cz = minChunk.z; cz <= maxChunk.z; cz++) {
                 var machinesInChunk = blockChangeListeners.get(new ChunkPos(cx, cz));
@@ -299,7 +299,7 @@ public class DimensionAtmosphereManager extends SavedData {
                 }
             }
         }
-        for (IFloodFillMachine machine : machinesAffected) {
+        for (IBlockSensitiveMachine machine : machinesAffected) {
             machine.onGridSpatialEvent(min, max);
         }
     }
@@ -313,9 +313,9 @@ public class DimensionAtmosphereManager extends SavedData {
      */
     public void onChunkLoad(ChunkPos chunkPos) {
         // Notify machines waiting for this chunk
-        Set<IFloodFillMachine> listeners = chunkLoadListeners.get(chunkPos);
+        Set<IBlockSensitiveMachine> listeners = chunkLoadListeners.get(chunkPos);
         if (listeners != null) {
-            for (IFloodFillMachine machine : listeners) {
+            for (IBlockSensitiveMachine machine : listeners) {
                 machine.onChunkLoad(chunkPos);
             }
         }
@@ -324,35 +324,29 @@ public class DimensionAtmosphereManager extends SavedData {
     }
 
     /**
-     * Defers orphan check to the next tick. By then, machine onLoad() has already fired
-     * and attached to its provider. Any provider still without a machine is orphaned.
+     * Check if any providers in this chunk have lost their machine. This might happen with worldedit.
+     * <p>
+     * The orphan check is deferred to the next tick. By then, machine onLoad() has already fired
+     * and the machine has attached to its provider. Any provider still without a machine is orphaned.
      */
     private void checkOrphanedProviders(ChunkPos chunkPos) {
-        // Check if any providers have machines in this chunk
-        boolean hasProvidersInChunk = false;
-        for (BlockPos machinePos : providers.keySet()) {
-            if (new ChunkPos(machinePos).equals(chunkPos)) {
-                hasProvidersInChunk = true;
-                break;
-            }
-        }
-        if (!hasProvidersInChunk)
+        List<BlockPos> providersInChunk = providers.keySet().stream()
+                .filter(pos -> new ChunkPos(pos).equals(chunkPos))
+                .toList();
+
+        if (providersInChunk.isEmpty())
             return;
 
         level.getServer().tell(new net.minecraft.server.TickTask(
                 level.getServer().getTickCount() + 1,
                 () -> {
                     List<BlockPos> orphaned = new ArrayList<>();
-                    for (var entry : providers.entrySet()) {
-                        BlockPos machinePos = entry.getKey();
-                        if (new ChunkPos(machinePos).equals(chunkPos) && !entry.getValue().isMachineLoaded()) {
-                            orphaned.add(machinePos);
-                            TFGCore.LOGGER.debug("Removing orphaned oxygen provider at {}", machinePos);
+                    for (BlockPos providerPos : providersInChunk) {
+                        OxygenProvider provider = providers.get(providerPos);
+                        if (provider != null && !provider.isMachineLoaded()) {
+                            removeProvider(providerPos);
+                            TFGCore.LOGGER.debug("Removing orphaned oxygen provider at {}", providerPos);
                         }
-                    }
-
-                    for (BlockPos pos : orphaned) {
-                        removeProvider(pos);
                     }
                 }));
     }
@@ -360,7 +354,8 @@ public class DimensionAtmosphereManager extends SavedData {
     // ==================== MachineRegistry ====================
 
     /**
-     * Wrapper around a Map<ChunkPos, Set<T>> that handles adding and removing
+     * Wrapper around a Map<ChunkPos, Set<T>> that handles adding and removing.
+     * Meant for quick lookup of providers and machines based on the ChunkPos.
      */
     public static class MachineRegistry<T> {
         private final Map<ChunkPos, Set<T>> map = new HashMap<>();

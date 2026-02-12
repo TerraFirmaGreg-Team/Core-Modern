@@ -13,8 +13,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import su.terrafirmagreg.core.common.atmosphere.AtmosphereSystem;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 
 /**
  * Recipe condition that requires oxygen adjacency using ad_astra's OxygenApi.
@@ -79,7 +79,7 @@ public class OxygenatedCondition extends RecipeCondition {
 
         BlockPos pos = machine.getPos();
         // Check the machine position directly - envelope includes shell blocks
-        boolean hasOxygen = AtmosphereSystem.hasOxygen(serverLevel, pos);
+        boolean hasOxygen = EnvironmentSystem.hasOxygen(serverLevel, pos);
         boolean passes = isOxygenated == hasOxygen;
         return isReverse != passes;
     }

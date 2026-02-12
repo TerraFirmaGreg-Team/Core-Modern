@@ -9,17 +9,17 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.atmosphere.DiagnosticFloodFill;
-import su.terrafirmagreg.core.common.atmosphere.FloodFill;
-import su.terrafirmagreg.core.common.atmosphere.RoomScan;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.environment.DiagnosticFloodFill;
+import su.terrafirmagreg.core.common.environment.FloodFill;
+import su.terrafirmagreg.core.common.environment.RoomScan;
 
 public class FloodFillCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -69,9 +69,9 @@ public class FloodFillCommand {
         RoomScan result;
         long startTime = System.nanoTime();
         if (diagnostic) {
-            result = DiagnosticFloodFill.fill(level, level, start, maxBlocks, maxHorizontalDistance);
+            result = DiagnosticFloodFill.fill(level, start, maxBlocks, maxHorizontalDistance);
         } else {
-            result = FloodFill.fill(level, level, start, maxBlocks, maxHorizontalDistance);
+            result = FloodFill.fill(level, start, maxBlocks, maxHorizontalDistance);
         }
         long elapsed = System.nanoTime() - startTime;
 
@@ -96,7 +96,7 @@ public class FloodFillCommand {
     }
 
     public static void findUncacheableBlocks() {
-        for (Block block : BuiltInRegistries.BLOCK) {
+        for (Block block : ForgeRegistries.BLOCKS) {
             BlockState state = block.defaultBlockState();
             if (state.is(TFGTags.Blocks.AtmospherePassable) || state.is(TFGTags.Blocks.AtmosphereImpassable)) {
                 continue;
@@ -104,7 +104,7 @@ public class FloodFillCommand {
             try {
                 state.getCollisionShape(null, BlockPos.ZERO);
             } catch (NullPointerException e) {
-                TFGCore.LOGGER.warn("Uncacheable block: {}", BuiltInRegistries.BLOCK.getKey(block));
+                TFGCore.LOGGER.warn("Uncacheable block: {}", ForgeRegistries.BLOCKS.getKey(block));
             }
         }
     }

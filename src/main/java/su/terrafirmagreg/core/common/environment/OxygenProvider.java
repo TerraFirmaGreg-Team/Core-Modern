@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,10 +24,6 @@ public class OxygenProvider {
     @Getter
     private final BlockPos machinePos;
 
-    /**
-     * -- SETTER --
-     *  Updates the room scan data. Called by the machine after validation completes.
-     */
     @Setter
     @Getter
     private RoomScan roomScan = RoomScan.empty();
@@ -45,9 +41,8 @@ public class OxygenProvider {
      * Works even when the machine is unloaded, using cached room data.
      */
     public boolean hasOxygen(BlockPos pos) {
-        // Need sealed room data and either:
-        // - Machine is loaded and working, OR
-        // - Machine is unloaded (we trust cached data)
+        // Need sealed room data and either the machine is loaded and working,
+        //  or the machine is unloaded (TODO: And was working last time it was loaded)
         if (!roomScan.isSealed()) {
             return false;
         }
@@ -57,34 +52,29 @@ public class OxygenProvider {
             return false;
         }
 
-        // Machine is either working or unloaded - trust the cached room data
+        // Machine is either working or unloaded
+        // TODO Maybe cache whether the machine was working when it was last loaded. Cos now it's a bit weird that
+        // TODO  machines that don't even have infra around them count as providing oxygen when unloaded.
+        // TODO  Maybe we cache on unload only? Or just whenever work status changes?
         return roomScan.containsEnvelope(pos);
     }
 
-    /**
-     * @return Whether the machine is currently loaded and attached
-     */
+    /** @return Whether the machine is currently loaded and attached */
     public boolean isMachineLoaded() {
         return attachedMachine != null;
     }
 
-    /**
-     * @return Whether the machine is loaded and actively working
-     */
+    /** @return Whether the machine is loaded and actively working */
     public boolean isMachineWorking() {
         return attachedMachine != null && attachedMachine.isWorking();
     }
 
-    /**
-     * Called when the machine's chunk loads and the machine attaches to this provider.
-     */
+    /** Called when the machine's chunk loads and the machine attaches to this provider. */
     public void attach(IAtmosphereMachine machine) {
         this.attachedMachine = machine;
     }
 
-    /**
-     * Called when the machine's chunk unloads.
-     */
+    /** Called when the machine's chunk unloads. */
     public void detach() {
         this.attachedMachine = null;
     }
@@ -102,17 +92,7 @@ public class OxygenProvider {
         tag.putLong("pos", machinePos.asLong());
 
         if (roomScan.isSealed()) {
-            tag.putInt("status", roomScan.status().ordinal());
             tag.putLongArray("envelope", roomScan.envelope().toLongArray());
-            //
-            //            // Save bounds
-            //            AABB bounds = roomScan.bounds();
-            //            tag.putDouble("minX", bounds.minX);
-            //            tag.putDouble("minY", bounds.minY);
-            //            tag.putDouble("minZ", bounds.minZ);
-            //            tag.putDouble("maxX", bounds.maxX);
-            //            tag.putDouble("maxY", bounds.maxY);
-            //            tag.putDouble("maxZ", bounds.maxZ);
 
             // Save touched chunks
             long[] chunkLongs = roomScan.touchedChunks().stream()
@@ -127,13 +107,7 @@ public class OxygenProvider {
         OxygenProvider provider = new OxygenProvider(pos);
 
         if (tag.contains("status")) {
-            RoomScan.Status status = RoomScan.Status.values()[tag.getInt("status")];
             LongOpenHashSet envelope = new LongOpenHashSet(tag.getLongArray("envelope"));
-            //
-            //            AABB bounds = new AABB(
-            //                    tag.getDouble("minX"), tag.getDouble("minY"), tag.getDouble("minZ"),
-            //                    tag.getDouble("maxX"), tag.getDouble("maxY"), tag.getDouble("maxZ")
-            //            );
 
             Set<ChunkPos> chunks = new HashSet<>();
             for (long chunkLong : tag.getLongArray("chunks")) {
@@ -141,8 +115,8 @@ public class OxygenProvider {
             }
 
             // Reconstruct RoomScan from cached data with SAVED_DATA status
-            // Interior is not persisted - we only need envelope for oxygen queries
-            // On next validation, we'll get the full data
+            // Only reconstructs the envelope and the touched chunks.
+            // On next validation we get the full data
             provider.roomScan = new RoomScan(
                     new LongOpenHashSet(),
                     envelope,

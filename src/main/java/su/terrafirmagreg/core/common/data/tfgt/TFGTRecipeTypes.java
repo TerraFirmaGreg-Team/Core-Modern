@@ -226,6 +226,7 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.FIRE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT);
 
+    // While oxygen distribution recipes are running the room is oxygenated.
     public static final GTRecipeType OXYGEN_DISTRIBUTION = GTRecipeTypes
             .register("oxygen_distribution", GTRecipeTypes.ELECTRIC)
             .setMaxIOSize(0, 0, 1, 0)

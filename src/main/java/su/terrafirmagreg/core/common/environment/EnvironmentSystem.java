@@ -1,12 +1,10 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -28,34 +26,27 @@ import appeng.api.networking.events.GridSpatialEvent;
 import appeng.api.networking.spatial.ISpatialService;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.EnvironmentClientCache;
 
 /**
- * Global singleton managing atmosphere systems across all dimensions.
- * Handles event registration and provides the main API for atmosphere queries.
+ * Global class with static state managing environment systems across all dimensions.
+ * Handles event registration and provides the main API for environment queries.
  */
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
-public final class AtmosphereSystem {
+public final class EnvironmentSystem {
 
     /** Per-dimension managers */
-    private static final Map<ResourceKey<Level>, DimensionAtmosphereManager> managers = new ConcurrentHashMap<>();
+    private static final Map<ResourceKey<Level>, DimEnvManager> managers = new ConcurrentHashMap<>();
 
-    //    /** Whether the system is initialized */
-    //    private static boolean initialized = false;
-
-    private AtmosphereSystem() {
+    private EnvironmentSystem() {
     }
 
     /**
-     * Initializes the atmosphere system and registers event handlers.
+     * Initializes the environment system and registers spatial event handler.
      * Should be called during mod initialization.
      */
     public static void init() {
-        //        if (initialized) {
-        //            return;
-        //        }
-
-        GridHelper.addEventHandler(GridSpatialEvent.class, AtmosphereSystem::onGridSpatialEvent);
-        //        initialized = true;
+        GridHelper.addEventHandler(GridSpatialEvent.class, EnvironmentSystem::onGridSpatialEvent);
         TFGCore.LOGGER.info("Atmosphere system initialized");
     }
 
@@ -65,24 +56,13 @@ public final class AtmosphereSystem {
      * @param level The server level
      * @return The dimension manager
      */
-    public static DimensionAtmosphereManager getManager(ServerLevel level) {
-        return managers.computeIfAbsent(level.dimension(), k -> DimensionAtmosphereManager.get(level));
-    }
-
-    /**
-     * Gets the manager for a dimension without creating it.
-     *
-     * @param dimension The dimension key
-     * @return The manager, or null if none exists
-     */
-    @Nullable
-    public static DimensionAtmosphereManager getManager(ResourceKey<Level> dimension) {
-        return managers.get(dimension);
+    public static DimEnvManager getManager(ServerLevel level) {
+        return managers.computeIfAbsent(level.dimension(), k -> DimEnvManager.get(level));
     }
 
     /**
      * Checks if a position has oxygen (server-side only).
-     * For client-side queries (tooltips), use {@link su.terrafirmagreg.core.client.AtmosphereClientCache#get(BlockPos)}.
+     * For client-side queries (tooltips), use {@link EnvironmentClientCache#get(BlockPos)}.
      *
      * @param level The level to check in
      * @param pos The position to check
@@ -90,33 +70,15 @@ public final class AtmosphereSystem {
      */
     public static boolean hasOxygen(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel)) {
-            return false; // Use su.terrafirmagreg.core.client.AtmosphereClientCache instead
+            return false; // Use su.terrafirmagreg.core.client.EnvironmentClientCache instead
         }
 
-        DimensionAtmosphereManager manager = managers.get(level.dimension());
+        DimEnvManager manager = managers.get(level.dimension());
         if (manager == null) {
             return false;
         }
 
         return manager.hasOxygen(pos);
-    }
-
-    // ==================== Interfaces ========================
-    // TODO: Should this live here??
-    public interface IOxygenProvider extends IAtmosphereMachine {
-        boolean hasOxygen(BlockPos pos);
-    }
-
-    /**
-     * Marker interface for gravity-normalizing bubble providers.
-     */
-    public interface IGravityProvider extends IAtmosphereMachine {
-    }
-
-    /**
-     * Marker interface for temperature-regulating bubble providers.
-     */
-    public interface ITemperatureProvider extends IAtmosphereMachine {
     }
 
     // ==================== Async Handling ====================
@@ -129,22 +91,22 @@ public final class AtmosphereSystem {
     });
 
     public record ValidationJob(
-            IFloodFillMachine machine,
+            IBlockSensitiveMachine machine,
             long earliestTick) {
     }
 
     static PriorityQueue<ValidationJob> validationQueue = new PriorityQueue<>(Comparator.comparingLong(ValidationJob::earliestTick));
-    static Set<IFloodFillMachine> validationRequested = new HashSet<>();
-    static Queue<IFloodFillMachine> doneValidating = new ConcurrentLinkedQueue<>();
+    static Set<IBlockSensitiveMachine> validationRequested = new HashSet<>();
+    static Queue<IBlockSensitiveMachine> doneValidating = new ConcurrentLinkedQueue<>();
 
-    public static void requestValidation(IFloodFillMachine machine, long earliestTick) {
+    public static void requestValidation(IBlockSensitiveMachine machine, long earliestTick) {
         if (!validationRequested.add(machine))
             return;
 
         validationQueue.add(new ValidationJob(machine, earliestTick));
     }
 
-    private static void dispatchValidation(IFloodFillMachine machine) {
+    private static void dispatchValidation(IBlockSensitiveMachine machine) {
         EXECUTOR.submit(() -> {
             try {
                 machine.validateAsync();
@@ -154,17 +116,16 @@ public final class AtmosphereSystem {
             }
         });
 
-        // Mark the room as clean to catch the case where the room is modified during the floodfill.
-        // The floodfill result might be stale before it finishes, in which case we want to run a new floodfill.
+        // Mark the room as clean to catch the case where the room is modified during the flood fill.
         machine.setDirty(false);
     }
 
-    private static void finalizeValidation(IFloodFillMachine machine) {
+    private static void finalizeValidation(IBlockSensitiveMachine machine) {
         validationRequested.remove(machine);
         machine.processValidationResult();
 
-        // If the machine got dirty during the async fill (block changed while we were scanning),
-        // the result we just applied is stale. Re-request validation.
+        // If the machine got dirty during the async fill (block changed while scanning),
+        // the validation result is stale. Re-request validation.
         if (machine.isDirty()) {
             requestValidation(machine, 0);
         }
@@ -189,19 +150,16 @@ public final class AtmosphereSystem {
         if (job != null && job.earliestTick() <= currentTick) {
             validationQueue.poll();
             dispatchValidation(job.machine());
-
         }
 
         // Process finished validation jobs
-        IFloodFillMachine machine;
+        IBlockSensitiveMachine machine;
         while ((machine = doneValidating.poll()) != null) {
             finalizeValidation(machine);
         }
 
         // Tick decompression events in all dimensions
-        for (DimensionAtmosphereManager manager : managers.values()) {
-            manager.tickDecompressions();
-        }
+        managers.values().forEach(DimEnvManager::tickDecompressions);
     }
 
     @SubscribeEvent
@@ -234,7 +192,7 @@ public final class AtmosphereSystem {
             return;
         }
 
-        DimensionAtmosphereManager manager = managers.get(serverLevel.dimension());
+        DimEnvManager manager = managers.get(serverLevel.dimension());
         if (manager != null) {
             manager.onBlockChange(event);
         }
@@ -258,7 +216,7 @@ public final class AtmosphereSystem {
             return;
         }
 
-        DimensionAtmosphereManager manager = managers.get(serverLevel.dimension());
+        DimEnvManager manager = managers.get(serverLevel.dimension());
         if (manager != null) {
             manager.onGridSpatialEvent(spatialService.getMin(), spatialService.getMax());
         }
@@ -270,7 +228,7 @@ public final class AtmosphereSystem {
             return;
         }
 
-        DimensionAtmosphereManager manager = managers.get(serverLevel.dimension());
+        DimEnvManager manager = managers.get(serverLevel.dimension());
         if (manager != null) {
             ChunkPos chunkPos = event.getChunk().getPos();
             manager.onChunkLoad(chunkPos);

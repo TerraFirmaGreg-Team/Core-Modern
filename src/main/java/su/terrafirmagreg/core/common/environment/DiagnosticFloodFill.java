@@ -1,8 +1,8 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
-import static su.terrafirmagreg.core.common.atmosphere.AtmosphereHelpers.*;
-import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.*;
-import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassableResult.*;
+import static su.terrafirmagreg.core.common.environment.FloodFillHelpers.*;
+import static su.terrafirmagreg.core.common.environment.PassabilityChecker.*;
+import static su.terrafirmagreg.core.common.environment.PassabilityChecker.PassableResult.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
@@ -27,10 +26,10 @@ import su.terrafirmagreg.core.TFGCore;
 
 /**
  * Diagnostic version of flood fill that finds the shortest path to the escape point.
- * Uses regular DFS flood fill first, then BFS through the interior to find shortest path.
+ * Uses regular DFS flood fill first, then BFS through the interior with parent tracking to find shortest path.
  *
  * <p>Returns a {@link RoomScan} with the {@code escapePath} field populated.
- * <p>Also handles particle visualization of leak paths via {@link #spawnTrace}.
+ * <p>Handles particle visualization of leak paths via {@link #spawnTrace}.
  */
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class DiagnosticFloodFill {
@@ -46,93 +45,31 @@ public final class DiagnosticFloodFill {
     private DiagnosticFloodFill() {
     }
 
-    // ==================== Leak Trace Visualization ====================
-
-    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END)
-            return;
-        ACTIVE_TRACES.removeIf(ActiveTrace::tick);
-    }
-
-    /**
-     * Spawns a particle trace along the given path.
-     */
-    public static void spawnTrace(ServerLevel level, List<BlockPos> path) {
-        ACTIVE_TRACES.add(new ActiveTrace(level, path));
-    }
-
-    private static class ActiveTrace {
-        private final ServerLevel level;
-        private final List<BlockPos> path;
-        private int index = 0;
-        private int tick = 0;
-        private static final int SEGMENTS_PER_TICK = 1;
-
-        ActiveTrace(ServerLevel level, List<BlockPos> path) {
-            this.level = level;
-            this.path = path;
-        }
-
-        boolean tick() {
-            int spawned = 0;
-            while (spawned < SEGMENTS_PER_TICK && index < path.size() - 1) {
-                spawnSegment(index);
-                spawned++;
-            }
-            if (tick++ % 3 == 0)
-                index++;
-            return index >= path.size() - 3;
-        }
-
-        private void spawnSegment(int i) {
-            for (int j = i; j < i + 3 && j < path.size() - 1; j++) {
-                BlockPos a = path.get(j);
-                BlockPos b = path.get(j + 1);
-
-                Vec3 from = Vec3.atCenterOf(a);
-                Vec3 to = Vec3.atCenterOf(b);
-                Vec3 dir = to.subtract(from).normalize();
-
-                level.sendParticles(
-                        ParticleTypes.CLOUD,
-                        from.x, from.y, from.z,
-                        3,
-                        dir.x * 0.15,
-                        dir.y * 0.15,
-                        dir.z * 0.15,
-                        0);
-            }
-        }
-    }
-
     // ==================== Diagnostic Flood Fill ====================
 
     /**
-     * Performs a diagnostic flood fill with shortest path tracking.
+     * Perform a diagnostic flood fill with shortest path tracking.
      *
      * <p>First runs regular DFS to find the room and escape point, then uses BFS
-     * through the interior blocks to find the shortest path to the escape.
+     * through the interior blocks with parent tracking to find the shortest path to the escape.
      *
-     * @param level Block getter
-     * @param heightAccessor Height accessor for build height limits
-     * @param start Starting position
-     * @param maxBlocks Maximum number of interior blocks we should find
+     * @param level                  Level object for BlockStates and build height
+     * @param start                  Starting position
+     * @param maxBlocks              Maximum number of interior blocks we should find
      * @param maxHorizontalDimension Maximum horizontal distance this room can span, including walls (make sure it's in render distance)
      * @return RoomScan with escapePath populated if there's an escape
      */
-    public static RoomScan fill(Level level, LevelHeightAccessor heightAccessor,
-            BlockPos start, int maxBlocks, int maxHorizontalDimension) {
+    public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
         // Run regular flood fill to find the room and escape point
-        RoomScan result = FloodFill.fill(level, heightAccessor, start, maxBlocks, maxHorizontalDimension);
+        RoomScan result = FloodFill.fill(level, start, maxBlocks, maxHorizontalDimension);
 
         // If no escape point, return as-is (sealed room or block limit)
         if (result.escapePoint() == null) {
             return result;
         }
 
-        // Find shortest path through interior using BFS with direction-aware passability
-        List<BlockPos> shortestPath = findShortestPath(
+        // Find shortest path through interior using BFS
+        LongArrayList shortestPath = findShortestPath(
                 level,
                 result.interior(),
                 start.asLong(),
@@ -151,12 +88,11 @@ public final class DiagnosticFloodFill {
 
     /**
      * Finds the shortest path from start to escape through interior blocks using BFS.
-     * Uses direction-aware passability checks to ensure the path is actually traversable.
      *
      * <p>The parentDir map tracks visited blocks and stores the direction we successfully entered from.
      */
     // TODO: This should be A* from both sides instead of BFS
-    private static List<BlockPos> findShortestPath(Level level, LongOpenHashSet interior, long startLong, long escapeLong) {
+    private static LongArrayList findShortestPath(Level level, LongOpenHashSet interior, long startLong, long escapeLong) {
         Long2ByteOpenHashMap parentDir = new Long2ByteOpenHashMap();
         parentDir.defaultReturnValue(NO_PARENT);
 
@@ -166,6 +102,10 @@ public final class DiagnosticFloodFill {
 
         queue.add(new QueueEntry(startLong, ORIGIN));
 
+        // The actual algorithm for this is very similar to the DFS flood fill, but it's different enough that it's
+        //  hard to prevent code duplication.
+        // Since we want the shortest path, we can't check a block for passability from multiple directions at once
+        //  because then we don't know if it succeeded. This makes the algo slower.
         while (!queue.isEmpty()) {
             QueueEntry entry = queue.poll();
             long posLong = entry.pos();
@@ -187,12 +127,12 @@ public final class DiagnosticFloodFill {
 
             pos.set(posLong);
             BlockState blockState = level.getBlockState(pos);
-            PassCache passCache = getPassCache(level, pos, blockState);
+            PassInfo passInfo = getPassInfo(level, pos, blockState);
 
-            PassableResult result = switch (passCache.type()) {
+            PassableResult result = switch (passInfo.type()) {
                 case EMPTY -> PassableResult.EMPTY;
                 case FULL -> PassableResult.FULL;
-                case COLLISION -> isPassableFromDirections(level, pos, passCache, approachDir);
+                case COLLISION -> isPassableFromDirections(level, pos, passInfo, approachDir);
                 default -> ALREADY_CHECKED;
             };
 
@@ -209,17 +149,19 @@ public final class DiagnosticFloodFill {
                     break;
                 case OPEN_SILHOUETTE:
                 case PASSABLE_WINDOW_PANE:
-                    neighbors = mirrorDirs(passCache.openFaces());
+                    neighbors = mirrorDirs(passInfo.openFaces());
                     break;
 
                 default:
                     continue;
             }
 
-            // Successfully entered - mark visited with the direction we came from
+            // Track parent
             parentDir.put(posLong, approachDir);
 
-            // Queue neighbors with their approach directions
+            // Queue neighbors with approach directions
+            // Queue in random order to make the path more interesting.
+            //  Will still get a shortest path but there's multiple options in Manhattan.
             forEachDirRandomly(neighbors, random, neighborDirInt -> {
                 long neighborLong = relativeLong(posLong, neighborDirInt);
                 if (!parentDir.containsKey(neighborLong)) {
@@ -228,32 +170,94 @@ public final class DiagnosticFloodFill {
             });
         }
 
-        // No path found (shouldn't happen if escape point is reachable)
-        return List.of();
+        // No path found. Maybe the world changed in the meantime?
+        return LongArrayList.of();
     }
 
     /**
      * Reconstructs the path from end to start using the parent direction map, then reverses it.
      */
-    private static List<BlockPos> reconstructPath(Long2ByteOpenHashMap parentDir, long endLong) {
-        LongArrayList pathLongs = new LongArrayList();
-        long currentLong = endLong;
-        pathLongs.add(currentLong);
+    private static LongArrayList reconstructPath(Long2ByteOpenHashMap parentDir, long endLong) {
+        LongArrayList path = new LongArrayList();
+        long cur = endLong;
+        path.add(cur);
 
-        byte dir = parentDir.get(currentLong);
+        byte dir = parentDir.get(cur);
+        // Walk backwards from the end
         while (dir != ORIGIN) {
-            // Direction stored is how we entered; mirror to get direction back to parent
-            currentLong = relativeLong(currentLong, mirrorDirs(dir));
-            pathLongs.add(currentLong);
-            dir = parentDir.get(currentLong);
+            cur = relativeLong(cur, mirrorDirs(dir));
+            path.add(cur);
+            dir = parentDir.get(cur);
         }
 
-        // Reverse to get start-to-end order
-        List<BlockPos> path = new ArrayList<>(pathLongs.size());
-        for (int i = pathLongs.size() - 1; i >= 0; i--) {
-            path.add(BlockPos.of(pathLongs.getLong(i)));
+        // Reverse in place
+        long[] a = path.elements();
+        for (int lo = 0, hi = path.size() - 1; lo < hi; lo++, hi--) {
+            long tmp = a[lo];
+            a[lo] = a[hi];
+            a[hi] = tmp;
         }
 
         return path;
+    }
+
+    // ==================== Leak Trace Visualization ====================
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END)
+            return;
+        ACTIVE_TRACES.removeIf(ActiveTrace::tick);
+    }
+
+    /**
+     * Spawns a particle trace along the given path.
+     */
+    public static void spawnTrace(ServerLevel level, LongArrayList path) {
+        ACTIVE_TRACES.add(new ActiveTrace(level, path));
+    }
+
+    private static class ActiveTrace {
+        private final ServerLevel level;
+        private final LongArrayList path;
+        private int index = 0;
+        private int tick = 0;
+        private static final int SEGMENTS_PER_TICK = 1;
+
+        ActiveTrace(ServerLevel level, LongArrayList path) {
+            this.level = level;
+            this.path = path;
+        }
+
+        boolean tick() {
+            int spawned = 0;
+            while (spawned < SEGMENTS_PER_TICK && index < path.size() - 1) {
+                spawnSegment(index);
+                spawned++;
+            }
+            if (tick++ % 3 == 0)
+                index++;
+            return index >= path.size() - 3;
+        }
+
+        private void spawnSegment(int i) {
+            for (int j = i; j < i + 3 && j < path.size() - 1; j++) {
+                BlockPos a = BlockPos.of(path.getLong(j));
+                BlockPos b = BlockPos.of(path.getLong(j + 1));
+
+                Vec3 from = Vec3.atCenterOf(a);
+                Vec3 to = Vec3.atCenterOf(b);
+                Vec3 dir = to.subtract(from).normalize();
+
+                level.sendParticles(
+                        ParticleTypes.CLOUD,
+                        from.x, from.y, from.z,
+                        3,
+                        dir.x * 0.15,
+                        dir.y * 0.15,
+                        dir.z * 0.15,
+                        0);
+            }
+        }
     }
 }

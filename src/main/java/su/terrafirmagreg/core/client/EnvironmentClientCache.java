@@ -13,8 +13,8 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 //  1. Change the record fields - just change boolean to float
 //  2. Update the packet encoding - replace the byte packing with actual float writes:
 //
-//// In AtmosphereResponsePacket
-//public static void encode(AtmosphereResponsePacket pkt, FriendlyByteBuf buf) {
+//// In EnvironmentResponsePacket
+//public static void encode(EnvironmentResponsePacket pkt, FriendlyByteBuf buf) {
 //    buf.writeBlockPos(pkt.pos);
 //    buf.writeFloat(pkt.state.oxygen());
 //    buf.writeFloat(pkt.state.gravity());
@@ -22,29 +22,29 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 //    buf.writeFloat(pkt.state.pressure());
 //}
 //
-//public static AtmosphereResponsePacket decode(FriendlyByteBuf buf) {
-//    return new AtmosphereResponsePacket(
+//public static EnvironmentResponsePacket decode(FriendlyByteBuf buf) {
+//    return new EnvironmentResponsePacket(
 //            buf.readBlockPos(),
-//            new AtmosphereState(
+//            new EnvironmentState(
 //                    buf.readFloat(),
 //                    buf.readFloat(),
 //                    buf.readFloat(),
 //                    buf.readFloat()));
 //}
 //
-//  3. Update the server-side query in AtmosphereQueryPacket to compute floats instead of booleans
+//  3. Update the server-side query in EnvironmentQueryPacket to compute floats instead of booleans
 //  4. Remove toByte()/fromByte() - they don't make sense for floats
 
 /**
- * Client-side cache for atmosphere query results.
+ * Client-side cache for environment query results.
  * Used for tooltips and other client-side display.
  */
-public final class AtmosphereClientCache {
+public final class EnvironmentClientCache {
 
     /**
      * Atmosphere state at a position.
      */
-    public record AtmosphereState(
+    public record EnvironmentState(
             boolean hasOxygen,
             boolean hasNormalGravity,
             boolean hasNormalTemperature,
@@ -65,8 +65,8 @@ public final class AtmosphereClientCache {
         }
 
         /** Decodes from a byte. */
-        public static AtmosphereState fromByte(byte flags) {
-            return new AtmosphereState(
+        public static EnvironmentState fromByte(byte flags) {
+            return new EnvironmentState(
                     (flags & 0x01) != 0,
                     (flags & 0x02) != 0,
                     (flags & 0x04) != 0,
@@ -74,7 +74,7 @@ public final class AtmosphereClientCache {
         }
     }
 
-    private static final Long2ObjectOpenHashMap<AtmosphereState> cache = new Long2ObjectOpenHashMap<>();
+    private static final Long2ObjectOpenHashMap<EnvironmentState> cache = new Long2ObjectOpenHashMap<>();
     private static final LongOpenHashSet pending = new LongOpenHashSet();
 
     /** Cache entries expire after this many ticks (5 seconds) */
@@ -83,22 +83,22 @@ public final class AtmosphereClientCache {
     /** Tick when the cache was last cleared */
     private static long lastClearTick = 0;
 
-    private AtmosphereClientCache() {
+    private EnvironmentClientCache() {
     }
 
     /**
-     * Queries the atmosphere state at a position.
+     * Queries the environment state at a position.
      * Returns cached value if available, otherwise sends a request to the server.
      *
      * @param pos The position to check
-     * @return The atmosphere state, or null if query is pending
+     * @return The environment state, or null if query is pending
      */
     @Nullable
-    public static AtmosphereState get(BlockPos pos) {
+    public static EnvironmentState get(BlockPos pos) {
         long posLong = pos.asLong();
 
         // Check cache first
-        AtmosphereState cached = cache.get(posLong);
+        EnvironmentState cached = cache.get(posLong);
         if (cached != null) {
             return cached;
         }
@@ -117,9 +117,9 @@ public final class AtmosphereClientCache {
      * Called when we receive a response from the server.
      *
      * @param pos The position that was queried
-     * @param state The atmosphere state at that position
+     * @param state The environment state at that position
      */
-    public static void receive(BlockPos pos, AtmosphereState state) {
+    public static void receive(BlockPos pos, EnvironmentState state) {
         long posLong = pos.asLong();
         cache.put(posLong, state);
         pending.remove(posLong);

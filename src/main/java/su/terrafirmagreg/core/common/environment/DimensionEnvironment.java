@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +10,11 @@ import earth.terrarium.adastra.api.planets.Planet;
 
 /**
  * Defines the natural environmental properties of a dimension.
- * Used to determine baseline oxygen, gravity, temperature, and atmosphere
+ * Used to determine baseline oxygen, gravity, temperature, and environment
  * before checking machine-provided sources.
  */
+// TODO This should probably be floats or something instead of booleans, I'll fix it once I start implementing
+//  gravity and temperature stuff.
 public record DimensionEnvironment(
         boolean hasOxygen,
         boolean hasNormalGravity,
@@ -26,14 +28,14 @@ public record DimensionEnvironment(
 
     static {
         // Earth-like dimensions
-        REGISTRY.put(Level.OVERWORLD, EARTH_LIKE);
+        // Fixme temp for testing Overworld earthlike
+        REGISTRY.put(Level.OVERWORLD, VACUUM);
+        //REGISTRY.put(Level.OVERWORLD, EARTH_LIKE);
         REGISTRY.put(Level.NETHER, EARTH_LIKE);
-        REGISTRY.put(Level.END, EARTH_LIKE);
 
-        // Vacuum dimensions (no oxygen, no gravity, no temperature, no atmosphere)
         REGISTRY.put(Planet.MOON, VACUUM);
-        REGISTRY.put(Planet.MARS, VACUUM);
-        REGISTRY.put(Planet.VENUS, VACUUM);
+        REGISTRY.put(Planet.MARS, new DimensionEnvironment(false, false, false, false));
+        REGISTRY.put(Planet.VENUS, new DimensionEnvironment(false, true, true, true));
         REGISTRY.put(Planet.MERCURY, VACUUM);
         REGISTRY.put(Planet.GLACIO, VACUUM);
 

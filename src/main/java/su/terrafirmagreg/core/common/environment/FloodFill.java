@@ -1,7 +1,7 @@
-package su.terrafirmagreg.core.common.atmosphere;
+package su.terrafirmagreg.core.common.environment;
 
-import static su.terrafirmagreg.core.common.atmosphere.AtmosphereHelpers.*;
-import static su.terrafirmagreg.core.common.atmosphere.PassabilityChecker.PassableResult;
+import static su.terrafirmagreg.core.common.environment.FloodFillHelpers.*;
+import static su.terrafirmagreg.core.common.environment.PassabilityChecker.PassableResult;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -20,7 +19,7 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 /**
- * Flood fill algorithm for atmosphere room detection.
+ * Flood fill algorithm for environment room detection.
  * Uses DFS with UP-first direction order for fast escape detection.
  */
 public class FloodFill {
@@ -31,15 +30,13 @@ public class FloodFill {
     /**
      * Performs a DFS flood fill starting from the given position.
      *
-     * @param level Block getter (should be a Level or ChunkAccess)
-     * @param heightAccessor Height accessor for build height limits
-     * @param start Starting position (typically one block from machine)
-     * @param maxBlocks Maximum number of interior blocks we should find
+     * @param level                  Block getter (should be a Level or ChunkAccess)
+     * @param start                  Starting position (typically one block from machine)
+     * @param maxBlocks              Maximum number of interior blocks we should find
      * @param maxHorizontalDimension Maximum horizontal distance this room can span, including walls (make sure it's in render distance)
      * @return RoomScan containing the room data
      */
-    public static RoomScan fill(Level level, LevelHeightAccessor heightAccessor,
-            BlockPos start, int maxBlocks, int maxHorizontalDimension) {
+    public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
         State state = new State();
 
         // Init
@@ -61,13 +58,14 @@ public class FloodFill {
 
             pos.set(posLong);
 
-            if (!state.updateAndCheckBounds(level, heightAccessor, pos, maxHorizontalDimension)) {
+            if (!state.updateAndCheckBounds(level, pos, maxHorizontalDimension)) {
                 return buildResult(state);
             }
 
             BlockState blockState = level.getBlockState(pos);
 
-            PassableResult result = PassabilityChecker.isPassable(level, pos, posLong, blockState, state);
+            PassableResult result = PassabilityChecker.isPassable(level, pos, posLong, blockState, state.visitDirections);
+            // Read PassableResult javadocs for more info
             switch (result) {
                 case EMPTY:
                     state.addInteriorBlock(posLong);
@@ -107,15 +105,14 @@ public class FloodFill {
         return buildResult(state);
     }
 
+    /** Add only the neighbors to the stack in directions where the outgoing face is not completely closed. */
     private static void queueAccessibleNeighbors(Level level, State state, BlockPos currentPos, long currentPosLong, BlockState blockState) {
-        byte openFacesInward = PassabilityChecker.getPassCache(level, currentPos, blockState).openFaces();
+        byte openFacesInward = PassabilityChecker.getPassInfo(level, currentPos, blockState).openFaces();
         byte openFacesOutward = mirrorDirs(openFacesInward);
         queueNeighbors(level, state, currentPos, currentPosLong, openFacesOutward);
     }
 
-    /**
-     * Add neighbors of the current block to the stack.
-     */
+    /** Add neighbors of the current block to the stack. */
     private static void queueNeighbors(Level level, State state, BlockPos currentPos, long currentPosLong, byte neighbors) {
         // Filter out the directions we came from to get to the current block
         byte visitDirections = state.visitDirections.get(currentPosLong);
@@ -130,9 +127,7 @@ public class FloodFill {
         }
     }
 
-    /**
-     * Builds the final result from the current state.
-     */
+    /** Build the final result from the current state. */
     private static RoomScan buildResult(State state) {
         state.envelope.addAll(state.pendingShell);
         state.pendingShell.clear();
@@ -160,10 +155,7 @@ public class FloodFill {
                 state.touchedChunks);
     }
 
-    /**
-     * Mutable state during a flood fill operation.
-     * Tracks interior blocks, shell blocks, escape point, and bounds.
-     */
+    /** Mutable state during a flood fill operation. */
     static class State {
         /** Interior blocks (passable blocks that are part of the room) */
         final LongOpenHashSet interior = new LongOpenHashSet();
@@ -171,21 +163,24 @@ public class FloodFill {
         /** Union of walls and interior blocks, represents the entire room */
         final LongOpenHashSet envelope = new LongOpenHashSet();
 
-        /** DFS frontier stack */
+        /** DFS frontier stack, aka blocks waiting to be processed */
         final LongArrayList frontier = new LongArrayList();
 
         /**
          * Direction-aware visited tracking for partial blocks.
-         * Maps position (packed long) to a bitmask of checked directions.
+         * Maps position to a bitmask of checked directions.
          */
         final Long2ByteOpenHashMap visitDirections = new Long2ByteOpenHashMap();
 
         /**
-         * Blocks that are partially passable - visited from a blocked direction,
-         * but might still be visited from an open direction. Any blocks still here
-         * at the end of the flood fill become part of the shell.
+         * Partially passable blocks that have been visited from a closed direction, so they might be wall.
+         * But they might still be visited from a different, open direction, and be interior instead.
+         * Any blocks still here at the end of the flood fill become part of the wall.
          */
         final LongOpenHashSet pendingShell = new LongOpenHashSet();
+
+        /** Chunks that we've reached during the fill. */
+        Set<ChunkPos> touchedChunks = new HashSet<>();
 
         /** Position where the DFS reaches a termination condition */
         @Nullable
@@ -199,8 +194,6 @@ public class FloodFill {
         int maxY = Integer.MIN_VALUE;
         int maxZ = Integer.MIN_VALUE;
 
-        Set<ChunkPos> touchedChunks = new HashSet<>();
-
         // Termination flags
         boolean hitBlockLimit = false;
         boolean hitDimensionLimit = false;
@@ -211,8 +204,13 @@ public class FloodFill {
             visitDirections.defaultReturnValue((byte) 0);
         }
 
+        /**
+         * Add another direction from which we're visiting this block.
+         * Note that this is not guaranteed to contain all visit directions,
+         *  as this can get wiped when a block gets processed to prevent redundant checking.
+         */
         void markVisitDirection(long posLong, int dirInt) {
-            visitDirections.merge(posLong, int2byte(dirInt), AtmosphereHelpers::unionDirs);
+            visitDirections.merge(posLong, int2byte(dirInt), FloodFillHelpers::unionDirs);
         }
 
         AABB getBounds() {
@@ -226,7 +224,7 @@ public class FloodFill {
          * Updates bounds to include the given position.
          * @return whether the position got processed without crossing any limits.
          */
-        boolean updateAndCheckBounds(Level level, LevelHeightAccessor heightAccessor, BlockPos pos, int maxHorizontalDimension) {
+        boolean updateAndCheckBounds(Level level, BlockPos pos, int maxHorizontalDimension) {
             touchedChunks.add(new ChunkPos(pos));
 
             if (pos.getX() < minX || pos.getX() > maxX || pos.getZ() < minZ || pos.getZ() > maxZ) {
@@ -254,7 +252,7 @@ public class FloodFill {
                 minY = Math.min(minY, pos.getY());
                 maxY = Math.max(maxY, pos.getY());
 
-                if (heightAccessor.isOutsideBuildHeight(pos.getY())) {
+                if (level.isOutsideBuildHeight(pos.getY())) {
                     hitBuildHeight = true;
                     escapePoint = pos.immutable();
                     return false;
@@ -264,6 +262,7 @@ public class FloodFill {
             return true;
         }
 
+        /** Interior blocks are also inside the envelope (full room) */
         void addInteriorBlock(long posLong) {
             interior.add(posLong);
             envelope.add(posLong);
