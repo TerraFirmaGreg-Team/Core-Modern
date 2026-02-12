@@ -5,9 +5,9 @@ import static su.terrafirmagreg.core.common.environment.PassabilityChecker.*;
 import static su.terrafirmagreg.core.common.environment.PassabilityChecker.PassableResult.*;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
@@ -36,7 +36,7 @@ public final class DiagnosticFloodFill {
 
     private static final byte NO_PARENT = 0;
     private static final byte ORIGIN = ALL_DIRECTIONS;
-    private static final List<ActiveTrace> ACTIVE_TRACES = new ArrayList<>();
+    private static final List<ActiveTrace> ACTIVE_TRACES = new CopyOnWriteArrayList<>();
 
     /** Queue entry containing position and approach direction. */
     private record QueueEntry(long pos, byte dir) {
@@ -100,7 +100,8 @@ public final class DiagnosticFloodFill {
         MutableBlockPos pos = new MutableBlockPos();
         Random random = new Random();
 
-        queue.add(new QueueEntry(startLong, ORIGIN));
+        parentDir.put(startLong, ORIGIN);
+        queueNeighborsRandomly(startLong, parentDir, ALL_DIRECTIONS, queue, random);
 
         // The actual algorithm for this is very similar to the DFS flood fill, but it's different enough that it's
         //  hard to prevent code duplication.
@@ -159,19 +160,25 @@ public final class DiagnosticFloodFill {
             // Track parent
             parentDir.put(posLong, approachDir);
 
-            // Queue neighbors with approach directions
-            // Queue in random order to make the path more interesting.
-            //  Will still get a shortest path but there's multiple options in Manhattan.
-            forEachDirRandomly(neighbors, random, neighborDirInt -> {
-                long neighborLong = relativeLong(posLong, neighborDirInt);
-                if (!parentDir.containsKey(neighborLong)) {
-                    queue.add(new QueueEntry(neighborLong, int2byte(neighborDirInt)));
-                }
-            });
+            queueNeighborsRandomly(posLong, parentDir, neighbors, queue, random);
         }
 
         // No path found. Maybe the world changed in the meantime?
         return LongArrayList.of();
+    }
+
+    /**
+     * Queue in random order to make the path more interesting.
+     *  Will still get a shortest path but there's multiple options in Manhattan.
+     */
+    static private void queueNeighborsRandomly(long current, Long2ByteOpenHashMap parentDir, byte neighbors,
+            ArrayDeque<QueueEntry> queue, Random random) {
+        forEachDirRandomly(neighbors, random, neighborDirInt -> {
+            long neighborLong = relativeLong(current, neighborDirInt);
+            if (!parentDir.containsKey(neighborLong)) {
+                queue.add(new QueueEntry(neighborLong, int2byte(neighborDirInt)));
+            }
+        });
     }
 
     /**
