@@ -77,7 +77,6 @@ public class CommonProxy {
 
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
-        bus.addGenericListener(GTItems.class, this::registerGTItems);
         bus.addGenericListener(RecipeConditionType.class, this::registerRecipeConditions);
 
         AdAstraCompat.RegisterEvents();
@@ -121,10 +120,6 @@ public class CommonProxy {
 
     public void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
         TFGTRecipeTypes.init();
-    }
-
-    public void registerGTItems(GTCEuAPI.RegisterEvent<ResourceLocation, GTItems> event) {
-        TFGTItems.init();
     }
 
     public void registerRecipeConditions(GTCEuAPI.RegisterEvent<ResourceLocation, RecipeConditionType<?>> event) {

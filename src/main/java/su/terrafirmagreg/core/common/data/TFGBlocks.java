@@ -232,20 +232,9 @@ public final class TFGBlocks {
 
     public static final BlockEntry<IcicleBlock> MARS_ICICLE = TFGCore.REGISTRATE.block("mars_icicle", IcicleBlock::new)
             .initialProperties(TFCBlocks.ICICLE::get)
-            .blockstate((ctx, prov) -> {
-                var main = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/thin_spike"))
-                        .texture("0", TFGCore.id("block/mars_ice"))
-                        .texture("particle", TFGCore.id("block/mars_ice"));
-                var tip = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/thin_spike_tip"))
-                        .texture("0", TFGCore.id("block/mars_ice"))
-                        .texture("particle", TFGCore.id("block/mars_ice"));
-
-                prov.getVariantBuilder(ctx.getEntry()).partialState().with(TFCBlockStateProperties.TIP, false).modelForState().modelFile(main).addModel()
-                        .partialState().with(TFCBlockStateProperties.TIP, true).modelForState().modelFile(tip).addModel();
-            })
-            .item(BlockItem::new)
-            .model((ctx, prov) -> prov.generated(ctx::getEntry, ResourceLocation.fromNamespaceAndPath("tfc", "item/icicle"))).build()
-            .register();
+            .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build().register();
 
     public static final BlockEntry<DryIceBlock> DRY_ICE = TFGCore.REGISTRATE.block("dry_ice", DryIceBlock::new)
             .initialProperties(() -> Blocks.ICE)
