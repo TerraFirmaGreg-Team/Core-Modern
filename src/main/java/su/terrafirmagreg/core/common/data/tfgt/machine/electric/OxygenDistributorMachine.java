@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.OptionalLong;
 import java.util.Set;
 
@@ -8,6 +9,11 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.google.common.collect.Tables;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
@@ -15,8 +21,18 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.api.recipe.ui.GTRecipeTypeUI;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
+import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.SlotWidget;
+import com.lowdragmc.lowdraglib.gui.widget.Widget;
+import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.lowdragmc.lowdraglib.utils.Position;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -65,6 +81,10 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     /** Active decompression event for this machine's room, if any */
     @Nullable
     private DecompressionEvent activeDecompression = null;
+
+    /** Tick count of last breach trace request, for cooldown */
+    private long lastTraceRequestTick = 0;
+    private static final int TRACE_COOLDOWN_TICKS = 100;
 
     public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction) {
         super(holder, tier, tankScalingFunction);
@@ -119,6 +139,123 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     @Override
     public boolean regressWhenWaiting() {
         return false;
+    }
+
+    //////////////////////////////////////
+    // ************* GUI ************** //
+    //////////////////////////////////////
+
+    @Override
+    public Widget createUIWidget() {
+        var recipeEditableUI = getRecipeType().getRecipeUI().createEditableUITemplate(false, false);
+        WidgetGroup recipeTemplate = recipeEditableUI.createDefault();
+        SlotWidget batterySlot = createBatterySlot().createDefault();
+
+        // Status panel on the left, recipe on the right
+        int panelWidth = 108;
+        int recipeWidth = recipeTemplate.getSize().width;
+        int totalWidth = panelWidth + recipeWidth + 4;
+        int totalHeight = Math.max(recipeTemplate.getSize().height, 78);
+
+        var group = new WidgetGroup(0, 0, totalWidth, totalHeight);
+
+        // Status text panel
+        group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
+                .textSupplier(this.getLevel().isClientSide ? null : this::addStatusText)
+                .setMaxWidthLimit(panelWidth - 8));
+
+        // "Find Leak" button — bottom-left
+        group.addWidget(new ButtonWidget(4, totalHeight - 22, panelWidth - 8, 18,
+                GuiTextures.BUTTON, cd -> {
+                    if (!cd.isRemote) {
+                        requestBreachTrace();
+                    }
+                }) {
+            @Override
+            public void drawInBackground(@NotNull net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+                setVisible(true);
+                super.drawInBackground(graphics, mouseX, mouseY, partialTicks);
+            }
+        }.setHoverTooltips("tfg.machine.oxygen_distributor.find_leak"));
+
+        // Recipe template on the right (progress bar + fluid slot)
+        recipeTemplate.setSelfPosition(new Position(panelWidth, (totalHeight - recipeTemplate.getSize().height) / 2));
+        group.addWidget(recipeTemplate);
+
+        // Battery slot at bottom-right
+        batterySlot.setSelfPosition(new Position(panelWidth + recipeWidth / 2 - 9, totalHeight - 18));
+        group.addWidget(batterySlot);
+
+        // Bind recipe fluid slots and battery
+        var storages = Tables.newCustomTable(new java.util.EnumMap<>(IO.class),
+                java.util.LinkedHashMap<RecipeCapability<?>, Object>::new);
+        storages.put(IO.IN, FluidRecipeCapability.CAP, importFluids);
+
+        recipeEditableUI.setupUI(recipeTemplate,
+                new GTRecipeTypeUI.RecipeHolder(recipeLogic::getProgressPercent,
+                        storages, new net.minecraft.nbt.CompoundTag(),
+                        java.util.Collections.emptyList(), false, false));
+        createBatterySlot().setupUI(group, this);
+
+        return group;
+    }
+
+    private boolean shouldShowTraceButton() {
+        RoomScan scan = getRoomScan();
+        return !scan.isSealed() && scan.status() != Status.NULL && scan.hasEscapePoint();
+    }
+
+    private void addStatusText(List<Component> textList) {
+        RoomScan scan = getRoomScan();
+
+        // Status line
+        Component statusText = switch (scan.status()) {
+            case SEALED -> Component.translatable("tfg.machine.oxygen_distributor.status.sealed").withStyle(ChatFormatting.GREEN);
+            case ESCAPED_BUILD_HEIGHT -> Component.translatable("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.RED);
+            case ESCAPED_DIMENSION -> Component.translatable("tfg.machine.oxygen_distributor.status.too_wide").withStyle(ChatFormatting.YELLOW);
+            case ESCAPED_UNLOADED -> Component.translatable("tfg.machine.oxygen_distributor.status.chunk_unloaded").withStyle(ChatFormatting.YELLOW);
+            case BLOCK_LIMIT -> Component.translatable("tfg.machine.oxygen_distributor.status.volume_limit").withStyle(ChatFormatting.YELLOW);
+            case SAVED_DATA -> Component.translatable("tfg.machine.oxygen_distributor.status.restoring").withStyle(ChatFormatting.GREEN);
+            case NULL -> Component.translatable("tfg.machine.oxygen_distributor.status.scanning").withStyle(ChatFormatting.GRAY);
+        };
+        textList.add(Component.translatable("tfg.machine.oxygen_distributor.status").append(statusText));
+
+        // Size
+        if (scan.interiorSize() > 0) {
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.size",
+                    FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA));
+        }
+
+        // Working state
+        if (isWorking()) {
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+        } else {
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
+        }
+    }
+
+    private void requestBreachTrace() {
+        if (level == null)
+            return;
+
+        long currentTick = level.getServer().getTickCount();
+        if (currentTick - lastTraceRequestTick < TRACE_COOLDOWN_TICKS)
+            return;
+        lastTraceRequestTick = currentTick;
+
+        ServerLevel traceLevel = level;
+        BlockPos tracePos = getPos();
+
+        EnvironmentSystem.EXECUTOR.submit(() -> {
+            try {
+                RoomScan result = DiagnosticFloodFill.fill(traceLevel, tracePos, 1_000_000, 128);
+                if (result.escapePath() != null && !result.escapePath().isEmpty()) {
+                    DiagnosticFloodFill.spawnTrace(traceLevel, result.escapePath());
+                }
+            } catch (Exception e) {
+                TFGCore.LOGGER.error("Breach trace failed at {}", tracePos, e);
+            }
+        });
     }
 
     //////////////////////////////////////
@@ -193,9 +330,10 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             recipeLogic.onRecipeFinish();
         }
 
-        // Decompression: sealed → escaped, start event
-        // Skip in dimensions with environment
-        if (oldScan.isSealed() && newScan.status().hasEscape() && !manager.getEnvironment().hasAtmosphere()) {
+        // Decompression: sealed → breached, start event
+        // Only on ESCAPED_BUILD_HEIGHT (actual physical breach through the shell).
+        // Not on BLOCK_LIMIT (machine too weak), ESCAPED_DIMENSION (horizontal limit), or atmosphered dimensions.
+        if (oldScan.isSealed() && newScan.status() == Status.ESCAPED_BUILD_HEIGHT && !manager.getEnvironment().hasAtmosphere()) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
                 activeDecompression = manager.startDecompression(breachPoint, oldScan);

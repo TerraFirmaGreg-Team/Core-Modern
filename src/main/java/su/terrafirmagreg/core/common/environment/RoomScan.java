@@ -54,10 +54,6 @@ public record RoomScan(
         public boolean isSealed() {
             return this == SEALED || this == SAVED_DATA;
         }
-
-        public boolean hasEscape() {
-            return this != SEALED && this != BLOCK_LIMIT && this != NULL;
-        }
     }
 
     /**

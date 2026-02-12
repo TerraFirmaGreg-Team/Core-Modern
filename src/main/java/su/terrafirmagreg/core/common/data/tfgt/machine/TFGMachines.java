@@ -286,8 +286,6 @@ public class TFGMachines {
             (holder) -> new OxygenDistributorMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction))
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
             .recipeModifier(OxygenDistributorMachine::recipeModifier)
-            .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("oxygen_distributor"),
-                    TFGTRecipeTypes.OXYGEN_DISTRIBUTION))
             .tier(GTValues.MV)
             .register();
 

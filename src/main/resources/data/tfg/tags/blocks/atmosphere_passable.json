@@ -43,7 +43,8 @@
         "gtceu:large_duct_pipe",
         "gtceu:huge_duct_pipe",
         "gtceu:normal_optical_pipe",
-        "gtceu:normal_laser_pipe"
+        "gtceu:normal_laser_pipe",
+        "gtceu:oxygen_distributor"
     ],
     "replace": false
 }

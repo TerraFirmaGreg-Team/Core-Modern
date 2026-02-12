@@ -83,8 +83,8 @@ public final class EnvironmentSystem {
 
     // ==================== Async Handling ====================
 
-    /** Executor for async jobs. */
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(2, r -> {
+    /** Executor for async jobs (flood fill, diagnostic trace). */
+    public static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(2, r -> {
         Thread t = new Thread(r, "FloodFill");
         t.setDaemon(true);
         return t;
