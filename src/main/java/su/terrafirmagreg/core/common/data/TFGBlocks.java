@@ -286,28 +286,7 @@ public final class TFGBlocks {
     public static final BlockEntry<ActiveCardinalBlock> SAMPLE_RACK = TFGCore.REGISTRATE.block("sample_rack", ActiveCardinalBlock::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion())
             .addLayer(() -> RenderType::cutout)
-            .exBlockstate((ctx, prov) -> {
-
-                var sample1 = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v1"));
-                var sample2 = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v2"));
-                var sample3 = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v3"));
-                var sample4 = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v4"));
-                var sample5 = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v5"));
-
-                var sample1active = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v1_active"));
-                var sample2active = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v2_active"));
-                var sample3active = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v3_active"));
-                var sample4active = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v4_active"));
-                var sample5active = prov.models().getExistingFile(TFGCore.id("block/machines/sample_racks/sample_rack_v5_active"));
-
-                prov.getVariantBuilder(ctx.get())
-                        .partialState().with(GTBlockStateProperties.ACTIVE, false)
-                        .addModels(new ConfiguredModel(sample1), new ConfiguredModel(sample2), new ConfiguredModel(sample3), new ConfiguredModel(sample4), new ConfiguredModel(sample5))
-                        .partialState().with(GTBlockStateProperties.ACTIVE, true)
-                        .addModels(new ConfiguredModel(sample1active), new ConfiguredModel(sample2active), new ConfiguredModel(sample3active), new ConfiguredModel(sample4active),
-                                new ConfiguredModel(sample5active));
-
-            })
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
             .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("item/sample_rack"))).build()
             .register();
@@ -315,20 +294,7 @@ public final class TFGBlocks {
     public static final BlockEntry<ActiveCardinalBlock> GROWTH_MONITOR = TFGCore.REGISTRATE.block("growth_monitor", ActiveCardinalBlock::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion().lightLevel((state) -> (int) (0.8 * 15.0F)))
             .addLayer(() -> RenderType::cutout)
-            .exBlockstate((ctx, prov) -> {
-
-                var growth1 = prov.models().getExistingFile(TFGCore.id("block/machines/growth_monitors/growth_monitor_v1_active"));
-                var growth2 = prov.models().getExistingFile(TFGCore.id("block/machines/growth_monitors/growth_monitor_v2_active"));
-                var growth3 = prov.models().getExistingFile(TFGCore.id("block/machines/growth_monitors/growth_monitor_v3_active"));
-                var growth4 = prov.models().getExistingFile(TFGCore.id("block/machines/growth_monitors/growth_monitor_v4_active"));
-                var growth5 = prov.models().getExistingFile(TFGCore.id("block/machines/growth_monitors/growth_monitor_v5_active"));
-
-                prov.getVariantBuilder(ctx.get())
-                        .partialState().with(GTBlockStateProperties.ACTIVE, false)
-                        .modelForState().modelFile(prov.models().getExistingFile(TFGCore.id("block/machines/growth_monitors/growth_monitor"))).addModel()
-                        .partialState().with(GTBlockStateProperties.ACTIVE, true)
-                        .addModels(new ConfiguredModel(growth1), new ConfiguredModel(growth2), new ConfiguredModel(growth3), new ConfiguredModel(growth4), new ConfiguredModel(growth5));
-            })
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("item/growth_monitor"))).build()
             .register();
 
