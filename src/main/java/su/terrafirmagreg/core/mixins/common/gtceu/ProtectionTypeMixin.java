@@ -13,7 +13,7 @@ public abstract class ProtectionTypeMixin {
 
     //Change mask curio slot from "head" to "face"
     @ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Ljava/util/Set;of(Ljava/lang/Object;)Ljava/util/Set;", ordinal = 0))
-    private static Set<String> modifyMaskCurioSlot(Set<String> original) {
+    private static Set<String> tfg$modifyMaskCurioSlot(Set<String> original) {
         return Set.of("face");
     }
 }
