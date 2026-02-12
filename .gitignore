@@ -39,7 +39,12 @@ gradle-local.properties
 run
 runs
 libs
+<<<<<<< datagen
 src/dev/resources/**
 src/generated/resources/.cache/*
 src/generated/resources/assets/tfg/lang/*
+=======
+
+
+>>>>>>> dev
 *.jar
