@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,20 +50,27 @@ public final class DiagnosticFloodFill {
     // ==================== Diagnostic Flood Fill ====================
 
     /**
+     * Convenience overload for main-thread callers (commands, etc.)
+     */
+    public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
+        return fill(new AsyncBlockReader((ServerLevel) level), start, maxBlocks, maxHorizontalDimension);
+    }
+
+    /**
      * Perform a diagnostic flood fill with shortest path tracking.
      *
      * <p>First runs regular DFS to find the room and escape point, then uses BFS
      * through the interior blocks with parent tracking to find the shortest path to the escape.
      *
-     * @param level                  Level object for BlockStates and build height
+     * @param reader                 Block reader (thread-safe for async use)
      * @param start                  Starting position
      * @param maxBlocks              Maximum number of interior blocks we should find
      * @param maxHorizontalDimension Maximum horizontal distance this room can span, including walls (make sure it's in render distance)
      * @return RoomScan with escapePath populated if there's an escape
      */
-    public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
+    public static RoomScan fill(AsyncBlockReader reader, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
         // Run regular flood fill to find the room and escape point
-        RoomScan result = FloodFill.fill(level, start, maxBlocks, maxHorizontalDimension);
+        RoomScan result = FloodFill.fill(reader, start, maxBlocks, maxHorizontalDimension);
 
         // If no escape point, return as-is (sealed room or block limit)
         if (result.escapePoint() == null) {
@@ -70,7 +79,7 @@ public final class DiagnosticFloodFill {
 
         // Find shortest path through interior using BFS
         LongArrayList shortestPath = findShortestPath(
-                level,
+                reader,
                 result.interior(),
                 start.asLong(),
                 result.escapePoint().asLong());
@@ -92,7 +101,7 @@ public final class DiagnosticFloodFill {
      * <p>The parentDir map tracks visited blocks and stores the direction we successfully entered from.
      */
     // TODO: This should be A* from both sides instead of BFS
-    private static LongArrayList findShortestPath(Level level, LongOpenHashSet interior, long startLong, long escapeLong) {
+    private static LongArrayList findShortestPath(AsyncBlockReader reader, LongOpenHashSet interior, long startLong, long escapeLong) {
         Long2ByteOpenHashMap parentDir = new Long2ByteOpenHashMap();
         parentDir.defaultReturnValue(NO_PARENT);
 
@@ -127,13 +136,17 @@ public final class DiagnosticFloodFill {
                 continue;
 
             pos.set(posLong);
-            BlockState blockState = level.getBlockState(pos);
-            PassInfo passInfo = getPassInfo(level, pos, blockState);
+            @Nullable
+            BlockState blockState = reader.getBlockState(pos);
+            if (blockState == null) {
+                continue; // Chunk not loaded, skip this block
+            }
+            PassInfo passInfo = getPassInfo(reader, pos, blockState);
 
             PassableResult result = switch (passInfo.type()) {
                 case EMPTY -> PassableResult.EMPTY;
                 case FULL -> PassableResult.FULL;
-                case COLLISION -> isPassableFromDirections(level, pos, passInfo, approachDir);
+                case COLLISION -> isPassableFromDirections(reader, pos, passInfo, approachDir);
                 default -> ALREADY_CHECKED;
             };
 

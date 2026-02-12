@@ -1,6 +1,6 @@
 package su.terrafirmagreg.core.common.environment;
 
-import static su.terrafirmagreg.core.common.environment.PassabilityChecker.getPassInfo;
+import static su.terrafirmagreg.core.common.environment.PassabilityChecker.getCachedPassInfo;
 
 import java.util.*;
 
@@ -248,7 +248,7 @@ public class DimEnvManager extends SavedData {
 
         if (event instanceof BlockEvent.BreakEvent breakEvent) {
             TFGCore.LOGGER.info("breakEvent {}", breakEvent.getState());
-            PassInfo before = getPassInfo(level, pos, breakEvent.getState());
+            PassInfo before = getCachedPassInfo(breakEvent.getState());
             if (before.type() == PassType.EMPTY) {
                 TFGCore.LOGGER.info("Ignored - empty block");
                 return;
@@ -256,8 +256,8 @@ public class DimEnvManager extends SavedData {
 
         } else if (event instanceof BlockEvent.EntityPlaceEvent placeEvent) {
             TFGCore.LOGGER.info("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
-            PassInfo before = getPassInfo(level, pos, placeEvent.getBlockSnapshot().getReplacedBlock());
-            PassabilityChecker.PassInfo after = getPassInfo(level, pos, placeEvent.getPlacedBlock());
+            PassInfo before = getCachedPassInfo(placeEvent.getBlockSnapshot().getReplacedBlock());
+            PassInfo after = getCachedPassInfo(placeEvent.getPlacedBlock());
             if (before.equals(after) && before.type() != PassType.NO_CACHE) {
                 TFGCore.LOGGER.info("Ignored - passability unchanged");
                 return;
@@ -265,7 +265,7 @@ public class DimEnvManager extends SavedData {
 
         } else if (event instanceof BlockEvent.NeighborNotifyEvent nighEvent) {
             TFGCore.LOGGER.info("neighborNotifyEvent {}", nighEvent.getState());
-            PassabilityChecker.PassInfo passInfo = PassabilityChecker.getCachedPassInfo(nighEvent.getState());
+            PassInfo passInfo = getCachedPassInfo(nighEvent.getState());
             // NO_CACHE blocks (airlocks, pistons, etc.) have dynamic passability, always dispatch
             if (passInfo.type() == PassType.NO_CACHE) {
                 TFGCore.LOGGER.info("Dynamic block (NO_CACHE), always dispatching");

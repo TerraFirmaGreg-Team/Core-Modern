@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.environment;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraftforge.event.level.BlockEvent;
 
@@ -18,8 +19,9 @@ public interface IBlockSensitiveMachine {
     /**
      * Call this async to revalidate the room.
      * Usually means run a new flood fill.
+     * @param reader Thread-safe block reader, created on the main thread before dispatch
      */
-    void validateAsync();
+    void validateAsync(AsyncBlockReader reader);
 
     /**
      * Call this on the main thread to apply the revalidation results when they're ready
@@ -33,4 +35,6 @@ public interface IBlockSensitiveMachine {
     void onChunkLoad(ChunkPos chunkPos);
 
     BlockPos getPos();
+
+    ServerLevel getServerLevel();
 }

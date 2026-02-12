@@ -3,11 +3,13 @@ package su.terrafirmagreg.core.common.environment;
 import static su.terrafirmagreg.core.common.environment.FloodFillHelpers.*;
 import static su.terrafirmagreg.core.common.environment.PassabilityChecker.PassInfo.PassType.*;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -114,20 +116,20 @@ public final class PassabilityChecker {
     /**
      * Checks if environment can pass through a block.
      *
-     * @param level           Block getter for accessing block states
+     * @param reader           Block getter for accessing block states
      * @param pos             Position of the block to check
      * @param posLong         Position as long
      * @param blockState      Block state at the position
      * @param visitDirections Current FloodFill state, necessary for checking which directions we're visiting from.
      * @return PassableResult indicating if environment can pass
      */
-    public static PassableResult isPassable(Level level, MutableBlockPos pos, long posLong, BlockState blockState, Long2ByteOpenHashMap visitDirections) {
-        PassInfo passInfo = getPassInfo(level, pos, blockState);
+    public static PassableResult isPassable(AsyncBlockReader reader, MutableBlockPos pos, long posLong, BlockState blockState, Long2ByteOpenHashMap visitDirections) {
+        PassInfo passInfo = getPassInfo(reader, pos, blockState);
 
         return switch (passInfo.type) {
             case EMPTY -> PassableResult.EMPTY;
             case FULL -> PassableResult.FULL;
-            case COLLISION -> isPassableFromDirections(level, pos, passInfo, visitDirections.get(posLong));
+            case COLLISION -> isPassableFromDirections(reader, pos, passInfo, visitDirections.get(posLong));
             default -> {
                 TFGCore.LOGGER.error("Invalid state reached in PassabilityChecker");
                 TFGCore.LOGGER.error("PassInfo: {}", passInfo);
@@ -139,13 +141,13 @@ public final class PassabilityChecker {
     /**
      * Checks if environment can pass through a block given specific incoming directions.
      * Read also the {@link PassableResult} values javadoc for further information on what they mean.
-     * @param level Block getter for accessing block states
+     * @param reader Block getter for accessing block states
      * @param pos Position of the block to check
      * @param passInfo Cached information on the passability of faces and silhouettes
      * @param incomingDirs Bitmask of directions we're checking passability from
      * @return PassableResult indicating if environment can pass
      */
-    public static PassableResult isPassableFromDirections(Level level, MutableBlockPos pos, PassInfo passInfo, byte incomingDirs) {
+    public static PassableResult isPassableFromDirections(AsyncBlockReader reader, MutableBlockPos pos, PassInfo passInfo, byte incomingDirs) {
         if (incomingDirs == 0) {
             return PassableResult.ALREADY_CHECKED;
         }
@@ -165,8 +167,9 @@ public final class PassabilityChecker {
         // This is a simplification that's necessary to process walls entirely made of window panes.
         for (Direction perpDir : mask2perpendicularDirections(openIncomingFaces)) {
             pos.move(perpDir);
-            var perpState = level.getBlockState(pos);
-            PassInfo perpInfo = getPassInfo(level, pos, perpState);
+            var perpState = reader.getBlockState(pos);
+            // Treat unloaded chunk as solid (conservative — won't cause false passability)
+            PassInfo perpInfo = perpState != null ? getPassInfo(reader, pos, perpState) : PassInfo.full();
             pos.move(perpDir.getOpposite());
 
             if (perpInfo.type == EMPTY || (perpInfo.type == COLLISION && perpInfo.isFaceEmpty(perpDir))) {
@@ -180,8 +183,10 @@ public final class PassabilityChecker {
     /**
      * Computes face and silhouette data in cases where the result can't be cached.
      * Used for blocks that need level context (airlocks, pipes with dynamic connections, etc.)
+     * Falls back to the underlying Level for collision shape queries (may bounce to main thread).
      */
-    private static PassInfo computeNoCache(Level level, BlockPos pos, BlockState blockState) {
+    private static PassInfo computeNoCache(AsyncBlockReader reader, BlockPos pos, BlockState blockState) {
+        Level level = reader.getLevel();
         // Airlock door needs reference to controller block
         if (blockState.getBlock() instanceof SlidingDoorBlock sdb) {
             return computeFacesAndSilhouettes(sdb.getCollisionShape(blockState, level, pos, CollisionContext.empty()));
@@ -231,7 +236,7 @@ public final class PassabilityChecker {
             return new PassInfo(PassType.EMPTY, (byte) 0, (byte) 0, (byte) 0);
         }
 
-        private static PassInfo full() {
+        static PassInfo full() {
             return new PassInfo(PassType.FULL, (byte) 0, (byte) 0, (byte) 0);
         }
 
@@ -269,10 +274,10 @@ public final class PassabilityChecker {
     /**
      * Gets the passability info for a BlockState, computing current state for no_cache blocks
      */
-    public static PassInfo getPassInfo(Level level, BlockPos pos, BlockState blockState) {
+    public static PassInfo getPassInfo(AsyncBlockReader reader, BlockPos pos, BlockState blockState) {
         PassInfo passInfo = getCachedPassInfo(blockState);
         if (passInfo.type == NO_CACHE) {
-            return computeNoCache(level, pos, blockState);
+            return computeNoCache(reader, pos, blockState);
         }
         return passInfo;
     }
@@ -288,11 +293,23 @@ public final class PassabilityChecker {
 
         // Tagged blocks
         if (blockState.is(TFGTags.Blocks.AtmospherePassable)) {
+            TFGCore.LOGGER.info("[passability] {} tagged PASSABLE", blockState);
             return PassInfo.empty();
         }
         if (blockState.is(TFGTags.Blocks.AtmosphereImpassable)) {
+            TFGCore.LOGGER.info("[passability] {} tagged IMPASSABLE", blockState);
             return PassInfo.full();
         }
+
+        // Debug: log blocks that fall through to collision check
+        Block block = blockState.getBlock();
+        var registryName = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getKey(block);
+        TagKey<Block> tag = TFGTags.Blocks.AtmospherePassable;
+        var holder = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getHolder(block);
+        TFGCore.LOGGER.info("[passability] {} (registry={}) not tagged, tagKey={}, holderPresent={}, holderTags={}",
+                blockState, registryName, tag,
+                holder.isPresent(),
+                holder.map(h -> h.tags().toList()).orElse(List.of()));
 
         // Airlocks
         if (blockState.getBlock() instanceof SlidingDoorBlock) {

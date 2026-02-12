@@ -123,6 +123,9 @@ public final class EnvironmentSystem {
         TFGCore.LOGGER.info("[validation] dispatchValidation, pos={}, identity={}",
                 machine.getPos(), System.identityHashCode(machine));
 
+        // Create the AsyncBlockReader on the main thread — it captures ChunkMap safely
+        AsyncBlockReader reader = new AsyncBlockReader(machine.getServerLevel());
+
         long startTime = System.nanoTime();
         EXECUTOR.submit(() -> {
             long threadStartTime = System.nanoTime();
@@ -130,7 +133,7 @@ public final class EnvironmentSystem {
                     machine.getPos(), System.identityHashCode(machine),
                     (threadStartTime - startTime) / 1_000_000);
             try {
-                machine.validateAsync();
+                machine.validateAsync(reader);
                 long elapsed = (System.nanoTime() - threadStartTime) / 1_000_000;
                 TFGCore.LOGGER.info("[validation] async thread finished, pos={}, identity={}, elapsedMs={}",
                         machine.getPos(), System.identityHashCode(machine), elapsed);

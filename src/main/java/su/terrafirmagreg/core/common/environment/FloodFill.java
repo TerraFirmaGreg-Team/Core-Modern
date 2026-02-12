@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,21 +30,29 @@ public class FloodFill {
 
     /**
      * Performs a DFS flood fill starting from the given position.
+     * Convenience overload for main-thread callers (commands, etc.)
+     */
+    public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
+        return fill(new AsyncBlockReader((ServerLevel) level), start, maxBlocks, maxHorizontalDimension);
+    }
+
+    /**
+     * Performs a DFS flood fill starting from the given position.
      *
-     * @param level                  Block getter (should be a Level or ChunkAccess)
+     * @param reader                 Block reader (thread-safe for async use)
      * @param start                  Starting position (typically one block from machine)
      * @param maxBlocks              Maximum number of interior blocks we should find
      * @param maxHorizontalDimension Maximum horizontal distance this room can span, including walls (make sure it's in render distance)
      * @return RoomScan containing the room data
      */
-    public static RoomScan fill(Level level, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
+    public static RoomScan fill(AsyncBlockReader reader, BlockPos start, int maxBlocks, int maxHorizontalDimension) {
         State state = new State();
 
         // Init
         long startLong = start.asLong();
         state.addInteriorBlock(startLong);
         state.addEnvelopeBlock(startLong);
-        queueNeighbors(level, state, start, startLong, ALL_DIRECTIONS);
+        queueNeighbors(state, start, startLong, ALL_DIRECTIONS);
 
         BlockPos.MutableBlockPos pos = start.mutable();
 
@@ -58,13 +67,20 @@ public class FloodFill {
 
             pos.set(posLong);
 
-            if (!state.updateAndCheckBounds(level, pos, maxHorizontalDimension)) {
+            if (!state.updateAndCheckBounds(reader, pos, maxHorizontalDimension)) {
                 return buildResult(state);
             }
 
-            BlockState blockState = level.getBlockState(pos);
+            @Nullable
+            BlockState blockState = reader.getBlockState(pos);
+            if (blockState == null) {
+                // Chunk not loaded
+                state.hitUnloadedChunk = true;
+                state.escapePoint = pos.immutable();
+                return buildResult(state);
+            }
 
-            PassableResult result = PassabilityChecker.isPassable(level, pos, posLong, blockState, state.visitDirections);
+            PassableResult result = PassabilityChecker.isPassable(reader, pos, posLong, blockState, state.visitDirections);
             // Read PassableResult javadocs for more info
             switch (result) {
                 case EMPTY:
@@ -73,7 +89,7 @@ public class FloodFill {
                         state.hitBlockLimit = true;
                         return buildResult(state);
                     }
-                    queueNeighbors(level, state, pos, posLong, ALL_DIRECTIONS);
+                    queueNeighbors(state, pos, posLong, ALL_DIRECTIONS);
                     break;
 
                 case FULL:
@@ -94,7 +110,7 @@ public class FloodFill {
                         return buildResult(state);
                     }
                     state.removePendingShellBlock(posLong);
-                    queueAccessibleNeighbors(level, state, pos, posLong, blockState);
+                    queueAccessibleNeighbors(reader, state, pos, posLong, blockState);
                     break;
 
                 case ALREADY_CHECKED:
@@ -106,14 +122,14 @@ public class FloodFill {
     }
 
     /** Add only the neighbors to the stack in directions where the outgoing face is not completely closed. */
-    private static void queueAccessibleNeighbors(Level level, State state, BlockPos currentPos, long currentPosLong, BlockState blockState) {
-        byte openFacesInward = PassabilityChecker.getPassInfo(level, currentPos, blockState).openFaces();
+    private static void queueAccessibleNeighbors(AsyncBlockReader reader, State state, BlockPos currentPos, long currentPosLong, BlockState blockState) {
+        byte openFacesInward = PassabilityChecker.getPassInfo(reader, currentPos, blockState).openFaces();
         byte openFacesOutward = mirrorDirs(openFacesInward);
-        queueNeighbors(level, state, currentPos, currentPosLong, openFacesOutward);
+        queueNeighbors(state, currentPos, currentPosLong, openFacesOutward);
     }
 
     /** Add neighbors of the current block to the stack. */
-    private static void queueNeighbors(Level level, State state, BlockPos currentPos, long currentPosLong, byte neighbors) {
+    private static void queueNeighbors(State state, BlockPos currentPos, long currentPosLong, byte neighbors) {
         // Filter out the directions we came from to get to the current block
         byte visitDirections = state.visitDirections.get(currentPosLong);
         byte toQueue = subtractDirs(neighbors, mirrorDirs(visitDirections));
@@ -224,7 +240,7 @@ public class FloodFill {
          * Updates bounds to include the given position.
          * @return whether the position got processed without crossing any limits.
          */
-        boolean updateAndCheckBounds(Level level, BlockPos pos, int maxHorizontalDimension) {
+        boolean updateAndCheckBounds(AsyncBlockReader reader, BlockPos pos, int maxHorizontalDimension) {
             touchedChunks.add(new ChunkPos(pos));
 
             if (pos.getX() < minX || pos.getX() > maxX || pos.getZ() < minZ || pos.getZ() > maxZ) {
@@ -241,7 +257,7 @@ public class FloodFill {
                     return false;
                 }
 
-                if (!level.hasChunkAt(pos)) {
+                if (!reader.hasChunkAt(pos)) {
                     hitUnloadedChunk = true;
                     escapePoint = pos.immutable();
                     return false;
@@ -252,7 +268,7 @@ public class FloodFill {
                 minY = Math.min(minY, pos.getY());
                 maxY = Math.max(maxY, pos.getY());
 
-                if (level.isOutsideBuildHeight(pos.getY())) {
+                if (reader.isOutsideBuildHeight(pos.getY())) {
                     hitBuildHeight = true;
                     escapePoint = pos.immutable();
                     return false;

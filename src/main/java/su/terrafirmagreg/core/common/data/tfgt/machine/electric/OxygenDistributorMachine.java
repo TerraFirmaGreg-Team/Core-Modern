@@ -246,10 +246,12 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
         ServerLevel traceLevel = level;
         BlockPos tracePos = getPos();
+        // Create the reader on the main thread — it captures ChunkMap safely
+        AsyncBlockReader reader = new AsyncBlockReader(traceLevel);
 
         EnvironmentSystem.EXECUTOR.submit(() -> {
             try {
-                RoomScan result = DiagnosticFloodFill.fill(traceLevel, tracePos, MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
+                RoomScan result = DiagnosticFloodFill.fill(reader, tracePos, MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
                 if (result.escapePath() != null && !result.escapePath().isEmpty()) {
                     DiagnosticFloodFill.spawnTrace(traceLevel, result.escapePath());
                 }
@@ -268,13 +270,18 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
      * Runs a new flood fill.
      * Stores the result in newRoomScan which gets processed on the main thread in {@link #processValidationResult()}.
      */
-    public void validateAsync() {
+    public void validateAsync(AsyncBlockReader reader) {
         TFGCore.LOGGER.info("[validation] validateAsync START, pos={}, identity={}", getPos(), System.identityHashCode(this));
         long start = System.nanoTime();
-        newRoomScan = FloodFill.fill(level, getPos(), MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
+        newRoomScan = FloodFill.fill(reader, getPos(), MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
         long elapsed = (System.nanoTime() - start) / 1_000_000;
         TFGCore.LOGGER.info("[validation] validateAsync DONE, pos={}, identity={}, elapsedMs={}, status={}, size={}",
                 getPos(), System.identityHashCode(this), elapsed, newRoomScan.status(), newRoomScan.interiorSize());
+    }
+
+    @Override
+    public ServerLevel getServerLevel() {
+        return level;
     }
 
     /**
@@ -304,8 +311,15 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         // If we hit an unloaded chunk we don't actually want to update the room. We just pretend nothing has changed,
         // and we run a new flood fill when the chunk loads or another blockchange happens.
         if (newScan.status() == Status.ESCAPED_UNLOADED && newScan.escapePoint() != null) {
-            pendingChunkLoad = new ChunkPos(newScan.escapePoint());
-            manager.chunkLoadListeners.addSingle(this, pendingChunkLoad);
+
+            // The chunk may have loaded between the async fill and now (we'd miss the event).
+            // If already loaded, skip the listener and just re-request immediately.
+            if (level.isLoaded(newScan.escapePoint())) {
+                requestValidation();
+            } else {
+                pendingChunkLoad = new ChunkPos(newScan.escapePoint());
+                manager.chunkLoadListeners.addSingle(this, pendingChunkLoad);
+            }
             return;
         }
 
