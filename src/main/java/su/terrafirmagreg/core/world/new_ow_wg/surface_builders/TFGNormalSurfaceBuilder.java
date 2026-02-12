@@ -66,7 +66,7 @@ public enum TFGNormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant {
                     surfaceY = y; // Reached surface. Place top state and switch to subsurface layers
                     firstLayer = true;
                     if (y < context.getSeaLevel() - 1) {
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, -1, 5);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 5, -1);
                         if (surfaceDepth < -1) {
                             // No surface layers
                             surfaceDepth = 0;
@@ -80,7 +80,7 @@ public enum TFGNormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant {
                         surfaceState = underWaterState;
                         underwaterLayer = true;
                     } else {
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, subsurfaceMinDepth, 5);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 5, subsurfaceMinDepth);
                         if (surfaceDepth < -1) {
                             // No surface layers
                             surfaceDepth = 0;
@@ -104,10 +104,10 @@ public enum TFGNormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant {
                         if (firstLayer) {
                             firstLayer = false;
                             if (underwaterLayer) {
-                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 0, 5);
+                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 5, 0);
                                 surfaceState = thinUnderWaterState;
                             } else {
-                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 0, 5);
+                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 5, 0);
                                 surfaceState = underState;
                             }
                         }

@@ -51,7 +51,7 @@ public class TuyasSurfaceBuilder implements SurfaceBuilder {
             } else if (context.isDefaultBlock(stateAt)) {
                 if (surfaceDepth == -1) {
                     // Reached surface. Place top state and switch to subsurface layers
-                    surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(y, 4, 5);
+                    surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(y, 5, 4);
                     surfaceDepth = Mth.clamp((int) (surfaceDepth * (easing - 0.6f) / 0.4f), 2, 11);
                     context.setBlockState(y, basalt);
                 } else if (surfaceDepth > 0) {

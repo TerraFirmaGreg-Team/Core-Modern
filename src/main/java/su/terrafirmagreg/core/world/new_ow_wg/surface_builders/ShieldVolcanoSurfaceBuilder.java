@@ -98,7 +98,7 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder {
                     surfaceY = y; // Reached surface. Place top state and switch to subsurface layers
                     firstLayer = true;
                     if (y < context.getSeaLevel() - 1) {
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, -1, 5);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 5, -1);
                         if (surfaceDepth < -1) {
                             // No surface layers
                             surfaceDepth = 0;
@@ -113,7 +113,7 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder {
                         surfaceState = underWaterState;
                         underwaterLayer = true;
                     } else {
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, -3, 5);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 5, -3);
                         if (surfaceDepth < -1) {
                             // No surface layers
                             context.setBlockState(y, simpleStates.BASALT);
@@ -136,7 +136,7 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder {
                         // Next subsurface layer
                         if (firstLayer) {
                             firstLayer = false;
-                            surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 0, 5);
+                            surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 5, 0);
                             if (underwaterLayer) {
                                 surfaceState = underState;
                             }

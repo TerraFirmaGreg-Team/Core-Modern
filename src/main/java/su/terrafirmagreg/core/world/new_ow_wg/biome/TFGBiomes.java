@@ -10,9 +10,6 @@ import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.world.biome.*;
-import net.dries007.tfc.world.surface.builder.BadlandsSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.LowlandsSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -74,13 +71,13 @@ public class TFGBiomes {
     public static final BiomeExtension LOWLANDS = register("lowlands",
             riverType(TFGRiverBlendType.BANKED,
                     builder().heightmap(BiomeNoise::lowlands)
-                            .surface(LowlandsSurfaceBuilder.INSTANCE)
+                            .surface(TFGLowlandsSurfaceBuilder.INSTANCE)
                             .aquiferHeightOffset(-16).spawnable().noSandyRiverShores()));
     // Flat, swamp-like, lots of shallow pools below sea level.
     public static final BiomeExtension SALT_MARSH = register("salt_marsh",
             riverType(TFGRiverBlendType.BANKED,
                     builder().heightmap(BiomeNoise::lowlands)
-                            .surface(LowlandsSurfaceBuilder.INSTANCE)
+                            .surface(TFGLowlandsSurfaceBuilder.INSTANCE)
                             .aquiferHeightOffset(-16).spawnable().salty().noSandyRiverShores()));
     // Sharp, small hills, with lots of water / snaking winding rivers.
     public static final BiomeExtension LOW_CANYONS = register("low_canyons",
@@ -107,7 +104,7 @@ public class TFGBiomes {
     public static final BiomeExtension BADLANDS = register("badlands",
             riverType(TFGRiverBlendType.CANYON,
                     builder().heightmap(seed -> TFGBiomeNoise.badlands(seed, 22, 19.5f))
-                            .surface(BadlandsSurfaceBuilder.NORMAL)
+                            .surface(TFGBadlandsSurfaceBuilder.NORMAL)
                             .spawnable()));
     // Very high area, very flat top.
     public static final BiomeExtension PLATEAU = register("plateau",
@@ -205,12 +202,12 @@ public class TFGBiomes {
     // BiomeNoise.mountains and BiomeNoise.undergroundLakes are unchanged
     public static final BiomeExtension MOUNTAIN_LAKE = register("mountain_lake",
             builder().heightmap(seed -> BiomeNoise.mountains(seed, 10, 70))
-                    .surface(NormalSurfaceBuilder.ROCKY)
+                    .surface(TFGNormalSurfaceBuilder.ROCKY)
                     .carving(BiomeNoise::undergroundLakes)
                     .type(BiomeBlendType.LAKE).noRivers());
     public static final BiomeExtension OLD_MOUNTAIN_LAKE = register("old_mountain_lake",
             builder().heightmap(seed -> BiomeNoise.mountains(seed, -16, 60))
-                    .surface(NormalSurfaceBuilder.ROCKY)
+                    .surface(TFGNormalSurfaceBuilder.ROCKY)
                     .carving(BiomeNoise::undergroundLakes)
                     .type(BiomeBlendType.LAKE).noRivers());
     public static final BiomeExtension OCEANIC_MOUNTAIN_LAKE = register("oceanic_mountain_lake",
@@ -232,7 +229,7 @@ public class TFGBiomes {
                     .salty().type(BiomeBlendType.LAKE).noRivers());
     public static final BiomeExtension PLATEAU_LAKE = register("plateau_lake",
             builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30))
-                    .surface(NormalSurfaceBuilder.INSTANCE)
+                    .surface(TFGNormalSurfaceBuilder.INSTANCE)
                     .carving(BiomeNoise::undergroundLakes).type(BiomeBlendType.LAKE).noRivers());
 
     // Dry Biomes
