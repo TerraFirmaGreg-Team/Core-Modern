@@ -9,17 +9,18 @@ public enum TFGRegionTask {
     FLOOD_FILL_SMALL_OCEANS(FloodFillSmallOceans.INSTANCE),
     ADD_ISLANDS(TFGAddIslands.INSTANCE),
     //ADD_HOTSPOTS(TFGAddHotspots.INSTANCE),
-    ANNOTATE_DISTANCE_TO_OCEAN(AnnotateDistanceToOcean.INSTANCE),
-    ANNOTATE_BASE_LAND_HEIGHT(AnnotateBaseLandHeight.INSTANCE),
-    ANNOTATE_DISTANCE_TO_WEST_COAST(TFGAnnotateDistanceToWestCoast.INSTANCE),
-    ADD_MOUNTAINS(AddMountains.INSTANCE),
-    ANNOTATE_BIOME_ALTITUDE(AnnotateBiomeAltitude.INSTANCE),
-    ANNOTATE_CLIMATE(TFGAnnotateClimate.INSTANCE),
-    CHOOSE_ROCKS(ChooseRocks.INSTANCE),
-    ANNOTATE_KARST_SURFACE(TFGKarstSurfaceRocks.INSTANCE),
+    ANNOTATE_DISTANCE_TO_OCEAN(TFGAnnotateDistanceToOcean.INSTANCE),
+    //ANNOTATE_BASE_LAND_HEIGHT(AnnotateBaseLandHeight.INSTANCE),
+    //ANNOTATE_DISTANCE_TO_WEST_COAST(TFGAnnotateDistanceToWestCoast.INSTANCE),
+    //ADD_MOUNTAINS(AddMountains.INSTANCE),
+    //ANNOTATE_BIOME_ALTITUDE(AnnotateBiomeAltitude.INSTANCE),
+    //ANNOTATE_CLIMATE(TFGAnnotateClimate.INSTANCE),
+    //CHOOSE_ROCKS(ChooseRocks.INSTANCE),
+    //ANNOTATE_KARST_SURFACE(TFGKarstSurfaceRocks.INSTANCE),
     // TODO: Change to our own biomes task
     CHOOSE_BIOMES(ChooseBiomes.INSTANCE),
-    ADD_RIVERS_AND_LAKES(AddRiversAndLakes.INSTANCE);
+    ADD_RIVERS_AND_LAKES(TFGAddRiversAndLakes.INSTANCE);
+    ;
 
     public static final TFGRegionTask[] VALUES = values();
 

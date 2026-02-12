@@ -37,7 +37,7 @@ public abstract class ChooseBiomesMixin {
 
     // TODO: add guano
     @Unique
-    private static final int[] TFG_ISLAND_BIOMES = { PLAINS, HILLS, ROLLING_HILLS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS };
+    private static final int[] TFG_ISLAND_BIOMES = { SEA_STACKS, GUANO_ISLAND };
 
     @Inject(method = "apply", at = @At("HEAD"), remap = false, cancellable = true)
     public void tfg$apply(RegionGenerator.Context context, CallbackInfo ci) {

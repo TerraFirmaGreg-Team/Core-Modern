@@ -166,7 +166,7 @@
         "common.tfc.features.TFCChainBlockMixin",
         "common.tfc.new_ow_wg.BiomeBuilderMixin",
         "common.tfc.new_ow_wg.BiomeExtensionMixin",
-        "common.tfc.new_ow_wg.BiomeMixin",
+        "common.tfc.new_ow_wg.BiomeSourceExtensionMixin",
         "common.tfc.new_ow_wg.ChooseBiomesMixin",
         "common.tfc.new_ow_wg.ChunkBaseBlockSourceMixin",
         "common.tfc.new_ow_wg.ContextMixin",

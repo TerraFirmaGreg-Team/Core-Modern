@@ -9,10 +9,7 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.world.biome.BiomeBlendType;
-import net.dries007.tfc.world.biome.BiomeBuilder;
-import net.dries007.tfc.world.biome.BiomeExtension;
-import net.dries007.tfc.world.biome.BiomeNoise;
+import net.dries007.tfc.world.biome.*;
 import net.dries007.tfc.world.surface.builder.BadlandsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.LowlandsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
@@ -26,7 +23,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
@@ -277,7 +273,7 @@ public class TFGBiomes {
         final ResourceKey<Biome> key = ResourceKey.create(Registries.BIOME, id);
         final BiomeExtension variants = builder.build(key);
 
-		TFG_EXTENSIONS.put(key, variants);
+        TFG_EXTENSIONS.put(key, variants);
 
         return variants;
     }
@@ -290,8 +286,9 @@ public class TFGBiomes {
         return getExtension(level, biome) != null;
     }
 
+    @Nullable
     public static BiomeExtension getExtension(CommonLevelAccessor level, Biome biome) {
-        return ((IBiomeBridge) (Object) biome).tfg$getExtension(() -> findExtension(level, biome));
+        return ((BiomeBridge) (Object) biome).tfc$getExtension(() -> findExtension(level, biome));
     }
 
     public static Collection<ResourceKey<Biome>> getAllKeys() {

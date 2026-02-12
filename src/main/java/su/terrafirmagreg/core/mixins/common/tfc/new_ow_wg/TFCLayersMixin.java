@@ -19,4 +19,36 @@ public class TFCLayersMixin {
     private static void tfg$injected(CallbackInfo ci) {
         TFGLayers.init();
     }
+
+    //    @Inject(method = "hasLake", at = @At("HEAD"), remap = false, cancellable = true)
+    //    private static void tfg$hasLake(int value, CallbackInfoReturnable<Boolean> cir) {
+    //        if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
+    //            cir.setReturnValue(!TFGLayers.isOcean(value) && value != TFGLayers.BADLANDS);
+    //            // TODO: change to the 1.21 method
+    //        }
+    //    }
+    //
+    //    @Inject(method = "lakeFor", at = @At("HEAD"), remap = false, cancellable = true)
+    //    private static void tfg$lakeFor(int value, CallbackInfoReturnable<Integer> cir) {
+    //        if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
+    //            if (value == TFGLayers.MOUNTAINS) {
+    //                cir.setReturnValue(TFGLayers.MOUNTAIN_LAKE);
+    //            } else if (value == TFGLayers.VOLCANIC_MOUNTAINS) {
+    //                cir.setReturnValue(TFGLayers.VOLCANIC_MOUNTAIN_LAKE);
+    //            } else if (value == TFGLayers.OLD_MOUNTAINS) {
+    //                cir.setReturnValue(TFGLayers.OLD_MOUNTAIN_LAKE);
+    //            } else if (value == TFGLayers.OCEANIC_MOUNTAINS) {
+    //                cir.setReturnValue(TFGLayers.OCEANIC_MOUNTAIN_LAKE);
+    //            } else if (value == TFGLayers.VOLCANIC_OCEANIC_MOUNTAINS) {
+    //                cir.setReturnValue(TFGLayers.VOLCANIC_OCEANIC_MOUNTAIN_LAKE);
+    //            } else if (value == TFGLayers.PLATEAU) {
+    //                cir.setReturnValue(TFGLayers.PLATEAU_LAKE);
+    //            }
+    //            // TODO: isFlatIceSheet
+    //            // TODO: ICE_SHEET_EDGE
+    //            else {
+    //                cir.setReturnValue(TFGLayers.LAKE);
+    //            }
+    //        }
+    //    }
 }

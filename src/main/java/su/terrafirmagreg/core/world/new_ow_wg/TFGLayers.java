@@ -224,52 +224,44 @@ public class TFGLayers {
         return TIDAL_FLATS;
     }
 
-    //	public static boolean hasLake(int value)
-    //	{
-    //		return (!isOcean(value) && value != BADLANDS && value != ACTIVE_SHIELD_VOLCANO && value != DORMANT_SHIELD_VOLCANO
-    //					&& value != EXTINCT_SHIELD_VOLCANO && value != ANCIENT_SHIELD_VOLCANO && value != ICE_SHEET_MOUNTAINS
-    //					&& value != ICE_SHEET_MOUNTAINS_EDGE && value != ICE_SHEET_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
-    //					&& value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
-    //					&& value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
-    //					&& value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
-    //	}
+    public static boolean hasLake(int value) {
+        return (!isOcean(value) && value != BADLANDS /*&& value != ACTIVE_SHIELD_VOLCANO && value != DORMANT_SHIELD_VOLCANO
+                                                     && value != EXTINCT_SHIELD_VOLCANO && value != ANCIENT_SHIELD_VOLCANO && value != ICE_SHEET_MOUNTAINS
+                                                     && value != ICE_SHEET_MOUNTAINS_EDGE && value != ICE_SHEET_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
+                                                     && value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
+                                                     && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
+                                                     && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS*/);
+    }
 
-    //	public static int lakeFor(int value)
-    //	{
-    //		if (value == MOUNTAINS)
-    //		{
-    //			return MOUNTAIN_LAKE;
-    //		}
-    //		if (value == VOLCANIC_MOUNTAINS)
-    //		{
-    //			return VOLCANIC_MOUNTAIN_LAKE;
-    //		}
-    //		if (value == OLD_MOUNTAINS)
-    //		{
-    //			return OLD_MOUNTAIN_LAKE;
-    //		}
-    //		if (value == OCEANIC_MOUNTAINS)
-    //		{
-    //			return OCEANIC_MOUNTAIN_LAKE;
-    //		}
-    //		if (value == VOLCANIC_OCEANIC_MOUNTAINS)
-    //		{
-    //			return VOLCANIC_OCEANIC_MOUNTAIN_LAKE;
-    //		}
-    //		if (value == PLATEAU)
-    //		{
-    //			return PLATEAU_LAKE;
-    //		}
-    //		if (isFlatIceSheet(value))
-    //		{
-    //			return SUBGLACIAL_LAKE;
-    //		}
-    //		if (value == ICE_SHEET_EDGE)
-    //		{
-    //			return MELTWATER_LAKE;
-    //		}
-    //		return LAKE;
-    //	}
+    public static int lakeFor(int value) {
+        if (value == MOUNTAINS) {
+            return MOUNTAIN_LAKE;
+        }
+        if (value == VOLCANIC_MOUNTAINS) {
+            return VOLCANIC_MOUNTAIN_LAKE;
+        }
+        if (value == OLD_MOUNTAINS) {
+            return OLD_MOUNTAIN_LAKE;
+        }
+        if (value == OCEANIC_MOUNTAINS) {
+            return OCEANIC_MOUNTAIN_LAKE;
+        }
+        if (value == VOLCANIC_OCEANIC_MOUNTAINS) {
+            return VOLCANIC_OCEANIC_MOUNTAIN_LAKE;
+        }
+        if (value == PLATEAU) {
+            return PLATEAU_LAKE;
+        }
+        //    		if (isFlatIceSheet(value))
+        //    		{
+        //    			return SUBGLACIAL_LAKE;
+        //    		}
+        //    		if (value == ICE_SHEET_EDGE)
+        //    		{
+        //    			return MELTWATER_LAKE;
+        //    		}
+        return LAKE;
+    }
 
     public static AreaFactory createRegionBiomeLayer(RegionGenerator generator, long worldSeed) {
         Seed seed = Seed.of(worldSeed);
