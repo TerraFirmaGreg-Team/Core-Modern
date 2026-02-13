@@ -1,90 +1,98 @@
 dependencies {
 
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
     compileOnly 'org.jetbrains:annotations:26.0.+'
     annotationProcessor 'org.jetbrains:annotations:26.0.+'
 
     compileOnly 'org.projectlombok:lombok:1.18.+'
     annotationProcessor 'org.projectlombok:lombok:1.18.+'
 
+
     annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
 
     compileOnly annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0")
-    implementation jarJar("io.github.llamalad7:mixinextras-forge:0.5.0")
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.0")) {
+        jarJar.ranged(it, "[0.5.0,)")
+    }
+    compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.6-beta.1"))
+    implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.6-beta.1")) {
+        jarJar.ranged(it, "[0.3.6-beta.1,)")
+    }
 
-    compileOnly annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.6-beta.1")
-    implementation jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.6-beta.1")
-
-    modCompileOnly "com.tterrag.registrate:Registrate:MC1.20-1.3.11"
+    compileOnly fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.11")
 
     modImplementation "maven.modrinth:ferrite-core:DG5Fn9Sz"
     modImplementation "maven.modrinth:architectury-api:9.2.14+forge"
 
-    //modImplementation "curse.maven:configuration-444699:4710266"
+    //implementation fg.deobf("curse.maven:configuration-444699:4710266")
 
     // JEI
-    modCompileOnly "mezz.jei:jei-1.20.1-common-api:${jei_version}"
-    modCompileOnly "mezz.jei:jei-1.20.1-forge-api:${jei_version}"
-    modCompileOnly "mezz.jei:jei-1.20.1-forge:${jei_version}"
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge:${jei_version}")
 
     // EMI
-    //modCompileOnly "dev.emi:emi-forge:${emi_version}:api"
-    modImplementation "dev.emi:emi-forge:${emi_version}"
+    //compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
+    implementation fg.deobf("dev.emi:emi-forge:${emi_version}")
 
     // Create
-    modCompileOnly "dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"
-    modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
-    modImplementation ("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
+    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"))
+    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"))
+    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
 
     // Create: Vintage Improvements
-    modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7436235") { transitive = false }
+    implementation fg.deobf("curse.maven:vintage-improvements-ssw-edition-1255448:7436235") { transitive = false }
 
     // Greate
-    modImplementation ("maven.modrinth:greate:${greate_version}") { transitive = false }
+    implementation fg.deobf("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
-    modImplementation ("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
-    modImplementation ("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
+    implementation fg.deobf("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
+    implementation fg.deobf("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
 
     // KJS
-    modImplementation "maven.modrinth:rhino:2001.2.2-build.18+forge"
-    modImplementation "maven.modrinth:kubejs:2001.6.5-build.7+forge"
+    implementation fg.deobf("maven.modrinth:rhino:2001.2.2-build.18+forge")
+    implementation fg.deobf("maven.modrinth:kubejs:2001.6.5-build.7+forge")
 
     // TFC
-    modImplementation ("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
-    modImplementation ("maven.modrinth:terrafirmacraft:${tfc_version}") { transitive = false }
-    modImplementation ("curse.maven:kubejs-tfc-841001:6996502") { transitive = false }
+    implementation fg.deobf("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
+    implementation fg.deobf("maven.modrinth:terrafirmacraft:${tfc_version}") { transitive = false }
+    implementation fg.deobf("curse.maven:kubejs-tfc-841001:6996502") { transitive = false }
 
     // FirmaLife
-    modImplementation "maven.modrinth:firmalife:${firmalife_version}"
+    implementation fg.deobf("maven.modrinth:firmalife:${firmalife_version}")
 
     // Beneath
-    modImplementation ("maven.modrinth:beneath:${beneath_version}") { transitive = false }
+    implementation fg.deobf("maven.modrinth:beneath:${beneath_version}") { transitive = false }
 
     // TFC-Ambiental
-    modImplementation "maven.modrinth:curios:5.12.1+1.20.1"
-    modImplementation "maven.modrinth:tfc-ambiental-second-edition:1.20.1-3.3.0"
+    implementation fg.deobf("maven.modrinth:curios:5.12.1+1.20.1")
+    implementation fg.deobf("maven.modrinth:tfc-ambiental-second-edition:1.20.1-3.3.0")
 
     // FirmaCiv
-    modImplementation ("maven.modrinth:alekiships:${alekiships_version}") { transitive = false }
-    modImplementation ("maven.modrinth:firmaciv:${firmaciv_version}") { transitive = false }
+    implementation fg.deobf("maven.modrinth:alekiships:${alekiships_version}") { transitive = false }
+    implementation fg.deobf("maven.modrinth:firmaciv:${firmaciv_version}") { transitive = false }
 
     // TFC AstikorCarts
-    modImplementation ("curse.maven:astikor-carts-redux-916493:4988266") { transitive = false }
-    modImplementation ("curse.maven:astikor-carts-tfc-844019:5141430") { transitive = false }
+    implementation fg.deobf("curse.maven:astikor-carts-redux-916493:4988266") { transitive = false }
+    implementation fg.deobf("curse.maven:astikor-carts-tfc-844019:5141430") { transitive = false }
 
     // TFC hot or not
-    modImplementation ("curse.maven:tfc-hot-or-not-499096:6047294") { transitive = false }
+    implementation fg.deobf("curse.maven:tfc-hot-or-not-499096:6047294") { transitive = false }
 
     // AE2
-    modImplementation "curse.maven:guideme-1173950:7013686"
-    modImplementation jarJar("appeng:appliedenergistics2-forge:$ae2_version")
-    modImplementation "curse.maven:applied-energistics-2-wireless-terminals-459929:7014805"
+    implementation fg.deobf("curse.maven:guideme-1173950:7013686")
+    implementation fg.deobf(jarJar("appeng:appliedenergistics2-forge:$ae2_version")) {
+        jarJar.ranged(it, "[$ae2_version,)")
+    }
+    implementation fg.deobf("curse.maven:applied-energistics-2-wireless-terminals-459929:7014805")
 
     // ComputerCraft
-    modCompileOnly "cc.tweaked:cc-tweaked-1.20.1-core-api:${cc_tweaked_version}"
-    modCompileOnly "cc.tweaked:cc-tweaked-1.20.1-forge-api:${cc_tweaked_version}"
-    modImplementation "cc.tweaked:cc-tweaked-1.20.1-forge:${cc_tweaked_version}"
+    compileOnly fg.deobf("cc.tweaked:cc-tweaked-1.20.1-core-api:${cc_tweaked_version}")
+    compileOnly fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge-api:${cc_tweaked_version}")
+    implementation fg.deobf("cc.tweaked:cc-tweaked-1.20.1-forge:${cc_tweaked_version}")
 
     // FTB
     modImplementation ("curse.maven:ftb-teams-forge-404468:6130786") { transitive = false }
@@ -93,55 +101,57 @@ dependencies {
     modCompileOnly ("curse.maven:ftb-quests-forge-289412:6431737") { transitive = false }
 
     // Jade
-    modImplementation "curse.maven:jade-324717:6271651"
+    implementation fg.deobf("curse.maven:jade-324717:6271651")
 
     // TFC Roads and Roofs
-    modImplementation "curse.maven:roads-and-roofs-tfc-1048212:5852507"
+    implementation fg.deobf("curse.maven:roads-and-roofs-tfc-1048212:5852507")
 
     // Ad Astra
-    modImplementation ("curse.maven:ad-astra-635042:6262032") { transitive = false }
-    modImplementation ("curse.maven:botarium-704113:5486070") { transitive = false }
-    modImplementation ("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
-    modImplementation ("curse.maven:resourceful-config-714059:6231176") { transitive = false }
+    implementation fg.deobf("curse.maven:ad-astra-635042:6262032") { transitive = false }
+    implementation fg.deobf("curse.maven:botarium-704113:5486070") { transitive = false }
+    implementation fg.deobf("curse.maven:resourceful-lib-570073:5659871") { transitive = false }
+    implementation fg.deobf("curse.maven:resourceful-config-714059:6231176") { transitive = false }
 
     // Species
-    modImplementation ("maven.modrinth:species:3.5") { transitive = false }
+    implementation fg.deobf("maven.modrinth:species:3.5") { transitive = false }
 
     // Simply Stacked Dimensions
-    modImplementation ("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
+    implementation fg.deobf("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
 
     // Grappling Hook -- needless dependencies are dumb
-    modImplementation "curse.maven:cloth-config-348521:5729105"
-    modImplementation ("curse.maven:grappling-hook-mod-reforged-1166811:6028357") { transitive = false }
+    implementation fg.deobf("curse.maven:cloth-config-348521:5729105")
+    implementation fg.deobf("curse.maven:grappling-hook-mod-reforged-1166811:6028357") { transitive = false }
 
     // Hang Glider
     modCompileOnly "maven.modrinth:puzzles-lib:${puzzleslib_version}"
     modCompileOnly "maven.modrinth:hang-glider:${hangglider_version}"
 
     // Wan's ancient beasts
-    modImplementation "curse.maven:wans-ancient-beasts-1108604:7552366"
-    modImplementation "curse.maven:geckolib-388172:7553267"
+    implementation fg.deobf("curse.maven:wans-ancient-beasts-1108604:7552366")
+    implementation fg.deobf("curse.maven:geckolib-388172:7553267")
 
     // Immersive Aircraft
     modCompileOnly "curse.maven:immersive-aircraft-666014:6742170"
 
     //Create Liquid Fuel
-    modImplementation "curse.maven:create-liquid-fuel-840734:5217310"
+    implementation fg.deobf("curse.maven:create-liquid-fuel-840734:5217310")
 
     //Dea's Fission Vazde
-    modImplementation "curse.maven:deafission-1354541:7258440"
+    implementation fg.deobf("curse.maven:deafission-1354541:7258440")
 
     //Create Picky Waterwheels
-    modImplementation "curse.maven:create-picky-waterwheels-866839:6932328"
+    implementation fg.deobf("curse.maven:create-picky-waterwheels-866839:6932328")
 
     //Panda's Falling Trees
     modCompileOnly "curse.maven:pandas-falling-trees-880630:5653236"
     modCompileOnly "curse.maven:pandalib-975460:5653131"
 
     // ArborFirmaCraft
-    modImplementation "curse.maven:arborfirmacraft-877545:7200580"
+    implementation fg.deobf("curse.maven:arborfirmacraft-877545:7200580")
 
     // TFC Improved Badlands
     modCompileOnly "curse.maven:tfc-improved-badlands-969207:5126426"
 
+    // TFC Water Flasks
+    implementation fg.deobf("curse.maven:water-flasks-354353:7056478")
 }
