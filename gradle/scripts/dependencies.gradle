@@ -144,4 +144,7 @@ dependencies {
     // TFC Improved Badlands
     modCompileOnly "curse.maven:tfc-improved-badlands-969207:5126426"
 
+    // TFC Water Flasks
+    modCompileOnly "curse.maven:water-flasks-354353:7056478"
+
 }

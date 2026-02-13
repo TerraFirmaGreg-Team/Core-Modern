@@ -12,8 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import appeng.api.upgrades.Upgrades;
 import de.mennomax.astikorcarts.item.CartItem;
@@ -28,11 +26,13 @@ import su.terrafirmagreg.core.common.data.items.*;
 
 @SuppressWarnings("unused")
 public class TFGItems {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TFGCore.MOD_ID);
+
+    public static void init() {
+    }
 
     public static final ItemEntry<PiglinDisguise> PIGLIN_DISGUISE = TFGCore.REGISTRATE.item("piglin_disguise",
             (p) -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), p))
-            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/piglin_disguise_block")))
             .register();
 
     public static final ItemEntry<TrowelItem> TROWEL = TFGCore.REGISTRATE.item("trowel", TrowelItem::new)
@@ -48,6 +48,7 @@ public class TFGItems {
     public static final ItemEntry<FilledDnaSyringeItem> FILLED_DNA_SYRINGE = TFGCore.REGISTRATE.item("filled_dna_syringe", FilledDnaSyringeItem::new)
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
+
     public static final ItemEntry<ProgenitorCellsItem> PROGENITOR_CELLS = TFGCore.REGISTRATE.item("progenitor_cells", ProgenitorCellsItem::new)
             .model((ctx, prov) -> prov.generated(ctx::getEntry,
                     TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_1"), TFGCore.id("item/fish_roe_2")))
@@ -91,10 +92,12 @@ public class TFGItems {
 
     public static final ItemEntry<Item> GLACIAN_WOOL = TFGCore.REGISTRATE.item("glacian_wool", Item::new)
             .properties(p -> p.stacksTo(32))
+            .defaultModel()
             .register();
 
     public static final ItemEntry<Item> SNIFFER_WOOL = TFGCore.REGISTRATE.item("sniffer_wool", Item::new)
             .properties(p -> p.stacksTo(32))
+            .defaultModel()
             .register();
 
     public static final ItemEntry<Item> SNIFFER_EGG = TFGCore.REGISTRATE.item("sniffer_egg", Item::new)
@@ -104,7 +107,7 @@ public class TFGItems {
 
     public static final ItemEntry<Item> WRAPTOR_WOOL = TFGCore.REGISTRATE.item("wraptor_wool", Item::new)
             .properties(p -> p.stacksTo(32))
-            .model((ctx, prov) -> prov.generated(ctx::getEntry, TFGCore.id("item/wraptor_wool")))
+            .defaultModel()
             .register();
 
     public static final ItemEntry<Item> WRAPTOR_EGG = TFGCore.REGISTRATE.item("wraptor_egg", Item::new)
@@ -119,6 +122,7 @@ public class TFGItems {
             .register();
 
     public static final ItemEntry<CartItem> RNR_PLOW = TFGCore.REGISTRATE.item("rnr_plow", CartItem::new)
+            .defaultModel()
             .properties(p -> p.stacksTo(1))
             .register();
 

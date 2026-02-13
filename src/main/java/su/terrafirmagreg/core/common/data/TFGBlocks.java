@@ -3,10 +3,6 @@ package su.terrafirmagreg.core.common.data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
 
 import com.eerussianguy.firmalife.common.FLTags;
 import com.google.common.collect.ImmutableMap;
@@ -28,6 +24,7 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
@@ -38,7 +35,6 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.*;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
 import net.minecraft.resources.ResourceLocation;
@@ -56,7 +52,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
@@ -78,133 +73,235 @@ public final class TFGBlocks {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TFGCore.MOD_ID);
 
+    public static void init() {
+    }
+
     // Decoration blocks
 
-    public static final RegistryObject<Block> LUNAR_CHORUS_PLANT = register("lunar_chorus_plant",
-            () -> new LunarChorusPlantBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_PURPLE)
+    public static final BlockEntry<LunarChorusPlantBlock> LUNAR_CHORUS_PLANT = TFGCore.REGISTRATE.block("lunar_chorus_plant", LunarChorusPlantBlock::new)
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_PURPLE)
                     .pushReaction(PushReaction.DESTROY)
                     .noLootTable()
                     .strength(0.2f)
-                    .sound(SoundType.CHERRY_WOOD)));
+                    .sound(SoundType.CHERRY_WOOD))
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("minecraft", "block/chorus_plant"))).build()
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .register();
 
-    public static final RegistryObject<Block> LUNAR_CHORUS_FLOWER = register("lunar_chorus_flower",
-            () -> new LunarChorusFlowerBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_PURPLE)
+    public static final BlockEntry<LunarChorusFlowerBlock> LUNAR_CHORUS_FLOWER = TFGCore.REGISTRATE.block("lunar_chorus_flower", p -> new LunarChorusFlowerBlock(p, LUNAR_CHORUS_PLANT))
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_PURPLE)
                     .noOcclusion()
                     .pushReaction(PushReaction.DESTROY)
                     .strength(0.2f)
-                    .sound(SoundType.CHERRY_WOOD),
-                    LUNAR_CHORUS_PLANT));
+                    .sound(SoundType.CHERRY_WOOD))
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("minecraft", "block/chorus_flower"))).build()
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .register();
 
     // Connected texture grass blocks + dirt
 
     // This one's constructor needs to reference the others, so it's in the static constructor below
-    public static RegistryObject<Block> MARS_DIRT;
-    public static RegistryObject<Block> MARS_CLAY;
+    public static BlockEntry<DirtBlock> MARS_DIRT;
+    public static BlockEntry<DirtBlock> MARS_CLAY;
 
-    public static final RegistryObject<Block> MARS_PATH = register("grass/mars_path",
-            () -> new PathBlock(Block.Properties.of()
-                    .mapColor(MapColor.DIRT)
+    public static final BlockEntry<PathBlock> MARS_PATH = TFGCore.REGISTRATE.block("grass/mars_path", p -> new PathBlock(p, MARS_DIRT))
+            .properties(p -> p.mapColor(MapColor.DIRT)
                     .strength(1.4f)
-                    .sound(SoundType.GRAVEL), MARS_DIRT));
+                    .sound(SoundType.GRAVEL))
+            .simpleItem()
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .register();
 
-    public static final RegistryObject<Block> MARS_FARMLAND = register("grass/mars_farmland",
-            () -> new FarmlandBlock(ExtendedProperties.of(MapColor.DIRT)
+    public static final BlockEntry<FarmlandBlock> MARS_FARMLAND = TFGCore.REGISTRATE.block("grass/mars_farmland",
+            p -> new FarmlandBlock(ExtendedProperties.of(MapColor.DIRT)
                     .strength(1.3f)
                     .sound(SoundType.GRAVEL)
                     .isViewBlocking(TFCBlocks::always)
                     .isSuffocating(TFCBlocks::always)
-                    .blockEntity(TFCBlockEntities.FARMLAND), MARS_DIRT));
+                    .blockEntity(TFCBlockEntities.FARMLAND), MARS_DIRT))
+            .simpleItem()
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .register();
 
     private static final BlockBehaviour.Properties amber_properties = BlockBehaviour.Properties.of()
             .mapColor(MapColor.TERRACOTTA_YELLOW)
             .strength(5.0f)
             .sound(SoundType.WART_BLOCK)
             .randomTicks();
-    public static final RegistryObject<Block> AMBER_MYCELIUM = register("grass/amber_mycelium",
-            () -> new ConnectedGrassBlock(amber_properties, MARS_DIRT, MARS_PATH, MARS_FARMLAND));
-    public static final RegistryObject<Block> AMBER_CLAY_MYCELIUM = register("grass/amber_clay_mycelium",
-            () -> new ConnectedGrassBlock(amber_properties, MARS_CLAY, MARS_PATH, MARS_FARMLAND));
-    public static final RegistryObject<Block> AMBER_KAOLIN_MYCELIUM = register("grass/amber_kaolin_mycelium",
-            () -> new ConnectedGrassBlock(amber_properties, TFCBlocks.RED_KAOLIN_CLAY, null, null));
+
+    public static final BlockEntry<ConnectedGrassBlock> AMBER_MYCELIUM = TFGCore.REGISTRATE.block("grass/amber_mycelium",
+            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
+            .properties(p -> amber_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<ConnectedGrassBlock> AMBER_CLAY_MYCELIUM = TFGCore.REGISTRATE.block("grass/amber_clay_mycelium",
+            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
+            .properties(p -> amber_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<ConnectedGrassBlock> AMBER_KAOLIN_MYCELIUM = TFGCore.REGISTRATE.block("grass/amber_kaolin_mycelium",
+            p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
+            .properties(p -> amber_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
 
     private static final BlockBehaviour.Properties rusticus_properties = BlockBehaviour.Properties.of()
             .mapColor(MapColor.TERRACOTTA_ORANGE)
             .strength(5.0f)
             .sound(SoundType.WART_BLOCK)
             .randomTicks();
-    public static final RegistryObject<Block> RUSTICUS_MYCELIUM = register("grass/rusticus_mycelium",
-            () -> new ConnectedGrassBlock(rusticus_properties, MARS_DIRT, MARS_PATH, MARS_FARMLAND));
-    public static final RegistryObject<Block> RUSTICUS_CLAY_MYCELIUM = register("grass/rusticus_clay_mycelium",
-            () -> new ConnectedGrassBlock(rusticus_properties, MARS_CLAY, MARS_PATH, MARS_FARMLAND));
-    public static final RegistryObject<Block> RUSTICUS_KAOLIN_MYCELIUM = register("grass/rusticus_kaolin_mycelium",
-            () -> new ConnectedGrassBlock(rusticus_properties, TFCBlocks.RED_KAOLIN_CLAY, null, null));
+
+    public static final BlockEntry<ConnectedGrassBlock> RUSTICUS_MYCELIUM = TFGCore.REGISTRATE.block("grass/rusticus_mycelium",
+            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
+            .properties(p -> rusticus_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<ConnectedGrassBlock> RUSTICUS_CLAY_MYCELIUM = TFGCore.REGISTRATE.block("grass/rusticus_clay_mycelium",
+            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
+            .properties(p -> rusticus_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<ConnectedGrassBlock> RUSTICUS_KAOLIN_MYCELIUM = TFGCore.REGISTRATE.block("grass/rusticus_kaolin_mycelium",
+            p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
+            .properties(p -> rusticus_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
 
     private static final BlockBehaviour.Properties sangnum_properties = BlockBehaviour.Properties.of()
             .mapColor(MapColor.TERRACOTTA_RED)
             .strength(5.0f)
             .sound(SoundType.WART_BLOCK)
             .randomTicks();
-    public static final RegistryObject<Block> SANGNUM_MYCELIUM = register("grass/sangnum_mycelium",
-            () -> new ConnectedGrassBlock(sangnum_properties, MARS_DIRT, MARS_PATH, MARS_FARMLAND));
-    public static final RegistryObject<Block> SANGNUM_CLAY_MYCELIUM = register("grass/sangnum_clay_mycelium",
-            () -> new ConnectedGrassBlock(sangnum_properties, MARS_CLAY, MARS_PATH, MARS_FARMLAND));
-    public static final RegistryObject<Block> SANGNUM_KAOLIN_MYCELIUM = register("grass/sangnum_kaolin_mycelium",
-            () -> new ConnectedGrassBlock(sangnum_properties, TFCBlocks.RED_KAOLIN_CLAY, null, null));
+
+    public static final BlockEntry<ConnectedGrassBlock> SANGNUM_MYCELIUM = TFGCore.REGISTRATE.block("grass/sangnum_mycelium",
+            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
+            .properties(p -> sangnum_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<ConnectedGrassBlock> SANGNUM_CLAY_MYCELIUM = TFGCore.REGISTRATE.block("grass/sangnum_clay_mycelium",
+            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
+            .properties(p -> sangnum_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<ConnectedGrassBlock> SANGNUM_KAOLIN_MYCELIUM = TFGCore.REGISTRATE.block("grass/sangnum_kaolin_mycelium",
+            p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
+            .properties(p -> sangnum_properties)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
 
     //#region Martian sand piles and layer blocks, in order of color
 
     // Still in the pile folder because these are for the existing pre-0.11 layer blocks in peoples' worlds
 
-    public static final RegistryObject<SandLayerBlock> ASH_LAYER_BLOCK = register("ash_pile",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> VOLCANIC_ASH_LAYER_BLOCK = register("pile/volcanic_ash",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.BLACK).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> BLACK_SAND_LAYER_BLOCK = register("pile/black_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.BLACK).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> WHITE_SAND_LAYER_BLOCK = register("pile/white_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.WHITE).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> BROWN_SAND_LAYER_BLOCK = register("pile/brown_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.BROWN).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> RED_SAND_LAYER_BLOCK = register("pile/red_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> YELLOW_SAND_LAYER_BLOCK = register("pile/yellow_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.YELLOW).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> PINK_SAND_LAYER_BLOCK = register("pile/pink_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.PINK).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> GREEN_SAND_LAYER_BLOCK = register("pile/green_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.GREEN).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> MOON_SAND_LAYER_BLOCK = register("pile/moon_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> HEMATITIC_SAND_LAYER_BLOCK = register("pile/hematitic_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> MARS_SAND_LAYER_BLOCK = register("pile/mars_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)));
-    public static final RegistryObject<SandLayerBlock> VENUS_SAND_LAYER_BLOCK = register("pile/venus_sand",
-            () -> new SandLayerBlock(BlockBehaviour.Properties.copy(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE)));
+    public static final BlockEntry<SandLayerBlock> ASH_LAYER_BLOCK = TFGCore.REGISTRATE.block("ash_pile", SandLayerBlock::new)
+            .initialProperties(TFCBlocks.SAND.get(SandBlockType.RED)::get)
+            .properties(p -> p.noOcclusion().mapColor(MapColor.NONE))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).model(ModelUtils.layeredItemModel(ResourceLocation.fromNamespaceAndPath("tfc", "item/powder/wood_ash"))).build()
+            .register();
+
+    public static final BlockEntry<SandLayerBlock> VOLCANIC_ASH_LAYER_BLOCK = registerSandLayerBlock("pile/volcanic_ash",
+            TFCBlocks.SAND.get(SandBlockType.RED)::get, TFGCore.id("block/planets/venus/volcanic_ash"));
+
+    public static final BlockEntry<SandLayerBlock> BLACK_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/black_sand",
+            TFCBlocks.SAND.get(SandBlockType.BLACK)::get, ResourceLocation.fromNamespaceAndPath("tfc", "block/sand/black"));
+
+    public static final BlockEntry<SandLayerBlock> WHITE_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/white_sand",
+            TFCBlocks.SAND.get(SandBlockType.WHITE)::get, ResourceLocation.fromNamespaceAndPath("tfc", "block/sand/white"));
+
+    public static final BlockEntry<SandLayerBlock> BROWN_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/brown_sand",
+            TFCBlocks.SAND.get(SandBlockType.WHITE)::get, ResourceLocation.fromNamespaceAndPath("tfc", "block/sand/brown"));
+
+    public static final BlockEntry<SandLayerBlock> RED_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/red_sand",
+            TFCBlocks.SAND.get(SandBlockType.RED)::get, ResourceLocation.fromNamespaceAndPath("tfc", "block/sand/red"));
+
+    public static final BlockEntry<SandLayerBlock> YELLOW_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/yellow_sand",
+            TFCBlocks.SAND.get(SandBlockType.YELLOW)::get, ResourceLocation.fromNamespaceAndPath("tfc", "block/sand/yellow"));
+
+    public static final BlockEntry<SandLayerBlock> PINK_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/pink_sand",
+            TFCBlocks.SAND.get(SandBlockType.PINK)::get, ResourceLocation.fromNamespaceAndPath("tfc", "block/sand/pink"));
+
+    public static final BlockEntry<SandLayerBlock> GREEN_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/green_sand",
+            TFCBlocks.SAND.get(SandBlockType.PINK)::get, ResourceLocation.fromNamespaceAndPath("tfc", "block/sand/green"));
+
+    public static final BlockEntry<SandLayerBlock> MOON_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/moon_sand",
+            TFCBlocks.SAND.get(SandBlockType.PINK)::get, ResourceLocation.fromNamespaceAndPath("ad_astra", "block/moon_sand"));
+
+    public static final BlockEntry<SandLayerBlock> HEMATITIC_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/hematitic_sand",
+            TFCBlocks.SAND.get(SandBlockType.PINK)::get, ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_sand"));
+
+    public static final BlockEntry<SandLayerBlock> MARS_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/mars_sand",
+            TFCBlocks.SAND.get(SandBlockType.PINK)::get, ResourceLocation.fromNamespaceAndPath("ad_astra", "block/mars_sand"));
+
+    public static final BlockEntry<SandLayerBlock> VENUS_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/venus_sand",
+            TFCBlocks.SAND.get(SandBlockType.PINK)::get, ResourceLocation.fromNamespaceAndPath("ad_astra", "block/venus_sand"));
 
     // The _covering suffix is to differentiate these from the other piles
-    public static final RegistryObject<SandPileBlock> HEMATITIC_SAND_PILE_BLOCK = register("pile/hematitic_sand_covering",
-            () -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)));
-    public static final RegistryObject<SandPileBlock> MARS_SAND_PILE_BLOCK = register("pile/mars_sand_covering",
-            () -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)));
-    public static final RegistryObject<SandPileBlock> VENUS_SAND_PILE_BLOCK = register("pile/venus_sand_covering",
-            () -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)));
+    public static final BlockEntry<SandPileBlock> HEMATITIC_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/hematitic_sand_covering",
+            p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
+            .blockstate(ModelUtils.generateSandPileFromBlock(ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_sand")))
+            .register();
+
+    public static final BlockEntry<SandPileBlock> MARS_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/mars_sand_covering",
+            p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
+            .blockstate(ModelUtils.generateSandPileFromBlock(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/mars_sand")))
+            .register();
+
+    public static final BlockEntry<SandPileBlock> VENUS_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/venus_sand_covering",
+            p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
+            .blockstate(ModelUtils.generateSandPileFromBlock(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/venus_sand")))
+            .register();
+
+    private static BlockEntry<SandLayerBlock> registerSandLayerBlock(String name, NonNullSupplier<Block> initalProperties, ResourceLocation modelPath) {
+        return registerSandLayerBlock(name, initalProperties, modelPath, modelPath);
+    }
+
+    private static BlockEntry<SandLayerBlock> registerSandLayerBlock(String name, NonNullSupplier<Block> initalProperties, ResourceLocation modelPath, ResourceLocation itemModelPath) {
+        return TFGCore.REGISTRATE.block(name, SandLayerBlock::new)
+                .initialProperties(initalProperties)
+                .blockstate(ModelUtils.generateSandLayersFromBlock(modelPath))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(modelPath)).build()
+                .properties(p -> p.noOcclusion().mapColor(MapColor.NONE))
+                .register();
+    }
 
     //#endregion
 
     // Fluid blocks
 
-    public static final RegistryObject<LiquidBlock> MARS_WATER = registerNoItem("fluid/semiheavy_ammoniacal_water",
-            () -> new LiquidBlock(TFGFluids.MARS_WATER.source(),
-                    BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.WARPED_WART_BLOCK).noLootTable()));
-    public static final RegistryObject<LiquidBlock> SULFUR_FUMES = registerNoItem("fluid/sulfur_fumes",
-            () -> new LiquidBlock(TFGFluids.SULFUR_FUMES.source(),
-                    BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.NONE).noLootTable().noCollission()));
-    public static final RegistryObject<LiquidBlock> GEYSER_SLURRY = registerNoItem("fluid/geyser_slurry",
-            () -> new LiquidBlock(TFGFluids.GEYSER_SLURRY.source(),
-                    BlockBehaviour.Properties.copy(Blocks.WATER).mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable()));
+    public static final BlockEntry<LiquidBlock> MARS_WATER = TFGCore.REGISTRATE.block("fluid/semiheavy_ammoniacal_water", p -> new LiquidBlock(TFGFluids.MARS_WATER.source(), p))
+            .initialProperties(() -> Blocks.WATER)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .properties(p -> p.mapColor(MapColor.WARPED_WART_BLOCK).noLootTable())
+            .register();
+
+    public static final BlockEntry<LiquidBlock> SULFUR_FUMES = TFGCore.REGISTRATE.block("fluid/sulfur_fumes",
+            p -> new LiquidBlock(TFGFluids.SULFUR_FUMES.source(), p))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .initialProperties(() -> Blocks.WATER)
+            .properties(p -> p.mapColor(MapColor.NONE).noLootTable().noCollission())
+            .register();
+
+    public static final BlockEntry<LiquidBlock> GEYSER_SLURRY = TFGCore.REGISTRATE.block("fluid/geyser_slurry", p -> new LiquidBlock(TFGFluids.GEYSER_SLURRY.source(), p))
+            .initialProperties(() -> Blocks.WATER)
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable())
+            .register();
 
     // Misc blocks
 
@@ -244,36 +341,45 @@ public final class TFGBlocks {
             .register();
 
     // Mars animal related
-    public static final RegistryObject<Block> LARGE_NEST_BOX = register("large_nest_box",
-            () -> new LargeNestBoxBlock(ExtendedProperties.of()
+
+    public static final BlockEntry<LargeNestBoxBlock> LARGE_NEST_BOX = TFGCore.REGISTRATE.block("large_nest_box",
+            p -> new LargeNestBoxBlock(ExtendedProperties.of()
                     .mapColor(MapColor.WOOD)
                     .strength(3f)
                     .noOcclusion()
                     .sound(TFCSounds.THATCH)
                     .blockEntity(TFGBlockEntities.LARGE_NEST_BOX)
-                    .serverTicks(LargeNestBoxBlockEntity::serverTick)));
-    public static final RegistryObject<Block> LARGE_NEST_BOX_WARPED = register("large_nest_box_warped",
-            () -> new LargeNestBoxBlock(ExtendedProperties.of()
+                    .serverTicks(LargeNestBoxBlockEntity::serverTick)))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<LargeNestBoxBlock> LARGE_NEST_BOX_WARPED = TFGCore.REGISTRATE.block("large_nest_box_warped",
+            p -> new LargeNestBoxBlock(ExtendedProperties.of()
                     .mapColor(MapColor.WOOD)
                     .strength(3f)
                     .noOcclusion()
                     .sound(TFCSounds.THATCH)
                     .blockEntity(TFGBlockEntities.LARGE_NEST_BOX)
-                    .serverTicks(LargeNestBoxBlockEntity::serverTick)));
+                    .serverTicks(LargeNestBoxBlockEntity::serverTick)))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
 
     // These are done separately to avoid cyclic references
 
     static {
-        MARS_DIRT = register("grass/mars_dirt",
-                () -> new DirtBlock(Block.Properties.of()
-                        .mapColor(MapColor.DIRT)
-                        .strength(1.4f)
-                        .sound(SoundType.GRAVEL), RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
-        MARS_CLAY = register("grass/mars_clay_dirt",
-                () -> new DirtBlock(BlockBehaviour.Properties.of()
-                        .mapColor(MapColor.DIRT)
-                        .strength(1.4f)
-                        .sound(SoundType.GRAVEL), RUSTICUS_CLAY_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null));
+        MARS_DIRT = TFGCore.REGISTRATE.block("grass/mars_dirt",
+                (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
+                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .register();
+
+        MARS_CLAY = TFGCore.REGISTRATE.block("grass/mars_clay_dirt",
+                (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
+                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .register();
     }
 
     public static final BlockEntry<ActiveCardinalBlock> SAMPLE_RACK = TFGCore.REGISTRATE.block("sample_rack", ActiveCardinalBlock::new)
@@ -384,13 +490,20 @@ public final class TFGBlocks {
 
     public static final BlockEntry<Block> CLEAN_STAINLESS_STEEL_DESH_CASING = createCasingBlock("machine_casing_clean_stainless_steel_desh",
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_clean_stainless_steel_desh")));
+
     public static final BlockEntry<Block> DESH_PTFE_CASING = createCasingBlock("machine_casing_desh_ptfe", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_desh_ptfe")));
+
     public static final BlockEntry<Block> IRON_DESH_CASING = createCasingBlock("machine_casing_iron_desh", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_iron_desh")));
+
     public static final BlockEntry<Block> PTFE_DESH_CASING = createCasingBlock("machine_casing_ptfe_desh", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_ptfe_desh")));
+
     public static final BlockEntry<Block> STAINLESS_STEEL_DESH_CASING = createCasingBlock("machine_casing_stainless_steel_desh",
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_stainless_steel_desh")));
+
     public static final BlockEntry<Block> MARS_CASING = createCasingBlock("machine_casing_mars", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_mars")));
+
     public static final BlockEntry<Block> OSTRUM_CARBON_CASING = createCasingBlock("machine_casing_ostrum_carbon", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_ostrum_carbon")));
+
     public static final BlockEntry<Block> STAINLESS_EVAPORATION_CASING = createCasingBlock("machine_casing_stainless_evaporation",
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_stainless_evaporation")));
 
@@ -426,7 +539,12 @@ public final class TFGBlocks {
     public static final BlockEntry<Block> SUPERCONDUCTOR_COIL_SMALL_BLOCK = createCasingBlock("superconductor_coil_small", GTModels.cubeAllModel(TFGCore.id("block/casings/superconductor_coil_small")),
             SoundType.COPPER, 5.5f, 5.5f, MapColor.COLOR_ORANGE, false);
 
-    public static final RegistryObject<ReflectorBlock> REFLECTOR_BLOCK = register("reflector", ReflectorBlock::new);
+    public static final BlockEntry<ReflectorBlock> REFLECTOR_BLOCK = TFGCore.REGISTRATE.block("reflector", ReflectorBlock::new)
+            .properties(p -> p.mapColor(MapColor.SNOW).strength(5.5F).sound(SoundType.AMETHYST)
+                    .noOcclusion().isViewBlocking((state, level, pos) -> false))
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .register();
 
     public static final BlockEntry<Block> MACHINE_CASING_ALUMINIUM_PLATED_STEEL = createCasingBlock(
             "machine_casing_aluminium_plated_steel", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_aluminium_plated_steel")),
@@ -618,25 +736,5 @@ public final class TFGBlocks {
                     "blocks/" + blockEntry.getId().getPath());
             ((BlockBehaviourAccessor) blockEntry.get()).setDrops(lootTableId);
         });
-    }
-
-    // Helper registration methods
-
-    private static <T extends Block> RegistryObject<T> registerNoItem(String name, Supplier<T> blockSupplier) {
-        return register(name, blockSupplier, (Function<T, ? extends BlockItem>) null);
-    }
-
-    private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier) {
-        return register(name, blockSupplier, b -> new BlockItem(b, new Item.Properties()));
-    }
-
-    private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier,
-            Item.Properties blockItemProperties) {
-        return register(name, blockSupplier, block -> new BlockItem(block, blockItemProperties));
-    }
-
-    private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier,
-            @Nullable Function<T, ? extends BlockItem> blockItemFactory) {
-        return RegistrationHelpers.registerBlock(BLOCKS, TFGItems.ITEMS, name, blockSupplier, blockItemFactory);
     }
 }

@@ -102,6 +102,7 @@ legacyForge {
             programArguments.addAll '--existing-mod', 'gtceu'
             programArguments.addAll '--existing-mod', 'tfc'
             programArguments.addAll '--existing-mod', 'species'
+            programArguments.addAll '--existing-mod', "ad_astra"
         }
 
     }

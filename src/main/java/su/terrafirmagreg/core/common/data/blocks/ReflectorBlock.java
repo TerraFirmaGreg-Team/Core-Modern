@@ -6,15 +6,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.MapColor;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
@@ -23,14 +20,8 @@ public class ReflectorBlock extends Block implements EntityBlock {
 
     public static final IntegerProperty LIGHT_LEVEL = IntegerProperty.create("light_level", 0, 15);
 
-    public ReflectorBlock() {
-        super(BlockBehaviour.Properties
-                .of()
-                .mapColor(MapColor.SNOW)
-                .strength(5.5F)
-                .sound(SoundType.AMETHYST)
-                .noOcclusion()
-                .isViewBlocking((state, level, pos) -> false));
+    public ReflectorBlock(Properties p) {
+        super(p);
         this.registerDefaultState(this.stateDefinition.any().setValue(LIGHT_LEVEL, 0));
     }
 

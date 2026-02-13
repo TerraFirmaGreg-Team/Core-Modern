@@ -14,13 +14,26 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.ActiveCardinalBlock;
 import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock;
+import su.terrafirmagreg.core.common.data.blocks.SandLayerBlock;
+import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
 
 public class ModelUtils {
+
+    public static NonNullBiConsumer<DataGenContext<Item, BlockItem>, RegistrateItemModelProvider> layeredItemModel(ResourceLocation... layers) {
+        return (ctx, prov) -> {
+            ItemModelBuilder ret = prov.getBuilder(ctx.getName()).parent(new ModelFile.UncheckedModelFile("item/generated"));
+            for (int i = 0; i < layers.length; i++) {
+                ret = ret.texture("layer" + i, layers[i]);
+            }
+        };
+    }
 
     public static NonNullBiConsumer<DataGenContext<Item, BlockItem>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
         return (ctx, prov) -> prov.withExistingParent(ctx.getName(), blockModel);
@@ -100,6 +113,69 @@ public class ModelUtils {
 
     public static NonNullBiConsumer<DataGenContext<Block, ActiveParticleBlock>, RegistrateBlockstateProvider> existingActiveParticleModel(ResourceLocation modelPath) {
         return (ctx, prov) -> activeBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(modelPath), prov.models().getExistingFile(modelPath.withSuffix("_active")));
+    }
+
+    // These functions are identical, but registrate doesn't understand block types that inherit other block types
+    public static NonNullBiConsumer<DataGenContext<Block, SandPileBlock>, RegistrateBlockstateProvider> generateSandPileFromBlock(ResourceLocation blockToUse) {
+        return (ctx, prov) -> {
+
+            var fullModel = prov.models().getExistingFile(blockToUse);
+            ModelFile layer1model = prov.models().withExistingParent(ctx.getName() + "_height2", TFGCore.id("block/ash_pile/ash_height2"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer2model = prov.models().withExistingParent(ctx.getName() + "_height4", TFGCore.id("block/ash_pile/ash_height4"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer3model = prov.models().withExistingParent(ctx.getName() + "_height6", TFGCore.id("block/ash_pile/ash_height6"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer4model = prov.models().withExistingParent(ctx.getName() + "_height8", TFGCore.id("block/ash_pile/ash_height8"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer5model = prov.models().withExistingParent(ctx.getName() + "_height10", TFGCore.id("block/ash_pile/ash_height10"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer6model = prov.models().withExistingParent(ctx.getName() + "_height12", TFGCore.id("block/ash_pile/ash_height12"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer7model = prov.models().withExistingParent(ctx.getName() + "_height14", TFGCore.id("block/ash_pile/ash_height14"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+
+            prov.getVariantBuilder(ctx.getEntry())
+                    .partialState().with(SandLayerBlock.LAYERS, 1).modelForState().modelFile(layer1model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 2).modelForState().modelFile(layer2model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 3).modelForState().modelFile(layer3model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 4).modelForState().modelFile(layer4model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 5).modelForState().modelFile(layer5model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 6).modelForState().modelFile(layer6model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 7).modelForState().modelFile(layer7model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 8).modelForState().modelFile(fullModel).addModel();
+        };
+    }
+
+    public static NonNullBiConsumer<DataGenContext<Block, SandLayerBlock>, RegistrateBlockstateProvider> generateSandLayersFromBlock(ResourceLocation blockToUse) {
+        return (ctx, prov) -> {
+
+            var fullModel = prov.models().getExistingFile(blockToUse);
+            ModelFile layer1model = prov.models().withExistingParent(ctx.getName() + "_height2", TFGCore.id("block/ash_pile/ash_height2"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer2model = prov.models().withExistingParent(ctx.getName() + "_height4", TFGCore.id("block/ash_pile/ash_height4"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer3model = prov.models().withExistingParent(ctx.getName() + "_height6", TFGCore.id("block/ash_pile/ash_height6"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer4model = prov.models().withExistingParent(ctx.getName() + "_height8", TFGCore.id("block/ash_pile/ash_height8"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer5model = prov.models().withExistingParent(ctx.getName() + "_height10", TFGCore.id("block/ash_pile/ash_height10"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer6model = prov.models().withExistingParent(ctx.getName() + "_height12", TFGCore.id("block/ash_pile/ash_height12"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+            ModelFile layer7model = prov.models().withExistingParent(ctx.getName() + "_height14", TFGCore.id("block/ash_pile/ash_height14"))
+                    .texture("particle", blockToUse).texture("texture", blockToUse);
+
+            prov.getVariantBuilder(ctx.getEntry())
+                    .partialState().with(SandLayerBlock.LAYERS, 1).modelForState().modelFile(layer1model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 2).modelForState().modelFile(layer2model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 3).modelForState().modelFile(layer3model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 4).modelForState().modelFile(layer4model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 5).modelForState().modelFile(layer5model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 6).modelForState().modelFile(layer6model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 7).modelForState().modelFile(layer7model).addModel()
+                    .partialState().with(SandLayerBlock.LAYERS, 8).modelForState().modelFile(fullModel).addModel();
+        };
     }
 
 }

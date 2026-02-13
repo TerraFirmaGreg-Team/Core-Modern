@@ -52,9 +52,9 @@ public class CommonProxy {
         bus.addListener(CustomArmInteractionPointTypes::onRegister);
 
         TFGNetworkHandler.init();
-        TFGBlocks.BLOCKS.register(bus);
+        TFGBlocks.init();
         TFGBlockEntities.BLOCK_ENTITIES.register(bus);
-        TFGItems.ITEMS.register(bus);
+        TFGItems.init();
         TFGCreativeTab.init();
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.init();
