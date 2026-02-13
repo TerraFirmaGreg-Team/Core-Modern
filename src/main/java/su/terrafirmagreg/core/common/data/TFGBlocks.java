@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common.data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.eerussianguy.firmalife.common.FLTags;
 import com.google.common.collect.ImmutableMap;
@@ -22,6 +23,7 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
+import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
@@ -35,6 +37,8 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.*;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.common.items.Powder;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
 import net.minecraft.resources.ResourceLocation;
@@ -42,6 +46,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -49,7 +54,12 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -76,7 +86,7 @@ public final class TFGBlocks {
     public static void init() {
     }
 
-    // Decoration blocks
+    ////// Decoration blocks
 
     public static final BlockEntry<LunarChorusPlantBlock> LUNAR_CHORUS_PLANT = TFGCore.REGISTRATE.block("lunar_chorus_plant", LunarChorusPlantBlock::new)
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_PURPLE)
@@ -86,6 +96,7 @@ public final class TFGBlocks {
                     .sound(SoundType.CHERRY_WOOD))
             .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("minecraft", "block/chorus_plant"))).build()
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .register();
 
     public static final BlockEntry<LunarChorusFlowerBlock> LUNAR_CHORUS_FLOWER = TFGCore.REGISTRATE.block("lunar_chorus_flower", p -> new LunarChorusFlowerBlock(p, LUNAR_CHORUS_PLANT))
@@ -98,7 +109,7 @@ public final class TFGBlocks {
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .register();
 
-    // Connected texture grass blocks + dirt
+    ////// Connected texture grass blocks + dirt
 
     // This one's constructor needs to reference the others, so it's in the static constructor below
     public static BlockEntry<DirtBlock> MARS_DIRT;
@@ -109,7 +120,7 @@ public final class TFGBlocks {
                     .strength(1.4f)
                     .sound(SoundType.GRAVEL))
             .simpleItem()
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .blockstate(ModelUtils.blockVariantsRotated(TFGCore.id("block/grass/mars_path")))
             .register();
 
     public static final BlockEntry<FarmlandBlock> MARS_FARMLAND = TFGCore.REGISTRATE.block("grass/mars_farmland",
@@ -120,7 +131,8 @@ public final class TFGBlocks {
                     .isSuffocating(TFCBlocks::always)
                     .blockEntity(TFCBlockEntities.FARMLAND), MARS_DIRT))
             .simpleItem()
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .blockstate(ModelUtils.blockVariants(TFGCore.id("block/grass/mars_farmland")))
+            .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
             .register();
 
     private static final BlockBehaviour.Properties amber_properties = BlockBehaviour.Properties.of()
@@ -132,6 +144,7 @@ public final class TFGBlocks {
     public static final BlockEntry<ConnectedGrassBlock> AMBER_MYCELIUM = TFGCore.REGISTRATE.block("grass/amber_mycelium",
             p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
             .properties(p -> amber_properties)
+            .loot((ctx, b) -> ctx.dropOther(b, MARS_DIRT))
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
@@ -140,6 +153,7 @@ public final class TFGBlocks {
             p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
             .properties(p -> amber_properties)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
@@ -147,6 +161,7 @@ public final class TFGBlocks {
             p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
             .properties(p -> amber_properties)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot(dropBetween(TFCItems.KAOLIN_CLAY, 1, 3))
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
@@ -160,6 +175,7 @@ public final class TFGBlocks {
             p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
             .properties(p -> rusticus_properties)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
@@ -167,6 +183,7 @@ public final class TFGBlocks {
             p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
             .properties(p -> rusticus_properties)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
@@ -174,6 +191,7 @@ public final class TFGBlocks {
             p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
             .properties(p -> rusticus_properties)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot(dropBetween(TFCItems.KAOLIN_CLAY, 1, 3))
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
@@ -187,6 +205,7 @@ public final class TFGBlocks {
             p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
             .properties(p -> sangnum_properties)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
@@ -194,17 +213,45 @@ public final class TFGBlocks {
             p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
             .properties(p -> sangnum_properties)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
     public static final BlockEntry<ConnectedGrassBlock> SANGNUM_KAOLIN_MYCELIUM = TFGCore.REGISTRATE.block("grass/sangnum_kaolin_mycelium",
             p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
             .properties(p -> sangnum_properties)
+            .loot(dropBetween(TFCItems.KAOLIN_CLAY, 1, 3))
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
-    //#region Martian sand piles and layer blocks, in order of color
+    // These are done separately to avoid cyclic references
+
+    static {
+        MARS_DIRT = TFGCore.REGISTRATE.block("grass/mars_dirt",
+                (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
+                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
+                .simpleItem()
+                .blockstate(ModelUtils.blockVariantsRotated(TFGCore.id("block/grass/mars_dirt")))
+                .register();
+
+        MARS_CLAY = TFGCore.REGISTRATE.block("grass/mars_clay_dirt",
+                (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
+                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
+                .simpleItem()
+                .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
+                .blockstate(ModelUtils.blockVariantsRotated(TFGCore.id("block/grass/mars_clay_dirt")))
+                .register();
+
+    }
+
+    private static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {
+        return (ctx, b) -> ctx.add(b, LootTable.lootTable().withPool(
+                LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(item.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))))));
+    }
+
+    ////#region Martian sand piles and layer blocks, in order of color
 
     // Still in the pile folder because these are for the existing pre-0.11 layer blocks in peoples' worlds
 
@@ -212,6 +259,7 @@ public final class TFGBlocks {
             .initialProperties(TFCBlocks.SAND.get(SandBlockType.RED)::get)
             .properties(p -> p.noOcclusion().mapColor(MapColor.NONE))
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .loot((ctx, b) -> ctx.dropOther(b, TFCItems.POWDERS.get(Powder.WOOD_ASH).get()))
             .item(BlockItem::new).model(ModelUtils.layeredItemModel(ResourceLocation.fromNamespaceAndPath("tfc", "item/powder/wood_ash"))).build()
             .register();
 
@@ -254,17 +302,20 @@ public final class TFGBlocks {
     // The _covering suffix is to differentiate these from the other piles
     public static final BlockEntry<SandPileBlock> HEMATITIC_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/hematitic_sand_covering",
             p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
-            .blockstate(ModelUtils.generateSandPileFromBlock(ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_sand")))
+            .blockstate(ModelUtils.generateSandLayersFromBlock(ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_sand")))
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_sand"))).build()
             .register();
 
     public static final BlockEntry<SandPileBlock> MARS_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/mars_sand_covering",
             p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
-            .blockstate(ModelUtils.generateSandPileFromBlock(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/mars_sand")))
+            .blockstate(ModelUtils.generateSandLayersFromBlock(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/mars_sand")))
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/mars_sand"))).build()
             .register();
 
     public static final BlockEntry<SandPileBlock> VENUS_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/venus_sand_covering",
             p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
-            .blockstate(ModelUtils.generateSandPileFromBlock(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/venus_sand")))
+            .blockstate(ModelUtils.generateSandLayersFromBlock(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/venus_sand")))
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/venus_sand"))).build()
             .register();
 
     private static BlockEntry<SandLayerBlock> registerSandLayerBlock(String name, NonNullSupplier<Block> initalProperties, ResourceLocation modelPath) {
@@ -282,11 +333,11 @@ public final class TFGBlocks {
 
     //#endregion
 
-    // Fluid blocks
+    /// Fluid blocks
 
     public static final BlockEntry<LiquidBlock> MARS_WATER = TFGCore.REGISTRATE.block("fluid/semiheavy_ammoniacal_water", p -> new LiquidBlock(TFGFluids.MARS_WATER.source(), p))
             .initialProperties(() -> Blocks.WATER)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .blockstate(ModelUtils.blockVariants(TFGCore.id("block/fluid/semiheavy_ammoniacal_water")))
             .properties(p -> p.mapColor(MapColor.WARPED_WART_BLOCK).noLootTable())
             .register();
 
@@ -303,7 +354,7 @@ public final class TFGBlocks {
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable())
             .register();
 
-    // Misc blocks
+    ///// Misc blocks
 
     public static final BlockEntry<PiglinDisguiseBlock> PIGLIN_DISGUISE_BLOCK = TFGCore.REGISTRATE.block("piglin_disguise_block", PiglinDisguiseBlock::new)
             .properties(p -> p
@@ -340,7 +391,7 @@ public final class TFGBlocks {
             .item(BlockItem::new).build()
             .register();
 
-    // Mars animal related
+    ///// Mars animal related
 
     public static final BlockEntry<LargeNestBoxBlock> LARGE_NEST_BOX = TFGCore.REGISTRATE.block("large_nest_box",
             p -> new LargeNestBoxBlock(ExtendedProperties.of()
@@ -365,22 +416,6 @@ public final class TFGBlocks {
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
-
-    // These are done separately to avoid cyclic references
-
-    static {
-        MARS_DIRT = TFGCore.REGISTRATE.block("grass/mars_dirt",
-                (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
-                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .register();
-
-        MARS_CLAY = TFGCore.REGISTRATE.block("grass/mars_clay_dirt",
-                (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
-                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .register();
-    }
 
     public static final BlockEntry<ActiveCardinalBlock> SAMPLE_RACK = TFGCore.REGISTRATE.block("sample_rack", ActiveCardinalBlock::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_LIGHT_GRAY).noOcclusion())

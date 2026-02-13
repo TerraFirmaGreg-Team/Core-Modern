@@ -19,6 +19,7 @@ import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.items.*;
+import su.terrafirmagreg.core.utils.ModelUtils;
 
 /**
  * Uncomment TFGCreativeTab in TFGCore if you register anything new here
@@ -50,13 +51,11 @@ public class TFGItems {
             .register();
 
     public static final ItemEntry<ProgenitorCellsItem> PROGENITOR_CELLS = TFGCore.REGISTRATE.item("progenitor_cells", ProgenitorCellsItem::new)
-            .model((ctx, prov) -> prov.generated(ctx::getEntry,
-                    TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_1"), TFGCore.id("item/fish_roe_2")))
+            .model(ModelUtils.layeredItemModel(TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_1"), TFGCore.id("item/fish_roe_2")))
             .register();
 
     public static final ItemEntry<FishRoeItem> FISH_ROE = TFGCore.REGISTRATE.item("fish_roe", FishRoeItem::new)
-            .model((ctx, prov) -> prov.generated(ctx::getEntry,
-                    TFGCore.id("item/progenitor_cells_0"), TFGCore.id("item/progenitor_cells_1"), TFGCore.id("item/progenitor_cells_2")))
+            .model(ModelUtils.layeredItemModel(TFGCore.id("item/progenitor_cells_0"), TFGCore.id("item/progenitor_cells_1"), TFGCore.id("item/progenitor_cells_2")))
             .register();
 
     public static final ItemEntry<ForgeSpawnEggItem> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
@@ -102,7 +101,7 @@ public class TFGItems {
 
     public static final ItemEntry<Item> SNIFFER_EGG = TFGCore.REGISTRATE.item("sniffer_egg", Item::new)
             .properties(p -> p.stacksTo(32))
-            .model((ctx, prov) -> prov.generated(ctx::getEntry, ResourceLocation.fromNamespaceAndPath("minecraft", "item/sniffer_egg")))
+            .model(ModelUtils.layeredItemModel(ResourceLocation.fromNamespaceAndPath("minecraft", "item/sniffer_egg")))
             .register();
 
     public static final ItemEntry<Item> WRAPTOR_WOOL = TFGCore.REGISTRATE.item("wraptor_wool", Item::new)
@@ -112,13 +111,14 @@ public class TFGItems {
 
     public static final ItemEntry<Item> WRAPTOR_EGG = TFGCore.REGISTRATE.item("wraptor_egg", Item::new)
             .properties(p -> p.stacksTo(32))
-            .model((ctx, prov) -> prov.generated(ctx::getEntry, ResourceLocation.fromNamespaceAndPath("species", "item/wraptor_egg")))
+            .model(ModelUtils.layeredItemModel(ResourceLocation.fromNamespaceAndPath("species", "item/wraptor_egg")))
             .register();
 
     public static final ItemEntry<Item> WIRELESS_CARD = TFGCore.REGISTRATE.item("wireless_card",
             (p) -> Upgrades.createUpgradeCardItem(p.rarity(Rarity.UNCOMMON).stacksTo(1)))
-            .model((ctx, prov) -> prov.generated(ctx::getEntry,
-                    TFGCore.id("item/wireless_card/wireless_card_base"), TFGCore.id("item/wireless_card/wireless_card_layer1"), TFGCore.id("item/wireless_card/wireless_card_layer2")))
+            .model(ModelUtils.layeredItemModel(TFGCore.id("item/wireless_card/wireless_card_base"),
+                    TFGCore.id("item/wireless_card/wireless_card_layer1"),
+                    TFGCore.id("item/wireless_card/wireless_card_layer2")))
             .register();
 
     public static final ItemEntry<CartItem> RNR_PLOW = TFGCore.REGISTRATE.item("rnr_plow", CartItem::new)

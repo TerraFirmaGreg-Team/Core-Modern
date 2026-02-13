@@ -1,7 +1,7 @@
 {
     "pools": [{
         "entries": [{
-            "name": "tfg:grass/mars_farmland",
+            "name": "tfg:grass/mars_dirt",
             "type": "minecraft:item"
         }],
         "conditions": [{"condition": "minecraft:survives_explosion"}],

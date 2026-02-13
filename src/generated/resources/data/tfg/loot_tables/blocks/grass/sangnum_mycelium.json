@@ -1,7 +1,7 @@
 {
     "pools": [{
         "entries": [{
-            "name": "tfg:grass/sangnum_mycelium",
+            "name": "tfg:grass/mars_dirt",
             "type": "minecraft:item"
         }],
         "conditions": [{"condition": "minecraft:survives_explosion"}],

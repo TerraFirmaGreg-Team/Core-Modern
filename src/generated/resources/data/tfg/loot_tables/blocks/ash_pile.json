@@ -1,7 +1,7 @@
 {
     "pools": [{
         "entries": [{
-            "name": "tfg:ash_pile",
+            "name": "tfc:powder/wood_ash",
             "type": "minecraft:item"
         }],
         "conditions": [{"condition": "minecraft:survives_explosion"}],
