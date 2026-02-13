@@ -235,7 +235,7 @@ public class TFGChunkHeightFiller {
         // Sum weights by biome extension -> river blend type first
         Arrays.fill(riverBlendWeights, 0d);
         for (Object2DoubleMap.Entry<BiomeExtension> entry : biomeWeights.object2DoubleEntrySet()) {
-            riverBlendWeights[entry.getKey().riverBlendType().ordinal()] += entry.getDoubleValue();
+            riverBlendWeights[((IBiomeExtension) entry.getKey()).tfg$getRiverBlendType().ordinal()] += entry.getDoubleValue();
         }
     }
 

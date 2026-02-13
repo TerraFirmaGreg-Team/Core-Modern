@@ -168,8 +168,6 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
 
                 aquiferCache.set(chunkPos.x, chunkPos.z, filler.aquifer());
 
-                sections.forEach(LevelChunkSection::release);
-
                 return chunk;
             }, Util.backgroundExecutor()).whenCompleteAsync((ret, error) -> {
                 sections.forEach(LevelChunkSection::release);
