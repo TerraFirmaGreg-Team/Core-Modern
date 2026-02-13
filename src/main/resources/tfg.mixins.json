@@ -131,6 +131,7 @@
         "common.minecraft.SmallFireballMixin",
         "common.minecraft.SnifferEggBlockMixin",
         "common.minecraft.StriderMixin",
+        "common.sacks_n_such.AbstractArrowMixinSquared",
         "common.sandworms.WormSignHandlerMixin",
         "common.simply_stacked_dimensions.TeleportHandlerMixin",
         "common.sophisticatedbackpacks.FeedingUpgradeWrapperMixin",
