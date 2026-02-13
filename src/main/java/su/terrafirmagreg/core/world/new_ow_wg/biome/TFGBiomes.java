@@ -70,9 +70,9 @@ public class TFGBiomes {
     // Flat, swamp-like, lots of shallow pools below sea level.
     public static final BiomeExtension LOWLANDS = register("lowlands",
             riverType(TFGRiverBlendType.BANKED,
-                    builder().heightmap(BiomeNoise::lowlands)
-                            .surface(TFGLowlandsSurfaceBuilder.INSTANCE)
-                            .aquiferHeightOffset(-16).spawnable().noSandyRiverShores()));
+            builder().heightmap(BiomeNoise::lowlands)
+                    .surface(TFGLowlandsSurfaceBuilder.INSTANCE)
+                    .aquiferHeightOffset(-16).spawnable().noSandyRiverShores()));
     // Flat, swamp-like, lots of shallow pools below sea level.
     public static final BiomeExtension SALT_MARSH = register("salt_marsh",
             riverType(TFGRiverBlendType.BANKED,

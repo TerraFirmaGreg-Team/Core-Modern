@@ -1,12 +1,12 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
-import net.dries007.tfc.world.biome.TFCBiomes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.BiomeSourceExtension;
+import net.dries007.tfc.world.biome.TFCBiomes;
 import net.dries007.tfc.world.region.RegionPartition;
 import net.dries007.tfc.world.region.RiverEdge;
 import net.dries007.tfc.world.region.Units;
@@ -38,7 +38,7 @@ public interface BiomeSourceExtensionMixin {
 
             for (RiverEdge edge : partitionPoint.rivers()) {
                 if (edge.fractal().intersect(exactGridX, exactGridZ, 0.08f)) {
-					return TFGConfig.SERVER.enableNewTFCWorldgen.get() ? TFGBiomes.RIVER : TFCBiomes.RIVER;
+                    return TFGConfig.SERVER.enableNewTFCWorldgen.get() ? TFGBiomes.RIVER : TFCBiomes.RIVER;
                 }
             }
         }
