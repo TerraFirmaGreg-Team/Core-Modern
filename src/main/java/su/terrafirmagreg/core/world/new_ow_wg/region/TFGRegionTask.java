@@ -9,7 +9,7 @@ public enum TFGRegionTask {
     FLOOD_FILL_SMALL_OCEANS(FloodFillSmallOceans.INSTANCE), // OK
     ADD_ISLANDS(TFGAddIslands.INSTANCE), // OK
     //ADD_HOTSPOTS(TFGAddHotspots.INSTANCE), // LOOPS
-    //ANNOTATE_DISTANCE_TO_OCEAN(TFGAnnotateDistanceToOcean.INSTANCE), // ERRORS
+    ANNOTATE_DISTANCE_TO_OCEAN(TFGAnnotateDistanceToOcean.INSTANCE), // ERRORS
     ANNOTATE_BASE_LAND_HEIGHT(AnnotateBaseLandHeight.INSTANCE), // OK
     ANNOTATE_DISTANCE_TO_WEST_COAST(TFGAnnotateDistanceToWestCoast.INSTANCE), // OK
     ADD_MOUNTAINS(AddMountains.INSTANCE), // OK
