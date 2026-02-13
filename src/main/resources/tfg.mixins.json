@@ -39,6 +39,8 @@
         "common.cc_tweaked.ModRegistryMixin",
         "common.create.BasinBlockEntityMixin",
         "common.create.BasinCategoryMixin",
+        "common.create.BlazeBurnerBlockMixin",
+        "common.create.BlazeBurnerBlockEntityMixin",
         "common.create.BoilerFluidHandlerMixin",
         "common.create.ChainConveyorBlockEntityMixin",
         "common.create.ChainConveyorBlockMixin",
