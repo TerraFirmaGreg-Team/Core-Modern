@@ -1,0 +1,52 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "tfg:mv_railgun_item_loader_in",
+    "variants": {
+        "is_formed=false,is_painted=false": {"model": {
+            "parent": "gtceu:block/machine/template/part/hatch_machine_emissive",
+            "textures": {
+                "side": "gtceu:block/casings/voltage/mv/side",
+                "overlay_emissive": "gtceu:block/overlay/machine/overlay_item_hatch",
+                "overlay": "gtceu:block/overlay/machine/overlay_pipe_in_emissive",
+                "top": "gtceu:block/casings/voltage/mv/top",
+                "bottom": "gtceu:block/casings/voltage/mv/bottom"
+            }
+        }},
+        "is_formed=true,is_painted=true": {"model": {
+            "parent": "gtceu:block/machine/template/part/hatch_machine_emissive_color_ring",
+            "textures": {
+                "side": "gtceu:block/casings/voltage/mv/side",
+                "overlay_emissive": "gtceu:block/overlay/machine/overlay_item_hatch",
+                "overlay": "gtceu:block/overlay/machine/overlay_pipe_in_emissive",
+                "top": "gtceu:block/casings/voltage/mv/top",
+                "bottom": "gtceu:block/casings/voltage/mv/bottom"
+            }
+        }},
+        "is_formed=false,is_painted=true": {"model": {
+            "parent": "gtceu:block/machine/template/part/hatch_machine_emissive_color_ring",
+            "textures": {
+                "side": "gtceu:block/casings/voltage/mv/side",
+                "overlay_emissive": "gtceu:block/overlay/machine/overlay_item_hatch",
+                "overlay": "gtceu:block/overlay/machine/overlay_pipe_in_emissive",
+                "top": "gtceu:block/casings/voltage/mv/top",
+                "bottom": "gtceu:block/casings/voltage/mv/bottom"
+            }
+        }},
+        "is_formed=true,is_painted=false": {"model": {
+            "parent": "gtceu:block/machine/template/part/hatch_machine_emissive",
+            "textures": {
+                "side": "gtceu:block/casings/voltage/mv/side",
+                "overlay_emissive": "gtceu:block/overlay/machine/overlay_item_hatch",
+                "overlay": "gtceu:block/overlay/machine/overlay_pipe_in_emissive",
+                "top": "gtceu:block/casings/voltage/mv/top",
+                "bottom": "gtceu:block/casings/voltage/mv/bottom"
+            }
+        }}
+    },
+    "replaceable_textures": [
+        "bottom",
+        "top",
+        "side"
+    ]
+}

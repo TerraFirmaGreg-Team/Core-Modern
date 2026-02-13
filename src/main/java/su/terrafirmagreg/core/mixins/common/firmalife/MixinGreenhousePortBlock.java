@@ -22,7 +22,7 @@ public abstract class MixinGreenhousePortBlock implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new GTGreenhousePortBlockEntity(pos, state);
+        return new GTGreenhousePortBlockEntity(TFGBlockEntities.GT_GREENHOUSE_PORT.get(), pos, state);
     }
 
     @Override

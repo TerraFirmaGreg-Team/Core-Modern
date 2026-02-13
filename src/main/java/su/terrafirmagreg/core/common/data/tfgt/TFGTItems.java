@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
@@ -146,6 +147,7 @@ public class TFGTItems {
             .register();
 
     public static final ItemEntry<ComponentItem> PARACETAMOL_PILL = TFGCore.REGISTRATE.item("paracetamol_pill", ComponentItem::create)
+            .model((ctx, prov) -> prov.getExistingFile(GTCEu.id("item/paracetamol_pill")))
             .properties(p -> p.food(GTFoods.ANTIDOTE))
             .onRegister(attach(new AntidoteBehavior(30,
                     GTMedicalConditions.CHEMICAL_BURNS,
@@ -162,6 +164,7 @@ public class TFGTItems {
             .register();
 
     public static final ItemEntry<ComponentItem> RAD_AWAY_PILL = TFGCore.REGISTRATE.item("rad_away_pill", ComponentItem::create)
+            .model((ctx, prov) -> prov.getExistingFile(GTCEu.id("item/rad_away_pill")))
             .properties(p -> p.food(GTFoods.ANTIDOTE))
             .onRegister(attach(new AntidoteBehavior(-1,
                     GTMedicalConditions.CHEMICAL_BURNS,

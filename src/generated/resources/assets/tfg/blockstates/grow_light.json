@@ -1,0 +1,4 @@
+{"variants": {
+    "active=false": {"model": "tfg:block/machines/egh_planter/grow_light"},
+    "active=true": {"model": "tfg:block/machines/egh_planter/grow_light_active"}
+}}

@@ -7,12 +7,13 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
 
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 
+import su.terrafirmagreg.core.TFGCore;
+
 public class DoubleRocketModel<T extends Rocket> extends EntityModel<T> {
-    public static final ModelLayerLocation TIER_1_DOUBLE_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("tfg", "tier_1_double_rocket"), "main");
+    public static final ModelLayerLocation TIER_1_DOUBLE_LAYER = new ModelLayerLocation(TFGCore.id("tier_1_double_rocket"), "main");
     private final ModelPart root;
 
     public DoubleRocketModel(ModelPart root) {

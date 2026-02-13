@@ -1,0 +1,4 @@
+{"variants": {
+    "active=false": {"model": "tfg:block/casings/bioculture_rotor_primary"},
+    "active=true": {"model": "tfg:block/casings/bioculture_rotor_primary_active"}
+}}

@@ -1,0 +1,15 @@
+{"variants": {
+    "facing=east": {
+        "y": 90,
+        "model": "tfg:block/machine/opv_aqueous_accumulator"
+    },
+    "facing=south": {
+        "y": 180,
+        "model": "tfg:block/machine/opv_aqueous_accumulator"
+    },
+    "facing=north": {"model": "tfg:block/machine/opv_aqueous_accumulator"},
+    "facing=west": {
+        "y": 270,
+        "model": "tfg:block/machine/opv_aqueous_accumulator"
+    }
+}}

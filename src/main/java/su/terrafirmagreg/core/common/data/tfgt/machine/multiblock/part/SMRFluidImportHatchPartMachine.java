@@ -11,10 +11,11 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachin
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidType;
+
+import su.terrafirmagreg.core.TFGCore;
 
 // Credit to https://github.com/Phoenixvine32908/PhoenixCore/
 
@@ -25,7 +26,7 @@ public class SMRFluidImportHatchPartMachine extends FluidHatchPartMachine {
             FluidHatchPartMachine.MANAGED_FIELD_HOLDER);
 
     public static final TagKey<Fluid> SMR_FLUID_TAG = TagKey.create(Registries.FLUID,
-            ResourceLocation.fromNamespaceAndPath("tfg", "smr_fluids"));
+            TFGCore.id("smr_fluids"));
 
     public static final int BASE_CAPACITY = 16 * FluidType.BUCKET_VOLUME;
 

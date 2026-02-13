@@ -3,7 +3,7 @@ package su.terrafirmagreg.core.common.data.blocks;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
@@ -12,7 +12,6 @@ import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -30,6 +29,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import dev.latvian.mods.kubejs.typings.Info;
+import lombok.AllArgsConstructor;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
@@ -75,10 +75,10 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
      */
     public ActiveParticleBlock(
             Properties properties,
-            VoxelShape shape,
-            Supplier<Item> itemSupplier,
-            List<ParticleConfig> inactiveConfigs,
-            List<ParticleConfig> activeConfigs,
+            @Nullable VoxelShape shape,
+            @Nullable Supplier<Item> itemSupplier,
+            @Nullable List<ParticleConfig> inactiveConfigs,
+            @Nullable List<ParticleConfig> activeConfigs,
             boolean hasTicker,
             int emitDelay,
             int inactiveLight,
@@ -94,6 +94,11 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(GTBlockStateProperties.ACTIVE, false));
+    }
+
+    public ActiveParticleBlock(Properties properties, @Nullable VoxelShape shape, @Nullable Supplier<Item> itemSupplier, @Nullable List<ParticleConfig> inactiveConfigs,
+            @Nullable List<ParticleConfig> activeConfigs) {
+        this(properties, shape, itemSupplier, inactiveConfigs, activeConfigs, false, 0, 0, 0);
     }
 
     private static int clampLight(int v) {
@@ -115,7 +120,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return shape;
     }
 
@@ -125,12 +130,12 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
+    public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
@@ -147,7 +152,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
      */
     @Info("Client display tick. Cannot be every tick. Use ticker for adjustable frequency.")
     @Override
-    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (hasTicker && level.getBlockEntity(pos) != null)
             return;
         if (!shouldEmit(random))
@@ -166,12 +171,12 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return hasTicker ? new TickerBlockEntity(pos, state) : null;
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
+    public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (!hasTicker || !level.isClientSide)
             return null;
         if (type != TFGBlockEntities.TICKER_ENTITY.get())
@@ -199,6 +204,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
      * <p>- particle count.
      * <p>- whether the particle is forced (always visible) or standard.
      */
+    @AllArgsConstructor
     public static class ParticleConfig {
         private final Supplier<SimpleParticleType> type;
         private final double posX, posY, posZ;
@@ -208,34 +214,6 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
         private final boolean forced;
         private final boolean useDust;
         private final float r, g, b, scale;
-
-        public ParticleConfig(
-                Supplier<SimpleParticleType> type,
-                double posX, double posY, double posZ,
-                double rangeX, double rangeY, double rangeZ,
-                double velocityX, double velocityY, double velocityZ,
-                int count,
-                boolean forced,
-                boolean useDust,
-                float r, float g, float b, float scale) {
-            this.type = type != null ? type : () -> ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
-            this.posX = posX;
-            this.posY = posY;
-            this.posZ = posZ;
-            this.rangeX = rangeX;
-            this.rangeY = rangeY;
-            this.rangeZ = rangeZ;
-            this.velocityX = velocityX;
-            this.velocityY = velocityY;
-            this.velocityZ = velocityZ;
-            this.count = Math.max(1, count);
-            this.forced = forced;
-            this.useDust = useDust;
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.scale = scale;
-        }
 
         private double randRange(RandomSource rdn, double range) {
             if (range <= 0)

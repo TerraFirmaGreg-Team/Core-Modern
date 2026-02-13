@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -97,8 +98,8 @@ public class LargeNestBoxBlockEntity
     public static final int SLOTS = 4;
     private static final Component NAME = Component.translatable(TFGCore.MOD_ID + ".block_entity.large_nest_box");
 
-    public LargeNestBoxBlockEntity(BlockPos pos, BlockState state) {
-        super(TFGBlockEntities.LARGE_NEST_BOX.get(), pos, state, LargeNestBoxInventory::new, NAME);
+    public LargeNestBoxBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState, LargeNestBoxInventory::new, NAME);
 
         if (TFCConfig.SERVER.nestBoxEnableAutomation.get()) {
             sidedInventory.on(new PartialItemHandler(inventory).extractAll(), Direction.DOWN);

@@ -1,0 +1,15 @@
+{"variants": {
+    "facing=east": {
+        "y": 90,
+        "model": "tfg:block/artisan_table"
+    },
+    "facing=south": {
+        "y": 180,
+        "model": "tfg:block/artisan_table"
+    },
+    "facing=north": {"model": "tfg:block/artisan_table"},
+    "facing=west": {
+        "y": 270,
+        "model": "tfg:block/artisan_table"
+    }
+}}

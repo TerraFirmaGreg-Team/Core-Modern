@@ -1,0 +1,24 @@
+{"variants": {
+    "facing=east": {
+        "y": 90,
+        "model": "tfg:block/machine/uv_smr_fluid_import_hatch"
+    },
+    "facing=south": {
+        "y": 180,
+        "model": "tfg:block/machine/uv_smr_fluid_import_hatch"
+    },
+    "facing=down": {
+        "x": 90,
+        "model": "tfg:block/machine/uv_smr_fluid_import_hatch"
+    },
+    "facing=north": {"model": "tfg:block/machine/uv_smr_fluid_import_hatch"},
+    "facing=up": {
+        "gtceu:z": 180,
+        "x": 270,
+        "model": "tfg:block/machine/uv_smr_fluid_import_hatch"
+    },
+    "facing=west": {
+        "y": 270,
+        "model": "tfg:block/machine/uv_smr_fluid_import_hatch"
+    }
+}}

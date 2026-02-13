@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -15,13 +16,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-import su.terrafirmagreg.core.common.data.TFGBlockEntities;
-
 public class GTGreenhousePortBlockEntity extends BlockEntity implements IFluidHandler {
     private final FluidTank tank = new FluidTank(4000); // 4 ведра
 
-    public GTGreenhousePortBlockEntity(BlockPos pos, BlockState state) {
-        super(TFGBlockEntities.GT_GREENHOUSE_PORT.get(), pos, state);
+    public GTGreenhousePortBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState);
     }
 
     @Override

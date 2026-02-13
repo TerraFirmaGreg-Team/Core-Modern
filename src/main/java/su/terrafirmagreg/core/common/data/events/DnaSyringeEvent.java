@@ -26,7 +26,7 @@ import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.config.TFGConfig;
 
-@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class DnaSyringeEvent {
 
     /**
