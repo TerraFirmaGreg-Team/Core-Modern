@@ -5,6 +5,7 @@ import com.tterrag.registrate.util.entry.EntityEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -72,14 +73,14 @@ public class TFGItems {
 
     @SuppressWarnings("deprecation")
     public static final ItemEntry<BucketItem> SULFUR_FUMES_BUCKET = TFGCore.REGISTRATE.item("sulfur_fumes_bucket",
-                    p -> new BucketItem(TFGFluids.SULFUR_FUMES.getSource(), p))
+            p -> new BucketItem(TFGFluids.SULFUR_FUMES.getSource(), p))
             .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
     @SuppressWarnings("deprecation")
     public static final ItemEntry<BucketItem> GEYSER_SLURRY_BUCKET = TFGCore.REGISTRATE.item("geyser_slurry_bucket",
-                    p -> new BucketItem(TFGFluids.GEYSER_SLURRY.getSource(), p))
+            p -> new BucketItem(TFGFluids.GEYSER_SLURRY.getSource(), p))
             .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
@@ -98,14 +99,17 @@ public class TFGItems {
 
     public static final ItemEntry<Item> SNIFFER_EGG = TFGCore.REGISTRATE.item("sniffer_egg", Item::new)
             .properties(p -> p.stacksTo(32))
+            .model((ctx, prov) -> prov.generated(ctx::getEntry, ResourceLocation.fromNamespaceAndPath("minecraft", "item/sniffer_egg")))
             .register();
 
     public static final ItemEntry<Item> WRAPTOR_WOOL = TFGCore.REGISTRATE.item("wraptor_wool", Item::new)
             .properties(p -> p.stacksTo(32))
+            .model((ctx, prov) -> prov.generated(ctx::getEntry, TFGCore.id("item/wraptor_wool")))
             .register();
 
     public static final ItemEntry<Item> WRAPTOR_EGG = TFGCore.REGISTRATE.item("wraptor_egg", Item::new)
             .properties(p -> p.stacksTo(32))
+            .model((ctx, prov) -> prov.generated(ctx::getEntry, ResourceLocation.fromNamespaceAndPath("species", "item/wraptor_egg")))
             .register();
 
     public static final ItemEntry<Item> WIRELESS_CARD = TFGCore.REGISTRATE.item("wireless_card",
@@ -125,19 +129,19 @@ public class TFGItems {
             .register();
 
     public static final ItemEntry<RocketItem> TIER_2_DOUBLE_ROCKET = TFGCore.REGISTRATE.item("tier_2_double_rocket",
-                    p -> new RocketItem(TFGEntities.TIER_2_DOUBLE_ROCKET::get, p))
+            p -> new RocketItem(TFGEntities.TIER_2_DOUBLE_ROCKET::get, p))
             .properties(p -> p.stacksTo(1).fireResistant())
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
     public static final ItemEntry<RocketItem> TIER_3_DOUBLE_ROCKET = TFGCore.REGISTRATE.item("tier_3_double_rocket",
-                    p -> new RocketItem(TFGEntities.TIER_3_DOUBLE_ROCKET::get, p))
+            p -> new RocketItem(TFGEntities.TIER_3_DOUBLE_ROCKET::get, p))
             .properties(p -> p.stacksTo(1).fireResistant())
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
     public static final ItemEntry<RocketItem> TIER_4_DOUBLE_ROCKET = TFGCore.REGISTRATE.item("tier_4_double_rocket",
-                    p -> new RocketItem(TFGEntities.TIER_4_DOUBLE_ROCKET::get, p))
+            p -> new RocketItem(TFGEntities.TIER_4_DOUBLE_ROCKET::get, p))
             .properties(p -> p.stacksTo(1).fireResistant())
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();

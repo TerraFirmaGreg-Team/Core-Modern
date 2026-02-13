@@ -14,7 +14,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 
@@ -85,15 +84,12 @@ public class ModelUtils {
     }
 
     public static NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> createActiveModel(ResourceLocation textureName) {
-        return (ctx, prov) -> {
-            activeBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().cubeAll(ctx.getName(), textureName), prov.models().cubeAll(ctx.getName() + "_active", textureName.withSuffix("_active")));
-        };
+        return (ctx, prov) -> activeBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().cubeAll(ctx.getName(), textureName),
+                prov.models().cubeAll(ctx.getName() + "_active", textureName.withSuffix("_active")));
     }
 
     public static NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> existingActiveModel(ResourceLocation modelPath) {
-        return (ctx, prov) -> {
-            activeBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(modelPath), prov.models().getExistingFile(modelPath.withSuffix("_active")));
-        };
+        return (ctx, prov) -> activeBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(modelPath), prov.models().getExistingFile(modelPath.withSuffix("_active")));
     }
 
     // has to be duplicated because of the different block type
@@ -103,9 +99,7 @@ public class ModelUtils {
     }
 
     public static NonNullBiConsumer<DataGenContext<Block, ActiveParticleBlock>, RegistrateBlockstateProvider> existingActiveParticleModel(ResourceLocation modelPath) {
-        return (ctx, prov) -> {
-            activeBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(modelPath), prov.models().getExistingFile(modelPath.withSuffix("_active")));
-        };
+        return (ctx, prov) -> activeBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(modelPath), prov.models().getExistingFile(modelPath.withSuffix("_active")));
     }
 
 }

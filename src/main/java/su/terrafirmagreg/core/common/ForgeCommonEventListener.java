@@ -1,7 +1,10 @@
 package su.terrafirmagreg.core.common;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,9 +31,25 @@ public class ForgeCommonEventListener {
 
     @SubscribeEvent
     public static void onMissingMappings(MissingMappingsEvent event) {
-        event.getMappings(Registries.BLOCK, TFGCore.MOD_ID).forEach(mapping -> {
-            if (mapping.getKey().getNamespace().startsWith("casings/"))
-                mapping.remap(ForgeRegistries.BLOCKS.getValue(TFGCore.id(mapping.getKey().getNamespace().substring(8))));
-        });
+
+        event.getAllMappings(Registries.BLOCK).forEach(ForgeCommonEventListener::remapBlock);
+        event.getAllMappings(Registries.ITEM).forEach(ForgeCommonEventListener::remapItem);
+        event.getAllMappings(Registries.BLOCK_ENTITY_TYPE).forEach(ForgeCommonEventListener::remapBlockEntity);
+    }
+
+    public static void remapItem(MissingMappingsEvent.Mapping<Item> mapping) {
+        var key = mapping.getKey();
+
+    }
+
+    public static void remapBlock(MissingMappingsEvent.Mapping<Block> mapping) {
+        var key = mapping.getKey();
+        if (key.getNamespace().equals("tfg") && key.getPath().startsWith("casings/")) {
+            mapping.remap(ForgeRegistries.BLOCKS.getValue(TFGCore.id(key.getPath().substring(8))));
+        }
+    }
+
+    public static void remapBlockEntity(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {
+        var key = mapping.getKey();
     }
 }

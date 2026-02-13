@@ -13,7 +13,6 @@ import com.google.common.collect.ImmutableMap;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
-import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
@@ -35,7 +34,6 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IcicleBlock;
-import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.*;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
@@ -56,7 +54,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -219,10 +216,8 @@ public final class TFGBlocks {
                     .pushReaction(PushReaction.DESTROY)
                     .isViewBlocking((state, level, pos) -> false)
                     .isSuffocating((state, level, pos) -> false))
-            .blockstate((ctx, prov) -> {
-                ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/piglin_disguise_block")));
-            })
-            .item(BlockItem::new).build()
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .blockstate((ctx, prov) -> ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/piglin_disguise_block"))))
             .register();
 
     public static final BlockEntry<MarsIceBlock> MARS_ICE = TFGCore.REGISTRATE.block("mars_ice", MarsIceBlock::new)
@@ -232,7 +227,7 @@ public final class TFGBlocks {
 
     public static final BlockEntry<IcicleBlock> MARS_ICICLE = TFGCore.REGISTRATE.block("mars_icicle", IcicleBlock::new)
             .initialProperties(TFCBlocks.ICICLE::get)
-            .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
+            .properties(BlockBehaviour.Properties::noLootTable)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build().register();
 
@@ -244,9 +239,7 @@ public final class TFGBlocks {
 
     public static final BlockEntry<ArtisanTableBlock> ARTISAN_TABLE = TFGCore.REGISTRATE.block("artisan_table",
             (p) -> new ArtisanTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())))
-            .blockstate((ctx, prov) -> {
-                ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/artisan_table")));
-            })
+            .blockstate((ctx, prov) -> ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/artisan_table"))))
             .item(BlockItem::new).build()
             .register();
 
@@ -517,7 +510,7 @@ public final class TFGBlocks {
                         p.requiresCorrectToolForDrops();
                     return p;
                 })
-                .addLayer(() -> RenderType::cutoutMipped)
+                .addLayer(() -> RenderType::solid)
                 .blockstate(modelProvider)
                 .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
                 .item(BlockItem::new).tag(TFGTags.Items.Casings)

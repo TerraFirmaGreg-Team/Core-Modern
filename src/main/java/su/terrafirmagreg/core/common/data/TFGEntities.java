@@ -1,21 +1,14 @@
 package su.terrafirmagreg.core.common.data;
 
-import java.util.Locale;
-
 import com.tterrag.registrate.util.entry.EntityEntry;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import net.wanmine.wab.entity.render.EntityRenderer;
 import net.wanmine.wab.entity.render.model.SurferModel;
 
@@ -40,10 +33,12 @@ import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class TFGEntities {
 
-    public static void init() {}
+    public static void init() {
+    }
 
     public static final EntityEntry<MoonRabbit> MOON_RABBIT = TFGCore.REGISTRATE.entity("moon_rabbit", MoonRabbit::makeMoonRabbit, MobCategory.CREATURE)
             .properties(p -> p.sized(1.0F, 1.3F).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(MoonRabbit::createAttributes)
             .renderer(() -> MoonRabbitRenderer::new)
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MoonRabbit::spawnRules)
@@ -51,6 +46,7 @@ public class TFGEntities {
 
     public static final EntityEntry<TFCGlacianRam> GLACIAN_RAM = TFGCore.REGISTRATE.entity("glacian_ram", TFCGlacianRam::makeTFCGlacianRam, MobCategory.CREATURE)
             .properties(p -> p.sized(1f, 0.9f).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFCGlacianRam::createMobAttributes)
             .renderer(() -> TFCGlacianRamRenderer::new)
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCGlacianRam::spawnRules)
@@ -58,6 +54,7 @@ public class TFGEntities {
 
     public static final EntityEntry<TFCSniffer> SNIFFER = TFGCore.REGISTRATE.entity("sniffer", TFCSniffer::makeTFCSniffer, MobCategory.CREATURE)
             .properties(p -> p.sized(1.9f, 1.75f).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFCSniffer::createMobAttributes)
             .renderer(() -> TFCSnifferRenderer::new)
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCSniffer::spawnRules)
@@ -65,6 +62,7 @@ public class TFGEntities {
 
     public static final EntityEntry<TFCWraptor> WRAPTOR = TFGCore.REGISTRATE.entity("wraptor", TFCWraptor::makeTFCWraptor, MobCategory.CREATURE)
             .properties(p -> p.sized(0.8f, 2.2f).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFCWraptor::createMobAttributes)
             .renderer(() -> TFCWraptorRenderer::new)
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCWraptor::spawnRules)
@@ -72,6 +70,7 @@ public class TFGEntities {
 
     public static final EntityEntry<TFCSurfer> SURFER = TFGCore.REGISTRATE.entity("surfer", TFCSurfer::makeTFCSurfer, MobCategory.WATER_CREATURE)
             .properties(p -> p.sized(1.2f, 0.7f).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFCSurfer::getDefaultAttributes)
             .renderer(() -> c -> EntityRenderer.create(SurferModel::new, 0.6F).create(c))
             .spawnPlacement(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, TFCSurfer::spawnRules)

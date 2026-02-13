@@ -101,6 +101,7 @@ legacyForge {
             programArguments.addAll '--existing', file("src/dev/resources/").getAbsolutePath()
             programArguments.addAll '--existing-mod', 'gtceu'
             programArguments.addAll '--existing-mod', 'tfc'
+            programArguments.addAll '--existing-mod', 'species'
         }
 
     }
