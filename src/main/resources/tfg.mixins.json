@@ -75,6 +75,7 @@
         "common.grappling_hook.GrapplehookItemMixin",
         "common.greate.TieredCrushingRecipeMixin",
         "common.greate.TieredMillingRecipeMixin",
+        "common.greate.TieredSplashingTypeMixin",
         "common.gtceu.CleanroomConditionMixin",
         "common.gtceu.DimensionConditionMixin",
         "common.gtceu.EntityDamageUtilMixin",
