@@ -3,13 +3,11 @@ package su.terrafirmagreg.core.common.environment;
 import static su.terrafirmagreg.core.common.environment.FloodFillHelpers.*;
 import static su.terrafirmagreg.core.common.environment.PassabilityChecker.PassInfo.PassType.*;
 
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -265,6 +263,13 @@ public final class PassabilityChecker {
     }
 
     /**
+     * Returns a snapshot of all cached passability entries.
+     */
+    public static ConcurrentHashMap<BlockState, PassInfo> getCache() {
+        return CACHE;
+    }
+
+    /**
      * Gets the raw passability info for a BlockState.
      */
     public static PassInfo getCachedPassInfo(BlockState blockState) {
@@ -292,34 +297,27 @@ public final class PassabilityChecker {
         }
 
         // Tagged blocks
-        if (blockState.is(TFGTags.Blocks.AtmospherePassable)) {
-            TFGCore.LOGGER.info("[passability] {} tagged PASSABLE", blockState);
-            return PassInfo.empty();
-        }
         if (blockState.is(TFGTags.Blocks.AtmosphereImpassable)) {
-            TFGCore.LOGGER.info("[passability] {} tagged IMPASSABLE", blockState);
             return PassInfo.full();
         }
-
-        // Debug: log blocks that fall through to collision check
-        Block block = blockState.getBlock();
-        var registryName = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getKey(block);
-        TagKey<Block> tag = TFGTags.Blocks.AtmospherePassable;
-        var holder = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getHolder(block);
-        TFGCore.LOGGER.info("[passability] {} (registry={}) not tagged, tagKey={}, holderPresent={}, holderTags={}",
-                blockState, registryName, tag,
-                holder.isPresent(),
-                holder.map(h -> h.tags().toList()).orElse(List.of()));
+        if (blockState.is(TFGTags.Blocks.AtmospherePassable)) {
+            return PassInfo.empty();
+        }
 
         // Airlocks
         if (blockState.getBlock() instanceof SlidingDoorBlock) {
             return PassInfo.noCache();
         }
 
-        // CollisionShape based. Try with null level content to catch uncacheable blocks.
+        // Use outline shape instead of collision for tagged blocks (e.g. pillar blocks with
+        // full collision but visually open sides)
+        boolean useOutline = blockState.is(TFGTags.Blocks.AtmosphereUseOutline);
+
         VoxelShape shape;
         try {
-            shape = blockState.getCollisionShape(null, BlockPos.ZERO);
+            shape = useOutline
+                    ? blockState.getShape(null, BlockPos.ZERO)
+                    : blockState.getCollisionShape(null, BlockPos.ZERO);
         } catch (NullPointerException e) {
             // Block needs level context (e.g. moving piston, shulker box, bellows, GT pipes (though pipes are tagged passable))
             return PassInfo.noCache();

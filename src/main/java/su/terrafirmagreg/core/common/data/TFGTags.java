@@ -83,6 +83,7 @@ public final class TFGTags {
         // Atmosphere system tags
         public static final TagKey<Block> AtmospherePassable = createBlockTag("tfg:atmosphere_passable");
         public static final TagKey<Block> AtmosphereImpassable = createBlockTag("tfg:atmosphere_impassable");
+        public static final TagKey<Block> AtmosphereUseOutline = createBlockTag("tfg:atmosphere_use_outline");
 
         public static TagKey<Block> createBlockTag(String path) {
             return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.parse(path));

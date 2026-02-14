@@ -2,7 +2,7 @@ package su.terrafirmagreg.core.utils.commands;
 
 import static net.minecraft.commands.Commands.literal;
 
-import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
@@ -13,16 +13,18 @@ import su.terrafirmagreg.core.common.environment.DimEnvManager;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.core.common.environment.OxygenProvider;
 
-public class OxygenCommand {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(
-                literal("tfg")
-                        .then(literal("oxygen").requires(c -> c.hasPermission(2))
-                                .executes(c -> {
-                                    BlockPos pos = BlockPos.containing(c.getSource().getPosition());
-                                    ServerLevel level = c.getSource().getLevel();
-                                    return checkOxygen(c.getSource(), level, pos);
-                                })));
+/**
+ * /tfg debug oxygen: check oxygen at player position + list all providers
+ */
+public class DebugOxygenCommand {
+
+    public static void register(LiteralArgumentBuilder<CommandSourceStack> debug) {
+        debug.then(literal("oxygen")
+                .executes(c -> {
+                    BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                    ServerLevel level = c.getSource().getLevel();
+                    return checkOxygen(c.getSource(), level, pos);
+                }));
     }
 
     private static int checkOxygen(CommandSourceStack source, ServerLevel level, BlockPos pos) {
@@ -31,7 +33,6 @@ public class OxygenCommand {
         source.sendSuccess(() -> Component.literal(String.format(
                 "Oxygen at %s: %s", pos.toShortString(), hasOxygen ? "YES" : "NO")), false);
 
-        // Show provider details
         DimEnvManager manager = EnvironmentSystem.getManager(level);
         int providerCount = 0;
         for (OxygenProvider provider : manager.getProviders().values()) {
@@ -44,7 +45,7 @@ public class OxygenCommand {
             int envSize = provider.getRoomScan().envelopeSize();
 
             source.sendSuccess(() -> Component.literal(String.format(
-                    "  Provider at %s: status=%s, interior=%d, envelope=%d, machineLoaded=%s, working=%s",
+                    "  Provider at %s: status=%s, interior=%d, envelope=%d, loaded=%s, working=%s",
                     mPos.toShortString(), status, intSize, envSize, loaded, working)), false);
         }
 
