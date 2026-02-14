@@ -3,8 +3,8 @@
         "client.create.ChainConveyorRendererMixin",
         "client.minecraft.IBlockModelGeneratorsInvoker",
         "client.tfc.ClientForgeEventHandlerMixin",
-        "client.waterflasks.FlaskItemMixin",
         "client.tfc.DrinkableMixin",
+        "client.waterflasks.FlaskItemMixin",
         "common.ad_astra.EnvironmentEffectsMixin",
         "common.ad_astra.GasTankItemMixin",
         "common.ad_astra.LanderMixin",
@@ -39,8 +39,8 @@
         "common.cc_tweaked.ModRegistryMixin",
         "common.create.BasinBlockEntityMixin",
         "common.create.BasinCategoryMixin",
-        "common.create.BlazeBurnerBlockMixin",
         "common.create.BlazeBurnerBlockEntityMixin",
+        "common.create.BlazeBurnerBlockMixin",
         "common.create.BoilerFluidHandlerMixin",
         "common.create.ChainConveyorBlockEntityMixin",
         "common.create.ChainConveyorBlockMixin",
@@ -135,6 +135,7 @@
         "common.minecraft.SnifferEggBlockMixin",
         "common.minecraft.StriderMixin",
         "common.sacks_n_such.AbstractArrowMixinSquared",
+        "common.sacks_n_such.SimpleDynamicCachedWeightMixin",
         "common.sandworms.WormSignHandlerMixin",
         "common.simply_stacked_dimensions.TeleportHandlerMixin",
         "common.sophisticatedbackpacks.FeedingUpgradeWrapperMixin",
@@ -194,7 +195,9 @@
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",
-    "injectors": {"defaultRequire": 1},
+    "injectors": {
+        "defaultRequire": 1
+    },
     "compatibilityLevel": "JAVA_17",
     "client": [
         "client.afc.TapBlockEntityProviderMixin",
