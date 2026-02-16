@@ -24,7 +24,7 @@ plugins {
 apply from: 'gradle/scripts/repositories.gradle'
 apply from: 'gradle/scripts/dependencies.gradle'
 apply from: 'gradle/scripts/spotless.gradle'
-apply from: file("moveToInstance.gradle").exists() ? "moveToInstance.gradle" : null
+if (file("moveToInstance.gradle").exists()) apply from: "moveToInstance.gradle"
 
 base {
     version = "${mod_version}"
