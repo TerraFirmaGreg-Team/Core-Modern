@@ -130,7 +130,7 @@ dependencies {
     modImplementation "curse.maven:create-liquid-fuel-840734:5217310"
 
     //Dea's Fission Vazde
-    modImplementation "curse.maven:deafission-1354541:7258440"
+    modImplementation "curse.maven:deafission-1354541:7633771"
 
     //Create Picky Waterwheels
     modImplementation "curse.maven:create-picky-waterwheels-866839:6932328"

@@ -13,10 +13,10 @@ import net.minecraft.world.item.ItemStack;
 import mod.traister101.sns.common.capability.SimpleDynamicCachedWeight;
 import mod.traister101.sns.common.items.SNSItems;
 
-@Mixin(SimpleDynamicCachedWeight.class)
+@Mixin(value = SimpleDynamicCachedWeight.class, remap = false)
 public abstract class SimpleDynamicCachedWeightMixin {
     @Final
-    @Shadow
+    @Shadow(remap = false)
     private ItemStack owner;
 
     /** Changes the dynamic weight returning VERY_HEAVY when nearly full to HEAVY for HUGE containers so they don't trigger the exhaust debuff on players
