@@ -19,6 +19,7 @@ plugins {
     id 'idea'
     id 'net.neoforged.moddev.legacyforge' version "${mdg_legacy_version}"
     id 'com.diffplug.spotless' version "${spotless_version}"
+    id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
 apply from: 'gradle/scripts/repositories.gradle'
@@ -156,7 +157,6 @@ tasks.withType(Jar).configureEach {
             "MixinConfigs"            : "${mod_id}.mixins.json"
     ])
 }
-
 
 // Fix a bug in Species that only shows up when running from dev env
 // Compile our patched Species.class, and use it instead of the normal one in the species-3.5.jar.
