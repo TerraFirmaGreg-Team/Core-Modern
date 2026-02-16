@@ -100,7 +100,6 @@
         "common.gtceu.SurfaceRockBlockMixin",
         "common.gtceu.TagPrefixItemMixin",
         "common.gtceu.ToolHelperMixin",
-        "common.gtceu.materials.ElementMaterialsMixin",
         "common.gtceu.materials.FirstDegreeMixin",
         "common.gtceu.materials.MaterialBlocksMixin",
         "common.gtceu.materials.MaterialBuilderMixin",
