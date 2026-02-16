@@ -289,6 +289,13 @@ public class TFGMachines {
             .tier(GTValues.MV)
             .register();
 
+    public static final MachineDefinition SPACE_HEATER = GTRegistration.REGISTRATE.machine("space_heater",
+            (holder) -> new SpaceHeaterMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction))
+            .recipeType(TFGTRecipeTypes.SPACE_HEATING)
+            .recipeModifier(SpaceHeaterMachine::recipeModifier)
+            .tier(GTValues.MV)
+            .register();
+
     public static MachineDefinition[] registerTieredMachines(GTRegistrate registrate, String name,
             BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
             BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,

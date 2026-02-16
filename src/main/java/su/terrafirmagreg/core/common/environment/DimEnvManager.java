@@ -41,19 +41,19 @@ public class DimEnvManager extends SavedData {
     private final Map<BlockPos, OxygenProvider> providers = new HashMap<>();
 
     /** Map of Chunks to Machines that want to be notified of block change events in those chunks */
-    public final MachineRegistry<IBlockSensitiveMachine> blockChangeListeners = new MachineRegistry<>();
+    public final ChunkRegistry<IBlockSensitiveMachine> blockChangeListeners = new ChunkRegistry<>();
 
     /** Map of Chunks to Machines that want to be notified of chunk loads */
-    public final MachineRegistry<IBlockSensitiveMachine> chunkLoadListeners = new MachineRegistry<>();
+    public final ChunkRegistry<IBlockSensitiveMachine> chunkLoadListeners = new ChunkRegistry<>();
 
     /** Map of Chunks to OxygenProviders that affect oxygen in those Chunks */
-    public final MachineRegistry<OxygenProvider> oxygenProviders = new MachineRegistry<>();
+    public final ChunkRegistry<OxygenProvider> oxygenProviders = new ChunkRegistry<>();
 
-    /** Map of Chunks to Machines that affect gravity in those Chunks */
-    //public final MachineRegistry<EnvironmentSystem.IGravityProvider> gravityMachines = new MachineRegistry<>();
+    /** Temperature providers keyed by machine position. Persisted to NBT. */
+    private final Map<BlockPos, TemperatureProvider> tempProviders = new HashMap<>();
 
-    /** Map of Chunks to Machines that affect temperature in those Chunks */
-    //public final MachineRegistry<EnvironmentSystem.ITemperatureProvider> temperatureMachines = new MachineRegistry<>();
+    /** Map of Chunks to TemperatureProviders that affect temperature in those Chunks */
+    public final ChunkRegistry<TemperatureProvider> temperatureProviders = new ChunkRegistry<>();
 
     /** Active decompression events in this dimension */
     private final List<DecompressionEvent> activeDecompressions = new ArrayList<>();
@@ -98,6 +98,21 @@ public class DimEnvManager extends SavedData {
         }
 
         TFGCore.LOGGER.debug("Loaded {} oxygen providers from saved data", manager.providers.size());
+
+        // Load temperature providers
+        ListTag tempList = tag.getList("tempProviders", Tag.TAG_COMPOUND);
+        for (int i = 0; i < tempList.size(); i++) {
+            CompoundTag providerTag = tempList.getCompound(i);
+            try {
+                TemperatureProvider provider = TemperatureProvider.load(providerTag);
+                manager.tempProviders.put(provider.getMachinePos(), provider);
+                manager.temperatureProviders.add(provider, provider.getAffectedChunks());
+            } catch (Exception e) {
+                TFGCore.LOGGER.error("Failed to load temperature provider from NBT", e);
+            }
+        }
+        TFGCore.LOGGER.debug("Loaded {} temperature providers from saved data", manager.tempProviders.size());
+
         return manager;
     }
 
@@ -121,6 +136,21 @@ public class DimEnvManager extends SavedData {
 
         tag.put("providers", list);
         TFGCore.LOGGER.info("Saved {} sealed oxygen providers", list.size());
+
+        // Save temperature providers
+        ListTag tempList = new ListTag();
+        for (TemperatureProvider provider : tempProviders.values()) {
+            try {
+                CompoundTag providerTag = new CompoundTag();
+                provider.save(providerTag);
+                tempList.add(providerTag);
+            } catch (Exception e) {
+                TFGCore.LOGGER.error("Failed to save temperature provider at {}", provider.getMachinePos(), e);
+            }
+        }
+        tag.put("tempProviders", tempList);
+        TFGCore.LOGGER.info("Saved {} temperature providers", tempList.size());
+
         return tag;
     }
 
@@ -133,6 +163,13 @@ public class DimEnvManager extends SavedData {
      */
     public Map<BlockPos, OxygenProvider> getProviders() {
         return Collections.unmodifiableMap(providers);
+    }
+
+    /**
+     * @return All temperature providers in this dimension
+     */
+    public Map<BlockPos, TemperatureProvider> getTempProviders() {
+        return Collections.unmodifiableMap(tempProviders);
     }
 
     // ==================== Oxygen Provider Management ====================
@@ -229,6 +266,70 @@ public class DimEnvManager extends SavedData {
      */
     public void tickDecompressions() {
         activeDecompressions.removeIf(event -> !event.tick(level));
+    }
+
+    // ==================== Temperature Provider Management ====================
+
+    /**
+     * Gets an existing temperature provider or creates a new one.
+     * Called when a temperature machine loads.
+     */
+    public TemperatureProvider getOrCreateTempProvider(BlockPos machinePos, int radius) {
+        return tempProviders.computeIfAbsent(machinePos, pos -> {
+            TemperatureProvider provider = new TemperatureProvider(pos, radius);
+            temperatureProviders.add(provider, provider.getAffectedChunks());
+            setSavedDataDirty();
+            return provider;
+        });
+    }
+
+    /**
+     * Replaces a temperature provider with a new radius. Called when the machine's radius changes.
+     * Returns the new provider (already registered in chunk registry).
+     */
+    public TemperatureProvider updateTempProvider(BlockPos machinePos, int newRadius) {
+        TemperatureProvider old = tempProviders.remove(machinePos);
+        if (old != null) {
+            temperatureProviders.remove(old, old.getAffectedChunks());
+        }
+        TemperatureProvider newProvider = new TemperatureProvider(machinePos, newRadius);
+        tempProviders.put(machinePos, newProvider);
+        temperatureProviders.add(newProvider, newProvider.getAffectedChunks());
+        setSavedDataDirty();
+        return newProvider;
+    }
+
+    /**
+     * Removes a temperature provider. Called when a temperature machine is broken.
+     */
+    public void removeTempProvider(BlockPos machinePos) {
+        TemperatureProvider provider = tempProviders.remove(machinePos);
+        if (provider != null) {
+            temperatureProviders.remove(provider, provider.getAffectedChunks());
+            setSavedDataDirty();
+        }
+    }
+
+    // ==================== Temperature Queries ====================
+
+    /**
+     * Checks if a position has safe temperature (from natural environment or a machine bubble).
+     */
+    public boolean hasTemperature(BlockPos pos) {
+        if (environment.hasNormalTemperature()) {
+            return true;
+        }
+
+        ChunkPos chunkPos = new ChunkPos(pos);
+        Set<TemperatureProvider> providerSet = temperatureProviders.get(chunkPos);
+        if (providerSet != null) {
+            for (TemperatureProvider provider : providerSet) {
+                if (provider.hasTemperature(pos)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // ==================== Event Handling ====================
@@ -330,34 +431,44 @@ public class DimEnvManager extends SavedData {
      * and the machine has attached to its provider. Any provider still without a machine is orphaned.
      */
     private void checkOrphanedProviders(ChunkPos chunkPos) {
-        List<BlockPos> providersInChunk = providers.keySet().stream()
+        List<BlockPos> oxygenInChunk = providers.keySet().stream()
                 .filter(pos -> new ChunkPos(pos).equals(chunkPos))
                 .toList();
 
-        if (providersInChunk.isEmpty())
+        List<BlockPos> tempInChunk = tempProviders.keySet().stream()
+                .filter(pos -> new ChunkPos(pos).equals(chunkPos))
+                .toList();
+
+        if (oxygenInChunk.isEmpty() && tempInChunk.isEmpty())
             return;
 
         level.getServer().tell(new net.minecraft.server.TickTask(
                 level.getServer().getTickCount() + 1,
                 () -> {
-                    List<BlockPos> orphaned = new ArrayList<>();
-                    for (BlockPos providerPos : providersInChunk) {
+                    for (BlockPos providerPos : oxygenInChunk) {
                         OxygenProvider provider = providers.get(providerPos);
                         if (provider != null && !provider.isMachineLoaded()) {
                             removeProvider(providerPos);
                             TFGCore.LOGGER.debug("Removing orphaned oxygen provider at {}", providerPos);
                         }
                     }
+                    for (BlockPos providerPos : tempInChunk) {
+                        TemperatureProvider provider = tempProviders.get(providerPos);
+                        if (provider != null && !provider.isMachineLoaded()) {
+                            removeTempProvider(providerPos);
+                            TFGCore.LOGGER.debug("Removing orphaned temperature provider at {}", providerPos);
+                        }
+                    }
                 }));
     }
 
-    // ==================== MachineRegistry ====================
+    // ==================== ChunkRegistry ====================
 
     /**
      * Wrapper around a Map<ChunkPos, Set<T>> that handles adding and removing.
      * Meant for quick lookup of providers and machines based on the ChunkPos.
      */
-    public static class MachineRegistry<T> {
+    public static class ChunkRegistry<T> {
         private final Map<ChunkPos, Set<T>> map = new HashMap<>();
 
         public void update(T item, Set<ChunkPos> toRemove, Set<ChunkPos> toAdd) {

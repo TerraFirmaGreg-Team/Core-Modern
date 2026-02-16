@@ -136,6 +136,9 @@ public final class TFCAmbientalCompat {
                 .filter(Objects::nonNull)
                 .forEach(m -> capabilityBlocks.put(m.getBlock(), refrigeratorSpec));
 
+        // Space heater
+        capabilityBlocks.put(TFGMachines.SPACE_HEATER.getBlock(), new TempModifierSpec("space_heater", 18.0F, 3.0F));
+
         CAPABILITY_BLOCKS = Map.copyOf(capabilityBlocks);
     }
 

@@ -13,7 +13,7 @@ public class TFGCommands {
                 .requires(c -> c.hasPermission(2));
 
         DebugFloodFillCommand.register(debug);
-        DebugOxygenCommand.register(debug);
+        DebugEnvironmentCommand.register(debug);
         DebugPassabilityCommand.register(debug);
         DebugSpaceSuitCommand.register(debug);
 

@@ -233,4 +233,12 @@ public class TFGTRecipeTypes {
             .setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP)
             .setSound(GTSoundEntries.COOLING);
+
+    // While space heating recipes are running the bubble has safe temperature.
+    public static final GTRecipeType SPACE_HEATING = GTRecipeTypes
+            .register("space_heating", GTRecipeTypes.ELECTRIC)
+            //.setMaxIOSize(0, 0, 0, 0)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.COOLING);
 }

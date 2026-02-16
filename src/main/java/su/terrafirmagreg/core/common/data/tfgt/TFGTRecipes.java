@@ -134,11 +134,16 @@ public class TFGTRecipes {
             }
         }
 
-        // TODO Example recipe, replace with kubejs actual recipes
+        // TODO Example recipes, replace with kubejs actual recipes
         TFGTRecipeTypes.OXYGEN_DISTRIBUTION.recipeBuilder("oxygen_distribution")
                 .inputFluids(GTMaterials.Air.getFluid(1))
-                .duration(20)
+                .duration(200)
                 //.EUt(GTValues.VA[GTValues.MV])
+                .EUt(1)
+                .save(provider);
+
+        TFGTRecipeTypes.SPACE_HEATING.recipeBuilder("space_heating")
+                .duration(200)
                 .EUt(1)
                 .save(provider);
 

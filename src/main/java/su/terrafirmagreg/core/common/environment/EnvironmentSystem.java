@@ -81,6 +81,26 @@ public final class EnvironmentSystem {
         return manager.hasOxygen(pos);
     }
 
+    /**
+     * Checks if a position has safe temperature (server-side only).
+     *
+     * @param level The level to check in
+     * @param pos The position to check
+     * @return true if the position has safe temperature
+     */
+    public static boolean hasTemperature(Level level, BlockPos pos) {
+        if (!(level instanceof ServerLevel)) {
+            return false;
+        }
+
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager == null) {
+            return false;
+        }
+
+        return manager.hasTemperature(pos);
+    }
+
     // ==================== Async Handling ====================
 
     /** Executor for async jobs (flood fill, diagnostic trace). */
