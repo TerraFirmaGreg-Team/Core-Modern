@@ -15,6 +15,7 @@ public class TFGCommands {
         DebugFloodFillCommand.register(debug);
         DebugOxygenCommand.register(debug);
         DebugPassabilityCommand.register(debug);
+        DebugSpaceSuitCommand.register(debug);
 
         dispatcher.register(literal("tfg").then(debug));
 
