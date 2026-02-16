@@ -79,8 +79,6 @@ legacyForge {
         client {
             client()
             gameDirectory = project.file('run/client')
-            systemProperty 'mixin.env.remapRefMap', 'true'
-            systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         server {
