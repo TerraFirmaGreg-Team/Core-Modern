@@ -29,7 +29,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
  * <p>- Whitelist months
  * <p>- Start/end range. Supports wrap around (example: september-march)
  */
-public class MonthCondition extends RecipeCondition {
+public class MonthCondition extends RecipeCondition<MonthCondition> {
 
     private static final Codec<Month> MONTH_CODEC = Codec.INT.xmap(Month::valueOf, Month::ordinal);
 
@@ -74,7 +74,7 @@ public class MonthCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<MonthCondition> getType() {
         return TFGTRecipeConditions.MONTHS;
     }
 
@@ -137,7 +137,7 @@ public class MonthCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public MonthCondition createTemplate() {
         return new MonthCondition();
     }
 

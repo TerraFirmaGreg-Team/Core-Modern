@@ -1,23 +1,22 @@
 package su.terrafirmagreg.core.common;
 
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.Item;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.MissingMappingsEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggHandler;
+import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
-public class ForgeCommonEventListener {
+public final class ForgeCommonEventListener {
 
     @SubscribeEvent
     public static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
@@ -29,27 +28,15 @@ public class ForgeCommonEventListener {
         }
     }
 
+    /**
+     * Send the blaze burner liquid fuel map to send to the client and populate emi.
+     */
     @SubscribeEvent
-    public static void onMissingMappings(MissingMappingsEvent event) {
-
-        event.getAllMappings(Registries.BLOCK).forEach(ForgeCommonEventListener::remapBlock);
-        event.getAllMappings(Registries.ITEM).forEach(ForgeCommonEventListener::remapItem);
-        event.getAllMappings(Registries.BLOCK_ENTITY_TYPE).forEach(ForgeCommonEventListener::remapBlockEntity);
-    }
-
-    public static void remapItem(MissingMappingsEvent.Mapping<Item> mapping) {
-        var key = mapping.getKey();
-
-    }
-
-    public static void remapBlock(MissingMappingsEvent.Mapping<Block> mapping) {
-        var key = mapping.getKey();
-        if (key.getNamespace().equals("tfg") && key.getPath().startsWith("casings/")) {
-            mapping.remap(ForgeRegistries.BLOCKS.getValue(TFGCore.id(key.getPath().substring(8))));
+    private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            TFGNetworkHandler.INSTANCE.send(
+                    PacketDistributor.PLAYER.with(() -> player),
+                    new FuelSyncPacket(FuelSyncPacket.capturedJsonData));
         }
-    }
-
-    public static void remapBlockEntity(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {
-        var key = mapping.getKey();
     }
 }

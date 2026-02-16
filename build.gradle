@@ -19,6 +19,7 @@ plugins {
     id 'idea'
     id 'net.neoforged.moddev.legacyforge' version "${mdg_legacy_version}"
     id 'com.diffplug.spotless' version "${spotless_version}"
+    id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
 apply from: 'gradle/scripts/repositories.gradle'
@@ -202,7 +203,6 @@ tasks.register("prepareServerDev") {
     dependsOn patchSpeciesJar
 
     def serverDir = file("run/server")
-    def eulaFile = file("${serverDir}/eula.txt")
     def propsFile = file("${serverDir}/server.properties")
 
     outputs.file(eulaFile)
@@ -210,12 +210,6 @@ tasks.register("prepareServerDev") {
 
     doLast {
         serverDir.mkdirs()
-
-        copy {
-            from "src/patches"
-            include "eula.txt"
-            into serverDir
-        }
 
         // Create or patch server.properties to set online-mode=false
         if (propsFile.exists()) {
@@ -232,31 +226,10 @@ tasks.register("prepareServerDev") {
     }
 }
 
-// Prepare client: fix missing Jade lang files
-tasks.register("prepareClientDev") {
-    def langDir = file("run/client/kubejs/assets/jade/lang")
-    def langFile = file("${langDir}/en_us.json")
-
-    outputs.file(langFile)
-
-    doLast {
-        langDir.mkdirs()
-
-        copy {
-            from "src/patches"
-            include "en_us.json"
-            into langDir
-        }
-    }
-}
-
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
         dependsOn("prepareServerDev")
-    }
-    tasks.matching { it.name == "prepareRunClient" }.configureEach {
-        dependsOn("prepareClientDev")
     }
 }
 
@@ -279,6 +252,13 @@ tasks.register('replaceInstanceJar', Copy) {
     outputs.cacheIf { false }
 }
 
+
 tasks.withType(Jar).configureEach {
     finalizedBy(tasks.named("replaceInstanceJar"))
+}
+
+configurations.all {
+    resolutionStrategy {
+        cacheChangingModulesFor 0, 'seconds'
+    }
 }
