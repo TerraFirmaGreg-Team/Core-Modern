@@ -67,7 +67,8 @@ sourceSets {
 
 Properties localProperties = new Properties()
 localProperties.load(project.rootProject.file('gradle-local.properties').newDataInputStream())
-String instancePath = localProperties.get("instancePath")
+String instancePath = localProperties.get("instance_path")
+Boolean enableCopyToInstance = localProperties.get("enable_copy_to_instance")
 
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
@@ -233,7 +234,9 @@ allprojects {
     }
 }
 
+
 // Moving the core jar to a custom folder
+// To use: create gradle-local.properties and define enable_copy_to_instance = true and instance_path = path
 tasks.register('replaceInstanceJar', Copy) {
     String modsDir = "$instancePath/mods"
 
@@ -252,9 +255,10 @@ tasks.register('replaceInstanceJar', Copy) {
     outputs.cacheIf { false }
 }
 
-
-tasks.withType(Jar).configureEach {
-    finalizedBy(tasks.named("replaceInstanceJar"))
+if (enableCopyToInstance) {
+    tasks.withType(Jar).configureEach {
+        finalizedBy(tasks.named("replaceInstanceJar"))
+    }
 }
 
 configurations.all {
