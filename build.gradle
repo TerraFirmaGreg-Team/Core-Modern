@@ -65,11 +65,6 @@ sourceSets {
     }
 }
 
-Properties localProperties = new Properties()
-localProperties.load(project.rootProject.file('gradle-local.properties').newDataInputStream())
-String instancePath = localProperties.get("instance_path")
-Boolean enableCopyToInstance = localProperties.get("enable_copy_to_instance")
-
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
 
@@ -82,6 +77,7 @@ legacyForge {
 
         client {
             client()
+            ideName = "Client"
             gameDirectory = project.file('run/client')
             systemProperty 'mixin.env.remapRefMap', 'true'
             systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
@@ -89,12 +85,14 @@ legacyForge {
 
         server {
             server()
+            ideName = "Server"
             gameDirectory = project.file('run/server')
             programArgument '--nogui'
         }
 
         data {
             data()
+            ideName = "Data"
             gameDirectory = project.file('run/data')
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
@@ -111,7 +109,7 @@ legacyForge {
 
     mods {
         "${mod_id}" {
-            sourceSet(sourceSets.main)
+            sourceSet sourceSets.main
         }
     }
 }
@@ -237,31 +235,41 @@ allprojects {
 
 // Moving the core jar to a custom folder
 // To use: create gradle-local.properties and define enable_copy_to_instance = true and instance_path = path
-tasks.register('replaceInstanceJar', Copy) {
-    String modsDir = "$instancePath/mods"
 
-    fileTree(modsDir).matching {
-        include { file ->
-            file.name ==~ /TerraFirmaGreg-Core-Modern.+/
+if (project.rootProject.file("gradle-local.properties").exists()) {
+    Properties localProperties = new Properties()
+    localProperties.load(project.rootProject.file('gradle-local.properties').newDataInputStream())
+    String instancePath = localProperties.get("instance_path")
+    Boolean enableCopyToInstance = localProperties.get("enable_copy_to_instance")
+
+    tasks.register('replaceInstanceJar', Copy) {
+        String modsDir = "$instancePath/mods"
+
+        // Delete old core
+        fileTree(modsDir).matching {
+            include { file ->
+                file.name ==~ /TerraFirmaGreg-Core-Modern.+/
+            }
+        } each { it.delete() }
+
+        // Copy new core
+        copy {
+            from "${buildDir}/libs"
+            into modsDir
+            include "TerraFirmaGreg-Core-Modern-${version}.jar"
         }
-    } each { it.delete() }
 
-    copy {
-        from "${buildDir}/libs"
-        into modsDir
-        include "TerraFirmaGreg-Core-Modern-${version}.jar"
+        outputs.cacheIf { false }
     }
 
-    outputs.cacheIf { false }
-}
-
-if (enableCopyToInstance) {
-    tasks.withType(Jar).configureEach {
-        finalizedBy(tasks.named("replaceInstanceJar"))
+    if (enableCopyToInstance) {
+        tasks.withType(Jar).configureEach {
+            finalizedBy(tasks.named("replaceInstanceJar"))
+        }
     }
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         cacheChangingModulesFor 0, 'seconds'
     }

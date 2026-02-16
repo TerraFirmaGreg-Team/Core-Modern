@@ -32,7 +32,7 @@ public final class ForgeCommonEventListener {
      * Send the blaze burner liquid fuel map to send to the client and populate emi.
      */
     @SubscribeEvent
-    private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             TFGNetworkHandler.INSTANCE.send(
                     PacketDistributor.PLAYER.with(() -> player),

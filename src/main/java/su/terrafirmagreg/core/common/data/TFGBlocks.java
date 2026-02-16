@@ -63,6 +63,8 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.blocks.*;
@@ -79,7 +81,7 @@ public final class TFGBlocks {
     static ImmutableMap.Builder<Material, BlockEntry<BudIndicator>> BUD_BLOCKS_BUILDER = ImmutableMap.builder();
 
     // Reference tables
-    public static Map<Material, BlockEntry<BudIndicator>> BUD_BLOCKS;
+    public static Map<Material, BlockEntry<BudIndicator>> BUD_BLOCKS = new Object2ObjectOpenHashMap<>();
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TFGCore.MOD_ID);
 
@@ -120,6 +122,7 @@ public final class TFGBlocks {
                     .strength(1.4f)
                     .sound(SoundType.GRAVEL))
             .simpleItem()
+            .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
             .blockstate(ModelUtils.blockVariantsRotated(TFGCore.id("block/grass/mars_path")))
             .register();
 
@@ -303,18 +306,21 @@ public final class TFGBlocks {
     public static final BlockEntry<SandPileBlock> HEMATITIC_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/hematitic_sand_covering",
             p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
             .blockstate(ModelUtils.generateSandLayersFromBlock(ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_sand")))
+            .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
             .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_sand"))).build()
             .register();
 
     public static final BlockEntry<SandPileBlock> MARS_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/mars_sand_covering",
             p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
             .blockstate(ModelUtils.generateSandLayersFromBlock(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/mars_sand")))
+            .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
             .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/mars_sand"))).build()
             .register();
 
     public static final BlockEntry<SandPileBlock> VENUS_SAND_PILE_BLOCK = TFGCore.REGISTRATE.block("pile/venus_sand_covering",
             p -> new SandPileBlock(ExtendedProperties.of(TFCBlocks.SAND.get(SandBlockType.RED).get()).noOcclusion().mapColor(MapColor.NONE).randomTicks().blockEntity(TFCBlockEntities.PILE)))
             .blockstate(ModelUtils.generateSandLayersFromBlock(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/venus_sand")))
+            .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
             .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/venus_sand"))).build()
             .register();
 
@@ -327,6 +333,7 @@ public final class TFGBlocks {
                 .initialProperties(initalProperties)
                 .blockstate(ModelUtils.generateSandLayersFromBlock(modelPath))
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(modelPath)).build()
+                .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
                 .properties(p -> p.noOcclusion().mapColor(MapColor.NONE))
                 .register();
     }
