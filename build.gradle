@@ -312,6 +312,6 @@ tasks.register('copyJarToCustomFolder', Copy) {
     into("${modpack_mods}")
 }
 
-if (propertyBool('enable_copy_jar_to_custom_folder')) {
+if (enable_copy_jar_to_custom_folde.toBoolean()) {
     tasks.build.finalizedBy('copyJarToCustomFolder')
 }
