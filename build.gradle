@@ -152,7 +152,8 @@ tasks.withType(Jar).configureEach {
             "Implementation-Title"    : "${mod_name}",
             "Implementation-Version"  : "${mod_version}",
             "Implementation-Vendor"   : "${mod_authors}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs"            : "${mod_id}.mixins.json"
     ])
 }
 
@@ -221,4 +222,20 @@ allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
         dependsOn("prepareServerDev")
     }
+}
+
+// Moving the core jar to a custom folder
+tasks.register('copyJarToInstance', Copy) {
+
+    group = 'mod development/internal'
+
+    from("${buildDir}/libs") {
+        include("*${version}.jar")
+        exclude("*-sources.jar", "*-javadoc.jar")
+    }
+    into("${modpack_mods}")
+}
+
+if (project.findProperty('enable_copy_jar_to_instance')?.toBoolean()) {
+    tasks.build.finalizedBy('copyJarToInstance')
 }
