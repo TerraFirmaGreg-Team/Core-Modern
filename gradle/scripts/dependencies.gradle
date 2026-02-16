@@ -146,8 +146,8 @@ dependencies {
     modImplementation "curse.maven:tfc-improved-badlands-969207:5126426"
 
     // TFC Water Flasks
-    modCompileOnly "curse.maven:water-flasks-354353:7056478"
+    modImplementation "curse.maven:water-flasks-354353:7056478"
 
     // Sacks and such
-    modCompileOnly "curse.maven:sacks-n-such-695822:6965231"
+    modImplementation "curse.maven:sacks-n-such-695822:6965231"
 }
