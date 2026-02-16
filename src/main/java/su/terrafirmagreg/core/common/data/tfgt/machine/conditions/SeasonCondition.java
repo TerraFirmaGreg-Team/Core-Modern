@@ -30,7 +30,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
  * <p>- Whitelist months.
  * <p>- start/end range. Supports wrap around (example: fall-spring).
  */
-public class SeasonCondition extends RecipeCondition {
+public class SeasonCondition extends RecipeCondition<SeasonCondition> {
 
     private static final Codec<Season> SEASON_CODEC = Codec.INT.xmap(i -> Season.values()[i], Season::ordinal);
 
@@ -75,7 +75,7 @@ public class SeasonCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<SeasonCondition> getType() {
         return TFGTRecipeConditions.SEASONS;
     }
 
@@ -166,7 +166,7 @@ public class SeasonCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public SeasonCondition createTemplate() {
         return new SeasonCondition();
     }
 

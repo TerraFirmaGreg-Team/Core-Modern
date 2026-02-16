@@ -239,3 +239,9 @@ tasks.register('copyJarToInstance', Copy) {
 if (project.findProperty('enable_copy_jar_to_instance')?.toBoolean()) {
     tasks.build.finalizedBy('copyJarToInstance')
 }
+
+configurations.all {
+    resolutionStrategy {
+        cacheChangingModulesFor 0, 'seconds'
+    }
+}
