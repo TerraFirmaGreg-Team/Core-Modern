@@ -30,7 +30,7 @@ public class OxygenProvider {
 
     /** The attached machine, if its chunk is loaded */
     @Nullable
-    private IAtmosphereMachine attachedMachine;
+    private IEnvironmentMachine attachedMachine;
 
     public OxygenProvider(BlockPos machinePos) {
         this.machinePos = machinePos;
@@ -70,7 +70,7 @@ public class OxygenProvider {
     }
 
     /** Called when the machine's chunk loads and the machine attaches to this provider. */
-    public void attach(IAtmosphereMachine machine) {
+    public void attach(IEnvironmentMachine machine) {
         this.attachedMachine = machine;
     }
 

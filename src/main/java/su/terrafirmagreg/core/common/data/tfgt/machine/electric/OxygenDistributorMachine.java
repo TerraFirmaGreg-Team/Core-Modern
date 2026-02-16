@@ -51,7 +51,7 @@ import su.terrafirmagreg.core.common.environment.RoomScan.Status;
  * The actual oxygen data is stored in {@link OxygenProvider} which persists independently
  * of this machine's chunk load state, allowing oxygen queries even when this chunk is unloaded.
  */
-public class OxygenDistributorMachine extends SimpleTieredMachine implements IBlockSensitiveMachine, IAtmosphereMachine {
+public class OxygenDistributorMachine extends SimpleTieredMachine implements IBlockSensitiveMachine, IEnvironmentMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             OxygenDistributorMachine.class, SimpleTieredMachine.MANAGED_FIELD_HOLDER);
