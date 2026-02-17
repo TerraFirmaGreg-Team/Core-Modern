@@ -18,6 +18,7 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
@@ -147,7 +148,9 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
         group.addWidget(new ComponentPanelWidget(contentX, 4, this::addStatusText)
                 .setMaxWidthLimit(width - contentX - 4));
 
-        // Radius input widget
+        // Radius input label + widget
+        group.addWidget(new LabelWidget(contentX + 16 + 24, height - 26,
+                Component.translatable("tfg.machine.space_heater.radius_label").getString()));
         var radiusInput = new IntInputWidget(contentX + 16, height - 16, 80, 20,
                 this::getRadius, this::setRadius);
         radiusInput.setMin(1);
@@ -169,9 +172,9 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
             textList.add(Component.translatable("tfg.machine.space_heater.idle").withStyle(ChatFormatting.GRAY));
         }
 
-        // Radius
-        textList.add(Component.translatable("tfg.machine.space_heater.radius",
-                FormattingUtil.formatNumbers(radius)).withStyle(ChatFormatting.AQUA));
+        // Max radius info
+        textList.add(Component.translatable("tfg.machine.space_heater.max_radius",
+                FormattingUtil.formatNumbers(maxRadius)).withStyle(ChatFormatting.AQUA));
     }
 
     // ==================== Lifecycle ====================

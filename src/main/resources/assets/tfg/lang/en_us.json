@@ -6,6 +6,8 @@
     "tfg.machine.space_heater.active": "Active",
     "tfg.machine.oxygen_distributor.status.chunk_unloaded": "Chunk unloaded",
     "tfg.machine.oxygen_distributor.active": "Active",
+    "tfg.machine.space_heater.max_radius": "Max radius: %s",
+    "tfg.machine.space_heater.radius_label": "Radius:",
     "tfg.machine.oxygen_distributor.status.breached": "Breached",
     "tfg.machine.space_heater.idle": "Idle",
     "tfg.machine.oxygen_distributor.status.scanning": "Scanning...",
@@ -13,6 +15,5 @@
     "tfg.machine.oxygen_distributor.find_leak": "Find Leak",
     "tfg.machine.oxygen_distributor.size": "Size: %s blocks",
     "tfg.machine.oxygen_distributor.status.sealed": "Sealed",
-    "tfg.machine.space_heater.radius": "Radius: %s",
     "tfg.machine.oxygen_distributor.status": "Status: "
 }
