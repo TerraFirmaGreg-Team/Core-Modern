@@ -14,7 +14,6 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.EnvironmentClientCache;
 import su.terrafirmagreg.core.network.packet.*;
-import su.terrafirmagreg.core.network.packet.EnvironmentResponsePacket;
 
 public class TFGNetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
@@ -55,6 +54,12 @@ public class TFGNetworkHandler {
                 OreHighlightVeinPacket::encode,
                 OreHighlightVeinPacket::decode,
                 OreHighlightVeinPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                FuelSyncPacket.class,
+                FuelSyncPacket::encode,
+                FuelSyncPacket::decode,
+                FuelSyncPacket::handle);
         INSTANCE.registerMessage(
                 id(),
                 EnvironmentQueryPacket.class,

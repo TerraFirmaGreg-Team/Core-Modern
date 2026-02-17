@@ -196,7 +196,8 @@ public class TFGTRecipeTypes {
                             "tfg.nuclear.average_heat.text", heatText1, heatText2);
                 }
                 return "";
-            });
+            })
+            .addDataInfo(data -> "");
 
     public static final GTRecipeType HYDROPONICS_FACILITY_RECIPES = GTRecipeTypes
             .register("hydroponics_facility", GTRecipeTypes.MULTIBLOCK)

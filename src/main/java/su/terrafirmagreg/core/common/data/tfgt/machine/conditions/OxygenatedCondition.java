@@ -24,7 +24,7 @@ import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
  * <p>
  */
 //TODO: wth is going on here some of this smells bad
-public class OxygenatedCondition extends RecipeCondition {
+public class OxygenatedCondition extends RecipeCondition<OxygenatedCondition> {
 
     public static final Codec<OxygenatedCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)
             .and(Codec.BOOL.fieldOf("isOxygenated").forGetter(cond -> cond.isOxygenated))
@@ -49,7 +49,7 @@ public class OxygenatedCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<OxygenatedCondition> getType() {
         return TFGTRecipeConditions.OXYGENATED;
     }
 
@@ -85,7 +85,7 @@ public class OxygenatedCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public OxygenatedCondition createTemplate() {
         return new OxygenatedCondition();
     }
 }

@@ -31,7 +31,7 @@ public class TFGTRecipeConditions {
         GRAVITY = register("gravity", GravityCondition::new, GravityCondition.CODEC);
     }
 
-    private static <T extends RecipeCondition> RecipeConditionType<T> register(
+    private static <T extends RecipeCondition<T>> RecipeConditionType<T> register(
             String name,
             RecipeConditionType.ConditionFactory<T> factory,
             Codec<T> codec) {
