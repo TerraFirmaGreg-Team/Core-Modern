@@ -247,6 +247,15 @@ public class DimEnvManager extends SavedData {
         return false;
     }
 
+    /**
+     * Gets the ambient pressure at a position, in atmospheres.
+     * Currently returns the dimension default, but may depend on Y-level in the future
+     * (e.g. Europa ocean depth).
+     */
+    public float getPressure(BlockPos pos) {
+        return environment.pressure();
+    }
+
     // ==================== Decompression Events ====================
 
     public DecompressionEvent startDecompression(BlockPos breachPoint, RoomScan oldRoomScan) {

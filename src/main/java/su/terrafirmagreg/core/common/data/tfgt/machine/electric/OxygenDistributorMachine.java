@@ -116,12 +116,13 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         return recipeLogic != null && recipeLogic.isWorking();
     }
 
-    /** Fixed high multiplier for unsealed rooms - makes the machine impractical to run without a sealed room */
-    private static final int UNSEALED_MULTIPLIER = 10000;
+    // TODO: Should be dependent on maximum machine volume
+    private static final int MAXIMUM_VOLUME_MULTIPLIER = 10000;
 
     /**
      * Recipe Modifier for <b>Oxygen Distributors</b> - can be used as a valid {@link RecipeModifier}
-     * Sealed rooms scale cost by interior size. Unsealed rooms use a fixed high cost.
+     * Sealed rooms scale cost by interior size. Unsealed rooms use a high cost that scales
+     * with pressure difference.
      */
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof OxygenDistributorMachine oxygenMachine)) {
@@ -133,11 +134,21 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         if (scan.isSealed()) {
             multiplier = Math.max(1, scan.interiorSize());
         } else if (scan.status() == RoomScan.Status.NULL) {
-            // Not yet validated - use base cost so the machine can start
+            // Not yet validated, use base cost so the machine can start
             multiplier = 1;
         } else {
-            // Unsealed room - high cost to discourage running without sealed room
-            multiplier = UNSEALED_MULTIPLIER;
+
+            float pressure = oxygenMachine.manager != null
+                    ? oxygenMachine.manager.getPressure(oxygenMachine.getPos())
+                    : 0.0f;
+            if (pressure < 1.0f) {
+                // Vacuum/low pressure: penalty scales up as pressure drops
+                float leakFactor = 1.0f - pressure;
+                multiplier = Math.max(1, (int) (MAXIMUM_VOLUME_MULTIPLIER * (1.0f + 0.3f * leakFactor)));
+            } else {
+                // High pressure: external pressure helps contain the room, reduce cost
+                multiplier = Math.max(1, (int) (MAXIMUM_VOLUME_MULTIPLIER / pressure));
+            }
         }
 
         return ModifierFunction.builder()
@@ -354,7 +365,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         // Only on ESCAPED_BUILD_HEIGHT (actual physical breach through the shell).
         // Not on BLOCK_LIMIT (machine too weak), ESCAPED_DIMENSION (horizontal limit), or pressurized dimensions.
         if (oldScan.isSealed() && newScan.status() == Status.ESCAPED_BUILD_HEIGHT
-                && manager.getEnvironment().pressure() < DimensionEnvironment.DECOMPRESSION_THRESHOLD) {
+                && manager.getPressure(getPos()) < DimensionEnvironment.DECOMPRESSION_THRESHOLD) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
                 activeDecompression = manager.startDecompression(breachPoint, oldScan);
