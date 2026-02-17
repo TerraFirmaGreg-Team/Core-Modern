@@ -114,8 +114,10 @@ public final class EnvironmentSystem {
 
     // ==================== Async Handling ====================
 
+    private static final int THREAD_POOL_SIZE = 2;
+
     /** Executor for async jobs (flood fill, diagnostic trace). */
-    public static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(2, r -> {
+    public static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(THREAD_POOL_SIZE, r -> {
         Thread t = new Thread(r, "FloodFill");
         t.setDaemon(true);
         return t;
@@ -151,8 +153,12 @@ public final class EnvironmentSystem {
     }
 
     private static void dispatchValidation(IBlockSensitiveMachine machine) {
-        TFGCore.LOGGER.info("[validation] dispatchValidation, pos={}, identity={}",
-                machine.getPos(), System.identityHashCode(machine));
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        long currentTick = server != null ? server.getTickCount() : 0;
+        machine.setLastValidationTick(currentTick);
+
+        TFGCore.LOGGER.info("[validation] dispatchValidation, pos={}, identity={}, tick={}",
+                machine.getPos(), System.identityHashCode(machine), currentTick);
 
         // Create the AsyncBlockReader on the main thread — it captures ChunkMap safely
         AsyncBlockReader reader = new AsyncBlockReader(machine.getServerLevel());
@@ -185,11 +191,11 @@ public final class EnvironmentSystem {
         machine.processValidationResult();
 
         // If the machine got dirty during the async fill (block changed while scanning),
-        // the validation result is stale. Re-request validation.
+        // the validation result is stale. Re-request validation via the machine's cooldown logic.
         if (machine.isDirty()) {
             TFGCore.LOGGER.info("[validation] re-requesting (dirty during async), pos={}, identity={}",
                     machine.getPos(), System.identityHashCode(machine));
-            requestValidation(machine, 0);
+            machine.requestRevalidation();
         }
     }
 
@@ -206,10 +212,12 @@ public final class EnvironmentSystem {
             return;
         }
 
-        // Enqueue validation jobs
+        // Dispatch up to THREAD_POOL_SIZE validation jobs per tick
         long currentTick = server.getTickCount();
-        ValidationJob job = validationQueue.peek();
-        if (job != null && job.earliestTick() <= currentTick) {
+        for (int i = 0; i < THREAD_POOL_SIZE; i++) {
+            ValidationJob job = validationQueue.peek();
+            if (job == null || job.earliestTick() > currentTick)
+                break;
             validationQueue.poll();
             TFGCore.LOGGER.info("[validation] tick {} dispatching job, earliestTick={}, pos={}, identity={}",
                     currentTick, job.earliestTick(), job.machine().getPos(), System.identityHashCode(job.machine()));

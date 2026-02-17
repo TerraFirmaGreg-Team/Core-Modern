@@ -73,8 +73,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     /** Pending scan result from async validation */
     private RoomScan newRoomScan;
 
-    /** Offset for staggering validation timing across machines */
-    private long tickOffset;
+    /** Tick when this machine last had a validation dispatched */
+    private long lastValidationTick;
 
     @Getter
     @Setter
@@ -452,17 +452,15 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     }
 
     /**
-     * Calculate the earliest tick at which we want to revalidate.
-     * The purpose is to batch many blockchanges together instead of flood fill for each one.
-     * @param interval The interval between revalidations, if it were always trying to revalidate
-     * @return The next tick that's greater than the current getTickCount at which we want to start revalidating
+     * Returns cooldown ticks before next revalidation for debouncing, scaled by room size
      */
-    private long calculateEarliestTick(int interval) {
-        long now = level.getServer().getTickCount();
-
-        int phase = Math.floorMod(-tickOffset, interval);
-        long delta = Math.floorMod(phase - (now % interval), interval);
-        return now + delta;
+    private int getCooldownTicks() {
+        if (provider == null)
+            return 2;
+        int size = provider.getRoomScan().interiorSize();
+        if (size < 100_000)
+            return 2;
+        return 10;
     }
 
     public void onBlockChangeAt(BlockPos pos) {
@@ -501,10 +499,16 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     }
 
     private void requestValidation() {
-        TFGCore.LOGGER.info("[validation] requestValidation, pos={}, identity={}", getPos(), System.identityHashCode(this));
         setDirty(true);
-        //TODO: Set earliest tick interval dependent on current room size
-        EnvironmentSystem.requestValidation(this, calculateEarliestTick(1));
+
+        long now = level.getServer().getTickCount();
+        int cooldown = getCooldownTicks();
+        long cooldownEnd = lastValidationTick + cooldown;
+        long earliestTick = Math.max(cooldownEnd, now);
+
+        TFGCore.LOGGER.info("[validation] requestValidation, pos={}, identity={}, earliestTick={}, cooldown={}",
+                getPos(), System.identityHashCode(this), earliestTick, cooldown);
+        EnvironmentSystem.requestValidation(this, earliestTick);
 
         if (provider != null && provider.getRoomScan().status() == Status.ESCAPED_UNLOADED) {
             BlockPos escapePoint = provider.getRoomScan().escapePoint();
@@ -512,6 +516,16 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
                 manager.chunkLoadListeners.remove(this, Set.of(new ChunkPos(escapePoint)));
             }
         }
+    }
+
+    @Override
+    public void setLastValidationTick(long tick) {
+        this.lastValidationTick = tick;
+    }
+
+    @Override
+    public void requestRevalidation() {
+        requestValidation();
     }
 
     //////////////////////////////////////
@@ -525,8 +539,6 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             return;
 
         TFGCore.LOGGER.info("onLoad, pos={}, identity={}", getPos(), System.identityHashCode(this));
-
-        tickOffset = getPos().hashCode();
 
         level = serverLevel;
         manager = EnvironmentSystem.getManager(level);
