@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
 import su.terrafirmagreg.core.common.environment.DimEnvManager;
+import su.terrafirmagreg.core.common.environment.DimensionEnvironment;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.core.common.environment.OxygenProvider;
 import su.terrafirmagreg.core.common.environment.TemperatureProvider;
@@ -38,8 +39,21 @@ public class DebugEnvironmentCommand {
 
         // Temperature status
         boolean hasTemp = EnvironmentSystem.hasTemperature(level, pos);
+        String tempStatus;
+        if (hasTemp) {
+            tempStatus = "COZY";
+        } else {
+            short dimTemp = DimensionEnvironment.get(level.dimension()).temperature();
+            if (dimTemp < DimensionEnvironment.MIN_LIVEABLE_TEMPERATURE) {
+                tempStatus = "COLD (" + dimTemp + "°C)";
+            } else if (dimTemp > DimensionEnvironment.MAX_LIVEABLE_TEMPERATURE) {
+                tempStatus = "HOT (" + dimTemp + "°C)";
+            } else {
+                tempStatus = "COZY (" + dimTemp + "°C)";
+            }
+        }
         source.sendSuccess(() -> Component.literal(String.format(
-                "Temperature at %s: %s", pos.toShortString(), hasTemp ? "COZY" : "COLD")), false);
+                "Temperature at %s: %s", pos.toShortString(), tempStatus)), false);
 
         // Oxygen providers
         int oxygenCount = 0;
