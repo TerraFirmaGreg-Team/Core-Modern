@@ -101,6 +101,17 @@ public final class EnvironmentSystem {
         return manager.hasTemperature(pos);
     }
 
+    /**
+     * Checks if a dimension has normal gravity (planet-level, no per-position providers yet).
+     *
+     * @param level The level to check
+     * @return true if the dimension has Earth-like gravity
+     */
+    public static boolean hasNormalGravity(Level level) {
+        DimEnvManager manager = managers.get(level.dimension());
+        return manager != null && manager.getEnvironment().hasNormalGravity();
+    }
+
     // ==================== Async Handling ====================
 
     /** Executor for async jobs (flood fill, diagnostic trace). */

@@ -28,9 +28,7 @@ public record DimensionEnvironment(
 
     static {
         // Earth-like dimensions
-        // Fixme temp for testing Overworld earthlike
-        REGISTRY.put(Level.OVERWORLD, VACUUM);
-        //REGISTRY.put(Level.OVERWORLD, EARTH_LIKE);
+        REGISTRY.put(Level.OVERWORLD, EARTH_LIKE);
         REGISTRY.put(Level.NETHER, EARTH_LIKE);
 
         REGISTRY.put(Planet.MOON, VACUUM);

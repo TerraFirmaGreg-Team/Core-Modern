@@ -73,7 +73,7 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
     // ==================== Recipe ====================
 
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull ... args) {
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
         return new EnergyOnlyRecipeLogic(this);
     }
 
