@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -130,17 +131,23 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         }
 
         RoomScan scan = oxygenMachine.getRoomScan();
-        int multiplier;
+        ContentModifier inputModifier;
         if (scan.isSealed()) {
-            multiplier = Math.max(1, scan.interiorSize());
+
+            inputModifier = ContentModifier.multiplier(Math.max(1, scan.interiorSize()));
+
         } else if (scan.status() == RoomScan.Status.NULL) {
+
             // Not yet validated, use base cost so the machine can start
-            multiplier = 1;
+            inputModifier = ContentModifier.IDENTITY;
+
         } else {
 
+            // Unsealed: cost scales with pressure difference
             float pressure = oxygenMachine.manager != null
                     ? oxygenMachine.manager.getPressure(oxygenMachine.getPos())
                     : 0.0f;
+            int multiplier;
             if (pressure < 1.0f) {
                 // Vacuum/low pressure: penalty scales up as pressure drops
                 float leakFactor = 1.0f - pressure;
@@ -149,11 +156,23 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
                 // High pressure: external pressure helps contain the room, reduce cost
                 multiplier = Math.max(1, (int) (MAXIMUM_VOLUME_MULTIPLIER / pressure));
             }
+
+            // If the calculated cost exceeds available fluid, drain the tank instead.
+            int baseFluidAmount = recipe.getInputContents(FluidRecipeCapability.CAP).stream()
+                    .mapToInt(c -> FluidRecipeCapability.CAP.of(c.getContent()).getAmount())
+                    .sum();
+            int required = baseFluidAmount * multiplier;
+            int available = oxygenMachine.importFluids.getFluidInTank(0).getAmount();
+            if (available > 0 && required > available) {
+                inputModifier = new ContentModifier(0, available);
+            } else {
+                inputModifier = ContentModifier.multiplier(multiplier);
+            }
         }
 
         return ModifierFunction.builder()
                 //.eutMultiplier(multiplier)
-                .inputModifier(ContentModifier.multiplier(multiplier))
+                .inputModifier(inputModifier)
                 .build();
     }
 
