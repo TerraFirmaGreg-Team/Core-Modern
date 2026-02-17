@@ -131,13 +131,13 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
         var editableUI = createEnergyBar();
         var energyBar = editableUI.createDefault();
         energyBar.setSelfPosition(new Position(3, 4));
-        energyBar.setSize(energyBar.getSize().width, height - 4);
+        energyBar.setSize(energyBar.getSize().width, height);
         group.addWidget(energyBar);
         editableUI.setupUI(group, this);
 
         // Battery Slot
         var batterySlot = createBatterySlot().createDefault();
-        batterySlot.setSelfPosition(new Position(width / 2 - 9, height - 19));
+        batterySlot.setSelfPosition(new Position(width - 4 - 20, height - 14));
         group.addWidget(batterySlot);
         createBatterySlot().setupUI(group, this);
 
@@ -148,7 +148,7 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
                 .setMaxWidthLimit(width - contentX - 4));
 
         // Radius input widget
-        var radiusInput = new IntInputWidget(contentX, 30, 80, 20,
+        var radiusInput = new IntInputWidget(contentX + 16, height - 16, 80, 20,
                 this::getRadius, this::setRadius);
         radiusInput.setMin(1);
         radiusInput.setMax(maxRadius);
@@ -158,12 +158,18 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
     }
 
     private void addStatusText(List<Component> textList) {
+        // Working state
         if (isWorking()) {
             textList.add(Component.translatable("tfg.machine.space_heater.active").withStyle(ChatFormatting.GREEN));
+        } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
+            for (Component reason : recipeLogic.getFailureReasons()) {
+                textList.add(reason.copy().withStyle(ChatFormatting.RED));
+            }
         } else {
             textList.add(Component.translatable("tfg.machine.space_heater.idle").withStyle(ChatFormatting.GRAY));
         }
 
+        // Radius
         textList.add(Component.translatable("tfg.machine.space_heater.radius",
                 FormattingUtil.formatNumbers(radius)).withStyle(ChatFormatting.AQUA));
     }

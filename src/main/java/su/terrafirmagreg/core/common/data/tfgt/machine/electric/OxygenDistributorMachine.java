@@ -169,16 +169,16 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     @Override
     public Widget createUIWidget() {
         // Content area: 164x78 fills the standard 176x166 GT window (172-8 border, 86-8 border min)
-        int width = 164;
+        int width = 164 + 10;
         int height = 78;
-        int rightColX = width - 40; // 18px column + 4px margin from right edge
+        int rightColX = width - 40;
 
         var group = new WidgetGroup(0, 0, width, height);
 
         // Status text panel
         group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
                 .textSupplier(getLevel().isClientSide ? null : this::addStatusText)
-                .setMaxWidthLimit(rightColX - 8));
+                .setMaxWidthLimit(rightColX - 4));
 
         // "Find Leak" button, only visible when room is unsealed with an escape point
         var traceButton = new ButtonWidget(41 - 18, height - 20, 18, 18,
@@ -240,6 +240,16 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         // Working state
         if (isWorking()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+        } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
+            // Show GT's failure reasons
+            for (Component reason : recipeLogic.getFailureReasons()) {
+                textList.add(reason.copy().withStyle(ChatFormatting.RED));
+            }
+            // Add specific hint when the room volume exceeds tank capacity
+            // TODO: Keep this in sync with actual recipemodifier changes. Maybe directly query recipemodifier instead? Or sth?
+            if (scan.isSealed() && scan.interiorSize() > importFluids.getTankCapacity(0)) {
+                textList.add(Component.translatable("tfg.machine.oxygen_distributor.room_too_large").withStyle(ChatFormatting.RED));
+            }
         } else {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
         }
