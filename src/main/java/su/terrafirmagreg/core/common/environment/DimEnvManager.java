@@ -7,14 +7,18 @@ import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.event.level.BlockEvent;
 
+import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
+import earth.terrarium.adastra.common.blocks.properties.SlidingDoorPartProperty;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -342,9 +346,7 @@ public class DimEnvManager extends SavedData {
      */
     public void onBlockChange(BlockEvent event) {
         BlockPos pos = event.getPos();
-        ChunkPos chunkPos = new ChunkPos(pos);
-        Set<IBlockSensitiveMachine> machinesInChunk = blockChangeListeners.get(chunkPos);
-        if (machinesInChunk == null)
+        if (blockChangeListeners.get(new ChunkPos(pos)) == null)
             return;
 
         if (event instanceof BlockEvent.BreakEvent breakEvent) {
@@ -355,12 +357,24 @@ public class DimEnvManager extends SavedData {
                 return;
             }
 
+            // ad astra airlock break
+            if (breakEvent.getState().getBlock() instanceof SlidingDoorBlock) {
+                dispatchSlidingDoorPositions(breakEvent.getState(), pos);
+                return;
+            }
+
         } else if (event instanceof BlockEvent.EntityPlaceEvent placeEvent) {
             TFGCore.LOGGER.info("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
             PassInfo before = getCachedPassInfo(placeEvent.getBlockSnapshot().getReplacedBlock());
             PassInfo after = getCachedPassInfo(placeEvent.getPlacedBlock());
             if (before.equals(after) && before.type() != PassType.NO_CACHE) {
                 TFGCore.LOGGER.info("Ignored - passability unchanged");
+                return;
+            }
+
+            // ad astra airlock place
+            if (placeEvent.getPlacedBlock().getBlock() instanceof SlidingDoorBlock) {
+                dispatchSlidingDoorPositions(placeEvent.getPlacedBlock(), pos);
                 return;
             }
 
@@ -378,9 +392,41 @@ public class DimEnvManager extends SavedData {
             }
         }
 
-        TFGCore.LOGGER.info("Dispatching block change to {} machines", machinesInChunk.size());
-        for (IBlockSensitiveMachine machine : machinesInChunk) {
-            machine.onBlockChange(event);
+        dispatchToMachines(pos);
+    }
+
+    /**
+     * Expands a SlidingDoorBlock event to all 9 block positions of the structure.
+     * This is necessary for breaking and placing because the other 8 block updates don't fire events.
+     */
+    private void dispatchSlidingDoorPositions(BlockState doorState, BlockPos eventPos) {
+        SlidingDoorPartProperty part = doorState.getValue(SlidingDoorBlock.PART);
+        Direction facing = doorState.getValue(SlidingDoorBlock.FACING);
+        Direction sideways = facing.getClockWise();
+
+        // Resolve controller (BOTTOM) position from any part.
+        BlockPos controller = eventPos
+                .relative(sideways, -part.xOffset())
+                .below(part.yOffset());
+
+        TFGCore.LOGGER.info("SlidingDoor expansion: controller={}, from part={}", controller, part);
+
+        for (SlidingDoorPartProperty p : SlidingDoorPartProperty.values()) {
+            BlockPos partPos = controller.relative(sideways, p.xOffset()).above(p.yOffset());
+            dispatchToMachines(partPos);
+        }
+    }
+
+    /** Dispatches a block change at the given position to all machines listening in that chunk. */
+    private void dispatchToMachines(BlockPos pos) {
+        ChunkPos chunkPos = new ChunkPos(pos);
+        Set<IBlockSensitiveMachine> machines = blockChangeListeners.get(chunkPos);
+        if (machines == null)
+            return;
+
+        TFGCore.LOGGER.info("Dispatching block change at {} to {} machines", pos, machines.size());
+        for (IBlockSensitiveMachine machine : machines) {
+            machine.onBlockChangeAt(pos);
         }
     }
 

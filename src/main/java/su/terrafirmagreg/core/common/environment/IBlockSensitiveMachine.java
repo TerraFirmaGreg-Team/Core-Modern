@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.common.environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraftforge.event.level.BlockEvent;
 
 /**
  * Machine that is sensitive to block changes.
@@ -28,7 +27,8 @@ public interface IBlockSensitiveMachine {
      */
     void processValidationResult();
 
-    void onBlockChange(BlockEvent event);
+    /** Block changed in a relevant way at pos. If the room cares about pos, it will request revalidation. */
+    void onBlockChangeAt(BlockPos pos);
 
     void onGridSpatialEvent(BlockPos min, BlockPos max);
 

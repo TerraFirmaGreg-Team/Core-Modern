@@ -32,7 +32,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.level.BlockEvent;
 
 import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
 import earth.terrarium.adastra.common.blocks.properties.SlidingDoorPartProperty;
@@ -425,14 +424,12 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         return now + delta;
     }
 
-    public void onBlockChange(BlockEvent event) {
+    public void onBlockChangeAt(BlockPos pos) {
         if (provider == null)
             return;
 
         if (!dirty) {
-            BlockPos pos = event.getPos();
-
-            // Ignore our own block being broken — machine is about to be removed
+            // Ignore our own block being broken, machine is about to be removed
             if (pos.equals(getPos()))
                 return;
 
