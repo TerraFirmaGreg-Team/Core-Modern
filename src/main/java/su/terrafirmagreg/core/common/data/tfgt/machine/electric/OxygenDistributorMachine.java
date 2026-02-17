@@ -366,15 +366,15 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         showTraceButton = !newScan.isSealed() && newScan.status() != Status.NULL && newScan.hasEscapePoint();
 
         // Room changed: finish current recipe early so it re-searches with the new room size.
-        // Also resets runAttempt/runDelay recomputes the recipe modifier.
+        // Also resets runAttempt/runDelay and recomputes the recipe modifier.
         if (recipeLogic != null) {
             recipeLogic.onRecipeFinish();
         }
 
-        // Decompression: sealed → breached, start event
-        // Only on ESCAPED_BUILD_HEIGHT (actual physical breach through the shell).
-        // Not on BLOCK_LIMIT (machine too weak), ESCAPED_DIMENSION (horizontal limit), or pressurized dimensions.
-        if (oldScan.isSealed() && newScan.status() == Status.ESCAPED_BUILD_HEIGHT
+        // Decompression: sealed && working -> breached
+        if (isWorking() // Was working before the revalidation
+                && oldScan.isSealed()
+                && newScan.status() == Status.ESCAPED_BUILD_HEIGHT
                 && manager.getPressure(getPos()) < DimensionEnvironment.DECOMPRESSION_THRESHOLD) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
