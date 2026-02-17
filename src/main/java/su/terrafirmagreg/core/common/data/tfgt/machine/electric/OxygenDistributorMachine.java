@@ -352,8 +352,9 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
         // Decompression: sealed → breached, start event
         // Only on ESCAPED_BUILD_HEIGHT (actual physical breach through the shell).
-        // Not on BLOCK_LIMIT (machine too weak), ESCAPED_DIMENSION (horizontal limit), or atmosphered dimensions.
-        if (oldScan.isSealed() && newScan.status() == Status.ESCAPED_BUILD_HEIGHT && !manager.getEnvironment().hasAtmosphere()) {
+        // Not on BLOCK_LIMIT (machine too weak), ESCAPED_DIMENSION (horizontal limit), or pressurized dimensions.
+        if (oldScan.isSealed() && newScan.status() == Status.ESCAPED_BUILD_HEIGHT
+                && manager.getEnvironment().pressure() < DimensionEnvironment.DECOMPRESSION_THRESHOLD) {
             BlockPos breachPoint = findBreachPoint(oldScan, newScan);
             if (breachPoint != null) {
                 activeDecompression = manager.startDecompression(breachPoint, oldScan);
