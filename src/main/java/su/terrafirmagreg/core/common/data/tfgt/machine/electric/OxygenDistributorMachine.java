@@ -97,8 +97,14 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     private static final int MAX_BLOCKS = 1_000_000;
     private static final int MAX_HORIZONTAL_DIMENSION = 128;
 
-    public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction) {
+    /** Maximum room volume (in blocks) this machine is designed to handle */
+    @Getter
+    private final int maxVolume;
+
+    public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction,
+            int maxVolume) {
         super(holder, tier, tankScalingFunction);
+        this.maxVolume = maxVolume;
     }
 
     /**
@@ -117,13 +123,10 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         return recipeLogic != null && recipeLogic.isWorking();
     }
 
-    // TODO: Should be dependent on maximum machine volume
-    private static final int MAXIMUM_VOLUME_MULTIPLIER = 10000;
-
     /**
      * Recipe Modifier for <b>Oxygen Distributors</b> - can be used as a valid {@link RecipeModifier}
-     * Sealed rooms scale cost by interior size. Unsealed rooms use a high cost that scales
-     * with pressure difference.
+     * Sealed rooms scale cost by interior size. Unsealed rooms use a cost based on the machine's
+     * max volume, scaled by pressure difference.
      */
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof OxygenDistributorMachine oxygenMachine)) {
@@ -143,7 +146,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
         } else {
 
-            // Unsealed: cost scales with pressure difference
+            // Unsealed: cost based on maxVolume, scaled by pressure difference
             float pressure = oxygenMachine.manager != null
                     ? oxygenMachine.manager.getPressure(oxygenMachine.getPos())
                     : 0.0f;
@@ -151,13 +154,13 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             if (pressure < 1.0f) {
                 // Vacuum/low pressure: penalty scales up as pressure drops
                 float leakFactor = 1.0f - pressure;
-                multiplier = Math.max(1, (int) (MAXIMUM_VOLUME_MULTIPLIER * (1.0f + 0.3f * leakFactor)));
+                multiplier = Math.max(1, (int) (oxygenMachine.maxVolume * (1.0f + 0.3f * leakFactor)));
             } else {
                 // High pressure: external pressure helps contain the room, reduce cost
-                multiplier = Math.max(1, (int) (MAXIMUM_VOLUME_MULTIPLIER / pressure));
+                multiplier = Math.max(1, (int) (oxygenMachine.maxVolume / pressure));
             }
 
-            // If the calculated cost exceeds available fluid, drain the tank instead.
+            // If the calculated cost exceeds available fluid, drain whatever is in the tank
             int baseFluidAmount = recipe.getInputContents(FluidRecipeCapability.CAP).stream()
                     .mapToInt(c -> FluidRecipeCapability.CAP.of(c.getContent()).getAmount())
                     .sum();
@@ -264,10 +267,8 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             for (Component reason : recipeLogic.getFailureReasons()) {
                 textList.add(reason.copy().withStyle(ChatFormatting.RED));
             }
-            // Add specific hint when the room volume exceeds tank capacity
-            // TODO: Keep this in sync with actual recipemodifier changes. Maybe directly query recipemodifier instead? Or sth?
-            if (scan.isSealed() && scan.interiorSize() > importFluids.getTankCapacity(0)) {
-                textList.add(Component.translatable("tfg.machine.oxygen_distributor.room_too_large").withStyle(ChatFormatting.RED));
+            if (scan.isSealed() && scan.interiorSize() > maxVolume) {
+                textList.add(Component.translatable("tfg.machine.oxygen_distributor.room_too_large_machine").withStyle(ChatFormatting.RED));
             }
         } else {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
