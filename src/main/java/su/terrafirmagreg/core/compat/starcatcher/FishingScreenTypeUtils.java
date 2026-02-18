@@ -29,8 +29,9 @@ public class FishingScreenTypeUtils {
             ResourceLocation.fromNamespaceAndPath("starcatcher", "is_ocean"));
 
     private static final float CAVE_THRESHOLD = 50;
-    private static final float WARM_THRESHOLD = 30;
-    private static final float COLD_THRESHOLD = 0;
+    private static final float COLD_1_THRESHOLD = 0;
+    private static final float COLD_2_THRESHOLD = -8;
+    private static final float COLD_3_THRESHOLD = -20;
 
     /**
      * Determines the fishing screen type based on current environment.
@@ -68,23 +69,17 @@ public class FishingScreenTypeUtils {
                 return FishingScreenType.CAVE;
             }
 
-            if (biomeHolder.is(IS_OCEAN)) {
-                // Only Ocean has a warm screen type since it just adds coral.
-                if (temperature > WARM_THRESHOLD) {
-                    return FishingScreenType.SURFACE_WARM;
-                }
-                if (temperature < COLD_THRESHOLD) {
-                    return FishingScreenType.SURFACE_COLD;
-                }
-                return FishingScreenType.SURFACE;
+            if (temperature <= COLD_1_THRESHOLD && temperature > COLD_2_THRESHOLD) {
+                return FishingScreenType.SURFACE_COLD_1;
+            }
+            if (temperature <= COLD_2_THRESHOLD && temperature > COLD_3_THRESHOLD) {
+                return FishingScreenType.SURFACE_COLD_2;
+            }
+            if (temperature <= COLD_3_THRESHOLD) {
+                return FishingScreenType.SURFACE_COLD_3;
             }
 
-            if (!biomeHolder.is(IS_OCEAN)) {
-                if (temperature < COLD_THRESHOLD) {
-                    return FishingScreenType.SURFACE_COLD;
-                }
-                return FishingScreenType.SURFACE;
-            }
+            return FishingScreenType.SURFACE;
 
         }
         // Default.

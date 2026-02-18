@@ -11,8 +11,9 @@ import lombok.Getter;
 @Getter
 public enum FishingScreenType {
     SURFACE("surface"),
-    SURFACE_WARM("surface_warm"),
-    SURFACE_COLD("surface_cold"),
+    SURFACE_COLD_1("surface_cold_1"),
+    SURFACE_COLD_2("surface_cold_2"),
+    SURFACE_COLD_3("surface_cold_3"),
     CAVE("cave"),
     NETHER("nether"),
     MARS("mars"),
