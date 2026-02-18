@@ -135,10 +135,13 @@ public class TFGTRecipes {
         }
 
         // TODO Example recipes, replace with kubejs actual recipes
+        // Base cost is a scale factor, for a room of 50k blocks you'd get base cost consumption per tick
+        // Smaller or larger rooms scale linearly
         TFGTRecipeTypes.OXYGEN_DISTRIBUTION.recipeBuilder("oxygen_distribution")
-                .inputFluids(GTMaterials.Air.getFluid(1))
+                .perTick(true)
+                .inputFluids(GTMaterials.Air.getFluid(30))
+                .perTick(false)
                 .duration(200)
-                //.EUt(GTValues.VA[GTValues.MV])
                 .EUt(1)
                 .save(provider);
 

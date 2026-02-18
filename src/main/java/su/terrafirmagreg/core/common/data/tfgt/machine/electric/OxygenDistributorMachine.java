@@ -124,59 +124,64 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     }
 
     /**
-     * Recipe Modifier for <b>Oxygen Distributors</b> - can be used as a valid {@link RecipeModifier}
-     * Sealed rooms scale cost by interior size. Unsealed rooms use a cost based on the machine's
-     * max volume, scaled by pressure difference.
+     * Recipe modifier: scales fluid tickInput cost by room size.
+     * <p>
+     * The recipe's fluid amount is a scale factor (e.g. 30 mB/tick base). The modifier computes
+     * the actual cost as {@code baseCost * volume / 50000} and replaces the amount entirely
+     * using {@code ContentModifier(0, desiredAmount)} — zeroes the base, adds the computed cost.
+     * This lets KubeJS devs define cheaper or more expensive gas recipes by adjusting the base.
+     * <p>
+     * Returns NULL if room exceeds machine capacity.
      */
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (!(machine instanceof OxygenDistributorMachine oxygenMachine)) {
+        if (!(machine instanceof OxygenDistributorMachine distributor)) {
             return RecipeModifier.nullWrongType(OxygenDistributorMachine.class, machine);
         }
 
-        RoomScan scan = oxygenMachine.getRoomScan();
-        ContentModifier inputModifier;
+        int volume = distributor.computeEffectiveVolume();
+        if (volume < 0)
+            return ModifierFunction.NULL;
+
+        // Read base cost from the recipe's fluid tickInput (e.g. 30 mB/tick)
+        int baseCost = 1;
+        var fluidInputs = recipe.getTickInputContents(FluidRecipeCapability.CAP);
+        if (!fluidInputs.isEmpty()) {
+            baseCost = FluidRecipeCapability.CAP.of(fluidInputs.get(0).getContent()).getAmount();
+        }
+
+        int desiredAmount = Math.max(1, baseCost * volume / 50_000);
+
+        return ModifierFunction.builder()
+                .tickInputModifier(new ContentModifier(0, desiredAmount))
+                .build();
+    }
+
+    /**
+     * Compute the effective volume used for fluid cost scaling.
+     *
+     * @return volume (>=1), or -1 if the room exceeds machine capacity
+     */
+    private int computeEffectiveVolume() {
+        RoomScan scan = getRoomScan();
         if (scan.isSealed()) {
+            if (scan.interiorSize() > maxVolume)
+                return -1;
+            return Math.max(1, scan.interiorSize());
 
-            inputModifier = ContentModifier.multiplier(Math.max(1, scan.interiorSize()));
-
-        } else if (scan.status() == RoomScan.Status.NULL) {
-
-            // Not yet validated, use base cost so the machine can start
-            inputModifier = ContentModifier.IDENTITY;
+        } else if (scan.status() == Status.NULL) {
+            return 1; // minimal cost while scanning
 
         } else {
 
             // Unsealed: cost based on maxVolume, scaled by pressure difference
-            float pressure = oxygenMachine.manager != null
-                    ? oxygenMachine.manager.getPressure(oxygenMachine.getPos())
-                    : 0.0f;
-            int multiplier;
+            float pressure = manager != null ? manager.getPressure(getPos()) : 0.0f;
             if (pressure < 1.0f) {
-                // Vacuum/low pressure: penalty scales up as pressure drops
                 float leakFactor = 1.0f - pressure;
-                multiplier = Math.max(1, (int) (oxygenMachine.maxVolume * (1.0f + 0.3f * leakFactor)));
+                return Math.max(1, (int) (maxVolume * (1.0f + 0.3f * leakFactor)));
             } else {
-                // High pressure: external pressure helps contain the room, reduce cost
-                multiplier = Math.max(1, (int) (oxygenMachine.maxVolume / pressure));
-            }
-
-            // If the calculated cost exceeds available fluid, drain whatever is in the tank
-            int baseFluidAmount = recipe.getInputContents(FluidRecipeCapability.CAP).stream()
-                    .mapToInt(c -> FluidRecipeCapability.CAP.of(c.getContent()).getAmount())
-                    .sum();
-            int required = baseFluidAmount * multiplier;
-            int available = oxygenMachine.importFluids.getFluidInTank(0).getAmount();
-            if (available > 0 && required > available) {
-                inputModifier = new ContentModifier(0, available);
-            } else {
-                inputModifier = ContentModifier.multiplier(multiplier);
+                return Math.max(1, (int) (maxVolume / pressure));
             }
         }
-
-        return ModifierFunction.builder()
-                //.eutMultiplier(multiplier)
-                .inputModifier(inputModifier)
-                .build();
     }
 
     @Override
@@ -259,16 +264,19 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
                     FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA));
         }
 
+        // Room too large warning
+        if (scan.isSealed() && scan.interiorSize() > maxVolume) {
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.room_too_large_machine")
+                    .withStyle(ChatFormatting.RED));
+        }
+
         // Working state
         if (isWorking()) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
         } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
-            // Show GT's failure reasons
+            // Show failure reasons (insufficient fluid, etc.)
             for (Component reason : recipeLogic.getFailureReasons()) {
                 textList.add(reason.copy().withStyle(ChatFormatting.RED));
-            }
-            if (scan.isSealed() && scan.interiorSize() > maxVolume) {
-                textList.add(Component.translatable("tfg.machine.oxygen_distributor.room_too_large_machine").withStyle(ChatFormatting.RED));
             }
         } else {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
@@ -385,12 +393,6 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         // Sync button visibility to client
         showTraceButton = !newScan.isSealed() && newScan.status() != Status.NULL && newScan.hasEscapePoint();
 
-        // Room changed: finish current recipe early so it re-searches with the new room size.
-        // Also resets runAttempt/runDelay and recomputes the recipe modifier.
-        if (recipeLogic != null) {
-            recipeLogic.onRecipeFinish();
-        }
-
         // Decompression: sealed && working -> breached
         if (isWorking() // Was working before the revalidation
                 && oldScan.isSealed()
@@ -406,6 +408,14 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         if (!oldScan.isSealed() && newScan.isSealed() && activeDecompression != null) {
             activeDecompression.cancel(level);
             activeDecompression = null;
+        }
+
+        // Room changed: interrupt the recipe and mark dirty so it re-searches with the new modifier.
+        // markLastRecipeDirty() ensures findAndHandleRecipe skips the fast path (which reuses the old recipe).
+        // Must be after decompression check since that tests isWorking().
+        if (recipeLogic != null) {
+            recipeLogic.interruptRecipe();
+            recipeLogic.markLastRecipeDirty();
         }
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;

@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -34,6 +33,7 @@ import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
 import su.terrafirmagreg.core.common.environment.*;
 
 /**
@@ -75,7 +75,7 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
 
     @Override
     protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new EnergyOnlyRecipeLogic(this);
+        return new EnvironmentRecipeLogic(this);
     }
 
     public boolean isWorking() {
@@ -212,26 +212,4 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
         }
     }
 
-    // ==================== Custom recipe logic ====================
-
-    /**
-     * RecipeLogic that bypasses the recipe DB lookup.
-     * GT's recipe DB requires at least one searchable input (item or fluid) to index recipes.
-     * Energy-only recipes have none, so the normal lookup returns nothing.
-     * This logic directly iterates all recipes of the type instead.
-     */
-    private static class EnergyOnlyRecipeLogic extends RecipeLogic {
-
-        public EnergyOnlyRecipeLogic(SpaceHeaterMachine machine) {
-            super(machine);
-        }
-
-        @Override
-        public @NotNull Iterator<GTRecipe> searchRecipe() {
-            // Collect all recipes across all categories for this recipe type
-            return machine.getRecipeType().getCategories().stream()
-                    .flatMap(cat -> machine.getRecipeType().getRecipesInCategory(cat).stream())
-                    .iterator();
-        }
-    }
 }
