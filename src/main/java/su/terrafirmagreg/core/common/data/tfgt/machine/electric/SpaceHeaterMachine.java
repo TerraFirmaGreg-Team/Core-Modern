@@ -15,6 +15,7 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
@@ -29,7 +30,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -61,8 +61,8 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
     @DescSynced
     private int radius;
 
-    public SpaceHeaterMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction) {
-        super(holder, tier, tankScalingFunction);
+    public SpaceHeaterMachine(IMachineBlockEntity holder, int tier) {
+        super(holder, tier, GTMachineUtils.defaultTankSizeFunction);
         this.maxRadius = getMaxRadiusForTier(tier);
         this.radius = maxRadius;
     }
