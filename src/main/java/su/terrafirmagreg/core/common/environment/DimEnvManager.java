@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -231,19 +232,25 @@ public class DimEnvManager extends SavedData {
      * @return true if the position has oxygen
      */
     public boolean hasOxygen(BlockPos pos) {
-        if (environment.hasOxygen()) {
+        if (environment.hasOxygen())
             return true;
-        }
 
+        if (oxygenProviders.isEmpty())
+            return false;
+
+        ProfilerFiller profiler = level.getProfiler();
+        profiler.push("tfg.environment.hasOxygen");
         ChunkPos chunkPos = new ChunkPos(pos);
         Set<OxygenProvider> providerSet = oxygenProviders.get(chunkPos);
         if (providerSet != null) {
             for (OxygenProvider provider : providerSet) {
                 if (provider.hasOxygen(pos)) {
+                    profiler.pop();
                     return true;
                 }
             }
         }
+        profiler.pop();
         return false;
     }
 
@@ -329,19 +336,25 @@ public class DimEnvManager extends SavedData {
      * Checks if a position has safe temperature (from natural environment or a machine bubble).
      */
     public boolean hasTemperature(BlockPos pos) {
-        if (environment.hasNormalTemperature()) {
+        if (environment.hasNormalTemperature())
             return true;
-        }
 
+        if (temperatureProviders.isEmpty())
+            return false;
+
+        ProfilerFiller profiler = level.getProfiler();
+        profiler.push("tfg.environment.hasTemperature");
         ChunkPos chunkPos = new ChunkPos(pos);
         Set<TemperatureProvider> providerSet = temperatureProviders.get(chunkPos);
         if (providerSet != null) {
             for (TemperatureProvider provider : providerSet) {
                 if (provider.hasTemperature(pos)) {
+                    profiler.pop();
                     return true;
                 }
             }
         }
+        profiler.pop();
         return false;
     }
 
@@ -559,6 +572,10 @@ public class DimEnvManager extends SavedData {
 
         public Set<T> get(ChunkPos chunk) {
             return map.get(chunk);
+        }
+
+        public boolean isEmpty() {
+            return map.isEmpty();
         }
     }
 }

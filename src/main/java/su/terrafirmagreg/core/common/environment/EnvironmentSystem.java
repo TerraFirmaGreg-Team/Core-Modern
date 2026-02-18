@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
@@ -212,7 +213,11 @@ public final class EnvironmentSystem {
             return;
         }
 
+        ProfilerFiller profiler = server.getProfiler();
+        profiler.push("tfg.environment");
+
         // Dispatch up to THREAD_POOL_SIZE validation jobs per tick
+        profiler.push("dispatch");
         long currentTick = server.getTickCount();
         for (int i = 0; i < THREAD_POOL_SIZE; i++) {
             ValidationJob job = validationQueue.peek();
@@ -223,52 +228,63 @@ public final class EnvironmentSystem {
                     currentTick, job.earliestTick(), job.machine().getPos(), System.identityHashCode(job.machine()));
             dispatchValidation(job.machine());
         }
+        profiler.pop();
 
         // Process finished validation jobs
+        profiler.push("finalize");
         IBlockSensitiveMachine machine;
         while ((machine = doneValidating.poll()) != null) {
             TFGCore.LOGGER.info("[validation] tick {} finalizing, pos={}, identity={}",
                     currentTick, machine.getPos(), System.identityHashCode(machine));
             finalizeValidation(machine);
         }
+        profiler.pop();
 
         // Tick decompression events in all dimensions
+        profiler.push("decompressions");
         managers.values().forEach(DimEnvManager::tickDecompressions);
+        profiler.pop();
+
+        profiler.pop(); // tfg.environment
     }
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent e) {
-        onBlockChange(e);
+        onBlockChange(e, "blockBreak");
     }
 
     @SubscribeEvent
     public static void EntityPlaceEvent(BlockEvent.EntityPlaceEvent e) {
-        onBlockChange(e);
+        onBlockChange(e, "blockPlace");
     }
 
     @SubscribeEvent
     public static void NeighborNotifyEvent(BlockEvent.NeighborNotifyEvent e) {
-        onBlockChange(e);
+        onBlockChange(e, "neighborNotify");
     }
 
     @SubscribeEvent
     public static void FluidPlaceBlockEvent(BlockEvent.FluidPlaceBlockEvent e) {
-        onBlockChange(e);
+        onBlockChange(e, "fluidPlace");
     }
 
     /**
      * Called when a block has potentially changed state
      * Dispatches to the applicable dimension manager
      * @param event The event that changes the block
+     * @param profilerSection Name for the profiler section
      */
-    public static void onBlockChange(BlockEvent event) {
+    public static void onBlockChange(BlockEvent event, String profilerSection) {
         if (!(event.getLevel() instanceof ServerLevel serverLevel)) {
             return;
         }
 
         DimEnvManager manager = managers.get(serverLevel.dimension());
         if (manager != null) {
+            ProfilerFiller profiler = serverLevel.getProfiler();
+            profiler.push("tfg.environment." + profilerSection);
             manager.onBlockChange(event);
+            profiler.pop();
         }
     }
 
