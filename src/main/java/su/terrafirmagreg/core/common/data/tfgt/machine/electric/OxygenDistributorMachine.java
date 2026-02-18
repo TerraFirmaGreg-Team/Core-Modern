@@ -94,17 +94,22 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     private long lastTraceRequestTick = 0;
     private static final int TRACE_COOLDOWN_TICKS = 100;
 
-    private static final int MAX_BLOCKS = 1_000_000;
+    /** Block limit for find leak button */
+    private static final int TRACE_MAX_BLOCKS = 1_000_000;
     private static final int MAX_HORIZONTAL_DIMENSION = 128;
 
     /** Maximum room volume (in blocks) this machine is designed to handle */
     @Getter
     private final int maxVolume;
 
+    /** Block limit for validation scan: maxVolume plus a bit to detect breaches*/
+    private final int scanMaxBlocks;
+
     public OxygenDistributorMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction,
             int maxVolume) {
         super(holder, tier, tankScalingFunction);
         this.maxVolume = maxVolume;
+        this.scanMaxBlocks = maxVolume + 5_000;
     }
 
     /**
@@ -139,8 +144,6 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         }
 
         int volume = distributor.computeEffectiveVolume();
-        if (volume < 0)
-            return ModifierFunction.NULL;
 
         // Read base cost from the recipe's fluid tickInput (e.g. 30 mB/tick)
         int baseCost = 1;
@@ -159,20 +162,17 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     /**
      * Compute the effective volume used for fluid cost scaling.
      *
-     * @return volume (>=1), or -1 if the room exceeds machine capacity
+     * @return volume (>=1), always positive — the machine always runs, even if room is oversized
      */
     private int computeEffectiveVolume() {
         RoomScan scan = getRoomScan();
         if (scan.isSealed()) {
-            if (scan.interiorSize() > maxVolume)
-                return -1;
             return Math.max(1, scan.interiorSize());
 
         } else if (scan.status() == Status.NULL) {
             return 1; // minimal cost while scanning
 
         } else {
-
             // Unsealed: cost based on maxVolume, scaled by pressure difference
             float pressure = manager != null ? manager.getPressure(getPos()) : 0.0f;
             if (pressure < 1.0f) {
@@ -182,6 +182,11 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
                 return Math.max(1, (int) (maxVolume / pressure));
             }
         }
+    }
+
+    @Override
+    public boolean alwaysTryModifyRecipe() {
+        return true;
     }
 
     @Override
@@ -244,43 +249,55 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
     private void addStatusText(List<Component> textList) {
         RoomScan scan = getRoomScan();
+        boolean elevated = !scan.isSealed() || scan.interiorSize() > maxVolume;
 
         // Status line
         Component statusText = switch (scan.status()) {
-            case SEALED -> Component.translatable("tfg.machine.oxygen_distributor.status.sealed").withStyle(ChatFormatting.GREEN);
+            case SEALED -> scan.interiorSize() > maxVolume
+                    ? Component.translatable("tfg.machine.oxygen_distributor.status.volume_limit",
+                            FormattingUtil.formatNumbers(maxVolume)).withStyle(ChatFormatting.YELLOW)
+                    : Component.translatable("tfg.machine.oxygen_distributor.status.sealed").withStyle(ChatFormatting.GREEN);
             case ESCAPED_BUILD_HEIGHT -> Component.translatable("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.RED);
             case ESCAPED_DIMENSION -> Component.translatable("tfg.machine.oxygen_distributor.status.too_wide").withStyle(ChatFormatting.YELLOW);
             case ESCAPED_UNLOADED -> Component.translatable("tfg.machine.oxygen_distributor.status.chunk_unloaded").withStyle(ChatFormatting.YELLOW);
             case BLOCK_LIMIT -> Component.translatable("tfg.machine.oxygen_distributor.status.volume_limit",
-                    FormattingUtil.formatNumbers(MAX_BLOCKS)).withStyle(ChatFormatting.YELLOW);
+                    FormattingUtil.formatNumbers(maxVolume)).withStyle(ChatFormatting.YELLOW);
             case SAVED_DATA -> Component.translatable("tfg.machine.oxygen_distributor.status.restoring").withStyle(ChatFormatting.GREEN);
             case NULL -> Component.translatable("tfg.machine.oxygen_distributor.status.scanning").withStyle(ChatFormatting.GRAY);
         };
         textList.add(Component.translatable("tfg.machine.oxygen_distributor.status").append(statusText));
 
-        // Size — only meaningful when sealed
-        if (scan.isSealed() && scan.interiorSize() > 0) {
+        // Room size: only shown when sealed and within limits
+        if (scan.isSealed() && scan.interiorSize() > 0 && scan.interiorSize() <= maxVolume) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.size",
                     FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA));
         }
 
-        // Room too large warning
-        if (scan.isSealed() && scan.interiorSize() > maxVolume) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.room_too_large_machine")
-                    .withStyle(ChatFormatting.RED));
-        }
-
-        // Working state
+        // Consumption / working state
         if (isWorking()) {
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+            int fluidPerTick = getFluidConsumptionPerTick();
+            if (fluidPerTick > 0) {
+                textList.add(Component.translatable("tfg.machine.oxygen_distributor.consumption",
+                        FormattingUtil.formatNumbers(fluidPerTick))
+                        .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
+            }
         } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
-            // Show failure reasons (insufficient fluid, etc.)
             for (Component reason : recipeLogic.getFailureReasons()) {
                 textList.add(reason.copy().withStyle(ChatFormatting.RED));
             }
         } else {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.idle").withStyle(ChatFormatting.GRAY));
         }
+    }
+
+    /** Read the actual fluid consumption per tick from the currently running modified recipe. */
+    private int getFluidConsumptionPerTick() {
+        if (recipeLogic == null || recipeLogic.getLastRecipe() == null)
+            return 0;
+        var fluidInputs = recipeLogic.getLastRecipe().getTickInputContents(FluidRecipeCapability.CAP);
+        if (fluidInputs.isEmpty())
+            return 0;
+        return FluidRecipeCapability.CAP.of(fluidInputs.get(0).getContent()).getAmount();
     }
 
     private void requestBreachTrace() {
@@ -299,7 +316,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
         EnvironmentSystem.EXECUTOR.submit(() -> {
             try {
-                RoomScan result = DiagnosticFloodFill.fill(reader, tracePos, MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
+                RoomScan result = DiagnosticFloodFill.fill(reader, tracePos, TRACE_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
                 if (result.escapePath() != null && !result.escapePath().isEmpty()) {
                     DiagnosticFloodFill.spawnTrace(traceLevel, result.escapePath());
                 }
@@ -321,7 +338,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
     public void validateAsync(AsyncBlockReader reader) {
         TFGCore.LOGGER.info("[validation] validateAsync START, pos={}, identity={}", getPos(), System.identityHashCode(this));
         long start = System.nanoTime();
-        newRoomScan = FloodFill.fill(reader, getPos(), MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
+        newRoomScan = FloodFill.fill(reader, getPos(), scanMaxBlocks, MAX_HORIZONTAL_DIMENSION);
         long elapsed = (System.nanoTime() - start) / 1_000_000;
         TFGCore.LOGGER.info("[validation] validateAsync DONE, pos={}, identity={}, elapsedMs={}, status={}, size={}",
                 getPos(), System.identityHashCode(this), elapsed, newRoomScan.status(), newRoomScan.interiorSize());
@@ -410,12 +427,12 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             activeDecompression = null;
         }
 
-        // Room changed: interrupt the recipe and mark dirty so it re-searches with the new modifier.
-        // markLastRecipeDirty() ensures findAndHandleRecipe skips the fast path (which reuses the old recipe).
+        // Room changed: finish the current recipe so it re-searches with the new modifier.
+        // onRecipeFinish() also resets runAttempt/runDelay, ensuring immediate retry if the machine
+        // was backing off due to insufficient fluid/power in a larger room that just shrank.
         // Must be after decompression check since that tests isWorking().
         if (recipeLogic != null) {
-            recipeLogic.interruptRecipe();
-            recipeLogic.markLastRecipeDirty();
+            recipeLogic.onRecipeFinish();
         }
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;
