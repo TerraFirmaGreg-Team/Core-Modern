@@ -70,7 +70,6 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
                 .values().forEach(list -> list.removeIf(m -> className.equals(m.getClassName())));
     }
 
-
     // No-op event handlers that need implementation for an IMixinConfigPlugin
 
     // spotless:off
