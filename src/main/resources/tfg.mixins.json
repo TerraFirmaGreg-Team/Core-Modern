@@ -171,6 +171,7 @@
         "common.tfc.TFCChainBlockMixin",
         "common.tfc.TFCFallingBlockEntityMixin",
         "common.tfc.TFCLeavesBlockMixin",
+        "common.tfc_astikor_carts.TFCSupplyCartEntityMixin",
         "common.tfcambiental.TemperatureCapabilityMixin",
         "common.tfchotornot.ClientEventHandlerMixin",
         "common.tfchotornot.EventHandlerMixin",
