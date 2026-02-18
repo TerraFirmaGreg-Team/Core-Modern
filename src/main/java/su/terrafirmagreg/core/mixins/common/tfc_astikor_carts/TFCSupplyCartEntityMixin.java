@@ -48,7 +48,7 @@ public abstract class TFCSupplyCartEntityMixin extends AbstractDrawnInventoryEnt
             return;
         }
 
-        Entity pullingEntity = ((AbstractDrawnEntityAccessor) this).getPulling();
+        Entity pullingEntity = this.getPulling();
 
         if (!(pullingEntity instanceof LivingEntity livingEntity)) {
             return;
