@@ -18,6 +18,7 @@ import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
 import net.dries007.tfc.world.region.Units;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.PlayerRespawnLogic;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -31,9 +32,10 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 
-import de.eztxm.dimensionspawn.config.Config;
+import earth.terrarium.adastra.api.planets.Planet;
 
 import su.terrafirmagreg.core.common.data.utils.CustomSpawnHelper;
+import su.terrafirmagreg.core.common.data.utils.CustomSpawnSaveHandler;
 
 @Mixin(value = ForgeEventHandler.class, remap = false)
 @Debug(export = true)
@@ -75,9 +77,6 @@ public class ForgeEventHandlerMixin {
             final ChunkGenerator generator = extension.self();
             final ServerLevelData levelData = event.getSettings();
 
-            boolean climateMatch = false;
-            int seedTicker = 0;
-
             ChunkPos chunkPos = null;
             RandomSource random = new XoroshiroRandomSource(level.getSeed());
 
@@ -85,15 +84,14 @@ public class ForgeEventHandlerMixin {
 
             var condition = CustomSpawnHelper.getFromConfig();
 
-            if (condition.dimension() == ServerLevel.NETHER) {
-                Config.useDimensionEntry.set(true);
-                Config.dimensionEntry.set("minecraft:the_nether");
-            }
+            boolean climateMatch = false;
+            int seedTicker = 0;
 
             while (!climateMatch) {
 
-                chunkPos = new ChunkPos(CustomSpawnHelper.findSpawnBiome(condition.spawnCenterX(), condition.spawnCenterZ(), extension.settings().spawnDistance() * condition.spawnRadiusMultiplier(),
-                        random, extension));
+                chunkPos = new ChunkPos(
+                        CustomSpawnHelper.findSpawnBiome(condition.spawnCenterX(), condition.spawnCenterZ(), extension.settings().spawnDistance() * condition.spawnRadiusMultiplier(),
+                                random, extension));
                 Region.Point regionPoint = regionGen.getOrCreateRegionPoint(Units.blockToGrid(chunkPos.getMinBlockX()), Units.blockToGrid(chunkPos.getMinBlockZ()));
 
                 System.out.println("Testing chunkPos " + chunkPos.getWorldPosition());
@@ -108,15 +106,19 @@ public class ForgeEventHandlerMixin {
             }
 
             levelData.setSpawn(chunkPos.getWorldPosition().offset(8, generator.getSpawnHeight(level), 8), 0.0F);
+
             boolean foundExactSpawn = false;
             int x = 0, z = 0;
             int xStep = 0;
             int zStep = -1;
 
+            GlobalPos globalSpawnPos = null;
+
             for (int tries = 0; tries < 1024; ++tries) {
                 if (x > -16 && x <= 16 && z > -16 && z <= 16) {
                     final BlockPos spawnPos = PlayerRespawnLogic.getSpawnPosInChunk(level, new ChunkPos(chunkPos.x + x, chunkPos.z + z));
                     if (spawnPos != null) {
+                        globalSpawnPos = GlobalPos.of(ServerLevel.OVERWORLD, spawnPos);
                         levelData.setSpawn(spawnPos, 0);
                         foundExactSpawn = true;
                         break;
@@ -139,6 +141,14 @@ public class ForgeEventHandlerMixin {
 
             if (level.getServer().getWorldData().worldGenOptions().generateBonusChest()) {
                 LOGGER.warn("No bonus chest for you, you cheaty cheater!");
+            }
+
+            if (condition.dimension() == ServerLevel.OVERWORLD) {
+                CustomSpawnSaveHandler.setSpawnPos(level, globalSpawnPos);
+            } else if (condition.dimension() == ServerLevel.NETHER) {
+                CustomSpawnSaveHandler.setSpawnPos(level, CustomSpawnHelper.BENEATH_PLACEHOLDER);
+            } else if (condition.dimension() == Planet.MARS) {
+                CustomSpawnSaveHandler.setSpawnPos(level, CustomSpawnHelper.MARS_PLACEHOLDER);
             }
 
             CustomSpawnHelper.resetConfigValue();

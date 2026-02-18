@@ -199,6 +199,7 @@
         "client.ftb.QuestScreenMixin",
         "client.gtceu.ISurfaceRockRendererAccessor",
         "client.minecraft.CreateWorldScreenMixin",
+        "client.minecraft.GameTabMixin",
         "client.tfc.ClimateRenderCacheMixin",
         "client.tfc.DoubleIngotPileBlockModelMixin",
         "client.tfc.FarmlandBlockMixin",

@@ -8,16 +8,23 @@ import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.BiomeSourceExtension;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.QuartPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+
+import earth.terrarium.adastra.api.planets.Planet;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 
 public class CustomSpawnHelper {
+
+    public static final GlobalPos BENEATH_PLACEHOLDER = GlobalPos.of(ServerLevel.NETHER, BlockPos.ZERO);
+    public static final GlobalPos MARS_PLACEHOLDER = GlobalPos.of(Planet.MARS, BlockPos.ZERO);
 
     public static CustomSpawnCondition getFromConfig() {
         return CUSTOM_SPAWN_CONDITIONS.get(TFGConfig.COMMON.NEW_WORLD_SPAWN.get());
