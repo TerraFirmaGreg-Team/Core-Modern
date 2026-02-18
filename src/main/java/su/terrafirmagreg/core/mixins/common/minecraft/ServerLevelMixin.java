@@ -28,9 +28,15 @@ public abstract class ServerLevelMixin {
      */
     @Inject(method = "tickChunk", at = @At(value = "TAIL"))
     private void onEnvironmentTick(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci) {
-        if (chunk.getLevel().dimension().equals(Planet.MARS)) {
-            final ServerLevel level = (ServerLevel) (Object) this;
+        final ServerLevel level = (ServerLevel) (Object) this;
+
+        if (level.dimension().equals(Planet.MARS)) {
             MarsEnvironmentalHelpers.tickChunk(level, chunk, level.getProfiler());
         }
+
+        // Ad Astra's ServerLevelMixin also injects at TAIL with a popPush, which pops a section
+        // it doesn't own (vanilla has already popped everything inside tickChunk by TAIL).
+        // Push a sacrificial section so Ad Astra's popPush consumes it instead of corrupting the stack.
+        level.getProfiler().push("adastra$tickChunk_compat");
     }
 }
