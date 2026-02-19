@@ -10,12 +10,9 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
-import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
-import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
@@ -41,6 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
 import su.terrafirmagreg.core.common.environment.*;
 import su.terrafirmagreg.core.common.environment.RoomScan.Status;
 
@@ -128,41 +126,46 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         return recipeLogic != null && recipeLogic.isWorking();
     }
 
+    @Override
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
+        return new EnvironmentRecipeLogic(this);
+    }
+
     /**
-     * Recipe modifier: scales fluid tickInput cost by room size.
-     * <p>
-     * The recipe's fluid amount is a scale factor (e.g. 30 mB/tick base). The modifier computes
-     * the actual cost as {@code baseCost * volume / 50000} and replaces the amount entirely
-     * using {@code ContentModifier(0, desiredAmount)} — zeroes the base, adds the computed cost.
-     * This lets KubeJS devs define cheaper or more expensive gas recipes by adjusting the base.
-     * <p>
-     * Returns NULL if room exceeds machine capacity.
+     * Called by GT once when a recipe starts.
      */
-    public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (!(machine instanceof OxygenDistributorMachine distributor)) {
-            return RecipeModifier.nullWrongType(OxygenDistributorMachine.class, machine);
+    @Override
+    public boolean beforeWorking(@Nullable GTRecipe recipe) {
+        if (recipe != null) {
+            updateFluidCost(recipe);
+        }
+        return super.beforeWorking(recipe);
+    }
+
+    /**
+     * Recompute and cache the fractional fluid cost on the recipe logic.
+     */
+    private void updateFluidCost(@Nullable GTRecipe recipe) {
+        if (!(recipeLogic instanceof EnvironmentRecipeLogic envLogic))
+            return;
+        if (recipe == null) {
+            envLogic.setFluidCostPerTick(0);
+            return;
         }
 
-        int volume = distributor.computeEffectiveVolume();
-
-        // Read base cost from the recipe's fluid tickInput (e.g. 30 mB/tick)
-        int baseCost = 1;
+        int baseCost = 0;
         var fluidInputs = recipe.getTickInputContents(FluidRecipeCapability.CAP);
         if (!fluidInputs.isEmpty()) {
             baseCost = FluidRecipeCapability.CAP.of(fluidInputs.get(0).getContent()).getAmount();
         }
-
-        int desiredAmount = Math.max(1, baseCost * volume / 50_000);
-
-        return ModifierFunction.builder()
-                .tickInputModifier(new ContentModifier(0, desiredAmount))
-                .build();
+        // baseCost mB/min per 10k blocks -> mB/tick for actual volume
+        envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * 10_000));
     }
 
     /**
      * Compute the effective volume used for fluid cost scaling.
      *
-     * @return volume (>=1), always positive — the machine always runs, even if room is oversized
+     * @return volume (>=1)
      */
     private int computeEffectiveVolume() {
         RoomScan scan = getRoomScan();
@@ -170,7 +173,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             return Math.max(1, scan.interiorSize());
 
         } else if (scan.status() == Status.NULL) {
-            return 1; // minimal cost while scanning
+            return 1;
 
         } else {
             // Unsealed: cost based on maxVolume, scaled by pressure difference
@@ -209,7 +212,6 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
         // Status text panel
         group.addWidget(new ComponentPanelWidget(4, 4, this::addStatusText)
-                .textSupplier(getLevel().isClientSide ? null : this::addStatusText)
                 .setMaxWidthLimit(rightColX - 4));
 
         // "Find Leak" button, only visible when room is unsealed with an escape point
@@ -275,10 +277,9 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
 
         // Consumption / working state
         if (isWorking()) {
-            int fluidPerTick = getFluidConsumptionPerTick();
-            if (fluidPerTick > 0) {
-                textList.add(Component.translatable("tfg.machine.oxygen_distributor.consumption",
-                        FormattingUtil.formatNumbers(fluidPerTick))
+            String consumptionText = getFluidConsumptionDisplay();
+            if (consumptionText != null) {
+                textList.add(Component.translatable("tfg.machine.oxygen_distributor.consumption", consumptionText)
                         .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
             }
         } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
@@ -290,14 +291,18 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         }
     }
 
-    /** Read the actual fluid consumption per tick from the currently running modified recipe. */
-    private int getFluidConsumptionPerTick() {
-        if (recipeLogic == null || recipeLogic.getLastRecipe() == null)
-            return 0;
-        var fluidInputs = recipeLogic.getLastRecipe().getTickInputContents(FluidRecipeCapability.CAP);
-        if (fluidInputs.isEmpty())
-            return 0;
-        return FluidRecipeCapability.CAP.of(fluidInputs.get(0).getContent()).getAmount();
+    /** Format the fluid consumption for UI display in mB/s or mB/min. */
+    @Nullable
+    private String getFluidConsumptionDisplay() {
+        if (!(recipeLogic instanceof EnvironmentRecipeLogic envLogic))
+            return null;
+        double costPerTick = envLogic.getFluidCostPerTick();
+        if (costPerTick <= 0)
+            return null;
+
+        double mbPerMinute = costPerTick * 1200;
+        String formatString = mbPerMinute >= 10 ? "%.0f mB/min" : "%.2f mB/min";
+        return String.format(formatString, mbPerMinute);
     }
 
     private void requestBreachTrace() {
@@ -427,10 +432,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             activeDecompression = null;
         }
 
-        // Room changed: finish the current recipe so it re-searches with the new modifier.
-        // onRecipeFinish() also resets runAttempt/runDelay, ensuring immediate retry if the machine
-        // was backing off due to insufficient fluid/power in a larger room that just shrank.
-        // Must be after decompression check since that tests isWorking().
+        // Room changed: finish the current recipe so it re-searches and resets runDelay.
         if (recipeLogic != null) {
             recipeLogic.onRecipeFinish();
         }

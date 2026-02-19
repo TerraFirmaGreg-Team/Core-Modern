@@ -283,9 +283,8 @@ public class TFGMachines {
             .register();
 
     public static final MachineDefinition OXYGEN_DISTRIBUTOR = GTRegistration.REGISTRATE.machine("oxygen_distributor",
-            (holder) -> new OxygenDistributorMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction, 12_000))
+            (holder) -> new OxygenDistributorMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction, 500_000))
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
-            .recipeModifier(OxygenDistributorMachine::recipeModifier)
             .tier(GTValues.MV)
             .register();
 

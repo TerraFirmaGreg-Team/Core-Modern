@@ -1,7 +1,7 @@
 {
     "tfg.machine.oxygen_distributor.idle": "Idle",
     "tfg.machine.oxygen_distributor.size": "Size: %s blocks",
-    "tfg.machine.oxygen_distributor.consumption": "Consuming %s mB/t",
+    "tfg.machine.oxygen_distributor.consumption": "Consuming %s",
     "tfg.machine.oxygen_distributor.find_leak": "Find Leak",
     "tfg.machine.oxygen_distributor.status": "Status: ",
     "tfg.machine.oxygen_distributor.status.sealed": "Sealed",
