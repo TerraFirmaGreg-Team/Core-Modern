@@ -523,7 +523,16 @@ public final class TFGBlocks {
                                     .range(5.0, 0.0, 5.0)
                                     .velocity(0.0, 0.1, 0.0)
                                     .count(5)
-                                    .forced(false).build()),
+                                    .forced(false)
+                                    .build(),
+                            new GTActiveParticleBuilder.ParticleSetBuilder()
+                                    .particle("minecraft:current_down")
+                                    .position(0.0, 3.8, 0.0)
+                                    .range(0.5, 0.0, 0.5)
+                                    .velocity(0.0, 0.1, 0.0)
+                                    .count(5)
+                                    .forced(false)
+                                    .build()),
                     true, 20, 0, 12))
             .blockstate(ModelUtils.existingActiveParticleModel(TFGCore.id("block/casings/pisciculture_core")))
             .addLayer(() -> RenderType::cutout)

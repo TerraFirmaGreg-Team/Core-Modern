@@ -1,74 +1,40 @@
 {
-  "parent": "minecraft:block/block",
-  "loader": "gtceu:machine",
-  "machine": "tfg:nuclear_turbine",
-  "texture_overrides": {
-    "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-  },
-  "variants": {
-    "is_formed=false,recipe_logic_status=idle": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-        }
-      }
-    },
-    "is_formed=false,recipe_logic_status=suspend": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-        }
-      }
-    },
-    "is_formed=false,recipe_logic_status=waiting": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-        }
-      }
-    },
-    "is_formed=false,recipe_logic_status=working": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-        }
-      }
-    },
-    "is_formed=true,recipe_logic_status=idle": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-        }
-      }
-    },
-    "is_formed=true,recipe_logic_status=suspend": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-        }
-      }
-    },
-    "is_formed=true,recipe_logic_status=waiting": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-        }
-      }
-    },
-    "is_formed=true,recipe_logic_status=working": {
-      "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
-        "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
-        }
-      }
+    "texture_overrides": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"},
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "tfg:nuclear_turbine",
+    "variants": {
+        "is_formed=false,recipe_logic_status=suspend": {"model": {
+            "parent": "gtceu:block/machine/template/cube_all/sided",
+            "textures": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"}
+        }},
+        "is_formed=false,recipe_logic_status=waiting": {"model": {
+            "parent": "gtceu:block/machine/template/cube_all/sided",
+            "textures": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"}
+        }},
+        "is_formed=false,recipe_logic_status=working": {"model": {
+            "parent": "gtceu:block/machine/template/cube_all/sided",
+            "textures": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"}
+        }},
+        "is_formed=true,recipe_logic_status=idle": {"model": {
+            "parent": "gtceu:block/machine/template/cube_all/sided",
+            "textures": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"}
+        }},
+        "is_formed=true,recipe_logic_status=waiting": {"model": {
+            "parent": "gtceu:block/machine/template/cube_all/sided",
+            "textures": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"}
+        }},
+        "is_formed=true,recipe_logic_status=suspend": {"model": {
+            "parent": "gtceu:block/machine/template/cube_all/sided",
+            "textures": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"}
+        }},
+        "is_formed=false,recipe_logic_status=idle": {"model": {
+            "parent": "gtceu:block/machine/template/cube_all/sided",
+            "textures": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"}
+        }},
+        "is_formed=true,recipe_logic_status=working": {"model": {
+            "parent": "gtceu:block/machine/template/cube_all/sided",
+            "textures": {"all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"}
+        }}
     }
-  }
 }
