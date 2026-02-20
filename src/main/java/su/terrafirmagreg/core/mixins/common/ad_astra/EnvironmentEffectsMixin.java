@@ -64,7 +64,23 @@ public abstract class EnvironmentEffectsMixin {
         if (state.is(TFGTags.Blocks.DoNotDestroyInSpace))
             return;
 
+        // Cheap early exit before doing expensive hasOxygenOnAnySide.
         Block block = state.getBlock();
+        if (!(state.is(ModBlockTags.DESTROYED_IN_SPACE)
+                || block instanceof TFCTorchBlock
+                || block instanceof TFCWallTorchBlock
+                || block instanceof IGrassBlock
+                || block instanceof FarmlandBlock
+                || block instanceof TFCCandleBlock
+                || block instanceof FirepitBlock
+                || block instanceof TFCCandleCakeBlock
+                || block instanceof PitKilnBlock
+                || block instanceof OvenBottomBlock
+                || block instanceof CharcoalForgeBlock
+                || block instanceof JackOLanternBlock
+                || block instanceof LampBlock))
+            return;
+
         if (hasOxygenOnAnySide(level, pos))
             return;
 
