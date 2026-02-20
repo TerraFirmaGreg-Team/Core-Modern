@@ -1,225 +1,277 @@
 {
-    "texture_overrides": {"all": "tfg:block/casings/machine_casing_egh"},
-    "parent": "minecraft:block/block",
-    "dynamic_renders": [{
-        "offsets": [
-            [
-                -1,
-                0,
-                -5
-            ],
-            [
-                -1,
-                0,
-                -6
-            ],
-            [
-                -1,
-                0,
-                -7
-            ],
-            [
-                -1,
-                0,
-                -8
-            ],
-            [
-                -1,
-                0,
-                -9
-            ],
-            [
-                -1,
-                0,
-                -10
-            ],
-            [
-                1,
-                0,
-                -5
-            ],
-            [
-                1,
-                0,
-                -6
-            ],
-            [
-                1,
-                0,
-                -7
-            ],
-            [
-                1,
-                0,
-                -8
-            ],
-            [
-                1,
-                0,
-                -9
-            ],
-            [
-                1,
-                0,
-                -10
-            ],
-            [
-                -1,
-                3,
-                -5
-            ],
-            [
-                -1,
-                3,
-                -6
-            ],
-            [
-                -1,
-                3,
-                -7
-            ],
-            [
-                -1,
-                3,
-                -8
-            ],
-            [
-                -1,
-                3,
-                -9
-            ],
-            [
-                -1,
-                3,
-                -10
-            ],
-            [
-                1,
-                3,
-                -5
-            ],
-            [
-                1,
-                3,
-                -6
-            ],
-            [
-                1,
-                3,
-                -7
-            ],
-            [
-                1,
-                3,
-                -8
-            ],
-            [
-                1,
-                3,
-                -9
-            ],
-            [
-                1,
-                3,
-                -10
-            ],
-            [
-                -1,
-                6,
-                -5
-            ],
-            [
-                -1,
-                6,
-                -6
-            ],
-            [
-                -1,
-                6,
-                -7
-            ],
-            [
-                -1,
-                6,
-                -8
-            ],
-            [
-                -1,
-                6,
-                -9
-            ],
-            [
-                -1,
-                6,
-                -10
-            ],
-            [
-                1,
-                6,
-                -5
-            ],
-            [
-                1,
-                6,
-                -6
-            ],
-            [
-                1,
-                6,
-                -7
-            ],
-            [
-                1,
-                6,
-                -8
-            ],
-            [
-                1,
-                6,
-                -9
-            ],
-            [
-                1,
-                6,
-                -10
-            ]
+  "parent": "minecraft:block/block",
+  "dynamic_renders": [
+    {
+      "type": "gtceu:growing_plant",
+      "offsets": [
+        [
+          -1.0,
+          0.0,
+          -5.0
         ],
-        "type": "gtceu:growing_plant"
-    }],
-    "loader": "gtceu:machine",
-    "machine": "tfg:hydroponics_facility",
-    "variants": {
-        "is_formed=false,recipe_logic_status=suspend": {"model": {
-            "parent": "gtceu:block/machine/template/cube_all/sided",
-            "textures": {"all": "tfg:block/casings/machine_casing_egh"}
-        }},
-        "is_formed=false,recipe_logic_status=waiting": {"model": {
-            "parent": "gtceu:block/machine/template/cube_all/sided",
-            "textures": {"all": "tfg:block/casings/machine_casing_egh"}
-        }},
-        "is_formed=false,recipe_logic_status=working": {"model": {
-            "parent": "gtceu:block/machine/template/cube_all/sided",
-            "textures": {"all": "tfg:block/casings/machine_casing_egh"}
-        }},
-        "is_formed=true,recipe_logic_status=idle": {"model": {
-            "parent": "gtceu:block/machine/template/cube_all/sided",
-            "textures": {"all": "tfg:block/casings/machine_casing_egh"}
-        }},
-        "is_formed=true,recipe_logic_status=waiting": {"model": {
-            "parent": "gtceu:block/machine/template/cube_all/sided",
-            "textures": {"all": "tfg:block/casings/machine_casing_egh"}
-        }},
-        "is_formed=true,recipe_logic_status=suspend": {"model": {
-            "parent": "gtceu:block/machine/template/cube_all/sided",
-            "textures": {"all": "tfg:block/casings/machine_casing_egh"}
-        }},
-        "is_formed=false,recipe_logic_status=idle": {"model": {
-            "parent": "gtceu:block/machine/template/cube_all/sided",
-            "textures": {"all": "tfg:block/casings/machine_casing_egh"}
-        }},
-        "is_formed=true,recipe_logic_status=working": {"model": {
-            "parent": "gtceu:block/machine/template/cube_all/sided",
-            "textures": {"all": "tfg:block/casings/machine_casing_egh"}
-        }}
+        [
+          -1.0,
+          0.0,
+          -6.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -7.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -8.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -9.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -10.0
+        ],
+        [
+          1.0,
+          0.0,
+          -5.0
+        ],
+        [
+          1.0,
+          0.0,
+          -6.0
+        ],
+        [
+          1.0,
+          0.0,
+          -7.0
+        ],
+        [
+          1.0,
+          0.0,
+          -8.0
+        ],
+        [
+          1.0,
+          0.0,
+          -9.0
+        ],
+        [
+          1.0,
+          0.0,
+          -10.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -5.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -6.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -7.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -8.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -9.0
+        ],
+        [
+          -1.0,
+          3.0,
+          -10.0
+        ],
+        [
+          1.0,
+          3.0,
+          -5.0
+        ],
+        [
+          1.0,
+          3.0,
+          -6.0
+        ],
+        [
+          1.0,
+          3.0,
+          -7.0
+        ],
+        [
+          1.0,
+          3.0,
+          -8.0
+        ],
+        [
+          1.0,
+          3.0,
+          -9.0
+        ],
+        [
+          1.0,
+          3.0,
+          -10.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -5.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -6.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -7.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -8.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -9.0
+        ],
+        [
+          -1.0,
+          6.0,
+          -10.0
+        ],
+        [
+          1.0,
+          6.0,
+          -5.0
+        ],
+        [
+          1.0,
+          6.0,
+          -6.0
+        ],
+        [
+          1.0,
+          6.0,
+          -7.0
+        ],
+        [
+          1.0,
+          6.0,
+          -8.0
+        ],
+        [
+          1.0,
+          6.0,
+          -9.0
+        ],
+        [
+          1.0,
+          6.0,
+          -10.0
+        ]
+      ]
     }
+  ],
+  "loader": "gtceu:machine",
+  "machine": "tfg:hydroponics_facility",
+  "texture_overrides": {
+    "all": "tfg:block/casings/machine_casing_egh"
+  },
+  "variants": {
+    "is_formed=false,recipe_logic_status=idle": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh",
+          "overlay_front": "tfg:block/machines/hydroponics_facility/overlay_front",
+          "overlay_front_emissive": "tfg:block/machines/hydroponics_facility/overlay_front_emissive"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=suspend": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh",
+          "overlay_front": "tfg:block/machines/hydroponics_facility/overlay_front",
+          "overlay_front_emissive": "tfg:block/machines/hydroponics_facility/overlay_front_emissive"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=waiting": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh",
+          "overlay_front": "tfg:block/machines/hydroponics_facility/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/hydroponics_facility/overlay_front_active_emissive"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=working": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh",
+          "overlay_front": "tfg:block/machines/hydroponics_facility/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/hydroponics_facility/overlay_front_active_emissive"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=idle": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh",
+          "overlay_front": "tfg:block/machines/hydroponics_facility/overlay_front",
+          "overlay_front_emissive": "tfg:block/machines/hydroponics_facility/overlay_front_emissive"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=suspend": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh",
+          "overlay_front": "tfg:block/machines/hydroponics_facility/overlay_front",
+          "overlay_front_emissive": "tfg:block/machines/hydroponics_facility/overlay_front_emissive"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=waiting": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh",
+          "overlay_front": "tfg:block/machines/hydroponics_facility/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/hydroponics_facility/overlay_front_active_emissive"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=working": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "tfg:block/casings/machine_casing_egh",
+          "overlay_front": "tfg:block/machines/hydroponics_facility/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/hydroponics_facility/overlay_front_active_emissive"
+        }
+      }
+    }
+  }
 }
