@@ -178,6 +178,7 @@
         "common.tfchotornot.FluidEffectMixin",
         "common.tfcimprovedbadlands.IBEventHandlerMixin",
         "common.vintageimprovements.CurvingRecipeMixin",
+        "common.vintageimprovements.HelveBlockEntityMixin",
         "common.vintageimprovements.HelveItemsRendererMixin",
         "common.vintageimprovements.LatheMovingBlockMixin",
         "common.vintageimprovements.LatheRotatingBlockMixin",
