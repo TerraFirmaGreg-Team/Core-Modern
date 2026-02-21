@@ -267,6 +267,11 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             case SAVED_DATA -> Component.translatable("tfg.machine.oxygen_distributor.status.restoring").withStyle(ChatFormatting.GREEN);
             case NULL -> Component.translatable("tfg.machine.oxygen_distributor.status.scanning").withStyle(ChatFormatting.GRAY);
         };
+
+        if (pendingChunkLoad == null) {
+            statusText = Component.translatable("tfg.machine.oxygen_distributor.status.chunk_unloaded").withStyle(ChatFormatting.YELLOW);
+        }
+
         textList.add(Component.translatable("tfg.machine.oxygen_distributor.status").append(statusText));
 
         // Room size: only shown when sealed and within limits
