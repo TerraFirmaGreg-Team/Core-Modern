@@ -1,6 +1,6 @@
 package su.terrafirmagreg.core.common.data;
 
-import static com.gregtechceu.gtceu.common.registry.GTRegistration.REGISTRATE;
+import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -11,8 +11,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 
-import su.terrafirmagreg.core.TFGCore;
-
 @SuppressWarnings("unused")
 public class TFGCreativeTab {
 
@@ -22,7 +20,7 @@ public class TFGCreativeTab {
     public static RegistryEntry<CreativeModeTab> TFG = REGISTRATE.defaultCreativeTab("tfg",
             builder -> builder.title(Component.translatable("tfg.creative_tab.tfg"))
                     .icon(() -> new ItemStack(TFCItems.FOOD.get(Food.PUMPKIN_CHUNKS).get()))
-                    .displayItems(new RegistrateDisplayItemsGenerator("tfg", TFGCore.REGISTRATE)))
+                    .displayItems(new RegistrateDisplayItemsGenerator("tfg", REGISTRATE)))
             .register();
 
     public record RegistrateDisplayItemsGenerator(String name,
