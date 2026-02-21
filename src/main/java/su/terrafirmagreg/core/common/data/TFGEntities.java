@@ -30,7 +30,7 @@ import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
 
-@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
+@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TFGEntities {
 
     public static void init() {
