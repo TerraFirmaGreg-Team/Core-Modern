@@ -23,6 +23,7 @@ import earth.terrarium.botarium.common.fluid.base.FluidHolder;
  */
 public class DebugSpaceSuitCommand {
 
+    @SuppressWarnings("removal")
     private static final ResourceLocation NITROX = new ResourceLocation("tfg", "compressed_nitrox");
 
     public static void register(LiteralArgumentBuilder<CommandSourceStack> debug) {
