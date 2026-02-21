@@ -78,9 +78,9 @@ public abstract class RocketMixin extends Entity {
     @Inject(method = "<clinit>", at = @At("HEAD"))
     private static void tfg$injectToClinit(CallbackInfo ci) {
         TIER_1_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_1_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_1_ROCKET_FUEL);
-        TIER_2_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_2_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_2_ROCKET_FUEL);
-        TIER_3_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_3_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_3_ROCKET_FUEL);
-        TIER_4_DOUBLE_PROPERTIES = new Rocket.RocketProperties(1, TFGItems.TIER_4_DOUBLE_ROCKET.get(), 1.7F, ModFluidTags.TIER_4_ROCKET_FUEL);
+        TIER_2_DOUBLE_PROPERTIES = new Rocket.RocketProperties(2, TFGItems.TIER_2_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_2_ROCKET_FUEL);
+        TIER_3_DOUBLE_PROPERTIES = new Rocket.RocketProperties(3, TFGItems.TIER_3_DOUBLE_ROCKET.get(), 1.0F, ModFluidTags.TIER_3_ROCKET_FUEL);
+        TIER_4_DOUBLE_PROPERTIES = new Rocket.RocketProperties(4, TFGItems.TIER_4_DOUBLE_ROCKET.get(), 1.7F, ModFluidTags.TIER_4_ROCKET_FUEL);
 
     }
 
