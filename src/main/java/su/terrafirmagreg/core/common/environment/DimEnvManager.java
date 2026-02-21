@@ -266,6 +266,10 @@ public class DimEnvManager extends SavedData {
     // ==================== Decompression Events ====================
 
     public DecompressionEvent startDecompression(BlockPos breachPoint, RoomScan oldRoomScan) {
+        for (DecompressionEvent existing : activeDecompressions) {
+            if (existing.getBreachPoint().equals(breachPoint))
+                return null;
+        }
         DecompressionEvent event = new DecompressionEvent(level, breachPoint, oldRoomScan);
         activeDecompressions.add(event);
         return event;

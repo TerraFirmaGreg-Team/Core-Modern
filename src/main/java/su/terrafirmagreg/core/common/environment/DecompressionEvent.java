@@ -22,6 +22,7 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 // TODO: Don't spawn event when current status is volume limit exceeded or dimension limit exceeded
 public class DecompressionEvent {
 
+    @lombok.Getter
     private final BlockPos breachPoint;
     private final RoomScan oldRoomScan;
     private final int durationTicks;
