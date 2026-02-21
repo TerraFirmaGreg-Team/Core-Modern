@@ -5,6 +5,7 @@
  */
 package su.terrafirmagreg.core.mixins.client.create;
 
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,10 +42,16 @@ public class ChainConveyorRendererMixin {
     private void tfg$renderChains(ChainConveyorBlockEntity be, PoseStack ms, MultiBufferSource buffer, int light,
             int overlay, CallbackInfo ci, @Local(ordinal = 0) BlockPos blockPos) {
         ChainGTMaterialInterface cgtbe = (ChainGTMaterialInterface) be;
-        String matPath = cgtbe.getConnectionMaterial(blockPos).getResourceLocation().getPath();
-        // TODO: Perhaps this could be adapted to use a white chain texture png, and simply modified colour-wise
-        tfg$tempChainTextureResource = ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID,
-                "textures/block/metal/chain/" + matPath + ".png");
+		Material connection = cgtbe.getConnectionMaterial(blockPos);
+		if (connection != null) {
+			String matPath = connection.getResourceLocation().getPath();
+			// TODO: Perhaps this could be adapted to use a white chain texture png, and simply modified colour-wise
+			tfg$tempChainTextureResource = ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID,
+				"textures/block/metal/chain/" + matPath + ".png");
+		}
+		else {
+			tfg$tempChainTextureResource = null;
+		}
     }
 
     @Inject(method = "renderChains(Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At("TAIL"), remap = false)
@@ -55,7 +62,7 @@ public class ChainConveyorRendererMixin {
 
     @ModifyArg(method = "renderChain(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;FFIIZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource;getBuffer(Lnet/minecraft/client/renderer/RenderType;)Lcom/mojang/blaze3d/vertex/VertexConsumer;"))
     private static RenderType tfg$renderChain$getBuffer(RenderType pRenderType) {
-        if (ResourceLocation.isValidResourceLocation(tfg$tempChainTextureResource.toString()))
+        if (tfg$tempChainTextureResource != null && ResourceLocation.isValidResourceLocation(tfg$tempChainTextureResource.toString()))
             return RenderTypes.chain(tfg$tempChainTextureResource);
         else
             return pRenderType;
