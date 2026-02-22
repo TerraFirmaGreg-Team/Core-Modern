@@ -8,6 +8,7 @@ import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
@@ -25,13 +26,12 @@ import su.terrafirmagreg.core.mixins.common.minecraft.AccessorServerChunkCache;
  * directly from {@link ChunkHolder} futures. Only reads already-loaded chunks;
  * returns null for unloaded chunks (caller should treat as escaped).
  * <p>
- * This is safe because:
- * <ul>
- *   <li>{@link LevelChunk#getBlockState} reads from {@code PalettedContainer} which is
- *       thread-safe (Mojang's light engine reads it off-thread)</li>
- *   <li>{@code LevelChunk.sections} is final and sections are never nulled</li>
- *   <li>Stale reads are acceptable — block change events trigger re-validation</li>
- * </ul>
+ * {@link LevelChunk#getBlockState} reads from {@code PalettedContainer} which is
+ * thread-safe (Mojang's light engine reads it off-thread).
+ * {@code LevelChunk.sections} is final and sections are never nulled.
+ * Stale reads are acceptable because block change events trigger re-validation
+ * The main fragile bit is async block entity access, but we're only ever reading, and
+ * we don't care much about stale reads and we don't iterate so there's no risk of CME.
  */
 public class AsyncBlockReader {
     @Getter
@@ -49,8 +49,8 @@ public class AsyncBlockReader {
     }
 
     /**
-     * Get the block state at the given position without bouncing to the main thread.
-     * Returns null if the chunk is not loaded — caller must handle this (e.g. treat as unloaded escape).
+     * Get the block state at the given position async.
+     * Returns null if the chunk is not loaded.
      */
     @Nullable
     public BlockState getBlockState(BlockPos pos) {
@@ -62,21 +62,30 @@ public class AsyncBlockReader {
     }
 
     /**
-     * Check if a chunk is loaded at the given position.
+     * Get the block entity at the given position async.
+     * Returns null if the chunk is not loaded or there is no block entity.
      */
+    @Nullable
+    public BlockEntity getBlockEntity(BlockPos pos) {
+        LevelChunk chunk = getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+        if (chunk == null) {
+            return null;
+        }
+        return chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
+    }
+
+    /** Check if a chunk is loaded at the given position. */
     public boolean hasChunkAt(BlockPos pos) {
         return getChunk(pos.getX() >> 4, pos.getZ() >> 4) != null;
     }
 
-    /**
-     * Delegates to the level for build height checks (no world access needed).
-     */
+    /** Delegates to the level for build height checks. */
     public boolean isOutsideBuildHeight(int y) {
         return level.isOutsideBuildHeight(y);
     }
 
     /**
-     * Gets a loaded LevelChunk without blocking. Returns null if not loaded.
+     * Get a loaded LevelChunk without blocking, returns null if not loaded.
      * Mirrors the logic of {@link ServerChunkCache#getChunkNow} minus the thread check.
      */
     @Nullable
@@ -94,7 +103,6 @@ public class AsyncBlockReader {
         }
 
         // Read the already-completed future without blocking.
-        // Don't use holder.currentlyLoading — it's not volatile, unsafe to read off-thread.
         ChunkAccess access = holder.getFutureIfPresent(ChunkStatus.FULL)
                 .getNow(ChunkHolder.UNLOADED_CHUNK)
                 .left()

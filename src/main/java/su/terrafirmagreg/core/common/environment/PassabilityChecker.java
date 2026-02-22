@@ -5,6 +5,11 @@ import static su.terrafirmagreg.core.common.environment.PassabilityChecker.PassI
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.gregtechceu.gtceu.api.capability.ICoverable;
+import com.gregtechceu.gtceu.api.cover.CoverBehavior;
+import com.gregtechceu.gtceu.api.pipenet.IPipeNode;
+import com.gregtechceu.gtceu.common.cover.FacadeCover;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
@@ -227,11 +232,23 @@ public final class PassabilityChecker {
             /** Collision box dependent, have to check incoming directions. Some faces and/or silhouettes full, some not */
             COLLISION,
             /** Result can't be cached for some reason, eg airlock doors, moving pistons, bellows, shulker boxes. */
-            NO_CACHE
+            NO_CACHE,
+            /**
+             * Block is normally passable but may have GT facade covers that seal individual faces.
+             * The stored bitmasks reflect the underlying block shape. At query time, sealed facade faces
+             * are OR'd into fullFaces/fullSilhouettes before direction checks.
+             */
+            CHECK_FACADES
         }
 
         private static PassInfo empty() {
-            return new PassInfo(PassType.EMPTY, (byte) 0, (byte) 0, (byte) 0);
+            // emptyFaces = ALL_DIRECTIONS so facade overlays can union correctly
+            return new PassInfo(PassType.EMPTY, (byte) 0, (byte) 0, ALL_DIRECTIONS);
+        }
+
+        static PassInfo wrapInCheckFacades(PassInfo underlying) {
+            // Promote an EMPTY or COLLISION result to CHECK_FACADES, preserving the real bitmasks
+            return new PassInfo(CHECK_FACADES, underlying.fullFaces, underlying.fullSilhouettes, underlying.emptyFaces);
         }
 
         static PassInfo full() {
@@ -277,14 +294,64 @@ public final class PassabilityChecker {
     }
 
     /**
-     * Gets the passability info for a BlockState, computing current state for no_cache blocks
+     * Gets the passability info for a BlockState, computing current state for no_cache and check_facades blocks
      */
     public static PassInfo getPassInfo(AsyncBlockReader reader, BlockPos pos, BlockState blockState) {
         PassInfo passInfo = getCachedPassInfo(blockState);
         if (passInfo.type == NO_CACHE) {
             return computeNoCache(reader, pos, blockState);
         }
+        if (passInfo.type == CHECK_FACADES) {
+            return overlayFacades(reader, pos, passInfo);
+        }
         return passInfo;
+    }
+
+    /**
+     * Overlays GT facade covers onto a CHECK_FACADES passInfo.
+     * For each face with an occluding facade cover, marks that face as full (sealed).
+     * If any faces are sealed, promotes to COLLISION so direction checks apply.
+     */
+    private static PassInfo overlayFacades(AsyncBlockReader reader, BlockPos blockPos, PassInfo base) {
+
+        byte facadeFaces = 0;
+
+        if (reader.getBlockEntity(blockPos) instanceof IPipeNode<?, ?> pipe) {
+            ICoverable coverable = pipe.getCoverContainer();
+            if (coverable != null) {
+
+                // Get faces with solid covers
+                for (Direction side : DIRECTIONS) {
+
+                    CoverBehavior cover = coverable.getCoverAtSide(side);
+                    if (cover instanceof FacadeCover facade && !facade.getFacadeState().is(TFGTags.Blocks.AtmospherePassable)) {
+                        facadeFaces |= dir2byte(side);
+                    }
+                }
+                // Floodfill uses direction of travel, not direction from center of target block
+                facadeFaces = mirrorDirs(facadeFaces);
+            }
+        }
+
+        if (facadeFaces == 0b0) {
+            // No sealing facades, esolve CHECK_FACADES to the underlying type
+            return new PassInfo(base.fullFaces() == 0b0 && base.fullSilhouettes() == 0b0 ? EMPTY : COLLISION,
+                    base.fullFaces(), base.fullSilhouettes(), base.emptyFaces());
+        }
+
+        // Union facade faces into fullFaces; remove them from emptyFaces
+        byte newFullFaces = unionDirs(base.fullFaces(), facadeFaces);
+        byte newEmptyFaces = subtractDirs(base.emptyFaces(), facadeFaces);
+
+        // Compute new silhouettes; silhouette is full if one of the faces is full or it was already full
+        byte newSilhouettes = (byte) (base.fullSilhouettes() | facadeFaces | mirrorDirs(facadeFaces));
+
+        // If all faces sealed, it's simply FULL
+        if (newFullFaces == ALL_DIRECTIONS) {
+            return PassInfo.full();
+        }
+
+        return new PassInfo(COLLISION, newFullFaces, newSilhouettes, newEmptyFaces);
     }
 
     /**
@@ -300,8 +367,10 @@ public final class PassabilityChecker {
         if (blockState.is(TFGTags.Blocks.AtmosphereImpassable)) {
             return PassInfo.full();
         }
+        boolean checkFacades = blockState.is(TFGTags.Blocks.AtmosphereCheckFacades);
         if (blockState.is(TFGTags.Blocks.AtmospherePassable)) {
-            return PassInfo.empty();
+            PassInfo empty = PassInfo.empty();
+            return checkFacades ? PassInfo.wrapInCheckFacades(empty) : empty;
         }
 
         // Airlocks
@@ -323,7 +392,11 @@ public final class PassabilityChecker {
             return PassInfo.noCache();
         }
 
-        return computeFacesAndSilhouettes(shape);
+        PassInfo result = computeFacesAndSilhouettes(shape);
+        if (checkFacades && result.type != FULL) {
+            return PassInfo.wrapInCheckFacades(result);
+        }
+        return result;
     }
 
     /**
