@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGItems;
 
 /**
  * Setup hooks for TFG GT addons.
@@ -17,7 +18,7 @@ public class TFGTSetupHooks {
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            TFGTItems.COVER_ROTTEN_VOIDING.get().attachComponents(new CoverPlaceBehavior(TFGTCovers.ITEM_VOIDING_ROTTEN));
+            TFGItems.COVER_ROTTEN_VOIDING.get().attachComponents(new CoverPlaceBehavior(TFGTCovers.ITEM_VOIDING_ROTTEN));
         });
     }
 }

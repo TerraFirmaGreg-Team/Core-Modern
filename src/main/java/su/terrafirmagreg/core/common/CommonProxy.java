@@ -23,7 +23,6 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
-import su.terrafirmagreg.core.common.data.tfgt.TFGTItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
@@ -72,7 +71,6 @@ public class CommonProxy {
         TFGBrain.POI_TYPES.register(bus);
 
         TFGFoodTraits.init();
-        TFGTItems.init();
 
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);

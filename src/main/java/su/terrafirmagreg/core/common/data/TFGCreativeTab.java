@@ -31,13 +31,13 @@ public class TFGCreativeTab {
                 CreativeModeTab.Output output) {
             var tab = registrate.get(name, Registries.CREATIVE_MODE_TAB);
             for (var entry : registrate.getAll(Registries.BLOCK)) {
-                if (!registrate.isInCreativeTab(entry, tab))
+                if (registrate.isInCreativeTab(entry, tab))
                     continue;
                 if (entry.getId().getNamespace().equals("tfg"))
                     output.accept(entry.get());
             }
             for (var entry : registrate.getAll(Registries.ITEM)) {
-                if (!registrate.isInCreativeTab(entry, tab))
+                if (registrate.isInCreativeTab(entry, tab))
                     continue;
                 Item item = entry.get();
                 if (item instanceof BlockItem)
