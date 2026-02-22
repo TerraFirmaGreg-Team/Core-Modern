@@ -1,0 +1,9 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "tfg:item/fish_roe_0",
+        "layer3": "tfg:item/fish_roe_2",
+        "layer1": "tfg:item/fish_roe_0",
+        "layer2": "tfg:item/fish_roe_1"
+    }
+}

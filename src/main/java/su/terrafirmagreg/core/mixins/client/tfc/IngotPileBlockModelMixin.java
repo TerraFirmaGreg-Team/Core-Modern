@@ -33,7 +33,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.client.TFGClientEventHandler;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
 import su.terrafirmagreg.core.common.TFGHelpers;
 import su.terrafirmagreg.core.mixins.common.tfc.IIngotPileBlockEntityAccessor;
@@ -74,7 +73,7 @@ public abstract class IngotPileBlockModelMixin
 
             boolean shouldUseTFCRender = !(metalAtPos.getId() == Metal.unknown().getId() && !material.isEmpty());
             ResourceLocation metalResource = shouldUseTFCRender ? metalAtPos.getSoftTextureId()
-                    : TFGClientEventHandler.TFCMetalBlockTexturePattern;
+                    : TFGClientHelpers.TFCMetalBlockTexturePattern;
 
             sprite = textureAtlas.apply(metalResource);
 

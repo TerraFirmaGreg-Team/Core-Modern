@@ -1,0 +1,4 @@
+{"variants": {
+    "active=false": {"model": "tfg:block/machine_casing_egh"},
+    "active=true": {"model": "tfg:block/machine_casing_egh_active"}
+}}

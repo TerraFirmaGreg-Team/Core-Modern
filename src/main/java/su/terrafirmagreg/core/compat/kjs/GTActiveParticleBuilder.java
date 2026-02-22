@@ -235,7 +235,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
          * Convert to immutable ParticleConfig.
          * @return built ParticleConfig
          */
-        private ParticleConfig build() {
+        public ParticleConfig build() {
             return new ParticleConfig(
                     this.particle,
                     this.posX, this.posY, this.posZ,

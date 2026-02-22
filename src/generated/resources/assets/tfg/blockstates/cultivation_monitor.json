@@ -1,0 +1,28 @@
+{"variants": {
+    "active=true,facing=east": {
+        "y": 90,
+        "model": "tfg:block/machines/cultivation_monitor/cultivation_monitor_active"
+    },
+    "active=false,facing=north": {"model": "tfg:block/machines/cultivation_monitor/cultivation_monitor"},
+    "active=true,facing=south": {
+        "y": 180,
+        "model": "tfg:block/machines/cultivation_monitor/cultivation_monitor_active"
+    },
+    "active=true,facing=north": {"model": "tfg:block/machines/cultivation_monitor/cultivation_monitor_active"},
+    "active=false,facing=west": {
+        "y": 270,
+        "model": "tfg:block/machines/cultivation_monitor/cultivation_monitor"
+    },
+    "active=true,facing=west": {
+        "y": 270,
+        "model": "tfg:block/machines/cultivation_monitor/cultivation_monitor_active"
+    },
+    "active=false,facing=south": {
+        "y": 180,
+        "model": "tfg:block/machines/cultivation_monitor/cultivation_monitor"
+    },
+    "active=false,facing=east": {
+        "y": 90,
+        "model": "tfg:block/machines/cultivation_monitor/cultivation_monitor"
+    }
+}}

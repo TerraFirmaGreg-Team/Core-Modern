@@ -1,0 +1,15 @@
+{"variants": {
+    "facing=east": {
+        "y": 90,
+        "model": "tfg:block/machine/lv_food_oven"
+    },
+    "facing=south": {
+        "y": 180,
+        "model": "tfg:block/machine/lv_food_oven"
+    },
+    "facing=north": {"model": "tfg:block/machine/lv_food_oven"},
+    "facing=west": {
+        "y": 270,
+        "model": "tfg:block/machine/lv_food_oven"
+    }
+}}

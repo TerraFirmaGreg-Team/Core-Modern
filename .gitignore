@@ -9,7 +9,6 @@ hs_err_pid*
 ### Java ###
 
 *.class
-
 ### Windows ###
 
 thumbs.db
@@ -29,6 +28,7 @@ classes
 out
 build
 .gradle
+gradle-local.properties
 
 ### VS Code ###
 .vs
@@ -39,6 +39,7 @@ build
 run
 runs
 libs
-
-moveToInstance.gradle
+src/dev/resources/**
+src/generated/resources/.cache/*
+src/generated/resources/assets/tfg/lang/*
 *.jar

@@ -46,6 +46,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.fluids.FluidType;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.TFGPartAbility;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine.InterplanetaryLogisticsMonitorMachine;
@@ -88,7 +89,7 @@ public class TFGMachines {
                     .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("food_processor"),
                             TFGTRecipeTypes.FOOD_PROCESSOR_RECIPES))
-                    .workableTieredHullModel(GTCEu.id("block/machines/food_processor"))
+                    .workableTieredHullModel(TFGCore.id("block/machines/food_processor"))
                     .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
                             TFGTRecipeTypes.FOOD_PROCESSOR_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier),
                             true))
@@ -101,7 +102,7 @@ public class TFGMachines {
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(TFGTRecipeTypes.FOOD_OVEN_RECIPES)
                     .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
-                    .workableTieredHullModel(GTCEu.id("block/machines/food_oven"))
+                    .workableTieredHullModel(TFGCore.id("block/machines/food_oven"))
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("food_oven"),
                             TFGTRecipeTypes.FOOD_OVEN_RECIPES))
                     .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
@@ -123,7 +124,7 @@ public class TFGMachines {
                                     FoodRefrigeratorMachine.INVENTORY_SIZE(tier)))
                     .tooltips(Component.translatable("tfg.machine.food_refrigerator_power_usage",
                             FormattingUtil.formatNumbers(GTValues.VA[GTValues.LV] * (FoodRefrigeratorMachine.INVENTORY_SIZE(tier) / 9))))
-                    .workableTieredHullModel(GTCEu.id("block/machines/food_refrigerator"))
+                    .workableTieredHullModel(TFGCore.id("block/machines/food_refrigerator"))
                     .register(),
             GTValues.tiersBetween(GTValues.MV, GTValues.IV));
 
@@ -135,7 +136,7 @@ public class TFGMachines {
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(TFGTRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES)
                     .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
-                    .workableTieredHullModel(GTCEu.id("block/machines/aqueous_accumulator"))
+                    .workableTieredHullModel(TFGCore.id("block/machines/aqueous_accumulator"))
                     .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
                             TFGTRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES,
                             GTMachineUtils.defaultTankSizeFunction.apply(tier), true))
@@ -151,7 +152,7 @@ public class TFGMachines {
                     .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("gas_pressurizer"),
                             TFGTRecipeTypes.GAS_PRESSURIZER_RECIPES))
-                    .workableTieredHullModel(GTCEu.id("block/machines/gas_pressurizer"))
+                    .workableTieredHullModel(TFGCore.id("block/machines/gas_pressurizer"))
                     .tooltips(GTMachineUtils.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
                             TFGTRecipeTypes.GAS_PRESSURIZER_RECIPES, GTMachineUtils.defaultTankSizeFunction.apply(tier),
                             true))
@@ -193,6 +194,8 @@ public class TFGMachines {
     public static final MachineDefinition SINGLE_ITEMSTACK_BUS = REGISTRATE
             .machine("single_itemstack_bus", SingleItemstackBus::new)
             .rotationState(RotationState.ALL)
+            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
+                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
                     Component.translatable("tfg.tooltip.single_itemstack_bus.0"),
@@ -201,11 +204,15 @@ public class TFGMachines {
 
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE
             .machine("railgun_ammo_loader", RailgunAmmoLoaderMachine::new)
+            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
+                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .register();
 
     public static final MachineDefinition INTERPLANETARY_LOGISTICS_MONITOR = REGISTRATE
             .machine("interplanetary_logistics_monitor", InterplanetaryLogisticsMonitorMachine::new)
+            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
+                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
             .rotationState(RotationState.NON_Y_AXIS)
             .register();
 

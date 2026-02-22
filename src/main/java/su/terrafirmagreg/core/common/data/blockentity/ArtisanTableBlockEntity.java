@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
 
@@ -26,7 +27,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
@@ -69,8 +69,8 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
      * @param pos   The block position.
      * @param state The block state.
      */
-    public ArtisanTableBlockEntity(BlockPos pos, BlockState state) {
-        super(TFGBlockEntities.ARTISAN_TABLE.get(), pos, state, ArtisanTableBlockEntity::createInventory, NAME);
+    public ArtisanTableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state, ArtisanTableBlockEntity::createInventory, NAME);
         this.pattern = new ArtisanPattern();
     }
 

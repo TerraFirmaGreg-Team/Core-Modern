@@ -1,0 +1,4 @@
+{"variants": {
+    "active=false": {"model": "tfg:block/casings/pisciculture_core"},
+    "active=true": {"model": "tfg:block/casings/pisciculture_core_active"}
+}}

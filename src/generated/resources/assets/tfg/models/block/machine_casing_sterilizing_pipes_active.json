@@ -1,0 +1,7 @@
+{
+    "parent": "gtceu:block/cube_2_layer/all",
+    "textures": {
+        "bot_all": "tfg:block/casings/machine_casing_sterilizing_pipes_active",
+        "top_all": "tfg:block/casings/machine_casing_sterilizing_pipes_active_emissive"
+    }
+}

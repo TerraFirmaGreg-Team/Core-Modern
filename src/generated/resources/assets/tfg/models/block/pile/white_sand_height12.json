@@ -1,0 +1,7 @@
+{
+    "parent": "tfg:block/ash_pile/ash_height12",
+    "textures": {
+        "texture": "tfc:block/sand/white",
+        "particle": "tfc:block/sand/white"
+    }
+}
