@@ -478,7 +478,8 @@ public final class TFGBlocks {
                             .forced(false)
                             .build()),
                     true, 200, 0, 12))
-            .blockstate(ModelUtils.existingActiveParticleModel(TFGCore.id("block/machines/egh_planter/egh_planter")))
+            .blockstate((ctx, prov) -> ModelUtils.activeCardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/machines/egh_planter/egh_planter")),
+                    prov.models().getExistingFile(TFGCore.id("block/machines/egh_planter/egh_planter_active"))))
             .addLayer(() -> RenderType::cutout)
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFCTags.Blocks.FARMLAND, TFCTags.Blocks.TREE_GROWS_ON,
                     TFCTags.Blocks.BUSH_PLANTABLE_ON, TFCTags.Blocks.WILD_CROP_GROWS_ON, TFCTags.Blocks.SPREADING_FRUIT_GROWS_ON,
@@ -553,7 +554,8 @@ public final class TFGBlocks {
 
     public static final BlockEntry<Block> MARS_CASING = createCasingBlock("casings/machine_casing_mars", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_mars")));
 
-    public static final BlockEntry<Block> OSTRUM_CARBON_CASING = createCasingBlock("casings/machine_casing_ostrum_carbon", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_ostrum_carbon")));
+    public static final BlockEntry<Block> OSTRUM_CARBON_CASING = createCasingBlock("casings/machine_casing_ostrum_carbon",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_ostrum_carbon")));
 
     public static final BlockEntry<Block> STAINLESS_EVAPORATION_CASING = createCasingBlock("casings/machine_casing_stainless_evaporation",
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_stainless_evaporation")));

@@ -312,7 +312,7 @@ public class TFGMultiMachines {
             .recipeType(TFGTRecipeTypes.EVAPORATION_TOWER)
             .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks.STAINLESS_EVAPORATION_CASING)
-            .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"), TFGCore.id("block/machines/evaporation_tower"))
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"), TFGCore.id("block/machines/bioreactor"))
             .pattern(definition -> {
                 TraceabilityPredicate exportPredicate = Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).or(Predicates.blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
                 exportPredicate.setMaxLayerLimited(1);
@@ -930,7 +930,7 @@ public class TFGMultiMachines {
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .workableCasingModel(
                     TFGCore.id( "block/casings/machine_casing_mars"),
-                    TFGCore.id("block/machines/heat_battery_mk1"))
+                    TFGCore.id("block/machines/bioreactor"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##BBB##", "##CCC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
                     .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
