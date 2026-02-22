@@ -14,7 +14,7 @@ public class BoilerHeatersMixin {
      * @reason To remove passive heating from Blaze Burners to boilers
      */
     @ModifyReturnValue(method = "blazeBurner", at = @At("RETURN"))
-    private static int noPassiveHeat(int original) {
+    private static int tfg$noPassiveHeatBlazeBurner(int original) {
         if (original == BoilerHeater.PASSIVE_HEAT)
             return BoilerHeater.NO_HEAT;
         return original;
