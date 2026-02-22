@@ -109,7 +109,7 @@ dependencies {
     modImplementation ("maven.modrinth:species:3.5") { transitive = false }
 
     // Simply Stacked Dimensions
-    modImplementation ("curse.maven:simply-stacked-dimensions-523416:5562948") { transitive = false }
+    modImplementation ("curse.maven:simply-stacked-dimensions-523416:7657445") { transitive = false }
 
     // Grappling Hook -- needless dependencies are dumb
     modImplementation "curse.maven:cloth-config-348521:5729105"
