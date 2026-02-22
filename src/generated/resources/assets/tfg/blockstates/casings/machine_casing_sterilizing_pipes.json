@@ -1,34 +1,28 @@
-{
-  "variants": {
-    "active=false,facing=east": {
-      "model": "tfg:block/casings/machine_casing_sterilizing_pipes",
-      "y": 90
-    },
-    "active=false,facing=north": {
-      "model": "tfg:block/casings/machine_casing_sterilizing_pipes"
-    },
-    "active=false,facing=south": {
-      "model": "tfg:block/casings/machine_casing_sterilizing_pipes",
-      "y": 180
-    },
-    "active=false,facing=west": {
-      "model": "tfg:block/casings/machine_casing_sterilizing_pipes",
-      "y": 270
-    },
+{"variants": {
     "active=true,facing=east": {
-      "model": "tfg:block/casings/machine_casing_sterilizing_pipes_active",
-      "y": 90
+        "y": 90,
+        "model": "tfg:block/casings/machine_casing_sterilizing_pipes_active"
     },
-    "active=true,facing=north": {
-      "model": "tfg:block/casings/machine_casing_sterilizing_pipes_active"
-    },
+    "active=false,facing=north": {"model": "tfg:block/casings/machine_casing_sterilizing_pipes"},
     "active=true,facing=south": {
-      "model": "tfg:block/casings/machine_casing_sterilizing_pipes_active",
-      "y": 180
+        "y": 180,
+        "model": "tfg:block/casings/machine_casing_sterilizing_pipes_active"
+    },
+    "active=true,facing=north": {"model": "tfg:block/casings/machine_casing_sterilizing_pipes_active"},
+    "active=false,facing=west": {
+        "y": 270,
+        "model": "tfg:block/casings/machine_casing_sterilizing_pipes"
     },
     "active=true,facing=west": {
-      "model": "tfg:block/casings/machine_casing_sterilizing_pipes_active",
-      "y": 270
+        "y": 270,
+        "model": "tfg:block/casings/machine_casing_sterilizing_pipes_active"
+    },
+    "active=false,facing=south": {
+        "y": 180,
+        "model": "tfg:block/casings/machine_casing_sterilizing_pipes"
+    },
+    "active=false,facing=east": {
+        "y": 90,
+        "model": "tfg:block/casings/machine_casing_sterilizing_pipes"
     }
-  }
-}
+}}

@@ -1,7 +1,7 @@
 {
-  "parent": "gtceu:block/cube_2_layer/all",
-  "textures": {
-    "bot_all": "tfg:block/casings/machine_casing_ultraviolet_active",
-    "top_all": "tfg:block/casings/machine_casing_ultraviolet_active_emissive"
-  }
+    "parent": "gtceu:block/cube_2_layer/all",
+    "textures": {
+        "bot_all": "tfg:block/casings/machine_casing_ultraviolet_active",
+        "top_all": "tfg:block/casings/machine_casing_ultraviolet_active_emissive"
+    }
 }

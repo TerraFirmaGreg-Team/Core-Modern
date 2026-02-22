@@ -34,7 +34,7 @@ public class TFGCreativeTab {
                 if (registrate.isInCreativeTab(entry, tab))
                     continue;
                 if (entry.getId().getNamespace().equals("tfg"))
-                    output.accept(entry.get());
+                    output.accept(new ItemStack(entry.get(), 1));
             }
             for (var entry : registrate.getAll(Registries.ITEM)) {
                 if (registrate.isInCreativeTab(entry, tab))
@@ -43,7 +43,7 @@ public class TFGCreativeTab {
                 if (item instanceof BlockItem)
                     continue;
                 if (entry.getId().getNamespace().equals("tfg"))
-                    output.accept(entry.get());
+                    output.accept(new ItemStack(entry.get(), 1));
             }
         }
     }

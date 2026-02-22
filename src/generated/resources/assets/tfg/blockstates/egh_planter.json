@@ -1,34 +1,28 @@
-{
-  "variants": {
-    "active=false,facing=east": {
-      "model": "tfg:block/machines/egh_planter/egh_planter",
-      "y": 90
-    },
-    "active=false,facing=north": {
-      "model": "tfg:block/machines/egh_planter/egh_planter"
-    },
-    "active=false,facing=south": {
-      "model": "tfg:block/machines/egh_planter/egh_planter",
-      "y": 180
-    },
-    "active=false,facing=west": {
-      "model": "tfg:block/machines/egh_planter/egh_planter",
-      "y": 270
-    },
+{"variants": {
     "active=true,facing=east": {
-      "model": "tfg:block/machines/egh_planter/egh_planter_active",
-      "y": 90
+        "y": 90,
+        "model": "tfg:block/machines/egh_planter/egh_planter_active"
     },
-    "active=true,facing=north": {
-      "model": "tfg:block/machines/egh_planter/egh_planter_active"
-    },
+    "active=false,facing=north": {"model": "tfg:block/machines/egh_planter/egh_planter"},
     "active=true,facing=south": {
-      "model": "tfg:block/machines/egh_planter/egh_planter_active",
-      "y": 180
+        "y": 180,
+        "model": "tfg:block/machines/egh_planter/egh_planter_active"
+    },
+    "active=true,facing=north": {"model": "tfg:block/machines/egh_planter/egh_planter_active"},
+    "active=false,facing=west": {
+        "y": 270,
+        "model": "tfg:block/machines/egh_planter/egh_planter"
     },
     "active=true,facing=west": {
-      "model": "tfg:block/machines/egh_planter/egh_planter_active",
-      "y": 270
+        "y": 270,
+        "model": "tfg:block/machines/egh_planter/egh_planter_active"
+    },
+    "active=false,facing=south": {
+        "y": 180,
+        "model": "tfg:block/machines/egh_planter/egh_planter"
+    },
+    "active=false,facing=east": {
+        "y": 90,
+        "model": "tfg:block/machines/egh_planter/egh_planter"
     }
-  }
-}
+}}
