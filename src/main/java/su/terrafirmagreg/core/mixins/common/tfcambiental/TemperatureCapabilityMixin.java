@@ -1,15 +1,15 @@
 package su.terrafirmagreg.core.mixins.common.tfcambiental;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.lumintorious.tfcambiental.TFCAmbientalConfig;
 import com.lumintorious.tfcambiental.api.*;
 import com.lumintorious.tfcambiental.capability.TemperatureCapability;
 import com.lumintorious.tfcambiental.modifier.TempModifierStorage;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
@@ -31,32 +31,56 @@ public abstract class TemperatureCapabilityMixin {
     public TempModifierStorage modifiers;
 
     @Shadow
+    private Player player;
+    @Shadow
+    public float temperature;
+    @Shadow
     private float target;
-
+    @Shadow
+    private float targetWetness;
     @Shadow
     private float potency;
 
-    @Inject(method = "evaluateModifiers", at = @At(value = "TAIL"))
-    public void tfg$evaluateModifiers(CallbackInfo ci) {
-        if (this.potency < -1) {
-            this.potency = -1;
+    /**
+     * @author Mqrius
+     * @reason Short circuit when heatproof for performance, merged with old mixin to clamp temp
+     * Code mostly copied from original method and old mixin, short circuit added.
+     * Should save about 1ms per 10 players wearing fully insulated armor (spacesuits, nano, quark)
+     */
+    @Overwrite
+    public void evaluateModifiers() {
+        this.clearModifiers();
+        EquipmentTemperatureProvider.evaluateAll(this.player, this.modifiers);
+
+        var equipmentPotency = this.modifiers.getTotalPotency();
+        boolean fullyInsulated = equipmentPotency == (TFCAmbientalCompat.FULLY_INSULATED * 4) + 1;
+        boolean heatproof = equipmentPotency == (TFCAmbientalCompat.HEATPROOF * 4) + 1;
+
+        EnvironmentalTemperatureProvider.evaluateAll(this.player, this.modifiers);
+        if (!fullyInsulated) {
+            // Only evaluate everything else if we're not fully insulated
+            ItemTemperatureProvider.evaluateAll(this.player, this.modifiers);
+            BlockTemperatureProvider.evaluateAll(this.player, this.modifiers);
+            BlockEntityTemperatureProvider.evaluateAll(this.player, this.modifiers);
+            EntityTemperatureProvider.evaluateAll(this.player, this.modifiers);
+        }
+        this.modifiers.keepOnlyNEach(3);
+
+        this.potency = this.modifiers.getTotalPotency();
+        this.target = this.modifiers.getTargetTemperature();
+        this.targetWetness = this.modifiers.getTargetWetness();
+
+        if ((this.target > this.temperature && this.temperature > TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue())
+                || (this.target < this.temperature && this.temperature < TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue())) {
+            this.potency = 1f;
         }
 
-        clearModifiers();
-        EquipmentTemperatureProvider.evaluateAll(getPlayer(), this.modifiers);
+        this.potency = Math.max(1f, this.potency);
 
-        var totalPotency = this.modifiers.getTotalPotency();
-
-        if (totalPotency == (TFCAmbientalCompat.HEATPROOF * 4) + 1) {
-            if (this.target > 29f) {
-                this.target = 29f;
-            }
-        } else if (totalPotency == (TFCAmbientalCompat.FULLY_INSULATED * 4) + 1) {
-            if (this.target > 25f) {
-                this.target = 25f;
-            } else if (this.target < 5f) {
-                this.target = 5f;
-            }
+        if (heatproof) {
+            this.target = Math.min(this.target, 29f);
+        } else if (fullyInsulated) {
+            this.target = Mth.clamp(this.target, 5f, 25f);
         }
     }
 }

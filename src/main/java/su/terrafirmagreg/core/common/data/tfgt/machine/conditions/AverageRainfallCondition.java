@@ -23,7 +23,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
  * <p>- LT: passes when rainfall < value
  * <p>- BETWEEN: passes when start < rainfall < end
  */
-public class AverageRainfallCondition extends RecipeCondition {
+public class AverageRainfallCondition extends RecipeCondition<AverageRainfallCondition> {
 
     public enum Mode {
         GT,
@@ -92,7 +92,7 @@ public class AverageRainfallCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<AverageRainfallCondition> getType() {
         return TFGTRecipeConditions.CLIMATE_AVG_RAINFALL;
     }
 
@@ -159,7 +159,7 @@ public class AverageRainfallCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public AverageRainfallCondition createTemplate() {
         return new AverageRainfallCondition();
     }
 

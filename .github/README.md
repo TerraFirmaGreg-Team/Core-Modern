@@ -6,7 +6,7 @@
     <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/icon/v3/tfg_logo_icon_core_964x_1080p.gif?raw=true" alt="Logo" height="120"/>
   </a>
   <br/>
-  <a href="https://discord.terrafirmagreg.su">
+  <a href="https://terrafirmagreg.team/discord">
     <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/button/brands/discord_logo_32x.png?raw=true" alt="Join our Discord" height="50"/>
   </a>
   <a href="https://www.curseforge.com/minecraft/mc-mods/terrafirmagreg-core">

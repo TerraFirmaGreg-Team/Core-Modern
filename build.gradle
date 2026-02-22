@@ -1,138 +1,127 @@
 buildscript {
     repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+        // These repositories are only for Gradle plugins
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        maven {
+            name = "NeoForged"
+            url = 'https://maven.neoforged.net/releases'
+            content {
+                includeGroup "net.neoforged"
+            }
+        }
     }
 }
 
 plugins {
+    id 'java'
+    id 'java-library'
     id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'com.diffplug.spotless' version '7.2.1'
-}
-
-apply from: 'gradle/scripts/helpers.gradle'
-apply plugin: 'org.spongepowered.mixin'
-
-
-// Early Assertions
-assertProperty 'mod_version'
-assertProperty 'mod_package'
-assertProperty 'mod_id'
-assertProperty 'mod_name'
-assertProperty 'mod_name_suffix'
-
-base {
-    version = propertyString('mod_version')
-    group = propertyString('mod_package')
-    archivesName = propertyString('mod_name', 'mod_name_suffix')
-}
-
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(java_version))
-    }
-}
-
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-
-    enableIdeaPrepareRuns = true
-    copyIdeResources = true
-
-    // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
-    // The folder name can be set on a run configuration using the "folderName" property.
-    // By default, the folder name of a run configuration is the name of the Gradle project containing it.
-    // generateRunFolders = true
-
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    runs {
-        configureEach {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'INFO'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        client {
-            workingDirectory project.file('run/client')
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
-        server {
-            workingDirectory project.file('run/server')
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            workingDirectory project.file('run/game-test')
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
-        data {
-            workingDirectory project.file('run/data')
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
-    }
-}
-
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-
-    config "${mod_id}.mixins.json"
-
-    // THIS PRODUCES A TON OF LOG SPAM THAT DOESN'T NEED TO BE SEEN BY PLAYERS
-    // ONLY ENABLE THIS WHEN WORKING WITH MIXINS! DISABLE IN ALL OTHER CASES
-    debug.verbose = false
+    id 'net.neoforged.moddev.legacyforge' version "${mdg_legacy_version}"
+    id 'com.diffplug.spotless' version "${spotless_version}"
+    id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
 apply from: 'gradle/scripts/repositories.gradle'
 apply from: 'gradle/scripts/dependencies.gradle'
+apply from: 'gradle/scripts/spotless.gradle'
+if (file("moveToInstance.gradle").exists()) apply from: "moveToInstance.gradle"
+
+base {
+    version = "${mod_version}"
+    group = "${mod_package}"
+    archivesName = "${mod_name}-${mod_name_suffix}"
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+
+}
+
+mixin {
+    var refMap = add sourceSets.main, "${mod_id}.refmap.json"
+    jar.from refMap;
+    config "${mod_id}.mixins.json"
+}
+
+sourceSets {
+    main.resources {
+        srcDir 'src/main/resources'
+        srcDir 'src/generated/resources'
+    }
+
+    dev {
+        java.srcDir("src/dev/java")
+        resources.srcDir("src/dev/resources")
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+}
+
+legacyForge {
+    version = "${minecraft_version}-${forge_version}"
+
+    runs {
+        configureEach {
+            gameDirectory = project.file('run')
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'forge.logging.console.level', 'INFO'
+        }
+
+        client {
+            client()
+            gameDirectory = project.file('run/client')
+        }
+
+        server {
+            server()
+            gameDirectory = project.file('run/server')
+            programArgument '--nogui'
+        }
+
+        data {
+            data()
+            gameDirectory = project.file('run/data')
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            programArguments.addAll('--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath())
+        }
+
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
 
 processResources {
     var replaceProperties = [
-            'mod_id': propertyString('mod_id'),
-            'mod_name': propertyString('mod_name'),
-            'mod_version': propertyString('mod_version'),
-            'mod_description': propertyString('mod_description'),
-            'mod_authors': propertyString('mod_authors'),
-            'mod_credits': propertyString('mod_credits'),
-            'mod_url': propertyString('mod_url'),
-            'mod_update_json': propertyString('mod_update_json'),
-            'mod_logo_path': propertyString('mod_logo_path'),
+            'mod_id'                 : "${mod_id}",
+            'mod_name'               : "${mod_name}",
+            'mod_version'            : "${mod_version}",
+            'mod_description'        : "${mod_description}",
+            'mod_authors'            : "${mod_authors}",
+            'mod_credits'            : "${mod_credits}",
+            'mod_url'                : "${mod_url}",
+            'mod_update_json'        : "${mod_update_json}",
+            'mod_logo_path'          : "${mod_logo_path}",
 
-            'minecraft_version': propertyString('minecraft_version'),
-            'minecraft_version_range': propertyString('minecraft_version_range'),
+            'minecraft_version'      : "${minecraft_version}",
+            'minecraft_version_range': "${minecraft_version_range}",
 
-            'forge_version': propertyString('forge_version'),
-            'forge_version_range': propertyString('forge_version_range'),
-            'loader_version_range': propertyString('loader_version_range')
+            'forge_version'          : "${forge_version}",
+            'forge_version_range'    : "${forge_version_range}",
+            'loader_version_range'   : "${loader_version_range}"
     ]
     var filterList = [
             'META-INF/mods.toml',
@@ -140,61 +129,10 @@ processResources {
     ]
 
     inputs.properties replaceProperties
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     filesMatching(filterList) { fcd ->
         fcd.expand(replaceProperties + [project: project])
     }
-}
-
-
-
-// Example for how to get properties into the manifest for reading at runtime.
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                "Specification-Title":  propertyString('mod_id'),
-                "Specification-Vendor": propertyString('mod_authors'),
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": propertyString('mod_name'),
-                "Implementation-Version":  propertyString('mod_version'),
-                "Implementation-Vendor": propertyString('mod_authors'),
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
-}
-
-apply from: 'gradle/scripts/spotless.gradle'
-
-// Rename the final file: delete regular *.jar (if produced) and strip the -all suffix from the shaded jar
-tasks.register('renameAllJar') {
-    doLast {
-        def libsDir = file("${buildDir}/libs")
-        if (!libsDir.exists()) return
-        // Delete a possible regular jar first
-        libsDir.listFiles()?.findAll { it.name == "${archivesBaseName}-${version}.jar" }?.each { File reg ->
-            reg.delete()
-        }
-        // Rename *-all.jar to *.jar
-        libsDir.listFiles()?.findAll { it.name.endsWith('-all.jar') }?.each { File f ->
-            def targetName = f.name.replace('-all.jar', '.jar')
-            def target = new File(f.parentFile, targetName)
-            if (target.exists()) target.delete()
-            if (!f.renameTo(target)) {
-                throw new GradleException("Failed to rename ${f.name} to ${target.name}")
-            }
-        }
-    }
-}
-
-// Run rename step after available packaging task (bind safely after tasks are created)
-gradle.projectsEvaluated {
-    tasks.findByName('reobfJarJar')?.finalizedBy('renameAllJar')
-    tasks.findByName('reobfJar')?.finalizedBy('renameAllJar')
-    // Fallbacks if reobf tasks are not present in this environment
-    tasks.findByName('jarJar')?.finalizedBy('renameAllJar')
-    tasks.findByName('jar')?.finalizedBy('renameAllJar')
 }
 
 sourceSets {
@@ -203,6 +141,19 @@ sourceSets {
         resources.srcDir("src/dev/resources")
         compileClasspath += sourceSets.main.compileClasspath
     }
+}
+
+tasks.withType(Jar).configureEach {
+    manifest.attributes([
+            "Specification-Title"     : "${mod_id}",
+            "Specification-Vendor"    : "${mod_authors}",
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : "${mod_name}",
+            "Implementation-Version"  : "${mod_version}",
+            "Implementation-Vendor"   : "${mod_authors}",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs"            : "${mod_id}.mixins.json"
+    ])
 }
 
 // Fix a bug in Species that only shows up when running from dev env
@@ -241,7 +192,6 @@ tasks.register("prepareServerDev") {
     dependsOn patchSpeciesJar
 
     def serverDir = file("run/server")
-    def eulaFile = file("${serverDir}/eula.txt")
     def propsFile = file("${serverDir}/server.properties")
 
     outputs.file(eulaFile)
@@ -249,12 +199,6 @@ tasks.register("prepareServerDev") {
 
     doLast {
         serverDir.mkdirs()
-
-        copy {
-            from "src/dev/resources"
-            include "eula.txt"
-            into serverDir
-        }
 
         // Create or patch server.properties to set online-mode=false
         if (propsFile.exists()) {
@@ -271,70 +215,31 @@ tasks.register("prepareServerDev") {
     }
 }
 
-// Prepare client: fix missing Jade lang files
-tasks.register("prepareClientDev") {
-    def langDir = file("run/client/kubejs/assets/jade/lang")
-    def langFile = file("${langDir}/en_us.json")
-
-    outputs.file(langFile)
-
-    doLast {
-        langDir.mkdirs()
-
-        copy {
-            from "src/dev/resources/assets/jade/lang"
-            include "en_us.json"
-            into langDir
-        }
-    }
-}
-
 // Runs Species patch before runServer.
 allprojects {
     tasks.matching { it.name == "prepareRunServer" }.configureEach {
         dependsOn("prepareServerDev")
     }
-    tasks.matching { it.name == "prepareRunClient" }.configureEach {
-        dependsOn("prepareClientDev")
-    }
-
 }
-
-def green = "\u001B[32m"
-def darkGreen = "\u001B[38;5;28m"
-def bold = "\u001B[1m"
-def yellow = "\u001B[33m"
-def reset = "\u001B[0m"
-def check = "\u2714"  // ✔
 
 // Moving the core jar to a custom folder
-var copyJarToCustomFolder = tasks.register('copyJarToCustomFolder', Copy) {
+tasks.register('copyJarToInstance', Copy) {
 
-    mustRunAfter("build")
-    def modsDir = "D:/Modding Juegos/TerrafirmaGreg/Prism launcher/instances/TerrafirmaGreg-Modern/minecraft/mods/"
-    def coreJarName = "${archivesBaseName}-${version}.jar"
-    from("$buildDir/libs")
-    include("*${version}.jar")
-    into(modsDir)
-    doLast{
-        println("${green}${check} Copied ${darkGreen}${bold}$coreJarName${reset}${green} successfully to ${darkGreen}${bold}$modsDir${reset}${green}!${reset}")
+    group = 'mod development/internal'
+
+    from("${buildDir}/libs") {
+        include("*${version}.jar")
+        exclude("*-sources.jar", "*-javadoc.jar")
     }
+    into("${modpack_mods}")
 }
 
-// Executing a windows shortcut
-var executeShortcut = tasks.register('executeShortcut') {
-    mustRunAfter("copyJarToCustomFolder")
-
-    doLast {
-        def shortcut = new File("C:/Users/Ujhik/Desktop/TerrafirmaGreg-Modern - New World.lnk").canonicalPath
-        Thread.start {
-            ["explorer", shortcut].execute()
-        }
-        println("${green}${check} Launched ${darkGreen}${bold}$shortcut${reset}${green} successfully!${reset}")
-    }
+if (project.findProperty('enable_copy_jar_to_instance')?.toBoolean()) {
+    tasks.build.finalizedBy('copyJarToInstance')
 }
 
-// Automate building, copying the core jar to the mods modpack folder and launching minecraft to test
-tasks.register("buildAndLaunch") {
-    dependsOn(build, copyJarToCustomFolder, executeShortcut)
+configurations.all {
+    resolutionStrategy {
+        cacheChangingModulesFor 0, 'seconds'
+    }
 }
