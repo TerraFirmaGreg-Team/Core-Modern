@@ -27,12 +27,21 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 import earth.terrarium.adastra.common.blocks.SlidingDoorBlock;
 import earth.terrarium.adastra.common.blocks.properties.SlidingDoorPartProperty;
+import earth.terrarium.adastra.common.items.armor.SpaceSuitItem;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
+import earth.terrarium.botarium.common.fluid.base.FluidContainer;
+import earth.terrarium.botarium.common.fluid.base.FluidHolder;
+import earth.terrarium.botarium.common.item.ItemStackHolder;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import lombok.Getter;
 import lombok.Setter;
@@ -215,7 +224,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
                 .setMaxWidthLimit(rightColX - 4));
 
         // "Find Leak" button, only visible when room is unsealed with an escape point
-        var traceButton = new ButtonWidget(41 - 18, height - 20, 18, 18,
+        var traceButton = new ButtonWidget(41 - 23, height - 19, 18, 18,
                 new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture("💨")), cd -> {
                     if (!cd.isRemote) {
                         requestBreachTrace();
@@ -229,6 +238,17 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
         };
         traceButton.setHoverTooltips(Component.translatable("tfg.machine.oxygen_distributor.find_leak"));
         group.addWidget(traceButton);
+
+        // "Fill Suit" button
+        ButtonWidget fillButton = new ButtonWidget(41 + 5, height - 19, 18, 18,
+                new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture("⛽")), null);
+        fillButton.setOnPressCallback(cd -> {
+            if (!cd.isRemote) {
+                fillSpaceSuit(fillButton.getGui().entityPlayer);
+            }
+        });
+        fillButton.setHoverTooltips(Component.translatable("tfg.machine.oxygen_distributor.fill_suit"));
+        group.addWidget(fillButton);
 
         // Progress bar
         group.addWidget(new ProgressWidget(recipeLogic::getProgressPercent, rightColX, height - 19 - 20 - 8, 20, 20,
@@ -268,7 +288,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             case NULL -> Component.translatable("tfg.machine.oxygen_distributor.status.scanning").withStyle(ChatFormatting.GRAY);
         };
 
-        if (pendingChunkLoad == null) {
+        if (pendingChunkLoad != null) {
             statusText = Component.translatable("tfg.machine.oxygen_distributor.status.chunk_unloaded").withStyle(ChatFormatting.YELLOW);
         }
 
@@ -334,6 +354,42 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
                 TFGCore.LOGGER.error("Breach trace failed at {}", tracePos, e);
             }
         });
+    }
+
+    private void fillSpaceSuit(net.minecraft.world.entity.player.Player player) {
+        TFGCore.LOGGER.info("Filling Space Suit");
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (!(chest.getItem() instanceof SpaceSuitItem))
+            return;
+        TFGCore.LOGGER.info("2");
+
+        // Find fluid in machine tank
+        FluidStack inTank = importFluids.getFluidInTank(0);
+        if (inTank.isEmpty())
+            return;
+        TFGCore.LOGGER.info("3");
+
+        // Get suit container and simulate insert to find available space
+        var holder = new ItemStackHolder(chest);
+        FluidContainer suitContainer = FluidContainer.of(holder);
+        if (suitContainer == null)
+            return;
+        TFGCore.LOGGER.info("4");
+
+        FluidHolder fluidToInsert = FluidHolder.ofMillibuckets(inTank.getFluid(), FluidConstants.toMillibuckets(inTank.getAmount()));
+        long inserted = suitContainer.insertFluid(fluidToInsert, true);
+        if (inserted <= 0)
+            return;
+        TFGCore.LOGGER.info("5");
+
+        // Drain from machine tank and insert into suit
+        long insertMb = FluidConstants.toMillibuckets(inserted);
+        FluidStack toDrain = new FluidStack(inTank.getFluid(), (int) insertMb);
+        FluidStack drained = importFluids.drainInternal(toDrain, FluidAction.EXECUTE);
+        if (!drained.isEmpty()) {
+            FluidHolder actualInsert = FluidHolder.ofMillibuckets(drained.getFluid(), drained.getAmount());
+            suitContainer.insertFluid(actualInsert, false);
+        }
     }
 
     //////////////////////////////////////
