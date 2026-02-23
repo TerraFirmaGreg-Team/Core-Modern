@@ -194,8 +194,8 @@ public class TFGMachines {
     public static final MachineDefinition SINGLE_ITEMSTACK_BUS = REGISTRATE
             .machine("single_itemstack_bus", SingleItemstackBus::new)
             .rotationState(RotationState.ALL)
-            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
-                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"),
+                    TFGCore.id("block/machines/single_itemstack_bus"))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
                     Component.translatable("tfg.tooltip.single_itemstack_bus.0"),
