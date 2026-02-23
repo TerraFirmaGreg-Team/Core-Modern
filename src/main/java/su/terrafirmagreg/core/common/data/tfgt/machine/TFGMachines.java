@@ -209,6 +209,19 @@ public class TFGMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .register();
 
+    public static final MachineDefinition OXYGEN_DISTRIBUTOR = REGISTRATE.machine("oxygen_distributor",
+            (holder) -> new OxygenDistributorMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction, 500_000))
+            .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
+            .tier(GTValues.MV)
+            .register();
+
+    public static final MachineDefinition SPACE_HEATER = REGISTRATE.machine("space_heater",
+            (holder) -> new SpaceHeaterMachine(holder, GTValues.MV))
+            .recipeType(TFGTRecipeTypes.SPACE_HEATING)
+            .recipeModifier(SpaceHeaterMachine::recipeModifier)
+            .tier(GTValues.MV)
+            .register();
+
     // LV super chest is 1M, which is already crazy.
     // 10K is about as much as three steel crates holding items that stack to 64
     public static final MachineDefinition ULV_SUPER_CHEST = GTRegistration.REGISTRATE.machine("ulv_super_chest",
@@ -280,19 +293,6 @@ public class TFGMachines {
                     Component.translatable("gtceu.machine.energy_hatch.output_hi_amp.tooltip"))
             .overlayTieredHullModel("energy_output_hatch_4a")
             .tier(GTValues.HV)
-            .register();
-
-    public static final MachineDefinition OXYGEN_DISTRIBUTOR = GTRegistration.REGISTRATE.machine("oxygen_distributor",
-            (holder) -> new OxygenDistributorMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction, 500_000))
-            .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
-            .tier(GTValues.MV)
-            .register();
-
-    public static final MachineDefinition SPACE_HEATER = GTRegistration.REGISTRATE.machine("space_heater",
-            (holder) -> new SpaceHeaterMachine(holder, GTValues.MV))
-            .recipeType(TFGTRecipeTypes.SPACE_HEATING)
-            .recipeModifier(SpaceHeaterMachine::recipeModifier)
-            .tier(GTValues.MV)
             .register();
 
     public static MachineDefinition[] registerTieredMachines(GTRegistrate registrate, String name,

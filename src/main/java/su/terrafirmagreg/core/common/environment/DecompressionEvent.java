@@ -1,10 +1,15 @@
 package su.terrafirmagreg.core.common.environment;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -13,7 +18,7 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 
 /**
  * Represents an active decompression event caused by a sealed room being breached.
- * Pulls entities toward the breach point from inside the room, and pushes them mildly away on the outside
+ * Pulls entities toward the breach point from inside the room, and pushes them mildly away on the outside.
  * <p>
  * Created when a room transitions from sealed to escaped (build height or dimension limit).
  * Cancelled early if the room re-seals or the machine is removed.
@@ -38,8 +43,13 @@ public class DecompressionEvent {
     private static final double DAMAGE_DISTANCE = 2.0;        // damage within this range of breach
     private static final float DAMAGE_PER_TICK = 2.0f;        // a heart per tick at point-blank, usually you're half a wall block away
     private static final double FRICTION_DISTANCE = 5.0;      // dampen perpendicular velocity within this range
+    private static final double PRONE_DISTANCE = 5;           // force prone within this range of breach
+    private static final double PRONE_RELEASE_DISTANCE = 8;   // release prone when further than this
     private static final double EXTERIOR_RADIUS = 6.0;        // push entities outside the room within this range
     private static final double EXTERIOR_BASE_FORCE = 0.4;
+
+    /** Players currently forced prone by this event. Cleared and unforced on finish. */
+    private final Set<ServerPlayer> crawlingPlayers = new HashSet<>();
 
     /**
      * @param breachPoint The block where the room was breached
@@ -50,7 +60,6 @@ public class DecompressionEvent {
         this.oldRoomScan = oldRoomScan;
         this.durationTicks = Mth.clamp(Mth.floor(oldRoomScan.interiorSize() * TICKS_PER_BLOCK), MIN_DURATION, MAX_DURATION);
         this.elapsed = 0;
-        // Play woosh sound on clients
         TFGNetworkHandler.sendDecompressionSoundStart(level, breachPoint, durationTicks);
     }
 
@@ -70,25 +79,32 @@ public class DecompressionEvent {
         }
 
         Vec3 target = Vec3.atCenterOf(breachPoint);
-        AABB searchEntitiesBounds = oldRoomScan.bounds().inflate(1.0);
+
+        // Update crawling players: remove those who have exited the room or moved far away
+        Iterator<ServerPlayer> it = crawlingPlayers.iterator();
+        while (it.hasNext()) {
+            ServerPlayer player = it.next();
+            if (!entityInRoom(player, true) || player.position().distanceTo(target) > PRONE_RELEASE_DISTANCE) {
+                it.remove();
+                player.setForcedPose(null);
+                TFGNetworkHandler.sendForcedPose(player, false, 0f);
+                player.refreshDimensions();
+            }
+        }
 
         // Interior entities: pull toward breach
+        AABB searchEntitiesBounds = oldRoomScan.bounds().inflate(1.0);
         for (Entity entity : level.getEntities((Entity) null, searchEntitiesBounds, this::shouldAffect)) {
-
-            // Check if entity is in the room interior.
-            // Use entity's bounding box instead of just pos
-            if (!entityInRoom(entity))
+            if (!entityInRoom(entity, false))
                 continue;
-
             applyForce(entity, target, timeScale);
         }
 
         // Exterior entities: push away from breach by escaping air
         AABB exteriorBounds = AABB.ofSize(target, EXTERIOR_RADIUS * 2, EXTERIOR_RADIUS * 2, EXTERIOR_RADIUS * 2);
         for (Entity entity : level.getEntities((Entity) null, exteriorBounds, this::shouldAffect)) {
-            if (entityInRoom(entity))
+            if (entityInRoom(entity, true))
                 continue;
-
             applyExteriorForce(entity, target, timeScale);
         }
 
@@ -97,7 +113,7 @@ public class DecompressionEvent {
     }
 
     /** Check if any block position overlapping the entity's bounding box is in the room interior. */
-    private boolean entityInRoom(Entity entity) {
+    private boolean entityInRoom(Entity entity, boolean checkEnvelope) {
         AABB box = entity.getBoundingBox();
         int minX = Mth.floor(box.minX);
         int minY = Mth.floor(box.minY);
@@ -105,11 +121,13 @@ public class DecompressionEvent {
         int maxX = Mth.floor(box.maxX);
         int maxY = Mth.floor(box.maxY);
         int maxZ = Mth.floor(box.maxZ);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    if (oldRoomScan.containsInterior(new BlockPos(x, y, z))) {
+                    if ((checkEnvelope && oldRoomScan.containsEnvelope(pos.set(x, y, z)))
+                            || oldRoomScan.containsInterior(pos.set(x, y, z))) {
                         return true;
                     }
                 }
@@ -129,7 +147,6 @@ public class DecompressionEvent {
 
         Vec3 direction = offset.normalize();
 
-        // Falloff with distance, scaled by time decay
         // Linear falloff because it's more fun in gameplay than quadratic
         double force = BASE_FORCE / distance * timeScale;
         force = Mth.clamp(force, 0, MAX_FORCE);
@@ -144,8 +161,6 @@ public class DecompressionEvent {
             double parallelSpeed = vel.dot(direction);
             Vec3 parallelVel = direction.scale(parallelSpeed);
             Vec3 perpVel = vel.subtract(parallelVel);
-
-            // Damp more when closer
             double dampFactor = distance / FRICTION_DISTANCE;
             entity.setDeltaMovement(parallelVel.add(perpVel.scale(dampFactor)));
         }
@@ -161,8 +176,17 @@ public class DecompressionEvent {
         }
 
         if (entity instanceof ServerPlayer player) {
-            // Syncs movement to client
             player.hurtMarked = true;
+            // Force prone if close enough to fit through a 1-block gap
+            if (distance < PRONE_DISTANCE && crawlingPlayers.add(player)) {
+                player.setForcedPose(Pose.SWIMMING);
+                entity.refreshDimensions();
+                // Shift up to keep the eye level stable: STANDING eye 1.62, SWIMMING eye 0.4, delta = 1.22.
+                // Client applies the same shift immediately via ForcedPosePacket so the server's
+                // ClientboundPlayerPositionPacket arrives when the client is already at the target Y.
+                player.teleportTo(player.getX(), player.getY() + 1.22, player.getZ());
+                TFGNetworkHandler.sendForcedPose(player, true, 1.22f);
+            }
         }
     }
 
@@ -198,10 +222,14 @@ public class DecompressionEvent {
         return true;
     }
 
-    /** Stop the sound and mark as expired. */
+    /** Stop the sound, unforce all crawling players, and mark as expired. */
     private void finish(ServerLevel level) {
         elapsed = durationTicks;
         TFGNetworkHandler.sendDecompressionSoundStop(level, breachPoint);
+        for (ServerPlayer player : crawlingPlayers) {
+            TFGNetworkHandler.sendForcedPose(player, false, 0f);
+        }
+        crawlingPlayers.clear();
     }
 
     /** Cancel this decompression event early (e.g. room re-sealed, machine removed). */

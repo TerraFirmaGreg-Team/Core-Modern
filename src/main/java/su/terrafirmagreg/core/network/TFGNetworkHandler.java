@@ -78,6 +78,16 @@ public class TFGNetworkHandler {
                 DecompressionSoundPacket::encode,
                 DecompressionSoundPacket::decode,
                 DecompressionSoundPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                ForcedPosePacket.class,
+                ForcedPosePacket::encode,
+                ForcedPosePacket::decode,
+                ForcedPosePacket::handle);
+    }
+
+    public static void sendForcedPose(ServerPlayer player, boolean prone, float yShift) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ForcedPosePacket(prone, yShift));
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {
