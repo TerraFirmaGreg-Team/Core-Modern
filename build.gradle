@@ -74,7 +74,7 @@ if (project.rootProject.file("gradle-local.properties").exists()) {
     Properties localProperties = new Properties()
     localProperties.load(project.rootProject.file('gradle-local.properties').newDataInputStream())
     instancePath = localProperties.get("instance_path")
-    enableCopyToInstance = localProperties.get("enable_copy_to_instance")
+    enableCopyToInstance = localProperties.getProperty("enable_copy_to_instance")?.toBoolean() ?: false
 } else {
     instancePath = ""
     enableCopyToInstance = false
