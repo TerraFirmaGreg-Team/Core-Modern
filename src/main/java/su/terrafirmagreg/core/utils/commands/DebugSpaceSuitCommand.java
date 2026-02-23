@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import earth.terrarium.adastra.common.items.armor.SpaceSuitItem;
@@ -25,6 +26,8 @@ public class DebugSpaceSuitCommand {
 
     @SuppressWarnings("removal")
     private static final ResourceLocation NITROX = new ResourceLocation("tfg", "compressed_nitrox");
+    @SuppressWarnings("removal")
+    private static final ResourceLocation OXYGEN = new ResourceLocation("ad_astra", "oxygen");
 
     public static void register(LiteralArgumentBuilder<CommandSourceStack> debug) {
         debug.then(literal("spacesuit")
@@ -43,14 +46,14 @@ public class DebugSpaceSuitCommand {
         ItemStack boots = new ItemStack(ModItems.SPACE_BOOTS.get());
 
         if (!fillWithBreathableAir(chestplate)) {
-            source.sendFailure(Component.literal("Fluid tfg:compressed_nitrox not found"));
+            source.sendFailure(Component.literal("No breathable fluid found (need tfg:compressed_nitrox or ad_astra:oxygen)"));
             return 0;
         }
 
-        player.setItemSlot(EquipmentSlot.HEAD, helmet);
-        player.setItemSlot(EquipmentSlot.CHEST, chestplate);
-        player.setItemSlot(EquipmentSlot.LEGS, leggings);
-        player.setItemSlot(EquipmentSlot.FEET, boots);
+        DebugCommandUtils.equipSlot(player, EquipmentSlot.HEAD, helmet);
+        DebugCommandUtils.equipSlot(player, EquipmentSlot.CHEST, chestplate);
+        DebugCommandUtils.equipSlot(player, EquipmentSlot.LEGS, leggings);
+        DebugCommandUtils.equipSlot(player, EquipmentSlot.FEET, boots);
 
         return 1;
     }
@@ -60,9 +63,10 @@ public class DebugSpaceSuitCommand {
             return false;
 
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(NITROX);
-        if (fluid == null) {
+        if (fluid == Fluids.EMPTY)
+            fluid = ForgeRegistries.FLUIDS.getValue(OXYGEN);
+        if (fluid == Fluids.EMPTY)
             return false;
-        }
 
         var container = suit.getFluidContainer(chestplate);
         long capacity = container.getTankCapacity(0);

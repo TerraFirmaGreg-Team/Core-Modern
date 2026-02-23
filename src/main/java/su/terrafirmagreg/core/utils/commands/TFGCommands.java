@@ -16,6 +16,7 @@ public class TFGCommands {
         DebugEnvironmentCommand.register(debug);
         DebugPassabilityCommand.register(debug);
         DebugSpaceSuitCommand.register(debug);
+        DebugQuarktechCommand.register(debug);
 
         dispatcher.register(literal("tfg").then(debug));
 
