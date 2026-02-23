@@ -10,7 +10,8 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "overlay_front": "tfg:block/machines/steam_bloomery/overlay_front"
         }
       }
     },
@@ -18,7 +19,8 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "overlay_front": "tfg:block/machines/steam_bloomery/overlay_front"
         }
       }
     },
@@ -26,7 +28,8 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "overlay_front": "tfg:block/machines/steam_bloomery/overlay_front_active"
         }
       }
     },
@@ -34,7 +37,8 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "overlay_front": "tfg:block/machines/steam_bloomery/overlay_front_active"
         }
       }
     },
@@ -42,7 +46,8 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "overlay_front": "tfg:block/machines/steam_bloomery/overlay_front"
         }
       }
     },
@@ -50,7 +55,8 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "overlay_front": "tfg:block/machines/steam_bloomery/overlay_front"
         }
       }
     },
@@ -58,7 +64,8 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "overlay_front": "tfg:block/machines/steam_bloomery/overlay_front_active"
         }
       }
     },
@@ -66,7 +73,8 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "overlay_front": "tfg:block/machines/steam_bloomery/overlay_front_active"
         }
       }
     }

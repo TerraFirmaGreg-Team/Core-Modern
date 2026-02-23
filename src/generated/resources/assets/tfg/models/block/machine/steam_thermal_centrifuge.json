@@ -30,7 +30,10 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/gcym/industrial_steam_casing"
+          "all": "gtceu:block/casings/gcym/industrial_steam_casing",
+          "overlay_front": "gtceu:block/machines/thermal_centrifuge/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_front_emissive",
+          "overlay_side": "gtceu:block/machines/thermal_centrifuge/overlay_side"
         }
       }
     },
@@ -38,7 +41,10 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/gcym/industrial_steam_casing"
+          "all": "gtceu:block/casings/gcym/industrial_steam_casing",
+          "overlay_front": "gtceu:block/machines/thermal_centrifuge/overlay_front_paused",
+          "overlay_front_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_front_paused_emissive",
+          "overlay_side": "gtceu:block/machines/thermal_centrifuge/overlay_side"
         }
       }
     },
@@ -46,7 +52,11 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/gcym/industrial_steam_casing"
+          "all": "gtceu:block/casings/gcym/industrial_steam_casing",
+          "overlay_front": "gtceu:block/machines/thermal_centrifuge/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_front_active_emissive",
+          "overlay_side": "gtceu:block/machines/thermal_centrifuge/overlay_side_active",
+          "overlay_side_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_side_active_emissive"
         }
       }
     },
@@ -54,7 +64,11 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/gcym/industrial_steam_casing"
+          "all": "gtceu:block/casings/gcym/industrial_steam_casing",
+          "overlay_front": "gtceu:block/machines/thermal_centrifuge/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_front_active_emissive",
+          "overlay_side": "gtceu:block/machines/thermal_centrifuge/overlay_side_active",
+          "overlay_side_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_side_active_emissive"
         }
       }
     },
@@ -62,7 +76,10 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/gcym/industrial_steam_casing"
+          "all": "gtceu:block/casings/gcym/industrial_steam_casing",
+          "overlay_front": "gtceu:block/machines/thermal_centrifuge/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_front_emissive",
+          "overlay_side": "gtceu:block/machines/thermal_centrifuge/overlay_side"
         }
       }
     },
@@ -70,7 +87,10 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/gcym/industrial_steam_casing"
+          "all": "gtceu:block/casings/gcym/industrial_steam_casing",
+          "overlay_front": "gtceu:block/machines/thermal_centrifuge/overlay_front_paused",
+          "overlay_front_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_front_paused_emissive",
+          "overlay_side": "gtceu:block/machines/thermal_centrifuge/overlay_side"
         }
       }
     },
@@ -78,7 +98,11 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/gcym/industrial_steam_casing"
+          "all": "gtceu:block/casings/gcym/industrial_steam_casing",
+          "overlay_front": "gtceu:block/machines/thermal_centrifuge/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_front_active_emissive",
+          "overlay_side": "gtceu:block/machines/thermal_centrifuge/overlay_side_active",
+          "overlay_side_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_side_active_emissive"
         }
       }
     },
@@ -86,7 +110,11 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/gcym/industrial_steam_casing"
+          "all": "gtceu:block/casings/gcym/industrial_steam_casing",
+          "overlay_front": "gtceu:block/machines/thermal_centrifuge/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_front_active_emissive",
+          "overlay_side": "gtceu:block/machines/thermal_centrifuge/overlay_side_active",
+          "overlay_side_emissive": "gtceu:block/machines/thermal_centrifuge/overlay_side_active_emissive"
         }
       }
     }

@@ -775,7 +775,7 @@ public class TFGMultiMachines {
             .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    TFGCore.id( "block/steam_bloomery"))
+                    TFGCore.id( "block/machines/steam_bloomery"))
             .pattern((definition) -> FactoryBlockPattern.start()
                     .aisle(" F ", " C ", " E ", " E ", " E ")
                     .aisle("FCF", "C#C", "E#E", "E#E", "E#E")
@@ -838,7 +838,7 @@ public class TFGMultiMachines {
                     .build())
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
-                    GTCEu.id("block/machines/thermal_centrifuge/overlay_front"))
+                    GTCEu.id("block/machines/thermal_centrifuge"))
                             .andThen(b -> b.addDynamicRenderer(
                                     () -> DynamicRenderHelper.makeBoilerPartRender(BoilerFireboxType.STEEL_FIREBOX, GTBlocks.CASING_STEEL_SOLID))))
             .register();
@@ -865,7 +865,7 @@ public class TFGMultiMachines {
                     .build())
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    GTCEu.id("block/machines/alloy_smelter/overlay_front"))
+                    GTCEu.id("block/machines/alloy_smelter"))
                             .andThen(b -> b.addDynamicRenderer(
                                     () -> DynamicRenderHelper.makeBoilerPartRender(BoilerFireboxType.BRONZE_FIREBOX, GTBlocks.CASING_BRONZE_BRICKS))))
             .register();
@@ -892,7 +892,7 @@ public class TFGMultiMachines {
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .build())
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    GTCEu.id("block/machines/compressor/overlay_front"))
+                    GTCEu.id("block/machines/compressor"))
             .register();
 
     public static final MultiblockMachineDefinition STEAM_PRESSER = REGISTRATE
@@ -916,7 +916,7 @@ public class TFGMultiMachines {
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .build())
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    GTCEu.id("block/machines/forge_hammer/overlay_front"))
+                    GTCEu.id("block/machines/forge_hammer"))
             .register();
 
     public static final MultiblockMachineDefinition HeatBatteryMk1 = REGISTRATE
