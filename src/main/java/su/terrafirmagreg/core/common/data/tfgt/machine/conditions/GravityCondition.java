@@ -29,7 +29,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
  * <p>- LT: passes when gravity < value
  * <p>- BETWEEN: passes when start < gravity < end
  */
-public class GravityCondition extends RecipeCondition {
+public class GravityCondition extends RecipeCondition<GravityCondition> {
 
     private static final float EARTH_GRAVITY = PlanetConstants.EARTH_GRAVITY;
 
@@ -101,7 +101,7 @@ public class GravityCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<GravityCondition> getType() {
         return TFGTRecipeConditions.GRAVITY;
     }
 
@@ -187,7 +187,7 @@ public class GravityCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public GravityCondition createTemplate() {
         return new GravityCondition();
     }
 

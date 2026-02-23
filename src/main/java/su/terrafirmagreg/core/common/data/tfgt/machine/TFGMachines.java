@@ -284,7 +284,7 @@ public class TFGMachines {
 
     public static MachineDefinition[] registerTieredMachines(GTRegistrate registrate, String name,
             BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
-            BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
+            BiFunction<Integer, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder,
             int... tiers) {
 
         MachineDefinition[] definitions = new MachineDefinition[tiers.length];
@@ -299,7 +299,7 @@ public class TFGMachines {
 
     public static MachineDefinition registerSteamMachine(String name,
             BiFunction<IMachineBlockEntity, Boolean, MetaMachine> factory,
-            BiFunction<Boolean, MachineBuilder<MachineDefinition>, MachineDefinition> builder) {
+            BiFunction<Boolean, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
         return builder.apply(true,
                 REGISTRATE.machine("hp_%s".formatted(name), holder -> factory.apply(holder, true))
                         .tier(1));
@@ -321,7 +321,7 @@ public class TFGMachines {
                 name,
                 SMRFluidImportHatchPartMachine::new,
 
-                (Integer tier, MachineBuilder<MachineDefinition> builder) -> builder
+                (Integer tier, MachineBuilder<MachineDefinition, ?> builder) -> builder
                         .langValue(GTValues.VNF[tier] + " " + displayName)
                         .rotationState(RotationState.ALL)
                         .abilities(abilities)

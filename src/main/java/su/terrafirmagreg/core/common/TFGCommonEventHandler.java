@@ -6,13 +6,16 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.PacketDistributor;
 
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
@@ -26,6 +29,8 @@ import su.terrafirmagreg.core.compat.grappling_hook.GrapplehookCompat;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
 
 public final class TFGCommonEventHandler {
@@ -36,6 +41,7 @@ public final class TFGCommonEventHandler {
         final IEventBus otherBus = MinecraftForge.EVENT_BUS;
 
         otherBus.addGenericListener(ItemStack.class, TFGCommonEventHandler::attachItemCapabilities);
+        otherBus.addListener(TFGCommonEventHandler::onPlayerLogin);
 
         bus.addListener(TFGConfig::onLoad);
         bus.addListener(TFGCommonEventHandler::onCommonSetup);
@@ -78,5 +84,16 @@ public final class TFGCommonEventHandler {
 
     private static void addUpgrades(ItemLike item) {
         add(TFGItems.WIRELESS_CARD.get(), item, 1, GuiText.WirelessTerminals.getTranslationKey());
+    }
+
+    /**
+     * Send the blaze burner liquid fuel map to send to the client and populate emi.
+     */
+    private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            TFGNetworkHandler.INSTANCE.send(
+                    PacketDistributor.PLAYER.with(() -> player),
+                    new FuelSyncPacket(FuelSyncPacket.capturedJsonData));
+        }
     }
 }

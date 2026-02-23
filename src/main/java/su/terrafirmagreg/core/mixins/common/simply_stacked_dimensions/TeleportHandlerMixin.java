@@ -1,14 +1,8 @@
 package su.terrafirmagreg.core.mixins.common.simply_stacked_dimensions;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -58,30 +52,6 @@ public abstract class TeleportHandlerMixin {
         BlockState state = level.getBlockState(pos);
         if (state.is(TFCTags.Blocks.CAN_COLLAPSE) || state.is(TFCTags.Blocks.CAN_LANDSLIDE)) {
             level.setBlockAndUpdate(pos, m_air);
-        }
-    }
-
-    @Shadow(remap = false)
-    @Final
-    private static HashMap<UUID, Integer> cooldownCache;
-
-    /**
-     * updateCooldownCache modifies cooldownCache while iterating over it, leading to CMEs sometimes if there's
-     * multiple people on cooldown. It also ticks down all cooldowns for every entity tick, so having 10
-     * players on the server reduces the cooldown by 10 times. This mixin fixes both.
-     * @param entity The entity being ticked
-     * @author Mqrius
-     */
-    @Redirect(method = "onLivingTick", at = @At(value = "INVOKE", target = "Lcom/simplystacked/Teleporting/TeleportHandler;updateCooldownCache()V"), remap = false)
-    private static void tfg$updateCooldownCacheWithoutCME(@Local(name = "entity") LivingEntity entity) {
-        UUID uuid = entity.getUUID();
-        Integer cooldown = cooldownCache.get(uuid);
-        if (cooldown != null) {
-            if (cooldown <= 0) {
-                cooldownCache.remove(uuid);
-            } else {
-                cooldownCache.put(uuid, cooldown - 1);
-            }
         }
     }
 }
