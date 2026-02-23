@@ -141,6 +141,13 @@ public class TFGNetworkHandler {
         sendToAllAround(level, pos, DecompressionSoundPacket.stop(pos));
     }
 
+    public static void sendDecompressionSoundShift(ServerLevel level, BlockPos oldPos, BlockPos newPos, int durationTicks, int elapsedTicks) {
+        DecompressionSoundPacket pkt = DecompressionSoundPacket.shift(oldPos, newPos, durationTicks, elapsedTicks);
+        // Send in both locations to affect all players. Client handles dedup.
+        sendToAllAround(level, oldPos, pkt);
+        sendToAllAround(level, newPos, pkt);
+    }
+
     /**
      * Sends an environment query from client to server.
      * Called from client side only.

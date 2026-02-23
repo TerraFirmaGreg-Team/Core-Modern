@@ -487,6 +487,14 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             }
         }
 
+        // Breach shifted: still unsealed, but breach point has moved (e.g. original hole closed, new one opened)
+        if (activeDecompression != null && !oldScan.isSealed() && !newScan.isSealed()) {
+            BlockPos newBreachPoint = findBreachPoint(activeDecompression.getOldRoomScan(), newScan);
+            if (newBreachPoint != null && !newBreachPoint.equals(activeDecompression.getBreachPoint())) {
+                activeDecompression.shiftBreachPoint(level, newBreachPoint);
+            }
+        }
+
         // Room fixed: escaped → sealed, cancel active decompression
         if (!oldScan.isSealed() && newScan.isSealed() && activeDecompression != null) {
             activeDecompression.cancel(level);

@@ -27,7 +27,8 @@ import su.terrafirmagreg.core.network.packet.ForcedPosePacket;
 public class DecompressionEvent {
 
     @lombok.Getter
-    private final BlockPos breachPoint;
+    private BlockPos breachPoint;
+    @lombok.Getter
     private final RoomScan oldRoomScan;
     private final int durationTicks;
     private int elapsed;
@@ -235,6 +236,12 @@ public class DecompressionEvent {
             TFGNetworkHandler.sendForcedPose(player, null);
         }
         crawlingPlayers.clear();
+    }
+
+    /** Shift the breach point mid-event (e.g. original hole closed, new hole opened). */
+    public void shiftBreachPoint(ServerLevel level, BlockPos newBreachPoint) {
+        TFGNetworkHandler.sendDecompressionSoundShift(level, breachPoint, newBreachPoint, durationTicks, elapsed);
+        this.breachPoint = newBreachPoint;
     }
 
     /** Cancel this decompression event early (e.g. room re-sealed, machine removed). */

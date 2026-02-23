@@ -1,7 +1,7 @@
 package su.terrafirmagreg.core.client;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
@@ -20,17 +20,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class DecompressionSoundInstance extends AbstractTickableSoundInstance {
 
-    private static final Map<BlockPos, DecompressionSoundInstance> ACTIVE = new HashMap<>();
+    private static final Map<BlockPos, DecompressionSoundInstance> ACTIVE = new ConcurrentHashMap<>();
 
-    private final BlockPos breachPos;
+    private BlockPos breachPos;
     private final int durationTicks;
     private int elapsed;
 
-    private DecompressionSoundInstance(BlockPos breachPos, int durationTicks) {
+    private DecompressionSoundInstance(BlockPos breachPos, int durationTicks, int elapsedOffset) {
         super(SoundEvents.ELYTRA_FLYING, SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
         this.breachPos = breachPos;
         this.durationTicks = durationTicks;
-        this.elapsed = 0;
+        this.elapsed = elapsedOffset;
         this.x = breachPos.getX() + 0.5;
         this.y = breachPos.getY() + 0.5;
         this.z = breachPos.getZ() + 0.5;
@@ -74,12 +74,29 @@ public class DecompressionSoundInstance extends AbstractTickableSoundInstance {
     }
 
     public static void start(BlockPos pos, int durationTicks) {
-        // Stop existing sound at this position if any
         stop(pos);
-
-        DecompressionSoundInstance instance = new DecompressionSoundInstance(pos, durationTicks);
+        DecompressionSoundInstance instance = new DecompressionSoundInstance(pos, durationTicks, 0);
         ACTIVE.put(pos, instance);
         Minecraft.getInstance().getSoundManager().play(instance);
+    }
+
+    public static void shift(BlockPos oldPos, BlockPos newPos, int durationTicks, int elapsedTicks) {
+        DecompressionSoundInstance instance = ACTIVE.remove(oldPos);
+        if (instance == null) {
+            // Either old sound wasn't in range, or a duplicate shift packet already moved it.
+            // Only start fresh if nothing is playing at the new position either.
+            if (!ACTIVE.containsKey(newPos)) {
+                instance = new DecompressionSoundInstance(newPos, durationTicks, elapsedTicks);
+                ACTIVE.put(newPos, instance);
+                Minecraft.getInstance().getSoundManager().play(instance);
+            }
+            return;
+        }
+        instance.breachPos = newPos;
+        instance.x = newPos.getX() + 0.5;
+        instance.y = newPos.getY() + 0.5;
+        instance.z = newPos.getZ() + 0.5;
+        ACTIVE.put(newPos, instance);
     }
 
     public static void stop(BlockPos pos) {
