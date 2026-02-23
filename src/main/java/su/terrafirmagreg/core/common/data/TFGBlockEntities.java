@@ -60,6 +60,9 @@ public class TFGBlockEntities {
                 blocks.addAll(ParticleEmitterBlockBuilder.REGISTERED_BLOCKS);
                 blocks.addAll(ParticleEmitterDecorationBlockBuilder.REGISTERED_BLOCKS);
                 blocks.addAll(GTActiveParticleBuilder.REGISTERED_BLOCKS);
+                blocks.add(TFGBlocks.GROW_LIGHT.get());
+                blocks.add(TFGBlocks.EGH_PLANTER.get());
+                blocks.add(TFGBlocks.PISCICULTURE_CORE.get());
                 return BlockEntityType.Builder.of(TickerBlockEntity::new, blocks.toArray(Block[]::new)).build(null);
             });
 }
