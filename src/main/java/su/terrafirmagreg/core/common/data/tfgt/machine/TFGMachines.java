@@ -44,6 +44,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.fluids.FluidType;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -211,8 +213,15 @@ public class TFGMachines {
 
     public static final MachineDefinition INTERPLANETARY_LOGISTICS_MONITOR = REGISTRATE
             .machine("interplanetary_logistics_monitor", InterplanetaryLogisticsMonitorMachine::new)
-            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
-                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
+            .model((ctx, prov, builder) -> {
+                BlockModelBuilder model = prov.models().nested()
+                        .parent(prov.models().getExistingFile(TFGCore.id("block/machines/monitor")))
+                        .texture("all", TFGCore.id("block/casings/machine_casing_inert_ptfe"))
+                        .texture("overlay_front", TFGCore.id("block/machines/interplanetary_logistics_monitor/overlay_front"))
+                        .texture("overlay_front_active_emissive", TFGCore.id("block/machines/interplanetary_logistics_monitor/overlay_front_active_emissive"));
+
+                builder.forAllStates($ -> ConfiguredModel.builder().modelFile(model).build());
+            })
             .rotationState(RotationState.NON_Y_AXIS)
             .register();
 

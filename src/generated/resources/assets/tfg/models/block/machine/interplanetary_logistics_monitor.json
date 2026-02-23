@@ -2,33 +2,14 @@
   "parent": "minecraft:block/block",
   "loader": "gtceu:machine",
   "machine": "tfg:interplanetary_logistics_monitor",
-  "replaceable_textures": [
-    "bottom",
-    "top",
-    "side"
-  ],
   "variants": {
-    "is_painted=false": {
+    "": {
       "model": {
-        "parent": "gtceu:block/machine/template/part/hatch_machine_emissive",
+        "parent": "tfg:block/machines/monitor",
         "textures": {
-          "bottom": "gtceu:block/casings/voltage/ulv/bottom",
-          "overlay": "gtceu:block/overlay/machine/overlay_pipe_out_emissive",
-          "overlay_emissive": "gtceu:block/overlay/machine/overlay_item_hatch",
-          "side": "gtceu:block/casings/voltage/ulv/side",
-          "top": "gtceu:block/casings/voltage/ulv/top"
-        }
-      }
-    },
-    "is_painted=true": {
-      "model": {
-        "parent": "gtceu:block/machine/template/part/hatch_machine_emissive_color_ring",
-        "textures": {
-          "bottom": "gtceu:block/casings/voltage/ulv/bottom",
-          "overlay": "gtceu:block/overlay/machine/overlay_pipe_out_emissive",
-          "overlay_emissive": "gtceu:block/overlay/machine/overlay_item_hatch",
-          "side": "gtceu:block/casings/voltage/ulv/side",
-          "top": "gtceu:block/casings/voltage/ulv/top"
+          "all": "tfg:block/casings/machine_casing_inert_ptfe",
+          "overlay_front": "tfg:block/machines/interplanetary_logistics_monitor/overlay_front",
+          "overlay_front_active_emissive": "tfg:block/machines/interplanetary_logistics_monitor/overlay_front_active_emissive"
         }
       }
     }

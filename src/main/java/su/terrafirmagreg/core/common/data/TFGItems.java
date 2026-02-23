@@ -336,6 +336,8 @@ public class TFGItems {
 
     private static <T extends Mob> ItemEntry<ForgeSpawnEggItem> registerSpawnEgg(EntityEntry<T> entity, int color1, int color2) {
         return TFGCore.REGISTRATE.item("spawn_egg/" + entity.getId().getPath(),
-                (p) -> new ForgeSpawnEggItem(entity, color1, color2, p)).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).register();
+                (p) -> new ForgeSpawnEggItem(entity, color1, color2, p))
+                .setData(ProviderType.ITEM_MODEL, (ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/template_spawn_egg")))
+                .register();
     }
 }
