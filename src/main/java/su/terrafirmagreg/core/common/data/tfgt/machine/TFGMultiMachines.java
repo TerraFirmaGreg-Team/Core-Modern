@@ -312,7 +312,7 @@ public class TFGMultiMachines {
             .recipeType(TFGTRecipeTypes.EVAPORATION_TOWER)
             .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks.STAINLESS_EVAPORATION_CASING)
-            .workableCasingModel(TFGCore.id("block/casings/machine_casing_bioculture"), TFGCore.id("block/machines/bioreactor"))
+            .workableCasingModel(TFGCore.id("block/casings/machine_casing_stainless_evaporation"), TFGCore.id("block/machines/bioreactor"))
             .pattern(definition -> {
                 TraceabilityPredicate exportPredicate = Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).or(Predicates.blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
                 exportPredicate.setMaxLayerLimited(1);
