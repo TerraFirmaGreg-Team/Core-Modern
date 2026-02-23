@@ -10,6 +10,7 @@ import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
 
 @SuppressWarnings("unused")
 public class TFGCreativeTab {
@@ -31,19 +32,23 @@ public class TFGCreativeTab {
                 CreativeModeTab.Output output) {
             var tab = registrate.get(name, Registries.CREATIVE_MODE_TAB);
             for (var entry : registrate.getAll(Registries.BLOCK)) {
+                Block block = entry.get();
+                var stack = new ItemStack(block, 1);
+
                 if (registrate.isInCreativeTab(entry, tab))
                     continue;
-                if (entry.getId().getNamespace().equals("tfg"))
-                    output.accept(new ItemStack(entry.get(), 1));
+                if (entry.getId().getNamespace().equals("tfg") && !stack.isEmpty())
+                    output.accept(block);
             }
             for (var entry : registrate.getAll(Registries.ITEM)) {
                 if (registrate.isInCreativeTab(entry, tab))
                     continue;
                 Item item = entry.get();
+                var stack = new ItemStack(item, 1);
                 if (item instanceof BlockItem)
                     continue;
                 if (entry.getId().getNamespace().equals("tfg"))
-                    output.accept(new ItemStack(entry.get(), 1));
+                    output.accept(stack);
             }
         }
     }

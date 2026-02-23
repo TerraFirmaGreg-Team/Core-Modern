@@ -595,7 +595,8 @@ public final class TFGBlocks {
     public static final BlockEntry<ReflectorBlock> REFLECTOR_BLOCK = TFGCore.REGISTRATE.block("reflector", ReflectorBlock::new)
             .properties(p -> p.mapColor(MapColor.SNOW).strength(5.5F).sound(SoundType.AMETHYST)
                     .noOcclusion().isViewBlocking((state, level, pos) -> false))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/reflector_night"))).build()
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .register();
 
