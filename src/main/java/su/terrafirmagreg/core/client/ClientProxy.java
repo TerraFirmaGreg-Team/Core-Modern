@@ -5,6 +5,7 @@ import static su.terrafirmagreg.core.common.data.TFGEntities.*;
 
 import java.util.function.BiConsumer;
 
+import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.TerraFirmaCraft;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.container.ArtisanTableScreen;
@@ -29,6 +31,7 @@ import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.entities.sniffer.*;
 import su.terrafirmagreg.core.common.data.particles.*;
 
+@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class ClientProxy extends CommonProxy {
     public ClientProxy() {
         super();

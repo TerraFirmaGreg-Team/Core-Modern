@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -39,12 +40,12 @@ import su.terrafirmagreg.core.utils.TFGModsResolver;
 import su.terrafirmagreg.core.world.TFGFeatures;
 import su.terrafirmagreg.core.world.TFGSurfaceRules;
 
+@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class CommonProxy {
 
     @SuppressWarnings("removal")
     public CommonProxy() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.register(this);
         bus.addListener(TFGConfig::onLoad);
 
         TFGCore.REGISTRATE.registerEventListeners(bus);

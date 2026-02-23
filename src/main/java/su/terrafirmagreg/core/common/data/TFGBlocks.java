@@ -586,7 +586,7 @@ public final class TFGBlocks {
             .build()
             .register();
 
-    public static final BlockEntry<Block> TEST_CASING = TFGCore.REGISTRATE.block("test_casing", Block::new)
+    public static final BlockEntry<Block> TEST_CASING = TFGCore.REGISTRATE.block("casings/test_casing", Block::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5f, 6f))
             .tag(TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers")))
             .defaultBlockstate()
@@ -612,7 +612,7 @@ public final class TFGBlocks {
             SoundType.COPPER, 5.5f, 5.5f, MapColor.COLOR_LIGHT_BLUE, false);
 
     public static final BlockEntry<Block> MACHINE_CASING_POWER_CASING = createCasingBlock(
-            "casings/machine_casing_power_casing", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_power_casing")),
+            "machine_casing_power_casing", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_power_casing")),
             SoundType.COPPER, 5.5f, 5.5f, MapColor.COLOR_LIGHT_BLUE, false);
 
     public static final BlockEntry<Block> HEAT_PIPE_CASING = createCasingBlock("casings/heat_pipe_casing", GTModels.cubeAllModel(TFGCore.id("block/casings/heat_pipe_casing")),
@@ -728,7 +728,7 @@ public final class TFGBlocks {
             var blockBuilder = TFGCore.REGISTRATE.block(blockId, Block::new)
                     .initialProperties(() -> Blocks.IRON_BLOCK)
                     .properties(p -> p.strength(0.3f, 0.3f).requiresCorrectToolForDrops().sound(SoundType.GLASS))
-                    .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/greenhouse/" + blockId)))
+                    .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/" + blockId)))
                     .tag(TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW, FLTags.Blocks.GREENHOUSE, FLTags.Blocks.GREENHOUSE_FULL_WALLS)
                     .addLayer(i > 2 ? () -> RenderType::translucent : () -> RenderType::cutout);
             blockTags.forEach(blockBuilder::tag);
