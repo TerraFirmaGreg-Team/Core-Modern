@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 
-@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
+@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus= Mod.EventBusSubscriber.Bus.MOD)
 public class DataGen {
 
     @SubscribeEvent
