@@ -1,1 +1,3 @@
-{"parent": "tfg:block/machine/single_itemstack_bus"}
+{
+  "parent": "tfg:block/machine/single_itemstack_bus"
+}

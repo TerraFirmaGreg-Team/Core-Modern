@@ -1,15 +1,19 @@
-{"variants": {
+{
+  "variants": {
     "facing=east": {
-        "y": 90,
-        "model": "tfg:block/machine/hv_food_refrigerator"
+      "model": "tfg:block/machine/hv_food_refrigerator",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/hv_food_refrigerator"
     },
     "facing=south": {
-        "y": 180,
-        "model": "tfg:block/machine/hv_food_refrigerator"
+      "model": "tfg:block/machine/hv_food_refrigerator",
+      "y": 180
     },
-    "facing=north": {"model": "tfg:block/machine/hv_food_refrigerator"},
     "facing=west": {
-        "y": 270,
-        "model": "tfg:block/machine/hv_food_refrigerator"
+      "model": "tfg:block/machine/hv_food_refrigerator",
+      "y": 270
     }
-}}
+  }
+}

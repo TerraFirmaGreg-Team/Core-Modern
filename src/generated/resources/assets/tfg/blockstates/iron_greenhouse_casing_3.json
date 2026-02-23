@@ -1,1 +1,7 @@
-{"variants": {"": {"model": "tfg:block/iron_greenhouse_casing_3"}}}
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/iron_greenhouse_casing_3"
+    }
+  }
+}

@@ -1,1 +1,7 @@
-{"variants": {"": {"model": "tfg:block/treated_wood_greenhouse_casing_1"}}}
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/treated_wood_greenhouse_casing_1"
+    }
+  }
+}

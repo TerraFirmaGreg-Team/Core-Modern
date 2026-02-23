@@ -1,1 +1,3 @@
-{"parent": "tfg:block/machine/steam_bloomery"}
+{
+  "parent": "tfg:block/machine/steam_bloomery"
+}

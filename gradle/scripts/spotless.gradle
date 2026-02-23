@@ -21,9 +21,7 @@ spotless {
     }
 
     json {
-        target 'src/*/resources/**/*.json'
-        targetExclude 'src/generated/resources/**'
-        targetExclude "src/dev/**"
+        target 'src/main/resources/**/*.json'
         simple()
         leadingTabsToSpaces(2)
         endWithNewline()

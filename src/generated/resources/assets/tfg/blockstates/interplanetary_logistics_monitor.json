@@ -1,15 +1,19 @@
-{"variants": {
+{
+  "variants": {
     "facing=east": {
-        "y": 90,
-        "model": "tfg:block/machine/interplanetary_logistics_monitor"
+      "model": "tfg:block/machine/interplanetary_logistics_monitor",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/interplanetary_logistics_monitor"
     },
     "facing=south": {
-        "y": 180,
-        "model": "tfg:block/machine/interplanetary_logistics_monitor"
+      "model": "tfg:block/machine/interplanetary_logistics_monitor",
+      "y": 180
     },
-    "facing=north": {"model": "tfg:block/machine/interplanetary_logistics_monitor"},
     "facing=west": {
-        "y": 270,
-        "model": "tfg:block/machine/interplanetary_logistics_monitor"
+      "model": "tfg:block/machine/interplanetary_logistics_monitor",
+      "y": 270
     }
-}}
+  }
+}

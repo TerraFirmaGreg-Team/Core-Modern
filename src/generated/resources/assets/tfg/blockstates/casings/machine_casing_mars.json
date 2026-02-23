@@ -1,1 +1,7 @@
-{"variants": {"": {"model": "tfg:block/casings/machine_casing_mars"}}}
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/casings/machine_casing_mars"
+    }
+  }
+}

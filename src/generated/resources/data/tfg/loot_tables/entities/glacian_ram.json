@@ -1,4 +1,4 @@
 {
-    "random_sequence": "tfg:entities/glacian_ram",
-    "type": "minecraft:entity"
+  "type": "minecraft:entity",
+  "random_sequence": "tfg:entities/glacian_ram"
 }

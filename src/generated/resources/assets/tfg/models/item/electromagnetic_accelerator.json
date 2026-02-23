@@ -1,1 +1,3 @@
-{"parent": "tfg:block/electromagnetic_accelerator"}
+{
+  "parent": "tfg:block/electromagnetic_accelerator"
+}

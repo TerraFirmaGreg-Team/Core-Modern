@@ -1,4 +1,5 @@
-{"values": [
+{
+  "values": [
     "tfg:sample_rack",
     "tfg:casings/bioculture_rotor_primary",
     "tfg:egh_planter",
@@ -27,4 +28,5 @@
     "tfg:casings/machine_casing_vacuum_engine_intake",
     "tfg:casings/machine_casing_ultraviolet",
     "tfg:casings/machine_casing_egh"
-]}
+  ]
+}

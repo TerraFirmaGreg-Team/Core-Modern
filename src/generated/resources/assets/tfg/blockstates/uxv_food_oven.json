@@ -1,15 +1,19 @@
-{"variants": {
+{
+  "variants": {
     "facing=east": {
-        "y": 90,
-        "model": "tfg:block/machine/uxv_food_oven"
+      "model": "tfg:block/machine/uxv_food_oven",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/uxv_food_oven"
     },
     "facing=south": {
-        "y": 180,
-        "model": "tfg:block/machine/uxv_food_oven"
+      "model": "tfg:block/machine/uxv_food_oven",
+      "y": 180
     },
-    "facing=north": {"model": "tfg:block/machine/uxv_food_oven"},
     "facing=west": {
-        "y": 270,
-        "model": "tfg:block/machine/uxv_food_oven"
+      "model": "tfg:block/machine/uxv_food_oven",
+      "y": 270
     }
-}}
+  }
+}

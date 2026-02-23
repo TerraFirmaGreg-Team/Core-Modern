@@ -1,4 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {"layer0": "tfg:item/sniffer_wool"}
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tfg:item/sniffer_wool"
+  }
 }

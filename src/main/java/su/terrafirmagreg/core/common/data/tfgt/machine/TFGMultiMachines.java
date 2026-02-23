@@ -282,7 +282,7 @@ public class TFGMultiMachines {
             .recipeType(TFGTRecipeTypes.NUCLEAR_TURBINE)
             .recipeModifier(NuclearLargeTurbineMachine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
-            .workableCasingModel(GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"), TFGCore.id("block/machines/nuclear_turbine"))
+            .workableCasingModel(GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"), TFGCore.id("block/multiblock/generator/large_steam_turbine"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("A   A", "A   A", "CCCCC", "CDCDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
                     .aisle("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")

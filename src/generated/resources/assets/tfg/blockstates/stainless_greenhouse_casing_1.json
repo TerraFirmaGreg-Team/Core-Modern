@@ -1,1 +1,7 @@
-{"variants": {"": {"model": "tfg:block/stainless_greenhouse_casing_1"}}}
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/stainless_greenhouse_casing_1"
+    }
+  }
+}

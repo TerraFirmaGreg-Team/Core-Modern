@@ -1,1 +1,7 @@
-{"variants": {"": {"model": "tfg:block/dry_ice"}}}
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/dry_ice"
+    }
+  }
+}

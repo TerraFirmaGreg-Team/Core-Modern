@@ -1,4 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {"layer0": "tfg:item/wraptor_wool"}
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tfg:item/wraptor_wool"
+  }
 }

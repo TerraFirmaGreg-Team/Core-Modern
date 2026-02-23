@@ -1,1 +1,3 @@
-{"parent": "tfg:block/casings/machine_casing_vacuum_engine_intake"}
+{
+  "parent": "tfg:block/casings/machine_casing_vacuum_engine_intake"
+}

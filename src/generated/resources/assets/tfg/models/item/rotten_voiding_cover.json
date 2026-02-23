@@ -1,4 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {"layer0": "tfg:item/rotten_voiding_cover"}
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tfg:item/rotten_voiding_cover"
+  }
 }

@@ -1,1 +1,3 @@
-{"parent": "minecraft:block/chorus_flower"}
+{
+  "parent": "minecraft:block/chorus_flower"
+}

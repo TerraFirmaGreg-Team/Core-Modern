@@ -1,1 +1,7 @@
-{"variants": {"": {"model": "tfg:block/mars_ice"}}}
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/mars_ice"
+    }
+  }
+}

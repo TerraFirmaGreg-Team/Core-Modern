@@ -1,1 +1,7 @@
-{"variants": {"": {"model": "tfg:block/casings/machine_casing_ostrum_carbon"}}}
+{
+  "variants": {
+    "": {
+      "model": "tfg:block/casings/machine_casing_ostrum_carbon"
+    }
+  }
+}

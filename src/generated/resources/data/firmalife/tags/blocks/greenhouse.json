@@ -1,4 +1,5 @@
-{"values": [
+{
+  "values": [
     "tfg:treated_wood_greenhouse_casing_0",
     "tfg:treated_wood_greenhouse_casing_1",
     "tfg:treated_wood_greenhouse_casing_2",
@@ -15,4 +16,5 @@
     "tfg:stainless_greenhouse_casing_1",
     "tfg:stainless_greenhouse_casing_2",
     "tfg:stainless_greenhouse_casing_3"
-]}
+  ]
+}

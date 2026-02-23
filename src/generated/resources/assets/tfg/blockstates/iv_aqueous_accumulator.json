@@ -1,15 +1,19 @@
-{"variants": {
+{
+  "variants": {
     "facing=east": {
-        "y": 90,
-        "model": "tfg:block/machine/iv_aqueous_accumulator"
+      "model": "tfg:block/machine/iv_aqueous_accumulator",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/iv_aqueous_accumulator"
     },
     "facing=south": {
-        "y": 180,
-        "model": "tfg:block/machine/iv_aqueous_accumulator"
+      "model": "tfg:block/machine/iv_aqueous_accumulator",
+      "y": 180
     },
-    "facing=north": {"model": "tfg:block/machine/iv_aqueous_accumulator"},
     "facing=west": {
-        "y": 270,
-        "model": "tfg:block/machine/iv_aqueous_accumulator"
+      "model": "tfg:block/machine/iv_aqueous_accumulator",
+      "y": 270
     }
-}}
+  }
+}
