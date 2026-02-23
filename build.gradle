@@ -59,9 +59,15 @@ sourceSets {
     }
 
     dev {
+
+        resources {
+            srcDir 'src/main/resources'
+            srcDir 'src/generated/resources'
+        }
+
         java.srcDir("src/dev/java")
-        //resources.srcDir("src/dev/resources")
         compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
     }
 }
 
@@ -78,12 +84,14 @@ legacyForge {
         client {
             client()
             ideName = "Client"
+            sourceSet = sourceSets.dev
             gameDirectory = project.file('run/client')
        }
 
         server {
             server()
             ideName = "Server"
+            sourceSet = sourceSets.dev
             gameDirectory = project.file('run/server')
             programArgument '--nogui'
         }
@@ -92,7 +100,7 @@ legacyForge {
             data()
             ideName = "Data"
             gameDirectory = project.file('run/data')
-
+            sourceSet = sourceSets.dev
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
