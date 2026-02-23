@@ -44,6 +44,7 @@ public class CommonProxy {
     @SuppressWarnings("removal")
     public CommonProxy() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.register(this);
         bus.addListener(TFGConfig::onLoad);
 
         TFGCore.REGISTRATE.registerEventListeners(bus);

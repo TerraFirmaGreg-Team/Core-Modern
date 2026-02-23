@@ -14,7 +14,7 @@ import su.terrafirmagreg.core.TFGCore;
 
 // This mixin makes it so minecraft will put models in the right folder.
 // Typically, minecraft will put the model for a block 'tfg:grass/mars_path' in 'models/grass' instead of 'models/block/grass', this mixin changes that for TFG stuff.
-@Mixin(ModelProvider.class)
+@Mixin(value = ModelProvider.class, remap = false)
 public class ModelProviderMixin {
     @Final
     @Shadow
