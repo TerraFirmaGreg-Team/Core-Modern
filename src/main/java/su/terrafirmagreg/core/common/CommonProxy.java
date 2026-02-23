@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -40,7 +39,6 @@ import su.terrafirmagreg.core.utils.TFGModsResolver;
 import su.terrafirmagreg.core.world.TFGFeatures;
 import su.terrafirmagreg.core.world.TFGSurfaceRules;
 
-@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class CommonProxy {
 
     @SuppressWarnings("removal")
@@ -82,18 +80,18 @@ public class CommonProxy {
     }
 
     @SubscribeEvent
-    public static void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
+    public void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
         TFGCore.MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(TFGCore.MOD_ID);
     }
 
     @SubscribeEvent
-    public static void onPostRegisterMaterials(final PostMaterialEvent event) {
+    public void onPostRegisterMaterials(final PostMaterialEvent event) {
         TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
     }
 
     @SubscribeEvent
-    public static void onCommonSetup(final FMLCommonSetupEvent event) {
+    public void onCommonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             if (TFGConfig.COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get() && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
                 TFCAmbientalCompat.register();
@@ -107,7 +105,7 @@ public class CommonProxy {
         });
     }
 
-    private static void addUpgrades(ItemLike item) {
+    private void addUpgrades(ItemLike item) {
         add(TFGItems.WIRELESS_CARD.get(), item, 1, GuiText.WirelessTerminals.getTranslationKey());
     }
 

@@ -5,7 +5,6 @@ import static su.terrafirmagreg.core.common.data.TFGEntities.*;
 
 import java.util.function.BiConsumer;
 
-import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.TerraFirmaCraft;
@@ -18,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
@@ -75,7 +75,7 @@ public class ClientProxy extends CommonProxy {
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }
 
-    public static void onRegisterItemRenderers(BiConsumer<Item, BlockEntityWithoutLevelRenderer> consumer) {
+    public void onRegisterItemRenderers(BiConsumer<Item, BlockEntityWithoutLevelRenderer> consumer) {
         consumer.accept(TFGItems.TIER_1_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_1_LAYER, RocketRenderer.TIER_1_TEXTURE));
         consumer.accept(TFGItems.TIER_2_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_2_LAYER, RocketRenderer.TIER_2_TEXTURE));
         consumer.accept(TFGItems.TIER_3_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_3_LAYER, RocketRenderer.TIER_3_TEXTURE));
