@@ -64,7 +64,7 @@ public abstract class EnvironmentEffectsMixin {
         if (state.is(TFGTags.Blocks.DoNotDestroyInSpace))
             return;
 
-        // Early exit before doing expensive hasOxygenOnAnySide
+        // Cheap early exit before doing expensive hasOxygenOnAnySide.
         Block block = state.getBlock();
         if (!(state.is(ModBlockTags.DESTROYED_IN_SPACE)
                 || block instanceof TFCTorchBlock
