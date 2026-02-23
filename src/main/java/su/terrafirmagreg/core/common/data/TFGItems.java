@@ -287,7 +287,7 @@ public class TFGItems {
             .register();
 
     public static final ItemEntry<ComponentItem> PARACETAMOL_PILL = TFGCore.REGISTRATE.item("paracetamol_pill", ComponentItem::create)
-            .model((ctx, prov) -> prov.getExistingFile(GTCEu.id("item/paracetamol_pill")))
+            .model(ModelUtils.layeredItemModel(GTCEu.id("item/paracetamol_pill")))
             .properties(p -> p.food(GTFoods.ANTIDOTE))
             .onRegister(attach(new AntidoteBehavior(30,
                     GTMedicalConditions.CHEMICAL_BURNS,
@@ -304,7 +304,7 @@ public class TFGItems {
             .register();
 
     public static final ItemEntry<ComponentItem> RAD_AWAY_PILL = TFGCore.REGISTRATE.item("rad_away_pill", ComponentItem::create)
-            .model((ctx, prov) -> prov.getExistingFile(GTCEu.id("item/rad_away_pill")))
+            .model(ModelUtils.layeredItemModel(GTCEu.id("item/rad_away_pill")))
             .properties(p -> p.food(GTFoods.ANTIDOTE))
             .onRegister(attach(new AntidoteBehavior(-1,
                     GTMedicalConditions.CHEMICAL_BURNS,

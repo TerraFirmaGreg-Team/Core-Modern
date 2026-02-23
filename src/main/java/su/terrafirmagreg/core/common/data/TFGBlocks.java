@@ -586,6 +586,13 @@ public final class TFGBlocks {
             .build()
             .register();
 
+    public static final BlockEntry<Block> TEST_CASING = TFGCore.REGISTRATE.block("test_casing", Block::new)
+            .properties(p -> p.sound(SoundType.COPPER).strength(5f, 6f))
+            .tag(TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers")))
+            .defaultBlockstate()
+            .item(BlockItem::new).tag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"))).build()
+            .register();
+
     public static final BlockEntry<Block> SUPERCONDUCTOR_COIL_LARGE_BLOCK = createCasingBlock("superconductor_coil_large", GTModels.cubeAllModel(TFGCore.id("block/casings/superconductor_coil_large")),
             SoundType.COPPER, 5.5f, 5.5f, MapColor.COLOR_ORANGE, false);
 
@@ -601,7 +608,7 @@ public final class TFGBlocks {
             .register();
 
     public static final BlockEntry<Block> MACHINE_CASING_ALUMINIUM_PLATED_STEEL = createCasingBlock(
-            "casings/machine_casing_aluminium_plated_steel", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_aluminium_plated_steel")),
+            "machine_casing_aluminium_plated_steel", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_aluminium_plated_steel")),
             SoundType.COPPER, 5.5f, 5.5f, MapColor.COLOR_LIGHT_BLUE, false);
 
     public static final BlockEntry<Block> MACHINE_CASING_POWER_CASING = createCasingBlock(
@@ -717,7 +724,7 @@ public final class TFGBlocks {
         List<BlockEntry<Block>> casings = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            String blockId = "%s_greenhouse_casing_%s".formatted(tier, i);
+            String blockId = "casings/greenhouse/%s_greenhouse_casing_%s".formatted(tier, i);
             var blockBuilder = TFGCore.REGISTRATE.block(blockId, Block::new)
                     .initialProperties(() -> Blocks.IRON_BLOCK)
                     .properties(p -> p.strength(0.3f, 0.3f).requiresCorrectToolForDrops().sound(SoundType.GLASS))
