@@ -59,16 +59,25 @@ sourceSets {
     }
 
     dev {
-
-        resources {
-            srcDir 'src/main/resources'
-            srcDir 'src/generated/resources'
-        }
-
         java.srcDir("src/dev/java")
         compileClasspath += sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
+}
+
+// gradle-local.properties should have the following:
+// enable_copy_to_instance = true/false -- Whether to copy the output jar to the modpack mods folder whenever core is rebuilt
+// instance_path = path -- Path to modpack folder
+String instancePath
+Boolean enableCopyToInstance
+if (project.rootProject.file("gradle-local.properties").exists()) {
+    Properties localProperties = new Properties()
+    localProperties.load(project.rootProject.file('gradle-local.properties').newDataInputStream())
+    instancePath = localProperties.get("instance_path")
+    enableCopyToInstance = localProperties.get("enable_copy_to_instance")
+} else {
+    instancePath = ""
+    enableCopyToInstance = false
 }
 
 legacyForge {
@@ -104,7 +113,7 @@ legacyForge {
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
-            programArguments.addAll '--existing', file("src/dev/resources/").getAbsolutePath()
+            programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
             programArguments.addAll '--existing-mod', 'gtceu'
             programArguments.addAll '--existing-mod', 'tfc'
             programArguments.addAll '--existing-mod', 'species'
@@ -238,16 +247,7 @@ allprojects {
     }
 }
 
-
-// Moving the core jar to a custom folder
-// To use: create gradle-local.properties and define enable_copy_to_instance = true and instance_path = path
-
-if (project.rootProject.file("gradle-local.properties").exists()) {
-    Properties localProperties = new Properties()
-    localProperties.load(project.rootProject.file('gradle-local.properties').newDataInputStream())
-    String instancePath = localProperties.get("instance_path")
-    Boolean enableCopyToInstance = localProperties.get("enable_copy_to_instance")
-
+if (enableCopyToInstance) {
     tasks.register('replaceInstanceJar', Copy) {
         String modsDir = file("$instancePath/mods").getAbsolutePath()
 
@@ -268,10 +268,8 @@ if (project.rootProject.file("gradle-local.properties").exists()) {
         outputs.cacheIf { false }
     }
 
-    if (enableCopyToInstance) {
-        tasks.withType(Jar).configureEach {
-            finalizedBy(tasks.named("replaceInstanceJar"))
-        }
+    tasks.withType(Jar).configureEach {
+        finalizedBy(tasks.named("replaceInstanceJar"))
     }
 }
 
