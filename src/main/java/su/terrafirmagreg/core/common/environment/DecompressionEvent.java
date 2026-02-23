@@ -10,11 +10,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.network.packet.ForcedPosePacket;
 
 /**
  * Represents an active decompression event caused by a sealed room being breached.
@@ -24,7 +24,6 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
  * Cancelled early if the room re-seals or the machine is removed.
  */
 // TODO: Add particles
-// TODO: Don't spawn event when current status is volume limit exceeded or dimension limit exceeded
 public class DecompressionEvent {
 
     @lombok.Getter
@@ -87,7 +86,7 @@ public class DecompressionEvent {
             if (!entityInRoom(player, true) || player.position().distanceTo(target) > PRONE_RELEASE_DISTANCE) {
                 it.remove();
                 player.setForcedPose(null);
-                TFGNetworkHandler.sendForcedPose(player, false, 0f);
+                TFGNetworkHandler.sendForcedPose(player, null);
                 player.refreshDimensions();
             }
         }
@@ -177,15 +176,21 @@ public class DecompressionEvent {
 
         if (entity instanceof ServerPlayer player) {
             player.hurtMarked = true;
+
             // Force prone if close enough to fit through a 1-block gap
             if (distance < PRONE_DISTANCE && crawlingPlayers.add(player)) {
+
+                // Clientside: Force pose, teleport up to keep eyes at same level, prevent camera lerping
+                // Applied atomically on a camera tick to prevent jitter
+                TFGNetworkHandler.sendForcedPose(player, Pose.SWIMMING);
+
+                // Serverside: Force pose, teleport up, refresh dimension and position to new values
+                // Doesn't use teleportTo because that breaks atomity by sending a separate packet.
                 player.setForcedPose(Pose.SWIMMING);
+                double newY = player.getY() + ForcedPosePacket.SWIMMING_EYE_SHIFT;
+                player.absMoveTo(player.getX(), newY, player.getZ(), player.getYRot(), player.getXRot());
                 entity.refreshDimensions();
-                // Shift up to keep the eye level stable: STANDING eye 1.62, SWIMMING eye 0.4, delta = 1.22.
-                // Client applies the same shift immediately via ForcedPosePacket so the server's
-                // ClientboundPlayerPositionPacket arrives when the client is already at the target Y.
-                player.teleportTo(player.getX(), player.getY() + 1.22, player.getZ());
-                TFGNetworkHandler.sendForcedPose(player, true, 1.22f);
+                player.connection.resetPosition();
             }
         }
     }
@@ -214,11 +219,9 @@ public class DecompressionEvent {
     }
 
     private boolean shouldAffect(Entity entity) {
-        // TODO: Tags for entities that shouldn't be affected (rope knot??)
-        if (entity instanceof Player player && false)
-            //        if (entity instanceof Player player &&
-            //                (player.isCreative() || player.isSpectator()))
-            return false;
+        // TODO: Tags for entities that shouldn't be affected (ad astra has rope knot?)
+        // if (entity instanceof Player player && (player.isCreative() || player.isSpectator()))
+        //     return false;
         return true;
     }
 
@@ -227,7 +230,9 @@ public class DecompressionEvent {
         elapsed = durationTicks;
         TFGNetworkHandler.sendDecompressionSoundStop(level, breachPoint);
         for (ServerPlayer player : crawlingPlayers) {
-            TFGNetworkHandler.sendForcedPose(player, false, 0f);
+            player.setForcedPose(null);
+            player.refreshDimensions();
+            TFGNetworkHandler.sendForcedPose(player, null);
         }
         crawlingPlayers.clear();
     }

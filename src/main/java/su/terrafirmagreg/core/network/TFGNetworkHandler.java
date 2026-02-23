@@ -1,10 +1,13 @@
 package su.terrafirmagreg.core.network;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkRegistry;
@@ -86,8 +89,8 @@ public class TFGNetworkHandler {
                 ForcedPosePacket::handle);
     }
 
-    public static void sendForcedPose(ServerPlayer player, boolean prone, float yShift) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ForcedPosePacket(prone, yShift));
+    public static void sendForcedPose(ServerPlayer player, @Nullable Pose pose) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ForcedPosePacket(pose));
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {

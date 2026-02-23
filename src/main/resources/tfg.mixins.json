@@ -206,6 +206,7 @@
         "client.ftb.ClientTeamManagerImplMixin",
         "client.ftb.QuestScreenMixin",
         "client.gtceu.ISurfaceRockRendererAccessor",
+        "client.minecraft.CameraMixin",
         "client.minecraft.CreateWorldScreenMixin",
         "client.tfc.ClimateRenderCacheMixin",
         "client.tfc.DoubleIngotPileBlockModelMixin",

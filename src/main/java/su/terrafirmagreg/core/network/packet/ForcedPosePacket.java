@@ -2,43 +2,49 @@ package su.terrafirmagreg.core.network.packet;
 
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Pose;
 import net.minecraftforge.network.NetworkEvent;
 
+import su.terrafirmagreg.core.client.PoseSnapHelper;
+
 /**
- * Server → Client packet to set or clear a forced pose on the local player.
- * Also shifts the player by yShift so the eye level stays in place during the pose transition.
+ * Server -> Client packet to force or release a pose on the local player.
+ * The actual changes are applied atomically in Camera.tick() via CameraMixin.
  */
 public class ForcedPosePacket {
 
-    private final boolean prone;
-    /** Y shift to apply on the client to keep eye level stable. */
-    private final float yShift;
+    // Eye heights are hardcoded in Player.getStandingEyeHeight(): STANDING = 1.62, SWIMMING = 0.4
+    public static final float SWIMMING_EYE_SHIFT = 1.62f - 0.4f;
 
-    public ForcedPosePacket(boolean prone, float yShift) {
-        this.prone = prone;
-        this.yShift = yShift;
+    /** Null means release the forced pose. */
+    @Nullable
+    private final Pose pose;
+
+    public ForcedPosePacket(@Nullable Pose pose) {
+        this.pose = pose;
     }
 
     public static void encode(ForcedPosePacket pkt, FriendlyByteBuf buf) {
-        buf.writeBoolean(pkt.prone);
-        buf.writeFloat(pkt.yShift);
+        buf.writeBoolean(pkt.pose != null);
+        if (pkt.pose != null)
+            buf.writeEnum(pkt.pose);
     }
 
     public static ForcedPosePacket decode(FriendlyByteBuf buf) {
-        return new ForcedPosePacket(buf.readBoolean(), buf.readFloat());
+        Pose pose = buf.readBoolean() ? buf.readEnum(Pose.class) : null;
+        return new ForcedPosePacket(pose);
     }
 
     public static void handle(ForcedPosePacket pkt, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            var player = Minecraft.getInstance().player;
-            if (player == null)
+            if (Minecraft.getInstance().player == null)
                 return;
-            player.setForcedPose(pkt.prone ? Pose.SWIMMING : null);
-            if (pkt.yShift != 0f)
-                player.setPos(player.getX(), player.getY() + pkt.yShift, player.getZ());
+            float yShift = pkt.pose == Pose.SWIMMING ? SWIMMING_EYE_SHIFT : 0f;
+            PoseSnapHelper.pendingSnap = new PoseSnapHelper.PoseSnap(pkt.pose, yShift);
         });
         ctx.get().setPacketHandled(true);
     }
