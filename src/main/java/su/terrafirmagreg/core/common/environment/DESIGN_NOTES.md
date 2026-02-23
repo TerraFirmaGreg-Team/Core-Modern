@@ -1,3 +1,36 @@
+TODOs in no particular order:
+
+**General:**\
+Cleanroom-style room that is only safe inside.
+
+**Oxygen machine:**\
+Sound effect (higher pitch when breached and surroundings are lower pressure)\
+Oxygenation visualization like ad astra?\
+Make radius and max volume settings you can define for the machine in kubejs\
+make oxygen machines in general kubejs-able
+
+**Space heater:**\
+Visual effects?\
+Radius visualization\
+Energy consumption GUI\
+Some kind of temperature gameplay that's not so binary? Gradient maybe? How to make it nice to play while also being interesting?
+
+**Higgs Emitter (gravity machine):**\
+Everything
+
+**Low Pressure Chamber (Cleanroom for Europa)**\
+Needs special flood fill handling for the walls
+
+**Decompression:**\
+Particle effects\
+Breach force direction based on pressure differential against environment, or actually against the local pressure outside the breach (future-proof for Europa's varying pressure level with Y level)\
+Stop decompression force when original hole is filled but there's still other holes (shift to new hole)
+
+**Maybe:**\
+Readout board with temperature, oxygen, pressure, gravity status?
+Equip quark suit debug command\
+
+
 # Environment System Design Notes
 
 Non-obvious design decisions and their rationale.
@@ -7,6 +40,13 @@ Non-obvious design decisions and their rationale.
 Right now my machines and ad astra's machines both work as expected, so players have time to transition. In the future I can remove ad astra's codepath and get the actual performance benefits. 
 
 ## Machines
+
+### Types
+
+Oxygen Distributors use flood fill to fill a room with atmosphere.\
+Space Heaters create a bubble of warm air\
+TODO Higgs Emitter, I'm thinking maybe it spreads outwards along a floor surface and above it? That could be cool, could be annoying. Gotta think what would be fun for gameplay and what's possible to code.
+TODO Low Pressure Chamber, cleanroom style but you live inside of it. Flood fill with special conditions for what counts as walls.
 
 ### Unloaded machines and machines just loaded from NBT are assumed to be working
 
