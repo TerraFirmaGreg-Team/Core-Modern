@@ -20,6 +20,7 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.simibubi.create.content.decoration.palettes.ConnectedGlassBlock;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
@@ -719,17 +720,18 @@ public final class TFGBlocks {
         return createCasingBlock(name, modelProvider, SoundType.COPPER, 5, 6, MapColor.COLOR_LIGHT_GRAY, false);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "removal" })
     public static BlockEntry<Block>[] createGreenhouseCasings(String tier, List<TagKey<Block>> blockTags, List<TagKey<Item>> itemTags) {
-        List<BlockEntry<Block>> casings = new ArrayList<>();
+        List<BlockEntry<ConnectedGlassBlock>> casings = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
             String blockId = "casings/greenhouse/%s_greenhouse_casing_%s".formatted(tier, i);
-            var blockBuilder = TFGCore.REGISTRATE.block(blockId, Block::new)
-                    .initialProperties(() -> Blocks.IRON_BLOCK)
+            var blockBuilder = TFGCore.REGISTRATE.block(blockId, ConnectedGlassBlock::new)
+                    .initialProperties(() -> Blocks.GLASS)
                     .properties(p -> p.strength(0.3f, 0.3f).requiresCorrectToolForDrops().sound(SoundType.GLASS).noOcclusion())
                     .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/" + blockId)))
-                    .tag(TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW, FLTags.Blocks.GREENHOUSE, FLTags.Blocks.GREENHOUSE_FULL_WALLS)
+                    .tag(TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW, CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, FLTags.Blocks.GREENHOUSE,
+                            FLTags.Blocks.GREENHOUSE_FULL_WALLS)
                     .addLayer(i > 2 ? () -> RenderType::translucent : () -> RenderType::cutout);
             blockTags.forEach(blockBuilder::tag);
 
