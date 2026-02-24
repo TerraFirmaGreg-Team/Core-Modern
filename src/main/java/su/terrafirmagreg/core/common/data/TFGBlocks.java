@@ -624,7 +624,7 @@ public final class TFGBlocks {
     public static final BlockEntry<Block> BIOCULTURE_GLASS_CASING = TFGCore.REGISTRATE.block("casings/machine_casing_bioculture_glass", Block::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
             .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false)
-                    .sound(SoundType.GLASS).strength(5, 6)
+                    .sound(SoundType.GLASS).strength(5, 6).noOcclusion()
                     .mapColor(MapColor.COLOR_ORANGE))
             .addLayer(() -> RenderType::translucent)
             .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_bioculture_glass")))
@@ -727,7 +727,7 @@ public final class TFGBlocks {
             String blockId = "casings/greenhouse/%s_greenhouse_casing_%s".formatted(tier, i);
             var blockBuilder = TFGCore.REGISTRATE.block(blockId, Block::new)
                     .initialProperties(() -> Blocks.IRON_BLOCK)
-                    .properties(p -> p.strength(0.3f, 0.3f).requiresCorrectToolForDrops().sound(SoundType.GLASS))
+                    .properties(p -> p.strength(0.3f, 0.3f).requiresCorrectToolForDrops().sound(SoundType.GLASS).noOcclusion())
                     .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/" + blockId)))
                     .tag(TFGTags.Blocks.Casings, TFCTags.Blocks.MINEABLE_WITH_GLASS_SAW, FLTags.Blocks.GREENHOUSE, FLTags.Blocks.GREENHOUSE_FULL_WALLS)
                     .addLayer(i > 2 ? () -> RenderType::translucent : () -> RenderType::cutout);

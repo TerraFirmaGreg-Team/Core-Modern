@@ -605,7 +605,7 @@ public class TFGMultiMachines {
             .recipeType(TFGTRecipeTypes.SMR_GENERATOR)
             .recipeModifier(SMRGenerator2::recipeModifier, true)
             .appearanceBlock(TFGBlocks.DESH_PTFE_CASING)
-            .workableCasingModel(TFGCore.id( "block/casings/machine_casing_ostrum_carbon"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
+            .workableCasingModel(TFGCore.id( "block/casings/machine_casing_desh_ptfe"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAA", "ABA", "ABA", "AAA")
                     .aisle("AEA", "BDB", "BDB", "AEA")
@@ -840,7 +840,7 @@ public class TFGMultiMachines {
             .model(GTMachineModels.createWorkableCasingMachineModel(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTCEu.id("block/machines/thermal_centrifuge"))
                             .andThen(b -> b.addDynamicRenderer(
-                                    () -> DynamicRenderHelper.makeBoilerPartRender(BoilerFireboxType.STEEL_FIREBOX, GTBlocks.CASING_STEEL_SOLID))))
+                                    () -> DynamicRenderHelper.makeBoilerPartRender(BoilerFireboxType.STEEL_FIREBOX, GCYMBlocks.CASING_INDUSTRIAL_STEAM))))
             .register();
 
     public static final MultiblockMachineDefinition STEAM_FUSER = REGISTRATE

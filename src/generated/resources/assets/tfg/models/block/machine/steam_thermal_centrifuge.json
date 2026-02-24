@@ -4,7 +4,7 @@
     {
       "type": "gtceu:boiler_multi_parts",
       "casing_block": {
-        "Name": "gtceu:solid_machine_casing"
+        "Name": "gtceu:industrial_steam_casing"
       },
       "firebox_active": {
         "Name": "gtceu:steel_firebox_casing",
