@@ -124,7 +124,7 @@ public final class TFGBlocks {
                     .sound(SoundType.GRAVEL))
             .simpleItem()
             .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
-            .blockstate(ModelUtils.blockVariantsRotated(TFGCore.id("block/grass/mars_path")))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .register();
 
     public static final BlockEntry<FarmlandBlock> MARS_FARMLAND = TFGCore.REGISTRATE.block("grass/mars_farmland",
@@ -135,7 +135,7 @@ public final class TFGBlocks {
                     .isSuffocating(TFCBlocks::always)
                     .blockEntity(TFCBlockEntities.FARMLAND), MARS_DIRT))
             .simpleItem()
-            .blockstate(ModelUtils.blockVariants(TFGCore.id("block/grass/mars_farmland")))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
             .register();
 
@@ -236,7 +236,7 @@ public final class TFGBlocks {
                 (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
                 .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
                 .simpleItem()
-                .blockstate(ModelUtils.blockVariantsRotated(TFGCore.id("block/grass/mars_dirt")))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .register();
 
         MARS_CLAY = TFGCore.REGISTRATE.block("grass/mars_clay_dirt",
@@ -244,7 +244,7 @@ public final class TFGBlocks {
                 .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
                 .simpleItem()
                 .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
-                .blockstate(ModelUtils.blockVariantsRotated(TFGCore.id("block/grass/mars_clay_dirt")))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .register();
 
     }
@@ -267,8 +267,13 @@ public final class TFGBlocks {
             .item(BlockItem::new).model(ModelUtils.layeredItemModel(ResourceLocation.fromNamespaceAndPath("tfc", "item/powder/wood_ash"))).build()
             .register();
 
-    public static final BlockEntry<SandLayerBlock> VOLCANIC_ASH_LAYER_BLOCK = registerSandLayerBlock("pile/volcanic_ash",
-            TFCBlocks.SAND.get(SandBlockType.RED)::get, TFGCore.id("block/planets/venus/volcanic_ash"));
+    public static final BlockEntry<SandLayerBlock> VOLCANIC_ASH_LAYER_BLOCK = TFGCore.REGISTRATE.block("pile/volcanic_ash", SandLayerBlock::new)
+            .initialProperties(TFCBlocks.SAND.get(SandBlockType.RED)::get)
+            .properties(p -> p.noOcclusion().mapColor(MapColor.NONE))
+            .blockstate(ModelUtils.generateSandLayersFromBlock(TFGCore.id("block/volcanic_ash")))
+            .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/volcanic_ash"))).build()
+            .register();
 
     public static final BlockEntry<SandLayerBlock> BLACK_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/black_sand",
             TFCBlocks.SAND.get(SandBlockType.BLACK)::get, ResourceLocation.fromNamespaceAndPath("tfc", "block/sand/black"));
