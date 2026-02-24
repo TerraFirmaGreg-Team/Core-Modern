@@ -27,6 +27,22 @@
     "tfg:casings/bioculture_rotor_secondary",
     "tfg:casings/machine_casing_vacuum_engine_intake",
     "tfg:casings/machine_casing_ultraviolet",
-    "tfg:casings/machine_casing_egh"
+    "tfg:casings/machine_casing_egh",
+    "tfg:casings/greenhouse/treated_wood_greenhouse_casing_0",
+    "tfg:casings/greenhouse/treated_wood_greenhouse_casing_1",
+    "tfg:casings/greenhouse/treated_wood_greenhouse_casing_2",
+    "tfg:casings/greenhouse/treated_wood_greenhouse_casing_3",
+    "tfg:casings/greenhouse/copper_greenhouse_casing_0",
+    "tfg:casings/greenhouse/copper_greenhouse_casing_1",
+    "tfg:casings/greenhouse/copper_greenhouse_casing_2",
+    "tfg:casings/greenhouse/copper_greenhouse_casing_3",
+    "tfg:casings/greenhouse/iron_greenhouse_casing_0",
+    "tfg:casings/greenhouse/iron_greenhouse_casing_1",
+    "tfg:casings/greenhouse/iron_greenhouse_casing_2",
+    "tfg:casings/greenhouse/iron_greenhouse_casing_3",
+    "tfg:casings/greenhouse/stainless_greenhouse_casing_0",
+    "tfg:casings/greenhouse/stainless_greenhouse_casing_1",
+    "tfg:casings/greenhouse/stainless_greenhouse_casing_2",
+    "tfg:casings/greenhouse/stainless_greenhouse_casing_3"
   ]
 }

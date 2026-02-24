@@ -22,7 +22,7 @@
       "model": "tfg:block/pile/volcanic_ash_height14"
     },
     "layers=8": {
-      "model": "tfg:block/planets/venus/volcanic_ash"
+      "model": "tfg:block/volcanic_ash"
     }
   }
 }
