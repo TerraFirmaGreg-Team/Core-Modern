@@ -11,8 +11,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_desh_ptfe",
-          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_emissive"
+          "overlay_front": "tfg:block/machines/smr/overlay_front"
         }
       }
     },
@@ -21,8 +20,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_desh_ptfe",
-          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_paused",
-          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_paused_emissive"
+          "overlay_front": "tfg:block/machines/smr/overlay_front_paused"
         }
       }
     },
@@ -31,8 +29,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_desh_ptfe",
-          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active_emissive"
+          "overlay_front": "tfg:block/machines/smr/overlay_front_active"
         }
       }
     },
@@ -41,8 +38,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_desh_ptfe",
-          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active_emissive"
+          "overlay_front": "tfg:block/machines/smr/overlay_front_active"
         }
       }
     },
@@ -51,8 +47,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_desh_ptfe",
-          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_emissive"
+          "overlay_front": "tfg:block/machines/smr/overlay_front"
         }
       }
     },
@@ -61,8 +56,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_desh_ptfe",
-          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_paused",
-          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_paused_emissive"
+          "overlay_front": "tfg:block/machines/smr/overlay_front_paused"
         }
       }
     },
@@ -71,8 +65,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_desh_ptfe",
-          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active_emissive"
+          "overlay_front": "tfg:block/machines/smr/overlay_front_active"
         }
       }
     },
@@ -81,8 +74,7 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_desh_ptfe",
-          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active_emissive"
+          "overlay_front": "tfg:block/machines/smr/overlay_front_active"
         }
       }
     }

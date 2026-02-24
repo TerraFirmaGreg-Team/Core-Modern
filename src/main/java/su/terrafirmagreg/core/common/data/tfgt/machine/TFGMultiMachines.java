@@ -605,7 +605,7 @@ public class TFGMultiMachines {
             .recipeType(TFGTRecipeTypes.SMR_GENERATOR)
             .recipeModifier(SMRGenerator2::recipeModifier, true)
             .appearanceBlock(TFGBlocks.DESH_PTFE_CASING)
-            .workableCasingModel(TFGCore.id( "block/casings/machine_casing_desh_ptfe"), GTCEu.id("block/multiblock/generator/large_steam_turbine"))
+            .workableCasingModel(TFGCore.id( "block/casings/machine_casing_desh_ptfe"), TFGCore.id("block/machines/smr"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAA", "ABA", "ABA", "AAA")
                     .aisle("AEA", "BDB", "BDB", "AEA")
