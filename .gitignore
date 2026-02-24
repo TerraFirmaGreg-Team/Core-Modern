@@ -41,5 +41,6 @@ runs
 libs
 src/dev/resources/**
 src/generated/resources/.cache/*
+src/dev/java/resources/assets/*
 src/generated/resources/assets/tfg/lang/*
 *.jar

@@ -161,6 +161,10 @@ processResources {
     }
 }
 
+processDevResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 tasks.withType(Jar).configureEach {
     manifest.attributes([
             "Specification-Title"     : "${mod_id}",
