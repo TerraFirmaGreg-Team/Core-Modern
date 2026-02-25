@@ -52,6 +52,7 @@ public class TFGItems {
             .register();
 
     public static final ItemEntry<TrowelItem> TROWEL = TFGCore.REGISTRATE.item("trowel", TrowelItem::new)
+            .properties(p -> p.stacksTo(1))
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
