@@ -6,6 +6,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.llamalad7.mixinextras.injector.ModifyReceiver;
+
 import net.dries007.tfc.common.TFCEffects;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,7 +16,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import tfchotornot.EventHandler;
 
@@ -30,6 +34,12 @@ public class EventHandlerMixin {
         if (stack.is(TFGTags.Items.InsulatingContainer)) {
             ci.cancel();
         }
+    }
+
+    // Stacked fluid containers (count > 1) don't expose FLUID_HANDLER_ITEM capability, so query as a single-item stack
+    @ModifyReceiver(method = "onPlayerTick", require = 2, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;", remap = false))
+    private static ItemStack tfg$normalizeStackCount(ItemStack stack, Capability<IFluidHandlerItem> cap) {
+        return stack.getCount() > 1 ? stack.copyWithCount(1) : stack;
     }
 
     // The first thing the mod does is check if the player has fire prot or resistance... which this should nullify.
