@@ -65,6 +65,7 @@ public class CommonProxy {
         TFGEffects.EFFECTS.register(bus);
         TFGRecipeTypes.RECIPE_TYPES.register(bus);
         TFGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
+        TFGEvents.register();
 
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);
