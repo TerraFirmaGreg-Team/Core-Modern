@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 
 import net.dries007.tfc.common.TFCEffects;
+import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -51,7 +52,7 @@ public class EventHandlerMixin {
         }
 
         // Oil floats on water O_O
-        if (TFGCore.IS_APRIL_FIRST && level.isRainingAt(player.blockPosition().above())
+        if (TFGCore.IS_APRIL_FIRST && EnvironmentHelpers.isRainingOrSnowing(level, player.blockPosition().above())
                 && (Helpers.isFluid(fluidStack.getFluid(), GT_OILS) || Helpers.isFluid(fluidStack.getFluid(), FIRMALIFE_OILS))) {
             player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40, 0));
             ci.cancel();
