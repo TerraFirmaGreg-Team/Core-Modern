@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.mixins.common.tfchotornot;
 
+import java.util.List;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -9,6 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 
 import net.dries007.tfc.common.TFCEffects;
+import net.dries007.tfc.util.Helpers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -16,9 +21,11 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import tfchotornot.EventHandler;
 
@@ -27,11 +34,28 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 @Mixin(value = EventHandler.class, remap = false)
 public class EventHandlerMixin {
 
+    @SuppressWarnings("removal")
+    private static final List<TagKey<Fluid>> OIL_FLUID_TAGS = List.of(
+            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("firmalife", "oils")),
+            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("gtceu", "oil")),
+            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("gtceu", "oil_light")),
+            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("gtceu", "oil_medium")),
+            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("gtceu", "oil_heavy")));
+    private static final boolean IS_APRIL_FIRST = java.time.LocalDate.now().getMonthValue() == 4 && java.time.LocalDate.now().getDayOfMonth() == 1;
+
     // If the fluid is inside some sort of insulating container, cancel the effect
 
     @Inject(method = "applyEffectsFluid", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$applyEffectsFluid(ItemStack stack, FluidStack fluidStack, Player player, Level level, CallbackInfo ci) {
         if (stack.is(TFGTags.Items.InsulatingContainer)) {
+            ci.cancel();
+            return;
+        }
+
+        // Oil floats on water O_O
+w        if (IS_APRIL_FIRST && level.isRainingAt(player.blockPosition().above())
+                && OIL_FLUID_TAGS.stream().anyMatch(tag -> Helpers.isFluid(fluidStack.getFluid(), tag))) {
+            player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40, 0));
             ci.cancel();
         }
     }
