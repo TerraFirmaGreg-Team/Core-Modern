@@ -1,8 +1,7 @@
 package su.terrafirmagreg.core.mixins.common.tfchotornot;
 
-import java.util.List;
-
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -29,19 +28,18 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import tfchotornot.EventHandler;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 @Mixin(value = EventHandler.class, remap = false)
 public class EventHandlerMixin {
 
+    @Unique
     @SuppressWarnings("removal")
-    private static final List<TagKey<Fluid>> OIL_FLUID_TAGS = List.of(
-            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("firmalife", "oils")),
-            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("gtceu", "oil")),
-            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("gtceu", "oil_light")),
-            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("gtceu", "oil_medium")),
-            TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("gtceu", "oil_heavy")));
-    private static final boolean IS_APRIL_FIRST = java.time.LocalDate.now().getMonthValue() == 4 && java.time.LocalDate.now().getDayOfMonth() == 1;
+    private static final TagKey<Fluid> GT_OILS = TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("tfg", "oils"));
+    @Unique
+    @SuppressWarnings("removal")
+    private static final TagKey<Fluid> FIRMALIFE_OILS = TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("firmalife", "oils"));
 
     // If the fluid is inside some sort of insulating container, cancel the effect
 
@@ -53,8 +51,8 @@ public class EventHandlerMixin {
         }
 
         // Oil floats on water O_O
-w        if (IS_APRIL_FIRST && level.isRainingAt(player.blockPosition().above())
-                && OIL_FLUID_TAGS.stream().anyMatch(tag -> Helpers.isFluid(fluidStack.getFluid(), tag))) {
+        if (TFGCore.IS_APRIL_FIRST && level.isRainingAt(player.blockPosition().above())
+                && (Helpers.isFluid(fluidStack.getFluid(), GT_OILS) || Helpers.isFluid(fluidStack.getFluid(), FIRMALIFE_OILS))) {
             player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40, 0));
             ci.cancel();
         }

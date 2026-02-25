@@ -24,6 +24,8 @@ public final class TFGCore {
     public static final String NAME = "TerraFirmaGreg-Core";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
 
+    public static final boolean IS_APRIL_FIRST = java.time.LocalDate.now().getMonthValue() == 4 && java.time.LocalDate.now().getDayOfMonth() == 1;
+
     public static MaterialRegistry MATERIAL_REGISTRY;
     public static final GTRegistrate REGISTRATE = GTRegistrate.create(TFGCore.MOD_ID);
 
