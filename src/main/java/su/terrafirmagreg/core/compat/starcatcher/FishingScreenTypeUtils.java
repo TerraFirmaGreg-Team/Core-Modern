@@ -6,7 +6,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -23,10 +22,6 @@ public class FishingScreenTypeUtils {
     private static final ResourceKey<Level> VENUS_DIMENSION = ResourceKey.create(
             net.minecraft.core.registries.Registries.DIMENSION,
             ResourceLocation.parse("ad_astra:venus"));
-
-    private static final TagKey<Biome> IS_OCEAN = TagKey.create(
-            net.minecraft.core.registries.Registries.BIOME,
-            ResourceLocation.fromNamespaceAndPath("starcatcher", "is_ocean"));
 
     private static final float CAVE_THRESHOLD = 50;
     private static final float COLD_1_THRESHOLD = 0;
