@@ -64,7 +64,7 @@ public class OxygenDistributorMachine extends SimpleTieredMachine implements IBl
             OxygenDistributorMachine.class, SimpleTieredMachine.MANAGED_FIELD_HOLDER);
 
     @Override
-    public ManagedFieldHolder getFieldHolder() {
+    public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
 

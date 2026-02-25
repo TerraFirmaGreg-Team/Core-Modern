@@ -1,8 +1,10 @@
 {
+    "block.tfg.oxygen_distributor": "Oxygen Distributor",
     "tfg.machine.oxygen_distributor.idle": "Idle",
     "tfg.machine.oxygen_distributor.size": "Size: %s blocks",
-    "tfg.machine.oxygen_distributor.consumption": "Consuming %s",
-    "tfg.machine.oxygen_distributor.find_leak": "Find Leak",
+    "tfg.machine.oxygen_distributor.consumption": "Consuming %s mB/t",
+    "tfg.machine.oxygen_distributor.find_leak": "Trace leak",
+    "tfg.machine.oxygen_distributor.fill_suit": "Refill suit oxygen",
     "tfg.machine.oxygen_distributor.status": "Status: ",
     "tfg.machine.oxygen_distributor.status.sealed": "Sealed",
     "tfg.machine.oxygen_distributor.status.breached": "Breached",
@@ -12,6 +14,7 @@
     "tfg.machine.oxygen_distributor.status.scanning": "Scanning...",
     "tfg.machine.oxygen_distributor.status.restoring": "Restoring...",
 
+    "block.tfg.space_heater": "Space Heater",
     "tfg.machine.space_heater.idle": "Idle",
     "tfg.machine.space_heater.active": "Active",
     "tfg.machine.space_heater.radius_label": "Radius:",

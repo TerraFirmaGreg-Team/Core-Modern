@@ -129,9 +129,8 @@ public class DebugPassabilityCommand {
                 "Passability cache (%d entries):", cache.size())), false);
 
         for (Map.Entry<BlockState, PassInfo> entry : cache.entrySet()) {
-            BlockState state = entry.getKey();
             PassInfo info = entry.getValue();
-            var key = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+            var key = entry.getKey();
             String suffix = info.type() == PassType.COLLISION
                     ? String.format(" faces=%s sil=%s", dirMask(info.fullFaces()), dirMask(info.fullSilhouettes()))
                     : "";
