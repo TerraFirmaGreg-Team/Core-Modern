@@ -204,6 +204,7 @@
     "client": [
         "client.afc.TapBlockEntityProviderMixin",
         "client.carryon.ClientEventsMixin",
+        "client.create.XaeroTrainMapMixin",
         "client.firmalife.FLBeehiveBlockMixin",
         "client.ftb.ClientTeamManagerImplMixin",
         "client.ftb.QuestScreenMixin",
