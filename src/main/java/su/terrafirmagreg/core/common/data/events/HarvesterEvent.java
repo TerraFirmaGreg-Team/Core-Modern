@@ -2,11 +2,13 @@ package su.terrafirmagreg.core.common.data.events;
 
 import java.util.*;
 
+import com.eerussianguy.firmalife.common.blockentities.LargePlanterBlockEntity;
+import com.eerussianguy.firmalife.common.blocks.greenhouse.LargePlanterBlock;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,18 +19,29 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.items.ItemHandlerHelper;
 
-import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.config.TFGConfig;
 
-@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
+/**
+ * Handles the harvester tool right-click event for mass harvesting blocks tagged as harvestable.
+ */
 public class HarvesterEvent {
 
     private static final TagKey<Item> HARVESTER_ITEM_TAG = TFGTags.Items.Harvester;
     private static final TagKey<Block> HARVESTABLE_BLOCK_TAG = TFGTags.Blocks.HarvesterHarvestable;
 
+    /**
+     * Handles the right-click block event for the harvester tool.
+     * <p>
+     * If the player is holding a harvester item and right-clicks a harvestable block,
+     * performs a breadth first search to harvest all connected harvestable blocks within the configured radius.
+     * <p>
+     * For LargePlanterBlock, uses the Firmalife API to harvest each slot. For other blocks, simulates a use action.
+     *
+     * @param event The right-click block event.
+     */
     @SubscribeEvent
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
 
@@ -75,7 +88,14 @@ public class HarvesterEvent {
                     current,
                     false);
 
-            InteractionResult result = state.use(level, player, hand, hit);
+            if (state.getBlock() instanceof LargePlanterBlock
+                    && level.getBlockEntity(current) instanceof LargePlanterBlockEntity planter) {
+                for (int slot = 0; slot < planter.slots(); slot++) {
+                    LargePlanterBlock.takeSlot(level, planter, slot, i -> ItemHandlerHelper.giveItemToPlayer(player, i));
+                }
+            } else {
+                state.use(level, player, hand, hit);
+            }
 
             // Iterates through connected and diagonal neighbors
             for (int dx = -1; dx <= 1; dx++) {

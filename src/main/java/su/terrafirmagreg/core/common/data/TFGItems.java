@@ -52,6 +52,7 @@ public class TFGItems {
             .register();
 
     public static final ItemEntry<TrowelItem> TROWEL = TFGCore.REGISTRATE.item("trowel", TrowelItem::new)
+            .properties(p -> p.stacksTo(1))
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
@@ -66,11 +67,11 @@ public class TFGItems {
             .register();
 
     public static final ItemEntry<ProgenitorCellsItem> PROGENITOR_CELLS = TFGCore.REGISTRATE.item("progenitor_cells", ProgenitorCellsItem::new)
-            .model(ModelUtils.layeredItemModel(TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_1"), TFGCore.id("item/fish_roe_2")))
+            .model(ModelUtils.layeredItemModel(TFGCore.id("item/progenitor_cells_0"), TFGCore.id("item/progenitor_cells_1"), TFGCore.id("item/progenitor_cells_2")))
             .register();
 
     public static final ItemEntry<FishRoeItem> FISH_ROE = TFGCore.REGISTRATE.item("fish_roe", FishRoeItem::new)
-            .model(ModelUtils.layeredItemModel(TFGCore.id("item/progenitor_cells_0"), TFGCore.id("item/progenitor_cells_1"), TFGCore.id("item/progenitor_cells_2")))
+            .model(ModelUtils.layeredItemModel(TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_1"), TFGCore.id("item/fish_roe_2")))
             .register();
 
     public static final ItemEntry<ForgeSpawnEggItem> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
