@@ -1,11 +1,21 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
+import java.util.Set;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import com.eerussianguy.firmalife.common.blockentities.HangingPlanterBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.LargePlanterBlockEntity;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.LargePlanterBlock;
 import com.google.common.collect.Sets;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.gregtechceu.gtceu.common.item.tool.behavior.HarvestCropsBehavior;
+
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.crop.ClimbingCropBlock;
 import net.dries007.tfc.common.blocks.crop.DeadCropBlock;
@@ -31,14 +41,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Set;
 
 @Mixin(value = HarvestCropsBehavior.class, remap = false)
 public abstract class HarvestCropsBehaviorMixin {
