@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -16,11 +17,14 @@ import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import net.dries007.tfc.client.TFCSounds;
+import net.dries007.tfc.common.items.Powder;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import lombok.Getter;
 
@@ -70,7 +74,7 @@ public class ArtisanType {
      * @param clickPitch The pitch of the click sound.
      */
     public ArtisanType(String name, ItemStack inputItemA, @Nullable ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture,
-            @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture, float clickVolume, float clickPitch) {
+                       @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture, float clickVolume, float clickPitch) {
         this.id = TFGCore.id(name);
         inputItems = new ArrayList<>(Stream.of(inputItemA, inputItemB).filter(Objects::nonNull).toList());
         toolTags = new ArrayList<>(Arrays.asList(toolA, toolB));
@@ -168,6 +172,19 @@ public class ArtisanType {
             0.8f,
             2.0f);
 
+    public static final ArtisanType GLASS_LENS = new ArtisanType(
+            "optical_borosilicate",
+            new ItemStack(ForgeRegistries.ITEMS.getValue(TFGCore.id("optical_borosilicate_blank"))),
+            new ItemStack(TFCItems.POWDERS.get(Powder.FLUX).get(), 8),
+            CustomTags.BUZZSAWS,
+            CustomTags.MALLETS,
+            textureLocation("blank_phenolic_board"),
+            textureLocation("printed_phenolic_board"),
+            GTSoundEntries.CUT.getMainEvent(),
+            textureLocation("phenolic_board_border_4x"),
+            0.8f,
+            2.0f);
+
     /**
      * Registers a new ArtisanType in the ARTISAN_TYPES map.
      * @param type The ArtisanType to register.
@@ -183,5 +200,6 @@ public class ArtisanType {
         initNewType(RESIN_BOARD_FOUR);
         initNewType(PHENOLIC_BOARD);
         initNewType(PHENOLIC_BOARD_FOUR);
+        initNewType(GLASS_LENS);
     }
 }
