@@ -1,5 +1,4 @@
 {
     "parent": "block/cube_all",
-    "textures": {"all": "tfg:block/coarse_dirt/entisol"},
-    "__comment__": "This file was automatically created by mcresources"
+    "textures": {"all": "tfg:block/coarse_dirt/loam"}
 }

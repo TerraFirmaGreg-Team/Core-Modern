@@ -44,6 +44,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -259,7 +260,7 @@ public final class TFGBlocks {
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_GRAY))
             .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/volcanic_ash")))
             .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
-            .simpleItem()
+            .item(BlockItem::new).build()
             .register();
 
     // New TFC Worldgen
@@ -267,21 +268,28 @@ public final class TFGBlocks {
             .initialProperties(() -> Blocks.TUFF)
             .blockstate((ctx, prov) -> prov.slabBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF), prov.blockTexture(Blocks.TUFF)))
             .tag(BlockTags.SLABS, BlockTags.MINEABLE_WITH_PICKAXE)
-            .simpleItem()
+            .item(BlockItem::new)
+            .tag(ItemTags.SLABS)
+            .build()
             .register();
 
     public static final BlockEntry<StairBlock> TUFF_STAIRS = TFGCore.REGISTRATE.block("tuff_stairs", p -> new StairBlock(Blocks.TUFF::defaultBlockState, p))
             .initialProperties(() -> Blocks.TUFF)
             .blockstate((ctx, prov) -> prov.stairsBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF)))
             .tag(BlockTags.STAIRS, BlockTags.MINEABLE_WITH_PICKAXE)
-            .simpleItem()
+            .item(BlockItem::new)
+            .tag(ItemTags.STAIRS)
+            .build()
             .register();
 
     public static final BlockEntry<WallBlock> TUFF_WALL = TFGCore.REGISTRATE.block("tuff_wall", WallBlock::new)
             .initialProperties(() -> Blocks.TUFF)
             .blockstate((ctx, prov) -> prov.wallBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF)))
             .tag(BlockTags.WALLS, BlockTags.MINEABLE_WITH_PICKAXE)
-            .simpleItem()
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.wallInventory("tuff_wall", ResourceLocation.fromNamespaceAndPath("minecraft", "block/tuff")))
+            .tag(ItemTags.WALLS)
+            .build()
             .register();
 
     public static final BlockEntry<Block> TUFF_GRAVEL = TFGCore.REGISTRATE.block("tuff_gravel", Block::new)
@@ -289,35 +297,45 @@ public final class TFGBlocks {
             .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/tuff_gravel")))
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_GRAY))
             .tag(Tags.Blocks.GRAVEL, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .simpleItem()
+            .item(BlockItem::new)
+            .tag(Tags.Items.GRAVEL)
+            .build()
             .register();
 
     public static final BlockEntry<Block> COARSE_SILTY_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_silty_loam_dirt", Block::new)
             .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get())
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/coarse_dirt/andisol")))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .simpleItem()
+            .item(BlockItem::new)
+            .tag(ItemTags.DIRT)
+            .build()
             .register();
 
     public static final BlockEntry<Block> COARSE_SANDY_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_sandy_loam_dirt", Block::new)
             .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get())
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/coarse_dirt/aridisol")))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .simpleItem()
+            .item(BlockItem::new)
+            .tag(ItemTags.DIRT)
+            .build()
             .register();
 
     public static final BlockEntry<Block> COARSE_SILT_DIRT = TFGCore.REGISTRATE.block("coarse_silt_dirt", Block::new)
             .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get())
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/coarse_dirt/fluvisol")))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .simpleItem()
+            .item(BlockItem::new)
+            .tag(ItemTags.DIRT)
+            .build()
             .register();
 
     public static final BlockEntry<Block> COARSE_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_loam_dirt", Block::new)
             .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get())
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/coarse_dirt/entisol")))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .simpleItem()
+            .item(BlockItem::new)
+            .tag(ItemTags.DIRT)
+            .build()
             .register();
 
     public static final BlockEntry<Block> HARDENED_CLAY = TFGCore.REGISTRATE.block("hardened_clay", Block::new)
@@ -327,9 +345,9 @@ public final class TFGBlocks {
                     .sound(SoundType.PACKED_MUD)
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops())
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/hardened_clay")))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .simpleItem()
+            .item(BlockItem::new).build()
             .register();
 
     public static final BlockEntry<Block> HALITE = TFGCore.REGISTRATE.block("halite", Block::new)
@@ -338,9 +356,10 @@ public final class TFGBlocks {
                     .strength(6.0F)
                     .sound(SoundType.DEEPSLATE)
                     .requiresCorrectToolForDrops())
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/halite")))
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
-            .simpleItem().register();
+            .item(BlockItem::new).build()
+            .register();
 
     ////#region Martian sand piles and layer blocks, in order of color
 

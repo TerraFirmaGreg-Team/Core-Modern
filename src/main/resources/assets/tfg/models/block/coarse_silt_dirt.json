@@ -1,8 +1,4 @@
 {
-    "parent": "minecraft:block/cube_column",
-    "textures": {
-        "side": "tfg:block/coarse_dirt/fluvisol",
-        "end": "tfg:block/coarse_dirt/fluvisol_top"
-    },
-    "__comment__": "This file was automatically created by mcresources"
+    "parent": "block/cube_all",
+    "textures": {"all": "tfg:block/coarse_dirt/silt"}
 }
