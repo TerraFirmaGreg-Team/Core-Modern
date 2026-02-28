@@ -676,6 +676,10 @@ public final class TFGBlocks {
             ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_egh")),
             SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, false);
 
+    public static final BlockEntry<ActiveBlock> PRESSURE_CASING = createActiveCasingBlock("casings/sterling_silver_casing2",
+            ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/sterling_silver_casing2")),
+            SoundType.METAL, 6, 5, MapColor.COLOR_LIGHT_GRAY, false);
+
     public static final BlockEntry<ActiveCardinalBlock> STERILIZING_PIPE_CASING = TFGCore.REGISTRATE.block("casings/machine_casing_sterilizing_pipes", ActiveCardinalBlock::new)
             .properties(p -> p.sound(SoundType.COPPER).strength(5, 6).mapColor(MapColor.COLOR_BROWN))
             .addLayer(() -> RenderType::cutout)
