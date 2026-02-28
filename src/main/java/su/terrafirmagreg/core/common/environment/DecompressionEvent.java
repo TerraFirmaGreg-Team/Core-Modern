@@ -179,19 +179,25 @@ public class DecompressionEvent {
             player.hurtMarked = true;
 
             // Force prone if close enough to fit through a 1-block gap
+
+            // Clientside: Force pose, teleport up to keep eyes at same level, prevent camera lerping
+            // Applied atomically on a camera tick to prevent jitter
+            // Serverside: Force pose, teleport up, refresh dimension and position to new values
+            // Doesn't use teleportTo because that breaks atomity by sending a separate packet.
+
+            // Teleport and lerp prevention only happens if the player wasn't already prone
             if (distance < PRONE_DISTANCE && crawlingPlayers.add(player)) {
 
-                // Clientside: Force pose, teleport up to keep eyes at same level, prevent camera lerping
-                // Applied atomically on a camera tick to prevent jitter
+                boolean alreadyProne = player.getPose() == Pose.SWIMMING;
+                player.setForcedPose(Pose.SWIMMING);
                 TFGNetworkHandler.sendForcedPose(player, Pose.SWIMMING);
 
-                // Serverside: Force pose, teleport up, refresh dimension and position to new values
-                // Doesn't use teleportTo because that breaks atomity by sending a separate packet.
-                player.setForcedPose(Pose.SWIMMING);
-                double newY = player.getY() + ForcedPosePacket.SWIMMING_EYE_SHIFT;
-                player.absMoveTo(player.getX(), newY, player.getZ(), player.getYRot(), player.getXRot());
-                entity.refreshDimensions();
-                player.connection.resetPosition();
+                if (!alreadyProne) {
+                    double newY = player.getY() + ForcedPosePacket.SWIMMING_EYE_SHIFT;
+                    player.absMoveTo(player.getX(), newY, player.getZ(), player.getYRot(), player.getXRot());
+                    entity.refreshDimensions();
+                    player.connection.resetPosition();
+                }
             }
         }
     }

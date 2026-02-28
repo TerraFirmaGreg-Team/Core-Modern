@@ -41,9 +41,11 @@ public class ForcedPosePacket {
 
     public static void handle(ForcedPosePacket pkt, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if (Minecraft.getInstance().player == null)
+            var player = Minecraft.getInstance().player;
+            if (player == null)
                 return;
-            float yShift = pkt.pose == Pose.SWIMMING ? SWIMMING_EYE_SHIFT : 0f;
+            boolean alreadyProne = player.getPose() == Pose.SWIMMING;
+            float yShift = pkt.pose == Pose.SWIMMING && !alreadyProne ? SWIMMING_EYE_SHIFT : 0f;
             PoseSnapHelper.pendingSnap = new PoseSnapHelper.PoseSnap(pkt.pose, yShift);
         });
         ctx.get().setPacketHandled(true);
