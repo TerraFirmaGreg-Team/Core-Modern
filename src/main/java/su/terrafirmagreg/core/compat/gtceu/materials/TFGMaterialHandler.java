@@ -29,7 +29,6 @@ import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Metal;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -38,6 +37,7 @@ import earth.terrarium.adastra.common.registry.ModBlocks;
 import earth.terrarium.adastra.common.registry.ModItems;
 import electrolyte.greate.registry.GreateMaterials;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.TFGHelpers;
 
 public final class TFGMaterialHandler {
@@ -165,7 +165,7 @@ public final class TFGMaterialHandler {
         //Holder Materials
         //    Used to allow us to give material components to non-material items
         final Supplier<Item> nitrocellulose_item = () -> Objects.requireNonNull(ForgeRegistries.ITEMS
-                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "nitrocellulose"))).asItem();
+                .getValue(TFGCore.id("nitrocellulose"))).asItem();
 
         var nitrocellulose = TFGHelpers.getMaterial("nitrocellulose");
         if (nitrocellulose != null) {
@@ -175,7 +175,7 @@ public final class TFGMaterialHandler {
         }
 
         final Supplier<Item> celluloseM_item = () -> Objects.requireNonNull(ForgeRegistries.ITEMS
-                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "cellulose_matrix"))).asItem();
+                .getValue(TFGCore.id("cellulose_matrix"))).asItem();
 
         var cellulose_matrix = TFGHelpers.getMaterial("cellulose_matrix");
         if (cellulose_matrix != null) {
@@ -185,9 +185,9 @@ public final class TFGMaterialHandler {
         }
 
         final Supplier<Item> polycaprolactam_fabric_item = () -> Objects.requireNonNull(ForgeRegistries.ITEMS
-                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "polycaprolactam_fabric"))).asItem();
+                .getValue(TFGCore.id("polycaprolactam_fabric"))).asItem();
         final Supplier<Item> polycaprolactam_string_item = () -> Objects.requireNonNull(ForgeRegistries.ITEMS
-                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "polycaprolactam_string"))).asItem();
+                .getValue(TFGCore.id("polycaprolactam_string"))).asItem();
 
         var polycaprolactam = TFGHelpers.getMaterial("tfg_polycaprolactam");
         if (polycaprolactam != null) {

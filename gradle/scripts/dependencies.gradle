@@ -16,7 +16,6 @@ dependencies {
 
     modCompileOnly "com.tterrag.registrate:Registrate:MC1.20-1.3.11"
 
-    modImplementation "maven.modrinth:embeddium:0.3.31+mc1.20.1"
     modImplementation "maven.modrinth:ferrite-core:DG5Fn9Sz"
     modImplementation "maven.modrinth:architectury-api:9.2.14+forge"
 
@@ -90,8 +89,8 @@ dependencies {
     // FTB
     modImplementation ("curse.maven:ftb-teams-forge-404468:6130786") { transitive = false }
     modImplementation ("curse.maven:ftb-library-forge-404465:6164053") { transitive = false }
-    modImplementation ("curse.maven:ftb-quests-forge-289412:6431737") { transitive = false }
     modImplementation ("curse.maven:ftb-chunks-forge-314906:6431735") { transitive = false }
+    modCompileOnly ("curse.maven:ftb-quests-forge-289412:6431737") { transitive = false }
 
     // Jade
     modImplementation "curse.maven:jade-324717:6271651"
@@ -116,15 +115,15 @@ dependencies {
     modImplementation ("curse.maven:grappling-hook-mod-reforged-1166811:6028357") { transitive = false }
 
     // Hang Glider
-    modImplementation "maven.modrinth:puzzles-lib:${puzzleslib_version}"
-    modImplementation "maven.modrinth:hang-glider:${hangglider_version}"
+    modCompileOnly "maven.modrinth:puzzles-lib:${puzzleslib_version}"
+    modCompileOnly "maven.modrinth:hang-glider:${hangglider_version}"
 
     // Wan's ancient beasts
     modImplementation "curse.maven:wans-ancient-beasts-1108604:7552366"
     modImplementation "curse.maven:geckolib-388172:7553267"
 
     // Immersive Aircraft
-    modImplementation "curse.maven:immersive-aircraft-666014:6742170"
+    modCompileOnly "curse.maven:immersive-aircraft-666014:6742170"
 
     //Create Liquid Fuel
     modImplementation "curse.maven:create-liquid-fuel-840734:5217310"
@@ -136,17 +135,17 @@ dependencies {
     modImplementation "curse.maven:create-picky-waterwheels-866839:6932328"
 
     //Panda's Falling Trees
-    modImplementation "curse.maven:pandas-falling-trees-880630:5653236"
-    modImplementation "curse.maven:pandalib-975460:5653131"
+    modCompileOnly "curse.maven:pandas-falling-trees-880630:5653236"
+    modCompileOnly "curse.maven:pandalib-975460:5653131"
 
     // ArborFirmaCraft
     modImplementation "curse.maven:arborfirmacraft-877545:7200580"
 
     // TFC Improved Badlands
-    modImplementation "curse.maven:tfc-improved-badlands-969207:5126426"
+    modCompileOnly "curse.maven:tfc-improved-badlands-969207:5126426"
 
     // TFC Water Flasks
-    modImplementation "curse.maven:water-flasks-354353:7056478"
+    modCompileOnly "curse.maven:water-flasks-354353:7056478"
 
     // Sacks and such
     modImplementation "curse.maven:sacks-n-such-695822:6965231"
