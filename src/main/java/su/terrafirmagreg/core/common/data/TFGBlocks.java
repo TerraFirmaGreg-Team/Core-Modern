@@ -59,6 +59,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -252,6 +253,86 @@ public final class TFGBlocks {
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(item.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))))));
     }
+
+    // New TFC Worldgen
+    public static final BlockEntry<SlabBlock> TUFF_SLAB = TFGCore.REGISTRATE.block("tuff_slab", SlabBlock::new)
+            .initialProperties(() -> Blocks.TUFF)
+            .blockstate((ctx, prov) -> prov.slabBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF), prov.blockTexture(Blocks.TUFF)))
+            .tag(BlockTags.SLABS, BlockTags.MINEABLE_WITH_PICKAXE)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<StairBlock> TUFF_STAIRS = TFGCore.REGISTRATE.block("tuff_stairs", p -> new StairBlock(Blocks.TUFF::defaultBlockState, p))
+            .initialProperties(() -> Blocks.TUFF)
+            .blockstate((ctx, prov) -> prov.stairsBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF)))
+            .tag(BlockTags.STAIRS, BlockTags.MINEABLE_WITH_PICKAXE)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<WallBlock> TUFF_WALL = TFGCore.REGISTRATE.block("tuff_wall", WallBlock::new)
+            .initialProperties(() -> Blocks.TUFF)
+            .blockstate((ctx, prov) -> prov.wallBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF)))
+            .tag(BlockTags.WALLS, BlockTags.MINEABLE_WITH_PICKAXE)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> TUFF_GRAVEL = TFGCore.REGISTRATE.block("tuff_gravel", Block::new)
+            .initialProperties(() -> Blocks.GRAVEL)
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/tuff_gravel")))
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_GRAY))
+            .tag(Tags.Blocks.GRAVEL, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> COARSE_SILTY_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_silty_loam_dirt", Block::new)
+            .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get())
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/coarse_dirt/andisol")))
+            .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> COARSE_SANDY_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_sandy_loam_dirt", Block::new)
+            .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get())
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/coarse_dirt/aridisol")))
+            .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> COARSE_SILT_DIRT = TFGCore.REGISTRATE.block("coarse_silt_dirt", Block::new)
+            .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get())
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/coarse_dirt/fluvisol")))
+            .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> COARSE_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_loam_dirt", Block::new)
+            .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get())
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/coarse_dirt/entisol")))
+            .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> HARDENED_CLAY = TFGCore.REGISTRATE.block("hardened_clay", Block::new)
+            .properties(p -> p
+                    .mapColor(MapColor.TERRACOTTA_ORANGE)
+                    .strength(7.0F)
+                    .sound(SoundType.PACKED_MUD)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops())
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/hardened_clay")))
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_SHOVEL)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> HALITE = TFGCore.REGISTRATE.block("halite", Block::new)
+            .properties(p -> p
+                    .mapColor(MapColor.QUARTZ)
+                    .strength(6.0F)
+                    .sound(SoundType.DEEPSLATE)
+                    .requiresCorrectToolForDrops())
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/halite")))
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .simpleItem().register();
 
     ////#region Martian sand piles and layer blocks, in order of color
 
@@ -563,64 +644,6 @@ public final class TFGBlocks {
 
     public static final BlockEntry<Block> STAINLESS_EVAPORATION_CASING = createCasingBlock("casings/machine_casing_stainless_evaporation",
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_stainless_evaporation")));
-    // New TFC Worldgen
-    public static final RegistryObject<SlabBlock> TUFF_SLAB = register("tuff_slab",
-            () -> new SlabBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_GRAY)
-                    .sound(SoundType.TUFF)
-                    .strength(1.5f, 10)
-                    .requiresCorrectToolForDrops()));
-
-    public static final RegistryObject<StairBlock> TUFF_STAIRS = register("tuff_stairs",
-            () -> new StairBlock(Blocks.TUFF::defaultBlockState,
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.TERRACOTTA_GRAY)
-                            .sound(SoundType.TUFF)
-                            .strength(1.5f, 10)
-                            .requiresCorrectToolForDrops()));
-
-    public static final RegistryObject<WallBlock> TUFF_WALL = register("tuff_wall",
-            () -> new WallBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_GRAY)
-                    .sound(SoundType.TUFF)
-                    .strength(1.5f, 10)
-                    .requiresCorrectToolForDrops()));
-
-    public static final RegistryObject<Block> TUFF_GRAVEL = register("tuff_gravel",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_GRAY)
-                    .sound(SoundType.GRAVEL)
-                    .instrument(NoteBlockInstrument.SNARE)
-                    .strength(1.6f, 5)));
-
-    public static final RegistryObject<Block> COARSE_SILTY_LOAM_DIRT = register("coarse_silty_loam_dirt",
-            () -> new Block(BlockBehaviour.Properties.copy(TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get())));
-
-    public static final RegistryObject<Block> COARSE_SANDY_LOAM_DIRT = register("coarse_sandy_loam_dirt",
-            () -> new Block(BlockBehaviour.Properties.copy(TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get())));
-
-    public static final RegistryObject<Block> COARSE_SILT_DIRT = register("coarse_silt_dirt",
-            () -> new Block(BlockBehaviour.Properties.copy(TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get())));
-
-    public static final RegistryObject<Block> COARSE_LOAM_DIRT = register("coarse_loam_dirt",
-            () -> new Block(BlockBehaviour.Properties.copy(TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get())));
-
-    public static final RegistryObject<Block> HARDENED_CLAY = register("hardened_clay",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.TERRACOTTA_ORANGE)
-                    .strength(7.0F)
-                    .sound(SoundType.PACKED_MUD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .requiresCorrectToolForDrops()));
-
-    public static final RegistryObject<Block> HALITE = register("halite",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.QUARTZ)
-                    .strength(6.0F)
-                    .sound(SoundType.DEEPSLATE)
-                    .requiresCorrectToolForDrops()));
-
-    // These are done separately to avoid cyclic references
 
     public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("casings/machine_casing_blue_solar_panel",
             (ctx, prov) -> prov.models().cubeBottomTop(ctx.getName(), GTCEu.id("block/casings/steam/steel/side"), GTCEu.id("block/casings/steam/steel/bottom"),
