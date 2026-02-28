@@ -969,5 +969,30 @@ public class TFGMultiMachines {
                             .or(Predicates.air()))
                     .build())
             .register();
+
+    // I made this beautiful and well-designed multiblock that looks aesthetically perfect especially for Tom
+    public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR_MULTI = REGISTRATE
+            .multiblock("oxygen_distributor_200",
+                    holder -> new OxygenDistributorMultiblock(holder, 200_000))
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
+            .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
+            .workableCasingModel(
+                    GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
+                    GTCEu.id("block/multiblock/implosion_compressor"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("CCC", " D ", "   ")
+                    .aisle("CCC", "DDD", " F ")
+                    .aisle("CXC", " D ", "   ")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('C', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where('D', Predicates.blocks(GTBlocks.CASING_STEEL_TURBINE.get()))
+                    .where('F', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
+                    .where(" ", Predicates.air())
+                    .build())
+            .register();
     // spotless:on
 }

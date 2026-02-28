@@ -209,8 +209,8 @@ public class TFGMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .register();
 
-    public static final MachineDefinition OXYGEN_DISTRIBUTOR = REGISTRATE.machine("oxygen_distributor",
-            (holder) -> new OxygenDistributorMachine(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction, 500_000))
+    public static final MachineDefinition OXYGEN_DISTRIBUTOR_SINGLE = REGISTRATE.machine("oxygen_distributor_10",
+            (holder) -> new OxygenDistributorSingleblock(holder, GTValues.MV, GTMachineUtils.defaultTankSizeFunction, 10_000))
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
             .tier(GTValues.MV)
             .register();
