@@ -254,6 +254,14 @@ public final class TFGBlocks {
                         .add(LootItem.lootTableItem(item.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))))));
     }
 
+    public static final BlockEntry<Block> VOLCANIC_ASH = TFGCore.REGISTRATE.block("volcanic_ash", Block::new)
+            .initialProperties(TFCBlocks.SAND.get(SandBlockType.RED)::get)
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_GRAY))
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/volcanic_ash")))
+            .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
+            .simpleItem()
+            .register();
+
     // New TFC Worldgen
     public static final BlockEntry<SlabBlock> TUFF_SLAB = TFGCore.REGISTRATE.block("tuff_slab", SlabBlock::new)
             .initialProperties(() -> Blocks.TUFF)
@@ -351,7 +359,7 @@ public final class TFGBlocks {
             .properties(p -> p.noOcclusion().mapColor(MapColor.NONE))
             .blockstate(ModelUtils.generateSandLayersFromBlock(TFGCore.id("block/volcanic_ash")))
             .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
-            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/volcanic_ash"))).build()
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("tfc", "item/powder/tetrahedrite"))).build()
             .register();
 
     public static final BlockEntry<SandLayerBlock> BLACK_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/black_sand",
