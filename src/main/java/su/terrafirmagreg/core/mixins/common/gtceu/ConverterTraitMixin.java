@@ -35,7 +35,6 @@ public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
             if (d == frontFacing)
                 continue;
             BlockState state = machine.getLevel().getBlockState(machine.getPos().relative(d));
-            Block PORTABLE_ENERGY_INTERFACE = BuiltInRegistries.BLOCK.get(ResourceLocation.tryBuild("createaddition", "portable_energy_interface"));
             var targetEnergyContainer = GTCapabilityHelper.getForgeEnergy(machine.getLevel(),
                     machine.getPos().relative(d), null);
             if (targetEnergyContainer != null && targetEnergyContainer.canExtract() && state.is(PORTABLE_ENERGY_INTERFACE)) {
