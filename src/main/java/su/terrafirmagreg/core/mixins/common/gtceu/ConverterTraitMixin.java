@@ -12,9 +12,10 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.common.machine.trait.ConverterTrait;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 @Mixin(ConverterTrait.class)
 public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
@@ -24,7 +25,7 @@ public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
     }
 
     @Inject(method = "serverTick", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableEnergyContainer;serverTick()V"), remap = false)
-    private void tryFeExtract(CallbackInfo ci) {
+    private void tfg$tryFeExtract(CallbackInfo ci) {
         var frontFacing = machine.getFrontFacing();
         var thisEnergyContainer = GTCapabilityHelper.getForgeEnergy(machine.getLevel(),
                 machine.getPos(), null);
@@ -32,10 +33,10 @@ public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
             if (d == frontFacing)
                 continue;
             BlockState state = machine.getLevel().getBlockState(machine.getPos().relative(d));
-            ResourceLocation id = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+            Block PORTABLE_ENERGY_INTERFACE = BuiltInRegistries.BLOCK.get(ResourceLocation.tryBuild("createaddition", "portable_energy_interface"));
             var targetEnergyContainer = GTCapabilityHelper.getForgeEnergy(machine.getLevel(),
                     machine.getPos().relative(d), null);
-            if (targetEnergyContainer != null && targetEnergyContainer.canExtract() && id.getPath().contains("portable_energy_interface")) {
+            if (targetEnergyContainer != null && targetEnergyContainer.canExtract() && state.is(PORTABLE_ENERGY_INTERFACE)) {
                 int energyExtracted = targetEnergyContainer.extractEnergy(
                         thisEnergyContainer.receiveEnergy(
                                 FeCompat.toFe(
