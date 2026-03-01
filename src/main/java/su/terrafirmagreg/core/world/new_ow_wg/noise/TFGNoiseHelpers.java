@@ -65,4 +65,32 @@ public class TFGNoiseHelpers {
     public static Noise2D stretchX(Noise2D noise, double stretch) {
         return (x, z) -> noise.noise(x / stretch, z);
     }
+
+    /**
+     * Sum of a noise and a constant.
+     */
+    public static Noise2D addConstant(Noise2D noise, double constant) {
+        return (x, y) -> noise.noise(x, y) + constant;
+    }
+
+    /**
+     * Used to generate varying-height cliffs starting at various noise values
+     *
+     * @param compare value above which cliffs should be added
+     * @param addend  cliff height noise
+     */
+    public static Noise2D cliffMap(Noise2D thisNoise, Noise2D compare, Noise2D addend) {
+        return (x, z) -> {
+            final double noise = thisNoise.noise(x, z);
+            if (noise > compare.noise(x, z)) {
+                return noise + addend.noise(x, z);
+            } else {
+                return noise;
+            }
+        };
+    }
+
+    public static double triangle(double amplitude, double midpoint, double frequency, double value) {
+        return midpoint + amplitude * (Math.abs(4.0 * frequency * value + 1.0 - 4.0 * Mth.floor(frequency * value + 0.75)) - 1.0);
+    }
 }

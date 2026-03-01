@@ -16,6 +16,7 @@ import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
 
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
+import su.terrafirmagreg.core.world.new_ow_wg.layers.TFGIceSheetEdgeLayer;
 import su.terrafirmagreg.core.world.new_ow_wg.layers.TFGMoreShoresLayer;
 import su.terrafirmagreg.core.world.new_ow_wg.layers.TFGRegionEdgeBiomeLayer;
 import su.terrafirmagreg.core.world.new_ow_wg.layers.TFGShoreLayer;
@@ -28,97 +29,28 @@ public class TFGLayers {
     private static final BiomeExtension[] BIOME_LAYERS;
     private static final MutableInt BIOME_LAYER_INDEX;
 
-    public static final int DEEP_OCEAN_TRENCH;
-    public static final int DEEP_OCEAN;
-    public static final int OCEAN;
-    public static final int OCEAN_REEF;
-
-    public static final int PLAINS;
-    public static final int HILLS;
-    public static final int LOWLANDS;
-    public static final int SALT_MARSH;
-    public static final int LOW_CANYONS;
-
-    public static final int ROLLING_HILLS;
-    public static final int HIGHLANDS;
-    public static final int BADLANDS;
-    public static final int PLATEAU;
-    public static final int PLATEAU_WIDE;
-    public static final int CANYONS;
-
-    public static final int MOUNTAINS;
-    public static final int OLD_MOUNTAINS;
-    public static final int OCEANIC_MOUNTAINS;
-    public static final int VOLCANIC_MOUNTAINS;
-    public static final int VOLCANIC_OCEANIC_MOUNTAINS;
-
-    public static final int GUANO_ISLAND;
-    public static final int SHORE;
-    public static final int TIDAL_FLATS;
-    public static final int SEA_STACKS;
-    public static final int TERRACE_UPPER;
-    public static final int TERRACE_LOWER;
-    public static final int SETBACK_CLIFFS;
-    public static final int COASTAL_DUNES;
-    public static final int ROCKY_SHORES;
-    public static final int EMBAYMENTS;
-
-    public static final int LAKE;
-    public static final int RIVER;
-
-    public static final int MOUNTAIN_LAKE;
-    public static final int OLD_MOUNTAIN_LAKE;
-    public static final int OCEANIC_MOUNTAIN_LAKE;
-    public static final int VOLCANIC_MOUNTAIN_LAKE;
-    public static final int VOLCANIC_OCEANIC_MOUNTAIN_LAKE;
-    public static final int PLATEAU_LAKE;
-
-    public static final int MUD_FLATS;
-    public static final int SALT_FLATS;
-    public static final int DUNE_SEA;
-    public static final int GRASSY_DUNES;
-    public static final int WHORLED_CANYONS;
-    public static final int STAIR_STEP_CANYONS;
-    public static final int MESAS;
-    public static final int BUTTES;
-    public static final int HOODOOS;
-    public static final int ROCKY_PLATEAU;
-
-    public static final int TOWER_KARST_PLAINS;
-    public static final int TOWER_KARST_CANYONS;
-    public static final int TOWER_KARST_HILLS;
-    public static final int TOWER_KARST_HIGHLANDS;
-    public static final int TOWER_KARST_LAKE;
-    public static final int TOWER_KARST_BAY;
-
-    public static final int BURREN_PLATEAU;
-    public static final int BURREN_BADLANDS;
-    public static final int BURREN_BADLANDS_TALL;
-    public static final int BURREN_PLAINS;
-    public static final int BURREN_ROCHE_MOUTONEE;
-
-    public static final int SHILIN_PLAINS;
-    public static final int SHILIN_CANYONS;
-    public static final int SHILIN_HILLS;
-    public static final int SHILIN_HIGHLANDS;
-    public static final int SHILIN_PLATEAU;
-
-    public static final int DOLINE_PLAINS;
-    public static final int DOLINE_HILLS;
-    public static final int DOLINE_ROLLING_HILLS;
-    public static final int DOLINE_HIGHLANDS;
-    public static final int DOLINE_PLATEAU;
-    public static final int DOLINE_CANYONS;
-
-    public static final int CENOTE_PLAINS;
-    public static final int CENOTE_HILLS;
-    public static final int CENOTE_ROLLING_HILLS;
-    public static final int CENOTE_CANYONS;
-    public static final int CENOTE_HIGHLANDS;
-    public static final int CENOTE_PLATEAU;
-
-    public static final int EXTREME_DOLINE_PLATEAU;
-    public static final int EXTREME_DOLINE_MOUNTAINS;
+    public static final int DEEP_OCEAN_TRENCH, DEEP_OCEAN, OCEAN, OCEAN_REEF,
+            PLAINS, HILLS, LOWLANDS, SALT_MARSH, LOW_CANYONS,
+            ROLLING_HILLS, HIGHLANDS, BADLANDS, PLATEAU, PLATEAU_WIDE, CANYONS,
+            MOUNTAINS, OLD_MOUNTAINS, OCEANIC_MOUNTAINS, VOLCANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS,
+            GUANO_ISLAND, SHORE, TIDAL_FLATS, SEA_STACKS, TERRACE_UPPER, TERRACE_LOWER, SETBACK_CLIFFS, COASTAL_DUNES, ROCKY_SHORES, EMBAYMENTS,
+            LAKE, RIVER,
+            MOUNTAIN_LAKE, OLD_MOUNTAIN_LAKE, OCEANIC_MOUNTAIN_LAKE, VOLCANIC_MOUNTAIN_LAKE, VOLCANIC_OCEANIC_MOUNTAIN_LAKE, PLATEAU_LAKE,
+            MUD_FLATS, SALT_FLATS, DUNE_SEA, GRASSY_DUNES,
+            WHORLED_CANYONS, STAIR_STEP_CANYONS, MESAS, BUTTES, HOODOOS, ROCKY_PLATEAU,
+            TOWER_KARST_PLAINS, TOWER_KARST_CANYONS, TOWER_KARST_HILLS, TOWER_KARST_HIGHLANDS, TOWER_KARST_LAKE, TOWER_KARST_BAY,
+            BURREN_PLATEAU, BURREN_BADLANDS, BURREN_BADLANDS_TALL, BURREN_PLAINS, BURREN_ROCHE_MOUTONEE,
+            SHILIN_PLAINS, SHILIN_CANYONS, SHILIN_HILLS, SHILIN_HIGHLANDS, SHILIN_PLATEAU,
+            DOLINE_PLAINS, DOLINE_HILLS, DOLINE_ROLLING_HILLS, DOLINE_HIGHLANDS, DOLINE_PLATEAU, DOLINE_CANYONS,
+            CENOTE_PLAINS, CENOTE_HILLS, CENOTE_ROLLING_HILLS, CENOTE_CANYONS, CENOTE_HIGHLANDS, CENOTE_PLATEAU,
+            EXTREME_DOLINE_PLATEAU, EXTREME_DOLINE_MOUNTAINS,
+            // volcanoes
+            ICE_SHEET, ICE_SHEET_MOUNTAINS, ICE_SHEET_OCEANIC_MOUNTAINS, /*ICE_SHEET_SHIELD_VOLCANO,*/ ICE_SHEET_TUYAS, SUBGLACIAL_LAKE,
+            ICE_SHEET_EDGE, ICE_SHEET_TUYAS_EDGE, ICE_SHEET_MOUNTAINS_EDGE, ICE_SHEET_OCEANIC_MOUNTAINS_EDGE, MELTWATER_LAKE, ICE_SHEET_OCEANIC, ICE_SHEET_SHORE,
+            GLACIATED_MOUNTAINS, GLACIATED_OCEANIC_MOUNTAINS, //GLACIATED_SHIELD_VOLCANO,
+            GLACIALLY_CARVED_MOUNTAINS, GLACIALLY_CARVED_OCEANIC_MOUNTAINS,
+            DRUMLINS, TUYAS,
+            KNOB_AND_KETTLE, PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, STONE_CIRCLES;
 
     static {
         BIOME_LAYERS = new BiomeExtension[128];
@@ -215,6 +147,36 @@ public class TFGLayers {
 
         EXTREME_DOLINE_PLATEAU = TFGLayers.register(() -> TFGBiomes.EXTREME_DOLINE_PLATEAU);
         EXTREME_DOLINE_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.EXTREME_DOLINE_MOUNTAINS);
+
+        ICE_SHEET = TFGLayers.register(() -> TFGBiomes.ICE_SHEET);
+        ICE_SHEET_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_MOUNTAINS);
+        ICE_SHEET_OCEANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_OCEANIC_MOUNTAINS);
+        //ICE_SHEET_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_SHIELD_VOLCANO);
+        ICE_SHEET_TUYAS = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_TUYAS);
+        SUBGLACIAL_LAKE = TFGLayers.register(() -> TFGBiomes.SUBGLACIAL_LAKE);
+
+        ICE_SHEET_EDGE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_EDGE);
+        ICE_SHEET_TUYAS_EDGE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_TUYAS_EDGE);
+        ICE_SHEET_MOUNTAINS_EDGE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_MOUNTAINS_EDGE);
+        ICE_SHEET_OCEANIC_MOUNTAINS_EDGE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_OCEANIC_MOUNTAINS_EDGE);
+        MELTWATER_LAKE = TFGLayers.register(() -> TFGBiomes.MELTWATER_LAKE);
+        ICE_SHEET_OCEANIC = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_OCEANIC);
+        ICE_SHEET_SHORE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_SHORE);
+
+        GLACIATED_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.GLACIATED_MOUNTAINS);
+        GLACIATED_OCEANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.GLACIATED_OCEANIC_MOUNTAINS);
+        //GLACIATED_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.GLACIATED_SHIELD_VOLCANO);
+
+        GLACIALLY_CARVED_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.GLACIALLY_CARVED_MOUNTAINS);
+        GLACIALLY_CARVED_OCEANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
+
+        DRUMLINS = TFGLayers.register(() -> TFGBiomes.DRUMLINS);
+        TUYAS = TFGLayers.register(() -> TFGBiomes.TUYAS);
+
+        KNOB_AND_KETTLE = TFGLayers.register(() -> TFGBiomes.KNOB_AND_KETTLE);
+        PATTERNED_GROUND = TFGLayers.register(() -> TFGBiomes.PATTERNED_GROUND);
+        INVERTED_PATTERNED_GROUND = TFGLayers.register(() -> TFGBiomes.INVERTED_PATTERNED_GROUND);
+        STONE_CIRCLES = TFGLayers.register(() -> TFGBiomes.STONE_CIRCLES);
     }
 
     public static BiomeExtension getFromLayerId(int id) {
@@ -245,8 +207,7 @@ public class TFGLayers {
     }
 
     public static boolean isFlatIceSheet(int value) {
-        return false;
-        //return value == ICE_SHEET || value == ICE_SHEET_TUYAS || value == SUBGLACIAL_LAKE;
+        return value == ICE_SHEET || value == ICE_SHEET_TUYAS || value == SUBGLACIAL_LAKE;
     }
 
     public static boolean isMountains(int value) {
@@ -259,7 +220,8 @@ public class TFGLayers {
 
     public static boolean hasShore(int value) {
         return value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS
-                && value != TOWER_KARST_BAY //&& value != SUNKEN_SHIELD_VOLCANO && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
+                && value != TOWER_KARST_BAY /*&& value != SUNKEN_SHIELD_VOLCANO*/ && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS
+                && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
                 //&& value != ICE_SHEET_SHIELD_VOLCANO && value != GLACIATED_SHIELD_VOLCANO
                 && value != GUANO_ISLAND;
     }
@@ -285,18 +247,15 @@ public class TFGLayers {
         //		{
         //			return OLD_SHIELD_VOLCANO_SHORE;
         //		}
-        //		if (isFlatIceSheet(value) || value == ICE_SHEET_EDGE || value == ICE_SHEET_OCEANIC)
-        //		{
-        //			return ICE_SHEET_SHORE;
-        //		}
-        //		if (value == ICE_SHEET_OCEANIC_MOUNTAINS)
-        //		{
-        //			return ICE_SHEET_OCEANIC_MOUNTAINS_EDGE;
-        //		}
-        //		if (value == GLACIALLY_CARVED_OCEANIC_MOUNTAINS || value == GLACIALLY_CARVED_MOUNTAINS)
-        //		{
-        //			return GLACIATED_OCEANIC_MOUNTAINS;
-        //		}
+        if (isFlatIceSheet(value) || value == ICE_SHEET_EDGE || value == ICE_SHEET_OCEANIC) {
+            return ICE_SHEET_SHORE;
+        }
+        if (value == ICE_SHEET_OCEANIC_MOUNTAINS) {
+            return ICE_SHEET_OCEANIC_MOUNTAINS_EDGE;
+        }
+        if (value == GLACIALLY_CARVED_OCEANIC_MOUNTAINS || value == GLACIALLY_CARVED_MOUNTAINS) {
+            return GLACIATED_OCEANIC_MOUNTAINS;
+        }
         if (value == OLD_MOUNTAINS || value == EXTREME_DOLINE_MOUNTAINS) {
             return TERRACE_LOWER;
         }
@@ -320,11 +279,11 @@ public class TFGLayers {
 
     public static boolean hasLake(int value) {
         return (!isOcean(value) && value != BADLANDS /*&& value != ACTIVE_SHIELD_VOLCANO && value != DORMANT_SHIELD_VOLCANO
-                                                     && value != EXTINCT_SHIELD_VOLCANO && value != ANCIENT_SHIELD_VOLCANO && value != ICE_SHEET_MOUNTAINS
-                                                     && value != ICE_SHEET_MOUNTAINS_EDGE && value != ICE_SHEET_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
-                                                     && value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
-                                                     && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
-                                                     && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS*/);
+                                                     && value != EXTINCT_SHIELD_VOLCANO && value != ANCIENT_SHIELD_VOLCANO*/ && value != ICE_SHEET_MOUNTAINS
+                && value != ICE_SHEET_MOUNTAINS_EDGE && value != ICE_SHEET_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
+                //&& value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
+                && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
+                && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
     }
 
     public static int lakeFor(int value) {
@@ -346,14 +305,12 @@ public class TFGLayers {
         if (value == PLATEAU) {
             return PLATEAU_LAKE;
         }
-        //    		if (isFlatIceSheet(value))
-        //    		{
-        //    			return SUBGLACIAL_LAKE;
-        //    		}
-        //    		if (value == ICE_SHEET_EDGE)
-        //    		{
-        //    			return MELTWATER_LAKE;
-        //    		}
+        if (isFlatIceSheet(value)) {
+            return SUBGLACIAL_LAKE;
+        }
+        if (value == ICE_SHEET_EDGE) {
+            return MELTWATER_LAKE;
+        }
         return LAKE;
     }
 
@@ -373,8 +330,7 @@ public class TFGLayers {
         // 4x4 Chunk Scale
         mainLayer = TFGShoreLayer.INSTANCE.apply(seed.next(), mainLayer);
         mainLayer = TFGMoreShoresLayer.INSTANCE.apply(seed.next(), mainLayer);
-        // TODO
-        //mainLayer = IceSheetEdgeLayer.INSTANCE.apply(seed.next(), mainLayer);
+        mainLayer = TFGIceSheetEdgeLayer.INSTANCE.apply(seed.next(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(seed.next(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(seed.next(), mainLayer);
 

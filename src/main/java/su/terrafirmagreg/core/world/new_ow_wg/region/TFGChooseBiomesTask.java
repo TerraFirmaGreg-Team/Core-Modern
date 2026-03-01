@@ -18,16 +18,26 @@ public enum TFGChooseBiomesTask implements RegionTask {
             { HIGHLANDS, HIGHLANDS, HIGHLANDS, HIGHLANDS, ROLLING_HILLS, ROLLING_HILLS, BADLANDS, BADLANDS, STAIR_STEP_CANYONS, PLATEAU, PLATEAU, PLATEAU, PLATEAU_WIDE, OLD_MOUNTAINS, OLD_MOUNTAINS,
                     OLD_MOUNTAINS, OLD_MOUNTAINS }, // High
     };
-    //	private static final int[][] ICE_SHEET_ALTITUDE_BIOMES = {
-    //		{ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS}, // Low
-    //		{ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET, ICE_SHEET_TUYAS}, // Mid
-    //		{ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET_TUYAS, ICE_SHEET_MOUNTAINS, ICE_SHEET_MOUNTAINS}, // High
-    //	};
-    //	private static final int[][] PALEO_ICE_SHEET_ALTITUDE_BIOMES = {
-    //		{PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, TUYAS, LOWLANDS, LOWLANDS}, // Low
-    //		{PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, TUYAS, TUYAS}, // Mid
-    //		{DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, PLATEAU, PLATEAU, PLATEAU, PLATEAU_WIDE, ICE_SHEET_MOUNTAINS}, // High
-    //	};
+    //    private static final int[][] ICE_SHEET_ALTITUDE_BIOMES = {
+    //            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS }, // Low
+    //            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET, ICE_SHEET_TUYAS }, // Mid
+    //            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET_TUYAS, ICE_SHEET_MOUNTAINS, ICE_SHEET_MOUNTAINS }, // High
+    //    };
+    //private static final int[][] PALEO_ICE_SHEET_ALTITUDE_BIOMES = {
+    //	{ PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, TUYAS, LOWLANDS, LOWLANDS }, // Low
+    //	{ PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, TUYAS, TUYAS }, // Mid
+    //	{ DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, PLATEAU, PLATEAU, PLATEAU, PLATEAU_WIDE, ICE_SHEET_MOUNTAINS }, // High
+    //};
+    private static final int[][] ICE_SHEET_ALTITUDE_BIOMES = {
+            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET }, // Low
+            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET }, // Mid
+            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_MOUNTAINS, ICE_SHEET_MOUNTAINS }, // High
+    };
+    private static final int[][] PALEO_ICE_SHEET_ALTITUDE_BIOMES = {
+            { PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, LOWLANDS, LOWLANDS }, // Low
+            { PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS }, // Mid
+            { DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, PLATEAU, PLATEAU, PLATEAU, PLATEAU_WIDE, ICE_SHEET_MOUNTAINS }, // High
+    };
     private static final int[][] DESERT_ALTITUDE_BIOMES = {
             { BUTTES, GRASSY_DUNES, DUNE_SEA, DUNE_SEA, DUNE_SEA, SALT_FLATS, SALT_FLATS }, // Low
             { DUNE_SEA, BUTTES, BUTTES, HOODOOS, MESAS, MESAS, STAIR_STEP_CANYONS, BADLANDS, PLATEAU, CANYONS, WHORLED_CANYONS }, // Mid
@@ -39,7 +49,7 @@ public enum TFGChooseBiomesTask implements RegionTask {
             { HIGHLANDS, HIGHLANDS, MESAS, HOODOOS, ROLLING_HILLS, ROLLING_HILLS, BADLANDS, BADLANDS, PLATEAU_WIDE, ROCKY_PLATEAU, STAIR_STEP_CANYONS, STAIR_STEP_CANYONS, OLD_MOUNTAINS, OLD_MOUNTAINS,
                     WHORLED_CANYONS }, // High
     };
-    //	private static final int[] KNOB_AND_KETTLE_BIOMES = {KNOB_AND_KETTLE, PATTERNED_GROUND, INVERTED_PATTERNED_GROUND};
+    private static final int[] KNOB_AND_KETTLE_BIOMES = { KNOB_AND_KETTLE, PATTERNED_GROUND, INVERTED_PATTERNED_GROUND };
     private static final int[] ISLAND_BIOMES = { PLAINS, HILLS, ROLLING_HILLS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS, GUANO_ISLAND };
     private static final int[] MID_DEPTH_OCEAN_BIOMES = { DEEP_OCEAN, OCEAN, OCEAN, OCEAN_REEF, OCEAN_REEF, OCEAN_REEF };
 
@@ -60,68 +70,45 @@ public enum TFGChooseBiomesTask implements RegionTask {
                 if (point.coastalMountain()) {
                     // Different temperature limits used because biomes at different elevations
                     final float maxIceSheetTemp = -16f + 0.006f * point.rainfall;
-                    //					if (temp < maxIceSheetTemp + 2)
-                    //					{
-                    //						point.biome = ICE_SHEET_OCEANIC_MOUNTAINS;
-                    //					}
-                    //					else if (temp < maxIceSheetTemp + 6)
-                    //					{
-                    //						point.biome = GLACIATED_OCEANIC_MOUNTAINS;
-                    //					}
-                    //					else if (temp < maxIceSheetTemp + 10)
-                    //					{
-                    //						point.biome = GLACIALLY_CARVED_OCEANIC_MOUNTAINS;
-                    //					}
-                    //					else
-                    //					{
-                    point.biome = randomSeededFrom(rngSeed, areaSeed, OCEANIC_MOUNTAIN_ALTITUDE_BIOMES);
-                    //					}
+                    if (temp < maxIceSheetTemp + 2) {
+                        point.biome = ICE_SHEET_OCEANIC_MOUNTAINS;
+                    } else if (temp < maxIceSheetTemp + 6) {
+                        point.biome = GLACIATED_OCEANIC_MOUNTAINS;
+                    } else if (temp < maxIceSheetTemp + 10) {
+                        point.biome = GLACIALLY_CARVED_OCEANIC_MOUNTAINS;
+                    } else {
+                        point.biome = randomSeededFrom(rngSeed, areaSeed, OCEANIC_MOUNTAIN_ALTITUDE_BIOMES);
+                    }
                 } else {
                     final float maxIceSheetTemp = -14f + 0.006f * point.rainfall;
-                    //					if (temp < maxIceSheetTemp)
-                    //					{
-                    //						point.biome = ICE_SHEET_MOUNTAINS;
-                    //					}
-                    //					else if (temp < maxIceSheetTemp + 4)
-                    //					{
-                    //						point.biome = GLACIATED_MOUNTAINS;
-                    //					}
-                    //					else if (temp < maxIceSheetTemp + 10)
-                    //					{
-                    //						point.biome = GLACIALLY_CARVED_MOUNTAINS;
-                    //					}
-                    //					else
-                    //					{
-                    point.biome = randomSeededFrom(rngSeed, areaSeed, MOUNTAIN_ALTITUDE_BIOMES);
-                    //					}
+                    if (temp < maxIceSheetTemp) {
+                        point.biome = ICE_SHEET_MOUNTAINS;
+                    } else if (temp < maxIceSheetTemp + 4) {
+                        point.biome = GLACIATED_MOUNTAINS;
+                    } else if (temp < maxIceSheetTemp + 10) {
+                        point.biome = GLACIALLY_CARVED_MOUNTAINS;
+                    } else {
+                        point.biome = randomSeededFrom(rngSeed, areaSeed, MOUNTAIN_ALTITUDE_BIOMES);
+                    }
                 }
             } else if (point.land()) {
                 final float rain = point.rainfall;
                 final float maxIceSheetTemp = -17f + 0.006f * rain;
                 final float temp = point.temperature;
-                //				if (temp < maxIceSheetTemp)
-                //				{
-                //					int biome = randomSeededFrom(rngSeed, areaSeed, ICE_SHEET_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
-                //
-                //					if (point.distanceToOcean < 3 && isFlatIceSheet(biome))
-                //					{
-                //						biome = ICE_SHEET_OCEANIC;
-                //					}
-                //					point.biome = biome;
-                //				}
-                //				else if (temp < maxIceSheetTemp + 1)
-                //				{
-                //					point.biome = ICE_SHEET_EDGE;
-                //				}
-                //				else if (temp < maxIceSheetTemp + 2.5)
-                //				{
-                //					point.biome = randomSeededFrom(rngSeed, areaSeed, KNOB_AND_KETTLE_BIOMES);
-                //				}
-                //				else if (temp < maxIceSheetTemp + 6)
-                //				{
-                //					point.biome = randomSeededFrom(rngSeed, areaSeed, PALEO_ICE_SHEET_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
-                //				}
-                /*else*/ if (rain < 60) {
+                if (temp < maxIceSheetTemp) {
+                    int biome = randomSeededFrom(rngSeed, areaSeed, ICE_SHEET_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
+
+                    if (point.distanceToOcean < 3 && isFlatIceSheet(biome)) {
+                        biome = ICE_SHEET_OCEANIC;
+                    }
+                    point.biome = biome;
+                } else if (temp < maxIceSheetTemp + 1) {
+                    point.biome = ICE_SHEET_EDGE;
+                } else if (temp < maxIceSheetTemp + 2.5) {
+                    point.biome = randomSeededFrom(rngSeed, areaSeed, KNOB_AND_KETTLE_BIOMES);
+                } else if (temp < maxIceSheetTemp + 6) {
+                    point.biome = randomSeededFrom(rngSeed, areaSeed, PALEO_ICE_SHEET_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
+                } else if (rain < 60) {
                     point.biome = randomSeededFrom(rngSeed, areaSeed, DESERT_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
                 } else if (rain < 155) {
                     point.biome = randomSeededFrom(rngSeed, areaSeed, SEMI_ARID_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
@@ -164,8 +151,8 @@ public enum TFGChooseBiomesTask implements RegionTask {
                         point.biome = DUNE_SEA;
                 }
             }
-            //			if (rainfall < 145 && (point.biome == PATTERNED_GROUND || point.biome == INVERTED_PATTERNED_GROUND))
-            //				point.biome = STONE_CIRCLES;
+            if (rainfall < 145 && (point.biome == PATTERNED_GROUND || point.biome == INVERTED_PATTERNED_GROUND))
+                point.biome = STONE_CIRCLES;
 
             // Prevent badlands from appearing in very high rainfall environments
             final float maxRainfallForBadlands = 420f + Math.floorMod(areaSeed ^ climateSeed, 40);
@@ -211,7 +198,6 @@ public enum TFGChooseBiomesTask implements RegionTask {
                         point.biome = getDolineBiome(point.biome);
                     }
                 }
-
             }
 
             // Increase prevalence/size of salt marshes in climates where mangroves can generate
@@ -273,14 +259,14 @@ public enum TFGChooseBiomesTask implements RegionTask {
             return BURREN_PLAINS;
         if (biome == BADLANDS || biome == HILLS || biome == ROLLING_HILLS)
             return BURREN_BADLANDS;
-        //if (biome == DRUMLINS)
-        //	return BURREN_ROCHE_MOUTONEE;
+        if (biome == DRUMLINS)
+            return BURREN_ROCHE_MOUTONEE;
         if (biome == HIGHLANDS)
             return BURREN_BADLANDS_TALL;
         if (biome == PLATEAU || biome == PLATEAU_WIDE)
             return BURREN_PLATEAU;
-        //		else
-        return biome;
+        else
+            return biome;
     }
 
     private int getDolineBiome(int biome) {

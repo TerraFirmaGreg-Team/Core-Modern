@@ -18,7 +18,6 @@ public enum TFGRegionTask {
     CHOOSE_ROCKS(ChooseRocks.INSTANCE),
     ANNOTATE_KARST_SURFACE(TFGKarstSurfaceRocks.INSTANCE),
     CHOOSE_BIOMES(TFGChooseBiomesTask.INSTANCE),
-    //CHOOSE_BIOMES(ChooseBiomes.INSTANCE),
     ADD_RIVERS_AND_LAKES(TFGAddRiversAndLakes.INSTANCE);
 
     public static final TFGRegionTask[] VALUES = values();

@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.world.new_ow_wg.noise;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
 
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.*;
 import net.dries007.tfc.world.region.Units;
@@ -10,6 +11,20 @@ import net.minecraft.util.Mth;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 
 public class TFGBiomeNoise {
+    /**
+     * Signed version f connected valley noise, usable for creating asymmetrical features in valleys
+     */
+    public static Noise2D connectedValleyBaseNoise(long seed) {
+        return new OpenSimplex2D(seed).spread(0.0025);
+    }
+
+    /**
+     * Basic noise map used by several biomes with connected ridge-noise valleys
+     */
+    public static Noise2D connectedValleyNoise(long seed) {
+        return connectedValleyBaseNoise(seed).abs();
+    }
+
     /**
      * Very flat biome
      */
@@ -663,5 +678,197 @@ public class TFGBiomeNoise {
                     + -22 * (wideBase > compare ? wideBase * (1 - addend) + addend : wideBase)
                     + -24 * (deepBase > compare ? deepBase * (1 - addend) + addend : deepBase);
         };
+    }
+
+    /**
+     * Jointed surface of ice sheets/glaciers, should be added to biome noise, should not be included in surface builders
+     */
+    public static Noise2D glacialSurfaceTexture(long seed) {
+        final Noise2D warp = new OpenSimplex2D(seed + 413L).spread(0.02).scaled(-12, 12);
+        return (x, z) -> {
+            final double yOfX = Math.min(TFGNoiseHelpers.triangle(25, 18, 0.035, x + warp.noise(x, z)), 0.0);
+            // Reversed order of x, and z in the .noise() call is intentional here
+            final double yOfZ = Math.min(TFGNoiseHelpers.triangle(40, 30, 0.025, z + warp.noise(z, x)), 0.0);
+            return Math.min(yOfX, yOfZ);
+        };
+    }
+
+    /**
+     * The standard height for the base of an ice sheet
+     */
+    public static Noise2D glacialBase(long seed) {
+        return TFGNoiseHelpers.addConstant(knobAndKettle(seed), 1.5);
+    }
+
+    /**
+     * The standard height for the base of an ice sheet in biomes near oceans
+     */
+    public static Noise2D glacialOceanicBase(long seed) {
+        return (x, z) -> SEA_LEVEL_Y - 4;
+    }
+
+    /**
+     * The standard height for the top of an ice sheet, without texturing
+     */
+    public static Noise2D iceSheetSurfaceHeight(long seed) {
+        return BiomeNoise.hills(seed, 23, 38);
+    }
+
+    /**
+     * The standard height for the top of an ice sheet in mountainous biomes, without texturing
+     */
+    public static Noise2D montaneIceSheetSurfaceHeight(long seed) {
+        return BiomeNoise.hills(seed, 40, 48);
+    }
+
+    /**
+     * The standard height for the top of an ice sheet in oceanic biomes, without texturing
+     */
+    public static Noise2D oceanicIceSheetSurfaceHeight(long seed) {
+        return BiomeNoise.hills(seed, 18, 26);
+    }
+
+    /**
+     * The standard height for the top of glaciers in glacial cirque biomes
+     * This function is at the correct height for oceanic glacial mountains. It is shifted up for standard glacial mountains
+     */
+    public static Noise2D glacialCirquesIceSurfaceHeight(long seed) {
+        return connectedValleyNoise(seed)
+                .map(y -> y < 0.38 ? -100 : y < 0.43 ? Mth.map(y, 0.38, 0.43, -50, 0) : Mth.map(y, 0.43, 1, 0, 32))
+                .add(BiomeNoise.hills(seed, 15, 23)
+                        .add(TFGBiomeNoise.glacialCirquesCliffsScale(seed)));
+    }
+
+    /**
+     * Should mirror the upper surface of {@link TFGBiomeNoise#glacialCirquesIceSurfaceHeight(long)}, but 3 blocks highers
+     * Reverses slope instead of plunging vertically at edges of glaciers to avoid creating cliffs that block the mouths of cirques
+     */
+    public static Noise2D glacialCirquesCliffsStartHeight(long seed) {
+        return connectedValleyNoise(seed)
+                .map(y -> y < 0.43
+                        ? Mth.map(y, 0, 0.43, 32, 0)
+                        : Mth.map(y, 0.43, 1, 0, 32))
+                .add(BiomeNoise.hills(seed, 18, 26));
+    }
+
+    public static Noise2D glacialCirquesCliffsScale(long seed) {
+        return new OpenSimplex2D(seed + 78267L).spread(0.015).add(glacialValleyShapeNoise(seed)).scaled(-10, 8).clamped(0, 7);
+
+    }
+
+    /**
+     * U-shaped valleys for glacial mountains
+     */
+    public static Noise2D glacialValleyShapeNoise(long seed) {
+        return connectedValleyBaseNoise(seed).map(y -> Math.min(6 * y * y, 0.75 + 0.25 * y)).add(new OpenSimplex2D(seed + 5287L).octaves(4).spread(0.06).scaled(-0.2, 0.2));
+    }
+
+    /**
+     * This function is at the correct height for oceanic glacial mountains. It is shifted up for standard glacial mountains
+     */
+    public static Noise2D glacialCirques(long seed) {
+
+        // Noise for the large, continuous valleys
+        final Noise2D shape = glacialValleyShapeNoise(seed);
+        final Noise2D shapeMap = connectedValleyNoise(seed);
+
+        // Glacial mountain noise is based on cellular noise. Cells are either bowl-shaped cirques, or cone-shaped horns
+        final double cellScale = 0.010;
+        final TFGCellular2D cells = new TFGCellular2D(seed, 2).spread(cellScale);
+        final Noise2D warp = new OpenSimplex2D(seed).spread(0.02).add(shapeMap).scaled(-1, 2, -0.25, 0.2);
+        final Noise2D roughPeaks = new OpenSimplex2D(seed).octaves(3).spread(0.08).scaled(0.6, 1.6);
+
+        // Cliffs in valleys
+        final Noise2D cliffScale = new OpenSimplex2D(seed + 785267L).spread(0.01).scaled(-12, 15).clamped(0, 10);
+        final Noise2D cliffStartHeight = TFGNoiseHelpers.addConstant(oceanicIceSheetSurfaceHeight(seed), -8);
+
+        final Noise2D cirques = (x, z) -> {
+            Cellular2D.Cell cell = cells.cell(x, z);
+
+            final double f1 = cell.f1();
+            final double f2 = cell.f2();
+            final double f2f1 = (f1 > 0 ? (f2 - f1) : 1);
+
+            final double shapeAtCenter = shapeMap.noise(cell.cx() / cellScale, cell.cy() / cellScale);
+
+            // Whether a cell is a cirque or a horn is based on the shape noise, a way of approximating the distance to the nearest valley
+            if (shapeAtCenter > 0.60) {
+                // Horn height function
+                double y = (f2f1 + warp.noise(x, z));
+                final double rough = roughPeaks.noise(x, z);
+                final double scale = Math.min(Helpers.lerp(2 * y, 1.0, (rough)), rough);
+                y = 1 + scale * y;
+                return y;
+            } else {
+                // Cirque height function
+                double y = 1 - (f2f1 - warp.noise(x, z));
+                y = 0.5 * (1 + y * y);
+
+                final double shapeAtPoint = shapeMap.noise(x, z);
+                final double valleyCloseness = Math.min(shapeAtPoint - shapeAtCenter, 0);
+
+                return y + Mth.clampedMap(f2f1, 0, 0.1, 0, valleyCloseness);
+            }
+        };
+        return TFGNoiseHelpers.cliffMap(TFGNoiseHelpers.cliffMap(
+                TFGNoiseHelpers.addConstant(cirques.scaled(0, 1, 12, 64).lazyProduct(shape), SEA_LEVEL_Y - 15), cliffStartHeight, cliffScale), glacialCirquesCliffsStartHeight(seed),
+                glacialCirquesCliffsScale(seed));
+    }
+
+    /**
+     * Polygonal incisions 1 block deep to superimpose on terrain
+     * Inspired by polygonal ground due to frost action
+     */
+    public static Noise2D patternedGround(long seed) {
+        Cellular2D cells = new TFGCellular2D(seed, 0.25f, 1).spread(0.05);
+        return (x, z) -> {
+            Cellular2D.Cell cell = cells.cell(x, z);
+
+            return cell.f2() - cell.f1() < 0.12 ? -1 : 0;
+        };
+    }
+
+    /**
+     * Polygonal ridges 1 block high to superimpose on terrain
+     * Inspired by polygonal ground due to frost action
+     */
+    public static Noise2D invertedPatternedGround(long seed) {
+        final Noise2D base = BiomeNoise.hills(seed, -4, 3);
+        Cellular2D cells = new TFGCellular2D(seed, 0.25f, 1).spread(0.05);
+
+        return (x, z) -> {
+            final double height = base.noise(x, z);
+            Cellular2D.Cell cell = cells.cell(x, z);
+            final double f2f1 = cell.f2() - cell.f1();
+            if (height >= SEA_LEVEL_Y) {
+                return height + (f2f1 < 0.12 ? 1 : 0);
+            } else {
+                return f2f1 < 0.12 ? SEA_LEVEL_Y - 1 : f2f1 < 0.22 ? SEA_LEVEL_Y - 2 : SEA_LEVEL_Y - 3;
+            }
+        };
+    }
+
+    /**
+     * Lifted rings to superimpose on terrain
+     * Based on sorted circles found in the Svalbard Archipelago and other polar climates
+     */
+    public static Noise2D stoneCircles(long seed) {
+        Cellular2D cells = new TFGCellular2D(seed, 0.26f, 1).spread(0.09);
+        return (x, z) -> {
+            Cellular2D.Cell cell = cells.cell(x, z);
+
+            final double f1 = cell.f1();
+
+            return f1 > 0.06 && f1 < 0.13 ? 1 : 0;
+        };
+    }
+
+    /**
+     * Flat land with scattered ponds and small mounds
+     */
+    public static Noise2D knobAndKettle(long seed) {
+        return new OpenSimplex2D(seed).octaves(2).spread(0.03f)
+                .map(y -> y > 0.3 ? y - 0.3 : y < -0.3 ? y + 0.3 : 0)
+                .scaled(-12, 10).add(BiomeNoise.hills(seed, -3, 3));
     }
 }
