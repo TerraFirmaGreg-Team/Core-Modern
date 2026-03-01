@@ -84,6 +84,42 @@ public class TFGLayers {
     public static final int HOODOOS;
     public static final int ROCKY_PLATEAU;
 
+    public static final int TOWER_KARST_PLAINS;
+    public static final int TOWER_KARST_CANYONS;
+    public static final int TOWER_KARST_HILLS;
+    public static final int TOWER_KARST_HIGHLANDS;
+    public static final int TOWER_KARST_LAKE;
+    public static final int TOWER_KARST_BAY;
+
+    public static final int BURREN_PLATEAU;
+    public static final int BURREN_BADLANDS;
+    public static final int BURREN_BADLANDS_TALL;
+    public static final int BURREN_PLAINS;
+    public static final int BURREN_ROCHE_MOUTONEE;
+
+    public static final int SHILIN_PLAINS;
+    public static final int SHILIN_CANYONS;
+    public static final int SHILIN_HILLS;
+    public static final int SHILIN_HIGHLANDS;
+    public static final int SHILIN_PLATEAU;
+
+    public static final int DOLINE_PLAINS;
+    public static final int DOLINE_HILLS;
+    public static final int DOLINE_ROLLING_HILLS;
+    public static final int DOLINE_HIGHLANDS;
+    public static final int DOLINE_PLATEAU;
+    public static final int DOLINE_CANYONS;
+
+    public static final int CENOTE_PLAINS;
+    public static final int CENOTE_HILLS;
+    public static final int CENOTE_ROLLING_HILLS;
+    public static final int CENOTE_CANYONS;
+    public static final int CENOTE_HIGHLANDS;
+    public static final int CENOTE_PLATEAU;
+
+    public static final int EXTREME_DOLINE_PLATEAU;
+    public static final int EXTREME_DOLINE_MOUNTAINS;
+
     static {
         BIOME_LAYERS = new BiomeExtension[128];
         BIOME_LAYER_INDEX = new MutableInt(0);
@@ -143,6 +179,42 @@ public class TFGLayers {
         BUTTES = TFGLayers.register(() -> TFGBiomes.BUTTES);
         HOODOOS = TFGLayers.register(() -> TFGBiomes.HOODOOS);
         ROCKY_PLATEAU = TFGLayers.register(() -> TFGBiomes.ROCKY_PLATEAU);
+
+        TOWER_KARST_PLAINS = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_PLAINS);
+        TOWER_KARST_CANYONS = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_CANYONS);
+        TOWER_KARST_HILLS = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_HILLS);
+        TOWER_KARST_HIGHLANDS = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_HIGHLANDS);
+        TOWER_KARST_LAKE = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_LAKE);
+        TOWER_KARST_BAY = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_BAY);
+
+        BURREN_PLATEAU = TFGLayers.register(() -> TFGBiomes.BURREN_PLATEAU);
+        BURREN_BADLANDS = TFGLayers.register(() -> TFGBiomes.BURREN_BADLANDS);
+        BURREN_BADLANDS_TALL = TFGLayers.register(() -> TFGBiomes.BURREN_BADLANDS_TALL);
+        BURREN_PLAINS = TFGLayers.register(() -> TFGBiomes.BURREN_PLAINS);
+        BURREN_ROCHE_MOUTONEE = TFGLayers.register(() -> TFGBiomes.BURREN_ROCHE_MOUTONEE);
+
+        SHILIN_PLAINS = TFGLayers.register(() -> TFGBiomes.SHILIN_PLAINS);
+        SHILIN_CANYONS = TFGLayers.register(() -> TFGBiomes.SHILIN_CANYONS);
+        SHILIN_HILLS = TFGLayers.register(() -> TFGBiomes.SHILIN_HILLS);
+        SHILIN_HIGHLANDS = TFGLayers.register(() -> TFGBiomes.SHILIN_HIGHLANDS);
+        SHILIN_PLATEAU = TFGLayers.register(() -> TFGBiomes.SHILIN_PLATEAU);
+
+        DOLINE_PLAINS = TFGLayers.register(() -> TFGBiomes.DOLINE_PLAINS);
+        DOLINE_HILLS = TFGLayers.register(() -> TFGBiomes.DOLINE_HILLS);
+        DOLINE_ROLLING_HILLS = TFGLayers.register(() -> TFGBiomes.DOLINE_ROLLING_HILLS);
+        DOLINE_HIGHLANDS = TFGLayers.register(() -> TFGBiomes.DOLINE_HIGHLANDS);
+        DOLINE_PLATEAU = TFGLayers.register(() -> TFGBiomes.DOLINE_PLATEAU);
+        DOLINE_CANYONS = TFGLayers.register(() -> TFGBiomes.DOLINE_CANYONS);
+
+        CENOTE_PLAINS = TFGLayers.register(() -> TFGBiomes.CENOTE_PLAINS);
+        CENOTE_HILLS = TFGLayers.register(() -> TFGBiomes.CENOTE_HILLS);
+        CENOTE_ROLLING_HILLS = TFGLayers.register(() -> TFGBiomes.CENOTE_ROLLING_HILLS);
+        CENOTE_CANYONS = TFGLayers.register(() -> TFGBiomes.CENOTE_CANYONS);
+        CENOTE_HIGHLANDS = TFGLayers.register(() -> TFGBiomes.CENOTE_HIGHLANDS);
+        CENOTE_PLATEAU = TFGLayers.register(() -> TFGBiomes.CENOTE_PLATEAU);
+
+        EXTREME_DOLINE_PLATEAU = TFGLayers.register(() -> TFGBiomes.EXTREME_DOLINE_PLATEAU);
+        EXTREME_DOLINE_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.EXTREME_DOLINE_MOUNTAINS);
     }
 
     public static BiomeExtension getFromLayerId(int id) {
@@ -187,9 +259,9 @@ public class TFGLayers {
 
     public static boolean hasShore(int value) {
         return value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS
-        //&& value != TOWER_KARST_BAY && value != SUNKEN_SHIELD_VOLCANO && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
-        //&& value != ICE_SHEET_SHIELD_VOLCANO && value != GLACIATED_SHIELD_VOLCANO && value != GUANO_ISLAND;
-        ;
+                && value != TOWER_KARST_BAY //&& value != SUNKEN_SHIELD_VOLCANO && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
+                //&& value != ICE_SHEET_SHIELD_VOLCANO && value != GLACIATED_SHIELD_VOLCANO
+                && value != GUANO_ISLAND;
     }
 
     public static int shoreFor(int value) {
@@ -202,10 +274,9 @@ public class TFGLayers {
         if (value == VOLCANIC_MOUNTAINS) {
             return VOLCANIC_OCEANIC_MOUNTAINS;
         }
-        //		if (value == TOWER_KARST_LAKE)
-        //		{
-        //			return TOWER_KARST_BAY;
-        //		}
+        if (value == TOWER_KARST_LAKE) {
+            return TOWER_KARST_BAY;
+        }
         //		if (value == ACTIVE_SHIELD_VOLCANO)
         //		{
         //			return SHIELD_VOLCANO_SHORE;
@@ -226,22 +297,22 @@ public class TFGLayers {
         //		{
         //			return GLACIATED_OCEANIC_MOUNTAINS;
         //		}
-        if (value == OLD_MOUNTAINS /*|| value == EXTREME_DOLINE_MOUNTAINS*/) {
+        if (value == OLD_MOUNTAINS || value == EXTREME_DOLINE_MOUNTAINS) {
             return TERRACE_LOWER;
         }
-        if (value == PLATEAU /*|| value == EXTREME_DOLINE_PLATEAU || value == BURREN_PLATEAU || value == SHILIN_PLATEAU*/) {
+        if (value == PLATEAU || value == EXTREME_DOLINE_PLATEAU || value == BURREN_PLATEAU || value == SHILIN_PLATEAU) {
             return SEA_STACKS;
         }
-        if (value == PLATEAU_WIDE || value == ROCKY_PLATEAU /*|| value == DOLINE_PLATEAU*/) {
+        if (value == PLATEAU_WIDE || value == ROCKY_PLATEAU || value == DOLINE_PLATEAU) {
             return SETBACK_CLIFFS;
         }
-        if (value == HIGHLANDS /*|| value == CENOTE_HIGHLANDS || value == DOLINE_HIGHLANDS || value == SHILIN_HIGHLANDS || value == TOWER_KARST_HIGHLANDS*/) {
+        if (value == HIGHLANDS || value == CENOTE_HIGHLANDS || value == DOLINE_HIGHLANDS || value == SHILIN_HIGHLANDS || value == TOWER_KARST_HIGHLANDS) {
             return ROCKY_SHORES;
         }
-        if (value == ROLLING_HILLS /*|| value == DOLINE_ROLLING_HILLS || value == CENOTE_ROLLING_HILLS*/) {
+        if (value == ROLLING_HILLS || value == DOLINE_ROLLING_HILLS || value == CENOTE_ROLLING_HILLS) {
             return EMBAYMENTS;
         }
-        if (value == HILLS /*|| value == CENOTE_HILLS || value == DOLINE_HILLS || value == SHILIN_HILLS || value == TOWER_KARST_HILLS*/ || value == GRASSY_DUNES || value == DUNE_SEA) {
+        if (value == HILLS || value == CENOTE_HILLS || value == DOLINE_HILLS || value == SHILIN_HILLS || value == TOWER_KARST_HILLS || value == GRASSY_DUNES || value == DUNE_SEA) {
             return COASTAL_DUNES;
         }
         return TIDAL_FLATS;

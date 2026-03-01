@@ -57,4 +57,12 @@ public class TFGNoiseHelpers {
             }
         };
     }
+
+    public static Noise2D stretchZ(Noise2D noise, double stretch) {
+        return (x, z) -> noise.noise(x, z / stretch);
+    }
+
+    public static Noise2D stretchX(Noise2D noise, double stretch) {
+        return (x, z) -> noise.noise(x / stretch, z);
+    }
 }

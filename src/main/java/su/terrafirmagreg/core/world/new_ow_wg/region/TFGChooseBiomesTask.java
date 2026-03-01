@@ -234,87 +234,87 @@ public enum TFGChooseBiomesTask implements RegionTask {
     }
 
     private int getTowerKarstBiome(int biome) {
-        //		if (biome == SALT_MARSH)
-        //			return TOWER_KARST_BAY;
-        //		else if (biome == LOWLANDS)
-        //			return TOWER_KARST_LAKE;
-        //		else if (biome == PLAINS || biome == LOW_CANYONS)
-        //			return TOWER_KARST_PLAINS;
-        //		else if (biome == CANYONS)
-        //			return TOWER_KARST_CANYONS;
-        //		else if (biome == HILLS || biome == ROLLING_HILLS || biome == BADLANDS)
-        //			return TOWER_KARST_HILLS;
-        //		else if (biome == HIGHLANDS)
-        //			return TOWER_KARST_HIGHLANDS;
-        //		else if (biome == PLATEAU || biome == PLATEAU_WIDE)
-        //			return EXTREME_DOLINE_PLATEAU;
-        //		else if (biome == OLD_MOUNTAINS || biome == MOUNTAINS || biome == OCEANIC_MOUNTAINS)
-        //			return EXTREME_DOLINE_MOUNTAINS;
-        //		else
-        return biome;
+        if (biome == SALT_MARSH)
+            return TOWER_KARST_BAY;
+        else if (biome == LOWLANDS)
+            return TOWER_KARST_LAKE;
+        else if (biome == PLAINS || biome == LOW_CANYONS)
+            return TOWER_KARST_PLAINS;
+        else if (biome == CANYONS)
+            return TOWER_KARST_CANYONS;
+        else if (biome == HILLS || biome == ROLLING_HILLS || biome == BADLANDS)
+            return TOWER_KARST_HILLS;
+        else if (biome == HIGHLANDS)
+            return TOWER_KARST_HIGHLANDS;
+        else if (biome == PLATEAU || biome == PLATEAU_WIDE)
+            return EXTREME_DOLINE_PLATEAU;
+        else if (biome == OLD_MOUNTAINS || biome == MOUNTAINS || biome == OCEANIC_MOUNTAINS)
+            return EXTREME_DOLINE_MOUNTAINS;
+        else
+            return biome;
     }
 
     private int getShilinBiome(int biome) {
-        //		if (biome == PLAINS)
-        //			return SHILIN_PLAINS;
-        //		if (biome == CANYONS)
-        //			return SHILIN_CANYONS;
-        //		if (biome == ROLLING_HILLS || biome == BADLANDS)
-        //			return SHILIN_HILLS;
-        //		if (biome == PLATEAU || biome == PLATEAU_WIDE)
-        //			return SHILIN_PLATEAU;
-        //		if (biome == HIGHLANDS)
-        //			return SHILIN_HIGHLANDS;
+        if (biome == PLAINS)
+            return SHILIN_PLAINS;
+        if (biome == CANYONS)
+            return SHILIN_CANYONS;
+        if (biome == ROLLING_HILLS || biome == BADLANDS)
+            return SHILIN_HILLS;
+        if (biome == PLATEAU || biome == PLATEAU_WIDE)
+            return SHILIN_PLATEAU;
+        if (biome == HIGHLANDS)
+            return SHILIN_HIGHLANDS;
         return biome;
     }
 
     private int getBurrenBiome(int biome) {
-        //		if (biome == PLAINS || biome == CANYONS)
-        //			return BURREN_PLAINS;
-        //		if (biome == BADLANDS || biome == HILLS || biome == ROLLING_HILLS)
-        //			return BURREN_BADLANDS;
-        //		if (biome == DRUMLINS)
-        //			return BURREN_ROCHE_MOUTONEE;
-        //		if (biome == HIGHLANDS)
-        //			return BURREN_BADLANDS_TALL;
-        //		if (biome == PLATEAU || biome == PLATEAU_WIDE)
-        //			return BURREN_PLATEAU;
+        if (biome == PLAINS || biome == CANYONS)
+            return BURREN_PLAINS;
+        if (biome == BADLANDS || biome == HILLS || biome == ROLLING_HILLS)
+            return BURREN_BADLANDS;
+        //if (biome == DRUMLINS)
+        //	return BURREN_ROCHE_MOUTONEE;
+        if (biome == HIGHLANDS)
+            return BURREN_BADLANDS_TALL;
+        if (biome == PLATEAU || biome == PLATEAU_WIDE)
+            return BURREN_PLATEAU;
         //		else
         return biome;
     }
 
     private int getDolineBiome(int biome) {
-        //		if (biome == CANYONS)
-        //			return DOLINE_CANYONS;
-        //		else if (biome == PLAINS || biome == LOW_CANYONS)
-        //			return DOLINE_PLAINS;
-        //		else if (biome == HILLS)
-        //			return DOLINE_HILLS;
-        //		else if (biome == ROLLING_HILLS)
-        //			return DOLINE_ROLLING_HILLS;
-        //		else if (biome == HIGHLANDS)
-        //			return DOLINE_HIGHLANDS;
-        //		else if (biome == PLATEAU || biome == PLATEAU_WIDE)
-        //			return DOLINE_PLATEAU;
-        //		else
-        return biome;
+        if (biome == CANYONS)
+            return DOLINE_CANYONS;
+        else if (biome == PLAINS || biome == LOW_CANYONS)
+            return DOLINE_PLAINS;
+        else if (biome == HILLS)
+            return DOLINE_HILLS;
+        else if (biome == ROLLING_HILLS)
+            return DOLINE_ROLLING_HILLS;
+        else if (biome == HIGHLANDS)
+            return DOLINE_HIGHLANDS;
+        else if (biome == PLATEAU || biome == PLATEAU_WIDE)
+            return DOLINE_PLATEAU;
+        else
+            return biome;
     }
 
     private int getCenoteBiome(int biome) {
-        //		if (biome == CANYONS)
-        //			return CENOTE_CANYONS;
-        //		else if (biome == PLAINS || biome == LOW_CANYONS)
-        //			return CENOTE_PLAINS;
-        //		else if (biome == HILLS)
-        //			return CENOTE_HILLS;
-        //		else if (biome == ROLLING_HILLS)
-        //			return CENOTE_ROLLING_HILLS;
-        //		else if (biome == HIGHLANDS)
-        //			return CENOTE_HIGHLANDS;
-        //		else if (biome == PLATEAU || biome == PLATEAU_WIDE)
-        //			return CENOTE_PLATEAU;
-        //		else
-        return biome;
+        if (biome == CANYONS)
+            return CENOTE_CANYONS;
+        else if (biome == PLAINS || biome == LOW_CANYONS)
+            return CENOTE_PLAINS;
+        else if (biome == HILLS)
+            return CENOTE_HILLS;
+        else if (biome == ROLLING_HILLS)
+            return CENOTE_ROLLING_HILLS;
+        else if (biome == HIGHLANDS)
+            return CENOTE_HIGHLANDS;
+        else if (biome == PLATEAU || biome == PLATEAU_WIDE)
+            return CENOTE_PLATEAU;
+        else
+            return biome;
     }
 
     private int randomSeededFrom(long rngSeed, int areaSeed, int[] choices) {

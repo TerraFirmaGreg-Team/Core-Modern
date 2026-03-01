@@ -12,7 +12,6 @@ import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.settings.RockSettings;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
-import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.minecraft.util.Mth;
@@ -154,7 +153,7 @@ public class TFGBadlandsSurfaceBuilder implements SurfaceBuilder {
             buildSandStoneSurface(context, startY, endY, karst, volcanic, (int) (shift + heightVariation + weightVariation + rainfallVariation));
         } else {
             if (startY - 5 > heightVariation - weightVariation - rainfallVariation) {
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_SAND, complexStates.MID_DIRT_TO_SAND, complexStates.UNDER_GRAVEL);
+                TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_SAND, complexStates.MID_DIRT_TO_SAND, complexStates.UNDER_GRAVEL);
             } else {
                 buildSandySurface(context, startY, endY, karst, volcanic);
             }
