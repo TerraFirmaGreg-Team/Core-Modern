@@ -280,9 +280,10 @@ public class TFGBiomes {
                             .surface(seed -> new FlatsSurfaceBuilder(true))
                             .aquiferHeightOffset(-16).spawnable().noSandyRiverShores()));
     public static final BiomeExtension SALT_FLATS = register("salt_flats",
-            riverType(TFGRiverBlendType.WIDE, builder().heightmap(TFGBiomeNoise::saltFlats)
-                    .surface(seed -> new FlatsSurfaceBuilder(false))
-                    .aquiferHeightOffset(-16).salty().spawnable().noSandyRiverShores()));
+            riverType(TFGRiverBlendType.WIDE,
+                    builder().heightmap(TFGBiomeNoise::saltFlats)
+                            .surface(seed -> new FlatsSurfaceBuilder(false))
+                            .aquiferHeightOffset(-16).salty().spawnable().noSandyRiverShores()));
     public static final BiomeExtension DUNE_SEA = register("dune_sea",
             riverType(TFGRiverBlendType.WIDE,
                     builder().heightmap(seed -> TFGBiomeNoise.dunes(seed, 2, 16))

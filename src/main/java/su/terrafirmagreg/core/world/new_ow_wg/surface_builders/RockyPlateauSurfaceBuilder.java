@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.world.new_ow_wg.surface_builders;
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceStates;
-import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 
@@ -26,7 +25,7 @@ public class RockyPlateauSurfaceBuilder implements SurfaceBuilder {
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
         final double weight = context.weight();
-        final NormalSurfaceBuilder surfaceBuilder = NormalSurfaceBuilder.ROCKY;
+        final TFGNormalSurfaceBuilder surfaceBuilder = TFGNormalSurfaceBuilder.ROCKY;
         if (weight > 0.9 && startY < 86 && context.rainfall() == 0) {
             surfaceBuilder.buildSurface(context, startY, endY, simpleStates.SALTED_EARTH, simpleStates.DRY_MUD, SurfaceStates.RAW);
         } else if (startY - 2 > BiomeNoise.hills(seed, 22, 32).noise(context.pos().getX(), context.pos().getZ())) {

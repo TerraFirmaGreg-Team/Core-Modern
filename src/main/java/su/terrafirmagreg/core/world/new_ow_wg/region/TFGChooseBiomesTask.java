@@ -177,11 +177,11 @@ public enum TFGChooseBiomesTask implements RegionTask {
             // Special Biome Glaciation
             final float maxIceSheetTemp = -14f + 0.006f * rainfall;
             if (point.land() && temperature < maxIceSheetTemp) {
-                final int biome = point.biome;
+                //final int biome = point.biome;
                 //				if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO)
                 //					point.biome = ICE_SHEET_SHIELD_VOLCANO;
             } else if (temperature < maxIceSheetTemp + 4f) {
-                final int biome = point.biome;
+                //final int biome = point.biome;
                 //				if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO)
                 //					point.biome = GLACIATED_SHIELD_VOLCANO;
             }
