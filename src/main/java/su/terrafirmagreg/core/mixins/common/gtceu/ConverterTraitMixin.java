@@ -19,6 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(ConverterTrait.class)
 public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
+    @Unique
+    private static final Block PORTABLE_ENERGY_INTERFACE = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("createaddition", "portable_energy_interface"));
 
     public ConverterTraitMixin(MetaMachine machine, long maxCapacity, long maxInputVoltage, long maxInputAmperage, long maxOutputVoltage, long maxOutputAmperage) {
         super(machine, maxCapacity, maxInputVoltage, maxInputAmperage, maxOutputVoltage, maxOutputAmperage);
