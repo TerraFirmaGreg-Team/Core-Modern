@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.client.tfc;
+package su.terrafirmagreg.core.mixins.common.tfc;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
