@@ -73,7 +73,7 @@ public class ArtisanType {
      * @param clickPitch The pitch of the click sound.
      */
     public ArtisanType(String name, ItemStack inputItemA, @Nullable ItemStack inputItemB, TagKey<Item> toolA, TagKey<Item> toolB, ResourceLocation activeTexture,
-                       @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture, float clickVolume, float clickPitch) {
+            @Nullable ResourceLocation inactiveTexture, SoundEvent clickSound, @Nullable ResourceLocation borderTexture, float clickVolume, float clickPitch) {
         this.id = TFGCore.id(name);
         inputItems = new ArrayList<>(Stream.of(inputItemA, inputItemB).filter(Objects::nonNull).toList());
         toolTags = new ArrayList<>(Arrays.asList(toolA, toolB));
