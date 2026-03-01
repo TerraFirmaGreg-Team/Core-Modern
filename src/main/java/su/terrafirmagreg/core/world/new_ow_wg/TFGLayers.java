@@ -28,11 +28,6 @@ public class TFGLayers {
     private static final BiomeExtension[] BIOME_LAYERS;
     private static final MutableInt BIOME_LAYER_INDEX;
 
-    public static final int MUD_FLATS;
-    public static final int SALT_FLATS;
-    public static final int DUNE_SEA;
-    public static final int GRASSY_DUNES;
-
     public static final int DEEP_OCEAN_TRENCH;
     public static final int DEEP_OCEAN;
     public static final int OCEAN;
@@ -61,6 +56,12 @@ public class TFGLayers {
     public static final int SHORE;
     public static final int TIDAL_FLATS;
     public static final int SEA_STACKS;
+    public static final int TERRACE_UPPER;
+    public static final int TERRACE_LOWER;
+    public static final int SETBACK_CLIFFS;
+    public static final int COASTAL_DUNES;
+    public static final int ROCKY_SHORES;
+    public static final int EMBAYMENTS;
 
     public static final int LAKE;
     public static final int RIVER;
@@ -72,14 +73,20 @@ public class TFGLayers {
     public static final int VOLCANIC_OCEANIC_MOUNTAIN_LAKE;
     public static final int PLATEAU_LAKE;
 
+    public static final int MUD_FLATS;
+    public static final int SALT_FLATS;
+    public static final int DUNE_SEA;
+    public static final int GRASSY_DUNES;
+    public static final int WHORLED_CANYONS;
+    public static final int STAIR_STEP_CANYONS;
+    public static final int MESAS;
+    public static final int BUTTES;
+    public static final int HOODOOS;
+    public static final int ROCKY_PLATEAU;
+
     static {
         BIOME_LAYERS = new BiomeExtension[128];
         BIOME_LAYER_INDEX = new MutableInt(0);
-
-        MUD_FLATS = TFGLayers.register(() -> TFGBiomes.MUD_FLATS);
-        SALT_FLATS = TFGLayers.register(() -> TFGBiomes.SALT_FLATS);
-        DUNE_SEA = TFGLayers.register(() -> TFGBiomes.DUNE_SEA);
-        GRASSY_DUNES = TFGLayers.register(() -> TFGBiomes.GRASSY_DUNES);
 
         DEEP_OCEAN_TRENCH = TFGLayers.register(() -> TFGBiomes.DEEP_OCEAN_TRENCH);
         DEEP_OCEAN = TFGLayers.register(() -> TFGBiomes.DEEP_OCEAN);
@@ -109,6 +116,12 @@ public class TFGLayers {
         SHORE = TFGLayers.register(() -> TFGBiomes.SHORE);
         TIDAL_FLATS = TFGLayers.register(() -> TFGBiomes.TIDAL_FLATS);
         SEA_STACKS = TFGLayers.register(() -> TFGBiomes.SEA_STACKS);
+        TERRACE_UPPER = TFGLayers.register(() -> TFGBiomes.TERRACE_UPPER);
+        TERRACE_LOWER = TFGLayers.register(() -> TFGBiomes.TERRACE_LOWER);
+        SETBACK_CLIFFS = TFGLayers.register(() -> TFGBiomes.SETBACK_CLIFFS);
+        COASTAL_DUNES = TFGLayers.register(() -> TFGBiomes.COASTAL_DUNES);
+        ROCKY_SHORES = TFGLayers.register(() -> TFGBiomes.ROCKY_SHORES);
+        EMBAYMENTS = TFGLayers.register(() -> TFGBiomes.EMBAYMENTS);
 
         LAKE = TFGLayers.register(() -> TFGBiomes.LAKE);
         RIVER = TFGLayers.register(() -> TFGBiomes.RIVER);
@@ -119,6 +132,17 @@ public class TFGLayers {
         VOLCANIC_MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.VOLCANIC_MOUNTAIN_LAKE);
         VOLCANIC_OCEANIC_MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.VOLCANIC_OCEANIC_MOUNTAIN_LAKE);
         PLATEAU_LAKE = TFGLayers.register(() -> TFGBiomes.PLATEAU_LAKE);
+
+        MUD_FLATS = TFGLayers.register(() -> TFGBiomes.MUD_FLATS);
+        SALT_FLATS = TFGLayers.register(() -> TFGBiomes.SALT_FLATS);
+        DUNE_SEA = TFGLayers.register(() -> TFGBiomes.DUNE_SEA);
+        GRASSY_DUNES = TFGLayers.register(() -> TFGBiomes.GRASSY_DUNES);
+        WHORLED_CANYONS = TFGLayers.register(() -> TFGBiomes.WHORLED_CANYONS);
+        STAIR_STEP_CANYONS = TFGLayers.register(() -> TFGBiomes.STAIR_STEP_CANYONS);
+        MESAS = TFGLayers.register(() -> TFGBiomes.MESAS);
+        BUTTES = TFGLayers.register(() -> TFGBiomes.BUTTES);
+        HOODOOS = TFGLayers.register(() -> TFGBiomes.HOODOOS);
+        ROCKY_PLATEAU = TFGLayers.register(() -> TFGBiomes.ROCKY_PLATEAU);
     }
 
     public static BiomeExtension getFromLayerId(int id) {
@@ -146,6 +170,11 @@ public class TFGLayers {
 
     public static boolean isFlats(int value) {
         return value == MUD_FLATS || value == SALT_FLATS;
+    }
+
+    public static boolean isFlatIceSheet(int value) {
+        return false;
+        //return value == ICE_SHEET || value == ICE_SHEET_TUYAS || value == SUBGLACIAL_LAKE;
     }
 
     public static boolean isMountains(int value) {
@@ -197,30 +226,24 @@ public class TFGLayers {
         //		{
         //			return GLACIATED_OCEANIC_MOUNTAINS;
         //		}
-        //		if (value == OLD_MOUNTAINS || value == EXTREME_DOLINE_MOUNTAINS)
-        //		{
-        //			return TERRACE_LOWER;
-        //		}
-        //		if (value == PLATEAU || value == EXTREME_DOLINE_PLATEAU || value == BURREN_PLATEAU || value == SHILIN_PLATEAU)
-        //		{
-        //			return SEA_STACKS;
-        //		}
-        //		if (value == PLATEAU_WIDE || value == ROCKY_PLATEAU || value == DOLINE_PLATEAU)
-        //		{
-        //			return SETBACK_CLIFFS;
-        //		}
-        //		if (value == HIGHLANDS || value == CENOTE_HIGHLANDS || value == DOLINE_HIGHLANDS || value == SHILIN_HIGHLANDS || value == TOWER_KARST_HIGHLANDS)
-        //		{
-        //			return ROCKY_SHORES;
-        //		}
-        //		if (value == ROLLING_HILLS || value == DOLINE_ROLLING_HILLS || value == CENOTE_ROLLING_HILLS)
-        //		{
-        //			return EMBAYMENTS;
-        //		}
-        //		if (value == HILLS || value == CENOTE_HILLS || value == DOLINE_HILLS || value == SHILIN_HILLS || value == TOWER_KARST_HILLS || value == GRASSY_DUNES || value == DUNE_SEA)
-        //		{
-        //			return COASTAL_DUNES;
-        //		}
+        if (value == OLD_MOUNTAINS /*|| value == EXTREME_DOLINE_MOUNTAINS*/) {
+            return TERRACE_LOWER;
+        }
+        if (value == PLATEAU /*|| value == EXTREME_DOLINE_PLATEAU || value == BURREN_PLATEAU || value == SHILIN_PLATEAU*/) {
+            return SEA_STACKS;
+        }
+        if (value == PLATEAU_WIDE || value == ROCKY_PLATEAU /*|| value == DOLINE_PLATEAU*/) {
+            return SETBACK_CLIFFS;
+        }
+        if (value == HIGHLANDS /*|| value == CENOTE_HIGHLANDS || value == DOLINE_HIGHLANDS || value == SHILIN_HIGHLANDS || value == TOWER_KARST_HIGHLANDS*/) {
+            return ROCKY_SHORES;
+        }
+        if (value == ROLLING_HILLS /*|| value == DOLINE_ROLLING_HILLS || value == CENOTE_ROLLING_HILLS*/) {
+            return EMBAYMENTS;
+        }
+        if (value == HILLS /*|| value == CENOTE_HILLS || value == DOLINE_HILLS || value == SHILIN_HILLS || value == TOWER_KARST_HILLS*/ || value == GRASSY_DUNES || value == DUNE_SEA) {
+            return COASTAL_DUNES;
+        }
         return TIDAL_FLATS;
     }
 

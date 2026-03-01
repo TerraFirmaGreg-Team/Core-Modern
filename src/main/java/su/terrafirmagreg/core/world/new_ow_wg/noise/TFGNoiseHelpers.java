@@ -26,4 +26,35 @@ public class TFGNoiseHelpers {
     public static Noise2D max(Noise2D noise, Noise2D other) {
         return (x, y) -> Math.max(noise.noise(x, y), other.noise(x, y));
     }
+
+    /**
+     * Minimum of two noises.
+     */
+    public static Noise2D min(Noise2D noise, Noise2D other) {
+        return (x, y) -> Math.min(noise.noise(x, y), other.noise(x, y));
+    }
+
+    /**
+     * Used to generate varying-height cliffs starting at various noise values
+     *
+     * @param compareNoise value above which cliffs should be added
+     * @param addendNoise  cliff height noise
+     * @param slopeNoise multiplier between the slope of the base noise and the slope of the added cliff
+     */
+    public static Noise2D slopedCliffMap(Noise2D thisNoise, Noise2D compareNoise, Noise2D addendNoise, Noise2D slopeNoise) {
+        return (x, z) -> {
+            final double noise = thisNoise.noise(x, z);
+            final double compare = compareNoise.noise(x, z);
+            final double addend = addendNoise.noise(x, z);
+            final double slope = slopeNoise.noise(x, z);
+            // Well above the cliff, add the full cliff height amount
+            if (noise > compare + addend) {
+                return noise + addend;
+            } else if (noise > compare) {
+                return noise + Math.min((noise - compare) * slope, addend);
+            } else {
+                return noise;
+            }
+        };
+    }
 }

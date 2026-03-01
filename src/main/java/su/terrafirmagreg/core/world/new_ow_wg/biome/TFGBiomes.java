@@ -21,6 +21,7 @@ import net.minecraft.world.level.biome.Biome;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGNoiseHelpers;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.*;
@@ -187,7 +188,47 @@ public class TFGBiomes {
                             .surface(ShoreAndOceanSurfaceBuilder.SEA_CLIFFS)
                             .aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore()
                             .noRivers().noSandyRiverShores()));
-    // TODO: more kinds of shores
+    // Multiple tiers of cliffs -- High to montane biome shore
+    public static final BiomeExtension TERRACE_UPPER = register("terrace_upper",
+            shoreType(TFGRiverBlendType.TALL_CANYON, ShoreBlendType.UPPER_TERRACE, 0,
+                    builder().heightmap(seed -> TFGBiomeNoise.constant(0))
+                            .surface(ShoreAndOceanSurfaceBuilder.SEA_CLIFFS)
+                            .aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore()
+                            .noRivers().noSandyRiverShores()));
+    public static final BiomeExtension TERRACE_LOWER = register("terrace_lower",
+            shoreType(TFGRiverBlendType.TALL_CANYON, ShoreBlendType.LOWER_TERRACE, 0,
+                    builder().heightmap(seed -> TFGBiomeNoise.constant(0))
+                            .surface(ShoreAndOceanSurfaceBuilder.SEA_CLIFFS)
+                            .aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore()
+                            .noRivers().noSandyRiverShores()));
+    // Vegetated zone below shore cliffs -- Mid-high biome shore
+    public static final BiomeExtension SETBACK_CLIFFS = register("setback_cliffs",
+            shoreType(TFGRiverBlendType.CANYON, ShoreBlendType.SETBACK_CLIFFS, 0,
+                    builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30))
+                            .surface(ShoreAndOceanSurfaceBuilder.SANDY)
+                            .aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore()
+                            .noRivers().noSandyRiverShores()));
+    // Vegetated coastal Dunes -- Below setback cliffs
+    public static final BiomeExtension COASTAL_DUNES = register("coastal_dunes",
+            shoreType(TFGRiverBlendType.WIDE_DEEP, ShoreBlendType.DUNES, 0,
+                    builder().heightmap(seed -> TFGBiomeNoise.constant(0))
+                            .surface(ShoreAndOceanSurfaceBuilder.SANDY)
+                            .aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore()
+                            .noRivers().noSandyRiverShores()));
+    // Chaotic rock formations, tide pools, and blowholes
+    public static final BiomeExtension ROCKY_SHORES = register("rocky_shores",
+            shoreType(TFGRiverBlendType.CANYON, ShoreBlendType.ROCKY_SHORES, 0,
+                    builder().heightmap(seed -> TFGBiomeNoise.constant(-15))
+                            .surface(ShoreAndOceanSurfaceBuilder.ROCKY_SHORE)
+                            .aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore()
+                            .noRivers().noSandyRiverShores()));
+    // Similar to Rocky Shores, but with beaches mixed in
+    public static final BiomeExtension EMBAYMENTS = register("embayments",
+            shoreType(TFGRiverBlendType.CANYON, ShoreBlendType.EMBAYMENTS, 0,
+                    builder().heightmap(BiomeNoise::shore)
+                            .surface(ShoreAndOceanSurfaceBuilder.SEA_CLIFFS)
+                            .aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore()
+                            .noRivers().noSandyRiverShores()));
 
     // Water
     public static final BiomeExtension LAKE = register("lake",
@@ -252,6 +293,38 @@ public class TFGBiomes {
                     builder().heightmap(seed -> TFGBiomeNoise.dunes(seed, 2, 16))
                             .surface(GrassyDunesSurfaceBuilder::new)
                             .aquiferHeightOffset(-16).spawnable()));
+    // Zhangye danxia
+    public static final BiomeExtension WHORLED_CANYONS = register("whorled_canyons",
+            riverType(TFGRiverBlendType.TALL_CANYON,
+                    builder().heightmap(seed -> BiomeNoise.canyons(seed, 8, 60))
+                            .surface(TFGBadlandsSurfaceBuilder.WARPED)
+                            .aquiferHeightOffset(-16).spawnable()));
+    public static final BiomeExtension STAIR_STEP_CANYONS = register("stair_step_canyons",
+            riverType(TFGRiverBlendType.TERRACES,
+                    builder().heightmap(TFGBiomeNoise::stairCanyons)
+                            .surface(TFGBadlandsSurfaceBuilder.MESAS)
+                            .aquiferHeightOffset(-16).spawnable()));
+    public static final BiomeExtension MESAS = register("mesas",
+            riverType(TFGRiverBlendType.TERRACES,
+                    builder().heightmap(TFGBiomeNoise::mesas)
+                            .surface(TFGBadlandsSurfaceBuilder.MESAS)
+                            .aquiferHeightOffset(-16).spawnable()));
+    public static final BiomeExtension BUTTES = register("buttes",
+            riverType(TFGRiverBlendType.TERRACES,
+                    builder().heightmap(TFGBiomeNoise::buttes)
+                            .surface(TFGBadlandsSurfaceBuilder.MESAS)
+                            .aquiferHeightOffset(-16).spawnable()));
+    public static final BiomeExtension HOODOOS = register("hoodoos",
+            riverType(TFGRiverBlendType.TERRACES,
+                    builder().heightmap(TFGBiomeNoise::hoodoos)
+                            .surface(TFGBadlandsSurfaceBuilder.HOODOOS)
+                            .aquiferHeightOffset(-16).spawnable()));
+    public static final BiomeExtension ROCKY_PLATEAU = register("rocky_plateau",
+            riverType(TFGRiverBlendType.TALUS,
+                    builder().heightmap(seed -> TFGNoiseHelpers.max(
+                            TFGBiomeNoise.bowlDolines(seed, BiomeNoise.hills(seed, 22, 32), 16),
+                            BiomeNoise.canyons(seed, 0, 52).spread(1.5)))
+                            .surface(RockyPlateauSurfaceBuilder.INSTANCE).spawnable().noSandyRiverShores()));
 
     private static BiomeBuilder riverType(TFGRiverBlendType river, BiomeBuilder builder) {
         var ib = (IBiomeBuilder) builder;
