@@ -1,0 +1,14 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:simple_random_selector",
+    "config": {"features": [
+        "tfc:topaz_tuya_fissure",
+        "tfc:topaz_tuya_fissure",
+        "tfc:topaz_tuya_fissure",
+        "tfc:diamond_tuya_fissure",
+        "tfc:tuya_fissure",
+        "tfc:tuya_fissure",
+        "tfc:tuya_fissure",
+        "tfc:tuya_fissure"
+    ]}
+}

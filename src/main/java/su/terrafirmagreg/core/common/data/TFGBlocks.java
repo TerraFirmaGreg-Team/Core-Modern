@@ -292,6 +292,16 @@ public final class TFGBlocks {
             .build()
             .register();
 
+    public static final BlockEntry<Block> HARDENED_TUFF = TFGCore.REGISTRATE.block("hardened_tuff", Block::new)
+            .initialProperties(() -> Blocks.TUFF)
+            .exBlockstate(GTModels.cubeAllModel(ResourceLocation.fromNamespaceAndPath("minecraft", "block/tuff")))
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_GRAY))
+            .tag(Tags.Blocks.STONE, TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .item(BlockItem::new)
+            .tag(Tags.Items.STONE)
+            .build()
+            .register();
+
     public static final BlockEntry<Block> TUFF_GRAVEL = TFGCore.REGISTRATE.block("tuff_gravel", Block::new)
             .initialProperties(() -> Blocks.GRAVEL)
             .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/tuff_gravel")))
@@ -299,6 +309,16 @@ public final class TFGBlocks {
             .tag(Tags.Blocks.GRAVEL, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
             .item(BlockItem::new)
             .tag(Tags.Items.GRAVEL)
+            .build()
+            .register();
+
+    public static final BlockEntry<Block> TUFF_COBBLE = TFGCore.REGISTRATE.block("tuff_cobble", Block::new)
+            .initialProperties(() -> Blocks.TUFF)
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/tuff_cobble")))
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_GRAY))
+            .tag(Tags.Blocks.COBBLESTONE, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .item(BlockItem::new)
+            .tag(Tags.Items.COBBLESTONE)
             .build()
             .register();
 

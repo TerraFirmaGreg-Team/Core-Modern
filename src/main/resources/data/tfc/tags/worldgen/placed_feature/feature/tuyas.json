@@ -1,0 +1,11 @@
+{
+    "values": [
+        "tfc:tuya_rivulet",
+        "tfc:tuya_caldera",
+        "tfc:random_tuya_fissure",
+        "tfc:pumice_patch",
+        "tfc:lava_surface_spring"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

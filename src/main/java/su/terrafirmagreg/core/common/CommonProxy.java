@@ -37,8 +37,8 @@ import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
 import su.terrafirmagreg.core.world.TFGFeatures;
+import su.terrafirmagreg.core.world.TFGPlacements;
 import su.terrafirmagreg.core.world.TFGSurfaceRules;
-import su.terrafirmagreg.core.world.new_ow_wg.placements.TFGPlacements;
 
 public class CommonProxy {
 

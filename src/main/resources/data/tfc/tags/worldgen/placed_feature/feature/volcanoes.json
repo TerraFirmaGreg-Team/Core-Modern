@@ -1,0 +1,11 @@
+{
+    "values": [
+        "tfc:volcano_rivulet",
+        "tfc:volcano_caldera",
+        "tfc:random_volcano_fissure",
+        "tfc:pumice_patch",
+        "tfc:lava_surface_spring"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -36,10 +36,11 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder {
             final float easing = tuffRingNoise.calculateEasing(context.pos().getX(), context.pos().getZ(), biome.tfg$getTuffRingRarity());
             if (easing > 0.6f) {
                 if (startY < context.getSeaLevel() + 3) {
-                    buildTuffSurface(context, startY, endY, complexStates.VOLCANIC_SHORE_SAND, complexStates.VOLCANIC_SHORE_SAND, simpleStates.TUFF, simpleStates.TUFF_GRAVEL);
+                    buildTuffSurface(context, startY, endY, complexStates.VOLCANIC_SHORE_SAND, complexStates.VOLCANIC_SHORE_SAND,
+                            simpleStates.TUFF, simpleStates.TUFF_GRAVEL);
                 } else {
-                    buildTuffSurface(context, startY, endY, complexStates.VOLCANIC_TOP_GRASS_TO_LOCAL_GRAVEL, complexStates.VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL, simpleStates.TUFF,
-                            simpleStates.TUFF_GRAVEL);
+                    buildTuffSurface(context, startY, endY, complexStates.VOLCANIC_TOP_GRASS_TO_LOCAL_GRAVEL, complexStates.VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL,
+                            simpleStates.TUFF, simpleStates.TUFF_GRAVEL);
                 }
                 return;
             }

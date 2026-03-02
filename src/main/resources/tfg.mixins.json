@@ -168,7 +168,6 @@
         "common.tfc.features.CaveSpikesFeatureMixin",
         "common.tfc.features.ErosionFeatureMixin",
         "common.tfc.features.GroundcoverBlockMixin",
-        "common.tfc.features.IceCaveFeatureMixin",
         "common.tfc.features.IcePileBlockMixin",
         "common.tfc.features.RockSpikeBlockMixin",
         "common.tfc.features.TFCBlocksMixin",
