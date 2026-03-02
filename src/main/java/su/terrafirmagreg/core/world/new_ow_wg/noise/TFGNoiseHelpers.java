@@ -93,4 +93,11 @@ public class TFGNoiseHelpers {
     public static double triangle(double amplitude, double midpoint, double frequency, double value) {
         return midpoint + amplitude * (Math.abs(4.0 * frequency * value + 1.0 - 4.0 * Mth.floor(frequency * value + 0.75)) - 1.0);
     }
+
+    /**
+     * @return The average annual temperature adjusted for elevation above sea level
+     */
+    public static float adjustAverageTemperatureByElevation(int y, float averageTemperature, float seaLevel) {
+        return averageTemperature - Mth.clamp((y - seaLevel) * 0.16225f, 0, 17.822f);
+    }
 }

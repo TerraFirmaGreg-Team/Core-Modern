@@ -103,7 +103,7 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
         this.tfg$tuffRingFrequency = frequency;
 
         assert heightNoiseFactory != null : "tuff rings must be called after setting a heightmap";
-        assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
+        assert surfaceBuilderFactory != null : "tuff rings must be called after setting a surface builder";
 
         final LongFunction<Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
         this.heightNoiseFactory = seed -> TFGBiomeNoise.addTuffRings(Seed.of(seed), baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight);
@@ -119,8 +119,8 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
         this.tfg$tuyaFrequency = frequency;
         this.volcanoBasaltHeight = SEA_LEVEL_Y + volcanoBasaltHeight;
 
-        assert heightNoiseFactory != null : "volcanoes must be called after setting a heightmap";
-        assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
+        assert heightNoiseFactory != null : "tuyas must be called after setting a heightmap";
+        assert surfaceBuilderFactory != null : "tuyas must be called after setting a surface builder";
 
         final LongFunction<Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
         this.heightNoiseFactory = seed -> TFGBiomeNoise.addTuyas(Seed.of(seed), baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight, icy);

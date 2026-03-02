@@ -38,6 +38,7 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
 import su.terrafirmagreg.core.world.TFGFeatures;
 import su.terrafirmagreg.core.world.TFGSurfaceRules;
+import su.terrafirmagreg.core.world.new_ow_wg.placements.TFGPlacements;
 
 public class CommonProxy {
 
@@ -58,6 +59,7 @@ public class CommonProxy {
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.init();
         TFGParticles.register(bus);
+        TFGPlacements.PLACEMENT_MODIFIERS.register(bus);
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
         TFGContainers.CONTAINERS.register(bus);

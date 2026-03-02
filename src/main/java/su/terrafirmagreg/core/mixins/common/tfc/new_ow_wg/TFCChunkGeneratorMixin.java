@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
+import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
+
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -28,6 +30,7 @@ import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.BiomeSourceExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
+import net.dries007.tfc.world.chunkdata.LerpFloatLayer;
 import net.dries007.tfc.world.layer.TFCLayers;
 import net.dries007.tfc.world.layer.framework.AreaFactory;
 import net.dries007.tfc.world.noise.ChunkNoiseSamplingSettings;
@@ -39,6 +42,7 @@ import net.minecraft.Util;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
@@ -165,6 +169,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
                 chunkData.generateFull(filler.surfaceHeight(), filler.aquifer().surfaceHeights());
                 chunkData.getRockData().useCache(chunkPos);
                 filler.fillFromNoise();
+                tfg$modifyBaseRainfall(chunkData, filler.surfaceHeight());
 
                 aquiferCache.set(chunkPos.x, chunkPos.z, filler.aquifer());
 
@@ -175,6 +180,24 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
                         random, getSeaLevel(), settings.minY());
             }));
         }
+    }
+
+    // Fixes rainfall influence applying to underground rivers
+    @Unique
+    private void tfg$modifyBaseRainfall(ChunkData chunkData, int[] surfaceHeight) {
+        var chunkDataAccessor = (ChunkDataAccessor) chunkData;
+        var rainfallLayer = chunkDataAccessor.tfg$getRainfallLayer();
+        assert rainfallLayer != null;
+        float groundwater00 = tfg$modifyBaseGroundwaterPoint(surfaceHeight[0], rainfallLayer.value00()); // Constant = x + 16z, x=0, z=0
+        float groundwater10 = tfg$modifyBaseGroundwaterPoint(surfaceHeight[15], rainfallLayer.value10()); // Constant = x + 16z, x=15, z=0
+        float groundwater01 = tfg$modifyBaseGroundwaterPoint(surfaceHeight[240], rainfallLayer.value01()); // Constant = x + 16z, x=0, z=15
+        float groundwater11 = tfg$modifyBaseGroundwaterPoint(surfaceHeight[255], rainfallLayer.value11()); // Constant = x + 16z, x=15, z=15
+        chunkDataAccessor.tfg$setRainfallLayer(new LerpFloatLayer(groundwater00, groundwater01, groundwater10, groundwater11));
+    }
+
+    @Unique
+    private float tfg$modifyBaseGroundwaterPoint(int height, float startingWater) {
+        return startingWater * Mth.clampedMap(height, SEA_LEVEL_Y + 10, SEA_LEVEL_Y + 25, 1, 0);
     }
 
     @Unique

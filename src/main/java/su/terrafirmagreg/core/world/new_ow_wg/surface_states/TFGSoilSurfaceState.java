@@ -1,6 +1,9 @@
 package su.terrafirmagreg.core.world.new_ow_wg.surface_states;
 
+import java.util.List;
 import java.util.function.Supplier;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.ImmutableList;
 
@@ -8,15 +11,17 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.surface.SoilSurfaceState;
+import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg.SoilSurfaceStateAccessor;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGNoiseHelpers;
 
-public class TFGSoilSurfaceState {
+public class TFGSoilSurfaceState implements SurfaceState {
 
     private static SurfaceState transition(SurfaceState first, SurfaceState second) {
         return context -> (Helpers.hash(729375982L, context.pos()) & 127) > 63 ? first.getState(context) : second.getState(context);
@@ -69,9 +74,9 @@ public class TFGSoilSurfaceState {
                 states.SNOW,
                 transition(states.SNOW, dry),
                 dry,
-                transition(dry, states.COARSE_ARIDISOL_BASE),
-                states.COARSE_ARIDISOL_BASE,
-                transition(states.COARSE_ARIDISOL_BASE, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
+                transition(dry, states.COARSE_SANDY_LOAM),
+                states.COARSE_SANDY_LOAM,
+                transition(states.COARSE_SANDY_LOAM, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
                 soil(type, SoilBlockType.Variant.SANDY_LOAM),
                 blobTransition(soil(type, SoilBlockType.Variant.SANDY_LOAM), transitioningSoil(type)),
                 transitioningSoil(type),
@@ -83,7 +88,7 @@ public class TFGSoilSurfaceState {
                 transitioningSoil(type),
                 transitioningSoil(type),
                 transitioningSoil(type));
-        return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : SoilSurfaceStateAccessor.newSoilSurfaceState(regions);
+        return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : new TFGSoilSurfaceState(regions);
     }
 
     public static SurfaceState buildVolcanicSurfaceType(SoilBlockType type, SurfaceState dry) {
@@ -93,9 +98,9 @@ public class TFGSoilSurfaceState {
                 states.SNOW,
                 transition(states.SNOW, dry),
                 dry,
-                transition(dry, states.COARSE_ANDISOL_BASE),
-                states.COARSE_ANDISOL_BASE,
-                transition(states.COARSE_ANDISOL_BASE, soil(type, SoilBlockType.Variant.SILTY_LOAM)),
+                transition(dry, states.COARSE_SILTY_LOAM),
+                states.COARSE_SILTY_LOAM,
+                transition(states.COARSE_SILTY_LOAM, soil(type, SoilBlockType.Variant.SILTY_LOAM)),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
@@ -107,7 +112,7 @@ public class TFGSoilSurfaceState {
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM));
-        return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : SoilSurfaceStateAccessor.newSoilSurfaceState(regions);
+        return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : new TFGSoilSurfaceState(regions);
     }
 
     public static SurfaceState buildMidType(SoilBlockType type, SurfaceState dry) {
@@ -117,9 +122,9 @@ public class TFGSoilSurfaceState {
                 blobTransition(states.PACKED_ICE, dry),
                 dry,
                 dry,
-                transition(dry, states.COARSE_ARIDISOL_BASE),
-                states.COARSE_ARIDISOL_BASE,
-                transition(states.COARSE_ARIDISOL_BASE, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
+                transition(dry, states.COARSE_SANDY_LOAM),
+                states.COARSE_SANDY_LOAM,
+                transition(states.COARSE_SANDY_LOAM, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
                 soil(type, SoilBlockType.Variant.SANDY_LOAM),
                 blobTransition(soil(type, SoilBlockType.Variant.SANDY_LOAM), transitioningSoil(type)),
                 transitioningSoil(type),
@@ -131,7 +136,7 @@ public class TFGSoilSurfaceState {
                 transitioningSoil(type),
                 transitioningSoil(type),
                 transitioningSoil(type));
-        return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : SoilSurfaceStateAccessor.newSoilSurfaceState(regions);
+        return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : new TFGSoilSurfaceState(regions);
     }
 
     public static SurfaceState buildVolcanicMidType(SoilBlockType type, SurfaceState dry) {
@@ -141,9 +146,9 @@ public class TFGSoilSurfaceState {
                 blobTransition(states.PACKED_ICE, dry),
                 dry,
                 dry,
-                transition(dry, states.COARSE_ANDISOL_BASE),
-                states.COARSE_ANDISOL_BASE,
-                transition(states.COARSE_ANDISOL_BASE, soil(type, SoilBlockType.Variant.SILTY_LOAM)),
+                transition(dry, states.COARSE_SILTY_LOAM),
+                states.COARSE_SILTY_LOAM,
+                transition(states.COARSE_SILTY_LOAM, soil(type, SoilBlockType.Variant.SILTY_LOAM)),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
@@ -155,7 +160,7 @@ public class TFGSoilSurfaceState {
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM),
                 soil(type, SoilBlockType.Variant.SILTY_LOAM));
-        return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : SoilSurfaceStateAccessor.newSoilSurfaceState(regions);
+        return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : new TFGSoilSurfaceState(regions);
     }
 
     public static SurfaceState buildSnowableSurface(SurfaceState snow, SurfaceState typical) {
@@ -178,7 +183,7 @@ public class TFGSoilSurfaceState {
                 typical,
                 typical,
                 typical);
-        return SoilSurfaceStateAccessor.newSoilSurfaceState(regions);
+        return new TFGSoilSurfaceState(regions);
     }
 
     public static SurfaceState buildUnderType() {
@@ -201,6 +206,42 @@ public class TFGSoilSurfaceState {
                 SurfaceStates.GRAVEL,
                 SurfaceStates.GRAVEL,
                 SurfaceStates.GRAVEL);
-        return SoilSurfaceStateAccessor.newSoilSurfaceState(regions);
+        return new TFGSoilSurfaceState(regions);
     }
+
+    private final List<SurfaceState> m_regions;
+
+    private TFGSoilSurfaceState(List<SurfaceState> regions) {
+        this.m_regions = regions;
+    }
+
+    @Override
+    public @NotNull BlockState getState(SurfaceBuilderContext context) {
+        final float rainfall = context.rainfall();
+        final float temperature = TFGNoiseHelpers.adjustAverageTemperatureByElevation(context.pos().getY(), context.averageTemperature(), context.getSeaLevel());
+
+        // Rain-controlled surface: <64 pure gravel, <91 mixed gravel/dirt, <118 dirt, <145 mixed dirt/grass, otherwise grass
+        final int rainIndex = (int) Mth.clampedMap(rainfall, 35, 450, 3, m_regions.size() - 0.01f);
+
+        // Temperature-controlled surface: <-17.4 pure snow, <-16.6 mixed gravel/snow <-15.7 pure gravel, <-15 mixed gravel/dirt, <14.1, <-13.2 mixed dirt/grass, otherwise grass
+        // -17c = Koppen EF/ET Border
+        // -12c = Koppen ET Border
+        final int tempIndex = (int) Mth.clampedMap(temperature, -19, -4, 0, m_regions.size() - 0.01f);
+
+        return m_regions.get(Math.min(rainIndex, tempIndex)).getState(context);
+    }
+
+    static class NeedsPostProcessingSoilSurfaceState extends TFGSoilSurfaceState {
+
+        private NeedsPostProcessingSoilSurfaceState(List<SurfaceState> regions) {
+            super(regions);
+        }
+
+        @Override
+        public void setState(SurfaceBuilderContext context) {
+            context.chunk().setBlockState(context.pos(), getState(context), false);
+            context.chunk().markPosForPostprocessing(context.pos());
+        }
+    }
+
 }

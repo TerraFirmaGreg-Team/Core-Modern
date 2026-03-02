@@ -18,24 +18,14 @@ public enum TFGChooseBiomesTask implements RegionTask {
             { HIGHLANDS, HIGHLANDS, HIGHLANDS, HIGHLANDS, ROLLING_HILLS, ROLLING_HILLS, BADLANDS, BADLANDS, STAIR_STEP_CANYONS, PLATEAU, PLATEAU, PLATEAU, PLATEAU_WIDE, OLD_MOUNTAINS, OLD_MOUNTAINS,
                     OLD_MOUNTAINS, OLD_MOUNTAINS }, // High
     };
-    //    private static final int[][] ICE_SHEET_ALTITUDE_BIOMES = {
-    //            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS }, // Low
-    //            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET, ICE_SHEET_TUYAS }, // Mid
-    //            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET_TUYAS, ICE_SHEET_MOUNTAINS, ICE_SHEET_MOUNTAINS }, // High
-    //    };
-    //private static final int[][] PALEO_ICE_SHEET_ALTITUDE_BIOMES = {
-    //	{ PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, TUYAS, LOWLANDS, LOWLANDS }, // Low
-    //	{ PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, TUYAS, TUYAS }, // Mid
-    //	{ DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, PLATEAU, PLATEAU, PLATEAU, PLATEAU_WIDE, ICE_SHEET_MOUNTAINS }, // High
-    //};
     private static final int[][] ICE_SHEET_ALTITUDE_BIOMES = {
-            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET }, // Low
-            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET }, // Mid
-            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_MOUNTAINS, ICE_SHEET_MOUNTAINS }, // High
+            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS }, // Low
+            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET, ICE_SHEET_TUYAS }, // Mid
+            { ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET_TUYAS, ICE_SHEET_MOUNTAINS, ICE_SHEET_MOUNTAINS }, // High
     };
     private static final int[][] PALEO_ICE_SHEET_ALTITUDE_BIOMES = {
-            { PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, LOWLANDS, LOWLANDS }, // Low
-            { PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS }, // Mid
+            { PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, TUYAS, LOWLANDS, LOWLANDS }, // Low
+            { PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, TUYAS, TUYAS }, // Mid
             { DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, PLATEAU, PLATEAU, PLATEAU, PLATEAU_WIDE, ICE_SHEET_MOUNTAINS }, // High
     };
     private static final int[][] DESERT_ALTITUDE_BIOMES = {
@@ -128,14 +118,11 @@ public enum TFGChooseBiomesTask implements RegionTask {
             // Add hot spot biomes
             final byte age = pt.tfg$getHotSpotAge();
             if (age > 0) {
-                //				if (age == 4 && point.biome == OCEAN || point.biome == DEEP_OCEAN || point.biome == OCEAN_REEF || point.biome == DEEP_OCEAN_TRENCH)
-                //				{
-                //					point.biome = SUNKEN_SHIELD_VOLCANO;
-                //				}
-                //				else
-                //				{
-                //					point.biome = getHotSpotBiome(pt.tfg$getHotSpotAge());
-                //				}
+                if (age == 4 && point.biome == OCEAN || point.biome == DEEP_OCEAN || point.biome == OCEAN_REEF || point.biome == DEEP_OCEAN_TRENCH) {
+                    point.biome = SUNKEN_SHIELD_VOLCANO;
+                } else {
+                    point.biome = getHotSpotBiome(pt.tfg$getHotSpotAge());
+                }
             }
 
             // Adjust certain biome placements by climate. Low, freshwater biomes don't make much sense appearing in
@@ -164,13 +151,13 @@ public enum TFGChooseBiomesTask implements RegionTask {
             // Special Biome Glaciation
             final float maxIceSheetTemp = -14f + 0.006f * rainfall;
             if (point.land() && temperature < maxIceSheetTemp) {
-                //final int biome = point.biome;
-                //				if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO)
-                //					point.biome = ICE_SHEET_SHIELD_VOLCANO;
+                final int biome = point.biome;
+                if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO)
+                    point.biome = ICE_SHEET_SHIELD_VOLCANO;
             } else if (temperature < maxIceSheetTemp + 4f) {
-                //final int biome = point.biome;
-                //				if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO)
-                //					point.biome = GLACIATED_SHIELD_VOLCANO;
+                final int biome = point.biome;
+                if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO)
+                    point.biome = GLACIATED_SHIELD_VOLCANO;
             }
 
             // Karst Biomes
@@ -208,14 +195,14 @@ public enum TFGChooseBiomesTask implements RegionTask {
     }
 
     private int getHotSpotBiome(int age) {
-        //		if (age == 4)
-        //			return ANCIENT_SHIELD_VOLCANO;
-        //		if (age == 3)
-        //			return EXTINCT_SHIELD_VOLCANO;
-        //		if (age == 2)
-        //			return DORMANT_SHIELD_VOLCANO;
-        //		if (age == 1)
-        //			return ACTIVE_SHIELD_VOLCANO;
+        if (age == 4)
+            return ANCIENT_SHIELD_VOLCANO;
+        if (age == 3)
+            return EXTINCT_SHIELD_VOLCANO;
+        if (age == 2)
+            return DORMANT_SHIELD_VOLCANO;
+        if (age == 1)
+            return ACTIVE_SHIELD_VOLCANO;
         return PLAINS;
     }
 

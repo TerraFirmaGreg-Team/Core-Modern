@@ -5,7 +5,6 @@ import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.world.biome.BiomeExtension;
-import net.dries007.tfc.world.noise.Cellular2D;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.minecraft.core.BlockPos;
@@ -35,11 +34,11 @@ public final class TFGVolcanoNoise implements CenterOrDistanceNoise {
         }
     }
 
-    private final Cellular2D cellNoise;
+    private final TFGCellular2D cellNoise;
     private final Noise2D jitterNoise;
 
     public TFGVolcanoNoise(Seed seed) {
-        cellNoise = new Cellular2D(seed.seed()).spread(0.009f);
+        cellNoise = new TFGCellular2D(seed.seed()).spread(0.009f);
         jitterNoise = new OpenSimplex2D(seed.seed() + 8179234123L).octaves(2).scaled(-0.0016f, 0.0016f).spread(0.128f);
     }
 
@@ -54,7 +53,7 @@ public final class TFGVolcanoNoise implements CenterOrDistanceNoise {
     }
 
     public double modifyHeight(double x, double z, double baseHeight, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight) {
-        final Cellular2D.Cell cell = sampleCell(x, z, rarity);
+        final TFGCellular2D.Cell cell = sampleCell(x, z, rarity);
         if (cell != null) {
             // Circular gradient defining the shape of the cone
             final float cone_easing = Mth.clamp(TFGVolcanoNoise.calculateEasing((float) cell.f1()) + (float) jitterNoise.noise(x, z), 0, 1);
@@ -70,7 +69,7 @@ public final class TFGVolcanoNoise implements CenterOrDistanceNoise {
 
     // Alternate version of modifyHeight used for shield volcanoes that weighs the base noise more heavily
     public double modifyShieldVolcanoHeight(double x, double z, double baseHeight, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight) {
-        final Cellular2D.Cell cell = sampleCell(x, z, rarity);
+        final TFGCellular2D.Cell cell = sampleCell(x, z, rarity);
         if (cell != null) {
             final float f1 = (float) cell.f1();
             final float easing = Mth.clamp(TFGVolcanoNoise.calculateEasing(f1) + (float) jitterNoise.noise(x, z), 0, 1);
@@ -88,7 +87,7 @@ public final class TFGVolcanoNoise implements CenterOrDistanceNoise {
      */
     @Override
     public float calculateEasing(int x, int z, int rarity) {
-        final Cellular2D.Cell cell = sampleCell(x, z, rarity);
+        final TFGCellular2D.Cell cell = sampleCell(x, z, rarity);
         if (cell != null) {
             return calculateClampedEasing((float) cell.f1());
         }
@@ -101,7 +100,7 @@ public final class TFGVolcanoNoise implements CenterOrDistanceNoise {
     @Override
     @Nullable
     public BlockPos calculateCenter(int x, int y, int z, int rarity) {
-        final Cellular2D.Cell cell = sampleCell(x, z, rarity);
+        final TFGCellular2D.Cell cell = sampleCell(x, z, rarity);
         if (cell != null) {
             return new BlockPos((int) cell.x(), y, (int) cell.y());
         }
@@ -113,8 +112,8 @@ public final class TFGVolcanoNoise implements CenterOrDistanceNoise {
      * Returns {@code null} if the cell was excluded due to a rarity condition, or if the cell was too close to adjacent cells (possibly causing overlapping volcanoes)
      */
     @Nullable
-    private Cellular2D.Cell sampleCell(double x, double z, int rarity) {
-        final Cellular2D.Cell cell = cellNoise.cell(x, z);
+    private TFGCellular2D.Cell sampleCell(double x, double z, int rarity) {
+        final TFGCellular2D.Cell cell = cellNoise.cell(x, z);
         if (Math.abs(cell.noise()) <= 1f / rarity) {
             return cell;
         }

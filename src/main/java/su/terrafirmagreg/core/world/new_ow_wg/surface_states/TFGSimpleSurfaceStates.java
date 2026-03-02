@@ -39,8 +39,8 @@ public class TFGSimpleSurfaceStates {
     public final SurfaceState PACKED_ICE;
     public final SurfaceState SNOW;
 
-    public final SurfaceState COARSE_ARIDISOL_BASE;
-    public final SurfaceState COARSE_ANDISOL_BASE;
+    public final SurfaceState COARSE_SANDY_LOAM;
+    public final SurfaceState COARSE_SILTY_LOAM;
     public final SurfaceState DRY_MUD;
     public final SurfaceState SALTED_EARTH;
 
@@ -93,8 +93,8 @@ public class TFGSimpleSurfaceStates {
         SNOWY_BASALT_MORAINE = TFGSoilSurfaceState.buildSnowableSurface(SNOW, BASALT_MORAINE);
         SNOWY_SAND_AND_GRAVEL = TFGSoilSurfaceState.buildSnowableSurface(SNOW, SAND_AND_GRAVEL);
 
-        COARSE_ARIDISOL_BASE = context -> TFGBlocks.COARSE_SANDY_LOAM_DIRT.get().defaultBlockState();
-        COARSE_ANDISOL_BASE = context -> TFGBlocks.COARSE_SILTY_LOAM_DIRT.get().defaultBlockState();
+        COARSE_SANDY_LOAM = context -> TFGBlocks.COARSE_SANDY_LOAM_DIRT.get().defaultBlockState();
+        COARSE_SILTY_LOAM = context -> TFGBlocks.COARSE_SILTY_LOAM_DIRT.get().defaultBlockState();
         DRY_MUD = context -> TFGBlocks.HARDENED_CLAY.get().defaultBlockState();
         SALTED_EARTH = context -> TFGBlocks.HALITE.get().defaultBlockState();
 
