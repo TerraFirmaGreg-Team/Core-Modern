@@ -96,6 +96,8 @@ public final class TFGTags {
         public static final TagKey<Block> CopperGreenhouseCasings = createBlockTag("copper_greenhouse_casings");
         public static final TagKey<Block> TreatedWoodGreenhouseCasings = createBlockTag("treated_wood_greenhouse_casings");
 
+        public static final TagKey<Block> SeaStackRocks = createBlockTag("sea_stack_rocks");
+
         private static TagKey<Block> createBlockTag(String path) {
             return createBlockTag(TFGCore.id(path));
         }

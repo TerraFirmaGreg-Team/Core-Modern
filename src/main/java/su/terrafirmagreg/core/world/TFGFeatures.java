@@ -40,6 +40,9 @@ public class TFGFeatures {
     public static final RegistryObject<MarsIceCaveFeature> MARS_ICE_CAVES = register(
             "mars_ice_caves", MarsIceCaveFeature::new, NoneFeatureConfiguration.CODEC);
 
+    public static final RegistryObject<SeaStacksFeature> SEA_STACKS = register(
+            "sea_stacks", SeaStacksFeature::new, NoneFeatureConfiguration.CODEC);
+
     private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
             Function<Codec<C>, F> factory, Codec<C> codec) {
         return FEATURES.register(name, () -> factory.apply(codec));
