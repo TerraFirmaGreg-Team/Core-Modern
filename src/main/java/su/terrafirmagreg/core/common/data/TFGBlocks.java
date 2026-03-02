@@ -255,6 +255,14 @@ public final class TFGBlocks {
                         .add(LootItem.lootTableItem(item.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))))));
     }
 
+    public static final BlockEntry<Block> VOLCANIC_ASH = TFGCore.REGISTRATE.block("volcanic_ash", Block::new)
+            .initialProperties(TFCBlocks.SAND.get(SandBlockType.RED)::get)
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_GRAY))
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/volcanic_ash")))
+            .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
+            .simpleItem()
+            .register();
+
     ////#region Martian sand piles and layer blocks, in order of color
 
     // Still in the pile folder because these are for the existing pre-0.11 layer blocks in peoples' worlds
@@ -272,7 +280,7 @@ public final class TFGBlocks {
             .properties(p -> p.noOcclusion().mapColor(MapColor.NONE))
             .blockstate(ModelUtils.generateSandLayersFromBlock(TFGCore.id("block/volcanic_ash")))
             .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
-            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/volcanic_ash"))).build()
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("tfc", "item/powder/tetrahedrite"))).build()
             .register();
 
     public static final BlockEntry<SandLayerBlock> BLACK_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/black_sand",

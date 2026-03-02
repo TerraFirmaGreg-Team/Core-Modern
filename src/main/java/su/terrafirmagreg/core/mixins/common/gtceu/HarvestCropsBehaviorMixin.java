@@ -83,7 +83,7 @@ public abstract class HarvestCropsBehaviorMixin {
         }
 
         if (tfg$isPlanter(block)) {
-            isProcessed = tfg$processPlanters(world, pos);
+            isProcessed = tfg$processPlanters(world, player, blockState, pos);
         }
 
         if (isProcessed && player != null) {
@@ -107,7 +107,7 @@ public abstract class HarvestCropsBehaviorMixin {
     }
 
     @Unique
-    private static boolean tfg$processPlanters(Level level, BlockPos pos) {
+    private static boolean tfg$processPlanters(Level level, Player player, BlockState blockState, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof LargePlanterBlockEntity planterBlockEntity) {
@@ -121,7 +121,16 @@ public abstract class HarvestCropsBehaviorMixin {
             }
 
             for (int i = 0; i < planterBlockEntity.slots(); i++) {
-                InteractionResult resultTemp = LargePlanterBlock.takeSlot(level, planterBlockEntity, i, (item) -> Block.popResourceFromFace(level, pos, direction, item));
+                int iFinal = i;
+                InteractionResult resultTemp = LargePlanterBlock.takeSlot(level, planterBlockEntity, i, (item) -> {
+                    if (item.is(Tags.Items.SEEDS)) {
+                        if (blockState.getBlock() instanceof LargePlanterBlock planterBlock) {
+                            planterBlock.insertSlot(level, planterBlockEntity, item, player, iFinal);
+                        }
+                    }
+
+                    Block.popResourceFromFace(level, pos, direction, item);
+                });
 
                 if (result != InteractionResult.CONSUME) {
                     result = resultTemp;

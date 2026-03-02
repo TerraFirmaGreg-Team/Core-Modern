@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,9 +15,15 @@ import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggHandler;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
+import su.terrafirmagreg.core.utils.commands.TFGCommands;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class ForgeCommonEventListener {
+
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event) {
+        TFGCommands.register(event.getDispatcher());
+    }
 
     @SubscribeEvent
     public static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
