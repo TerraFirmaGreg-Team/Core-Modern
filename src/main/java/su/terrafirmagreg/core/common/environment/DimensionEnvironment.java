@@ -23,7 +23,7 @@ public record DimensionEnvironment(
         short temperature,
         float pressure) {
 
-    /** Pressure threshold below which decompression events occur (low pressure → air rushes out) */
+    /** Pressure threshold below which decompression events occur (low pressure -> air rushes out) */
     public static final float DECOMPRESSION_THRESHOLD = 0.5f;
 
     /** Earth-normalized gravity (1.0 = Earth). Used by Ad Astra's gravity system. */

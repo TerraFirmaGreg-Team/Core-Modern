@@ -30,7 +30,6 @@ Stop decompression force when original hole is filled but there's still other ho
 
 **Maybe:**\
 Readout board with temperature, oxygen, pressure, gravity status?
-Equip quark suit debug command
 
 
 # Environment System Design Notes

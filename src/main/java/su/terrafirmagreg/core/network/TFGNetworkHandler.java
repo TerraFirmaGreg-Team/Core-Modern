@@ -77,10 +77,10 @@ public class TFGNetworkHandler {
                 EnvironmentResponsePacket::handle);
         INSTANCE.registerMessage(
                 id(),
-                DecompressionSoundPacket.class,
-                DecompressionSoundPacket::encode,
-                DecompressionSoundPacket::decode,
-                DecompressionSoundPacket::handle);
+                DecompressionEventPacket.class,
+                DecompressionEventPacket::encode,
+                DecompressionEventPacket::decode,
+                DecompressionEventPacket::handle);
         INSTANCE.registerMessage(
                 id(),
                 ForcedPosePacket.class,
@@ -133,16 +133,16 @@ public class TFGNetworkHandler {
         sendToAllAround(level, pos, packet);
     }
 
-    public static void sendDecompressionSoundStart(ServerLevel level, BlockPos pos, int durationTicks) {
-        sendToAllAround(level, pos, DecompressionSoundPacket.start(pos, durationTicks));
+    public static void sendDecompressionEventStart(ServerLevel level, BlockPos pos, int durationTicks, Vec3 breachAxis) {
+        sendToAllAround(level, pos, DecompressionEventPacket.start(pos, durationTicks, breachAxis));
     }
 
-    public static void sendDecompressionSoundStop(ServerLevel level, BlockPos pos) {
-        sendToAllAround(level, pos, DecompressionSoundPacket.stop(pos));
+    public static void sendDecompressionEventStop(ServerLevel level, BlockPos pos) {
+        sendToAllAround(level, pos, DecompressionEventPacket.stop(pos));
     }
 
-    public static void sendDecompressionSoundShift(ServerLevel level, BlockPos oldPos, BlockPos newPos, int durationTicks, int elapsedTicks) {
-        DecompressionSoundPacket pkt = DecompressionSoundPacket.shift(oldPos, newPos, durationTicks, elapsedTicks);
+    public static void sendDecompressionEventShift(ServerLevel level, BlockPos oldPos, BlockPos newPos, int durationTicks, int elapsedTicks, Vec3 newBreachAxis) {
+        DecompressionEventPacket pkt = DecompressionEventPacket.shift(oldPos, newPos, durationTicks, elapsedTicks, newBreachAxis);
         // Send in both locations to affect all players. Client handles dedup.
         sendToAllAround(level, oldPos, pkt);
         sendToAllAround(level, newPos, pkt);

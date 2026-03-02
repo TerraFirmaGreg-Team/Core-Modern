@@ -4,7 +4,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -12,6 +15,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import lombok.Getter;
 
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.ForcedPosePacket;
@@ -23,12 +28,11 @@ import su.terrafirmagreg.core.network.packet.ForcedPosePacket;
  * Created when a room transitions from sealed to escaped (build height or dimension limit).
  * Cancelled early if the room re-seals or the machine is removed.
  */
-// TODO: Add particles
 public class DecompressionEvent {
 
-    @lombok.Getter
+    @Getter
     private BlockPos breachPoint;
-    @lombok.Getter
+    @Getter
     private final RoomScan oldRoomScan;
     private final int durationTicks;
     private int elapsed;
@@ -60,7 +64,42 @@ public class DecompressionEvent {
         this.oldRoomScan = oldRoomScan;
         this.durationTicks = Mth.clamp(Mth.floor(oldRoomScan.interiorSize() * TICKS_PER_BLOCK), MIN_DURATION, MAX_DURATION);
         this.elapsed = 0;
-        TFGNetworkHandler.sendDecompressionSoundStart(level, breachPoint, durationTicks);
+        Vec3 breachAxis = computeBreachAxis(breachPoint, oldRoomScan);
+        if (breachAxis != null) {
+            TFGNetworkHandler.sendDecompressionEventStart(level, breachPoint, durationTicks, breachAxis);
+        } else {
+            finish(level);
+        }
+    }
+
+    /**
+     * Sample all 6 neighbors of the breach block to determine the breach direction.
+     * Inside = neighbor is in the old room's interior. Outside = neighbor is not in the envelope.
+     * Returns the normalized vector from the averaged outside to averaged inside positions.
+     */
+    static @Nullable Vec3 computeBreachAxis(BlockPos breachPoint, RoomScan oldRoomScan) {
+        Vec3 insideSum = Vec3.ZERO;
+        Vec3 outsideSum = Vec3.ZERO;
+        int insideCount = 0, outsideCount = 0;
+
+        for (Direction dir : Direction.values()) {
+            BlockPos neighbor = breachPoint.relative(dir);
+            long neighborLong = neighbor.asLong();
+            if (oldRoomScan.interior().contains(neighborLong)) {
+                insideSum = insideSum.add(dir.getStepX(), dir.getStepY(), dir.getStepZ());
+                insideCount++;
+            } else if (!oldRoomScan.envelope().contains(neighborLong)) {
+                outsideSum = outsideSum.add(dir.getStepX(), dir.getStepY(), dir.getStepZ());
+                outsideCount++;
+            }
+        }
+
+        if (insideCount == 0 || outsideCount == 0)
+            return null;
+
+        Vec3 inside = insideSum.normalize();
+        Vec3 outside = outsideSum.normalize();
+        return outside.subtract(inside).normalize();
     }
 
     /**
@@ -227,15 +266,15 @@ public class DecompressionEvent {
 
     private boolean shouldAffect(Entity entity) {
         // TODO: Tags for entities that shouldn't be affected (ad astra has rope knot?)
-        // if (entity instanceof Player player && (player.isCreative() || player.isSpectator()))
-        //     return false;
+        //        if (entity instanceof Player player && (player.isCreative() || player.isSpectator()))
+        //            return false;
         return true;
     }
 
     /** Stop the sound, unforce all crawling players, and mark as expired. */
     private void finish(ServerLevel level) {
         elapsed = durationTicks;
-        TFGNetworkHandler.sendDecompressionSoundStop(level, breachPoint);
+        TFGNetworkHandler.sendDecompressionEventStop(level, breachPoint);
         for (ServerPlayer player : crawlingPlayers) {
             player.setForcedPose(null);
             player.refreshDimensions();
@@ -246,8 +285,13 @@ public class DecompressionEvent {
 
     /** Shift the breach point mid-event (e.g. original hole closed, new hole opened). */
     public void shiftBreachPoint(ServerLevel level, BlockPos newBreachPoint) {
-        TFGNetworkHandler.sendDecompressionSoundShift(level, breachPoint, newBreachPoint, durationTicks, elapsed);
-        this.breachPoint = newBreachPoint;
+        Vec3 breachAxis = computeBreachAxis(newBreachPoint, oldRoomScan);
+        if (breachAxis != null) {
+            TFGNetworkHandler.sendDecompressionEventShift(level, breachPoint, newBreachPoint, durationTicks, elapsed, breachAxis);
+            this.breachPoint = newBreachPoint;
+        } else {
+            finish(level);
+        }
     }
 
     /** Cancel this decompression event early (e.g. room re-sealed, machine removed). */
