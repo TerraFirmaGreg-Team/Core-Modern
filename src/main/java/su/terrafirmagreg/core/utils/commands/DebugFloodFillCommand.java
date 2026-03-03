@@ -19,6 +19,8 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.environment.DiagnosticFloodFill;
 import su.terrafirmagreg.core.common.environment.FloodFill;
+import su.terrafirmagreg.core.common.environment.PressureFloodFill;
+import su.terrafirmagreg.core.common.environment.PressureRoomScan;
 import su.terrafirmagreg.core.common.environment.RoomScan;
 
 /**
@@ -67,6 +69,26 @@ public class DebugFloodFillCommand {
                                     return runFloodFill(c.getSource(), pos, maxBlocks, 256, false);
                                 }))));
 
+        debug.then(literal("pressure")
+                // /tfg debug pressure
+                .executes(c -> {
+                    BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                    return runPressureFill(c.getSource(), pos, 1_000_000, 256);
+                })
+                // /tfg debug pressure <maxBlocks> [pos]
+                .then(argument("maxBlocks", IntegerArgumentType.integer(0, 1_000_000))
+                        .executes(c -> {
+                            BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                            int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                            return runPressureFill(c.getSource(), pos, maxBlocks, 256);
+                        })
+                        .then(argument("pos", BlockPosArgument.blockPos())
+                                .executes(c -> {
+                                    BlockPos pos = BlockPosArgument.getBlockPos(c, "pos");
+                                    int maxBlocks = IntegerArgumentType.getInteger(c, "maxBlocks");
+                                    return runPressureFill(c.getSource(), pos, maxBlocks, 256);
+                                }))));
+
         debug.then(literal("uncacheable")
                 .executes(c -> {
                     findUncacheableBlocks(c.getSource());
@@ -106,6 +128,34 @@ public class DebugFloodFillCommand {
             if (diagnostic && result.escapePath() != null) {
                 DiagnosticFloodFill.spawnTrace(level, result.escapePath());
             }
+        }
+
+        return 1;
+    }
+
+    private static int runPressureFill(CommandSourceStack source, BlockPos start, int maxBlocks, int maxHorizontalDistance) {
+        ServerLevel level = source.getLevel();
+
+        source.sendSuccess(() -> Component.literal(String.format(
+                "Running pressure flood fill from %s with max %d blocks...",
+                start.toShortString(), maxBlocks)), false);
+
+        long startTime = System.nanoTime();
+        PressureRoomScan result = PressureFloodFill.fill(level, start, maxBlocks, maxHorizontalDistance,
+                TFGTags.Blocks.PressureResistant);
+        long elapsed = System.nanoTime() - startTime;
+
+        source.sendSuccess(() -> Component.literal(String.format("Status: %s", result.status())), false);
+        source.sendSuccess(() -> Component.literal(String.format(
+                "Interior: %d blocks, Envelope: %d blocks, Parts: %d",
+                result.roomScan().interiorSize(), result.roomScan().envelopeSize(),
+                result.partPositions().size())), false);
+        source.sendSuccess(() -> Component.literal(String.format("Time: %.2f ms", elapsed / 1_000_000.0)), false);
+
+        if (result.roomScan().hasEscapePoint()) {
+            BlockPos escape = result.roomScan().escapePoint();
+            assert escape != null;
+            source.sendSuccess(() -> Component.literal(String.format("Escape point: %s", escape.toShortString())), false);
         }
 
         return 1;
