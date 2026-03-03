@@ -35,16 +35,6 @@ import su.terrafirmagreg.core.common.data.TFGFluids;
 @Mixin(value = CaveSpikesFeature.class, remap = false)
 public class CaveSpikesFeatureMixin {
 
-    // Stops stalagmites from generating out in the open
-    @Inject(method = "place(Lnet/minecraft/world/level/levelgen/feature/FeaturePlaceContext;)Z", at = @At("HEAD"), cancellable = true)
-    private void tfg$place(FeaturePlaceContext<NoneFeatureConfiguration> context, CallbackInfoReturnable<Boolean> cir) {
-        final WorldGenLevel level = context.level();
-        final BlockPos pos = context.origin();
-        if (level.canSeeSky(pos.above())) {
-            cir.cancel();
-        }
-    }
-
     // Controls which block tag to check when placing small spikes
     @ModifyArg(method = "placeSmallSpike(Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;F)V", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/util/Helpers;isBlock(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/tags/TagKey;)Z"), index = 1)
     private TagKey<Block> tfg$placeSmallSpike(TagKey<Block> tag, @Local(argsOnly = true) WorldGenLevel level) {
