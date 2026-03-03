@@ -85,9 +85,6 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     protected abstract BiomeExtension sampleBiomeNoRiver(int blockX, int blockZ);
 
     @Shadow
-    public abstract int getSeaLevel();
-
-    @Shadow
     protected abstract ChunkNoiseSamplingSettings createNoiseSamplingSettingsForChunk(ChunkAccess chunk);
 
     @Shadow
@@ -173,7 +170,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
             final ChunkBaseBlockSource baseBlockSource = createBaseBlockSourceForChunk(chunk);
             final TFGChunkNoiseFiller filler = new TFGChunkNoiseFiller((ProtoChunk) chunk, biomeWeights, customBiomeSource, tfg$createBiomeSamplersForChunk(chunk),
                     tfg$createRiverSamplersForChunk(), tfg$createShoreSamplersForChunk(), tfg$createVolcanoSamplersForChunk(), tfg$noiseSampler, baseBlockSource,
-                    settings, getSeaLevel(), tfg$tideHeightNoise, Beardifier.forStructuresInChunk(structureFeatureManager, chunkPos));
+                    settings, SEA_LEVEL_Y, tfg$tideHeightNoise, Beardifier.forStructuresInChunk(structureFeatureManager, chunkPos));
 
             final BiomeExtension cinderConeBiome = CenteredFeatureNoise.cinder(tfg$seed).getCenterBiome(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), customBiomeSource);
             final BiomeExtension tuffRingBiome = CenteredFeatureNoise.tuffRing(tfg$seed).getCenterBiome(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), customBiomeSource);
@@ -194,7 +191,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
                 sections.forEach(LevelChunkSection::release);
 
                 tfg$surfaceManager.buildSurface(actualLevel, chunk, rockLayerSettings(), chunkData, filler.localBiomes(),
-                        filler.localBiomesNoRivers(), filler.localBiomeWeights(), filler.createSlopeMap(), random, getSeaLevel(), settings.minY(),
+                        filler.localBiomesNoRivers(), filler.localBiomeWeights(), filler.createSlopeMap(), random, SEA_LEVEL_Y, settings.minY(),
                         cinderConeBiome, tuffRingBiome, tuyaBiome);
             }));
         }
@@ -222,7 +219,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     private TFGChunkHeightFiller tfg$createHeightFillerForChunk(ChunkPos pos) {
         final Object2DoubleMap<BiomeExtension>[] biomeWeights = ChunkBiomeSampler.sampleBiomes(pos, this::sampleBiomeNoRiver, BiomeExtension::biomeBlendType);
         return new TFGChunkHeightFiller(biomeWeights, customBiomeSource, tfg$createBiomeSamplersForChunk(null), tfg$createRiverSamplersForChunk(),
-                tfg$createShoreSamplersForChunk(), tfg$createVolcanoSamplersForChunk(), getSeaLevel(), tfg$tideHeightNoise);
+                tfg$createShoreSamplersForChunk(), tfg$createVolcanoSamplersForChunk(), SEA_LEVEL_Y, tfg$tideHeightNoise);
     }
 
     @Unique

@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.world.new_ow_wg.noise;
 import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
 
 import net.dries007.tfc.world.biome.BiomeExtension;
-import net.dries007.tfc.world.noise.Cellular2D;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.Noise3D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
@@ -231,9 +230,9 @@ public final class ShoreNoise {
                     new OpenSimplex2D(seed.seed() + 492L).octaves(3).spread(0.09),
                     -1, 0, -5, 0);
 
-            private final Cellular2D cellularNoise = new Cellular2D(seed.seed() + 323L).spread(0.022);
+            private final TFGCellular2D cellularNoise = new TFGCellular2D(seed.seed() + 323L).spread(0.022);
             private final Noise2D punchbowlCarvingNoise = (x, z) -> {
-                Cellular2D.Cell cell = cellularNoise.cell(x, z);
+                TFGCellular2D.TFGCell cell = cellularNoise.cell(x, z);
                 final double punchBowlRarity = 0.25;
                 final double punchBowlDiameter = 0.5;
                 if (cell.noise() > punchBowlRarity && cell.f2() >= punchBowlDiameter)
@@ -368,17 +367,17 @@ public final class ShoreNoise {
             final double minStackDensity = 0.85;
             final double noiseScale = 3;
 
-            final Cellular2D cellularNoise = new Cellular2D(seed.seed() + 323L).spread(0.05);
+            final TFGCellular2D cellularNoise = new TFGCellular2D(seed.seed() + 323L).spread(0.05);
 
             final Noise2D seaStackDistributionNoise = new OpenSimplex2D(seed.seed() + 5424L).octaves(2).map(y -> 1 - Math.abs(y)).spread(0.015);
             final Noise2D f2MinusF1Noise = (x, z) -> {
-                Cellular2D.Cell cell = cellularNoise.cell(x, z);
+                TFGCellular2D.TFGCell cell = cellularNoise.cell(x, z);
                 final double f1 = cell.f1();
                 final double f2 = cell.f2();
                 return (f1 > 0 ? (f2 - f1) : 1);
             };
             final Noise2D f1Noise = (x, z) -> {
-                Cellular2D.Cell cell = cellularNoise.cell(x, z);
+                TFGCellular2D.TFGCell cell = cellularNoise.cell(x, z);
                 final double centerX = cell.x();
                 final double centerZ = cell.y();
                 final double stackDensity = seaStackDistributionNoise.noise(centerX, centerZ);
