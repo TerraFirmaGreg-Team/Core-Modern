@@ -8,9 +8,10 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 import su.terrafirmagreg.core.world.TFGPlacements;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.TuyaNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoiseSampler;
 
-public class TuyaPlacement extends CenterOrDistanceToPlacement<TuyaNoise> {
+public class TuyaPlacement extends CenterOrDistanceToPlacement<CenteredFeatureNoiseSampler> {
     public static final Codec<TuyaPlacement> PLACEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("center", false).forGetter(c -> c.center),
             Codecs.UNIT_FLOAT.optionalFieldOf("distance", 0f).forGetter(c -> c.distance)).apply(instance, TuyaPlacement::new));
@@ -25,7 +26,7 @@ public class TuyaPlacement extends CenterOrDistanceToPlacement<TuyaNoise> {
     }
 
     @Override
-    protected TuyaNoise createContext(Seed seed) {
-        return new TuyaNoise(seed);
+    protected CenteredFeatureNoiseSampler createContext(Seed seed) {
+        return CenteredFeatureNoise.tuya(seed);
     }
 }

@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.google.common.collect.ImmutableMap;
@@ -37,10 +38,10 @@ import net.dries007.tfc.world.noise.ChunkNoiseSamplingSettings;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.NoiseSampler;
 import net.dries007.tfc.world.region.RegionGenerator;
-import net.dries007.tfc.world.surface.SurfaceManager;
 import net.minecraft.Util;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -65,11 +66,15 @@ import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 import su.terrafirmagreg.core.world.new_ow_wg.chunk.TFGChunkHeightFiller;
 import su.terrafirmagreg.core.world.new_ow_wg.chunk.TFGChunkNoiseFiller;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureBlendType;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoiseSampler;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverNoiseSampler;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreNoiseSampler;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TFGSurfaceManager;
 
 // Points the TFC chunk generator to use the new biome layers if the config option is enabled
 
@@ -78,9 +83,6 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
 
     @Shadow
     protected abstract BiomeExtension sampleBiomeNoRiver(int blockX, int blockZ);
-
-    @Shadow
-    protected abstract Map<BiomeExtension, BiomeNoiseSampler> createBiomeSamplersForChunk(@Nullable ChunkAccess chunk);
 
     @Shadow
     public abstract int getSeaLevel();
@@ -101,21 +103,23 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     @Shadow
     @Final
     private FastConcurrentCache<TFCAquifer> aquiferCache;
-    @Shadow
-    private SurfaceManager surfaceManager;
 
     @Unique
     private Noise2D tfg$tideHeightNoise;
     @Unique
     private NoiseSampler tfg$noiseSampler;
+    @Unique
+    private Seed tfg$seed;
+    @Unique
+    private TFGSurfaceManager tfg$surfaceManager;
 
     // overwriting the AreaFactory
     @Redirect(method = "initRandomState", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/world/layer/TFCLayers;createRegionBiomeLayer(Lnet/dries007/tfc/world/region/RegionGenerator;J)Lnet/dries007/tfc/world/layer/framework/AreaFactory;"), remap = false)
     private AreaFactory tfg$modifyCreateRegionBiomeLayer(RegionGenerator generator, long worldSeed, @Local(argsOnly = true) ServerLevel level) {
         if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
-            Seed seed = Seed.of(worldSeed);
-            tfg$tideHeightNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
-            tfg$noiseSampler = new NoiseSampler(seed.next(), level.registryAccess().lookupOrThrow(Registries.NOISE), level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION));
+            this.tfg$seed = Seed.of(worldSeed);
+            tfg$tideHeightNoise = TFGBiomeNoise.shoreTideLevelNoise(tfg$seed);
+            tfg$noiseSampler = new NoiseSampler(tfg$seed.next(), level.registryAccess().lookupOrThrow(Registries.NOISE), level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION));
             return TFGLayers.createRegionBiomeLayer(generator, worldSeed);
         } else {
             return TFCLayers.createRegionBiomeLayer(generator, worldSeed);
@@ -129,6 +133,13 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
             return TFGLayers::getFromLayerId;
         } else {
             return TFCLayers::getFromLayerId;
+        }
+    }
+
+    @Inject(method = "initRandomState", at = @At("TAIL"), remap = false)
+    private void tfg$initSurfaceManager(ChunkMap chunkMap, ServerLevel level, CallbackInfo ci) {
+        if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
+            tfg$surfaceManager = new TFGSurfaceManager(tfg$seed);
         }
     }
 
@@ -160,9 +171,13 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
 
             final Object2DoubleMap<BiomeExtension>[] biomeWeights = ChunkBiomeSampler.sampleBiomes(chunkPos, this::sampleBiomeNoRiver, BiomeExtension::biomeBlendType);
             final ChunkBaseBlockSource baseBlockSource = createBaseBlockSourceForChunk(chunk);
-            final TFGChunkNoiseFiller filler = new TFGChunkNoiseFiller((ProtoChunk) chunk, biomeWeights, customBiomeSource, tfg$createBiomeSamplersForChunk(chunk), tfg$createRiverSamplersForChunk(),
-                    tfg$createShoreSamplersForChunk(), tfg$noiseSampler, baseBlockSource, settings, getSeaLevel(), tfg$tideHeightNoise,
-                    Beardifier.forStructuresInChunk(structureFeatureManager, chunkPos));
+            final TFGChunkNoiseFiller filler = new TFGChunkNoiseFiller((ProtoChunk) chunk, biomeWeights, customBiomeSource, tfg$createBiomeSamplersForChunk(chunk),
+                    tfg$createRiverSamplersForChunk(), tfg$createShoreSamplersForChunk(), tfg$createVolcanoSamplersForChunk(), tfg$noiseSampler, baseBlockSource,
+                    settings, getSeaLevel(), tfg$tideHeightNoise, Beardifier.forStructuresInChunk(structureFeatureManager, chunkPos));
+
+            final BiomeExtension cinderConeBiome = CenteredFeatureNoise.cinder(tfg$seed).getCenterBiome(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), customBiomeSource);
+            final BiomeExtension tuffRingBiome = CenteredFeatureNoise.tuffRing(tfg$seed).getCenterBiome(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), customBiomeSource);
+            final BiomeExtension tuyaBiome = CenteredFeatureNoise.tuya(tfg$seed).getCenterBiome(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), customBiomeSource);
 
             cir.setReturnValue(CompletableFuture.supplyAsync(() -> {
                 filler.sampleAquiferSurfaceHeight(this::sampleBiomeNoRiver);
@@ -177,8 +192,10 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
                 return chunk;
             }, Util.backgroundExecutor()).whenCompleteAsync((ret, error) -> {
                 sections.forEach(LevelChunkSection::release);
-                surfaceManager.buildSurface(actualLevel, chunk, rockLayerSettings(), chunkData, filler.localBiomes(), filler.localBiomesNoRivers(), filler.localBiomeWeights(), filler.createSlopeMap(),
-                        random, getSeaLevel(), settings.minY());
+
+                tfg$surfaceManager.buildSurface(actualLevel, chunk, rockLayerSettings(), chunkData, filler.localBiomes(),
+                        filler.localBiomesNoRivers(), filler.localBiomeWeights(), filler.createSlopeMap(), random, getSeaLevel(), settings.minY(),
+                        cinderConeBiome, tuffRingBiome, tuyaBiome);
             }));
         }
     }
@@ -204,8 +221,8 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     @Unique
     private TFGChunkHeightFiller tfg$createHeightFillerForChunk(ChunkPos pos) {
         final Object2DoubleMap<BiomeExtension>[] biomeWeights = ChunkBiomeSampler.sampleBiomes(pos, this::sampleBiomeNoRiver, BiomeExtension::biomeBlendType);
-        return new TFGChunkHeightFiller(biomeWeights, customBiomeSource, tfg$createBiomeSamplersForChunk(null), tfg$createRiverSamplersForChunk(), tfg$createShoreSamplersForChunk(), getSeaLevel(),
-                tfg$tideHeightNoise);
+        return new TFGChunkHeightFiller(biomeWeights, customBiomeSource, tfg$createBiomeSamplersForChunk(null), tfg$createRiverSamplersForChunk(),
+                tfg$createShoreSamplersForChunk(), tfg$createVolcanoSamplersForChunk(), getSeaLevel(), tfg$tideHeightNoise);
     }
 
     @Unique
@@ -223,6 +240,16 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
         final Seed seed = Seed.of(noiseSamplerSeed).forkStable();
         final EnumMap<ShoreBlendType, ShoreNoiseSampler> builder = new EnumMap<>(ShoreBlendType.class);
         for (ShoreBlendType blendType : ShoreBlendType.ALL) {
+            builder.put(blendType, blendType.createNoiseSampler(seed));
+        }
+        return builder;
+    }
+
+    @Unique
+    private Map<CenteredFeatureBlendType, CenteredFeatureNoiseSampler> tfg$createVolcanoSamplersForChunk() {
+        final Seed seed = Seed.of(noiseSamplerSeed).forkStable();
+        final EnumMap<CenteredFeatureBlendType, CenteredFeatureNoiseSampler> builder = new EnumMap<>(CenteredFeatureBlendType.class);
+        for (CenteredFeatureBlendType blendType : CenteredFeatureBlendType.ALL) {
             builder.put(blendType, blendType.createNoiseSampler(seed));
         }
         return builder;

@@ -11,23 +11,23 @@ import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoise;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoiseSampler;
 
-public class TuffRingPlacement extends CenterOrDistanceToPlacement<CenteredFeatureNoiseSampler> {
-    public static final Codec<TuffRingPlacement> PLACEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class CinderConePlacement extends CenterOrDistanceToPlacement<CenteredFeatureNoiseSampler> {
+    public static final Codec<CinderConePlacement> PLACEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("center", false).forGetter(c -> c.center),
             Codecs.UNIT_FLOAT.optionalFieldOf("distance", 0f).forGetter(c -> c.distance))
-            .apply(instance, TuffRingPlacement::new));
+            .apply(instance, CinderConePlacement::new));
 
-    public TuffRingPlacement(boolean center, float distance) {
+    public CinderConePlacement(boolean center, float distance) {
         super(center, distance);
     }
 
     @Override
     public PlacementModifierType<?> type() {
-        return TFGPlacements.TUFF_RING.get();
+        return TFGPlacements.CINDER_CONE.get();
     }
 
     @Override
     protected CenteredFeatureNoiseSampler createContext(Seed seed) {
-        return CenteredFeatureNoise.tuffRing(seed);
+        return CenteredFeatureNoise.cinder(seed);
     }
 }

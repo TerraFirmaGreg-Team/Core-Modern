@@ -188,6 +188,7 @@
         "common.tfc.new_ow_wg.RegionGeneratorMixin",
         "common.tfc.new_ow_wg.RegionMixin",
         "common.tfc.new_ow_wg.RockSettingsAccessor",
+        "common.tfc.new_ow_wg.SurfaceBuilderContextMixin",
         "common.tfc.new_ow_wg.TFCBiomesMixin",
         "common.tfc.new_ow_wg.TFCChunkGeneratorMixin",
         "common.tfc.new_ow_wg.TFCLayersMixin",

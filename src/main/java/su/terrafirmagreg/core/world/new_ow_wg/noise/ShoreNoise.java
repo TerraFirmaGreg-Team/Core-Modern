@@ -17,22 +17,27 @@ public final class ShoreNoise {
     // Typical monoslope beach
     public static ShoreNoiseSampler sandyBeach(Seed seed) {
         return new ShoreNoiseSampler() {
-            double sandHeight;
+            double sandHeight, weight;
 
             @Override
             public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome,
                     double shoreHeight, double normalHeight) {
+
                 this.sandHeight = ShoreNoise.simpleBeach(seed, x, z, heightIn, landWeight, oceanWeight);
+                this.weight = thisWeight;
 
                 return sandHeight;
             }
 
             @Override
             public double noise(int yIn, double noiseIn) {
-                if (yIn <= sandHeight)
+                if (yIn <= sandHeight || weight > 0.5)
                     return 0;
 
-                return 0.7;
+                final double heightMultiplier = Mth.clamp((yIn - sandHeight) / 8, 0, 1);
+
+                // Only carve with noise in near a biome edge, otherwise it's unnecessary
+                return heightMultiplier * Mth.map(weight, 0, 0.5, 0.7, 0);
             }
         };
     }

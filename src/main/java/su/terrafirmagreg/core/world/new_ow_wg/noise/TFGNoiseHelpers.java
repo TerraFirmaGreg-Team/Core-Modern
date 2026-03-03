@@ -95,6 +95,16 @@ public class TFGNoiseHelpers {
     }
 
     /**
+     * Returns an approximate angle in the range [0, 4] where 4 is the equivalent of 360 degrees from a vector in the form x, y
+     */
+    public static double diamondAngle(double x, double y) {
+        if (y >= 0)
+            return (x >= 0 ? y / (x + y) : 1 - x / (-x + y));
+        else
+            return (x < 0 ? 2 - y / (-x - y) : 3 + x / (x - y));
+    }
+
+    /**
      * @return The average annual temperature adjusted for elevation above sea level
      */
     public static float adjustAverageTemperatureByElevation(int y, float averageTemperature, float seaLevel) {

@@ -22,14 +22,13 @@ import net.dries007.tfc.world.surface.builder.VolcanoesSurfaceBuilder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
-import su.terrafirmagreg.core.world.new_ow_wg.*;
+import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeBuilder;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuffRingsSurfaceBuilder;
-import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuyasSurfaceBuilder;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuyaSurfaceBuilder;
 
 /**
  * Adds additional data to biome builders that are new in 1.21
@@ -43,10 +42,10 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
     private LongFunction<BiomeNoiseSampler> noiseFactory;
     @Shadow
     private SurfaceBuilderFactory surfaceBuilderFactory;
-    @Shadow
-    private int volcanoBasaltHeight;
+    /** Now named 'hasCinderCones' in 1.21 TFC */
     @Shadow
     private boolean volcanic;
+    /** Now named 'centeredFeatureFrequency' in 1.21 TFC */
     @Shadow
     private int volcanoFrequency;
     @Shadow
@@ -57,28 +56,35 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
     @Unique
     private ShoreBlendType tfg$shoreBlendType;
     @Unique
+    private int tfg$shoreBaseHeight;
+    @Unique
     private boolean tfg$hasTuffRings;
     @Unique
     private boolean tfg$hasTuyas;
     @Unique
-    private int tfg$tuffRingFrequency;
+    private boolean tfg$centeredFeatureIce;
     @Unique
-    private int tfg$tuyaFrequency;
+    private int tfg$centeredFeatureRockHeight;
     @Unique
-    private int tfg$shoreBaseHeight;
+    private int tfg$centeredFeatureBaseHeight;
+    @Unique
+    private int tfg$centeredFeatureScaleHeight;
 
     @Inject(method = "<init>", at = @At("TAIL"), remap = false)
     private void tfg$init(CallbackInfo ci) {
         tfg$shoreBlendType = ShoreBlendType.NONE;
         tfg$riverBlendType = TFGRiverBlendType.NONE;
+        tfg$shoreBaseHeight = TFCChunkGenerator.SEA_LEVEL_Y;
 
+        volcanic = false;
         tfg$hasTuffRings = false;
         tfg$hasTuyas = false;
 
-        tfg$tuffRingFrequency = 0;
-        tfg$tuyaFrequency = 0;
-
-        tfg$shoreBaseHeight = TFCChunkGenerator.SEA_LEVEL_Y;
+        tfg$centeredFeatureIce = false;
+        volcanoFrequency = 0;
+        tfg$centeredFeatureRockHeight = 0;
+        tfg$centeredFeatureBaseHeight = 0;
+        tfg$centeredFeatureScaleHeight = 0;
     }
 
     public BiomeBuilder tfg$type(ShoreBlendType type) {
@@ -98,65 +104,46 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
         return (BiomeBuilder) (Object) this;
     }
 
+    @Inject(method = "surface", at = @At("TAIL"), remap = false)
+    private void tfg$surface(SurfaceBuilderFactory surfaceBuilderFactory, CallbackInfoReturnable<BiomeBuilder> cir) {
+        if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
+            this.surfaceBuilderFactory = VolcanoesSurfaceBuilder.create(surfaceBuilderFactory);
+            this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(this.surfaceBuilderFactory);
+            this.surfaceBuilderFactory = TuyaSurfaceBuilder.create(this.surfaceBuilderFactory);
+        }
+    }
+
     public BiomeBuilder tfg$tuffRings(int frequency, int baseHeight, int scaleHeight) {
         this.tfg$hasTuffRings = true;
-        this.tfg$tuffRingFrequency = frequency;
-
-        assert heightNoiseFactory != null : "tuff rings must be called after setting a heightmap";
-        assert surfaceBuilderFactory != null : "tuff rings must be called after setting a surface builder";
-
-        final LongFunction<Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
-        this.heightNoiseFactory = seed -> TFGBiomeNoise.addTuffRings(Seed.of(seed), baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight);
-        this.noiseFactory = seed -> BiomeNoiseSampler.fromHeightNoise(heightNoiseFactory.apply(seed));
-
-        this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(surfaceBuilderFactory);
-
+        this.volcanoFrequency = frequency;
+        this.tfg$centeredFeatureBaseHeight = baseHeight;
+        this.tfg$centeredFeatureScaleHeight = scaleHeight;
         return (BiomeBuilder) (Object) this;
     }
 
-    public BiomeBuilder tfg$tuyas(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean icy) {
+    public BiomeBuilder tfg$tuyas(int frequency, int baseHeight, int scaleHeight, int tuyaBasaltHeight, boolean icy) {
         this.tfg$hasTuyas = true;
-        this.tfg$tuyaFrequency = frequency;
-        this.volcanoBasaltHeight = SEA_LEVEL_Y + volcanoBasaltHeight;
-
-        assert heightNoiseFactory != null : "tuyas must be called after setting a heightmap";
-        assert surfaceBuilderFactory != null : "tuyas must be called after setting a surface builder";
-
-        final LongFunction<Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
-        this.heightNoiseFactory = seed -> TFGBiomeNoise.addTuyas(Seed.of(seed), baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight, icy);
-        this.noiseFactory = seed -> BiomeNoiseSampler.fromHeightNoise(heightNoiseFactory.apply(seed));
-
-        this.surfaceBuilderFactory = TuyasSurfaceBuilder.create(surfaceBuilderFactory);
-
+        this.volcanoFrequency = frequency;
+        this.tfg$centeredFeatureRockHeight = SEA_LEVEL_Y + tuyaBasaltHeight;
+        this.tfg$centeredFeatureBaseHeight = baseHeight;
+        this.tfg$centeredFeatureScaleHeight = scaleHeight;
         return (BiomeBuilder) (Object) this;
     }
 
-    public BiomeBuilder tfg$volcanoes(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight) {
-        return tfg$volcanoes(frequency, baseHeight, scaleHeight, volcanoBasaltHeight, false);
-    }
-
-    public BiomeBuilder tfg$volcanoes(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean additive) {
+    public BiomeBuilder tfg$cinderCones(int frequency, int baseHeight, int scaleHeight, int cinderConeBasaltHeight, boolean additive) {
         this.volcanic = true;
         this.volcanoFrequency = frequency;
-        this.volcanoBasaltHeight = SEA_LEVEL_Y + volcanoBasaltHeight;
-
-        assert heightNoiseFactory != null : "volcanoes must be called after setting a heightmap";
-        assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
-
-        final LongFunction<Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
-        this.heightNoiseFactory = seed -> TFGBiomeNoise.addVolcanoes(Seed.of(seed), baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight, additive);
-
-        this.noiseFactory = seed -> BiomeNoiseSampler.fromHeightNoise(heightNoiseFactory.apply(seed));
-
-        this.surfaceBuilderFactory = VolcanoesSurfaceBuilder.create(surfaceBuilderFactory);
-
+        this.tfg$centeredFeatureRockHeight = SEA_LEVEL_Y + cinderConeBasaltHeight;
+        this.tfg$centeredFeatureBaseHeight = baseHeight;
+        this.tfg$centeredFeatureScaleHeight = scaleHeight;
         return (BiomeBuilder) (Object) this;
     }
 
     @Inject(method = "build", at = @At("RETURN"), remap = false, cancellable = true)
     public void tfg$build(ResourceKey<Biome> key, CallbackInfoReturnable<BiomeExtension> cir) {
         var extension = cir.getReturnValue();
-        ((IBiomeExtension) extension).tfg$init(tfg$shoreBlendType, tfg$riverBlendType, tfg$hasTuffRings, tfg$hasTuyas, tfg$tuffRingFrequency, tfg$tuyaFrequency, tfg$shoreBaseHeight);
+        ((IBiomeExtension) extension).tfg$init(tfg$shoreBlendType, tfg$riverBlendType, tfg$shoreBaseHeight, tfg$hasTuffRings, tfg$hasTuyas,
+                tfg$centeredFeatureRockHeight, tfg$centeredFeatureBaseHeight, tfg$centeredFeatureScaleHeight, tfg$centeredFeatureIce);
         cir.setReturnValue(extension);
     }
 }

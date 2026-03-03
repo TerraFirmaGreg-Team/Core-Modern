@@ -8,7 +8,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.TuffRingNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoiseSampler;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGSimpleSurfaceStates;
 
@@ -18,22 +19,24 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder {
     }
 
     private final SurfaceBuilder parent;
-    private final TuffRingNoise tuffRingNoise;
+    private final Seed seed;
     private final TFGSimpleSurfaceStates simpleStates;
     private final TFGComplexSurfaceStates complexStates;
 
     public TuffRingsSurfaceBuilder(SurfaceBuilder parent, Seed seed) {
         this.parent = parent;
-        this.tuffRingNoise = new TuffRingNoise(seed);
+        this.seed = seed;
         this.simpleStates = TFGSimpleSurfaceStates.INSTANCE();
         this.complexStates = TFGComplexSurfaceStates.INSTANCE();
     }
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
-        var biome = (IBiomeExtension) context.biome();
+        var ctx = (ISurfaceBuilderContext) context;
+        var biome = (IBiomeExtension) ctx.tfg$getTuffRingBiome();
         if (biome.tfg$hasTuffRings()) {
-            final float easing = tuffRingNoise.calculateEasing(context.pos().getX(), context.pos().getZ(), biome.tfg$getTuffRingRarity());
+            final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.tuffRing(seed);
+            final float easing = sampler.calculateEasing(context.pos(), ctx.tfg$getTuffRingBiome());
             if (easing > 0.6f) {
                 if (startY < context.getSeaLevel() + 3) {
                     buildTuffSurface(context, startY, endY, complexStates.VOLCANIC_SHORE_SAND, complexStates.VOLCANIC_SHORE_SAND,

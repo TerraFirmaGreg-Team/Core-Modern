@@ -246,31 +246,6 @@ public class TFGBiomeNoise {
     }
 
     /**
-     * Adds volcanoes to a base noise height map
-     */
-    public static Noise2D addVolcanoes(Seed seed, Noise2D baseNoise, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight, boolean onShieldVolcano) {
-        final TFGVolcanoNoise volcanoes = new TFGVolcanoNoise(seed);
-        return (x, z) -> onShieldVolcano ? volcanoes.modifyShieldVolcanoHeight(x, z, baseNoise.noise(x, z), rarity, baseVolcanoHeight, scaleVolcanoHeight)
-                : volcanoes.modifyHeight(x, z, baseNoise.noise(x, z), rarity, baseVolcanoHeight, scaleVolcanoHeight);
-    }
-
-    /**
-     * Adds volcanoes to a base noise height map
-     */
-    public static Noise2D addTuffRings(Seed seed, Noise2D baseNoise, int rarity, int baseRingHeight, int scaleRingHeight) {
-        final TuffRingNoise rings = new TuffRingNoise(seed);
-        return (x, z) -> rings.modifyHeight(x, z, baseNoise, rarity, baseRingHeight, scaleRingHeight, seed.seed());
-    }
-
-    /**
-     * Adds tuya volcanoes to a base noise height map
-     */
-    public static Noise2D addTuyas(Seed seed, Noise2D baseNoise, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight, boolean icy) {
-        final TuyaNoise tuyas = new TuyaNoise(seed);
-        return (x, z) -> tuyas.modifyHeight(x, z, baseNoise.noise(x, z), rarity, baseVolcanoHeight, scaleVolcanoHeight, icy);
-    }
-
-    /**
      * Used for various shores
      */
     public static Noise3D cliffNoise(Seed seed) {
@@ -298,10 +273,10 @@ public class TFGBiomeNoise {
      * Simple f2 - f1 cellular noise, with slightly fuzzy edges
      */
     public static Noise2D seaIceNoise(long seed) {
-        final Cellular2D cells = new TFGCellular2D(seed, 0.21f, 1).spread(0.03);
+        final TFGCellular2D cells = new TFGCellular2D(seed, 0.21f, 1).spread(0.03);
         final Noise2D wiggle = new OpenSimplex2D(seed).scaled(-0.04, 0.04).spread(0.12);
         return (x, z) -> {
-            Cellular2D.Cell cell = cells.cell(x, z);
+            TFGCellular2D.TFGCell cell = cells.cell(x, z);
 
             return cell.f2() - cell.f1() + wiggle.noise(x, z);
         };
@@ -963,7 +938,7 @@ public class TFGBiomeNoise {
         final Noise2D cliffStartHeight = TFGNoiseHelpers.addConstant(oceanicIceSheetSurfaceHeight(seed), -8);
 
         final Noise2D cirques = (x, z) -> {
-            Cellular2D.Cell cell = cells.cell(x, z);
+            TFGCellular2D.TFGCell cell = cells.cell(x, z);
 
             final double f1 = cell.f1();
             final double f2 = cell.f2();
@@ -1000,9 +975,9 @@ public class TFGBiomeNoise {
      * Inspired by polygonal ground due to frost action
      */
     public static Noise2D patternedGround(long seed) {
-        Cellular2D cells = new TFGCellular2D(seed, 0.25f, 1).spread(0.05);
+        TFGCellular2D cells = new TFGCellular2D(seed, 0.25f, 1).spread(0.05);
         return (x, z) -> {
-            Cellular2D.Cell cell = cells.cell(x, z);
+            TFGCellular2D.TFGCell cell = cells.cell(x, z);
 
             return cell.f2() - cell.f1() < 0.12 ? -1 : 0;
         };
@@ -1014,11 +989,11 @@ public class TFGBiomeNoise {
      */
     public static Noise2D invertedPatternedGround(long seed) {
         final Noise2D base = BiomeNoise.hills(seed, -4, 3);
-        Cellular2D cells = new TFGCellular2D(seed, 0.25f, 1).spread(0.05);
+        TFGCellular2D cells = new TFGCellular2D(seed, 0.25f, 1).spread(0.05);
 
         return (x, z) -> {
             final double height = base.noise(x, z);
-            Cellular2D.Cell cell = cells.cell(x, z);
+            TFGCellular2D.TFGCell cell = cells.cell(x, z);
             final double f2f1 = cell.f2() - cell.f1();
             if (height >= SEA_LEVEL_Y) {
                 return height + (f2f1 < 0.12 ? 1 : 0);
@@ -1033,9 +1008,9 @@ public class TFGBiomeNoise {
      * Based on sorted circles found in the Svalbard Archipelago and other polar climates
      */
     public static Noise2D stoneCircles(long seed) {
-        Cellular2D cells = new TFGCellular2D(seed, 0.26f, 1).spread(0.09);
+        TFGCellular2D cells = new TFGCellular2D(seed, 0.26f, 1).spread(0.09);
         return (x, z) -> {
-            Cellular2D.Cell cell = cells.cell(x, z);
+            TFGCellular2D.TFGCell cell = cells.cell(x, z);
 
             final double f1 = cell.f1();
 

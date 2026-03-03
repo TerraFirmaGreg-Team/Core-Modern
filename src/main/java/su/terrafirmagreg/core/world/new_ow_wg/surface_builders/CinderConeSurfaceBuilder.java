@@ -2,6 +2,9 @@ package su.terrafirmagreg.core.world.new_ow_wg.surface_builders;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Rock;
+import net.dries007.tfc.world.biome.BiomeExtension;
+import net.dries007.tfc.world.noise.Noise2D;
+import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
@@ -10,28 +13,34 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
-import su.terrafirmagreg.core.world.new_ow_wg.noise.TuyaNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoise;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoiseSampler;
 
-public class TuyasSurfaceBuilder implements SurfaceBuilder {
+public class CinderConeSurfaceBuilder implements SurfaceBuilder {
     public static SurfaceBuilderFactory create(SurfaceBuilderFactory parent) {
-        return seed -> new TuyasSurfaceBuilder(parent.apply(seed), Seed.of(seed));
+        return seed -> new CinderConeSurfaceBuilder(parent.apply(seed), Seed.of(seed));
     }
 
     private final SurfaceBuilder parent;
+    private final Seed seed;
 
-    private final TuyaNoise tuyaNoise;
+    private final Noise2D heightNoise;
 
-    public TuyasSurfaceBuilder(SurfaceBuilder parent, Seed seed) {
+    public CinderConeSurfaceBuilder(SurfaceBuilder parent, Seed seed) {
+        this.seed = seed;
         this.parent = parent;
-        this.tuyaNoise = new TuyaNoise(seed);
+        this.heightNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.1f).scaled(-4, 4);
     }
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
-        var biome = (IBiomeExtension) context.biome();
-        if (biome.tfg$hasTuyas()) {
-            final float easing = tuyaNoise.calculateEasing(context.pos().getX(), context.pos().getZ(), biome.tfg$getTuyaRarity());
-            if (1 - easing < 0.16f) {
+        ISurfaceBuilderContext ctx = (ISurfaceBuilderContext) context;
+        BiomeExtension cinderConeBiome = ctx.tfg$getCinderConeBiome();
+        if (cinderConeBiome.isVolcanic()) {
+            final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.cinder(seed);
+            final float easing = sampler.calculateEasing(context.pos(), cinderConeBiome);
+            IBiomeExtension cbb = (IBiomeExtension) cinderConeBiome;
+            if (easing > 0.6f && startY > cbb.tfg$getCenteredFeatureRockHeight() + heightNoise.noise(context.pos().getX(), context.pos().getZ())) {
                 buildVolcanicSurface(context, startY, endY, easing);
                 return;
             }

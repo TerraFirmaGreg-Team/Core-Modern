@@ -132,7 +132,7 @@ public class TFGBiomes {
                             .spawnable().noSandyRiverShores()));
     // Medium height with snake like ridges, minor volcanic activity
     public static final BiomeExtension CANYONS = register("canyons",
-            volcanoesType(TFGRiverBlendType.CANYON, 6, 14, 30, 28, false,
+            cinderConesType(TFGRiverBlendType.CANYON, 6, 14, 30, 28, false,
                     builder().heightmap(seed -> BiomeNoise.canyons(seed, -2, 40))
                             .surface(SimpleSurfaceBuilder.VOLCANIC_SOIL)
                             .spawnable().noSandyRiverShores()));
@@ -160,12 +160,12 @@ public class TFGBiomes {
                             .salty().spawnable()));
     // Volcanic mountains - slightly smaller, but with plentiful tall volcanoes
     public static final BiomeExtension VOLCANIC_MOUNTAINS = register("volcanic_mountains",
-            volcanoesType(TFGRiverBlendType.CAVE, 4, 25, 50, 40, false,
+            cinderConesType(TFGRiverBlendType.CAVE, 4, 25, 50, 40, false,
                     builder().heightmap(seed -> BiomeNoise.mountains(seed, 10, 60))
                             .surface(SimpleSurfaceBuilder.ROCKY_VOLCANIC_SOIL)));
     // Volcanic oceanic islands. Slightly smaller and lower but with very plentiful volcanoes
     public static final BiomeExtension VOLCANIC_OCEANIC_MOUNTAINS = register("volcanic_oceanic_mountains",
-            volcanoesType(TFGRiverBlendType.CAVE, 2, -12, 50, 20, false,
+            cinderConesType(TFGRiverBlendType.CAVE, 2, -12, 50, 20, false,
                     builder().heightmap(seed -> BiomeNoise.mountains(seed, -24, 50))
                             .surface(ShoreAndOceanSurfaceBuilder.VOLCANIC_MOUNTAINS)
                             .aquiferHeightOffset(-8)
@@ -292,14 +292,14 @@ public class TFGBiomes {
                     .salty().type(BiomeBlendType.LAKE)
                     .noRivers());
     public static final BiomeExtension VOLCANIC_MOUNTAIN_LAKE = register("volcanic_mountain_lake",
-            volcanoesType(TFGRiverBlendType.NONE, 4, 25, 50, 40, false,
+            cinderConesType(TFGRiverBlendType.NONE, 4, 25, 50, 40, false,
                     builder().heightmap(seed -> BiomeNoise.mountains(seed, 10, 60))
                             .surface(SimpleSurfaceBuilder.ROCKY_VOLCANIC_SOIL)
                             .carving(BiomeNoise::undergroundLakes)
                             .type(BiomeBlendType.LAKE)
                             .noRivers()));
     public static final BiomeExtension VOLCANIC_OCEANIC_MOUNTAIN_LAKE = register("volcanic_oceanic_mountain_lake",
-            volcanoesType(TFGRiverBlendType.NONE, 2, -12, 50, 20, false,
+            cinderConesType(TFGRiverBlendType.NONE, 2, -12, 50, 20, false,
                     builder().heightmap(seed -> BiomeNoise.mountains(seed, -24, 50))
                             .surface(ShoreAndOceanSurfaceBuilder.VOLCANIC_MOUNTAINS)
                             .carving(BiomeNoise::undergroundLakes)
@@ -509,7 +509,7 @@ public class TFGBiomes {
                             .surface(TFGNormalSurfaceBuilder.INSTANCE)
                             .spawnable().noSandyRiverShores()));
     public static final BiomeExtension DOLINE_CANYONS = register("doline_canyons",
-            volcanoesType(TFGRiverBlendType.CANYON, 6, 14, 30, 28, false,
+            cinderConesType(TFGRiverBlendType.CANYON, 6, 14, 30, 28, false,
                     builder().heightmap(seed -> TFGBiomeNoise.bowlDolines(seed, BiomeNoise.canyons(seed, -2, 34), 15))
                             .surface(SimpleSurfaceBuilder.VOLCANIC_SOIL)
                             .spawnable().noSandyRiverShores()));
@@ -562,7 +562,7 @@ public class TFGBiomes {
 
     // Shield Volcanoes
     public static final BiomeExtension ACTIVE_SHIELD_VOLCANO = register("active_shield_volcano",
-            volcanoesType(TFGRiverBlendType.CAVE, 4, 15, 25, 28, true,
+            cinderConesType(TFGRiverBlendType.CAVE, 4, 15, 25, 28, true,
                     builder().heightmap(seed -> TFGBiomeNoise.activeShieldVolcano(seed, TFGBiomeNoise.activeHotSpots(seed)))
                             .surface(ShieldVolcanoSurfaceBuilder.ACTIVE)
                             .aquiferHeightOffset(-16)));
@@ -585,7 +585,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-16)
                             .spawnable()));
     public static final BiomeExtension SUNKEN_SHIELD_VOLCANO = register("sunken_shield_volcano",
-            tuffRingsType(TFGRiverBlendType.CAVE, 3, -8, 24,
+            tuffRingsType(TFGRiverBlendType.CAVE, 2, -8, 24,
                     builder().heightmap(seed -> TFGBiomeNoise.sunkenShieldVolcano(seed, TFGBiomeNoise.ancientHotSpots(seed)))
                             .surface(ShieldVolcanoSurfaceBuilder.DORMANT)
                             .aquiferHeightOffset(-16)
@@ -632,7 +632,7 @@ public class TFGBiomes {
                                     .add(TFGBiomeNoise.glacialSurfaceTexture(seed))))
                             .surface(IceSheetShieldVolcanoSurfaceBuilder.ICE_SHEET).spawnable().noSandyRiverShores()));
     public static final BiomeExtension ICE_SHEET_TUYAS = register("ice_sheet_tuyas",
-            tuyasType(TFGRiverBlendType.CAVE, 3, 0, 35, 40, true,
+            tuyasType(TFGRiverBlendType.CAVE, 3, 0, 35, -6, true,
                     builder().heightmap(seed -> TFGBiomeNoise.iceSheetSurfaceHeight(seed)
                             .add(TFGBiomeNoise.glacialSurfaceTexture(seed)))
                             .surface(IceSheetSurfaceBuilder.NORMAL)
@@ -651,7 +651,7 @@ public class TFGBiomes {
                             .surface(IceSheetSurfaceBuilder.EDGE)
                             .spawnable().noSandyRiverShores()));
     public static final BiomeExtension ICE_SHEET_TUYAS_EDGE = register("ice_sheet_tuyas_edge",
-            tuyasType(TFGRiverBlendType.TALL_CANYON, 3, 0, 35, 40, true,
+            tuyasType(TFGRiverBlendType.TALL_CANYON, 3, 0, 35, -6, true,
                     builder().heightmap(TFGBiomeNoise::glacialBase)
                             .surface(IceSheetSurfaceBuilder.EDGE)
                             .spawnable().noSandyRiverShores()));
@@ -728,7 +728,7 @@ public class TFGBiomes {
                             .surface(TFGNormalSurfaceBuilder.INSTANCE)
                             .spawnable()));
     public static final BiomeExtension TUYAS = register("tuyas",
-            tuyasType(TFGRiverBlendType.CANYON, 2, 0, 35, 40, false,
+            tuyasType(TFGRiverBlendType.CANYON, 2, 0, 35, -6, false,
                     builder().heightmap(TFGBiomeNoise::drumlins)
                             .surface(TFGNormalSurfaceBuilder.INSTANCE)
                             .spawnable()));
@@ -775,10 +775,10 @@ public class TFGBiomes {
         return ib.tfg$tuyas(frequency, baseHeight, scaleHeight, volcanoBasaltHeight, icy);
     }
 
-    private static BiomeBuilder volcanoesType(TFGRiverBlendType river, int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean additive, BiomeBuilder builder) {
+    private static BiomeBuilder cinderConesType(TFGRiverBlendType river, int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean additive, BiomeBuilder builder) {
         var ib = (IBiomeBuilder) builder;
         ib = (IBiomeBuilder) ib.tfg$type(river);
-        return ib.tfg$volcanoes(frequency, baseHeight, scaleHeight, volcanoBasaltHeight, additive);
+        return ib.tfg$cinderCones(frequency, baseHeight, scaleHeight, volcanoBasaltHeight, additive);
     }
 
     private static BiomeBuilder tuffRingsType(TFGRiverBlendType river, int frequency, int baseHeight, int scaleHeight, BiomeBuilder builder) {

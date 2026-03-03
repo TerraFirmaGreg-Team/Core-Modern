@@ -1,11 +1,12 @@
 package su.terrafirmagreg.core.world.new_ow_wg.region;
 
-import net.dries007.tfc.world.noise.Cellular2D;
 import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
 import net.dries007.tfc.world.region.RegionTask;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
+
+import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGCellular2D;
 
 public enum TFGAddHotspots implements RegionTask {
     INSTANCE;
@@ -23,7 +24,7 @@ public enum TFGAddHotspots implements RegionTask {
         for (final var point : RegionHelpers.points(region)) {
             final IRegionPoint pt = (IRegionPoint) point;
 
-            final Cellular2D.Cell cell = generator.tfg$getPlateRegionNoise().cell(pt.tfg$getX(), pt.tfg$getZ());
+            final TFGCellular2D.TFGCell cell = generator.tfg$getPlateRegionNoise().cell(pt.tfg$getX(), pt.tfg$getZ());
             final double edgeDist = Math.abs(cell.f1() - cell.f2());
 
             double val = generator.tfg$getHotSpotIntensityNoise().noise(shift(pt.tfg$getX()), shift(pt.tfg$getZ()));

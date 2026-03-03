@@ -21,25 +21,32 @@ public class BiomeExtensionMixin implements IBiomeExtension {
     @Unique
     private TFGRiverBlendType tfg$riverBlendType;
     @Unique
+    private int tfg$shoreBaseHeight;
+    @Unique
     private boolean tfg$hasTuffCones;
     @Unique
     private boolean tfg$hasTuyas;
     @Unique
-    private int tfg$tuffRingRarity;
+    private boolean tfg$centeredFeatureIce;
     @Unique
-    private int tfg$tuyaRarity;
+    private int tfg$centeredFeatureRockHeight;
     @Unique
-    private int tfg$shoreBaseHeight;
+    private int tfg$centeredFeatureBaseHeight;
+    @Unique
+    private int tfg$centeredFeatureScaleHeight;
 
     @Unique
-    public void tfg$init(ShoreBlendType shoreBlendType, TFGRiverBlendType riverBlendType, boolean hasTuffCones, boolean hasTuyas, int tuffRingRarity, int tuyaRarity, int shoreBaseHeight) {
+    public void tfg$init(ShoreBlendType shoreBlendType, TFGRiverBlendType riverBlendType, int shoreBaseHeight, boolean hasTuffCones, boolean hasTuyas,
+            int centeredFeatureRockHeight, int centeredFeatureBaseHeight, int centeredFeatureScaleHeight, boolean centeredFeatureIce) {
         this.tfg$shoreBlendType = shoreBlendType;
         this.tfg$riverBlendType = riverBlendType;
+        this.tfg$shoreBaseHeight = shoreBaseHeight;
         this.tfg$hasTuffCones = hasTuffCones;
         this.tfg$hasTuyas = hasTuyas;
-        this.tfg$tuffRingRarity = tuffRingRarity;
-        this.tfg$tuyaRarity = tuyaRarity;
-        this.tfg$shoreBaseHeight = shoreBaseHeight;
+        this.tfg$centeredFeatureRockHeight = centeredFeatureRockHeight;
+        this.tfg$centeredFeatureBaseHeight = centeredFeatureBaseHeight;
+        this.tfg$centeredFeatureScaleHeight = centeredFeatureScaleHeight;
+        this.tfg$centeredFeatureIce = centeredFeatureIce;
     }
 
     @Override
@@ -53,13 +60,23 @@ public class BiomeExtensionMixin implements IBiomeExtension {
     }
 
     @Override
-    public int tfg$getTuffRingRarity() {
-        return this.tfg$tuffRingRarity;
+    public int tfg$getCenteredFeatureRockHeight() {
+        return this.tfg$centeredFeatureRockHeight;
     }
 
     @Override
-    public int tfg$getTuyaRarity() {
-        return this.tfg$tuyaRarity;
+    public int tfg$getCenteredFeatureBaseHeight() {
+        return this.tfg$centeredFeatureBaseHeight;
+    }
+
+    @Override
+    public int tfg$getCenteredFeatureScaleHeight() {
+        return this.tfg$centeredFeatureScaleHeight;
+    }
+
+    @Override
+    public boolean tfg$getCenteredFeatureIce() {
+        return this.tfg$centeredFeatureIce;
     }
 
     @Override

@@ -34,6 +34,8 @@ import net.minecraft.world.level.material.Fluids;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureBlendType;
+import su.terrafirmagreg.core.world.new_ow_wg.noise.CenteredFeatureNoiseSampler;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverNoiseSampler;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
@@ -104,13 +106,14 @@ public class TFGChunkNoiseFiller extends TFGChunkHeightFiller {
             Map<BiomeExtension, BiomeNoiseSampler> biomeNoiseSamplers,
             Map<TFGRiverBlendType, TFGRiverNoiseSampler> riverNoiseSamplers,
             Map<ShoreBlendType, ShoreNoiseSampler> shoreSamplers,
+            Map<CenteredFeatureBlendType, CenteredFeatureNoiseSampler> volcanoSamplers,
             NoiseSampler sampler,
             ChunkBaseBlockSource baseBlockSource,
             ChunkNoiseSamplingSettings settings,
             int seaLevel,
             Noise2D tideHeightNoise,
             Beardifier beardifier) {
-        super(sampledBiomeWeights, biomeSource, biomeNoiseSamplers, riverNoiseSamplers, shoreSamplers, seaLevel, tideHeightNoise);
+        super(sampledBiomeWeights, biomeSource, biomeNoiseSamplers, riverNoiseSamplers, shoreSamplers, volcanoSamplers, seaLevel, tideHeightNoise);
 
         this.chunk = chunk;
         this.chunkMinX = chunk.getPos().getMinBlockX();
@@ -224,16 +227,6 @@ public class TFGChunkNoiseFiller extends TFGChunkHeightFiller {
                 aquiferSurfaceHeights[x + 4 * z] = (int) minAquiferSurfaceHeight;
             }
         }
-
-        if (debugAquiferSurfaceHeight) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    setupColumn(x, z);
-                    setDebugState((int) sampledHeight[((x >> 3) + 4) + 11 * ((z >> 3) + 4)], Blocks.YELLOW_STAINED_GLASS); // Sampled height
-                    setDebugState(aquiferSurfaceHeights[5], Blocks.LIME_STAINED_GLASS); // Aquifer surface height, per-chunk basis
-                }
-            }
-        }
     }
 
     /**
@@ -318,8 +311,6 @@ public class TFGChunkNoiseFiller extends TFGChunkHeightFiller {
      * Fills a single column
      */
     private void fillColumn(BlockPos.MutableBlockPos cursor, int cellX, int cellZ) {
-        final boolean debugFillColumn = false;
-
         prepareColumnBiomeWeights();
         sampleColumnHeightAndBiome(biomeWeights1, true);
 
@@ -367,34 +358,16 @@ public class TFGChunkNoiseFiller extends TFGChunkHeightFiller {
                 final BlockState state = calculateBlockStateAtNoise(y, noise);
                 final FluidState fluid = state.getFluidState();
 
-                if (debugFillColumn && y < heightNoiseValue && noise < 0) {
-                    // Below surface height, that has been carved out by BiomeNoiseSampler carving (not caves)
-                    setDebugState(y, Blocks.RED_STAINED_GLASS);
-                }
-
                 // Set block
                 cursor.setY(y);
                 if (!state.isAir()) {
                     // Need to account for underground rivers in this y level check, thus the smaller value between sea level and height noise
                     if (fluid.getType() == Fluids.WATER && flow != Flow.NONE && y >= Math.min(seaLevel - 4, heightNoiseValue)) {
                         // Place a flowing fluid block according to the river flow at this location
-                        if (debugFillColumn) {
-                            setDebugState(y, Blocks.GREEN_STAINED_GLASS);
-                        } else {
-                            section.setBlockState(localX, localY, localZ, riverWater.setValue(RiverWaterFluid.FLOW, flow).createLegacyBlock(), false);
-                        }
+                        section.setBlockState(localX, localY, localZ, riverWater.setValue(RiverWaterFluid.FLOW, flow).createLegacyBlock(), false);
+
                     } else {
-                        if (debugFillColumn) {
-                            if (fluid.getType() == Fluids.WATER) {
-                                setDebugState(y, Blocks.LIGHT_BLUE_STAINED_GLASS);
-                            } else if (fluid.getType() == Fluids.LAVA) {
-                                setDebugState(y, Blocks.ORANGE_STAINED_GLASS);
-                            } else if (fluid.getType() == TFCFluids.SALT_WATER.getSource() && y >= TFCChunkGenerator.SEA_LEVEL_Y - 1) {
-                                setDebugState(y, Blocks.BLUE_STAINED_GLASS);
-                            }
-                        } else {
-                            section.setBlockState(localX, localY, localZ, state, false);
-                        }
+                        section.setBlockState(localX, localY, localZ, state, false);
                     }
                     if (aquifer.shouldScheduleFluidUpdate() && !fluid.isEmpty()) {
                         chunk.markPosForPostprocessing(cursor);
@@ -407,13 +380,7 @@ public class TFGChunkNoiseFiller extends TFGChunkHeightFiller {
                     if (topSolidBlockPlaced) {
                         // Air under solid blocks, so mark as carved, and replace with cave air
                         airCarvingMask.set(blockX, y, blockZ);
-                        if (debugFillColumn) {
-                            if (section.getBlockState(localX, localY, localZ).isAir()) {
-                                setDebugState(y, Blocks.LIGHT_GRAY_STAINED_GLASS);
-                            }
-                        } else {
-                            section.setBlockState(localX, localY, localZ, Blocks.CAVE_AIR.defaultBlockState(), false);
-                        }
+                        section.setBlockState(localX, localY, localZ, Blocks.CAVE_AIR.defaultBlockState(), false);
                     }
                 } else if (!fluid.isEmpty()) // Fluids
                 {
@@ -438,14 +405,6 @@ public class TFGChunkNoiseFiller extends TFGChunkHeightFiller {
                         oceanFloor.update(localX, y, localZ, state);
                     }
                 }
-
-                if (debugFillColumn && y == heightNoiseValue) {
-                    setDebugState(y, Blocks.BLACK_STAINED_GLASS);
-                }
-            }
-
-            if (debugFillColumn) {
-                setPerColumnDebugStates();
             }
         }
     }

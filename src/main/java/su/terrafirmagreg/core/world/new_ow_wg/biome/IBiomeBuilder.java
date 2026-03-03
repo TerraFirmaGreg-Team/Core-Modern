@@ -21,7 +21,5 @@ public interface IBiomeBuilder {
 
     BiomeBuilder tfg$tuffRings(int frequency, int baseHeight, int scaleHeight);
 
-    BiomeBuilder tfg$volcanoes(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight);
-
-    BiomeBuilder tfg$volcanoes(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean additive);
+    BiomeBuilder tfg$cinderCones(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean additive);
 }
