@@ -169,7 +169,8 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
                 chunkData.generateFull(filler.surfaceHeight(), filler.aquifer().surfaceHeights());
                 chunkData.getRockData().useCache(chunkPos);
                 filler.fillFromNoise();
-                tfg$modifyBaseRainfall(chunkData, filler.surfaceHeight());
+                // TODO: causes rainfall to drop off dramatically with Y level instead?
+                //tfg$modifyBaseRainfall(chunkData, filler.surfaceHeight());
 
                 aquiferCache.set(chunkPos.x, chunkPos.z, filler.aquifer());
 

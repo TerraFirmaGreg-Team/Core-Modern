@@ -2,7 +2,7 @@
     "feature": "tfc:sea_stacks_patch",
     "placement": [
         {
-            "chance": 120,
+            "chance": 30,
             "type": "minecraft:rarity_filter"
         },
         {"type": "minecraft:in_square"},

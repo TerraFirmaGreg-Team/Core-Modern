@@ -6,18 +6,20 @@ import java.util.List;
 import com.mojang.serialization.Codec;
 
 import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.world.chunkdata.ChunkData;
+import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.dries007.tfc.world.chunkdata.RockData;
 import net.dries007.tfc.world.noise.Metaballs2D;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class SeaStacksFeature extends Feature<NoneFeatureConfiguration> {
@@ -31,7 +33,9 @@ public class SeaStacksFeature extends Feature<NoneFeatureConfiguration> {
         final BlockPos pos = context.origin();
 
         final var random = context.random();
-        final RockData data = ChunkData.get(context.level(), pos).getRockData();
+
+        final ChunkDataProvider provider = ChunkDataProvider.get(context.chunkGenerator());
+        final RockData data = provider.get(context.level(), pos).getRockData();
 
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos().set(pos);
 
@@ -39,7 +43,13 @@ public class SeaStacksFeature extends Feature<NoneFeatureConfiguration> {
         if (level.getFluidState(cursor).isEmpty() || pos.getY() > seaLevel) {
             return false; // only place in water
         }
-        final BlockState rock = data.getSurfaceRock(cursor.getX(), cursor.getZ()).hardened().defaultBlockState();
+
+        BlockState rock = Blocks.STONE.defaultBlockState();
+        try {
+            rock = data.getSurfaceRock(cursor.getX(), cursor.getZ()).hardened().defaultBlockState();
+        } catch (NullPointerException ex) {
+            TFGCore.LOGGER.error("Caught exception in SeaStacksFeature: ", ex);
+        }
         if (!Helpers.isBlock(rock, TFGTags.Blocks.SeaStackRocks)) {
             return false;
         }

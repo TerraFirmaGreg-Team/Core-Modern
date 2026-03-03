@@ -1,12 +1,11 @@
 package su.terrafirmagreg.core.mixins.common.tfc.features;
 
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.sugar.Local;
 
@@ -21,13 +20,14 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 
 import earth.terrarium.adastra.api.planets.Planet;
 import earth.terrarium.adastra.common.tags.ModBlockTags;
 
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGFluids;
@@ -35,18 +35,17 @@ import su.terrafirmagreg.core.common.data.TFGFluids;
 @Mixin(value = CaveSpikesFeature.class, remap = false)
 public class CaveSpikesFeatureMixin {
 
-	// Stops stalagmites from generating out in the open
-	@Inject(method = "place(Lnet/minecraft/world/level/levelgen/feature/FeaturePlaceContext;)Z", at = @At("HEAD"), cancellable = true)
-	private void tfg$place(FeaturePlaceContext<NoneFeatureConfiguration> context, CallbackInfoReturnable<Boolean> cir) {
-		final WorldGenLevel level = context.level();
-		final BlockPos pos = context.origin();
-		if (level.canSeeSkyFromBelowWater(pos))
-		{
-			cir.cancel();
-		}
-	}
+    // Stops stalagmites from generating out in the open
+    @Inject(method = "place(Lnet/minecraft/world/level/levelgen/feature/FeaturePlaceContext;)Z", at = @At("HEAD"), cancellable = true)
+    private void tfg$place(FeaturePlaceContext<NoneFeatureConfiguration> context, CallbackInfoReturnable<Boolean> cir) {
+        final WorldGenLevel level = context.level();
+        final BlockPos pos = context.origin();
+        if (level.canSeeSky(pos.above())) {
+            cir.cancel();
+        }
+    }
 
-	// Controls which block tag to check when placing small spikes
+    // Controls which block tag to check when placing small spikes
     @ModifyArg(method = "placeSmallSpike(Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;F)V", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/util/Helpers;isBlock(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/tags/TagKey;)Z"), index = 1)
     private TagKey<Block> tfg$placeSmallSpike(TagKey<Block> tag, @Local(argsOnly = true) WorldGenLevel level) {
         ResourceKey<Level> dim = level.getLevel().dimension();

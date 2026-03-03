@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:tide_pool",
-    "tfc:big_tide_pool"
-  ]
+    "values": [
+        "tfc:tide_pool",
+        "tfc:big_tide_pool"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }
