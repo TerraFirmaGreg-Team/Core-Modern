@@ -51,11 +51,11 @@ public class PressureFloodFill {
      */
     public static PressureRoomScan fill(AsyncBlockReader reader, BlockPos start, int maxBlocks,
             int maxHorizontalDimension, TagKey<Block> wallTag) {
-        LongOpenHashSet interior      = new LongOpenHashSet();
-        LongOpenHashSet envelope      = new LongOpenHashSet();
+        LongOpenHashSet interior = new LongOpenHashSet();
+        LongOpenHashSet envelope = new LongOpenHashSet();
         LongOpenHashSet partPositions = new LongOpenHashSet();
-        LongArrayList   frontier      = new LongArrayList();
-        Set<ChunkPos>   touchedChunks = new HashSet<>();
+        LongArrayList frontier = new LongArrayList();
+        Set<ChunkPos> touchedChunks = new HashSet<>();
 
         // Bounds
         int minX = start.getX(), maxX = start.getX();
@@ -63,7 +63,8 @@ public class PressureFloodFill {
         int minZ = start.getZ(), maxZ = start.getZ();
 
         RoomScan.Status status = RoomScan.Status.SEALED;
-        @Nullable BlockPos escapePoint = null;
+        @Nullable
+        BlockPos escapePoint = null;
 
         // Start
         long startLong = start.asLong();

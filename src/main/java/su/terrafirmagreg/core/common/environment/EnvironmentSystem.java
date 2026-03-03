@@ -103,6 +103,24 @@ public final class EnvironmentSystem {
     }
 
     /**
+     * Checks if a position has safe pressure (server-side only).
+     * True if inside a sealed, active pressure room shielding from dangerous ambient pressure
+     * (e.g. Europa ocean floor).
+     */
+    public static boolean hasSafePressure(Level level, BlockPos pos) {
+        if (!(level instanceof ServerLevel)) {
+            return false;
+        }
+
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager == null) {
+            return false;
+        }
+
+        return manager.hasSafePressure(pos);
+    }
+
+    /**
      * Checks if a dimension has normal gravity (planet-level, no per-position providers yet).
      *
      * @param level The level to check
