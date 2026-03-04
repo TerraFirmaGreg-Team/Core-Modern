@@ -78,26 +78,26 @@ import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TFGSurfaceManager
 
 // Points the TFC chunk generator to use the new biome layers if the config option is enabled
 
-@Mixin(value = TFCChunkGenerator.class, remap = false)
+@Mixin(value = TFCChunkGenerator.class, remap = true)
 public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension {
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract BiomeExtension sampleBiomeNoRiver(int blockX, int blockZ);
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract ChunkNoiseSamplingSettings createNoiseSamplingSettingsForChunk(ChunkAccess chunk);
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract ChunkBaseBlockSource createBaseBlockSourceForChunk(ChunkAccess chunk);
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private BiomeSourceExtension customBiomeSource;
-    @Shadow
+    @Shadow(remap = false)
     private long noiseSamplerSeed;
-    @Shadow
+    @Shadow(remap = false)
     private ChunkDataProvider chunkDataProvider;
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private FastConcurrentCache<TFCAquifer> aquiferCache;
 
@@ -140,7 +140,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
         }
     }
 
-    @Inject(method = "getBaseHeight", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "getBaseHeight", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState state, CallbackInfoReturnable<Integer> cir) {
         if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
             final ChunkPos pos = new ChunkPos(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
@@ -148,7 +148,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
         }
     }
 
-    @Inject(method = "fillFromNoise", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "fillFromNoise", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$fillFromNoise(Executor mainExecutor, Blender oldTerrainBlender, RandomState rawState, StructureManager structureFeatureManager, ChunkAccess chunk,
             CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
         if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {

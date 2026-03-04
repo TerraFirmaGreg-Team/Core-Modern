@@ -1,7 +1,7 @@
 {
     "type": "tfc:cave",
     "config": {
-        "probability": 0.015,
+        "probability": 0.01,
         "replaceable": "#tfc:can_carve",
         "y": {
             "min_inclusive": {"absolute": -56},

@@ -28,7 +28,7 @@
             "vertical_radius_default_factor": 1,
             "vertical_radius_center_factor": 0
         },
-        "probability": 0.015,
+        "probability": 0.005,
         "replaceable": "#tfc:can_carve",
         "vertical_rotation": {
             "type": "uniform",
