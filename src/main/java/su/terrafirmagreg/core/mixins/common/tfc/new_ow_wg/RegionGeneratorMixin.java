@@ -1,8 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,10 +19,6 @@ import su.terrafirmagreg.core.world.new_ow_wg.region.IRegionGenerator;
 
 @Mixin(value = RegionGenerator.class, remap = false)
 public abstract class RegionGeneratorMixin implements IRegionGenerator {
-    @Final
-    @Shadow
-    private long seed;
-
     @Unique
     private Settings tfg$settings;
     @Unique
@@ -38,13 +32,11 @@ public abstract class RegionGeneratorMixin implements IRegionGenerator {
 
     @Inject(method = "<init>", at = @At("TAIL"), remap = false)
     private void tfg$init(Settings settings, RandomSource random, CallbackInfo ci) {
-        final Seed tfgSeed = Seed.of(seed);
         tfg$settings = settings;
-        tfg$oceanicInfluenceNoise = new OpenSimplex2D(tfgSeed.next()).spread(0.02f);
-        final long hotSpotSeed = tfgSeed.next();
-        tfg$hotSpotAgeNoise = TFGBiomeNoise.hotSpotAge(hotSpotSeed).spread(128);
-        tfg$hotSpotIntensityNoise = TFGBiomeNoise.hotSpotIntensity(hotSpotSeed).spread(128);
-        tfg$plateRegionNoise = TFGBiomeNoise.plateRegions(tfgSeed.next()).spread(128);
+        tfg$oceanicInfluenceNoise = new OpenSimplex2D(Seed.worldSeed).spread(0.02f);
+        tfg$hotSpotAgeNoise = TFGBiomeNoise.hotSpotAge(Seed.worldSeed).spread(128);
+        tfg$hotSpotIntensityNoise = TFGBiomeNoise.hotSpotIntensity(Seed.worldSeed).spread(128);
+        tfg$plateRegionNoise = TFGBiomeNoise.plateRegions(Seed.worldSeed).spread(128);
     }
 
     @Unique
