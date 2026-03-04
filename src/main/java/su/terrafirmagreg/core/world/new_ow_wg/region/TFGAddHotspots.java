@@ -30,12 +30,10 @@ public enum TFGAddHotspots implements RegionTask {
             double val = generator.tfg$getHotSpotIntensityNoise().noise(shift(pt.tfg$getX()), shift(pt.tfg$getZ()));
             if (val > threshold && edgeDist > 0.05) {
                 final byte age = (byte) (int) generator.tfg$getHotSpotAgeNoise().noise(shift(pt.tfg$getX()), shift(pt.tfg$getZ()));
-                if (age != 0) {
-                    pt.tfg$setHotSpotAge(age);
-                    if (age != 4)
-                        point.setLand();
-                    queue.enqueue(pt.tfg$getIndex());
-                }
+                pt.tfg$setHotSpotAge(age);
+                if (age != 4)
+                    point.setLand();
+                queue.enqueue(pt.tfg$getIndex());
             }
         }
 

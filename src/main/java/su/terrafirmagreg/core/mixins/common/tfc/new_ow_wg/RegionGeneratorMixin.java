@@ -33,8 +33,9 @@ public abstract class RegionGeneratorMixin implements IRegionGenerator {
     private void tfg$init(Settings settings, RandomSource random, CallbackInfo ci) {
         tfg$settings = settings;
         tfg$oceanicInfluenceNoise = new OpenSimplex2D(random.nextInt()).spread(0.02f);
-        tfg$hotSpotAgeNoise = TFGBiomeNoise.hotSpotAge(random.nextInt()).spread(128);
-        tfg$hotSpotIntensityNoise = TFGBiomeNoise.hotSpotIntensity(random.nextInt()).spread(128);
+        long hotSpotSeed = random.nextLong();
+        tfg$hotSpotAgeNoise = TFGBiomeNoise.hotSpotAge(hotSpotSeed).spread(128);
+        tfg$hotSpotIntensityNoise = TFGBiomeNoise.hotSpotIntensity(hotSpotSeed).spread(128);
         tfg$plateRegionNoise = TFGBiomeNoise.plateRegions(random.nextInt()).spread(128);
     }
 
