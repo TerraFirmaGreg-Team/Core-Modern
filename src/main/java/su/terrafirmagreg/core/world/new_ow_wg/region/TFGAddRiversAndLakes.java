@@ -126,7 +126,7 @@ public enum TFGAddRiversAndLakes implements RegionTask {
         final int gridX = (int) (edge.source().x() + 0.3f * offsetX);
         final int gridZ = (int) (edge.source().y() + 0.3f * offsetZ);
 
-        final Region.Point point = region.at(gridX, gridZ);
+        final Region.Point point = region.maybeAt(gridX, gridZ);
         if (point != null && point.land() && point.distanceToOcean >= 2 && point.distanceToEdge >= 2 && TFGLayers.hasLake(point.biome)) {
             point.biome = TFGLayers.lakeFor(point.biome);
             point.rainfall += 0.09f * (500f - point.rainfall); // Small, localized rainfall increase around lakes of ~45mm max
@@ -153,7 +153,7 @@ public enum TFGAddRiversAndLakes implements RegionTask {
         private Region.Point vertex2Point(River.Vertex vertex) {
             final int gridX = (int) Math.round(vertex.x());
             final int gridZ = (int) Math.round(vertex.y());
-            return region.at(gridX, gridZ);
+            return region.maybeAt(gridX, gridZ);
         }
     }
 }

@@ -25,7 +25,7 @@ public enum TFGAddIslands implements RegionTask {
                 for (int island = 0; island < 12; island++) {
                     point.setLand();
                     point.setIsland();
-                    point = region.at(
+                    point = region.maybeAt(
                             pt.tfg$getX() + random.nextInt(4) - random.nextInt(4),
                             pt.tfg$getZ() + random.nextInt(4) - random.nextInt(4));
                     if (point == null || (point.land() && !point.island()) || point.distanceToEdge <= 2) {
