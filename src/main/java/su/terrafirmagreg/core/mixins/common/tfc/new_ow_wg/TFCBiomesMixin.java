@@ -6,10 +6,12 @@ import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWOR
 import java.util.Collection;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.dries007.tfc.world.biome.BiomeBridge;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.TFCBiomes;
 import net.minecraft.resources.ResourceKey;
@@ -23,26 +25,58 @@ import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 @Mixin(value = TFCBiomes.class, remap = false)
 public class TFCBiomesMixin {
 
+    // Lookup methods fall through to TFC if TFG doesn't know the biome, handling
+    // mixed-version chunk boundaries where legacy tfc: biomes appear alongside tfgcore: biomes.
+    //
+    // We use findExtension rather than getExtension to prevent storing null in the cache.
+    //
+    // For TFG biomes we warm the cache manually after the map lookup, so subsequent calls
+    // are satisfied by the cache and never reach this mixin.
+
+    @Unique
+    private static BiomeExtension tfg$findAndCache(CommonLevelAccessor level, Biome biome) {
+        final BiomeExtension ext = TFGBiomes.findExtension(level, biome);
+        if (ext != null)
+            ((BiomeBridge) (Object) biome).tfc$getExtension(() -> ext);
+        return null;
+    }
+
     @Inject(method = "getExtensionOrThrow", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$getExtensionOrThrow(LevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
         if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            cir.setReturnValue(TFGBiomes.getExtensionOrThrow(level, biome));
+            final BiomeExtension ext = tfg$findAndCache(level, biome);
+            if (ext != null)
+                cir.setReturnValue(ext);
         }
     }
 
     @Inject(method = "hasExtension", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$hasExtension(CommonLevelAccessor level, Biome biome, CallbackInfoReturnable<Boolean> cir) {
         if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            cir.setReturnValue(TFGBiomes.hasExtension(level, biome));
+            if (tfg$findAndCache(level, biome) != null)
+                cir.setReturnValue(true);
         }
     }
 
     @Inject(method = "getExtension", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$getExtension(CommonLevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
         if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            cir.setReturnValue(TFGBiomes.getExtension(level, biome));
+            final BiomeExtension ext = tfg$findAndCache(level, biome);
+            if (ext != null)
+                cir.setReturnValue(ext);
         }
     }
+
+    @Inject(method = "findExtension", at = @At("HEAD"), remap = false, cancellable = true)
+    private static void tfg$findExtension(CommonLevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
+        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
+            final BiomeExtension ext = TFGBiomes.findExtension(level, biome);
+            if (ext != null)
+                cir.setReturnValue(ext);
+        }
+    }
+
+    // Collection methods always only return 1.21 worldgen context.
 
     @Inject(method = "getAllKeys", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$getAllKeys(CallbackInfoReturnable<Collection<ResourceKey<Biome>>> cir) {
@@ -69,13 +103,6 @@ public class TFCBiomesMixin {
     private static void tfg$getById(ResourceLocation id, CallbackInfoReturnable<BiomeExtension> cir) {
         if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
             cir.setReturnValue(TFGBiomes.getById(id));
-        }
-    }
-
-    @Inject(method = "findExtension", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void tfg$findExtension(CommonLevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            cir.setReturnValue(TFGBiomes.findExtension(level, biome));
         }
     }
 }

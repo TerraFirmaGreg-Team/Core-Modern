@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Set;
 
+import net.dries007.tfc.world.biome.TFCBiomes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -22,6 +23,9 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.mixins.common.minecraft.AccessorMinecraftServer;
 import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
+import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
+import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 
 public class WorldgenVersionEvents {
 
@@ -67,6 +71,22 @@ public class WorldgenVersionEvents {
                         ? WorldgenVersionData.OVERWORLD_VERSION
                         : 0;
                 data.setGeneratedVersion(level.dimension().location(), version);
+            }
+        }
+
+        // Initialize TFG-specific fields on 1.20 biome extensions so we can support old worlds
+        // with a forced 1.21 worldgen override. This will still cause ugly chunk boundaries
+        // but shouldn't cause NPE.
+        if (WorldgenVersionData.OVERWORLD_VERSION == WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT) {
+            for (var ext : TFCBiomes.getExtensions()) {
+                final TFGRiverBlendType riverBlendType = switch (ext.riverBlendType()) {
+                    case NONE -> TFGRiverBlendType.NONE;
+                    case WIDE -> TFGRiverBlendType.WIDE;
+                    case CANYON -> TFGRiverBlendType.CANYON;
+                    case TALL_CANYON -> TFGRiverBlendType.TALL_CANYON;
+                    case CAVE -> TFGRiverBlendType.CAVE;
+                };
+                ((IBiomeExtension) ext).tfg$init(ShoreBlendType.CLASSIC, riverBlendType, 0, false, false, 0, 0, 0, false);
             }
         }
 
