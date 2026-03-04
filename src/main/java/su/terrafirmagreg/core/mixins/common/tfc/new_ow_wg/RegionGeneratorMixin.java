@@ -44,7 +44,7 @@ public abstract class RegionGeneratorMixin implements IRegionGenerator {
         final long hotSpotSeed = tfgSeed.next();
         tfg$hotSpotAgeNoise = TFGBiomeNoise.hotSpotAge(hotSpotSeed).spread(128);
         tfg$hotSpotIntensityNoise = TFGBiomeNoise.hotSpotIntensity(hotSpotSeed).spread(128);
-        tfg$plateRegionNoise = TFGBiomeNoise.plateRegions(tfgSeed.next()).spread(128);
+        tfg$plateRegionNoise = TFGBiomeNoise.plateRegions(hotSpotSeed).spread(128);
     }
 
     @Unique
