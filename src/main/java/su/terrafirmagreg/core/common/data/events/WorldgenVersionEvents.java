@@ -1,7 +1,9 @@
 package su.terrafirmagreg.core.common.data.events;
 
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -14,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
@@ -28,6 +31,10 @@ import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
 import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
 
 public class WorldgenVersionEvents {
+
+    // Warnings about changed worldgen overrides, shown to ops on login.
+    // Cleared at server start so stale warnings from previous sessions don't persist.
+    private static final List<String> pendingOpWarnings = new ArrayList<>();
 
     @SubscribeEvent
     public void onServerAboutToStart(ServerAboutToStartEvent event) {
@@ -109,19 +116,30 @@ public class WorldgenVersionEvents {
                         + ". If unintentional, restore your config before generating new chunks.";
 
                 TFGCore.LOGGER.warn(msg);
-                for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                    if (server.getPlayerList().isOp(player.getGameProfile())) {
-                        player.sendSystemMessage(Component.literal(msg));
-                    }
-                }
-
+                pendingOpWarnings.add(msg);
                 data.setKnownConfigOverride(dim, currentOverride);
             }
         }
     }
 
     @SubscribeEvent
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (pendingOpWarnings.isEmpty())
+            return;
+        if (!(event.getEntity() instanceof ServerPlayer player))
+            return;
+        final MinecraftServer server = player.getServer();
+        if (server == null || !server.getPlayerList().isOp(player.getGameProfile()))
+            return;
+
+        for (String msg : pendingOpWarnings) {
+            player.sendSystemMessage(Component.literal(msg));
+        }
+    }
+
+    @SubscribeEvent
     public void onServerStopped(ServerStoppedEvent event) {
         WorldgenVersionData.OVERWORLD_VERSION = 0;
+        pendingOpWarnings.clear();
     }
 }
