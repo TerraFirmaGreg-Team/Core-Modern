@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
+import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
+import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_VERSION;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,7 +15,6 @@ import net.dries007.tfc.world.region.RiverEdge;
 import net.dries007.tfc.world.region.Units;
 import net.minecraft.core.QuartPos;
 
-import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 
 @Mixin(value = BiomeSourceExtension.class, remap = false)
@@ -38,7 +40,7 @@ public interface BiomeSourceExtensionMixin {
 
             for (RiverEdge edge : partitionPoint.rivers()) {
                 if (edge.fractal().intersect(exactGridX, exactGridZ, 0.08f)) {
-                    return TFGConfig.SERVER.enableNewTFCWorldgen.get() ? TFGBiomes.RIVER : TFCBiomes.RIVER;
+                    return OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT ? TFGBiomes.RIVER : TFCBiomes.RIVER;
                 }
             }
         }

@@ -117,6 +117,7 @@
         "common.immersive_aircraft.BambooHopperEntityMixin",
         "common.kubejs.MiscForgeHelperMixin",
         "common.ldlib.ModularUIContainerMixin",
+        "common.minecraft.AccessorMinecraftServer",
         "common.minecraft.AccessorChunkMap",
         "common.minecraft.AccessorServerChunkCache",
         "common.minecraft.AxolotlMixin",

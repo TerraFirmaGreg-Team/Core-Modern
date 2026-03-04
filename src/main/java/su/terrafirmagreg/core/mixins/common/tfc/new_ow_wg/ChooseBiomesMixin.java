@@ -1,6 +1,8 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
 import static su.terrafirmagreg.core.world.new_ow_wg.TFGLayers.*;
+import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
+import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_VERSION;
 
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,8 +13,6 @@ import net.dries007.tfc.world.layer.framework.Area;
 import net.dries007.tfc.world.region.ChooseBiomes;
 import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
-
-import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mixin(value = ChooseBiomes.class, remap = false)
 public abstract class ChooseBiomesMixin {
@@ -41,7 +41,7 @@ public abstract class ChooseBiomesMixin {
 
     @Inject(method = "apply", at = @At("HEAD"), remap = false, cancellable = true)
     public void tfg$apply(RegionGenerator.Context context, CallbackInfo ci) {
-        if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
+        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
 
             final Region region = context.region;
             final Area blobArea = context.generator().biomeArea.get();

@@ -1,6 +1,8 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
+import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
+import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_VERSION;
 
 import java.util.function.LongFunction;
 
@@ -22,7 +24,6 @@ import net.dries007.tfc.world.surface.builder.VolcanoesSurfaceBuilder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
-import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeBuilder;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
@@ -106,7 +107,7 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
 
     @Inject(method = "surface", at = @At("TAIL"), remap = false)
     private void tfg$surface(SurfaceBuilderFactory surfaceBuilderFactory, CallbackInfoReturnable<BiomeBuilder> cir) {
-        if (TFGConfig.SERVER.enableNewTFCWorldgen.get()) {
+        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
             this.surfaceBuilderFactory = VolcanoesSurfaceBuilder.create(surfaceBuilderFactory);
             this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(this.surfaceBuilderFactory);
             this.surfaceBuilderFactory = TuyaSurfaceBuilder.create(this.surfaceBuilderFactory);
