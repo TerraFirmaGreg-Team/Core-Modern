@@ -120,7 +120,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     @Redirect(method = "initRandomState", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/world/layer/TFCLayers;createRegionBiomeLayer(Lnet/dries007/tfc/world/region/RegionGenerator;J)Lnet/dries007/tfc/world/layer/framework/AreaFactory;"), remap = false)
     private AreaFactory tfg$modifyCreateRegionBiomeLayer(RegionGenerator generator, long worldSeed, @Local(argsOnly = true) ServerLevel level) {
         if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            this.tfg$seed = Seed.of(worldSeed);
+            this.tfg$seed = Seed.of(level.getSeed());
             tfg$tideHeightNoise = TFGBiomeNoise.shoreTideLevelNoise(tfg$seed);
             tfg$noiseSampler = new NoiseSampler(tfg$seed.next(), level.registryAccess().lookupOrThrow(Registries.NOISE), level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION));
             return TFGLayers.createRegionBiomeLayer(generator, worldSeed);
