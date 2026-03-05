@@ -91,7 +91,7 @@ public class CommonProxy {
     public void onPostRegisterMaterials(final PostMaterialEvent event) {
         TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
-        TFGModifyMaterials.modify(event);
+        TFGModifyMaterials.modify();
     }
 
     @SubscribeEvent
