@@ -56,6 +56,10 @@ public class TFGItems {
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
+    public static final ItemEntry<Item> SILICON_SEED_CRYSTAL = TFGCore.REGISTRATE.item("silicon_seed_crystal", Item::new)
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<EmptyDnaSyringeItem> EMPTY_DNA_SYRINGE = TFGCore.REGISTRATE.item("empty_dna_syringe", EmptyDnaSyringeItem::new)
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();

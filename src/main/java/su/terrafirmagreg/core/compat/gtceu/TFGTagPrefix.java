@@ -373,6 +373,14 @@ public final class TFGTagPrefix {
         slabPlated = new TagPrefix("plated_slab")
                 .materialAmount(GTValues.M / 2)
                 .unificationEnabled(true);
+
+        // Modify existing GT ones
+        TagPrefix.toolHeadBuzzSaw.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_BUZZSAW_BLADE));
+        TagPrefix.toolHeadScrewdriver.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_SCREWDRIVER_HEAD));
+        TagPrefix.toolHeadDrill.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_DRILL_HEAD));
+        TagPrefix.toolHeadChainsaw.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_CHAINSAW_HEAD));
+        TagPrefix.toolHeadWrench.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_WRENCH_HEAD));
+        TagPrefix.toolHeadWireCutter.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_WIRE_CUTTER_HEAD));
     }
 
     public static void init() {

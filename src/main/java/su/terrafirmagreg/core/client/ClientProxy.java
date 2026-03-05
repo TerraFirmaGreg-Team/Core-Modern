@@ -7,6 +7,8 @@ import java.util.function.BiConsumer;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
+
 import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -30,11 +32,13 @@ import su.terrafirmagreg.core.common.data.container.ArtisanTableScreen;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.entities.sniffer.*;
 import su.terrafirmagreg.core.common.data.particles.*;
+import su.terrafirmagreg.core.common.data.tfgt.machine.render.BouleRender;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class ClientProxy extends CommonProxy {
     public ClientProxy() {
         super();
+        initializeDynamicRenders();
     }
 
     @SubscribeEvent
@@ -84,6 +88,10 @@ public class ClientProxy extends CommonProxy {
         consumer.accept(TFGItems.TIER_2_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_2_LAYER, RocketRenderer.TIER_2_TEXTURE));
         consumer.accept(TFGItems.TIER_3_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_3_LAYER, RocketRenderer.TIER_3_TEXTURE));
         consumer.accept(TFGItems.TIER_4_DOUBLE_ROCKET.get(), new RocketRenderer.ItemRenderer(RocketModel.TIER_4_LAYER, RocketRenderer.TIER_4_TEXTURE));
+    }
+
+    public void initializeDynamicRenders() {
+        DynamicRenderManager.register(TFGCore.id("boule"), BouleRender.TYPE);
     }
 
     @SubscribeEvent

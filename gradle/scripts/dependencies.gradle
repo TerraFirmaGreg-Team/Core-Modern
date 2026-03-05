@@ -155,4 +155,7 @@ dependencies {
 
     // Framed Blocks
     modCompileOnly "curse.maven:framedblocks-441647:7386520"
+
+    // GT modern utils
+    modImplementation "curse.maven:gregtech-modern-utilities-1235020:7612516"
 }
