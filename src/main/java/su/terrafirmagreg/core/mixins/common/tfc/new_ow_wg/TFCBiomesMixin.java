@@ -5,13 +5,13 @@ import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWOR
 
 import java.util.Collection;
 
+import net.dries007.tfc.world.biome.BiomeBridge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.dries007.tfc.world.biome.BiomeBridge;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.TFCBiomes;
 import net.minecraft.resources.ResourceKey;
@@ -27,18 +27,15 @@ public class TFCBiomesMixin {
 
     // Lookup methods fall through to TFC if TFG doesn't know the biome, handling
     // mixed-version chunk boundaries where legacy tfc: biomes appear alongside tfgcore: biomes.
-    //
-    // We use findExtension rather than getExtension to prevent storing null in the cache.
-    //
-    // For TFG biomes we warm the cache manually after the map lookup, so subsequent calls
-    // are satisfied by the cache and never reach this mixin.
+    // We use TFGBiomes.findExtension (direct registry lookup) rather than getExtension to avoid
+    // storing null in the biome cache when looking up a TFC biome we don't own.
 
     @Unique
     private static BiomeExtension tfg$findAndCache(CommonLevelAccessor level, Biome biome) {
         final BiomeExtension ext = TFGBiomes.findExtension(level, biome);
         if (ext != null)
             ((BiomeBridge) (Object) biome).tfc$getExtension(() -> ext);
-        return null;
+        return ext;
     }
 
     @Inject(method = "getExtensionOrThrow", at = @At("HEAD"), remap = false, cancellable = true)
