@@ -1,5 +1,5 @@
 {
-    "values": [],
+    "values": ["tfg:earth/salt_lick_patch"],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,12 +1,7 @@
 package su.terrafirmagreg.core.common.data.events;
 
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalInt;
-import java.util.Set;
+import java.util.*;
 
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.minecraft.network.chat.Component;
