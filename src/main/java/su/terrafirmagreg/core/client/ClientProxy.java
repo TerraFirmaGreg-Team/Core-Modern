@@ -71,6 +71,10 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICICLE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.SANDY_LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.SILTY_LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.SILT_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.LOAM_DUFF.get(), RenderType.cutoutMipped());
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }

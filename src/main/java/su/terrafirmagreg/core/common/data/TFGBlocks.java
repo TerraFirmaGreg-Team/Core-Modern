@@ -229,6 +229,15 @@ public final class TFGBlocks {
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
+    public static BlockEntry<CoarseDirtBlock> COARSE_SILTY_LOAM_DIRT;
+    public static BlockEntry<CoarseDirtBlock> COARSE_SANDY_LOAM_DIRT;
+    public static BlockEntry<CoarseDirtBlock> COARSE_SILT_DIRT;
+    public static BlockEntry<CoarseDirtBlock> COARSE_LOAM_DIRT;
+    public static BlockEntry<ConnectedDuffBlock> SILTY_LOAM_DUFF;
+    public static BlockEntry<ConnectedDuffBlock> SANDY_LOAM_DUFF;
+    public static BlockEntry<ConnectedDuffBlock> SILT_DUFF;
+    public static BlockEntry<ConnectedDuffBlock> LOAM_DUFF;
+
     // These are done separately to avoid cyclic references
 
     static {
@@ -247,6 +256,113 @@ public final class TFGBlocks {
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .register();
 
+        COARSE_SILTY_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_silty_loam_dirt",
+                p -> new CoarseDirtBlock(p,
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILTY_LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILTY_LOAM).get()))
+                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+
+        COARSE_SANDY_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_sandy_loam_dirt",
+                p -> new CoarseDirtBlock(p,
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SANDY_LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SANDY_LOAM).get()))
+                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+
+        COARSE_SILT_DIRT = TFGCore.REGISTRATE.block("coarse_silt_dirt",
+                p -> new CoarseDirtBlock(p,
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILT).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILT).get()))
+                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+
+        COARSE_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_loam_dirt",
+                p -> new CoarseDirtBlock(p,
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.LOAM).get()))
+                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+
+        SILTY_LOAM_DUFF = TFGCore.REGISTRATE.block("silty_loam_duff",
+                p -> new ConnectedDuffBlock(p.randomTicks(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILTY_LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILTY_LOAM).get()))
+                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get()))
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+
+        SANDY_LOAM_DUFF = TFGCore.REGISTRATE.block("sandy_loam_duff",
+                p -> new ConnectedDuffBlock(p.randomTicks(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SANDY_LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SANDY_LOAM).get()))
+                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get()))
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+
+        SILT_DUFF = TFGCore.REGISTRATE.block("silt_duff",
+                p -> new ConnectedDuffBlock(p.randomTicks(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILT).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILT).get()))
+                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get()))
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+
+        LOAM_DUFF = TFGCore.REGISTRATE.block("loam_duff",
+                p -> new ConnectedDuffBlock(p.randomTicks(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.LOAM).get(),
+                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.LOAM).get()))
+                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get()))
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
     }
 
     private static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {
@@ -322,42 +438,6 @@ public final class TFGBlocks {
             .build()
             .register();
 
-    public static final BlockEntry<Block> COARSE_SILTY_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_silty_loam_dirt", Block::new)
-            .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .item(BlockItem::new)
-            .tag(ItemTags.DIRT)
-            .build()
-            .register();
-
-    public static final BlockEntry<Block> COARSE_SANDY_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_sandy_loam_dirt", Block::new)
-            .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .item(BlockItem::new)
-            .tag(ItemTags.DIRT)
-            .build()
-            .register();
-
-    public static final BlockEntry<Block> COARSE_SILT_DIRT = TFGCore.REGISTRATE.block("coarse_silt_dirt", Block::new)
-            .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .item(BlockItem::new)
-            .tag(ItemTags.DIRT)
-            .build()
-            .register();
-
-    public static final BlockEntry<Block> COARSE_LOAM_DIRT = TFGCore.REGISTRATE.block("coarse_loam_dirt", Block::new)
-            .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-            .item(BlockItem::new)
-            .tag(ItemTags.DIRT)
-            .build()
-            .register();
-
     public static final BlockEntry<Block> HARDENED_CLAY = TFGCore.REGISTRATE.block("hardened_clay", Block::new)
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_ORANGE)
@@ -368,6 +448,7 @@ public final class TFGBlocks {
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_SHOVEL)
             .item(BlockItem::new).build()
+            .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
             .register();
 
     public static final BlockEntry<Block> HALITE = TFGCore.REGISTRATE.block("halite", Block::new)
