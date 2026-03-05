@@ -1,7 +1,12 @@
 package su.terrafirmagreg.core.common.data.events;
 
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.OptionalInt;
+import java.util.Set;
 
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.minecraft.network.chat.Component;
@@ -94,7 +99,7 @@ public class WorldgenVersionEvents {
             }
         }
 
-        // Warn ops if config overrides changed since last session.
+        // Collect warnings for ops about changed worldgen overrides.
         final Set<ResourceLocation> dimensions = new HashSet<>(configOverrides.keySet());
         dimensions.addAll(data.knownOverrideDimensions());
 
