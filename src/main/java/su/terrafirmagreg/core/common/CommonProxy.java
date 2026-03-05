@@ -22,6 +22,7 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
+import su.terrafirmagreg.core.common.data.TFGModifyMaterials;
 import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
@@ -90,6 +91,7 @@ public class CommonProxy {
     public void onPostRegisterMaterials(final PostMaterialEvent event) {
         TFGHelpers.isMaterialRegistrationFinished = true;
         TFGMaterialHandler.postInit();
+        TFGModifyMaterials.modify();
     }
 
     @SubscribeEvent
