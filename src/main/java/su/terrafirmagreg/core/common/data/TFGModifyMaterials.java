@@ -10,13 +10,12 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 public class TFGModifyMaterials {
 
     public static void modify() {
-        enableCustomStill("iron_iii_chloride");
-        enableCustomStill("soldering_alloy");
-        enableCustomStill("tin");
+        enableCustomStill(GTMaterials.Iron3Chloride);
+        enableCustomStill(GTMaterials.SolderingAlloy);
+        enableCustomStill(GTMaterials.Tin);
     }
 
-    private static void enableCustomStill(String materialName) {
-        Material material = GTMaterials.get(materialName);
+    private static void enableCustomStill(Material material) {
 
         FluidProperty property = material.getProperty(PropertyKey.FLUID);
         if (property == null)
