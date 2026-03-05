@@ -25,20 +25,18 @@ import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 
 public class TFGSurfaceManager {
-    private static Map<BiomeExtension, SurfaceBuilder> collectSurfaceBuilders(Seed seed) {
+    private static Map<BiomeExtension, SurfaceBuilder> collectSurfaceBuilders(long worldSeed) {
         final ImmutableMap.Builder<BiomeExtension, SurfaceBuilder> builder = ImmutableMap.builder();
         for (BiomeExtension variant : TFGBiomes.getExtensions()) {
-            builder.put(variant, variant.createSurfaceBuilder(seed.seed()));
+            builder.put(variant, variant.createSurfaceBuilder(worldSeed));
         }
         return builder.build();
     }
 
-    private final Seed seed;
     private final Map<BiomeExtension, SurfaceBuilder> builders;
 
-    public TFGSurfaceManager(Seed seed) {
-        this.builders = collectSurfaceBuilders(seed);
-        this.seed = seed;
+    public TFGSurfaceManager(long worldSeed) {
+        this.builders = collectSurfaceBuilders(worldSeed);
     }
 
     public void buildSurface(LevelAccessor world, ChunkAccess chunk, RockLayerSettings rockLayerSettings, ChunkData chunkData, BiomeExtension[] accurateChunkBiomes,
@@ -47,7 +45,7 @@ public class TFGSurfaceManager {
         final ChunkPos chunkPos = chunk.getPos();
         final int blockX = chunkPos.getMinBlockX(), blockZ = chunkPos.getMinBlockZ();
 
-        SurfaceBuilderContext context = new SurfaceBuilderContext(world, chunk, chunkData, random, seed.seed(), rockLayerSettings, seaLevel, minY);
+        SurfaceBuilderContext context = new SurfaceBuilderContext(world, chunk, chunkData, random, Seed.worldSeed, rockLayerSettings, seaLevel, minY);
         ISurfaceBuilderContext ctx = (ISurfaceBuilderContext) context;
         ctx.tfg$init(cinderConeBiome, tuffRingBiome, tuyaBiome);
 
