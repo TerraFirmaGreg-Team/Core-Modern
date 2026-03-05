@@ -18,16 +18,16 @@ public class FlatsSurfaceBuilder implements SurfaceBuilder {
         TFGSimpleSurfaceStates simpleStates = TFGSimpleSurfaceStates.INSTANCE();
         this.complexStates = TFGComplexSurfaceStates.INSTANCE();
         this.top = isMuddy ? simpleStates.DRY_MUD : simpleStates.SALTED_EARTH;
-        this.mid = simpleStates.DRY_MUD;
+        this.mid = isMuddy ? simpleStates.DRY_MUD : complexStates.UNDER_GRAVEL;
         this.water = SurfaceStates.MUD;
     }
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
         if (startY < 66 && context.rainfall() < 25) {
-            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, mid, water, water);
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, complexStates.UNDER_GRAVEL, complexStates.UNDER_GRAVEL, water, water);
         } else {
-            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_SAND, complexStates.MID_DIRT_TO_SAND, complexStates.UNDER_GRAVEL);
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, complexStates.UNDER_GRAVEL, water, water);
         }
     }
 }
