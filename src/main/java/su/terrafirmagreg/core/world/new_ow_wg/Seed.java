@@ -15,6 +15,9 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
  * are initially built, in a predictable sequence).
  */
 public final class Seed {
+    /** World seed for the current server session, set before RegionGenerator construction. */
+    public static long worldSeed;
+
     /**
      * @return A new {@code Seed} that is capable of generating sequential {@code next()} values.
      */

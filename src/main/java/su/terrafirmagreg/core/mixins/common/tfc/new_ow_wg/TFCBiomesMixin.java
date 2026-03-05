@@ -4,12 +4,16 @@ import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWOR
 import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_VERSION;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 
 import net.dries007.tfc.world.biome.BiomeBridge;
 import net.dries007.tfc.world.biome.BiomeExtension;
@@ -17,7 +21,6 @@ import net.dries007.tfc.world.biome.TFCBiomes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.CommonLevelAccessor;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
@@ -25,45 +28,22 @@ import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 @Mixin(value = TFCBiomes.class, remap = false)
 public class TFCBiomesMixin {
 
-    // Lookup methods fall through to TFC if TFG doesn't know the biome, handling
-    // mixed-version chunk boundaries where legacy tfc: biomes appear alongside tfgcore: biomes.
-    //
-    // We use findExtension rather than getExtension to prevent storing null in the cache.
-    //
-    // For TFG biomes we warm the cache manually after the map lookup, so subsequent calls
-    // are satisfied by the cache and never reach this mixin.
-
-    @Unique
-    private static BiomeExtension tfg$findAndCache(CommonLevelAccessor level, Biome biome) {
-        final BiomeExtension ext = TFGBiomes.findExtension(level, biome);
-        if (ext != null)
-            ((BiomeBridge) (Object) biome).tfc$getExtension(() -> ext);
-        return null;
-    }
-
-    @Inject(method = "getExtensionOrThrow", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void tfg$getExtensionOrThrow(LevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
+    /**
+     * Wrap tfc$getExtension call inside getExtension to use a different Supplier for 1.21 worldgen backport
+     * Our Supplier tries TFG Extensions first, and only falls back to default TFC if none are found.
+     * By wrapping it this way, the TFC caching mechanism works properly.
+     */
+    @WrapOperation(method = "getExtension", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/world/biome/BiomeBridge;tfc$getExtension(Ljava/util/function/Supplier;)Lnet/dries007/tfc/world/biome/BiomeExtension;"))
+    private static BiomeExtension tfg$wrapGetExtension(BiomeBridge bridge, Supplier<BiomeExtension> original, Operation<BiomeExtension> op,
+            @Local(argsOnly = true) CommonLevelAccessor level, @Local(argsOnly = true) Biome biome) {
         if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            final BiomeExtension ext = tfg$findAndCache(level, biome);
-            if (ext != null)
-                cir.setReturnValue(ext);
-        }
-    }
-
-    @Inject(method = "hasExtension", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void tfg$hasExtension(CommonLevelAccessor level, Biome biome, CallbackInfoReturnable<Boolean> cir) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            if (tfg$findAndCache(level, biome) != null)
-                cir.setReturnValue(true);
-        }
-    }
-
-    @Inject(method = "getExtension", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void tfg$getExtension(CommonLevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            final BiomeExtension ext = tfg$findAndCache(level, biome);
-            if (ext != null)
-                cir.setReturnValue(ext);
+            final Supplier<BiomeExtension> supplier = () -> {
+                final BiomeExtension ext = TFGBiomes.findExtension(level, biome);
+                return ext != null ? ext : original.get();
+            };
+            return op.call(bridge, supplier);
+        } else {
+            return op.call(bridge, original);
         }
     }
 

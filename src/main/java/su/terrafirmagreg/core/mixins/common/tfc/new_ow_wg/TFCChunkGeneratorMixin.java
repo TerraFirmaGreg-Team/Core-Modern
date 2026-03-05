@@ -111,6 +111,11 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     @Unique
     private TFGSurfaceManager tfg$surfaceManager;
 
+    @Inject(method = "initRandomState", at = @At("HEAD"), remap = false)
+    private void tfg$captureWorldSeed(ChunkMap chunkMap, ServerLevel level, CallbackInfo ci) {
+        Seed.worldSeed = level.getSeed();
+    }
+
     // overwriting the AreaFactory
     @Redirect(method = "initRandomState", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/world/layer/TFCLayers;createRegionBiomeLayer(Lnet/dries007/tfc/world/region/RegionGenerator;J)Lnet/dries007/tfc/world/layer/framework/AreaFactory;"), remap = false)
     private AreaFactory tfg$modifyCreateRegionBiomeLayer(RegionGenerator generator, long worldSeed, @Local(argsOnly = true) ServerLevel level) {
