@@ -317,7 +317,7 @@ public final class TFGBlocks {
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
                 .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM).get()))
-                .item(BlockItem::new)
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
                 .tag(ItemTags.DIRT)
                 .build()
                 .register();
@@ -331,7 +331,7 @@ public final class TFGBlocks {
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
                 .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM).get()))
-                .item(BlockItem::new)
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
                 .tag(ItemTags.DIRT)
                 .build()
                 .register();
@@ -345,7 +345,7 @@ public final class TFGBlocks {
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
                 .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT).get()))
-                .item(BlockItem::new)
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
                 .tag(ItemTags.DIRT)
                 .build()
                 .register();
@@ -359,7 +359,7 @@ public final class TFGBlocks {
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
                 .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM).get()))
-                .item(BlockItem::new)
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
                 .tag(ItemTags.DIRT)
                 .build()
                 .register();
