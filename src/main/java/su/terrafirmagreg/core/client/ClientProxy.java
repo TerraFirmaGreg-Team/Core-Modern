@@ -34,7 +34,6 @@ import su.terrafirmagreg.core.common.data.entities.sniffer.*;
 import su.terrafirmagreg.core.common.data.particles.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.render.BouleRender;
 
-@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class ClientProxy extends CommonProxy {
     public ClientProxy() {
         super();
