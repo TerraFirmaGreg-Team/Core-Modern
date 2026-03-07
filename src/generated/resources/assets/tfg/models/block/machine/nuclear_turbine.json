@@ -10,7 +10,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
+          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel",
+          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_emissive"
         }
       }
     },
@@ -18,7 +20,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
+          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel",
+          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_paused",
+          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_paused_emissive"
         }
       }
     },
@@ -26,7 +30,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
+          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel",
+          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active_emissive"
         }
       }
     },
@@ -34,7 +40,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
+          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel",
+          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active_emissive"
         }
       }
     },
@@ -42,7 +50,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
+          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel",
+          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_emissive"
         }
       }
     },
@@ -50,7 +60,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
+          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel",
+          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_paused",
+          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_paused_emissive"
         }
       }
     },
@@ -58,7 +70,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
+          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel",
+          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active_emissive"
         }
       }
     },
@@ -66,7 +80,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel"
+          "all": "gtceu:block/casings/mechanic/machine_casing_turbine_steel",
+          "overlay_front": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/generator/large_steam_turbine/overlay_front_active_emissive"
         }
       }
     }

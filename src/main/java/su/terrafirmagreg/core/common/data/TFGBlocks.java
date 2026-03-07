@@ -460,6 +460,13 @@ public final class TFGBlocks {
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
+    public static final BlockEntry<Block> QUARTZ_CRUCIBLE = TFGCore.REGISTRATE.block("quartz_crucible", Block::new)
+            .properties(p -> p.sound(SoundType.STONE).strength(3).mapColor(MapColor.QUARTZ).noOcclusion())
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .item(BlockItem::new).build()
+            .register();
+
     //// Casings
 
     public static final BlockEntry<ActiveParticleBlock> BIOCULTURE_ROTOR_PRIMARY = TFGCore.REGISTRATE
@@ -693,7 +700,8 @@ public final class TFGBlocks {
             List.of(FLTags.Blocks.STAINLESS_STEEL_GREENHOUSE, TFGTags.Blocks.StainlessSteelGreenhouseCasings, BlockTags.MINEABLE_WITH_PICKAXE),
             List.of(TFGTags.Items.StainlessSteelGreenhouseCasings));
 
-    public static final BlockEntry<Block> STERLING_SILVER_CASING = createCasingBlock("casings/sterling_silver_casing", GTModels.cubeAllModel(TFGCore.id("block/casings/sterling_silver_casing")));
+    public static final BlockEntry<Block> STERLING_SILVER_CASING = createCasingBlock("casings/sterling_silver_casing",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/sterling_silver_casing")));
 
     public static BlockEntry<ActiveBlock> createActiveCasingBlock(String name, NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> modelProvider,
             SoundType sound, float strength, float explosionResist, MapColor mapColor, boolean onlyDropWithTool) {
