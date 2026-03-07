@@ -1,0 +1,39 @@
+{
+    "entity.seal.ambient": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.ambient",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.ambient"
+    },
+    "entity.seal.attack": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.bite",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.attack"
+    },
+    "entity.seal.hurt": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.hurt",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.hurt"
+    },
+    "entity.seal.step": {
+        "sounds": [{
+            "volume": 0.5,
+            "name": "minecraft:entity/fish/flop1",
+            "pitch": 0.7
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.footsteps"
+    },
+    "entity.seal.death": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.death",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.death"
+    }
+}

@@ -79,6 +79,7 @@ public class TFGItems {
     public static final ItemEntry<ForgeSpawnEggItem> SNIFFER_SPAWN_EGG = registerSpawnEgg(TFGEntities.SNIFFER, 11285007, 4829025);
     public static final ItemEntry<ForgeSpawnEggItem> WRAPTOR_SPAWN_EGG = registerSpawnEgg(TFGEntities.WRAPTOR, 15767516, 4829025);
     public static final ItemEntry<ForgeSpawnEggItem> SURFER_SPAWN_EGG = registerSpawnEgg(TFGEntities.SURFER, 7644045, 12824430);
+    public static final ItemEntry<ForgeSpawnEggItem> LEOPARD_SEAL_EGG = registerSpawnEgg(TFGEntities.LEOPARD_SEAL, 0xffffff, 0xffffff);
 
     @SuppressWarnings("deprecation")
     public static final ItemEntry<BucketItem> MARS_WATER_BUCKET = TFGCore.REGISTRATE.item("semiheavy_ammoniacal_water_bucket",

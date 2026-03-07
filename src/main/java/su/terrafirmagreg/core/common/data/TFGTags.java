@@ -48,6 +48,8 @@ public final class TFGTags {
         public static final TagKey<Item> CopperGreenhouseCasings = createItemTag("copper_greenhouse_casings");
         public static final TagKey<Item> TreatedWoodGreenhouseCasings = createItemTag("treated_wood_greenhouse_casings");
 
+        public static final TagKey<Item> SEAL_FOOD = createItemTag("seal_food");
+
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("interaction/brick");
         public static final TagKey<Item> INTERACTIONBRICKSTAIR = createItemTag("interaction/brick_stairs");
