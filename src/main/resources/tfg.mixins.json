@@ -125,6 +125,7 @@
         "common.minecraft.IBlockLootSubProviderAccessor",
         "common.minecraft.MinecartFurnaceMixin",
         "common.minecraft.MonsterMixin",
+        "common.minecraft.PathfinderMobMixin",
         "common.minecraft.MushroomBlockMixin",
         "common.minecraft.PiglinBruteMixin",
         "common.minecraft.ServerAdvancementManagerMixin",
