@@ -6,12 +6,14 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -25,6 +27,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggHandler;
+import su.terrafirmagreg.core.common.perf.SupportCache;
 import su.terrafirmagreg.core.compat.grappling_hook.GrapplehookCompat;
 import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
@@ -42,6 +45,7 @@ public final class TFGCommonEventHandler {
 
         otherBus.addGenericListener(ItemStack.class, TFGCommonEventHandler::attachItemCapabilities);
         otherBus.addListener(TFGCommonEventHandler::onPlayerLogin);
+        otherBus.addListener(TFGCommonEventHandler::onLevelUnload);
 
         bus.addListener(TFGConfig::onLoad);
         bus.addListener(TFGCommonEventHandler::onCommonSetup);
@@ -84,6 +88,12 @@ public final class TFGCommonEventHandler {
 
     private static void addUpgrades(ItemLike item) {
         add(TFGItems.WIRELESS_CARD.get(), item, 1, GuiText.WirelessTerminals.getTranslationKey());
+    }
+
+    private static void onLevelUnload(LevelEvent.Unload event) {
+        if (!(event.getLevel() instanceof ServerLevel level))
+            return;
+        SupportCache.clearLevel(level.dimension());
     }
 
     /**
