@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.compat.gtceu;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.*;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconType;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
@@ -72,8 +71,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadSword)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SWORD)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SWORD)));
 
         toolHeadPickaxe = new TagPrefix("pickaxeHead")
                 .defaultTagPath("pickaxe_heads/%s")
@@ -84,8 +82,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadPickaxe)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.PICKAXE)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.PICKAXE)));
 
         toolHeadShovel = new TagPrefix("shovelHead")
                 .defaultTagPath("shovel_heads/%s")
@@ -96,8 +93,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadShovel)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SHOVEL)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SHOVEL)));
 
         toolHeadAxe = new TagPrefix("axeHead")
                 .defaultTagPath("axe_heads/%s")
@@ -108,8 +104,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadAxe)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.AXE)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.AXE)));
 
         toolHeadHoe = new TagPrefix("hoeHead")
                 .defaultTagPath("hoe_heads/%s")
@@ -120,8 +115,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadHoe)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.HOE)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.HOE)));
 
         toolHeadScythe = new TagPrefix("scytheHead")
                 .defaultTagPath("scythe_heads/%s")
@@ -132,8 +126,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadScythe)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SCYTHE)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SCYTHE)));
 
         toolHeadFile = new TagPrefix("fileHead")
                 .defaultTagPath("file_heads/%s")
@@ -144,8 +137,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadFile)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.FILE)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.FILE)));
 
         toolHeadHammer = new TagPrefix("hammerHead")
                 .defaultTagPath("hammer_heads/%s")
@@ -156,8 +148,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadHammer)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.HARD_HAMMER)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.HARD_HAMMER)));
 
         toolHeadSaw = new TagPrefix("sawHead")
                 .defaultTagPath("saw_heads/%s")
@@ -168,8 +159,7 @@ public final class TFGTagPrefix {
                 .materialIconType(MaterialIconType.toolHeadSaw)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SAW)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SAW)));
 
         toolHeadKnife = new TagPrefix("knifeHead")
                 .defaultTagPath("knife_heads/%s")
@@ -180,8 +170,7 @@ public final class TFGTagPrefix {
                 .materialIconType(TFGMaterialIconType.toolHeadKnife)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.KNIFE)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.KNIFE)));
 
         toolHeadButcheryKnife = new TagPrefix("butcheryKnifeHead")
                 .defaultTagPath("butchery_knife_heads/%s")
@@ -192,8 +181,7 @@ public final class TFGTagPrefix {
                 .materialIconType(TFGMaterialIconType.toolHeadButcheryKnife)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.BUTCHERY_KNIFE)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.BUTCHERY_KNIFE)));
 
         toolHeadMiningHammer = new TagPrefix("miningHammerHead")
                 .defaultTagPath("mining_hammer_heads/%s")
@@ -204,8 +192,7 @@ public final class TFGTagPrefix {
                 .materialIconType(TFGMaterialIconType.toolHeadMiningHammer)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.MINING_HAMMER)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.MINING_HAMMER)));
 
         toolHeadSpade = new TagPrefix("spadeHead")
                 .defaultTagPath("spade_heads/%s")
@@ -216,8 +203,7 @@ public final class TFGTagPrefix {
                 .materialIconType(TFGMaterialIconType.toolHeadSpade)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasToolProperty.and(mat -> mat.hasFlag(MaterialFlags.GENERATE_PLATE))
-                        .and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SPADE)));
+                .generationCondition(hasToolProperty.and(mat -> mat.getProperty(PropertyKey.TOOL).hasType(GTToolType.SPADE)));
 
         toolHeadPropick = new TagPrefix("propickHead")
                 .defaultTagPath("propick_heads/%s")
@@ -375,12 +361,15 @@ public final class TFGTagPrefix {
                 .unificationEnabled(true);
 
         // Modify existing GT ones
-        TagPrefix.toolHeadBuzzSaw.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_BUZZSAW_BLADE));
         TagPrefix.toolHeadScrewdriver.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_SCREWDRIVER_HEAD));
         TagPrefix.toolHeadDrill.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_DRILL_HEAD));
         TagPrefix.toolHeadChainsaw.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_CHAINSAW_HEAD));
         TagPrefix.toolHeadWrench.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_WRENCH_HEAD));
         TagPrefix.toolHeadWireCutter.generationCondition(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_WIRE_CUTTER_HEAD));
+
+        // Has to be handled specially because otherwise some recipes crash on startup because of missing recipe inputs
+        TagPrefix.toolHeadBuzzSaw.generationCondition(TagPrefix.toolHeadBuzzSaw.generationCondition()
+                .or(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_BUZZSAW_BLADE)));
     }
 
     public static void init() {

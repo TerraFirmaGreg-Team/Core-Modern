@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.client;
 
 import static earth.terrarium.adastra.client.forge.AdAstraClientForge.ITEM_RENDERERS;
-import static su.terrafirmagreg.core.common.data.TFGEntities.*;
 
 import java.util.function.BiConsumer;
 
@@ -19,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
@@ -34,7 +32,6 @@ import su.terrafirmagreg.core.common.data.entities.sniffer.*;
 import su.terrafirmagreg.core.common.data.particles.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.render.BouleRender;
 
-@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class ClientProxy extends CommonProxy {
     public ClientProxy() {
         super();
