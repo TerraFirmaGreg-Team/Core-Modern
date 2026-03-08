@@ -53,6 +53,7 @@ public class AmphibiousSetWalkTargetAwayFrom {
                                 }
                             }
 
+                            boolean isOceanPredator = Helpers.isEntity(attacker, TFCTags.Entities.OCEAN_PREDATORS);
                             // Evaluate positions for escape, favors land positions if an ocean predator is attacking it
                             Vec3 bestLandEscapePos = currentPos;
                             Vec3 bestWaterEscapePos = currentPos;
@@ -70,12 +71,13 @@ public class AmphibiousSetWalkTargetAwayFrom {
                                         }
                                     }
                                 }
-                                if (Helpers.isEntity(attacker, TFCTags.Entities.OCEAN_PREDATORS) && isTargetPosValidForEscape(currentPos, escapeFromPos, bestLandEscapePos)) {
-                                    pathToTarget.set(new WalkTarget(bestLandEscapePos, speedModifier.apply(mob), 0));
-                                } else {
-                                    final Vec3 bestEscapePos = getVectorFartherFromChaser(escapeFromPos, bestLandEscapePos, bestWaterEscapePos);
-                                    pathToTarget.set(new WalkTarget(bestEscapePos, speedModifier.apply(mob), 0));
-                                }
+                            }
+
+                            if (isOceanPredator && isTargetPosValidForEscape(currentPos, escapeFromPos, bestLandEscapePos)) {
+                                pathToTarget.set(new WalkTarget(bestLandEscapePos, speedModifier.apply(mob), 0));
+                            } else {
+                                final Vec3 bestEscapePos = getVectorFartherFromChaser(escapeFromPos, bestLandEscapePos, bestWaterEscapePos);
+                                pathToTarget.set(new WalkTarget(bestEscapePos, speedModifier.apply(mob), 0));
                             }
 
                             return true;
