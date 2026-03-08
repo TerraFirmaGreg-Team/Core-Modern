@@ -15,7 +15,7 @@ public class TFCAnimalBrainMixin {
      * The actual movement physics run independently in Minecraft aiStep/moveControl and are unaffected.
      * Interactive behaviors (temptation, following) should still be fast enough at max 3 ticks delay.
      */
-    @Inject(method = "customServerAiStep", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "customServerAiStep", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$throttleBrainTick(CallbackInfo ci) {
         TFCAnimal self = (TFCAnimal) (Object) this;
         if ((self.tickCount + self.getId()) % 3 != 0) {
