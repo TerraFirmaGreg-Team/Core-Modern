@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
@@ -95,6 +96,16 @@ public abstract class RocketMixin extends Entity {
                 TFGEntities.TIER_2_DOUBLE_ROCKET.get(), TIER_2_DOUBLE_PROPERTIES,
                 TFGEntities.TIER_3_DOUBLE_ROCKET.get(), TIER_3_DOUBLE_PROPERTIES,
                 TFGEntities.TIER_4_DOUBLE_ROCKET.get(), TIER_4_DOUBLE_PROPERTIES);
+    }
+
+    @Redirect(method = "burnEntitiesUnderRocket", at = @At(value = "INVOKE", target = "net/minecraft/world/entity/LivingEntity.equals (Ljava/lang/Object;)Z"))
+    private boolean tfg$dontBurnPassengers(LivingEntity instance, Object o) {
+        List<Entity> passengers = tfg$self.getPassengers();
+
+        for (var entity : passengers) {
+            return instance.equals(entity);
+        }
+        return false;
     }
 
     @Override

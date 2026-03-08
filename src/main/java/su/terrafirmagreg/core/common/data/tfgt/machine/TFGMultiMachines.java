@@ -955,7 +955,7 @@ public class TFGMultiMachines {
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .workableCasingModel(
                     TFGCore.id( "block/casings/machine_casing_mars"),
-                    GTCEu.id("block/multiblock/implosion_compressor"))
+                    GTCEu.id("block/machines/bioreactor"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##BBB##", "##CCC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
                     .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
