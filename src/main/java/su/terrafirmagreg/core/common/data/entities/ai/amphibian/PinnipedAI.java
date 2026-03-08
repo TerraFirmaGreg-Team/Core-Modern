@@ -6,10 +6,13 @@
 
 package su.terrafirmagreg.core.common.data.entities.ai.amphibian;
 
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
@@ -30,8 +33,6 @@ import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Optional;
 
 public class PinnipedAI {
     private static final UniformInt ADULT_FOLLOW_RANGE = UniformInt.of(15, 30);

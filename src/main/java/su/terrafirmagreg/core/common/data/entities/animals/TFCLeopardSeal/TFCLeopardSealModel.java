@@ -4,7 +4,7 @@
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-package su.terrafirmagreg.core.common.data.entities.animals.TFCLeopardSeal;
+package su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -6,6 +6,10 @@
 
 package su.terrafirmagreg.core.common.data.entities.ai.amphibian;
 
+import java.util.function.Function;
+
+import org.apache.commons.lang3.mutable.MutableLong;
+
 import net.minecraft.core.GlobalPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -13,9 +17,6 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
-import org.apache.commons.lang3.mutable.MutableLong;
-
-import java.util.function.Function;
 
 // Adapted from StrollToPoi to allow for variable speed modifiers between land and water
 public class AmphibiousStrollToPoi {

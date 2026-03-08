@@ -4,7 +4,7 @@
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-package su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal;
+package su.terrafirmagreg.core.common.data.entities.animals.tfcbison;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,17 +14,17 @@ import net.minecraft.resources.ResourceLocation;
 
 import su.terrafirmagreg.core.TFGCore;
 
-public class TFCLeopardSealRenderer extends MobRenderer<TFCLeopardSeal, TFCLeopardSealModel> {
+public class TFCBisonRenderer extends MobRenderer<TFCBison, TFCBisonModel> {
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
-            TFGCore.MOD_ID, "textures/entity/animal/leopard_seal.png");
+            TFGCore.MOD_ID, "textures/entity/animal/bison.png");
 
-    public TFCLeopardSealRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new TFCLeopardSealModel(ctx.bakeLayer(TFCLeopardSealModel.LAYER_LOCATION)), 0.7F);
+    public TFCBisonRenderer(EntityRendererProvider.Context ctx) {
+        super(ctx, new TFCBisonModel(ctx.bakeLayer(TFCBisonModel.LAYER_LOCATION)), 0.7F);
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull TFCLeopardSeal entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull TFCBison entity) {
         return TEXTURE;
     }
 }

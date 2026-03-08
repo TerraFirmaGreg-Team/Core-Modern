@@ -1,20 +1,22 @@
 package su.terrafirmagreg.core.common.data;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import net.dries007.tfc.client.TFCSounds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import su.terrafirmagreg.core.TFGCore;
 
-import java.util.Optional;
-import java.util.function.Supplier;
+import su.terrafirmagreg.core.TFGCore;
 
 public final class TFGSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, TFGCore.MOD_ID);
 
     public static final TFCSounds.EntitySound SEAL = createTfcEntitySounds("seal", true, false);
+    public static final TFCSounds.EntitySound BISON = createTfcEntitySounds("bison", true, false);
 
     private static RegistryObject<SoundEvent> createSound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(

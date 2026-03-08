@@ -6,6 +6,9 @@
 
 package su.terrafirmagreg.core.common.data.entities.ai.amphibian;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
@@ -20,9 +23,6 @@ import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.Optional;
-import java.util.function.Function;
 
 public class AmphibiousSetWalkTargetAwayFrom {
     public AmphibiousSetWalkTargetAwayFrom() {
