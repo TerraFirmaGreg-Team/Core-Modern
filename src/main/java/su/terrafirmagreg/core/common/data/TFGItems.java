@@ -78,6 +78,14 @@ public class TFGItems {
             .model(ModelUtils.layeredItemModel(TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_0"), TFGCore.id("item/fish_roe_1"), TFGCore.id("item/fish_roe_2")))
             .register();
 
+    public static final ItemEntry<Item> BISON_RAW_MEAT = TFGCore.REGISTRATE.item("raw_bison_meat", Item::new)
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<Item> BISON_COOKED_MEAT = TFGCore.REGISTRATE.item("cooked_bison_meat", Item::new)
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ForgeSpawnEggItem> MOON_RABBIT_EGG = registerSpawnEgg(TFGEntities.MOON_RABBIT, 15767516, 9756658);
     public static final ItemEntry<ForgeSpawnEggItem> GLACIAN_RAM_EGG = registerSpawnEgg(TFGEntities.GLACIAN_RAM, 16772607, 3997758);
     public static final ItemEntry<ForgeSpawnEggItem> SNIFFER_SPAWN_EGG = registerSpawnEgg(TFGEntities.SNIFFER, 11285007, 4829025);
