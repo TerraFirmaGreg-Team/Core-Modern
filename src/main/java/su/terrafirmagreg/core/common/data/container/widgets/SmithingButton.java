@@ -29,6 +29,7 @@ import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
  */
 public class SmithingButton extends Button {
     public int id;
+    @Nullable
     @Getter
     private final ResourceLocation texture;
     @Nullable
@@ -50,11 +51,12 @@ public class SmithingButton extends Button {
      * @param height The button height.
      * @param texWidth The texture width.
      * @param texHeight The texture height.
-     * @param texture The active texture.
+     * @param texture The active texture (nullable).
      * @param inactiveTexture The inactive texture (nullable).
      * @param sound The sound to play on press.
      */
-    public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound) {
+    public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, @Nullable ResourceLocation texture, @Nullable ResourceLocation inactiveTexture,
+            SoundEvent sound) {
         this(id, type, x, y, width, height, texWidth, texHeight, texture, inactiveTexture, sound, (button) -> {
         });
     }
@@ -69,12 +71,13 @@ public class SmithingButton extends Button {
      * @param height The button height.
      * @param texWidth The texture width.
      * @param texHeight The texture height.
-     * @param texture The active texture.
+     * @param texture The active texture (nullable).
      * @param inactiveTexture The inactive texture (nullable).
      * @param sound The sound to play on press.
      * @param onPress The action to perform when pressed.
      */
-    public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, ResourceLocation texture, ResourceLocation inactiveTexture, SoundEvent sound,
+    public SmithingButton(int id, ArtisanType type, int x, int y, int width, int height, int texWidth, int texHeight, @Nullable ResourceLocation texture, @Nullable ResourceLocation inactiveTexture,
+            SoundEvent sound,
             net.minecraft.client.gui.components.Button.OnPress onPress) {
         super(x, y, width, height, Component.empty(), onPress, RenderHelpers.NARRATION);
         this.texWidth = texWidth;
@@ -132,18 +135,27 @@ public class SmithingButton extends Button {
 
         int x = this.getX();
         int y = this.getY();
+
+        this.isHovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + this.height;
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
         if (this.active) {
-            RenderSystem.setShaderTexture(0, this.texture);
-            this.isHovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + this.height;
-            graphics.blit(this.texture, x, y, 0.0F, 0.0F, width, height, texWidth, texHeight);
-            if (this.isHovered) {
-                graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x40FFFFFF);
+            if (this.texture != null) {
+                RenderSystem.setShaderTexture(0, this.texture);
+                graphics.blit(this.texture, x, y, 0.0F, 0.0F, width, height, texWidth, texHeight);
             }
         } else if (inactiveTexture != null) {
             RenderSystem.setShaderTexture(0, this.inactiveTexture);
             graphics.blit(this.inactiveTexture, x, y, 0.0F, 0.0F, width, height, texWidth, texHeight);
         }
 
+        if (this.isHovered) {
+            graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x40FFFFFF);
+        }
+
+        RenderSystem.disableBlend();
     }
 
 }

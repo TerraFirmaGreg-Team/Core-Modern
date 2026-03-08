@@ -12,11 +12,11 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.GroundcoverBlockType;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.items.TFCItems;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class BlockInteractionInfo {
@@ -24,30 +24,30 @@ public class BlockInteractionInfo {
     private static final Item incoloy_frame = ChemicalHelper.get(TagPrefix.frameGt, GTMaterials.IncoloyMA956).getItem();
 
     private static final Supplier<Item> glacian_frame = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool_frame")).asItem();
+            .getValue(TFGCore.id("glacian_wool_frame")).asItem();
     private static final Supplier<Item> aes_frame = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "aes_insulation_frame")).asItem();
+            .getValue(TFGCore.id("aes_insulation_frame")).asItem();
     private static final Supplier<Item> impure_moderate_frame = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "impure_moderate_core_frame")).asItem();
+            .getValue(TFGCore.id("impure_moderate_core_frame")).asItem();
     private static final Supplier<Item> moderate_frame = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "moderate_core_frame")).asItem();
+            .getValue(TFGCore.id("moderate_core_frame")).asItem();
     private static final Supplier<Item> copper_sandy_frame = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "copper_sandy_frame")).asItem();
+            .getValue(TFGCore.id("copper_sandy_frame")).asItem();
     private static final Supplier<Item> beryllium_sandy_frame = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "beryllium_sandy_frame")).asItem();
+            .getValue(TFGCore.id("beryllium_sandy_frame")).asItem();
 
     private static final Supplier<Item> glacian_wool = () -> ForgeRegistries.ITEMS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "glacian_wool")).asItem();
+            .getValue(TFGCore.id("glacian_wool")).asItem();
     private static final Supplier<Item> aes_roll = () -> ForgeRegistries.ITEMS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "aes_insulation_roll")).asItem();
+            .getValue(TFGCore.id("aes_insulation_roll")).asItem();
     private static final Supplier<Item> impure_moderator = () -> ForgeRegistries.ITEMS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "impure_graphite_moderator")).asItem();
+            .getValue(TFGCore.id("impure_graphite_moderator")).asItem();
     private static final Supplier<Item> moderator = () -> ForgeRegistries.ITEMS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "graphite_moderator")).asItem();
+            .getValue(TFGCore.id("graphite_moderator")).asItem();
     private static final Supplier<Item> copper_sandy = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "copper_sandy")).asItem();
+            .getValue(TFGCore.id("copper_sandy")).asItem();
     private static final Supplier<Item> beryllium_sandy = () -> ForgeRegistries.BLOCKS
-            .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "beryllium_sandy")).asItem();
+            .getValue(TFGCore.id("beryllium_sandy")).asItem();
 
     public static BlockInteractionRecipe[] RECIPES = {
             //Brick -> cracked

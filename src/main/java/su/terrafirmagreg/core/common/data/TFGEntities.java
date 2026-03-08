@@ -1,18 +1,14 @@
 package su.terrafirmagreg.core.common.data;
 
-import java.util.Locale;
+import com.tterrag.registrate.util.entry.EntityEntry;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.wanmine.wab.entity.render.EntityRenderer;
 import net.wanmine.wab.entity.render.model.SurferModel;
 
@@ -34,130 +30,81 @@ import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
 
+@Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TFGEntities {
 
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES,
-            TFGCore.MOD_ID);
-
-    public static final RegistryObject<EntityType<MoonRabbit>> MOON_RABBIT = register("moon_rabbit", EntityType.Builder
-            .of(MoonRabbit::makeMoonRabbit, MobCategory.CREATURE).sized(1.0F, 1.3F).clientTrackingRange(10));
-    public static final RegistryObject<EntityType<TFCGlacianRam>> GLACIAN_RAM = register("glacian_ram",
-            EntityType.Builder.of(TFCGlacianRam::makeTFCGlacianRam, MobCategory.CREATURE).sized(1f, .9f)
-                    .clientTrackingRange(10));
-    public static final RegistryObject<EntityType<TFCSniffer>> SNIFFER = register("sniffer", EntityType.Builder
-            .of(TFCSniffer::makeTFCSniffer, MobCategory.CREATURE).sized(1.9F, 1.75F).clientTrackingRange(10));
-    public static final RegistryObject<EntityType<TFCWraptor>> WRAPTOR = register("wraptor", EntityType.Builder
-            .of(TFCWraptor::makeTFCWraptor, MobCategory.CREATURE).sized(0.8F, 2.2F).clientTrackingRange(10));
-    public static final RegistryObject<EntityType<TFCSurfer>> SURFER = register("surfer", EntityType.Builder
-            .of(TFCSurfer::makeTFCSurfer, MobCategory.WATER_CREATURE).sized(1.2F, 0.7F).clientTrackingRange(10));
-
-    public static final RegistryObject<EntityType<Rocket>> TIER_1_DOUBLE_ROCKET = register("tier_1_double_rocket", EntityType.Builder
-            .of(RocketHelper::makeRocket, MobCategory.MISC)
-            .sized(1.1F, 4.6F)
-            .clientTrackingRange(10)
-            .fireImmune());
-
-    public static final RegistryObject<EntityType<Rocket>> TIER_2_DOUBLE_ROCKET = register("tier_2_double_rocket", EntityType.Builder
-            .of(RocketHelper::makeRocket, MobCategory.MISC)
-            .sized(1.1F, 4.8F)
-            .clientTrackingRange(10)
-            .fireImmune());
-
-    public static final RegistryObject<EntityType<Rocket>> TIER_3_DOUBLE_ROCKET = register("tier_3_double_rocket", EntityType.Builder
-            .of(RocketHelper::makeRocket, MobCategory.MISC)
-            .sized(1.1F, 5.5F)
-            .clientTrackingRange(10)
-            .fireImmune());
-
-    public static final RegistryObject<EntityType<Rocket>> TIER_4_DOUBLE_ROCKET = register("tier_4_double_rocket", EntityType.Builder
-            .of(RocketHelper::makeRocket, MobCategory.MISC)
-            .sized(1.1F, 7.0F)
-            .clientTrackingRange(10)
-            .fireImmune());
-
-    public static <E extends Entity> RegistryObject<EntityType<E>> register(String name,
-            EntityType.Builder<E> builder) {
-        return register(name, builder, true);
+    public static void init() {
     }
 
-    public static <E extends Entity> RegistryObject<EntityType<E>> register(String name, EntityType.Builder<E> builder,
-            boolean serialize) {
-        final String id = name.toLowerCase(Locale.ROOT);
+    public static final EntityEntry<MoonRabbit> MOON_RABBIT = TFGCore.REGISTRATE.entity("moon_rabbit", MoonRabbit::makeMoonRabbit, MobCategory.CREATURE)
+            .properties(p -> p.sized(1.0F, 1.3F).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(MoonRabbit::createAttributes)
+            .renderer(() -> MoonRabbitRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MoonRabbit::spawnRules)
+            .register();
 
-        return ENTITIES.register(id, () -> {
-            if (!serialize)
-                builder.noSave();
-            return builder.build(TFGCore.MOD_ID + ":" + id);
-        });
-    }
+    public static final EntityEntry<TFCGlacianRam> GLACIAN_RAM = TFGCore.REGISTRATE.entity("glacian_ram", TFCGlacianRam::makeTFCGlacianRam, MobCategory.CREATURE)
+            .properties(p -> p.sized(1f, 0.9f).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCGlacianRam::createMobAttributes)
+            .renderer(() -> TFCGlacianRamRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCGlacianRam::spawnRules)
+            .register();
 
-    public static void onAttributes(EntityAttributeCreationEvent event) {
-        event.put(MOON_RABBIT.get(), MoonRabbit.createAttributes().build());
-        event.put(GLACIAN_RAM.get(), TFCGlacianRam.createMobAttributes().build());
-        event.put(SNIFFER.get(), TFCSniffer.createMobAttributes().build());
-        event.put(WRAPTOR.get(), TFCWraptor.createMobAttributes().build());
-        event.put(SURFER.get(), TFCSurfer.getDefaultAttributes().build());
-    }
+    public static final EntityEntry<TFCSniffer> SNIFFER = TFGCore.REGISTRATE.entity("sniffer", TFCSniffer::makeTFCSniffer, MobCategory.CREATURE)
+            .properties(p -> p.sized(1.9f, 1.75f).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCSniffer::createMobAttributes)
+            .renderer(() -> TFCSnifferRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCSniffer::spawnRules)
+            .register();
 
-    public static void onSpawnPlacement(SpawnPlacementRegisterEvent event) {
-        event.register(
-                MOON_RABBIT.get(),
-                SpawnPlacements.Type.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                MoonRabbit::spawnRules,
-                SpawnPlacementRegisterEvent.Operation.REPLACE);
-        event.register(
-                GLACIAN_RAM.get(),
-                SpawnPlacements.Type.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                TFCGlacianRam::spawnRules,
-                SpawnPlacementRegisterEvent.Operation.REPLACE);
-        event.register(
-                SNIFFER.get(),
-                SpawnPlacements.Type.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                TFCSniffer::spawnRules,
-                SpawnPlacementRegisterEvent.Operation.REPLACE);
-        event.register(
-                WRAPTOR.get(),
-                SpawnPlacements.Type.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                TFCWraptor::spawnRules,
-                SpawnPlacementRegisterEvent.Operation.REPLACE);
-        event.register(
-                SURFER.get(),
-                SpawnPlacements.Type.IN_WATER,
-                Heightmap.Types.OCEAN_FLOOR,
-                TFCSurfer::spawnRules,
-                SpawnPlacementRegisterEvent.Operation.REPLACE);
-    }
+    public static final EntityEntry<TFCWraptor> WRAPTOR = TFGCore.REGISTRATE.entity("wraptor", TFCWraptor::makeTFCWraptor, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.8f, 2.2f).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCWraptor::createMobAttributes)
+            .renderer(() -> TFCWraptorRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCWraptor::spawnRules)
+            .register();
 
-    public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(MOON_RABBIT.get(), MoonRabbitRenderer::new);
-        event.registerEntityRenderer(GLACIAN_RAM.get(), TFCGlacianRamRenderer::new);
-        event.registerEntityRenderer(SNIFFER.get(), TFCSnifferRenderer::new);
-        event.registerEntityRenderer(WRAPTOR.get(), TFCWraptorRenderer::new);
+    public static final EntityEntry<TFCSurfer> SURFER = TFGCore.REGISTRATE.entity("surfer", TFCSurfer::makeTFCSurfer, MobCategory.WATER_CREATURE)
+            .properties(p -> p.sized(1.2f, 0.7f).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCSurfer::getDefaultAttributes)
+            .renderer(() -> c -> EntityRenderer.create(SurferModel::new, 0.6F).create(c))
+            .spawnPlacement(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, TFCSurfer::spawnRules)
+            .register();
 
-        event.registerEntityRenderer(SURFER.get(), EntityRenderer.create(SurferModel::new, 0.6F));
-        event.registerEntityRenderer(RNR_PLOW.get(), RNRPlowRenderer::new);
+    public static final EntityEntry<Rocket> TIER_1_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_1_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)
+            .properties(p -> p.sized(1.1f, 4.6f).clientTrackingRange(10).fireImmune())
+            .renderer(() -> RocketHelper::makeRocketRendererT1)
+            .register();
 
-        event.registerEntityRenderer(TIER_1_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT1);
-        event.registerEntityRenderer(TIER_2_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT2);
-        event.registerEntityRenderer(TIER_3_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT3);
-        event.registerEntityRenderer(TIER_4_DOUBLE_ROCKET.get(), RocketHelper::makeRocketRendererT4);
+    public static final EntityEntry<Rocket> TIER_2_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_2_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)
+            .properties(p -> p.sized(1.1f, 4.8f).clientTrackingRange(10).fireImmune())
+            .renderer(() -> RocketHelper::makeRocketRendererT2)
+            .register();
 
-        // event.registerBlockEntityRenderer(TFGBlockEntities.LARGE_NEST_BOX.get(), ctx -> new
-        // LargeNestBoxBlockEntityRenderer());
-    }
+    public static final EntityEntry<Rocket> TIER_3_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_3_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)
+            .properties(p -> p.sized(1.1f, 5.5f).clientTrackingRange(10).fireImmune())
+            .renderer(() -> RocketHelper::makeRocketRendererT3)
+            .register();
 
+    public static final EntityEntry<Rocket> TIER_4_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_4_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)
+            .properties(p -> p.sized(1.1f, 7.0f).clientTrackingRange(10).fireImmune())
+            .renderer(() -> RocketHelper::makeRocketRendererT4)
+            .register();
+
+    public static final EntityEntry<RNRPlow> RNR_PLOW = TFGCore.REGISTRATE.entity("rnr_plow", RNRPlow::new, MobCategory.MISC)
+            .properties(p -> p.sized(1.3f, 1.4f))
+            .renderer(() -> RNRPlowRenderer::new)
+            .register();
+
+    @SubscribeEvent
     public static void onEntityLayerRegister(EntityRenderersEvent.RegisterLayerDefinitions event) {
         //RocketHelper.register(event);
         event.registerLayerDefinition(TFCGlacianRamModel.LAYER_LOCATION, TFCGlacianRamModel::createBodyLayer);
         event.registerLayerDefinition(RNRPlowModel.LAYER_LOCATION, RNRPlowModel::createLayer);
     }
-
-    public static final RegistryObject<EntityType<RNRPlow>> RNR_PLOW = ENTITIES.register("rnr_plow",
-            () -> EntityType.Builder.of(RNRPlow::new, MobCategory.MISC)
-                    .sized(1.3F, 1.4F)
-                    .build(TFGCore.MOD_ID + ":rnr_plow"));
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
 
@@ -26,7 +27,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
@@ -69,8 +69,8 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
      * @param pos   The block position.
      * @param state The block state.
      */
-    public ArtisanTableBlockEntity(BlockPos pos, BlockState state) {
-        super(TFGBlockEntities.ARTISAN_TABLE.get(), pos, state, ArtisanTableBlockEntity::createInventory, NAME);
+    public ArtisanTableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state, ArtisanTableBlockEntity::createInventory, NAME);
         this.pattern = new ArtisanPattern();
     }
 
@@ -193,35 +193,73 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
         if (currentType == null)
             return false;
 
-        TagKey<Item> testTool1 = currentType.getToolTags().get(0);
-        TagKey<Item> testTool2 = currentType.getToolTags().get(1);
-        boolean toolsValid = !toolA.isEmpty() && !toolB.isEmpty() &&
-                ((toolA.is(testTool1) || toolB.is(testTool1)) &&
-                        (toolA.is(testTool2) || toolB.is(testTool2)));
+        var toolRequirements = currentType.getToolRequirements();
+        if (toolRequirements.size() < 2)
+            return false;
+
+        ArtisanType.Ingredient tool1Requirement = toolRequirements.get(0);
+        ArtisanType.Ingredient tool2Requirement = toolRequirements.get(1);
+
+        boolean toolsValid = !toolA.isEmpty() && !toolB.isEmpty();
+        if (toolsValid) {
+            boolean tool1Valid = isToolValid(toolA, tool1Requirement) || isToolValid(toolB, tool1Requirement);
+            boolean tool2Valid = isToolValid(toolA, tool2Requirement) || isToolValid(toolB, tool2Requirement);
+            toolsValid = tool1Valid && tool2Valid;
+        }
         if (!toolsValid)
             return false;
-        var requiredInputs = new ArrayList<>(currentType.getInputItems());
-        int[] needed = new int[requiredInputs.size()];
-        for (int i = 0; i < requiredInputs.size(); i++) {
-            needed[i] = requiredInputs.get(i).getCount();
+
+        var requiredIngredients = currentType.getInputIngredients();
+        int[] needed = new int[requiredIngredients.size()];
+        for (int i = 0; i < requiredIngredients.size(); i++) {
+            ArtisanType.Ingredient ingredient = requiredIngredients.get(i);
+            if (ingredient.isItemStack() && ingredient.getItemStack() != null) {
+                needed[i] = ingredient.getItemStack().getCount();
+            } else {
+                needed[i] = 1;
+            }
         }
+
         ItemStack[] inputStacks = { inputA, inputB };
         for (ItemStack input : inputStacks) {
             if (input.isEmpty())
                 continue;
-            for (int i = 0; i < requiredInputs.size(); i++) {
-                ItemStack required = requiredInputs.get(i);
-                if (needed[i] > 0 && input.is(required.getItem())) {
+
+            for (int i = 0; i < requiredIngredients.size(); i++) {
+                if (needed[i] <= 0)
+                    continue;
+
+                ArtisanType.Ingredient required = requiredIngredients.get(i);
+                if (isInputValid(input, required)) {
                     int toUse = Math.min(input.getCount(), needed[i]);
                     needed[i] -= toUse;
                 }
             }
         }
+
         for (int n : needed) {
             if (n > 0)
                 return false;
         }
         return true;
+    }
+
+    private boolean isToolValid(ItemStack tool, ArtisanType.Ingredient requirement) {
+        if (requirement.isItemStack() && requirement.getItemStack() != null) {
+            return tool.is(requirement.getItemStack().getItem());
+        } else if (requirement.isTag() && requirement.getTag() != null) {
+            return tool.is(requirement.getTag());
+        }
+        return false;
+    }
+
+    private boolean isInputValid(ItemStack input, ArtisanType.Ingredient requirement) {
+        if (requirement.isItemStack() && requirement.getItemStack() != null) {
+            return input.is(requirement.getItemStack().getItem());
+        } else if (requirement.isTag() && requirement.getTag() != null) {
+            return input.is(requirement.getTag());
+        }
+        return false;
     }
 
     /**
@@ -259,13 +297,23 @@ public class ArtisanTableBlockEntity extends InventoryBlockEntity<InventoryItemH
 
         ItemStack matA = inventory.getStackInSlot(MAT_SLOTA);
         ItemStack matB = inventory.getStackInSlot(MAT_SLOTB);
-        ArrayList<ItemStack> ingredients = currentType.getInputItems();
+        var ingredients = currentType.getInputIngredients();
 
-        for (ItemStack stack : ingredients) {
-            if (stack.is(matA.getItem())) {
-                matA.shrink(stack.getCount());
-            } else if (stack.is(matB.getItem())) {
-                matB.shrink(stack.getCount());
+        for (ArtisanType.Ingredient ingredient : ingredients) {
+            if (ingredient.isItemStack() && ingredient.getItemStack() != null) {
+                ItemStack required = ingredient.getItemStack();
+                if (required.is(matA.getItem())) {
+                    matA.shrink(required.getCount());
+                } else if (required.is(matB.getItem())) {
+                    matB.shrink(required.getCount());
+                }
+            } else if (ingredient.isTag() && ingredient.getTag() != null) {
+                TagKey<Item> tag = ingredient.getTag();
+                if (matA.is(tag)) {
+                    matA.shrink(1);
+                } else if (matB.is(tag)) {
+                    matB.shrink(1);
+                }
             }
         }
         markForSync();

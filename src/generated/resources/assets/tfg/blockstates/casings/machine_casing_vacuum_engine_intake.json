@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "tfg:block/casings/machine_casing_vacuum_engine_intake"
+    },
+    "active=true": {
+      "model": "tfg:block/casings/machine_casing_vacuum_engine_intake_active"
+    }
+  }
+}
