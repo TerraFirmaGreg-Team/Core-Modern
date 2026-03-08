@@ -11,7 +11,8 @@ public enum TFGModsResolver {
     CREATE("create"),
     TFC_AMBIENTAL("tfcambiental"),
     TFC("tfc"),
-    GRAPPLEMOD("grapplemod");
+    GRAPPLEMOD("grapplemod"),
+    RNR("rnr");
 
     private final String name;
     private Boolean modLoaded;

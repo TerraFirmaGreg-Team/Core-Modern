@@ -18,21 +18,43 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     private static final String SPECIES_MIXIN_JSON = "species.mixins.json";
     private static final String SPECIES_BLOCK_ENTITY_TYPE_MIXIN = "com.ninni.species.mixin.BlockEntityTypeMixin";
 
+    private static final String AAAPARTICLES_MIXIN_JSON = "aaa_particles.mixins.json";
+    private static final String AAAPARTICLES_GAME_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinGameRenderer";
+    private static final String AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinItemInHandRenderer";
+
     /**
      * acceptTargets fires once after all configs have been collected but before any have been applied,
      * so we can safely modify the mixin configs at this point.
      */
     @Override
     public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
+
+        String currentMixin = null;
+        String currentConfig = null;
+
         try {
             for (Object config : getPendingConfigs()) {
-                // Remove BlockEntityTypeMixin from the species config avoiding
-                //  CIR allocation on every block entity tick for 0.5 ms/tick
-                if (SPECIES_MIXIN_JSON.equals(getConfigName(config)))
-                    removeMixin(config, SPECIES_BLOCK_ENTITY_TYPE_MIXIN);
+                currentConfig = getConfigName(config);
+
+                if (SPECIES_MIXIN_JSON.equals(currentConfig)) {
+                    // Remove BlockEntityTypeMixin from the species config avoiding
+                    //  CIR allocation on every block entity tick for 0.5 ms/tick
+                    currentMixin = SPECIES_BLOCK_ENTITY_TYPE_MIXIN;
+                    removeMixin(config, currentMixin);
+                }
+
+                if (AAAPARTICLES_MIXIN_JSON.equals(currentConfig)) {
+                    // Remove hand rendering mixins from AAA Particles
+                    // Only the sandworm mod uses AAA Particles and not for the hands
+                    // Causes lag spikes when switching items
+                    currentMixin = AAAPARTICLES_GAME_RENDERER_MIXIN;
+                    removeMixin(config, currentMixin);
+                    currentMixin = AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN;
+                    removeMixin(config, currentMixin);
+                }
             }
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Failed to remove " + SPECIES_BLOCK_ENTITY_TYPE_MIXIN + " from " + SPECIES_MIXIN_JSON, e);
+            throw new RuntimeException("Failed to remove " + currentMixin + " from " + currentConfig, e);
         }
     }
 

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/machine/high_temp_precision_fabricator",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/high_temp_precision_fabricator"
+    },
+    "facing=south": {
+      "model": "tfg:block/machine/high_temp_precision_fabricator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tfg:block/machine/high_temp_precision_fabricator",
+      "y": 270
+    }
+  }
+}

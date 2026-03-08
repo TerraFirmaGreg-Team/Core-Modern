@@ -25,7 +25,6 @@ plugins {
 apply from: 'gradle/scripts/repositories.gradle'
 apply from: 'gradle/scripts/dependencies.gradle'
 apply from: 'gradle/scripts/spotless.gradle'
-if (file("moveToInstance.gradle").exists()) apply from: "moveToInstance.gradle"
 
 base {
     version = "${mod_version}"
@@ -49,7 +48,7 @@ java {
 
 mixin {
     var refMap = add sourceSets.main, "${mod_id}.refmap.json"
-    jar.from refMap;
+    jar.from refMap
     config "${mod_id}.mixins.json"
 }
 
@@ -63,7 +62,23 @@ sourceSets {
         java.srcDir("src/dev/java")
         resources.srcDir("src/dev/resources")
         compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
     }
+}
+
+// gradle-local.properties should have the following:
+// enable_copy_to_instance = true/false -- Whether to copy the output jar to the modpack mods folder whenever core is rebuilt
+// instance_path = path -- Path to modpack folder
+String instancePath
+Boolean enableCopyToInstance
+if (project.rootProject.file("gradle-local.properties").exists()) {
+    Properties localProperties = new Properties()
+    localProperties.load(project.rootProject.file('gradle-local.properties').newDataInputStream())
+    instancePath = localProperties.get("instance_path")
+    enableCopyToInstance = localProperties.getProperty("enable_copy_to_instance")?.toBoolean() ?: false
+} else {
+    instancePath = ""
+    enableCopyToInstance = false
 }
 
 legacyForge {
@@ -78,28 +93,39 @@ legacyForge {
 
         client {
             client()
+            ideName = "Client"
+            sourceSet = sourceSets.dev
             gameDirectory = project.file('run/client')
-        }
+       }
 
         server {
             server()
+            ideName = "Server"
+            sourceSet = sourceSets.dev
             gameDirectory = project.file('run/server')
             programArgument '--nogui'
         }
 
         data {
             data()
+            ideName = "Data"
             gameDirectory = project.file('run/data')
-
+            sourceSet = sourceSets.dev
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll('--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath())
+            programArguments.addAll "--mod", "$mod_id", "--all"
+            programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
+            programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
+            programArguments.addAll '--existing-mod', 'gtceu'
+            programArguments.addAll '--existing-mod', 'tfc'
+            programArguments.addAll '--existing-mod', 'species'
+            programArguments.addAll '--existing-mod', "ad_astra"
         }
 
     }
 
     mods {
         "${mod_id}" {
-            sourceSet(sourceSets.main)
+            sourceSet sourceSets.main
         }
     }
 }
@@ -135,12 +161,8 @@ processResources {
     }
 }
 
-sourceSets {
-    dev {
-        java.srcDir("src/dev/java")
-        resources.srcDir("src/dev/resources")
-        compileClasspath += sourceSets.main.compileClasspath
-    }
+processDevResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 tasks.withType(Jar).configureEach {
@@ -154,6 +176,14 @@ tasks.withType(Jar).configureEach {
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
             "MixinConfigs"            : "${mod_id}.mixins.json"
     ])
+}
+
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-Xlint:-removal"
+    options.compilerArgs << "-Aquiet=true" // Suppress mixin notes
+
 }
 
 // Fix a bug in Species that only shows up when running from dev env
@@ -222,23 +252,33 @@ allprojects {
     }
 }
 
-// Moving the core jar to a custom folder
-tasks.register('copyJarToInstance', Copy) {
+if (enableCopyToInstance) {
+    tasks.register('replaceInstanceJar', Copy) {
+        String modsDir = file("$instancePath/mods").getAbsolutePath()
 
-    group = 'mod development/internal'
+        // Delete old core
+        fileTree(modsDir).matching {
+            include { file ->
+                file.name ==~ /TerraFirmaGreg-Core-Modern.+/
+            }
+        } each { it.delete() }
 
-    from("${buildDir}/libs") {
-        include("*${version}.jar")
-        exclude("*-sources.jar", "*-javadoc.jar")
+        // Copy new core
+        copy {
+            from "${buildDir}/libs"
+            into modsDir
+            include "TerraFirmaGreg-Core-Modern-${version}.jar"
+        }
+
+        outputs.cacheIf { false }
     }
-    into("${modpack_mods}")
+
+    tasks.withType(Jar).configureEach {
+        finalizedBy(tasks.named("replaceInstanceJar"))
+    }
 }
 
-if (project.findProperty('enable_copy_jar_to_instance')?.toBoolean()) {
-    tasks.build.finalizedBy('copyJarToInstance')
-}
-
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         cacheChangingModulesFor 0, 'seconds'
     }
