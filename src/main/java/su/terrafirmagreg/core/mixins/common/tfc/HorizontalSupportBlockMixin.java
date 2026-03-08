@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.perf.SupportCache;
 
-@Mixin(value = HorizontalSupportBlock.class, remap = false)
+@Mixin(value = HorizontalSupportBlock.class, remap = true)
 public abstract class HorizontalSupportBlockMixin extends VerticalSupportBlock {
 
     protected HorizontalSupportBlockMixin(ExtendedProperties properties) {

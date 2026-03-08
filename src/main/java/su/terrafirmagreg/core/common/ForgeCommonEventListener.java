@@ -51,7 +51,7 @@ public final class ForgeCommonEventListener {
     }
 
     @SubscribeEvent
-    private static void onLevelUnload(LevelEvent.Unload event) {
+    public static void onLevelUnload(LevelEvent.Unload event) {
         if (!(event.getLevel() instanceof ServerLevel level))
             return;
         SupportCache.clearLevel(level.dimension());
