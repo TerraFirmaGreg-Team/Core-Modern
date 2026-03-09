@@ -271,8 +271,8 @@ public class TFGTRecipeTypes {
             });
 
     public static final GTRecipeType SUPER_BOILER = GTRecipeTypes
-            .register("super_boiler", GTRecipeTypes.GENERATOR)
+            .register("super_boiler", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 1, 1)
-            .setSound(GTSoundEntries.BOILER)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.DOWN_TO_UP);
+            .setSound(GTSoundEntries.FURNACE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_FUEL.get(true), FillDirection.DOWN_TO_UP);
 }
