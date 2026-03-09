@@ -317,15 +317,30 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         inputTanks.addAll(getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP));
         inputTanks.addAll(getCapabilitiesFlat(IO.BOTH, FluidRecipeCapability.CAP));
 
+        // Order the booster by temperatureBonus so we can stop searching if we find the best one
+        List<BoosterFluid> compatibleBoosters = getCompatibleBoosters().stream()
+                .sorted(Comparator.comparingInt(BoosterFluid::temperatureBonus).reversed())
+                .toList();
+        if (compatibleBoosters.isEmpty())
+            return null;
+
+        int bestBonusPossible = compatibleBoosters.get(0).temperatureBonus();
         BoosterFluid bestBooster = null;
-        for (BoosterFluid booster : getCompatibleBoosters()) {
-            var checkBoost = List.of(FluidIngredient.of(booster.fluid().get(), booster.fluidAmountMb()));
-            for (IRecipeHandler<?> tank : inputTanks) {
-                var result = (List<FluidIngredient>) tank.handleRecipe(IO.IN, null, checkBoost, true);
+
+        // Iterate tanks once; for each tank check which booster it can satisfy
+        for (IRecipeHandler<?> tank : inputTanks) {
+            for (BoosterFluid booster : compatibleBoosters) {
+                // Skip if this booster can't beat what we already found
+                if (bestBooster != null && booster.temperatureBonus() <= bestBooster.temperatureBonus())
+                    break;
+
+                var check = List.of(FluidIngredient.of(booster.fluid().get(), booster.fluidAmountMb()));
+                var result = (List<FluidIngredient>) tank.handleRecipe(IO.IN, null, check, true);
                 if (result == null || result.isEmpty()) {
-                    if (bestBooster == null || booster.temperatureBonus() > bestBooster.temperatureBonus()) {
-                        bestBooster = booster;
-                    }
+                    bestBooster = booster;
+                    // already found the best possible booster
+                    if (booster.temperatureBonus() == bestBonusPossible)
+                        return bestBooster;
                     break;
                 }
             }
