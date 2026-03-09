@@ -173,6 +173,7 @@
         "common.tfc.RockDataMixin",
         "common.tfc.RockSpikeBlockMixin",
         "common.tfc.TFCBlocksMixin",
+        "common.tfc.TFCDolphinMixin",
         "common.tfc.TFCChainBlockMixin",
         "common.tfc.TFCFallingBlockEntityMixin",
         "common.tfc.TFCLeavesBlockMixin",
