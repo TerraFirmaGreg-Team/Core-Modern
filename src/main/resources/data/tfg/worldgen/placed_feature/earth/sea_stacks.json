@@ -1,0 +1,36 @@
+{
+    "feature": "tfg:earth/sea_stacks",
+    "placement": [
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {
+                "predicates": [
+                    {
+                        "offset": [
+                            0,
+                            -1,
+                            0
+                        ],
+                        "tag": "forge:stone",
+                        "type": "minecraft:matching_block_tag"
+                    },
+                    {
+                        "offset": [
+                            0,
+                            -1,
+                            0
+                        ],
+                        "tag": "forge:gravel",
+                        "type": "minecraft:matching_block_tag"
+                    }
+                ],
+                "type": "minecraft:any_of"
+            },
+            "type": "minecraft:block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

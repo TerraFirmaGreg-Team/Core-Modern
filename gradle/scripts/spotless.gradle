@@ -25,6 +25,7 @@ spotless {
         simple()
         leadingTabsToSpaces(2)
         endWithNewline()
+
     }
 }
 

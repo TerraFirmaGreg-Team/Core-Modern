@@ -1,9 +1,0 @@
-{
-    "values": [
-        "tfc:sea_stacks_patch",
-        "#tfc:feature/shore_decorations",
-        "#tfc:feature/tide_pool_decorations"
-    ],
-    "replace": false,
-    "__comment__": "This file was automatically created by mcresources"
-}

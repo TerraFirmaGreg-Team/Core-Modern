@@ -1,8 +1,0 @@
-{
-    "values": [
-        "#tfc:feature/shield_volcanoes",
-        "#tfc:feature/surface_flood_fill_lakes"
-    ],
-    "replace": false,
-    "__comment__": "This file was automatically created by mcresources"
-}

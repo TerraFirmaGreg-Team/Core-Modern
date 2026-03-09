@@ -1,0 +1,19 @@
+{
+    "feature": "tfg:earth/glacial_spring",
+    "placement": [
+        {
+            "count": 200,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 80},
+                "max_inclusive": {"absolute": 92},
+                "type": "uniform"
+            }
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}
