@@ -123,6 +123,11 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     @DescSynced
     private float lastWaterMultiplier = 1.0f;
 
+    // Cache for getBestAvailableBooster()
+    @Nullable
+    private BoosterFluid cachedBooster = null;
+    private long boosterCacheTimer = -1L;
+
     public TFGLargeBoilerMachine(IMachineBlockEntity holder, int maxTemperature, int heatSpeed, Object... args) {
         super(holder, args);
         this.maxTemperature = maxTemperature;
@@ -143,6 +148,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
+        boosterCacheTimer = -1L; // invalidate cache
         if (getLevel() instanceof ServerLevel serverLevel) {
             serverLevel.getServer().tell(new TickTask(0, this::updateSteamSubscription));
         }
@@ -151,6 +157,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
+        boosterCacheTimer = -1L; // invalidate cache
+        cachedBooster = null;
         if (getLevel() instanceof ServerLevel serverLevel) {
             serverLevel.getServer().tell(new TickTask(0, this::updateSteamSubscription));
         }
@@ -304,7 +312,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     }
 
     @Nullable
-    private BoosterFluid getBestAvailableBooster() {
+    private BoosterFluid computeBestAvailableBooster() {
         List<IRecipeHandler<?>> inputTanks = new ArrayList<>();
         inputTanks.addAll(getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP));
         inputTanks.addAll(getCapabilitiesFlat(IO.BOTH, FluidRecipeCapability.CAP));
@@ -325,6 +333,18 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         return bestBooster;
     }
 
+    // Returns the cached booster and recomputed every 20 ticks
+    // Call by the others less problematic because less often
+    @Nullable
+    private BoosterFluid getBestAvailableBooster() {
+        long now = getOffsetTimer();
+        if (boosterCacheTimer < 0 || now - boosterCacheTimer >= 20) {
+            cachedBooster = computeBestAvailableBooster();
+            boosterCacheTimer = now;
+        }
+        return cachedBooster;
+    }
+
     // Drain the best Booster available
     // If no Booster then reset the max temperature
 
@@ -343,6 +363,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             if (drainBoost == null || drainBoost.isEmpty())
                 return bestBooster.temperatureBonus();
         }
+        boosterCacheTimer = -1L;
+        cachedBooster = null;
         return 0;
     }
 
@@ -452,7 +474,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         return GuiTextures.DISPLAY_STEAM.get(maxTemperature > 800);
     }
 
-    public class TFGLargeBoilerRecipeLogic extends RecipeLogic {
+    public static class TFGLargeBoilerRecipeLogic extends RecipeLogic {
 
         @Persisted
         @DescSynced
