@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
+import static com.gregtechceu.gtceu.api.GTValues.EV;
+
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +44,7 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
     public LargeSteamTurbine(IMachineBlockEntity holder, int tier) {
         super(holder);
         this.tier = tier;
-        this.BASE_EU_OUTPUT = GTValues.EV;
+        this.BASE_EU_OUTPUT = GTValues.V[EV];
     }
 
     @Nullable
