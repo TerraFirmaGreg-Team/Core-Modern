@@ -2,6 +2,9 @@ package su.terrafirmagreg.core.common.data;
 
 import static su.terrafirmagreg.core.common.data.TFGBlocks.dropBetween;
 
+import java.util.Locale;
+import java.util.Map;
+
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -10,6 +13,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.*;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
@@ -72,6 +76,13 @@ public class TFGBlocks_Earth {
             .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new).build()
             .register();
+
+    public static final Map<TFGPlant, BlockEntry<Block>> PLANTS = Helpers.mapOfKeys(TFGPlant.class,
+            plant -> TFGCore.REGISTRATE.block("plant/" + plant.name().toLowerCase(Locale.ROOT), p -> plant.create())
+                    .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                    .tag(TFCTags.Blocks.PLANTS, BlockTags.MINEABLE_WITH_HOE)
+                    .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+                    .register());
 
     // These are done separately to avoid cyclic references
 

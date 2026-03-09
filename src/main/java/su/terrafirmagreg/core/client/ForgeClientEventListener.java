@@ -6,7 +6,9 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import net.dries007.tfc.client.TFCColors;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
@@ -14,11 +16,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.events.AdvancedOreProspectorEventHelper;
@@ -102,6 +106,19 @@ public class ForgeClientEventListener {
                 foodProperties.getEffects().forEach(effect -> event.getToolTip().add(getTooltip(effect.getFirst())));
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void registerColorHandlerBlocks(RegisterColorHandlersEvent.Block event) {
+        final BlockColor grassColor = (state, level, pos, tintIndex) -> TFCColors.getGrassColor(pos, tintIndex);
+        final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
+
+        TFGBlocks_Earth.PLANTS.forEach((plant, reg) -> {
+            if (plant.isBlockTinted()) {
+                event.register(
+                        plant.isTallGrass() ? tallGrassColor : plant.isSeasonal() ? (state, level, pos, tintIndex) -> TFCColors.getSeasonalFoliageColor(pos, tintIndex, 145) : grassColor, reg.get());
+            }
+        });
     }
 
     // These are taken from TFC Aged Alcohol
