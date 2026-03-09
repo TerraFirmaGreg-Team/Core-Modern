@@ -1,6 +1,8 @@
 {
   "values": [
     "tfg:quartz_crucible",
+    "tfg:tuff_cobble",
+    "tfg:hardened_tuff",
     "tfg:halite",
     "tfg:casings/greenhouse/copper_greenhouse_casing_0",
     "tfg:casings/greenhouse/copper_greenhouse_casing_1",

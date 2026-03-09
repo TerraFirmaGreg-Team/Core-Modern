@@ -1,5 +1,7 @@
 {
   "values": [
+    "tfg:tuff_cobble",
+    "tfg:hardened_tuff",
     "tfg:tuff_gravel",
     "tfg:hardened_clay",
     "tfg:halite",
