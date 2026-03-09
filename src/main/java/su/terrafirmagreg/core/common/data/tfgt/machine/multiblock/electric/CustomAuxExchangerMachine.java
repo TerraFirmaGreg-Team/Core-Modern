@@ -209,7 +209,7 @@ public class CustomAuxExchangerMachine extends AuxExchangerMachine
                     "tfg.machine.aux_exchanger.total_hu.desc"));
 
             if (tempRecipe > 0) {
-                double ratio = Math.min((double) tempBattery / tempRecipe, 3.0);
+                double ratio = (double) tempBattery / tempRecipe;
                 double durationMultiplier = 1 / Math.pow(2, ratio);
                 int speedPercent = (int) Math.round((1 / durationMultiplier) * 100);
 
