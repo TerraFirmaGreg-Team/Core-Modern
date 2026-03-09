@@ -246,7 +246,7 @@ public final class TFGBlocks {
             .properties(p -> p.sound(SoundType.STONE).strength(3).mapColor(MapColor.QUARTZ).noOcclusion())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new).build()
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {
