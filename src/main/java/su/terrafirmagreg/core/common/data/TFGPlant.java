@@ -159,7 +159,7 @@ public enum TFGPlant implements RegistryPlant {
         PASSABLE_CACTUS((plant, type) -> PassableCactusBlock.create(plant, fire(nonSolid(plant).strength(0.25F).sound(SoundType.WOOL)).pathType(BlockPathTypes.DAMAGE_OTHER))),
         PERCHED_EPIPHYTE((plant, type) -> TFGPlantBlock.createPerchedEpiphyte(plant, fire(nonSolid(plant)).offsetType(BlockBehaviour.OffsetType.XZ))),
         TALL_SHRUB((plant, type) -> TallShrubBlock.create(plant, fire(nonSolid(plant)))),
-        FLOATING_FRESH((plant, type) -> FloatingWaterPlantBlock.create(plant, () -> Fluids.WATER, nonSolid(plant))),
+        FLOATING_FRESH((plant, type) -> FloatingWaterPlantBlock.create(plant, () -> Fluids.WATER, nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ))),
         WEEPING((plant, type) -> new BodyPlantBlock(fire(nonSolidTallPlant(plant)), plant.transform(), BodyPlantBlock.BODY_SHAPE, Direction.DOWN)),
         WEEPING_TOP((plant, type) -> new TopPlantBlock(fire(nonSolidTallPlant(plant)), plant.transform(), Direction.DOWN, BodyPlantBlock.WEEPING_SHAPE)),
         TWISTING((plant, type) -> new BodyPlantBlock(fire(nonSolidTallPlant(plant)), plant.transform(), BodyPlantBlock.BODY_SHAPE, Direction.UP)),
