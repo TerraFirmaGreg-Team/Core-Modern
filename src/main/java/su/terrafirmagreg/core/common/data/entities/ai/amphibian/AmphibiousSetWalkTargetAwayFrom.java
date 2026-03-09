@@ -57,28 +57,39 @@ public class AmphibiousSetWalkTargetAwayFrom {
                             // Evaluate positions for escape, favors land positions if an ocean predator is attacking it
                             Vec3 bestLandEscapePos = currentPos;
                             Vec3 bestWaterEscapePos = currentPos;
+                            boolean foundLand = false;
+                            boolean foundWater = false;
                             for (int i = 0; i < 25; ++i) {
                                 Vec3 destination = AirAndWaterRandomPos.getPos(mob, 10, 7, 3, 0, 0, 1);
-                                if (destination != null) {
+                                if (destination != null && isTargetPosValidForEscape(currentPos, escapeFromPos, destination)) {
                                     final BlockPos pos = new BlockPos((int) destination.x, (int) destination.y, (int) destination.z);
                                     final BlockState state = level.getBlockState(pos);
                                     if (Helpers.isFluid(state.getFluidState(), FluidTags.WATER)) {
                                         bestWaterEscapePos = getVectorFartherFromChaser(escapeFromPos, bestWaterEscapePos, destination);
+                                        foundWater = true;
                                     } else {
                                         final BlockState belowState = level.getBlockState(pos.below());
                                         if (!belowState.isAir() && !Helpers.isFluid(belowState.getFluidState(), FluidTags.WATER)) {
                                             bestLandEscapePos = getVectorFartherFromChaser(escapeFromPos, bestLandEscapePos, destination);
+                                            foundLand = true;
                                         }
                                     }
                                 }
                             }
 
-                            if (isOceanPredator && isTargetPosValidForEscape(currentPos, escapeFromPos, bestLandEscapePos)) {
-                                pathToTarget.set(new WalkTarget(bestLandEscapePos, speedModifier.apply(mob), 0));
+                            // Ocean predators: prefer land if available, otherwise fall back to water
+                            // Non-ocean predators: prefer water if available, otherwise fall back to land
+                            final Vec3 bestEscapePos;
+                            if (isOceanPredator) {
+                                bestEscapePos = foundLand ? bestLandEscapePos : (foundWater ? bestWaterEscapePos : null);
                             } else {
-                                final Vec3 bestEscapePos = getVectorFartherFromChaser(escapeFromPos, bestLandEscapePos, bestWaterEscapePos);
-                                pathToTarget.set(new WalkTarget(bestEscapePos, speedModifier.apply(mob), 0));
+                                bestEscapePos = foundWater ? bestWaterEscapePos : (foundLand ? bestLandEscapePos : null);
                             }
+
+                            if (bestEscapePos == null) {
+                                return false;
+                            }
+                            pathToTarget.set(new WalkTarget(bestEscapePos, speedModifier.apply(mob), 0));
 
                             return true;
                         }
