@@ -5,6 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -41,7 +42,7 @@ public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
     public LargeSteamTurbine(IMachineBlockEntity holder, int tier) {
         super(holder);
         this.tier = tier;
-        this.BASE_EU_OUTPUT = 2048;
+        this.BASE_EU_OUTPUT = GTValues.EV;
     }
 
     @Nullable

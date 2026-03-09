@@ -123,6 +123,10 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     @DescSynced
     private float lastWaterMultiplier = 1.0f;
 
+    // Precomputed once in constructor (depends only on final maxTemperature)
+    private final List<BoosterFluid> compatibleBoosters;
+    private final int bestBonusPossible;
+
     // Cache for getBestAvailableBooster()
     @Nullable
     private BoosterFluid cachedBooster = null;
@@ -133,6 +137,11 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         this.maxTemperature = maxTemperature;
         this.heatSpeed = heatSpeed;
         this.throttle = 100;
+        this.compatibleBoosters = BOOSTERS.stream()
+                .filter(b -> maxTemperature >= b.minBoilerTemperature())
+                .sorted(Comparator.comparingInt(BoosterFluid::temperatureBonus).reversed())
+                .toList();
+        this.bestBonusPossible = compatibleBoosters.isEmpty() ? 0 : compatibleBoosters.get(0).temperatureBonus();
     }
 
     @Override
@@ -180,13 +189,6 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             temperatureSubs.unsubscribe();
             temperatureSubs = null;
         }
-    }
-
-    // Check temp to allow the Booster
-    private List<BoosterFluid> getCompatibleBoosters() {
-        return BOOSTERS.stream()
-                .filter(b -> maxTemperature >= b.minBoilerTemperature())
-                .toList();
     }
 
     private DrainResult tryDrainWater(int maxDrain) {
@@ -317,14 +319,9 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         inputTanks.addAll(getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP));
         inputTanks.addAll(getCapabilitiesFlat(IO.BOTH, FluidRecipeCapability.CAP));
 
-        // Order the booster by temperatureBonus so we can stop searching if we find the best one
-        List<BoosterFluid> compatibleBoosters = getCompatibleBoosters().stream()
-                .sorted(Comparator.comparingInt(BoosterFluid::temperatureBonus).reversed())
-                .toList();
         if (compatibleBoosters.isEmpty())
             return null;
 
-        int bestBonusPossible = compatibleBoosters.get(0).temperatureBonus();
         BoosterFluid bestBooster = null;
 
         // Iterate tanks once; for each tank check which booster it can satisfy
