@@ -59,7 +59,6 @@ public enum TFGPlant implements RegistryPlant {
     MOSS_CAMPION(BlockType.DRY, 0.9F, new int[] { 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3 }),
     PALASH(BlockType.TALL_SHRUB, 0.4f, new int[] { 3, 3, 3, 0, 0, 1, 1, 1, 2, 2, 3, 3 }),
     PENWORTEL(BlockType.SHRUB, 0.4f, new int[] { 3, 3, 3, 0, 0, 1, 1, 1, 2, 2, 3, 3 }),
-    PHILODENDRON(BlockType.CREEPING, 0.7F),
     PRICKLY_PEAR(BlockType.PASSABLE_CACTUS, 0.3F, new int[] { 3, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2 }),
     PRICKLY_PEAR_PURPLE(BlockType.PASSABLE_CACTUS, 0.3F, new int[] { 3, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2 }),
     QANTU(BlockType.SHRUB, 0.4f, new int[] { 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3 }),
