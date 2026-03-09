@@ -1,3 +1,9 @@
+/* Originally from [TerraFirmaCraft] (https://github.com/TerraFirmaCraft/TerraFirmaCraft)
+ * Licensed under the EUPL, Version 1.2.
+ * You may obtain a copy of the Licence at:
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ */
+
 package su.terrafirmagreg.core.world.new_ow_wg.surface_states;
 
 import java.util.function.Supplier;
@@ -17,6 +23,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.world.new_ow_wg.RockSettingsHelpers;
+
+// Split from TFC's SurfaceStates because of looping references.
 
 public class TFGComplexSurfaceStates {
     private static TFGComplexSurfaceStates instance = null;

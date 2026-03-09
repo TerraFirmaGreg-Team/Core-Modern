@@ -4,8 +4,6 @@ import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
 import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
 import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_VERSION;
 
-import java.util.function.LongFunction;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,11 +12,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.dries007.tfc.world.BiomeNoiseSampler;
 import net.dries007.tfc.world.TFCChunkGenerator;
 import net.dries007.tfc.world.biome.BiomeBuilder;
 import net.dries007.tfc.world.biome.BiomeExtension;
-import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
@@ -37,10 +33,6 @@ import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuyaSurfaceBuilde
 
 @Mixin(value = BiomeBuilder.class, remap = false)
 public class BiomeBuilderMixin implements IBiomeBuilder {
-    @Shadow
-    private LongFunction<Noise2D> heightNoiseFactory;
-    @Shadow
-    private LongFunction<BiomeNoiseSampler> noiseFactory;
     @Shadow
     private SurfaceBuilderFactory surfaceBuilderFactory;
     /** Now named 'hasCinderCones' in 1.21 TFC */

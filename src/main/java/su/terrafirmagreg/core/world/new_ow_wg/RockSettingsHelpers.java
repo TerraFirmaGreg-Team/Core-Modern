@@ -10,8 +10,8 @@ import su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg.RockSettingsAccessor;
 
 public final class RockSettingsHelpers {
 
-    private static Map<RockSettings, Boolean> isKarstMap = new HashMap<>();
-    private static Map<RockSettings, Boolean> isMaficMap = new HashMap<>();
+    private static final Map<RockSettings, Boolean> isKarstMap = new HashMap<>();
+    private static final Map<RockSettings, Boolean> isMaficMap = new HashMap<>();
 
     static {
         var presets = RockSettingsAccessor.getPresets();
