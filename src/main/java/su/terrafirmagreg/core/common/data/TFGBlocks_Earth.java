@@ -10,7 +10,6 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
@@ -40,44 +39,6 @@ public class TFGBlocks_Earth {
     public static BlockEntry<ConnectedDuffBlock> LOAM_DUFF;
 
     // New TFC Worldgen
-    public static final BlockEntry<SlabBlock> TUFF_SLAB = TFGCore.REGISTRATE.block("tuff_slab", SlabBlock::new)
-            .initialProperties(() -> Blocks.TUFF)
-            .blockstate((ctx, prov) -> prov.slabBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF), prov.blockTexture(Blocks.TUFF)))
-            .tag(BlockTags.SLABS, BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .tag(ItemTags.SLABS)
-            .build()
-            .register();
-
-    public static final BlockEntry<StairBlock> TUFF_STAIRS = TFGCore.REGISTRATE.block("tuff_stairs", p -> new StairBlock(Blocks.TUFF::defaultBlockState, p))
-            .initialProperties(() -> Blocks.TUFF)
-            .blockstate((ctx, prov) -> prov.stairsBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF)))
-            .tag(BlockTags.STAIRS, BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .tag(ItemTags.STAIRS)
-            .build()
-            .register();
-
-    public static final BlockEntry<WallBlock> TUFF_WALL = TFGCore.REGISTRATE.block("tuff_wall", WallBlock::new)
-            .initialProperties(() -> Blocks.TUFF)
-            .blockstate((ctx, prov) -> prov.wallBlock(ctx.getEntry(), prov.blockTexture(Blocks.TUFF)))
-            .tag(BlockTags.WALLS, BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .model((ctx, prov) -> prov.wallInventory("tuff_wall", ResourceLocation.fromNamespaceAndPath("minecraft", "block/tuff")))
-            .tag(ItemTags.WALLS)
-            .build()
-            .register();
-
-    public static final BlockEntry<Block> HARDENED_TUFF = TFGCore.REGISTRATE.block("hardened_tuff", Block::new)
-            .initialProperties(() -> Blocks.TUFF)
-            .exBlockstate(GTModels.cubeAllModel(ResourceLocation.fromNamespaceAndPath("minecraft", "block/tuff")))
-            .properties(p -> p.mapColor(MapColor.TERRACOTTA_GRAY))
-            .tag(Tags.Blocks.STONE, TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .tag(Tags.Items.STONE)
-            .build()
-            .register();
-
     public static final BlockEntry<Block> TUFF_GRAVEL = TFGCore.REGISTRATE.block("tuff_gravel", Block::new)
             .initialProperties(() -> Blocks.GRAVEL)
             .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/tuff_gravel")))
@@ -85,16 +46,6 @@ public class TFGBlocks_Earth {
             .tag(Tags.Blocks.GRAVEL, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
             .item(BlockItem::new)
             .tag(Tags.Items.GRAVEL)
-            .build()
-            .register();
-
-    public static final BlockEntry<Block> TUFF_COBBLE = TFGCore.REGISTRATE.block("tuff_cobble", Block::new)
-            .initialProperties(() -> Blocks.TUFF)
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/tuff_cobble")))
-            .properties(p -> p.mapColor(MapColor.TERRACOTTA_GRAY))
-            .tag(Tags.Blocks.COBBLESTONE, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .tag(Tags.Items.COBBLESTONE)
             .build()
             .register();
 
