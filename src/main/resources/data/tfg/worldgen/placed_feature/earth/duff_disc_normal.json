@@ -1,12 +1,12 @@
 {
-    "feature": "tfg:earth/duff_disc",
+    "feature": "tfg:earth/duff_disc_normal",
     "placement": [
         {
             "type": "tfc:climate",
             "min_forest": "normal"
         },
         {
-            "count": 6,
+            "count": 5,
             "type": "minecraft:count"
         },
         {"type": "minecraft:in_square"},

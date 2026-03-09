@@ -1,0 +1,8 @@
+{
+    "values": [
+        "tfg:earth/duff_disc_edge",
+        "tfg:earth/duff_disc_normal",
+        "tfg:earth/duff_disc_old_growth"
+    ],
+    "replace": false
+}

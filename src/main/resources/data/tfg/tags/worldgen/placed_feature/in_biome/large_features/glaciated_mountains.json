@@ -5,7 +5,7 @@
         "tfc:bamboo",
         "tfc:cave_vegetation",
         "tfg:earth/glacial_spring",
-        "tfg:earth/duff_disc",
+        "#tfg:feature/duff_discs",
         "#tfg:feature/surface_flood_fill_lakes"
     ],
     "replace": false,

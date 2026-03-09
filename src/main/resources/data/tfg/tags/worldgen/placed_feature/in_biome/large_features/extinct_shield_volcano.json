@@ -6,7 +6,7 @@
         "tfc:cave_vegetation",
         "#tfg:feature/shield_volcanoes",
         "tfc:random_empty_hot_spring",
-        "tfg:earth/duff_disc",
+        "#tfg:feature/duff_discs",
         "#tfg:feature/surface_flood_fill_lakes"
     ],
     "replace": false,
