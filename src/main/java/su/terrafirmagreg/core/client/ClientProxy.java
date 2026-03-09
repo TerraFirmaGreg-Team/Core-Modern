@@ -28,7 +28,6 @@ import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.container.ArtisanTableScreen;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
-import su.terrafirmagreg.core.common.data.entities.sniffer.*;
 import su.terrafirmagreg.core.common.data.particles.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.render.BouleRender;
 
@@ -68,14 +67,14 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.SULFUR_FUMES.getSource(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getSource(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICE.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICICLE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Mars.MARS_ICE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Mars.MARS_ICICLE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.SANDY_LOAM_DUFF.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.SILTY_LOAM_DUFF.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.SILT_DUFF.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Casings.REFLECTOR_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SANDY_LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILTY_LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILT_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.LOAM_DUFF.get(), RenderType.cutoutMipped());
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }

@@ -10,7 +10,7 @@ import net.dries007.tfc.util.registry.RegistryRock;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.material.MapColor;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
 
 public class TuffRegistryRock implements RegistryRock {
     @Override
@@ -30,17 +30,17 @@ public class TuffRegistryRock implements RegistryRock {
 
     @Override
     public @NotNull Supplier<? extends SlabBlock> getSlab(Rock.@NotNull BlockType blockType) {
-        return TFGBlocks.TUFF_SLAB;
+        return TFGBlocks_Earth.TUFF_SLAB;
     }
 
     @Override
     public @NotNull Supplier<? extends StairBlock> getStair(Rock.@NotNull BlockType blockType) {
-        return TFGBlocks.TUFF_STAIRS;
+        return TFGBlocks_Earth.TUFF_STAIRS;
     }
 
     @Override
     public @NotNull Supplier<? extends WallBlock> getWall(Rock.@NotNull BlockType blockType) {
-        return TFGBlocks.TUFF_WALL;
+        return TFGBlocks_Earth.TUFF_WALL;
     }
 
     @Override

@@ -8,7 +8,7 @@ import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
 import net.minecraft.world.level.block.Blocks;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
 
 public class TFGSimpleSurfaceStates {
 
@@ -71,7 +71,7 @@ public class TFGSimpleSurfaceStates {
                 : TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
 
         TUFF = context -> Blocks.TUFF.defaultBlockState();
-        TUFF_GRAVEL = context -> TFGBlocks.TUFF_GRAVEL.get().defaultBlockState();
+        TUFF_GRAVEL = context -> TFGBlocks_Earth.TUFF_GRAVEL.get().defaultBlockState();
 
         MORAINE = context -> (Helpers.hash(729375982L, context.pos()) & 127) > 96 ? context.getRock().cobble().defaultBlockState() : context.getRock().gravel().defaultBlockState();
         SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48 ? context.getRock().sand().defaultBlockState() : context.getRock().gravel().defaultBlockState();
@@ -93,10 +93,10 @@ public class TFGSimpleSurfaceStates {
         SNOWY_BASALT_MORAINE = TFGSoilSurfaceState.buildSnowableSurface(SNOW, BASALT_MORAINE);
         SNOWY_SAND_AND_GRAVEL = TFGSoilSurfaceState.buildSnowableSurface(SNOW, SAND_AND_GRAVEL);
 
-        COARSE_SANDY_LOAM = context -> TFGBlocks.COARSE_SANDY_LOAM_DIRT.get().defaultBlockState();
-        COARSE_SILTY_LOAM = context -> TFGBlocks.COARSE_SILTY_LOAM_DIRT.get().defaultBlockState();
-        DRY_MUD = context -> TFGBlocks.HARDENED_CLAY.get().defaultBlockState();
-        SALTED_EARTH = context -> TFGBlocks.HALITE.get().defaultBlockState();
+        COARSE_SANDY_LOAM = context -> TFGBlocks_Earth.COARSE_SANDY_LOAM_DIRT.get().defaultBlockState();
+        COARSE_SILTY_LOAM = context -> TFGBlocks_Earth.COARSE_SILTY_LOAM_DIRT.get().defaultBlockState();
+        DRY_MUD = context -> TFGBlocks_Earth.HARDENED_CLAY.get().defaultBlockState();
+        SALTED_EARTH = context -> TFGBlocks_Earth.HALITE.get().defaultBlockState();
 
         OCEAN_MUD = context -> TFCBlocks.SOIL.get(SoilBlockType.MUD).get(SoilBlockType.Variant.SILT).get().defaultBlockState();
 

@@ -1,5 +1,10 @@
 {
   "values": [
+    "tfg:hardened_tuff",
+    "tfg:tuff_gravel",
+    "tfg:tuff_cobble",
+    "tfg:hardened_clay",
+    "tfg:halite",
     "tfg:coarse_silty_loam_dirt",
     "tfg:coarse_sandy_loam_dirt",
     "tfg:coarse_silt_dirt",
@@ -7,11 +12,6 @@
     "tfg:silty_loam_duff",
     "tfg:sandy_loam_duff",
     "tfg:silt_duff",
-    "tfg:loam_duff",
-    "tfg:hardened_tuff",
-    "tfg:tuff_gravel",
-    "tfg:tuff_cobble",
-    "tfg:hardened_clay",
-    "tfg:halite"
+    "tfg:loam_duff"
   ]
 }

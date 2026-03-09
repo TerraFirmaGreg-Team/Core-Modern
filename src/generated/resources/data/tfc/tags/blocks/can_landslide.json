@@ -1,5 +1,7 @@
 {
   "values": [
+    "tfg:tuff_gravel",
+    "tfg:tuff_cobble",
     "tfg:coarse_silty_loam_dirt",
     "tfg:coarse_sandy_loam_dirt",
     "tfg:coarse_silt_dirt",
@@ -7,8 +9,6 @@
     "tfg:silty_loam_duff",
     "tfg:sandy_loam_duff",
     "tfg:silt_duff",
-    "tfg:loam_duff",
-    "tfg:tuff_gravel",
-    "tfg:tuff_cobble"
+    "tfg:loam_duff"
   ]
 }

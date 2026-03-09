@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraftforge.common.Tags;
 
 import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 
 public class MarsIceCaveFeature extends Feature<NoneFeatureConfiguration> {
@@ -106,7 +107,7 @@ public class MarsIceCaveFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private BlockState getState(RandomSource rand) {
-        return rand.nextFloat() < 0.4F ? TFGBlocks.MARS_ICE.get().defaultBlockState() : TFGBlocks.DRY_ICE.get().defaultBlockState();
+        return rand.nextFloat() < 0.4F ? TFGBlocks_Mars.MARS_ICE.get().defaultBlockState() : TFGBlocks.DRY_ICE.get().defaultBlockState();
     }
 
     private void placeSphere(WorldGenLevel world, BlockPos.MutableBlockPos mutablePos, RandomSource rand) {
@@ -114,7 +115,7 @@ public class MarsIceCaveFeature extends Feature<NoneFeatureConfiguration> {
         float radiusSquared = radius * radius;
         int size = Mth.ceil(radius);
         BlockPos pos = mutablePos.immutable();
-        BlockState ice = TFGBlocks.MARS_ICE.get().defaultBlockState();
+        BlockState ice = TFGBlocks_Mars.MARS_ICE.get().defaultBlockState();
 
         for (int x = -size; x <= size; ++x) {
             for (int y = -size; y <= size; ++y) {

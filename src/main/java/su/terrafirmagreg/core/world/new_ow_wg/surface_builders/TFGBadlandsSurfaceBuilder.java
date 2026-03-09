@@ -19,7 +19,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
 import su.terrafirmagreg.core.world.new_ow_wg.RockSettingsHelpers;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;
@@ -125,7 +125,7 @@ public class TFGBadlandsSurfaceBuilder implements SurfaceBuilder {
         fillSand(random, sandLayers1, sandstoneLayers1, SandBlockType.BROWN, SandBlockType.YELLOW, SandBlockType.WHITE);
         fillSand(random, sandLayersKarst, sandstoneLayersKarst, SandBlockType.RED, SandBlockType.YELLOW, SandBlockType.WHITE);
         fillBlocks(random, sandLayersVolcanic, sandstoneLayersVolcanic, sandstone(SandBlockType.BLACK), sand(SandBlockType.BLACK),
-                Blocks.TUFF.defaultBlockState(), TFGBlocks.TUFF_GRAVEL.get().defaultBlockState(), sandstone(SandBlockType.RED), sand(SandBlockType.RED));
+                Blocks.TUFF.defaultBlockState(), TFGBlocks_Earth.TUFF_GRAVEL.get().defaultBlockState(), sandstone(SandBlockType.RED), sand(SandBlockType.RED));
 
         for (int i = 0; i < LAYER_SIZE; i++) {
             layerThresholds[i] = random.nextFloat();
