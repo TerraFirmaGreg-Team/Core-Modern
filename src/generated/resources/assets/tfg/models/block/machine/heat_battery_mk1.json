@@ -10,7 +10,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_mars"
+          "all": "tfg:block/casings/machine_casing_mars",
+          "overlay_front": "tfg:block/machines/bioreactor/overlay_front",
+          "overlay_front_emissive": "tfg:block/machines/bioreactor/overlay_front_emissive"
         }
       }
     },
@@ -18,7 +20,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_mars"
+          "all": "tfg:block/casings/machine_casing_mars",
+          "overlay_front": "tfg:block/machines/bioreactor/overlay_front",
+          "overlay_front_emissive": "tfg:block/machines/bioreactor/overlay_front_emissive"
         }
       }
     },
@@ -26,7 +30,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_mars"
+          "all": "tfg:block/casings/machine_casing_mars",
+          "overlay_front": "tfg:block/machines/bioreactor/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/bioreactor/overlay_front_active_emissive"
         }
       }
     },
@@ -34,7 +40,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_mars"
+          "all": "tfg:block/casings/machine_casing_mars",
+          "overlay_front": "tfg:block/machines/bioreactor/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/bioreactor/overlay_front_active_emissive"
         }
       }
     },
@@ -42,7 +50,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_mars"
+          "all": "tfg:block/casings/machine_casing_mars",
+          "overlay_front": "tfg:block/machines/bioreactor/overlay_front",
+          "overlay_front_emissive": "tfg:block/machines/bioreactor/overlay_front_emissive"
         }
       }
     },
@@ -50,7 +60,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_mars"
+          "all": "tfg:block/casings/machine_casing_mars",
+          "overlay_front": "tfg:block/machines/bioreactor/overlay_front",
+          "overlay_front_emissive": "tfg:block/machines/bioreactor/overlay_front_emissive"
         }
       }
     },
@@ -58,7 +70,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_mars"
+          "all": "tfg:block/casings/machine_casing_mars",
+          "overlay_front": "tfg:block/machines/bioreactor/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/bioreactor/overlay_front_active_emissive"
         }
       }
     },
@@ -66,7 +80,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_mars"
+          "all": "tfg:block/casings/machine_casing_mars",
+          "overlay_front": "tfg:block/machines/bioreactor/overlay_front_active",
+          "overlay_front_emissive": "tfg:block/machines/bioreactor/overlay_front_active_emissive"
         }
       }
     }

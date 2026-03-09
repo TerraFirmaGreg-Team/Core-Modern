@@ -48,6 +48,8 @@ public final class TFGTags {
         public static final TagKey<Item> CopperGreenhouseCasings = createItemTag("copper_greenhouse_casings");
         public static final TagKey<Item> TreatedWoodGreenhouseCasings = createItemTag("treated_wood_greenhouse_casings");
 
+        public static final TagKey<Item> SEAL_FOOD = createItemTag("seal_food");
+
         public static final TagKey<Item> PrecisionFabricatorDippedItems = createItemTag("precision_fabricator_dipped_items");
         public static final TagKey<Item> PrecisionFabricatorHolderRods = createItemTag("precision_fabricator_holder_rods");
 

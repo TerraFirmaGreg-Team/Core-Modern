@@ -173,6 +173,7 @@
         "common.tfc.RockDataMixin",
         "common.tfc.TFCAnimalBrainMixin",
         "common.tfc.SupportMixin",
+        "common.tfc.TFCDolphinMixin",
         "common.tfc.TFCFallingBlockEntityMixin",
         "common.tfc.TFCLeavesBlockMixin",
         "common.tfc.features.CaveSpikesFeatureMixin",
