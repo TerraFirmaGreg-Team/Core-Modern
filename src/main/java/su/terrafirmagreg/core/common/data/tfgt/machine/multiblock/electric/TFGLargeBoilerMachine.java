@@ -524,7 +524,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
 
             double t = (current - THRESHOLD) / 1000.0;
             // logarithm : start fast then slow down until it reaches its cap
-            double reduction = MAX_REDUCTION * (1.0 - Math.exp(-1 * t)); // Math.exp(-x * t) avec (x) 2 faster towards cap and 0.5 slower towards cap
+            double reduction = MAX_REDUCTION * (1.0 - Math.exp(-1 * t)); // Math.exp(-x * t) with (x) 2 faster towards cap and 0.5 slower towards cap
             return 1.0 - reduction;
         }
 
