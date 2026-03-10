@@ -69,11 +69,11 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             String translationKey) {
     }
 
-    // Every Boosters available
+    // Every Boosters available - fluidAmountMb * 4 per second
     private static final List<BoosterFluid> BOOSTERS = List.of(
             new BoosterFluid(
                     () -> GTMaterials.Creosote.getFluid(1).getFluid(),
-                    10, 500,
+                    10, 200,
                     0, // Works for all the Boilers
                     "block.gtceu.creosote"),
             new BoosterFluid(
@@ -84,7 +84,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "raw_aromatic_mix")),
-                    20, 1000,
+                    150, 1000,
                     1280, // Only works for Steel Boiler and +
                     "material.tfg.raw_aromatic_mix")
 
@@ -516,17 +516,16 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         public double getTemperatureMultiplier() {
             TFGLargeBoilerMachine boiler = (TFGLargeBoilerMachine) machine;
             int current = boiler.getCurrentTemperature();
-            final int THRESHOLD = 480; // After this Temperature the recipe starts to be faster
-            final double REDUCTION_PER_100_DEGREES = 0.05; // 5% every 100C over 800
+            final int THRESHOLD = 480;
+            final double MAX_REDUCTION = 0.5; // Cap à 2x au maximum (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
 
             if (current <= THRESHOLD)
                 return 1.0;
 
-            double degreesAboveThreshold = current - THRESHOLD;
-            double reduction = (degreesAboveThreshold / 100.0) * REDUCTION_PER_100_DEGREES;
-
-            // Minimum
-            return Math.max(0.1, 1.0 - reduction);
+            double t = (current - THRESHOLD) / 1000.0;
+            // log : monte vite au début, ralentit progressivement vers le cap
+            double reduction = MAX_REDUCTION * (1.0 - Math.exp(-1 * t)); // Math.exp(-x * t) avec (x) 2 faster towards cap and 0.5 slower towards cap
+            return 1.0 - reduction;
         }
 
         @Override

@@ -20,4 +20,5 @@ public final class TFGMaterialFlags {
     public static final MaterialFlag GENERATE_CHAINSAW_HEAD = new MaterialFlag.Builder("generate_chainsaw_head").build();
     public static final MaterialFlag GENERATE_WRENCH_HEAD = new MaterialFlag.Builder("generate_wrench_head").build();
     public static final MaterialFlag GENERATE_WIRE_CUTTER_HEAD = new MaterialFlag.Builder("generate_wire_cutter_head").build();
+    public static final MaterialFlag GENERATE_REPAIR_KIT = new MaterialFlag.Builder("generate_repair_kit").build();
 }
