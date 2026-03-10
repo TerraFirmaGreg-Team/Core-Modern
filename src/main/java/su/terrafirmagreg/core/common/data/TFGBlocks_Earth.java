@@ -80,7 +80,8 @@ public class TFGBlocks_Earth {
     public static final Map<TFGPlant, BlockEntry<Block>> PLANTS = Helpers.mapOfKeys(TFGPlant.class,
             plant -> TFGCore.REGISTRATE.block("plant/" + plant.name().toLowerCase(Locale.ROOT), p -> plant.create())
                     .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                    .tag(TFCTags.Blocks.PLANTS, BlockTags.MINEABLE_WITH_HOE)
+                    .tag(TFCTags.Blocks.PLANTS, BlockTags.MINEABLE_WITH_HOE, TFCTags.Blocks.CAN_BE_ICE_PILED, TFCTags.Blocks.CAN_BE_SNOW_PILED, TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE,
+                            BlockTags.REPLACEABLE)
                     .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
                     .register());
 

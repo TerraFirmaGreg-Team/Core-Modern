@@ -7,7 +7,6 @@
 package su.terrafirmagreg.core.common.data;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -76,10 +75,7 @@ public enum TFGPlant implements RegistryPlant {
     FLAME_VINE_PLANT(BlockType.WEEPING, 1.0F),
     FLAME_VINE(BlockType.WEEPING_TOP, 1.0F),
     CYCAD_PLANT(BlockType.TWISTING_SOLID, 0F),
-    CYCAD(BlockType.TWISTING_SOLID_TOP, 0F),
-    ;
-
-    private static final EnumSet<TFGPlant> BLOCK_TINTED_PLANTS = EnumSet.of(RED_OAT_GRASS, CYCAD, TANK_BROMELIAD);
+    CYCAD(BlockType.TWISTING_SOLID_TOP, 0F);
 
     private final float speedFactor;
     @Nullable
@@ -120,18 +116,6 @@ public enum TFGPlant implements RegistryPlant {
         return property;
     }
 
-    public boolean isBlockTinted() {
-        return BLOCK_TINTED_PLANTS.contains(this);
-    }
-
-    public boolean isSeasonal() {
-        return type == TFGPlant.BlockType.VINE;
-    }
-
-    public boolean isTallGrass() {
-        return type == TFGPlant.BlockType.TALL_GRASS || type == TFGPlant.BlockType.SHORT_GRASS;
-    }
-
     private Supplier<? extends Block> transform() {
         return TFGBlocks_Earth.PLANTS.get(switch (this) {
             case CYCAD -> CYCAD_PLANT;
@@ -145,13 +129,11 @@ public enum TFGPlant implements RegistryPlant {
     // Why isn't yours public, TFC?
     enum BlockType {
         STANDARD((plant, type) -> PlantBlock.create(plant, fire(nonSolid(plant)).offsetType(BlockBehaviour.OffsetType.XZ))),
-        CREEPING((plant, type) -> CreepingPlantBlock.create(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))), // Post process ensures shape is updated after world gen
         CREEPING_STONE((plant, type) -> CreepingPlantBlock.createStone(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))),
         EPIPHYTE((plant, type) -> EpiphytePlantBlock.create(plant, fire(nonSolid(plant).hasPostProcess(TFCBlocks::always)))),
         SHORT_GRASS((plant, type) -> ShortGrassBlock.create(plant, fire(nonSolid(plant)).offsetType(BlockBehaviour.OffsetType.XZ))),
         DRY((plant, type) -> PlantBlock.createDry(plant, fire(nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ)))),
         TALL_GRASS((plant, type) -> TFCTallGrassBlock.create(plant, fire(nonSolid(plant)).offsetType(BlockBehaviour.OffsetType.XZ))),
-        VINE((plant, type) -> new TFCVineBlock(fire(nonSolid(plant)))),
         SHORT_SHRUB((plant, type) -> TFGPlantBlock.createShortShrub(plant, fire(nonSolid(plant)))),
         SHRUB((plant, type) -> TFGPlantBlock.createShrub(plant, fire(nonSolid(plant)))),
         FLOWERBED((plant, type) -> PlantBlock.createFlat(plant, fire(nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ)))),
@@ -162,14 +144,11 @@ public enum TFGPlant implements RegistryPlant {
         FLOATING_FRESH((plant, type) -> FloatingWaterPlantBlock.create(plant, () -> Fluids.WATER, nonSolid(plant).offsetType(BlockBehaviour.OffsetType.XZ))),
         WEEPING((plant, type) -> new BodyPlantBlock(fire(nonSolidTallPlant(plant)), plant.transform(), BodyPlantBlock.BODY_SHAPE, Direction.DOWN)),
         WEEPING_TOP((plant, type) -> new TopPlantBlock(fire(nonSolidTallPlant(plant)), plant.transform(), Direction.DOWN, BodyPlantBlock.WEEPING_SHAPE)),
-        TWISTING((plant, type) -> new BodyPlantBlock(fire(nonSolidTallPlant(plant)), plant.transform(), BodyPlantBlock.BODY_SHAPE, Direction.UP)),
-        TWISTING_TOP((plant, type) -> new TopPlantBlock(fire(nonSolidTallPlant(plant)), plant.transform(), Direction.UP, BodyPlantBlock.TWISTING_SHAPE)),
         TWISTING_SOLID((plant, type) -> new BodyPlantBlock(fire(solidTallPlant()), plant.transform(), BodyPlantBlock.BODY_SHAPE, Direction.UP)),
         TWISTING_SOLID_TOP((plant, type) -> new TopPlantBlock(fire(solidTallPlant()), plant.transform(), Direction.UP, BodyPlantBlock.TWISTING_SHAPE)),
         OCEAN_ROCK_CREEPING((plant, type) -> CreepingWaterPlantBlock.createRock(plant, TFCBlockStateProperties.SALT_WATER, ExtendedProperties.of(nonSolid(plant).sound(SoundType.BASALT)))),
         OCEAN_CREEPING((plant, type) -> CreepingWaterPlantBlock.create(plant, TFCBlockStateProperties.SALT_WATER, ExtendedProperties.of(nonSolid(plant).sound(SoundType.BASALT)))),
-        OCEAN_ROTATABLE((plant, type) -> RotatableWaterPlantBlock.create(plant, TFCBlockStateProperties.SALT_WATER, ExtendedProperties.of(nonSolid(plant).sound(SoundType.SLIME_BLOCK)))),
-        ;
+        OCEAN_ROTATABLE((plant, type) -> RotatableWaterPlantBlock.create(plant, TFCBlockStateProperties.SALT_WATER, ExtendedProperties.of(nonSolid(plant).sound(SoundType.SLIME_BLOCK))));
 
         /**
          * Default properties to avoid rewriting them out every time

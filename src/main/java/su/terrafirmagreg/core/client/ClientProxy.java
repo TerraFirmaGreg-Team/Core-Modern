@@ -17,8 +17,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
@@ -32,9 +34,14 @@ import su.terrafirmagreg.core.common.data.particles.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.render.BouleRender;
 
 public class ClientProxy extends CommonProxy {
+    @SuppressWarnings("removal")
     public ClientProxy() {
         super();
         initializeDynamicRenders();
+
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(ForgeClientEventListener::registerColorHandlerBlocks);
+        bus.addListener(ForgeClientEventListener::registerColorHandlerItems);
     }
 
     @SubscribeEvent
@@ -75,6 +82,7 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILTY_LOAM_DUFF.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILT_DUFF.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.LOAM_DUFF.get(), RenderType.cutoutMipped());
+            TFGBlocks_Earth.PLANTS.forEach((plant, block) -> ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutoutMipped()));
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }
