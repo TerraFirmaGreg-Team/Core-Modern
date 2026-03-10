@@ -68,8 +68,6 @@ public enum TFGPlant implements RegistryPlant {
     SILVER_BROMELIAD(BlockType.PERCHED_EPIPHYTE, 0.9f),
     TANK_BROMELIAD(BlockType.PERCHED_EPIPHYTE, 0.9f),
     YELLOW_SAXIFRAGE(BlockType.FLOWERBED, 1.0F, new int[] { 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3 }),
-    WHITE_WATER_LILY(BlockType.FLOATING_FRESH, 0.7F, new int[] { 5, 5, 6, 0, 1, 2, 2, 2, 2, 3, 4, 5 }),
-    PURPLE_WATER_LILY(BlockType.FLOATING_FRESH, 0.7F, new int[] { 5, 5, 6, 0, 1, 2, 2, 2, 2, 3, 4, 5 }),
 
     // Unique
     FLAME_VINE_PLANT(BlockType.WEEPING, 1.0F),
