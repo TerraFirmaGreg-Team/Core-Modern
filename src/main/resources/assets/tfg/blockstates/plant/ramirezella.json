@@ -1,0 +1,150 @@
+{"multipart": [
+    {
+        "apply": [{
+            "y": 90,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "east",
+            "age": 0
+        }
+    },
+    {
+        "apply": [{
+            "y": 90,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "east",
+            "age": 1
+        }
+    },
+    {
+        "apply": [{
+            "y": 90,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "east",
+            "age": 2
+        }
+    },
+    {
+        "apply": [{
+            "y": 90,
+            "model": "tfg:block/plant/ramirezella_0"
+        }],
+        "when": {
+            "facing": "east",
+            "age": 3
+        }
+    },
+    {
+        "apply": [{
+            "y": 180,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "south",
+            "age": 0
+        }
+    },
+    {
+        "apply": [{
+            "y": 180,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "south",
+            "age": 1
+        }
+    },
+    {
+        "apply": [{
+            "y": 180,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "south",
+            "age": 2
+        }
+    },
+    {
+        "apply": [{
+            "y": 180,
+            "model": "tfg:block/plant/ramirezella_0"
+        }],
+        "when": {
+            "facing": "south",
+            "age": 3
+        }
+    },
+    {
+        "apply": [{
+            "y": 270,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "west",
+            "age": 0
+        }
+    },
+    {
+        "apply": [{
+            "y": 270,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "west",
+            "age": 1
+        }
+    },
+    {
+        "apply": [{
+            "y": 270,
+            "model": "tfg:block/plant/ramirezella_1"
+        }],
+        "when": {
+            "facing": "west",
+            "age": 2
+        }
+    },
+    {
+        "apply": [{
+            "y": 270,
+            "model": "tfg:block/plant/ramirezella_0"
+        }],
+        "when": {
+            "facing": "west",
+            "age": 3
+        }
+    },
+    {
+        "apply": [{"model": "tfg:block/plant/ramirezella_1"}],
+        "when": {
+            "facing": "north",
+            "age": 0
+        }
+    },
+    {
+        "apply": [{"model": "tfg:block/plant/ramirezella_1"}],
+        "when": {
+            "facing": "north",
+            "age": 1
+        }
+    },
+    {
+        "apply": [{"model": "tfg:block/plant/ramirezella_1"}],
+        "when": {
+            "facing": "north",
+            "age": 2
+        }
+    },
+    {
+        "apply": [{"model": "tfg:block/plant/ramirezella_0"}],
+        "when": {
+            "facing": "north",
+            "age": 3
+        }
+    }
+]}
