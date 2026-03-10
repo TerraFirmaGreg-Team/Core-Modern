@@ -14,9 +14,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import vazkii.patchouli.client.book.ClientBookRegistry;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
@@ -29,6 +32,16 @@ import su.terrafirmagreg.core.common.data.events.WeakOreProspectorEventHelper;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class ForgeClientEventListener {
+
+    /**
+     * Load Patchouli's book manually on player login.
+     * Workaround for Pachouli books not loading when no Advancements are registered on the server.
+     * With no advancements, ClientAdvancements::onClientPacket doesn't fire, which gates initial load.
+     */
+    @SubscribeEvent
+    public static void onClientLogin(ClientPlayerNetworkEvent.LoggingIn event) {
+        ClientBookRegistry.INSTANCE.reload();
+    }
 
     @SubscribeEvent
     public static void onTooltip(@NotNull ItemTooltipEvent event) {
