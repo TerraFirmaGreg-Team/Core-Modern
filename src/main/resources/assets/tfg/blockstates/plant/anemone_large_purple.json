@@ -1,0 +1,122 @@
+{"multipart": [
+    {
+        "apply": [{
+            "x": 90,
+            "y": 90,
+            "model": "tfg:block/plant/anemone_large_purple"
+        }],
+        "when": {
+            "facing": "east",
+            "open": "true"
+        }
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "y": 180,
+            "model": "tfg:block/plant/anemone_large_purple"
+        }],
+        "when": {
+            "facing": "south",
+            "open": "true"
+        }
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "y": 270,
+            "model": "tfg:block/plant/anemone_large_purple"
+        }],
+        "when": {
+            "facing": "west",
+            "open": "true"
+        }
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "model": "tfg:block/plant/anemone_large_purple"
+        }],
+        "when": {
+            "facing": "north",
+            "open": "true"
+        }
+    },
+    {
+        "apply": [{"model": "tfg:block/plant/anemone_large_purple"}],
+        "when": {
+            "facing": "up",
+            "open": "true"
+        }
+    },
+    {
+        "apply": [{
+            "x": 180,
+            "model": "tfg:block/plant/anemone_large_purple"
+        }],
+        "when": {
+            "facing": "down",
+            "open": "true"
+        }
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "y": 90,
+            "model": "tfg:block/plant/anemone_large_purple_closed"
+        }],
+        "when": {
+            "facing": "east",
+            "open": "false"
+        }
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "y": 180,
+            "model": "tfg:block/plant/anemone_large_purple_closed"
+        }],
+        "when": {
+            "facing": "south",
+            "open": "false"
+        }
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "y": 270,
+            "model": "tfg:block/plant/anemone_large_purple_closed"
+        }],
+        "when": {
+            "facing": "west",
+            "open": "false"
+        }
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "model": "tfg:block/plant/anemone_large_purple_closed"
+        }],
+        "when": {
+            "facing": "north",
+            "open": "false"
+        }
+    },
+    {
+        "apply": [{"model": "tfg:block/plant/anemone_large_purple_closed"}],
+        "when": {
+            "facing": "up",
+            "open": "false"
+        }
+    },
+    {
+        "apply": [{
+            "x": 180,
+            "model": "tfg:block/plant/anemone_large_purple_closed"
+        }],
+        "when": {
+            "facing": "down",
+            "open": "false"
+        }
+    }
+]}
