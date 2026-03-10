@@ -325,7 +325,7 @@ public final class TFGTagPrefix {
                 .defaultTagPath("repair_kit_materials/%s")
                 .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
                 .unformattedTagPath("repair_kit_materials")
-                .materialAmount(GTValues.M * 4)
+                .materialAmount(GTValues.M * 1/4)
                 .materialIconType(TFGMaterialIconType.repairKit)
                 .unificationEnabled(true)
                 .generateItem(true)
