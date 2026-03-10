@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "age=3": {"model": "tfg:block/plant/tank_bromeliad_1"},
+        "age=2": {"model": "tfg:block/plant/tank_bromeliad_1"},
+        "age=1": {"model": "tfg:block/plant/tank_bromeliad_1"},
+        "age=0": {"model": "tfg:block/plant/tank_bromeliad_0"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

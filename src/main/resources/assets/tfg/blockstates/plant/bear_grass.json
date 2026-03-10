@@ -42,7 +42,7 @@
         }
     },
     {
-        "apply": {"model": "tfg:block/empty0"},
+        "apply": {"model": "tfg:block/empty"},
         "when": {
             "part": "upper",
             "age": "2"
