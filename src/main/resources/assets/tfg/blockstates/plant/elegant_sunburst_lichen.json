@@ -1,60 +1,44 @@
-{
-  "multipart": [
+{"multipart": [
     {
-      "when": {
-        "down": "true"
-      },
-      "apply": {
-        "model": "tfg:block/plant/elegant_sunburst_lichen"
-      }
+        "apply": {"model": "tfg:block/plant/elegant_sunburst_lichen"},
+        "when": {"down": "true"}
     },
     {
-      "when": {
-        "east": "true"
-      },
-      "apply": {
-        "model": "tfg:block/plant/elegant_sunburst_lichen",
-        "x": 270,
-        "y": 90
-      }
+        "apply": {
+            "x": 270,
+            "y": 90,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"east": "true"}
     },
     {
-      "when": {
-        "north": "true"
-      },
-      "apply": {
-        "model": "tfg:block/plant/elegant_sunburst_lichen",
-        "x": 270
-      }
+        "apply": {
+            "x": 270,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"north": "true"}
     },
     {
-      "when": {
-        "south": "true"
-      },
-      "apply": {
-        "model": "tfg:block/plant/elegant_sunburst_lichen",
-        "x": 270,
-        "y": 180
-      }
+        "apply": {
+            "x": 270,
+            "y": 180,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"south": "true"}
     },
     {
-      "when": {
-        "up": "true"
-      },
-      "apply": {
-        "model": "tfg:block/plant/elegant_sunburst_lichen",
-		"x": 180
-      }
+        "apply": {
+            "x": 180,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"up": "true"}
     },
     {
-      "when": {
-        "west": "true"
-      },
-      "apply": {
-        "model": "tfg:block/plant/elegant_sunburst_lichen",
-        "x": 270,
-        "y": 270
-      }
+        "apply": {
+            "x": 270,
+            "y": 270,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"west": "true"}
     }
-  ]
-}
+]}

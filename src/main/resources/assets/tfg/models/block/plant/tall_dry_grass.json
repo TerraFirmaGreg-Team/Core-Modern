@@ -1,6 +1,4 @@
 {
-  "parent": "block/cross",
-  "textures": {
-    "cross": "tfg:block/plant/dry_grass/tall_dry_grass"
-  }
+    "parent": "block/cross",
+    "textures": {"cross": "tfg:block/plant/dry_grass/tall_dry_grass"}
 }
