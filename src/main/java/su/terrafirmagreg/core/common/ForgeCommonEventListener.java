@@ -1,10 +1,12 @@
 package su.terrafirmagreg.core.common;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
@@ -13,6 +15,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggHandler;
+import su.terrafirmagreg.core.common.perf.SupportCache;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
 import su.terrafirmagreg.core.utils.commands.TFGCommands;
@@ -45,5 +48,12 @@ public final class ForgeCommonEventListener {
                     PacketDistributor.PLAYER.with(() -> player),
                     new FuelSyncPacket(FuelSyncPacket.capturedJsonData));
         }
+    }
+
+    @SubscribeEvent
+    public static void onLevelUnload(LevelEvent.Unload event) {
+        if (!(event.getLevel() instanceof ServerLevel level))
+            return;
+        SupportCache.clearLevel(level.dimension());
     }
 }

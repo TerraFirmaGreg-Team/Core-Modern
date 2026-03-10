@@ -460,6 +460,13 @@ public final class TFGBlocks {
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
+    public static final BlockEntry<Block> QUARTZ_CRUCIBLE = TFGCore.REGISTRATE.block("quartz_crucible", Block::new)
+            .properties(p -> p.sound(SoundType.STONE).strength(3).mapColor(MapColor.QUARTZ).noOcclusion())
+            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
     //// Casings
 
     public static final BlockEntry<ActiveParticleBlock> BIOCULTURE_ROTOR_PRIMARY = TFGCore.REGISTRATE
@@ -575,16 +582,22 @@ public final class TFGBlocks {
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_stainless_evaporation")));
 
     public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("casings/machine_casing_blue_solar_panel",
-            (ctx, prov) -> prov.models().cubeBottomTop(ctx.getName(), GTCEu.id("block/casings/steam/steel/side"), GTCEu.id("block/casings/steam/steel/bottom"),
-                    TFGCore.id("block/casings/machine_casing_blue_solar_panel")));
+            (ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
+                    GTCEu.id("block/casings/steam/steel/side"),
+                    GTCEu.id("block/casings/steam/steel/bottom"),
+                    TFGCore.id("block/casings/machine_casing_blue_solar_panel"))));
 
     public static final BlockEntry<Block> GREEN_SOLAR_PANEL_CASING = createCasingBlock("casings/machine_casing_green_solar_panel",
-            (ctx, prov) -> prov.models().cubeBottomTop(ctx.getName(), GTCEu.id("block/casings/steam/steel/side"), GTCEu.id("block/casings/steam/steel/bottom"),
-                    TFGCore.id("block/casings/machine_casing_green_solar_panel")));
+            (ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
+                    GTCEu.id("block/casings/steam/steel/side"),
+                    GTCEu.id("block/casings/steam/steel/bottom"),
+                    TFGCore.id("block/casings/machine_casing_green_solar_panel"))));
 
     public static final BlockEntry<Block> RED_SOLAR_PANEL_CASING = createCasingBlock("casings/machine_casing_red_solar_panel",
-            (ctx, prov) -> prov.models().cubeBottomTop(ctx.getName(), GTCEu.id("block/casings/steam/steel/side"), GTCEu.id("block/casings/steam/steel/bottom"),
-                    TFGCore.id("block/casings/machine_casing_red_solar_panel")));
+            (ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
+                    GTCEu.id("block/casings/steam/steel/side"),
+                    GTCEu.id("block/casings/steam/steel/bottom"),
+                    TFGCore.id("block/casings/machine_casing_red_solar_panel"))));
 
     public static final BlockEntry<ElectromagneticAcceleratorBlock> ELECTROMAGNETIC_ACCELERATOR_BLOCK = TFGCore.REGISTRATE.block("electromagnetic_accelerator", ElectromagneticAcceleratorBlock::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
@@ -635,7 +648,7 @@ public final class TFGBlocks {
     public static final BlockEntry<Block> BIOCULTURE_CASING = createCasingBlock("casings/machine_casing_bioculture", GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_bioculture")),
             SoundType.COPPER, 5.5f, 6f, MapColor.COLOR_RED, false);
 
-    public static final BlockEntry<Block> BIOCULTURE_GLASS_CASING = TFGCore.REGISTRATE.block("casings/machine_casing_bioculture_glass", Block::new)
+    public static final BlockEntry<ConnectedGlassBlock> BIOCULTURE_GLASS_CASING = TFGCore.REGISTRATE.block("casings/machine_casing_bioculture_glass", ConnectedGlassBlock::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
             .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false)
                     .sound(SoundType.GLASS).strength(5, 6).noOcclusion()
@@ -693,7 +706,8 @@ public final class TFGBlocks {
             List.of(FLTags.Blocks.STAINLESS_STEEL_GREENHOUSE, TFGTags.Blocks.StainlessSteelGreenhouseCasings, BlockTags.MINEABLE_WITH_PICKAXE),
             List.of(TFGTags.Items.StainlessSteelGreenhouseCasings));
 
-    public static final BlockEntry<Block> STERLING_SILVER_CASING = createCasingBlock("casings/sterling_silver_casing", GTModels.cubeAllModel(TFGCore.id("block/casings/sterling_silver_casing")));
+    public static final BlockEntry<Block> STERLING_SILVER_CASING = createCasingBlock("casings/sterling_silver_casing",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/sterling_silver_casing")));
 
     public static BlockEntry<ActiveBlock> createActiveCasingBlock(String name, NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> modelProvider,
             SoundType sound, float strength, float explosionResist, MapColor mapColor, boolean onlyDropWithTool) {

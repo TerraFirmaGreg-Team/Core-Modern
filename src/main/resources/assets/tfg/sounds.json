@@ -1,0 +1,93 @@
+{
+    "entity.seal.ambient": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.ambient",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.ambient"
+    },
+    "entity.bison.hurt": {
+        "sounds": ["tfc:entity/deer/hurt1"],
+        "subtitle": "subtitles.entity.tfc.bison.hurt"
+    },
+    "entity.bison.attack": {
+        "sounds": ["tfc:entity/deer/moose_charge_1"],
+        "subtitle": "subtitles.entity.tfc.bison.attack"
+    },
+    "entity.seal.attack": {
+        "sounds": [{
+            "name": "minecraft:entity.fox.bite",
+            "pitch": 0.5,
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.attack"
+    },
+    "entity.bison.ambient": {
+        "sounds": [
+            {
+                "name": "tfc:entity/deer/say1",
+                "weight": 10,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say2",
+                "weight": 10,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say3",
+                "weight": 10,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say5",
+                "weight": 4,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say6",
+                "weight": 10,
+                "pitch": 0.9
+            },
+            {
+                "name": "tfc:entity/deer/say7",
+                "weight": 10,
+                "pitch": 0.9
+            }
+        ],
+        "subtitle": "subtitles.entity.tfc.bison.ambient"
+    },
+    "entity.bison.death": {
+        "sounds": ["tfc:entity/deer/death1"],
+        "subtitle": "subtitles.entity.tfc.bison.death"
+    },
+    "entity.seal.hurt": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.hurt",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.hurt"
+    },
+    "entity.seal.step": {
+        "sounds": [{
+            "volume": 0.5,
+            "name": "minecraft:entity/fish/flop1",
+            "pitch": 0.7
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.footsteps"
+    },
+    "entity.seal.death": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.death",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.entity.tfc.seal.death"
+    },
+    "entity.bison.step": {
+        "sounds": [{
+            "name": "minecraft:entity.wolf.step",
+            "type": "event"
+        }],
+        "subtitle": "subtitles.block.generic.footsteps"
+    }
+}

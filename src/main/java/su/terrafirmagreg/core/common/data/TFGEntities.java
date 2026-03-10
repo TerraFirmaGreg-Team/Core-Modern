@@ -15,6 +15,12 @@ import net.wanmine.wab.entity.render.model.SurferModel;
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBison;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBisonModel;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBisonRenderer;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSeal;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSealModel;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSealRenderer;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowRenderer;
@@ -76,6 +82,22 @@ public class TFGEntities {
             .spawnPlacement(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, TFCSurfer::spawnRules)
             .register();
 
+    public static final EntityEntry<TFCLeopardSeal> LEOPARD_SEAL = TFGCore.REGISTRATE.entity("leopard_seal", TFCLeopardSeal::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(1.2F, 0.7F).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCLeopardSeal::createAttributes)
+            .renderer(() -> TFCLeopardSealRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCLeopardSeal::spawnRules)
+            .register();
+
+    public static final EntityEntry<TFCBison> BISON = TFGCore.REGISTRATE.entity("bison", TFCBison::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(1.5F, 2.0F).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCBison::createAttributes)
+            .renderer(() -> TFCBisonRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCBison::spawnRules)
+            .register();
+
     public static final EntityEntry<Rocket> TIER_1_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_1_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)
             .properties(p -> p.sized(1.1f, 4.6f).clientTrackingRange(10).fireImmune())
             .renderer(() -> RocketHelper::makeRocketRendererT1)
@@ -106,5 +128,7 @@ public class TFGEntities {
         //RocketHelper.register(event);
         event.registerLayerDefinition(TFCGlacianRamModel.LAYER_LOCATION, TFCGlacianRamModel::createBodyLayer);
         event.registerLayerDefinition(RNRPlowModel.LAYER_LOCATION, RNRPlowModel::createLayer);
+        event.registerLayerDefinition(TFCLeopardSealModel.LAYER_LOCATION, TFCLeopardSealModel::createBodyLayer);
+        event.registerLayerDefinition(TFCBisonModel.LAYER_LOCATION, TFCBisonModel::createBodyLayer);
     }
 }

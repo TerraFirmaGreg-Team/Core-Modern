@@ -44,9 +44,29 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
      */
     public ArtisanTableEmiRecipe(ArtisanRecipe recipe) {
         this.recipe = recipe;
-        tools = recipe.getTools().stream().map(EmiIngredient::of).toList();
-        assert recipe.getIngredient() != null;
-        items = Arrays.stream(recipe.getIngredient().getItems()).map(EmiStack::of).toList();
+
+        List<EmiIngredient> allTools = new ArrayList<>();
+
+        allTools.addAll(recipe.getTools().stream().map(EmiIngredient::of).toList());
+
+        if (recipe.getArtisanType() != null && recipe.getArtisanType().getToolRequirements() != null) {
+            for (ArtisanType.Ingredient toolRequirement : recipe.getArtisanType().getToolRequirements()) {
+                if (toolRequirement.isItemStack() && toolRequirement.getItemStack() != null) {
+                    allTools.add(EmiStack.of(toolRequirement.getItemStack()));
+                }
+            }
+        }
+
+        tools = allTools;
+
+        if (recipe.getIngredient() != null) {
+            items = Arrays.stream(recipe.getIngredient().getItems())
+                    .filter(stack -> !stack.isEmpty())
+                    .map(EmiStack::of)
+                    .toList();
+        } else {
+            items = List.of();
+        }
 
         type = recipe.getArtisanType();
         pattern = recipe.getPattern();
@@ -111,8 +131,14 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
         int yDiff = 21;
 
         ArrayList<EmiIngredient> stdInputs = new ArrayList<>(this.getInputs());
-        if (stdInputs.size() < 4)
-            stdInputs.add(1, EmiStack.EMPTY);
+
+        while (stdInputs.size() < 2) {
+            stdInputs.add(EmiStack.EMPTY);
+        }
+
+        if (stdInputs.size() > 4) {
+            stdInputs = new ArrayList<>(stdInputs.subList(0, 4));
+        }
 
         for (EmiIngredient input : stdInputs) {
             if (yPos == (10 + yDiff * 2)) {
@@ -123,29 +149,36 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
             holder.addSlot(input, xPos, yPos);
             yPos += yDiff;
         }
-        holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, yPos + 5).recipeContext(this);
+
+        if (!this.getOutputs().isEmpty()) {
+            holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, yPos + 5).recipeContext(this);
+        }
 
         displayPattern(holder);
 
         // Add border texture over all widgets, with translucency.
         ResourceLocation borderTexture = type.getBorderTexture();
-        if (borderTexture != null) {
+        if (isValidTexture(borderTexture)) {
             int borderX = 3;
             int borderY = 5;
             int borderW = 82;
             int borderH = 82;
-            TextureWidget borderWidget = new TextureWidget(borderTexture, borderX, borderY, borderW, borderH, 0, 0, borderW, borderH, borderW, borderH) {
-                @Override
-                public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-                    RenderSystem.enableBlend();
-                    RenderSystem.defaultBlendFunc();
-                    graphics.setColor(1.0F, 1.0F, 1.0F, 0.5F);
-                    super.render(graphics, mouseX, mouseY, delta);
-                    graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                    RenderSystem.disableBlend();
-                }
-            };
-            holder.add(borderWidget);
+            try {
+                TextureWidget borderWidget = new TextureWidget(borderTexture, borderX, borderY, borderW, borderH, 0, 0, borderW, borderH, borderW, borderH) {
+                    @Override
+                    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+                        RenderSystem.enableBlend();
+                        RenderSystem.defaultBlendFunc();
+                        graphics.setColor(1.0F, 1.0F, 1.0F, 0.5F);
+                        super.render(graphics, mouseX, mouseY, delta);
+                        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                        RenderSystem.disableBlend();
+                    }
+                };
+                holder.add(borderWidget);
+            } catch (Exception e) {
+                // Skip border texture if it fails to create
+            }
         }
     }
 
@@ -154,9 +187,17 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
      * @param holder The widget holder.
      */
     private void displayPattern(WidgetHolder holder) {
+        if (pattern == null || type == null) {
+            return;
+        }
+
         long patternData = pattern.getData();
         int patternWidth = pattern.getWidth();
         int patternHeight = pattern.getHeight();
+
+        if (patternWidth <= 0 || patternHeight <= 0 || patternWidth > 6 || patternHeight > 6) {
+            return;
+        }
 
         ResourceLocation activeTexture = type.getActiveTexture();
         ResourceLocation inactiveTexture = type.getInactiveTexture();
@@ -164,7 +205,15 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(patternData);
 
-        String patternString = buildPatternString(buffer, patternWidth, patternHeight);
+        String patternString;
+        try {
+            patternString = buildPatternString(buffer, patternWidth, patternHeight);
+            if (patternString.isEmpty()) {
+                return;
+            }
+        } catch (Exception e) {
+            return;
+        }
 
         int xPos = 8;
         int yPos = 10;
@@ -177,14 +226,52 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
             }
 
             switch (bit) {
-                case '1' ->
-                    holder.addTexture(activeTexture, xPos, yPos, imgSize, imgSize, 0, 0, imgSize, imgSize, imgSize, imgSize);
+                case '1' -> {
+                    if (isValidTexture(activeTexture)) {
+                        try {
+                            holder.addTexture(activeTexture, xPos, yPos, imgSize, imgSize, 0, 0, imgSize, imgSize, imgSize, imgSize);
+                        } catch (Exception e) {
+                            // Skip this texture if it fails to add
+                        }
+                    }
+                }
                 case '0' -> {
-                    if (inactiveTexture != null)
-                        holder.addTexture(inactiveTexture, xPos, yPos, imgSize, imgSize, 0, 0, imgSize, imgSize, imgSize, imgSize);
+                    if (isValidTexture(inactiveTexture)) {
+                        try {
+                            holder.addTexture(inactiveTexture, xPos, yPos, imgSize, imgSize, 0, 0, imgSize, imgSize, imgSize, imgSize);
+                        } catch (Exception e) {
+                            // Skip this texture if it fails to add
+                        }
+                    }
                 }
             }
             xPos += imgSize;
+        }
+    }
+
+    /**
+     * Validates that a ResourceLocation is not null and has valid path components.
+     * @param texture The ResourceLocation to validate.
+     * @return true if the texture is valid.
+     */
+    private boolean isValidTexture(@Nullable ResourceLocation texture) {
+        if (texture == null) {
+            return false;
+        }
+
+        try {
+            String namespace = texture.getNamespace();
+            String path = texture.getPath();
+
+            if (namespace.isEmpty() || path.isEmpty()) {
+                return false;
+            }
+
+            return !namespace.contains(" ") && !path.contains(" ") &&
+                    !namespace.equals("null") && !path.equals("null") &&
+                    !path.startsWith("/") && !path.endsWith("/");
+        } catch (Exception e) {
+            return false;
         }
     }
 

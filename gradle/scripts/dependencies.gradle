@@ -148,11 +148,14 @@ dependencies {
     modCompileOnly "curse.maven:water-flasks-354353:7056478"
 
     // Sacks and such
-    modImplementation "curse.maven:sacks-n-such-695822:6965231"
+    modImplementation "curse.maven:sacks-n-such-695822:7721827"
 
     // Domum Ornamentum
     modCompileOnly "curse.maven:domum-ornamentum-527361:7585567"
 
     // Framed Blocks
     modCompileOnly "curse.maven:framedblocks-441647:7386520"
+
+    // GT modern utils
+    modImplementation "curse.maven:gregtech-modern-utilities-1235020:7612516"
 }
