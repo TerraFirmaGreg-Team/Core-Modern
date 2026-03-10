@@ -34,6 +34,7 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -68,18 +69,24 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             String translationKey) {
     }
 
-    // Every Boosters available
+    // Every Boosters available - fluidAmountMb * 4 per second
     private static final List<BoosterFluid> BOOSTERS = List.of(
             new BoosterFluid(
                     () -> GTMaterials.Creosote.getFluid(1).getFluid(),
-                    10, 500,
+                    10, 200,
                     0, // Works for all the Boilers
                     "block.gtceu.creosote"),
             new BoosterFluid(
                     () -> GTMaterials.Lubricant.getFluid(1).getFluid(),
                     20, 1000,
                     1280, // Only works for Steel Boiler and +
-                    "material.gtceu.lubricant")
+                    "material.gtceu.lubricant"),
+            new BoosterFluid(
+                    () -> BuiltInRegistries.FLUID.get(
+                            ResourceLocation.fromNamespaceAndPath("tfg", "raw_aromatic_mix")),
+                    150, 1000,
+                    1280, // Only works for Steel Boiler and +
+                    "material.tfg.raw_aromatic_mix")
 
     /*
     // Example of a Booster that requires 1800 Temp (minBoilerTemperature = 1800) :
@@ -259,8 +266,12 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                     (ConfigHolder.INSTANCE.machines.largeBoilers.steamPerWater * 100.0);
 
             // Only for amount of water consummed
-            final int WATER_THRESHOLD = 800; // From that temperature water is getting more consumed
-            double tempFactor = currentTemperature <= WATER_THRESHOLD ? 1.0 : 1.0 + ((currentTemperature - WATER_THRESHOLD) / 100.0) * 0.10;
+            final int WATER_THRESHOLD = 480; // At the point the cost in water stats increasing
+            double tempFactor = 1.0;
+            if (currentTemperature > WATER_THRESHOLD) {
+                double t = (currentTemperature - WATER_THRESHOLD) / 100.0;
+                tempFactor = 1.0 + 0.035 * Math.pow(t, 1.5); // The formula to show how much it increases
+            }
 
             int maxDrain = (int) Math.round(baseDrainExact * tempFactor); // eau consommée augmentée
 
@@ -505,17 +516,16 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         public double getTemperatureMultiplier() {
             TFGLargeBoilerMachine boiler = (TFGLargeBoilerMachine) machine;
             int current = boiler.getCurrentTemperature();
-            final int THRESHOLD = 800; // After this Temperature the recipe starts to be faster
-            final double REDUCTION_PER_100_DEGREES = 0.05; // 5% every 100C over 800
+            final int THRESHOLD = 480;
+            final double MAX_REDUCTION = 0.5; // Cap à 2x au maximum (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
 
             if (current <= THRESHOLD)
                 return 1.0;
 
-            double degreesAboveThreshold = current - THRESHOLD;
-            double reduction = (degreesAboveThreshold / 100.0) * REDUCTION_PER_100_DEGREES;
-
-            // Minimum
-            return Math.max(0.1, 1.0 - reduction);
+            double t = (current - THRESHOLD) / 1000.0;
+            // logarithm : start fast then slow down until it reaches its cap
+            double reduction = MAX_REDUCTION * (1.0 - Math.exp(-1 * t)); // Math.exp(-x * t) with (x) 2 faster towards cap and 0.5 slower towards cap
+            return 1.0 - reduction;
         }
 
         @Override
