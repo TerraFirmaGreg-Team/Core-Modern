@@ -159,7 +159,6 @@
         "common.tfc.CrucibleBlockMixin",
         "common.tfc.EntityTooltipsMixin",
         "common.tfc.EnvironmentHelpersMixin",
-        "common.tfc.FastGateBehaviorMixin",
         "common.tfc.FluidHelpersMixin",
         "common.tfc.FoodDataMixin",
         "common.tfc.FoodHandlerDynamicMixin",
