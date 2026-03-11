@@ -1,0 +1,5 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfg:rotatable_water_plant",
+    "config": {"block": "tfg:plant/anemone_large_orange"}
+}

@@ -1,7 +1,7 @@
 {
     "values": [
         "tfc:plant/dry_phragmite",
-        "#tfc:feature/land_plants"
+        "#tfg:feature/land_plants"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

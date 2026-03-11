@@ -1,0 +1,22 @@
+{
+    "feature": "tfg:earth/plant/anemone_purple_patch",
+    "placement": [
+        {
+            "chance": 10,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "max_temperature": 16,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 0,
+            "min_temperature": -10
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

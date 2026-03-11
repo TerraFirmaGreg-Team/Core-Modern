@@ -1,6 +1,6 @@
 {
     "values": [
-        "#tfc:feature/ocean_plants",
+        "#tfg:feature/ocean_plants",
         "#tfc:feature/ocean_decorations"
     ],
     "replace": false,

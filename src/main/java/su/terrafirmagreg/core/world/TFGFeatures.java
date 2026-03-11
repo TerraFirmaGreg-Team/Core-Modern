@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
 
+import net.dries007.tfc.world.feature.plant.CreepingPlantConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -42,6 +43,10 @@ public class TFGFeatures {
 
     public static final RegistryObject<SeaStacksFeature> SEA_STACKS = register(
             "sea_stacks", SeaStacksFeature::new, NoneFeatureConfiguration.CODEC);
+    public static final RegistryObject<CreepingOceanPlantFeature> CREEPING_OCEAN_PLANT = register(
+            "creeping_ocean_plant", CreepingOceanPlantFeature::new, CreepingPlantConfig.CODEC);
+    public static final RegistryObject<RotatableWaterPlantFeature> ROTATABLE_WATER_PLANT = register(
+            "rotatable_water_plant", RotatableWaterPlantFeature::new, RotatableWaterPlantFeature.CODEC);
 
     private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
             Function<Codec<C>, F> factory, Codec<C> codec) {
