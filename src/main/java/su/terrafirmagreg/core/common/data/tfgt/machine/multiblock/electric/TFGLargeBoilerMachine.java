@@ -31,6 +31,8 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import net.dries007.tfc.common.fluids.SimpleFluid;
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
@@ -69,24 +71,58 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             String translationKey) {
     }
 
-    // Every Boosters available - fluidAmountMb * 4 per second
+    // Every Boosters available - fluidAmountMb * 4 per second in order of !temperatureBonus!
     private static final List<BoosterFluid> BOOSTERS = List.of(
             new BoosterFluid(
                     () -> GTMaterials.Creosote.getFluid(1).getFluid(),
-                    10, 200,
-                    0, // Works for all the Boilers
-                    "block.gtceu.creosote"),
+                    8, 200,
+                    0,
+                    "block.gtceu.creosote"), // Works for all the Boilers = 32 per second
             new BoosterFluid(
-                    () -> GTMaterials.Lubricant.getFluid(1).getFluid(),
-                    20, 1000,
-                    1280, // Only works for Steel Boiler and +
-                    "material.gtceu.lubricant"),
+                    () -> BuiltInRegistries.FLUID.get(
+                            ResourceLocation.fromNamespaceAndPath("tfg", "conifer_pitch")),
+                    5, 200,
+                    0,
+                    "fluid.tfg.conifer_pitch"), // Works for all the Boilers = 20 per second
+            new BoosterFluid(
+                    () -> BuiltInRegistries.FLUID.get(
+                            ResourceLocation.fromNamespaceAndPath("afc", "maple_sap")),
+                    5, 200,
+                    0,
+                    "fluid.afc.maple_sap"), // Only works for Steel Boiler and + = 20 per second
+            new BoosterFluid(
+                    () -> BuiltInRegistries.FLUID.get(
+                            ResourceLocation.fromNamespaceAndPath("afc", "birch_sap")),
+                    5, 200,
+                    0,
+                    "fluid.afc.birch_sap"), // Works for all the Boilers = 20 per second
+            new BoosterFluid(
+                    () -> GTMaterials.WoodGas.getFluid(1).getFluid(),
+                    13, 400,
+                    0,
+                    "material.gtceu.wood_gas"), // Works for all the Boilers = 52 second
+            new BoosterFluid(
+                    () -> TFCFluids.SIMPLE_FLUIDS.get(SimpleFluid.OLIVE_OIL).getSource(),
+                    2, 400,
+                    0,
+                    "fluid.tfc.olive_oil"), // Works for all the Boilers = 8 per second
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "raw_aromatic_mix")),
                     150, 1000,
-                    1280, // Only works for Steel Boiler and +
-                    "material.tfg.raw_aromatic_mix")
+                    1280,
+                    "material.tfg.raw_aromatic_mix"), // Only works for Steel Boiler and + = 600 per second
+            new BoosterFluid(
+                    () -> GTMaterials.RocketFuel.getFluid(1).getFluid(),
+                    25, 4000,
+                    1280,
+                    "material.gtceu.rocket_fuel"), // Only works for Steel Boiler and + = 100 per second
+            new BoosterFluid(
+                    () -> BuiltInRegistries.FLUID.get(
+                            ResourceLocation.fromNamespaceAndPath("tfg", "radioactive_effluent")),
+                    1, 8000,
+                    1280,
+                    "material.tfg.radioactive_effluent") // Only works for Steel Boiler and + = 4 per second
 
     /*
     // Example of a Booster that requires 1800 Temp (minBoilerTemperature = 1800) :
@@ -517,14 +553,14 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             TFGLargeBoilerMachine boiler = (TFGLargeBoilerMachine) machine;
             int current = boiler.getCurrentTemperature();
             final int THRESHOLD = 480;
-            final double MAX_REDUCTION = 0.5; // Cap à 2x au maximum (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
+            final double MAX_REDUCTION = 0.6; // Cap à 2x au maximum (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
 
             if (current <= THRESHOLD)
                 return 1.0;
 
             double t = (current - THRESHOLD) / 1000.0;
             // logarithm : start fast then slow down until it reaches its cap
-            double reduction = MAX_REDUCTION * (1.0 - Math.exp(-1 * t)); // Math.exp(-x * t) with (x) 2 faster towards cap and 0.5 slower towards cap
+            double reduction = MAX_REDUCTION * (1.0 - Math.exp(-0.8 * t)); // Math.exp(-x * t) with (x) 2 faster towards cap and 0.5 slower towards cap
             return 1.0 - reduction;
         }
 
