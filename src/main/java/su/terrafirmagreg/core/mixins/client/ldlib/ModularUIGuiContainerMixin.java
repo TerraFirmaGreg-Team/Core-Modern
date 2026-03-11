@@ -11,10 +11,10 @@ import com.lowdragmc.lowdraglib.gui.modular.ModularUIGuiContainer;
  * EMI's own Forge event hooks already handle this for any AbstractContainerScreen.
  * The redundant calls cause double rendering and leave stale depth buffer values that occlude items in EMI tooltips.
  */
-@Mixin(value = ModularUIGuiContainer.class, remap = false)
+@Mixin(value = ModularUIGuiContainer.class)
 public abstract class ModularUIGuiContainerMixin {
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lcom/lowdragmc/lowdraglib/LDLib;isEmiLoaded()Z"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lcom/lowdragmc/lowdraglib/LDLib;isEmiLoaded()Z", remap = false))
     private boolean tfg$disableRedundantEmiRendering() {
         // For this method only, pretend EMI isn't loaded at all
         return false;
