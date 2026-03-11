@@ -553,7 +553,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             TFGLargeBoilerMachine boiler = (TFGLargeBoilerMachine) machine;
             int current = boiler.getCurrentTemperature();
             final int THRESHOLD = 480;
-            final double MAX_REDUCTION = 0.6; // Cap à 2x au maximum (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
+            final double MAX_REDUCTION = 0.6; // x2.5 max (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
 
             if (current <= THRESHOLD)
                 return 1.0;
