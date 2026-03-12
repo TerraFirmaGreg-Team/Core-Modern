@@ -333,7 +333,7 @@ public class TFGItems {
 
     public static ItemEntry<ComponentItem> COVER_ROTTEN_VOIDING = TFGCore.REGISTRATE
             .item("rotten_voiding_cover", ComponentItem::create)
-            .onRegister(attach(new CoverPlaceBehavior(TFGTCovers.ITEM_VOIDING_ROTTEN)))
+            .onRegister(item -> item.attachComponents(new CoverPlaceBehavior(TFGTCovers.ITEM_VOIDING_ROTTEN)))
             .register();
 
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent components) {

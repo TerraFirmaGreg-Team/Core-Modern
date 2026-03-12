@@ -151,6 +151,7 @@
         "common.species.LimpetMixin",
         "common.species.SpringlingMixin",
         "common.species.TrooperMixin",
+        "common.tfc.BreedBehaviorMixin",
         "common.tfc.BlastFurnaceBlockEntityMixin",
         "common.tfc.BloomeryBlockEntityMixin",
         "common.tfc.CaveSpikesFeatureMixin",

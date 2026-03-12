@@ -151,7 +151,7 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
         }
 
         if (!this.getOutputs().isEmpty()) {
-            holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, yPos + 5).recipeContext(this);
+            holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, 10 + yDiff * 2 + 5).recipeContext(this);
         }
 
         displayPattern(holder);
