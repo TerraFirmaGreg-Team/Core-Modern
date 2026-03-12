@@ -1,8 +1,8 @@
 package su.terrafirmagreg.core.common;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -52,8 +52,8 @@ public final class ForgeCommonEventListener {
 
     @SubscribeEvent
     public static void onLevelUnload(LevelEvent.Unload event) {
-        if (!(event.getLevel() instanceof ServerLevel level))
-            return;
-        SupportCache.clearLevel(level.dimension());
+        if (event.getLevel() instanceof Level level) {
+            SupportCache.clearLevel(level);
+        }
     }
 }

@@ -12,10 +12,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -28,6 +31,7 @@ import su.terrafirmagreg.core.common.data.events.AdvancedOreProspectorEventHelpe
 import su.terrafirmagreg.core.common.data.events.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.data.events.OreProspectorEvent;
 import su.terrafirmagreg.core.common.data.events.WeakOreProspectorEventHelper;
+import su.terrafirmagreg.core.common.perf.SupportCache;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
@@ -41,6 +45,19 @@ public class ForgeClientEventListener {
     @SubscribeEvent
     public static void onClientLogin(ClientPlayerNetworkEvent.LoggingIn event) {
         ClientBookRegistry.INSTANCE.reload();
+    }
+
+    /**
+     * Evict client-side SupportCache chunk to prevent stale cache info.
+     * Clients don't get placement/removal updates for chunks that aren't in range, so we can't trust the cache
+     * for those chunks.
+     */
+    @SubscribeEvent
+    public static void onChunkUnload(ChunkEvent.Unload event) {
+        if (event.getLevel() instanceof Level level) {
+            ChunkPos pos = event.getChunk().getPos();
+            SupportCache.forLevel(level).evictChunk(pos.x, pos.z);
+        }
     }
 
     @SubscribeEvent
