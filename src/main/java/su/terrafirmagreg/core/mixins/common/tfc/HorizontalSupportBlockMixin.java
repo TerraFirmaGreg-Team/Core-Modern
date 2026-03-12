@@ -53,6 +53,11 @@ public abstract class HorizontalSupportBlockMixin extends VerticalSupportBlock {
         return result;
     }
 
+    /**
+     * Unfortunately this is only called ServerSide, so the clientside cache may contain stale supports.
+     * In practice this is no problem because we doublecheck all found supports and remove them if they're stale,
+     * so clientside the cache is just a little lazier about removal.
+     */
     @SuppressWarnings({ "NullableProblems", "deprecation" })
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
