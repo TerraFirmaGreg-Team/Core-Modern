@@ -75,9 +75,9 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     private static final List<BoosterFluid> BOOSTERS = List.of(
             new BoosterFluid(
                     () -> GTMaterials.Creosote.getFluid(1).getFluid(),
-                    8, 200,
+                    16, 200,
                     0,
-                    "block.gtceu.creosote"), // Works for all the Boilers = 32 per second
+                    "block.gtceu.creosote"), // Works for all the Boilers = 64 per second
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "conifer_pitch")),
