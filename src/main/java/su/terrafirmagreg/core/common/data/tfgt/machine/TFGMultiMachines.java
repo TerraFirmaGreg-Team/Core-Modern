@@ -1028,7 +1028,7 @@ public class TFGMultiMachines {
 
     public static final MultiblockMachineDefinition LARGE_BOILER_BRONZE = REGISTRATE
             .multiblock("large_bronze_boiler",
-                    holder -> new TFGLargeBoilerMachine(holder, 480, 2))
+                    holder -> new TFGLargeBoilerMachine(holder, 480, 1))
             .langValue("Large Bronze Boiler")
             .allowExtendedFacing(false)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -1068,7 +1068,7 @@ public class TFGMultiMachines {
                                     BoilerFireboxType.BRONZE_FIREBOX, GTBlocks.CASING_BRONZE_BRICKS))))
             .tooltips(
                     Component.translatable("gtceu.multiblock.large_boiler.max_temperature", 754, 480),
-                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 480 / 2 / 20),
+                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 480 / 1 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))
             .register();
