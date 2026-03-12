@@ -2,7 +2,7 @@
     "feature": "tfg:earth/plant/bird_nest_fern_patch",
     "placement": [
         {
-            "chance": 5,
+            "chance": 4,
             "type": "minecraft:rarity_filter"
         },
         {"type": "minecraft:in_square"},

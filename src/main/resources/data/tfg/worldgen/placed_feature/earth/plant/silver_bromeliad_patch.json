@@ -2,7 +2,7 @@
     "feature": "tfg:earth/plant/silver_bromeliad_patch",
     "placement": [
         {
-            "chance": 5,
+            "chance": 3,
             "type": "minecraft:rarity_filter"
         },
         {"type": "minecraft:in_square"},

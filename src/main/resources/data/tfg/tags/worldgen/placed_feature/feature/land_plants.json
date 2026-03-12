@@ -6,10 +6,6 @@
         "tfc:plant/saguaro_patch",
         "tfc:plant/jungle_vines",
         "tfc:plant/liana",
-        "tfc:plant/moss_cover",
-        "tfc:plant/reindeer_lichen_cover",
-        "tfc:plant/morning_glory_cover",
-        "tfc:plant/philodendron_cover",
         "tfc:plant/tree_fern",
         "tfc:plant/arundo",
         "#tfc:feature/crops",
@@ -58,7 +54,6 @@
         "tfc:plant/milfoil_patch",
         "tfc:plant/morning_glory_patch",
         "tfc:plant/philodendron_patch",
-        "tfc:plant/moss_patch",
         "tfc:plant/nasturtium_patch",
         "tfc:plant/ostrich_fern_patch",
         "tfc:plant/oxeye_daisy_patch",
@@ -122,7 +117,12 @@
         "tfg:earth/plant/silver_bromeliad_patch",
         "tfg:earth/plant/tank_bromeliad_patch",
         "#tfc:feature/berry_bushes",
-        "#tfc:feature/fruit_trees"
+        "#tfc:feature/fruit_trees",
+        "tfc:plant/moss_cover",
+        "tfc:plant/moss_patch",
+        "tfc:plant/reindeer_lichen_cover",
+        "tfc:plant/morning_glory_cover",
+        "tfc:plant/philodendron_cover"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"
