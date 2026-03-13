@@ -49,6 +49,7 @@ public final class TFGTagPrefix {
     public static final TagPrefix dustyRawOre;
 
     public static final TagPrefix repairKit;
+    public static final TagPrefix unfiredRepairKit;
 
     public static final TagPrefix anvil;
     public static final TagPrefix lamp;
@@ -327,6 +328,17 @@ public final class TFGTagPrefix {
                 .unformattedTagPath("repair_kit_materials")
                 //.materialAmount(GTValues.M * 1)
                 .materialIconType(TFGMaterialIconType.repairKit)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(hasIngotProperty.and(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_REPAIR_KIT)));
+
+        unfiredRepairKit = new TagPrefix("unfired_repair_kit", true)
+                .idPattern("unfired_repair_kit_%s")
+                .defaultTagPath("unfired_repair_kit_materials/%s")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
+                .unformattedTagPath("unfired_repair_kit_materials")
+                //.materialAmount(GTValues.M * 1)
+                .materialIconType(TFGMaterialIconType.unfiredRepairKit)
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(hasIngotProperty.and(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_REPAIR_KIT)));
