@@ -84,7 +84,7 @@ public class BlockInteractionRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return TFGCore.id(recipeID + "_block_interaction_emi");
+        return TFGCore.id("/" + recipeID + "_block_interaction_emi");
     }
 
     @Override
