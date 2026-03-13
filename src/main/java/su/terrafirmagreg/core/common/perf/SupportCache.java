@@ -1,21 +1,19 @@
 package su.terrafirmagreg.core.common.perf;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import net.dries007.tfc.util.Support;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.EmptyLevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 
@@ -24,22 +22,25 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 
 /**
  * Per-level cache of support block AABBs.
- * Replaces Support.isSupported()'s brute-force 14k block scan with a few AABB check.
+ * Replaces Support.isSupported()'s brute-force 14k block scan with a few AABB checks.
  */
 public class SupportCache {
 
-    private static final Map<ResourceKey<Level>, SupportCache> CACHES = new HashMap<>();
+    private static final Map<ResourceKey<Level>, SupportCache> SERVER_CACHES = new HashMap<>();
+    private static final Map<ResourceKey<Level>, SupportCache> CLIENT_CACHES = new HashMap<>();
 
-    public static SupportCache forLevel(ServerLevel level) {
-        return CACHES.computeIfAbsent(level.dimension(), k -> new SupportCache());
+    public static SupportCache forLevel(Level level) {
+        var caches = level.isClientSide() ? CLIENT_CACHES : SERVER_CACHES;
+        return caches.computeIfAbsent(level.dimension(), k -> new SupportCache());
     }
 
-    public static void clearLevel(ResourceKey<Level> dimension) {
-        CACHES.remove(dimension);
+    public static void clearLevel(Level level) {
+        var caches = level.isClientSide() ? CLIENT_CACHES : SERVER_CACHES;
+        caches.remove(level.dimension());
     }
 
-    // Maps chunk long pos -> list of (pos, aabb) entries for supports in that chunk
-    private final Map<Long, List<SupportEntry>> chunkSupports = new HashMap<>();
+    // Maps chunk long pos -> map of support block positions to their AABB entries
+    private final Map<Long, Map<BlockPos, SupportEntry>> chunkSupports = new HashMap<>();
     // Tracks which chunks have been scanned, even if they contained no supports
     private final Set<Long> scannedChunks = new HashSet<>();
 
@@ -49,7 +50,7 @@ public class SupportCache {
     /**
      * Check if a BlockPos is supported.
      */
-    public boolean isSupported(ServerLevel level, BlockPos pos) {
+    public boolean isSupported(Level level, BlockPos pos) {
         int horizontal = Support.getSupportCheckRange().horizontal();
 
         int minCX = (pos.getX() - horizontal) >> 4;
@@ -67,17 +68,19 @@ public class SupportCache {
                     scanChunk(level, cx, cz);
                 }
 
-                List<SupportEntry> entries = chunkSupports.get(key);
+                Map<BlockPos, SupportEntry> entries = chunkSupports.get(key);
                 if (entries == null)
                     continue;
 
-                var it = entries.iterator();
+                var it = entries.entrySet().iterator();
                 while (it.hasNext()) {
-                    SupportEntry entry = it.next();
-                    if (entry.contains(pos)) {
-                        // Sanity check
-                        if (Support.get(level.getBlockState(entry.pos())) == null) {
+                    var e = it.next();
+                    if (e.getValue().contains(pos)) {
+                        // Sanity check and clientside eviction
+                        if (Support.get(level.getBlockState(e.getKey())) == null) {
                             it.remove();
+                            if (entries.isEmpty())
+                                chunkSupports.remove(key);
                         } else {
                             return true;
                         }
@@ -92,15 +95,17 @@ public class SupportCache {
      * Find all support blocks in a chunk.
      * Does a very low-level scan of the raw PalettedContainer data to make things fast.
      */
-    private void scanChunk(ServerLevel level, int cx, int cz) {
+    private void scanChunk(Level level, int cx, int cz) {
         long key = ChunkPos.asLong(cx, cz);
-        scannedChunks.add(key);
 
         ChunkAccess chunk = level.getChunkSource().getChunk(cx, cz, ChunkStatus.FULL, true);
-        if (chunk == null)
+        if (chunk == null || chunk instanceof EmptyLevelChunk)
+            // Clientside returns EmptyLevelChunk for unloaded chunks, we don't want to scan those or mark them as scanned
             return;
 
-        List<SupportEntry> entries = new ArrayList<>();
+        scannedChunks.add(key);
+
+        Map<BlockPos, SupportEntry> entries = new HashMap<>();
         LevelChunkSection[] sections = chunk.getSections();
 
         for (int sectionIdx = 0; sectionIdx < sections.length; sectionIdx++) {
@@ -135,7 +140,7 @@ public class SupportCache {
                     BlockPos supportPos = new BlockPos((cx << 4) + x, baseY + y, (cz << 4) + z);
                     Support support = Support.get(palette.valueFor(paletteIdx));
                     assert support != null;
-                    entries.add(SupportEntry.of(supportPos, support));
+                    entries.put(supportPos, SupportEntry.of(supportPos, support));
                 }
                 slot[0]++;
             });
@@ -150,7 +155,7 @@ public class SupportCache {
      * Build a set of BlockPos between the given positions, then remove all BlockPos that are supported from this set.
      * @return a Set<BlockPos> of unsupported blocks.
      */
-    public Set<BlockPos> findUnsupportedPositions(ServerLevel level, BlockPos from, BlockPos to) {
+    public Set<BlockPos> findUnsupportedPositions(Level level, BlockPos from, BlockPos to) {
         int minX = Math.min(from.getX(), to.getX());
         int maxX = Math.max(from.getX(), to.getX());
         int minY = Math.min(from.getY(), to.getY());
@@ -175,17 +180,27 @@ public class SupportCache {
                 if (!scannedChunks.contains(key)) {
                     scanChunk(level, cx, cz);
                 }
-                List<SupportEntry> entries = chunkSupports.get(key);
+                Map<BlockPos, SupportEntry> entries = chunkSupports.get(key);
                 if (entries == null)
                     continue;
 
-                for (SupportEntry entry : entries) {
+                var it = entries.entrySet().iterator();
+                while (it.hasNext()) {
+                    var e = it.next();
+                    SupportEntry entry = e.getValue();
                     if (entry.maxX() < minX || entry.minX() > maxX)
                         continue;
                     if (entry.maxY() < minY || entry.minY() > maxY)
                         continue;
                     if (entry.maxZ() < minZ || entry.minZ() > maxZ)
                         continue;
+                    // Sanity check and clientside eviction
+                    if (Support.get(level.getBlockState(e.getKey())) == null) {
+                        it.remove();
+                        if (entries.isEmpty())
+                            chunkSupports.remove(key);
+                        continue;
+                    }
                     int ex1 = Math.max(entry.minX(), minX);
                     int ex2 = Math.min(entry.maxX(), maxX);
                     int ey1 = Math.max(entry.minY(), minY);
@@ -202,31 +217,36 @@ public class SupportCache {
         return unsupported;
     }
 
+    /**
+     * Used only ClientSide to prevent stale cache info. Serverside will always be in sync because server is the
+     * source of truth.
+     */
+    public void evictChunk(int cx, int cz) {
+        long key = ChunkPos.asLong(cx, cz);
+        scannedChunks.remove(key);
+        chunkSupports.remove(key);
+    }
+
     public void addSupport(BlockPos pos, Support support) {
         long key = ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4);
-        List<SupportEntry> entries = chunkSupports.computeIfAbsent(key, k -> new ArrayList<>());
-        for (SupportEntry e : entries) {
-            if (e.pos().equals(pos))
-                return;
-        }
-        entries.add(SupportEntry.of(pos, support));
+        chunkSupports.computeIfAbsent(key, k -> new HashMap<>())
+                .put(pos, SupportEntry.of(pos, support));
     }
 
     public void removeSupport(BlockPos pos) {
         long key = ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4);
-        List<SupportEntry> entries = chunkSupports.get(key);
+        Map<BlockPos, SupportEntry> entries = chunkSupports.get(key);
         if (entries != null) {
-            entries.removeIf(e -> e.pos().equals(pos));
+            entries.remove(pos);
             if (entries.isEmpty())
                 chunkSupports.remove(key);
         }
     }
 
-    public record SupportEntry(BlockPos pos, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+    public record SupportEntry(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
 
         public static SupportEntry of(BlockPos pos, Support support) {
             return new SupportEntry(
-                    pos,
                     pos.getX() - support.getSupportHorizontal(),
                     pos.getY() - support.getSupportDown(),
                     pos.getZ() - support.getSupportHorizontal(),

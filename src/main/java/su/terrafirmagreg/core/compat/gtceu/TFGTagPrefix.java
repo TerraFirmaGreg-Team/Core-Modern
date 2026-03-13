@@ -48,6 +48,8 @@ public final class TFGTagPrefix {
 
     public static final TagPrefix dustyRawOre;
 
+    public static final TagPrefix repairKit;
+
     public static final TagPrefix anvil;
     public static final TagPrefix lamp;
     public static final TagPrefix lampUnfinished;
@@ -317,6 +319,17 @@ public final class TFGTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(hasOreProperty.and(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_DUSTY_ORES)));
+
+        repairKit = new TagPrefix("repair_kit", true)
+                .idPattern("repair_kit_%s")
+                .defaultTagPath("repair_kit_materials/%s")
+                .itemTable(() -> GTMaterialItems.MATERIAL_ITEMS)
+                .unformattedTagPath("repair_kit_materials")
+                //.materialAmount(GTValues.M * 1)
+                .materialIconType(TFGMaterialIconType.repairKit)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(hasIngotProperty.and(mat -> mat.hasFlag(TFGMaterialFlags.GENERATE_REPAIR_KIT)));
 
         anvil = new TagPrefix("anvil")
                 .materialAmount(GTValues.M * 14)

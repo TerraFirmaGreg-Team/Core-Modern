@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.dries007.tfc.util.Support;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 import su.terrafirmagreg.core.common.perf.SupportCache;
 
@@ -19,12 +19,12 @@ import su.terrafirmagreg.core.common.perf.SupportCache;
 public class SupportMixin {
 
     /**
-     * Check our support cache to see if this position is supported by a HorizontalSupportBlock
+     * Check our support cache to see if this position is supported by a HorizontalSupportBlock.
      */
     @Inject(method = "isSupported", at = @At("HEAD"), cancellable = true)
     private static void tfg$useSupportCache(BlockGetter world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (world instanceof ServerLevel serverLevel) {
-            cir.setReturnValue(SupportCache.forLevel(serverLevel).isSupported(serverLevel, pos));
+        if (world instanceof Level level) {
+            cir.setReturnValue(SupportCache.forLevel(level).isSupported(level, pos));
         }
     }
 
@@ -34,10 +34,9 @@ public class SupportMixin {
      */
     @Overwrite
     public static Set<BlockPos> findUnsupportedPositions(BlockGetter world, BlockPos from, BlockPos to) {
-        if (world instanceof ServerLevel serverLevel) {
-            return SupportCache.forLevel(serverLevel).findUnsupportedPositions(serverLevel, from, to);
+        if (world instanceof Level level) {
+            return SupportCache.forLevel(level).findUnsupportedPositions(level, from, to);
         }
-        // Clientside: Return empty
         return Set.of();
     }
 }

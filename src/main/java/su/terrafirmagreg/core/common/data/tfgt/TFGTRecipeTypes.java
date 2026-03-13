@@ -269,4 +269,10 @@ public class TFGTRecipeTypes {
                 widgetGroup.addWidget(new SlotWidget(new CycleItemStackHandler(items), 0,
                         widgetGroup.getSize().width - 25, widgetGroup.getSize().height - 32, false, false));
             });
+
+    public static final GTRecipeType SUPER_BOILER = GTRecipeTypes
+            .register("super_boiler", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 1, 1)
+            .setSound(GTSoundEntries.FURNACE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_FUEL.get(true), FillDirection.DOWN_TO_UP);
 }

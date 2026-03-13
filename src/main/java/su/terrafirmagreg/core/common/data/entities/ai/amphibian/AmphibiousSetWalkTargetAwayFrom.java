@@ -60,8 +60,9 @@ public class AmphibiousSetWalkTargetAwayFrom {
                             boolean foundLand = false;
                             boolean foundWater = false;
                             for (int i = 0; i < 25; ++i) {
-                                Vec3 destination = AirAndWaterRandomPos.getPos(mob, 10, 7, 3, 0, 0, 1);
-                                if (destination != null && isTargetPosValidForEscape(currentPos, escapeFromPos, destination)) {
+                                Vec3 escapeDir = currentPos.subtract(escapeFromPos).normalize();
+                                Vec3 destination = AirAndWaterRandomPos.getPos(mob, 10, 7, 3, escapeDir.x, escapeDir.z, (float) Math.PI * 0.25f);
+                                if (destination != null) {
                                     final BlockPos pos = new BlockPos((int) destination.x, (int) destination.y, (int) destination.z);
                                     final BlockState state = level.getBlockState(pos);
                                     if (Helpers.isFluid(state.getFluidState(), FluidTags.WATER)) {

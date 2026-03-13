@@ -1,6 +1,6 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
-import static com.gregtechceu.gtceu.api.GTValues.IV;
+import static com.gregtechceu.gtceu.api.GTValues.EV;
 
 import java.util.List;
 
@@ -10,9 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
-import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
@@ -30,14 +27,12 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.world.level.Level;
 
 import lombok.Getter;
 
-public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachine
+public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
         implements ITieredMachine, ITurbineMachine {
 
     public static final int MIN_DURABILITY_TO_WARN = 10;
@@ -46,10 +41,10 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
     @Getter
     private final int tier;
 
-    public NuclearLargeTurbineMachine(IMachineBlockEntity holder, int tier) {
+    public LargeSteamTurbine(IMachineBlockEntity holder, int tier) {
         super(holder);
         this.tier = tier;
-        this.BASE_EU_OUTPUT = GTValues.V[IV];
+        this.BASE_EU_OUTPUT = GTValues.V[EV];
     }
 
     @Nullable
@@ -60,41 +55,41 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
         }
         return null;
     }
-
+    /*
     private boolean isIntakesObstructed() {
         BlockPos rotorPos = getRotorHolderPos();
         if (rotorPos == null)
             return false;
-
+    
         Level level = getLevel();
         Direction front = getFrontFacing();
         Direction right = front.getClockWise();
-
+    
         boolean obstructed = false;
-
+    
         // Vérifie les deux couches sous le rotor (-1 et -2)
         for (int yOffset = -1; yOffset >= -2; yOffset--) {
             BlockPos planeOrigin = rotorPos.offset(0, yOffset, 0);
-
+    
             for (int z = -2; z <= 2; z++) {
                 for (int x = -2; x <= 2; x++) {
-
+    
                     // Coins (X) ignorés
                     if (Math.abs(x) == 2 && Math.abs(z) == 2) {
                         continue;
                     }
-
+    
                     BlockPos pos = planeOrigin
                             .relative(right, x)
                             .relative(front, z);
-
+    
                     if (!level.getBlockState(pos).isAir()) {
                         obstructed = true;
                     }
                 }
             }
         }
-
+    
         // Vérifie les blocs uniques au-dessus du rotor (+5 à +8)
         for (int y = 5; y <= 8; y++) {
             BlockPos pos = rotorPos.above(y);
@@ -102,9 +97,11 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
                 return true;
             }
         }
-
+    
         return obstructed;
-    }
+    
+    
+    }*/
 
     @Nullable
     private IRotorHolderMachine getRotorHolder() {
@@ -202,12 +199,12 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
      * @return A {@link ModifierFunction} for the given Turbine Multiblock and recipe
      */
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (!(machine instanceof NuclearLargeTurbineMachine turbineMachine)) {
-            return RecipeModifier.nullWrongType(NuclearLargeTurbineMachine.class, machine);
+        if (!(machine instanceof LargeSteamTurbine turbineMachine)) {
+            return RecipeModifier.nullWrongType(LargeSteamTurbine.class, machine);
         }
-        if (turbineMachine.isIntakesObstructed()) {
-            return ModifierFunction.NULL;
-        }
+        //if (turbineMachine.isIntakesObstructed()) {
+        //    return ModifierFunction.NULL;
+        //}
         var rotorHolder = turbineMachine.getRotorHolder();
         if (rotorHolder == null)
             return ModifierFunction.NULL;
@@ -282,7 +279,7 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
             }
         }
     }
-
+    /*
     @Override
     public void attachTooltips(TooltipsPanel tooltipsPanel) {
         super.attachTooltips(tooltipsPanel);
@@ -293,4 +290,6 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
                 this::isIntakesObstructed,
                 () -> null));
     }
+    
+     */
 }
