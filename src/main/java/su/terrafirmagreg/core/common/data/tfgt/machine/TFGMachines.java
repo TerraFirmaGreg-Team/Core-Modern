@@ -299,7 +299,7 @@ public class TFGMachines {
             .register();
 
     public static final MachineDefinition HV_ENERGY_OUTPUT_HATCH_16A = GTRegistration.REGISTRATE.machine("hv_energy_output_hatch_16a",
-            (holder) -> new EnergyHatchPartMachine(holder, GTValues.HV, OUT, 4))
+            (holder) -> new EnergyHatchPartMachine(holder, GTValues.HV, OUT, 16))
             .langValue(GTValues.VNF[GTValues.HV] + " 16A Dynamo Hatch")
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.OUTPUT_ENERGY)
