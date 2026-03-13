@@ -306,7 +306,7 @@ public class TFGMachines {
             .modelProperty(IS_FORMED, false)
             .tooltips(Component.translatable("gtceu.universal.tooltip.voltage_out",
                     FormattingUtil.formatNumbers(GTValues.V[GTValues.HV]), GTValues.VNF[GTValues.HV]),
-                    Component.translatable("gtceu.universal.tooltip.amperage_out", 4),
+                    Component.translatable("gtceu.universal.tooltip.amperage_out", 16),
                     Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
                             FormattingUtil
                                     .formatNumbers(EnergyHatchPartMachine.getHatchEnergyCapacity(GTValues.HV, 16))),
