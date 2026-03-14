@@ -298,6 +298,23 @@ public class TFGMachines {
             .tier(GTValues.HV)
             .register();
 
+    public static final MachineDefinition HV_ENERGY_OUTPUT_HATCH_16A = GTRegistration.REGISTRATE.machine("hv_energy_output_hatch_16a",
+            (holder) -> new EnergyHatchPartMachine(holder, GTValues.HV, OUT, 16))
+            .langValue(GTValues.VNF[GTValues.HV] + " 16A Dynamo Hatch")
+            .rotationState(RotationState.ALL)
+            .abilities(PartAbility.OUTPUT_ENERGY)
+            .modelProperty(IS_FORMED, false)
+            .tooltips(Component.translatable("gtceu.universal.tooltip.voltage_out",
+                    FormattingUtil.formatNumbers(GTValues.V[GTValues.HV]), GTValues.VNF[GTValues.HV]),
+                    Component.translatable("gtceu.universal.tooltip.amperage_out", 16),
+                    Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
+                            FormattingUtil
+                                    .formatNumbers(EnergyHatchPartMachine.getHatchEnergyCapacity(GTValues.HV, 16))),
+                    Component.translatable("gtceu.machine.energy_hatch.output_hi_amp.tooltip"))
+            .overlayTieredHullModel("energy_output_hatch_16a")
+            .tier(GTValues.HV)
+            .register();
+
     public static MachineDefinition[] registerTieredMachines(GTRegistrate registrate, String name,
             BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
             BiFunction<Integer, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder,

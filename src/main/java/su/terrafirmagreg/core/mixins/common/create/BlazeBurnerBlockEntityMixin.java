@@ -16,24 +16,22 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Mixin to prevent fuel from being inserted in the Blaze Burner by hand or mechanical arm in airless dimensions.
- * Needs higher priority than CreateLiquidFuel's mixin to prevent liquid insertion with a bucket.
- * Automated liquid insertion with pipes etc still works, but won't burn.
- */
-@Mixin(value = BlazeBurnerBlockEntity.class, priority = 900, remap = false)
+@Mixin(value = BlazeBurnerBlockEntity.class, priority = 1500, remap = false)
 public abstract class BlazeBurnerBlockEntityMixin extends SmartBlockEntity {
 
     public BlazeBurnerBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    @Inject(method = "tryUpdateFuel", at = @At("HEAD"), cancellable = true)
-    public void tfg$tryUpdateFuel(ItemStack itemStack, boolean forceOverflow, boolean simulate, CallbackInfoReturnable<Boolean> cir) {
-        assert level != null;
-        if (level.dimension() != Level.OVERWORLD && level.dimension() != Level.NETHER) {
-            cir.setReturnValue(false);
-        }
+    /**
+     * Cancel CLF's tryUpdateFuel entirely. Fluid fuel insertion is now handled
+     * with proper Forge fluid API in {@link BlazeBurnerBlockMixin}.
+     */
+    @SuppressWarnings("CancellableInjectionUsage")
+    @TargetHandler(mixin = "com.forsteri.createliquidfuel.mixin.MixinBlazeBurnerTileEntity", name = "tryUpdateFuel")
+    @Inject(method = "@MixinSquared:Handler", at = @At("HEAD"), cancellable = true)
+    private void tfg$cancelLiquidFuelTryUpdateFuel(ItemStack itemStack, boolean forceOverflow, boolean simulate, CallbackInfoReturnable<Boolean> originalCir, CallbackInfo ci) {
+        ci.cancel();
     }
 
     /**
