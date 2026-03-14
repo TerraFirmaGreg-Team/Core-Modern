@@ -19,9 +19,9 @@ public abstract class ServerAdvancementManagerMixin {
 
     /**
      * Removes all advancements from loading, skipping JSON parsing entirely.
-     * Make sure to call ClientBookRegistry.INSTANCE.reload() manually,
-     * otherwise Patchouli's ClientAdvancements::onClientPacket gate prevents initial loading.
-     * @see su.terrafirmagreg.core.client.ForgeClientEventListener#onClientLogin
+     * Without advancements, Patchouli's ClientAdvancements::onClientPacket never fires,
+     * so {@link su.terrafirmagreg.core.mixins.client.patchouli.ClientBookRegistryMixin}
+     * ensures books are loaded on first open instead.
      */
     @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"), cancellable = true)
     private void tfg$removeAdvancements(Map<ResourceLocation, JsonElement> pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler, CallbackInfo ci) {

@@ -218,6 +218,7 @@
         "client.firmalife.FLBeehiveBlockMixin",
         "client.ftb.ClientTeamManagerImplMixin",
         "client.ftb.QuestScreenMixin",
+        "client.patchouli.ClientBookRegistryMixin",
         "client.gtceu.ISurfaceRockRendererAccessor",
         "client.ldlib.ModularUIGuiContainerMixin",
         "client.minecraft.CreateWorldScreenMixin",
