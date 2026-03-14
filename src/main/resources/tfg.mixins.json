@@ -81,6 +81,7 @@
         "common.gtceu.DimensionConditionMixin",
         "common.gtceu.EntityDamageUtilMixin",
         "common.gtceu.GregTechKubeJSPluginMixin",
+        "common.gtceu.GTEMIPluginMixin",
         "common.gtceu.GrowingPlantRenderMixin",
         "common.gtceu.GTCleanroomMixin",
         "common.gtceu.GTMachineUtilsMixin",
