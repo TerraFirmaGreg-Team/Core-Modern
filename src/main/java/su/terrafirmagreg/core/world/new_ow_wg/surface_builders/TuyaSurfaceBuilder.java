@@ -61,7 +61,8 @@ public class TuyaSurfaceBuilder implements SurfaceBuilder {
                 // Reached air, reset surface depth
                 surfaceDepth = -1;
             } else if (context.isDefaultBlock(stateAt)) {
-                IBiomeExtension be = (IBiomeExtension) context.biome();
+                ISurfaceBuilderContext ctx = (ISurfaceBuilderContext) context;
+                IBiomeExtension be = (IBiomeExtension) ctx.tfg$getTuyaBiome();
                 if (y > be.tfg$getCenteredFeatureRockHeight() + noise) {
                     if (surfaceDepth == -1) {
                         // Reached surface. Place top state and switch to subsurface layers

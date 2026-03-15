@@ -39,7 +39,7 @@ public enum TFGChooseRocks implements RegionTask {
     private int findClosestType(Region region, Region.Point center, int index) {
         int type = center.land() ? LAND : OCEAN, minDist = Integer.MAX_VALUE;
         for (int dx = -2; dx <= 2; dx++) {
-            for (int dz = 0; dz <= 2; dz++) {
+            for (int dz = -2; dz <= 2; dz++) {
                 final @Nullable Region.Point point = RegionHelpers.atOffset(region, index, dx, dz);
                 final IRegionPoint pt = (IRegionPoint) point;
                 final int dist = Math.abs(dx) + Math.abs(dz);

@@ -39,7 +39,7 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
                 for (int y = 0; y < height; y++) {
-                    if (x * x + z + z < radius * radius && context.random().nextFloat() < context.config().integrity()) {
+                    if (x * x + z * z < radius * radius && context.random().nextFloat() < context.config().integrity()) {
                         cursor.setWithOffset(pos, x, y, z);
                         int heightAboveTide = state.is(TFGTags.Blocks.IsAnemone) ? -1 : 2;
                         if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor) && cursor.getY() <= heightAboveTide + maxTideHeight.noise(cursor.getX(), cursor.getZ())) {
