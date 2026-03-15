@@ -124,7 +124,8 @@ public enum TFGChooseBiomesTask implements RegionTask {
             // Add hot spot biomes
             final byte age = pt.tfg$getHotSpotAge();
             if (age > 0) {
-                if (age == 4 && point.biome == OCEAN || point.biome == DEEP_OCEAN || point.biome == OCEAN_REEF || point.biome == DEEP_OCEAN_TRENCH) {
+                // TO CHECK: the biome parentheses are missing in 1.21 TFC
+                if (age == 4 && (point.biome == OCEAN || point.biome == DEEP_OCEAN || point.biome == OCEAN_REEF || point.biome == DEEP_OCEAN_TRENCH)) {
                     point.biome = SUNKEN_SHIELD_VOLCANO;
                 } else {
                     point.biome = getHotSpotBiome(pt.tfg$getHotSpotAge());

@@ -105,6 +105,7 @@ public final class TFGTags {
         public static final TagKey<Block> DryPlantPlantableOn = createBlockTag("dry_plant_plantable_on");
         public static final TagKey<Block> EpiphytePlantableOn = createBlockTag("epiphyte_plantable_on");
         public static final TagKey<Block> AnemonePlantableOn = createBlockTag("anemone_plantable_on");
+        public static final TagKey<Block> IsAnemone = createBlockTag("is_anemone");
 
         private static TagKey<Block> createBlockTag(String path) {
             return createBlockTag(TFGCore.id(path));

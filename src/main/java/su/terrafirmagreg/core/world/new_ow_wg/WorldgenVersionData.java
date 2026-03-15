@@ -24,7 +24,7 @@ public class WorldgenVersionData extends SavedData {
     public static final int OVERWORLD_TFC_1_21_BACKPORT = 1;
 
     /** Effective overworld worldgen version for the current server session. Set on server start. */
-    public static int OVERWORLD_VERSION = 0;
+    public static volatile int OVERWORLD_VERSION = 0;
 
     public static WorldgenVersionData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(

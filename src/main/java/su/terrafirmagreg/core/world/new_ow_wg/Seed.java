@@ -22,7 +22,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
  */
 public final class Seed {
     /** World seed for the current server session, set before RegionGenerator construction. */
-    public static long worldSeed;
+    public static volatile long worldSeed;
 
     /**
      * @return A new {@code Seed} that is capable of generating sequential {@code next()} values.

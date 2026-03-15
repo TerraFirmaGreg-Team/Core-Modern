@@ -326,7 +326,7 @@ public class TFGBiomeNoise {
      *     <li>{@code noiseC} is added on top to provide additional variance (in places where the piecewise function would otherwise flatten areas.</li>
      * </ul>
      */
-    public static Noise2D sharpHills(long seed, float minMeight, float maxHeight) {
+    public static Noise2D sharpHills(long seed, float minHeight, float maxHeight) {
         final Noise2D base = new OpenSimplex2D(seed)
                 .octaves(4)
                 .spread(0.08f);
@@ -348,7 +348,7 @@ public class TFGBiomeNoise {
 
         return lerpMapped
                 .add(variance)
-                .scaled(-0.75f, 0.7f, SEA_LEVEL_Y - minMeight, SEA_LEVEL_Y + maxHeight);
+                .scaled(-0.75f, 0.7f, SEA_LEVEL_Y - minHeight, SEA_LEVEL_Y + maxHeight);
     }
 
     /**

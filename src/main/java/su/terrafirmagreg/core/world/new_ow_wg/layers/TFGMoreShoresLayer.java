@@ -27,7 +27,7 @@ public enum TFGMoreShoresLayer implements AdjacentTransformLayer {
             if (matcher.test(layer -> layer == TFGLayers.SEA_STACKS)) {
                 return TFGLayers.SEA_STACKS;
             }
-            if (matcher.test(layer -> layer == TFGLayers.TIDAL_FLATS && layer == TFGLayers.SHORE)) {
+            if (matcher.test(layer -> layer == TFGLayers.TIDAL_FLATS || layer == TFGLayers.SHORE)) {
                 return TFGLayers.SHORE;
             }
             if (matcher.test(layer -> layer == TFGLayers.COASTAL_DUNES)) {

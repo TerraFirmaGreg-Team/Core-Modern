@@ -34,7 +34,7 @@ public class RotatableWaterPlantFeature extends Feature<BlockConfig<RotatableWat
         if (!EnvironmentHelpers.isWorldgenReplaceable(level, pos))
             return false;
         BlockState state = context.config().block().defaultBlockState();
-        for (Direction direction : Direction.allShuffled(RandomSource.create())) {
+        for (Direction direction : Direction.allShuffled(random)) {
             state = state.setValue(RotatableWaterPlantBlock.FACING, direction);
             if (state.canSurvive(level, pos)) {
                 final Fluid fluidAt = level.getFluidState(pos).getType();

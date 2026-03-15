@@ -21,7 +21,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.common.Tags;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -83,7 +82,6 @@ public class TFGBlocks_Earth {
                     .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                     .tag(TFCTags.Blocks.PLANTS, BlockTags.MINEABLE_WITH_HOE, TFCTags.Blocks.CAN_BE_ICE_PILED, TFCTags.Blocks.CAN_BE_SNOW_PILED, TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE,
                             BlockTags.REPLACEABLE)
-                    .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
                     .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
                     .register());
 

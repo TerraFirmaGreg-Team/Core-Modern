@@ -120,6 +120,7 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
         this.tfg$centeredFeatureRockHeight = SEA_LEVEL_Y + tuyaBasaltHeight;
         this.tfg$centeredFeatureBaseHeight = baseHeight;
         this.tfg$centeredFeatureScaleHeight = scaleHeight;
+        this.tfg$centeredFeatureIce = icy;
         return (BiomeBuilder) (Object) this;
     }
 

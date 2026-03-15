@@ -321,13 +321,13 @@ public class TFGBiomes {
 
     // Dry Biomes
     public static final BiomeExtension MUD_FLATS = register("mud_flats",
-            riverType(TFGRiverBlendType.WIDE,
+            riverType(TFGRiverBlendType.TALL_BANKED,
                     builder().heightmap(TFGBiomeNoise::flats)
                             .surface(seed -> new FlatsSurfaceBuilder(true))
                             .aquiferHeightOffset(-16)
                             .spawnable().noSandyRiverShores()));
     public static final BiomeExtension SALT_FLATS = register("salt_flats",
-            riverType(TFGRiverBlendType.WIDE,
+            riverType(TFGRiverBlendType.TALL_BANKED,
                     builder().heightmap(TFGBiomeNoise::saltFlats)
                             .surface(seed -> new FlatsSurfaceBuilder(false))
                             .aquiferHeightOffset(-16)

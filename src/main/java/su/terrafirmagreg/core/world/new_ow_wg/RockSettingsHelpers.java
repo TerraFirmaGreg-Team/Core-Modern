@@ -21,8 +21,8 @@ public final class RockSettingsHelpers {
         isKarstMap.put(presets.get(Helpers.identifier("chalk")), true);
         isKarstMap.put(presets.get(Helpers.identifier("marble")), true);
 
-        isMaficMap.put(presets.get(Helpers.identifier("gabbro")), false);
-        isMaficMap.put(presets.get(Helpers.identifier("basalt")), false);
+        isMaficMap.put(presets.get(Helpers.identifier("gabbro")), true);
+        isMaficMap.put(presets.get(Helpers.identifier("basalt")), true);
     }
 
     public static boolean isKarst(RockSettings rock) {

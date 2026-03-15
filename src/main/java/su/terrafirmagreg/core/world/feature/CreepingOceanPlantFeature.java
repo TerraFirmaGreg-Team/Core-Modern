@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.material.Fluid;
 
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.blocks.CreepingWaterPlantBlock;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
@@ -40,7 +41,7 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
                 for (int y = 0; y < height; y++) {
                     if (x * x + z + z < radius * radius && context.random().nextFloat() < context.config().integrity()) {
                         cursor.setWithOffset(pos, x, y, z);
-                        int heightAboveTide = context.config().block().toString().contains("anemone") ? -1 : 2;
+                        int heightAboveTide = state.is(TFGTags.Blocks.IsAnemone) ? -1 : 2;
                         if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor) && cursor.getY() <= heightAboveTide + maxTideHeight.noise(cursor.getX(), cursor.getZ())) {
                             final BlockState newState = CreepingWaterPlantBlock.updateStateFromSides(level, cursor, state);
                             if (!newState.isAir()) {
@@ -49,6 +50,7 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
                                 final BlockState waterloggedState = FluidHelpers.fillWithFluid(newState, fluidAt);
                                 if (waterloggedState != null) {
                                     setBlock(level, cursor, waterloggedState.setValue(TFGBlockProperties.OPEN, isOpen));
+                                    return true;
                                 }
                             }
                         }
