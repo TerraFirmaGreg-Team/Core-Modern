@@ -86,7 +86,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return TFGCore.id(ID + "_emi");
+        return TFGCore.id("/" + ID + "_emi");
     }
 
     @Override

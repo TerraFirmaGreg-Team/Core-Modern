@@ -82,7 +82,7 @@ public class BlockInteractionInfo {
             //brick -> smooth
             new BlockInteractionRecipe("normal_to_smooth_bricks", TFGTags.Items.INTERACTIONBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
             new BlockInteractionRecipe("mossy_to_smooth_bricks", TFGTags.Items.INTERACTIONMOSSYBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
-            new BlockInteractionRecipe("cracked_to_normal_bricks", TFGTags.Items.INTERACTIONCRACKEDBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
+            new BlockInteractionRecipe("cracked_to_smooth_bricks", TFGTags.Items.INTERACTIONCRACKEDBRICK, TFGTags.Items.INTERACTIONSMOOTHBRICK, AllTags.AllItemTags.SANDPAPER.tag),
             //cobble -> mossy
             new BlockInteractionRecipe("cobble_to_mossy", TFGTags.Items.INTERACTIONCOBBLE, TFGTags.Items.INTERACTIONMOSSYCOBBLE, TFCTags.Items.COMPOST_GREENS_LOW),
             new BlockInteractionRecipe("cobble_to_mossy_stairs", TFGTags.Items.INTERACTIONCOBBLESTAIR, TFGTags.Items.INTERACTIONMOSSYCOBBLESTAIR, TFCTags.Items.COMPOST_GREENS_LOW),

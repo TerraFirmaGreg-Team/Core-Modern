@@ -26,8 +26,6 @@ import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import vazkii.patchouli.client.book.ClientBookRegistry;
-
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.data.TFGPlant;
@@ -42,16 +40,6 @@ import su.terrafirmagreg.core.common.perf.SupportCache;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class ForgeClientEventListener {
-
-    /**
-     * Load Patchouli's book manually on player login.
-     * Workaround for Pachouli books not loading when no Advancements are registered on the server.
-     * With no advancements, ClientAdvancements::onClientPacket doesn't fire, which gates initial load.
-     */
-    @SubscribeEvent
-    public static void onClientLogin(ClientPlayerNetworkEvent.LoggingIn event) {
-        ClientBookRegistry.INSTANCE.reload();
-    }
 
     /**
      * Evict client-side SupportCache chunk to prevent stale cache info.
