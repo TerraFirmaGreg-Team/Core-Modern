@@ -7,7 +7,6 @@
 package su.terrafirmagreg.core.world.new_ow_wg.surface_states;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +24,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.world.new_ow_wg.DirtHelpers;
+import su.terrafirmagreg.core.world.new_ow_wg.TFGSoilVariant;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGNoiseHelpers;
 
 public class TFGSoilSurfaceState implements SurfaceState {
@@ -41,17 +42,12 @@ public class TFGSoilSurfaceState implements SurfaceState {
         };
     }
 
-    public static SurfaceState soil(SoilBlockType type, SoilBlockType.Variant variant) {
-        final Supplier<Block> block = TFCBlocks.SOIL.get(type).get(variant);
-        return context -> block.get().defaultBlockState();
+    public static SurfaceState soil(SoilBlockType type, TFGSoilVariant variant) {
+        final Block block = DirtHelpers.getBlock(type, variant);
+        return context -> block.defaultBlockState();
     }
 
-    public static SurfaceState transitioningSoil(SoilBlockType type) {
-        // second argument is normally Oxisol
-        return transitioningSoil(type, SoilBlockType.Variant.LOAM, SoilBlockType.Variant.SILTY_LOAM, 16f, 16.7f);
-    }
-
-    public static SurfaceState transitioningSoil(SoilBlockType blockType, SoilBlockType.Variant coldSoilType, SoilBlockType.Variant hotSoilType, float transitionStartTemp, float transitionEndTemp) {
+    public static SurfaceState transitioningSoil(SoilBlockType blockType, TFGSoilVariant coldSoilType, TFGSoilVariant hotSoilType, float transitionStartTemp, float transitionEndTemp) {
         return context -> {
             // First, check if near a "flooding" river, and place silt if so
             if (context.rainfall() > 200) {
@@ -59,11 +55,11 @@ public class TFGSoilSurfaceState implements SurfaceState {
             }
             // Then run through the temperature calculations
             final float temp = context.averageTemperature();
-            final BlockState coldBlock = TFCBlocks.SOIL.get(blockType).get(coldSoilType).get().defaultBlockState();
+            final BlockState coldBlock = DirtHelpers.getBlock(blockType, coldSoilType).defaultBlockState();
             if (temp < transitionStartTemp) {
                 return coldBlock;
             }
-            final BlockState hotBlock = TFCBlocks.SOIL.get(blockType).get(hotSoilType).get().defaultBlockState();
+            final BlockState hotBlock = DirtHelpers.getBlock(blockType, hotSoilType).defaultBlockState();
             if (temp > transitionEndTemp) {
                 return hotBlock;
             }
@@ -80,20 +76,20 @@ public class TFGSoilSurfaceState implements SurfaceState {
                 states.SNOW,
                 transition(states.SNOW, dry),
                 dry,
-                transition(dry, states.COARSE_SANDY_LOAM),
-                states.COARSE_SANDY_LOAM,
-                transition(states.COARSE_SANDY_LOAM, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
-                soil(type, SoilBlockType.Variant.SANDY_LOAM),
-                blobTransition(soil(type, SoilBlockType.Variant.SANDY_LOAM), transitioningSoil(type)),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type));
+                transition(dry, states.COARSE_ARIDISOL),
+                states.COARSE_ARIDISOL,
+                transition(states.COARSE_ARIDISOL, soil(type, TFGSoilVariant.ARIDISOL)),
+                soil(type, TFGSoilVariant.ARIDISOL),
+                blobTransition(soil(type, TFGSoilVariant.ARIDISOL), transitioningSoil(type, TFGSoilVariant.PODZOL, TFGSoilVariant.ARIDISOL, 0f, 2f)),
+                transitioningSoil(type, TFGSoilVariant.PODZOL, TFGSoilVariant.ALFISOL, 4f, 6f),
+                transitioningSoil(type, TFGSoilVariant.PODZOL, TFGSoilVariant.ALFISOL, 8f, 10f),
+                blobTransition(transitioningSoil(type, TFGSoilVariant.PODZOL, TFGSoilVariant.ALFISOL, 12f, 14f), transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ALFISOL, 0f, 2f)),
+                transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ENTISOL, 4f, 6f),
+                transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ENTISOL, 8f, 10f),
+                transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ENTISOL, 10f, 12f),
+                blobTransition(transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ENTISOL, 13f, 15f), transitioningSoil(type, TFGSoilVariant.FLUVISOL, TFGSoilVariant.ENTISOL, 0f, 2f)),
+                transitioningSoil(type, TFGSoilVariant.FLUVISOL, TFGSoilVariant.OXISOL, 7f, 9f),
+                transitioningSoil(type, TFGSoilVariant.FLUVISOL, TFGSoilVariant.OXISOL, 14f, 16f));
         return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : new TFGSoilSurfaceState(regions);
     }
 
@@ -104,20 +100,20 @@ public class TFGSoilSurfaceState implements SurfaceState {
                 states.SNOW,
                 transition(states.SNOW, dry),
                 dry,
-                transition(dry, states.COARSE_SILTY_LOAM),
-                states.COARSE_SILTY_LOAM,
-                transition(states.COARSE_SILTY_LOAM, soil(type, SoilBlockType.Variant.SILTY_LOAM)),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM));
+                transition(dry, states.COARSE_MOLLISOL),
+                states.COARSE_MOLLISOL,
+                transition(states.COARSE_MOLLISOL, soil(type, TFGSoilVariant.MOLLISOL)),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL));
         return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : new TFGSoilSurfaceState(regions);
     }
 
@@ -128,20 +124,20 @@ public class TFGSoilSurfaceState implements SurfaceState {
                 blobTransition(states.PACKED_ICE, dry),
                 dry,
                 dry,
-                transition(dry, states.COARSE_SANDY_LOAM),
-                states.COARSE_SANDY_LOAM,
-                transition(states.COARSE_SANDY_LOAM, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
-                soil(type, SoilBlockType.Variant.SANDY_LOAM),
-                blobTransition(soil(type, SoilBlockType.Variant.SANDY_LOAM), transitioningSoil(type)),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type),
-                transitioningSoil(type));
+                transition(dry, states.COARSE_ARIDISOL),
+                states.COARSE_ARIDISOL,
+                transition(states.COARSE_ARIDISOL, soil(type, TFGSoilVariant.ARIDISOL)),
+                soil(type, TFGSoilVariant.ARIDISOL),
+                blobTransition(soil(type, TFGSoilVariant.ARIDISOL), transitioningSoil(type, TFGSoilVariant.PODZOL, TFGSoilVariant.ARIDISOL, 0f, 2f)),
+                transitioningSoil(type, TFGSoilVariant.PODZOL, TFGSoilVariant.ALFISOL, 4f, 6f),
+                transitioningSoil(type, TFGSoilVariant.PODZOL, TFGSoilVariant.ALFISOL, 8f, 10f),
+                blobTransition(transitioningSoil(type, TFGSoilVariant.PODZOL, TFGSoilVariant.ALFISOL, 12f, 14f), transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ALFISOL, 0f, 2f)),
+                transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ENTISOL, 4f, 6f),
+                transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ENTISOL, 8f, 10f),
+                transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ENTISOL, 10f, 12f),
+                blobTransition(transitioningSoil(type, TFGSoilVariant.ANDISOL, TFGSoilVariant.ENTISOL, 13f, 15f), transitioningSoil(type, TFGSoilVariant.FLUVISOL, TFGSoilVariant.ENTISOL, 0f, 2f)),
+                transitioningSoil(type, TFGSoilVariant.FLUVISOL, TFGSoilVariant.OXISOL, 7f, 9f),
+                transitioningSoil(type, TFGSoilVariant.FLUVISOL, TFGSoilVariant.OXISOL, 14f, 16f));
         return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : new TFGSoilSurfaceState(regions);
     }
 
@@ -152,20 +148,20 @@ public class TFGSoilSurfaceState implements SurfaceState {
                 blobTransition(states.PACKED_ICE, dry),
                 dry,
                 dry,
-                transition(dry, states.COARSE_SILTY_LOAM),
-                states.COARSE_SILTY_LOAM,
-                transition(states.COARSE_SILTY_LOAM, soil(type, SoilBlockType.Variant.SILTY_LOAM)),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM),
-                soil(type, SoilBlockType.Variant.SILTY_LOAM));
+                transition(dry, states.COARSE_MOLLISOL),
+                states.COARSE_MOLLISOL,
+                transition(states.COARSE_MOLLISOL, soil(type, TFGSoilVariant.MOLLISOL)),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL),
+                soil(type, TFGSoilVariant.MOLLISOL));
         return type == SoilBlockType.GRASS ? new NeedsPostProcessingSoilSurfaceState(regions) : new TFGSoilSurfaceState(regions);
     }
 
