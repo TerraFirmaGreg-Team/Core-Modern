@@ -18,9 +18,18 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBison;
 import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBisonModel;
 import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBisonRenderer;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcjerboa.TFCJerboa;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcjerboa.TFCJerboaModel;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcjerboa.TFCJerboaRenderer;
+import su.terrafirmagreg.core.common.data.entities.animals.tfclemming.TFCLemming;
+import su.terrafirmagreg.core.common.data.entities.animals.tfclemming.TFCLemmingModel;
+import su.terrafirmagreg.core.common.data.entities.animals.tfclemming.TFCLemmingRenderer;
 import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSeal;
 import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSealModel;
 import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSealRenderer;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcmongoose.TFCMongoose;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcmongoose.TFCMongooseModel;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcmongoose.TFCMongooseRenderer;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowRenderer;
@@ -98,6 +107,30 @@ public class TFGEntities {
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCBison::spawnRules)
             .register();
 
+    public static final EntityEntry<TFCJerboa> JERBOA = TFGCore.REGISTRATE.entity("jerboa", TFCJerboa::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.4F, 0.23F).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCJerboa::createAttributes)
+            .renderer(() -> TFCJerboaRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCJerboa::spawnRules)
+            .register();
+
+    public static final EntityEntry<TFCLemming> LEMMING = TFGCore.REGISTRATE.entity("lemming", TFCLemming::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.3F, 0.23F).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCLemming::createAttributes)
+            .renderer(() -> TFCLemmingRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCLemming::spawnRules)
+            .register();
+
+    public static final EntityEntry<TFCMongoose> MONGOOSE = TFGCore.REGISTRATE.entity("mongoose", TFCMongoose::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.6F, 0.4F).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCMongoose::createAttributes)
+            .renderer(() -> TFCMongooseRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCMongoose::spawnRules)
+            .register();
+
     public static final EntityEntry<Rocket> TIER_1_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_1_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)
             .properties(p -> p.sized(1.1f, 4.6f).clientTrackingRange(10).fireImmune())
             .renderer(() -> RocketHelper::makeRocketRendererT1)
@@ -130,5 +163,8 @@ public class TFGEntities {
         event.registerLayerDefinition(RNRPlowModel.LAYER_LOCATION, RNRPlowModel::createLayer);
         event.registerLayerDefinition(TFCLeopardSealModel.LAYER_LOCATION, TFCLeopardSealModel::createBodyLayer);
         event.registerLayerDefinition(TFCBisonModel.LAYER_LOCATION, TFCBisonModel::createBodyLayer);
+        event.registerLayerDefinition(TFCJerboaModel.LAYER_LOCATION, TFCJerboaModel::createBodyLayer);
+        event.registerLayerDefinition(TFCLemmingModel.LAYER_LOCATION, TFCLemmingModel::createBodyLayer);
+        event.registerLayerDefinition(TFCMongooseModel.LAYER_LOCATION, TFCMongooseModel::createBodyLayer);
     }
 }

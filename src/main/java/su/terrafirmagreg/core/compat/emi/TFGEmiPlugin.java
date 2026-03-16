@@ -43,7 +43,9 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(ORE_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LV));
         emiRegistry.addWorkstation(ORE_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_HV));
         emiRegistry.addWorkstation(ORE_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
-        Arrays.stream(ExportedOreVeinInfo.RECIPES).forEach(emiRegistry::addRecipe);
+        Arrays.stream(ExportedOreVeinInfo.RECIPES)
+                .filter(r -> !r.getId().getPath().equals("/nether_anthracite_emi"))
+                .forEach(emiRegistry::addRecipe);
 
         // These two aren't normal ores so add them separately
         emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_anthracite", "minecraft:the_nether",
