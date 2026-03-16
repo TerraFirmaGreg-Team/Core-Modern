@@ -1,0 +1,15 @@
+{"variants": {"": [
+    {"model": "tfg:block/grass_path/oxisol"},
+    {
+        "y": 90,
+        "model": "tfg:block/grass_path/oxisol"
+    },
+    {
+        "y": 180,
+        "model": "tfg:block/grass_path/oxisol"
+    },
+    {
+        "y": 270,
+        "model": "tfg:block/grass_path/oxisol"
+    }
+]}}

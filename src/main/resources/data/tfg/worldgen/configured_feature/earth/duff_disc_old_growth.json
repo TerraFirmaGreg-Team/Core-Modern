@@ -7,19 +7,19 @@
         "height": 7,
         "states": [
             {
-                "with": "tfg:sandy_loam_duff",
+                "with": "tfg:duff/sandy_loam",
                 "replace": "tfc:grass/sandy_loam"
             },
             {
-                "with": "tfg:silty_loam_duff",
+                "with": "tfg:duff/silty_loam",
                 "replace": "tfc:grass/silty_loam"
             },
             {
-                "with": "tfg:silt_duff",
+                "with": "tfg:duff/silt",
                 "replace": "tfc:grass/silt"
             },
             {
-                "with": "tfg:loam_duff",
+                "with": "tfg:duff/loam",
                 "replace": "tfc:grass/loam"
             }
         ]

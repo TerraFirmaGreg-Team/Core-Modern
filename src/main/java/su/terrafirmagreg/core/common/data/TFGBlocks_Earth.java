@@ -1,22 +1,29 @@
 package su.terrafirmagreg.core.common.data;
 
 import static su.terrafirmagreg.core.common.data.TFGBlocks.dropBetween;
+import static su.terrafirmagreg.core.common.data.TFGItems.*;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.devices.DryingBricksBlock;
 import net.dries007.tfc.common.blocks.soil.*;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -30,17 +37,6 @@ import su.terrafirmagreg.core.common.data.blocks.ConnectedDuffBlock;
 public class TFGBlocks_Earth {
     public static void init() {
     }
-
-    ////// Connected texture grass blocks + dirt
-
-    public static BlockEntry<CoarseDirtBlock> COARSE_SILTY_LOAM_DIRT;
-    public static BlockEntry<CoarseDirtBlock> COARSE_SANDY_LOAM_DIRT;
-    public static BlockEntry<CoarseDirtBlock> COARSE_SILT_DIRT;
-    public static BlockEntry<CoarseDirtBlock> COARSE_LOAM_DIRT;
-    public static BlockEntry<ConnectedDuffBlock> SILTY_LOAM_DUFF;
-    public static BlockEntry<ConnectedDuffBlock> SANDY_LOAM_DUFF;
-    public static BlockEntry<ConnectedDuffBlock> SILT_DUFF;
-    public static BlockEntry<ConnectedDuffBlock> LOAM_DUFF;
 
     // New TFC Worldgen
     public static final BlockEntry<Block> TUFF_GRAVEL = TFGCore.REGISTRATE.block("tuff_gravel", Block::new)
@@ -85,27 +81,154 @@ public class TFGBlocks_Earth {
                     .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
                     .register());
 
+    // Coarse dirt for old soil types
+    public static BlockEntry<CoarseDirtBlock> COARSE_SILTY_LOAM_DIRT;
+    public static BlockEntry<CoarseDirtBlock> COARSE_SANDY_LOAM_DIRT;
+    public static BlockEntry<CoarseDirtBlock> COARSE_SILT_DIRT;
+    public static BlockEntry<CoarseDirtBlock> COARSE_LOAM_DIRT;
+    // Duff for old soil types
+    public static BlockEntry<ConnectedDuffBlock> SILTY_LOAM_DUFF;
+    public static BlockEntry<ConnectedDuffBlock> SANDY_LOAM_DUFF;
+    public static BlockEntry<ConnectedDuffBlock> SILT_DUFF;
+    public static BlockEntry<ConnectedDuffBlock> LOAM_DUFF;
+    // Alfisol
+    public static final BlockEntry<MudBlock> ALFISOL_MUD = createMud("mud/alfisol");
+    public static final BlockEntry<RotatedPillarBlock> ALFISOL_MUDDY_ROOTS = createMuddyRoots("muddy_roots/alfisol");
+    public static BlockEntry<DirtBlock> ALFISOL_DIRT;
+    public static BlockEntry<PathBlock> ALFISOL_PATH;
+    public static BlockEntry<FarmlandBlock> ALFISOL_FARMLAND;
+    public static BlockEntry<ConnectedGrassBlock> ALFISOL_GRASS;
+    public static BlockEntry<TFCRootedDirtBlock> ALFISOL_ROOTED;
+    public static BlockEntry<DirtBlock> ALFISOL_CLAY;
+    public static BlockEntry<ConnectedGrassBlock> ALFISOL_CLAY_GRASS;
+    public static BlockEntry<DryingBricksBlock> ALFISOL_DRYING_BRICKS;
+    public static BlockEntry<CoarseDirtBlock> ALFISOL_COARSE;
+    public static BlockEntry<ConnectedDuffBlock> ALFISOL_DUFF;
+    // Mollisol (normally Andisol is the volcanic one, but we're already using that texture for Silty Loam)
+    public static final BlockEntry<MudBlock> MOLLISOL_MUD = createMud("mud/mollisol");
+    public static final BlockEntry<RotatedPillarBlock> MOLLISOL_MUDDY_ROOTS = createMuddyRoots("muddy_roots/mollisol");
+    public static BlockEntry<DirtBlock> MOLLISOL_DIRT;
+    public static BlockEntry<PathBlock> MOLLISOL_PATH;
+    public static BlockEntry<FarmlandBlock> MOLLISOL_FARMLAND;
+    public static BlockEntry<ConnectedGrassBlock> MOLLISOL_GRASS;
+    public static BlockEntry<TFCRootedDirtBlock> MOLLISOL_ROOTED;
+    public static BlockEntry<DirtBlock> MOLLISOL_CLAY;
+    public static BlockEntry<ConnectedGrassBlock> MOLLISOL_CLAY_GRASS;
+    public static BlockEntry<DryingBricksBlock> MOLLISOL_DRYING_BRICKS;
+    public static BlockEntry<CoarseDirtBlock> MOLLISOL_COARSE;
+    public static BlockEntry<ConnectedDuffBlock> MOLLISOL_DUFF;
+    // Oxisol
+    public static final BlockEntry<MudBlock> OXISOL_MUD = createMud("mud/oxisol");
+    public static final BlockEntry<RotatedPillarBlock> OXISOL_MUDDY_ROOTS = createMuddyRoots("muddy_roots/oxisol");
+    public static BlockEntry<DirtBlock> OXISOL_DIRT;
+    public static BlockEntry<PathBlock> OXISOL_PATH;
+    public static BlockEntry<FarmlandBlock> OXISOL_FARMLAND;
+    public static BlockEntry<ConnectedGrassBlock> OXISOL_GRASS;
+    public static BlockEntry<TFCRootedDirtBlock> OXISOL_ROOTED;
+    public static BlockEntry<DirtBlock> OXISOL_CLAY;
+    public static BlockEntry<ConnectedGrassBlock> OXISOL_CLAY_GRASS;
+    public static BlockEntry<DryingBricksBlock> OXISOL_DRYING_BRICKS;
+    public static BlockEntry<CoarseDirtBlock> OXISOL_COARSE;
+    public static BlockEntry<ConnectedDuffBlock> OXISOL_DUFF;
+    // Podzol
+    public static final BlockEntry<MudBlock> PODZOL_MUD = createMud("mud/podzol");
+    public static final BlockEntry<RotatedPillarBlock> PODZOL_MUDDY_ROOTS = createMuddyRoots("muddy_roots/podzol");
+    public static BlockEntry<DirtBlock> PODZOL_DIRT;
+    public static BlockEntry<PathBlock> PODZOL_PATH;
+    public static BlockEntry<FarmlandBlock> PODZOL_FARMLAND;
+    public static BlockEntry<ConnectedGrassBlock> PODZOL_GRASS;
+    public static BlockEntry<TFCRootedDirtBlock> PODZOL_ROOTED;
+    public static BlockEntry<DirtBlock> PODZOL_CLAY;
+    public static BlockEntry<ConnectedGrassBlock> PODZOL_CLAY_GRASS;
+    public static BlockEntry<DryingBricksBlock> PODZOL_DRYING_BRICKS;
+    public static BlockEntry<CoarseDirtBlock> PODZOL_COARSE;
+    public static BlockEntry<ConnectedDuffBlock> PODZOL_DUFF;
+
     // These are done separately to avoid cyclic references
-
     static {
-        COARSE_SILTY_LOAM_DIRT = createCoarse("coarse_silty_loam_dirt", SoilBlockType.Variant.SILTY_LOAM);
-        COARSE_SANDY_LOAM_DIRT = createCoarse("coarse_sandy_loam_dirt", SoilBlockType.Variant.SANDY_LOAM);
-        COARSE_SILT_DIRT = createCoarse("coarse_silt_dirt", SoilBlockType.Variant.SILT);
-        COARSE_LOAM_DIRT = createCoarse("coarse_loam_dirt", SoilBlockType.Variant.LOAM);
+        COARSE_SILTY_LOAM_DIRT = createCoarseTFC("coarse_dirt/silty_loam",
+                TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILTY_LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILTY_LOAM));
+        COARSE_SANDY_LOAM_DIRT = createCoarseTFC("coarse_dirt/sandy_loam",
+                TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SANDY_LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SANDY_LOAM));
+        COARSE_SILT_DIRT = createCoarseTFC("coarse_dirt/silt",
+                TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT),
+                TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILT),
+                TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILT));
+        COARSE_LOAM_DIRT = createCoarseTFC("coarse_dirt/loam",
+                TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.LOAM));
 
-        SILTY_LOAM_DUFF = createDuff("silty_loam_duff", SoilBlockType.Variant.SILTY_LOAM);
-        SANDY_LOAM_DUFF = createDuff("sandy_loam_duff", SoilBlockType.Variant.SANDY_LOAM);
-        SILT_DUFF = createDuff("silt_duff", SoilBlockType.Variant.SILT);
-        LOAM_DUFF = createDuff("loam_duff", SoilBlockType.Variant.LOAM);
+        SILTY_LOAM_DUFF = createDuffTFC("duff/silty_loam",
+                TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILTY_LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILTY_LOAM));
+        SANDY_LOAM_DUFF = createDuffTFC("duff/sandy_loam",
+                TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SANDY_LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SANDY_LOAM));
+        SILT_DUFF = createDuffTFC("duff/silt",
+                TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT),
+                TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILT),
+                TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILT));
+        LOAM_DUFF = createDuffTFC("duff/loam",
+                TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.LOAM),
+                TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.LOAM));
+
+        ALFISOL_DIRT = createDirt("dirt/alfisol", () -> ALFISOL_GRASS.get(), () -> ALFISOL_PATH.get(), () -> ALFISOL_FARMLAND.get(), () -> ALFISOL_ROOTED.get(), ALFISOL_MUD);
+        ALFISOL_PATH = createPath("grass_path/alfisol", ALFISOL_DIRT);
+        ALFISOL_FARMLAND = createFarmland("farmland/alfisol", ALFISOL_DIRT);
+        ALFISOL_GRASS = createGrass("grass/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
+        ALFISOL_ROOTED = createRooted("rooted_dirt/alfisol", ALFISOL_DIRT, ALFISOL_MUD);
+        ALFISOL_CLAY = createClay("clay/alfisol", ALFISOL_GRASS, ALFISOL_PATH, ALFISOL_FARMLAND, ALFISOL_ROOTED, ALFISOL_MUD);
+        ALFISOL_CLAY_GRASS = createClayGrass("clay_grass/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
+        ALFISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/alfisol", ALFISOL_MUD_BRICK);
+        ALFISOL_COARSE = createCoarse("coarse_dirt/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
+        ALFISOL_DUFF = createDuff("duff/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
+
+        MOLLISOL_DIRT = createDirt("dirt/mollisol", () -> MOLLISOL_GRASS.get(), () -> MOLLISOL_PATH.get(), () -> MOLLISOL_FARMLAND.get(), () -> MOLLISOL_ROOTED.get(), MOLLISOL_MUD);
+        MOLLISOL_PATH = createPath("grass_path/mollisol", MOLLISOL_DIRT);
+        MOLLISOL_FARMLAND = createFarmland("farmland/mollisol", MOLLISOL_DIRT);
+        MOLLISOL_GRASS = createGrass("grass/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
+        MOLLISOL_ROOTED = createRooted("rooted_dirt/mollisol", MOLLISOL_DIRT, MOLLISOL_MUD);
+        MOLLISOL_CLAY = createClay("clay/mollisol", MOLLISOL_GRASS, MOLLISOL_PATH, MOLLISOL_FARMLAND, MOLLISOL_ROOTED, MOLLISOL_MUD);
+        MOLLISOL_CLAY_GRASS = createClayGrass("clay_grass/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
+        MOLLISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/mollisol", MOLLISOL_MUD_BRICK);
+        MOLLISOL_COARSE = createCoarse("coarse_dirt/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
+        MOLLISOL_DUFF = createDuff("duff/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
+
+        OXISOL_DIRT = createDirt("dirt/oxisol", () -> OXISOL_GRASS.get(), () -> OXISOL_PATH.get(), () -> OXISOL_FARMLAND.get(), () -> OXISOL_ROOTED.get(), OXISOL_MUD);
+        OXISOL_PATH = createPath("grass_path/oxisol", OXISOL_DIRT);
+        OXISOL_FARMLAND = createFarmland("farmland/oxisol", OXISOL_DIRT);
+        OXISOL_GRASS = createGrass("grass/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
+        OXISOL_ROOTED = createRooted("rooted_dirt/oxisol", OXISOL_DIRT, OXISOL_MUD);
+        OXISOL_CLAY = createClay("clay/oxisol", OXISOL_GRASS, OXISOL_PATH, OXISOL_FARMLAND, OXISOL_ROOTED, OXISOL_MUD);
+        OXISOL_CLAY_GRASS = createClayGrass("clay_grass/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
+        OXISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/oxisol", OXISOL_MUD_BRICK);
+        OXISOL_COARSE = createCoarse("coarse_dirt/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
+        OXISOL_DUFF = createDuff("duff/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
+
+        PODZOL_DIRT = createDirt("dirt/podzol", () -> PODZOL_GRASS.get(), () -> PODZOL_PATH.get(), () -> PODZOL_FARMLAND.get(), () -> PODZOL_ROOTED.get(), PODZOL_MUD);
+        PODZOL_PATH = createPath("grass_path/podzol", PODZOL_DIRT);
+        PODZOL_FARMLAND = createFarmland("farmland/podzol", PODZOL_DIRT);
+        PODZOL_GRASS = createGrass("grass/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
+        PODZOL_ROOTED = createRooted("rooted_dirt/podzol", PODZOL_DIRT, PODZOL_MUD);
+        PODZOL_CLAY = createClay("clay/podzol", PODZOL_GRASS, PODZOL_PATH, PODZOL_FARMLAND, PODZOL_ROOTED, PODZOL_MUD);
+        PODZOL_CLAY_GRASS = createClayGrass("clay_grass/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
+        PODZOL_DRYING_BRICKS = createDryingBricks("drying_bricks/podzol", PODZOL_MUD_BRICK);
+        PODZOL_COARSE = createCoarse("coarse_dirt/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
+        PODZOL_DUFF = createDuff("duff/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
     }
 
-    private static BlockEntry<CoarseDirtBlock> createCoarse(String id, SoilBlockType.Variant tfcSoilType) {
+    private static BlockEntry<CoarseDirtBlock> createCoarse(String id, Supplier<DirtBlock> dirt, Supplier<PathBlock> path, Supplier<FarmlandBlock> farmland) {
         return TFGCore.REGISTRATE.block(id,
-                p -> new CoarseDirtBlock(p,
-                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(tfcSoilType).get(),
-                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(tfcSoilType).get(),
-                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(tfcSoilType).get()))
-                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(tfcSoilType).get())
+                p -> new CoarseDirtBlock(p, dirt, path, farmland))
+                .initialProperties(dirt::get)
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
                 .item(BlockItem::new)
@@ -114,19 +237,150 @@ public class TFGBlocks_Earth {
                 .register();
     }
 
-    private static BlockEntry<ConnectedDuffBlock> createDuff(String id, SoilBlockType.Variant tfcSoilType) {
+    private static BlockEntry<CoarseDirtBlock> createCoarseTFC(String id, Supplier<Block> dirt, Supplier<Block> path, Supplier<Block> farmland) {
         return TFGCore.REGISTRATE.block(id,
-                p -> new ConnectedDuffBlock(p.randomTicks(),
-                        () -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(tfcSoilType).get(),
-                        () -> TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(tfcSoilType).get(),
-                        () -> TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(tfcSoilType).get()))
-                .initialProperties(() -> TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(tfcSoilType).get())
+                p -> new CoarseDirtBlock(p, dirt, path, farmland))
+                .initialProperties(dirt::get)
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-                .loot((ctx, prov) -> ctx.dropOther(prov, TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(tfcSoilType).get()))
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<ConnectedDuffBlock> createDuff(String id, Supplier<DirtBlock> dirt, Supplier<PathBlock> path, Supplier<FarmlandBlock> farmland) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new ConnectedDuffBlock(p.randomTicks(), dirt, path, farmland))
+                .initialProperties(dirt::get)
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
                 .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
                 .tag(ItemTags.DIRT)
                 .build()
+                .register();
+    }
+
+    private static BlockEntry<ConnectedDuffBlock> createDuffTFC(String id, Supplier<Block> dirt, Supplier<Block> path, Supplier<Block> farmland) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new ConnectedDuffBlock(p.randomTicks(), dirt, path, farmland))
+                .initialProperties(dirt::get)
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<DirtBlock> createDirt(String id, Supplier<ConnectedGrassBlock> grass, Supplier<PathBlock> path,
+            Supplier<FarmlandBlock> farmland, Supplier<TFCRootedDirtBlock> rooted, Supplier<MudBlock> mud) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new DirtBlock(p, grass, path, farmland, rooted, mud))
+                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<PathBlock> createPath(String id, Supplier<DirtBlock> dirt) {
+        return TFGCore.REGISTRATE.block(id, p -> new PathBlock(p, dirt))
+                .properties(p -> p.mapColor(MapColor.DIRT)
+                        .strength(1.5f)
+                        .sound(SoundType.GRAVEL))
+                .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<DirtBlock> createClay(String id, Supplier<ConnectedGrassBlock> grass, Supplier<PathBlock> path,
+            BlockEntry<FarmlandBlock> farmland, BlockEntry<TFCRootedDirtBlock> rooted, BlockEntry<MudBlock> mud) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new DirtBlock(p, grass, path, farmland, rooted, mud))
+                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.5f).sound(SoundType.GRAVEL))
+                .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<ConnectedGrassBlock> createClayGrass(String id, Supplier<DirtBlock> dirt, Supplier<PathBlock> path, Supplier<FarmlandBlock> farmland) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new ConnectedGrassBlock(p, dirt, path, farmland))
+                .properties(p -> p.mapColor(MapColor.GRASS).strength(1.8f).sound(SoundType.GRASS).randomTicks())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+                .register();
+    }
+
+    private static BlockEntry<ConnectedGrassBlock> createGrass(String id, Supplier<DirtBlock> dirt, Supplier<PathBlock> path, Supplier<FarmlandBlock> farmland) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new ConnectedGrassBlock(p, dirt, path, farmland))
+                .properties(p -> p.mapColor(MapColor.GRASS).strength(1.8f).sound(SoundType.GRASS).randomTicks())
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+                .register();
+    }
+
+    private static BlockEntry<FarmlandBlock> createFarmland(String id, Supplier<DirtBlock> dirt) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new FarmlandBlock(ExtendedProperties.of(p).mapColor(MapColor.DIRT).strength(1.3f).sound(SoundType.GRAVEL).isViewBlocking(TFCBlocks::always).isSuffocating(TFCBlocks::always)
+                        .blockEntity(TFCBlockEntities.FARMLAND), dirt))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(TFCTags.Blocks.FARMLAND, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<TFCRootedDirtBlock> createRooted(String id, Supplier<DirtBlock> dirt, Supplier<MudBlock> mud) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new TFCRootedDirtBlock(p.mapColor(MapColor.DIRT).strength(2f).sound(SoundType.ROOTED_DIRT), dirt, mud))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<MudBlock> createMud(String id) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new MudBlock(p.mapColor(MapColor.DIRT).sound(SoundType.MUD).strength(2f).speedFactor(0.8f).isRedstoneConductor(TFCBlocks::always).isViewBlocking(TFCBlocks::always)
+                        .isSuffocating(TFCBlocks::always).instrument(NoteBlockInstrument.BASEDRUM)))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<DryingBricksBlock> createDryingBricks(String id, ItemEntry<Item> dryItem) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new DryingBricksBlock(
+                        ExtendedProperties.of(p).mapColor(MapColor.DIRT).noCollission().noOcclusion().instabreak().sound(SoundType.STEM).randomTicks().blockEntity(TFCBlockEntities.TICK_COUNTER),
+                        dryItem))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+                .register();
+    }
+
+    private static BlockEntry<RotatedPillarBlock> createMuddyRoots(String id) {
+        return TFGCore.REGISTRATE.block(id, p -> new RotatedPillarBlock(p.strength(4f)))
+                .initialProperties(() -> Blocks.MUDDY_MANGROVE_ROOTS)
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .simpleItem()
                 .register();
     }
 }

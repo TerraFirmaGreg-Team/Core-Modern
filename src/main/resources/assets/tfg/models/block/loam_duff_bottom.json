@@ -1,5 +1,0 @@
-{
-    "parent": "tfg:block/duff_bottom",
-    "textures": {"texture": "tfc:block/dirt/loam"},
-    "__comment__": "This file was automatically created by mcresources"
-}

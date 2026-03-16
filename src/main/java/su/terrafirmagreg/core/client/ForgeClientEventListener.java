@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.client.TFCColors;
+import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
@@ -130,6 +131,7 @@ public class ForgeClientEventListener {
     public static void registerColorHandlerBlocks(RegisterColorHandlersEvent.Block event) {
         final BlockColor grassColor = (state, level, pos, tintIndex) -> TFCColors.getGrassColor(pos, tintIndex);
         final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
+        final BlockColor grassBlockColor = (state, level, pos, tintIndex) -> state.getValue(ConnectedGrassBlock.SNOWY) || tintIndex != 1 ? -1 : grassColor.getColor(state, level, pos, tintIndex);
 
         event.register(tallGrassColor,
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());
@@ -137,6 +139,15 @@ public class ForgeClientEventListener {
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.CYCAD).get(),
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.CYCAD_PLANT).get(),
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.TANK_BROMELIAD).get());
+        event.register(grassBlockColor,
+                TFGBlocks_Earth.ALFISOL_GRASS.get(),
+                TFGBlocks_Earth.ALFISOL_CLAY_GRASS.get(),
+                TFGBlocks_Earth.MOLLISOL_GRASS.get(),
+                TFGBlocks_Earth.MOLLISOL_CLAY_GRASS.get(),
+                TFGBlocks_Earth.OXISOL_GRASS.get(),
+                TFGBlocks_Earth.OXISOL_CLAY_GRASS.get(),
+                TFGBlocks_Earth.PODZOL_GRASS.get(),
+                TFGBlocks_Earth.PODZOL_CLAY_GRASS.get());
     }
 
     public static void registerColorHandlerItems(RegisterColorHandlersEvent.Item event) {

@@ -1,0 +1,12 @@
+{
+  "values": [
+    "tfg:grass/alfisol",
+    "tfg:clay_grass/alfisol",
+    "tfg:grass/mollisol",
+    "tfg:clay_grass/mollisol",
+    "tfg:grass/oxisol",
+    "tfg:clay_grass/oxisol",
+    "tfg:grass/podzol",
+    "tfg:clay_grass/podzol"
+  ]
+}

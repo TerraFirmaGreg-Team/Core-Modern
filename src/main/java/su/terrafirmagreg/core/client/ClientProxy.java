@@ -82,6 +82,18 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILTY_LOAM_DUFF.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILT_DUFF.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.ALFISOL_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.ALFISOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.ALFISOL_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.MOLLISOL_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.MOLLISOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.MOLLISOL_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.OXISOL_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.OXISOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.OXISOL_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_DUFF.get(), RenderType.cutoutMipped());
             TFGBlocks_Earth.PLANTS.forEach((plant, block) -> ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutoutMipped()));
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
