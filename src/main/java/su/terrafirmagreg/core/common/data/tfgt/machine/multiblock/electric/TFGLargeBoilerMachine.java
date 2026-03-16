@@ -75,54 +75,54 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     private static final List<BoosterFluid> BOOSTERS = List.of(
             new BoosterFluid(
                     () -> GTMaterials.Creosote.getFluid(1).getFluid(),
-                    16, 200,
+                    64, 200,
                     0,
-                    "block.gtceu.creosote"), // Works for all the Boilers = 64 per second
+                    "block.gtceu.creosote"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "conifer_pitch")),
-                    5, 200,
+                    20, 200,
                     0,
-                    "fluid.tfg.conifer_pitch"), // Works for all the Boilers = 20 per second
+                    "fluid.tfg.conifer_pitch"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("afc", "maple_sap")),
-                    5, 200,
+                    20, 200,
                     0,
-                    "fluid.afc.maple_sap"), // Only works for Steel Boiler and + = 20 per second
+                    "fluid.afc.maple_sap"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("afc", "birch_sap")),
-                    5, 200,
+                    20, 200,
                     0,
-                    "fluid.afc.birch_sap"), // Works for all the Boilers = 20 per second
+                    "fluid.afc.birch_sap"),
             new BoosterFluid(
                     () -> GTMaterials.WoodGas.getFluid(1).getFluid(),
-                    13, 400,
+                    52, 400,
                     0,
-                    "material.gtceu.wood_gas"), // Works for all the Boilers = 52 second
+                    "material.gtceu.wood_gas"),
             new BoosterFluid(
                     () -> TFCFluids.SIMPLE_FLUIDS.get(SimpleFluid.OLIVE_OIL).getSource(),
-                    2, 400,
+                    8, 400,
                     0,
-                    "fluid.tfc.olive_oil"), // Works for all the Boilers = 8 per second
+                    "fluid.tfc.olive_oil"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "raw_aromatic_mix")),
-                    150, 1000,
+                    600, 1000,
                     1280,
-                    "material.tfg.raw_aromatic_mix"), // Only works for Steel Boiler and + = 600 per second
+                    "material.tfg.raw_aromatic_mix"),
             new BoosterFluid(
                     () -> GTMaterials.RocketFuel.getFluid(1).getFluid(),
-                    25, 4000,
+                    100, 4000,
                     1280,
-                    "material.gtceu.rocket_fuel"), // Only works for Steel Boiler and + = 100 per second
+                    "material.gtceu.rocket_fuel"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "radioactive_effluent")),
-                    1, 8000,
+                    4, 8000,
                     1280,
-                    "material.tfg.radioactive_effluent") // Only works for Steel Boiler and + = 4 per second
+                    "material.tfg.radioactive_effluent")
 
     /*
     // Example of a Booster that requires 1800 Temp (minBoilerTemperature = 1800) :
@@ -290,10 +290,9 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
 
         if (isFormed() && getOffsetTimer() % TICKS_PER_STEAM_GENERATION == 0) {
 
-            tryDrainBoostFluid();
-
-            // Update the recipe duration
+            // Update the recipe duration + drain booster every 20 ticks
             if (getOffsetTimer() % 20 == 0) {
+                tryDrainBoostFluid();
                 getRecipeLogic().refreshDurationForTemperature();
             }
 
