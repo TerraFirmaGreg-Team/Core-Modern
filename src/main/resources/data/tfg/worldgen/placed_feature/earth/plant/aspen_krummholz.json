@@ -12,10 +12,10 @@
         },
         {
             "max_temperature": -4.1,
-            "max_rainfall": 550,
+            "max_rainfall": 500,
             "max_forest": "old_growth",
             "type": "tfc:climate",
-            "min_rainfall": 325,
+            "min_rainfall": 350,
             "min_forest": "edge",
             "min_temperature": -18.7
         }
