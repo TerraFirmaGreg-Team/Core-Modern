@@ -103,19 +103,19 @@
                 "replace": "tfg:coarse_dirt/oxisol"
             },
             {
-                "with": "tfg:duff/podzol",
+                "with": "tfg:grass/podzol",
                 "replace": "tfc:grass/loam"
             },
             {
-                "with": "tfg:duff/podzol",
+                "with": "tfg:grass/podzol",
                 "replace": "tfc:grass/sandy_loam"
             },
             {
-                "with": "tfg:duff/podzol",
+                "with": "tfg:grass/podzol",
                 "replace": "tfc:grass/silty_loam"
             },
             {
-                "with": "tfg:duff/podzol",
+                "with": "tfg:grass/podzol",
                 "replace": "tfg:grass/oxisol"
             },
             {
