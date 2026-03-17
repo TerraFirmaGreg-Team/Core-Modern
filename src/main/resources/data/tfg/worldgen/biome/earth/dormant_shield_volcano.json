@@ -259,6 +259,30 @@
                 "minCount": 2,
                 "type": "tfc:frog",
                 "maxCount": 4
+            },
+            {
+                "weight": 2,
+                "minCount": 3,
+                "type": "tfg:bison",
+                "maxCount": 6
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfg:mongoose",
+                "maxCount": 3
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfg:lemming",
+                "maxCount": 3
+            },
+            {
+                "weight": 1,
+                "minCount": 1,
+                "type": "tfg:jerboa",
+                "maxCount": 3
             }
         ],
         "monster": [

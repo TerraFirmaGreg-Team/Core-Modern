@@ -21,13 +21,15 @@
             {
                 "with": "tfg:duff/loam",
                 "replace": "tfc:grass/loam"
-            },{
-            "with": "tfg:duff/mollisol",
-            "replace": "tfg:grass/mollisol"
-          }, {
-            "with": "tfg:duff/oxisol",
-            "replace": "tfg:grass/oxisol"
-          }
+            },
+            {
+                "with": "tfg:duff/mollisol",
+                "replace": "tfg:grass/mollisol"
+            },
+            {
+                "with": "tfg:duff/oxisol",
+                "replace": "tfg:grass/oxisol"
+            }
         ]
     }
 }

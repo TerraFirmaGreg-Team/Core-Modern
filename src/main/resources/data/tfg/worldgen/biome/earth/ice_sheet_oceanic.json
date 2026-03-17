@@ -43,6 +43,12 @@
                 "minCount": 2,
                 "type": "tfc:penguin",
                 "maxCount": 5
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfg:leopard_seal",
+                "maxCount": 4
             }
         ],
         "monster": [
