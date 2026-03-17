@@ -2,7 +2,9 @@
     "values": [
         "tfg:earth/duff_disc_edge",
         "tfg:earth/duff_disc_normal",
-        "tfg:earth/duff_disc_old_growth"
+        "tfg:earth/duff_disc_old_growth",
+        "tfg:earth/alfisol_disc",
+        "tfg:earth/podzol_disc"
     ],
     "replace": false
 }

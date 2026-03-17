@@ -1,0 +1,39 @@
+{
+    "feature": "tfc:hanging_roots_patch",
+    "placement": [
+        {
+            "type": "tfc:climate",
+            "min_forest": "edge"
+        },
+        {"type": "tfc:biome"},
+        {
+            "count": 10,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 40},
+                "max_inclusive": {"absolute": 72},
+                "type": "uniform"
+            }
+        },
+        {
+            "xz_spread": 0,
+            "y_spread": -1,
+            "type": "minecraft:random_offset"
+        },
+        {
+            "allowed_search_condition": {
+                "blocks": ["minecraft:air"],
+                "type": "minecraft:matching_blocks"
+            },
+            "max_steps": 12,
+            "target_condition": {"type": "minecraft:solid"},
+            "direction_of_search": "up",
+            "type": "minecraft:environment_scan"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}
