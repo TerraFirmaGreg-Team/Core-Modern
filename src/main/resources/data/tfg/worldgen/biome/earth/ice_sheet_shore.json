@@ -312,6 +312,12 @@
                 "minCount": 1,
                 "type": "tfg:jerboa",
                 "maxCount": 3
+            },
+            {
+                "weight": 1,
+                "minCount": 2,
+                "type": "tfg:leopard_seal",
+                "maxCount": 4
             }
         ],
         "water_ambient": [
