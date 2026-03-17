@@ -1,6 +1,10 @@
 {
   "values": [
     "tfg:tuff_gravel",
+    "tfg:mud/alfisol",
+    "tfg:mud/mollisol",
+    "tfg:mud/oxisol",
+    "tfg:mud/podzol",
     "tfg:coarse_dirt/silty_loam",
     "tfg:coarse_dirt/sandy_loam",
     "tfg:coarse_dirt/silt",
@@ -9,10 +13,6 @@
     "tfg:duff/sandy_loam",
     "tfg:duff/silt",
     "tfg:duff/loam",
-    "tfg:mud/alfisol",
-    "tfg:mud/mollisol",
-    "tfg:mud/oxisol",
-    "tfg:mud/podzol",
     "tfg:dirt/alfisol",
     "tfg:grass_path/alfisol",
     "tfg:farmland/alfisol",

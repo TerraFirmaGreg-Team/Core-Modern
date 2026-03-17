@@ -372,6 +372,7 @@ public class TFGBlocks_Earth {
                         ExtendedProperties.of(p).mapColor(MapColor.DIRT).noCollission().noOcclusion().instabreak().sound(SoundType.STEM).randomTicks().blockEntity(TFCBlockEntities.TICK_COUNTER),
                         dryItem))
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
                 .register();
     }
