@@ -308,9 +308,7 @@ public class TFGBlocks_Earth {
                 .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-                .item(BlockItem::new)
-                .tag(ItemTags.DIRT)
-                .build()
+                .simpleItem()
                 .register();
     }
 
@@ -352,7 +350,9 @@ public class TFGBlocks_Earth {
                 p -> new TFCRootedDirtBlock(p.mapColor(MapColor.DIRT).strength(2f).sound(SoundType.ROOTED_DIRT), dirt, mud))
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(ItemTags.DIRT)
+                .build()
                 .register();
     }
 
