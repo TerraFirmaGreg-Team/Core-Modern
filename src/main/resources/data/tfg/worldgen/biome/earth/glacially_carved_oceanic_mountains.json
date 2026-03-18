@@ -295,17 +295,17 @@
                 "type": "tfg:bison",
                 "maxCount": 6
             },
-            {
-                "weight": 1,
-                "minCount": 1,
+             {
+                "weight": 2,
+                "minCount": 2,
                 "type": "tfg:mongoose",
-                "maxCount": 3
+                "maxCount": 4
             },
-            {
-                "weight": 1,
-                "minCount": 1,
+             {
+                "weight": 2,
+                "minCount": 2,
                 "type": "tfg:lemming",
-                "maxCount": 3
+                "maxCount": 4
             },
             {
                 "weight": 1,
