@@ -317,7 +317,7 @@ public class TFGBlocks_Earth {
                 p -> new ConnectedGrassBlock(p, dirt, path, farmland))
                 .properties(p -> p.mapColor(MapColor.GRASS).strength(1.8f).sound(SoundType.GRASS).randomTicks())
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCTags.Blocks.GRASS)
                 .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
                 .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
                 .register();
@@ -328,7 +328,7 @@ public class TFGBlocks_Earth {
                 p -> new ConnectedGrassBlock(p, dirt, path, farmland))
                 .properties(p -> p.mapColor(MapColor.GRASS).strength(1.8f).sound(SoundType.GRASS).randomTicks())
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCTags.Blocks.GRASS)
                 .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
                 .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
                 .register();
