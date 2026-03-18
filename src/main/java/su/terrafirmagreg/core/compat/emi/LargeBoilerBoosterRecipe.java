@@ -59,12 +59,12 @@ public class LargeBoilerBoosterRecipe implements EmiRecipe {
         int lines = 2; // Bonus Temp + mB/s
         if (MIN_BOILER_TEMPERATURE > 0)
             lines++; // Temp Boiler required
-        return 18 + 4 + (font.lineHeight * lines) + 4;
+        return 20 + 6 + (font.lineHeight * lines) + 6;
     }
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
-        int offsetY = 5;
+        int offsetY = 7;
         offsetY = createFluidWidget(widgetHolder, offsetY);
         createBoosterStatsWidget(widgetHolder, offsetY);
     }
@@ -86,7 +86,7 @@ public class LargeBoilerBoosterRecipe implements EmiRecipe {
 
     private void createBoosterStatsWidget(WidgetHolder holder, int offsetY) {
         Font font = Minecraft.getInstance().font;
-        int lineHeight = font.lineHeight;
+        int lineHeight = font.lineHeight + 1;
 
         // Bonus Temp
         holder.addText(
