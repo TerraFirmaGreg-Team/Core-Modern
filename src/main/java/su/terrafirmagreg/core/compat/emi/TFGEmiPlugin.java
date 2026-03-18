@@ -39,8 +39,7 @@ public class TFGEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory ARTISAN_TABLE = new EmiRecipeCategory(TFGCore.id("artisan_table"),
             EmiStack.of(TFGBlocks.ARTISAN_TABLE.get()));
 
-    public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(
-            TFGCore.id("large_boiler_booster"),
+    public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(TFGCore.id("large_boiler_booster"),
             EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
 
     @Override
