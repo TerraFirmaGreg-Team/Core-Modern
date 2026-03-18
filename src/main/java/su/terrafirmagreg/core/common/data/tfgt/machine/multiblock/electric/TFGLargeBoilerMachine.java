@@ -75,52 +75,52 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     private static final List<BoosterFluid> BOOSTERS = List.of(
             new BoosterFluid(
                     () -> GTMaterials.Creosote.getFluid(1).getFluid(),
-                    64, 200,
+                    32, 300,
                     0,
                     "block.gtceu.creosote"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "conifer_pitch")),
-                    20, 200,
+                    5, 300,
                     0,
-                    "fluid.tfg.conifer_pitch"),
+                    "material.tfg.conifer_pitch"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("afc", "maple_sap")),
-                    20, 200,
+                    5, 300,
                     0,
                     "fluid.afc.maple_sap"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("afc", "birch_sap")),
-                    20, 200,
+                    5, 300,
                     0,
                     "fluid.afc.birch_sap"),
             new BoosterFluid(
                     () -> GTMaterials.WoodGas.getFluid(1).getFluid(),
-                    52, 400,
+                    52, 600,
                     0,
                     "material.gtceu.wood_gas"),
             new BoosterFluid(
                     () -> TFCFluids.SIMPLE_FLUIDS.get(SimpleFluid.OLIVE_OIL).getSource(),
-                    8, 400,
+                    1, 600,
                     0,
                     "fluid.tfc.olive_oil"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "raw_aromatic_mix")),
-                    600, 1000,
+                    600, 1200,
                     1280,
                     "material.tfg.raw_aromatic_mix"),
             new BoosterFluid(
                     () -> GTMaterials.RocketFuel.getFluid(1).getFluid(),
-                    100, 4000,
+                    200, 5000,
                     1280,
                     "material.gtceu.rocket_fuel"),
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "radioactive_effluent")),
-                    4, 8000,
+                    2, 16000,
                     1280,
                     "material.tfg.radioactive_effluent")
 
@@ -133,6 +133,11 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     )
     */
     );
+
+    // Boosters list for EMI
+    public static List<BoosterFluid> getBoosters() {
+        return BOOSTERS;
+    }
 
     // Steam output boost depending of the water
     private static final Map<TagKey<Fluid>, Float> WATER_STEAM_MULTIPLIERS = new LinkedHashMap<>();
