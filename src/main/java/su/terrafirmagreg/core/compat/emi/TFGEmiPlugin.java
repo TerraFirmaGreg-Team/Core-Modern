@@ -41,7 +41,7 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(
             TFGCore.id("large_boiler_booster"),
-            EmiStack.of(GTBlocks.CASING_STEEL_SOLID.asItem()));
+            EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
