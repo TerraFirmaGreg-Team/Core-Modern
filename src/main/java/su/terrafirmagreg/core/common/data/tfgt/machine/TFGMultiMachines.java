@@ -952,6 +952,41 @@ public class TFGMultiMachines {
                     GTCEu.id("block/machines/forge_hammer"))
             .register();
 
+    public static final MultiblockMachineDefinition HEAT_EXCHANGER = REGISTRATE
+            .multiblock("heat_exchanger", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .appearanceBlock(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING)
+            .recipeType(TFGTRecipeTypes.HEAT_EXCHANGER)
+            .recipeModifiers(GTRecipeModifiers.OC_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("       ","BBBBBBB","BCCCCCB","BBBBBBB","       ")
+                    .aisle("AAAAAAA","A#####A","LDDDDDZ","A#####A","AAAAAAA")
+                    .aisle("AFFFFFA","L#####L","LEEEEEL","L#####L","AFFFFFA")
+                    .aisle("AAAAAAA","A#####A","LDDDDDZ","A#####A","AAAAAAA")
+                    .aisle("       ","BBBXBBB","BCCCCCB","BBBMBBB","       ")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('A', Predicates.blocks(GCYMBlocks.CASING_ATOMIC.get()))
+                    .where('B', Predicates.blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                    .where('C', Predicates.blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
+                    .where('D', Predicates.blocks(GTBlocks.FIREBOX_TITANIUM.get()))
+                    .where('E', Predicates.blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+                    .where('F', Predicates.blocks(GTBlocks.CASING_ENGINE_INTAKE.get()))
+                    .where('L', Predicates.blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())
+                            .or(Predicates.blocks(PartAbility.IMPORT_FLUIDS.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new))
+                                    .setPreviewCount(1))
+                            .or(Predicates.blocks(PartAbility.EXPORT_FLUIDS.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new))
+                                    .setPreviewCount(1)))
+                    .where('M', Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)
+                            .or(Predicates.blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())))
+                    .where('#', Predicates.air())
+                    .where(' ', Predicates.any())
+                    .build())
+            .workableCasingModel(
+                    GTCEu.id("gtceu:block/casings/gcym/high_temperature_smelting_casing"),
+                    GTCEu.id("gtceu:block/machines/fluid_heater"))
+            .register();
+
     public static final MultiblockMachineDefinition HEAT_BATTERY_MK_1 = REGISTRATE
             .multiblock("heat_battery_mk1", HbMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -963,7 +998,7 @@ public class TFGMultiMachines {
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .workableCasingModel(
                     TFGCore.id( "block/casings/machine_casing_mars"),
-					TFGCore.id("block/machines/bioreactor"))
+                    TFGCore.id("block/machines/bioreactor"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##BBB##", "##CCC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
                     .aisle("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
@@ -977,8 +1012,10 @@ public class TFGMultiMachines {
                     .where("A", Predicates.air())
                     .where("B", Predicates.blocks(TFGBlocks.OSTRUM_CARBON_CASING.get()))
                     .where("C", Predicates.blocks(TFGBlocks.MARS_CASING.get())
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(6).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(6).setPreviewCount(1)))
+                            .or(Predicates.blocks(PartAbility.IMPORT_FLUIDS.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new))
+                                    .setMaxGlobalLimited(6).setPreviewCount(1))
+                            .or(Predicates.blocks(PartAbility.EXPORT_FLUIDS.getBlockRange(GTValues.EV, GTValues.UHV).toArray(Block[]::new))
+                                    .setMaxGlobalLimited(6).setPreviewCount(1)))
                     .where("D", Predicates.blocks(GTBlocks.CASING_LAMINATED_GLASS.get())
                             .or(Predicates.blocks(HeatPortEv.get()).setMaxGlobalLimited(1).setPreviewCount(1)))
                     .where("F", Predicates.blocks(TFGBlocks.HEAT_PIPE_CASING.get()))
