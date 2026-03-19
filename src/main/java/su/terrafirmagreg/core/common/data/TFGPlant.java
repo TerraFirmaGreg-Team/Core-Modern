@@ -152,7 +152,7 @@ public enum TFGPlant implements RegistryPlant {
          * Default properties to avoid rewriting them out every time
          */
         private static BlockBehaviour.Properties solid() {
-            return Block.Properties.of().instabreak().noOcclusion().sound(SoundType.GRASS).randomTicks().pushReaction(PushReaction.DESTROY).noLootTable();
+            return Block.Properties.of().instabreak().noOcclusion().sound(SoundType.GRASS).randomTicks().pushReaction(PushReaction.DESTROY);
         }
 
         private static BlockBehaviour.Properties nonSolid(TFGPlant plant) {
@@ -160,7 +160,7 @@ public enum TFGPlant implements RegistryPlant {
         }
 
         private static BlockBehaviour.Properties solidTallPlant() {
-            return BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).instabreak().noOcclusion().randomTicks().sound(SoundType.WEEPING_VINES).pushReaction(PushReaction.DESTROY).noLootTable();
+            return BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).instabreak().noOcclusion().randomTicks().sound(SoundType.WEEPING_VINES).pushReaction(PushReaction.DESTROY);
         }
 
         private static BlockBehaviour.Properties nonSolidTallPlant(TFGPlant plant) {
