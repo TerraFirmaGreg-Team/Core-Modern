@@ -158,7 +158,7 @@ public abstract class EntityTooltipsMixin {
 
     @Unique
     private static final EntityTooltip TFC_1_21 = (level, entity, tooltip) -> {
-        tooltip.accept(Component.translatable(TFGCore.MOD_ID + "tooltip.attribution.tfc"));
+        tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.tfc"));
     };
 
     @Unique
