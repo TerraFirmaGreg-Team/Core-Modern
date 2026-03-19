@@ -36,6 +36,7 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
         final int height = context.config().height();
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
 
+        boolean isSuccessful = false;
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
                 for (int y = 0; y < height; y++) {
@@ -50,7 +51,7 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
                                 final BlockState waterloggedState = FluidHelpers.fillWithFluid(newState, fluidAt);
                                 if (waterloggedState != null) {
                                     setBlock(level, cursor, waterloggedState.setValue(TFGBlockProperties.OPEN, isOpen));
-                                    return true;
+                                    isSuccessful = true;
                                 }
                             }
                         }
@@ -59,6 +60,6 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig> {
             }
         }
 
-        return false;
+        return isSuccessful;
     }
 }
