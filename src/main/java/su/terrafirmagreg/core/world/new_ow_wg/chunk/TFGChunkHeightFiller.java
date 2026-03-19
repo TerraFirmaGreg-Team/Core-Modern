@@ -115,7 +115,7 @@ public class TFGChunkHeightFiller {
     protected final double sampleColumnHeightAndBiome(Object2DoubleMap<BiomeExtension> biomeWeights, boolean useCache) {
         columnBiomeNoiseSamplers.clear();
 
-        double height = 0, normalHeight = 0, shoreHeight = 0, shoreBaseHeight = 0, oceanHeight = 0;
+        double height = 0, normalHeight = 0, shoreHeight = 0;
         double shoreWeight = 0, oceanWeight = 0;
 
         BiomeExtension biomeAt = null, normalBiomeAt = null, shoreBiomeAt = null, oceanBiomeAt = null;
@@ -144,17 +144,13 @@ public class TFGChunkHeightFiller {
             height += biomeHeight;
 
             if (biome.isShore()) {
-                var extension = (IBiomeExtension) biome;
-
                 shoreHeight += biomeHeight;
                 shoreWeight += biomeWeight;
-                shoreBaseHeight += biomeWeight * extension.tfg$getShoreBaseHeight();
                 if (maxShoreWeight < biomeWeight) {
                     shoreBiomeAt = biome;
                     maxShoreWeight = biomeWeight;
                 }
             } else if (biome.biomeBlendType() == BiomeBlendType.OCEAN) {
-                oceanHeight += biomeHeight;
                 oceanWeight += biomeWeight;
                 if (maxOceanWeight < biomeWeight) {
                     oceanBiomeAt = biome;
