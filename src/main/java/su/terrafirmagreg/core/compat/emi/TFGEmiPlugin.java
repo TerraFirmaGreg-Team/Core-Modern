@@ -8,6 +8,8 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import dev.emi.emi.api.EmiEntrypoint;
@@ -20,6 +22,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
+import su.terrafirmagreg.core.common.data.recipes.repair.ItemRepairRecipe;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -35,6 +38,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory ARTISAN_TABLE = new EmiRecipeCategory(TFGCore.id("artisan_table"),
             EmiStack.of(TFGBlocks.ARTISAN_TABLE.get()));
+
+    public static final EmiRecipeCategory ITEM_REPAIR = new EmiRecipeCategory(TFGCore.id("item_repair"),
+            EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -79,5 +85,14 @@ public class TFGEmiPlugin implements EmiPlugin {
             emiRegistry.addRecipe(new ArtisanTableEmiRecipe(recipe));
         }
 
+        emiRegistry.addCategory(ITEM_REPAIR);
+        emiRegistry.addWorkstation(ITEM_REPAIR, EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
+        emiRegistry.addRecipeHandler(MenuType.CRAFTING, new ItemRepairCraftingRecipeHandler());
+        for (ItemRepairRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream()
+                .filter(r -> r instanceof ItemRepairRecipe)
+                .map(r -> (ItemRepairRecipe) r)
+                .toList()) {
+            emiRegistry.addRecipe(new ItemRepairEmiRecipe(recipe));
+        }
     }
 }
