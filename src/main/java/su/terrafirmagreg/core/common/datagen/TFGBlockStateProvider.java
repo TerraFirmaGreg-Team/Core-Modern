@@ -13,6 +13,6 @@ public class TFGBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-
+        new FruitTreeStateProvider(this).generate();
     }
 }

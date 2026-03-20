@@ -7,6 +7,8 @@ import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
+import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
+import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,6 +20,8 @@ import su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
+import su.terrafirmagreg.core.common.data.blockentity.TFGBerryBushBlockEntity;
+import su.terrafirmagreg.core.common.data.blockentity.TFGTickCounterBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 import su.terrafirmagreg.core.compat.kjs.GTActiveParticleBuilder;
 import su.terrafirmagreg.core.compat.kjs.ParticleEmitterBlockBuilder;
@@ -65,4 +69,22 @@ public class TFGBlockEntities {
                 blocks.add(TFGBlocks.PISCICULTURE_CORE.get());
                 return BlockEntityType.Builder.of(TickerBlockEntity::new, blocks.toArray(Block[]::new)).build(null);
             });
+
+    @SuppressWarnings("unchecked")
+    public static final BlockEntityEntry<BerryBushBlockEntity> FRUIT_TREE_BERRY_BUSH = TFGCore.REGISTRATE
+            .<BerryBushBlockEntity>blockEntity("fruit_tree_berry_bush", (type, pos, state) -> new TFGBerryBushBlockEntity(pos, state))
+            .validBlocks(java.util.Arrays.stream(TFGFruitTrees.values())
+                    .map(TFGFruitTree.FRUIT_TREE_LEAVES::get)
+                    .toArray(com.tterrag.registrate.util.nullness.NonNullSupplier[]::new))
+            .register();
+
+    @SuppressWarnings("unchecked")
+    public static final BlockEntityEntry<TickCounterBlockEntity> FRUIT_TREE_TICK_COUNTER = TFGCore.REGISTRATE
+            .<TickCounterBlockEntity>blockEntity("fruit_tree_tick_counter", (type, pos, state) -> new TFGTickCounterBlockEntity(pos, state))
+            .validBlocks(java.util.Arrays.stream(TFGFruitTrees.values())
+                    .flatMap(tree -> java.util.stream.Stream.of(
+                            TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree),
+                            TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree)))
+                    .toArray(com.tterrag.registrate.util.nullness.NonNullSupplier[]::new))
+            .register();
 }
