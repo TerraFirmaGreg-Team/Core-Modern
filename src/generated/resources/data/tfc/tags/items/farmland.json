@@ -4,7 +4,6 @@
     "tfg:farmland/mollisol",
     "tfg:farmland/oxisol",
     "tfg:farmland/podzol",
-    "tfg:grass/mars_farmland",
-    "tfg:egh_planter"
+    "tfg:grass/mars_farmland"
   ]
 }

@@ -1,13 +1,16 @@
 package su.terrafirmagreg.core.common.data;
 
 import static su.terrafirmagreg.core.common.data.TFGBlocks.dropBetween;
+import static su.terrafirmagreg.core.common.data.TFGBlocks_Earth.*;
 
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.TFCSounds;
-import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IcicleBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -16,12 +19,16 @@ import net.dries007.tfc.common.blocks.soil.DirtBlock;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.PathBlock;
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
@@ -32,120 +39,38 @@ public class TFGBlocks_Mars {
     public static void init() {
     }
 
-    // This one's constructor needs to reference the others, so it's in the static constructor below
     public static BlockEntry<DirtBlock> MARS_DIRT;
     public static BlockEntry<DirtBlock> MARS_CLAY;
+    public static BlockEntry<PathBlock> MARS_PATH;
+    public static BlockEntry<FarmlandBlock> MARS_FARMLAND;
 
-    public static final BlockEntry<PathBlock> MARS_PATH = TFGCore.REGISTRATE.block("grass/mars_path", p -> new PathBlock(p, MARS_DIRT))
-            .properties(p -> p.mapColor(MapColor.DIRT)
-                    .strength(1.4f)
-                    .sound(SoundType.GRAVEL))
-            .simpleItem()
-            .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .register();
+    public static BlockEntry<ConnectedGrassBlock> AMBER_MYCELIUM;
+    public static BlockEntry<ConnectedGrassBlock> AMBER_CLAY_MYCELIUM;
+    public static BlockEntry<ConnectedGrassBlock> AMBER_KAOLIN_MYCELIUM;
+    public static BlockEntry<ConnectedGrassBlock> RUSTICUS_MYCELIUM;
+    public static BlockEntry<ConnectedGrassBlock> RUSTICUS_CLAY_MYCELIUM;
+    public static BlockEntry<ConnectedGrassBlock> RUSTICUS_KAOLIN_MYCELIUM;
+    public static BlockEntry<ConnectedGrassBlock> SANGNUM_MYCELIUM;
+    public static BlockEntry<ConnectedGrassBlock> SANGNUM_CLAY_MYCELIUM;
+    public static BlockEntry<ConnectedGrassBlock> SANGNUM_KAOLIN_MYCELIUM;
 
-    public static final BlockEntry<FarmlandBlock> MARS_FARMLAND = TFGCore.REGISTRATE.block("grass/mars_farmland",
-            p -> new FarmlandBlock(ExtendedProperties.of(MapColor.DIRT)
-                    .strength(1.3f)
-                    .sound(SoundType.GRAVEL)
-                    .isViewBlocking(TFCBlocks::always)
-                    .isSuffocating(TFCBlocks::always)
-                    .blockEntity(TFCBlockEntities.FARMLAND), MARS_DIRT))
-            .simpleItem()
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
-            .register();
-
-    private static final BlockBehaviour.Properties amber_properties = BlockBehaviour.Properties.of()
+    private static final NonNullUnaryOperator<BlockBehaviour.Properties> amber_properties = p -> p
             .mapColor(MapColor.TERRACOTTA_YELLOW)
             .strength(5.0f)
             .sound(SoundType.WART_BLOCK)
             .randomTicks();
 
-    public static final BlockEntry<ConnectedGrassBlock> AMBER_MYCELIUM = TFGCore.REGISTRATE.block("grass/amber_mycelium",
-            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
-            .properties(p -> amber_properties)
-            .loot((ctx, b) -> ctx.dropOther(b, MARS_DIRT))
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
-
-    public static final BlockEntry<ConnectedGrassBlock> AMBER_CLAY_MYCELIUM = TFGCore.REGISTRATE.block("grass/amber_clay_mycelium",
-            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
-            .properties(p -> amber_properties)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
-
-    public static final BlockEntry<ConnectedGrassBlock> AMBER_KAOLIN_MYCELIUM = TFGCore.REGISTRATE.block("grass/amber_kaolin_mycelium",
-            p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
-            .properties(p -> amber_properties)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .loot(dropBetween(TFCItems.KAOLIN_CLAY, 1, 3))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
-
-    private static final BlockBehaviour.Properties rusticus_properties = BlockBehaviour.Properties.of()
+    private static final NonNullUnaryOperator<BlockBehaviour.Properties> rusticus_properties = p -> p
             .mapColor(MapColor.TERRACOTTA_ORANGE)
             .strength(5.0f)
             .sound(SoundType.WART_BLOCK)
             .randomTicks();
 
-    public static final BlockEntry<ConnectedGrassBlock> RUSTICUS_MYCELIUM = TFGCore.REGISTRATE.block("grass/rusticus_mycelium",
-            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
-            .properties(p -> rusticus_properties)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
-
-    public static final BlockEntry<ConnectedGrassBlock> RUSTICUS_CLAY_MYCELIUM = TFGCore.REGISTRATE.block("grass/rusticus_clay_mycelium",
-            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
-            .properties(p -> rusticus_properties)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
-
-    public static final BlockEntry<ConnectedGrassBlock> RUSTICUS_KAOLIN_MYCELIUM = TFGCore.REGISTRATE.block("grass/rusticus_kaolin_mycelium",
-            p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
-            .properties(p -> rusticus_properties)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .loot(dropBetween(TFCItems.KAOLIN_CLAY, 1, 3))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
-
-    private static final BlockBehaviour.Properties sangnum_properties = BlockBehaviour.Properties.of()
+    private static final NonNullUnaryOperator<BlockBehaviour.Properties> sangnum_properties = p -> p
             .mapColor(MapColor.TERRACOTTA_RED)
             .strength(5.0f)
             .sound(SoundType.WART_BLOCK)
             .randomTicks();
-
-    public static final BlockEntry<ConnectedGrassBlock> SANGNUM_MYCELIUM = TFGCore.REGISTRATE.block("grass/sangnum_mycelium",
-            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
-            .properties(p -> sangnum_properties)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .loot((ctx, prov) -> ctx.dropOther(prov, MARS_DIRT))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
-
-    public static final BlockEntry<ConnectedGrassBlock> SANGNUM_CLAY_MYCELIUM = TFGCore.REGISTRATE.block("grass/sangnum_clay_mycelium",
-            p -> new ConnectedGrassBlock(p, MARS_DIRT, MARS_PATH, MARS_FARMLAND))
-            .properties(p -> sangnum_properties)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
-
-    public static final BlockEntry<ConnectedGrassBlock> SANGNUM_KAOLIN_MYCELIUM = TFGCore.REGISTRATE.block("grass/sangnum_kaolin_mycelium",
-            p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
-            .properties(p -> sangnum_properties)
-            .loot(dropBetween(TFCItems.KAOLIN_CLAY, 1, 3))
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .register();
 
     public static final BlockEntry<MarsIceBlock> MARS_ICE = TFGCore.REGISTRATE.block("mars_ice", MarsIceBlock::new)
             .initialProperties(() -> Blocks.ICE)
@@ -184,22 +109,36 @@ public class TFGBlocks_Mars {
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
-    // These are done separately to avoid cyclic references
     static {
+        MARS_DIRT = createDirt("grass/mars_dirt", () -> RUSTICUS_MYCELIUM.get(), () -> MARS_PATH.get(), () -> MARS_FARMLAND.get(), null, null);
 
-        MARS_DIRT = TFGCore.REGISTRATE.block("grass/mars_dirt",
-                (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
-                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
-                .simpleItem()
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .register();
+        MARS_CLAY = createClay("grass/mars_clay_dirt", RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null);
+        MARS_PATH = createPath("grass/mars_path", MARS_DIRT);
+        MARS_FARMLAND = createFarmland("grass/mars_farmland", MARS_DIRT);
 
-        MARS_CLAY = TFGCore.REGISTRATE.block("grass/mars_clay_dirt",
-                (p) -> new DirtBlock(p, RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null))
-                .properties(p -> p.mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL))
-                .simpleItem()
-                .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
+        AMBER_MYCELIUM = createGrass("grass/amber_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, amber_properties);
+        AMBER_CLAY_MYCELIUM = createClayGrass("grass/amber_clay_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, amber_properties);
+        AMBER_KAOLIN_MYCELIUM = createKaolin("grass/amber_kaolin_mycelium", amber_properties);
+
+        RUSTICUS_MYCELIUM = createGrass("grass/rusticus_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, rusticus_properties);
+        RUSTICUS_CLAY_MYCELIUM = createClayGrass("grass/rusticus_clay_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, rusticus_properties);
+        RUSTICUS_KAOLIN_MYCELIUM = createKaolin("grass/rusticus_kaolin_mycelium", rusticus_properties);
+
+        SANGNUM_MYCELIUM = createGrass("grass/sangnum_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, sangnum_properties);
+        SANGNUM_CLAY_MYCELIUM = createClayGrass("grass/sangnum_clay_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, sangnum_properties);
+        SANGNUM_KAOLIN_MYCELIUM = createKaolin("grass/sangnum_kaolin_mycelium", sangnum_properties);
+    }
+
+    private static BlockEntry<ConnectedGrassBlock> createKaolin(String id, NonNullUnaryOperator<BlockBehaviour.Properties> props) {
+        return TFGCore.REGISTRATE.block(id,
+                p -> new ConnectedGrassBlock(p, TFCBlocks.RED_KAOLIN_CLAY, null, null))
+                .properties(props)
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .loot(dropBetween(TFCItems.KAOLIN_CLAY, 1, 3))
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCTags.Blocks.GRASS)
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+                .tag(ItemTags.DIRT, TFCGrassItemTag, TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "kaolin_clay")))
+                .build()
                 .register();
     }
 }
