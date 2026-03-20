@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "tfg:block/fruit_tree/lavacado_leaves"
+  }
+}
