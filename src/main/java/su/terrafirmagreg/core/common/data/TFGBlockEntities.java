@@ -73,7 +73,7 @@ public class TFGBlockEntities {
     @SuppressWarnings("unchecked")
     public static final BlockEntityEntry<BerryBushBlockEntity> FRUIT_TREE_BERRY_BUSH = TFGCore.REGISTRATE
             .<BerryBushBlockEntity>blockEntity("fruit_tree_berry_bush", (type, pos, state) -> new TFGBerryBushBlockEntity(pos, state))
-            .validBlocks(java.util.Arrays.stream(TFGFruitTrees.values())
+            .validBlocks(java.util.Arrays.stream(TFGFruitTree.FruitTreeType.values())
                     .map(TFGFruitTree.FRUIT_TREE_LEAVES::get)
                     .toArray(com.tterrag.registrate.util.nullness.NonNullSupplier[]::new))
             .register();
@@ -81,7 +81,7 @@ public class TFGBlockEntities {
     @SuppressWarnings("unchecked")
     public static final BlockEntityEntry<TickCounterBlockEntity> FRUIT_TREE_TICK_COUNTER = TFGCore.REGISTRATE
             .<TickCounterBlockEntity>blockEntity("fruit_tree_tick_counter", (type, pos, state) -> new TFGTickCounterBlockEntity(pos, state))
-            .validBlocks(java.util.Arrays.stream(TFGFruitTrees.values())
+            .validBlocks(java.util.Arrays.stream(TFGFruitTree.FruitTreeType.values())
                     .flatMap(tree -> java.util.stream.Stream.of(
                             TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree),
                             TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree)))
