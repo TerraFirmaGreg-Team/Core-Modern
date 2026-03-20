@@ -5,7 +5,9 @@
             "count": 70,
             "type": "minecraft:count"
         },
-        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:in_square"
+        },
         {
             "type": "minecraft:height_range",
             "height": {

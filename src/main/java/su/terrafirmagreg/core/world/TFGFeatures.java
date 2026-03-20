@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.world;
 
 import java.util.function.Function;
 
+import com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration;
 import com.mojang.serialization.Codec;
 
 import net.dries007.tfc.world.feature.plant.CreepingPlantConfig;
@@ -47,6 +48,9 @@ public class TFGFeatures {
             "creeping_ocean_plant", CreepingOceanPlantFeature::new, CreepingPlantConfig.CODEC);
     public static final RegistryObject<RotatableWaterPlantFeature> ROTATABLE_WATER_PLANT = register(
             "rotatable_water_plant", RotatableWaterPlantFeature::new, RotatableWaterPlantFeature.CODEC);
+
+    public static final RegistryObject<EncasedSpoutFeature> ENCASED_SPOUT = register(
+            "encased_spout", EncasedSpoutFeature::new, FluidSproutConfiguration.CODEC);
 
     private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
             Function<Codec<C>, F> factory, Codec<C> codec) {
