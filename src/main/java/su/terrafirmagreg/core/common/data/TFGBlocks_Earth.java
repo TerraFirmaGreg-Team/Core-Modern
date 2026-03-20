@@ -9,7 +9,6 @@ import java.util.function.Supplier;
 
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.tterrag.registrate.providers.ProviderType;
-import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
@@ -79,7 +78,6 @@ public class TFGBlocks_Earth {
                     .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                     .tag(TFCTags.Blocks.PLANTS, BlockTags.MINEABLE_WITH_HOE, TFCTags.Blocks.CAN_BE_ICE_PILED, TFCTags.Blocks.CAN_BE_SNOW_PILED, TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE,
                             BlockTags.REPLACEABLE)
-                    .loot(RegistrateBlockLootTables::dropSelf)
                     .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
                     .register());
 
