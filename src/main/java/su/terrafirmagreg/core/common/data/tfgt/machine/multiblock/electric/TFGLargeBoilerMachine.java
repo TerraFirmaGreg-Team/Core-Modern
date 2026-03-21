@@ -109,7 +109,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
             new BoosterFluid(
                     () -> BuiltInRegistries.FLUID.get(
                             ResourceLocation.fromNamespaceAndPath("tfg", "raw_aromatic_mix")),
-                    600, 1200,
+                    300, 1200,
                     1280,
                     "material.tfg.raw_aromatic_mix"),
             new BoosterFluid(
