@@ -69,7 +69,7 @@ public class TFGBlocks_Buds {
                         .noCollission()
                         .strength(0.25f)
                         .lightLevel(b -> 3)
-						.mapColor(MapColor.NONE)
+                        .mapColor(MapColor.NONE)
                         .offsetType(BlockBehaviour.OffsetType.XZ))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
