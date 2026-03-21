@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -68,6 +69,7 @@ public class TFGBlocks_Buds {
                         .noCollission()
                         .strength(0.25f)
                         .lightLevel(b -> 3)
+						.mapColor(MapColor.NONE)
                         .offsetType(BlockBehaviour.OffsetType.XZ))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
