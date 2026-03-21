@@ -2,7 +2,7 @@
     "feature": "tfc:pumice_patch",
     "placement": [
         {
-            "chance": 3,
+            "chance": 2,
             "type": "minecraft:rarity_filter"
         },
         {"type": "minecraft:in_square"},

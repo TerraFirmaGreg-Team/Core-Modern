@@ -12,6 +12,7 @@ import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.dries007.tfc.world.settings.RockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -104,7 +105,7 @@ public class EncasedSpoutFeature extends Feature<FluidSproutConfiguration> {
 
                         // Decide what to place
                         BlockState state = fluidBlockState;
-                        if (y != height - 1 && distFromCenter > 0.9) {
+                        if (distFromCenter > 0.75) {
                             state = magmaBlockState;
                         }
 
@@ -112,6 +113,8 @@ public class EncasedSpoutFeature extends Feature<FluidSproutConfiguration> {
                     }
                 }
             }
+
+            int topOfSphere = blockpos.getY() + radius;
 
             // Pipe
             if (random.nextFloat() <= config.sproutChance()) {
@@ -130,14 +133,15 @@ public class EncasedSpoutFeature extends Feature<FluidSproutConfiguration> {
                         setBlock(mutablePos, currentX, currentY, currentZ + 1, bulkSectionAccess, level, fluidBlockState, placedAmount);
                         setBlock(mutablePos, currentX, currentY, currentZ - 1, bulkSectionAccess, level, fluidBlockState, placedAmount);
                         // magma
-                        setBlock(mutablePos, currentX + 1, currentY, currentZ + 1, bulkSectionAccess, level, fluidBlockState, placedAmount);
-                        setBlock(mutablePos, currentX + 1, currentY, currentZ - 1, bulkSectionAccess, level, fluidBlockState, placedAmount);
-                        setBlock(mutablePos, currentX - 1, currentY, currentZ - 1, bulkSectionAccess, level, fluidBlockState, placedAmount);
-                        setBlock(mutablePos, currentX - 1, currentY, currentZ + 1, bulkSectionAccess, level, fluidBlockState, placedAmount);
-                        setBlock(mutablePos, currentX + 2, currentY, currentZ, bulkSectionAccess, level, fluidBlockState, placedAmount);
-                        setBlock(mutablePos, currentX - 2, currentY, currentZ, bulkSectionAccess, level, fluidBlockState, placedAmount);
-                        setBlock(mutablePos, currentX, currentY, currentZ + 2, bulkSectionAccess, level, fluidBlockState, placedAmount);
-                        setBlock(mutablePos, currentX, currentY, currentZ - 2, bulkSectionAccess, level, fluidBlockState, placedAmount);
+                        var edgeBlockState = currentY < surfaceHeight && currentY > topOfSphere ? magmaBlockState : fluidBlockState;
+                        setBlock(mutablePos, currentX + 1, currentY, currentZ + 1, bulkSectionAccess, level, edgeBlockState, placedAmount);
+                        setBlock(mutablePos, currentX + 1, currentY, currentZ - 1, bulkSectionAccess, level, edgeBlockState, placedAmount);
+                        setBlock(mutablePos, currentX - 1, currentY, currentZ - 1, bulkSectionAccess, level, edgeBlockState, placedAmount);
+                        setBlock(mutablePos, currentX - 1, currentY, currentZ + 1, bulkSectionAccess, level, edgeBlockState, placedAmount);
+                        setBlock(mutablePos, currentX + 2, currentY, currentZ, bulkSectionAccess, level, edgeBlockState, placedAmount);
+                        setBlock(mutablePos, currentX - 2, currentY, currentZ, bulkSectionAccess, level, edgeBlockState, placedAmount);
+                        setBlock(mutablePos, currentX, currentY, currentZ + 2, bulkSectionAccess, level, edgeBlockState, placedAmount);
+                        setBlock(mutablePos, currentX, currentY, currentZ - 2, bulkSectionAccess, level, edgeBlockState, placedAmount);
                     }
                 }
             }
@@ -147,19 +151,25 @@ public class EncasedSpoutFeature extends Feature<FluidSproutConfiguration> {
     }
 
     public void setBlock(BlockPos.MutableBlockPos mutablePos, int currentX, int currentY, int currentZ,
-            BulkSectionAccess access, WorldGenLevel level,
-            BlockState state, MutableInt placedAmount) {
+            BulkSectionAccess access, WorldGenLevel level, BlockState state, MutableInt placedAmount) {
+
         mutablePos.set(currentX, currentY, currentZ);
         if (!level.ensureCanWrite(mutablePos))
             return;
-        LevelChunkSection levelchunksection = access.getSection(mutablePos);
-        if (levelchunksection == null)
+
+        LevelChunkSection levelChunkSection = access.getSection(mutablePos);
+        if (levelChunkSection == null)
             return;
 
         int sectionX = SectionPos.sectionRelative(currentX);
         int sectionY = SectionPos.sectionRelative(currentY);
         int sectionZ = SectionPos.sectionRelative(currentZ);
-        levelchunksection.setBlockState(sectionX, sectionY, sectionZ, state, false);
+
+        // Don't replace bedrock
+        if (levelChunkSection.getBlockState(sectionX, sectionY, sectionZ).is(BlockTags.FEATURES_CANNOT_REPLACE))
+            return;
+
+        levelChunkSection.setBlockState(sectionX, sectionY, sectionZ, state, false);
         level.getChunk(mutablePos).markPosForPostprocessing(mutablePos);
         placedAmount.add(1);
     }

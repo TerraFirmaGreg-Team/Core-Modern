@@ -2,6 +2,9 @@ package su.terrafirmagreg.core.common.data;
 
 import java.util.function.Supplier;
 
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.tterrag.registrate.providers.ProviderType;
@@ -98,8 +101,7 @@ public final class TFGBlocks {
             .initialProperties(TFCBlocks.SAND.get(SandBlockType.RED)::get)
             .properties(p -> p.noOcclusion().mapColor(MapColor.NONE))
             .blockstate(ModelUtils.generateSandLayersFromBlock(TFGCore.id("block/volcanic_ash")))
-            .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
-            .item(BlockItem::new).model(ModelUtils.blockItemModel(ResourceLocation.fromNamespaceAndPath("tfc", "item/powder/tetrahedrite"))).build()
+            .loot((ctx, b) -> ctx.dropOther(b, ChemicalHelper.get(TagPrefix.dustSmall, GTMaterials.DarkAsh, 1).getItem()))
             .register();
 
     public static final BlockEntry<SandLayerBlock> BLACK_SAND_LAYER_BLOCK = registerSandLayerBlock("pile/black_sand",
