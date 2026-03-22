@@ -6,20 +6,28 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.capabilities.ILargeEgg;
@@ -118,10 +126,26 @@ public class ForgeClientEventListener {
             if (foodProperties != null) {
                 foodProperties.getEffects().forEach(effect -> event.getToolTip().add(getTooltip(effect.getFirst())));
             }
+
+            var alcoholTag = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfc", "drinkables"));
+            stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(capability -> {
+                FluidStack fluidStack = capability.getFluidInTank(0);
+                if (fluidStack.getFluid().is(alcoholTag) && !ForgeRegistries.FLUIDS.getKey(fluidStack.getFluid()).getNamespace().equals("tfcagedalcohol")) {
+                    Drinkable drink = Drinkable.get(fluidStack.getFluid());
+                    if (drink != null) {
+                        drink.getEffects().forEach(effect -> event.getToolTip().add(getTooltip(effect.type(), effect.duration(), effect.amplifier())));
+                    }
+                }
+            });
         }
     }
 
     // These are taken from TFC Aged Alcohol
+
+    private static Component getTooltip(MobEffect effect, int duration, int amplifier) {
+        MobEffectInstance effectInstance = new MobEffectInstance(effect, duration, amplifier);
+        return Component.literal(effect.getDisplayName().getString() + displayedPotency(amplifier) + "(" + formatDuration(effectInstance) + ")").withStyle(effect.getCategory().getTooltipFormatting());
+    }
 
     private static Component getTooltip(MobEffectInstance effectInstance) {
         return Component.literal(effectInstance.getEffect().getDisplayName().getString()
