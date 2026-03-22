@@ -1,0 +1,167 @@
+package su.terrafirmagreg.core.common.data.tfgt.machine.trait;
+
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
+import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.FluidVeinWorldEntry;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
+
+import net.minecraft.core.SectionPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import lombok.Getter;
+
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.GasWellMachine;
+
+@Getter
+public class GasWellRecipeLogic {
+
+    public boolean isActive() {
+        return hasConsumedExplosive;
+    }
+
+    public static final int FLUID_CONSUMPTION_PER_TICK = 10;
+    public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 1200;
+
+    private final GasWellMachine machine;
+
+    private int timer = 0;
+
+    private boolean hasConsumedExplosive = false;
+
+    public GasWellRecipeLogic(GasWellMachine machine) {
+        this.machine = machine;
+    }
+
+    public void reset() {
+        timer = 0;
+        hasConsumedExplosive = false;
+    }
+
+    public void tick() {
+        if (!(machine.getLevel() instanceof ServerLevel serverLevel))
+            return;
+        if (!machine.isFormed() || machine.getMultiblockState().hasError())
+            return;
+
+        int chunkX = SectionPos.blockToSectionCoord(machine.getPos().getX());
+        int chunkZ = SectionPos.blockToSectionCoord(machine.getPos().getZ());
+
+        var savedData = BedrockFluidVeinSavedData.getOrCreate(serverLevel);
+        var entry = savedData.getFluidVeinWorldEntry(chunkX, chunkZ);
+
+        if (entry == null || entry.getDefinition() == null)
+            return;
+
+        // Check the vein
+        var veinFluid = entry.getDefinition().getStoredFluid().get();
+        if (veinFluid == null)
+            return;
+
+        // Only work for natural_gas
+        var naturalGas = net.minecraftforge.registries.ForgeRegistries.FLUIDS
+                .getValue(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("gtceu", "natural_gas"));
+        if (naturalGas == null || !veinFluid.isSame(naturalGas))
+            return;
+
+        // Won't start if explosive wasn't consummed
+        if (!hasConsumedExplosive) {
+            if (!consumeExplosive())
+                return;
+        }
+
+        // Always consumme water or steam
+        if (!consumeFluid())
+            return;
+
+        // Use explosive
+        timer++;
+        if (timer >= EXPLOSIVE_CONSUMPTION_INTERVAL) {
+            if (!consumeExplosive()) {
+                hasConsumedExplosive = false;
+                timer = 0;
+                return;
+            }
+            timer = 0;
+        }
+
+        int produced = getFluidToProduce(entry);
+        if (produced <= 0)
+            return;
+
+        outputFluid(new FluidStack(veinFluid, produced));
+
+        if (GTValues.RNG.nextInt(1) == 0) {
+            savedData.depleteVein(chunkX, chunkZ, 1, false);
+        }
+    }
+
+    private boolean consumeFluid() {
+        var inputTank = machine.getInputFluidTank();
+        if (inputTank == null)
+            return false;
+
+        var waterStack = GTMaterials.Water.getFluid(FLUID_CONSUMPTION_PER_TICK);
+        var steamStack = GTMaterials.Steam.getFluid(FLUID_CONSUMPTION_PER_TICK * 160);
+
+        // Try to drain water
+        var drained = inputTank.drainInternal(waterStack, IFluidHandler.FluidAction.SIMULATE);
+        if (!drained.isEmpty() && drained.getAmount() >= FLUID_CONSUMPTION_PER_TICK) {
+            inputTank.drainInternal(waterStack, IFluidHandler.FluidAction.EXECUTE);
+            return true;
+        }
+
+        // Try to drain steam
+        drained = inputTank.drainInternal(steamStack, IFluidHandler.FluidAction.SIMULATE);
+        if (!drained.isEmpty() && drained.getAmount() >= FLUID_CONSUMPTION_PER_TICK * 160) {
+            inputTank.drainInternal(steamStack, IFluidHandler.FluidAction.EXECUTE);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void outputFluid(FluidStack fluid) {
+        var outputTank = machine.getOutputFluidTank();
+        if (outputTank == null)
+            return;
+        outputTank.fillInternal(fluid, IFluidHandler.FluidAction.EXECUTE);
+    }
+
+    private boolean consumeExplosive() {
+        var itemHandler = machine.getInputItemHandler();
+        if (itemHandler == null)
+            return false;
+
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            var stack = itemHandler.getStackInSlot(i);
+            if (!stack.isEmpty() && isExplosive(stack)) {
+                itemHandler.extractItemInternal(i, 1, false);
+                hasConsumedExplosive = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isExplosive(net.minecraft.world.item.ItemStack stack) {
+        if (stack.is(Items.TNT))
+            return true;
+        var dynamite = net.minecraftforge.registries.ForgeRegistries.ITEMS
+                .getValue(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("gtceu", "powderbarrel"));
+        if (dynamite != null && stack.is(dynamite))
+            return true;
+        return stack.is(net.minecraft.tags.ItemTags.create(
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("tfg", "explosives")));
+    }
+
+    private int getFluidToProduce(FluidVeinWorldEntry entry) {
+        int depletedYield = entry.getDefinition().getDepletedYield();
+        int regularYield = entry.getFluidYield();
+        int remainingOperations = entry.getOperationsRemaining();
+        return Math.max(depletedYield,
+                regularYield * remainingOperations / BedrockFluidVeinSavedData.MAXIMUM_VEIN_OPERATIONS);
+    }
+}
