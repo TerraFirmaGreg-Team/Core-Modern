@@ -92,6 +92,33 @@ public class TFGBlocks_Earth {
             .item(BlockItem::new).build()
             .register();
 
+    public static final BlockEntry<Block> CARBONATE_HORNFELS = TFGCore.REGISTRATE.block("carbonate_hornfels", Block::new)
+            .properties(p -> p
+                    .mapColor(MapColor.TERRACOTTA_BROWN)
+                    .sound(SoundType.DEEPSLATE)
+                    .requiresCorrectToolForDrops())
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> PELITIC_HORNFELS = TFGCore.REGISTRATE.block("pelitic_hornfels", Block::new)
+            .properties(p -> p
+                    .mapColor(MapColor.TERRACOTTA_RED)
+                    .sound(SoundType.DEEPSLATE)
+                    .requiresCorrectToolForDrops())
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .simpleItem()
+            .register();
+
+    public static final BlockEntry<Block> MAFIC_HORNFELS = TFGCore.REGISTRATE.block("mafic_hornfels", Block::new)
+            .properties(p -> p
+                    .mapColor(MapColor.TERRACOTTA_BROWN)
+                    .sound(SoundType.DEEPSLATE)
+                    .requiresCorrectToolForDrops())
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .simpleItem()
+            .register();
+
     public static final Map<TFGPlant, BlockEntry<Block>> PLANTS = Helpers.mapOfKeys(TFGPlant.class,
             plant -> TFGCore.REGISTRATE.block("plant/" + plant.name().toLowerCase(Locale.ROOT), p -> plant.create())
                     .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
