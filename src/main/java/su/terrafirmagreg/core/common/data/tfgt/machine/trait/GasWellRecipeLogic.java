@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.trait;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.FluidVeinWorldEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -23,7 +22,7 @@ public class GasWellRecipeLogic {
     }
 
     public static final int FLUID_CONSUMPTION_PER_TICK = 10;
-    public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 1200;
+    public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 120;
 
     private final GasWellMachine machine;
 
@@ -78,7 +77,7 @@ public class GasWellRecipeLogic {
 
         // Use explosive
         timer++;
-        if (timer >= EXPLOSIVE_CONSUMPTION_INTERVAL) {
+        if (timer >= EXPLOSIVE_CONSUMPTION_INTERVAL * 20) { // interval en secondes * 20 ticks
             if (!consumeExplosive()) {
                 hasConsumedExplosive = false;
                 timer = 0;
@@ -87,14 +86,14 @@ public class GasWellRecipeLogic {
             timer = 0;
         }
 
-        int produced = getFluidToProduce(entry);
-        if (produced <= 0)
-            return;
-
-        outputFluid(new FluidStack(veinFluid, produced));
-
-        if (GTValues.RNG.nextInt(1) == 0) {
-            savedData.depleteVein(chunkX, chunkZ, 1, false);
+        // Production once per second
+        if (machine.getOffsetTimer() % 20 == 0) {
+            int produced = getFluidToProduce(entry);
+            if (produced <= 0)
+                return;
+            outputFluid(new FluidStack(veinFluid, produced));
+            // Amount of depletion and override the stat veins
+            savedData.depleteVein(chunkX, chunkZ, 5, true);
         }
     }
 
@@ -103,19 +102,20 @@ public class GasWellRecipeLogic {
         if (inputTank == null)
             return false;
 
-        var waterStack = GTMaterials.Water.getFluid(FLUID_CONSUMPTION_PER_TICK);
-        var steamStack = GTMaterials.Steam.getFluid(FLUID_CONSUMPTION_PER_TICK * 160);
+        int waterAmount = FLUID_CONSUMPTION_PER_TICK;
+        int steamAmount = FLUID_CONSUMPTION_PER_TICK * 160;
 
-        // Try to drain water
+        var waterStack = GTMaterials.Water.getFluid(waterAmount);
+        var steamStack = GTMaterials.Steam.getFluid(steamAmount);
+
         var drained = inputTank.drainInternal(waterStack, IFluidHandler.FluidAction.SIMULATE);
-        if (!drained.isEmpty() && drained.getAmount() >= FLUID_CONSUMPTION_PER_TICK) {
+        if (!drained.isEmpty() && drained.getAmount() >= waterAmount) {
             inputTank.drainInternal(waterStack, IFluidHandler.FluidAction.EXECUTE);
             return true;
         }
 
-        // Try to drain steam
         drained = inputTank.drainInternal(steamStack, IFluidHandler.FluidAction.SIMULATE);
-        if (!drained.isEmpty() && drained.getAmount() >= FLUID_CONSUMPTION_PER_TICK * 160) {
+        if (!drained.isEmpty() && drained.getAmount() >= steamAmount) {
             inputTank.drainInternal(steamStack, IFluidHandler.FluidAction.EXECUTE);
             return true;
         }
