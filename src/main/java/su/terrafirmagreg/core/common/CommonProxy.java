@@ -37,6 +37,7 @@ import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
+import su.terrafirmagreg.core.world.TFGCarvers;
 import su.terrafirmagreg.core.world.TFGFeatures;
 import su.terrafirmagreg.core.world.TFGPlacements;
 import su.terrafirmagreg.core.world.TFGSurfaceRules;
@@ -70,6 +71,7 @@ public class CommonProxy {
         TFGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
         TFGEvents.register();
         TFGSounds.SOUNDS.register(bus);
+        TFGCarvers.CARVERS.register(bus);
 
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);
