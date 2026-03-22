@@ -30,7 +30,7 @@ public class VolcanoSmoke extends TextureSheetParticle {
         xWind = wind.x;
         zWind = wind.y;
 
-        this.scale(this.random.nextFloat() * 8F + 20F);
+        this.scale(this.random.nextFloat() * 8F + 60F);
 
         this.setSpriteFromAge(this.spriteSet);
     }
