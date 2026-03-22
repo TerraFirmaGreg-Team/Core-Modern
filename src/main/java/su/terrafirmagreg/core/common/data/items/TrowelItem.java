@@ -1,19 +1,16 @@
 package su.terrafirmagreg.core.common.data.items;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.dries007.tfc.common.blocks.rock.Rock;
-import net.dries007.tfc.common.blocks.soil.SandBlockType;
+import com.therighthon.rnr.common.recipe.BlockModRecipe;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -24,81 +21,38 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraftforge.registries.ForgeRegistries;
 
+import su.terrafirmagreg.core.utils.TFGModsResolver;
+
+/**
+ * The TrowelItem allows players to place random blocks from their hotbar or, if the RnR mod is loaded,
+ * to use RnR road recipes on base course blocks using items from the hotbar.
+ */
+@SuppressWarnings("deprecation")
 public class TrowelItem extends Item {
-    public TrowelItem(Properties properties) {
-        super(properties.durability(1026));
+
+    public TrowelItem(Properties props) {
+        super(props);
     }
 
-    // Maps for RNR block replacing.
-    public static Map<ResourceLocation, ResourceLocation> createBlockMapping() {
-        Map<ResourceLocation, ResourceLocation> map = new HashMap<>();
-
-        // Gets enums from TFC and turns into a sring for the maps.
-        List<String> sandstone_colors = Arrays.stream(SandBlockType.values())
-                .map(SandBlockType -> SandBlockType.name().toLowerCase(Locale.ROOT))
-                .toList();
-
-        List<String> rocks = Arrays.stream(Rock.values())
-                .map(rock -> rock.name().toLowerCase(Locale.ROOT))
-                .toList();
-
-        // Sandstone
-        for (String sandstone_color : sandstone_colors) {
-            map.put(
-                    ResourceLocation.fromNamespaceAndPath("rnr", "flagstone/" + sandstone_color + "_sandstone"),
-                    ResourceLocation.fromNamespaceAndPath("rnr", sandstone_color + "_sandstone_flagstones"));
-        }
-        // Flagstones
-        for (String flagstone_rock : rocks) {
-            map.put(
-                    ResourceLocation.fromNamespaceAndPath("rnr", "flagstone/" + flagstone_rock),
-                    ResourceLocation.fromNamespaceAndPath("rnr", "rock/flagstones/" + flagstone_rock));
-        }
-        // Gravel
-        for (String gravel_rock : rocks) {
-            map.put(
-                    ResourceLocation.fromNamespaceAndPath("rnr", "gravel_fill/" + gravel_rock),
-                    ResourceLocation.fromNamespaceAndPath("rnr", "rock/gravel_road/" + gravel_rock));
-        }
-        // Cobble
-        for (String cobble_rock : rocks) {
-            map.put(
-                    ResourceLocation.fromNamespaceAndPath("tfc", "rock/loose/" + cobble_rock),
-                    ResourceLocation.fromNamespaceAndPath("rnr", "rock/cobbled_road/" + cobble_rock));
-        }
-        for (String mossy_cobble_rock : rocks) {
-            map.put(
-                    ResourceLocation.fromNamespaceAndPath("tfc", "rock/mossy_loose/" + mossy_cobble_rock),
-                    ResourceLocation.fromNamespaceAndPath("rnr", "rock/cobbled_road/" + mossy_cobble_rock));
-        }
-        // Sett Bricks
-        for (String brick_rock : rocks) {
-            map.put(
-                    ResourceLocation.fromNamespaceAndPath("tfc", "brick/" + brick_rock),
-                    ResourceLocation.fromNamespaceAndPath("rnr", "rock/sett_road/" + brick_rock));
-        }
-        // Hoggin
-        map.put(
-                ResourceLocation.fromNamespaceAndPath("rnr", "hoggin_mix"),
-                ResourceLocation.fromNamespaceAndPath("rnr", "hoggin"));
-        // Brick
-        map.put(
-                ResourceLocation.fromNamespaceAndPath("minecraft", "brick"),
-                ResourceLocation.fromNamespaceAndPath("rnr", "brick_road"));
-
-        return map;
-    }
-
+    /**
+     * Called when the player uses the trowel on a block. If the RnR mod is loaded and the clicked block is
+     * base course, it attempts to apply a matching RnR BlockModRecipe using a hotbar item. Otherwise, places
+     * a random block from the player's hotbar.
+     *
+     * @param context The use context, including player, world, and target block information.
+     * @return The result of the interaction.
+     */
     @Override
     public @NotNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         if (level.isClientSide())
             return InteractionResult.SUCCESS;
+
+        if (!(level instanceof ServerLevel))
+            return InteractionResult.PASS;
 
         Player player = context.getPlayer();
         if (player == null)
@@ -110,51 +64,37 @@ public class TrowelItem extends Item {
         BlockState clickedState = level.getBlockState(targetPos);
         ResourceLocation clickedBlockId = clickedState.getBlock().builtInRegistryHolder().key().location();
 
-        Map<ResourceLocation, ResourceLocation> blockMapping = createBlockMapping();
-
-        // Exception for rnr roads.
-        if (clickedBlockId.toString().equals("rnr:base_course")) {
-            List<ItemStack> validStacks = new ArrayList<>();
-            // Randomly chooses a spot in the hotbar.
+        // RNR road exception. Use BlockModRecipe to find a matching recipe.
+        if (TFGModsResolver.RNR.isLoaded() && clickedBlockId.toString().equals("rnr:base_course")) {
+            List<HotbarEntry> validEntries = new ArrayList<>();
             for (int i = 0; i < 9; i++) {
                 ItemStack hotbarStack = player.getInventory().getItem(i);
                 if (!hotbarStack.isEmpty()) {
-                    ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(hotbarStack.getItem());
-                    if (itemId != null && blockMapping.containsKey(itemId)) {
-                        validStacks.add(hotbarStack);
+                    ItemStack oneStack = hotbarStack.copy();
+                    oneStack.setCount(1);
+                    BlockModRecipe recipe = BlockModRecipe.getRecipe(clickedState, oneStack);
+                    if (recipe != null && recipe.getOutputBlock() != null && recipe.getOutputBlock() != clickedState) {
+                        validEntries.add(new HotbarEntry(i, hotbarStack, recipe));
                     }
                 }
             }
 
-            if (validStacks.isEmpty())
+            if (validEntries.isEmpty())
                 return InteractionResult.PASS;
 
-            ItemStack randomStack = validStacks.get(new Random().nextInt(validStacks.size()));
-            ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(randomStack.getItem());
-            ResourceLocation resultBlockId = blockMapping.get(itemId);
-            Block resultBlock = ForgeRegistries.BLOCKS.getValue(resultBlockId);
+            HotbarEntry chosen = validEntries.get(new Random().nextInt(validEntries.size()));
+            BlockState newState = chosen.recipe.getOutputBlock();
 
-            if (resultBlock != null) {
-                // Updates state.
-                BlockState newState = resultBlock.defaultBlockState();
-                level.setBlock(targetPos, newState, 3);
-                level.updateNeighborsAt(targetPos, resultBlock);
+            level.setBlock(targetPos, newState, 3);
+            level.updateNeighborsAt(targetPos, newState.getBlock());
 
-                // Plays sound when placing.
-                level.playSound(null, targetPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);
+            level.playSound(null, targetPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);
 
-                // Decreases item count unless in creative.
-                if (!player.isCreative()) {
-                    randomStack.shrink(1);
-                }
-
-                // Damages the tool, or breaks it if at 0.
-                stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
-
-                return InteractionResult.SUCCESS;
+            if (!player.isCreative() && Boolean.TRUE.equals(chosen.recipe.consumesItem())) {
+                chosen.stack.shrink(1);
             }
 
-            return InteractionResult.FAIL;
+            return InteractionResult.SUCCESS;
         }
 
         // Normal block behavior.
@@ -197,11 +137,16 @@ public class TrowelItem extends Item {
             randomStack.shrink(1);
         }
 
-        // Only damage the trowel if the block was placed
-        if (result.consumesAction() && !player.isCreative()) {
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
-        }
-
         return result;
+    }
+
+    /**
+     * Represents a hotbar entry containing the slot index, item stack, and associated BlockModRecipe.
+     *
+     * @param slot   The hotbar slot index.
+     * @param stack  The item stack in the slot.
+     * @param recipe The matching BlockModRecipe for this stack and block state.
+     */
+    private record HotbarEntry(int slot, ItemStack stack, BlockModRecipe recipe) {
     }
 }

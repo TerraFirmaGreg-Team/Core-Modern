@@ -45,6 +45,7 @@ import de.mennomax.astikorcarts.config.AstikorCartsConfig;
 import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 import de.mennomax.astikorcarts.util.CartItemStackHandler;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
 
 /**
@@ -77,7 +78,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
     // Array of block tags that can be converted into base course by the plow.
     // Added `#tfg:base_course_sources` to have an easy way to add more.
     private static final List<TagKey<Block>> BASE_COURSE_SOURCE_TAGS = List.of(
-            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfg", "base_course_sources")),
+            TagKey.create(Registries.BLOCK, TFGCore.id("base_course_sources")),
             TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("minecraft", "dirt")),
             TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "mud")),
             TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "grass")));

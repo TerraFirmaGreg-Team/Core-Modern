@@ -112,6 +112,17 @@ public class TFGTRecipes {
                 .EUt(GTValues.VA[GTValues.MV])
                 .save(provider);
 
+        GTRecipeTypes.ASSEMBLER_RECIPES.recipeBuilder("hv_16a_energy_output")
+                .inputItems(GTMachines.TRANSFORMER[GTValues.HV])
+                .inputItems(TFGMachines.HV_ENERGY_OUTPUT_HATCH_4A)
+                .inputItems(GTCraftingComponents.WIRE_OCT.get(GTValues.HV), 2)
+                .inputItems(GTCraftingComponents.PLATE.get(GTValues.HV), 4)
+                .outputItems(TFGMachines.HV_ENERGY_OUTPUT_HATCH_16A, 1)
+                .addMaterialInfo(true)
+                .duration(5 * 20)
+                .EUt(GTValues.VA[GTValues.MV])
+                .save(provider);
+
         for (int i = 0; i < TFGMachines.RAILGUN_ITEM_LOADER_IN.length; i++) {
             if (TFGMachines.RAILGUN_ITEM_LOADER_IN[i] != null && TFGMachines.RAILGUN_ITEM_LOADER_OUT[i] != null) {
                 VanillaRecipeHelper.addShapedRecipe(provider, true,

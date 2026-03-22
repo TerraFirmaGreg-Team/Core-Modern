@@ -1,12 +1,19 @@
 package su.terrafirmagreg.core.mixins.common.tfchotornot;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.llamalad7.mixinextras.injector.ModifyReceiver;
+
 import net.dries007.tfc.common.TFCEffects;
+import net.dries007.tfc.util.EnvironmentHelpers;
+import net.dries007.tfc.util.Helpers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -14,14 +21,26 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import tfchotornot.EventHandler;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 @Mixin(value = EventHandler.class, remap = false)
 public class EventHandlerMixin {
+
+    @Unique
+    @SuppressWarnings("removal")
+    private static final TagKey<Fluid> GT_OILS = TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("tfg", "oils"));
+    @Unique
+    @SuppressWarnings("removal")
+    private static final TagKey<Fluid> FIRMALIFE_OILS = TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), new ResourceLocation("firmalife", "oils"));
 
     // If the fluid is inside some sort of insulating container, cancel the effect
 
@@ -29,7 +48,21 @@ public class EventHandlerMixin {
     private static void tfg$applyEffectsFluid(ItemStack stack, FluidStack fluidStack, Player player, Level level, CallbackInfo ci) {
         if (stack.is(TFGTags.Items.InsulatingContainer)) {
             ci.cancel();
+            return;
         }
+
+        // Oil floats on water O_O
+        if (TFGCore.IS_APRIL_FIRST && EnvironmentHelpers.isRainingOrSnowing(level, player.blockPosition().above())
+                && (Helpers.isFluid(fluidStack.getFluid(), GT_OILS) || Helpers.isFluid(fluidStack.getFluid(), FIRMALIFE_OILS))) {
+            player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40, 0));
+            ci.cancel();
+        }
+    }
+
+    // Stacked fluid containers (count > 1) don't expose FLUID_HANDLER_ITEM capability, so query as a single-item stack
+    @ModifyReceiver(method = "onPlayerTick", require = 2, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;", remap = false))
+    private static ItemStack tfg$normalizeStackCount(ItemStack stack, Capability<IFluidHandlerItem> cap) {
+        return stack.getCount() > 1 ? stack.copyWithCount(1) : stack;
     }
 
     // The first thing the mod does is check if the player has fire prot or resistance... which this should nullify.

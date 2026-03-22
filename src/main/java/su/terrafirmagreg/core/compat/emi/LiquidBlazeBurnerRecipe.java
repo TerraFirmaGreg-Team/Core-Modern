@@ -13,6 +13,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -47,7 +48,8 @@ public class LiquidBlazeBurnerRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return TFGCore.id(ID.replace(':', '_') + "_emi");
+        ResourceLocation fluidId = ForgeRegistries.FLUIDS.getKey(FLUID);
+        return TFGCore.id("/" + fluidId.getNamespace() + "_" + fluidId.getPath() + "_blaze_burner_emi");
     }
 
     @Override
