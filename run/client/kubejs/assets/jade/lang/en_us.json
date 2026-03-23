@@ -3,5 +3,10 @@
   "config.jade.plugin_tfc.soarer": "",
   "config.jade.plugin_tfc.snatcher": "",
   "config.jade.plugin_tfc.surfer": "",
-  "config.jade.plugin_tfc.axolotl": ""
+  "config.jade.plugin_tfc.axolotl": "",
+  "config.jade.plugin_tfc.mongoose": "",
+  "config.jade.plugin_tfc.bison": "",
+  "config.jade.plugin_tfc.leopard_seal": "",
+  "config.jade.plugin_tfc.jerboa": "",
+  "config.jade.plugin_tfc.lemming": ""
 }

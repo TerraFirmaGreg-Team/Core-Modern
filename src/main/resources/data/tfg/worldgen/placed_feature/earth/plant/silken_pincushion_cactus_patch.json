@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/silken_pincushion_cactus_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 40,
+            "max_rainfall": 170,
+            "max_forest": "normal",
+            "type": "tfc:climate",
+            "min_rainfall": 0,
+            "min_forest": "none",
+            "min_temperature": 17.6
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

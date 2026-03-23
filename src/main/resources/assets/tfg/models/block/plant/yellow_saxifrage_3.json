@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/plant/flowerbed_3",
+    "textures": {
+        "flowerbed": "tfg:block/plant/yellow_saxifrage/petals",
+        "stem": "tfg:block/plant/yellow_saxifrage/stem"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

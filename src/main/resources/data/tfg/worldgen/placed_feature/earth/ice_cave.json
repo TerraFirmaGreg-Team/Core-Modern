@@ -1,0 +1,22 @@
+{
+    "feature": "tfg:earth/ice_cave",
+    "placement": [
+        {
+            "max_temperature": -12,
+            "type": "tfc:climate"
+        },
+        {
+            "count": 10,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": -16},
+                "max_inclusive": {"absolute": 68},
+                "type": "uniform"
+            }
+        }
+    ]
+}

@@ -1,0 +1,348 @@
+{
+    "textures": {
+        "0": "tfg:block/plant/mussels/mussels_0",
+        "1": "tfg:block/plant/mussels/mussels_1",
+        "particle": "tfg:block/plant/mussels/mussels_1"
+    },
+    "elements": [
+        {
+            "name": "lower",
+            "from": [
+                0,
+                0.01,
+                0
+            ],
+            "to": [
+                16,
+                0.01,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#1"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#1"
+                }
+            }
+        },
+        {
+            "name": "mussel_left",
+            "from": [
+                2,
+                -1,
+                11
+            ],
+            "to": [
+                7,
+                5,
+                11
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        3,
+                        10,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        8,
+                        10,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "name": "mussel_right",
+            "from": [
+                7,
+                -1,
+                2
+            ],
+            "to": [
+                7,
+                5,
+                7
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        8,
+                        10,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        3,
+                        10,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    9,
+                    0,
+                    7
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "name": "mussel_left",
+            "from": [
+                7,
+                -1,
+                7
+            ],
+            "to": [
+                12,
+                5,
+                7
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        8,
+                        10,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        3,
+                        10,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "name": "mussel_right",
+            "from": [
+                7,
+                -1,
+                7
+            ],
+            "to": [
+                12,
+                5,
+                7
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        8,
+                        10,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        3,
+                        10,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    7,
+                    0,
+                    5
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "name": "mussel_left",
+            "from": [
+                7,
+                -1,
+                2
+            ],
+            "to": [
+                7,
+                5,
+                7
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        8,
+                        10,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        3,
+                        10,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    6,
+                    0,
+                    11
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "name": "mussel_right",
+            "from": [
+                2,
+                -1,
+                11
+            ],
+            "to": [
+                7,
+                5,
+                11
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        3,
+                        10,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        8,
+                        10,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "name": "mussel_left",
+            "from": [
+                12,
+                -1,
+                9
+            ],
+            "to": [
+                12,
+                5,
+                14
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        3,
+                        10,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        8,
+                        10,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    12,
+                    0,
+                    10
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "name": "mussel_right",
+            "from": [
+                12,
+                -1,
+                9
+            ],
+            "to": [
+                12,
+                5,
+                14
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        3,
+                        10,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        8,
+                        10,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ],
+    "display": {"thirdperson_righthand": {"translation": [
+        0,
+        8.25,
+        0
+    ]}},
+    "credit": "Made with Blockbench"
+}

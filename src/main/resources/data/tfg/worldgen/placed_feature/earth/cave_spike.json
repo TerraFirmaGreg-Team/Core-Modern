@@ -1,0 +1,15 @@
+{
+    "feature": "tfc:cave_spike",
+    "placement": [
+        {
+            "step": "air",
+            "type": "tfc:carving_mask"
+        },
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "tfc:underground"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

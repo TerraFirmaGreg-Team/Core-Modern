@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/qantu_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 23,
+            "max_rainfall": 350,
+            "max_forest": "edge",
+            "type": "tfc:climate",
+            "min_rainfall": 200,
+            "min_forest": "none",
+            "min_temperature": 10.4
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

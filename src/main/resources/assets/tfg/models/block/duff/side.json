@@ -1,0 +1,42 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "overlay": "tfg:block/duff_side",
+        "particle": "tfg:block/duff_side"
+    },
+    "elements": [
+        {
+            "from": [
+                0,
+                0,
+                0
+            ],
+            "to": [
+                16,
+                16,
+                0
+            ],
+            "faces": {"north": {
+                "cullface": "north",
+                "texture": "#texture"
+            }}
+        },
+        {
+            "from": [
+                0,
+                0,
+                0
+            ],
+            "to": [
+                16,
+                16,
+                0
+            ],
+            "faces": {"north": {
+                "cullface": "north",
+                "texture": "#overlay"
+            }}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

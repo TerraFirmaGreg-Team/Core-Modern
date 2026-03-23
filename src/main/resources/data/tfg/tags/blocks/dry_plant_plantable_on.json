@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#minecraft:sand",
+        "#forge:gravel",
+        "#tfc:bush_plantable_on",
+        "#forge:sandstone"
+    ],
+    "replace": false
+}

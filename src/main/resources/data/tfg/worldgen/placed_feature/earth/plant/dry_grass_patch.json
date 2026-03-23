@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/dry_grass_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 40,
+            "max_rainfall": 95,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 35,
+            "min_forest": "edge",
+            "min_temperature": -13
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

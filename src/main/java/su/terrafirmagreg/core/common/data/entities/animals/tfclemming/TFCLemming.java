@@ -7,7 +7,6 @@
 package su.terrafirmagreg.core.common.data.entities.animals.tfclemming;
 
 import net.dries007.tfc.client.TFCSounds;
-import net.dries007.tfc.common.entities.prey.Pest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -16,8 +15,10 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
-public class TFCLemming extends Pest {
-    public TFCLemming(EntityType<? extends Pest> type, Level level) {
+import su.terrafirmagreg.core.common.data.entities.TFGPest;
+
+public class TFCLemming extends TFGPest {
+    public TFCLemming(EntityType<? extends TFGPest> type, Level level) {
         super(type, level, TFCSounds.RAT);
     }
 

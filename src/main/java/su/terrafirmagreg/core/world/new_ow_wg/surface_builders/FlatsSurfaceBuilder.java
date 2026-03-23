@@ -1,0 +1,39 @@
+/* Originally from [TerraFirmaCraft] (https://github.com/TerraFirmaCraft/TerraFirmaCraft)
+ * Licensed under the EUPL, Version 1.2.
+ * You may obtain a copy of the Licence at:
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ */
+
+package su.terrafirmagreg.core.world.new_ow_wg.surface_builders;
+
+import net.dries007.tfc.world.surface.SurfaceBuilderContext;
+import net.dries007.tfc.world.surface.SurfaceState;
+import net.dries007.tfc.world.surface.SurfaceStates;
+import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
+
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGSimpleSurfaceStates;
+
+public class FlatsSurfaceBuilder implements SurfaceBuilder {
+    private final TFGComplexSurfaceStates complexStates;
+    private final SurfaceState top;
+    private final SurfaceState mid;
+    private final SurfaceState water;
+
+    public FlatsSurfaceBuilder(boolean isMuddy) {
+        TFGSimpleSurfaceStates simpleStates = TFGSimpleSurfaceStates.INSTANCE();
+        this.complexStates = TFGComplexSurfaceStates.INSTANCE();
+        this.top = isMuddy ? simpleStates.DRY_MUD : simpleStates.SALTED_EARTH;
+        this.mid = isMuddy ? simpleStates.DRY_MUD : complexStates.UNDER_GRAVEL;
+        this.water = SurfaceStates.MUD;
+    }
+
+    @Override
+    public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
+        if (startY < 66 && context.rainfall() < 25) {
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, complexStates.UNDER_GRAVEL, complexStates.UNDER_GRAVEL, water, water);
+        } else {
+            TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, top, mid, complexStates.UNDER_GRAVEL, water, water);
+        }
+    }
+}

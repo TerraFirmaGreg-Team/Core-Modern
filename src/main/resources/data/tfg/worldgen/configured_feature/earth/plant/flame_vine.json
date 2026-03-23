@@ -1,0 +1,12 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:weeping_vines",
+    "config": {
+        "head": "tfg:plant/flame_vine",
+        "tries": 40,
+        "min_height": 8,
+        "max_height": 16,
+        "body": "tfg:plant/flame_vine_plant",
+        "radius": 10
+    }
+}

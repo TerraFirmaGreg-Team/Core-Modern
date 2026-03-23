@@ -17,7 +17,7 @@ public class DryIceBlock extends IceBlock {
 
     @Override
     public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
-        level.removeBlock(pos, false);
+        dropResources(state, level, pos, te, player, stack);
     }
 
     @Override

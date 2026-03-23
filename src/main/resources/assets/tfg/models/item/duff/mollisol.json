@@ -1,0 +1,4 @@
+{
+    "parent": "tfg:item/duff/inv",
+    "textures": {"block": "tfg:block/dirt/mollisol"}
+}

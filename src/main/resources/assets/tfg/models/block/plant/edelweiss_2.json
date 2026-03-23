@@ -1,0 +1,5 @@
+{
+    "parent": "block/cross",
+    "textures": {"cross": "tfg:block/plant/edelweiss/edelweiss_2"},
+    "__comment__": "This file was automatically created by mcresources"
+}

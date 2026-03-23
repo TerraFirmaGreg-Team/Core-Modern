@@ -1,0 +1,27 @@
+{
+    "feature": "tfg:earth/plant/yellow_saxifrage",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {
+                        "stage": "1",
+                        "age": "1"
+                    },
+                    "Name": "tfg:plant/yellow_saxifrage"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

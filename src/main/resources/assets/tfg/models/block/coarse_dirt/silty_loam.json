@@ -1,0 +1,4 @@
+{
+    "parent": "block/cube_all",
+    "textures": {"all": "tfg:block/coarse_dirt/silty_loam"}
+}

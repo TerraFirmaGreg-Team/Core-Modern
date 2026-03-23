@@ -1,0 +1,58 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfg:block/plant/azalea_lower_3"},
+        "when": {
+            "part": "lower",
+            "age": "0"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/azalea_lower_2"},
+        "when": {
+            "part": "lower",
+            "age": "1"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/azalea_lower_1"},
+        "when": {
+            "part": "lower",
+            "age": "2"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/azalea_lower_0"},
+        "when": {
+            "part": "lower",
+            "age": "3"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/azalea_upper_3"},
+        "when": {
+            "part": "upper",
+            "age": "0"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/azalea_upper_2"},
+        "when": {
+            "part": "upper",
+            "age": "1"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/azalea_upper_1"},
+        "when": {
+            "part": "upper",
+            "age": "2"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/azalea_upper_0"},
+        "when": {
+            "part": "upper",
+            "age": "3"
+        }
+    }
+]}

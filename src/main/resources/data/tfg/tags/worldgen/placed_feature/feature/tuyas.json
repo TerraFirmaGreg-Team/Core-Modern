@@ -1,0 +1,11 @@
+{
+    "values": [
+        "tfg:earth/tuya_rivulet",
+        "tfg:earth/tuya_caldera",
+        "tfg:earth/random_tuya_fissure",
+        "tfg:earth/pumice_patch",
+        "tfg:earth/lava_surface_spring"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}
