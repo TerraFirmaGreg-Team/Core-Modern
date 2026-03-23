@@ -92,30 +92,36 @@ public class TFGBlocks_Earth {
             .item(BlockItem::new).build()
             .register();
 
-    public static final BlockEntry<Block> CARBONATE_HORNFELS = TFGCore.REGISTRATE.block("carbonate_hornfels", Block::new)
+    public static final BlockEntry<TFGTierLockedBlock> CARBONATE_HORNFELS = TFGCore.REGISTRATE.block("carbonate_hornfels", TFGTierLockedBlock::new)
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.DEEPSLATE)
+                    .strength(15f)
                     .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE,
+                    BlockTags.NEEDS_DIAMOND_TOOL)
             .simpleItem()
             .register();
 
-    public static final BlockEntry<Block> PELITIC_HORNFELS = TFGCore.REGISTRATE.block("pelitic_hornfels", Block::new)
+    public static final BlockEntry<TFGTierLockedBlock> PELITIC_HORNFELS = TFGCore.REGISTRATE.block("pelitic_hornfels", TFGTierLockedBlock::new)
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_RED)
                     .sound(SoundType.DEEPSLATE)
+                    .strength(15f)
                     .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE,
+                    BlockTags.NEEDS_DIAMOND_TOOL)
             .simpleItem()
             .register();
 
-    public static final BlockEntry<Block> MAFIC_HORNFELS = TFGCore.REGISTRATE.block("mafic_hornfels", Block::new)
+    public static final BlockEntry<TFGTierLockedBlock> MAFIC_HORNFELS = TFGCore.REGISTRATE.block("mafic_hornfels", TFGTierLockedBlock::new)
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.DEEPSLATE)
+                    .strength(15f)
                     .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE,
+                    BlockTags.NEEDS_DIAMOND_TOOL)
             .simpleItem()
             .register();
 
