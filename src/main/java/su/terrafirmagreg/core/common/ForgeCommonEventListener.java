@@ -1,11 +1,11 @@
 package su.terrafirmagreg.core.common;
 
-import com.gregtechceu.gtceu.common.worldgen.feature.FluidSproutFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
+import com.gregtechceu.gtceu.common.worldgen.feature.FluidSproutFeature;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
