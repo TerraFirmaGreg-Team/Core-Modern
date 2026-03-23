@@ -35,6 +35,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -96,8 +97,11 @@ public class TFGBlocks_Earth {
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.DEEPSLATE)
-                    .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+                    .strength(20)
+                    .explosionResistance(2)
+                    .requiresCorrectToolForDrops()
+                    .pushReaction(PushReaction.IGNORE))
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
             .simpleItem()
             .register();
 
@@ -105,8 +109,11 @@ public class TFGBlocks_Earth {
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_RED)
                     .sound(SoundType.DEEPSLATE)
-                    .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+                    .strength(20)
+                    .explosionResistance(2)
+                    .requiresCorrectToolForDrops()
+                    .pushReaction(PushReaction.IGNORE))
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
             .simpleItem()
             .register();
 
@@ -114,8 +121,11 @@ public class TFGBlocks_Earth {
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.DEEPSLATE)
-                    .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
+                    .strength(20)
+                    .explosionResistance(2)
+                    .requiresCorrectToolForDrops()
+                    .pushReaction(PushReaction.IGNORE))
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_COLLAPSE, Tags.Blocks.STONE, BlockTags.NEEDS_DIAMOND_TOOL)
             .simpleItem()
             .register();
 

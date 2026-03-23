@@ -35,12 +35,6 @@ import su.terrafirmagreg.core.world.new_ow_wg.surface_builders.TuyaSurfaceBuilde
 public class BiomeBuilderMixin implements IBiomeBuilder {
     @Shadow
     private SurfaceBuilderFactory surfaceBuilderFactory;
-    /** Now named 'hasCinderCones' in 1.21 TFC */
-    @Shadow
-    private boolean volcanic;
-    /** Now named 'centeredFeatureFrequency' in 1.21 TFC */
-    @Shadow
-    private int volcanoFrequency;
     @Shadow
     private boolean sandyRiverShores;
 
@@ -51,11 +45,15 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
     @Unique
     private int tfg$shoreBaseHeight;
     @Unique
+    private boolean tfg$hasCinderCones;
+    @Unique
     private boolean tfg$hasTuffRings;
     @Unique
     private boolean tfg$hasTuyas;
     @Unique
     private boolean tfg$centeredFeatureIce;
+    @Unique
+    private int tfg$centeredFeatureFrequency;
     @Unique
     private int tfg$centeredFeatureRockHeight;
     @Unique
@@ -69,12 +67,12 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
         tfg$riverBlendType = TFGRiverBlendType.NONE;
         tfg$shoreBaseHeight = TFCChunkGenerator.SEA_LEVEL_Y;
 
-        volcanic = false;
+        tfg$hasCinderCones = false;
         tfg$hasTuffRings = false;
         tfg$hasTuyas = false;
 
         tfg$centeredFeatureIce = false;
-        volcanoFrequency = 0;
+        tfg$centeredFeatureFrequency = 0;
         tfg$centeredFeatureRockHeight = 0;
         tfg$centeredFeatureBaseHeight = 0;
         tfg$centeredFeatureScaleHeight = 0;
@@ -108,7 +106,7 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
 
     public BiomeBuilder tfg$tuffRings(int frequency, int baseHeight, int scaleHeight) {
         this.tfg$hasTuffRings = true;
-        this.volcanoFrequency = frequency;
+        this.tfg$centeredFeatureFrequency = frequency;
         this.tfg$centeredFeatureBaseHeight = baseHeight;
         this.tfg$centeredFeatureScaleHeight = scaleHeight;
         return (BiomeBuilder) (Object) this;
@@ -116,7 +114,7 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
 
     public BiomeBuilder tfg$tuyas(int frequency, int baseHeight, int scaleHeight, int tuyaBasaltHeight, boolean icy) {
         this.tfg$hasTuyas = true;
-        this.volcanoFrequency = frequency;
+        this.tfg$centeredFeatureFrequency = frequency;
         this.tfg$centeredFeatureRockHeight = SEA_LEVEL_Y + tuyaBasaltHeight;
         this.tfg$centeredFeatureBaseHeight = baseHeight;
         this.tfg$centeredFeatureScaleHeight = scaleHeight;
@@ -125,8 +123,8 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
     }
 
     public BiomeBuilder tfg$cinderCones(int frequency, int baseHeight, int scaleHeight, int cinderConeBasaltHeight, boolean additive) {
-        this.volcanic = true;
-        this.volcanoFrequency = frequency;
+        this.tfg$hasCinderCones = true;
+        this.tfg$centeredFeatureFrequency = frequency;
         this.tfg$centeredFeatureRockHeight = SEA_LEVEL_Y + cinderConeBasaltHeight;
         this.tfg$centeredFeatureBaseHeight = baseHeight;
         this.tfg$centeredFeatureScaleHeight = scaleHeight;
@@ -136,8 +134,8 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
     @Inject(method = "build", at = @At("RETURN"), remap = false, cancellable = true)
     public void tfg$build(ResourceKey<Biome> key, CallbackInfoReturnable<BiomeExtension> cir) {
         var extension = cir.getReturnValue();
-        ((IBiomeExtension) extension).tfg$init(tfg$shoreBlendType, tfg$riverBlendType, tfg$shoreBaseHeight, tfg$hasTuffRings, tfg$hasTuyas,
-                tfg$centeredFeatureRockHeight, tfg$centeredFeatureBaseHeight, tfg$centeredFeatureScaleHeight, tfg$centeredFeatureIce);
+        ((IBiomeExtension) extension).tfg$init(tfg$shoreBlendType, tfg$riverBlendType, tfg$shoreBaseHeight, tfg$hasCinderCones, tfg$hasTuffRings, tfg$hasTuyas,
+                tfg$centeredFeatureFrequency, tfg$centeredFeatureRockHeight, tfg$centeredFeatureBaseHeight, tfg$centeredFeatureScaleHeight, tfg$centeredFeatureIce);
         cir.setReturnValue(extension);
     }
 }
