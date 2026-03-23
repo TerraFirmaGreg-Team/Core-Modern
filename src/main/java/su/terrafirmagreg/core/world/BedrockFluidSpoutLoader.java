@@ -38,9 +38,13 @@ public class BedrockFluidSpoutLoader extends SimpleJsonResourceReloadListener {
         VEIN_TO_FEATURE.clear();
         VEIN_TO_TYPE.clear();
 
+        /*
+        Check that each fluid veins is rightly configured in configure feature with the right ID vein
+        */
+
         for (var fileEntry : objects.entrySet()) {
             if (!fileEntry.getValue().isJsonObject()) {
-                LOGGER.warn("[TFG] bedrock_fluid_spouts: fichier {} n'est pas un objet JSON, ignoré",
+                LOGGER.warn("[TFG] bedrock_fluid_spouts: {} isn't a JSON so ignore",
                         fileEntry.getKey());
                 continue;
             }
@@ -48,7 +52,7 @@ public class BedrockFluidSpoutLoader extends SimpleJsonResourceReloadListener {
             JsonObject root = fileEntry.getValue().getAsJsonObject();
 
             if (!root.has("entries")) {
-                LOGGER.warn("[TFG] bedrock_fluid_spouts: fichier {} sans champ 'entries', ignoré",
+                LOGGER.warn("[TFG] bedrock_fluid_spouts: {} without the field 'entries', ignore",
                         fileEntry.getKey());
                 continue;
             }
