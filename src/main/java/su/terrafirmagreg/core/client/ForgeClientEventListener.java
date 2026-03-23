@@ -118,7 +118,7 @@ public class ForgeClientEventListener {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"deprecation", "ConstantConditions"})
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
         final ItemStack stack = event.getItemStack();
