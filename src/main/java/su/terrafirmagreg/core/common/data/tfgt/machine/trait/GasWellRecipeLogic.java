@@ -1,14 +1,20 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.trait;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.FluidVeinWorldEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.core.SectionPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.Items;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import lombok.Getter;
 
@@ -60,8 +66,8 @@ public class GasWellRecipeLogic {
             return;
 
         // Only work for natural_gas
-        var naturalGas = net.minecraftforge.registries.ForgeRegistries.FLUIDS
-                .getValue(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("gtceu", "natural_gas"));
+        var naturalGas = ForgeRegistries.FLUIDS
+                .getValue(GTCEu.id("natural_gas"));
         if (naturalGas == null || !veinFluid.isSame(naturalGas))
             return;
 
@@ -146,15 +152,10 @@ public class GasWellRecipeLogic {
         return false;
     }
 
-    private boolean isExplosive(net.minecraft.world.item.ItemStack stack) {
-        if (stack.is(Items.TNT))
-            return true;
-        var dynamite = net.minecraftforge.registries.ForgeRegistries.ITEMS
-                .getValue(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("gtceu", "powderbarrel"));
-        if (dynamite != null && stack.is(dynamite))
-            return true;
-        return stack.is(net.minecraft.tags.ItemTags.create(
-                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("tfg", "explosives")));
+    private static final TagKey<Item> EXPLOSIVES = ItemTags.create(ResourceLocation.fromNamespaceAndPath("tfg", "explosives"));
+
+    private boolean isExplosive(ItemStack stack) {
+        return stack.is(EXPLOSIVES);
     }
 
     private int getFluidToProduce(FluidVeinWorldEntry entry) {
