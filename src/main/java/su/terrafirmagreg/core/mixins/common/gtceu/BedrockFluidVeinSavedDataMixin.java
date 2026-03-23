@@ -33,7 +33,7 @@ import su.terrafirmagreg.core.common.data.tfgt.worldgen.TFGBedrockFluidRegistry;
 public abstract class BedrockFluidVeinSavedDataMixin {
 
     @Shadow
-    public final HashMap<ChunkPos, FluidVeinWorldEntry> veinFluids = null;
+    public HashMap<ChunkPos, FluidVeinWorldEntry> veinFluids;
 
     @Shadow
     private ServerLevel serverLevel;

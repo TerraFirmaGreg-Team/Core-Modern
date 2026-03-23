@@ -3,15 +3,23 @@ package su.terrafirmagreg.core.common;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -81,7 +89,7 @@ public final class ForgeCommonEventListener {
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(BedrockFluidSpoutLoader.INSTANCE);
     }
-    /*
+
     @SubscribeEvent
     public static void onChunkLoad(ChunkEvent.Load event) {
         if (event.getLevel().isClientSide())
@@ -90,58 +98,58 @@ public final class ForgeCommonEventListener {
             return;
         if (!(event.getLevel() instanceof ServerLevel serverLevel))
             return;
-    
+
         ChunkPos chunkPos = event.getChunk().getPos();
-    
+
         var savedData = BedrockFluidVeinSavedData.getOrCreate(serverLevel);
         var entry = savedData.getFluidVeinWorldEntry(chunkPos.x, chunkPos.z);
-    
+
         if (entry == null || entry.getVeinId() == null)
             return;
-    
+
         ResourceLocation featureId = BedrockFluidSpoutLoader.VEIN_TO_FEATURE.get(entry.getVeinId());
         if (featureId == null)
             return;
-    
+
         String type = BedrockFluidSpoutLoader.VEIN_TO_TYPE.getOrDefault(entry.getVeinId(), "spout");
-    
+
         if ("spout".equals(type)) {
             var cfRegistry = serverLevel.registryAccess()
                     .registry(Registries.CONFIGURED_FEATURE)
                     .orElse(null);
             if (cfRegistry == null)
                 return;
-    
+
             var configuredFeature = cfRegistry.get(featureId);
             if (configuredFeature == null)
                 return;
-    
+
             if (!(configuredFeature.feature() instanceof com.gregtechceu.gtceu.common.worldgen.feature.FluidSproutFeature))
                 return;
-    
+
             var config = (com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration) configuredFeature.config();
-    
+
             serverLevel.getServer().execute(() -> {
                 int x = chunkPos.getMiddleBlockX();
                 int z = chunkPos.getMiddleBlockZ();
                 int surfaceY = serverLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
-    
+
                 if (serverLevel.random.nextFloat() > config.sproutChance())
                     return;
-    
+
                 var fluid = config.fluid();
                 if (fluid == null || fluid.isSame(net.minecraft.world.level.material.Fluids.EMPTY))
                     return;
-    
+
                 var blockState = fluid.defaultFluidState().createLegacyBlock();
-    
+
                 int size = config.size().sample(serverLevel.random);
                 int surfaceOffset = config.surfaceOffset().sample(serverLevel.random);
-    
+
                 int minY = serverLevel.getMinBuildHeight() + size + 5;
                 int maxOriginY = Math.max(minY + 1, surfaceY / 2);
                 int originY = minY + serverLevel.random.nextInt(Math.max(1, maxOriginY - minY));
-    
+
                 int radius = net.minecraft.util.Mth.ceil(size / 2f);
                 int x0 = x - radius;
                 int y0 = originY - radius;
@@ -149,42 +157,42 @@ public final class ForgeCommonEventListener {
                 int width = size + 1;
                 int height = size + 1;
                 int length = size + 1;
-    
+
                 BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-    
+
                 for (int dx = 0; dx < width; dx++) {
                     float fx = dx * 2f / width - 1;
                     if (fx * fx > 1)
                         continue;
-    
+
                     for (int dy = 0; dy < height; dy++) {
                         float fy = dy * 2f / height - 1;
                         if (fx * fx + fy * fy > 1)
                             continue;
-    
+
                         int currentY = y0 + dy;
                         if (serverLevel.isOutsideBuildHeight(currentY))
                             continue;
-    
+
                         for (int dz = 0; dz < length; dz++) {
                             float fz = dz * 2f / length - 1;
                             if (fx * fx + fy * fy + fz * fz > 1)
                                 continue;
-    
+
                             mutablePos.set(x0 + dx, currentY, z0 + dz);
                             if (!serverLevel.isOutsideBuildHeight(mutablePos))
                                 serverLevel.getChunk(mutablePos).setBlockState(mutablePos, blockState, false);
                         }
                     }
                 }
-    
+
                 int topY = surfaceY + surfaceOffset;
                 for (int currentY = originY; currentY <= topY; currentY++) {
                     mutablePos.set(x, currentY, z);
                     if (serverLevel.isOutsideBuildHeight(mutablePos))
                         continue;
                     serverLevel.getChunk(mutablePos).setBlockState(mutablePos, blockState, false);
-    
+
                     if (currentY <= surfaceY) {
                         mutablePos.set(x + 1, currentY, z);
                         if (!serverLevel.isOutsideBuildHeight(mutablePos))
@@ -200,40 +208,40 @@ public final class ForgeCommonEventListener {
                             serverLevel.getChunk(mutablePos).setBlockState(mutablePos, blockState, false);
                     }
                 }
-    
-                LOGGER.debug("[FluidVeins] Spout placed at {},{},{} for vein {}", x, topY, z, entry.getVeinId());
+
+                //LOGGER.debug("[FluidVeins] Spout placed at {},{},{} for vein {}", x, topY, z, entry.getVeinId());
             });
-    
+
         } else if ("structure".equals(type)) {
             serverLevel.getServer().execute(() -> {
-                if (serverLevel.random.nextFloat() > 0.01f) // Spawn rate
+                if (serverLevel.random.nextFloat() > 0.05f) // Spawn rate
                     return;
-    
+
                 int x = chunkPos.getMiddleBlockX();
                 int z = chunkPos.getMiddleBlockZ();
                 int surfaceY = serverLevel.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, x, z);
-    
+
                 if (!loadGasVentBlocks()) {
                     LOGGER.warn("[FluidVeins] Do blocks exists");
                     return;
                 }
-    
+
                 var dryIce = cachedDryIce.defaultBlockState();
                 var geyserite = cachedGeyserite.defaultBlockState();
-    
+
                 BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-    
+
                 int baseRadius = 4;
                 for (int dx = -baseRadius - 1; dx <= baseRadius + 1; dx++) {
                     for (int dz = -baseRadius - 1; dz <= baseRadius + 1; dz++) {
                         double dist = Math.sqrt(dx * dx + dz * dz);
                         double effectiveRadius = baseRadius + (serverLevel.random.nextDouble() - 0.5) * 1.5;
-    
+
                         if (dist > effectiveRadius)
                             continue;
-    
+
                         mutablePos.set(x + dx, surfaceY - 1, z + dz);
-    
+
                         if (dist < 1.0) {
                             serverLevel.getChunk(mutablePos).setBlockState(mutablePos, dryIce, false);
                         } else {
@@ -242,10 +250,10 @@ public final class ForgeCommonEventListener {
                         }
                     }
                 }
-    
-                LOGGER.debug("[FluidVeins] Structure placed at {},{},{} for vein {}", x, surfaceY, z, entry.getVeinId());
+
+                //LOGGER.debug("[FluidVeins] Structure placed at {},{},{} for vein {}", x, surfaceY, z, entry.getVeinId());
             });
-    
+
         }
-    }*/
+    }
 }
