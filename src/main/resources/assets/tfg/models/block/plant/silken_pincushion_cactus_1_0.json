@@ -1,0 +1,214 @@
+{
+    "textures": {
+        "0": "tfg:block/plant/silken_pincushion_cactus/cactus_0",
+        "particle": "tfg:block/plant/silken_pincushion_cactus/cactus_0"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    13,
+                    0,
+                    2
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                13,
+                0,
+                2
+            ],
+            "to": [
+                13,
+                8,
+                10
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        8,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        8,
+                        8,
+                        0,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    7,
+                    0,
+                    2
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                7,
+                0,
+                2
+            ],
+            "to": [
+                7,
+                8,
+                10
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        8,
+                        8,
+                        0,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        8,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    14,
+                    0,
+                    3
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                6,
+                0,
+                3
+            ],
+            "to": [
+                14,
+                8,
+                3
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        8,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        8,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    14,
+                    0,
+                    9
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                6,
+                0,
+                9
+            ],
+            "to": [
+                14,
+                8,
+                9
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        8,
+                        8,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        8,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    7,
+                    0,
+                    3
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                7,
+                0,
+                3
+            ],
+            "to": [
+                13,
+                6,
+                9
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        1,
+                        1,
+                        7,
+                        7
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        9,
+                        1,
+                        15,
+                        7
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

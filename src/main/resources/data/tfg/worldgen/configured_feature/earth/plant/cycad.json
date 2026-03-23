@@ -1,0 +1,12 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:twisting_vines",
+    "config": {
+        "head": "tfg:plant/cycad",
+        "tries": 8,
+        "min_height": 2,
+        "max_height": 6,
+        "body": "tfg:plant/cycad_plant",
+        "radius": 7
+    }
+}

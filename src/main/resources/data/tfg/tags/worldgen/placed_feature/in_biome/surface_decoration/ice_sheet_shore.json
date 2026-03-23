@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#tfg:feature/ocean_plants",
+        "#tfg:feature/shore_decorations",
+        "#tfg:feature/land_plants"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

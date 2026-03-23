@@ -1,0 +1,75 @@
+{
+    "textures": {
+        "particle": "tfg:block/plant/elegant_sunburst_lichen/elegant_sunburst_lichen_layer1",
+        "layer1": "tfg:block/plant/elegant_sunburst_lichen/elegant_sunburst_lichen_layer1",
+        "layer2": "tfg:block/plant/elegant_sunburst_lichen/elegant_sunburst_lichen_layer2"
+    },
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "from": [
+                0,
+                1,
+                0
+            ],
+            "to": [
+                16,
+                1,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#layer1"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        0
+                    ],
+                    "texture": "#layer1"
+                }
+            }
+        },
+        {
+            "from": [
+                0,
+                2,
+                0
+            ],
+            "to": [
+                16,
+                2,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#layer2"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        0
+                    ],
+                    "texture": "#layer2"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

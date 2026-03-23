@@ -1,0 +1,49 @@
+{
+    "type": "tfc:canyon",
+    "config": {
+        "shape": {
+            "width_smoothness": 3,
+            "thickness": {
+                "type": "trapezoid",
+                "value": {
+                    "min": 0,
+                    "max": 6,
+                    "plateau": 2
+                }
+            },
+            "distance_factor": {
+                "type": "uniform",
+                "value": {
+                    "min_inclusive": 0.75,
+                    "max_exclusive": 1
+                }
+            },
+            "horizontal_radius_factor": {
+                "type": "uniform",
+                "value": {
+                    "min_inclusive": 0.75,
+                    "max_exclusive": 1
+                }
+            },
+            "vertical_radius_default_factor": 1,
+            "vertical_radius_center_factor": 0
+        },
+        "probability": 0.005,
+        "replaceable": "#tfc:can_carve",
+        "vertical_rotation": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": -0.125,
+                "max_exclusive": 0.125
+            }
+        },
+        "y": {
+            "min_inclusive": {"absolute": 10},
+            "max_inclusive": {"absolute": 67},
+            "type": "uniform"
+        },
+        "yScale": 3,
+        "lava_level": {"above_bottom": 8},
+        "aquifers_enabled": true
+    }
+}

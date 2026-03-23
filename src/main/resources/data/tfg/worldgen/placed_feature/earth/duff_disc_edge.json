@@ -1,0 +1,18 @@
+{
+    "feature": "tfg:earth/duff_disc_edge",
+    "placement": [
+        {
+            "type": "tfc:climate",
+            "min_forest": "edge"
+        },
+        {
+            "count": 3,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ]
+}

@@ -17,8 +17,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
@@ -28,14 +30,18 @@ import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.container.ArtisanTableScreen;
 import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
-import su.terrafirmagreg.core.common.data.entities.sniffer.*;
 import su.terrafirmagreg.core.common.data.particles.*;
 import su.terrafirmagreg.core.common.data.tfgt.machine.render.BouleRender;
 
 public class ClientProxy extends CommonProxy {
+    @SuppressWarnings("removal")
     public ClientProxy() {
         super();
         initializeDynamicRenders();
+
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(ForgeClientEventListener::registerColorHandlerBlocks);
+        bus.addListener(ForgeClientEventListener::registerColorHandlerItems);
     }
 
     @SubscribeEvent
@@ -46,13 +52,14 @@ public class ClientProxy extends CommonProxy {
         // prospector
         event.registerSpriteSet(TFGParticles.ORE_PROSPECTOR.get(), OreProspectorProvider::new);
         event.registerSpriteSet(TFGParticles.ORE_PROSPECTOR_VEIN.get(), OreProspectorVeinProvider::new);
-        event.registerSpriteSet(TFGParticles.COOLING_STEAM.get(), CoolingSteamProvider::new);
         // martian wind
         event.registerSpriteSet(TFGParticles.DARK_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xbe6621))); // avg color of red sand
         event.registerSpriteSet(TFGParticles.MEDIUM_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xc48456))); // avg color of ad astra mars sand
         event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
         // Other
+        event.registerSpriteSet(TFGParticles.COOLING_STEAM.get(), CoolingSteamProvider::new);
         event.registerSpriteSet(TFGParticles.FISH_SCHOOL.get(), FishSchoolProvider::new);
+        event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
     }
 
     @SuppressWarnings("removal")
@@ -68,10 +75,27 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.SULFUR_FUMES.getSource(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getSource(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICE.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.MARS_ICICLE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Mars.MARS_ICE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Mars.MARS_ICICLE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Casings.REFLECTOR_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SANDY_LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILTY_LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILT_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.LOAM_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.ALFISOL_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.ALFISOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.ALFISOL_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.MOLLISOL_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.MOLLISOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.MOLLISOL_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.OXISOL_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.OXISOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.OXISOL_DUFF.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_DUFF.get(), RenderType.cutoutMipped());
+            TFGBlocks_Earth.PLANTS.forEach((plant, block) -> ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutoutMipped()));
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }

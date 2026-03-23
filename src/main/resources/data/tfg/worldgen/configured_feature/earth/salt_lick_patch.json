@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:random_patch",
+    "config": {
+        "xz_spread": 8,
+        "tries": 32,
+        "y_spread": 1,
+        "feature": "tfc:salt_lick"
+    }
+}

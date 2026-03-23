@@ -1,0 +1,34 @@
+{
+    "feature": "tfg:earth/plant/prickly_pear_purple",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {
+                        "stage": "1",
+                        "part": "lower",
+                        "age": "1"
+                    },
+                    "Name": "tfg:plant/prickly_pear_purple"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
+        },
+        {"type": "tfc:no_solid_neighbors"},
+        {
+            "min_elevation": 1,
+            "max_elevation": 512,
+            "type": "tfg:intertidal"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,35 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:soil_disc",
+    "config": {
+        "max_radius": 5,
+        "min_radius": 3,
+        "height": 7,
+        "states": [
+            {
+                "with": "tfg:duff/sandy_loam",
+                "replace": "tfc:grass/sandy_loam"
+            },
+            {
+                "with": "tfg:duff/silty_loam",
+                "replace": "tfc:grass/silty_loam"
+            },
+            {
+                "with": "tfg:duff/silt",
+                "replace": "tfc:grass/silt"
+            },
+            {
+                "with": "tfg:duff/loam",
+                "replace": "tfc:grass/loam"
+            },
+            {
+                "with": "tfg:duff/mollisol",
+                "replace": "tfg:grass/mollisol"
+            },
+            {
+                "with": "tfg:duff/oxisol",
+                "replace": "tfg:grass/oxisol"
+            }
+        ]
+    }
+}

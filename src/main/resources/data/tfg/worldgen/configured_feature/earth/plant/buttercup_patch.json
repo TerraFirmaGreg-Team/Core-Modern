@@ -1,0 +1,10 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:random_patch",
+    "config": {
+        "xz_spread": 10,
+        "tries": 20,
+        "y_spread": 1,
+        "feature": "tfg:earth/plant/buttercup"
+    }
+}

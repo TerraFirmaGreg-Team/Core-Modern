@@ -1,0 +1,8 @@
+{
+    "parent": "tfg:block/plant/prickly_pear_1",
+    "textures": {
+        "particle": "tfg:block/plant/prickly_pear/flower_2",
+        "base": "tfg:block/plant/prickly_pear/base",
+        "flower": "tfg:block/plant/prickly_pear/flower_3"
+    }
+}

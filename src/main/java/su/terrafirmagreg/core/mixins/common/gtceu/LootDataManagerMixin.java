@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGBlocks_Buds;
 
 @Mixin(LootDataManager.class)
 public abstract class LootDataManagerMixin {
@@ -28,6 +28,6 @@ public abstract class LootDataManagerMixin {
         Map<ResourceLocation, LootTable> lootTables = (Map<ResourceLocation, LootTable>) allElements
                 .get(LootDataType.TABLE);
 
-        TFGBlocks.generateBudIndicatorLoot(lootTables);
+        TFGBlocks_Buds.generateBudIndicatorLoot(lootTables);
     }
 }

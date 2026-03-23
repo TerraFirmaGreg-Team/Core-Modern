@@ -1,0 +1,263 @@
+{
+    "textures": {
+        "0": "tfg:block/plant/fan_palm/frond_0a",
+        "1": "tfg:block/plant/fan_palm/small_frond_0a",
+        "particle": "tfg:block/plant/fan_palm/frond_0a"
+    },
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    3
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "name": "north0",
+            "from": [
+                -8,
+                0,
+                3
+            ],
+            "to": [
+                24,
+                16,
+                3
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    0,
+                    15,
+                    -3
+                ],
+                "angle": -45,
+                "axis": "x"
+            },
+            "name": "north1",
+            "from": [
+                -8,
+                14.9,
+                -3.3
+            ],
+            "to": [
+                24,
+                30.9,
+                -3.3
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        8
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        8
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    13,
+                    0,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "z"
+            },
+            "name": "east0",
+            "from": [
+                13,
+                0,
+                0
+            ],
+            "to": [
+                13,
+                16,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#1"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#1"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    15,
+                    19
+                ],
+                "angle": 45,
+                "axis": "x"
+            },
+            "name": "south0",
+            "from": [
+                -8,
+                14.9,
+                19.2
+            ],
+            "to": [
+                24,
+                30.9,
+                19.2
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        8
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        8
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    13
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "name": "south1",
+            "from": [
+                -8,
+                0,
+                13
+            ],
+            "to": [
+                24,
+                16,
+                13
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        8,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    3,
+                    0,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "name": "west0",
+            "from": [
+                3,
+                0,
+                0
+            ],
+            "to": [
+                3,
+                16,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#1"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#1"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

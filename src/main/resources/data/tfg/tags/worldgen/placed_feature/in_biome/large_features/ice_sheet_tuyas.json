@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#tfc:feature/boulders",
+        "#tfg:feature/tuyas",
+        "#tfg:feature/surface_flood_fill_lakes"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

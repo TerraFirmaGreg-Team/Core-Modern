@@ -1,0 +1,9 @@
+{
+    "parent": "tfg:block/grass_path_column",
+    "textures": {
+        "side": "tfg:block/grass_path/podzol_side",
+        "top": "tfg:block/grass_path/podzol_top",
+        "bottom": "tfg:block/dirt/podzol_top",
+        "dirt": "tfg:block/dirt/podzol"
+    }
+}

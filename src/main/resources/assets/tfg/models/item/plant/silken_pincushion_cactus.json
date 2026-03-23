@@ -1,0 +1,4 @@
+{
+    "parent": "item/generated",
+    "textures": {"layer0": "tfg:item/plant/silken_pincushion_cactus"}
+}

@@ -1,0 +1,11 @@
+{
+    "values": [
+        "#tfg:feature/ocean_plants",
+        "#tfc:feature/ocean_decorations",
+        "tfc:plant/dry_phragmite",
+        "tfc:plant/marsh_jungle_vines",
+        "#tfg:feature/land_plants"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

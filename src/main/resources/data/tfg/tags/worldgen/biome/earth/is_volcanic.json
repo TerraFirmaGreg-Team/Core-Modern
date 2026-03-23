@@ -1,0 +1,12 @@
+{
+    "values": [
+        "tfg:earth/canyons",
+        "tfg:earth/volcanic_mountains",
+        "tfg:earth/volcanic_oceanic_mountains",
+        "tfg:earth/active_shield_volcano",
+        "tfg:earth/volcanic_mountain_lake",
+        "tfg:earth/volcanic_oceanic_mountain_lake"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

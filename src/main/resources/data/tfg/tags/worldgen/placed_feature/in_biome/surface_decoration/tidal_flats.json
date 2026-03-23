@@ -1,0 +1,9 @@
+{
+    "values": [
+        "tfg:earth/sea_stacks_patch",
+        "#tfg:feature/shore_decorations",
+        "#tfg:feature/tide_pool_decorations"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

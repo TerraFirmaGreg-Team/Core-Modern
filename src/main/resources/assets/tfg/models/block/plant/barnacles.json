@@ -1,0 +1,135 @@
+{
+    "textures": {
+        "0": "tfg:block/plant/barnacles/barnacles_0",
+        "1": "tfg:block/plant/barnacles/barnacles_1",
+        "2": "tfg:block/plant/barnacles/barnacles_2",
+        "3": "tfg:block/plant/barnacles/barnacles_3",
+        "particle": "tfg:block/plant/barnacles/barnacles_1"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                0,
+                0,
+                0
+            ],
+            "to": [
+                16,
+                0.1,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#1"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                0,
+                0.3,
+                0
+            ],
+            "to": [
+                16,
+                0.3,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#2"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#2"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                0,
+                0.5,
+                0
+            ],
+            "to": [
+                16,
+                0.5,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#3"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#3"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

@@ -1,0 +1,11 @@
+{
+    "feature": "tfg:earth/salt_lick_patch",
+    "placement": [
+        {
+            "chance": 2,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {"type": "minecraft:biome"}
+    ]
+}

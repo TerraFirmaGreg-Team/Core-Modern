@@ -1,0 +1,10 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:random_patch",
+    "config": {
+        "xz_spread": 15,
+        "tries": 100,
+        "y_spread": 6,
+        "feature": "tfg:earth/plant/bird_nest_fern"
+    }
+}

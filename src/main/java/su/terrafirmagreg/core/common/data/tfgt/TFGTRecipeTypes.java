@@ -173,6 +173,12 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.TURBINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP);
 
+    public final static GTRecipeType HEAT_EXCHANGER = GTRecipeTypes
+            .register("heat_exchanger", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 3, 3)
+            .setSound(GTSoundEntries.TURBINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP);
+
     public final static GTRecipeType OSTRUM_LINEAR_ACCELERATOR = GTRecipeTypes
             .register("ostrum_linear_accelerator", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 9, 6, 6)

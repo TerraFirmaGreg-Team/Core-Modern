@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common;
 
 import com.gregtechceu.gtceu.GTCEu;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -15,8 +16,8 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
-
 import net.minecraftforge.registries.MissingMappingsEvent;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
@@ -64,7 +65,6 @@ public final class ForgeCommonEventListener {
         }
     }
 
-
     @SubscribeEvent
     public static void remapIds(MissingMappingsEvent event) {
         event.getAllMappings(Registries.BLOCK).forEach(ForgeCommonEventListener::remapBlocks);
@@ -73,14 +73,17 @@ public final class ForgeCommonEventListener {
     }
 
     private static void remapBlocks(MissingMappingsEvent.Mapping<Block> mapping) {
-        //if (mapping.getKey() == GTCEu.id("heat_exchanger")) mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlock());
+        if (mapping.getKey() == GTCEu.id("heat_exchanger"))
+            mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlock());
     }
 
     private static void remapItems(MissingMappingsEvent.Mapping<Item> mapping) {
-        //if (mapping.getKey() == GTCEu.id("heat_exchanger")) mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getItem());
+        if (mapping.getKey() == GTCEu.id("heat_exchanger"))
+            mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getItem());
     }
 
     private static void remapBlockEntities(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {
-        //if (mapping.getKey() == GTCEu.id("heat_exchanger")) mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlockEntityType());
+        if (mapping.getKey() == GTCEu.id("heat_exchanger"))
+            mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlockEntityType());
     }
 }
