@@ -86,6 +86,18 @@ public class ModelUtils {
                 .modelForState().modelFile(model).rotationY(90).addModel();
     }
 
+    // Thanks TFC
+    public static void cardinalBlockInverted(VariantBlockStateBuilder builder, ModelFile model) {
+        builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+                .modelForState().modelFile(model).rotationY(180).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
+                .modelForState().modelFile(model).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
+                .modelForState().modelFile(model).rotationY(90).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
+                .modelForState().modelFile(model).rotationY(270).addModel();
+    }
+
     public static void activeCardinalBlock(VariantBlockStateBuilder builder, ModelFile inactive, ModelFile active) {
         builder.partialState().with(GTBlockStateProperties.ACTIVE, false).with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
                 .modelForState().modelFile(inactive).addModel()

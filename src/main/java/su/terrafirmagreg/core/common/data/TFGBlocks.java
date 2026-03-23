@@ -87,6 +87,7 @@ public final class TFGBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TFGCore.MOD_ID);
 
     public static void init() {
+        TFGBlocks_Wood.init();
     }
 
     ////// Decoration blocks
