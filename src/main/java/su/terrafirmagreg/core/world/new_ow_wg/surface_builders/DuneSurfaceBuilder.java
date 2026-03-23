@@ -1,0 +1,26 @@
+/* Originally from [TerraFirmaCraft] (https://github.com/TerraFirmaCraft/TerraFirmaCraft)
+ * Licensed under the EUPL, Version 1.2.
+ * You may obtain a copy of the Licence at:
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ */
+
+package su.terrafirmagreg.core.world.new_ow_wg.surface_builders;
+
+import net.dries007.tfc.world.surface.SurfaceBuilderContext;
+import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
+
+import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGSimpleSurfaceStates;
+
+public class DuneSurfaceBuilder implements SurfaceBuilderFactory.Invariant {
+    private final TFGSimpleSurfaceStates states;
+
+    public DuneSurfaceBuilder(long seed) {
+        this.states = TFGSimpleSurfaceStates.INSTANCE();
+    }
+
+    @Override
+    public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
+        context.setSlope(context.getSlope() * (1 - context.weight()));
+        TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, states.SNOWY_SAND, states.SAND, states.SAND, states.SAND, states.SAND);
+    }
+}

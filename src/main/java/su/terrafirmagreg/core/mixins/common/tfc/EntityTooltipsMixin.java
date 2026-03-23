@@ -40,6 +40,11 @@ import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.entity.Soarer;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBison;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcjerboa.TFCJerboa;
+import su.terrafirmagreg.core.common.data.entities.animals.tfclemming.TFCLemming;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSeal;
+import su.terrafirmagreg.core.common.data.entities.animals.tfcmongoose.TFCMongoose;
 import su.terrafirmagreg.core.common.data.entities.axolotl.AxolotlData;
 import su.terrafirmagreg.core.common.data.entities.charger.ChargerData;
 import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
@@ -78,6 +83,11 @@ public abstract class EntityTooltipsMixin {
         registry.register("axolotl", TFG_AXOLOTL, Axolotl.class);
         registry.register("charger", TFG_CHARGER, Charger.class);
         registry.register("snatcher", TFG_SNATCHER, Snatcher.class);
+        registry.register("leopard_seal", TFC_1_21, TFCLeopardSeal.class);
+        registry.register("bison", TFC_1_21, TFCBison.class);
+        registry.register("lemming", TFC_1_21, TFCLemming.class);
+        registry.register("jerboa", TFC_1_21, TFCJerboa.class);
+        registry.register("mongoose", TFC_1_21, TFCMongoose.class);
     }
 
     @Unique
@@ -144,6 +154,11 @@ public abstract class EntityTooltipsMixin {
         if (entity instanceof Axolotl axolotl) {
             tooltip.accept(Helpers.translateEnum(AxolotlData.isMale(axolotl) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
         }
+    };
+
+    @Unique
+    private static final EntityTooltip TFC_1_21 = (level, entity, tooltip) -> {
+        tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.tfc"));
     };
 
     @Unique

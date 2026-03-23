@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/prickly_pear_purple_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 14,
+            "max_rainfall": 140,
+            "max_forest": "normal",
+            "type": "tfc:climate",
+            "min_rainfall": 40,
+            "min_forest": "sparse",
+            "min_temperature": 8.6
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

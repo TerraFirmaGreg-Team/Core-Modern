@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/mud_bricks/1",
+    "textures": {"mud": "tfg:block/mud/oxisol"},
+    "__comment__": "This file was automatically created by mcresources"
+}

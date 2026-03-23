@@ -1,0 +1,8 @@
+{
+  "values": [
+    "tfg:drying_bricks/alfisol",
+    "tfg:drying_bricks/mollisol",
+    "tfg:drying_bricks/oxisol",
+    "tfg:drying_bricks/podzol"
+  ]
+}

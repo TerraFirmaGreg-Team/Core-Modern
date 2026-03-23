@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/grass_side",
+    "textures": {"texture": "tfg:block/clay/oxisol"},
+    "__comment__": "This file was automatically created by mcresources"
+}

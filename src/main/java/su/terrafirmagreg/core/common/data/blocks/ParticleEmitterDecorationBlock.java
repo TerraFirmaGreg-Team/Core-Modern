@@ -52,7 +52,7 @@ import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 @SuppressWarnings({ "deprecation", "unused" })
 public class ParticleEmitterDecorationBlock extends Block implements EntityBlock, IFluidLoggable {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER;
+    public static final FluidProperty FLUID = TFGBlockProperties.SPACE_WATER_AND_LAVA;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(2.0F, 0.0F, 2.0F, 14.0F, 16.0F, 14.0F);
 
     private final VoxelShape shape;

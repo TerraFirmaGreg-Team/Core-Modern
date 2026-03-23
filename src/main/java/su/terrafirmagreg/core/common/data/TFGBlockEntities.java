@@ -43,7 +43,7 @@ public class TFGBlockEntities {
     // TFGBlocks.LARGE_NEST_BOX_WARPED.get()};
 
     public static final BlockEntityEntry<LargeNestBoxBlockEntity> LARGE_NEST_BOX = TFGCore.REGISTRATE.blockEntity("large_nest_box", LargeNestBoxBlockEntity::new)
-            .validBlocks(TFGBlocks.LARGE_NEST_BOX::get, TFGBlocks.LARGE_NEST_BOX_WARPED::get)
+            .validBlocks(TFGBlocks_Mars.LARGE_NEST_BOX::get, TFGBlocks_Mars.LARGE_NEST_BOX_WARPED::get)
             .register();
 
     public static final BlockEntityEntry<ArtisanTableBlockEntity> ARTISAN_TABLE = TFGCore.REGISTRATE.blockEntity("artisan_table", ArtisanTableBlockEntity::new)
@@ -51,7 +51,7 @@ public class TFGBlockEntities {
             .register();
 
     public static final BlockEntityEntry<ReflectorBlockEntity> REFLECTOR_BLOCK_ENTITY = TFGCore.REGISTRATE.blockEntity("reflector", ReflectorBlockEntity::new)
-            .validBlock(TFGBlocks.REFLECTOR_BLOCK::get)
+            .validBlock(TFGBlocks_Casings.REFLECTOR_BLOCK::get)
             .register();
 
     public static final RegistryObject<BlockEntityType<TickerBlockEntity>> TICKER_ENTITY = BLOCK_ENTITIES
@@ -60,9 +60,9 @@ public class TFGBlockEntities {
                 blocks.addAll(ParticleEmitterBlockBuilder.REGISTERED_BLOCKS);
                 blocks.addAll(ParticleEmitterDecorationBlockBuilder.REGISTERED_BLOCKS);
                 blocks.addAll(GTActiveParticleBuilder.REGISTERED_BLOCKS);
-                blocks.add(TFGBlocks.GROW_LIGHT.get());
-                blocks.add(TFGBlocks.EGH_PLANTER.get());
-                blocks.add(TFGBlocks.PISCICULTURE_CORE.get());
+                blocks.add(TFGBlocks_Casings.GROW_LIGHT.get());
+                blocks.add(TFGBlocks_Casings.EGH_PLANTER.get());
+                blocks.add(TFGBlocks_Casings.PISCICULTURE_CORE.get());
                 return BlockEntityType.Builder.of(TickerBlockEntity::new, blocks.toArray(Block[]::new)).build(null);
             });
 }

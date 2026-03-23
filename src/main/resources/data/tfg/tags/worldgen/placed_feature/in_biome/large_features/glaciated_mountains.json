@@ -1,0 +1,13 @@
+{
+    "values": [
+        "tfg:earth/forest",
+        "tfc:rare_bamboo",
+        "tfc:bamboo",
+        "tfc:cave_vegetation",
+        "tfg:earth/glacial_spring",
+        "#tfg:feature/duff_discs",
+        "#tfg:feature/surface_flood_fill_lakes"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

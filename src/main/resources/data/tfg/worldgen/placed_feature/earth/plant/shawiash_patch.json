@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/shawiash_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": -2.2,
+            "max_rainfall": 500,
+            "max_forest": "edge",
+            "type": "tfc:climate",
+            "min_rainfall": 250,
+            "min_forest": "none",
+            "min_temperature": -16.6
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -115,6 +115,7 @@ legacyForge {
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
+            programArguments.addAll '--existing-mod', 'tfg'
             programArguments.addAll '--existing-mod', 'gtceu'
             programArguments.addAll '--existing-mod', 'tfc'
             programArguments.addAll '--existing-mod', 'species'

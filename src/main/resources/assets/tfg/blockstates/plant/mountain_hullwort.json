@@ -1,0 +1,34 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfg:block/plant/mountain_hullwort_lower"},
+        "when": {"part": "lower"}
+    },
+    {
+        "apply": {"model": "tfg:block/plant/mountain_hullwort_upper_2"},
+        "when": {
+            "part": "upper",
+            "age": "0"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/mountain_hullwort_upper_1"},
+        "when": {
+            "part": "upper",
+            "age": "1"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/mountain_hullwort_upper_1"},
+        "when": {
+            "part": "upper",
+            "age": "2"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/mountain_hullwort_upper_0"},
+        "when": {
+            "part": "upper",
+            "age": "3"
+        }
+    }
+]}

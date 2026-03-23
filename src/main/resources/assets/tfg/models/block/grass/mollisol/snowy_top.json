@@ -1,0 +1,5 @@
+{
+    "parent": "tfc:block/grass_snowy_top",
+    "textures": {"texture": "tfg:block/dirt/mollisol"},
+    "__comment__": "This file was automatically created by mcresources"
+}
