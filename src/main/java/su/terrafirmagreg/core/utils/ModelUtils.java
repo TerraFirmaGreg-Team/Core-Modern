@@ -2,6 +2,9 @@ package su.terrafirmagreg.core.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
@@ -84,6 +87,21 @@ public class ModelUtils {
                 .modelForState().modelFile(model).rotationY(270).addModel()
                 .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
                 .modelForState().modelFile(model).rotationY(90).addModel();
+    }
+
+    public static void forEachCardinalDirection(VariantBlockStateBuilder builder, ModelFile model, Consumer<VariantBlockStateBuilder.PartialBlockstate> func) {
+        var north = builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH);
+        func.accept(north);
+        north.modelForState().modelFile(model).addModel();
+        var south = builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH);
+        func.accept(south);
+        south.modelForState().modelFile(model).rotationY(180).addModel();
+        var east = builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST);
+        func.accept(east);
+        east.modelForState().modelFile(model).rotationY(90).addModel();
+        var west = builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST);
+        west.modelForState().modelFile(model).rotationY(270).addModel();
+        func.accept(west);
     }
 
     // Thanks TFC
