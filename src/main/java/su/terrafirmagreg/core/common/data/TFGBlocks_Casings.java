@@ -37,6 +37,7 @@ import su.terrafirmagreg.core.common.data.blocks.ReflectorBlock;
 import su.terrafirmagreg.core.compat.kjs.GTActiveParticleBuilder;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
+@SuppressWarnings("unused")
 public class TFGBlocks_Casings {
     public static void init() {
     }

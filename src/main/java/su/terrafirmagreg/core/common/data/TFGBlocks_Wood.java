@@ -240,7 +240,6 @@ public class TFGBlocks_Wood {
                             .texture("planks", woodType.plankBlock)
                             .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
 
-
                     ModelFile sealedBarrel = prov.models().withExistingParent("wood/barrel_sealed/" + woodType.name, ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_sealed"))
                             .texture("particle", woodType.plankBlock)
                             .texture("planks", woodType.plankBlock)
@@ -433,18 +432,18 @@ public class TFGBlocks_Wood {
     }
 
     private static BlockModelBuilder bigBarrelTextures(BlockModelBuilder builder, WoodType type) {
-        return builder.texture("0", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_3_side"))
-                .texture("1", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_0"))
-                .texture("2", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_0_side"))
-                .texture("3", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_1"))
-                .texture("4", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_1_side"))
-                .texture("5", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_2"))
-                .texture("6", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_2_side"))
-                .texture("7", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_3"))
-                .texture("8", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_3_top"))
-                .texture("9", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_0_top"))
-                .texture("10", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_1_top"))
-                .texture("11", ResourceLocation.fromNamespaceAndPath("firmalife", type.name + "_2_top"))
+        return builder.texture("0", TFGCore.id(type.name + "_3_side"))
+                .texture("1", TFGCore.id( type.name + "_0"))
+                .texture("2", TFGCore.id( type.name + "_0_side"))
+                .texture("3", TFGCore.id( type.name + "_1"))
+                .texture("4", TFGCore.id( type.name + "_1_side"))
+                .texture("5", TFGCore.id( type.name + "_2"))
+                .texture("6", TFGCore.id( type.name + "_2_side"))
+                .texture("7", TFGCore.id( type.name + "_3"))
+                .texture("8", TFGCore.id( type.name + "_3_top"))
+                .texture("9", TFGCore.id( type.name + "_0_top"))
+                .texture("10", TFGCore.id( type.name + "_1_top"))
+                .texture("11", TFGCore.id( type.name + "_2_top"))
                 .texture("12", type.logBlock);
     }
 

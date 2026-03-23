@@ -2,9 +2,7 @@ package su.terrafirmagreg.core.utils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
@@ -117,22 +115,8 @@ public class ModelUtils {
     }
 
     public static void activeCardinalBlock(VariantBlockStateBuilder builder, ModelFile inactive, ModelFile active) {
-        builder.partialState().with(GTBlockStateProperties.ACTIVE, false).with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
-                .modelForState().modelFile(inactive).addModel()
-                .partialState().with(GTBlockStateProperties.ACTIVE, false).with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
-                .modelForState().modelFile(inactive).rotationY(180).addModel()
-                .partialState().with(GTBlockStateProperties.ACTIVE, false).with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
-                .modelForState().modelFile(inactive).rotationY(270).addModel()
-                .partialState().with(GTBlockStateProperties.ACTIVE, false).with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
-                .modelForState().modelFile(inactive).rotationY(90).addModel()
-                .partialState().with(GTBlockStateProperties.ACTIVE, true).with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
-                .modelForState().modelFile(active).addModel()
-                .partialState().with(GTBlockStateProperties.ACTIVE, true).with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
-                .modelForState().modelFile(active).rotationY(180).addModel()
-                .partialState().with(GTBlockStateProperties.ACTIVE, true).with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
-                .modelForState().modelFile(active).rotationY(270).addModel()
-                .partialState().with(GTBlockStateProperties.ACTIVE, true).with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
-                .modelForState().modelFile(active).rotationY(90).addModel();
+        forEachCardinalDirection(builder, inactive, b -> b.with(GTBlockStateProperties.ACTIVE, false));
+        forEachCardinalDirection(builder, active, b -> b.with(GTBlockStateProperties.ACTIVE, true));
     }
 
     public static NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> createActiveCasingModel(ResourceLocation texture) {

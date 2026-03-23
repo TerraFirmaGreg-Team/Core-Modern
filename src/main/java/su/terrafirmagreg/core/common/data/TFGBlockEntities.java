@@ -43,15 +43,15 @@ public class TFGBlockEntities {
     // TFGBlocks.LARGE_NEST_BOX_WARPED.get()};
 
     public static final BlockEntityEntry<LargeNestBoxBlockEntity> LARGE_NEST_BOX = TFGCore.REGISTRATE.blockEntity("large_nest_box", LargeNestBoxBlockEntity::new)
-            .validBlocks(TFGBlocks_Mars.LARGE_NEST_BOX::get, TFGBlocks_Mars.LARGE_NEST_BOX_WARPED::get)
+            .validBlocks(TFGBlocks_Mars.LARGE_NEST_BOX, TFGBlocks_Mars.LARGE_NEST_BOX_WARPED)
             .register();
 
     public static final BlockEntityEntry<ArtisanTableBlockEntity> ARTISAN_TABLE = TFGCore.REGISTRATE.blockEntity("artisan_table", ArtisanTableBlockEntity::new)
-            .validBlock(TFGBlocks.ARTISAN_TABLE::get)
+            .validBlock(TFGBlocks.ARTISAN_TABLE)
             .register();
 
     public static final BlockEntityEntry<ReflectorBlockEntity> REFLECTOR_BLOCK_ENTITY = TFGCore.REGISTRATE.blockEntity("reflector", ReflectorBlockEntity::new)
-            .validBlock(TFGBlocks_Casings.REFLECTOR_BLOCK::get)
+            .validBlock(TFGBlocks_Casings.REFLECTOR_BLOCK)
             .register();
 
     public static final RegistryObject<BlockEntityType<TickerBlockEntity>> TICKER_ENTITY = BLOCK_ENTITIES
