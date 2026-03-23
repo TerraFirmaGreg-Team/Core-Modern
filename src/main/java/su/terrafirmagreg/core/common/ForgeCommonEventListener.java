@@ -31,6 +31,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.MissingMappingsEvent;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.capabilities.LargeEggHandler;
@@ -52,8 +53,7 @@ public final class ForgeCommonEventListener {
     private static boolean loadGasVentBlocks() {
         if (cachedDryIce != null && cachedGeyserite != null)
             return true;
-        cachedDryIce = ForgeRegistries.BLOCKS
-                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "dry_ice"));
+        cachedDryIce = TFGBlocks.DRY_ICE.get();
         cachedGeyserite = ForgeRegistries.BLOCKS
                 .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "rock/raw/geyserite"));
         return cachedDryIce != null && cachedGeyserite != null;
