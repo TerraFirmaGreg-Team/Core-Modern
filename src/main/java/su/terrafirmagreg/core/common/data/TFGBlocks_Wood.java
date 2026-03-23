@@ -282,13 +282,13 @@ public class TFGBlocks_Wood {
     }
 
     private static void buildBarrelBlockStateEntry(VariantBlockStateBuilder builder, Direction facing, int y, ModelFile barrel, ModelFile rack, ModelFile sealed, ModelFile sealedRack) {
-        builder.partialState().with(BlockStateProperties.FACING, facing).with(TFCBlockStateProperties.SEALED, false).with(TFCBlockStateProperties.RACK, false).modelForState().rotationY(y)
+        builder.partialState().with(TFCBlockStateProperties.FACING_NOT_DOWN, facing).with(TFCBlockStateProperties.SEALED, false).with(TFCBlockStateProperties.RACK, false).modelForState().rotationY(y)
                 .modelFile(barrel).addModel()
-                .partialState().with(BlockStateProperties.FACING, facing).with(TFCBlockStateProperties.SEALED, true).with(TFCBlockStateProperties.RACK, false).modelForState().rotationY(y)
+                .partialState().with(TFCBlockStateProperties.FACING_NOT_DOWN, facing).with(TFCBlockStateProperties.SEALED, true).with(TFCBlockStateProperties.RACK, false).modelForState().rotationY(y)
                 .modelFile(sealed).addModel()
-                .partialState().with(BlockStateProperties.FACING, facing).with(TFCBlockStateProperties.SEALED, false).with(TFCBlockStateProperties.RACK, true).modelForState().rotationY(y)
+                .partialState().with(TFCBlockStateProperties.FACING_NOT_DOWN, facing).with(TFCBlockStateProperties.SEALED, false).with(TFCBlockStateProperties.RACK, true).modelForState().rotationY(y)
                 .modelFile(rack).addModel()
-                .partialState().with(BlockStateProperties.FACING, facing).with(TFCBlockStateProperties.SEALED, true).with(TFCBlockStateProperties.RACK, true).modelForState().rotationY(y)
+                .partialState().with(TFCBlockStateProperties.FACING_NOT_DOWN, facing).with(TFCBlockStateProperties.SEALED, true).with(TFCBlockStateProperties.RACK, true).modelForState().rotationY(y)
                 .modelFile(sealedRack).addModel();
     }
 
@@ -318,7 +318,7 @@ public class TFGBlocks_Wood {
         return TFGCore.REGISTRATE.block("wood/scribing_table/" + woodType.name, p -> scribingTableBlock)
                 .blockstate((ctx, prov) -> {
                     var model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/scribing_table"))
-                            .texture("top", TFGCore.id("wood/scribing_table/" + woodType.name))
+                            .texture("top", TFGCore.id("block/wood/scribing_table/" + woodType.name))
                             .texture("leg", woodType.logTexture)
                             .texture("side", woodType.plankTexture)
                             .texture("misc", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/scribing_table/scribing_paraphernalia"))
