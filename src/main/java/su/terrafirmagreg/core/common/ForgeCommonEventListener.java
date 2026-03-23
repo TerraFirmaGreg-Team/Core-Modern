@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common;
 
+import com.gregtechceu.gtceu.common.worldgen.feature.FluidSproutFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -133,7 +134,7 @@ public final class ForgeCommonEventListener {
             if (configuredFeature == null)
                 return;
 
-            if (!(configuredFeature.feature() instanceof com.gregtechceu.gtceu.common.worldgen.feature.FluidSproutFeature))
+            if (!(configuredFeature.feature() instanceof FluidSproutFeature))
                 return;
 
             var config = (com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration) configuredFeature.config();
