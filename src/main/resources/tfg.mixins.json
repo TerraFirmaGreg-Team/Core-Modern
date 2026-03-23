@@ -99,6 +99,7 @@
         "common.gtceu.ProtectionTypeMixin",
         "common.gtceu.QuarkTechSuiteMixin",
         "common.gtceu.SteamBoilerMachineMixin",
+        "common.gtceu.BedrockFluidVeinSavedDataMixin",
         "common.gtceu.SurfaceRockBlockMixin",
         "common.gtceu.TagPrefixItemMixin",
         "common.gtceu.ToolHelperMixin",
