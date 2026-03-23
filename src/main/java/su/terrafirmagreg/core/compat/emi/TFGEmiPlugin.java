@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.compat.emi;
 import java.util.Arrays;
 
 import com.forsteri.createliquidfuel.core.BurnerStomachHandler;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
@@ -23,6 +24,8 @@ import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
 import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
 import su.terrafirmagreg.core.common.data.recipes.repair.ItemRepairRecipe;
+import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.TFGLargeBoilerMachine;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -41,6 +44,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory ITEM_REPAIR = new EmiRecipeCategory(TFGCore.id("item_repair"),
             EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
+
+    public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(TFGCore.id("large_boiler_booster"),
+            EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -78,6 +84,13 @@ public class TFGEmiPlugin implements EmiPlugin {
 
         emiRegistry.addCategory(BLOCK_INTERACTION);
         Arrays.stream(BlockInteractionInfo.RECIPES).forEach(emiRegistry::addRecipe);
+
+        emiRegistry.addCategory(LARGE_BOILER_BOOSTER);
+        emiRegistry.addWorkstation(LARGE_BOILER_BOOSTER,
+                EmiStack.of(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock().asItem()));
+        emiRegistry.addWorkstation(LARGE_BOILER_BOOSTER,
+                EmiStack.of(TFGMultiMachines.LARGE_STEEL_BOILER.getBlock().asItem()));
+        TFGLargeBoilerMachine.getBoosters().forEach(booster -> emiRegistry.addRecipe(new LargeBoilerBoosterRecipe(booster)));
 
         emiRegistry.addCategory(ARTISAN_TABLE);
         emiRegistry.addWorkstation(ARTISAN_TABLE, EmiStack.of(TFGBlocks.ARTISAN_TABLE.get().asItem()));
