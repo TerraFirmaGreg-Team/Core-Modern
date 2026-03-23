@@ -92,7 +92,7 @@ public class TFGBlocks_Earth {
             .item(BlockItem::new).build()
             .register();
 
-    public static final BlockEntry<TFGTierLockedBlock> CARBONATE_HORNFELS = TFGCore.REGISTRATE.block("carbonate_hornfels", TFGTierLockedBlock::new)
+    public static final BlockEntry<TierLockedBlock> CARBONATE_HORNFELS = TFGCore.REGISTRATE.block("carbonate_hornfels", TierLockedBlock::new)
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.DEEPSLATE)
@@ -103,7 +103,7 @@ public class TFGBlocks_Earth {
             .simpleItem()
             .register();
 
-    public static final BlockEntry<TFGTierLockedBlock> PELITIC_HORNFELS = TFGCore.REGISTRATE.block("pelitic_hornfels", TFGTierLockedBlock::new)
+    public static final BlockEntry<TierLockedBlock> PELITIC_HORNFELS = TFGCore.REGISTRATE.block("pelitic_hornfels", TierLockedBlock::new)
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_RED)
                     .sound(SoundType.DEEPSLATE)
@@ -114,7 +114,7 @@ public class TFGBlocks_Earth {
             .simpleItem()
             .register();
 
-    public static final BlockEntry<TFGTierLockedBlock> MAFIC_HORNFELS = TFGCore.REGISTRATE.block("mafic_hornfels", TFGTierLockedBlock::new)
+    public static final BlockEntry<TierLockedBlock> MAFIC_HORNFELS = TFGCore.REGISTRATE.block("mafic_hornfels", TierLockedBlock::new)
             .properties(p -> p
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.DEEPSLATE)

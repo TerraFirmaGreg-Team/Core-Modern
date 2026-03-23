@@ -8,9 +8,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 @SuppressWarnings("deprecation")
-public class TFGTierLockedBlock extends Block {
+public class TierLockedBlock extends Block {
 
-    public TFGTierLockedBlock(Properties properties) {
+    public TierLockedBlock(Properties properties) {
         super(properties);
     }
 
