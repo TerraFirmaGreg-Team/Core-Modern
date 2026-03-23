@@ -57,7 +57,7 @@ public abstract class BedrockFluidVeinSavedDataMixin {
 
         int totalWeight = getTotalWeight(biome);
 
-        // Calcule le poids climatique additionnel total
+        // Total weight due to climate condition
         int tfgTotalWeight = totalWeight;
         for (var tfgDef : TFGBedrockFluidRegistry.getAll()) {
             tfgTotalWeight += tfgDef.getClimateWeight(serverLevel, blockPos);
@@ -85,7 +85,7 @@ public abstract class BedrockFluidVeinSavedDataMixin {
             int veinWeight = fluidDefinition.getWeight()
                     + fluidDefinition.getBiomeWeightModifier().applyAsInt(biome);
 
-            // Récupère l'id via le registre GT
+            // Get iD through GT Registries
             var defId = GTRegistries.BEDROCK_FLUID_DEFINITIONS.getKey(fluidDefinition);
             if (defId != null) {
                 var tfgDef = TFGBedrockFluidRegistry.get(defId);
