@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/lectern",
+  "textures": {
+    "base": "tfg:block/wood/lectern/strophar/base",
+    "bottom": "ad_astra:block/strophar_planks",
+    "front": "tfg:block/wood/lectern/strophar/front",
+    "particle": "tfg:block/wood/lectern/strophar/sides",
+    "sides": "tfg:block/wood/lectern/strophar/sides",
+    "top": "tfg:block/wood/lectern/strophar/top"
+  }
+}

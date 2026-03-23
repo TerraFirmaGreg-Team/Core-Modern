@@ -44,21 +44,34 @@ import su.terrafirmagreg.core.utils.ModelUtils;
 public class TFGBlocks_Wood {
 
     public enum WoodType {
-        GLACIAN("glacian", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"), ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"), MapColor.NONE),
-        STROPHAR("strophar", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"), ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"), MapColor.NONE),
-        AERONOS("aeronos", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"), ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"), MapColor.NONE),
-        GINKGO("ginkgo", ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"), ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
+        GLACIAN("glacian", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
+                MapColor.NONE),
+        STROPHAR("strophar", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
+                MapColor.NONE),
+        AERONOS("aeronos", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
+                MapColor.NONE),
+        GINKGO("ginkgo", ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
+                ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
+                ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/stripped_ginkgo_log"),
                 MapColor.NONE);
 
         public final String name;
         public final ResourceLocation plankTexture;
         public final ResourceLocation logTexture;
+        public final ResourceLocation strippedLogTexture;
         public final RegistryWood registryWood;
 
-        WoodType(String name, ResourceLocation plankTexture, ResourceLocation logBlock, MapColor col) {
+        WoodType(String name, ResourceLocation plankTexture, ResourceLocation logBlock, ResourceLocation strippedLogTexture, MapColor col) {
             this.name = name;
             this.plankTexture = plankTexture;
             this.logTexture = logBlock;
+            this.strippedLogTexture = strippedLogTexture;
             // This is just needed for the TFC wood block ctors, only the colour method is used.
             this.registryWood = new RegistryWood() {
                 @Override
@@ -227,7 +240,7 @@ public class TFGBlocks_Wood {
                     ModelUtils.forEachCardinalDirection(builder, sluiceLower, b -> b.with(TFCBlockStateProperties.UPPER, false));
                     ModelUtils.forEachCardinalDirection(builder, sluiceUpper, b -> b.with(TFCBlockStateProperties.UPPER, true));
                 })
-                .simpleItem()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower"))).build()
                 .register();
 
     }
@@ -394,7 +407,7 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), dynamicModel);
                 })
-                .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/wood/food_shelf/" + type.name))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + type.name))).build()
                 .register();
     }
 
@@ -412,7 +425,7 @@ public class TFGBlocks_Wood {
 
                     prov.simpleBlock(ctx.getEntry(), dynamicModel);
                 })
-                .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/wood/hanger/" + type.name))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + type.name))).build()
                 .register();
 
     }
@@ -445,24 +458,24 @@ public class TFGBlocks_Wood {
                     ModelUtils.forEachCardinalDirection(builder, dynamicModel, b -> b.with(BlockStateProperties.OPEN, true));
                     ModelUtils.forEachCardinalDirection(builder, dynamicModelShut, b -> b.with(BlockStateProperties.OPEN, false));
                 })
-                .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/wood/jarbnet/" + type.name))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + type.name))).build()
                 .register();
 
     }
 
     private static BlockModelBuilder bigBarrelTextures(BlockModelBuilder builder, WoodType type) {
-        return builder.texture("0", TFGCore.id(type.name + "_3_side"))
-                .texture("1", TFGCore.id(type.name + "_0"))
-                .texture("2", TFGCore.id(type.name + "_0_side"))
-                .texture("3", TFGCore.id(type.name + "_1"))
-                .texture("4", TFGCore.id(type.name + "_1_side"))
-                .texture("5", TFGCore.id(type.name + "_2"))
-                .texture("6", TFGCore.id(type.name + "_2_side"))
-                .texture("7", TFGCore.id(type.name + "_3"))
-                .texture("8", TFGCore.id(type.name + "_3_top"))
-                .texture("9", TFGCore.id(type.name + "_0_top"))
-                .texture("10", TFGCore.id(type.name + "_1_top"))
-                .texture("11", TFGCore.id(type.name + "_2_top"))
+        return builder.texture("0", TFGCore.id("block/wood/big_barrel/" + type.name + "_3_side"))
+                .texture("1", TFGCore.id("block/wood/big_barrel/" + type.name + "_0"))
+                .texture("2", TFGCore.id("block/wood/big_barrel/" + type.name + "_0_side"))
+                .texture("3", TFGCore.id("block/wood/big_barrel/" + type.name + "_1"))
+                .texture("4", TFGCore.id("block/wood/big_barrel/" + type.name + "_1_side"))
+                .texture("5", TFGCore.id("block/wood/big_barrel/" + type.name + "_2"))
+                .texture("6", TFGCore.id("block/wood/big_barrel/" + type.name + "_2_side"))
+                .texture("7", TFGCore.id("block/wood/big_barrel/" + type.name + "_3"))
+                .texture("8", TFGCore.id("block/wood/big_barrel/" + type.name + "_3_top"))
+                .texture("9", TFGCore.id("block/wood/big_barrel/" + type.name + "_0_top"))
+                .texture("10", TFGCore.id("block/wood/big_barrel/" + type.name + "_1_top"))
+                .texture("11", TFGCore.id("block/wood/big_barrel/" + type.name + "_2_top"))
                 .texture("12", type.logTexture);
     }
 
@@ -482,7 +495,7 @@ public class TFGBlocks_Wood {
                     }
 
                 })
-                .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/wood/big_barrel/" + type.name + "_item")))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/big_barrel/" + type.name + "_item")))
                 .build()
                 .register();
     }
@@ -497,7 +510,7 @@ public class TFGBlocks_Wood {
                     prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/wine_shelf"))
                             .texture("0", type.plankTexture)
                             .texture("1", TFGCore.id("block/wood/sheet/" + type.name))
-                            .texture("2", type.logTexture.withPrefix("stripped_"));
+                            .texture("2", type.strippedLogTexture);
 
                     var dynamicModel = prov.models().getBuilder("wood/wine_shelf/" + type.name + "_dynamic")
                             .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelf"), TFGCore.id("block/wood/wine_shelf/" + type.name), t,
@@ -507,7 +520,7 @@ public class TFGBlocks_Wood {
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), dynamicModel);
 
                 })
-                .item(BlockItem::new).model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/wood/wine_shelf/" + type.name))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/wine_shelf/" + type.name))).build()
                 .register();
 
     }

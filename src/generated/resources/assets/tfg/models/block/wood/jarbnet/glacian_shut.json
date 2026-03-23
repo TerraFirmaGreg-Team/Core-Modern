@@ -1,0 +1,8 @@
+{
+  "parent": "firmalife:block/jarbnet_shut",
+  "textures": {
+    "log": "ad_astra:block/glacian_log",
+    "planks": "ad_astra:block/glacian_planks",
+    "sheet": "tfg:block/wood/sheet/glacian"
+  }
+}

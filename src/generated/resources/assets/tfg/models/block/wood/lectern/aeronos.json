@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/lectern",
+  "textures": {
+    "base": "tfg:block/wood/lectern/aeronos/base",
+    "bottom": "ad_astra:block/aeronos_planks",
+    "front": "tfg:block/wood/lectern/aeronos/front",
+    "particle": "tfg:block/wood/lectern/aeronos/sides",
+    "sides": "tfg:block/wood/lectern/aeronos/sides",
+    "top": "tfg:block/wood/lectern/aeronos/top"
+  }
+}
