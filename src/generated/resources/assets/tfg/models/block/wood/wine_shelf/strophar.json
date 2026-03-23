@@ -3,6 +3,6 @@
   "textures": {
     "0": "ad_astra:block/strophar_planks",
     "1": "tfg:block/wood/sheet/strophar",
-    "2": "ad_astra:block/stripped_glacian_log"
+    "2": "ad_astra:block/strophar_stem"
   }
 }

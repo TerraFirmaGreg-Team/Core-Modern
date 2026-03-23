@@ -1,7 +1,7 @@
 {
   "parent": "firmalife:block/jarbnet_shut",
   "textures": {
-    "log": "ad_astra:block/glacian_log",
+    "log": "ad_astra:block/aeronos_stem",
     "planks": "ad_astra:block/aeronos_planks",
     "sheet": "tfg:block/wood/sheet/aeronos"
   }

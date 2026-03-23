@@ -1,7 +1,7 @@
 {
   "parent": "tfc:block/scribing_table",
   "textures": {
-    "leg": "ad_astra:block/glacian_log",
+    "leg": "ad_astra:block/strophar_stem",
     "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia",
     "particle": "ad_astra:block/strophar_planks",
     "side": "ad_astra:block/strophar_planks",

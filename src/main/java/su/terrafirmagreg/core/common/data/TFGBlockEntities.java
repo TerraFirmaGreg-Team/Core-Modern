@@ -1,17 +1,11 @@
 package su.terrafirmagreg.core.common.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity;
@@ -19,13 +13,11 @@ import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntit
 import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
-import su.terrafirmagreg.core.compat.kjs.GTActiveParticleBuilder;
-import su.terrafirmagreg.core.compat.kjs.ParticleEmitterBlockBuilder;
-import su.terrafirmagreg.core.compat.kjs.ParticleEmitterDecorationBlockBuilder;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
 
 public class TFGBlockEntities {
-    public static void init() {}
+    public static void init() {
+    }
 
     public static final BlockEntityEntry<GTGreenhousePortBlockEntity> GT_GREENHOUSE_PORT = TFGCore.REGISTRATE.blockEntity("gt_greenhouse_port", GTGreenhousePortBlockEntity::new)
             .validBlocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.STAINLESS_STEEL).get(Greenhouse.BlockType.PORT)::get,
@@ -59,7 +51,7 @@ public class TFGBlockEntities {
             .register();
 
     public static void addValidBEBlock(BlockEntityType<?> type, Block block) {
-        var beType = (BlockEntityTypeAccessor)type;
+        var beType = (BlockEntityTypeAccessor) type;
         var blocks = beType.tfg$getValidBlocks();
         blocks.add(block);
         beType.tfg$setValidBlocks(blocks);
