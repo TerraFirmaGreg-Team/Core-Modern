@@ -3,7 +3,7 @@
 <div align="center">
   <h1>TerraFirmaGreg-Core - Modern</h1>
   <a href="https://github.com/TerraFirmaGreg-Team/Core-Modern">
-    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/icon/v3/tfg_logo_icon_core_964x_1080p.gif?raw=true" alt="Logo" height="120"/>
+    <img src="https://github.com/TerraFirmaGreg-Team/.github/blob/main/branding/icon/v3/964x_1080p_logo_core.gif?raw=true" alt="Logo" height="120"/>
   </a>
   <br/>
   <a href="https://terrafirmagreg.team/discord">

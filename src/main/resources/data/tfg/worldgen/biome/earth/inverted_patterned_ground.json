@@ -24,7 +24,8 @@
         "liquid": [],
         "air": [
             "tfc:cave",
-            "tfc:canyon"
+            "tfc:canyon",
+            "tfc:deep_caves"
         ]
     },
     "downfall": 0.5,
