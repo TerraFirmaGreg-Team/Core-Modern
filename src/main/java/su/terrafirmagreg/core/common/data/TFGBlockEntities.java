@@ -22,10 +22,10 @@ import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 import su.terrafirmagreg.core.compat.kjs.GTActiveParticleBuilder;
 import su.terrafirmagreg.core.compat.kjs.ParticleEmitterBlockBuilder;
 import su.terrafirmagreg.core.compat.kjs.ParticleEmitterDecorationBlockBuilder;
+import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
 
 public class TFGBlockEntities {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister
-            .create(ForgeRegistries.BLOCK_ENTITY_TYPES, TFGCore.MOD_ID);
+    public static void init() {}
 
     public static final BlockEntityEntry<GTGreenhousePortBlockEntity> GT_GREENHOUSE_PORT = TFGCore.REGISTRATE.blockEntity("gt_greenhouse_port", GTGreenhousePortBlockEntity::new)
             .validBlocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.STAINLESS_STEEL).get(Greenhouse.BlockType.PORT)::get,
@@ -54,15 +54,14 @@ public class TFGBlockEntities {
             .validBlock(TFGBlocks_Casings.REFLECTOR_BLOCK)
             .register();
 
-    public static final RegistryObject<BlockEntityType<TickerBlockEntity>> TICKER_ENTITY = BLOCK_ENTITIES
-            .register("particle_emitter", () -> {
-                List<Block> blocks = new ArrayList<>();
-                blocks.addAll(ParticleEmitterBlockBuilder.REGISTERED_BLOCKS);
-                blocks.addAll(ParticleEmitterDecorationBlockBuilder.REGISTERED_BLOCKS);
-                blocks.addAll(GTActiveParticleBuilder.REGISTERED_BLOCKS);
-                blocks.add(TFGBlocks_Casings.GROW_LIGHT.get());
-                blocks.add(TFGBlocks_Casings.EGH_PLANTER.get());
-                blocks.add(TFGBlocks_Casings.PISCICULTURE_CORE.get());
-                return BlockEntityType.Builder.of(TickerBlockEntity::new, blocks.toArray(Block[]::new)).build(null);
-            });
+    public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)
+            .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
+            .register();
+
+    public static void addValidBEBlock(BlockEntityType<?> type, Block block) {
+        var beType = (BlockEntityTypeAccessor)type;
+        var blocks = beType.tfg$getValidBlocks();
+        blocks.add(block);
+        beType.tfg$setValidBlocks(blocks);
+    }
 }

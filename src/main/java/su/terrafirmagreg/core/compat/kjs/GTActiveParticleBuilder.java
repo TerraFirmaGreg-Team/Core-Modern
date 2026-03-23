@@ -20,6 +20,7 @@ import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
 
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock;
 import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock.ParticleConfig;
 
@@ -39,8 +40,6 @@ import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock.ParticleCon
  */
 @SuppressWarnings("unused")
 public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
-
-    public static final List<net.minecraft.world.level.block.Block> REGISTERED_BLOCKS = new ArrayList<>();
 
     public transient VoxelShape cachedShape;
     public transient Supplier<Item> preexistingItem;
@@ -289,7 +288,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
                 inactiveLight,
                 activeLight);
         if (hasTicker) {
-            REGISTERED_BLOCKS.add(block);
+            TFGBlockEntities.addValidBEBlock(TFGBlockEntities.TICKER_ENTITY.get(), block);
         }
         return block;
     }
