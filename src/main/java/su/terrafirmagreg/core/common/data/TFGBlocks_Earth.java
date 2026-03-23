@@ -97,7 +97,7 @@ public class TFGBlocks_Earth {
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.DEEPSLATE)
                     .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE)
             .simpleItem()
             .register();
 
@@ -106,7 +106,7 @@ public class TFGBlocks_Earth {
                     .mapColor(MapColor.TERRACOTTA_RED)
                     .sound(SoundType.DEEPSLATE)
                     .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE)
             .simpleItem()
             .register();
 
@@ -115,7 +115,7 @@ public class TFGBlocks_Earth {
                     .mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.DEEPSLATE)
                     .requiresCorrectToolForDrops())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.CAN_START_COLLAPSE, Tags.Blocks.STONE)
             .simpleItem()
             .register();
 
