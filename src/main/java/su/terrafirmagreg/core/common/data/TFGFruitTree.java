@@ -89,7 +89,8 @@ public final class TFGFruitTree {
                         Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY,
                         Lifecycle.HEALTHY, Lifecycle.FLOWERING, Lifecycle.FLOWERING, Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT
                 },
-                new Color(255, 100, 50).getRGB());
+                new Color(255, 100, 50).getRGB(),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "the_nether"));
 
         public static final FoodProperties FRUIT_FOOD = new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).build();
 
@@ -97,6 +98,7 @@ public final class TFGFruitTree {
         private final int defaultGrowthDays;
         private final Lifecycle[] stages;
         private final int floweringLeavesColor;
+        private final ResourceLocation dimension;
 
         /**
          * Constructor for {@link FruitTreeType}.
@@ -104,12 +106,14 @@ public final class TFGFruitTree {
          * @param defaultGrowthDays Default number of days required for growth.
          * @param stages Lifecycle stages is a 12-month cycle. Jan - Dec.
          * @param floweringLeavesColor RGB color of the leaf particles.
+         * @param dimension The dimension this fruit tree is found in (Only information for the tooltip).
          */
-        FruitTreeType(int defaultGrowthDays, Lifecycle[] stages, int floweringLeavesColor) {
+        FruitTreeType(int defaultGrowthDays, Lifecycle[] stages, int floweringLeavesColor, ResourceLocation dimension) {
             this.serializedName = name().toLowerCase(Locale.ROOT);
             this.defaultGrowthDays = defaultGrowthDays;
             this.stages = stages;
             this.floweringLeavesColor = floweringLeavesColor;
+            this.dimension = dimension;
         }
     }
 
@@ -347,7 +351,7 @@ public final class TFGFruitTree {
      * Builds a multipart block state for a branch block.
      */
     private static void buildBranchMultipart(RegistrateBlockstateProvider prov, Block block,
-                                             ModelFile core, ModelFile down, ModelFile up, ModelFile side) {
+            ModelFile core, ModelFile down, ModelFile up, ModelFile side) {
         MultiPartBlockStateBuilder builder = prov.getMultipartBuilder(block);
         builder.part().modelFile(core).addModel().end();
         builder.part().modelFile(down).addModel().condition(PipeBlock.DOWN, true).end();

@@ -96,7 +96,6 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_DUFF.get(), RenderType.cutoutMipped());
             TFGBlocks_Earth.PLANTS.forEach((plant, block) -> ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutoutMipped()));
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks.REFLECTOR_BLOCK.get(), RenderType.translucent());
 
             // Fruit Trees.
             for (TFGFruitTree.FruitTreeType tree : TFGFruitTree.FruitTreeType.values()) {
