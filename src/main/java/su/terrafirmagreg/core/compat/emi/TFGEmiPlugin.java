@@ -44,7 +44,6 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory ITEM_REPAIR = new EmiRecipeCategory(TFGCore.id("item_repair"),
             EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
-
     public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(TFGCore.id("large_boiler_booster"),
             EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
 
