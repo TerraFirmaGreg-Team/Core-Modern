@@ -75,11 +75,18 @@ public class ItemRepairRecipe extends CustomRecipe {
     @Override
     public ItemStack assemble(@Nonnull CraftingContainer container, @Nonnull RegistryAccess registryAccess) {
         ItemStack toRepair = findRepairableStack(container);
-        if (toRepair == null || toRepair.isEmpty()) {
+        return computeRepairedResult(toRepair, repairPercentage);
+    }
+
+    /**
+     * Returns repaired copy of input using the same formula as assemble(). Empty if input cannot be repaired.
+     */
+    public static ItemStack computeRepairedResult(@Nullable ItemStack input, float repairPercentage) {
+        if (input == null || input.isEmpty() || !input.isDamageableItem() || !input.isDamaged()) {
             return ItemStack.EMPTY;
         }
 
-        ItemStack result = toRepair.copy();
+        ItemStack result = input.copy();
         int maxDurability = result.getMaxDamage();
         int repairAmount = (int) (maxDurability * repairPercentage);
         int newDamage = Math.max(0, result.getDamageValue() - repairAmount);

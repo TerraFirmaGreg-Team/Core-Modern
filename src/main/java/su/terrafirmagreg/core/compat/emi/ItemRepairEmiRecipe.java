@@ -8,7 +8,9 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -16,6 +18,7 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.common.data.recipes.repair.ItemRepairRecipe;
 
@@ -24,12 +27,10 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
 
     private final ItemRepairRecipe recipe;
     private final List<EmiIngredient> inputs;
-    private final EmiStack output;
 
     public ItemRepairEmiRecipe(ItemRepairRecipe recipe) {
         this.recipe = recipe;
         this.inputs = buildInputs(recipe);
-        this.output = buildOutput(recipe);
     }
 
     private static List<EmiIngredient> buildInputs(ItemRepairRecipe recipe) {
@@ -62,14 +63,29 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
         }
         for (ItemStack stack : repairableIngredient.getItems()) {
             if (!stack.isEmpty() && stack.isDamageableItem()) {
-                ItemStack repaired = stack.copy();
-                int maxDurability = repaired.getMaxDamage();
-                int repairAmount = (int) (maxDurability * recipe.getRepairPercentage());
-                repaired.setDamageValue(Math.max(0, maxDurability - repairAmount));
-                return EmiStack.of(repaired);
+                ItemStack sampleDamaged = stack.copy();
+                int maxDurability = sampleDamaged.getMaxDamage();
+                if (!sampleDamaged.isDamaged() && maxDurability > 0) {
+                    sampleDamaged.setDamageValue(maxDurability - 1);
+                }
+
+                ItemStack repaired = ItemRepairRecipe.computeRepairedResult(sampleDamaged, recipe.getRepairPercentage());
+                return repaired.isEmpty() ? EmiStack.EMPTY : EmiStack.of(repaired);
             }
         }
         return EmiStack.EMPTY;
+    }
+
+    private EmiStack buildDynamicOrFallbackOutput() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc != null && mc.player != null && mc.player.containerMenu instanceof CraftingMenu craftingMenu) {
+            ItemStack dynamic = ItemRepairCraftingRecipeHandler.getDynamicOutput(craftingMenu, recipe);
+            if (!dynamic.isEmpty()) {
+                return EmiStack.of(dynamic);
+            }
+        }
+        // Fallback for recipe list/search screens where no live crafting grid context is available.
+        return buildOutput(recipe);
     }
 
     @Override
@@ -89,7 +105,7 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
 
     @Override
     public List<EmiStack> getOutputs() {
-        return List.of(output);
+        return List.of(buildDynamicOrFallbackOutput());
     }
 
     @Override
@@ -103,7 +119,7 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
     }
 
     @Override
-    public void addWidgets(@NotNull dev.emi.emi.api.widget.WidgetHolder holder) {
+    public void addWidgets(@NotNull WidgetHolder holder) {
         int slotSize = 18;
         int startX = 0;
         int startY = 0;
@@ -119,6 +135,7 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
             }
         }
 
-        holder.addSlot(output, startX + width * slotSize + 5, startY + (height * slotSize) / 2 - 9).recipeContext(this);
+        holder.addSlot(buildDynamicOrFallbackOutput(), startX + width * slotSize + 5, startY + (height * slotSize) / 2 - 9)
+                .recipeContext(this);
     }
 }

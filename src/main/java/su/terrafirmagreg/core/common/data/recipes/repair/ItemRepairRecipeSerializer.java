@@ -16,7 +16,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 /**
- * Loads and saves tfg:item_repair. JSON must have pattern and key; repairPercentage is optional and defaults to 0.75.
+ * Loads and saves tfg:item_repair. JSON must have pattern and key; repairPercentage is optional and defaults to 0.25.
  */
 public class ItemRepairRecipeSerializer implements RecipeSerializer<ItemRepairRecipe> {
 
@@ -27,7 +27,7 @@ public class ItemRepairRecipeSerializer implements RecipeSerializer<ItemRepairRe
                 json.has("category") ? json.get("category").getAsString() : "misc",
                 CraftingBookCategory.MISC);
 
-        float repairPercentage = json.has("repairPercentage") ? json.get("repairPercentage").getAsFloat() : 0.75f;
+        float repairPercentage = json.has("repairPercentage") ? json.get("repairPercentage").getAsFloat() : 0.25f;
 
         if (!json.has("pattern") || !json.has("key")) {
             throw new IllegalArgumentException("Recipe " + recipeId + ": item_repair requires pattern and key");
