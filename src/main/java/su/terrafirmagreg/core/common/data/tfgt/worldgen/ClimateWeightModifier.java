@@ -1,8 +1,12 @@
 package su.terrafirmagreg.core.common.data.tfgt.worldgen;
 
+import java.util.Set;
+
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.biome.Biome;
 
 public class ClimateWeightModifier {
 
@@ -40,6 +44,26 @@ public class ClimateWeightModifier {
                 float rain = Climate.getRainfall(level, pos);
                 return temp >= tempMin && temp <= tempMax
                         && rain >= rainMin && rain <= rainMax
+                                ? addedWeight
+                                : 0;
+            }
+        };
+    }
+
+    public static ClimateWeightModifier combinedWithBiome(
+            float tempMin, float tempMax,
+            float rainMin, float rainMax,
+            Set<ResourceKey<Biome>> biomes,
+            int addedWeight) {
+        return new ClimateWeightModifier(null, 0, 0, addedWeight) {
+            @Override
+            public int applyAsInt(ServerLevel level, BlockPos pos) {
+                float temp = Climate.getAverageTemperature(level, pos);
+                float rain = Climate.getRainfall(level, pos);
+                var biome = level.getBiome(pos).unwrapKey().orElse(null);
+                return temp >= tempMin && temp <= tempMax
+                        && rain >= rainMin && rain <= rainMax
+                        && (biomes.isEmpty() || biomes.contains(biome))
                                 ? addedWeight
                                 : 0;
             }
