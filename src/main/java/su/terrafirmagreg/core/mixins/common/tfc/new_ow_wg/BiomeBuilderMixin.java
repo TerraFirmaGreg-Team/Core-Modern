@@ -95,12 +95,13 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
         return (BiomeBuilder) (Object) this;
     }
 
-    @Inject(method = "surface", at = @At("TAIL"), remap = false)
+    @Inject(method = "surface", at = @At("TAIL"), remap = false, cancellable = true)
     private void tfg$surface(SurfaceBuilderFactory surfaceBuilderFactory, CallbackInfoReturnable<BiomeBuilder> cir) {
         if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
             this.surfaceBuilderFactory = CinderConeSurfaceBuilder.create(surfaceBuilderFactory);
             this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(this.surfaceBuilderFactory);
             this.surfaceBuilderFactory = TuyaSurfaceBuilder.create(this.surfaceBuilderFactory);
+            cir.setReturnValue((BiomeBuilder) (Object) this);
         }
     }
 

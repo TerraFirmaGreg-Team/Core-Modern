@@ -37,7 +37,7 @@ dependencies {
     modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
 
     // Create: Vintage Improvements
-    modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7436235") { transitive = false }
+    modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
 
     // Greate
     modImplementation ("maven.modrinth:greate:${greate_version}") { transitive = false }

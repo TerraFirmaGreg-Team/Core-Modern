@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/lectern",
+  "textures": {
+    "base": "tfg:block/wood/lectern/glacian/base",
+    "bottom": "ad_astra:block/glacian_planks",
+    "front": "tfg:block/wood/lectern/glacian/front",
+    "particle": "tfg:block/wood/lectern/glacian/sides",
+    "sides": "tfg:block/wood/lectern/glacian/sides",
+    "top": "tfg:block/wood/lectern/glacian/top"
+  }
+}
