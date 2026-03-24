@@ -1,0 +1,297 @@
+{
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    7,
+                    1,
+                    7
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "name": "water",
+            "shade": false,
+            "from": [
+                5,
+                3,
+                5
+            ],
+            "to": [
+                11,
+                3,
+                11
+            ],
+            "faces": {"up": {
+                "uv": [
+                    5,
+                    5,
+                    11,
+                    11
+                ],
+                "texture": "#water",
+                "tintindex": 0
+            }}
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    7
+                ],
+                "angle": 45,
+                "axis": "z"
+            },
+            "name": "leaf",
+            "shade": false,
+            "from": [
+                8,
+                0,
+                0
+            ],
+            "to": [
+                8,
+                16,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#leaves"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#leaves"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    7
+                ],
+                "angle": -45,
+                "axis": "z"
+            },
+            "name": "leaf",
+            "shade": false,
+            "from": [
+                8,
+                0,
+                0
+            ],
+            "to": [
+                8,
+                16,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#leaves"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#leaves"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    9,
+                    0,
+                    8
+                ],
+                "angle": -45,
+                "axis": "x"
+            },
+            "name": "leaf",
+            "shade": false,
+            "from": [
+                0,
+                0,
+                8
+            ],
+            "to": [
+                16,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#leaves"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#leaves"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    9,
+                    0,
+                    8
+                ],
+                "angle": 45,
+                "axis": "x"
+            },
+            "name": "leaf",
+            "shade": false,
+            "from": [
+                0,
+                0,
+                8
+            ],
+            "to": [
+                16,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#leaves"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#leaves"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "vertical",
+            "shade": false,
+            "from": [
+                0,
+                0,
+                8
+            ],
+            "to": [
+                16,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#flower"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#flower"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "name": "vertical",
+            "shade": false,
+            "from": [
+                0,
+                0,
+                8
+            ],
+            "to": [
+                16,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#flower"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#flower"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

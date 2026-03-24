@@ -1,0 +1,107 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:soil_disc",
+    "config": {
+        "max_radius": 9,
+        "min_radius": 5,
+        "height": 7,
+        "states": [
+            {
+                "with": "tfc:peat",
+                "replace": "tfc:dirt/silt"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfc:dirt/loam"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfc:dirt/sandy_loam"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfc:dirt/silty_loam"
+            },
+            {
+                "with": "tfc:peat_grass",
+                "replace": "tfc:grass/silt"
+            },
+            {
+                "with": "tfc:peat_grass",
+                "replace": "tfc:grass/loam"
+            },
+            {
+                "with": "tfc:peat_grass",
+                "replace": "tfc:grass/sandy_loam"
+            },
+            {
+                "with": "tfc:peat_grass",
+                "replace": "tfc:grass/silty_loam"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfc:mud/silt"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfc:mud/loam"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfc:mud/sandy_loam"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfc:mud/silty_loam"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfg:dirt/alfisol"
+            },
+            {
+                "with": "tfc:peat_grass",
+                "replace": "tfg:grass/alfisol"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfg:mud/alfisol"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfg:dirt/mollisol"
+            },
+            {
+                "with": "tfc:peat_grass",
+                "replace": "tfg:grass/mollisol"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfg:mud/mollisol"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfg:dirt/oxisol"
+            },
+            {
+                "with": "tfc:peat_grass",
+                "replace": "tfg:grass/oxisol"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfg:mud/oxisol"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfg:dirt/podzol"
+            },
+            {
+                "with": "tfc:peat_grass",
+                "replace": "tfg:grass/podzol"
+            },
+            {
+                "with": "tfc:peat",
+                "replace": "tfg:mud/podzol"
+            }
+        ]
+    }
+}

@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/jarbnet/glacian"
+  },
+  "loader": "firmalife:jarbnet"
+}

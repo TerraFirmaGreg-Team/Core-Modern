@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/bird_nest_fern_patch",
+    "placement": [
+        {
+            "chance": 4,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 40,
+            "max_rainfall": 500,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 260,
+            "min_forest": "sparse",
+            "min_temperature": 17.6
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

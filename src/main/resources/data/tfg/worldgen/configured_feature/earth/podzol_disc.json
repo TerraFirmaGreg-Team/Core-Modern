@@ -1,0 +1,139 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:soil_disc",
+    "config": {
+        "max_radius": 14,
+        "min_radius": 7,
+        "height": 7,
+        "states": [
+            {
+                "with": "tfg:dirt/podzol",
+                "replace": "tfc:dirt/loam"
+            },
+            {
+                "with": "tfg:duff/podzol",
+                "replace": "tfg:duff/loam"
+            },
+            {
+                "with": "tfg:mud/podzol",
+                "replace": "tfc:mud/loam"
+            },
+            {
+                "with": "tfg:clay/podzol",
+                "replace": "tfc:clay/loam"
+            },
+            {
+                "with": "tfg:rooted_dirt/podzol",
+                "replace": "tfc:rooted_dirt/loam"
+            },
+            {
+                "with": "tfg:coarse_dirt/podzol",
+                "replace": "tfg:coarse_dirt/loam"
+            },
+            {
+                "with": "tfg:dirt/podzol",
+                "replace": "tfc:dirt/sandy_loam"
+            },
+            {
+                "with": "tfg:duff/podzol",
+                "replace": "tfg:duff/sandy_loam"
+            },
+            {
+                "with": "tfg:mud/podzol",
+                "replace": "tfc:mud/sandy_loam"
+            },
+            {
+                "with": "tfg:clay/podzol",
+                "replace": "tfc:clay/sandy_loam"
+            },
+            {
+                "with": "tfg:rooted_dirt/podzol",
+                "replace": "tfc:rooted_dirt/sandy_loam"
+            },
+            {
+                "with": "tfg:coarse_dirt/podzol",
+                "replace": "tfg:coarse_dirt/sandy_loam"
+            },
+            {
+                "with": "tfg:dirt/podzol",
+                "replace": "tfc:dirt/silty_loam"
+            },
+            {
+                "with": "tfg:duff/podzol",
+                "replace": "tfg:duff/silty_loam"
+            },
+            {
+                "with": "tfg:mud/podzol",
+                "replace": "tfc:mud/silty_loam"
+            },
+            {
+                "with": "tfg:clay/podzol",
+                "replace": "tfc:clay/silty_loam"
+            },
+            {
+                "with": "tfg:rooted_dirt/podzol",
+                "replace": "tfc:rooted_dirt/silty_loam"
+            },
+            {
+                "with": "tfg:coarse_dirt/podzol",
+                "replace": "tfg:coarse_dirt/silty_loam"
+            },
+            {
+                "with": "tfg:dirt/podzol",
+                "replace": "tfg:dirt/oxisol"
+            },
+            {
+                "with": "tfg:duff/podzol",
+                "replace": "tfg:duff/oxisol"
+            },
+            {
+                "with": "tfg:mud/podzol",
+                "replace": "tfg:mud/oxisol"
+            },
+            {
+                "with": "tfg:clay/podzol",
+                "replace": "tfg:clay/oxisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/podzol",
+                "replace": "tfg:rooted_dirt/oxisol"
+            },
+            {
+                "with": "tfg:coarse_dirt/podzol",
+                "replace": "tfg:coarse_dirt/oxisol"
+            },
+            {
+                "with": "tfg:grass/podzol",
+                "replace": "tfc:grass/loam"
+            },
+            {
+                "with": "tfg:grass/podzol",
+                "replace": "tfc:grass/sandy_loam"
+            },
+            {
+                "with": "tfg:grass/podzol",
+                "replace": "tfc:grass/silty_loam"
+            },
+            {
+                "with": "tfg:grass/podzol",
+                "replace": "tfg:grass/oxisol"
+            },
+            {
+                "with": "tfg:clay_grass/podzol",
+                "replace": "tfc:clay_grass/loam"
+            },
+            {
+                "with": "tfg:clay_grass/podzol",
+                "replace": "tfc:clay_grass/sandy_loam"
+            },
+            {
+                "with": "tfg:clay_grass/podzol",
+                "replace": "tfc:clay_grass/silty_loam"
+            },
+            {
+                "with": "tfg:clay_grass/podzol",
+                "replace": "tfg:clay_grass/oxisol"
+            }
+        ]
+    }
+}

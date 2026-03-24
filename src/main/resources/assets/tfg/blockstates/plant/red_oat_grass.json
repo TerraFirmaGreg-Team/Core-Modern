@@ -1,0 +1,46 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfg:block/plant/red_oat_grass_shortest"},
+        "when": {"age": "0"}
+    },
+    {
+        "apply": {"model": "tfg:block/plant/red_oat_grass_shorter"},
+        "when": {"age": "1"}
+    },
+    {
+        "apply": {"model": "tfg:block/plant/red_oat_grass_short"},
+        "when": {"age": "2"}
+    },
+    {
+        "apply": {"model": "tfg:block/plant/red_oat_grass"},
+        "when": {"age": "3"}
+    },
+    {
+        "apply": {"model": "tfg:block/plant/red_oat_grass_shortest_tuft"},
+        "when": {
+            "stage": "1",
+            "age": "0"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/red_oat_grass_shorter_tuft"},
+        "when": {
+            "stage": "1",
+            "age": "1"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/red_oat_grass_short_tuft"},
+        "when": {
+            "stage": "1",
+            "age": "2"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/plant/red_oat_grass_tuft"},
+        "when": {
+            "stage": "1",
+            "age": "3"
+        }
+    }
+]}

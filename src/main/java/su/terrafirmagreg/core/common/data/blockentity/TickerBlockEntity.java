@@ -3,17 +3,17 @@ package su.terrafirmagreg.core.common.data.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.ParticleEmitterBlock;
 
 // Client based ticker.
 public class TickerBlockEntity extends BlockEntity {
 
     // Constructs ticker for a particle emitter block.
-    public TickerBlockEntity(BlockPos pos, BlockState state) {
-        super(TFGBlockEntities.TICKER_ENTITY.get(), pos, state);
+    public TickerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     // Invokes the block's animateTick using RNG.
