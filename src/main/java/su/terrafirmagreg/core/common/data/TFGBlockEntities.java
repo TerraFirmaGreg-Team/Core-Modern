@@ -57,22 +57,6 @@ public class TFGBlockEntities {
             .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
             .register();
 
-    private static final Map<BlockEntityEntry<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();
-
-    public static void addValidBEBlock(BlockEntityEntry<?> type, Block block) {
-        beModification.computeIfAbsent(type, t -> new HashSet<>());
-        beModification.get(type).add(block);
-    }
-
-    public static void finaliseBEModification() {
-        for (var key: beModification.keySet()) {
-            var beType = (BlockEntityTypeAccessor) key.get();
-            var blocks = beType.tfg$getValidBlocks();
-            blocks.addAll(beModification.get(key));
-            beType.tfg$setValidBlocks(blocks);
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public static final BlockEntityEntry<BerryBushBlockEntity> FRUIT_TREE_BERRY_BUSH = TFGCore.REGISTRATE
             .<BerryBushBlockEntity>blockEntity("fruit_tree_berry_bush", (type, pos, state) -> new TFGBerryBushBlockEntity(pos, state))
@@ -90,4 +74,21 @@ public class TFGBlockEntities {
                             TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree)))
                     .toArray(com.tterrag.registrate.util.nullness.NonNullSupplier[]::new))
             .register();
+
+    private static final Map<BlockEntityEntry<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();
+
+    public static void addValidBEBlock(BlockEntityEntry<?> type, Block block) {
+        beModification.computeIfAbsent(type, t -> new HashSet<>());
+        beModification.get(type).add(block);
+    }
+
+    public static void finaliseBEModification() {
+        for (var key: beModification.keySet()) {
+            var beType = (BlockEntityTypeAccessor) key.get();
+            var blocks = beType.tfg$getValidBlocks();
+            blocks.addAll(beModification.get(key));
+            beType.tfg$setValidBlocks(blocks);
+        }
+    }
+
 }
