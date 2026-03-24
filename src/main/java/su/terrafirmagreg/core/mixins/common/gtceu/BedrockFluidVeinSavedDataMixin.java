@@ -43,7 +43,7 @@ public abstract class BedrockFluidVeinSavedDataMixin {
 
     @Inject(method = "getFluidVeinWorldEntry", at = @At("HEAD"), cancellable = true)
     private void tfg$getFluidVeinWorldEntry(int chunkX, int chunkZ,
-            CallbackInfoReturnable<FluidVeinWorldEntry> cir) {
+                                            CallbackInfoReturnable<FluidVeinWorldEntry> cir) {
 
         if (TFGBedrockFluidRegistry.isEmpty())
             return;
@@ -104,20 +104,21 @@ public abstract class BedrockFluidVeinSavedDataMixin {
             }
         }
 
+        if (selected == null)
+            return;
+
         var random = new XoroshiroRandomSource(
                 serverLevel.getSeed() ^ ChunkPos.asLong(chunkX, chunkZ));
 
-        int maximumYield = 0;
-        if (selected != null) {
-            if (selected.getMaximumYield() - selected.getMinimumYield() <= 0) {
-                maximumYield = selected.getMinimumYield();
-            } else {
-                maximumYield = random.nextInt(
-                        selected.getMaximumYield() - selected.getMinimumYield())
-                        + selected.getMinimumYield();
-            }
-            maximumYield = Math.min(maximumYield, selected.getMaximumYield());
+        int maximumYield;
+        if (selected.getMaximumYield() - selected.getMinimumYield() <= 0) {
+            maximumYield = selected.getMinimumYield();
+        } else {
+            maximumYield = random.nextInt(
+                    selected.getMaximumYield() - selected.getMinimumYield())
+                    + selected.getMinimumYield();
         }
+        maximumYield = Math.min(maximumYield, selected.getMaximumYield());
 
         veinFluids.put(pos, new FluidVeinWorldEntry(selected, maximumYield,
                 BedrockFluidVeinSavedData.MAXIMUM_VEIN_OPERATIONS));

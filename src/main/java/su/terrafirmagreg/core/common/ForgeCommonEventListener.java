@@ -117,13 +117,17 @@ public final class ForgeCommonEventListener {
         if (entry == null || entry.getVeinId() == null)
             return;
 
-        ResourceLocation featureId = BedrockFluidSpoutLoader.VEIN_TO_FEATURE.get(entry.getVeinId());
+        String veinId = entry.getVeinId();
+
+        ResourceLocation featureId = BedrockFluidSpoutLoader.VEIN_TO_FEATURE.get(veinId);
         if (featureId == null)
             return;
 
-        String type = BedrockFluidSpoutLoader.VEIN_TO_TYPE.getOrDefault(entry.getVeinId(), "spout");
+        String type = BedrockFluidSpoutLoader.VEIN_TO_TYPE.get(veinId);
+        if (type == null)
+            return;
 
-        if ("spout".equals(type)) {
+        if (type.equals("spout")) {
             var cfRegistry = serverLevel.registryAccess()
                     .registry(Registries.CONFIGURED_FEATURE)
                     .orElse(null);
@@ -140,12 +144,12 @@ public final class ForgeCommonEventListener {
             var config = (com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration) configuredFeature.config();
 
             serverLevel.getServer().execute(() -> {
+                if (serverLevel.random.nextFloat() > config.sproutChance())
+                    return;
+
                 int x = chunkPos.getMiddleBlockX();
                 int z = chunkPos.getMiddleBlockZ();
                 int surfaceY = serverLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
-
-                if (serverLevel.random.nextFloat() > config.sproutChance())
-                    return;
 
                 var fluid = config.fluid();
                 if (fluid == null || fluid.isSame(net.minecraft.world.level.material.Fluids.EMPTY))
@@ -218,13 +222,11 @@ public final class ForgeCommonEventListener {
                             serverLevel.getChunk(mutablePos).setBlockState(mutablePos, blockState, false);
                     }
                 }
-
-                //LOGGER.debug("[FluidVeins] Spout placed at {},{},{} for vein {}", x, topY, z, entry.getVeinId());
             });
 
-        } else if ("structure".equals(type)) {
+        } else if (type.equals("structure")) {
             serverLevel.getServer().execute(() -> {
-                if (serverLevel.random.nextFloat() > 0.05f) // Spawn rate
+                if (serverLevel.random.nextFloat() > 0.05f)
                     return;
 
                 int x = chunkPos.getMiddleBlockX();
@@ -232,7 +234,7 @@ public final class ForgeCommonEventListener {
                 int surfaceY = serverLevel.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, x, z);
 
                 if (!loadGasVentBlocks()) {
-                    LOGGER.warn("[FluidVeins] Do blocks exists");
+                    LOGGER.warn("[FluidVeins] Gas vent blocks not found");
                     return;
                 }
 
@@ -260,10 +262,7 @@ public final class ForgeCommonEventListener {
                         }
                     }
                 }
-
-                //LOGGER.debug("[FluidVeins] Structure placed at {},{},{} for vein {}", x, surfaceY, z, entry.getVeinId());
             });
-
         }
     }
 

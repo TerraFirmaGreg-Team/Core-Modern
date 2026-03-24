@@ -29,6 +29,22 @@ public class ClimateWeightModifier {
         return value >= min && value <= max ? addedWeight : 0;
     }
 
+    public static ClimateWeightModifier combined(
+            float tempMin, float tempMax,
+            float rainMin, float rainMax,
+            int addedWeight) {
+        return new ClimateWeightModifier(null, 0, 0, addedWeight) {
+            @Override
+            public int applyAsInt(ServerLevel level, BlockPos pos) {
+                float temp = Climate.getAverageTemperature(level, pos);
+                float rain = Climate.getRainfall(level, pos);
+                return temp >= tempMin && temp <= tempMax
+                        && rain >= rainMin && rain <= rainMax
+                        ? addedWeight : 0;
+            }
+        };
+    }
+
     public Mode getMode() {
         return mode;
     }

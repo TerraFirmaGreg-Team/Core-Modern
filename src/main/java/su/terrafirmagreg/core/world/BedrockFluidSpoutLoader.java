@@ -32,19 +32,15 @@ public class BedrockFluidSpoutLoader extends SimpleJsonResourceReloadListener {
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> objects,
-            ResourceManager manager,
-            ProfilerFiller profiler) {
+                         ResourceManager manager,
+                         ProfilerFiller profiler) {
 
         VEIN_TO_FEATURE.clear();
         VEIN_TO_TYPE.clear();
 
-        /*
-        Check that each fluid veins is rightly configured in configure feature with the right ID vein
-        */
-
         for (var fileEntry : objects.entrySet()) {
             if (!fileEntry.getValue().isJsonObject()) {
-                LOGGER.warn("[TFG] bedrock_fluid_spouts: {} isn't a JSON so ignore",
+                LOGGER.warn("[TFG] bedrock_fluid_spouts: {} is not a JSON object, ignoring",
                         fileEntry.getKey());
                 continue;
             }
@@ -52,7 +48,7 @@ public class BedrockFluidSpoutLoader extends SimpleJsonResourceReloadListener {
             JsonObject root = fileEntry.getValue().getAsJsonObject();
 
             if (!root.has("entries")) {
-                LOGGER.warn("[TFG] bedrock_fluid_spouts: {} without the field 'entries', ignore",
+                LOGGER.warn("[TFG] bedrock_fluid_spouts: {} missing 'entries' field, ignoring",
                         fileEntry.getKey());
                 continue;
             }
@@ -61,7 +57,7 @@ public class BedrockFluidSpoutLoader extends SimpleJsonResourceReloadListener {
                 var entry = entryElement.getAsJsonObject();
 
                 if (!entry.has("feature") || !entry.has("vein_ids")) {
-                    LOGGER.warn("[TFG] bedrock_fluid_spouts: wrong id {}, ignored",
+                    LOGGER.warn("[TFG] bedrock_fluid_spouts: entry in {} missing 'feature' or 'vein_ids', ignoring",
                             fileEntry.getKey());
                     continue;
                 }
@@ -75,12 +71,10 @@ public class BedrockFluidSpoutLoader extends SimpleJsonResourceReloadListener {
                     String veinId = veinElement.getAsString();
                     VEIN_TO_FEATURE.put(veinId, featureId);
                     VEIN_TO_TYPE.put(veinId, type);
-                    LOGGER.debug("[TFG] Saved : {} -> {} (type: {})", veinId, featureId, type);
                 }
             }
         }
 
-        LOGGER.info("[TFG] BedrockFluidSpoutLoader : {} features loaded",
-                VEIN_TO_FEATURE.size());
+        LOGGER.info("[TFG] BedrockFluidSpoutLoader: {} features loaded", VEIN_TO_FEATURE.size());
     }
 }
