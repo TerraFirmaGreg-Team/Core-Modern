@@ -111,6 +111,8 @@ public class CommonProxy {
             addUpgrades(AE2wtlib.PATTERN_ENCODING_TERMINAL);
             addUpgrades(AE2wtlib.PATTERN_ACCESS_TERMINAL);
             addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
+
+            TFGBlockEntities.finaliseBEModification();
         });
     }
 

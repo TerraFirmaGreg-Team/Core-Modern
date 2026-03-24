@@ -233,7 +233,7 @@ public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder 
                 hasTicker,
                 emitDelay);
         if (hasTicker) {
-            TFGBlockEntities.addValidBEBlock(TFGBlockEntities.TICKER_ENTITY.get(), block);
+            TFGBlockEntities.addValidBEBlock(TFGBlockEntities.TICKER_ENTITY, block);
         }
         return block;
     }

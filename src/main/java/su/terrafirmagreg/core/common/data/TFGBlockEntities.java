@@ -6,6 +6,7 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -18,6 +19,8 @@ import su.terrafirmagreg.core.common.data.blockentity.TFGBerryBushBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.TFGTickCounterBlockEntity;
 import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
+
+import java.util.*;
 
 public class TFGBlockEntities {
     public static void init() {
@@ -54,11 +57,20 @@ public class TFGBlockEntities {
             .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
             .register();
 
-    public static void addValidBEBlock(BlockEntityType<?> type, Block block) {
-        var beType = (BlockEntityTypeAccessor) type;
-        var blocks = beType.tfg$getValidBlocks();
-        blocks.add(block);
-        beType.tfg$setValidBlocks(blocks);
+    private static final Map<BlockEntityEntry<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();
+
+    public static void addValidBEBlock(BlockEntityEntry<?> type, Block block) {
+        beModification.computeIfAbsent(type, t -> new HashSet<>());
+        beModification.get(type).add(block);
+    }
+
+    public static void finaliseBEModification() {
+        for (var key: beModification.keySet()) {
+            var beType = (BlockEntityTypeAccessor) key.get();
+            var blocks = beType.tfg$getValidBlocks();
+            blocks.addAll(beModification.get(key));
+            beType.tfg$setValidBlocks(blocks);
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -288,7 +288,7 @@ public class GTActiveParticleBuilder extends ExtendedPropertiesBlockBuilder {
                 inactiveLight,
                 activeLight);
         if (hasTicker) {
-            TFGBlockEntities.addValidBEBlock(TFGBlockEntities.TICKER_ENTITY.get(), block);
+            TFGBlockEntities.addValidBEBlock(TFGBlockEntities.TICKER_ENTITY, block);
         }
         return block;
     }
