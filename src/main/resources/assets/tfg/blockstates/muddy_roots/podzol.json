@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfg:block/muddy_roots/podzol"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfg:block/muddy_roots/podzol"
+        },
+        "axis=y": {"model": "tfg:block/muddy_roots/podzol"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

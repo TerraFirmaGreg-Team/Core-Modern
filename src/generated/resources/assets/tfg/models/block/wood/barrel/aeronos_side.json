@@ -1,0 +1,8 @@
+{
+  "parent": "tfc:block/barrel_side",
+  "textures": {
+    "particle": "ad_astra:block/aeronos_planks",
+    "planks": "ad_astra:block/aeronos_planks",
+    "sheet": "tfg:block/wood/sheet/aeronos"
+  }
+}

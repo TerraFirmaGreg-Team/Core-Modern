@@ -1,0 +1,24 @@
+{
+    "feature": "tfc:tree/pine_krummholz",
+    "placement": [
+        {
+            "chance": 3,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 9.2,
+            "max_rainfall": 320,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 90,
+            "min_forest": "edge",
+            "min_temperature": -17.2
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

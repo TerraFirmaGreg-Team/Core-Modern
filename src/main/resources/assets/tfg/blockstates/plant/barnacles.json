@@ -1,0 +1,44 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfg:block/plant/barnacles"},
+        "when": {"down": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 90,
+            "model": "tfg:block/plant/barnacles"
+        },
+        "when": {"east": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "model": "tfg:block/plant/barnacles"
+        },
+        "when": {"north": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 180,
+            "model": "tfg:block/plant/barnacles"
+        },
+        "when": {"south": "true"}
+    },
+    {
+        "apply": {
+            "x": 180,
+            "model": "tfg:block/plant/barnacles"
+        },
+        "when": {"up": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 270,
+            "model": "tfg:block/plant/barnacles"
+        },
+        "when": {"west": "true"}
+    }
+]}

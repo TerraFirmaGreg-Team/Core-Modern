@@ -1,0 +1,136 @@
+{
+    "textures": {
+        "0": "tfg:block/plant/ramirezella/base",
+        "particle": "tfg:block/plant/ramirezella/base"
+    },
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    16
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "name": "side",
+            "from": [
+                8,
+                2,
+                0
+            ],
+            "to": [
+                8,
+                14,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        4,
+                        0,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        4,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    16
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "side",
+            "from": [
+                8,
+                1,
+                0
+            ],
+            "to": [
+                8,
+                13,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        4,
+                        0,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        4,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    16
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "name": "center",
+            "from": [
+                8,
+                0,
+                0
+            ],
+            "to": [
+                8,
+                16,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

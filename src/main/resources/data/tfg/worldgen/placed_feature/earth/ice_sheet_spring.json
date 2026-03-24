@@ -1,0 +1,19 @@
+{
+    "feature": "tfg:earth/ice_sheet_spring",
+    "placement": [
+        {
+            "count": 50,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 64},
+                "max_inclusive": {"absolute": 96},
+                "type": "uniform"
+            }
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

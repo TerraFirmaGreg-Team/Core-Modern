@@ -10,7 +10,7 @@ import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.data.entities.TFGWoolEggProducingAnimal;
 
 public class LayLargeEggBehavior extends MoveOntoBlockBehavior<TFGWoolEggProducingAnimal> {
@@ -41,8 +41,8 @@ public class LayLargeEggBehavior extends MoveOntoBlockBehavior<TFGWoolEggProduci
 
     @Override
     protected boolean isTargetAt(ServerLevel level, BlockPos pos) {
-        return Helpers.isBlock(level.getBlockState(pos), TFGBlocks.LARGE_NEST_BOX.get())
-                || Helpers.isBlock(level.getBlockState(pos), TFGBlocks.LARGE_NEST_BOX_WARPED.get());
+        return Helpers.isBlock(level.getBlockState(pos), TFGBlocks_Mars.LARGE_NEST_BOX.get())
+                || Helpers.isBlock(level.getBlockState(pos), TFGBlocks_Mars.LARGE_NEST_BOX_WARPED.get());
     }
 
 }

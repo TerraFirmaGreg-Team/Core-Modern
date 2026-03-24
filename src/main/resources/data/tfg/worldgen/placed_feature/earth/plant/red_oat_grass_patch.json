@@ -1,0 +1,18 @@
+{
+    "feature": "tfg:earth/plant/red_oat_grass_patch",
+    "placement": [
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 40,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 90,
+            "min_temperature": 15.8
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

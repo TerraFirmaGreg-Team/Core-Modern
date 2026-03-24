@@ -1,0 +1,15 @@
+{
+    "feature": "tfc:pumice_patch",
+    "placement": [
+        {
+            "chance": 2,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "distance": 0.8,
+            "type": "tfg:cinder_cone"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

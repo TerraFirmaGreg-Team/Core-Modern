@@ -1,0 +1,8 @@
+{
+    "parent": "block/template_farmland",
+    "textures": {
+        "top": "tfg:block/farmland/podzol",
+        "dirt": "tfg:block/dirt/podzol"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

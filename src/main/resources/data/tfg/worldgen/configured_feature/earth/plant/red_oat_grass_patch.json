@@ -1,0 +1,10 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:dynamic_random_patch",
+    "config": {
+        "xz_spread": 15,
+        "tries": 6,
+        "y_spread": 1,
+        "feature": "tfg:earth/plant/red_oat_grass"
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "variants": {"": [
+        {"model": "tfg:block/coarse_dirt/alfisol"},
+        {
+            "y": 90,
+            "model": "tfg:block/coarse_dirt/alfisol"
+        },
+        {
+            "y": 180,
+            "model": "tfg:block/coarse_dirt/alfisol"
+        },
+        {
+            "y": 270,
+            "model": "tfg:block/coarse_dirt/alfisol"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
+}

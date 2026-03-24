@@ -1,0 +1,5 @@
+{
+    "parent": "item/generated",
+    "textures": {"layer0": "tfg:item/mud_brick/oxisol_wet"},
+    "__comment__": "This file was automatically created by mcresources"
+}
