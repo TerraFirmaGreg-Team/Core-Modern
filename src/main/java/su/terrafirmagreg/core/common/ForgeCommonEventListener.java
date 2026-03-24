@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common;
 
+import com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -141,7 +142,7 @@ public final class ForgeCommonEventListener {
             if (!(configuredFeature.feature() instanceof FluidSproutFeature))
                 return;
 
-            var config = (com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration) configuredFeature.config();
+            var config = (FluidSproutConfiguration) configuredFeature.config();
 
             serverLevel.getServer().execute(() -> {
                 if (serverLevel.random.nextFloat() > config.sproutChance())
@@ -259,6 +260,44 @@ public final class ForgeCommonEventListener {
                         } else {
                             if (serverLevel.random.nextFloat() < 0.7f)
                                 serverLevel.getChunk(mutablePos).setBlockState(mutablePos, geyserite, false);
+                        }
+                    }
+                }
+            });
+        } else if (type.equals("pool")) {
+            var definition = entry.getDefinition();
+            if (definition == null)
+                return;
+
+            var fluid = definition.getStoredFluid().get();
+            if (fluid == null)
+                return;
+
+            var fluidState = fluid.defaultFluidState().createLegacyBlock();
+
+            serverLevel.getServer().execute(() -> {
+                if (serverLevel.random.nextFloat() > 0.05f)
+                    return;
+
+                int x = chunkPos.getMiddleBlockX();
+                int z = chunkPos.getMiddleBlockZ();
+                int surfaceY = serverLevel.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, x, z);
+
+                BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+
+                int poolRadius = 6 + serverLevel.random.nextInt(6);
+                int poolDepth = 3 + serverLevel.random.nextInt(3);
+
+                for (int dx = -poolRadius; dx <= poolRadius; dx++) {
+                    for (int dz = -poolRadius; dz <= poolRadius; dz++) {
+                        double dist = Math.sqrt(dx * dx + dz * dz);
+                        if (dist > poolRadius)
+                            continue;
+
+                        for (int dy = 0; dy < poolDepth; dy++) {
+                            mutablePos.set(x + dx, surfaceY - dy, z + dz);
+                            if (!serverLevel.isOutsideBuildHeight(mutablePos))
+                                serverLevel.getChunk(mutablePos).setBlockState(mutablePos, fluidState, false);
                         }
                     }
                 }
