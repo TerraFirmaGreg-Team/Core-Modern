@@ -89,7 +89,7 @@ public final class TFGFruitTree {
                         Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY,
                         Lifecycle.HEALTHY, Lifecycle.FLOWERING, Lifecycle.FLOWERING, Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT
                 },
-                new Color(255, 100, 50).getRGB(),
+                new Color(249, 255, 123).getRGB(),
                 ResourceLocation.fromNamespaceAndPath("minecraft", "the_nether"));
 
         public static final FoodProperties FRUIT_FOOD = new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).build();
