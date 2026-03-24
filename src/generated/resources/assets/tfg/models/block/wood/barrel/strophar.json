@@ -1,0 +1,8 @@
+{
+  "parent": "tfc:block/barrel",
+  "textures": {
+    "particle": "ad_astra:block/strophar_planks",
+    "planks": "ad_astra:block/strophar_planks",
+    "sheet": "tfg:block/wood/sheet/strophar"
+  }
+}

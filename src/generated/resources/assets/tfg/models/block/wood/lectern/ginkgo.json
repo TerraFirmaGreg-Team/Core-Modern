@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/lectern",
+  "textures": {
+    "base": "tfg:block/wood/lectern/ginkgo/base",
+    "bottom": "wan_ancient_beasts:block/ginkgo_planks",
+    "front": "tfg:block/wood/lectern/ginkgo/front",
+    "particle": "tfg:block/wood/lectern/ginkgo/sides",
+    "sides": "tfg:block/wood/lectern/ginkgo/sides",
+    "top": "tfg:block/wood/lectern/ginkgo/top"
+  }
+}

@@ -17,10 +17,11 @@ public class TFGCommands {
         DebugPassabilityCommand.register(debug);
         DebugSpaceSuitCommand.register(debug);
         DebugQuarktechCommand.register(debug);
+        DebugRecipeDump.register(debug);
+        DebugWorldgenVersions.register(debug);
 
         dispatcher.register(literal("tfg").then(debug));
 
-        // Non-debug commands
-        DustAndWindCommand.register(dispatcher);
+        //DustAndWindCommand.register(dispatcher);
     }
 }

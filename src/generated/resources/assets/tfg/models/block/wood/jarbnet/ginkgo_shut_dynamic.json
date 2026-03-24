@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/jarbnet/ginkgo_shut"
+  },
+  "loader": "firmalife:jarbnet"
+}

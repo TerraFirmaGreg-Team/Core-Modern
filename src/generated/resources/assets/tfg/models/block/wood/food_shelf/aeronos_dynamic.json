@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/food_shelf/aeronos"
+  },
+  "loader": "firmalife:food_shelf"
+}

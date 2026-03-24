@@ -1,0 +1,15 @@
+{
+    "feature": "tfg:earth/tuya_caldera",
+    "placement": [
+        {
+            "center": true,
+            "type": "tfg:tuya"
+        },
+        {"type": "minecraft:biome"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/alfisol_disc",
+    "placement": [
+        {
+            "max_temperature": 14.5,
+            "max_rainfall": 433,
+            "type": "tfc:climate",
+            "min_forest": "edge",
+            "min_rainfall": 183,
+            "min_temperature": -1.6,
+            "fuzzy": true
+        },
+        {
+            "count": 3,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

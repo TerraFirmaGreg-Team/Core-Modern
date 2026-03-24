@@ -1,0 +1,4 @@
+{
+    "parent": "minecraft:block/cross",
+    "textures": {"cross": "tfg:block/plant/bear_grass/bear_grass_upper_0"}
+}

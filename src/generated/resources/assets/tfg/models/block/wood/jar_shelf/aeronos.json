@@ -1,0 +1,6 @@
+{
+  "parent": "tfc:block/jar_shelf",
+  "textures": {
+    "0": "ad_astra:block/aeronos_planks"
+  }
+}

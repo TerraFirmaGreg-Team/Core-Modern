@@ -1,0 +1,498 @@
+{
+    "textures": {
+        "0": "tfg:block/plant/starfish/starfish",
+        "particle": "tfg:block/plant/starfish/starfish"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "from": [
+                7,
+                0,
+                9.41421
+            ],
+            "to": [
+                9,
+                1,
+                13.41421
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        1,
+                        4,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        1,
+                        2,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        2
+                    ],
+                    "texture": "#missing"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        5,
+                        12,
+                        7,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "from": [
+                7,
+                0,
+                9.41421
+            ],
+            "to": [
+                9,
+                1,
+                13.41421
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        4,
+                        0,
+                        6,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        2
+                    ],
+                    "texture": "#missing"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        2
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        10,
+                        8,
+                        14,
+                        10
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "from": [
+                9.30656,
+                0,
+                6.4588
+            ],
+            "to": [
+                13.30656,
+                1,
+                8.4588
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        2
+                    ],
+                    "texture": "#missing"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        4
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        5,
+                        12,
+                        7,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "y"
+            },
+            "from": [
+                2.69344,
+                0,
+                6.4588
+            ],
+            "to": [
+                6.69344,
+                1,
+                8.4588
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        2
+                    ],
+                    "texture": "#missing"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        4,
+                        1,
+                        6,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        4
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        5,
+                        12,
+                        7,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                7,
+                0,
+                3
+            ],
+            "to": [
+                9,
+                1,
+                7
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        1
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        2,
+                        2
+                    ],
+                    "texture": "#missing"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        1,
+                        2,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        1,
+                        4,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        2
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        10,
+                        8,
+                        14,
+                        10
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                6,
+                -0.1,
+                6
+            ],
+            "to": [
+                10,
+                1.1,
+                10
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        4,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        12,
+                        0,
+                        16,
+                        4
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        12,
+                        4,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                }
+            }
+        }
+    ],
+    "groups": [{
+        "color": 0,
+        "children": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "origin": [
+            8,
+            0,
+            8
+        ],
+        "name": "starfish"
+    }],
+    "credit": "Made with Blockbench"
+}

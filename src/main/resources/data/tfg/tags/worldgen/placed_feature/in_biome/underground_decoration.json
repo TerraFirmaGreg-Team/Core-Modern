@@ -1,0 +1,20 @@
+{
+    "values": [
+        "tfc:underground_loose_rocks",
+        "tfc:cave_spike",
+        "tfc:cave_column",
+        "tfc:large_cave_spike",
+        "tfc:water_spring",
+        "tfc:lava_spring",
+        "tfg:earth/water_surface_spring",
+        "tfg:earth/extra_water_surface_spring",
+        "tfg:earth/glacial_spring",
+        "tfg:earth/ice_sheet_spring",
+        "tfc:calcite",
+        "tfc:mega_calcite",
+        "tfg:earth/ice_cave",
+        "tfc:icicle"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

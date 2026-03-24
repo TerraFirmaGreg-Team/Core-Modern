@@ -1,0 +1,11 @@
+{
+    "values": [
+        "#tfg:feature/ocean_plants",
+        "tfc:plant/beachgrass_patch",
+        "tfc:plant/sea_palm_patch",
+        "#tfg:feature/shore_decorations",
+        "#tfg:feature/land_plants"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

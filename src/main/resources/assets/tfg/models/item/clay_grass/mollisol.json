@@ -1,0 +1,4 @@
+{
+    "parent": "tfc:item/grass_inv",
+    "textures": {"block": "tfg:block/clay/mollisol"}
+}

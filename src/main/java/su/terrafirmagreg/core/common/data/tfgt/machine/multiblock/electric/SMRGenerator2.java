@@ -68,12 +68,21 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
     private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
     private int runningTimer = 0;
     static {
-        boostingTiers.put(TFGHelpers.getMaterial("ozone").getFluid(1), 1);
-        boostingTiers.put(TFGHelpers.getMaterial("cyclohex_diperoxide").getFluid(1), 4);
-        boostingTiers.put(TFGHelpers.getMaterial("booster_t3").getFluid(1), 8);
+        var ozone = TFGHelpers.getMaterial("ozone");
+        var cyclohex_diperoxide = TFGHelpers.getMaterial("cyclohex_diperoxide");
+        var booster_t3 = TFGHelpers.getMaterial("booster_t3");
+        var polyalkylene_lubricant = TFGHelpers.getMaterial("polyalkylene_lubricant");
+
+        if (ozone != null && !ozone.isNull())
+            boostingTiers.put(ozone.getFluid(1), 1);
+        if (cyclohex_diperoxide != null && !cyclohex_diperoxide.isNull())
+            boostingTiers.put(cyclohex_diperoxide.getFluid(1), 4);
+        if (booster_t3 != null && !booster_t3.isNull())
+            boostingTiers.put(booster_t3.getFluid(1), 8);
 
         lubricantTiers.put(GTMaterials.Lubricant.getFluid(1), 2);
-        lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
+        if (polyalkylene_lubricant != null && !polyalkylene_lubricant.isNull())
+            lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
     }
 
     public SMRGenerator2(IMachineBlockEntity holder, int tier) {

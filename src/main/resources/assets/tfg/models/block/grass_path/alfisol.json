@@ -1,0 +1,8 @@
+{
+    "parent": "tfc:block/grass_path",
+    "textures": {
+        "side": "tfg:block/grass_path/alfisol_side",
+        "top": "tfg:block/grass_path/alfisol_top",
+        "dirt": "tfg:block/dirt/alfisol"
+    }
+}

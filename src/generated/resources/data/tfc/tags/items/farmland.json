@@ -1,0 +1,9 @@
+{
+  "values": [
+    "tfg:farmland/alfisol",
+    "tfg:farmland/mollisol",
+    "tfg:farmland/oxisol",
+    "tfg:farmland/podzol",
+    "tfg:grass/mars_farmland"
+  ]
+}

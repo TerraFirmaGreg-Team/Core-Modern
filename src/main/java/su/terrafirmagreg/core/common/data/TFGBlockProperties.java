@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.TFCFluids;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluids;
 
@@ -18,4 +19,6 @@ public class TFGBlockProperties {
                     TFGFluids.SULFUR_FUMES, TFGFluids.GEYSER_SLURRY));
 
     public static final IntegerProperty HEIGHT = IntegerProperty.create("height", 0, 5);
+
+    public static final BooleanProperty OPEN = BooleanProperty.create("open");
 }

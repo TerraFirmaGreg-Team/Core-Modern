@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfg:block/muddy_roots/alfisol"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfg:block/muddy_roots/alfisol"
+        },
+        "axis=y": {"model": "tfg:block/muddy_roots/alfisol"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

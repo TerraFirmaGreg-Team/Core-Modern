@@ -1,6 +1,8 @@
 package su.terrafirmagreg.core.common.data.recipes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -165,7 +167,7 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
             final ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             final ArtisanPattern pattern = ArtisanPattern.fromJson(json);
             final ArtisanType type = ArtisanType.ARTISAN_TYPES.get(ResourceLocation.parse(GsonHelper.getAsString(json, "artisanType")));
-            return new ArtisanRecipe(recipeId, pattern, result, Ingredient.of(type.getInputItems().stream()), type.getToolTags(), type);
+            return new ArtisanRecipe(recipeId, pattern, result, createIngredientFromType(type), extractToolTags(type), type);
         }
 
         /**
@@ -181,7 +183,43 @@ public class ArtisanRecipe implements ISimpleRecipe<ArtisanTableContainer.Recipe
             final ItemStack stack = buffer.readItem();
             final ArtisanType type = ArtisanType.ARTISAN_TYPES.get(buffer.readResourceLocation());
 
-            return new ArtisanRecipe(recipeId, pattern, stack, Ingredient.of(type.getInputItems().stream()), type.getToolTags(), type);
+            return new ArtisanRecipe(recipeId, pattern, stack, createIngredientFromType(type), extractToolTags(type), type);
+        }
+
+        private static @Nullable Ingredient createIngredientFromType(ArtisanType type) {
+            var inputIngredients = type.getInputIngredients();
+            if (inputIngredients.isEmpty())
+                return null;
+
+            var ingredientValues = inputIngredients.stream()
+                    .map(artisanIngredient -> {
+                        if (artisanIngredient.isItemStack() && artisanIngredient.getItemStack() != null) {
+                            return Ingredient.of(artisanIngredient.getItemStack());
+                        } else if (artisanIngredient.isTag() && artisanIngredient.getTag() != null) {
+                            return Ingredient.of(artisanIngredient.getTag());
+                        } else {
+                            return Ingredient.EMPTY;
+                        }
+                    })
+                    .filter(ingredient -> ingredient != Ingredient.EMPTY)
+                    .toArray(Ingredient[]::new);
+
+            if (ingredientValues.length == 0) {
+                return null;
+            } else if (ingredientValues.length == 1) {
+                return ingredientValues[0];
+            } else {
+                return Ingredient.merge(Arrays.asList(ingredientValues));
+            }
+        }
+
+        private static ArrayList<TagKey<Item>> extractToolTags(ArtisanType type) {
+            var toolRequirements = type.getToolRequirements();
+            return toolRequirements.stream()
+                    .filter(ArtisanType.Ingredient::isTag)
+                    .map(ArtisanType.Ingredient::getTag)
+                    .filter(Objects::nonNull)
+                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
         }
 
         /**

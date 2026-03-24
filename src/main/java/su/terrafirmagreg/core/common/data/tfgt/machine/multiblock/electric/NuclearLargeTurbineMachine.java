@@ -1,10 +1,13 @@
 package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
 
+import static com.gregtechceu.gtceu.api.GTValues.IV;
+
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
@@ -46,7 +49,7 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
     public NuclearLargeTurbineMachine(IMachineBlockEntity holder, int tier) {
         super(holder);
         this.tier = tier;
-        this.BASE_EU_OUTPUT = 8192;
+        this.BASE_EU_OUTPUT = GTValues.V[IV];
     }
 
     @Nullable

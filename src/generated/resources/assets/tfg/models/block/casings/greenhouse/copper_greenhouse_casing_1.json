@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "tfg:block/casings/greenhouse/copper_greenhouse_casing_1"
+  }
+}

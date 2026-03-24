@@ -1,0 +1,16 @@
+{
+    "feature": "tfg:earth/tuya_rivulet",
+    "placement": [
+        {
+            "count": 2,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {"type": "minecraft:biome"},
+        {
+            "distance": 0.84,
+            "type": "tfg:tuya"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}
