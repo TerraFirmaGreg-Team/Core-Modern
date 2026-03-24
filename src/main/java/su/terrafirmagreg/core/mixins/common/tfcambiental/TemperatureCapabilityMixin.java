@@ -50,15 +50,14 @@ public abstract class TemperatureCapabilityMixin {
     @Overwrite
     public void evaluateModifiers() {
         this.clearModifiers();
+
+        var suitType = TFCAmbientalCompat.getWornSuitType(this.player);
+        boolean fullyInsulated = suitType == TFCAmbientalCompat.SuitType.FULLY_INSULATED;
+        boolean heatproof = suitType == TFCAmbientalCompat.SuitType.HEATPROOF;
+
         EquipmentTemperatureProvider.evaluateAll(this.player, this.modifiers);
-
-        var equipmentPotency = this.modifiers.getTotalPotency();
-        boolean fullyInsulated = equipmentPotency == (TFCAmbientalCompat.FULLY_INSULATED * 4) + 1;
-        boolean heatproof = equipmentPotency == (TFCAmbientalCompat.HEATPROOF * 4) + 1;
-
         EnvironmentalTemperatureProvider.evaluateAll(this.player, this.modifiers);
         if (!fullyInsulated) {
-            // Only evaluate everything else if we're not fully insulated
             ItemTemperatureProvider.evaluateAll(this.player, this.modifiers);
             BlockTemperatureProvider.evaluateAll(this.player, this.modifiers);
             BlockEntityTemperatureProvider.evaluateAll(this.player, this.modifiers);
