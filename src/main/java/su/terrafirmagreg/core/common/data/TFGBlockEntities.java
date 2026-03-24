@@ -85,7 +85,8 @@ public class TFGBlockEntities {
     public static void finaliseBEModification() {
         for (var key: beModification.keySet()) {
             var beType = (BlockEntityTypeAccessor) key.get();
-            var blocks = beType.tfg$getValidBlocks();
+            Set<Block> blocks = new HashSet<>();
+            blocks.addAll(beType.tfg$getValidBlocks());
             blocks.addAll(beModification.get(key));
             beType.tfg$setValidBlocks(blocks);
         }
