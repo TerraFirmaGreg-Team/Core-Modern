@@ -51,8 +51,7 @@ public class TFCBiomesMixin {
     private static void tfg$findExtension(CommonLevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
         if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
             final BiomeExtension ext = TFGBiomes.findExtension(level, biome);
-            if (ext != null)
-                cir.setReturnValue(ext);
+            cir.setReturnValue(ext);
         }
     }
 
