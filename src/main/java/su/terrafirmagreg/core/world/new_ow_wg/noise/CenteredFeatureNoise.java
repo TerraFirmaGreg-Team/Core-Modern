@@ -33,8 +33,9 @@ public class CenteredFeatureNoise {
             public double setColumnAndSampleHeight(double heightIn, int x, int z, BiomeSourceExtension biomeSource) {
                 TFGCellular2D.TFGCell cell = cellNoise.cell(x, z);
                 final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
-                if (biome.isVolcanic()) {
-                    final int rarity = biome.getVolcanoRarity();
+                IBiomeExtension be = (IBiomeExtension) biome;
+                if (be.tfg$hasCinderCones()) {
+                    final int rarity = be.tfg$getCenteredFeatureRarity();
                     if (checkCellRarity(cell, rarity)) {
                         if (biome == TFGBiomes.ACTIVE_SHIELD_VOLCANO)
                             return modifyHeightShieldVolcano(cell, x, z, biome, heightIn);
@@ -110,7 +111,8 @@ public class CenteredFeatureNoise {
 
             @Override
             public boolean isValidBiome(BiomeExtension biome) {
-                return biome.isVolcanic();
+                IBiomeExtension be = (IBiomeExtension) biome;
+                return be.tfg$hasCinderCones();
             }
 
             /**
@@ -141,7 +143,7 @@ public class CenteredFeatureNoise {
                 final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
                 IBiomeExtension be = (IBiomeExtension) biome;
                 if (be.tfg$hasTuffRings()) {
-                    final int rarity = biome.getVolcanoRarity();
+                    final int rarity = be.tfg$getCenteredFeatureRarity();
                     if (checkCellRarity(cell, rarity)) {
                         return modifyHeight(cell, x, z, biome, heightIn);
                     }
@@ -204,7 +206,8 @@ public class CenteredFeatureNoise {
 
             @Override
             public boolean isValidBiome(BiomeExtension biome) {
-                return biome.isVolcanic();
+                IBiomeExtension be = (IBiomeExtension) biome;
+                return be.tfg$hasTuffRings();
             }
 
             /**
@@ -259,7 +262,7 @@ public class CenteredFeatureNoise {
                 TFGCellular2D.TFGCell cell = cellNoise.cell(x, z);
                 final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
                 IBiomeExtension be = (IBiomeExtension) biome;
-                final int rarity = biome.getVolcanoRarity();
+                final int rarity = be.tfg$getCenteredFeatureRarity();
                 if (be.tfg$hasTuyas()) {
                     if (checkCellRarity(cell, rarity)) {
                         return modifyHeight(cell, x, z, biome, heightIn);

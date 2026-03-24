@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ad_astra:block/strophar_planks",
+    "east": "tfg:block/wood/workbench/strophar_side",
+    "north": "tfg:block/wood/workbench/strophar_front",
+    "south": "tfg:block/wood/workbench/strophar_side",
+    "up": "tfg:block/wood/workbench/strophar_top",
+    "west": "tfg:block/wood/workbench/strophar_front"
+  }
+}

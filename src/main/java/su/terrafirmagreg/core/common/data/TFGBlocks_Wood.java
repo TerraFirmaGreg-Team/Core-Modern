@@ -1,0 +1,554 @@
+package su.terrafirmagreg.core.common.data;
+
+import static com.eerussianguy.firmalife.common.blocks.FLBlocks.*;
+
+import java.util.Map;
+import java.util.function.Supplier;
+
+import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
+import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
+import com.eerussianguy.firmalife.common.blocks.*;
+import com.google.gson.JsonObject;
+import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+
+import net.dries007.tfc.common.blocks.ExtendedProperties;
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.blocks.devices.BarrelBlock;
+import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.common.items.BarrelBlockItem;
+import net.dries007.tfc.common.items.ChestBlockItem;
+import net.dries007.tfc.util.registry.RegistryWood;
+import net.dries007.tfc.world.feature.tree.TFCTreeGrower;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
+import net.minecraftforge.common.data.ExistingFileHelper;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+
+import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.utils.ModelUtils;
+
+public class TFGBlocks_Wood {
+
+    public enum WoodType {
+        GLACIAN("glacian", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
+                MapColor.NONE),
+        STROPHAR("strophar", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
+                MapColor.NONE),
+        AERONOS("aeronos", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
+                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
+                MapColor.NONE),
+        GINKGO("ginkgo", ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
+                ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
+                ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/stripped_ginkgo_log"),
+                MapColor.NONE);
+
+        public final String name;
+        public final ResourceLocation plankTexture;
+        public final ResourceLocation logTexture;
+        public final ResourceLocation strippedLogTexture;
+        public final RegistryWood registryWood;
+
+        WoodType(String name, ResourceLocation plankTexture, ResourceLocation logBlock, ResourceLocation strippedLogTexture, MapColor col) {
+            this.name = name;
+            this.plankTexture = plankTexture;
+            this.logTexture = logBlock;
+            this.strippedLogTexture = strippedLogTexture;
+            // This is just needed for the TFC wood block ctors, only the colour method is used.
+            this.registryWood = new RegistryWood() {
+                @Override
+                public MapColor woodColor() {
+                    return col;
+                }
+
+                @Override
+                public MapColor barkColor() {
+                    return col;
+                }
+
+                @Override
+                public TFCTreeGrower tree() {
+                    //noinspection DataFlowIssue
+                    return null;
+                }
+
+                @Override
+                public int daysToGrow() {
+                    return 0;
+                }
+
+                @Override
+                public int autumnIndex() {
+                    return 0;
+                }
+
+                @Override
+                public Supplier<Block> getBlock(Wood.BlockType blockType) {
+                    //noinspection DataFlowIssue
+                    return null;
+                }
+
+                @Override
+                public BlockSetType getBlockSet() {
+                    //noinspection DataFlowIssue
+                    return null;
+                }
+
+                @Override
+                public net.minecraft.world.level.block.state.properties.WoodType getVanillaWoodType() {
+                    //noinspection DataFlowIssue
+                    return null;
+                }
+
+                @Override
+                public String getSerializedName() {
+                    return "";
+                }
+            };
+        }
+    }
+
+    public static final Map<WoodType, Map<Wood.BlockType, BlockEntry<? extends Block>>> WOOD_BLOCKS = new Object2ObjectOpenHashMap<>();
+
+    public static final Map<WoodType, BlockEntry<? extends Block>> FOOD_SHELVES = new Object2ObjectOpenHashMap<>();
+    public static final Map<WoodType, BlockEntry<? extends Block>> HANGERS = new Object2ObjectOpenHashMap<>();
+    public static final Map<WoodType, BlockEntry<? extends Block>> JARBNETS = new Object2ObjectOpenHashMap<>();
+    public static final Map<WoodType, BlockEntry<? extends Block>> BIG_BARRELS = new Object2ObjectOpenHashMap<>();
+    public static final Map<WoodType, BlockEntry<? extends Block>> WINE_SHELVES = new Object2ObjectOpenHashMap<>();
+    public static final Map<WoodType, BlockEntry<? extends Block>> STOMPING_BARRELS = new Object2ObjectOpenHashMap<>();
+    public static final Map<WoodType, BlockEntry<? extends Block>> BARREL_PRESSES = new Object2ObjectOpenHashMap<>();
+
+    public static void init() {
+        for (WoodType value : WoodType.values()) {
+            registerBlocks(value);
+
+            FOOD_SHELVES.put(value, foodShelf(value));
+            HANGERS.put(value, hanger(value));
+            JARBNETS.put(value, jarbnet(value));
+            BIG_BARRELS.put(value, bigBarrel(value));
+            WINE_SHELVES.put(value, wineShelf(value));
+            STOMPING_BARRELS.put(value, stompingBarrel(value));
+            BARREL_PRESSES.put(value, barrelPress(value));
+        }
+    }
+
+    private static void registerBlocks(WoodType woodType) {
+        Map<Wood.BlockType, BlockEntry<? extends Block>> blocks = new Object2ObjectOpenHashMap<>();
+
+        blocks.put(Wood.BlockType.TOOL_RACK, toolRack(woodType));
+        blocks.put(Wood.BlockType.WORKBENCH, workbench(woodType));
+        blocks.put(Wood.BlockType.CHEST, chest(woodType));
+        blocks.put(Wood.BlockType.TRAPPED_CHEST, trappedChest(woodType));
+        blocks.put(Wood.BlockType.LOOM, loom(woodType));
+        blocks.put(Wood.BlockType.SLUICE, sluice(woodType));
+        blocks.put(Wood.BlockType.BARREL, barrel(woodType));
+        blocks.put(Wood.BlockType.LECTERN, lectern(woodType));
+        blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(woodType));
+        blocks.put(Wood.BlockType.SEWING_TABLE, sewingTable(woodType));
+        blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(woodType));
+
+        WOOD_BLOCKS.put(woodType, blocks);
+    }
+
+    private static BlockEntry<Block> toolRack(WoodType woodType) {
+        var toolRackBlock = Wood.BlockType.TOOL_RACK.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/tool_rack/" + woodType.name, p -> toolRackBlock)
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/tool_rack"))
+                            .texture("texture", woodType.plankTexture)
+                            .texture("particle", woodType.plankTexture);
+
+                    ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<Block> workbench(WoodType woodType) {
+        var workbenchBlock = Wood.BlockType.WORKBENCH.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/workbench/" + woodType.name, p -> workbenchBlock)
+                .blockstate((ctx, prov) -> {
+                    ResourceLocation path = TFGCore.id("block/wood/workbench/" + woodType.name);
+                    prov.simpleBlock(ctx.getEntry(), prov.models().cube(ctx.getName(), woodType.plankTexture, path.withSuffix("_top"), path.withSuffix("_front"),
+                            path.withSuffix("_side"), path.withSuffix("_side"), path.withSuffix("_front")));
+                })
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<Block> chest(WoodType woodType) {
+        var chestBlock = Wood.BlockType.CHEST.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/chest/" + woodType.name, p -> chestBlock)
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> trappedChest(WoodType woodType) {
+        var trappedChestBlock = Wood.BlockType.TRAPPED_CHEST.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/trapped_chest/" + woodType.name, p -> trappedChestBlock)
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> loom(WoodType woodType) {
+        var loomBlock = Wood.BlockType.LOOM.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/loom/" + woodType.name, p -> loomBlock)
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/loom"))
+                            .texture("texture", woodType.plankTexture)
+                            .texture("particle", woodType.plankTexture);
+
+                    ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .simpleItem()
+                .register();
+
+    }
+
+    private static BlockEntry<Block> sluice(WoodType woodType) {
+        var sluiceBlock = Wood.BlockType.SLUICE.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/sluice/" + woodType.name, p -> sluiceBlock)
+                .blockstate((ctx, prov) -> {
+
+                    ModelFile sluiceUpper = prov.models().withExistingParent("wood/sluice/" + woodType.name + "_upper", ResourceLocation.fromNamespaceAndPath("tfc", "block/sluice_upper"))
+                            .texture("texture", TFGCore.id("block/wood/sheet/" + woodType.name));
+                    ModelFile sluiceLower = prov.models().withExistingParent("wood/sluice/" + woodType.name + "_lower", ResourceLocation.fromNamespaceAndPath("tfc", "block/sluice_lower"))
+                            .texture("texture", TFGCore.id("block/wood/sheet/" + woodType.name));
+
+                    var builder = prov.getVariantBuilder(ctx.getEntry());
+
+                    ModelUtils.forEachCardinalDirection(builder, sluiceLower, b -> b.with(TFCBlockStateProperties.UPPER, false));
+                    ModelUtils.forEachCardinalDirection(builder, sluiceUpper, b -> b.with(TFCBlockStateProperties.UPPER, true));
+                })
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower"))).build()
+                .register();
+
+    }
+
+    private static BlockEntry<BarrelBlock> barrel(WoodType woodType) {
+        var barrelBlock = Wood.BlockType.BARREL.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/barrel/" + woodType.name, p -> (BarrelBlock) barrelBlock)
+                .blockstate((ctx, prov) -> {
+
+                    ModelFile barrel = prov.models().withExistingParent("wood/barrel/" + woodType.name, ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel"))
+                            .texture("particle", woodType.plankTexture)
+                            .texture("planks", woodType.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+
+                    ModelFile barrelSide = prov.models().withExistingParent("wood/barrel/" + woodType.name + "_side", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side"))
+                            .texture("particle", woodType.plankTexture)
+                            .texture("planks", woodType.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+
+                    ModelFile barrelSideRack = prov.models().withExistingParent("wood/barrel/" + woodType.name + "_side_rack", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_rack"))
+                            .texture("particle", woodType.plankTexture)
+                            .texture("planks", woodType.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+
+                    ModelFile sealedBarrel = prov.models().withExistingParent("wood/barrel_sealed/" + woodType.name, ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_sealed"))
+                            .texture("particle", woodType.plankTexture)
+                            .texture("planks", woodType.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+
+                    ModelFile sealedBarrelSide = prov.models()
+                            .withExistingParent("wood/barrel_sealed/" + woodType.name + "_side", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_sealed"))
+                            .texture("particle", woodType.plankTexture)
+                            .texture("planks", woodType.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+
+                    ModelFile sealedBarrelSideRack = prov.models()
+                            .withExistingParent("wood/barrel_sealed/" + woodType.name + "_side_rack", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_sealed_rack"))
+                            .texture("particle", woodType.plankTexture)
+                            .texture("planks", woodType.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+
+                    var builder = prov.getVariantBuilder(ctx.getEntry());
+
+                    buildBarrelBlockStateEntry(builder, Direction.UP, 0, barrel, barrel, sealedBarrel, sealedBarrel);
+                    buildBarrelBlockStateEntry(builder, Direction.EAST, 0, barrelSide, barrelSideRack, sealedBarrelSide, sealedBarrelSideRack);
+                    buildBarrelBlockStateEntry(builder, Direction.WEST, 180, barrelSide, barrelSideRack, sealedBarrelSide, sealedBarrelSideRack);
+                    buildBarrelBlockStateEntry(builder, Direction.SOUTH, 90, barrelSide, barrelSideRack, sealedBarrelSide, sealedBarrelSideRack);
+                    buildBarrelBlockStateEntry(builder, Direction.NORTH, 270, barrelSide, barrelSideRack, sealedBarrelSide, sealedBarrelSideRack);
+                })
+                .item(BarrelBlockItem::new).build()
+                .register();
+    }
+
+    private static void buildBarrelBlockStateEntry(VariantBlockStateBuilder builder, Direction facing, int y, ModelFile barrel, ModelFile rack, ModelFile sealed, ModelFile sealedRack) {
+        builder.partialState().with(TFCBlockStateProperties.FACING_NOT_DOWN, facing).with(TFCBlockStateProperties.SEALED, false).with(TFCBlockStateProperties.RACK, false).modelForState().rotationY(y)
+                .modelFile(barrel).addModel()
+                .partialState().with(TFCBlockStateProperties.FACING_NOT_DOWN, facing).with(TFCBlockStateProperties.SEALED, true).with(TFCBlockStateProperties.RACK, false).modelForState().rotationY(y)
+                .modelFile(sealed).addModel()
+                .partialState().with(TFCBlockStateProperties.FACING_NOT_DOWN, facing).with(TFCBlockStateProperties.SEALED, false).with(TFCBlockStateProperties.RACK, true).modelForState().rotationY(y)
+                .modelFile(rack).addModel()
+                .partialState().with(TFCBlockStateProperties.FACING_NOT_DOWN, facing).with(TFCBlockStateProperties.SEALED, true).with(TFCBlockStateProperties.RACK, true).modelForState().rotationY(y)
+                .modelFile(sealedRack).addModel();
+    }
+
+    private static BlockEntry<Block> lectern(WoodType woodType) {
+        var lecternBlock = Wood.BlockType.LECTERN.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/lectern/" + woodType.name, p -> lecternBlock)
+                .blockstate((ctx, prov) -> {
+
+                    var path = "block/wood/lectern/" + woodType.name + "/";
+                    ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("block/lectern"))
+                            .texture("bottom", woodType.plankTexture)
+                            .texture("base", TFGCore.id(path + "base"))
+                            .texture("front", TFGCore.id(path + "front"))
+                            .texture("sides", TFGCore.id(path + "sides"))
+                            .texture("top", TFGCore.id(path + "top"))
+                            .texture("particle", TFGCore.id(path + "sides"));
+
+                    ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .simpleItem()
+                .register();
+
+    }
+
+    private static BlockEntry<Block> scribingTable(WoodType woodType) {
+        var scribingTableBlock = Wood.BlockType.SCRIBING_TABLE.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/scribing_table/" + woodType.name, p -> scribingTableBlock)
+                .blockstate((ctx, prov) -> {
+                    var model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/scribing_table"))
+                            .texture("top", TFGCore.id("block/wood/scribing_table/" + woodType.name))
+                            .texture("leg", woodType.logTexture)
+                            .texture("side", woodType.plankTexture)
+                            .texture("misc", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/scribing_table/scribing_paraphernalia"))
+                            .texture("particle", woodType.plankTexture);
+
+                    ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .simpleItem()
+                .register();
+
+    }
+
+    private static BlockEntry<Block> sewingTable(WoodType woodType) {
+        var sewingTableBlock = Wood.BlockType.SEWING_TABLE.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/sewing_table/" + woodType.name, p -> sewingTableBlock)
+                .blockstate((ctx, prov) -> {
+                    var model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/sewing_table"))
+                            .texture("0", woodType.logTexture)
+                            .texture("1", woodType.plankTexture);
+
+                    ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<Block> jarShelf(WoodType woodType) {
+        var jarShelfBlock = Wood.BlockType.JAR_SHELF.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/jar_shelf/" + woodType.name, p -> jarShelfBlock)
+                .blockstate((ctx, prov) -> {
+                    var model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/jar_shelf"))
+                            .texture("0", woodType.plankTexture);
+
+                    ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .simpleItem().register();
+
+    }
+
+    private static class FirmaCustomLoader extends CustomLoaderBuilder<BlockModelBuilder> {
+
+        private final ResourceLocation parentBlock;
+
+        public static FirmaCustomLoader get(ResourceLocation loaderId, ResourceLocation parentBlock, BlockModelBuilder parent, ExistingFileHelper existingFileHelper) {
+            return new FirmaCustomLoader(loaderId, parentBlock, parent, existingFileHelper);
+        }
+
+        protected FirmaCustomLoader(ResourceLocation loaderId, ResourceLocation parentBlock, BlockModelBuilder parent, ExistingFileHelper existingFileHelper) {
+            super(loaderId, parent, existingFileHelper);
+            this.parentBlock = parentBlock;
+        }
+
+        @Override
+        public JsonObject toJson(JsonObject json) {
+            super.toJson(json);
+            var obj = new JsonObject();
+            obj.addProperty("parent", parentBlock.toString());
+            json.add("base", obj);
+            return json;
+        }
+    }
+
+    private static BlockEntry<FoodShelfBlock> foodShelf(WoodType type) {
+        return TFGCore.REGISTRATE.block("wood/food_shelf/" + type.name, p -> new FoodShelfBlock(shelfProperties().mapColor(type.registryWood.woodColor())))
+                .blockstate((ctx, prov) -> {
+                    prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/food_shelf_base"))
+                            .texture("wood", type.plankTexture);
+
+                    var dynamicModel = prov.models().getBuilder("wood/food_shelf/" + type.name + "_dynamic")
+                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelf"), TFGCore.id("block/wood/food_shelf/" + type.name), t,
+                                    existing))
+                            .end();
+
+                    ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), dynamicModel);
+                })
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + type.name))).build()
+                .register();
+    }
+
+    private static BlockEntry<HangerBlock> hanger(WoodType type) {
+        return TFGCore.REGISTRATE.block("wood/hanger/" + type.name, p -> new HangerBlock(hangerProperties().mapColor(type.registryWood.woodColor())))
+                .blockstate((ctx, prov) -> {
+                    prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/hanger_base"))
+                            .texture("wood", type.plankTexture)
+                            .texture("string", ResourceLocation.withDefaultNamespace("block/white_wool"));
+
+                    var dynamicModel = prov.models().getBuilder("wood/hanger/" + type.name + "_dynamic")
+                            .customLoader(
+                                    (t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "hanger"), TFGCore.id("block/wood/hanger/" + type.name), t, existing))
+                            .end();
+
+                    prov.simpleBlock(ctx.getEntry(), dynamicModel);
+                })
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + type.name))).build()
+                .register();
+
+    }
+
+    private static BlockEntry<JarbnetBlock> jarbnet(WoodType type) {
+        return TFGCore.REGISTRATE.block("wood/jarbnet/" + type.name, p -> new JarbnetBlock(jarbnetProperties().mapColor(type.registryWood.woodColor())))
+                .blockstate((ctx, prov) -> {
+                    prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/jarbnet"))
+                            .texture("planks", type.plankTexture)
+                            .texture("log", type.logTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + type.name));
+
+                    prov.models().withExistingParent(ctx.getName() + "_shut", ResourceLocation.fromNamespaceAndPath("firmalife", "block/jarbnet_shut"))
+                            .texture("planks", type.plankTexture)
+                            .texture("log", type.logTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + type.name));
+
+                    var dynamicModel = prov.models().getBuilder("wood/jarbnet/" + type.name + "_dynamic")
+                            .customLoader(
+                                    (t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnet"), TFGCore.id("block/wood/jarbnet/" + type.name), t, existing))
+                            .end();
+
+                    var dynamicModelShut = prov.models().getBuilder("wood/jarbnet/" + type.name + "_shut_dynamic")
+                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnet"), TFGCore.id("block/wood/jarbnet/" + type.name + "_shut"),
+                                    t, existing))
+                            .end();
+
+                    var builder = prov.getVariantBuilder(ctx.getEntry());
+
+                    ModelUtils.forEachCardinalDirection(builder, dynamicModel, b -> b.with(BlockStateProperties.OPEN, true));
+                    ModelUtils.forEachCardinalDirection(builder, dynamicModelShut, b -> b.with(BlockStateProperties.OPEN, false));
+                })
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + type.name))).build()
+                .register();
+
+    }
+
+    private static BlockModelBuilder bigBarrelTextures(BlockModelBuilder builder, WoodType type) {
+        return builder.texture("0", TFGCore.id("block/wood/big_barrel/" + type.name + "_3_side"))
+                .texture("1", TFGCore.id("block/wood/big_barrel/" + type.name + "_0"))
+                .texture("2", TFGCore.id("block/wood/big_barrel/" + type.name + "_0_side"))
+                .texture("3", TFGCore.id("block/wood/big_barrel/" + type.name + "_1"))
+                .texture("4", TFGCore.id("block/wood/big_barrel/" + type.name + "_1_side"))
+                .texture("5", TFGCore.id("block/wood/big_barrel/" + type.name + "_2"))
+                .texture("6", TFGCore.id("block/wood/big_barrel/" + type.name + "_2_side"))
+                .texture("7", TFGCore.id("block/wood/big_barrel/" + type.name + "_3"))
+                .texture("8", TFGCore.id("block/wood/big_barrel/" + type.name + "_3_top"))
+                .texture("9", TFGCore.id("block/wood/big_barrel/" + type.name + "_0_top"))
+                .texture("10", TFGCore.id("block/wood/big_barrel/" + type.name + "_1_top"))
+                .texture("11", TFGCore.id("block/wood/big_barrel/" + type.name + "_2_top"))
+                .texture("12", type.logTexture);
+    }
+
+    private static BlockEntry<BigBarrelBlock> bigBarrel(WoodType type) {
+        var properties = ExtendedProperties.of().mapColor(type.registryWood.woodColor()).sound(SoundType.WOOD)
+                .noOcclusion().strength(10f).pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.BIG_BARREL);
+
+        return TFGCore.REGISTRATE.block("wood/big_barrel/" + type.name, p -> new BigBarrelBlock(properties))
+                .blockstate((ctx, prov) -> {
+                    var builder = prov.getVariantBuilder(ctx.getEntry());
+
+                    bigBarrelTextures(prov.models().withExistingParent(ctx.getName() + "_item", ResourceLocation.fromNamespaceAndPath("firmalife", "block/big_barrel_item")), type);
+                    for (int i = 0; i < 8; i++) {
+                        var model = bigBarrelTextures(prov.models().withExistingParent(ctx.getName() + "_" + i, ResourceLocation.fromNamespaceAndPath("firmalife", "block/big_barrel_" + i)), type);
+                        int finalI = i;
+                        ModelUtils.forEachCardinalDirection(builder, model, b -> b.with(FLStateProperties.BARREL_PART, finalI));
+                    }
+
+                })
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/big_barrel/" + type.name + "_item")))
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<WineShelfBlock> wineShelf(WoodType type) {
+        var properties = ExtendedProperties.of().mapColor(type.registryWood.woodColor()).sound(SoundType.WOOD).noOcclusion()
+                .strength(4f).pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.WINE_SHELF);
+
+        return TFGCore.REGISTRATE.block("wood/wine_shelf/" + type.name, p -> new WineShelfBlock(properties))
+                .blockstate((ctx, prov) -> {
+
+                    prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/wine_shelf"))
+                            .texture("0", type.plankTexture)
+                            .texture("1", TFGCore.id("block/wood/sheet/" + type.name))
+                            .texture("2", type.strippedLogTexture);
+
+                    var dynamicModel = prov.models().getBuilder("wood/wine_shelf/" + type.name + "_dynamic")
+                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelf"), TFGCore.id("block/wood/wine_shelf/" + type.name), t,
+                                    existing))
+                            .end();
+
+                    ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), dynamicModel);
+
+                })
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/wine_shelf/" + type.name))).build()
+                .register();
+
+    }
+
+    private static BlockEntry<StompingBarrelBlock> stompingBarrel(WoodType type) {
+        var properties = ExtendedProperties.of().mapColor(type.registryWood.woodColor()).sound(SoundType.WOOD).noOcclusion().strength(4f)
+                .pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.STOMPING_BARREL);
+
+        return TFGCore.REGISTRATE.block("wood/stomping_barrel/" + type.name, p -> new StompingBarrelBlock(properties))
+                .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                        prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/stomping_barrel"))
+                                .texture("0", TFGCore.id("block/wood/sheet/" + type.name))))
+                .simpleItem()
+                .register();
+
+    }
+
+    private static BlockEntry<BarrelPressBlock> barrelPress(WoodType type) {
+        var properties = ExtendedProperties.of().mapColor(type.registryWood.woodColor()).sound(SoundType.WOOD).noOcclusion()
+                .strength(4f).pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.BARREL_PRESS).ticks(BarrelPressBlockEntity::tick);
+
+        return TFGCore.REGISTRATE.block("wood/barrel_press/" + type.name, p -> new BarrelPressBlock(properties))
+                .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                        prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/barrel_press"))
+                                .texture("0", TFGCore.id("block/wood/sheet/" + type.name))))
+                .simpleItem()
+                .register();
+
+    }
+
+}

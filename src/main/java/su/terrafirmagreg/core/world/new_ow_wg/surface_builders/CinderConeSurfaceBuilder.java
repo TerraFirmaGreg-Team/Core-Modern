@@ -42,10 +42,10 @@ public class CinderConeSurfaceBuilder implements SurfaceBuilder {
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
         ISurfaceBuilderContext ctx = (ISurfaceBuilderContext) context;
         BiomeExtension cinderConeBiome = ctx.tfg$getCinderConeBiome();
-        if (cinderConeBiome.isVolcanic()) {
+        IBiomeExtension cbb = (IBiomeExtension) cinderConeBiome;
+        if (cbb.tfg$hasCinderCones()) {
             final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.cinder(seed);
             final float easing = sampler.calculateEasing(context.pos(), cinderConeBiome);
-            IBiomeExtension cbb = (IBiomeExtension) cinderConeBiome;
             if (easing > 0.6f && startY > cbb.tfg$getCenteredFeatureRockHeight() + heightNoise.noise(context.pos().getX(), context.pos().getZ())) {
                 buildVolcanicSurface(context, startY, endY, easing);
                 return;

@@ -7,7 +7,6 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.core.mixins.BlockBehaviourAccessor;
@@ -17,8 +16,10 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -56,18 +57,17 @@ public class TFGBlocks_Buds {
     @SuppressWarnings("removal")
     private static void registerBudIndicator(Material material, GTRegistrate registrate,
             ImmutableMap.Builder<Material, BlockEntry<BudIndicator>> builder) {
-        TagPrefix budTag;
-        int lightLevel;
-
         var entry = registrate
                 .block("%s_bud_indicator".formatted(material.getName()), p -> new BudIndicator(p, material))
-                .initialProperties(() -> Blocks.AMETHYST_CLUSTER)
                 .properties(p -> p
+                        .mapColor(MapColor.NONE)
                         .noLootTable()
                         .noOcclusion()
                         .noCollission()
                         .strength(0.25f)
-                        .offsetType(BlockBehaviour.OffsetType.XZ))
+                        .offsetType(BlockBehaviour.OffsetType.XZ)
+                        .sound(SoundType.AMETHYST_CLUSTER)
+                        .pushReaction(PushReaction.DESTROY))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())

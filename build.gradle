@@ -116,11 +116,15 @@ legacyForge {
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
-            programArguments.addAll '--existing-mod', 'tfg'
-            programArguments.addAll '--existing-mod', 'gtceu'
-            programArguments.addAll '--existing-mod', 'tfc'
-            programArguments.addAll '--existing-mod', 'species'
-            programArguments.addAll '--existing-mod', "ad_astra"
+
+            String[] existingMods = new String[] {
+                    "tfg", "gtceu", "tfc", "firmalife", "species",
+                    "ad_astra", "wan_ancient_beasts"
+            }
+
+            for (String mod : existingMods) {
+                programArguments.addAll '--existing-mod', mod
+            }
         }
 
     }

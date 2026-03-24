@@ -1,0 +1,6 @@
+{
+  "parent": "firmalife:block/food_shelf_base",
+  "textures": {
+    "wood": "wan_ancient_beasts:block/ginkgo_planks"
+  }
+}
