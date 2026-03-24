@@ -13,7 +13,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.TFGBlocks_Mars;
 
 public class TFGBrain {
 
@@ -32,11 +32,11 @@ public class TFGBrain {
 
     public static final RegistryObject<PoiType> LARGE_NEST_POI = POI_TYPES.register("large_nest_poi",
             () -> new PoiType(
-                    ImmutableSet.copyOf(TFGBlocks.LARGE_NEST_BOX.get().getStateDefinition().getPossibleStates()), 1,
+                    ImmutableSet.copyOf(TFGBlocks_Mars.LARGE_NEST_BOX.get().getStateDefinition().getPossibleStates()), 1,
                     2));
     public static final RegistryObject<PoiType> WARPED_LARGE_NEST_POI = POI_TYPES.register("warped_large_nest_poi",
             () -> new PoiType(
-                    ImmutableSet.copyOf(TFGBlocks.LARGE_NEST_BOX_WARPED.get().getStateDefinition().getPossibleStates()),
+                    ImmutableSet.copyOf(TFGBlocks_Mars.LARGE_NEST_BOX_WARPED.get().getStateDefinition().getPossibleStates()),
                     1, 2));
 
 }

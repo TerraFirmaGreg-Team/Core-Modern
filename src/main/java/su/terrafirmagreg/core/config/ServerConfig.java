@@ -4,6 +4,7 @@ import static su.terrafirmagreg.core.TFGCore.LOGGER;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.dries007.tfc.util.Metal;
 import net.minecraft.resources.ResourceKey;
@@ -39,6 +40,8 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue HARVEST_BASKET_RANGE;
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
+
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> worldgenOverrides;
 
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
     public final ForgeConfigSpec.IntValue sandDecumulateChance;
@@ -97,6 +100,16 @@ public final class ServerConfig {
                             return true;
                         });
 
+        builder.pop().push("world_generation");
+        worldgenOverrides = builder
+                .comment("""
+                        Per-dimension worldgen version overrides. Normally the version used during world\s
+                        creation is stored in SavedData and used automatically. Set an entry here to force\s
+                        a specific version regardless of what was recorded at generation time.\s
+                        Changing this for an existing world can cause chunk boundary artifacts.\s
+                        Format: list of "dimension_id=version", e.g. ["minecraft:overworld=1"]""")
+                .defineListAllowEmpty("worldgenOverrides", List.of(), o -> o instanceof String);
+
         builder.pop().push("mars_climate");
         sandAccumulateChance = builder
                 .comment("The chance that sand piles will accumulate during a sandstorm. Lower values = faster sand pile accumulation, but also more block updates (aka lag).")
@@ -109,4 +122,25 @@ public final class ServerConfig {
         builder.pop();
     }
 
+    /**
+     * Parses {@link #worldgenOverrides} into a map of dimension ID to version.
+     * Throws if any entry is malformed — the validator should have caught these at config load time.
+     */
+    public Map<ResourceLocation, Integer> parsedWorldgenOverrides() {
+        Map<ResourceLocation, Integer> result = new HashMap<>();
+        for (String entry : worldgenOverrides.get()) {
+            String[] parts = entry.split("=", 2);
+            if (parts.length != 2)
+                throw new IllegalStateException("[TFG] Malformed worldgen override entry: " + entry);
+            ResourceLocation dim = ResourceLocation.tryParse(parts[0].trim());
+            if (dim == null)
+                throw new IllegalStateException("[TFG] Invalid dimension ID in worldgen override: " + parts[0].trim());
+            try {
+                result.put(dim, Integer.parseInt(parts[1].trim()));
+            } catch (NumberFormatException e) {
+                throw new IllegalStateException("[TFG] Invalid version number in worldgen override: " + parts[1].trim(), e);
+            }
+        }
+        return result;
+    }
 }

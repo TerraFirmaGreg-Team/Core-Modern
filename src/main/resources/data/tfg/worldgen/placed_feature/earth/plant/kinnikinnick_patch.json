@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/kinnikinnick_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": -13,
+            "max_rainfall": 500,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 210,
+            "min_forest": "none",
+            "min_temperature": -18.4
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

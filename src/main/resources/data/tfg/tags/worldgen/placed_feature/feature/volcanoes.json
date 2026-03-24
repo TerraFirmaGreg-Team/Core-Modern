@@ -1,0 +1,5 @@
+{
+    "values": ["tfg:earth/pumice_patch"],
+    "replace": false,
+    "__comment__": "The new worldgen uses different noise for volcanoes than the old worldgen, so this requires different features"
+}

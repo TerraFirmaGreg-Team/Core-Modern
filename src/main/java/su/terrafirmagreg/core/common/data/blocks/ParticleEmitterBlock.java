@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import net.minecraft.core.BlockPos;
@@ -128,7 +127,7 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return shape != null ? shape : super.getShape(state, level, pos, context);
     }
 
@@ -143,12 +142,12 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
+    public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
@@ -158,7 +157,7 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
      * entity exists at the position, animation is deferred to the ticker.
      */
     @Override
-    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (hasTicker && level.getBlockEntity(pos) != null)
             return;
         if (shouldEmit(random))
@@ -210,13 +209,13 @@ public class ParticleEmitterBlock extends Block implements EntityBlock {
 
     // Creates ticker entity if enabled.
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return hasTicker ? new TickerBlockEntity(pos, state) : null;
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return hasTicker ? TFGBlockEntities.TICKER_ENTITY.create(pos, state) : null;
     }
 
     // Client ticker setting emission each tick when enabled.
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (!hasTicker || !level.isClientSide)
             return null;
         return type == TFGBlockEntities.TICKER_ENTITY.get()

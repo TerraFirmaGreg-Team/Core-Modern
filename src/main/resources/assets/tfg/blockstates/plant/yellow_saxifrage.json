@@ -1,0 +1,18 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfg:block/plant/yellow_saxifrage_1"},
+        "when": {"age": "1|2|3|0"}
+    },
+    {
+        "apply": {"model": "tfg:block/plant/yellow_saxifrage_2"},
+        "when": {"age": "2|3|1"}
+    },
+    {
+        "apply": {"model": "tfg:block/plant/yellow_saxifrage_3"},
+        "when": {"age": "3|2"}
+    },
+    {
+        "apply": {"model": "tfg:block/plant/yellow_saxifrage_4"},
+        "when": {"age": "3"}
+    }
+]}

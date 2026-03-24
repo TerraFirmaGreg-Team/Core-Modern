@@ -1,0 +1,49 @@
+{
+    "type": "tfc:cave",
+    "config": {
+        "debug_settings": {
+            "water_state": {"Name": "minecraft:water"},
+            "barrier_state": {"Name": "minecraft:calcite"},
+            "debug_mode": true,
+            "lava_state": {"Name": "beneath:crackrack"},
+            "air_state": {"Name": "minecraft:cave_air"}
+        },
+        "probability": 0.15,
+        "replaceable": "#tfc:can_carve",
+        "y": {
+            "min_inclusive": {"absolute": -80},
+            "max_inclusive": {"absolute": -32},
+            "type": "uniform"
+        },
+        "yScale": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": 0.1,
+                "max_exclusive": 0.9
+            }
+        },
+        "lava_level": {"above_bottom": 0},
+        "aquifers_enabled": false,
+        "horizontal_radius_multiplier": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": 1,
+                "max_exclusive": 2.5
+            }
+        },
+        "floor_level": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": -1,
+                "max_exclusive": 0.3
+            }
+        },
+        "vertical_radius_multiplier": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": 1,
+                "max_exclusive": 2.5
+            }
+        }
+    }
+}

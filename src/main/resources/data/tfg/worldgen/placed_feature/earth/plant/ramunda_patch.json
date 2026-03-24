@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/ramunda_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": -0.4,
+            "max_rainfall": 190,
+            "max_forest": "sparse",
+            "type": "tfc:climate",
+            "min_rainfall": 0,
+            "min_forest": "none",
+            "min_temperature": -18.4
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -1,0 +1,4 @@
+{
+    "parent": "tfg:block/moss_campion",
+    "textures": {"texture": "tfg:block/plant/moss_campion/moss_campion_0"}
+}

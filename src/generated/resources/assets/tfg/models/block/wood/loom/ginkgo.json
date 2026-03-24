@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/loom",
+  "textures": {
+    "particle": "wan_ancient_beasts:block/ginkgo_planks",
+    "texture": "wan_ancient_beasts:block/ginkgo_planks"
+  }
+}

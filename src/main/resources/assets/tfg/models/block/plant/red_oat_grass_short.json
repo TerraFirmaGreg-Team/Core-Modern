@@ -1,0 +1,4 @@
+{
+    "parent": "minecraft:block/tinted_cross",
+    "textures": {"cross": "tfg:block/plant/red_oat_grass/red_oat_grass_short"}
+}

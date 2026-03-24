@@ -1,0 +1,11 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfg:creeping_ocean_plant",
+    "config": {
+        "integrity": 0.45,
+        "block": "tfg:plant/anemone_purple",
+        "tide_height": -1,
+        "radius": 3,
+        "height": 5
+    }
+}

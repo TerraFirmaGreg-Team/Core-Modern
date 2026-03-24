@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/cube_column",
+    "textures": {
+        "side": "tfg:block/dirt/podzol",
+        "end": "tfg:block/dirt/podzol_top"
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

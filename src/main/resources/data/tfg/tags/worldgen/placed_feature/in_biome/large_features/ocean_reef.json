@@ -1,0 +1,10 @@
+{
+    "values": [
+        "tfc:coral_mushroom",
+        "tfc:coral_tree",
+        "tfc:coral_claw",
+        "#tfg:feature/surface_flood_fill_lakes"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

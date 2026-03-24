@@ -1,0 +1,44 @@
+{"multipart": [
+    {
+        "apply": {"model": "tfg:block/plant/elegant_sunburst_lichen"},
+        "when": {"down": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 90,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"east": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"north": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 180,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"south": "true"}
+    },
+    {
+        "apply": {
+            "x": 180,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"up": "true"}
+    },
+    {
+        "apply": {
+            "x": 270,
+            "y": 270,
+            "model": "tfg:block/plant/elegant_sunburst_lichen"
+        },
+        "when": {"west": "true"}
+    }
+]}

@@ -1,0 +1,16 @@
+{
+    "feature": "tfg:earth/extra_island_guano_patch",
+    "placement": [
+        {
+            "count": 10,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 15,
+            "type": "tfc:climate",
+            "min_temperature": -30
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

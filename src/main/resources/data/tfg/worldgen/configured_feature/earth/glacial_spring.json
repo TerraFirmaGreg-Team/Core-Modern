@@ -1,0 +1,11 @@
+{
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:spring",
+    "config": {
+        "valid_blocks": ["minecraft:packed_ice"],
+        "state": {
+            "Properties": {"falling": "true"},
+            "Name": "minecraft:water"
+        }
+    }
+}

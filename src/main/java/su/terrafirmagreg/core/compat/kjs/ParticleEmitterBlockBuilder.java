@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.compat.kjs;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -22,6 +20,7 @@ import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
 
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.ParticleEmitterBlock;
 
 /**
@@ -32,7 +31,6 @@ import su.terrafirmagreg.core.common.data.blocks.ParticleEmitterBlock;
  */
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder {
-    public static final List<net.minecraft.world.level.block.Block> REGISTERED_BLOCKS = new ArrayList<>();
 
     public transient VoxelShape cachedShape;
     public transient Supplier<Item> preexistingItem;
@@ -235,7 +233,7 @@ public class ParticleEmitterBlockBuilder extends ExtendedPropertiesBlockBuilder 
                 hasTicker,
                 emitDelay);
         if (hasTicker) {
-            REGISTERED_BLOCKS.add(block);
+            TFGBlockEntities.addValidBEBlock(TFGBlockEntities.TICKER_ENTITY, block);
         }
         return block;
     }

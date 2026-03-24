@@ -1,0 +1,11 @@
+{
+    "feature": "tfg:earth/pumice_shield_volcano_patch",
+    "placement": [
+        {
+            "chance": 3,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

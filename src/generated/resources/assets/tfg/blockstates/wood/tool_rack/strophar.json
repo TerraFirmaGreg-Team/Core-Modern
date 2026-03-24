@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/tool_rack/strophar",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/tool_rack/strophar",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/tool_rack/strophar"
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/tool_rack/strophar",
+      "y": 90
+    }
+  }
+}

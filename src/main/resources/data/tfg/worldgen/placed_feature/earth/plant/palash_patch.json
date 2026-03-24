@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/plant/palash_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 24.8,
+            "max_rainfall": 500,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 190,
+            "min_forest": "edge",
+            "min_temperature": 15.8
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

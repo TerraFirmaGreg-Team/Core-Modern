@@ -13,6 +13,7 @@ public class TFGCommands {
         LiteralArgumentBuilder<CommandSourceStack> debug = literal("debug")
                 .requires(c -> c.hasPermission(2));
         DebugRecipeDump.register(debug);
+        DebugWorldgenVersions.register(debug);
         dispatcher.register(literal("tfg").then(debug));
 
         //DustAndWindCommand.register(dispatcher);

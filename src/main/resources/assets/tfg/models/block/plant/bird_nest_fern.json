@@ -1,0 +1,179 @@
+{
+    "textures": {
+        "0": "tfg:block/plant/bird_nest_fern/bird_nest_fern",
+        "particle": "tfg:block/plant/bird_nest_fern/bird_nest_fern"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    7
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "from": [
+                0,
+                0,
+                -9
+            ],
+            "to": [
+                16,
+                0,
+                7
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    9
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "from": [
+                0,
+                0,
+                9
+            ],
+            "to": [
+                16,
+                0,
+                25
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    7,
+                    0,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "z"
+            },
+            "from": [
+                -9,
+                0,
+                0
+            ],
+            "to": [
+                7,
+                0,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                },
+                "down": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    9,
+                    0,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "from": [
+                9,
+                0,
+                0
+            ],
+            "to": [
+                25,
+                0,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
+}

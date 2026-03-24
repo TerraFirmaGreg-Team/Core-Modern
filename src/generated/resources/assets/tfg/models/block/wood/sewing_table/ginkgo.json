@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/sewing_table",
+  "textures": {
+    "0": "wan_ancient_beasts:block/ginkgo_log",
+    "1": "wan_ancient_beasts:block/ginkgo_planks"
+  }
+}
