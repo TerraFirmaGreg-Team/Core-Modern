@@ -32,8 +32,8 @@ public class BedrockFluidSpoutLoader extends SimpleJsonResourceReloadListener {
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> objects,
-                         ResourceManager manager,
-                         ProfilerFiller profiler) {
+            ResourceManager manager,
+            ProfilerFiller profiler) {
 
         VEIN_TO_FEATURE.clear();
         VEIN_TO_TYPE.clear();

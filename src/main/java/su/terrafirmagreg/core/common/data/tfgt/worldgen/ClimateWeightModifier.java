@@ -40,7 +40,8 @@ public class ClimateWeightModifier {
                 float rain = Climate.getRainfall(level, pos);
                 return temp >= tempMin && temp <= tempMax
                         && rain >= rainMin && rain <= rainMax
-                        ? addedWeight : 0;
+                                ? addedWeight
+                                : 0;
             }
         };
     }
