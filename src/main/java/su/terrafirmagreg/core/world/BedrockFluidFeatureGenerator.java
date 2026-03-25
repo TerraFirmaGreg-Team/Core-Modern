@@ -30,7 +30,7 @@ public class BedrockFluidFeatureGenerator {
         if (!(configuredFeature.config() instanceof FluidSproutConfiguration))
             return;
 
-        if (serverLevel.random.nextFloat() > 0.05f)
+        if (serverLevel.random.nextFloat() > 0.01f)
             return;
 
         int x = chunkPos.getMiddleBlockX();
