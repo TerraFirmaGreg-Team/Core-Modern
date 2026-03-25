@@ -227,7 +227,6 @@ tasks.register("prepareServerDev") {
     def serverDir = file("run/server")
     def propsFile = file("${serverDir}/server.properties")
 
-    outputs.file(eulaFile)
     outputs.file(propsFile)
 
     doLast {
@@ -250,7 +249,7 @@ tasks.register("prepareServerDev") {
 
 // Runs Species patch before runServer.
 allprojects {
-    tasks.matching { it.name == "prepareRunServer" }.configureEach {
+    tasks.matching { it.name == "prepareServerRun" }.configureEach {
         dependsOn("prepareServerDev")
     }
 }
