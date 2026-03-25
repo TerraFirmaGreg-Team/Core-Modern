@@ -10,6 +10,8 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.common.data.models.GTModels;
+import com.therighthon.rnr.common.block.TampedMudBlock;
+import com.therighthon.rnr.common.block.TampedSoilBlock;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -161,6 +163,8 @@ public class TFGBlocks_Earth {
     public static BlockEntry<DryingBricksBlock> ALFISOL_DRYING_BRICKS;
     public static BlockEntry<CoarseDirtBlock> ALFISOL_COARSE;
     public static BlockEntry<ConnectedDuffBlock> ALFISOL_DUFF;
+    public static BlockEntry<TampedSoilBlock> TAMPED_SOIL_ALFISOL = createTampedSoil("alfisol");
+    public static BlockEntry<TampedMudBlock> TAMPED_MUD_ALFISOL = createTampedMud("alfisol");
     // Mollisol (normally Andisol is the volcanic one, but we're already using that texture for Silty Loam)
     public static final BlockEntry<MudBlock> MOLLISOL_MUD = createMud("mud/mollisol");
     public static final BlockEntry<RotatedPillarBlock> MOLLISOL_MUDDY_ROOTS = createMuddyRoots("muddy_roots/mollisol");
@@ -174,6 +178,8 @@ public class TFGBlocks_Earth {
     public static BlockEntry<DryingBricksBlock> MOLLISOL_DRYING_BRICKS;
     public static BlockEntry<CoarseDirtBlock> MOLLISOL_COARSE;
     public static BlockEntry<ConnectedDuffBlock> MOLLISOL_DUFF;
+    public static BlockEntry<TampedSoilBlock> TAMPED_SOIL_MOLLISOL = createTampedSoil("mollisol");
+    public static BlockEntry<TampedMudBlock> TAMPED_MUD_MOLLISOL = createTampedMud("mollisol");
     // Oxisol
     public static final BlockEntry<MudBlock> OXISOL_MUD = createMud("mud/oxisol");
     public static final BlockEntry<RotatedPillarBlock> OXISOL_MUDDY_ROOTS = createMuddyRoots("muddy_roots/oxisol");
@@ -187,6 +193,8 @@ public class TFGBlocks_Earth {
     public static BlockEntry<DryingBricksBlock> OXISOL_DRYING_BRICKS;
     public static BlockEntry<CoarseDirtBlock> OXISOL_COARSE;
     public static BlockEntry<ConnectedDuffBlock> OXISOL_DUFF;
+    public static BlockEntry<TampedSoilBlock> TAMPED_SOIL_OXISOL = createTampedSoil("oxisol");
+    public static BlockEntry<TampedMudBlock> TAMPED_MUD_OXISOL = createTampedMud("oxisol");
     // Podzol
     public static final BlockEntry<MudBlock> PODZOL_MUD = createMud("mud/podzol");
     public static final BlockEntry<RotatedPillarBlock> PODZOL_MUDDY_ROOTS = createMuddyRoots("muddy_roots/podzol");
@@ -200,6 +208,8 @@ public class TFGBlocks_Earth {
     public static BlockEntry<DryingBricksBlock> PODZOL_DRYING_BRICKS;
     public static BlockEntry<CoarseDirtBlock> PODZOL_COARSE;
     public static BlockEntry<ConnectedDuffBlock> PODZOL_DUFF;
+    public static BlockEntry<TampedSoilBlock> TAMPED_SOIL_PODZOL = createTampedSoil("podzol");
+    public static BlockEntry<TampedMudBlock> TAMPED_MUD_PODZOL = createTampedMud("podzol");
 
     // These are done separately to avoid cyclic references
     static {
@@ -435,6 +445,40 @@ public class TFGBlocks_Earth {
         return TFGCore.REGISTRATE.block(id, p -> new RotatedPillarBlock(p.strength(4f)))
                 .initialProperties(() -> Blocks.MUDDY_MANGROVE_ROOTS)
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<TampedSoilBlock> createTampedSoil(String dirtBlock) {
+        return TFGCore.REGISTRATE.block("tamped/dirt/" + dirtBlock, TampedSoilBlock::new)
+                .properties(p -> p
+                        .mapColor(MapColor.DIRT)
+                        .strength(3.0F)
+                        .sound(SoundType.ROOTED_DIRT))
+                .tag(TFCTags.Blocks.CAN_LANDSLIDE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .blockstate((blockTampedSoilBlockDataGenContext, registrateBlockstateProvider) -> {
+                    var model = registrateBlockstateProvider.models()
+                            .withExistingParent(blockTampedSoilBlockDataGenContext.getName(), ResourceLocation.fromNamespaceAndPath("rnr", "block/tamped_block"))
+                            .texture("dirt", TFGCore.id("block/dirt/" + dirtBlock));
+                    registrateBlockstateProvider.simpleBlock(blockTampedSoilBlockDataGenContext.getEntry(), model);
+                })
+                .simpleItem()
+                .register();
+    }
+
+    private static BlockEntry<TampedMudBlock> createTampedMud(String mudBlock) {
+        return TFGCore.REGISTRATE.block("tamped/mud/" + mudBlock, TampedMudBlock::new)
+                .properties(p -> p
+                        .mapColor(MapColor.DIRT)
+                        .strength(3.0F)
+                        .sound(SoundType.ROOTED_DIRT))
+                .tag(TFCTags.Blocks.CAN_LANDSLIDE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .blockstate((blockTampedSoilBlockDataGenContext, registrateBlockstateProvider) -> {
+                    var model = registrateBlockstateProvider.models()
+                            .withExistingParent(blockTampedSoilBlockDataGenContext.getName(), ResourceLocation.fromNamespaceAndPath("rnr", "block/tamped_block"))
+                            .texture("dirt", TFGCore.id("block/mud/" + mudBlock));
+                    registrateBlockstateProvider.simpleBlock(blockTampedSoilBlockDataGenContext.getEntry(), model);
+                })
                 .simpleItem()
                 .register();
     }

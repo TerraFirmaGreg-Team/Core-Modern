@@ -118,7 +118,7 @@ legacyForge {
 
             String[] existingMods = new String[] {
                     "tfg", "gtceu", "tfc", "firmalife", "species",
-                    "ad_astra", "wan_ancient_beasts"
+                    "ad_astra", "wan_ancient_beasts", "rnr"
             }
 
             for (String mod : existingMods) {
