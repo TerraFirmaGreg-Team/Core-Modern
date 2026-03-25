@@ -147,8 +147,8 @@ dependencies {
     // TFC Water Flasks
     modCompileOnly "curse.maven:water-flasks-354353:7056478"
 
-    // Sacks and such
-    modImplementation "curse.maven:sacks-n-such-695822:7721827"
+    // Sacks and such, Sacks 'N Such-1.20.1-1.2.6.jar, Mar 9, 2026
+    modImplementation "curse.maven:sacks-n-such-695822:7732041"
 
     // Domum Ornamentum
     modCompileOnly "curse.maven:domum-ornamentum-527361:7585567"
