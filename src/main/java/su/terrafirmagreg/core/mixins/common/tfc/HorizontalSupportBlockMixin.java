@@ -1,21 +1,14 @@
 package su.terrafirmagreg.core.mixins.common.tfc;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.wood.HorizontalSupportBlock;
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
 import net.dries007.tfc.util.Support;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.perf.SupportCache;
@@ -28,29 +21,17 @@ public abstract class HorizontalSupportBlockMixin extends VerticalSupportBlock {
     }
 
     /**
-     * Add the directly-placed beam block at pos to the cache.
+     * Adds supports to the cache.
+     * Fires on both client and server for all players when a support block is placed.
      */
-    @Inject(method = "setPlacedBy", at = @At("HEAD"))
-    private void tfg$cachePlacedPos(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, CallbackInfo ci) {
-        Support support = Support.get(state);
-        if (support == null)
+    @Override
+    public void onBlockStateChange(LevelReader levelReader, BlockPos pos, BlockState oldState, BlockState newState) {
+        if (!(levelReader instanceof Level level))
             return;
-        SupportCache.forLevel(level).addSupport(pos.immutable(), support);
-    }
-
-    /**
-     * Add the automatically extended beam blocks to the cache too.
-     */
-    @WrapOperation(method = "setPlacedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z"))
-    private boolean tfg$cacheSetBlock(Level level, BlockPos pos, BlockState state, int flags, Operation<Boolean> original) {
-        boolean result = original.call(level, pos, state, flags);
-        if (result) {
-            Support support = Support.get(state);
-            if (support != null) {
-                SupportCache.forLevel(level).addSupport(pos.immutable(), support);
-            }
+        Support support = Support.get(newState);
+        if (support != null) {
+            SupportCache.forLevel(level).addSupport(pos.immutable(), support);
         }
-        return result;
     }
 
     /**
