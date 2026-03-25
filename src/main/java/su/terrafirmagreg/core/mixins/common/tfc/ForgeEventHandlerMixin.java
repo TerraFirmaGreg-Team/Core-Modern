@@ -11,9 +11,13 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.dries007.tfc.ForgeEventHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.level.BlockEvent;
 
 @Mixin(value = ForgeEventHandler.class)
@@ -43,5 +47,18 @@ public class ForgeEventHandlerMixin {
 
         // Otherwise do as usual
         return original.call(level, pos, newState);
+    }
+
+    @Inject(method = "onLivingSpawnCheck", at = @At("TAIL"), remap = false)
+    private static void tfg$onLivingSpawnCheck(MobSpawnEvent.FinalizeSpawn event, CallbackInfo ci) {
+        // Prevent surface slimes because TFC makes an exception for them for some reason
+        final MobSpawnType spawn = event.getSpawnType();
+        if (spawn == MobSpawnType.NATURAL || spawn == MobSpawnType.CHUNK_GENERATION) {
+            final LivingEntity entity = event.getEntity();
+            if (entity.getType() == EntityType.SLIME && event.getLevel().getRawBrightness(entity.blockPosition(), 0) != 0) {
+                event.setSpawnCancelled(true);
+                event.setCanceled(true);
+            }
+        }
     }
 }

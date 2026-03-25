@@ -46,6 +46,7 @@ import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
 import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@SuppressWarnings("unused")
 public class TFGEntities {
 
     public static void init() {

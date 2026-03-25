@@ -5,7 +5,7 @@ import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.mojang.serialization.Codec;
 
-import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.*;
+import su.terrafirmagreg.core.common.data.tfgt.recipe.condition.*;
 
 /**
  * Registry class for TFG custom recipe conditions.

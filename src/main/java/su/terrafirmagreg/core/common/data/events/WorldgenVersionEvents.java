@@ -90,7 +90,7 @@ public class WorldgenVersionEvents {
                     case TALL_CANYON -> TFGRiverBlendType.TALL_CANYON;
                     case CAVE -> TFGRiverBlendType.CAVE;
                 };
-                ((IBiomeExtension) ext).tfg$init(ShoreBlendType.CLASSIC, riverBlendType, 0, false, false, 0, 0, 0, false);
+                ((IBiomeExtension) ext).tfg$init(ShoreBlendType.CLASSIC, riverBlendType, 0, false, false, false, 0, 0, 0, 0, false);
             }
         }
 

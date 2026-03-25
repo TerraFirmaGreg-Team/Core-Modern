@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "wan_ancient_beasts:block/ginkgo_planks",
+    "east": "tfg:block/wood/workbench/ginkgo_side",
+    "north": "tfg:block/wood/workbench/ginkgo_front",
+    "south": "tfg:block/wood/workbench/ginkgo_side",
+    "up": "tfg:block/wood/workbench/ginkgo_top",
+    "west": "tfg:block/wood/workbench/ginkgo_front"
+  }
+}

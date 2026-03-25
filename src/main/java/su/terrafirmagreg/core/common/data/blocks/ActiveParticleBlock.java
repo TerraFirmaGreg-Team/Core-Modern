@@ -172,7 +172,7 @@ public class ActiveParticleBlock extends ActiveBlock implements EntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return hasTicker ? new TickerBlockEntity(pos, state) : null;
+        return hasTicker ? TFGBlockEntities.TICKER_ENTITY.create(pos, state) : null;
     }
 
     @Override

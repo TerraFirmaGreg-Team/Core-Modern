@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/tool_rack/ginkgo",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/tool_rack/ginkgo",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/tool_rack/ginkgo"
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/tool_rack/ginkgo",
+      "y": 90
+    }
+  }
+}

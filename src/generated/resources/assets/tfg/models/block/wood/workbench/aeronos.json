@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ad_astra:block/aeronos_planks",
+    "east": "tfg:block/wood/workbench/aeronos_side",
+    "north": "tfg:block/wood/workbench/aeronos_front",
+    "south": "tfg:block/wood/workbench/aeronos_side",
+    "up": "tfg:block/wood/workbench/aeronos_top",
+    "west": "tfg:block/wood/workbench/aeronos_front"
+  }
+}

@@ -12,6 +12,8 @@ import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.BiomeSourceExtension;
 import net.minecraft.core.BlockPos;
 
+import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
+
 /**
  * Interface for cellular noise features that are dependent on the biome at the center of a 2D cell
  */
@@ -32,7 +34,8 @@ public interface CenteredFeatureNoiseSampler {
      * returns {@code true}. This value is provided to the following methods.
      */
     default int getRarity(BiomeExtension biome) {
-        return biome.getVolcanoRarity();
+        IBiomeExtension be = (IBiomeExtension) biome;
+        return be.tfg$getCenteredFeatureRarity();
     }
 
     /**

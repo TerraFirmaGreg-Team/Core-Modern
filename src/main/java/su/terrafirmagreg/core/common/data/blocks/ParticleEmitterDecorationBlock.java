@@ -2,7 +2,7 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import net.dries007.tfc.common.fluids.FluidProperty;
@@ -148,7 +148,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return shape;
     }
 
@@ -166,7 +166,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     }
 
     @Override
-    public boolean canPlaceLiquid(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Fluid fluid) {
+    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
         if (fluid instanceof FlowingFluid && !getFluidProperty().canContain(fluid)) {
             return true;
         }
@@ -174,7 +174,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     }
 
     @Override
-    public boolean placeLiquid(@NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState state, FluidState fluidStateIn) {
+    public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
         if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
             level.destroyBlock(pos, true);
             level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
@@ -184,29 +184,29 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     }
 
     @Override
-    public @NotNull FluidProperty getFluidProperty() {
+    public FluidProperty getFluidProperty() {
         return FLUID;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public @NotNull FluidState getFluidState(@NotNull BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
+    public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     // Needs sturdy block below.
     @Override
-    public boolean canSurvive(@NotNull BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockPos below = pos.below();
         return level.getBlockState(below).isFaceSturdy(level, below, Direction.UP);
     }
@@ -218,7 +218,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
      * entity exists at the position, animation is deferred to the ticker.
      */
     @Override
-    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (hasTicker && level.getBlockEntity(pos) != null)
             return;
         if (shouldEmit(random))
@@ -270,13 +270,13 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
 
     // Creates ticker entity if enabled.
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return hasTicker ? new TickerBlockEntity(pos, state) : null;
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return hasTicker ? TFGBlockEntities.TICKER_ENTITY.create(pos, state) : null;
     }
 
     // Client ticker setting emission each tick when enabled.
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (!hasTicker || !level.isClientSide)
             return null;
         return type == TFGBlockEntities.TICKER_ENTITY.get()
@@ -289,7 +289,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public void neighborChanged(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Block neighborBlock, @NotNull BlockPos neighborPos,
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos,
             boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (!canSurvive(state, level, pos)) {

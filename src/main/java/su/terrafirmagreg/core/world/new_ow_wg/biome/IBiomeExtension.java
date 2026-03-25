@@ -8,8 +8,11 @@ import su.terrafirmagreg.core.world.new_ow_wg.shores.ShoreBlendType;
  */
 
 public interface IBiomeExtension {
-    void tfg$init(ShoreBlendType shoreBlendType, TFGRiverBlendType riverBlendType, int shoreBaseHeight, boolean hasTuffCones, boolean hasTuyas,
-            int centeredFeatureRockHeight, int centeredFeatureBaseHeight, int centeredFeatureScaleHeight, boolean centeredFeatureIce);
+    void tfg$init(ShoreBlendType shoreBlendType, TFGRiverBlendType riverBlendType, int shoreBaseHeight, boolean hasCinderCones, boolean hasTuffCones,
+            boolean hasTuyas, int centeredFeatureRarity, int centeredFeatureRockHeight, int centeredFeatureBaseHeight, int centeredFeatureScaleHeight,
+            boolean centeredFeatureIce);
+
+    boolean tfg$hasCinderCones();
 
     boolean tfg$hasTuffRings();
 
@@ -20,6 +23,8 @@ public interface IBiomeExtension {
     ShoreBlendType tfg$getShoreBlendType();
 
     TFGRiverBlendType tfg$getRiverBlendType();
+
+    int tfg$getCenteredFeatureRarity();
 
     int tfg$getCenteredFeatureRockHeight();
 

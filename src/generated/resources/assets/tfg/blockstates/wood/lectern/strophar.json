@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/lectern/strophar",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/lectern/strophar"
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/lectern/strophar",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/lectern/strophar",
+      "y": 270
+    }
+  }
+}

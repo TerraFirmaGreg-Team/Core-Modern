@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema.GTRecipeJS;
 
-import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.*;
+import su.terrafirmagreg.core.common.data.tfgt.recipe.condition.*;
 
 /**
  * KubeJS recipe schema bindings for TFG.

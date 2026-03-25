@@ -6,6 +6,7 @@
             "type": "minecraft:count"
         },
         {"type": "minecraft:in_square"},
+        {"type": "minecraft:biome"},
         {
             "distance": 0.84,
             "type": "tfg:tuya"
