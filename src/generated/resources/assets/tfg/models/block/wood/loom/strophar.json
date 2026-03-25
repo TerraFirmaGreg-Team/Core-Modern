@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/loom",
+  "textures": {
+    "particle": "ad_astra:block/strophar_planks",
+    "texture": "ad_astra:block/strophar_planks"
+  }
+}

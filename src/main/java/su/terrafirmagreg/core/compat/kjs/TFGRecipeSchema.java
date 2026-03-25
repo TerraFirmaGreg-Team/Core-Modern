@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import lombok.experimental.Accessors;
 
-import su.terrafirmagreg.core.common.data.tfgt.machine.conditions.*;
+import su.terrafirmagreg.core.common.data.tfgt.recipe.condition.*;
 
 /**
  * KubeJS recipe schema extensions for TFG.
@@ -99,19 +99,19 @@ public interface TFGRecipeSchema {
 
         // Gravity Conditions.
         public GTRecipeSchema.GTRecipeJS gravityGreaterThan(float value) {
-            return this.addCondition(su.terrafirmagreg.core.common.data.tfgt.machine.conditions.GravityCondition.greaterThan(value));
+            return this.addCondition(GravityCondition.greaterThan(value));
         }
 
         public GTRecipeSchema.GTRecipeJS gravityLessThan(float value) {
-            return this.addCondition(su.terrafirmagreg.core.common.data.tfgt.machine.conditions.GravityCondition.lessThan(value));
+            return this.addCondition(GravityCondition.lessThan(value));
         }
 
         public GTRecipeSchema.GTRecipeJS gravityRange(float start, float end) {
-            return this.addCondition(su.terrafirmagreg.core.common.data.tfgt.machine.conditions.GravityCondition.ofRange(false, start, end));
+            return this.addCondition(GravityCondition.ofRange(false, start, end));
         }
 
         public GTRecipeSchema.GTRecipeJS gravityRange(float start, float end, boolean reverse) {
-            return this.addCondition(su.terrafirmagreg.core.common.data.tfgt.machine.conditions.GravityCondition.ofRange(reverse, start, end));
+            return this.addCondition(GravityCondition.ofRange(reverse, start, end));
         }
     }
 

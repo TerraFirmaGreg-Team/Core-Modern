@@ -52,6 +52,14 @@ public class TFGFeatures {
     public static final RegistryObject<EncasedSpoutFeature> ENCASED_SPOUT = register(
             "encased_spout", EncasedSpoutFeature::new, FluidSproutConfiguration.CODEC);
 
+    public static final RegistryObject<BedrockSpoutFeature> BEDROCK_SPOUT = register(
+            "bedrock_spout", BedrockSpoutFeature::new, FluidSproutConfiguration.CODEC);
+
+    public static final RegistryObject<FluidPoolFeature> FLUID_POOL = register(
+            "fluid_pool", FluidPoolFeature::new, FluidPoolConfig.CODEC);
+    public static final RegistryObject<FluidGasVentFeature> FLUID_GAS_VENT = register(
+            "fluid_gas_vent", FluidGasVentFeature::new, FluidGasVentConfig.CODEC);
+
     private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
             Function<Codec<C>, F> factory, Codec<C> codec) {
         return FEATURES.register(name, () -> factory.apply(codec));

@@ -354,6 +354,30 @@
                 "minCount": 4,
                 "type": "minecraft:slime",
                 "maxCount": 4
+            },
+            {
+                "weight": 50,
+                "minCount": 1,
+                "type": "endermanoverhaul:flower_fields_enderman",
+                "maxCount": 1
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "minecraft:enderman",
+                "maxCount": 1
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:husk",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:drowned",
+                "maxCount": 4
             }
         ]
     },

@@ -115,11 +115,15 @@ legacyForge {
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
-            programArguments.addAll '--existing-mod', 'tfg'
-            programArguments.addAll '--existing-mod', 'gtceu'
-            programArguments.addAll '--existing-mod', 'tfc'
-            programArguments.addAll '--existing-mod', 'species'
-            programArguments.addAll '--existing-mod', "ad_astra"
+
+            String[] existingMods = new String[] {
+                    "tfg", "gtceu", "tfc", "firmalife", "species",
+                    "ad_astra", "wan_ancient_beasts"
+            }
+
+            for (String mod : existingMods) {
+                programArguments.addAll '--existing-mod', mod
+            }
         }
 
     }
@@ -140,14 +144,12 @@ processResources {
             'mod_authors'            : "${mod_authors}",
             'mod_credits'            : "${mod_credits}",
             'mod_url'                : "${mod_url}",
-            'mod_update_json'        : "${mod_update_json}",
             'mod_logo_path'          : "${mod_logo_path}",
 
             'minecraft_version'      : "${minecraft_version}",
-            'minecraft_version_range': "${minecraft_version_range}",
 
             'forge_version'          : "${forge_version}",
-            'forge_version_range'    : "${forge_version_range}",
+            'forge_version_range'    : "${loader_version_range}",
             'loader_version_range'   : "${loader_version_range}"
     ]
     var filterList = [

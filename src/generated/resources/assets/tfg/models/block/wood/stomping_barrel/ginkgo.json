@@ -1,0 +1,6 @@
+{
+  "parent": "firmalife:block/stomping_barrel",
+  "textures": {
+    "0": "tfg:block/wood/sheet/ginkgo"
+  }
+}
