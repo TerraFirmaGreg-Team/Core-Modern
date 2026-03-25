@@ -29,7 +29,10 @@
         ]
     },
     "downfall": 0.5,
-    "spawn_costs": {},
+    "spawn_costs": {"endermanoverhaul:crimson_forest_enderman": {
+        "charge": 0.95,
+        "energy_budget": 0.01
+    }},
     "__comment__": "This file was automatically created by mcresources",
     "spawners": {
         "creature": [
@@ -315,6 +318,30 @@
                 "weight": 100,
                 "minCount": 4,
                 "type": "minecraft:slime",
+                "maxCount": 4
+            },
+            {
+                "weight": 50,
+                "minCount": 1,
+                "type": "endermanoverhaul:flower_fields_enderman",
+                "maxCount": 1
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "minecraft:enderman",
+                "maxCount": 1
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:husk",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:drowned",
                 "maxCount": 4
             }
         ]

@@ -1,0 +1,8 @@
+{
+  "parent": "tfc:block/barrel_sealed",
+  "textures": {
+    "particle": "wan_ancient_beasts:block/ginkgo_planks",
+    "planks": "wan_ancient_beasts:block/ginkgo_planks",
+    "sheet": "tfg:block/wood/sheet/ginkgo"
+  }
+}

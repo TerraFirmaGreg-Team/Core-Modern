@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.Unique;
 
 import net.dries007.tfc.world.ChunkBaseBlockSource;
 import net.dries007.tfc.world.biome.BiomeExtension;
-import net.dries007.tfc.world.biome.TFCBiomes;
 import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 import su.terrafirmagreg.core.world.new_ow_wg.chunk.IChunkBaseBlockSource;
 
 @Mixin(value = ChunkBaseBlockSource.class, remap = false)
@@ -36,6 +36,6 @@ public class ChunkBaseBlockSourceMixin implements IChunkBaseBlockSource {
      */
     @Override
     public void tfg$useAccurateBiome(int localX, int localZ, BiomeExtension biome, double weight, boolean couldBeSalty) {
-        cachedFluidStates[tfg$index(localX, localZ)] = !couldBeSalty || (!biome.isSalty() && (weight > 0.5 || biome == TFCBiomes.RIVER)) ? freshWater : saltWater;
+        cachedFluidStates[tfg$index(localX, localZ)] = !couldBeSalty || (!biome.isSalty() && (weight > 0.5 || biome == TFGBiomes.RIVER)) ? freshWater : saltWater;
     }
 }

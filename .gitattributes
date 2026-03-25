@@ -10,9 +10,9 @@
 *.jpeg binary
 *.gif binary
 *.ico binary
-*.mcmeta text
 
 # Data files
-*.json text
+*.json text eol=lf
 *.properties text
 *.toml text
+*.mcmeta text

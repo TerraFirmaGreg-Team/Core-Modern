@@ -43,6 +43,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.CoarseDirtBlock;
 import su.terrafirmagreg.core.common.data.blocks.ConnectedDuffBlock;
 
+@SuppressWarnings("unused")
 public class TFGBlocks_Earth {
     public static void init() {
     }
@@ -202,36 +203,36 @@ public class TFGBlocks_Earth {
 
     // These are done separately to avoid cyclic references
     static {
-        COARSE_SILTY_LOAM_DIRT = createCoarseTFC("coarse_dirt/silty_loam",
+        COARSE_SILTY_LOAM_DIRT = createCoarse("coarse_dirt/silty_loam",
                 TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILTY_LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILTY_LOAM));
-        COARSE_SANDY_LOAM_DIRT = createCoarseTFC("coarse_dirt/sandy_loam",
+        COARSE_SANDY_LOAM_DIRT = createCoarse("coarse_dirt/sandy_loam",
                 TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SANDY_LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SANDY_LOAM));
-        COARSE_SILT_DIRT = createCoarseTFC("coarse_dirt/silt",
+        COARSE_SILT_DIRT = createCoarse("coarse_dirt/silt",
                 TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT),
                 TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILT),
                 TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILT));
-        COARSE_LOAM_DIRT = createCoarseTFC("coarse_dirt/loam",
+        COARSE_LOAM_DIRT = createCoarse("coarse_dirt/loam",
                 TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.LOAM));
 
-        SILTY_LOAM_DUFF = createDuffTFC("duff/silty_loam",
+        SILTY_LOAM_DUFF = createDuff("duff/silty_loam",
                 TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILTY_LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILTY_LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILTY_LOAM));
-        SANDY_LOAM_DUFF = createDuffTFC("duff/sandy_loam",
+        SANDY_LOAM_DUFF = createDuff("duff/sandy_loam",
                 TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SANDY_LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SANDY_LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SANDY_LOAM));
-        SILT_DUFF = createDuffTFC("duff/silt",
+        SILT_DUFF = createDuff("duff/silt",
                 TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.SILT),
                 TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.SILT),
                 TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.SILT));
-        LOAM_DUFF = createDuffTFC("duff/loam",
+        LOAM_DUFF = createDuff("duff/loam",
                 TFCBlocks.SOIL.get(SoilBlockType.DIRT).get(SoilBlockType.Variant.LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH).get(SoilBlockType.Variant.LOAM),
                 TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.LOAM));
@@ -281,7 +282,7 @@ public class TFGBlocks_Earth {
         PODZOL_DUFF = createDuff("duff/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
     }
 
-    private static BlockEntry<CoarseDirtBlock> createCoarse(String id, Supplier<DirtBlock> dirt, Supplier<PathBlock> path, Supplier<FarmlandBlock> farmland) {
+    private static BlockEntry<CoarseDirtBlock> createCoarse(String id, Supplier<? extends Block> dirt, Supplier<? extends Block> path, Supplier<? extends Block> farmland) {
         return TFGCore.REGISTRATE.block(id,
                 p -> new CoarseDirtBlock(p, dirt, path, farmland))
                 .initialProperties(dirt::get)
@@ -293,32 +294,7 @@ public class TFGBlocks_Earth {
                 .register();
     }
 
-    private static BlockEntry<CoarseDirtBlock> createCoarseTFC(String id, Supplier<Block> dirt, Supplier<Block> path, Supplier<Block> farmland) {
-        return TFGCore.REGISTRATE.block(id,
-                p -> new CoarseDirtBlock(p, dirt, path, farmland))
-                .initialProperties(dirt::get)
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCDirtBlockTag)
-                .item(BlockItem::new)
-                .tag(ItemTags.DIRT, TFCDirtItemTag)
-                .build()
-                .register();
-    }
-
-    private static BlockEntry<ConnectedDuffBlock> createDuff(String id, Supplier<DirtBlock> dirt, Supplier<PathBlock> path, Supplier<FarmlandBlock> farmland) {
-        return TFGCore.REGISTRATE.block(id,
-                p -> new ConnectedDuffBlock(p.randomTicks(), dirt, path, farmland))
-                .initialProperties(dirt::get)
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCDirtBlockTag)
-                .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
-                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
-                .tag(ItemTags.DIRT, TFCDirtItemTag)
-                .build()
-                .register();
-    }
-
-    private static BlockEntry<ConnectedDuffBlock> createDuffTFC(String id, Supplier<Block> dirt, Supplier<Block> path, Supplier<Block> farmland) {
+    private static BlockEntry<ConnectedDuffBlock> createDuff(String id, Supplier<? extends Block> dirt, Supplier<? extends Block> path, Supplier<? extends Block> farmland) {
         return TFGCore.REGISTRATE.block(id,
                 p -> new ConnectedDuffBlock(p.randomTicks(), dirt, path, farmland))
                 .initialProperties(dirt::get)
