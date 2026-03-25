@@ -55,7 +55,7 @@
                 {
                   "condition": "minecraft:match_tool",
                   "predicate": {
-                    "tag": "tfc:axes"
+                    "tag": "minecraft:axes"
                   }
                 }
               ]

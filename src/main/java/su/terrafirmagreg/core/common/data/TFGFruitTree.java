@@ -27,6 +27,7 @@ import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.food.FoodProperties;
@@ -117,10 +118,21 @@ public final class TFGFruitTree {
         }
     }
 
-    private static final TagKey<Item> TFC_AXES = TagKey.create(ForgeRegistries.Keys.ITEMS,
-            net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("tfc", "axes"));
-    private static final TagKey<Item> TFC_SHARP_TOOLS = TagKey.create(ForgeRegistries.Keys.ITEMS,
-            net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("tfc", "sharp_tools"));
+    // Shout out to TFC for not having all their tags registered in java.
+    private static final TagKey<Item> AXES = ItemTags.AXES;
+    private static final TagKey<Item> TFC_ITEM_SHARP_TOOLS = TagKey.create(ForgeRegistries.Keys.ITEMS,
+            ResourceLocation.fromNamespaceAndPath("tfc", "sharp_tools"));
+    private static final TagKey<Item> TFC_ITEM_FRUIT_TREE_LEAVES = TagKey.create(ForgeRegistries.Keys.ITEMS,
+            ResourceLocation.fromNamespaceAndPath("tfc", "fruit_tree_leaves"));
+    private static final TagKey<Item> TFC_ITEM_WILD_FRUITS = TagKey.create(ForgeRegistries.Keys.ITEMS,
+            ResourceLocation.fromNamespaceAndPath("tfc", "wild_fruits"));
+    private static final TagKey<Item> TFC_ITEM_PLANTS = TagKey.create(ForgeRegistries.Keys.ITEMS,
+            ResourceLocation.fromNamespaceAndPath("tfc", "plants"));
+
+    private static final TagKey<Block> TFC_BLOCK_WILD_FRUITS = TagKey.create(ForgeRegistries.Keys.BLOCKS,
+            ResourceLocation.fromNamespaceAndPath("tfc", "wild_fruits"));
+    private static final TagKey<Block> TFC_BLOCK_MINEABLE_SHARP_TOOL = TagKey.create(ForgeRegistries.Keys.BLOCKS,
+            ResourceLocation.fromNamespaceAndPath("tfc", "mineable_with_sharp_tool"));
 
     public static final Map<FruitTreeType, BlockEntry<Block>> FRUIT_TREE_SAPLINGS = new EnumMap<>(FruitTreeType.class);
     public static final Map<FruitTreeType, BlockEntry<Block>> FRUIT_TREE_POTTED_SAPLINGS = new EnumMap<>(FruitTreeType.class);
@@ -146,11 +158,13 @@ public final class TFGFruitTree {
     private static void register(FruitTreeType tree) {
         String name = tree.getSerializedName();
         Supplier<ClimateRange> climate = climateSupplier(tree);
+        TagKey<Item> tfgFoodProductTag = TagKey.create(ForgeRegistries.Keys.ITEMS, ResourceLocation.fromNamespaceAndPath("tfg", "foods/" + name));
 
         // Product item (edible fruit).
         ItemEntry<Item> productItem = TFGCore.REGISTRATE.item("food/" + name,
                 p -> new Item(p.food(FruitTreeType.FRUIT_FOOD)))
                 .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+                .tag(TFCTags.Items.FOODS, tfgFoodProductTag)
                 .register();
 
         // Growing Branch.
@@ -204,6 +218,7 @@ public final class TFGFruitTree {
                         tree.getFloweringLeavesColor()))
                 .setData(ProviderType.BLOCKSTATE, leavesBlockstate(tree))
                 .loot((prov, block) -> leavesLoot(prov, block, productItem))
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).tag(TFC_ITEM_FRUIT_TREE_LEAVES, ItemTags.LEAVES).build()
                 .tag(TFCTags.Blocks.FRUIT_TREE_LEAVES, TFCTags.Blocks.MINEABLE_WITH_SCYTHE, BlockTags.LEAVES)
                 .register();
 
@@ -223,8 +238,8 @@ public final class TFGFruitTree {
                         tree.getStages()))
                 .setData(ProviderType.BLOCKSTATE, saplingBlockstate(tree))
                 .loot(TFGFruitTree::saplingLoot)
-                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-                .tag(TFCTags.Blocks.FRUIT_TREE_SAPLING)
+                .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).tag(ItemTags.SAPLINGS, TFC_ITEM_WILD_FRUITS, TFC_ITEM_PLANTS).build()
+                .tag(TFCTags.Blocks.FRUIT_TREE_SAPLING, TFC_BLOCK_MINEABLE_SHARP_TOOL, BlockTags.SAPLINGS, TFC_BLOCK_WILD_FRUITS)
                 .register();
 
         // Potted Sapling.
@@ -377,7 +392,7 @@ public final class TFGFruitTree {
                         LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                                 .setProperties(StatePropertiesPredicate.Builder.properties()
                                         .hasProperty(PipeBlock.UP, true).hasProperty(PipeBlock.SOUTH, true))),
-                MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFC_AXES)));
+                MatchTool.toolMatches(ItemPredicate.Builder.item().of(AXES)));
 
         prov.add(block, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
@@ -438,7 +453,7 @@ public final class TFGFruitTree {
                         .setRolls(ConstantValue.exactly(1))
                         .add(AlternativesEntry.alternatives(
                                 LootItem.lootTableItem(Items.STICK)
-                                        .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFC_SHARP_TOOLS)))
+                                        .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFC_ITEM_SHARP_TOOLS)))
                                         .when(LootItemRandomChanceCondition.randomChance(0.2F))
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))),
                                 LootItem.lootTableItem(Items.STICK)
