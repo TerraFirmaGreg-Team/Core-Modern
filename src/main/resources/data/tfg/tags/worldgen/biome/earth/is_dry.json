@@ -1,0 +1,10 @@
+{
+    "values": [
+        "tfg:earth/mud_flats",
+        "tfg:earth/salt_flats",
+        "tfg:earth/dune_sea",
+        "tfg:earth/grassy_dunes"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

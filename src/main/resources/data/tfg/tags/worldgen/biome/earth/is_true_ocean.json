@@ -1,0 +1,11 @@
+{
+    "values": [
+        "tfg:earth/ocean",
+        "tfg:earth/ocean_reef",
+        "tfg:earth/deep_ocean",
+        "tfg:earth/deep_ocean_trench",
+        "tfg:earth/sunken_shield_volcano"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

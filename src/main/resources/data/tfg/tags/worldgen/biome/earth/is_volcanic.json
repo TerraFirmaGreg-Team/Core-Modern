@@ -4,8 +4,17 @@
         "tfg:earth/volcanic_mountains",
         "tfg:earth/volcanic_oceanic_mountains",
         "tfg:earth/active_shield_volcano",
-        "tfg:earth/volcanic_mountain_lake",
-        "tfg:earth/volcanic_oceanic_mountain_lake"
+        "tfg:earth/dormant_shield_volcano",
+        "tfg:earth/extinct_shield_volcano",
+        "tfg:earth/ancient_shield_volcano",
+        "tfg:earth/sunken_shield_volcano",
+        "tfg:earth/shield_volcano_shore",
+        "tfg:earth/old_shield_volcano_shore",
+        "tfg:earth/ice_sheet_shield_volcano",
+        "tfg:earth/ice_sheet_tuyas",
+        "tfg:earth/ice_sheet_tuyas_edge",
+        "tfg:earth/glaciated_shield_volcano",
+        "tfg:earth/tuyas"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"
