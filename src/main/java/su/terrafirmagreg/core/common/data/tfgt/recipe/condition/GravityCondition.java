@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.machine.conditions;
+package su.terrafirmagreg.core.common.data.tfgt.recipe.condition;
 
 import java.util.Locale;
 

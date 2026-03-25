@@ -18,6 +18,7 @@ import earth.terrarium.adastra.api.systems.GravityApi;
 import earth.terrarium.adastra.api.systems.OxygenApi;
 import earth.terrarium.adastra.api.systems.TemperatureApi;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.TFGHelpers;
 import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
 import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
@@ -51,6 +52,7 @@ public final class TFGKubeJSPlugin extends KubeJSPlugin {
             event.register(entry.getKey(), TFGRecipeSchema.SCHEMA);
         }
         event.register(ResourceLocation.parse("gtceu:greenhouse"), TFGRecipeSchema.SCHEMA);
+        event.register(TFGCore.id("item_repair"), ItemRepairRecipeSchema.SCHEMA);
     }
 
     @Override

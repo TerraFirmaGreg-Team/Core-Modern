@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.machine.conditions;
+package su.terrafirmagreg.core.common.data.tfgt.recipe.condition;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -17,13 +17,13 @@ import net.minecraft.server.level.ServerLevel;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
 
 /**
- * Recipe condition that checks TFC average temperature at the machine position.
+ * Recipe condition that checks TFC average rainfall at the machine position.
  * <p>Modes:
- * <p>- GT: passes when temperature > value
- * <p>- LT: passes when temperature < value
- * <p>- BETWEEN: passes when start < temperature < end
+ * <p>- GT: passes when rainfall > value
+ * <p>- LT: passes when rainfall < value
+ * <p>- BETWEEN: passes when start < rainfall < end
  */
-public class AverageTemperatureCondition extends RecipeCondition<AverageTemperatureCondition> {
+public class AverageRainfallCondition extends RecipeCondition<AverageRainfallCondition> {
 
     public enum Mode {
         GT,
@@ -36,7 +36,7 @@ public class AverageTemperatureCondition extends RecipeCondition<AverageTemperat
      * <p>- mode: GT|LT|BETWEEN
      * <p>- optional value, start, end bounds
      */
-    public static final Codec<AverageTemperatureCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)
+    public static final Codec<AverageRainfallCondition> CODEC = RecordCodecBuilder.create(instance -> RecipeCondition.isReverse(instance)
             .and(Codec.STRING.xmap(Mode::valueOf, Enum::name).fieldOf("mode").forGetter(c -> c.mode))
             .and(Codec.FLOAT.optionalFieldOf("value").forGetter(c -> c.valuePresent ? java.util.Optional.of(c.value) : java.util.Optional.empty()))
             .and(Codec.FLOAT.optionalFieldOf("start").forGetter(c -> c.startPresent ? java.util.Optional.of(c.start) : java.util.Optional.empty()))
@@ -45,7 +45,7 @@ public class AverageTemperatureCondition extends RecipeCondition<AverageTemperat
                 float v = valueOpt.orElse(0f);
                 float s = startOpt.orElse(0f);
                 float e = endOpt.orElse(0f);
-                return new AverageTemperatureCondition(isReverse, mode, v, valueOpt.isPresent(), s, startOpt.isPresent(), e, endOpt.isPresent());
+                return new AverageRainfallCondition(isReverse, mode, v, valueOpt.isPresent(), s, startOpt.isPresent(), e, endOpt.isPresent());
             }));
 
     private final Mode mode;
@@ -57,14 +57,14 @@ public class AverageTemperatureCondition extends RecipeCondition<AverageTemperat
     private final boolean endPresent;
 
     // Default template.
-    public AverageTemperatureCondition() {
+    public AverageRainfallCondition() {
         super(false);
         this.mode = Mode.BETWEEN;
         this.value = 0f;
         this.valuePresent = false;
-        this.start = -1000f;
+        this.start = 0f;
         this.startPresent = true;
-        this.end = 1000f;
+        this.end = 500f;
         this.endPresent = true;
     }
 
@@ -80,7 +80,7 @@ public class AverageTemperatureCondition extends RecipeCondition<AverageTemperat
      * @param end range end.
      * @param endPresent whether end is provided.
      */
-    public AverageTemperatureCondition(boolean isReverse, Mode mode, float value, boolean valuePresent, float start, boolean startPresent, float end, boolean endPresent) {
+    public AverageRainfallCondition(boolean isReverse, Mode mode, float value, boolean valuePresent, float start, boolean startPresent, float end, boolean endPresent) {
         super(isReverse);
         this.mode = mode;
         this.value = value;
@@ -92,8 +92,8 @@ public class AverageTemperatureCondition extends RecipeCondition<AverageTemperat
     }
 
     @Override
-    public RecipeConditionType<AverageTemperatureCondition> getType() {
-        return TFGTRecipeConditions.CLIMATE_AVG_TEMPERATURE;
+    public RecipeConditionType<AverageRainfallCondition> getType() {
+        return TFGTRecipeConditions.CLIMATE_AVG_RAINFALL;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class AverageTemperatureCondition extends RecipeCondition<AverageTemperat
     // Tooltip (with rounded values)
     @Override
     public Component getTooltips() {
-        Component label = Component.translatable("tfg.tooltip.recipe_condition.climate_temp");
+        Component label = Component.translatable("tfg.tooltip.recipe_condition.climate_rain");
         switch (mode) {
             case GT -> {
                 long rounded = Math.round(value);
@@ -142,7 +142,7 @@ public class AverageTemperatureCondition extends RecipeCondition<AverageTemperat
             return false;
 
         BlockPos pos = machine.getPos();
-        float climate = Climate.getAverageTemperature(serverLevel, pos);
+        float climate = Climate.getRainfall(serverLevel, pos);
 
         boolean passes;
         switch (mode) {
@@ -159,21 +159,21 @@ public class AverageTemperatureCondition extends RecipeCondition<AverageTemperat
     }
 
     @Override
-    public AverageTemperatureCondition createTemplate() {
-        return new AverageTemperatureCondition();
+    public AverageRainfallCondition createTemplate() {
+        return new AverageRainfallCondition();
     }
 
     // Template factories.
 
-    public static AverageTemperatureCondition greaterThan(float value) {
-        return new AverageTemperatureCondition(false, Mode.GT, value, true, 0f, false, 0f, false);
+    public static AverageRainfallCondition greaterThan(float value) {
+        return new AverageRainfallCondition(false, Mode.GT, value, true, 0f, false, 0f, false);
     }
 
-    public static AverageTemperatureCondition lessThan(float value) {
-        return new AverageTemperatureCondition(false, Mode.LT, value, true, 0f, false, 0f, false);
+    public static AverageRainfallCondition lessThan(float value) {
+        return new AverageRainfallCondition(false, Mode.LT, value, true, 0f, false, 0f, false);
     }
 
-    public static AverageTemperatureCondition ofRange(boolean reverse, float start, float end) {
-        return new AverageTemperatureCondition(reverse, Mode.BETWEEN, 0f, false, start, true, end, true);
+    public static AverageRainfallCondition ofRange(boolean reverse, float start, float end) {
+        return new AverageRainfallCondition(reverse, Mode.BETWEEN, 0f, false, start, true, end, true);
     }
 }

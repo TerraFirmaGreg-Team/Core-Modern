@@ -87,7 +87,10 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine.InterplanetaryItemLauncherMachine;
 import su.terrafirmagreg.core.common.data.tfgt.interdim_logistics.machine.InterplanetaryItemReceiverMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.*;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.steam.GasWellMachine;
+import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.render.BouleRender;
+import su.terrafirmagreg.core.common.data.tfgt.machine.trait.GasWellRecipeLogic;
 
 @SuppressWarnings({ "unused", "SpellCheckingInspection" })
 public class TFGMultiMachines {
@@ -1205,6 +1208,33 @@ public class TFGMultiMachines {
             .tooltips(
                     Component.translatable("gtceu.universal.tooltip.base_production_eut", V[GTValues.HV] * 4),
                     Component.translatable("gtceu.multiblock.turbine.efficiency_tooltip", VNF[GTValues.HV]))
+            .register();
+
+    public static final MultiblockMachineDefinition GAS_WELL = REGISTRATE
+            .multiblock("gas_well", GasWellMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .noRecipeModifier()
+            .appearanceBlock(GTBlocks.STEEL_HULL)
+            .tooltips(
+                    Component.translatable("tfg.machine.gas_well.description"),
+                    Component.translatable("tfg.machine.gas_well.explosive_interval",
+                            GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL / 20))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAA", "XXX", "XXX")
+                    .aisle("AAA", "XBX", "XXX")
+                    .aisle("AAA", "XSX", "XXX")
+                    .where('S', controller(blocks(definition.get())))
+                    .where('X', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(4)
+                            .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(abilities(PartAbility.EXPORT_FLUIDS_1X).setMinGlobalLimited(1).setMaxGlobalLimited(1).setPreviewCount(1)))
+                    .where('A', blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
+                    .where('B', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .build())
+            .workableCasingModel(
+                    GTCEu.id("block/casings/steam/steel/side"),
+                    GTCEu.id("block/machines/high_pressure_steam_miner"))
             .register();
 
     // spotless:on

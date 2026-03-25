@@ -15,6 +15,7 @@ import su.terrafirmagreg.core.compat.gtceu.TFGTagPrefix;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class TFGTRepairHelper {
+    private static final float DEFAULT_REPAIR_PERCENT = 0.25f;
 
     @SubscribeEvent
     public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
@@ -22,7 +23,7 @@ public class TFGTRepairHelper {
             return;
 
         boolean hasRepairKit = false;
-        float repairPercent = 0.25f;
+        float repairPercent = DEFAULT_REPAIR_PERCENT;
         ItemStack toolStack = ItemStack.EMPTY;
 
         for (int i = 0; i < grid.getContainerSize(); i++) {
@@ -34,8 +35,8 @@ public class TFGTRepairHelper {
             if (entry != null && !entry.isEmpty() && entry.tagPrefix() == TFGTagPrefix.repairKit) {
                 hasRepairKit = true;
                 repairPercent = stack.hasTag() && stack.getTag().contains("RepairPercent")
-                        ? stack.getTag().getFloat("RepairPercent")
-                        : 0.25f;
+                        ? sanitizeRepairPercent(stack.getTag().getFloat("RepairPercent"))
+                        : DEFAULT_REPAIR_PERCENT;
             } else if (stack.getItem() instanceof IGTTool) {
                 toolStack = stack;
             }
@@ -50,5 +51,12 @@ public class TFGTRepairHelper {
             }
             event.getCrafting().setDamageValue(newDamage);
         }
+    }
+
+    private static float sanitizeRepairPercent(float value) {
+        if (Float.isNaN(value) || Float.isInfinite(value)) {
+            return DEFAULT_REPAIR_PERCENT;
+        }
+        return Math.max(0.0f, Math.min(1.0f, value));
     }
 }

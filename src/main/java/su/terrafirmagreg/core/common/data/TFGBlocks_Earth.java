@@ -52,7 +52,7 @@ public class TFGBlocks_Earth {
     public static TagKey<Item> TFCDirtItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "dirt"));
     public static TagKey<Item> TFCGrassItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "grass"));
     public static TagKey<Item> TFCFarmlandItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "farmland"));
-    public static TagKey<Item> TFCMudBricksItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "mud_bricks"));
+    public static TagKey<Item> TFCDryMudBricksItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "dry_mud_bricks"));
     public static TagKey<Item> TFCPathItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "paths"));
     public static TagKey<Item> TFCMudItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "mud"));
 
@@ -426,7 +426,7 @@ public class TFGBlocks_Earth {
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.MINEABLE_WITH_SHOVEL, TFCMudBricksBlockTag)
                 .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
-                .tag(TFCMudBricksItemTag)
+                .tag(TFCDryMudBricksItemTag)
                 .build()
                 .register();
     }

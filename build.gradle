@@ -145,14 +145,12 @@ processResources {
             'mod_authors'            : "${mod_authors}",
             'mod_credits'            : "${mod_credits}",
             'mod_url'                : "${mod_url}",
-            'mod_update_json'        : "${mod_update_json}",
             'mod_logo_path'          : "${mod_logo_path}",
 
             'minecraft_version'      : "${minecraft_version}",
-            'minecraft_version_range': "${minecraft_version_range}",
 
             'forge_version'          : "${forge_version}",
-            'forge_version_range'    : "${forge_version_range}",
+            'forge_version_range'    : "${loader_version_range}",
             'loader_version_range'   : "${loader_version_range}"
     ]
     var filterList = [
