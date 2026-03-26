@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.client;
+package su.terrafirmagreg.core.client.renderer;
 
 import java.util.ArrayList;
 import java.util.Iterator;

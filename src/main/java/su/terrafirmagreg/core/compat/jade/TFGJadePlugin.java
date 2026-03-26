@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.client;
+package su.terrafirmagreg.core.compat.jade;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -16,6 +16,6 @@ public class TFGJadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        registration.registerBlockComponent(TierLockedComponent.INSTANCE, TierLockedBlock.class);
+        registration.registerBlockComponent(TierLockedProvider.INSTANCE, TierLockedBlock.class);
     }
 }

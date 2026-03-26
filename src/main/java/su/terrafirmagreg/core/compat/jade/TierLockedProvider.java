@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.client;
+package su.terrafirmagreg.core.compat.jade;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -11,7 +11,7 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
 @SuppressWarnings("removal")
-public enum TierLockedComponent implements IBlockComponentProvider {
+public enum TierLockedProvider implements IBlockComponentProvider {
     INSTANCE;
 
     @Override
