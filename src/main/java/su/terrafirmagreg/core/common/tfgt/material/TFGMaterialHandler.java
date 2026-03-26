@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.tfgt.materials;
+package su.terrafirmagreg.core.common.tfgt.material;
 
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;

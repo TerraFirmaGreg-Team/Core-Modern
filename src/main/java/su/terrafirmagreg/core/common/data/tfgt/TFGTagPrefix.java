@@ -9,8 +9,8 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
 
-import su.terrafirmagreg.core.common.tfgt.materials.TFGMaterialFlags;
-import su.terrafirmagreg.core.common.tfgt.materials.TFGMaterialIconType;
+import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialFlags;
+import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialIconType;
 
 public final class TFGTagPrefix {
 

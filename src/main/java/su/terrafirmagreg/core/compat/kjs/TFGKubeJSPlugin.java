@@ -19,13 +19,13 @@ import earth.terrarium.adastra.api.systems.OxygenApi;
 import earth.terrarium.adastra.api.systems.TemperatureApi;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.utils.TFGHelpers;
 import su.terrafirmagreg.core.common.data.tfgt.TFGPropertyKeys;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
-import su.terrafirmagreg.core.common.tfgt.materials.TFGMaterialFlags;
+import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialFlags;
 import su.terrafirmagreg.core.compat.kjs.events.TFGAE2PowerConsumption;
 import su.terrafirmagreg.core.compat.kjs.events.TFGServerEvents;
 import su.terrafirmagreg.core.compat.kjs.events.TFGStartupEvents;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 public final class TFGKubeJSPlugin extends KubeJSPlugin {
 

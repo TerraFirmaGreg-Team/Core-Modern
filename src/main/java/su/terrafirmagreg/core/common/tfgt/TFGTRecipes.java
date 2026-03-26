@@ -20,8 +20,8 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import electrolyte.greate.registry.Pumps;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCraftingComponents;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 
 public class TFGTRecipes {
 

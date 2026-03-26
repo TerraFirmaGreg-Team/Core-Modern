@@ -34,8 +34,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.TFGClientHelpers;
-import su.terrafirmagreg.core.utils.TFGHelpers;
 import su.terrafirmagreg.core.mixins.common.tfc.IIngotPileBlockEntityAccessor;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
