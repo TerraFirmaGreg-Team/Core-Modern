@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 public class TFGFluids {
 

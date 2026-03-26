@@ -53,6 +53,8 @@ public final class TFGTags {
         public static final TagKey<Item> PrecisionFabricatorDippedItems = createItemTag("precision_fabricator_dipped_items");
         public static final TagKey<Item> PrecisionFabricatorHolderRods = createItemTag("precision_fabricator_holder_rods");
 
+        public static final TagKey<Item> Explosives = createItemTag("explosives");
+
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("interaction/brick");
         public static final TagKey<Item> INTERACTIONBRICKSTAIR = createItemTag("interaction/brick_stairs");

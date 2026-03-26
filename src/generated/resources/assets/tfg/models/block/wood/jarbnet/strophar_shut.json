@@ -1,0 +1,8 @@
+{
+  "parent": "firmalife:block/jarbnet_shut",
+  "textures": {
+    "log": "ad_astra:block/strophar_stem",
+    "planks": "ad_astra:block/strophar_planks",
+    "sheet": "tfg:block/wood/sheet/strophar"
+  }
+}

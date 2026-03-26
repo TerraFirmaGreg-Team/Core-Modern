@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/food_shelf/strophar"
+  },
+  "loader": "firmalife:food_shelf"
+}

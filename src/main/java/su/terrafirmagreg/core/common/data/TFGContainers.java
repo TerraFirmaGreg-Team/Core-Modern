@@ -19,11 +19,11 @@ import net.minecraftforge.registries.RegistryObject;
 import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
-import su.terrafirmagreg.core.common.data.container.ArtisanTableContainer;
-import su.terrafirmagreg.core.common.data.container.LargeNestBoxContainer;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowContainer;
+import su.terrafirmagreg.core.common.blockentity.ArtisanTableBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.LargeNestBoxBlockEntity;
+import su.terrafirmagreg.core.common.container.ArtisanTableContainer;
+import su.terrafirmagreg.core.common.container.LargeNestBoxContainer;
+import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowContainer;
 
 public class TFGContainers {
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, TFGCore.MOD_ID);

@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blocks.DecorativeAttachedPlantBlock;
+import su.terrafirmagreg.core.common.block.DecorativeAttachedPlantBlock;
 
 // Mostly just a copy of TFC's EpiphytePlantFeature
 

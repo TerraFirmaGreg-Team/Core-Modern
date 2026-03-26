@@ -9,7 +9,7 @@ import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.event.Entities;
 
-import su.terrafirmagreg.core.common.data.entities.snatcher.SnatcherData;
+import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
 
 @Mixin(value = Entities.class, remap = false)
 public class EntitiesMixin {

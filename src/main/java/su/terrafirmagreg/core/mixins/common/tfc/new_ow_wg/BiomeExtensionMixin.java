@@ -23,11 +23,15 @@ public class BiomeExtensionMixin implements IBiomeExtension {
     @Unique
     private int tfg$shoreBaseHeight;
     @Unique
+    private boolean tfg$hasCinderCones;
+    @Unique
     private boolean tfg$hasTuffCones;
     @Unique
     private boolean tfg$hasTuyas;
     @Unique
     private boolean tfg$centeredFeatureIce;
+    @Unique
+    private int tfg$centeredFeatureRarity;
     @Unique
     private int tfg$centeredFeatureRockHeight;
     @Unique
@@ -36,17 +40,25 @@ public class BiomeExtensionMixin implements IBiomeExtension {
     private int tfg$centeredFeatureScaleHeight;
 
     @Unique
-    public void tfg$init(ShoreBlendType shoreBlendType, TFGRiverBlendType riverBlendType, int shoreBaseHeight, boolean hasTuffCones, boolean hasTuyas,
-            int centeredFeatureRockHeight, int centeredFeatureBaseHeight, int centeredFeatureScaleHeight, boolean centeredFeatureIce) {
+    public void tfg$init(ShoreBlendType shoreBlendType, TFGRiverBlendType riverBlendType, int shoreBaseHeight, boolean hasCinderCones,
+            boolean hasTuffCones, boolean hasTuyas, int centeredFeatureRarity, int centeredFeatureRockHeight, int centeredFeatureBaseHeight,
+            int centeredFeatureScaleHeight, boolean centeredFeatureIce) {
         this.tfg$shoreBlendType = shoreBlendType;
         this.tfg$riverBlendType = riverBlendType;
         this.tfg$shoreBaseHeight = shoreBaseHeight;
+        this.tfg$hasCinderCones = hasCinderCones;
         this.tfg$hasTuffCones = hasTuffCones;
         this.tfg$hasTuyas = hasTuyas;
+        this.tfg$centeredFeatureRarity = centeredFeatureRarity;
         this.tfg$centeredFeatureRockHeight = centeredFeatureRockHeight;
         this.tfg$centeredFeatureBaseHeight = centeredFeatureBaseHeight;
         this.tfg$centeredFeatureScaleHeight = centeredFeatureScaleHeight;
         this.tfg$centeredFeatureIce = centeredFeatureIce;
+    }
+
+    @Override
+    public boolean tfg$hasCinderCones() {
+        return this.tfg$hasCinderCones;
     }
 
     @Override
@@ -57,6 +69,11 @@ public class BiomeExtensionMixin implements IBiomeExtension {
     @Override
     public boolean tfg$hasTuyas() {
         return this.tfg$hasTuyas;
+    }
+
+    @Override
+    public int tfg$getCenteredFeatureRarity() {
+        return this.tfg$centeredFeatureRarity;
     }
 
     @Override

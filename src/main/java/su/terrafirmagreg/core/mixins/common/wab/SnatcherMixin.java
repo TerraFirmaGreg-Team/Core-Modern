@@ -26,7 +26,7 @@ import net.minecraftforge.common.Tags;
 import net.wanmine.wab.entity.Snatcher;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.entities.snatcher.SnatcherData;
+import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
 
 @Mixin(value = Snatcher.class)
 public abstract class SnatcherMixin extends ShoulderRidingEntity {

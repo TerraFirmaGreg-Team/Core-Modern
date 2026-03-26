@@ -9,6 +9,8 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import dev.emi.emi.api.EmiEntrypoint;
@@ -18,11 +20,12 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
-import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric.TFGLargeBoilerMachine;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -39,6 +42,8 @@ public class TFGEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory ARTISAN_TABLE = new EmiRecipeCategory(TFGCore.id("artisan_table"),
             EmiStack.of(TFGBlocks.ARTISAN_TABLE.get()));
 
+    public static final EmiRecipeCategory ITEM_REPAIR = new EmiRecipeCategory(TFGCore.id("item_repair"),
+            EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
     public static final EmiRecipeCategory LARGE_BOILER_BOOSTER = new EmiRecipeCategory(TFGCore.id("large_boiler_booster"),
             EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
 
@@ -92,5 +97,14 @@ public class TFGEmiPlugin implements EmiPlugin {
             emiRegistry.addRecipe(new ArtisanTableEmiRecipe(recipe));
         }
 
+        emiRegistry.addCategory(ITEM_REPAIR);
+        emiRegistry.addWorkstation(ITEM_REPAIR, EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
+        emiRegistry.addRecipeHandler(MenuType.CRAFTING, new ItemRepairCraftingRecipeHandler());
+        for (ItemRepairRecipe recipe : emiRegistry.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream()
+                .filter(r -> r instanceof ItemRepairRecipe)
+                .map(r -> (ItemRepairRecipe) r)
+                .toList()) {
+            emiRegistry.addRecipe(new ItemRepairEmiRecipe(recipe));
+        }
     }
 }

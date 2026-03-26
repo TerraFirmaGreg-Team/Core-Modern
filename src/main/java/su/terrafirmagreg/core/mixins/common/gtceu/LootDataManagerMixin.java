@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks_Buds;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Buds;
 
 @Mixin(LootDataManager.class)
 public abstract class LootDataManagerMixin {

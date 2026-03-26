@@ -17,7 +17,7 @@ import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
-import su.terrafirmagreg.core.common.data.entities.axolotl.AxolotlData;
+import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
 
 @Mixin(value = Axolotl.class, remap = true)
 public abstract class AxolotlMixin extends Animal {

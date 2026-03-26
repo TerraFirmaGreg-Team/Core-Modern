@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import su.terrafirmagreg.core.common.data.TFGEntities;
-import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
+import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 
 @Mixin(value = SnifferEggBlock.class)
 public abstract class SnifferEggBlockMixin {

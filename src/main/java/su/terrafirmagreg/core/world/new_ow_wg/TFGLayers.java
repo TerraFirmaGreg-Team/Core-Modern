@@ -6,9 +6,9 @@
 
 package su.terrafirmagreg.core.world.new_ow_wg;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
-
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.biome.BiomeExtension;
@@ -32,8 +32,7 @@ public class TFGLayers {
     public static void init() {
     }
 
-    private static final BiomeExtension[] BIOME_LAYERS;
-    private static final MutableInt BIOME_LAYER_INDEX;
+    private static final List<Supplier<BiomeExtension>> BIOME_LAYERS;
 
     public static final int DEEP_OCEAN_TRENCH, DEEP_OCEAN, OCEAN, OCEAN_REEF,
             PLAINS, HILLS, LOWLANDS, SALT_MARSH, LOW_CANYONS,
@@ -60,143 +59,142 @@ public class TFGLayers {
             KNOB_AND_KETTLE, PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, STONE_CIRCLES;
 
     static {
-        BIOME_LAYERS = new BiomeExtension[128];
-        BIOME_LAYER_INDEX = new MutableInt(0);
+        BIOME_LAYERS = new ArrayList<>(128);
 
-        DEEP_OCEAN_TRENCH = TFGLayers.register(() -> TFGBiomes.DEEP_OCEAN_TRENCH);
-        DEEP_OCEAN = TFGLayers.register(() -> TFGBiomes.DEEP_OCEAN);
-        OCEAN = TFGLayers.register(() -> TFGBiomes.OCEAN);
-        OCEAN_REEF = TFGLayers.register(() -> TFGBiomes.OCEAN_REEF);
+        DEEP_OCEAN_TRENCH = register(() -> TFGBiomes.DEEP_OCEAN_TRENCH);
+        DEEP_OCEAN = register(() -> TFGBiomes.DEEP_OCEAN);
+        OCEAN = register(() -> TFGBiomes.OCEAN);
+        OCEAN_REEF = register(() -> TFGBiomes.OCEAN_REEF);
 
-        PLAINS = TFGLayers.register(() -> TFGBiomes.PLAINS);
-        HILLS = TFGLayers.register(() -> TFGBiomes.HILLS);
-        LOWLANDS = TFGLayers.register(() -> TFGBiomes.LOWLANDS);
-        SALT_MARSH = TFGLayers.register(() -> TFGBiomes.SALT_MARSH);
-        LOW_CANYONS = TFGLayers.register(() -> TFGBiomes.LOW_CANYONS);
+        PLAINS = register(() -> TFGBiomes.PLAINS);
+        HILLS = register(() -> TFGBiomes.HILLS);
+        LOWLANDS = register(() -> TFGBiomes.LOWLANDS);
+        SALT_MARSH = register(() -> TFGBiomes.SALT_MARSH);
+        LOW_CANYONS = register(() -> TFGBiomes.LOW_CANYONS);
 
-        ROLLING_HILLS = TFGLayers.register(() -> TFGBiomes.ROLLING_HILLS);
-        HIGHLANDS = TFGLayers.register(() -> TFGBiomes.HIGHLANDS);
-        BADLANDS = TFGLayers.register(() -> TFGBiomes.BADLANDS);
-        PLATEAU = TFGLayers.register(() -> TFGBiomes.PLATEAU);
-        PLATEAU_WIDE = TFGLayers.register(() -> TFGBiomes.PLATEAU_WIDE);
-        CANYONS = TFGLayers.register(() -> TFGBiomes.CANYONS);
+        ROLLING_HILLS = register(() -> TFGBiomes.ROLLING_HILLS);
+        HIGHLANDS = register(() -> TFGBiomes.HIGHLANDS);
+        BADLANDS = register(() -> TFGBiomes.BADLANDS);
+        PLATEAU = register(() -> TFGBiomes.PLATEAU);
+        PLATEAU_WIDE = register(() -> TFGBiomes.PLATEAU_WIDE);
+        CANYONS = register(() -> TFGBiomes.CANYONS);
 
-        MOUNTAINS = TFGLayers.register(() -> TFGBiomes.MOUNTAINS);
-        OLD_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.OLD_MOUNTAINS);
-        OCEANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.OCEANIC_MOUNTAINS);
-        VOLCANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.VOLCANIC_MOUNTAINS);
-        VOLCANIC_OCEANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.VOLCANIC_OCEANIC_MOUNTAINS);
+        MOUNTAINS = register(() -> TFGBiomes.MOUNTAINS);
+        OLD_MOUNTAINS = register(() -> TFGBiomes.OLD_MOUNTAINS);
+        OCEANIC_MOUNTAINS = register(() -> TFGBiomes.OCEANIC_MOUNTAINS);
+        VOLCANIC_MOUNTAINS = register(() -> TFGBiomes.VOLCANIC_MOUNTAINS);
+        VOLCANIC_OCEANIC_MOUNTAINS = register(() -> TFGBiomes.VOLCANIC_OCEANIC_MOUNTAINS);
 
-        GUANO_ISLAND = TFGLayers.register(() -> TFGBiomes.GUANO_ISLAND);
-        SHORE = TFGLayers.register(() -> TFGBiomes.SHORE);
-        TIDAL_FLATS = TFGLayers.register(() -> TFGBiomes.TIDAL_FLATS);
-        SEA_STACKS = TFGLayers.register(() -> TFGBiomes.SEA_STACKS);
-        TERRACE_UPPER = TFGLayers.register(() -> TFGBiomes.TERRACE_UPPER);
-        TERRACE_LOWER = TFGLayers.register(() -> TFGBiomes.TERRACE_LOWER);
-        SETBACK_CLIFFS = TFGLayers.register(() -> TFGBiomes.SETBACK_CLIFFS);
-        COASTAL_DUNES = TFGLayers.register(() -> TFGBiomes.COASTAL_DUNES);
-        ROCKY_SHORES = TFGLayers.register(() -> TFGBiomes.ROCKY_SHORES);
-        EMBAYMENTS = TFGLayers.register(() -> TFGBiomes.EMBAYMENTS);
+        GUANO_ISLAND = register(() -> TFGBiomes.GUANO_ISLAND);
+        SHORE = register(() -> TFGBiomes.SHORE);
+        TIDAL_FLATS = register(() -> TFGBiomes.TIDAL_FLATS);
+        SEA_STACKS = register(() -> TFGBiomes.SEA_STACKS);
+        TERRACE_UPPER = register(() -> TFGBiomes.TERRACE_UPPER);
+        TERRACE_LOWER = register(() -> TFGBiomes.TERRACE_LOWER);
+        SETBACK_CLIFFS = register(() -> TFGBiomes.SETBACK_CLIFFS);
+        COASTAL_DUNES = register(() -> TFGBiomes.COASTAL_DUNES);
+        ROCKY_SHORES = register(() -> TFGBiomes.ROCKY_SHORES);
+        EMBAYMENTS = register(() -> TFGBiomes.EMBAYMENTS);
 
-        LAKE = TFGLayers.register(() -> TFGBiomes.LAKE);
-        RIVER = TFGLayers.register(() -> TFGBiomes.RIVER);
+        LAKE = register(() -> TFGBiomes.LAKE);
+        RIVER = register(() -> TFGBiomes.RIVER);
 
-        MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.MOUNTAIN_LAKE);
-        OLD_MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.OLD_MOUNTAIN_LAKE);
-        OCEANIC_MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.OCEANIC_MOUNTAIN_LAKE);
-        VOLCANIC_MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.VOLCANIC_MOUNTAIN_LAKE);
-        VOLCANIC_OCEANIC_MOUNTAIN_LAKE = TFGLayers.register(() -> TFGBiomes.VOLCANIC_OCEANIC_MOUNTAIN_LAKE);
-        PLATEAU_LAKE = TFGLayers.register(() -> TFGBiomes.PLATEAU_LAKE);
+        MOUNTAIN_LAKE = register(() -> TFGBiomes.MOUNTAIN_LAKE);
+        OLD_MOUNTAIN_LAKE = register(() -> TFGBiomes.OLD_MOUNTAIN_LAKE);
+        OCEANIC_MOUNTAIN_LAKE = register(() -> TFGBiomes.OCEANIC_MOUNTAIN_LAKE);
+        VOLCANIC_MOUNTAIN_LAKE = register(() -> TFGBiomes.VOLCANIC_MOUNTAIN_LAKE);
+        VOLCANIC_OCEANIC_MOUNTAIN_LAKE = register(() -> TFGBiomes.VOLCANIC_OCEANIC_MOUNTAIN_LAKE);
+        PLATEAU_LAKE = register(() -> TFGBiomes.PLATEAU_LAKE);
 
-        MUD_FLATS = TFGLayers.register(() -> TFGBiomes.MUD_FLATS);
-        SALT_FLATS = TFGLayers.register(() -> TFGBiomes.SALT_FLATS);
-        DUNE_SEA = TFGLayers.register(() -> TFGBiomes.DUNE_SEA);
-        GRASSY_DUNES = TFGLayers.register(() -> TFGBiomes.GRASSY_DUNES);
-        WHORLED_CANYONS = TFGLayers.register(() -> TFGBiomes.WHORLED_CANYONS);
-        STAIR_STEP_CANYONS = TFGLayers.register(() -> TFGBiomes.STAIR_STEP_CANYONS);
-        MESAS = TFGLayers.register(() -> TFGBiomes.MESAS);
-        BUTTES = TFGLayers.register(() -> TFGBiomes.BUTTES);
-        HOODOOS = TFGLayers.register(() -> TFGBiomes.HOODOOS);
-        ROCKY_PLATEAU = TFGLayers.register(() -> TFGBiomes.ROCKY_PLATEAU);
+        MUD_FLATS = register(() -> TFGBiomes.MUD_FLATS);
+        SALT_FLATS = register(() -> TFGBiomes.SALT_FLATS);
+        DUNE_SEA = register(() -> TFGBiomes.DUNE_SEA);
+        GRASSY_DUNES = register(() -> TFGBiomes.GRASSY_DUNES);
+        WHORLED_CANYONS = register(() -> TFGBiomes.WHORLED_CANYONS);
+        STAIR_STEP_CANYONS = register(() -> TFGBiomes.STAIR_STEP_CANYONS);
+        MESAS = register(() -> TFGBiomes.MESAS);
+        BUTTES = register(() -> TFGBiomes.BUTTES);
+        HOODOOS = register(() -> TFGBiomes.HOODOOS);
+        ROCKY_PLATEAU = register(() -> TFGBiomes.ROCKY_PLATEAU);
 
-        TOWER_KARST_PLAINS = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_PLAINS);
-        TOWER_KARST_CANYONS = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_CANYONS);
-        TOWER_KARST_HILLS = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_HILLS);
-        TOWER_KARST_HIGHLANDS = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_HIGHLANDS);
-        TOWER_KARST_LAKE = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_LAKE);
-        TOWER_KARST_BAY = TFGLayers.register(() -> TFGBiomes.TOWER_KARST_BAY);
+        TOWER_KARST_PLAINS = register(() -> TFGBiomes.TOWER_KARST_PLAINS);
+        TOWER_KARST_CANYONS = register(() -> TFGBiomes.TOWER_KARST_CANYONS);
+        TOWER_KARST_HILLS = register(() -> TFGBiomes.TOWER_KARST_HILLS);
+        TOWER_KARST_HIGHLANDS = register(() -> TFGBiomes.TOWER_KARST_HIGHLANDS);
+        TOWER_KARST_LAKE = register(() -> TFGBiomes.TOWER_KARST_LAKE);
+        TOWER_KARST_BAY = register(() -> TFGBiomes.TOWER_KARST_BAY);
 
-        BURREN_PLATEAU = TFGLayers.register(() -> TFGBiomes.BURREN_PLATEAU);
-        BURREN_BADLANDS = TFGLayers.register(() -> TFGBiomes.BURREN_BADLANDS);
-        BURREN_BADLANDS_TALL = TFGLayers.register(() -> TFGBiomes.BURREN_BADLANDS_TALL);
-        BURREN_PLAINS = TFGLayers.register(() -> TFGBiomes.BURREN_PLAINS);
-        BURREN_ROCHE_MOUTONEE = TFGLayers.register(() -> TFGBiomes.BURREN_ROCHE_MOUTONEE);
+        BURREN_PLATEAU = register(() -> TFGBiomes.BURREN_PLATEAU);
+        BURREN_BADLANDS = register(() -> TFGBiomes.BURREN_BADLANDS);
+        BURREN_BADLANDS_TALL = register(() -> TFGBiomes.BURREN_BADLANDS_TALL);
+        BURREN_PLAINS = register(() -> TFGBiomes.BURREN_PLAINS);
+        BURREN_ROCHE_MOUTONEE = register(() -> TFGBiomes.BURREN_ROCHE_MOUTONEE);
 
-        SHILIN_PLAINS = TFGLayers.register(() -> TFGBiomes.SHILIN_PLAINS);
-        SHILIN_CANYONS = TFGLayers.register(() -> TFGBiomes.SHILIN_CANYONS);
-        SHILIN_HILLS = TFGLayers.register(() -> TFGBiomes.SHILIN_HILLS);
-        SHILIN_HIGHLANDS = TFGLayers.register(() -> TFGBiomes.SHILIN_HIGHLANDS);
-        SHILIN_PLATEAU = TFGLayers.register(() -> TFGBiomes.SHILIN_PLATEAU);
+        SHILIN_PLAINS = register(() -> TFGBiomes.SHILIN_PLAINS);
+        SHILIN_CANYONS = register(() -> TFGBiomes.SHILIN_CANYONS);
+        SHILIN_HILLS = register(() -> TFGBiomes.SHILIN_HILLS);
+        SHILIN_HIGHLANDS = register(() -> TFGBiomes.SHILIN_HIGHLANDS);
+        SHILIN_PLATEAU = register(() -> TFGBiomes.SHILIN_PLATEAU);
 
-        DOLINE_PLAINS = TFGLayers.register(() -> TFGBiomes.DOLINE_PLAINS);
-        DOLINE_HILLS = TFGLayers.register(() -> TFGBiomes.DOLINE_HILLS);
-        DOLINE_ROLLING_HILLS = TFGLayers.register(() -> TFGBiomes.DOLINE_ROLLING_HILLS);
-        DOLINE_HIGHLANDS = TFGLayers.register(() -> TFGBiomes.DOLINE_HIGHLANDS);
-        DOLINE_PLATEAU = TFGLayers.register(() -> TFGBiomes.DOLINE_PLATEAU);
-        DOLINE_CANYONS = TFGLayers.register(() -> TFGBiomes.DOLINE_CANYONS);
+        DOLINE_PLAINS = register(() -> TFGBiomes.DOLINE_PLAINS);
+        DOLINE_HILLS = register(() -> TFGBiomes.DOLINE_HILLS);
+        DOLINE_ROLLING_HILLS = register(() -> TFGBiomes.DOLINE_ROLLING_HILLS);
+        DOLINE_HIGHLANDS = register(() -> TFGBiomes.DOLINE_HIGHLANDS);
+        DOLINE_PLATEAU = register(() -> TFGBiomes.DOLINE_PLATEAU);
+        DOLINE_CANYONS = register(() -> TFGBiomes.DOLINE_CANYONS);
 
-        CENOTE_PLAINS = TFGLayers.register(() -> TFGBiomes.CENOTE_PLAINS);
-        CENOTE_HILLS = TFGLayers.register(() -> TFGBiomes.CENOTE_HILLS);
-        CENOTE_ROLLING_HILLS = TFGLayers.register(() -> TFGBiomes.CENOTE_ROLLING_HILLS);
-        CENOTE_CANYONS = TFGLayers.register(() -> TFGBiomes.CENOTE_CANYONS);
-        CENOTE_HIGHLANDS = TFGLayers.register(() -> TFGBiomes.CENOTE_HIGHLANDS);
-        CENOTE_PLATEAU = TFGLayers.register(() -> TFGBiomes.CENOTE_PLATEAU);
+        CENOTE_PLAINS = register(() -> TFGBiomes.CENOTE_PLAINS);
+        CENOTE_HILLS = register(() -> TFGBiomes.CENOTE_HILLS);
+        CENOTE_ROLLING_HILLS = register(() -> TFGBiomes.CENOTE_ROLLING_HILLS);
+        CENOTE_CANYONS = register(() -> TFGBiomes.CENOTE_CANYONS);
+        CENOTE_HIGHLANDS = register(() -> TFGBiomes.CENOTE_HIGHLANDS);
+        CENOTE_PLATEAU = register(() -> TFGBiomes.CENOTE_PLATEAU);
 
-        EXTREME_DOLINE_PLATEAU = TFGLayers.register(() -> TFGBiomes.EXTREME_DOLINE_PLATEAU);
-        EXTREME_DOLINE_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.EXTREME_DOLINE_MOUNTAINS);
+        EXTREME_DOLINE_PLATEAU = register(() -> TFGBiomes.EXTREME_DOLINE_PLATEAU);
+        EXTREME_DOLINE_MOUNTAINS = register(() -> TFGBiomes.EXTREME_DOLINE_MOUNTAINS);
 
-        ACTIVE_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.ACTIVE_SHIELD_VOLCANO);
-        DORMANT_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.DORMANT_SHIELD_VOLCANO);
-        EXTINCT_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.EXTINCT_SHIELD_VOLCANO);
-        ANCIENT_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.ANCIENT_SHIELD_VOLCANO);
-        SUNKEN_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.SUNKEN_SHIELD_VOLCANO);
+        ACTIVE_SHIELD_VOLCANO = register(() -> TFGBiomes.ACTIVE_SHIELD_VOLCANO);
+        DORMANT_SHIELD_VOLCANO = register(() -> TFGBiomes.DORMANT_SHIELD_VOLCANO);
+        EXTINCT_SHIELD_VOLCANO = register(() -> TFGBiomes.EXTINCT_SHIELD_VOLCANO);
+        ANCIENT_SHIELD_VOLCANO = register(() -> TFGBiomes.ANCIENT_SHIELD_VOLCANO);
+        SUNKEN_SHIELD_VOLCANO = register(() -> TFGBiomes.SUNKEN_SHIELD_VOLCANO);
 
-        SHIELD_VOLCANO_SHORE = TFGLayers.register(() -> TFGBiomes.SHIELD_VOLCANO_SHORE);
-        OLD_SHIELD_VOLCANO_SHORE = TFGLayers.register(() -> TFGBiomes.OLD_SHIELD_VOLCANO_SHORE);
+        SHIELD_VOLCANO_SHORE = register(() -> TFGBiomes.SHIELD_VOLCANO_SHORE);
+        OLD_SHIELD_VOLCANO_SHORE = register(() -> TFGBiomes.OLD_SHIELD_VOLCANO_SHORE);
 
-        ICE_SHEET = TFGLayers.register(() -> TFGBiomes.ICE_SHEET);
-        ICE_SHEET_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_MOUNTAINS);
-        ICE_SHEET_OCEANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_OCEANIC_MOUNTAINS);
-        ICE_SHEET_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_SHIELD_VOLCANO);
-        ICE_SHEET_TUYAS = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_TUYAS);
-        SUBGLACIAL_LAKE = TFGLayers.register(() -> TFGBiomes.SUBGLACIAL_LAKE);
+        ICE_SHEET = register(() -> TFGBiomes.ICE_SHEET);
+        ICE_SHEET_MOUNTAINS = register(() -> TFGBiomes.ICE_SHEET_MOUNTAINS);
+        ICE_SHEET_OCEANIC_MOUNTAINS = register(() -> TFGBiomes.ICE_SHEET_OCEANIC_MOUNTAINS);
+        ICE_SHEET_SHIELD_VOLCANO = register(() -> TFGBiomes.ICE_SHEET_SHIELD_VOLCANO);
+        ICE_SHEET_TUYAS = register(() -> TFGBiomes.ICE_SHEET_TUYAS);
+        SUBGLACIAL_LAKE = register(() -> TFGBiomes.SUBGLACIAL_LAKE);
 
-        ICE_SHEET_EDGE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_EDGE);
-        ICE_SHEET_TUYAS_EDGE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_TUYAS_EDGE);
-        ICE_SHEET_MOUNTAINS_EDGE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_MOUNTAINS_EDGE);
-        ICE_SHEET_OCEANIC_MOUNTAINS_EDGE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_OCEANIC_MOUNTAINS_EDGE);
-        MELTWATER_LAKE = TFGLayers.register(() -> TFGBiomes.MELTWATER_LAKE);
-        ICE_SHEET_OCEANIC = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_OCEANIC);
-        ICE_SHEET_SHORE = TFGLayers.register(() -> TFGBiomes.ICE_SHEET_SHORE);
+        ICE_SHEET_EDGE = register(() -> TFGBiomes.ICE_SHEET_EDGE);
+        ICE_SHEET_TUYAS_EDGE = register(() -> TFGBiomes.ICE_SHEET_TUYAS_EDGE);
+        ICE_SHEET_MOUNTAINS_EDGE = register(() -> TFGBiomes.ICE_SHEET_MOUNTAINS_EDGE);
+        ICE_SHEET_OCEANIC_MOUNTAINS_EDGE = register(() -> TFGBiomes.ICE_SHEET_OCEANIC_MOUNTAINS_EDGE);
+        MELTWATER_LAKE = register(() -> TFGBiomes.MELTWATER_LAKE);
+        ICE_SHEET_OCEANIC = register(() -> TFGBiomes.ICE_SHEET_OCEANIC);
+        ICE_SHEET_SHORE = register(() -> TFGBiomes.ICE_SHEET_SHORE);
 
-        GLACIATED_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.GLACIATED_MOUNTAINS);
-        GLACIATED_OCEANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.GLACIATED_OCEANIC_MOUNTAINS);
-        GLACIATED_SHIELD_VOLCANO = TFGLayers.register(() -> TFGBiomes.GLACIATED_SHIELD_VOLCANO);
+        GLACIATED_MOUNTAINS = register(() -> TFGBiomes.GLACIATED_MOUNTAINS);
+        GLACIATED_OCEANIC_MOUNTAINS = register(() -> TFGBiomes.GLACIATED_OCEANIC_MOUNTAINS);
+        GLACIATED_SHIELD_VOLCANO = register(() -> TFGBiomes.GLACIATED_SHIELD_VOLCANO);
 
-        GLACIALLY_CARVED_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.GLACIALLY_CARVED_MOUNTAINS);
-        GLACIALLY_CARVED_OCEANIC_MOUNTAINS = TFGLayers.register(() -> TFGBiomes.GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
+        GLACIALLY_CARVED_MOUNTAINS = register(() -> TFGBiomes.GLACIALLY_CARVED_MOUNTAINS);
+        GLACIALLY_CARVED_OCEANIC_MOUNTAINS = register(() -> TFGBiomes.GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
 
-        DRUMLINS = TFGLayers.register(() -> TFGBiomes.DRUMLINS);
-        TUYAS = TFGLayers.register(() -> TFGBiomes.TUYAS);
+        DRUMLINS = register(() -> TFGBiomes.DRUMLINS);
+        TUYAS = register(() -> TFGBiomes.TUYAS);
 
-        KNOB_AND_KETTLE = TFGLayers.register(() -> TFGBiomes.KNOB_AND_KETTLE);
-        PATTERNED_GROUND = TFGLayers.register(() -> TFGBiomes.PATTERNED_GROUND);
-        INVERTED_PATTERNED_GROUND = TFGLayers.register(() -> TFGBiomes.INVERTED_PATTERNED_GROUND);
-        STONE_CIRCLES = TFGLayers.register(() -> TFGBiomes.STONE_CIRCLES);
+        KNOB_AND_KETTLE = register(() -> TFGBiomes.KNOB_AND_KETTLE);
+        PATTERNED_GROUND = register(() -> TFGBiomes.PATTERNED_GROUND);
+        INVERTED_PATTERNED_GROUND = register(() -> TFGBiomes.INVERTED_PATTERNED_GROUND);
+        STONE_CIRCLES = register(() -> TFGBiomes.STONE_CIRCLES);
     }
 
     public static BiomeExtension getFromLayerId(int id) {
-        BiomeExtension v = BIOME_LAYERS[id];
+        BiomeExtension v = BIOME_LAYERS.get(id).get();
         if (v == null) {
             throw new NullPointerException("Layer id = " + id + " returned null!");
         } else {
@@ -204,14 +202,9 @@ public class TFGLayers {
         }
     }
 
-    public static int register(Supplier<BiomeExtension> variants) {
-        int index = BIOME_LAYER_INDEX.getAndIncrement();
-        if (index >= BIOME_LAYERS.length) {
-            throw new IllegalStateException("Tried to register layer id " + index + " but only had space for " + BIOME_LAYERS.length + " layers");
-        } else {
-            BIOME_LAYERS[index] = Helpers.BOOTSTRAP_ENVIRONMENT ? null : variants.get();
-            return index;
-        }
+    public static int register(Supplier<BiomeExtension> biome) {
+        BIOME_LAYERS.add(Helpers.BOOTSTRAP_ENVIRONMENT ? null : biome);
+        return BIOME_LAYERS.size() - 1;
     }
 
     public static boolean isOcean(int value) {

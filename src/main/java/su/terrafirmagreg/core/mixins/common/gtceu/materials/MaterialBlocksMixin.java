@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.gregtechceu.gtceu.common.data.GTMaterialBlocks;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks_Buds;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Buds;
 
 @Mixin(value = GTMaterialBlocks.class, remap = false)
 public abstract class MaterialBlocksMixin {

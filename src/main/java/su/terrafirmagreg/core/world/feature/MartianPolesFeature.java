@@ -22,10 +22,10 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.material.Fluids;
 
+import su.terrafirmagreg.core.common.block.SandLayerBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.TFGBlocks_Mars;
-import su.terrafirmagreg.core.common.data.blocks.SandLayerBlock;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 
 // Most of this code is taken from TFC's OverworldClimateModel::onChunkLoad(),
 // since that's where it does its initial snow placement

@@ -40,20 +40,20 @@ import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.entity.Soarer;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBison;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcjerboa.TFCJerboa;
-import su.terrafirmagreg.core.common.data.entities.animals.tfclemming.TFCLemming;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSeal;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcmongoose.TFCMongoose;
-import su.terrafirmagreg.core.common.data.entities.axolotl.AxolotlData;
-import su.terrafirmagreg.core.common.data.entities.charger.ChargerData;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
-import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
-import su.terrafirmagreg.core.common.data.entities.snatcher.SnatcherData;
-import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
-import su.terrafirmagreg.core.common.data.entities.soarer.SoarerData;
-import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
-import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
+import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBison;
+import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboa;
+import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemming;
+import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSeal;
+import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
+import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
+import su.terrafirmagreg.core.common.entity.charger.ChargerData;
+import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
+import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
+import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
+import su.terrafirmagreg.core.common.entity.soarer.SoarerData;
+import su.terrafirmagreg.core.common.entity.surfer.TFCSurfer;
+import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptor;
 
 @Mixin(value = EntityTooltips.class, remap = false)
 public abstract class EntityTooltipsMixin {

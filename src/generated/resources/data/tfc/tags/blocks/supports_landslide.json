@@ -1,0 +1,12 @@
+{
+  "values": [
+    "tfg:tamped/dirt/alfisol",
+    "tfg:tamped/mud/alfisol",
+    "tfg:tamped/dirt/mollisol",
+    "tfg:tamped/mud/mollisol",
+    "tfg:tamped/dirt/oxisol",
+    "tfg:tamped/mud/oxisol",
+    "tfg:tamped/dirt/podzol",
+    "tfg:tamped/mud/podzol"
+  ]
+}

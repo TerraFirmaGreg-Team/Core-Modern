@@ -59,7 +59,7 @@ description='''${mod_description}'''
    modId="minecraft"
    mandatory=true
    # This version range declares a minimum of the current minecraft version up to but not including the next major version
-   versionRange="${minecraft_version_range}"
+   versionRange="${minecraft_version}"
    ordering="NONE"
    side="BOTH"
 

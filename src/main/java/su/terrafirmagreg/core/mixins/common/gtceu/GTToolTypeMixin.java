@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.api.item.tool.ToolDefinitionBuilder;
 import com.gregtechceu.gtceu.api.item.tool.behavior.IToolBehavior;
 import com.gregtechceu.gtceu.common.item.tool.behavior.HarvestIceBehavior;
 
-import su.terrafirmagreg.core.compat.gtceu.behaviors.CanoeCreatorBehavior;
+import su.terrafirmagreg.core.common.item.behavior.CanoeCreatorBehavior;
 
 @Mixin(value = GTToolType.class, remap = false)
 public abstract class GTToolTypeMixin {

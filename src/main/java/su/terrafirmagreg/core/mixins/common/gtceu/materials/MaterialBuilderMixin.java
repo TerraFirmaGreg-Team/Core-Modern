@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.HazardPropert
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.IMaterialProperty;
 import com.llamalad7.mixinextras.sugar.Local;
 
-import su.terrafirmagreg.core.common.data.tfgt.TFGTMedicalConditions;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMedicalConditions;
 
 @Mixin(value = Material.Builder.class)
 public class MaterialBuilderMixin {
@@ -18,6 +18,6 @@ public class MaterialBuilderMixin {
 
     @ModifyArg(method = "radioactiveHazard", at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/api/data/chemical/material/properties/MaterialProperties;setProperty(Lcom/gregtechceu/gtceu/api/data/chemical/material/properties/PropertyKey;Lcom/gregtechceu/gtceu/api/data/chemical/material/properties/IMaterialProperty;)V"), index = 1, remap = false)
     private IMaterialProperty tfg$radioactiveHazard(IMaterialProperty value, @Local(argsOnly = true) float multiplier) {
-        return new HazardProperty(HazardProperty.HazardTrigger.ANY, TFGTMedicalConditions.RADIOACTIVE, multiplier, true);
+        return new HazardProperty(HazardProperty.HazardTrigger.ANY, TFGMedicalConditions.RADIOACTIVE, multiplier, true);
     }
 }

@@ -24,7 +24,7 @@ import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
 
-import su.terrafirmagreg.core.common.data.blocks.DecorativePlantBlock;
+import su.terrafirmagreg.core.common.block.DecorativePlantBlock;
 
 @SuppressWarnings("unused")
 public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder {

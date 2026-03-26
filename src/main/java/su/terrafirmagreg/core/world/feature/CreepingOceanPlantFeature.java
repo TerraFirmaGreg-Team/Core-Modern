@@ -14,9 +14,9 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.material.Fluid;
 
+import su.terrafirmagreg.core.common.block.CreepingWaterPlantBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.blocks.CreepingWaterPlantBlock;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.noise.TFGBiomeNoise;
 

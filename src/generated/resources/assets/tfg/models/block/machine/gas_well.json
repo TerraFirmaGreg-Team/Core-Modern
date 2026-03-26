@@ -1,0 +1,106 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "tfg:gas_well",
+  "texture_overrides": {
+    "all": "gtceu:block/casings/steam/steel/side"
+  },
+  "variants": {
+    "is_formed=false,recipe_logic_status=idle": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "gtceu:block/casings/steam/steel/side",
+          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
+          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
+          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
+          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=suspend": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "gtceu:block/casings/steam/steel/side",
+          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
+          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
+          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
+          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=waiting": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "gtceu:block/casings/steam/steel/side",
+          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
+          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
+          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
+          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+        }
+      }
+    },
+    "is_formed=false,recipe_logic_status=working": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "gtceu:block/casings/steam/steel/side",
+          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
+          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
+          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
+          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=idle": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "gtceu:block/casings/steam/steel/side",
+          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
+          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
+          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
+          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=suspend": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "gtceu:block/casings/steam/steel/side",
+          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
+          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
+          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
+          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=waiting": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "gtceu:block/casings/steam/steel/side",
+          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
+          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
+          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
+          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+        }
+      }
+    },
+    "is_formed=true,recipe_logic_status=working": {
+      "model": {
+        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "textures": {
+          "all": "gtceu:block/casings/steam/steel/side",
+          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
+          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
+          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
+          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+        }
+      }
+    }
+  }
+}

@@ -27,11 +27,15 @@ import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.CommonProxy;
+import su.terrafirmagreg.core.common.container.ArtisanTableScreen;
+import su.terrafirmagreg.core.common.container.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.container.ArtisanTableScreen;
-import su.terrafirmagreg.core.common.data.container.LargeNestBoxScreen;
-import su.terrafirmagreg.core.common.data.particles.*;
-import su.terrafirmagreg.core.common.data.tfgt.machine.render.BouleRender;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
+import su.terrafirmagreg.core.common.particle.*;
+import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 
 public class ClientProxy extends CommonProxy {
     @SuppressWarnings("removal")

@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/hanger/glacian"
+  },
+  "loader": "firmalife:hanger"
+}

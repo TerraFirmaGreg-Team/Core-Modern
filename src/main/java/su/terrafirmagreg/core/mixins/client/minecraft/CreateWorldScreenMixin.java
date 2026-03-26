@@ -17,6 +17,7 @@ public abstract class CreateWorldScreenMixin {
 
     /**
      * Убираем из списка все типы мира кроме TFC.
+     * Remove all world types besides TFC.
      */
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/CycleButton$Builder;withValues(Lnet/minecraft/client/gui/components/CycleButton$ValueListSupplier;)Lnet/minecraft/client/gui/components/CycleButton$Builder;"))
     private CycleButton.Builder<WorldCreationUiState.WorldTypeEntry> tfg$init$builder$withValues(
@@ -31,4 +32,5 @@ public abstract class CreateWorldScreenMixin {
 
         return instance.withValues(CycleButton.ValueListSupplier.create(allowedWorldPresets));
     }
+
 }

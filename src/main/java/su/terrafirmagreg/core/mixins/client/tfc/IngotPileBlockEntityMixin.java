@@ -24,7 +24,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.TFGHelpers;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 
 @Mixin(value = IngotPileBlockEntity.class, remap = false)
 @OnlyIn(Dist.CLIENT)
