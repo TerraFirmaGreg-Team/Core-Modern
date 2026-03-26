@@ -93,10 +93,10 @@ dependencies {
     modCompileOnly ("curse.maven:ftb-quests-forge-289412:6431737") { transitive = false }
 
     // Jade
-    modImplementation "curse.maven:jade-324717:6271651"
+    modImplementation "maven.modrinth:jade:11.13.2+forge"
 
-    // TFC Roads and Roofs
-    modImplementation "curse.maven:roads-and-roofs-tfc-1048212:5852507"
+    // TFC Roads and Roofs, rnr-0.2.2-1.20.1.jar, Dec 16, 2025
+    modImplementation "curse.maven:roads-and-roofs-tfc-1048212:7339318"
 
     // Ad Astra
     modImplementation ("curse.maven:ad-astra-635042:6262032") { transitive = false }
@@ -128,7 +128,7 @@ dependencies {
     //Create Liquid Fuel
     modImplementation "curse.maven:create-liquid-fuel-840734:5217310"
 
-    //Dea's Fission Vazde
+    //Dea's Fission Vazde, deafission-1.20.1-0.16.0.jar, Feb 16, 2026
     modImplementation "curse.maven:deafission-1354541:7633771"
 
     //Create Picky Waterwheels
@@ -138,24 +138,24 @@ dependencies {
     modCompileOnly "curse.maven:pandas-falling-trees-880630:5653236"
     modCompileOnly "curse.maven:pandalib-975460:5653131"
 
-    // ArborFirmaCraft
+    // ArborFirmaCraft, afc-1.0.20-1.20.1.jar, Nov 8, 2025
     modImplementation "curse.maven:arborfirmacraft-877545:7200580"
 
     // TFC Improved Badlands
     modCompileOnly "curse.maven:tfc-improved-badlands-969207:5126426"
 
-    // TFC Water Flasks
+    // TFC Water Flasks, waterflasks-3.0.10.jar, Oct 2, 2025
     modCompileOnly "curse.maven:water-flasks-354353:7056478"
 
-    // Sacks and such
-    modImplementation "curse.maven:sacks-n-such-695822:7721827"
+    // Sacks and such, Sacks 'N Such-1.20.1-1.2.6.jar, Mar 9, 2026
+    modImplementation "curse.maven:sacks-n-such-695822:7732041"
 
-    // Domum Ornamentum
-    modCompileOnly "curse.maven:domum-ornamentum-527361:7585567"
+    // Domum Ornamentum, domum_ornamentum-1.20.1-1.0.298-snapshot-universal.jar, Mar 15, 2026
+    modCompileOnly "curse.maven:domum-ornamentum-527361:7762540"
 
-    // Framed Blocks
+    // Framed Blocks, FramedBlocks-9.4.3.jar, Dec 28, 2025
     modCompileOnly "curse.maven:framedblocks-441647:7386520"
 
-    // GT modern utils
+    // GT modern utils, gtmutils-2.8.0.jar, Feb 12, 2026
     modImplementation "curse.maven:gregtech-modern-utilities-1235020:7612516"
 }

@@ -14,7 +14,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.TFGTMedicalConditions;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMedicalConditions;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 public class TFGItems_Medicines {
@@ -160,7 +160,7 @@ public class TFGItems_Medicines {
             .onRegister(attach(new AntidoteBehavior(10,
                     GTMedicalConditions.CARCINOGEN)))
             .onRegister(attach(new AntidoteBehavior(5,
-                    TFGTMedicalConditions.RADIOACTIVE)))
+                    TFGMedicalConditions.RADIOACTIVE)))
             .register();
 
     public static final ItemEntry<ComponentItem> RAD_AWAY_PILL = TFGCore.REGISTRATE.item("rad_away_pill", ComponentItem::create)
@@ -179,6 +179,6 @@ public class TFGItems_Medicines {
                     GTMedicalConditions.SILICOSIS,
                     GTMedicalConditions.BERYLLIOSIS,
                     GTMedicalConditions.CARCINOGEN,
-                    TFGTMedicalConditions.RADIOACTIVE)))
+                    TFGMedicalConditions.RADIOACTIVE)))
             .register();
 }

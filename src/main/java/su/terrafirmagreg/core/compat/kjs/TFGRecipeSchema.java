@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import lombok.experimental.Accessors;
 
-import su.terrafirmagreg.core.common.data.tfgt.recipe.condition.*;
+import su.terrafirmagreg.core.common.tfgt.recipe.condition.*;
 
 /**
  * KubeJS recipe schema extensions for TFG.

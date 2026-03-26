@@ -23,8 +23,9 @@ import de.mennomax.astikorcarts.item.CartItem;
 import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.items.*;
-import su.terrafirmagreg.core.common.data.tfgt.TFGTCovers;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
+import su.terrafirmagreg.core.common.item.*;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings("unused")
@@ -164,7 +165,7 @@ public class TFGItems {
 
     public static ItemEntry<ComponentItem> COVER_ROTTEN_VOIDING = TFGCore.REGISTRATE
             .item("rotten_voiding_cover", ComponentItem::create)
-            .onRegister(item -> item.attachComponents(new CoverPlaceBehavior(TFGTCovers.ITEM_VOIDING_ROTTEN)))
+            .onRegister(item -> item.attachComponents(new CoverPlaceBehavior(TFGCovers.ITEM_VOIDING_ROTTEN)))
             .register();
 
     public static ItemEntry<Item> ALFISOL_MUD_BRICK = TFGCore.REGISTRATE.item("mud_brick/alfisol", Item::new).defaultModel().register();

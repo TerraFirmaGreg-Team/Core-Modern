@@ -25,7 +25,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.world.new_ow_wg.RockSettingsHelpers;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.surface_states.TFGComplexSurfaceStates;

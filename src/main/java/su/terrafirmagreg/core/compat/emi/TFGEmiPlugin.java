@@ -20,12 +20,12 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
-import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
-import su.terrafirmagreg.core.common.data.recipes.repair.ItemRepairRecipe;
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
+import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {

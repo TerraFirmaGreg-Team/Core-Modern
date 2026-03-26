@@ -1,0 +1,19 @@
+{
+    "values": [
+        "tfg:earth/guano_island",
+        "tfg:earth/shore",
+        "tfg:earth/tidal_flats",
+        "tfg:earth/sea_stacks",
+        "tfg:earth/terrace_upper",
+        "tfg:earth/terrace_lower",
+        "tfg:earth/setback_cliffs",
+        "tfg:earth/coastal_dunes",
+        "tfg:earth/rocky_shores",
+        "tfg:earth/embayments",
+        "tfg:earth/shield_volcano_shore",
+        "tfg:earth/old_shield_volcano_shore",
+        "tfg:earth/ice_sheet_shore"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

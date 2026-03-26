@@ -25,7 +25,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.saveddata.SavedData;
 
-import su.terrafirmagreg.core.common.data.tfgt.worldgen.TFGBedrockFluidRegistry;
+import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidRegistry;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault

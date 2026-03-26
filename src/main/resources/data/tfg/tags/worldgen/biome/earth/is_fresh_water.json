@@ -1,0 +1,15 @@
+{
+    "values": [
+        "tfg:earth/lake",
+        "tfg:earth/river",
+        "tfg:earth/mountain_lake",
+        "tfg:earth/old_mountain_lake",
+        "tfg:earth/volcanic_mountain_lake",
+        "tfg:earth/plateau_lake",
+        "tfg:earth/tower_karst_lake",
+        "tfg:earth/subglacial_lake",
+        "tfg:earth/meltwater_lake"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

@@ -20,7 +20,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 
-import su.terrafirmagreg.core.common.data.recipes.repair.ItemRepairRecipe;
+import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 
 /** Shows a tfg:item_repair recipe in EMI from its pattern and key. */
 public class ItemRepairEmiRecipe implements EmiRecipe {

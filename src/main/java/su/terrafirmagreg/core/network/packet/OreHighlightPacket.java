@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-import su.terrafirmagreg.core.client.OreHighlightRenderer;
+import su.terrafirmagreg.core.client.renderer.OreHighlightRenderer;
 
 public record OreHighlightPacket(List<BlockPos> positions) {
 

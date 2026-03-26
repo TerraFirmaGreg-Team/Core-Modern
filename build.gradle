@@ -98,6 +98,15 @@ legacyForge {
             gameDirectory = project.file('run/client')
        }
 
+        client2 {
+            client()
+            ideName = "Client2"
+            sourceSet = sourceSets.dev
+            programArgument '--username'
+            programArgument 'Dev2'
+            gameDirectory = project.file('run/client2')
+        }
+
         server {
             server()
             ideName = "Server"
@@ -119,7 +128,7 @@ legacyForge {
 
             String[] existingMods = new String[] {
                     "tfg", "gtceu", "tfc", "firmalife", "species",
-                    "ad_astra", "wan_ancient_beasts"
+                    "ad_astra", "wan_ancient_beasts", "rnr"
             }
 
             for (String mod : existingMods) {
@@ -228,7 +237,6 @@ tasks.register("prepareServerDev") {
     def serverDir = file("run/server")
     def propsFile = file("${serverDir}/server.properties")
 
-    outputs.file(eulaFile)
     outputs.file(propsFile)
 
     doLast {
@@ -251,7 +259,7 @@ tasks.register("prepareServerDev") {
 
 // Runs Species patch before runServer.
 allprojects {
-    tasks.matching { it.name == "prepareRunServer" }.configureEach {
+    tasks.matching { it.name == "prepareServerRun" }.configureEach {
         dependsOn("prepareServerDev")
     }
 }

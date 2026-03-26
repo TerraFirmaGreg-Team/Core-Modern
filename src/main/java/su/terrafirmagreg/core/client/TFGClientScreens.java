@@ -8,7 +8,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGContainers;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowScreen;
+import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowScreen;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class TFGClientScreens {

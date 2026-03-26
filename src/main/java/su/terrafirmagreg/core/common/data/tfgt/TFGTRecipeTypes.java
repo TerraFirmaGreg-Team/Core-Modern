@@ -1,6 +1,6 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
-import static su.terrafirmagreg.core.common.data.container.ProgressBars.*;
+import static su.terrafirmagreg.core.common.container.ProgressBars.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

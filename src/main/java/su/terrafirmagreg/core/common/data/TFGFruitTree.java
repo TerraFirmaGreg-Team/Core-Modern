@@ -68,8 +68,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blocks.fruittreeblocks.TFGFruitTreeSaplingBlock;
-import su.terrafirmagreg.core.common.data.blocks.fruittreeblocks.TFGGrowingFruitTreeBranchBlock;
+import su.terrafirmagreg.core.common.block.fruittree.TFGFruitTreeSaplingBlock;
+import su.terrafirmagreg.core.common.block.fruittree.TFGGrowingFruitTreeBranchBlock;
 
 /**
  * Registration of custom TFG fruit tree blocks and items.

@@ -9,9 +9,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.effects.InstantDamageEffect;
-import su.terrafirmagreg.core.common.data.effects.MedicalConditionEffect;
-import su.terrafirmagreg.core.common.data.effects.TemperatureChangeEffect;
+import su.terrafirmagreg.core.common.effect.InstantDamageEffect;
+import su.terrafirmagreg.core.common.effect.MedicalConditionEffect;
+import su.terrafirmagreg.core.common.effect.TemperatureChangeEffect;
 
 public class TFGEffects {
 

@@ -9,8 +9,8 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.LunarChorusFlowerBlock;
+import su.terrafirmagreg.core.common.block.LunarChorusFlowerBlock;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 public class LunarChorusPlantFeature extends Feature<NoneFeatureConfiguration> {
 

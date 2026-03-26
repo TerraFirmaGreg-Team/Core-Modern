@@ -1,0 +1,14 @@
+{
+    "values": [
+        "tfg:earth/oceanic_mountain_lake",
+        "tfg:earth/volcanic_oceanic_mountain_lake",
+        "tfg:earth/salt_marsh",
+        "tfg:earth/tower_karst_bay",
+        "tfg:earth/ice_sheet_oceanic_mountains",
+        "tfg:earth/ice_sheet_oceanic_mountains_edge",
+        "tfg:earth/ice_sheet_oceanic",
+        "tfg:earth/glaciated_oceanic_mountains"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

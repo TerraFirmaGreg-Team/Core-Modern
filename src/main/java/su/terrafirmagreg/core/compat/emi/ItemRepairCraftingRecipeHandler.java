@@ -16,7 +16,7 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.handler.StandardRecipeHandler;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.recipes.repair.ItemRepairRecipe;
+import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 
 /** Lets EMI fill the crafting grid from tfg:item_repair recipes (plus button). */
 public class ItemRepairCraftingRecipeHandler implements StandardRecipeHandler<CraftingMenu> {

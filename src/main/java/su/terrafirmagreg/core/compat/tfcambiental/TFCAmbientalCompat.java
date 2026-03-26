@@ -32,7 +32,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import earth.terrarium.adastra.common.registry.ModItems;
 
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 
 /**
  * Compatibility for TFC Ambiental

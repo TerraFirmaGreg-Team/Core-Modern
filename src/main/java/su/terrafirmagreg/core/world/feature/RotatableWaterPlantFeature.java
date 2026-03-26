@@ -15,8 +15,8 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.material.Fluid;
 
+import su.terrafirmagreg.core.common.block.RotatableWaterPlantBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
-import su.terrafirmagreg.core.common.data.blocks.RotatableWaterPlantBlock;
 
 public class RotatableWaterPlantFeature extends Feature<BlockConfig<RotatableWaterPlantBlock>> {
     public static final Codec<BlockConfig<RotatableWaterPlantBlock>> CODEC = BlockConfig.codec(b -> b instanceof RotatableWaterPlantBlock t ? t : null,

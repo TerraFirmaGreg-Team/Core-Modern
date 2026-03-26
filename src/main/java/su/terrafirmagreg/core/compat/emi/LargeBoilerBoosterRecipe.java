@@ -19,7 +19,7 @@ import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 
 public class LargeBoilerBoosterRecipe implements EmiRecipe {
 

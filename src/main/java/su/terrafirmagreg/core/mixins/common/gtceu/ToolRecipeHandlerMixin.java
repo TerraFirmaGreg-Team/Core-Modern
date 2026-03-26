@@ -10,7 +10,7 @@ import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.data.recipe.generated.ToolRecipeHandler;
 import com.llamalad7.mixinextras.sugar.Local;
 
-import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
+import su.terrafirmagreg.core.common.tfgt.materials.TFGMaterialFlags;
 
 @Mixin(value = ToolRecipeHandler.class, remap = false)
 public class ToolRecipeHandlerMixin {

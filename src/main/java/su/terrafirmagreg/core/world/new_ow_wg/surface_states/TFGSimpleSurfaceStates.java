@@ -14,7 +14,7 @@ import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
 import net.minecraft.world.level.block.Blocks;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 
 // Split from TFC's SurfaceStates because of looping references.
 

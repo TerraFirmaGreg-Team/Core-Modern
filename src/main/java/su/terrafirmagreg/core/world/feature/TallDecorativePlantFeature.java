@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.material.FluidState;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blocks.TallDecorativePlantBlock;
+import su.terrafirmagreg.core.common.block.TallDecorativePlantBlock;
 
 public class TallDecorativePlantFeature extends Feature<TallDecorativePlantConfig> {
 

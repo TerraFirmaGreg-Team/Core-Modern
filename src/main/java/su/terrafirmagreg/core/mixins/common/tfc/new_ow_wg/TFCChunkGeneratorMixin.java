@@ -68,7 +68,7 @@ import net.minecraftforge.common.Tags;
 
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;

@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 
 public final class DirtHelpers {
 

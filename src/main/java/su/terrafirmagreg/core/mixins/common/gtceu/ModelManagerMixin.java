@@ -13,7 +13,7 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 
-import su.terrafirmagreg.core.common.data.buds.BudRenderer;
+import su.terrafirmagreg.core.common.buds.BudRenderer;
 
 @Mixin(value = ModelManager.class)
 public abstract class ModelManagerMixin {

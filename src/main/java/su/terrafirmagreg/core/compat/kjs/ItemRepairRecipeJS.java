@@ -14,7 +14,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import dev.latvian.mods.kubejs.recipe.RecipeJS;
 import dev.latvian.mods.kubejs.util.MapJS;
 
-import su.terrafirmagreg.core.common.data.recipes.repair.RecipePatternMatcher;
+import su.terrafirmagreg.core.common.recipe.repair.RecipePatternMatcher;
 
 /**
  * KubeJS recipe builder for tfg:item_repair: call pattern(...) with up to three rows of up to three characters, key(...) with
