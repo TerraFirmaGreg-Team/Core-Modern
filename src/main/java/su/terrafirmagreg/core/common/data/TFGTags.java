@@ -154,20 +154,20 @@ public final class TFGTags {
         public static final TagKey<Biome> HasLightSandWind = createBiomeTag("has_light_sand_particles");
 
         // earth worldgen tags
-        public static final TagKey<Biome> IsCold = createBiomeTag("earth/is_cold");
-        public static final TagKey<Biome> IsDry = createBiomeTag("earth/is_dry");
-        public static final TagKey<Biome> IsFreshWater = createBiomeTag("earth/is_fresh_water");
-        public static final TagKey<Biome> IsKarst = createBiomeTag("earth/is_karst");
-        public static final TagKey<Biome> IsLake = createBiomeTag("earth/is_lake");
-        public static final TagKey<Biome> IsMountain = createBiomeTag("earth/is_mountain");
-        public static final TagKey<Biome> IsNormal = createBiomeTag("earth/is_normal");
-        public static final TagKey<Biome> IsOcean = createBiomeTag("earth/is_ocean");
-        public static final TagKey<Biome> IsRiver = createBiomeTag("earth/is_river");
-        public static final TagKey<Biome> IsSaltWater = createBiomeTag("earth/is_salt_water");
-        public static final TagKey<Biome> IsSandstone = createBiomeTag("earth/is_sandstone");
-        public static final TagKey<Biome> IsShoreIsland = createBiomeTag("earth/is_shore_island");
-        public static final TagKey<Biome> IsTrueOcean = createBiomeTag("earth/is_true_ocean");
-        public static final TagKey<Biome> IsVolcanic = createBiomeTag("earth/is_volcanic");
+        public static final TagKey<Biome> EarthIsCold = createBiomeTag("earth/is_cold");
+        public static final TagKey<Biome> EarthIsDry = createBiomeTag("earth/is_dry");
+        public static final TagKey<Biome> EarthIsFreshWater = createBiomeTag("earth/is_fresh_water");
+        public static final TagKey<Biome> EarthIsKarst = createBiomeTag("earth/is_karst");
+        public static final TagKey<Biome> EarthIsLake = createBiomeTag("earth/is_lake");
+        public static final TagKey<Biome> EarthIsMountain = createBiomeTag("earth/is_mountain");
+        public static final TagKey<Biome> EarthIsNormal = createBiomeTag("earth/is_normal");
+        public static final TagKey<Biome> EarthIsOcean = createBiomeTag("earth/is_ocean");
+        public static final TagKey<Biome> EarthIsRiver = createBiomeTag("earth/is_river");
+        public static final TagKey<Biome> EarthIsSaltWater = createBiomeTag("earth/is_salt_water");
+        public static final TagKey<Biome> EarthIsSandstone = createBiomeTag("earth/is_sandstone");
+        public static final TagKey<Biome> EarthIsShoreIsland = createBiomeTag("earth/is_shore_island");
+        public static final TagKey<Biome> EarthIsTrueOcean = createBiomeTag("earth/is_true_ocean");
+        public static final TagKey<Biome> EarthIsVolcanic = createBiomeTag("earth/is_volcanic");
 
         private static TagKey<Biome> createBiomeTag(String path) {
             return createBiomeTag(TFGCore.id(path));
