@@ -70,7 +70,6 @@ public abstract class BedrockFluidVeinSavedDataMixin {
             tfgTotalWeight += tfgDef.getClimateWeight(serverLevel, blockPos);
         }
 
-        System.out.println("tfgTotalWeight: " + tfgTotalWeight);
         if (tfgTotalWeight == totalWeight)
             return;
 
@@ -80,12 +79,10 @@ public abstract class BedrockFluidVeinSavedDataMixin {
                         BedrockFluidVeinSavedData.getVeinCoord(chunkZ)))
                 .nextInt();
 
-        System.out.println("query: " + query);
         BedrockFluidDefinition selected = null;
         int weight = Math.abs(query % tfgTotalWeight);
 
         for (var fluidDefinition : GTRegistries.BEDROCK_FLUID_DEFINITIONS) {
-            System.out.println("fluidDef: " + fluidDefinition.getStoredFluid().get());
             if (fluidDefinition.getDimensionFilter() != null &&
                     fluidDefinition.getDimensionFilter().stream().noneMatch(
                             dim -> WorldGeneratorUtils.isSameDimension(dim, serverLevel.dimension()))) {
@@ -95,7 +92,6 @@ public abstract class BedrockFluidVeinSavedDataMixin {
             int veinWeight = fluidDefinition.getWeight()
                     + fluidDefinition.getBiomeWeightModifier().applyAsInt(biome);
 
-            System.out.println("veinWeight: " + veinWeight);
             // Get iD through GT Registries
             var defId = GTRegistries.BEDROCK_FLUID_DEFINITIONS.getKey(fluidDefinition);
             if (defId != null) {

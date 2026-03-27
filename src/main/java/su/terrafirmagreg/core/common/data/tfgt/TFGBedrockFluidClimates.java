@@ -28,13 +28,11 @@ public class TFGBedrockFluidClimates {
 
     /// Add a fluid vein dependent on both average temperature and rainfall
     private static void ClimateModifier(ResourceLocation id, int tempMin, int tempMax, int rainMin, int rainMax, int weight) {
-        System.out.println("DebugClimate");
         TFGBedrockFluidRegistry.addClimate(id, ClimateWeightModifier.combined(tempMin, tempMax, rainMin, rainMax, weight));
     }
 
     /// Add a fluid vein dependent on average temperature, rainfall, and biome
     private static void ClimateAndBiomeModifier(ResourceLocation id, int tempMin, int tempMax, int rainMin, int rainMax, Set<ResourceKey<Biome>> biomes, int weight) {
-        System.out.println("DebugClimateBiome");
         TFGBedrockFluidRegistry.addClimate(id, ClimateWeightModifier.combinedWithBiome(tempMin, tempMax, rainMin, rainMax, biomes, weight));
     }
 
@@ -96,7 +94,7 @@ public class TFGBedrockFluidClimates {
         // Spout - Ocean Biomes
         ClimateAndBiomeModifier(TFGCore.id("raw_oil_spout_ocean"), 15, 30, 0, 100, TRUE_OCEAN_BIOMES, 30);
 
-        System.out.println("Debug123");
-        TFGBedrockFluidRegistry.DebugAll();
+        //System.out.println("Debug123");
+        //TFGBedrockFluidRegistry.DebugAll();
     }
 }

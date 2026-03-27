@@ -35,8 +35,6 @@ public class ClimateWeightModifier {
 
     public ChunkData getChunkData(ServerLevel level, BlockPos pos) {
         ChunkAccess currentChunk = CHUNK_ACCESS_CACHE.get(new ChunkPos(pos));
-        System.out.println(currentChunk);
-
         return ChunkDataProvider.get(level.getChunkSource().getGenerator()).get(currentChunk);
     }
 
