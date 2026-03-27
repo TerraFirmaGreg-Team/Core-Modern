@@ -67,6 +67,7 @@ import net.minecraftforge.common.Tags;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.tfgt.worldgen.ClimateWeightModifier;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
@@ -231,21 +232,12 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     @Inject(method = "applyBiomeDecoration", at = @At("HEAD"), remap = true)
     private void tfg$outputBiomes(WorldGenLevel level, ChunkAccess chunk, StructureManager structureFeatureManager, CallbackInfo ci) {
         var middlePos = chunk.getPos().getMiddleBlockPosition(chunk.getHeight());
-        var biome = level.getBiome(middlePos).unwrapKey().orElse(null);
-        var data = chunkDataProvider.get(chunk);
-        var rain = data.getRainfall(middlePos);
-        var temp = data.getAverageTemp(middlePos);
-
-        System.out.println("Chunk Data");
-        System.out.println("Biome: " + biome);
-        System.out.println("Pos: " + chunk.getPos());
-        System.out.println("Rain: " + rain);
-        System.out.println("Temp: " + temp);
 
         var savedData = BedrockFluidVeinSavedData.getOrCreate(level.getLevel());
+        ClimateWeightModifier.CHUNK_ACCESS_CACHE.put(new ChunkPos(middlePos), chunk);
         var entry = savedData.getFluidVeinWorldEntry(chunk.getPos().x, chunk.getPos().z);
 
-        System.out.println("Fluid: " + entry.getVeinId());
+        ClimateWeightModifier.CHUNK_ACCESS_CACHE.remove(new ChunkPos(middlePos));
     }
 
     @Unique

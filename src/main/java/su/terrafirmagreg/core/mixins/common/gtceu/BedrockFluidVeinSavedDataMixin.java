@@ -26,7 +26,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.saveddata.SavedData;
 
-import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidDefinition;
 import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidRegistry;
 
 @MethodsReturnNonnullByDefault
@@ -63,10 +62,10 @@ public abstract class BedrockFluidVeinSavedDataMixin {
 
         // Total weight due to climate condition
         int tfgTotalWeight = totalWeight;
-        System.out.println("Registries");
-        System.out.println(GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries());
-        System.out.println(TFGBedrockFluidRegistry.getAll().stream().map(TFGBedrockFluidDefinition::getId).toList());
-        TFGBedrockFluidRegistry.DebugAll();
+        //System.out.println("Registries");
+        //System.out.println(GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries());
+        //System.out.println(TFGBedrockFluidRegistry.getAll().stream().map(TFGBedrockFluidDefinition::getId).toList());
+        //TFGBedrockFluidRegistry.DebugAll();
         for (var tfgDef : TFGBedrockFluidRegistry.getAll()) {
             tfgTotalWeight += tfgDef.getClimateWeight(serverLevel, blockPos);
         }
