@@ -5,7 +5,6 @@
             "center": true,
             "type": "tfg:tuya"
         },
-        {"type": "minecraft:biome"},
         {
             "heightmap": "WORLD_SURFACE_WG",
             "type": "minecraft:heightmap"

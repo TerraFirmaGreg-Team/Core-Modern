@@ -29,11 +29,12 @@ public enum TFGNormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant {
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
-        buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_GRAVEL, complexStates.MID_DIRT_TO_GRAVEL, complexStates.UNDER_GRAVEL);
+        buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_SANDY_GRAVEL, complexStates.MID_DIRT_TO_GRAVEL, complexStates.UNDER_GRAVEL);
     }
 
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY, SurfaceState topCaveState, SurfaceState midCaveState, SurfaceState underCaveState, int caveHeight) {
-        buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_GRAVEL, complexStates.MID_DIRT_TO_GRAVEL, complexStates.UNDER_GRAVEL, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL, topCaveState,
+        buildSurface(context, startY, endY, complexStates.TOP_GRASS_TO_SANDY_GRAVEL, complexStates.MID_DIRT_TO_GRAVEL, complexStates.UNDER_GRAVEL, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL,
+                topCaveState,
                 midCaveState, underCaveState, caveHeight);
     }
 

@@ -107,7 +107,8 @@ public class TFGSoilSurfaceState implements SurfaceState {
                 dry,
                 transition(dry, states.COARSE_MOLLISOL),
                 states.COARSE_MOLLISOL,
-                transition(states.COARSE_MOLLISOL, soil(type, TFGSoilVariant.MOLLISOL)),
+                // Intentionally aridisol here because the color against the grass looks better
+                transition(states.COARSE_ARIDISOL, soil(type, TFGSoilVariant.MOLLISOL)),
                 soil(type, TFGSoilVariant.MOLLISOL),
                 soil(type, TFGSoilVariant.MOLLISOL),
                 soil(type, TFGSoilVariant.MOLLISOL),
@@ -155,7 +156,8 @@ public class TFGSoilSurfaceState implements SurfaceState {
                 dry,
                 transition(dry, states.COARSE_MOLLISOL),
                 states.COARSE_MOLLISOL,
-                transition(states.COARSE_MOLLISOL, soil(type, TFGSoilVariant.MOLLISOL)),
+                // Intentionally aridisol here because the color against the grass looks better
+                transition(states.COARSE_ARIDISOL, soil(type, TFGSoilVariant.MOLLISOL)),
                 soil(type, TFGSoilVariant.MOLLISOL),
                 soil(type, TFGSoilVariant.MOLLISOL),
                 soil(type, TFGSoilVariant.MOLLISOL),
