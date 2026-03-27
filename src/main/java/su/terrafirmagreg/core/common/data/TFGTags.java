@@ -169,6 +169,8 @@ public final class TFGTags {
         public static final TagKey<Biome> EarthIsTrueOcean = createBiomeTag("earth/is_true_ocean");
         public static final TagKey<Biome> EarthIsVolcanic = createBiomeTag("earth/is_volcanic");
 
+        public static final TagKey<Biome> EarthIsSaltFlats = createBiomeTag("earth/is_salt_flats");
+
         private static TagKey<Biome> createBiomeTag(String path) {
             return createBiomeTag(TFGCore.id(path));
         }

@@ -23,6 +23,10 @@ public class TFGBedrockFluidRegistry {
         return DEFINITIONS.values();
     }
 
+    public static void DebugAll() {
+        DEFINITIONS.values().forEach(TFGBedrockFluidDefinition::debugModifiers);
+    }
+
     public static boolean isEmpty() {
         return DEFINITIONS.isEmpty();
     }

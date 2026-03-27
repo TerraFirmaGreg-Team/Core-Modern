@@ -85,6 +85,7 @@
         "common.gtceu.EntityDamageUtilMixin",
         "common.gtceu.GregTechKubeJSPluginMixin",
         "common.gtceu.GrowingPlantRenderMixin",
+        "common.gtceu.GTBedrockFluidsMixin",
         "common.gtceu.GTCleanroomMixin",
         "common.gtceu.GTEMIPluginMixin",
         "common.gtceu.GTMachineUtilsMixin",

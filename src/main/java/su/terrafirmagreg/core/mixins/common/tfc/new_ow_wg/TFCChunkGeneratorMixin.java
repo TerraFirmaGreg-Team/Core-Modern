@@ -25,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.google.common.collect.ImmutableMap;
+import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -50,10 +51,7 @@ import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -228,6 +226,26 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
                 }
             }
         }
+    }
+
+    @Inject(method = "applyBiomeDecoration", at = @At("HEAD"), remap = true)
+    private void tfg$outputBiomes(WorldGenLevel level, ChunkAccess chunk, StructureManager structureFeatureManager, CallbackInfo ci) {
+        var middlePos = chunk.getPos().getMiddleBlockPosition(chunk.getHeight());
+        var biome = level.getBiome(middlePos).unwrapKey().orElse(null);
+        var data = chunkDataProvider.get(chunk);
+        var rain = data.getRainfall(middlePos);
+        var temp = data.getAverageTemp(middlePos);
+
+        System.out.println("Chunk Data");
+        System.out.println("Biome: " + biome);
+        System.out.println("Pos: " + chunk.getPos());
+        System.out.println("Rain: " + rain);
+        System.out.println("Temp: " + temp);
+
+        var savedData = BedrockFluidVeinSavedData.getOrCreate(level.getLevel());
+        var entry = savedData.getFluidVeinWorldEntry(chunk.getPos().x, chunk.getPos().z);
+
+        System.out.println("Fluid: " + entry.getVeinId());
     }
 
     @Unique
