@@ -39,12 +39,14 @@ public class TFGComplexSurfaceStates {
     public final SurfaceState UNDER_GRAVEL;
 
     public final SurfaceState TOP_GRASS_TO_GRAVEL;
+    public final SurfaceState TOP_GRASS_TO_SANDY_GRAVEL;
     public final SurfaceState TOP_GRASS_TO_SAND;
     public final SurfaceState MID_DIRT_TO_GRAVEL;
     public final SurfaceState MID_DIRT_TO_SAND;
     public final SurfaceState VOLCANIC_TOP_GRASS_TO_BASALT_GRAVEL;
     public final SurfaceState VOLCANIC_MID_DIRT_TO_BASALT_GRAVEL;
     public final SurfaceState VOLCANIC_TOP_GRASS_TO_LOCAL_GRAVEL;
+    public final SurfaceState VOLCANIC_TOP_GRASS_TO_LOCAL_SAND;
     public final SurfaceState VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL;
     public final SurfaceState VOLCANIC_TOP_GRASS_TO_TUFF_GRAVEL;
     public final SurfaceState VOLCANIC_MID_DIRT_TO_TUFF_GRAVEL;
@@ -63,11 +65,13 @@ public class TFGComplexSurfaceStates {
 
         TOP_GRASS_TO_GRAVEL = TFGSoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, SurfaceStates.GRAVEL);
         TOP_GRASS_TO_SAND = TFGSoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, simpleStates.SAND);
+        TOP_GRASS_TO_SANDY_GRAVEL = TFGSoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, SurfaceStates.SAND_OR_GRAVEL);
         MID_DIRT_TO_GRAVEL = TFGSoilSurfaceState.buildMidType(SoilBlockType.DIRT, SurfaceStates.GRAVEL);
         MID_DIRT_TO_SAND = TFGSoilSurfaceState.buildMidType(SoilBlockType.DIRT, simpleStates.SAND);
         VOLCANIC_TOP_GRASS_TO_BASALT_GRAVEL = TFGSoilSurfaceState.buildVolcanicSurfaceType(SoilBlockType.GRASS, simpleStates.BASALT_GRAVEL);
         VOLCANIC_MID_DIRT_TO_BASALT_GRAVEL = TFGSoilSurfaceState.buildVolcanicMidType(SoilBlockType.DIRT, simpleStates.BASALT_GRAVEL);
         VOLCANIC_TOP_GRASS_TO_LOCAL_GRAVEL = TFGSoilSurfaceState.buildVolcanicSurfaceType(SoilBlockType.GRASS, SurfaceStates.GRAVEL);
+        VOLCANIC_TOP_GRASS_TO_LOCAL_SAND = TFGSoilSurfaceState.buildVolcanicSurfaceType(SoilBlockType.GRASS, simpleStates.SAND_AND_GRAVEL);
         VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL = TFGSoilSurfaceState.buildVolcanicMidType(SoilBlockType.DIRT, SurfaceStates.GRAVEL);
         VOLCANIC_TOP_GRASS_TO_TUFF_GRAVEL = TFGSoilSurfaceState.buildVolcanicSurfaceType(SoilBlockType.GRASS, simpleStates.TUFF_GRAVEL);
         VOLCANIC_MID_DIRT_TO_TUFF_GRAVEL = TFGSoilSurfaceState.buildVolcanicMidType(SoilBlockType.DIRT, simpleStates.TUFF_GRAVEL);

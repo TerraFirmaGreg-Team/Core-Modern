@@ -26,7 +26,7 @@ public class SimpleSurfaceBuilder implements SurfaceBuilder {
             complexStates.VOLCANIC_TOP_GRASS_TO_LOCAL_GRAVEL, complexStates.VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL, SurfaceStates.GRAVEL, true);
 
     public static final SurfaceBuilderFactory VOLCANIC_SOIL = seed -> new SimpleSurfaceBuilder(
-            complexStates.VOLCANIC_TOP_GRASS_TO_LOCAL_GRAVEL, complexStates.VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL, SurfaceStates.GRAVEL, true);
+            complexStates.VOLCANIC_TOP_GRASS_TO_LOCAL_SAND, complexStates.VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL, SurfaceStates.GRAVEL, true);
 
     public static final SurfaceBuilderFactory OCEAN_MUD = seed -> new SimpleSurfaceBuilder(
             simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD, simpleStates.OCEAN_MUD, false);
