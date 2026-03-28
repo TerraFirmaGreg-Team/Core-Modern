@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.common.tfgt.worldgen;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import lombok.Getter;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.minecraft.core.BlockPos;
@@ -12,6 +11,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
+
+import lombok.Getter;
 
 @Getter
 public class ClimateWeightModifier {

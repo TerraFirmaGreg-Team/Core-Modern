@@ -229,27 +229,27 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
         }
     }
 
-	@Unique
-	private final Block tfg$marble = TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.RAW).get();
-	@Unique
-	private final Block tfg$gabbro = TFCBlocks.ROCK_BLOCKS.get(Rock.GABBRO).get(Rock.BlockType.RAW).get();
-	@Unique
-	private final Block tfg$diorite = TFCBlocks.ROCK_BLOCKS.get(Rock.DIORITE).get(Rock.BlockType.RAW).get();
+    @Unique
+    private final Block tfg$marble = TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.RAW).get();
+    @Unique
+    private final Block tfg$gabbro = TFCBlocks.ROCK_BLOCKS.get(Rock.GABBRO).get(Rock.BlockType.RAW).get();
+    @Unique
+    private final Block tfg$diorite = TFCBlocks.ROCK_BLOCKS.get(Rock.DIORITE).get(Rock.BlockType.RAW).get();
 
-	@Unique
-	private BlockState tfg$getHornfels(RockSettings rockSettings) {
-		var raw = rockSettings.raw();
-		if (raw == tfg$marble) {
-			// marble is the only sedimentary carbonate that can spawn this deep
-			return TFGBlocks_Earth.CARBONATE_HORNFELS.getDefaultState();
-		} else if (raw == tfg$gabbro || raw == tfg$diorite) {
-			// diorite is intermediate so it's an honorary mafic
-			return TFGBlocks_Earth.MAFIC_HORNFELS.getDefaultState();
-		} else {
-			// this is for metamorphics, but felsics can get it too
-			return TFGBlocks_Earth.PELITIC_HORNFELS.getDefaultState();
-		}
-	}
+    @Unique
+    private BlockState tfg$getHornfels(RockSettings rockSettings) {
+        var raw = rockSettings.raw();
+        if (raw == tfg$marble) {
+            // marble is the only sedimentary carbonate that can spawn this deep
+            return TFGBlocks_Earth.CARBONATE_HORNFELS.getDefaultState();
+        } else if (raw == tfg$gabbro || raw == tfg$diorite) {
+            // diorite is intermediate so it's an honorary mafic
+            return TFGBlocks_Earth.MAFIC_HORNFELS.getDefaultState();
+        } else {
+            // this is for metamorphics, but felsics can get it too
+            return TFGBlocks_Earth.PELITIC_HORNFELS.getDefaultState();
+        }
+    }
 
     @Inject(method = "applyBiomeDecoration", at = @At("HEAD"), remap = true)
     private void tfg$outputBiomes(WorldGenLevel level, ChunkAccess chunk, StructureManager structureFeatureManager, CallbackInfo ci) {

@@ -25,6 +25,9 @@ public class TFGBedrockFluids {
 
     public static void init() {
     }
+
+    // By the way, if you see a vein have zero weight, it's controlled by the biome/climate instead
+
     // =========================================================
     // WATER
     // =========================================================
@@ -83,7 +86,7 @@ public class TFGBedrockFluids {
     // =========================================================
 
     // Common — everywhere except true ocean, shore/island, dry biomes
-    // Can't exclude so make it as : is_normal + is_mountain + is_cold + is_karst + is_fresh_water + is_volcanic + is_river
+    // Can't exclude so make it as : is_normal + is_mountain + is_cold + is_karst + is_fresh_water + is_volcanic + is_river + is_swamp
 
     public static BedrockFluidDefinition MUDDY_WATER = create(TFGCore.id("muddy_water"), vein -> vein
             .dimensions(overworld)
@@ -94,6 +97,7 @@ public class TFGBedrockFluids {
             .depletionAmount(1)
             .depletionChance(100)
             .depletedYield(10)
+            .biomes(10, TFGTags.Biomes.EarthIsSwamp)
             .biomes(5, TFGTags.Biomes.EarthIsNormal)
             .biomes(5, TFGTags.Biomes.EarthIsMountain)
             .biomes(5, TFGTags.Biomes.EarthIsCold)
@@ -123,7 +127,6 @@ public class TFGBedrockFluids {
     // =========================================================
 
     // Spout - Hot/Dry Climate — climate only
-    // temperatureAndRainfall managed in bedrock_fluid_climate.js
     public static BedrockFluidDefinition LIGHT_OIL_HOT = create(TFGCore.id("light_oil_spout_hot"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.OilLight::getFluid)
@@ -134,7 +137,7 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(25));
 
-    // Spout - Ocean Biomes — climate + biomes managed in bedrock_fluid_climate.js
+    // Spout - Ocean Biomes
     public static BedrockFluidDefinition LIGHT_OIL_OCEAN = create(TFGCore.id("light_oil_spout_ocean"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.OilLight::getFluid)
@@ -161,7 +164,6 @@ public class TFGBedrockFluids {
     // =========================================================
 
     // Spout - Hot/Dry Climate — climate only
-    // temperatureAndRainfall managed in bedrock_fluid_climate.js
     public static BedrockFluidDefinition OIL_HOT = create(TFGCore.id("oil_spout_hot"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.Oil::getFluid)
@@ -172,7 +174,7 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(20));
 
-    // Spout - Ocean Biomes — climate + biomes managed in bedrock_fluid_climate.js
+    // Spout - Ocean Biomes
     public static BedrockFluidDefinition OIL_OCEAN = create(TFGCore.id("oil_spout_ocean"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.Oil::getFluid)
@@ -198,8 +200,7 @@ public class TFGBedrockFluids {
     // HEAVY OIL
     // =========================================================
 
-    // Spout - Hot/Dry Climate — climate only
-    // temperatureAndRainfall managed in bedrock_fluid_climate.js
+    // Spout - Hot/Dry Climate
     public static BedrockFluidDefinition HEAVY_OIL_HOT = create(TFGCore.id("heavy_oil_spout_hot"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.OilHeavy::getFluid)
@@ -210,7 +211,7 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(20));
 
-    // Spout - Ocean Biomes — climate + biomes managed in bedrock_fluid_climate.js
+    // Spout - Ocean Biomes
     public static BedrockFluidDefinition HEAVY_OIL_OCEAN = create(TFGCore.id("heavy_oil_spout_ocean"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.OilHeavy::getFluid)
@@ -236,8 +237,7 @@ public class TFGBedrockFluids {
     // RAW OIL
     // =========================================================
 
-    // Spout - Hot/Dry Climate — climate only
-    // temperatureAndRainfall managed in bedrock_fluid_climate.js
+    // Spout - Hot/Dry Climate
     public static BedrockFluidDefinition RAW_OIL_HOT = create(TFGCore.id("raw_oil_spout_hot"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.RawOil::getFluid)
@@ -248,7 +248,7 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(20));
 
-    // Spout - Ocean Biomes — climate + biomes managed in bedrock_fluid_climate.js
+    // Spout - Ocean Biomes
     public static BedrockFluidDefinition RAW_OIL_OCEAN = create(TFGCore.id("raw_oil_spout_ocean"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.RawOil::getFluid)
@@ -274,8 +274,7 @@ public class TFGBedrockFluids {
     // NATURAL GAS
     // =========================================================
 
-    // Surface Indicator - Wet/Cold Climate — climate only
-    // temperature("natural_gas_surface_indicator", -20, 0, 50) managed in bedrock_fluid_climate.js
+    // Surface Indicator - Wet/Cold Climate
     public static BedrockFluidDefinition NATURAL_GAS_SURFACE = create(TFGCore.id("natural_gas_surface_indicator"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.NaturalGas::getFluid)
@@ -286,7 +285,7 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(40));
 
-    // Ocean Biomes — climate + biomes managed in bedrock_fluid_climate.js
+    // Ocean Biomes
     public static BedrockFluidDefinition NATURAL_GAS_OCEAN = create(TFGCore.id("natural_gas_ocean"), vein -> vein
             .dimensions(overworld)
             .fluid(GTMaterials.NaturalGas::getFluid)
@@ -335,5 +334,4 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(0)
             .biomes(10, TFGTags.Biomes.EarthIsMountain));
-
 }
