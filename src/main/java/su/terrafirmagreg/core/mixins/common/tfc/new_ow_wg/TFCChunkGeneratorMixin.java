@@ -204,7 +204,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     }
 
     @Inject(method = "buildSurface", at = @At("HEAD"), remap = true)
-    private void tfg$buildSurface(WorldGenRegion level, StructureManager structureFeatureManager, RandomState state, ChunkAccess chunk, CallbackInfo ci) {
+    private void tfg$generateHornfels(WorldGenRegion level, StructureManager structureFeatureManager, RandomState state, ChunkAccess chunk, CallbackInfo ci) {
         final ChunkPos chunkPos = chunk.getPos();
         final RandomSource random = new XoroshiroRandomSource(chunkPos.x * 2369412341L, chunkPos.z * 8192836412341L);
         final LevelChunkSection bottomSection = chunk.getSection(0);
@@ -229,37 +229,37 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
         }
     }
 
+	@Unique
+	private final Block tfg$marble = TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.RAW).get();
+	@Unique
+	private final Block tfg$gabbro = TFCBlocks.ROCK_BLOCKS.get(Rock.GABBRO).get(Rock.BlockType.RAW).get();
+	@Unique
+	private final Block tfg$diorite = TFCBlocks.ROCK_BLOCKS.get(Rock.DIORITE).get(Rock.BlockType.RAW).get();
+
+	@Unique
+	private BlockState tfg$getHornfels(RockSettings rockSettings) {
+		var raw = rockSettings.raw();
+		if (raw == tfg$marble) {
+			// marble is the only sedimentary carbonate that can spawn this deep
+			return TFGBlocks_Earth.CARBONATE_HORNFELS.getDefaultState();
+		} else if (raw == tfg$gabbro || raw == tfg$diorite) {
+			// diorite is intermediate so it's an honorary mafic
+			return TFGBlocks_Earth.MAFIC_HORNFELS.getDefaultState();
+		} else {
+			// this is for metamorphics, but felsics can get it too
+			return TFGBlocks_Earth.PELITIC_HORNFELS.getDefaultState();
+		}
+	}
+
     @Inject(method = "applyBiomeDecoration", at = @At("HEAD"), remap = true)
     private void tfg$outputBiomes(WorldGenLevel level, ChunkAccess chunk, StructureManager structureFeatureManager, CallbackInfo ci) {
         var middlePos = chunk.getPos().getMiddleBlockPosition(chunk.getHeight());
 
         var savedData = BedrockFluidVeinSavedData.getOrCreate(level.getLevel());
         ClimateWeightModifier.CHUNK_ACCESS_CACHE.put(new ChunkPos(middlePos), chunk);
-        var entry = savedData.getFluidVeinWorldEntry(chunk.getPos().x, chunk.getPos().z);
+        savedData.getFluidVeinWorldEntry(chunk.getPos().x, chunk.getPos().z);
 
         ClimateWeightModifier.CHUNK_ACCESS_CACHE.remove(new ChunkPos(middlePos));
-    }
-
-    @Unique
-    private final Block tfg$marble = TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.RAW).get();
-    @Unique
-    private final Block tfg$gabbro = TFCBlocks.ROCK_BLOCKS.get(Rock.GABBRO).get(Rock.BlockType.RAW).get();
-    @Unique
-    private final Block tfg$diorite = TFCBlocks.ROCK_BLOCKS.get(Rock.DIORITE).get(Rock.BlockType.RAW).get();
-
-    @Unique
-    private BlockState tfg$getHornfels(RockSettings rockSettings) {
-        var raw = rockSettings.raw();
-        if (raw == tfg$marble) {
-            // marble is the only sedimentary carbonate that can spawn this deep
-            return TFGBlocks_Earth.CARBONATE_HORNFELS.getDefaultState();
-        } else if (raw == tfg$gabbro || raw == tfg$diorite) {
-            // diorite is intermediate so it's an honorary mafic
-            return TFGBlocks_Earth.MAFIC_HORNFELS.getDefaultState();
-        } else {
-            // this is for metamorphics, but felsics can get it too
-            return TFGBlocks_Earth.PELITIC_HORNFELS.getDefaultState();
-        }
     }
 
     @Unique
