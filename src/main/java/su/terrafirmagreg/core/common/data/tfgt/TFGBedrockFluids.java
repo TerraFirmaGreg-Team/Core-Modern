@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFGBedrockFluids {
@@ -84,11 +85,9 @@ public class TFGBedrockFluids {
     // Common — everywhere except true ocean, shore/island, dry biomes
     // Can't exclude so make it as : is_normal + is_mountain + is_cold + is_karst + is_fresh_water + is_volcanic + is_river
 
-    /*public static Fluid muddy_water = ForgeRegistries.FLUIDS.getValue(ResourceLocation.fromNamespaceAndPath("tfg", "muddy_water"));
-    
     public static BedrockFluidDefinition MUDDY_WATER = create(TFGCore.id("muddy_water"), vein -> vein
             .dimensions(overworld)
-            .fluid()
+            .fluid(TFGFluids.MUDDY_WATER::getSource)
             .weight(0)
             .minimumYield(5)
             .maximumYield(100)
@@ -102,7 +101,7 @@ public class TFGBedrockFluids {
             .biomes(5, TFGTags.Biomes.EarthIsFreshWater)
             .biomes(5, TFGTags.Biomes.EarthIsVolcanic)
             .biomes(5, TFGTags.Biomes.EarthIsRiver));
-    */
+
     // =========================================================
     // SPRING WATER
     // =========================================================

@@ -39,6 +39,20 @@ public class TFGFluids {
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
 
+    public static final FluidRegistryObject<ForgeFlowingFluid> MUDDY_WATER = register(
+            "muddy_water",
+            properties -> properties
+                    .block(TFGBlocks.MUDDY_WATER)
+                    .bucket(TFGItems.MUDDY_WATER_BUCKET),
+            waterLike()
+                    .temperature(273)
+                    .descriptionId("fluid.tfg.muddy_water"),
+
+            new FluidTypeClientProperties(ALPHA_MASK | 0x734B26, WATER_STILL, WATER_FLOW, WATER_OVERLAY,
+                    UNDERWATER_LOCATION),
+            MixingFluid.Source::new,
+            MixingFluid.Flowing::new);
+
     public static final FluidRegistryObject<ForgeFlowingFluid> SULFUR_FUMES = register(
             "sulfur_fumes",
             properties -> properties

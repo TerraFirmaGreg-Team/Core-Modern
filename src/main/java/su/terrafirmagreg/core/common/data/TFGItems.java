@@ -85,6 +85,13 @@ public class TFGItems {
             .register();
 
     @SuppressWarnings("deprecation")
+    public static final ItemEntry<BucketItem> MUDDY_WATER_BUCKET = TFGCore.REGISTRATE.item("muddy_water_bucket",
+            p -> new BucketItem(TFGFluids.MUDDY_WATER.getSource(), p))
+            .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .register();
+
+    @SuppressWarnings("deprecation")
     public static final ItemEntry<BucketItem> SULFUR_FUMES_BUCKET = TFGCore.REGISTRATE.item("sulfur_fumes_bucket",
             p -> new BucketItem(TFGFluids.SULFUR_FUMES.getSource(), p))
             .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))

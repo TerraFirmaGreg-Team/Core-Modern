@@ -75,6 +75,8 @@ public class ClientProxy extends CommonProxy {
 
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getSource(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGFluids.MUDDY_WATER.getFlowing(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TFGFluids.MUDDY_WATER.getSource(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.SULFUR_FUMES.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.SULFUR_FUMES.getSource(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getFlowing(), RenderType.translucent());

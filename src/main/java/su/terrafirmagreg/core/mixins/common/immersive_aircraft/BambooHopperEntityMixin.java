@@ -26,7 +26,8 @@ public abstract class BambooHopperEntityMixin extends AirplaneEntity {
             TFCFluids.SALT_WATER.type().get(),
             TFCFluids.SPRING_WATER.type().get(),
             TFCFluids.RIVER_WATER.get().getFluidType(),
-            TFGFluids.MARS_WATER.type().get()
+            TFGFluids.MARS_WATER.type().get(),
+            TFGFluids.MUDDY_WATER.type().get()
     };
 
     private BambooHopperEntityMixin(EntityType<? extends AircraftEntity> entityType, Level world,
