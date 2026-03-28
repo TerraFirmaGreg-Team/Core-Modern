@@ -127,40 +127,6 @@ public final class ForgeCommonEventListener {
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(BedrockFluidSpoutLoader.INSTANCE);
     }
-    /*
-    @SubscribeEvent
-    public static void onChunkLoad(ChunkEvent.Load event) {
-        if (event.getLevel().isClientSide())
-            return;
-        if (!event.isNewChunk())
-            return;
-        if (!(event.getLevel() instanceof ServerLevel serverLevel))
-            return;
-    
-        ChunkPos chunkPos = event.getChunk().getPos();
-    
-        var savedData = BedrockFluidVeinSavedData.getOrCreate(serverLevel);
-        var entry = savedData.getFluidVeinWorldEntry(chunkPos.x, chunkPos.z);
-    
-        if (entry == null || entry.getVeinId() == null)
-            return;
-    
-        String veinId = entry.getVeinId();
-    
-        ResourceLocation featureId = BedrockFluidSpoutLoader.VEIN_TO_FEATURE.get(veinId);
-        if (featureId == null)
-            return;
-    
-        String type = BedrockFluidSpoutLoader.VEIN_TO_TYPE.get(veinId);
-        if (type == null)
-            return;
-    
-        switch (type) {
-            case "spout" -> BedrockFluidFeatureGenerator.generateSpout(serverLevel, chunkPos, featureId);
-            case "structure" -> BedrockFluidFeatureGenerator.generateStructure(serverLevel, chunkPos, featureId);
-            case "pool" -> BedrockFluidFeatureGenerator.generatePool(serverLevel, chunkPos, featureId);
-        }
-    }*/
 
     @SubscribeEvent
     public static void onLevelLoad(LevelEvent.Load event) {
@@ -184,7 +150,6 @@ public final class ForgeCommonEventListener {
                 int count = 0;
                 while (Objects.isNull(validSpawn)) {
                     ChunkPos chunkPos = new ChunkPos(random.nextInt(chunkSearchRadius * 2) - chunkSearchRadius, random.nextInt(chunkSearchRadius * 2) - chunkSearchRadius);
-                    //System.out.println("ChunkPos: " + chunkPos);
                     var testPos = chunkPos.getMiddleBlockPosition(128);
 
                     int buildHeightLimit = Math.min(targetLevel.getMaxBuildHeight(), targetLevel.getMinBuildHeight() + targetLevel.getLogicalHeight()) - 1;
@@ -209,7 +174,7 @@ public final class ForgeCommonEventListener {
                         System.out.print(!blockB.isCollisionShapeFullBlock(targetLevel, mutableTestPos.immutable()));
                         System.out.println(blockC);
                         System.out.print(blockC.isCollisionShapeFullBlock(targetLevel, mutableTestPos.immutable()));
-                        
+
                          */
 
                         if (blockA.isAir() && !blockB.isCollisionShapeFullBlock(targetLevel, mutableTestPos.immutable())) {

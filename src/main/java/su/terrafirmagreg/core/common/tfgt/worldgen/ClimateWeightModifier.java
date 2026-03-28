@@ -39,14 +39,11 @@ public class ClimateWeightModifier {
     }
 
     public int applyAsInt(ServerLevel level, BlockPos pos) {
-        //System.out.println("attempting to find climate weight at: " + pos);
-
         ChunkData chunkData = getChunkData(level, pos);
 
         float value = mode == Mode.TEMPERATURE
                 ? chunkData.getAverageTemp(pos)
                 : chunkData.getRainfall(pos);
-        //System.out.println("found climate weight");
         return value >= min && value <= max ? addedWeight : 0;
     }
 
@@ -57,12 +54,10 @@ public class ClimateWeightModifier {
         return new ClimateWeightModifier(null, 0, 0, addedWeight) {
             @Override
             public int applyAsInt(ServerLevel level, BlockPos pos) {
-                //System.out.println("attempting to find climate weight at: " + pos);
 
                 ChunkData chunkData = getChunkData(level, pos);
                 float temp = chunkData.getAverageTemp(pos);
                 float rain = chunkData.getRainfall(pos);
-                //System.out.println("found climate weight");
 
                 return temp >= tempMin && temp <= tempMax
                         && rain >= rainMin && rain <= rainMax
@@ -80,13 +75,11 @@ public class ClimateWeightModifier {
         return new ClimateWeightModifier(null, 0, 0, addedWeight) {
             @Override
             public int applyAsInt(ServerLevel level, BlockPos pos) {
-                //System.out.println("attempting to find climate weight at: " + pos);
 
                 ChunkData chunkData = getChunkData(level, pos);
                 float temp = chunkData.getAverageTemp(pos);
                 float rain = chunkData.getRainfall(pos);
                 var biome = level.getBiome(pos).unwrapKey().orElse(null);
-                //System.out.println("found climate weight");
 
                 return temp >= tempMin && temp <= tempMax
                         && rain >= rainMin && rain <= rainMax

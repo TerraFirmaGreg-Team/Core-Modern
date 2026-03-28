@@ -93,8 +93,5 @@ public class TFGBedrockFluidClimates {
 
         // Spout - Ocean Biomes
         ClimateAndBiomeModifier(TFGCore.id("raw_oil_spout_ocean"), 15, 30, 0, 100, TRUE_OCEAN_BIOMES, 30);
-
-        //System.out.println("Debug123");
-        //TFGBedrockFluidRegistry.DebugAll();
     }
 }

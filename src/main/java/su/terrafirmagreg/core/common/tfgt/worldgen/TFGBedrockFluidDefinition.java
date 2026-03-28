@@ -20,18 +20,7 @@ public class TFGBedrockFluidDefinition {
         climateModifiers.add(modifier);
     }
 
-    public void debugModifiers() {
-        for (ClimateWeightModifier modifier : climateModifiers) {
-            System.out.println(id);
-            System.out.println(modifier.getMode());
-            System.out.println(modifier.getMin());
-            System.out.println(modifier.getMax());
-        }
-    }
-
     public int getClimateWeight(ServerLevel level, BlockPos pos) {
-        //System.out.println("getClimateWeight");
-        //System.out.println(climateModifiers);
         int total = 0;
         for (ClimateWeightModifier modifier : climateModifiers) {
             total += modifier.applyAsInt(level, pos);
