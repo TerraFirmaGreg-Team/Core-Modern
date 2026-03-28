@@ -100,6 +100,7 @@
         "common.gtceu.ModelManagerMixin",
         "common.gtceu.MultiblockInfoEmiCategoryMixin",
         "common.gtceu.NotifiableItemStackHandlerMixin",
+        "common.gtceu.ProspectorModeMixin",
         "common.gtceu.ProtectionTypeMixin",
         "common.gtceu.QuarkTechSuiteMixin",
         "common.gtceu.SteamBoilerMachineMixin",

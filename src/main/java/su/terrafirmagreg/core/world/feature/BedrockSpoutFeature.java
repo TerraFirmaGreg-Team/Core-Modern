@@ -41,8 +41,8 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
         if (fluid.isSame(Fluids.EMPTY))
             return false;
 
-		if (!config.allowedFluids().contains(fluid))
-			return false;
+        if (!config.allowedFluids().contains(fluid))
+            return false;
 
         final int surfaceHeight = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, blockpos.getX(), blockpos.getZ());
         if (blockpos.getY() >= surfaceHeight)

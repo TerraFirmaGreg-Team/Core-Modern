@@ -67,7 +67,7 @@ import net.minecraftforge.common.Tags;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
-import su.terrafirmagreg.core.common.tfgt.worldgen.ClimateWeightModifier;
+import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidDefinition;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
@@ -255,11 +255,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     private void tfg$outputBiomes(WorldGenLevel level, ChunkAccess chunk, StructureManager structureFeatureManager, CallbackInfo ci) {
         var middlePos = chunk.getPos().getMiddleBlockPosition(chunk.getHeight());
 
-        var savedData = BedrockFluidVeinSavedData.getOrCreate(level.getLevel());
-        ClimateWeightModifier.CHUNK_ACCESS_CACHE.put(new ChunkPos(middlePos), chunk);
-        savedData.getFluidVeinWorldEntry(chunk.getPos().x, chunk.getPos().z);
-
-        ClimateWeightModifier.CHUNK_ACCESS_CACHE.remove(new ChunkPos(middlePos));
+        TFGBedrockFluidDefinition.safelyGetFluidVein(chunk, BedrockFluidVeinSavedData.getOrCreate(level.getLevel()));
     }
 
     @Unique
