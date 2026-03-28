@@ -102,6 +102,14 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_DUFF.get(), RenderType.cutoutMipped());
             TFGBlocks_Earth.PLANTS.forEach((plant, block) -> ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutoutMipped()));
+
+            // Fruit Trees.
+            for (TFGFruitTree.FruitTreeType tree : TFGFruitTree.FruitTreeType.values()) {
+                ItemBlockRenderTypes.setRenderLayer(TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree).get(), RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(TFGFruitTree.FRUIT_TREE_POTTED_SAPLINGS.get(tree).get(), RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(TFGFruitTree.FRUIT_TREE_LEAVES.get(tree).get(), RenderType.cutoutMipped());
+                ItemBlockRenderTypes.setRenderLayer(TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree).get(), RenderType.cutout());
+            }
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }

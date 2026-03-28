@@ -13,6 +13,5 @@ public class TFGBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-
     }
 }

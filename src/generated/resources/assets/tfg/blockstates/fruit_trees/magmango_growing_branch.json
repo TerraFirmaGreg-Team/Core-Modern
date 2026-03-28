@@ -1,0 +1,60 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tfg:block/fruit_trees/magmango_branch_core"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/fruit_trees/magmango_branch_down"
+      },
+      "when": {
+        "down": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/fruit_trees/magmango_branch_up"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/fruit_trees/magmango_branch_side",
+        "y": 90
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/fruit_trees/magmango_branch_side",
+        "y": 270
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/fruit_trees/magmango_branch_side"
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/fruit_trees/magmango_branch_side",
+        "y": 180
+      },
+      "when": {
+        "east": "true"
+      }
+    }
+  ]
+}
