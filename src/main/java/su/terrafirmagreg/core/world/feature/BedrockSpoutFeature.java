@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.world.feature;
 
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.mojang.serialization.Codec;
 
 import net.dries007.tfc.world.chunkdata.ChunkData;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.material.Fluids;
 
 public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
 
@@ -38,13 +38,14 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
             return false;
 
         final var fluid = vein.getStoredFluid().get();
-        if (fluid.isSame(Fluids.EMPTY))
+
+        if (fluid != GTMaterials.Oil.getFluid()
+                && fluid != GTMaterials.RawOil.getFluid()
+                && fluid != GTMaterials.OilLight.getFluid()
+                && fluid != GTMaterials.OilHeavy.getFluid())
             return false;
 
-        if (!config.allowedFluids().contains(fluid))
-            return false;
-
-        final int surfaceHeight = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, blockpos.getX(), blockpos.getZ());
+        final int surfaceHeight = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, blockpos.getX(), blockpos.getZ()) - 1;
         if (blockpos.getY() >= surfaceHeight)
             return false;
 

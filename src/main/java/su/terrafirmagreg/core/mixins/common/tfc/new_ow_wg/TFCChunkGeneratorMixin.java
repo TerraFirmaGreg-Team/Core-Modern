@@ -253,8 +253,6 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
 
     @Inject(method = "applyBiomeDecoration", at = @At("HEAD"), remap = true)
     private void tfg$outputBiomes(WorldGenLevel level, ChunkAccess chunk, StructureManager structureFeatureManager, CallbackInfo ci) {
-        var middlePos = chunk.getPos().getMiddleBlockPosition(chunk.getHeight());
-
         TFGBedrockFluidDefinition.safelyGetFluidVein(chunk, BedrockFluidVeinSavedData.getOrCreate(level.getLevel()));
     }
 

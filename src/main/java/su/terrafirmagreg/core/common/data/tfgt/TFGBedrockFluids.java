@@ -97,7 +97,6 @@ public class TFGBedrockFluids {
             .depletionAmount(1)
             .depletionChance(100)
             .depletedYield(10)
-            .biomes(10, TFGTags.Biomes.EarthIsSwamp)
             .biomes(5, TFGTags.Biomes.EarthIsNormal)
             .biomes(5, TFGTags.Biomes.EarthIsMountain)
             .biomes(5, TFGTags.Biomes.EarthIsCold)
@@ -105,6 +104,17 @@ public class TFGBedrockFluids {
             .biomes(5, TFGTags.Biomes.EarthIsFreshWater)
             .biomes(5, TFGTags.Biomes.EarthIsVolcanic)
             .biomes(5, TFGTags.Biomes.EarthIsRiver));
+
+    public static BedrockFluidDefinition MUDDY_WATER_SWAMP = create(TFGCore.id("muddy_water_swamp"), vein -> vein
+            .dimensions(overworld)
+            .fluid(TFGFluids.MUDDY_WATER::getSource)
+            .weight(0)
+            .minimumYield(5)
+            .maximumYield(100)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(10)
+            .biomes(10, TFGTags.Biomes.EarthIsSwamp));
 
     // =========================================================
     // SPRING WATER
@@ -205,7 +215,7 @@ public class TFGBedrockFluids {
             .dimensions(overworld)
             .fluid(GTMaterials.OilHeavy::getFluid)
             .weight(0)
-            .minimumYield(150)
+            .minimumYield(155)
             .maximumYield(250)
             .depletionAmount(1)
             .depletionChance(100)
