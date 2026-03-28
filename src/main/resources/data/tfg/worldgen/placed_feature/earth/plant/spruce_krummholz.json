@@ -2,8 +2,8 @@
     "feature": "tfc:tree/spruce_krummholz",
     "placement": [
         {
-            "chance": 3,
-            "type": "minecraft:rarity_filter"
+            "count": 2,
+            "type": "minecraft:count"
         },
         {"type": "minecraft:in_square"},
         {
