@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "lifecycle=dormant": {
+      "model": "tfg:block/fruit_trees/magmango_dry_leaves"
+    },
+    "lifecycle=flowering": {
+      "model": "tfg:block/fruit_trees/magmango_flowering_leaves"
+    },
+    "lifecycle=fruiting": {
+      "model": "tfg:block/fruit_trees/magmango_fruiting_leaves"
+    },
+    "lifecycle=healthy": {
+      "model": "tfg:block/fruit_trees/magmango_leaves"
+    }
+  }
+}
