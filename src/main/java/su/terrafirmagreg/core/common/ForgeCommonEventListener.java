@@ -174,7 +174,7 @@ public final class ForgeCommonEventListener {
                         System.out.print(!blockB.isCollisionShapeFullBlock(targetLevel, mutableTestPos.immutable()));
                         System.out.println(blockC);
                         System.out.print(blockC.isCollisionShapeFullBlock(targetLevel, mutableTestPos.immutable()));
-
+                        
                          */
 
                         if (blockA.isAir() && !blockB.isCollisionShapeFullBlock(targetLevel, mutableTestPos.immutable())) {
