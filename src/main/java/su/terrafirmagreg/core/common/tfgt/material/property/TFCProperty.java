@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.tfgt.properties;
+package su.terrafirmagreg.core.common.tfgt.material.property;
 
 import javax.annotation.Nullable;
 

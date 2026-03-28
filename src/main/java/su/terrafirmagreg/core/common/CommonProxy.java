@@ -29,7 +29,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
 import su.terrafirmagreg.core.common.entity.ai.TFGBrain;
-import su.terrafirmagreg.core.common.tfgt.materials.TFGMaterialHandler;
+import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
 import su.terrafirmagreg.core.compat.create.CustomArmInteractionPointTypes;
