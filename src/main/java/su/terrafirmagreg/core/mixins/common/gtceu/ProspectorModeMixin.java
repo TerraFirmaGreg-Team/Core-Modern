@@ -14,7 +14,6 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidDefinition;
 
 @Mixin(targets = "com.gregtechceu.gtceu.api.gui.misc.ProspectorMode$2", remap = false)
-@Debug(export = true)
 public class ProspectorModeMixin {
 
     @Redirect(method = "scan([[[Lcom/gregtechceu/gtceu/api/gui/misc/ProspectorMode$FluidInfo;Lnet/minecraft/world/level/chunk/LevelChunk;)V", at = @At(value = "INVOKE", target = "com/gregtechceu/gtceu/api/data/worldgen/bedrockfluid/BedrockFluidVeinSavedData.getFluidVeinWorldEntry (II)Lcom/gregtechceu/gtceu/api/data/worldgen/bedrockfluid/FluidVeinWorldEntry;"))
