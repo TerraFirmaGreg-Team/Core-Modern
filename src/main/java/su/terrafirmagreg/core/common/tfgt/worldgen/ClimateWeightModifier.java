@@ -1,9 +1,9 @@
 package su.terrafirmagreg.core.common.tfgt.worldgen;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import lombok.Getter;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.minecraft.core.BlockPos;
@@ -13,9 +13,10 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
+@Getter
 public class ClimateWeightModifier {
 
-    public static final Map<ChunkPos, ChunkAccess> CHUNK_ACCESS_CACHE = new HashMap<>();
+    public static final ConcurrentHashMap<ChunkPos, ChunkAccess> CHUNK_ACCESS_CACHE = new ConcurrentHashMap<>();
 
     public enum Mode {
         TEMPERATURE, RAINFALL
@@ -88,21 +89,5 @@ public class ClimateWeightModifier {
                                 : 0;
             }
         };
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    public float getMin() {
-        return min;
-    }
-
-    public float getMax() {
-        return max;
-    }
-
-    public int getAddedWeight() {
-        return addedWeight;
     }
 }
