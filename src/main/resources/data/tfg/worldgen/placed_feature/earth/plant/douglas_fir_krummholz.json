@@ -2,8 +2,8 @@
     "feature": "tfc:tree/douglas_fir_krummholz",
     "placement": [
         {
-            "chance": 3,
-            "type": "minecraft:rarity_filter"
+            "count": 2,
+            "type": "minecraft:count"
         },
         {"type": "minecraft:in_square"},
         {
@@ -11,13 +11,13 @@
             "type": "minecraft:heightmap"
         },
         {
-            "max_temperature": 3.6,
+            "max_temperature": -5,
             "max_rainfall": 500,
             "max_forest": "old_growth",
             "type": "tfc:climate",
             "min_rainfall": 270,
             "min_forest": "edge",
-            "min_temperature": -17.2
+            "min_temperature": -18.2
         }
     ],
     "__comment__": "This file was automatically created by mcresources"

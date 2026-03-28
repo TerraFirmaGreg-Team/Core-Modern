@@ -113,10 +113,6 @@ public class TFGBlocks_Mars {
     static {
         MARS_DIRT = createDirt("grass/mars_dirt", () -> RUSTICUS_MYCELIUM.get(), () -> MARS_PATH.get(), () -> MARS_FARMLAND.get(), null, null);
 
-        MARS_CLAY = createClay("grass/mars_clay_dirt", RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null);
-        MARS_PATH = createPath("grass/mars_path", MARS_DIRT);
-        MARS_FARMLAND = createFarmland("grass/mars_farmland", MARS_DIRT);
-
         AMBER_MYCELIUM = createGrass("grass/amber_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, amber_properties);
         AMBER_CLAY_MYCELIUM = createClayGrass("grass/amber_clay_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, amber_properties);
         AMBER_KAOLIN_MYCELIUM = createKaolin("grass/amber_kaolin_mycelium", amber_properties);
@@ -128,6 +124,10 @@ public class TFGBlocks_Mars {
         SANGNUM_MYCELIUM = createGrass("grass/sangnum_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, sangnum_properties);
         SANGNUM_CLAY_MYCELIUM = createClayGrass("grass/sangnum_clay_mycelium", MARS_DIRT, MARS_PATH, MARS_FARMLAND, sangnum_properties);
         SANGNUM_KAOLIN_MYCELIUM = createKaolin("grass/sangnum_kaolin_mycelium", sangnum_properties);
+
+        MARS_CLAY = createClay("grass/mars_clay_dirt", RUSTICUS_MYCELIUM, MARS_PATH, MARS_FARMLAND, null, null);
+        MARS_PATH = createPath("grass/mars_path", MARS_DIRT);
+        MARS_FARMLAND = createFarmland("grass/mars_farmland", MARS_DIRT);
     }
 
     private static BlockEntry<ConnectedGrassBlock> createKaolin(String id, NonNullUnaryOperator<BlockBehaviour.Properties> props) {
