@@ -87,10 +87,18 @@ public final class TFGFruitTree {
         LAVACADO(
                 10,
                 new Lifecycle[] {
-                        Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY,
-                        Lifecycle.HEALTHY, Lifecycle.FLOWERING, Lifecycle.FLOWERING, Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT
+                        Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.FLOWERING, Lifecycle.FLOWERING,
+                        Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.HEALTHY
                 },
                 new Color(249, 255, 123).getRGB(),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "the_nether")),
+        MAGMANGO(
+                10,
+                new Lifecycle[] {
+                        Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.FLOWERING, Lifecycle.FLOWERING, Lifecycle.FRUITING, Lifecycle.DORMANT,
+                        Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.HEALTHY, Lifecycle.HEALTHY, Lifecycle.HEALTHY
+                },
+                new Color(205, 76, 59).getRGB(),
                 ResourceLocation.fromNamespaceAndPath("minecraft", "the_nether"));
 
         public static final FoodProperties FRUIT_FOOD = new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).build();
