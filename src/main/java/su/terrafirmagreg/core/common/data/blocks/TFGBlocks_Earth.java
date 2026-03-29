@@ -42,9 +42,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.CoarseDirtBlock;
-import su.terrafirmagreg.core.common.block.ConnectedDuffBlock;
-import su.terrafirmagreg.core.common.block.TierLockedBlock;
+import su.terrafirmagreg.core.common.block.*;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 
 @SuppressWarnings("unused")
@@ -226,17 +224,15 @@ public class TFGBlocks_Earth {
             .item(BlockItem::new).build()
             .register();
 
-    public static final BlockEntry<HoneyBlock> OIL_TAR = TFGCore.REGISTRATE.block("oil_tar", HoneyBlock::new)
-            .properties(p -> p
-                    .mapColor(MapColor.COLOR_BLACK)
-                    .strength(2.0F)
-                    .speedFactor(0.4F)
-                    .jumpFactor(0.5F)
-                    .sound(SoundType.HONEY_BLOCK))
-            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/fluid_vein/oil_tar")))
-            .tag(BlockTags.MINEABLE_WITH_SHOVEL)
-            .item(BlockItem::new).build()
-            .register();
+    public static BlockEntry<OilTarBlock> OIL_TAR = createOilTar("oil");
+    public static BlockEntry<OilTarBlock> RAW_OIL_TAR = createOilTar("raw_oil");
+    public static BlockEntry<OilTarBlock> LIGHT_OIL_TAR = createOilTar("light_oil");
+    public static BlockEntry<OilTarBlock> HEAVY_OIL_TAR = createOilTar("heavy_oil");
+
+    public static BlockEntry<OilSlickBlock> OIL_SLICK = createOilSlick("oil");
+    public static BlockEntry<OilSlickBlock> RAW_OIL_SLICK = createOilSlick("raw_oil");
+    public static BlockEntry<OilSlickBlock> LIGHT_OIL_SLICK = createOilSlick("light_oil");
+    public static BlockEntry<OilSlickBlock> HEAVY_OIL_SLICK = createOilSlick("heavy_oil");
 
     // These are done separately to avoid cyclic references
     static {
@@ -509,4 +505,33 @@ public class TFGBlocks_Earth {
                 .simpleItem()
                 .register();
     }
+
+    private static BlockEntry<OilTarBlock> createOilTar(String oilType) {
+        return TFGCore.REGISTRATE.block(oilType + "_tar", OilTarBlock::new)
+                .properties(p -> p
+                        .mapColor(MapColor.COLOR_BLACK)
+                        .strength(2.0F)
+                        .speedFactor(0.2F)
+                        .jumpFactor(0.4F)
+                        .sound(SoundType.HONEY_BLOCK))
+                .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/fluid_vein/" + oilType + "_tar")))
+                .tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new).build()
+                .register();
+    }
+
+    //I don't know how to get it to use my custom model, but putting it in kjs works
+    private static BlockEntry<OilSlickBlock> createOilSlick(String oilType) {
+        return TFGCore.REGISTRATE.block(oilType + "_slick", OilSlickBlock::new)
+                .properties(p -> p
+                        .mapColor(MapColor.COLOR_BLACK)
+                        .strength(1.0F)
+                        .speedFactor(0.6F)
+                        .sound(SoundType.SLIME_BLOCK))
+                .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/fluid_vein/" + oilType + "_tar")))
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new).build()
+                .register();
+    }
+
 }

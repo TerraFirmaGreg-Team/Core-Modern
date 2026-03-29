@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
-import net.dries007.tfc.world.settings.RockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -16,6 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 
 public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
 
@@ -51,8 +52,8 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
 
         final ChunkDataProvider provider = ChunkDataProvider.get(context.chunkGenerator());
         final ChunkData data = provider.get(level, blockpos);
-        RockSettings rock = data.getRockData().getRock(blockpos);
-        final BlockState rockBlockState = rock.raw().defaultBlockState();
+        //RockSettings rock = data.getRockData().getRock(blockpos);
+        final BlockState outerBlockState = TFGBlocks_Earth.GILSONITE.getDefaultState();
         final BlockState fluidBlockState = fluid.defaultFluidState().createLegacyBlock();
 
         int size = config.size().sample(random);
@@ -86,7 +87,7 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
                     if (distFromCenter > 1)
                         continue;
 
-                    BlockState state = distFromCenter > 0.75 ? rockBlockState : fluidBlockState;
+                    BlockState state = distFromCenter > 0.75 ? outerBlockState : fluidBlockState;
                     mutablePos.set(x0 + x, y0 + y, z0 + z);
                     if (!level.isOutsideBuildHeight(mutablePos)) {
                         level.getChunk(mutablePos).setBlockState(mutablePos, state, false);
@@ -110,9 +111,9 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
             }
 
             if (currentY <= surfaceHeight) {
-				rock = data.getRockData().getRock(currentX, currentY, currentZ);
+                //rock = data.getRockData().getRock(currentX, currentY, currentZ);
 
-                var edgeState = currentY < surfaceHeight && currentY > topOfSphere ? rock.raw().defaultBlockState() : fluidBlockState;
+                var edgeState = currentY < surfaceHeight && currentY > topOfSphere ? outerBlockState : fluidBlockState;
 
                 setIfValid(level, mutablePos, currentX + 1, currentY, currentZ, fluidBlockState);
                 setIfValid(level, mutablePos, currentX - 1, currentY, currentZ, fluidBlockState);
@@ -126,9 +127,18 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
                 setIfValid(level, mutablePos, currentX - 2, currentY, currentZ, edgeState);
                 setIfValid(level, mutablePos, currentX, currentY, currentZ + 2, edgeState);
                 setIfValid(level, mutablePos, currentX, currentY, currentZ - 2, edgeState);
+                //Added these too, might not use
+                setIfValid(level, mutablePos, currentX + 1, currentY, currentZ + 2, edgeState);
+                setIfValid(level, mutablePos, currentX + 1, currentY, currentZ - 2, edgeState);
+                setIfValid(level, mutablePos, currentX - 1, currentY, currentZ + 2, edgeState);
+                setIfValid(level, mutablePos, currentX - 1, currentY, currentZ - 2, edgeState);
+                setIfValid(level, mutablePos, currentX + 2, currentY, currentZ + 1, edgeState);
+                setIfValid(level, mutablePos, currentX + 2, currentY, currentZ - 1, edgeState);
+                setIfValid(level, mutablePos, currentX - 2, currentY, currentZ + 1, edgeState);
+                setIfValid(level, mutablePos, currentX - 2, currentY, currentZ - 1, edgeState);
             }
-        }
 
+        }
         return placedAmount > 0;
     }
 
