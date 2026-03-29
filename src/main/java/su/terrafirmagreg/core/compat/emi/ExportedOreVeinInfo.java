@@ -324,32 +324,32 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("soapstone", 30),new OreVeinInfoRecipe.WeightedBlock("talc", 20),new OreVeinInfoRecipe.WeightedBlock("glauconite_sand", 25),new OreVeinInfoRecipe.WeightedBlock("pentlandite", 15),new OreVeinInfoRecipe.WeightedBlock("trona", 10),},
 				null),
 			new OreVeinInfoRecipe("deep_lazurite_calcite", "minecraft:overworld", 
-				180, 0.2, -50, 20, 0, 60, 10, new String[] {
+				130, 0.24, -50, 20, 0, 60, 10, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("lazurite", 33),new OreVeinInfoRecipe.WeightedBlock("sodalite", 26),new OreVeinInfoRecipe.WeightedBlock("lapis", 20),new OreVeinInfoRecipe.WeightedBlock("calcite", 20),},
 				null),
 			new OreVeinInfoRecipe("deep_graphite", "minecraft:overworld", 
-				140, 0.1, -50, 0, 0, 150, 18, new String[] {
+				140, 0.14, -50, 0, 0, 150, 18, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("graphite", 60),new OreVeinInfoRecipe.WeightedBlock("diamond", 40),},
 				new String[] {"ore_vein.tfg.deep_graphite.emi.0"}),
 			new OreVeinInfoRecipe("deep_tin", "minecraft:overworld", 
-				210, 0.2, -50, 20, 25, 0, 0, new String[] {
+				210, 0.24, -50, 20, 30, 0, 0, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("cassiterite", 87),new OreVeinInfoRecipe.WeightedBlock("tin", 12),},
 				null),
 			new OreVeinInfoRecipe("deep_bauxite", "minecraft:overworld", 
-				360, 0.12, -50, 20, 14, 0, 0, new String[] {
-				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				310, 0.16, -50, 20, 24, 0, 0, new String[] {
+				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("bauxite", 30),new OreVeinInfoRecipe.WeightedBlock("ilmenite", 70),},
 				null),
 			new OreVeinInfoRecipe("deep_copper_tin", "minecraft:overworld", 
-				260, 0.22, -50, 20, 29, 0, 0, new String[] {
-				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				210, 0.26, -50, 20, 39, 0, 0, new String[] {
+				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("chalcopyrite", 53),new OreVeinInfoRecipe.WeightedBlock("zeolite", 23),new OreVeinInfoRecipe.WeightedBlock("cassiterite", 23),},
 				null),
 			new OreVeinInfoRecipe("deep_thorianite", "minecraft:overworld", 
-				320, 0.14, -50, 20, 18, 0, 0, new String[] {
+				270, 0.18, -50, 20, 28, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("thorium", 44),new OreVeinInfoRecipe.WeightedBlock("uraninite", 22),new OreVeinInfoRecipe.WeightedBlock("emerald", 11),new OreVeinInfoRecipe.WeightedBlock("beryllium", 22),},
 				null),
@@ -369,12 +369,12 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("mica", 100),},
 				new String[] {"ore_vein.tfg.surface_mica.emi.0", "ore_vein.tfg.surface_mica.emi.1"}),
 			new OreVeinInfoRecipe("deep_nickel", "minecraft:overworld", 
-				230, 0.2, -50, 20, 26, 0, 0, new String[] {
+				180, 0.24, -50, 20, 36, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("garnierite", 36),new OreVeinInfoRecipe.WeightedBlock("nickel", 21),new OreVeinInfoRecipe.WeightedBlock("cobaltite", 26),new OreVeinInfoRecipe.WeightedBlock("pentlandite", 15),},
 				null),
 			new OreVeinInfoRecipe("high_tetrahedrite", "minecraft:overworld", 
-				140, 0.25, 110, 160, 25, 0, 0, new String[] {
+				60, 0.25, 110, 160, 25, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("tetrahedrite", 50),new OreVeinInfoRecipe.WeightedBlock("copper", 30),new OreVeinInfoRecipe.WeightedBlock("stibnite", 20),},
 				null),
@@ -404,7 +404,7 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("coal", 90),new OreVeinInfoRecipe.WeightedBlock("diamond", 10),},
 				null),
 			new OreVeinInfoRecipe("deep_sapphire", "minecraft:overworld", 
-				230, 0.15, -50, 20, 0, 60, 10, new String[] {
+				180, 0.19, -50, 20, 0, 60, 10, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("almandine", 16),new OreVeinInfoRecipe.WeightedBlock("pyrope", 24),new OreVeinInfoRecipe.WeightedBlock("sapphire", 32),new OreVeinInfoRecipe.WeightedBlock("green_sapphire", 26),},
 				null),
@@ -414,7 +414,7 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("chalcopyrite", 53),new OreVeinInfoRecipe.WeightedBlock("pyrite", 30),new OreVeinInfoRecipe.WeightedBlock("copper", 15),},
 				null),
 			new OreVeinInfoRecipe("high_realgar", "minecraft:overworld", 
-				160, 0.25, 90, 170, 20, 5, 0, new String[] {
+				70, 0.25, 90, 170, 20, 5, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("chalcopyrite", 53),new OreVeinInfoRecipe.WeightedBlock("zeolite", 26),new OreVeinInfoRecipe.WeightedBlock("realgar", 20),},
 				null),
@@ -425,26 +425,26 @@ package su.terrafirmagreg.core.compat.emi;
 				new String[] {"ore_vein.tfg.surface_native_copper.emi.0", "ore_vein.tfg.surface_native_copper.emi.1"}),
 			new OreVeinInfoRecipe("normal_galena", "minecraft:overworld", 
 				230, 0.1, 0, 60, 15, 0, 0, new String[] {
-				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("galena", 77),new OreVeinInfoRecipe.WeightedBlock("silver", 22),},
 				null),
 			new OreVeinInfoRecipe("deep_mineral_sand", "minecraft:overworld", 
-				240, 0.2, -50, 20, 24, 0, 0, new String[] {
-				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				190, 0.24, -50, 20, 34, 0, 0, new String[] {
+				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("basaltic_mineral_sand", 38),new OreVeinInfoRecipe.WeightedBlock("granitic_mineral_sand", 19),new OreVeinInfoRecipe.WeightedBlock("fullers_earth", 19),new OreVeinInfoRecipe.WeightedBlock("gypsum", 23),},
 				null),
 			new OreVeinInfoRecipe("surface_sylvite_salt", "minecraft:overworld", 
 				120, 0.15, -20, -5, 5, 0, 0, new String[] {
-				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("salt", 60),new OreVeinInfoRecipe.WeightedBlock("rock_salt", 40),},
 				new String[] {"ore_vein.tfg.surface_sylvite_salt.emi.0", "ore_vein.tfg.surface_sylvite_salt.emi.1"}),
 			new OreVeinInfoRecipe("normal_salt", "minecraft:overworld", 
-				160, 0.18, 0, 60, 20, 10, 0, new String[] {
+				160, 0.18, -20, 1, 20, 10, 0, new String[] {
 				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("salt", 60),new OreVeinInfoRecipe.WeightedBlock("rock_salt", 30),new OreVeinInfoRecipe.WeightedBlock("borax", 10),},
 				new String[] {"ore_vein.tfg.normal_salt.emi.0"}),
 			new OreVeinInfoRecipe("deep_monazite", "minecraft:overworld", 
-				340, 0.15, -50, 20, 14, 0, 0, new String[] {
+				290, 0.19, -50, 20, 24, 0, 0, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("bastnasite", 60),new OreVeinInfoRecipe.WeightedBlock("monazite", 30),new OreVeinInfoRecipe.WeightedBlock("neodymium", 10),},
 				null),
@@ -469,18 +469,18 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("yellow_limonite", 100),},
 				new String[] {"ore_vein.tfg.surface_limonite.emi.0", "ore_vein.tfg.surface_limonite.emi.1"}),
 			new OreVeinInfoRecipe("deep_asbestos", "minecraft:overworld", 
-				240, 0.2, -50, 20, 22, 5, 0, new String[] {
+				190, 0.24, -50, 20, 32, 5, 0, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("cassiterite_sand", 55),new OreVeinInfoRecipe.WeightedBlock("asbestos", 33),new OreVeinInfoRecipe.WeightedBlock("diatomite", 11),},
 				null),
 			new OreVeinInfoRecipe("deep_copper_iron", "minecraft:overworld", 
-				320, 0.18, -50, 20, 32, 0, 0, new String[] {
-				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				270, 0.22, -50, 20, 42, 0, 0, new String[] {
+				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("chalcopyrite", 37),new OreVeinInfoRecipe.WeightedBlock("goethite", 31),new OreVeinInfoRecipe.WeightedBlock("pyrite", 18),new OreVeinInfoRecipe.WeightedBlock("copper", 12),},
 				null),
 			new OreVeinInfoRecipe("normal_spodumene", "minecraft:overworld", 
 				190, 0.15, 0, 60, 15, 8, 0, new String[] {
-				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("spodumene", 75),new OreVeinInfoRecipe.WeightedBlock("rock_salt", 25),},
 				null),
 			new OreVeinInfoRecipe("high_gypsum", "minecraft:overworld", 
@@ -489,42 +489,42 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("gypsum", 100),},
 				null),
 			new OreVeinInfoRecipe("deep_apatite", "minecraft:overworld", 
-				240, 0.23, -50, 20, 24, 0, 0, new String[] {
+				190, 0.27, -50, 20, 34, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("apatite", 50),new OreVeinInfoRecipe.WeightedBlock("tricalcium_phosphate", 37),new OreVeinInfoRecipe.WeightedBlock("pyrochlore", 12),},
 				null),
 			new OreVeinInfoRecipe("deep_sulfur", "minecraft:overworld", 
-				4, 0.8, -60, -45, 18, 5, 0, new String[] {
+				34, 0.84, -60, -45, 23, 5, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("sulfur", 100),},
 				new String[] {"ore_vein.tfg.deep_sulfur.emi.0"}),
 			new OreVeinInfoRecipe("deep_saltpeter", "minecraft:overworld", 
-				310, 0.15, -50, 20, 19, 0, 0, new String[] {
-				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				260, 0.19, -50, 20, 29, 0, 0, new String[] {
+				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("saltpeter", 48),new OreVeinInfoRecipe.WeightedBlock("diatomite", 20),new OreVeinInfoRecipe.WeightedBlock("electrotine", 16),new OreVeinInfoRecipe.WeightedBlock("alunite", 16),},
 				null),
 			new OreVeinInfoRecipe("deep_molybdenum", "minecraft:overworld", 
-				260, 0.15, -50, 20, 25, 0, 0, new String[] {
+				210, 0.19, -50, 20, 35, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("wulfenite", 28),new OreVeinInfoRecipe.WeightedBlock("molybdenite", 57),new OreVeinInfoRecipe.WeightedBlock("molybdenum", 7),new OreVeinInfoRecipe.WeightedBlock("powellite", 7),},
 				null),
 			new OreVeinInfoRecipe("deep_big_redstone", "minecraft:overworld", 
-				320, 0.25, -50, 20, 29, 5, 0, new String[] {
+				270, 0.29, -50, 20, 39, 5, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("redstone", 50),new OreVeinInfoRecipe.WeightedBlock("ruby", 30),new OreVeinInfoRecipe.WeightedBlock("cinnabar", 20),},
 				null),
 			new OreVeinInfoRecipe("deep_redstone", "minecraft:overworld", 
-				120, 0.2, -50, 20, 20, 0, 0, new String[] {
+				120, 0.24, -50, 20, 25, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("redstone", 57),new OreVeinInfoRecipe.WeightedBlock("ruby", 28),new OreVeinInfoRecipe.WeightedBlock("cinnabar", 14),},
 				null),
 			new OreVeinInfoRecipe("surface_cobaltite", "minecraft:overworld", 
 				90, 0.1, -20, -5, 5, 0, 0, new String[] {
-				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("cobaltite", 100),},
 				new String[] {"ore_vein.tfg.surface_cobaltite.emi.0", "ore_vein.tfg.surface_cobaltite.emi.1"}),
 			new OreVeinInfoRecipe("deep_scheelite", "minecraft:overworld", 
-				390, 0.2, -50, 20, 12, 0, 0, new String[] {
+				340, 0.24, -50, 20, 22, 0, 0, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("scheelite", 42),new OreVeinInfoRecipe.WeightedBlock("tungstate", 42),new OreVeinInfoRecipe.WeightedBlock("lithium", 14),},
 				null),
@@ -554,7 +554,7 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("malachite", 100),},
 				new String[] {"ore_vein.tfg.surface_malachite.emi.0", "ore_vein.tfg.surface_malachite.emi.1"}),
 			new OreVeinInfoRecipe("deep_topaz", "minecraft:overworld", 
-				280, 0.1, -50, 20, 14, 0, 0, new String[] {
+				230, 0.14, -50, 20, 24, 0, 0, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("blue_topaz", 43),new OreVeinInfoRecipe.WeightedBlock("topaz", 31),new OreVeinInfoRecipe.WeightedBlock("chalcocite", 18),new OreVeinInfoRecipe.WeightedBlock("bornite", 6),},
 				null),
@@ -564,18 +564,18 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("mica", 58),new OreVeinInfoRecipe.WeightedBlock("kyanite", 41),},
 				null),
 			new OreVeinInfoRecipe("deep_bismuth", "minecraft:overworld", 
-				310, 0.2, -50, 20, 0, 60, 10, new String[] {
+				140, 0.24, -50, 20, 0, 60, 10, new String[] {
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("bismuth", 31),new OreVeinInfoRecipe.WeightedBlock("silver", 27),new OreVeinInfoRecipe.WeightedBlock("gold", 27),new OreVeinInfoRecipe.WeightedBlock("electrotine", 13),},
 				new String[] {"ore_vein.tfg.deep_bismuth.emi.0"}),
 			new OreVeinInfoRecipe("deep_magnetite_olivine", "minecraft:overworld", 
-				210, 0.2, -50, 20, 24, 0, 0, new String[] {
-				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				160, 0.24, -50, 20, 34, 0, 0, new String[] {
+				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("bentonite", 33),new OreVeinInfoRecipe.WeightedBlock("magnesite", 14),new OreVeinInfoRecipe.WeightedBlock("olivine", 7),new OreVeinInfoRecipe.WeightedBlock("glauconite_sand", 44),},
 				null),
 			new OreVeinInfoRecipe("deep_manganese", "minecraft:overworld", 
-				290, 0.15, -50, 20, 24, 0, 0, new String[] {
-				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				240, 0.19, -50, 20, 34, 0, 0, new String[] {
+				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("grossular", 42),new OreVeinInfoRecipe.WeightedBlock("pyrolusite", 38),new OreVeinInfoRecipe.WeightedBlock("tantalite", 19),},
 				null),
 			new OreVeinInfoRecipe("normal_garnierite", "minecraft:overworld", 
@@ -584,7 +584,7 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("garnierite", 52),new OreVeinInfoRecipe.WeightedBlock("nickel", 17),new OreVeinInfoRecipe.WeightedBlock("cobaltite", 30),},
 				null),
 			new OreVeinInfoRecipe("deep_tantalite", "minecraft:overworld", 
-				340, 0.2, -50, 20, 18, 0, 0, new String[] {
+				290, 0.24, -50, 20, 28, 0, 0, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("grossular", 33),new OreVeinInfoRecipe.WeightedBlock("spessartine", 27),new OreVeinInfoRecipe.WeightedBlock("pyrolusite", 22),new OreVeinInfoRecipe.WeightedBlock("tantalite", 16),},
 				null),
@@ -595,7 +595,7 @@ package su.terrafirmagreg.core.compat.emi;
 				new String[] {"ore_vein.tfg.surface_tricalcium_phosphate.emi.0", "ore_vein.tfg.surface_tricalcium_phosphate.emi.1"}),
 			new OreVeinInfoRecipe("normal_tarkianite", "minecraft:overworld", 
 				140, 0.2, 0, 60, 0, 60, 10, new String[] {
-				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("tarkianite", 53),new OreVeinInfoRecipe.WeightedBlock("borax", 30),new OreVeinInfoRecipe.WeightedBlock("trona", 15),},
 				null),
 			new OreVeinInfoRecipe("high_bismuth", "minecraft:overworld", 
@@ -604,8 +604,8 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("bismuth", 100),},
 				null),
 			new OreVeinInfoRecipe("deep_banded_iron", "minecraft:overworld", 
-				380, 0.2, -50, 20, 32, 0, 0, new String[] {
-				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				280, 0.24, -50, 20, 42, 0, 0, new String[] {
+				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("goethite", 42),new OreVeinInfoRecipe.WeightedBlock("yellow_limonite", 35),new OreVeinInfoRecipe.WeightedBlock("hematite", 21),},
 				null),
 			new OreVeinInfoRecipe("normal_cassiterite", "minecraft:overworld", 
@@ -624,23 +624,23 @@ package su.terrafirmagreg.core.compat.emi;
 				new OreVeinInfoRecipe.WeightedBlock("garnierite", 100),},
 				new String[] {"ore_vein.tfg.surface_nickel.emi.0", "ore_vein.tfg.surface_nickel.emi.1"}),
 			new OreVeinInfoRecipe("deep_kyanite", "minecraft:overworld", 
-				210, 0.15, -50, 20, 22, 0, 0, new String[] {
+				160, 0.19, -50, 20, 32, 0, 0, new String[] {
 				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("kyanite", 48),new OreVeinInfoRecipe.WeightedBlock("mica", 32),new OreVeinInfoRecipe.WeightedBlock("pollucite", 20),},
 				null),
 			new OreVeinInfoRecipe("surface_tetrahedrite", "minecraft:overworld", 
 				7, 0.2, -20, -5, 10, 0, 0, new String[] {
-				"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("tetrahedrite", 100),},
 				new String[] {"ore_vein.tfg.surface_tetrahedrite.emi.0", "ore_vein.tfg.surface_tetrahedrite.emi.1"}),
 			new OreVeinInfoRecipe("deep_iron", "minecraft:overworld", 
-				210, 0.2, -50, 20, 24, 0, 0, new String[] {
-				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				160, 0.24, -50, 20, 34, 0, 0, new String[] {
+				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("goethite", 31),new OreVeinInfoRecipe.WeightedBlock("yellow_limonite", 22),new OreVeinInfoRecipe.WeightedBlock("hematite", 22),new OreVeinInfoRecipe.WeightedBlock("malachite", 22),},
 				null),
 			new OreVeinInfoRecipe("deep_magnetite", "minecraft:overworld", 
-				210, 0.25, -50, 20, 28, 0, 0, new String[] {
-				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				160, 0.29, -50, 20, 38, 0, 0, new String[] {
+				"tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","tfc:rock/raw/andesite","tfc:rock/raw/dacite","tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("magnetite", 50),new OreVeinInfoRecipe.WeightedBlock("vanadium_magnetite", 29),new OreVeinInfoRecipe.WeightedBlock("gold", 20),},
 				null),
 			new OreVeinInfoRecipe("mars_pitchblende", "ad_astra:mars", 
