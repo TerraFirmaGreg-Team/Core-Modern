@@ -353,6 +353,11 @@ package su.terrafirmagreg.core.compat.emi;
 				"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/gabbro",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("thorium", 44),new OreVeinInfoRecipe.WeightedBlock("uraninite", 22),new OreVeinInfoRecipe.WeightedBlock("emerald", 11),new OreVeinInfoRecipe.WeightedBlock("beryllium", 22),},
 				null),
+			new OreVeinInfoRecipe("sand_tin", "minecraft:overworld", 
+				190, 0.2, -5, 1, 15, 0, 0, new String[] {
+				"tfc:sand/black","tfc:sand/brown","tfc:sand/green","tfc:sand/pink","tfc:sand/red","tfc:sand/white","tfc:sand/yellow",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				new OreVeinInfoRecipe.WeightedBlock("cassiterite_sand", 100),},
+				new String[] {"ore_vein.tfg.sand_tin.emi.0", "ore_vein.tfg.sand_tin.emi.1"}),
 			new OreVeinInfoRecipe("normal_coal", "minecraft:overworld", 
 				340, 0.2, 0, 60, 36, 0, 0, new String[] {
 				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
@@ -463,6 +468,11 @@ package su.terrafirmagreg.core.compat.emi;
 				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {
 				new OreVeinInfoRecipe.WeightedBlock("quartzite", 85),new OreVeinInfoRecipe.WeightedBlock("borax", 14),},
 				null),
+			new OreVeinInfoRecipe("sand_mineral_sand", "minecraft:overworld", 
+				190, 0.24, -5, 1, 34, 0, 0, new String[] {
+				"tfc:sand/black","tfc:sand/brown","tfc:sand/green","tfc:sand/pink","tfc:sand/red","tfc:sand/white","tfc:sand/yellow",}, new OreVeinInfoRecipe.WeightedBlock[] {
+				new OreVeinInfoRecipe.WeightedBlock("basaltic_mineral_sand", 38),new OreVeinInfoRecipe.WeightedBlock("granitic_mineral_sand", 19),new OreVeinInfoRecipe.WeightedBlock("fullers_earth", 19),new OreVeinInfoRecipe.WeightedBlock("glauconite_sand", 23),},
+				new String[] {"ore_vein.tfg.sand_mineral_sand.emi.0", "ore_vein.tfg.sand_mineral_sand.emi.1"}),
 			new OreVeinInfoRecipe("surface_limonite", "minecraft:overworld", 
 				90, 0.25, -20, -5, 15, 0, 0, new String[] {
 				"tfc:rock/raw/shale","tfc:rock/raw/claystone","tfc:rock/raw/limestone","tfc:rock/raw/conglomerate","tfc:rock/raw/dolomite","tfc:rock/raw/chert","tfc:rock/raw/chalk","minecraft:tuff",}, new OreVeinInfoRecipe.WeightedBlock[] {

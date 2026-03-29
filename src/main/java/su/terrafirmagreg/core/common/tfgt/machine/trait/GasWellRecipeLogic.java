@@ -23,7 +23,7 @@ public class GasWellRecipeLogic {
     }
 
     public static final int FLUID_CONSUMPTION_PER_TICK = 10;
-    public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 120;
+    public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 240;
 
     private final GasWellMachine machine;
 
@@ -103,7 +103,7 @@ public class GasWellRecipeLogic {
             return false;
 
         int waterAmount = FLUID_CONSUMPTION_PER_TICK;
-        int steamAmount = FLUID_CONSUMPTION_PER_TICK * 160;
+        int steamAmount = FLUID_CONSUMPTION_PER_TICK * 2;
 
         var waterStack = GTMaterials.Water.getFluid(waterAmount);
         var steamStack = GTMaterials.Steam.getFluid(steamAmount);

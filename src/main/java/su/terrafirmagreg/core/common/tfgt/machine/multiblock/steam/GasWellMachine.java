@@ -139,7 +139,7 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
 
             Component waterInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK + " mB/t")
                     .withStyle(ChatFormatting.BLUE);
-            Component steamInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK * 160 + " mB/t")
+            Component steamInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK * 2 + " mB/t")
                     .withStyle(ChatFormatting.BLUE);
             textList.add(Component.translatable("tfg.machine.gas_well.fluid_consumption", waterInfo, steamInfo)
                     .withStyle(ChatFormatting.GRAY));
