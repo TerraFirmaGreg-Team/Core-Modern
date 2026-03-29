@@ -4,8 +4,6 @@ import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSave
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.mojang.serialization.Codec;
 
-import net.dries007.tfc.world.chunkdata.ChunkData;
-import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -50,9 +48,6 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
         if (blockpos.getY() >= surfaceHeight)
             return false;
 
-        final ChunkDataProvider provider = ChunkDataProvider.get(context.chunkGenerator());
-        final ChunkData data = provider.get(level, blockpos);
-        //RockSettings rock = data.getRockData().getRock(blockpos);
         final BlockState outerBlockState = TFGBlocks_Earth.GILSONITE.getDefaultState();
         final BlockState fluidBlockState = fluid.defaultFluidState().createLegacyBlock();
 
@@ -87,7 +82,7 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
                     if (distFromCenter > 1)
                         continue;
 
-                    BlockState state = distFromCenter > 0.75 ? outerBlockState : fluidBlockState;
+                    BlockState state = distFromCenter > 0.65 ? outerBlockState : fluidBlockState;
                     mutablePos.set(x0 + x, y0 + y, z0 + z);
                     if (!level.isOutsideBuildHeight(mutablePos)) {
                         level.getChunk(mutablePos).setBlockState(mutablePos, state, false);
@@ -106,13 +101,15 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
         for (int currentY = blockpos.getY(); currentY <= springHeight; currentY++) {
             mutablePos.set(currentX, currentY, currentZ);
             if (!level.isOutsideBuildHeight(mutablePos)) {
-                level.getChunk(mutablePos).setBlockState(mutablePos, fluidBlockState, false);
+                var chunk = level.getChunk(mutablePos);
+                chunk.setBlockState(mutablePos, fluidBlockState, false);
+                if (currentY >= surfaceHeight) {
+                    chunk.markPosForPostprocessing(mutablePos);
+                }
                 placedAmount++;
             }
 
             if (currentY <= surfaceHeight) {
-                //rock = data.getRockData().getRock(currentX, currentY, currentZ);
-
                 var edgeState = currentY < surfaceHeight && currentY > topOfSphere ? outerBlockState : fluidBlockState;
 
                 setIfValid(level, mutablePos, currentX + 1, currentY, currentZ, fluidBlockState);
