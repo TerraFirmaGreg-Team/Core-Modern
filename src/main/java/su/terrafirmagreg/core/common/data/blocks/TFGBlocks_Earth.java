@@ -213,6 +213,31 @@ public class TFGBlocks_Earth {
     public static BlockEntry<TampedSoilBlock> TAMPED_SOIL_PODZOL = createTampedSoil("podzol");
     public static BlockEntry<TampedMudBlock> TAMPED_MUD_PODZOL = createTampedMud("podzol");
 
+    // Oil-based blocks for fluid vein indicators
+
+    public static final BlockEntry<Block> GILSONITE = TFGCore.REGISTRATE.block("gilsonite", Block::new)
+            .properties(p -> p
+                    .mapColor(MapColor.DIRT)
+                    .strength(3.0F)
+                    .sound(SoundType.BONE_BLOCK)
+                    .requiresCorrectToolForDrops())
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/fluid_vein/gilsonite")))
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_PICKAXE)
+            .item(BlockItem::new).build()
+            .register();
+
+    public static final BlockEntry<HoneyBlock> OIL_TAR = TFGCore.REGISTRATE.block("oil_tar", HoneyBlock::new)
+            .properties(p -> p
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .strength(2.0F)
+                    .speedFactor(0.4F)
+                    .jumpFactor(0.5F)
+                    .sound(SoundType.HONEY_BLOCK))
+            .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/fluid_vein/oil_tar")))
+            .tag(BlockTags.MINEABLE_WITH_SHOVEL)
+            .item(BlockItem::new).build()
+            .register();
+
     // These are done separately to avoid cyclic references
     static {
         COARSE_SILTY_LOAM_DIRT = createCoarse("coarse_dirt/silty_loam",

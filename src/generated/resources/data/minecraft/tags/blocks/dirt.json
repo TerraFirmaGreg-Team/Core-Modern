@@ -29,9 +29,9 @@
     "tfg:coarse_dirt/podzol",
     "tfg:duff/podzol",
     "tfg:grass/mars_dirt",
-    "tfg:grass/mars_clay_dirt",
     "tfg:grass/amber_kaolin_mycelium",
     "tfg:grass/rusticus_kaolin_mycelium",
-    "tfg:grass/sangnum_kaolin_mycelium"
+    "tfg:grass/sangnum_kaolin_mycelium",
+    "tfg:grass/mars_clay_dirt"
   ]
 }

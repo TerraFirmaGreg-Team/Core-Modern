@@ -10,6 +10,7 @@
     "tfg:mud/mollisol",
     "tfg:mud/oxisol",
     "tfg:mud/podzol",
+    "tfg:gilsonite",
     "tfg:coarse_dirt/silty_loam",
     "tfg:coarse_dirt/sandy_loam",
     "tfg:coarse_dirt/silt",
@@ -55,14 +56,14 @@
     "tfg:coarse_dirt/podzol",
     "tfg:duff/podzol",
     "tfg:grass/mars_dirt",
-    "tfg:grass/mars_clay_dirt",
-    "tfg:grass/mars_path",
-    "tfg:grass/mars_farmland",
     "tfg:grass/amber_mycelium",
     "tfg:grass/amber_clay_mycelium",
     "tfg:grass/rusticus_mycelium",
     "tfg:grass/rusticus_clay_mycelium",
     "tfg:grass/sangnum_mycelium",
-    "tfg:grass/sangnum_clay_mycelium"
+    "tfg:grass/sangnum_clay_mycelium",
+    "tfg:grass/mars_clay_dirt",
+    "tfg:grass/mars_path",
+    "tfg:grass/mars_farmland"
   ]
 }
