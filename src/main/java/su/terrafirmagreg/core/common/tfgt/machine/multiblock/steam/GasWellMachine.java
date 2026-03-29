@@ -32,8 +32,15 @@ import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellRecipeLogic;
 @MethodsReturnNonnullByDefault
 public class GasWellMachine extends MultiblockControllerMachine implements IDisplayUIMachine {
 
-    private com.gregtechceu.gtceu.api.machine.TickableSubscription tickSubscription;
+    @Nullable
+    private NotifiableFluidTank inputFluidTank;
+    @Nullable
+    private NotifiableFluidTank outputFluidTank;
+    @Nullable
+    private NotifiableItemStackHandler inputItemHandler;
+
     private final GasWellRecipeLogic logic;
+    private com.gregtechceu.gtceu.api.machine.TickableSubscription tickSubscription;
 
     public GasWellMachine(IMachineBlockEntity holder) {
         super(holder);
@@ -44,55 +51,34 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
         return logic;
     }
 
-    @Nullable
-    public NotifiableFluidTank getInputFluidTank() {
-        if (!isFormed())
-            return null;
-        for (IMultiPart part : getParts()) {
-            for (var handlerList : part.getRecipeHandlers()) {
-                var cap = handlerList.getCapability(FluidRecipeCapability.CAP);
-                if (!cap.isEmpty() && handlerList.getHandlerIO().support(IO.IN)) {
-                    return (NotifiableFluidTank) cap.get(0);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public NotifiableFluidTank getOutputFluidTank() {
-        if (!isFormed())
-            return null;
-        for (IMultiPart part : getParts()) {
-            for (var handlerList : part.getRecipeHandlers()) {
-                var cap = handlerList.getCapability(FluidRecipeCapability.CAP);
-                if (!cap.isEmpty() && handlerList.getHandlerIO().support(IO.OUT)) {
-                    return (NotifiableFluidTank) cap.get(0);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public NotifiableItemStackHandler getInputItemHandler() {
-        if (!isFormed())
-            return null;
-        for (IMultiPart part : getParts()) {
-            for (var handlerList : part.getRecipeHandlers()) {
-                var cap = handlerList.getCapability(ItemRecipeCapability.CAP);
-                if (!cap.isEmpty() && handlerList.getHandlerIO().support(IO.IN)) {
-                    return (NotifiableItemStackHandler) cap.get(0);
-                }
-            }
-        }
-        return null;
-    }
-
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
-        // No caching needed – handlers are resolved dynamically above.
+        inputFluidTank = null;
+        outputFluidTank = null;
+        inputItemHandler = null;
+
+        for (IMultiPart part : getParts()) {
+            for (var handlerList : part.getRecipeHandlers()) {
+                var fluidCap = handlerList.getCapability(FluidRecipeCapability.CAP);
+                var itemCap = handlerList.getCapability(ItemRecipeCapability.CAP);
+
+                if (!fluidCap.isEmpty()) {
+                    if (handlerList.getHandlerIO().support(IO.IN) && inputFluidTank == null) {
+                        inputFluidTank = (NotifiableFluidTank) fluidCap.get(0);
+                    } else if (handlerList.getHandlerIO().support(IO.OUT) && outputFluidTank == null) {
+                        outputFluidTank = (NotifiableFluidTank) fluidCap.get(0);
+                    }
+                }
+
+                if (!itemCap.isEmpty()
+                        && handlerList.getHandlerIO().support(IO.IN)
+                        && inputItemHandler == null) {
+                    inputItemHandler = (NotifiableItemStackHandler) itemCap.get(0);
+                }
+            }
+        }
+
         tickSubscription = subscribeServerTick(logic::tick);
     }
 
@@ -118,6 +104,24 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
         unsubscribe(tickSubscription);
         tickSubscription = null;
         logic.reset();
+        inputFluidTank = null;
+        outputFluidTank = null;
+        inputItemHandler = null;
+    }
+
+    @Nullable
+    public NotifiableFluidTank getInputFluidTank() {
+        return inputFluidTank;
+    }
+
+    @Nullable
+    public NotifiableFluidTank getOutputFluidTank() {
+        return outputFluidTank;
+    }
+
+    @Nullable
+    public NotifiableItemStackHandler getInputItemHandler() {
+        return inputItemHandler;
     }
 
     @Override
@@ -178,7 +182,8 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
                     int maxOps = BedrockFluidVeinSavedData.MAXIMUM_VEIN_OPERATIONS;
                     int percent = remainingOps * 100 / maxOps;
                     Component veinInfo = Component.literal(percent + "%")
-                            .withStyle(percent > 50 ? ChatFormatting.GREEN : percent > 20 ? ChatFormatting.YELLOW : ChatFormatting.RED);
+                            .withStyle(percent > 50 ? ChatFormatting.GREEN
+                                    : percent > 20 ? ChatFormatting.YELLOW : ChatFormatting.RED);
                     textList.add(Component.translatable("tfg.machine.gas_well.vein_remaining", veinInfo)
                             .withStyle(ChatFormatting.GRAY));
                 } else {

@@ -63,35 +63,24 @@ public class GasWellRecipeLogic {
         if (naturalGas == null || !veinFluid.isSame(naturalGas))
             return;
 
-        // FIX: explosive check now uses a separate path so the fluid is never
-        // consumed on the same tick that the explosive check fails. Previously,
-        // if consumeFluid() ran before consumeExplosive() returned false on a
-        // subsequent interval, fluid was drained for nothing and the machine
-        // silently stalled.
         if (!hasConsumedExplosive) {
             if (!consumeExplosive())
                 return;
-            // Explosive just consumed – start the timer fresh and skip fluid
-            // consumption this tick so we don't penalise the player.
             timer = 0;
-            return;
         }
 
-        // Consume water or steam every tick while active
+        // Consumme water or steam
         if (!consumeFluid()) {
-            // No fluid available: pause (keep hasConsumedExplosive = true so
-            // the machine resumes automatically when fluid is refilled, without
-            // requiring a new explosive).
+            // If no fluid just put on break : stop timer
+            // Starts again with fluid
             return;
         }
 
-        // Advance timer and check if it's time for the next explosive
         timer++;
         int intervalTicks = EXPLOSIVE_CONSUMPTION_INTERVAL * 20;
         if (timer >= intervalTicks) {
             timer = 0;
             if (!consumeExplosive()) {
-                // No explosive left: stop the machine
                 hasConsumedExplosive = false;
                 return;
             }
