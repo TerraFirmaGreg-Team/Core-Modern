@@ -1,0 +1,16 @@
+{
+  "values": [
+    "tfg:clay/alfisol",
+    "tfg:clay_grass/alfisol",
+    "tfg:clay/mollisol",
+    "tfg:clay_grass/mollisol",
+    "tfg:clay/oxisol",
+    "tfg:clay_grass/oxisol",
+    "tfg:clay/podzol",
+    "tfg:clay_grass/podzol",
+    "tfg:grass/amber_clay_mycelium",
+    "tfg:grass/rusticus_clay_mycelium",
+    "tfg:grass/sangnum_clay_mycelium",
+    "tfg:grass/mars_clay_dirt"
+  ]
+}

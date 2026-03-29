@@ -29,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 @Mixin(value = Drowned.class)
 public abstract class DrownedMixin extends Zombie {
@@ -64,6 +65,10 @@ public abstract class DrownedMixin extends Zombie {
     @Overwrite
     public static boolean checkDrownedSpawnRules(EntityType<Husk> entity, ServerLevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         if (accessor.getFluidState(pos.below()).is(FluidTags.WATER))
+            return false;
+
+        // Stop them spawning in oceans
+        if (accessor.getLevel().getHeight(Heightmap.Types.OCEAN_FLOOR, pos.getX(), pos.getZ()) <= pos.getY())
             return false;
 
         return checkMonsterSpawnRules(entity, accessor, spawnType, pos, random);
