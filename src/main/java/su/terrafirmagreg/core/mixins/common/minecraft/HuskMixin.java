@@ -26,9 +26,6 @@ public abstract class HuskMixin extends Zombie {
     @Overwrite
     public static boolean checkHuskSpawnRules(EntityType<Husk> entity, ServerLevelAccessor accessor, MobSpawnType spawnType,
             BlockPos pos, RandomSource random) {
-        //if (Climate.getRainfall(accessor.getLevel(), pos) < 200) {
         return checkMonsterSpawnRules(entity, accessor, spawnType, pos, random);
-        //}
-        //return false;
     }
 }

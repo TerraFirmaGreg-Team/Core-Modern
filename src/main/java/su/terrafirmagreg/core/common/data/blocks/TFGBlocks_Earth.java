@@ -58,6 +58,7 @@ public class TFGBlocks_Earth {
     public static TagKey<Item> TFCDryMudBricksItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "dry_mud_bricks"));
     public static TagKey<Item> TFCPathItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "paths"));
     public static TagKey<Item> TFCMudItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "mud"));
+    public static TagKey<Item> TFCClayItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "clay"));
 
     public static TagKey<Block> TFCDirtBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "dirt"));
     public static TagKey<Block> TFCMudBricksBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "mud_bricks"));
@@ -375,7 +376,7 @@ public class TFGBlocks_Earth {
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCDirtBlockTag)
                 .item(BlockItem::new)
-                .tag(TFCDirtItemTag)
+                .tag(TFCDirtItemTag, TFCClayItemTag)
                 .build()
                 .register();
     }
@@ -393,7 +394,7 @@ public class TFGBlocks_Earth {
                 .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
                 .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
                 .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
-                .tag(TFCGrassItemTag)
+                .tag(TFCGrassItemTag, TFCClayItemTag)
                 .build()
                 .register();
     }
