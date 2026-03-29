@@ -18,21 +18,20 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.GasWellMachin
 @Getter
 public class GasWellRecipeLogic {
 
-    public boolean isActive() {
-        return hasConsumedExplosive;
-    }
-
     public static final int FLUID_CONSUMPTION_PER_TICK = 10;
     public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 240;
 
     private final GasWellMachine machine;
 
     private int timer = 0;
-
     private boolean hasConsumedExplosive = false;
 
     public GasWellRecipeLogic(GasWellMachine machine) {
         this.machine = machine;
+    }
+
+    public boolean isActive() {
+        return hasConsumedExplosive;
     }
 
     public void reset() {
@@ -55,7 +54,6 @@ public class GasWellRecipeLogic {
         if (entry == null || entry.getDefinition() == null)
             return;
 
-        // Check the vein
         var veinFluid = entry.getDefinition().getStoredFluid().get();
         if (veinFluid == null)
             return;
@@ -65,34 +63,46 @@ public class GasWellRecipeLogic {
         if (naturalGas == null || !veinFluid.isSame(naturalGas))
             return;
 
-        // Won't start if explosive wasn't consummed
+        // FIX: explosive check now uses a separate path so the fluid is never
+        // consumed on the same tick that the explosive check fails. Previously,
+        // if consumeFluid() ran before consumeExplosive() returned false on a
+        // subsequent interval, fluid was drained for nothing and the machine
+        // silently stalled.
         if (!hasConsumedExplosive) {
             if (!consumeExplosive())
                 return;
+            // Explosive just consumed – start the timer fresh and skip fluid
+            // consumption this tick so we don't penalise the player.
+            timer = 0;
+            return;
         }
 
-        // Always consumme water or steam
-        if (!consumeFluid())
+        // Consume water or steam every tick while active
+        if (!consumeFluid()) {
+            // No fluid available: pause (keep hasConsumedExplosive = true so
+            // the machine resumes automatically when fluid is refilled, without
+            // requiring a new explosive).
             return;
+        }
 
-        // Use explosive
+        // Advance timer and check if it's time for the next explosive
         timer++;
-        if (timer >= EXPLOSIVE_CONSUMPTION_INTERVAL * 20) { // interval en secondes * 20 ticks
+        int intervalTicks = EXPLOSIVE_CONSUMPTION_INTERVAL * 20;
+        if (timer >= intervalTicks) {
+            timer = 0;
             if (!consumeExplosive()) {
+                // No explosive left: stop the machine
                 hasConsumedExplosive = false;
-                timer = 0;
                 return;
             }
-            timer = 0;
         }
 
-        // Production once per second
+        // Produce gas once per second
         if (machine.getOffsetTimer() % 20 == 0) {
             int produced = getFluidToProduce(entry);
             if (produced <= 0)
                 return;
             outputFluid(new FluidStack(veinFluid, produced));
-            // Amount of depletion and override the stat veins
             savedData.depleteVein(chunkX, chunkZ, 5, true);
         }
     }

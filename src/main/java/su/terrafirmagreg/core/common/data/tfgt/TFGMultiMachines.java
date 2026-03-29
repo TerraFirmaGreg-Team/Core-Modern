@@ -1217,7 +1217,7 @@ public class TFGMultiMachines {
             .tooltips(
                     Component.translatable("tfg.tooltip.machine.gas_well_1"),
                     Component.translatable("tfg.tooltip.machine.gas_well_2",
-                            GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL / 20))
+                            GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAA", "FXF")
                     .aisle("AAA", "XBX")
