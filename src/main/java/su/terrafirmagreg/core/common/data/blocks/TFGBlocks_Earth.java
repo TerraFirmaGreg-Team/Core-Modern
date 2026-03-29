@@ -38,6 +38,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -528,7 +529,8 @@ public class TFGBlocks_Earth {
                         .strength(1.0F)
                         .speedFactor(0.6F)
                         .sound(SoundType.SLIME_BLOCK))
-                .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/fluid_vein/" + oilType + "_tar")))
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
                 .tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(BlockItem::new).build()
                 .register();

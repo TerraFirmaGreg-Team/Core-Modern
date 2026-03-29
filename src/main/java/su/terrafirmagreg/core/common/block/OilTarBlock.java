@@ -25,7 +25,6 @@ public class OilTarBlock extends Block {
         return SHAPE;
     }
 
-
     //idk if this is even needed
     @Override
     public boolean addLandingEffects(BlockState state1, ServerLevel level, BlockPos pos, BlockState state2, LivingEntity entity, int numberOfParticles) {
