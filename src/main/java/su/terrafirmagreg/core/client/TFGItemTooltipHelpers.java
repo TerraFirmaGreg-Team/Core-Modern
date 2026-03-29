@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
@@ -23,7 +25,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 
-import org.jetbrains.annotations.NotNull;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
