@@ -89,6 +89,7 @@
         "common.gtceu.GTCleanroomMixin",
         "common.gtceu.GTEMIPluginMixin",
         "common.gtceu.GTMachineUtilsMixin",
+        "common.gtceu.GTMaterialBlocksMixin",
         "common.gtceu.GTMultiMachinesMixin",
         "common.gtceu.GTRecipeTypesMixin",
         "common.gtceu.GTRecipeWidgetMixin",
