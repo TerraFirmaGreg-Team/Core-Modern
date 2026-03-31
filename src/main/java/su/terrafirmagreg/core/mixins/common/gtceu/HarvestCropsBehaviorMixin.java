@@ -193,10 +193,6 @@ public abstract class HarvestCropsBehaviorMixin {
                 drop.shrink(1);
                 removedStick = true;
             }
-
-            // Generating drops
-            if (!drop.isEmpty())
-                Block.popResource(level, targetPos, drop);
         }
 
         // If not removed stick, try to remove one from inventory
@@ -215,6 +211,14 @@ public abstract class HarvestCropsBehaviorMixin {
         FluidState fluidState = level.getFluidState(targetPos);
         level.setBlockAndUpdate(targetPos, fluidState.createLegacyBlock());
 
+        BlockState stateAfter = level.getBlockState(targetPos);
+        Block blockAfter = stateAfter.getBlock();
+
+        // If break failed we exit
+        boolean broken = blockAfter != blockState.getBlock();
+        if (!broken)
+            return false;
+
         // Replanting in the next tick to ensure multiblock crop tops break
         if (cropSeed != null) {
             ItemStack finalCropSeed = cropSeed;
@@ -228,9 +232,25 @@ public abstract class HarvestCropsBehaviorMixin {
                             Direction.UP,
                             targetPos,
                             false));
+
+            BlockState previousBlockState = blockState;
             int ticksDelay = 1;
             level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + ticksDelay,
-                    () -> finalCropSeed.useOn(plantCtx)));
+                    () -> {
+                        BlockState checkState = level.getBlockState(targetPos);
+                        boolean trulyBroken = checkState.getBlock() != previousBlockState.getBlock();
+
+                        if (!trulyBroken)
+                            return;
+
+                        // Spawning drops
+                        for (ItemStack drop : drops) {
+                            if (!drop.isEmpty())
+                                Block.popResource(level, targetPos, drop);
+                        }
+
+                        finalCropSeed.useOn(plantCtx);
+                    }));
 
             // Adding the stick when needed. Couldn't add it simulating player right click because the "use" method of ClimbingCropBlock internally gets the item in hand instead of the item in context
             ticksDelay += 1;

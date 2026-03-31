@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.Block;
 
 import lombok.Getter;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 public class PlanetEnvironmentalHelpers {
     private static final Map<ResourceKey<Biome>, MarsSandBlockType> marsBiomeTags = new HashMap<>();

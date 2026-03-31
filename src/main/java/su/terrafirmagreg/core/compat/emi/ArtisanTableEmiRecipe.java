@@ -21,9 +21,9 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
-import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
-import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
-import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
+import su.terrafirmagreg.core.common.recipe.ArtisanPattern;
+import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.ArtisanType;
 
 /**
  * EMI recipe wrapper for the Artisan Table.

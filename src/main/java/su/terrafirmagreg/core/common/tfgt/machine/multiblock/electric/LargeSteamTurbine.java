@@ -1,0 +1,295 @@
+package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
+
+import static com.gregtechceu.gtceu.api.GTValues.EV;
+
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
+import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack;
+import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
+import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMachine;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+
+import lombok.Getter;
+
+public class LargeSteamTurbine extends WorkableElectricMultiblockMachine
+        implements ITieredMachine, ITurbineMachine {
+
+    public static final int MIN_DURABILITY_TO_WARN = 10;
+
+    private final long BASE_EU_OUTPUT;
+    @Getter
+    private final int tier;
+
+    public LargeSteamTurbine(IMachineBlockEntity holder, int tier) {
+        super(holder);
+        this.tier = tier;
+        this.BASE_EU_OUTPUT = GTValues.V[EV];
+    }
+
+    @Nullable
+    private BlockPos getRotorHolderPos() {
+        IRotorHolderMachine holder = getRotorHolder();
+        if (holder instanceof MetaMachine meta) {
+            return meta.getPos();
+        }
+        return null;
+    }
+    /*
+    private boolean isIntakesObstructed() {
+        BlockPos rotorPos = getRotorHolderPos();
+        if (rotorPos == null)
+            return false;
+    
+        Level level = getLevel();
+        Direction front = getFrontFacing();
+        Direction right = front.getClockWise();
+    
+        boolean obstructed = false;
+    
+        // Vérifie les deux couches sous le rotor (-1 et -2)
+        for (int yOffset = -1; yOffset >= -2; yOffset--) {
+            BlockPos planeOrigin = rotorPos.offset(0, yOffset, 0);
+    
+            for (int z = -2; z <= 2; z++) {
+                for (int x = -2; x <= 2; x++) {
+    
+                    // Coins (X) ignorés
+                    if (Math.abs(x) == 2 && Math.abs(z) == 2) {
+                        continue;
+                    }
+    
+                    BlockPos pos = planeOrigin
+                            .relative(right, x)
+                            .relative(front, z);
+    
+                    if (!level.getBlockState(pos).isAir()) {
+                        obstructed = true;
+                    }
+                }
+            }
+        }
+    
+        // Vérifie les blocs uniques au-dessus du rotor (+5 à +8)
+        for (int y = 5; y <= 8; y++) {
+            BlockPos pos = rotorPos.above(y);
+            if (!level.getBlockState(pos).isAir()) {
+                return true;
+            }
+        }
+    
+        return obstructed;
+    
+    
+    }*/
+
+    @Nullable
+    private IRotorHolderMachine getRotorHolder() {
+        for (IMultiPart part : getParts()) {
+            if (part instanceof IRotorHolderMachine rotorHolder) {
+                return rotorHolder;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public long getOverclockVoltage() {
+        var rotorHolder = getRotorHolder();
+        if (rotorHolder != null && rotorHolder.hasRotor())
+            return BASE_EU_OUTPUT * rotorHolder.getTotalPower() / 100;
+        return 0;
+    }
+
+    /**
+     * @return EUt multiplier that should be applied to the turbine's output
+     */
+    protected double productionBoost() {
+        var rotorHolder = getRotorHolder();
+        if (rotorHolder != null && rotorHolder.hasRotor()) {
+            int maxSpeed = rotorHolder.getMaxRotorHolderSpeed();
+            int currentSpeed = rotorHolder.getRotorSpeed();
+            if (currentSpeed >= maxSpeed)
+                return 1;
+            return Math.pow(1.0 * currentSpeed / maxSpeed, 2);
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean hasRotor() {
+        var rotorHolder = getRotorHolder();
+        return rotorHolder != null && rotorHolder.hasRotor();
+    }
+
+    @Override
+    public int getRotorSpeed() {
+        var rotorHolder = getRotorHolder();
+        if (rotorHolder != null && rotorHolder.hasRotor()) {
+            return rotorHolder.getRotorSpeed();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getMaxRotorHolderSpeed() {
+        var rotorHolder = getRotorHolder();
+        if (rotorHolder != null && rotorHolder.hasRotor()) {
+            return rotorHolder.getMaxRotorHolderSpeed();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getTotalEfficiency() {
+        var rotorHolder = getRotorHolder();
+        if (rotorHolder != null && rotorHolder.hasRotor()) {
+            return rotorHolder.getTotalEfficiency();
+        }
+        return -1;
+    }
+
+    @Override
+    public long getCurrentProduction() {
+        return isActive() && recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
+    }
+
+    @Override
+    public int getRotorDurabilityPercent() {
+        var rotorHolder = getRotorHolder();
+        if (rotorHolder != null && rotorHolder.hasRotor()) {
+            return rotorHolder.getRotorDurabilityPercent();
+        }
+        return -1;
+    }
+
+    //////////////////////////////////////
+    // ****** Recipe Logic *******//
+    //////////////////////////////////////
+
+    /**
+     * Recipe Modifier for <b>Large Turbine Multiblocks</b> - can be used as a valid {@link RecipeModifier}
+     * <p>
+     * Recipe is fast parallelized up to {@code (baseEUt * power) / recipeEUt} times.
+     * Duration is then multiplied by the holder efficiency.
+     * </p>
+     *
+     * @param machine a {@link LargeTurbineMachine}
+     * @param recipe  recipe
+     * @return A {@link ModifierFunction} for the given Turbine Multiblock and recipe
+     */
+    public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (!(machine instanceof LargeSteamTurbine turbineMachine)) {
+            return RecipeModifier.nullWrongType(LargeSteamTurbine.class, machine);
+        }
+        //if (turbineMachine.isIntakesObstructed()) {
+        //    return ModifierFunction.NULL;
+        //}
+        var rotorHolder = turbineMachine.getRotorHolder();
+        if (rotorHolder == null)
+            return ModifierFunction.NULL;
+
+        EnergyStack EUt = recipe.getOutputEUt();
+        long turbineMaxVoltage = turbineMachine.getOverclockVoltage();
+        double holderEfficiency = rotorHolder.getTotalEfficiency() / 100.0;
+
+        if (EUt.isEmpty() || turbineMaxVoltage <= EUt.voltage() || holderEfficiency <= 0)
+            return ModifierFunction.NULL;
+
+        // get the amount of parallel required to match the desired output voltage
+        int maxParallel = (int) (turbineMaxVoltage / EUt.getTotalEU());
+        int actualParallel = ParallelLogic.getParallelAmountFast(turbineMachine, recipe, maxParallel);
+        double eutMultiplier = turbineMachine.productionBoost() * actualParallel;
+
+        return ModifierFunction.builder()
+                .inputModifier(ContentModifier.multiplier(actualParallel))
+                .outputModifier(ContentModifier.multiplier(actualParallel))
+                .eutMultiplier(eutMultiplier)
+                .parallels(actualParallel)
+                .durationMultiplier(holderEfficiency)
+                .build();
+    }
+
+    @Override
+    public boolean regressWhenWaiting() {
+        return false;
+    }
+
+    @Override
+    public boolean canVoidRecipeOutputs(RecipeCapability<?> capability) {
+        return true;
+    }
+
+    //////////////////////////////////////
+    // ******* GUI ********//
+    //////////////////////////////////////
+
+    @Override
+    public void addDisplayText(List<Component> textList) {
+        super.addDisplayText(textList);
+
+        textList.removeIf(component -> component.getString().contains("Max Recipe Tier"));
+
+        if (isFormed()) {
+            var rotorHolder = getRotorHolder();
+
+            if (rotorHolder != null && rotorHolder.getRotorEfficiency() > 0) {
+                textList.add(Component.translatable("gtceu.multiblock.turbine.rotor_speed",
+                        FormattingUtil.formatNumbers(rotorHolder.getRotorSpeed()),
+                        FormattingUtil.formatNumbers(rotorHolder.getMaxRotorHolderSpeed())));
+                textList.add(Component.translatable("gtceu.multiblock.turbine.efficiency",
+                        rotorHolder.getTotalEfficiency()));
+
+                long maxProduction = getOverclockVoltage();
+                long currentProduction = getCurrentProduction();
+
+                if (isActive()) {
+                    textList.add(3, Component.translatable("gtceu.multiblock.turbine.energy_per_tick",
+                            FormattingUtil.formatNumbers(currentProduction),
+                            FormattingUtil.formatNumbers(maxProduction)));
+                }
+
+                int rotorDurability = rotorHolder.getRotorDurabilityPercent();
+                if (rotorDurability > MIN_DURABILITY_TO_WARN) {
+                    textList.add(Component.translatable("gtceu.multiblock.turbine.rotor_durability", rotorDurability));
+                } else {
+                    textList.add(Component.translatable("gtceu.multiblock.turbine.rotor_durability", rotorDurability)
+                            .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                }
+            }
+        }
+    }
+    /*
+    @Override
+    public void attachTooltips(TooltipsPanel tooltipsPanel) {
+        super.attachTooltips(tooltipsPanel);
+        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
+                () -> GuiTextures.INDICATOR_NO_STEAM.get(false),
+                () -> List.of(Component.translatable("tfg.multiblock.turbine.obstructed")
+                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
+                this::isIntakesObstructed,
+                () -> null));
+    }
+    
+     */
+}

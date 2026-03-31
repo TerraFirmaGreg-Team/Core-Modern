@@ -1,0 +1,25 @@
+{
+    "values": [
+        "tfg:earth/mountains",
+        "tfg:earth/old_mountains",
+        "tfg:earth/oceanic_mountains",
+        "tfg:earth/volcanic_mountains",
+        "tfg:earth/volcanic_oceanic_mountains",
+        "tfg:earth/mountain_lake",
+        "tfg:earth/old_mountain_lake",
+        "tfg:earth/volcanic_mountain_lake",
+        "tfg:earth/oceanic_mountain_lake",
+        "tfg:earth/volcanic_oceanic_mountain_lake",
+        "tfg:earth/extreme_doline_mountains",
+        "tfg:earth/ice_sheet_mountains",
+        "tfg:earth/ice_sheet_oceanic_mountains",
+        "tfg:earth/ice_sheet_mountains_edge",
+        "tfg:earth/ice_sheet_oceanic_mountains_edge",
+        "tfg:earth/glaciated_mountains",
+        "tfg:earth/glaciated_oceanic_mountains",
+        "tfg:earth/glacially_carved_mountains",
+        "tfg:earth/glacially_carved_oceanic_mountains"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

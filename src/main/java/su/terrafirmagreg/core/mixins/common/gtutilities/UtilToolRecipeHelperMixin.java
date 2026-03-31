@@ -19,7 +19,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.neganote.gtutilities.common.tools.UtilToolType;
 import net.neganote.gtutilities.common.tools.recipe.UtilToolRecipeHelper;
 
-import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialFlags;
+import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialFlags;
 
 @Mixin(value = UtilToolRecipeHelper.class, remap = false)
 public abstract class UtilToolRecipeHelperMixin {

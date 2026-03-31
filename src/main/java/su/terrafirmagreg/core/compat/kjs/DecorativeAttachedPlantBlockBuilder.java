@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import dev.latvian.mods.kubejs.typings.Info;
 
-import su.terrafirmagreg.core.common.data.blocks.DecorativeAttachedPlantBlock;
+import su.terrafirmagreg.core.common.block.DecorativeAttachedPlantBlock;
 
 public class DecorativeAttachedPlantBlockBuilder extends DecorativePlantBlockBuilder {
 

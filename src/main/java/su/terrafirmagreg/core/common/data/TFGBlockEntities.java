@@ -11,11 +11,14 @@ import net.minecraft.world.level.block.Block;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.ArtisanTableBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.GTGreenhousePortBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.LargeNestBoxBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.ReflectorBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.TickerBlockEntity;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
 
 public class TFGBlockEntities {

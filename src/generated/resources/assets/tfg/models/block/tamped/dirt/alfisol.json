@@ -1,0 +1,6 @@
+{
+  "parent": "rnr:block/tamped_block",
+  "textures": {
+    "dirt": "tfg:block/dirt/alfisol"
+  }
+}

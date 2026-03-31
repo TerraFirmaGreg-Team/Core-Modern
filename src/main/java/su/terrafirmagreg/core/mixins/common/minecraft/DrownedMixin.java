@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.eerussianguy.firmalife.common.items.FLItems;
 
+import net.dries007.tfc.common.blocks.rock.RockCategory;
+import net.dries007.tfc.common.entities.ai.JavelinAttackGoal;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.core.BlockPos;
@@ -73,11 +75,33 @@ public abstract class DrownedMixin extends Zombie {
      */
     @Overwrite
     protected void populateDefaultEquipmentSlots(RandomSource random, @NotNull DifficultyInstance difficulty) {
-		int i = random.nextInt(10);
-		if (i < 10) {
-			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.COPPER).get(Metal.ItemType.FISHING_ROD).get()));
-		} else {
-			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
-		}
+        boolean isJavelin = false;
+        int i = random.nextInt(10);
+        if (i == 0) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.COPPER).get(Metal.ItemType.FISHING_ROD).get()));
+        } else if (i < 3) {
+            // 20% for copper javelin
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.COPPER).get(Metal.ItemType.JAVELIN).get()));
+            isJavelin = true;
+        } else if (i < 4) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.BRONZE).get(Metal.ItemType.JAVELIN).get()));
+            isJavelin = true;
+        } else if (i < 5) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.BISMUTH_BRONZE).get(Metal.ItemType.JAVELIN).get()));
+            isJavelin = true;
+        } else if (i < 6) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.BLACK_BRONZE).get(Metal.ItemType.JAVELIN).get()));
+            isJavelin = true;
+        } else if (i == 9) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
+        } else {
+            // 30% for stone javelin
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.ROCK_TOOLS.get(RockCategory.IGNEOUS_INTRUSIVE).get(RockCategory.ItemType.JAVELIN).get()));
+            isJavelin = true;
+        }
+
+        if (isJavelin) {
+            this.goalSelector.addGoal(4, new JavelinAttackGoal<>(this, 1, 15f));
+        }
     }
 }

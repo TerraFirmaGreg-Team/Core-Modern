@@ -24,9 +24,9 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blocks.ActiveCardinalBlock;
-import su.terrafirmagreg.core.common.data.blocks.ActiveParticleBlock;
-import su.terrafirmagreg.core.common.data.blocks.SandLayerBlock;
+import su.terrafirmagreg.core.common.block.ActiveCardinalBlock;
+import su.terrafirmagreg.core.common.block.ActiveParticleBlock;
+import su.terrafirmagreg.core.common.block.SandLayerBlock;
 
 public class ModelUtils {
 

@@ -23,9 +23,9 @@ import net.minecraft.world.phys.Vec2;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.AbstractLayerBlock;
-import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
+import su.terrafirmagreg.core.common.block.AbstractLayerBlock;
+import su.terrafirmagreg.core.common.block.SandPileBlock;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 // Most of this code is from TFC's EnvironmentHelpers class for its snow stuff

@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import dev.latvian.mods.kubejs.typings.Info;
 
-import su.terrafirmagreg.core.common.data.blocks.DecorativeFloatingPlantBlock;
+import su.terrafirmagreg.core.common.block.DecorativeFloatingPlantBlock;
 
 public class DecorativeFloatingPlantBlockBuilder extends DecorativePlantBlockBuilder {
 

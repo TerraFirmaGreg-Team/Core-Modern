@@ -30,7 +30,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.wanmine.wab.entity.Soarer;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.entities.soarer.SoarerData;
+import su.terrafirmagreg.core.common.entity.soarer.SoarerData;
 
 @Mixin(value = Soarer.class)
 public abstract class SoarerMixin extends TamableAnimal {
