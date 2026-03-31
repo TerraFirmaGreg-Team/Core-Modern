@@ -1,0 +1,19 @@
+{
+    "values": [
+        "tfg:earth/hills",
+        "tfg:earth/rolling_hills",
+        "tfg:earth/highlands",
+        "tfg:earth/tower_karst_hills",
+        "tfg:earth/tower_karst_highlands",
+        "tfg:earth/shilin_hills",
+        "tfg:earth/shilin_highlands",
+        "tfg:earth/doline_hills",
+        "tfg:earth/doline_rolling_hills",
+        "tfg:earth/doline_highlands",
+        "tfg:earth/cenote_hills",
+        "tfg:earth/cenote_rolling_hills",
+        "tfg:earth/cenote_highlands"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}
