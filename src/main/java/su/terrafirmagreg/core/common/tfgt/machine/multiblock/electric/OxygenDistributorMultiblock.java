@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.machine.multiblock.electric;
+package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
 import javax.annotation.Nullable;
 
@@ -18,9 +18,9 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.server.level.ServerLevel;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.IOxygenDistributorHost;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.OxygenDistributorMachine;
 import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
+import su.terrafirmagreg.core.common.tfgt.machine.electric.IOxygenDistributorHost;
+import su.terrafirmagreg.core.common.tfgt.machine.electric.OxygenDistributorMachine;
 
 /**
  * GT multiblock wrapper for {@link OxygenDistributorMachine}.

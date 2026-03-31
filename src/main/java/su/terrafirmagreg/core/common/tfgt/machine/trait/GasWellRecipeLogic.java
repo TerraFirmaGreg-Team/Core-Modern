@@ -18,21 +18,20 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.GasWellMachin
 @Getter
 public class GasWellRecipeLogic {
 
-    public boolean isActive() {
-        return hasConsumedExplosive;
-    }
-
     public static final int FLUID_CONSUMPTION_PER_TICK = 10;
-    public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 120;
+    public static int EXPLOSIVE_CONSUMPTION_INTERVAL = 240;
 
     private final GasWellMachine machine;
 
     private int timer = 0;
-
     private boolean hasConsumedExplosive = false;
 
     public GasWellRecipeLogic(GasWellMachine machine) {
         this.machine = machine;
+    }
+
+    public boolean isActive() {
+        return hasConsumedExplosive;
     }
 
     public void reset() {
@@ -55,7 +54,6 @@ public class GasWellRecipeLogic {
         if (entry == null || entry.getDefinition() == null)
             return;
 
-        // Check the vein
         var veinFluid = entry.getDefinition().getStoredFluid().get();
         if (veinFluid == null)
             return;
@@ -65,34 +63,35 @@ public class GasWellRecipeLogic {
         if (naturalGas == null || !veinFluid.isSame(naturalGas))
             return;
 
-        // Won't start if explosive wasn't consummed
         if (!hasConsumedExplosive) {
             if (!consumeExplosive())
                 return;
-        }
-
-        // Always consumme water or steam
-        if (!consumeFluid())
-            return;
-
-        // Use explosive
-        timer++;
-        if (timer >= EXPLOSIVE_CONSUMPTION_INTERVAL * 20) { // interval en secondes * 20 ticks
-            if (!consumeExplosive()) {
-                hasConsumedExplosive = false;
-                timer = 0;
-                return;
-            }
             timer = 0;
         }
 
-        // Production once per second
+        // Consumme water or steam
+        if (!consumeFluid()) {
+            // If no fluid just put on break : stop timer
+            // Starts again with fluid
+            return;
+        }
+
+        timer++;
+        int intervalTicks = EXPLOSIVE_CONSUMPTION_INTERVAL * 20;
+        if (timer >= intervalTicks) {
+            timer = 0;
+            if (!consumeExplosive()) {
+                hasConsumedExplosive = false;
+                return;
+            }
+        }
+
+        // Produce gas once per second
         if (machine.getOffsetTimer() % 20 == 0) {
             int produced = getFluidToProduce(entry);
             if (produced <= 0)
                 return;
             outputFluid(new FluidStack(veinFluid, produced));
-            // Amount of depletion and override the stat veins
             savedData.depleteVein(chunkX, chunkZ, 5, true);
         }
     }
@@ -103,7 +102,7 @@ public class GasWellRecipeLogic {
             return false;
 
         int waterAmount = FLUID_CONSUMPTION_PER_TICK;
-        int steamAmount = FLUID_CONSUMPTION_PER_TICK * 160;
+        int steamAmount = FLUID_CONSUMPTION_PER_TICK * 2;
 
         var waterStack = GTMaterials.Water.getFluid(waterAmount);
         var steamStack = GTMaterials.Steam.getFluid(steamAmount);

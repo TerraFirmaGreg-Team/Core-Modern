@@ -1,0 +1,6 @@
+{
+  "parent": "tfc:block/plant/cross_4",
+  "textures": {
+    "cross": "tfg:block/fruit_tree/magmango_sapling"
+  }
+}

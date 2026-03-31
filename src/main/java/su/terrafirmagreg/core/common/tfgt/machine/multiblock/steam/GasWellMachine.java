@@ -71,7 +71,8 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
                     }
                 }
 
-                if (!itemCap.isEmpty() && handlerList.getHandlerIO().support(IO.IN)
+                if (!itemCap.isEmpty()
+                        && handlerList.getHandlerIO().support(IO.IN)
                         && inputItemHandler == null) {
                     inputItemHandler = (NotifiableItemStackHandler) itemCap.get(0);
                 }
@@ -101,6 +102,7 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
 
     private void resetState() {
         unsubscribe(tickSubscription);
+        tickSubscription = null;
         logic.reset();
         inputFluidTank = null;
         outputFluidTank = null;
@@ -139,7 +141,7 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
 
             Component waterInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK + " mB/t")
                     .withStyle(ChatFormatting.BLUE);
-            Component steamInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK * 160 + " mB/t")
+            Component steamInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK * 2 + " mB/t")
                     .withStyle(ChatFormatting.BLUE);
             textList.add(Component.translatable("tfg.machine.gas_well.fluid_consumption", waterInfo, steamInfo)
                     .withStyle(ChatFormatting.GRAY));
@@ -180,7 +182,8 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
                     int maxOps = BedrockFluidVeinSavedData.MAXIMUM_VEIN_OPERATIONS;
                     int percent = remainingOps * 100 / maxOps;
                     Component veinInfo = Component.literal(percent + "%")
-                            .withStyle(percent > 50 ? ChatFormatting.GREEN : percent > 20 ? ChatFormatting.YELLOW : ChatFormatting.RED);
+                            .withStyle(percent > 50 ? ChatFormatting.GREEN
+                                    : percent > 20 ? ChatFormatting.YELLOW : ChatFormatting.RED);
                     textList.add(Component.translatable("tfg.machine.gas_well.vein_remaining", veinInfo)
                             .withStyle(ChatFormatting.GRAY));
                 } else {

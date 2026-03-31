@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.particles;
+package su.terrafirmagreg.core.common.particle;
 
 import org.jetbrains.annotations.NotNull;
 

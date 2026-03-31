@@ -2,34 +2,21 @@ package su.terrafirmagreg.core.world.feature;
 
 import com.mojang.serialization.Codec;
 
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
+import net.dries007.tfc.world.chunkdata.RockData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 public class FluidGasVentFeature extends Feature<FluidGasVentConfig> {
 
-    private static Block cachedDryIce = null;
-    private static Block cachedGeyserite = null;
-
     public FluidGasVentFeature(Codec<FluidGasVentConfig> codec) {
         super(codec);
-    }
-
-    private static boolean loadBlocks() {
-        if (cachedDryIce != null && cachedGeyserite != null)
-            return true;
-        cachedDryIce = TFGBlocks.DRY_ICE.get();
-        cachedGeyserite = ForgeRegistries.BLOCKS
-                .getValue(ResourceLocation.fromNamespaceAndPath("tfg", "rock/raw/geyserite"));
-        return cachedDryIce != null && cachedGeyserite != null;
     }
 
     @Override
@@ -39,19 +26,14 @@ public class FluidGasVentFeature extends Feature<FluidGasVentConfig> {
         final var random = context.random();
         final FluidGasVentConfig config = context.config();
 
-        if (random.nextFloat() > config.spawnChance())
-            return false;
-
-        if (!loadBlocks())
-            return false;
-
         final int x = pos.getX();
         final int z = pos.getZ();
-        final int surfaceY = level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, x, z);
 
-        final BlockState dryIce = cachedDryIce.defaultBlockState();
-        final BlockState geyserite = cachedGeyserite.defaultBlockState();
-        final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+        final ChunkDataProvider provider = ChunkDataProvider.get(context.chunkGenerator());
+        final RockData rockData = provider.get(context.level(), pos).getRockData();
+
+        final BlockState cobbleState = rockData.getRock(pos).cobble().defaultBlockState();
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         boolean placed = false;
 
         final int baseRadius = config.baseRadius();
@@ -63,15 +45,30 @@ public class FluidGasVentFeature extends Feature<FluidGasVentConfig> {
                 if (dist > effectiveRadius)
                     continue;
 
-                mutablePos.set(x + dx, surfaceY - 1, z + dz);
+                int surfaceY = level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, x + dx, z + dz);
+
+                mutablePos = mutablePos.set(x + dx, surfaceY - 1, z + dz);
                 if (level.isOutsideBuildHeight(mutablePos))
                     continue;
 
-                if (dist < 1.0) {
-                    level.getChunk(mutablePos).setBlockState(mutablePos, dryIce, false);
+                var existingState = level.getBlockState(mutablePos);
+                if (existingState == Blocks.ICE.defaultBlockState()
+                        || existingState == Blocks.PACKED_ICE.defaultBlockState()
+                        || existingState == Blocks.BLUE_ICE.defaultBlockState()
+                        || existingState == TFCBlocks.SEA_ICE.get().defaultBlockState())
+                    continue;
+
+                if (dist < 1.5) {
+                    level.setBlock(mutablePos, cobbleState, 3);
+                    if (random.nextFloat() < 0.8) {
+                        level.setBlock(mutablePos.offset(0, 1, 0), config.ventState(), 3);
+                    }
                     placed = true;
-                } else if (random.nextFloat() < config.geyseriteChance()) {
-                    level.getChunk(mutablePos).setBlockState(mutablePos, geyserite, false);
+                } else if (random.nextFloat() < config.chance()) {
+                    level.setBlock(mutablePos, cobbleState, 3);
+                    if (random.nextFloat() < 0.2) {
+                        level.setBlock(mutablePos.offset(0, 1, 0), config.ventState(), 3);
+                    }
                     placed = true;
                 }
             }

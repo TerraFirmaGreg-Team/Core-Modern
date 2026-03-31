@@ -25,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.google.common.collect.ImmutableMap;
+import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -50,10 +51,7 @@ import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -69,6 +67,7 @@ import net.minecraftforge.common.Tags;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidDefinition;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
@@ -205,7 +204,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     }
 
     @Inject(method = "buildSurface", at = @At("HEAD"), remap = true)
-    private void tfg$buildSurface(WorldGenRegion level, StructureManager structureFeatureManager, RandomState state, ChunkAccess chunk, CallbackInfo ci) {
+    private void tfg$generateHornfels(WorldGenRegion level, StructureManager structureFeatureManager, RandomState state, ChunkAccess chunk, CallbackInfo ci) {
         final ChunkPos chunkPos = chunk.getPos();
         final RandomSource random = new XoroshiroRandomSource(chunkPos.x * 2369412341L, chunkPos.z * 8192836412341L);
         final LevelChunkSection bottomSection = chunk.getSection(0);
@@ -250,6 +249,11 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
             // this is for metamorphics, but felsics can get it too
             return TFGBlocks_Earth.PELITIC_HORNFELS.getDefaultState();
         }
+    }
+
+    @Inject(method = "applyBiomeDecoration", at = @At("HEAD"), remap = true)
+    private void tfg$outputBiomes(WorldGenLevel level, ChunkAccess chunk, StructureManager structureFeatureManager, CallbackInfo ci) {
+        TFGBedrockFluidDefinition.safelyGetFluidVein(chunk, BedrockFluidVeinSavedData.getOrCreate(level.getLevel()));
     }
 
     @Unique

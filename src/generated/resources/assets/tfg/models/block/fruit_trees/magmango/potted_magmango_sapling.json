@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/flower_pot_cross",
+  "textures": {
+    "dirt": "tfc:block/dirt/loam",
+    "plant": "tfg:block/fruit_tree/magmango_sapling"
+  }
+}

@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.utils.commands;
+package su.terrafirmagreg.core.common.command;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;

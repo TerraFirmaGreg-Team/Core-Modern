@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,9 +33,11 @@ import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidRegistry;
 @Mixin(value = BedrockFluidVeinSavedData.class, remap = false)
 public abstract class BedrockFluidVeinSavedDataMixin {
 
+    @Final
     @Shadow
     public HashMap<ChunkPos, FluidVeinWorldEntry> veinFluids;
 
+    @Final
     @Shadow
     private ServerLevel serverLevel;
 

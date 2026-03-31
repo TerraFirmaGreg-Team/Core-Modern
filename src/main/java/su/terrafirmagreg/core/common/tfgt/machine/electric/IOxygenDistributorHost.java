@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.tfgt.machine.electric;
+package su.terrafirmagreg.core.common.tfgt.machine.electric;
 
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 

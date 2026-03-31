@@ -10,6 +10,7 @@ on:
       - '*.gradle'
       - 'gradle.properties'
       - 'CHANGELOG.md'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -66,7 +67,6 @@ jobs:
           # Get data from previous steps
           TAG_EXISTS="${{ steps.tag_check.outputs.exists }}"
           PROJECT_NAME="${{ steps.project_info.outputs.mod_name }}-${{ steps.project_info.outputs.mod_name_suffix }}"
-          PROJECT_VERSION_TYPE="${{ steps.project_info.outputs.version_type }}"
           GAME_VERSIONS="${{ steps.project_info.outputs.minecraft_version }}"
           JAVA_VERSION="${{ steps.project_info.outputs.java_version }}"
           LOADERS="${{ steps.project_info.outputs.loader }}"
@@ -80,7 +80,7 @@ jobs:
 
           if [[ "$IS_RELEASE_CANDIDATE" == "true" ]]; then
             PROJECT_VERSION="${{ steps.project_info.outputs.mod_version }}"
-            PROJECT_VERSION_TYPE="${{ steps.project_info.outputs.version_type }}"
+            PROJECT_VERSION_TYPE="${{ steps.project_info.outputs.mod_version_type }}"
           else
             PROJECT_VERSION="${{ steps.project_info.outputs.mod_version }}-build-${{ github.run_number }}"
             PROJECT_VERSION_TYPE="Unreleased"
@@ -164,12 +164,12 @@ jobs:
       if: ${{ needs.info.outputs.make_release == 'true' }}
 
       steps:
-        - name: "[�] Debug make_release"
+        - name: "[📦] Debug make_release"
           run: |
             echo "make_release = '${{ needs.info.outputs.make_release }}'"
             echo "Comparison result: ${{ needs.info.outputs.make_release == 'true' }}"
         
-        - name: "[�📦] Download artifact"
+        - name: "[📦] Download artifact"
           uses: actions/download-artifact@v8
 
         - name: "[🔒] Verify"
@@ -230,7 +230,6 @@ jobs:
             github-generate-changelog: true
             github-draft: false
             github-prerelease: ${{ needs.info.outputs.version_type != 'release' }}
-            github-commitish: main
             github-token: ${{ secrets.GITHUB_TOKEN }}
 
             files: ${{ needs.info.outputs.full_name }}.jar

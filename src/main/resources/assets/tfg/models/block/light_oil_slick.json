@@ -1,0 +1,89 @@
+{
+    "format_version": "1.9.0",
+    "textures": {
+        "0": "tfg:block/fluid_vein/light_oil_tar",
+        "particle": "tfg:block/fluid_vein/light_oil_tar"
+    },
+    "texture_size": [
+        32,
+        32
+    ],
+    "elements": [{
+        "rotation": {
+            "origin": [
+                0,
+                -1,
+                0
+            ],
+            "angle": 0,
+            "axis": "y"
+        },
+        "from": [
+            0,
+            -2,
+            0
+        ],
+        "to": [
+            16,
+            1,
+            16
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    0,
+                    4.5,
+                    8,
+                    6
+                ],
+                "texture": "#0"
+            },
+            "south": {
+                "uv": [
+                    0,
+                    3,
+                    8,
+                    4.5
+                ],
+                "texture": "#0"
+            },
+            "north": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    1.5
+                ],
+                "texture": "#0"
+            },
+            "west": {
+                "uv": [
+                    0,
+                    1.5,
+                    8,
+                    3
+                ],
+                "texture": "#0"
+            },
+            "up": {
+                "uv": [
+                    8,
+                    8,
+                    0,
+                    0
+                ],
+                "texture": "#0"
+            },
+            "down": {
+                "uv": [
+                    8,
+                    0,
+                    0,
+                    8
+                ],
+                "texture": "#0"
+            }
+        }
+    }],
+    "credit": "Made with Blockbench"
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "tfc:block/plant/branch_side",
+  "textures": {
+    "bark": "tfg:block/fruit_tree/lavacado_branch"
+  }
+}

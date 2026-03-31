@@ -11,10 +11,10 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/steam/steel/side",
-          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
-          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
-          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
-          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+          "overlay_back": "gtceu:block/generators/naquadah_reactor_solid/overlay_back",
+          "overlay_front": "gtceu:block/generators/naquadah_reactor_solid/overlay_front",
+          "overlay_side": "gtceu:block/generators/naquadah_reactor_solid/overlay_side",
+          "overlay_top": "gtceu:block/generators/naquadah_reactor_solid/overlay_top"
         }
       }
     },
@@ -23,10 +23,10 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/steam/steel/side",
-          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
-          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
-          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
-          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+          "overlay_back": "gtceu:block/generators/naquadah_reactor_solid/overlay_back",
+          "overlay_front": "gtceu:block/generators/naquadah_reactor_solid/overlay_front",
+          "overlay_side": "gtceu:block/generators/naquadah_reactor_solid/overlay_side",
+          "overlay_top": "gtceu:block/generators/naquadah_reactor_solid/overlay_top"
         }
       }
     },
@@ -35,10 +35,10 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/steam/steel/side",
-          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
-          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
-          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
-          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+          "overlay_back": "gtceu:block/generators/naquadah_reactor_solid/overlay_back_active",
+          "overlay_front": "gtceu:block/generators/naquadah_reactor_solid/overlay_front_active",
+          "overlay_side": "gtceu:block/generators/naquadah_reactor_solid/overlay_side_active",
+          "overlay_top": "gtceu:block/generators/naquadah_reactor_solid/overlay_top_active"
         }
       }
     },
@@ -47,10 +47,10 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/steam/steel/side",
-          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
-          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
-          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
-          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+          "overlay_back": "gtceu:block/generators/naquadah_reactor_solid/overlay_back_active",
+          "overlay_front": "gtceu:block/generators/naquadah_reactor_solid/overlay_front_active",
+          "overlay_side": "gtceu:block/generators/naquadah_reactor_solid/overlay_side_active",
+          "overlay_top": "gtceu:block/generators/naquadah_reactor_solid/overlay_top_active"
         }
       }
     },
@@ -59,10 +59,10 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/steam/steel/side",
-          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
-          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
-          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
-          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+          "overlay_back": "gtceu:block/generators/naquadah_reactor_solid/overlay_back",
+          "overlay_front": "gtceu:block/generators/naquadah_reactor_solid/overlay_front",
+          "overlay_side": "gtceu:block/generators/naquadah_reactor_solid/overlay_side",
+          "overlay_top": "gtceu:block/generators/naquadah_reactor_solid/overlay_top"
         }
       }
     },
@@ -71,10 +71,10 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/steam/steel/side",
-          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
-          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
-          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
-          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+          "overlay_back": "gtceu:block/generators/naquadah_reactor_solid/overlay_back",
+          "overlay_front": "gtceu:block/generators/naquadah_reactor_solid/overlay_front",
+          "overlay_side": "gtceu:block/generators/naquadah_reactor_solid/overlay_side",
+          "overlay_top": "gtceu:block/generators/naquadah_reactor_solid/overlay_top"
         }
       }
     },
@@ -83,10 +83,10 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/steam/steel/side",
-          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
-          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
-          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
-          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+          "overlay_back": "gtceu:block/generators/naquadah_reactor_solid/overlay_back_active",
+          "overlay_front": "gtceu:block/generators/naquadah_reactor_solid/overlay_front_active",
+          "overlay_side": "gtceu:block/generators/naquadah_reactor_solid/overlay_side_active",
+          "overlay_top": "gtceu:block/generators/naquadah_reactor_solid/overlay_top_active"
         }
       }
     },
@@ -95,10 +95,10 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "gtceu:block/casings/steam/steel/side",
-          "overlay_back": "gtceu:block/machines/high_pressure_steam_miner/overlay_back",
-          "overlay_bottom": "gtceu:block/machines/high_pressure_steam_miner/overlay_bottom",
-          "overlay_front": "gtceu:block/machines/high_pressure_steam_miner/overlay_front",
-          "overlay_side": "gtceu:block/machines/high_pressure_steam_miner/overlay_side"
+          "overlay_back": "gtceu:block/generators/naquadah_reactor_solid/overlay_back_active",
+          "overlay_front": "gtceu:block/generators/naquadah_reactor_solid/overlay_front_active",
+          "overlay_side": "gtceu:block/generators/naquadah_reactor_solid/overlay_side_active",
+          "overlay_top": "gtceu:block/generators/naquadah_reactor_solid/overlay_top_active"
         }
       }
     }

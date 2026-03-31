@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.eerussianguy.firmalife.common.items.FLItems;
 
@@ -29,6 +32,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 
 @Mixin(value = Drowned.class)
 public abstract class DrownedMixin extends Zombie {
@@ -38,6 +43,11 @@ public abstract class DrownedMixin extends Zombie {
 
     public DrownedMixin(EntityType<? extends Zombie> type, Level level) {
         super(type, level);
+    }
+
+    @Inject(method = "travel", at = @At("HEAD"), remap = true)
+    private void tfg$travel(Vec3 p_32394_, CallbackInfo ci) {
+        this.setAirSupply(99999);
     }
 
     /**
@@ -64,6 +74,10 @@ public abstract class DrownedMixin extends Zombie {
     @Overwrite
     public static boolean checkDrownedSpawnRules(EntityType<Husk> entity, ServerLevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         if (accessor.getFluidState(pos.below()).is(FluidTags.WATER))
+            return false;
+
+        // Stop them spawning in oceans
+        if (accessor.getLevel().getHeight(Heightmap.Types.OCEAN_FLOOR, pos.getX(), pos.getZ()) <= pos.getY())
             return false;
 
         return checkMonsterSpawnRules(entity, accessor, spawnType, pos, random);

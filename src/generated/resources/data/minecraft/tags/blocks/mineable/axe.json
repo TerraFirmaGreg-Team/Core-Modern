@@ -4,6 +4,10 @@
     "tfg:casings/greenhouse/treated_wood_greenhouse_casing_1",
     "tfg:casings/greenhouse/treated_wood_greenhouse_casing_2",
     "tfg:casings/greenhouse/treated_wood_greenhouse_casing_3",
-    "tfg:casings/greenhouse/treated_wood_greenhouse_casing_4"
+    "tfg:casings/greenhouse/treated_wood_greenhouse_casing_4",
+    "tfg:fruit_trees/lavacado_growing_branch",
+    "tfg:fruit_trees/lavacado_branch",
+    "tfg:fruit_trees/magmango_growing_branch",
+    "tfg:fruit_trees/magmango_branch"
   ]
 }

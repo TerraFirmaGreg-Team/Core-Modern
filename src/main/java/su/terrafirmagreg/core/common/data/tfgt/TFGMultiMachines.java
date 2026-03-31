@@ -1215,24 +1215,24 @@ public class TFGMultiMachines {
             .noRecipeModifier()
             .appearanceBlock(GTBlocks.STEEL_HULL)
             .tooltips(
-                    Component.translatable("tfg.machine.gas_well.description"),
-                    Component.translatable("tfg.machine.gas_well.explosive_interval",
-                            GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL / 20))
+                    Component.translatable("tfg.tooltip.machine.gas_well_1"),
+                    Component.translatable("tfg.tooltip.machine.gas_well_2",
+                            GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA", "XXX", "XXX")
-                    .aisle("AAA", "XBX", "XXX")
-                    .aisle("AAA", "XSX", "XXX")
+                    .aisle("AAA", "FXF")
+                    .aisle("AAA", "XBX")
+                    .aisle("AAA", "FSF")
                     .where('S', controller(blocks(definition.get())))
-                    .where('X', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(4)
+                    .where('X', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(1)
                             .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setMaxGlobalLimited(1).setPreviewCount(1))
-                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
-                            .or(abilities(PartAbility.EXPORT_FLUIDS_1X).setMinGlobalLimited(1).setMaxGlobalLimited(1).setPreviewCount(1)))
+                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
                     .where('A', blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
-                    .where('B', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .where('F', Predicates.frames(GTMaterials.Steel))
+                    .where('B', abilities(PartAbility.EXPORT_FLUIDS_1X).setMinGlobalLimited(1).setMaxGlobalLimited(1).setPreviewCount(1))
                     .build())
             .workableCasingModel(
                     GTCEu.id("block/casings/steam/steel/side"),
-                    GTCEu.id("block/machines/high_pressure_steam_miner"))
+                    GTCEu.id("block/generators/naquadah_reactor_solid"))
             .register();
 
 

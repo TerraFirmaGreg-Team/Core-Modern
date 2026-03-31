@@ -3,9 +3,13 @@ package su.terrafirmagreg.core.common.tfgt.worldgen;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
+import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.FluidVeinWorldEntry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.chunk.ChunkAccess;
 
 public class TFGBedrockFluidDefinition {
 
@@ -26,6 +30,19 @@ public class TFGBedrockFluidDefinition {
             total += modifier.applyAsInt(level, pos);
         }
         return total;
+    }
+
+    /// Wraps the fluid vein get in chunk access cache stuff
+    /// @param chunk ChunkAccess of the current chunk
+    /// @param savedData BedrockFluidVeinSavedData of the current level
+    /// @return FluidVeinWorldEntry in that chunk
+    public static FluidVeinWorldEntry safelyGetFluidVein(ChunkAccess chunk, BedrockFluidVeinSavedData savedData) {
+
+        ClimateWeightModifier.CHUNK_ACCESS_CACHE.put(chunk.getPos(), chunk);
+        FluidVeinWorldEntry fluidVein = savedData.getFluidVeinWorldEntry(chunk.getPos().x, chunk.getPos().z);
+        ClimateWeightModifier.CHUNK_ACCESS_CACHE.remove(chunk.getPos());
+
+        return fluidVein;
     }
 
     public boolean hasClimateModifiers() {

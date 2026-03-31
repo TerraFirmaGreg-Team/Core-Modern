@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tfg:light_oil_tar"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tfg:blocks/light_oil_tar"
+}

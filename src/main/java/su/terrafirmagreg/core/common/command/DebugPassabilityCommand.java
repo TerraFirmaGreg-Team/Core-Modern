@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.utils.commands;
+package su.terrafirmagreg.core.common.command;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;

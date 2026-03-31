@@ -3,9 +3,7 @@ package su.terrafirmagreg.core.common;
 import java.util.Objects;
 
 import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
@@ -30,7 +28,6 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -48,7 +45,6 @@ import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
-import su.terrafirmagreg.core.world.BedrockFluidFeatureGenerator;
 import su.terrafirmagreg.core.world.BedrockFluidSpoutLoader;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
@@ -132,51 +128,17 @@ public final class ForgeCommonEventListener {
     }
 
     @SubscribeEvent
-    public static void onChunkLoad(ChunkEvent.Load event) {
-        if (event.getLevel().isClientSide())
-            return;
-        if (!event.isNewChunk())
-            return;
-        if (!(event.getLevel() instanceof ServerLevel serverLevel))
-            return;
-
-        ChunkPos chunkPos = event.getChunk().getPos();
-
-        var savedData = BedrockFluidVeinSavedData.getOrCreate(serverLevel);
-        var entry = savedData.getFluidVeinWorldEntry(chunkPos.x, chunkPos.z);
-
-        if (entry == null || entry.getVeinId() == null)
-            return;
-
-        String veinId = entry.getVeinId();
-
-        ResourceLocation featureId = BedrockFluidSpoutLoader.VEIN_TO_FEATURE.get(veinId);
-        if (featureId == null)
-            return;
-
-        String type = BedrockFluidSpoutLoader.VEIN_TO_TYPE.get(veinId);
-        if (type == null)
-            return;
-
-        switch (type) {
-            case "spout" -> BedrockFluidFeatureGenerator.generateSpout(serverLevel, chunkPos, featureId);
-            case "structure" -> BedrockFluidFeatureGenerator.generateStructure(serverLevel, chunkPos, featureId);
-            case "pool" -> BedrockFluidFeatureGenerator.generatePool(serverLevel, chunkPos, featureId);
-        }
-    }
-
-    @SubscribeEvent
     public static void onLevelLoad(LevelEvent.Load event) {
         LevelAccessor level = event.getLevel();
-        if (level instanceof ClientLevel)
+        if (!(level instanceof ServerLevel serverLevel))
             return;
 
-        MinecraftServer server = Objects.requireNonNull(level.getServer());
-        if (server.overworld() != level) {
+        MinecraftServer server = Objects.requireNonNull(serverLevel.getServer());
+        if (server.overworld() != serverLevel) {
             GlobalPos spawnPos = CustomSpawnSaveHandler.getSpawnPos(server.overworld());
 
             var targetLevel = server.getLevel(spawnPos.dimension());
-            if (targetLevel == level) {
+            if (targetLevel == serverLevel) {
 
                 RandomSource random = new XoroshiroRandomSource(targetLevel.getSeed());
 
@@ -187,7 +149,6 @@ public final class ForgeCommonEventListener {
                 int count = 0;
                 while (Objects.isNull(validSpawn)) {
                     ChunkPos chunkPos = new ChunkPos(random.nextInt(chunkSearchRadius * 2) - chunkSearchRadius, random.nextInt(chunkSearchRadius * 2) - chunkSearchRadius);
-                    //System.out.println("ChunkPos: " + chunkPos);
                     var testPos = chunkPos.getMiddleBlockPosition(128);
 
                     int buildHeightLimit = Math.min(targetLevel.getMaxBuildHeight(), targetLevel.getMinBuildHeight() + targetLevel.getLogicalHeight()) - 1;

@@ -8,6 +8,7 @@ package su.terrafirmagreg.core.world.new_ow_wg.surface_states;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Rock;
+import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.surface.SurfaceState;
@@ -35,10 +36,12 @@ public class TFGSimpleSurfaceStates {
     public final SurfaceState BASALT;
     public final SurfaceState BASALT_COBBLE;
     public final SurfaceState BASALT_GRAVEL;
+    public final SurfaceState BASALT_SAND_AND_GRAVEL;
     public final SurfaceState BASALT_MORAINE;
 
     public final SurfaceState TUFF;
     public final SurfaceState TUFF_GRAVEL;
+    public final SurfaceState TUFF_SAND_AND_GRAVEL;
 
     public final SurfaceState MORAINE;
     public final SurfaceState SAND_AND_GRAVEL;
@@ -75,14 +78,25 @@ public class TFGSimpleSurfaceStates {
         BASALT = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.RAW).get().defaultBlockState();
         BASALT_COBBLE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.COBBLE).get().defaultBlockState();
         BASALT_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
-        BASALT_MORAINE = context -> (Helpers.hash(729375982L, context.pos()) & 127) > 96 ? TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.COBBLE).get().defaultBlockState()
+        BASALT_MORAINE = context -> (Helpers.hash(729375982L, context.pos()) & 127) > 96
+                ? TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.COBBLE).get().defaultBlockState()
                 : TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
+        BASALT_SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48
+                ? TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.GRAVEL).get().defaultBlockState()
+                : TFCBlocks.SAND.get(SandBlockType.BLACK).get().defaultBlockState();
 
         TUFF = context -> Blocks.TUFF.defaultBlockState();
         TUFF_GRAVEL = context -> TFGBlocks_Earth.TUFF_GRAVEL.get().defaultBlockState();
+        TUFF_SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48
+                ? TFGBlocks_Earth.TUFF_GRAVEL.get().defaultBlockState()
+                : TFCBlocks.SAND.get(SandBlockType.BLACK).get().defaultBlockState();
 
-        MORAINE = context -> (Helpers.hash(729375982L, context.pos()) & 127) > 96 ? context.getRock().cobble().defaultBlockState() : context.getRock().gravel().defaultBlockState();
-        SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48 ? context.getRock().sand().defaultBlockState() : context.getRock().gravel().defaultBlockState();
+        MORAINE = context -> (Helpers.hash(729375982L, context.pos()) & 127) > 96
+                ? context.getRock().cobble().defaultBlockState()
+                : context.getRock().gravel().defaultBlockState();
+        SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48
+                ? context.getRock().sand().defaultBlockState()
+                : context.getRock().gravel().defaultBlockState();
 
         BLUE_ICE = context -> Blocks.BLUE_ICE.defaultBlockState();
         PACKED_ICE = context -> Blocks.PACKED_ICE.defaultBlockState();

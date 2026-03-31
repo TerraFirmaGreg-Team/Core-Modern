@@ -7,8 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraft.commands.CommandSourceStack;
 
-import su.terrafirmagreg.core.common.command.DebugRecipeDump;
-import su.terrafirmagreg.core.common.command.DebugWorldgenVersions;
+import su.terrafirmagreg.core.common.command.*;
 
 public class TFGCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

@@ -50,10 +50,7 @@ import net.minecraftforge.fluids.FluidType;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryLogisticsMonitorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.AqueousAccumulatorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.FoodRefrigeratorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.GasPressurizerMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.SimpleFoodProcessingMachine;
+import su.terrafirmagreg.core.common.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SMRFluidImportHatchPartMachine;
