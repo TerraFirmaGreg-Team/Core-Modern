@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.gtceu;
 
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,7 +11,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
 @Mixin(value = GTMaterialBlocks.class, remap = false)
-@Debug(export = true)
 public class GTMaterialBlocksMixin {
 
     @Inject(method = "lambda$registerOreIndicator$16(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;", at = @At("HEAD"), cancellable = true)
