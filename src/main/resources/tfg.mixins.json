@@ -186,6 +186,7 @@
         "common.tfc.LivestockAiMixin",
         "common.tfc.MoldCapabilityMixin",
         "common.tfc.OverworldClimateModelMixin",
+        "common.tfc.PotBlockEntityMixin",
         "common.tfc.RockDataMixin",
         "common.tfc.SupportMixin",
         "common.tfc.TFCAnimalBrainMixin",
