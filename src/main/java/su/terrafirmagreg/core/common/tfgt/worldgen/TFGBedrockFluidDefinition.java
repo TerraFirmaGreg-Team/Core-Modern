@@ -11,6 +11,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
+import lombok.Getter;
+
+@Getter
 public class TFGBedrockFluidDefinition {
 
     private final ResourceLocation id;
@@ -49,7 +52,4 @@ public class TFGBedrockFluidDefinition {
         return !climateModifiers.isEmpty();
     }
 
-    public ResourceLocation getId() {
-        return id;
-    }
 }
