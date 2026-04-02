@@ -70,6 +70,7 @@
         "common.firmalife.LargePlanterBlockEntityOxygenMixin",
         "common.firmalife.MixinFoodShelfBlockEntity",
         "common.firmalife.MixinGreenhousePortBlock",
+        "common.firmalife.VatRecipeMatchesMixin",
         "common.flywheel.AnimatedBlazeBurnerMixin",
         "common.forge.CapabilityProviderMixin",
         "common.forge.ForgeConfigSpecMixin",
