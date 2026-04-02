@@ -12,6 +12,7 @@ import com.eerussianguy.firmalife.common.recipes.VatRecipe;
 
 import net.dries007.tfc.common.recipes.ingredients.FluidStackIngredient;
 import net.dries007.tfc.common.recipes.ingredients.ItemStackIngredient;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
@@ -35,7 +36,7 @@ public abstract class VatRecipeMatchesMixin {
      * The recipe's assembleOutputs() will calculate the correct multiplier.
      */
     @Inject(method = "matches(Lcom/eerussianguy/firmalife/common/blockentities/VatBlockEntity$VatInventory;Lnet/minecraft/world/level/Level;)Z", at = @At("HEAD"), cancellable = true)
-    private void tfg$matchesWithMinimumFluid(VatBlockEntity.VatInventory container, net.minecraft.world.level.Level level, CallbackInfoReturnable<Boolean> cir) {
+    private void tfg$matchesWithMinimumFluid(VatBlockEntity.VatInventory container, Level level, CallbackInfoReturnable<Boolean> cir) {
         // Check if item matches.
         if (!inputItem.test(container.getStackInSlot(0))) {
             cir.setReturnValue(false);
