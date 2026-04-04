@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolActions;
 
 public final class CanoeCreatorBehavior implements IToolBehavior {
@@ -32,8 +33,11 @@ public final class CanoeCreatorBehavior implements IToolBehavior {
     public InteractionResult onItemUse(UseOnContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        level.getBlockState(pos).getToolModifiedState(context, ToolActions.AXE_STRIP, false);
-
+        BlockState modified = level.getBlockState(pos).getToolModifiedState(context, ToolActions.AXE_STRIP, false);
+        if (modified != null) {
+            level.setBlock(pos, modified, 11);
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
         return InteractionResult.PASS;
     }
 
