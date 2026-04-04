@@ -104,12 +104,12 @@ public class FluidVeinRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayWidth() {
-        return 168;
+        return 166;
     }
 
     @Override
     public int getDisplayHeight() {
-        return 170;
+        return 160;
     }
 
     private final int fluidSize = 24;
@@ -133,7 +133,8 @@ public class FluidVeinRecipe implements EmiRecipe {
             yPointer = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.weight", weight), 2, yPointer);
         }
 
-        yPointer = addDimensionIcons(widgets, 2, yPointer);
+        //yPointer = addDimensionIcons(widgets, 2, yPointer);
+        addCornerDimensionIcons(widgets);
 
         yPointer = addBiomes(widgets, 2, yPointer);
 
@@ -147,6 +148,16 @@ public class FluidVeinRecipe implements EmiRecipe {
 
         widgets.add(tankWidget);
         return y + fluidSize + 2;
+    }
+
+    private void addCornerDimensionIcons(WidgetHolder widgets) {
+        for (var dimension : dimensions) {
+            var slotWidget = new SlotWidget(EmiStack.of(Objects.requireNonNull(GTRegistries.DIMENSION_MARKERS.get(dimension.location())).getIcon()),
+                    getDisplayWidth() - 27, getDisplayHeight() - 27);
+            slotWidget.drawBack(false).large(true);
+
+            widgets.add(slotWidget);
+        }
     }
 
     private int addDimensionIcons(WidgetHolder widgets, int x, int y) {
@@ -206,7 +217,9 @@ public class FluidVeinRecipe implements EmiRecipe {
             int i = 0;
 
             MutableComponent tooltip = Component.empty();
-            for (ResourceKey<Biome> entry : biomeKeys) {
+            List<ResourceKey<Biome>> sortedBiomeKeys = biomeKeys.stream().sorted().toList();
+
+            for (ResourceKey<Biome> entry : sortedBiomeKeys) {
                 i++;
                 var langComp = Component.translatable("biome." + entry.location().toLanguageKey());
 
