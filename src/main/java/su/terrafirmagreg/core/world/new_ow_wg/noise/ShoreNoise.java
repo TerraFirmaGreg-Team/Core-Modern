@@ -22,13 +22,14 @@ public final class ShoreNoise {
     // Typical monoslope beach
     public static ShoreNoiseSampler sandyBeach(Seed seed) {
         return new ShoreNoiseSampler() {
+            final Noise2D tideLevelNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
             double sandHeight, weight;
 
             @Override
             public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome,
                     double shoreHeight, double normalHeight) {
 
-                this.sandHeight = ShoreNoise.simpleBeach(seed, x, z, heightIn, landWeight, oceanWeight);
+                this.sandHeight = ShoreNoise.simpleBeach(tideLevelNoise.noise(x, z), heightIn, landWeight, oceanWeight);
                 this.weight = thisWeight;
 
                 return sandHeight;
@@ -52,6 +53,7 @@ public final class ShoreNoise {
         return new ShoreNoiseSampler() {
             final Noise2D bankNoise = new OpenSimplex2D(seed.seed()).spread(0.03).abs().scaled(-1, 8);
             final Noise3D cliffNoise = TFGBiomeNoise.cliffNoise(seed);
+            final Noise2D tideLevelNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
 
             final double cliffBaseWeight = 0.25;
             final double cliffTopWeight = 0.45;
@@ -70,9 +72,9 @@ public final class ShoreNoise {
                 this.x = x;
                 this.z = z;
                 this.landWeight = landWeight;
-                this.sandHeight = ShoreNoise.simpleBeachNoLandBlend(seed, x, z, heightIn, landWeight, oceanWeight);
+                this.sandHeight = ShoreNoise.simpleBeachNoLandBlend(tideLevelNoise.noise(x, z), heightIn, landWeight, oceanWeight);
                 this.yTop = heightIn;
-                final double tideLevelAtOcean = TFGBiomeNoise.shoreTideLevelNoise(seed).noise(x, z) - 4;
+                final double tideLevelAtOcean = tideLevelNoise.noise(x, z) - 4;
 
                 final double shoreBankHeight = bankNoise.noise(x, z) + sandHeight;
 
@@ -116,6 +118,7 @@ public final class ShoreNoise {
         return new ShoreNoiseSampler() {
             final OpenSimplex2D warpNoise = new OpenSimplex2D(seed.seed()).scaled(-10, 10).spread(0.05);
             final Noise2D duneNoise = new OpenSimplex2D(seed.seed()).spread(0.03).abs().scaled(-2, 6.5).warped(warpNoise);
+            final Noise2D tideLevelNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
 
             double duneHeight;
             double sandHeight;
@@ -123,8 +126,8 @@ public final class ShoreNoise {
             @Override
             public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome,
                     double shoreHeight, double normalHeight) {
-                this.sandHeight = ShoreNoise.simpleBeach(seed, x, z, heightIn, landWeight, oceanWeight);
-                final double tideLevelAtOcean = TFGBiomeNoise.shoreTideLevelNoise(seed).noise(x, z) - 4;
+                this.sandHeight = ShoreNoise.simpleBeach(tideLevelNoise.noise(x, z), heightIn, landWeight, oceanWeight);
+                final double tideLevelAtOcean = tideLevelNoise.noise(x, z) - 4;
 
                 final double fullDuneHeight = duneNoise.noise(x, z) + sandHeight;
                 if (oceanWeight > 0) {
@@ -160,6 +163,7 @@ public final class ShoreNoise {
                     new OpenSimplex2D(seed.seed() + 492L).octaves(3).spread(0.09),
                     -1, 0, -5, 0);
             private final Noise3D caveNoise = TFGBiomeNoise.cliffNoise(seed).scaled(0, 0.12);
+            private final Noise2D tideLevelNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
 
             final double topShelfEdge = 0.7;
             final double midShelfEdge = 0.35;
@@ -177,7 +181,7 @@ public final class ShoreNoise {
             @Override
             public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome,
                     double shoreHeight, double normalHeight) {
-                tideLevel = TFGBiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
+                tideLevel = tideLevelNoise.noise(x, z);
                 sandHeight = ShoreNoise.simpleBeach(tideLevel, heightIn, landWeight, oceanWeight);
                 this.x = x;
                 this.z = z;
@@ -235,6 +239,7 @@ public final class ShoreNoise {
             private final Noise2D tidepoolNoise = TFGNoiseHelpers.clampedScaled(
                     new OpenSimplex2D(seed.seed() + 492L).octaves(3).spread(0.09),
                     -1, 0, -5, 0);
+            private final Noise2D tideLevelNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
 
             private final TFGCellular2D cellularNoise = new TFGCellular2D(seed.seed() + 323L).spread(0.022);
             private final Noise2D punchbowlCarvingNoise = (x, z) -> {
@@ -266,7 +271,7 @@ public final class ShoreNoise {
             @Override
             public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome,
                     double shoreHeight, double normalHeight) {
-                final double tideLevel = TFGBiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
+                final double tideLevel = tideLevelNoise.noise(x, z);
                 oceanEdgeHeight = tideLevel - 4;
                 this.x = x;
                 this.z = z;
@@ -393,6 +398,7 @@ public final class ShoreNoise {
             };
 
             final Noise3D cliffNoise = TFGBiomeNoise.cliffNoise(seed);
+            final Noise2D tideLevelNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
 
             private double stackNoiseValue;
             private double sandHeight;
@@ -410,7 +416,7 @@ public final class ShoreNoise {
                 this.landWeight = landWeight;
                 this.oceanWeightFactor = Mth.clampedMap(oceanWeight, 0.1, 0.25, 1, 0);
 
-                this.tideLevel = TFGBiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
+                this.tideLevel = tideLevelNoise.noise(x, z);
                 final double typicalBeachSandHeight = ShoreNoise.simpleBeach(tideLevel, heightIn, landWeight, oceanWeight);
                 // High-tide variants of this biome should completely swallow this beach
                 this.sandHeight = Mth.clampedMap(thisWeight, 0.5, 0.8, typicalBeachSandHeight, Math.min(typicalBeachSandHeight, tideLevel - 1));
@@ -512,6 +518,7 @@ public final class ShoreNoise {
 
             final Noise3D cliffNoise = TFGBiomeNoise.cliffNoise(seed);
             final Noise2D lowerTerraceNoise = TFGBiomeNoise.lowerTerraceNoise(seed);
+            final Noise2D tideLevelNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
 
             private double oceanWeight;
             private double lowerTerraceHeight;
@@ -526,7 +533,7 @@ public final class ShoreNoise {
                 this.z = z;
                 this.oceanWeight = oceanWeight;
                 this.lowerTerraceHeight = lowerTerraceNoise.noise(x, z);
-                this.sandHeight = ShoreNoise.simpleBeach(seed, x, z, heightIn, landWeight, oceanWeight);
+                this.sandHeight = ShoreNoise.simpleBeach(tideLevelNoise.noise(x, z), heightIn, landWeight, oceanWeight);
 
                 return lowerTerraceHeight;
             }
@@ -568,11 +575,6 @@ public final class ShoreNoise {
         return Math.min(curve, topWidth);
     }
 
-    private static double simpleBeach(Seed seed, int x, int z, double heightIn, double landWeight, double oceanWeight) {
-        final double tideLevel = TFGBiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
-        return simpleBeach(tideLevel, heightIn, landWeight, oceanWeight);
-    }
-
     private static double simpleBeach(double tideLevel, double heightIn, double landWeight, double oceanWeight) {
 
         // Basic heights that the shore height will approach at edges with other biomes
@@ -590,9 +592,7 @@ public final class ShoreNoise {
         }
     }
 
-    private static double simpleBeachNoLandBlend(Seed seed, int x, int z, double heightIn, double landWeight, double oceanWeight) {
-        final double tideLevel = TFGBiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
-
+    private static double simpleBeachNoLandBlend(double tideLevel, double heightIn, double landWeight, double oceanWeight) {
         // Basic heights that the shore height will approach at edges with other biomes
         final double simpleShoreSelfHeight = tideLevel - 1;
         final double simpleShoreOceanHeight = tideLevel - 4;

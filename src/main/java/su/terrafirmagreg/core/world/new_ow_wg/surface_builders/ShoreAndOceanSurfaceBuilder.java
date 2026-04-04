@@ -76,6 +76,9 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
     private final NormalNoise icebergSurfaceNoise;
     private final Noise2D patternedNoise;
 
+    private final Noise2D tideLevelNoise;
+    private final Noise2D lavaFlowMaterialNoise;
+    private final Noise2D lavaFlowNoise;
     private final TFGSimpleSurfaceStates simpleStates = TFGSimpleSurfaceStates.INSTANCE();
 
     /**
@@ -99,6 +102,9 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
         this.icebergPillarRoofNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-3, 1.0D));
         this.icebergSurfaceNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-6, 1.0D, 1.0D, 1.0D));
         this.patternedNoise = TFGBiomeNoise.seaIceNoise(seed.forkStable().next());
+        this.tideLevelNoise = TFGBiomeNoise.shoreTideLevelNoise(seed);
+        this.lavaFlowMaterialNoise = TFGBiomeNoise.lavaFlowMaterial(seed.seed());
+        this.lavaFlowNoise = TFGBiomeNoise.lavaFlow(seed.seed());
     }
 
     @Override
@@ -106,7 +112,7 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
         final BlockPos pos = context.pos();
         final int x = pos.getX();
         final int z = pos.getZ();
-        final int tideLevel = (int) TFGBiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
+        final int tideLevel = (int) tideLevelNoise.noise(x, z);
         final int sandHeightAbsolute = tideLevel + sandHeight;
         final int seaLevel = context.getSeaLevel();
 
@@ -151,10 +157,8 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder {
      * but using different materials
      */
     private void buildLavaFlowSurface(SurfaceBuilderContext context, int startY, int endY, int x, int z) {
-        final Noise2D smoothNoise = TFGBiomeNoise.lavaFlowMaterial(seed.seed());
-        final double noiseValue = smoothNoise.noise(x, z);
-        final Noise2D lavaFlows = TFGBiomeNoise.lavaFlow(seed.seed());
-        final double flowValue = lavaFlows.noise(x, z);
+        final double noiseValue = lavaFlowMaterialNoise.noise(x, z);
+        final double flowValue = lavaFlowNoise.noise(x, z);
 
         if (flowValue < 0.40)
             TFGNormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, surface, surface, subsurface, surface, surface);
