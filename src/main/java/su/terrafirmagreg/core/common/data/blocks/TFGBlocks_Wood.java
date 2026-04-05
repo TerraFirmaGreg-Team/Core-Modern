@@ -204,10 +204,7 @@ public class TFGBlocks_Wood {
     private static BlockEntry<Block> chest(WoodType woodType) {
         var chestBlock = Wood.BlockType.CHEST.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/chest/" + woodType.name, p -> chestBlock)
-                .blockstate((ctx, prov) -> {
-                    ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("block/chest"))
-                            .texture("particle", woodType.plankTexture);
-                })
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
                 .register();
     }
@@ -216,7 +213,6 @@ public class TFGBlocks_Wood {
         var trappedChestBlock = Wood.BlockType.TRAPPED_CHEST.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/trapped_chest/" + woodType.name, p -> trappedChestBlock)
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-
                 .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
                 .register();
     }
