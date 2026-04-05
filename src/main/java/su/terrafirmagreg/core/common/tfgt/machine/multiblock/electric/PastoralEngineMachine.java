@@ -11,6 +11,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.entities.livestock.DairyAnimal;
+import net.dries007.tfc.common.entities.livestock.ProducingMammal;
 import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.dries007.tfc.common.entities.livestock.WoolyAnimal;
 import net.dries007.tfc.common.fluids.FluidHelpers;
@@ -110,7 +111,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
     }
 
     private AnimalProductEvent buildEvent(ServerLevel level,
-            TFCAnimalProperties animal) {
+                                          TFCAnimalProperties animal) {
         if (animal instanceof DairyAnimal dairy) {
             return new AnimalProductEvent(
                     level, dairy.blockPosition(), null, dairy,
@@ -199,8 +200,12 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
                 allAnimals.stream()
                         .filter(e -> e instanceof TFCAnimalProperties animal
-                                && animal.getAgeType() != TFCAnimalProperties.Age.OLD
-                                && !animal.isReadyForAnimalProduct())
+                                // Filter so only animals that can produce milk have their cooldown checked
+                                && e instanceof ProducingMammal producer
+                                && animal.getAgeType() == TFCAnimalProperties.Age.ADULT
+                                && animal.getGender() == TFCAnimalProperties.Gender.FEMALE
+                                && !animal.isReadyForAnimalProduct()
+                                && producer.getProducedTick() > 0) // Check that the animal already produced milk at least once
                         .collect(java.util.stream.Collectors.groupingBy(
                                 e -> ForgeRegistries.ENTITY_TYPES.getKey(e.getType()),
                                 java.util.stream.Collectors.minBy(
@@ -219,13 +224,13 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
                             if (days > 0) {
                                 textList.add(Component.translatable(
-                                        "tfg.machine.pastoral_engine.next_harvest_days",
-                                        formattedName, days, hours)
+                                                "tfg.machine.pastoral_engine.next_harvest_days",
+                                                formattedName, days, hours)
                                         .withStyle(ChatFormatting.YELLOW));
                             } else {
                                 textList.add(Component.translatable(
-                                        "tfg.machine.pastoral_engine.next_harvest_hours",
-                                        formattedName, hours)
+                                                "tfg.machine.pastoral_engine.next_harvest_hours",
+                                                formattedName, hours)
                                         .withStyle(ChatFormatting.YELLOW));
                             }
                         }));
@@ -233,7 +238,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
         }
         // Toujours visible (client + server)
         textList.add(Component.translatable("tfg.machine.pastoral_engine.next_use",
-                harvestCounter, HARVESTS_PER_USE)
+                        harvestCounter, HARVESTS_PER_USE)
                 .withStyle(ChatFormatting.AQUA));
     }
 }
