@@ -181,6 +181,10 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TOOL_RACK, block);
+                })
                 .simpleItem()
                 .register();
     }
@@ -223,6 +227,10 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.LOOM, block);
+                })
                 .simpleItem()
                 .register();
 
@@ -242,6 +250,10 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.forEachCardinalDirection(builder, sluiceLower, b -> b.with(TFCBlockStateProperties.UPPER, false));
                     ModelUtils.forEachCardinalDirection(builder, sluiceUpper, b -> b.with(TFCBlockStateProperties.UPPER, true));
+                })
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.SLUICE, block);
                 })
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower"))).build()
                 .register();
@@ -327,6 +339,10 @@ public class TFGBlocks_Wood {
                             .texture("particle", TFGCore.id(path + "sides"));
 
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.LECTERN, block);
                 })
                 .simpleItem()
                 .register();
@@ -414,6 +430,7 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), dynamicModel);
                 })
+                .addLayer(() -> RenderType::cutout)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + type.name))).build()
                 .register();
     }
@@ -432,6 +449,7 @@ public class TFGBlocks_Wood {
 
                     prov.simpleBlock(ctx.getEntry(), dynamicModel);
                 })
+                .addLayer(() -> RenderType::cutout)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + type.name))).build()
                 .register();
 
@@ -465,6 +483,7 @@ public class TFGBlocks_Wood {
                     ModelUtils.forEachCardinalDirection(builder, dynamicModel, b -> b.with(BlockStateProperties.OPEN, true));
                     ModelUtils.forEachCardinalDirection(builder, dynamicModelShut, b -> b.with(BlockStateProperties.OPEN, false));
                 })
+                .addLayer(() -> RenderType::cutout)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + type.name))).build()
                 .register();
 
@@ -540,6 +559,10 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                         prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/stomping_barrel"))
                                 .texture("0", TFGCore.id("block/wood/sheet/" + type.name))))
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(FLBlockEntities.STOMPING_BARREL, block);
+                })
                 .simpleItem()
                 .register();
 
@@ -553,6 +576,10 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                         prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/barrel_press"))
                                 .texture("0", TFGCore.id("block/wood/sheet/" + type.name))))
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(FLBlockEntities.BARREL_PRESS, block);
+                })
                 .simpleItem()
                 .register();
 
