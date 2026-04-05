@@ -13,6 +13,7 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.devices.BarrelBlock;
@@ -21,6 +22,7 @@ import net.dries007.tfc.common.items.BarrelBlockItem;
 import net.dries007.tfc.common.items.ChestBlockItem;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.dries007.tfc.world.feature.tree.TFCTreeGrower;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -39,6 +41,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 public class TFGBlocks_Wood {
@@ -289,6 +292,10 @@ public class TFGBlocks_Wood {
                     buildBarrelBlockStateEntry(builder, Direction.WEST, 180, barrelSide, barrelSideRack, sealedBarrelSide, sealedBarrelSideRack);
                     buildBarrelBlockStateEntry(builder, Direction.SOUTH, 90, barrelSide, barrelSideRack, sealedBarrelSide, sealedBarrelSideRack);
                     buildBarrelBlockStateEntry(builder, Direction.NORTH, 270, barrelSide, barrelSideRack, sealedBarrelSide, sealedBarrelSideRack);
+                })
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.BARREL, block);
                 })
                 .item(BarrelBlockItem::new).build()
                 .register();
