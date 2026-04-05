@@ -204,7 +204,10 @@ public class TFGBlocks_Wood {
     private static BlockEntry<Block> chest(WoodType woodType) {
         var chestBlock = Wood.BlockType.CHEST.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/chest/" + woodType.name, p -> chestBlock)
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("block/chest"))
+                            .texture("particle", woodType.plankTexture);
+                })
                 .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
                 .register();
     }
@@ -213,6 +216,7 @@ public class TFGBlocks_Wood {
         var trappedChestBlock = Wood.BlockType.TRAPPED_CHEST.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/trapped_chest/" + woodType.name, p -> trappedChestBlock)
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+
                 .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
                 .register();
     }
@@ -377,6 +381,7 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
+                .addLayer(() -> RenderType::cutout)
                 .simpleItem()
                 .register();
     }
@@ -535,8 +540,8 @@ public class TFGBlocks_Wood {
 
                     prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/wine_shelf"))
                             .texture("0", type.plankTexture)
-                            .texture("1", TFGCore.id("block/wood/sheet/" + type.name))
-                            .texture("2", type.strippedLogTexture);
+                            .texture("2", TFGCore.id("block/wood/sheet/" + type.name))
+                            .texture("3", type.strippedLogTexture);
 
                     var dynamicModel = prov.models().getBuilder("wood/wine_shelf/" + type.name + "_dynamic")
                             .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelf"), TFGCore.id("block/wood/wine_shelf/" + type.name), t,
