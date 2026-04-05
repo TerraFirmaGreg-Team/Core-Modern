@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.compat.emi;
 
-import static com.gregtechceu.gtceu.integration.xei.widgets.GTOreVeinWidget.width;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -247,7 +245,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
     private void createVeinInfoTooltip(WidgetHolder holder, int offsetY) {
         holder.addTooltip(List.of(
                 ClientTooltipComponent.create(Component.translatable("tfg.emi.ore_veins.rarity.tooltip", rarity).getVisualOrderText())),
-                0, offsetY, width, 10);
+                0, offsetY, 120, 10);
     }
 
     @Override
