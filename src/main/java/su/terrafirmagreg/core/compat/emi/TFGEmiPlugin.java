@@ -10,6 +10,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -18,7 +19,11 @@ import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.SlotWidget;
+import dev.emi.emi.api.widget.TextureWidget;
+import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
@@ -124,5 +129,23 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
         GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries().forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
 
+    }
+
+    private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
+            "textures/gui/emi/arrow.png");
+
+    public static int createArrowWidget(WidgetHolder holder, int offsetY, int offsetX, int length) {
+        int image_height = 18;
+        int image_width = 40;
+        int u_start = image_width - length;
+
+        TextureWidget widget = new TextureWidget(ARROW, offsetX, offsetY, length, image_height, u_start, 0, length, image_height - 1, image_width, image_height);
+        holder.add(widget);
+        return offsetX + 2 + length;
+    }
+
+    public static void createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
+        SlotWidget widget = new SlotWidget(stack, offsetX, offsetY);
+        holder.add(widget);
     }
 }

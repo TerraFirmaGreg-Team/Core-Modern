@@ -134,6 +134,7 @@
         "common.ldlib.ModularUIContainerMixin",
         "common.minecraft.AccessorChunkMap",
         "common.minecraft.AccessorMinecraftServer",
+        "common.minecraft.BeardifierAccessor",
         "common.minecraft.AccessorServerChunkCache",
         "common.minecraft.AxolotlMixin",
         "common.minecraft.BlazeMixin",

@@ -46,7 +46,18 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
                 } else {
                     Ingredient ing = key.get(symbol);
                     if (ing != null && !ing.isEmpty()) {
-                        result.add(EmiIngredient.of(ing));
+                        if (ing.getItems()[0].isDamageableItem()) {
+                            ItemStack sampleDamaged = ing.getItems()[0].copy();
+                            int maxDurability = sampleDamaged.getMaxDamage();
+                            if (!sampleDamaged.isDamaged() && maxDurability > 0) {
+                                sampleDamaged.setDamageValue(maxDurability - 1);
+                            }
+
+                            ItemStack damaged = ItemRepairRecipe.computeRepairedResult(sampleDamaged, 1.0f - recipe.getRepairPercentage());
+                            result.add(damaged.isEmpty() ? EmiStack.EMPTY : EmiStack.of(damaged));
+                        } else {
+                            result.add(EmiIngredient.of(ing));
+                        }
                     } else {
                         result.add(EmiStack.EMPTY);
                     }
@@ -62,15 +73,8 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
             return EmiStack.EMPTY;
         }
         for (ItemStack stack : repairableIngredient.getItems()) {
-            if (!stack.isEmpty() && stack.isDamageableItem()) {
-                ItemStack sampleDamaged = stack.copy();
-                int maxDurability = sampleDamaged.getMaxDamage();
-                if (!sampleDamaged.isDamaged() && maxDurability > 0) {
-                    sampleDamaged.setDamageValue(maxDurability - 1);
-                }
-
-                ItemStack repaired = ItemRepairRecipe.computeRepairedResult(sampleDamaged, recipe.getRepairPercentage());
-                return repaired.isEmpty() ? EmiStack.EMPTY : EmiStack.of(repaired);
+            if (!stack.isEmpty()) {
+                return EmiStack.of(stack);
             }
         }
         return EmiStack.EMPTY;
@@ -115,7 +119,7 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return 54;
+        return 18;
     }
 
     @Override
@@ -135,7 +139,9 @@ public class ItemRepairEmiRecipe implements EmiRecipe {
             }
         }
 
-        holder.addSlot(buildDynamicOrFallbackOutput(), startX + width * slotSize + 5, startY + (height * slotSize) / 2 - 9)
+        TFGEmiPlugin.createArrowWidget(holder, startY + (height * slotSize) / 2 - 9, startX + 3 * slotSize, 30);
+
+        holder.addSlot(buildDynamicOrFallbackOutput(), startX + 5 * slotSize, startY + (height * slotSize) / 2 - 9)
                 .recipeContext(this);
     }
 }

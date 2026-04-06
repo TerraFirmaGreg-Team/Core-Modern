@@ -18,8 +18,6 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.SlotWidget;
-import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -102,30 +100,14 @@ public class BlockInteractionRecipe implements EmiRecipe {
         int itemOffsetY = 5;
         int itemOffsetX = 25;
 
-        createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(INPUTS));
+        TFGEmiPlugin.createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(INPUTS));
         itemOffsetX += 20;
 
-        createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(TOOL));
+        TFGEmiPlugin.createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(TOOL));
         itemOffsetX += 20;
 
-        itemOffsetX = createArrowWidget(widgetHolder, itemOffsetY, itemOffsetX, 30);
-        createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(OUTPUTS));
-
-    }
-
-    private void createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
-        SlotWidget widget = new SlotWidget(stack, offsetX, offsetY);
-        holder.add(widget);
-    }
-
-    private int createArrowWidget(WidgetHolder holder, int offsetY, int offsetX, int length) {
-        int image_height = 18;
-        int image_width = 40;
-        int u_start = image_width - length;
-
-        TextureWidget widget = new TextureWidget(ARROW, offsetX, offsetY, length, image_height, u_start, 0, length, image_height - 1, image_width, image_height);
-        holder.add(widget);
-        return offsetX + 2 + length;
+        itemOffsetX = TFGEmiPlugin.createArrowWidget(widgetHolder, itemOffsetY, itemOffsetX, 30);
+        TFGEmiPlugin.createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(OUTPUTS));
     }
 
     @Override

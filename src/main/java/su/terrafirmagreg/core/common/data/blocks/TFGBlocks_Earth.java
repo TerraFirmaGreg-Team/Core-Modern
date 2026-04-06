@@ -62,6 +62,8 @@ public class TFGBlocks_Earth {
 
     public static TagKey<Block> TFCDirtBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "dirt"));
     public static TagKey<Block> TFCMudBricksBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "mud_bricks"));
+    public static TagKey<Block> TFCClayBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "clay"));
+    public static TagKey<Block> TFCClayGrassBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "clay_grass"));
 
     // New TFC Worldgen
     public static final BlockEntry<Block> TUFF_GRAVEL = TFGCore.REGISTRATE.block("tuff_gravel", Block::new)
@@ -82,7 +84,7 @@ public class TFGBlocks_Earth {
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_SHOVEL)
+            .tag(TFCTags.Blocks.CAN_CARVE, BlockTags.MINEABLE_WITH_SHOVEL, TFCClayBlockTag)
             .item(BlockItem::new)
             .tag(TFCClayItemTag)
             .build()
@@ -376,7 +378,7 @@ public class TFGBlocks_Earth {
                 .properties(p -> p.mapColor(MapColor.DIRT).strength(1.5f).sound(SoundType.GRAVEL))
                 .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCDirtBlockTag)
+                .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCDirtBlockTag, TFCClayBlockTag)
                 .item(BlockItem::new)
                 .tag(TFCDirtItemTag, TFCClayItemTag)
                 .build()
@@ -393,7 +395,7 @@ public class TFGBlocks_Earth {
                 p -> new ConnectedGrassBlock(p, dirt, path, farmland))
                 .properties(props)
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .tag(TFCTags.Blocks.GRASS, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCClayGrassBlockTag)
                 .loot(dropBetween(() -> Items.CLAY_BALL, 1, 3))
                 .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
                 .tag(TFCGrassItemTag, TFCClayItemTag)
