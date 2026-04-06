@@ -54,6 +54,7 @@ public class FluidVeinRecipe implements EmiRecipe {
     }
 
     private static final int INDENT = 6;
+    private static final int NEW_LINE = 11;
 
     private final ResourceLocation veinID;
     private final Fluid fluid;
@@ -124,7 +125,7 @@ public class FluidVeinRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return 200;
+        return 198;
     }
 
     private final int fluidSize = 24;
@@ -198,6 +199,7 @@ public class FluidVeinRecipe implements EmiRecipe {
 
     private int addBiomeList(WidgetHolder widgets, Set<ResourceKey<Biome>> biomeKeys, int x, int y, boolean anyBiome) {
         int cutoff = 6;
+        int new_line = NEW_LINE - 2;
         widgets.addText(Component.translatable("tfg.emi.fluid_veins.biomes"), x, y, 0, false);
 
         if (!anyBiome) {
@@ -211,7 +213,7 @@ public class FluidVeinRecipe implements EmiRecipe {
                 var langComp = Component.translatable("biome." + entry.location().toLanguageKey());
 
                 if (i < cutoff) {
-                    y += 8;
+                    y += new_line;
                     addTextLine(widgets, langComp, x + INDENT, y);
                 }
 
@@ -220,7 +222,7 @@ public class FluidVeinRecipe implements EmiRecipe {
             }
 
             if (i >= cutoff) {
-                y += 8;
+                y += new_line;
                 var overflowText = new TextWidget(Component.translatable("tfg.emi.fluid_veins.biomes_overflow", "+" + (i - cutoff + 1)).getVisualOrderText(), x + INDENT, y, 0, false) {
                     @Override
                     public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
@@ -232,7 +234,7 @@ public class FluidVeinRecipe implements EmiRecipe {
 
             y = newLineY(y);
         } else {
-            y += 8;
+            y += new_line;
             y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.biome_any"), x + INDENT, y);
         }
 
@@ -308,7 +310,7 @@ public class FluidVeinRecipe implements EmiRecipe {
     }
 
     private int newLineY(int oldY) {
-        return oldY + 11;
+        return oldY + NEW_LINE;
     }
 
 }
