@@ -42,7 +42,18 @@ public class GTRepairHelper {
             }
         }
 
-        if (hasRepairKit && !toolStack.isEmpty()) {
+        boolean resultWasInputInGrid = false;
+        for (int i = 0; i < grid.getContainerSize(); i++) {
+            ItemStack s = grid.getItem(i);
+            if (!s.isEmpty() && s.getItem() == event.getCrafting().getItem()) {
+                resultWasInputInGrid = true;
+                break;
+            }
+        }
+
+        if (hasRepairKit && !toolStack.isEmpty()
+                && event.getCrafting().getItem() instanceof IGTTool
+                && !resultWasInputInGrid) {
             int repairAmount = (int) (toolStack.getMaxDamage() * repairPercent);
             int newDamage = Math.max(0, toolStack.getDamageValue() - repairAmount);
 
