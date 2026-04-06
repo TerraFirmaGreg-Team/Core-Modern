@@ -217,7 +217,7 @@ jobs:
             echo ""
 
         - name: "[🚀] Release"
-          uses: Xikaro/game-publish@3.3.1
+          uses: Xikaro/game-publish@3.3.3
           with:
             modrinth-id: ${{ vars.MODRINTH_ID }}
             modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
