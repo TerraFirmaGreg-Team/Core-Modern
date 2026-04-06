@@ -21,12 +21,18 @@ import dev.emi.emi.api.EmiRegistry;
 @Mixin(value = MultiblockInfoEmiCategory.class)
 public class MultiblockInfoEmiCategoryMixin {
 
+    // Hides certain multiblocks from EMI
+
     @Unique
     private final static List<ResourceLocation> tfg$excludedMultis = List.of(
             GTCEu.id("primitive_pump"),
             GTCEu.id("charcoal_pile_igniter"),
             GTCEu.id("active_transformer"),
             GTCEu.id("primitive_blast_furnace"),
+            GTCEu.id("large_bronze_boiler"),
+            GTCEu.id("large_steel_boiler"),
+            GTCEu.id("titanium_large_boiler"),
+            GTCEu.id("tungstensteel_large_boiler"),
             GTCEu.id("mv_bedrock_ore_miner"),
             GTCEu.id("hv_bedrock_ore_miner"),
             GTCEu.id("ev_bedrock_ore_miner"));

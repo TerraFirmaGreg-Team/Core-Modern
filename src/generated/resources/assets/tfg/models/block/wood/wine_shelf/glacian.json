@@ -2,7 +2,7 @@
   "parent": "firmalife:block/wine_shelf",
   "textures": {
     "0": "ad_astra:block/glacian_planks",
-    "1": "tfg:block/wood/sheet/glacian",
-    "2": "ad_astra:block/stripped_glacian_log"
+    "2": "tfg:block/wood/sheet/glacian",
+    "3": "ad_astra:block/stripped_glacian_log"
   }
 }

@@ -346,7 +346,9 @@ public class TFGChunkNoiseFiller extends TFGChunkHeightFiller {
 
         final Flow flow = localBiome.hasRivers() ? calculateFlowAt(cellX, cellZ) : Flow.NONE;
 
-        final int maxFilledY = 1 + Math.max(Math.max(heightNoiseValue, seaLevel), beardifierMaxY);
+        final int maxFilledYWithoutBeardifier = 1 + Math.max(heightNoiseValue, seaLevel);
+        final int maxFilledY = Math.max(maxFilledYWithoutBeardifier, beardifierMaxY);
+
         final int maxFilledCellY = Math.min(settings.cellCountY() - 1, 1 + Math.floorDiv(maxFilledY, settings.cellHeight()) - settings.firstCellY());
         final int maxFilledSectionY = Math.min(chunk.getSectionsCount() - 1, 1 + chunk.getSectionIndex(maxFilledY));
 
@@ -380,7 +382,15 @@ public class TFGChunkNoiseFiller extends TFGChunkHeightFiller {
 
                 interpolator.updateForY(cellDeltaY);
 
-                final double noise = calculateNoiseAtHeight(y, heightNoiseValue);
+                double noise = calculateNoiseAtHeight(y, heightNoiseValue);
+
+                // Above the normal fill range, only the beardifier should place blocks,
+                // so we force the terrain noise to be slightly biased towards air at best.
+                // This works around a bug where terrain noise by itself places blocks above
+                // the normal maxFilledY.
+                if (y >= maxFilledYWithoutBeardifier) {
+                    noise = Math.min(noise, -0.05);
+                }
                 final BlockState state = calculateBlockStateAtNoise(y, noise);
                 final FluidState fluid = state.getFluidState();
 

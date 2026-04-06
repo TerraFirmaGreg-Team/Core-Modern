@@ -103,7 +103,7 @@ public class BedrockSpoutFeature extends Feature<BedrockSpoutConfig> {
             if (!level.isOutsideBuildHeight(mutablePos)) {
                 var chunk = level.getChunk(mutablePos);
                 chunk.setBlockState(mutablePos, fluidBlockState, false);
-                if (currentY >= surfaceHeight) {
+                if (currentY >= surfaceHeight - 5) {
                     chunk.markPosForPostprocessing(mutablePos);
                 }
                 placedAmount++;
