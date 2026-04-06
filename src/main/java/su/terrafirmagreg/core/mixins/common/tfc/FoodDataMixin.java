@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import net.dries007.tfc.common.capabilities.food.FoodData;
 import net.minecraft.nbt.CompoundTag;
 
+import su.terrafirmagreg.core.common.capabilities.food.FoodDataExtension;
+
 @Mixin(FoodData.class)
 public class FoodDataMixin {
 
@@ -32,8 +34,8 @@ public class FoodDataMixin {
     private float dairy;
 
     /**
-     * @author Mqrius
-     * @reason Round saturation to prevent floatingpoint errors
+     * @author Mqrius & Redeix
+     * @reason Round saturation to prevent floatingpoint errors and add negative nutrient support
      */
     @Overwrite(remap = false)
     public CompoundTag write() {
@@ -47,6 +49,9 @@ public class FoodDataMixin {
         nbt.putFloat("fruit", fruit);
         nbt.putFloat("meat", protein);
         nbt.putFloat("dairy", dairy);
+
+        FoodDataExtension.writeToNbt((FoodData) (Object) this, nbt);
+
         return nbt;
     }
 }
