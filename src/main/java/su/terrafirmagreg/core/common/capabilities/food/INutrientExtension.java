@@ -5,8 +5,8 @@ package su.terrafirmagreg.core.common.capabilities.food;
  */
 public interface INutrientExtension {
 
-
     boolean tfg$isNegative();
+
     default boolean tfg$isPositive() {
         return !tfg$isNegative();
     }

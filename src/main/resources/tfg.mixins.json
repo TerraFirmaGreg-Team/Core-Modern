@@ -131,6 +131,8 @@
         "common.hang_glider.GliderItemMixin",
         "common.immersive_aircraft.BambooHopperEntityMixin",
         "common.kubejs.MiscForgeHelperMixin",
+        "common.kubejs_tfc.BuildFoodItemDataMixin",
+        "common.kubejs_tfc.FoodComponentFoodDataMixin",
         "common.ldlib.ModularUIContainerMixin",
         "common.minecraft.AccessorChunkMap",
         "common.minecraft.AccessorMinecraftServer",
