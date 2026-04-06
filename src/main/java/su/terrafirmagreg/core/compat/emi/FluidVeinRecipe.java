@@ -1,9 +1,6 @@
 package su.terrafirmagreg.core.compat.emi;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
@@ -32,11 +29,31 @@ import dev.emi.emi.api.widget.TankWidget;
 import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.worldgen.ClimateWeightModifier;
 import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidDefinition;
 import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidRegistry;
 
 public class FluidVeinRecipe implements EmiRecipe {
+
+    private static final HashMap<ResourceLocation, Integer> HAS_SURFACE_INDICATOR = new HashMap<>();
+
+    //Initializing this large of a map at the definition makes me angry
+    static {
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("heavy_oil_spout_hot"), 2);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("heavy_oil_spout_ocean"), 3);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("raw_oil_spout_hot"), 2);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("raw_oil_spout_ocean"), 3);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("light_oil_spout_hot"), 2);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("light_oil_spout_ocean"), 3);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("oil_spout_hot"), 2);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("oil_spout_ocean"), 3);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_surface_indicator"), 1);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("natural_gas_ocean"), 1);
+        HAS_SURFACE_INDICATOR.put(TFGCore.id("spring_water"), 1);
+    }
+
+    private static final int INDENT = 6;
 
     private final ResourceLocation veinID;
     private final Fluid fluid;
@@ -87,9 +104,7 @@ public class FluidVeinRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        var test = veinID.withSuffix("_emi");
-        System.out.println(test);
-        return test;
+        return veinID.withSuffix("_emi");
     }
 
     @Override
@@ -109,7 +124,7 @@ public class FluidVeinRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return 160;
+        return 200;
     }
 
     private final int fluidSize = 24;
@@ -118,7 +133,7 @@ public class FluidVeinRecipe implements EmiRecipe {
     public void addWidgets(WidgetHolder widgets) {
         int yPointer = 2;
 
-        yPointer = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins." + veinID.getPath()), 2, yPointer);
+        yPointer = addCenteredTextLine(widgets, Component.translatable("tfg.emi.fluid_veins." + veinID.getPath()), 2, yPointer);
 
         yPointer = addTank(widgets, this.getDisplayWidth() / 2 - fluidSize / 2, yPointer);
 
@@ -133,12 +148,15 @@ public class FluidVeinRecipe implements EmiRecipe {
             yPointer = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.weight", weight), 2, yPointer);
         }
 
-        //yPointer = addDimensionIcons(widgets, 2, yPointer);
+        //yPointer = addInlineDimensionIcons(widgets, 2, yPointer);
+        //Still don't know which one looks better
         addCornerDimensionIcons(widgets);
 
         yPointer = addBiomes(widgets, 2, yPointer);
 
         yPointer = addClimate(widgets, 2, yPointer);
+
+        yPointer = addIndicatorInfo(widgets, 2, yPointer);
     }
 
     private int addTank(WidgetHolder widgets, int x, int y) {
@@ -160,7 +178,7 @@ public class FluidVeinRecipe implements EmiRecipe {
         }
     }
 
-    private int addDimensionIcons(WidgetHolder widgets, int x, int y) {
+    private int addInlineDimensionIcons(WidgetHolder widgets, int x, int y) {
         int pointerX = x;
         var textWidget = new TextWidget(Component.translatable("tfg.emi.fluid_veins.dimension").getVisualOrderText(), pointerX, y, 0, false);
         widgets.add(textWidget);
@@ -176,6 +194,49 @@ public class FluidVeinRecipe implements EmiRecipe {
             pointerX += 20;
         }
         return newLineY(y);
+    }
+
+    private int addBiomeList(WidgetHolder widgets, Set<ResourceKey<Biome>> biomeKeys, int x, int y, boolean anyBiome) {
+        int cutoff = 6;
+        widgets.addText(Component.translatable("tfg.emi.fluid_veins.biomes"), x, y, 0, false);
+
+        if (!anyBiome) {
+            int i = 0;
+
+            MutableComponent tooltip = Component.empty();
+            List<ResourceKey<Biome>> sortedBiomeKeys = biomeKeys.stream().sorted().toList();
+
+            for (ResourceKey<Biome> entry : sortedBiomeKeys) {
+                i++;
+                var langComp = Component.translatable("biome." + entry.location().toLanguageKey());
+
+                if (i < cutoff) {
+                    y += 8;
+                    addTextLine(widgets, langComp, x + INDENT, y);
+                }
+
+                String appendSuffix = i == biomeKeys.size() ? "" : ", ";
+                tooltip.append(langComp).append(appendSuffix);
+            }
+
+            if (i >= cutoff) {
+                y += 8;
+                var overflowText = new TextWidget(Component.translatable("tfg.emi.fluid_veins.biomes_overflow", "+" + (i - cutoff + 1)).getVisualOrderText(), x + INDENT, y, 0, false) {
+                    @Override
+                    public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
+                        return List.of(ClientTooltipComponent.create(tooltip.getVisualOrderText()));
+                    }
+                };
+                widgets.add(overflowText);
+            }
+
+            y = newLineY(y);
+        } else {
+            y += 8;
+            y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.biome_any"), x + INDENT, y);
+        }
+
+        return y;
     }
 
     private int addBiomes(WidgetHolder widgets, int x, int y) {
@@ -205,55 +266,32 @@ public class FluidVeinRecipe implements EmiRecipe {
                 y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins." + type, min + numberSuffix, max + numberSuffix), x, y);
             }
         }
+
         return y;
     }
 
-    private int addBiomeList(WidgetHolder widgets, Set<ResourceKey<Biome>> biomeKeys, int x, int y, boolean anyBiome) {
-        int indent = 6;
-        int cutoff = 6;
-        widgets.addText(Component.translatable("tfg.emi.fluid_veins.biomes"), x, y, 0, false);
+    private int addIndicatorInfo(WidgetHolder widgets, int x, int y) {
+        if (HAS_SURFACE_INDICATOR.containsKey(veinID)) {
+            y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.indicator"), x, y);
 
-        if (!anyBiome) {
-            int i = 0;
+            for (int i = 1; i <= HAS_SURFACE_INDICATOR.get(veinID); i++) {
+                y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.indicator." + veinID.getPath() + "." + i), x + INDENT, y);
 
-            MutableComponent tooltip = Component.empty();
-            List<ResourceKey<Biome>> sortedBiomeKeys = biomeKeys.stream().sorted().toList();
-
-            for (ResourceKey<Biome> entry : sortedBiomeKeys) {
-                i++;
-                var langComp = Component.translatable("biome." + entry.location().toLanguageKey());
-
-                if (i < cutoff) {
-                    y += 8;
-                    addTextLine(widgets, langComp, x + indent, y);
-                }
-
-                String appendSuffix = i == biomeKeys.size() ? "" : ", ";
-                tooltip.append(langComp).append(appendSuffix);
             }
-
-            if (i >= cutoff) {
-                y += 8;
-                var overflowText = new TextWidget(Component.translatable("tfg.emi.fluid_veins.biomes_overflow", "+" + (i - cutoff + 1)).getVisualOrderText(), x + indent, y, 0, false) {
-                    @Override
-                    public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-                        return List.of(ClientTooltipComponent.create(tooltip.getVisualOrderText()));
-                    }
-                };
-                widgets.add(overflowText);
-            }
-
-            y = newLineY(y);
-        } else {
-            y += 8;
-            y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.biome_any"), x + indent, y);
         }
-
         return y;
     }
 
     private int addTextLine(WidgetHolder widgets, Component text, int x, int y) {
         widgets.addText(text, x, y, 0, false);
+        return newLineY(y);
+    }
+
+    private int addCenteredTextLine(WidgetHolder widgets, Component text, int x, int y) {
+        var textWidget = new TextWidget(text.getVisualOrderText(), x + getDisplayWidth() / 2, y, 0, false);
+        textWidget.horizontalAlign(TextWidget.Alignment.CENTER);
+
+        widgets.add(textWidget);
         return newLineY(y);
     }
 
@@ -270,7 +308,7 @@ public class FluidVeinRecipe implements EmiRecipe {
     }
 
     private int newLineY(int oldY) {
-        return oldY + 10;
+        return oldY + 11;
     }
 
 }

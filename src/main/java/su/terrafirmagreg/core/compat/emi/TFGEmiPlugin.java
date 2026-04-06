@@ -128,7 +128,6 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_HV));
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
         GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries().forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
-
     }
 
     private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
