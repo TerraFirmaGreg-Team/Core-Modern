@@ -40,7 +40,7 @@ jobs:
           fetch-depth: 0
 
       - name: "[🔍] Check required files and folders"
-        uses: andstor/file-existence-action@v3.0.0
+        uses: andstor/file-existence-action@v3.1.0
         with:
           fail: true
           ignore_case: true
