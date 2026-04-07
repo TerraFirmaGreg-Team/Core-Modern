@@ -195,7 +195,8 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TOOL_RACK, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "tool_racks"))).build()
                 .register();
     }
 
@@ -209,7 +210,8 @@ public class TFGBlocks_Wood {
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "workbenches")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "workbenches"))).build()
                 .register();
     }
 
@@ -229,7 +231,8 @@ public class TFGBlocks_Wood {
                 .model((ctx, prov) -> {
                     prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
                             .texture("particle", woodType.plankTexture);
-                }).build()
+                })
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests"))).build()
                 .register();
     }
 
@@ -249,7 +252,8 @@ public class TFGBlocks_Wood {
                 .model((ctx, prov) -> {
                     prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
                             .texture("particle", woodType.plankTexture);
-                }).build()
+                })
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests"))).build()
                 .register();
     }
 
@@ -269,7 +273,8 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.LOOM, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "looms"))).build()
                 .register();
 
     }
@@ -295,7 +300,8 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.SLUICE, block);
                 })
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower"))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "sluices"))).build()
                 .register();
 
     }
@@ -351,7 +357,8 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.BARREL, block);
                 })
-                .item(BarrelBlockItem::new).build()
+                .item(BarrelBlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "barrels"))).build()
                 .register();
     }
 
@@ -388,7 +395,8 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.LECTERN, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "lecterns"))).build()
                 .register();
 
     }
@@ -408,7 +416,8 @@ public class TFGBlocks_Wood {
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "scribing_tables")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "scribing_tables"))).build()
                 .register();
 
     }
@@ -426,7 +435,8 @@ public class TFGBlocks_Wood {
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "sewing_tables")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "sewing_tables"))).build()
                 .register();
     }
 
@@ -441,7 +451,8 @@ public class TFGBlocks_Wood {
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "jar_shelves")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "jar_shelves"))).build()
                 .register();
 
     }
@@ -485,7 +496,8 @@ public class TFGBlocks_Wood {
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelves")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + type.name))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + type.name)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelves"))).build()
                 .register();
     }
 
@@ -506,7 +518,8 @@ public class TFGBlocks_Wood {
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "hangers")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + type.name))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + type.name)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "hangers"))).build()
                 .register();
 
     }
@@ -542,7 +555,8 @@ public class TFGBlocks_Wood {
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnets")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + type.name))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + type.name)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnets"))).build()
                 .register();
 
     }
@@ -582,7 +596,7 @@ public class TFGBlocks_Wood {
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "big_barrels")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/big_barrel/" + type.name + "_item")))
-                .build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "big_barrels"))).build()
                 .loot((lt, block) -> lt.add(block, LootTable.lootTable()
                         .withPool(LootPool.lootPool()
                                 .name("loot_pool")
@@ -618,7 +632,8 @@ public class TFGBlocks_Wood {
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelves")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/wine_shelf/" + type.name))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/wine_shelf/" + type.name)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelves"))).build()
                 .register();
 
     }
@@ -637,7 +652,8 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(FLBlockEntities.STOMPING_BARREL, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "stomping_barrels"))).build()
                 .register();
 
     }
@@ -656,7 +672,8 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(FLBlockEntities.BARREL_PRESS, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "barrel_presses"))).build()
                 .register();
 
     }
