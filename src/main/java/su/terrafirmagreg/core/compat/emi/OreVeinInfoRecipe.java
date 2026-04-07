@@ -7,7 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -105,6 +107,7 @@ public class OreVeinInfoRecipe implements EmiRecipe {
         int offsetY = 0;
         offsetY = createLabelWidget(widgets, offsetY);
         offsetY = createOreItemWidgets(widgets, offsetY);
+        createVeinInfoTooltip(widgets, offsetY);
         offsetY = createVeinInfoText(widgets, offsetY);
         offsetY = createRockTypesWidget(widgets, offsetY);
         offsetY = createInfoWidget(widgets, offsetY);
@@ -142,9 +145,9 @@ public class OreVeinInfoRecipe implements EmiRecipe {
 
     private int createVeinInfoText(WidgetHolder holder, int offsetY) {
         var lineH = Minecraft.getInstance().font.lineHeight;
-        holder.addText(Component.translatable("tfg.emi.ore_veins.rarity", rarity), 2, offsetY, 0, false);
+        holder.addText(Component.translatable("tfg.emi.ore_veins.rarity", rarity).append(rarityText()), 2, offsetY, 0, false);
         offsetY += lineH;
-        holder.addText(Component.translatable("tfg.emi.ore_veins.density", density), 2, offsetY, 0, false);
+        holder.addText(Component.translatable("tfg.emi.ore_veins.density", (int) (density * 100)).append("%"), 2, offsetY, 0, false);
         offsetY += lineH;
         holder.addText(Component.translatable("tfg.emi.ore_veins.y_ranges", minY, maxY), 2, offsetY, 0, false);
         offsetY += lineH;
@@ -161,6 +164,21 @@ public class OreVeinInfoRecipe implements EmiRecipe {
             offsetY += lineH;
         }
         return offsetY;
+    }
+
+    private Component rarityText() {
+        Component rarityKey;
+
+        if (rarity <= 100)
+            rarityKey = Component.translatable("tfg.emi.ore_veins.rarity.common").withStyle(ChatFormatting.DARK_GREEN);
+        else if (rarity <= 200)
+            rarityKey = Component.translatable("tfg.emi.ore_veins.rarity.uncommon").withStyle(ChatFormatting.YELLOW);
+        else if (rarity <= 300)
+            rarityKey = Component.translatable("tfg.emi.ore_veins.rarity.rare").withStyle(ChatFormatting.GOLD);
+        else
+            rarityKey = Component.translatable("tfg.emi.ore_veins.rarity.very_rare").withStyle(ChatFormatting.DARK_RED);
+
+        return Component.empty().append(" [").append(rarityKey).append("]");
     }
 
     private int createRockTypesWidget(WidgetHolder holder, int offsetY) {
@@ -222,6 +240,12 @@ public class OreVeinInfoRecipe implements EmiRecipe {
         slot.drawBack(false);
         slot.recipeContext(this);
         holder.add(slot);
+    }
+
+    private void createVeinInfoTooltip(WidgetHolder holder, int offsetY) {
+        holder.addTooltip(List.of(
+                ClientTooltipComponent.create(Component.translatable("tfg.emi.ore_veins.rarity.tooltip", rarity).getVisualOrderText())),
+                0, offsetY, 120, 10);
     }
 
     @Override

@@ -2,7 +2,7 @@
   "parent": "firmalife:block/wine_shelf",
   "textures": {
     "0": "ad_astra:block/strophar_planks",
-    "1": "tfg:block/wood/sheet/strophar",
-    "2": "ad_astra:block/strophar_stem"
+    "2": "tfg:block/wood/sheet/strophar",
+    "3": "ad_astra:block/strophar_stem"
   }
 }
