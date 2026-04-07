@@ -11,9 +11,19 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "tfg:wood/big_barrel/glacian",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "barrel_part": "0"
+              }
+            }
+          ],
           "name": "tfg:wood/big_barrel/glacian"
         }
       ],
+      "name": "loot_pool",
       "rolls": 1.0
     }
   ],
