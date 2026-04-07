@@ -1,5 +1,4 @@
 {
-  "parent": "minecraft:item/chest",
   "textures": {
     "particle": "ad_astra:block/aeronos_planks"
   }

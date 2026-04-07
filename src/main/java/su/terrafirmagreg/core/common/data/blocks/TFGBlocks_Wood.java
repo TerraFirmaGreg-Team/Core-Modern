@@ -9,9 +9,7 @@ import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
 import com.eerussianguy.firmalife.common.blocks.*;
 import com.google.gson.JsonObject;
-import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -130,7 +128,7 @@ public class TFGBlocks_Wood {
 
                 @Override
                 public String getSerializedName() {
-                    return "";
+                    return name;
                 }
             };
         }
@@ -211,16 +209,36 @@ public class TFGBlocks_Wood {
     private static BlockEntry<Block> chest(WoodType woodType) {
         var chestBlock = Wood.BlockType.CHEST.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/chest/" + woodType.name, p -> chestBlock)
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
+                })
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.CHEST, block);
+                })
+                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood))
+                .model((ctx, prov) -> {
+                    prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
+                            .texture("particle", woodType.plankTexture);
+                }).build()
                 .register();
     }
 
     private static BlockEntry<Block> trappedChest(WoodType woodType) {
         var trappedChestBlock = Wood.BlockType.TRAPPED_CHEST.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/trapped_chest/" + woodType.name, p -> trappedChestBlock)
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
+                })
+                .addLayer(() -> RenderType::cutout)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TRAPPED_CHEST, block);
+                })
+                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood))
+                .model((ctx, prov) -> {
+                    prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
+                            .texture("particle", woodType.plankTexture);
+                }).build()
                 .register();
     }
 
