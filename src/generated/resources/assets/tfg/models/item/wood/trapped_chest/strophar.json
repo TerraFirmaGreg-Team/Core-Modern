@@ -1,3 +1,6 @@
 {
-  "parent": "tfg:block/wood/trapped_chest/strophar"
+  "parent": "minecraft:item/chest",
+  "textures": {
+    "particle": "ad_astra:block/strophar_planks"
+  }
 }

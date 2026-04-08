@@ -9,9 +9,7 @@ import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
 import com.eerussianguy.firmalife.common.blocks.*;
 import com.google.gson.JsonObject;
-import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -22,9 +20,13 @@ import net.dries007.tfc.common.items.BarrelBlockItem;
 import net.dries007.tfc.common.items.ChestBlockItem;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.dries007.tfc.world.feature.tree.TFCTreeGrower;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -32,6 +34,12 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -123,7 +131,7 @@ public class TFGBlocks_Wood {
 
                 @Override
                 public String getSerializedName() {
-                    return "";
+                    return name;
                 }
             };
         }
@@ -182,10 +190,13 @@ public class TFGBlocks_Wood {
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
                 .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "tool_racks")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TOOL_RACK, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "tool_racks"))).build()
                 .register();
     }
 
@@ -197,23 +208,52 @@ public class TFGBlocks_Wood {
                     prov.simpleBlock(ctx.getEntry(), prov.models().cube(ctx.getName(), woodType.plankTexture, path.withSuffix("_top"), path.withSuffix("_front"),
                             path.withSuffix("_side"), path.withSuffix("_side"), path.withSuffix("_front")));
                 })
-                .simpleItem()
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "workbenches")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "workbenches"))).build()
                 .register();
     }
 
     private static BlockEntry<Block> chest(WoodType woodType) {
         var chestBlock = Wood.BlockType.CHEST.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/chest/" + woodType.name, p -> chestBlock)
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
+                })
+                .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.CHEST, block);
+                })
+                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood))
+                .model((ctx, prov) -> {
+                    prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
+                            .texture("particle", woodType.plankTexture);
+                })
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests"))).build()
                 .register();
     }
 
     private static BlockEntry<Block> trappedChest(WoodType woodType) {
         var trappedChestBlock = Wood.BlockType.TRAPPED_CHEST.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/trapped_chest/" + woodType.name, p -> trappedChestBlock)
-                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood)).build()
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
+                })
+                .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TRAPPED_CHEST, block);
+                })
+                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood))
+                .model((ctx, prov) -> {
+                    prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
+                            .texture("particle", woodType.plankTexture);
+                })
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests"))).build()
                 .register();
     }
 
@@ -228,10 +268,13 @@ public class TFGBlocks_Wood {
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
                 .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "looms")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.LOOM, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "looms"))).build()
                 .register();
 
     }
@@ -252,10 +295,13 @@ public class TFGBlocks_Wood {
                     ModelUtils.forEachCardinalDirection(builder, sluiceUpper, b -> b.with(TFCBlockStateProperties.UPPER, true));
                 })
                 .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "sluices")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.SLUICE, block);
                 })
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower"))).build()
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "sluices"))).build()
                 .register();
 
     }
@@ -306,10 +352,13 @@ public class TFGBlocks_Wood {
                     buildBarrelBlockStateEntry(builder, Direction.NORTH, 270, barrelSide, barrelSideRack, sealedBarrelSide, sealedBarrelSideRack);
                 })
                 .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "barrels")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.BARREL, block);
                 })
-                .item(BarrelBlockItem::new).build()
+                .item(BarrelBlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "barrels"))).build()
                 .register();
     }
 
@@ -341,10 +390,13 @@ public class TFGBlocks_Wood {
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
                 .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "lecterns")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.LECTERN, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "lecterns"))).build()
                 .register();
 
     }
@@ -362,7 +414,10 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
-                .simpleItem()
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "scribing_tables")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "scribing_tables"))).build()
                 .register();
 
     }
@@ -378,7 +433,10 @@ public class TFGBlocks_Wood {
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
                 .addLayer(() -> RenderType::cutout)
-                .simpleItem()
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "sewing_tables")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "sewing_tables"))).build()
                 .register();
     }
 
@@ -391,7 +449,11 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
-                .simpleItem().register();
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "jar_shelves")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "jar_shelves"))).build()
+                .register();
 
     }
 
@@ -432,7 +494,10 @@ public class TFGBlocks_Wood {
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), dynamicModel);
                 })
                 .addLayer(() -> RenderType::cutout)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + type.name))).build()
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelves")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + type.name)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelves"))).build()
                 .register();
     }
 
@@ -451,7 +516,10 @@ public class TFGBlocks_Wood {
                     prov.simpleBlock(ctx.getEntry(), dynamicModel);
                 })
                 .addLayer(() -> RenderType::cutout)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + type.name))).build()
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "hangers")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + type.name)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "hangers"))).build()
                 .register();
 
     }
@@ -485,7 +553,10 @@ public class TFGBlocks_Wood {
                     ModelUtils.forEachCardinalDirection(builder, dynamicModelShut, b -> b.with(BlockStateProperties.OPEN, false));
                 })
                 .addLayer(() -> RenderType::cutout)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + type.name))).build()
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnets")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + type.name)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnets"))).build()
                 .register();
 
     }
@@ -522,8 +593,20 @@ public class TFGBlocks_Wood {
                     }
 
                 })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "big_barrels")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/big_barrel/" + type.name + "_item")))
-                .build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "big_barrels"))).build()
+                .loot((lt, block) -> lt.add(block, LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .name("loot_pool")
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(block)
+                                        .when(LootItemBlockStatePropertyCondition
+                                                .hasBlockStateProperties(block)
+                                                .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                        .hasProperty(FLStateProperties.BARREL_PART, 0))))
+                                .when(ExplosionCondition.survivesExplosion()))))
                 .register();
     }
 
@@ -547,7 +630,10 @@ public class TFGBlocks_Wood {
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), dynamicModel);
 
                 })
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/wine_shelf/" + type.name))).build()
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelves")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/wine_shelf/" + type.name)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelves"))).build()
                 .register();
 
     }
@@ -561,10 +647,13 @@ public class TFGBlocks_Wood {
                         prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/stomping_barrel"))
                                 .texture("0", TFGCore.id("block/wood/sheet/" + type.name))))
                 .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "stomping_barrels")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(FLBlockEntities.STOMPING_BARREL, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "stomping_barrels"))).build()
                 .register();
 
     }
@@ -578,10 +667,13 @@ public class TFGBlocks_Wood {
                         prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/barrel_press"))
                                 .texture("0", TFGCore.id("block/wood/sheet/" + type.name))))
                 .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "barrel_presses")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(FLBlockEntities.BARREL_PRESS, block);
                 })
-                .simpleItem()
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "barrel_presses"))).build()
                 .register();
 
     }

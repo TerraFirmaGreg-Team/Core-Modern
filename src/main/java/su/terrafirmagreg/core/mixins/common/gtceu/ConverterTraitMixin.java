@@ -23,6 +23,9 @@ import net.minecraft.world.level.block.state.BlockState;
 @SuppressWarnings("deprecation")
 @Mixin(ConverterTrait.class)
 public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
+
+    // Allows EU <-> FE converters to automatically pull FE out of a portable energy interface
+
     @Unique
     private static final Block PORTABLE_ENERGY_INTERFACE = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("createaddition", "portable_energy_interface"));
 

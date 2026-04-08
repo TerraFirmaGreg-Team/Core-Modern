@@ -6,25 +6,19 @@
 
 package su.terrafirmagreg.core.common.entity.animals.tfcleopardseal;
 
-import org.jetbrains.annotations.NotNull;
-
+import net.dries007.tfc.client.render.entity.SimpleMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 import su.terrafirmagreg.core.TFGCore;
 
-public class TFCLeopardSealRenderer extends MobRenderer<TFCLeopardSeal, TFCLeopardSealModel> {
+public class TFCLeopardSealRenderer extends SimpleMobRenderer<TFCLeopardSeal, TFCLeopardSealModel> {
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
             TFGCore.MOD_ID, "textures/entity/animal/leopard_seal.png");
 
     public TFCLeopardSealRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new TFCLeopardSealModel(ctx.bakeLayer(TFCLeopardSealModel.LAYER_LOCATION)), 0.7F);
-    }
-
-    @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull TFCLeopardSeal entity) {
-        return TEXTURE;
+        super(ctx, new TFCLeopardSealModel(ctx.bakeLayer(TFCLeopardSealModel.LAYER_LOCATION)), "leopard_seal",
+                0.7F, false, 1.0f, false, false, x -> TEXTURE);
     }
 }
