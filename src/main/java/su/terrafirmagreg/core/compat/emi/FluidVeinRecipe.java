@@ -10,6 +10,8 @@ import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidDefiniti
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
@@ -28,6 +30,7 @@ import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TankWidget;
 import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import dev.emi.emi.runtime.EmiDrawContext;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.worldgen.ClimateWeightModifier;
@@ -35,6 +38,8 @@ import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidDefinition;
 import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidRegistry;
 
 public class FluidVeinRecipe implements EmiRecipe {
+
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     private static final HashMap<ResourceLocation, Integer> HAS_SURFACE_INDICATOR = new HashMap<>();
 
@@ -134,7 +139,7 @@ public class FluidVeinRecipe implements EmiRecipe {
     public void addWidgets(WidgetHolder widgets) {
         int yPointer = 2;
 
-        yPointer = addCenteredTextLine(widgets, Component.translatable("tfg.emi.fluid_veins." + veinID.getPath()), 2, yPointer);
+        yPointer = addCenteredTextLine(widgets, Component.translatable("tfg.emi.fluid_veins." + veinID.getPath()), 0, yPointer);
 
         yPointer = addTank(widgets, this.getDisplayWidth() / 2 - fluidSize / 2, yPointer);
 
@@ -273,15 +278,16 @@ public class FluidVeinRecipe implements EmiRecipe {
     }
 
     private int addIndicatorInfo(WidgetHolder widgets, int x, int y) {
+        int new_line = NEW_LINE - 2;
         if (HAS_SURFACE_INDICATOR.containsKey(veinID)) {
-            y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.indicator"), x, y);
+            addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.indicator"), x, y);
 
             for (int i = 1; i <= HAS_SURFACE_INDICATOR.get(veinID); i++) {
-                y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.indicator." + veinID.getPath() + "." + i), x + INDENT, y);
-
+                y += new_line;
+                addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins.indicator." + veinID.getPath() + "." + i), x + INDENT, y);
             }
         }
-        return y;
+        return newLineY(y);
     }
 
     private int addTextLine(WidgetHolder widgets, Component text, int x, int y) {
@@ -290,7 +296,34 @@ public class FluidVeinRecipe implements EmiRecipe {
     }
 
     private int addCenteredTextLine(WidgetHolder widgets, Component text, int x, int y) {
-        var textWidget = new TextWidget(text.getVisualOrderText(), x + getDisplayWidth() / 2, y, 0, false);
+        var formText = text.getVisualOrderText();
+        var width = CLIENT.font.width(formText);
+
+        var textWidget = new TextWidget(formText, x + getDisplayWidth() / 2, y, 0, false) {
+
+            @Override
+            public void render(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+                EmiDrawContext context = EmiDrawContext.wrap(draw);
+                context.push();
+                float scaler = 1;
+                if (CLIENT.font.width(this.text) >= 166) {
+                    scaler = (float) (166 - 10) / CLIENT.font.width(this.text);
+                    context.matrices().scale(scaler, scaler, scaler);
+                }
+
+                int xOff = (int) (this.horizontalAlignment.offset(CLIENT.font.width(this.text)) * scaler);
+                int yOff = this.verticalAlignment.offset(CLIENT.font.lineHeight);
+                context.matrices().translate((float) xOff, (float) yOff, 300.0F);
+                if (this.shadow) {
+                    context.drawTextWithShadow(this.text, this.x, this.y, this.color);
+                } else {
+                    context.drawText(this.text, this.x, this.y, this.color);
+                }
+
+                context.pop();
+            }
+        };
+
         textWidget.horizontalAlign(TextWidget.Alignment.CENTER);
 
         widgets.add(textWidget);
