@@ -37,10 +37,9 @@ public class ClimateWeightModifier {
 
     /// Returns Map keyed by "temperature" and/or "rainfall"
     /// @return Map of List(float) containing minValue, maxValue
-    public Map<String, List<Float>> getClimates() {
-        String modeStr = mode == Mode.TEMPERATURE ? "temperature" : "rainfall";
+    public Map<Mode, List<Float>> getClimates() {
         List<Float> climate = new ArrayList<>(List.of(min, max));
-        return new HashMap<>(Map.of(modeStr, climate));
+        return new HashMap<>(Map.of(mode, climate));
     }
 
     /// Return Null unless overridden, or
@@ -69,12 +68,12 @@ public class ClimateWeightModifier {
             int addedWeight) {
         return new ClimateWeightModifier(null, 0, 0, addedWeight) {
             @Override
-            public Map<String, List<Float>> getClimates() {
+            public Map<Mode, List<Float>> getClimates() {
                 List<Float> tempList = new ArrayList<>(List.of(tempMin, tempMax));
                 List<Float> rainList = new ArrayList<>(List.of(rainMin, rainMax));
                 return new HashMap<>(Map.of(
-                        "temperature", tempList,
-                        "rainfall", rainList));
+                        Mode.TEMPERATURE, tempList,
+                        Mode.RAINFALL, rainList));
             }
 
             @Override
@@ -104,12 +103,12 @@ public class ClimateWeightModifier {
             }
 
             @Override
-            public Map<String, List<Float>> getClimates() {
+            public Map<Mode, List<Float>> getClimates() {
                 List<Float> tempList = new ArrayList<>(List.of(tempMin, tempMax));
                 List<Float> rainList = new ArrayList<>(List.of(rainMin, rainMax));
                 return new HashMap<>(Map.of(
-                        "temperature", tempList,
-                        "rainfall", rainList));
+                        Mode.TEMPERATURE, tempList,
+                        Mode.RAINFALL, rainList));
             }
 
             @Override
