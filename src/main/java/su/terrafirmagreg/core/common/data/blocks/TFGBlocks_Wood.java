@@ -166,6 +166,8 @@ public class TFGBlocks_Wood {
 
         blocks.put(Wood.BlockType.TOOL_RACK, toolRack(woodType));
         blocks.put(Wood.BlockType.WORKBENCH, workbench(woodType));
+        // blocks.put(Wood.BlockType.SIGN, sign(woodType));
+        // blocks.put(Wood.BlockType.WALL_SIGN, wallSign(woodType));
         blocks.put(Wood.BlockType.CHEST, chest(woodType));
         blocks.put(Wood.BlockType.TRAPPED_CHEST, trappedChest(woodType));
         blocks.put(Wood.BlockType.LOOM, loom(woodType));
@@ -175,6 +177,7 @@ public class TFGBlocks_Wood {
         blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(woodType));
         blocks.put(Wood.BlockType.SEWING_TABLE, sewingTable(woodType));
         blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(woodType));
+        blocks.put(Wood.BlockType.BOOKSHELF, bookshelf(woodType));
 
         WOOD_BLOCKS.put(woodType, blocks);
     }
@@ -212,6 +215,26 @@ public class TFGBlocks_Wood {
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "workbenches"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> sign(WoodType woodType) {
+        var standingSignBlock = Wood.BlockType.SIGN.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/sign/" + woodType.name, p -> standingSignBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
+                })
+                .item(BlockItem::new).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> wallSign(WoodType woodType) {
+        var wallSignBlock = Wood.BlockType.WALL_SIGN.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/sign/" + woodType.name, p -> wallSignBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
+                })
+                .item(BlockItem::new).build()
                 .register();
     }
 
@@ -303,7 +326,6 @@ public class TFGBlocks_Wood {
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "sluices"))).build()
                 .register();
-
     }
 
     private static BlockEntry<BarrelBlock> barrel(WoodType woodType) {
@@ -377,7 +399,6 @@ public class TFGBlocks_Wood {
         var lecternBlock = Wood.BlockType.LECTERN.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/lectern/" + woodType.name, p -> lecternBlock)
                 .blockstate((ctx, prov) -> {
-
                     var path = "block/wood/lectern/" + woodType.name + "/";
                     ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("block/lectern"))
                             .texture("bottom", woodType.plankTexture)
@@ -455,6 +476,18 @@ public class TFGBlocks_Wood {
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "jar_shelves"))).build()
                 .register();
 
+    }
+
+    private static BlockEntry<Block> bookshelf(WoodType woodType) {
+        var bookshelfBlock = Wood.BlockType.BOOKSHELF.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/bookshelf/" + woodType.name, p -> bookshelfBlock)
+                .blockstate((ctx, prov) -> {
+                    ModelFile base = prov.models()
+                            .withExistingParent("wood/bookshelf/" + woodType.name, ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"));
+                })
+                .register();
     }
 
     private static class FirmaCustomLoader extends CustomLoaderBuilder<BlockModelBuilder> {
