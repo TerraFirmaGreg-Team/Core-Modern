@@ -50,7 +50,9 @@ public abstract class PassableCactusBlock extends TFCTallGrassBlock {
     @Override
     @SuppressWarnings("deprecation")
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        entity.hurt(entity.damageSources().cactus(), 1f);
+        if (!entity.getType().is(TFGTags.Entities.IgnoresCacti)) {
+            entity.hurt(entity.damageSources().cactus(), 1f);
+        }
     }
 
     @Override

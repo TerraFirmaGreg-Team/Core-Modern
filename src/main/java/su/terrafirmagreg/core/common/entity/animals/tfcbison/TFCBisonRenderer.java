@@ -6,25 +6,19 @@
 
 package su.terrafirmagreg.core.common.entity.animals.tfcbison;
 
-import org.jetbrains.annotations.NotNull;
-
+import net.dries007.tfc.client.render.entity.SimpleMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 import su.terrafirmagreg.core.TFGCore;
 
-public class TFCBisonRenderer extends MobRenderer<TFCBison, TFCBisonModel> {
+public class TFCBisonRenderer extends SimpleMobRenderer<TFCBison, TFCBisonModel> {
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
             TFGCore.MOD_ID, "textures/entity/animal/bison.png");
 
     public TFCBisonRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new TFCBisonModel(ctx.bakeLayer(TFCBisonModel.LAYER_LOCATION)), 0.7F);
-    }
-
-    @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull TFCBison entity) {
-        return TEXTURE;
+        super(ctx, new TFCBisonModel(ctx.bakeLayer(TFCBisonModel.LAYER_LOCATION)), "bison",
+                0.7F, false, 1.0f, false, false, x -> TEXTURE);
     }
 }
