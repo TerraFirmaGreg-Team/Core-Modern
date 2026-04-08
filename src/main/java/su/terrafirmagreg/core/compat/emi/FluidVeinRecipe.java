@@ -264,13 +264,14 @@ public class FluidVeinRecipe implements EmiRecipe {
             y = addBiomeList(widgets, climateDef.getBiomes(), x, y, (climateDef.getBiomes() == null));
 
             for (var climateVar : climateDef.getClimates().entrySet()) {
-                String type = climateVar.getKey();
+                ClimateWeightModifier.Mode mode = climateVar.getKey();
                 float min = climateVar.getValue().get(0).intValue();
                 float max = climateVar.getValue().get(1).intValue();
 
-                String numberSuffix = "temperature".equals(type) ? "°C" : "mm";
+                String numberSuffix = mode == ClimateWeightModifier.Mode.TEMPERATURE ? "°C" : "mm";
 
-                y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins." + type, min + numberSuffix, max + numberSuffix), x, y);
+                y = addTextLine(widgets, Component.translatable("tfg.emi.fluid_veins." + mode.toString().toLowerCase(Locale.ROOT),
+                        min + numberSuffix, max + numberSuffix), x, y);
             }
         }
 
