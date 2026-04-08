@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -40,10 +41,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
+import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -482,11 +480,74 @@ public class TFGBlocks_Wood {
         var bookshelfBlock = Wood.BlockType.BOOKSHELF.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/bookshelf/" + woodType.name, p -> bookshelfBlock)
                 .blockstate((ctx, prov) -> {
+                    var builder = prov.getMultipartBuilder(ctx.getEntry());
                     ModelFile base = prov.models()
                             .withExistingParent("wood/bookshelf/" + woodType.name, ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf"))
                             .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
                             .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"));
+
+                    ModelFile inventory = prov.models()
+                            .withExistingParent("wood/bookshelf/" + woodType.name + "_inventory", ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf_inventory"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"))
+                            .texture("front", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_empty"));
+
+                    BooleanProperty[] slots = new BooleanProperty[] {
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_0_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_1_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_2_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_3_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_4_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_5_OCCUPIED
+                    };
+                    String[] vertical = { "top", "top", "top", "bottom", "bottom", "bottom" };
+                    String[] horizontal = { "left", "mid", "right", "left", "mid", "right" };
+
+                    for (Direction dir : Direction.Plane.HORIZONTAL) {
+                        int rot = switch (dir) {
+                            case NORTH -> 0;
+                            case EAST -> 90;
+                            case SOUTH -> 180;
+                            case WEST -> 270;
+                            default -> 0;
+                        };
+
+                        builder.part()
+                                .modelFile(base)
+                                .rotationY(rot)
+                                .uvLock(true)
+                                .addModel()
+                                .condition(BlockStateProperties.HORIZONTAL_FACING, dir);
+
+                        // Could try using SLOT_OCCUPIED_PROPERTIES?
+                        for (int i = 0; i < slots.length; i++) {
+                            String v = vertical[i];
+                            String h = horizontal[i];
+
+                            for (boolean occupied : new boolean[] { false, true }) {
+
+                                String state = occupied ? "occupied" : "empty";
+
+                                ModelFile model = prov.models()
+                                        .withExistingParent(
+                                                ctx.getName() + "_" + state + "_" + v + "_" + h,
+                                                "block/chiseled_bookshelf_" + state + "_slot_" + v + "_" + h)
+                                        .texture("texture", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_" + state));
+
+                                builder.part()
+                                        .modelFile(model)
+                                        .rotationY(rot)
+                                        .addModel()
+                                        .condition(BlockStateProperties.HORIZONTAL_FACING, dir)
+                                        .condition(slots[i], occupied);
+                            }
+                        }
+                    }
                 })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/bookshelf/" + woodType.name + "_inventory")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves"))).build()
                 .register();
     }
 
