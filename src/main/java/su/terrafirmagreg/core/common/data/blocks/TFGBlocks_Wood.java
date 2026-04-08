@@ -164,8 +164,6 @@ public class TFGBlocks_Wood {
 
         blocks.put(Wood.BlockType.TOOL_RACK, toolRack(woodType));
         blocks.put(Wood.BlockType.WORKBENCH, workbench(woodType));
-        // blocks.put(Wood.BlockType.SIGN, sign(woodType));
-        // blocks.put(Wood.BlockType.WALL_SIGN, wallSign(woodType));
         blocks.put(Wood.BlockType.CHEST, chest(woodType));
         blocks.put(Wood.BlockType.TRAPPED_CHEST, trappedChest(woodType));
         blocks.put(Wood.BlockType.LOOM, loom(woodType));
@@ -213,26 +211,6 @@ public class TFGBlocks_Wood {
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "workbenches"))).build()
-                .register();
-    }
-
-    private static BlockEntry<Block> sign(WoodType woodType) {
-        var standingSignBlock = Wood.BlockType.SIGN.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/sign/" + woodType.name, p -> standingSignBlock)
-                .blockstate((ctx, prov) -> {
-                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
-                })
-                .item(BlockItem::new).build()
-                .register();
-    }
-
-    private static BlockEntry<Block> wallSign(WoodType woodType) {
-        var wallSignBlock = Wood.BlockType.WALL_SIGN.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/sign/" + woodType.name, p -> wallSignBlock)
-                .blockstate((ctx, prov) -> {
-                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
-                })
-                .item(BlockItem::new).build()
                 .register();
     }
 
