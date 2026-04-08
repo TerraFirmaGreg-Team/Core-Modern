@@ -155,7 +155,7 @@ public class TFGBedrockFluidClimates {
         climateModifier(TFGCore.id("natural_gas_surface_indicator"), -20, 0, 300, 500, 50);
 
         // Ocean Biomes - Cold/Wet Climate
-        climateAndBiomeModifier(TFGCore.id("natural_gas_ocean"), -20, 10, 200, 500, TRUE_OCEAN_BIOMES, 50);
+        climateAndBiomeModifier(TFGCore.id("natural_gas_ocean"), -20, 10, 200, 500, TRUE_OCEAN_BIOMES, 20);
 
         // Surface Indicator - Permafrost (is_cold biomes, full temp range)
         climateAndBiomeModifier(TFGCore.id("natural_gas_permafrost"), -20, 30, 250, 500, COLD_BIOMES, 30);
@@ -174,7 +174,7 @@ public class TFGBedrockFluidClimates {
         climateModifier(TFGCore.id("light_oil_spout_hot"), 20, 30, 0, 50, 50);
 
         // Spill - Ocean Biomes
-        climateAndBiomeModifier(TFGCore.id("light_oil_spill_ocean"), 15, 30, 0, 100, TRUE_OCEAN_BIOMES, 100);
+        climateAndBiomeModifier(TFGCore.id("light_oil_spill_ocean"), 15, 30, 0, 100, TRUE_OCEAN_BIOMES, 50);
 
         // Normal Biomes - Low Rainfall
         climateAndBiomeModifier(TFGCore.id("light_oil_normal"), -20, 30, 0, 350, NORMAL_BIOMES, 2);
