@@ -1,5 +1,4 @@
 {
-    "__comment__": "This file was automatically created by mcresources",
     "type": "minecraft:random_patch",
     "config": {
         "xz_spread": 5,

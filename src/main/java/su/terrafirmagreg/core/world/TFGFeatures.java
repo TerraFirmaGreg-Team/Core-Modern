@@ -5,6 +5,7 @@ import java.util.function.Function;
 import com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration;
 import com.mojang.serialization.Codec;
 
+import net.dries007.tfc.world.feature.HotSpringConfig;
 import net.dries007.tfc.world.feature.plant.CreepingPlantConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -45,6 +46,9 @@ public class TFGFeatures {
     // Variant of TFC's ice caves feature but for Mars
     public static final RegistryObject<MarsIceCaveFeature> MARS_ICE_CAVES = register(
             "mars_ice_caves", MarsIceCaveFeature::new, NoneFeatureConfiguration.CODEC);
+    // Variant of TFC's hot spring feature but with any block as the wall block
+    public static final RegistryObject<CustomSpringFeature> CUSTOM_SPRING = register(
+            "custom_spring", CustomSpringFeature::new, HotSpringConfig.CODEC);
 
     // TFC 1.21 feature backport
     public static final RegistryObject<SeaStacksFeature> SEA_STACKS = register(

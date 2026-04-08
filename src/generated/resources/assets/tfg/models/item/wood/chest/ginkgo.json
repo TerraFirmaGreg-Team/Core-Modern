@@ -1,3 +1,6 @@
 {
-  "parent": "tfg:block/wood/chest/ginkgo"
+  "parent": "minecraft:item/chest",
+  "textures": {
+    "particle": "wan_ancient_beasts:block/ginkgo_planks"
+  }
 }
