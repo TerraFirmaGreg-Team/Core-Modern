@@ -480,17 +480,18 @@ public class TFGBlocks_Wood {
         var bookshelfBlock = Wood.BlockType.BOOKSHELF.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/bookshelf/" + woodType.name, p -> bookshelfBlock)
                 .blockstate((ctx, prov) -> {
-                    var builder = prov.getMultipartBuilder(ctx.getEntry());
+                    prov.models()
+                            .withExistingParent("wood/bookshelf/" + woodType.name + "_inventory", ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf_inventory"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"))
+                            .texture("front", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_empty"));
+
                     ModelFile base = prov.models()
                             .withExistingParent("wood/bookshelf/" + woodType.name, ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf"))
                             .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
                             .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"));
 
-                    ModelFile inventory = prov.models()
-                            .withExistingParent("wood/bookshelf/" + woodType.name + "_inventory", ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf_inventory"))
-                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
-                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"))
-                            .texture("front", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_empty"));
+                    var builder = prov.getMultipartBuilder(ctx.getEntry());
 
                     BooleanProperty[] slots = new BooleanProperty[] {
                             BlockStateProperties.CHISELED_BOOKSHELF_SLOT_0_OCCUPIED,
@@ -505,7 +506,6 @@ public class TFGBlocks_Wood {
 
                     for (Direction dir : Direction.Plane.HORIZONTAL) {
                         int rot = switch (dir) {
-                            case NORTH -> 0;
                             case EAST -> 90;
                             case SOUTH -> 180;
                             case WEST -> 270;
@@ -519,19 +519,14 @@ public class TFGBlocks_Wood {
                                 .addModel()
                                 .condition(BlockStateProperties.HORIZONTAL_FACING, dir);
 
-                        // Could try using SLOT_OCCUPIED_PROPERTIES?
-                        for (int i = 0; i < slots.length; i++) {
-                            String v = vertical[i];
-                            String h = horizontal[i];
-
+                        for (int i = 0; i < slots.length; i++)
                             for (boolean occupied : new boolean[] { false, true }) {
-
                                 String state = occupied ? "occupied" : "empty";
 
                                 ModelFile model = prov.models()
                                         .withExistingParent(
-                                                ctx.getName() + "_" + state + "_" + v + "_" + h,
-                                                "block/chiseled_bookshelf_" + state + "_slot_" + v + "_" + h)
+                                                ctx.getName() + "_" + state + "_" + vertical[i] + "_" + horizontal[i],
+                                                "block/chiseled_bookshelf_" + state + "_slot_" + vertical[i] + "_" + horizontal[i])
                                         .texture("texture", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_" + state));
 
                                 builder.part()
@@ -541,7 +536,6 @@ public class TFGBlocks_Wood {
                                         .condition(BlockStateProperties.HORIZONTAL_FACING, dir)
                                         .condition(slots[i], occupied);
                             }
-                        }
                     }
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves")))
