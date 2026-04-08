@@ -13,30 +13,31 @@ import com.notenoughmail.kubejs_tfc.addons.firmalife.recipe.component.FoodCompon
 
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 
+import su.terrafirmagreg.core.common.capabilities.food.INegativeNutrientBuilder;
 import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
 
 /**
  * Mixin to add support for new nutrients to KubeJS-TFC's FoodComponent.FoodData.
  */
-@Mixin(FoodComponent.FoodData.class)
-public class FoodComponentFoodDataMixin {
+@Mixin(value = FoodComponent.FoodData.class, remap = false)
+public class FoodComponentFoodDataMixin implements INegativeNutrientBuilder<FoodComponent.FoodData> {
 
     @Unique
     private float[] tfg$negativeNutrients;
 
-    @Unique
+    @Override
     public FoodComponent.FoodData toxins(float value) {
         return tfg$setNegativeNutrient("toxins", value);
     }
 
-    @Unique
+    @Override
     public FoodComponent.FoodData microplastics(float value) {
         return tfg$setNegativeNutrient("microplastics", value);
     }
 
     @Unique
     private FoodComponent.FoodData tfg$setNegativeNutrient(String name, float value) {
-        for (Nutrient nutrient : Nutrient.values()) {
+        for (Nutrient nutrient : Nutrient.VALUES) {
             if (TFGNutrients.isNegative(nutrient) && nutrient.getSerializedName().equals(name)) {
                 if (tfg$negativeNutrients == null) {
                     tfg$negativeNutrients = new float[TFGNutrients.getNegativeCount()];
@@ -53,7 +54,7 @@ public class FoodComponentFoodDataMixin {
 
     @Inject(method = "<init>(Lcom/google/gson/JsonObject;)V", at = @At("TAIL"), remap = false)
     private void tfg$readNegativeNutrients(JsonObject json, CallbackInfo ci) {
-        Nutrient[] values = Nutrient.values();
+        Nutrient[] values = Nutrient.VALUES;
         for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
             Nutrient nutrient = values[i];
             String name = nutrient.getSerializedName();
@@ -68,7 +69,7 @@ public class FoodComponentFoodDataMixin {
         if (tfg$negativeNutrients == null)
             return;
         if (cir.getReturnValue() instanceof JsonObject json) {
-            Nutrient[] values = Nutrient.values();
+            Nutrient[] values = Nutrient.VALUES;
             for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
                 int index = i - TFGNutrients.POSITIVE_COUNT;
                 if (index < tfg$negativeNutrients.length && tfg$negativeNutrients[index] != 0) {

@@ -23,7 +23,9 @@ public class FoodDataNutrientMixin {
     @Inject(method = "nutrient", at = @At("HEAD"), cancellable = true, remap = false)
     private void tfg$handleNegativeNutrient(Nutrient nutrient, CallbackInfoReturnable<Float> cir) {
         if (TFGNutrients.isNegative(nutrient)) {
-            cir.setReturnValue(FoodDataExtension.getNegativeNutrient((FoodData) (Object) this, nutrient));
+            FoodData self = (FoodData) (Object) this;
+            float value = FoodDataExtension.getNegativeNutrient(self, nutrient);
+            cir.setReturnValue(value);
         }
     }
 }

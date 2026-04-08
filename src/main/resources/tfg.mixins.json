@@ -206,7 +206,6 @@
         "common.tfc.food.FoodDataNutrientMixin",
         "common.tfc.food.FoodDataReadMixin",
         "common.tfc.food.FoodDataUpdatePacketMixin",
-        "common.tfc.food.IFoodMixin",
         "common.tfc.food.NutrientMixin",
         "common.tfc.food.NutritionDataMixin",
         "common.tfc.features.RockSpikeBlockMixin",

@@ -93,7 +93,7 @@ public abstract class NutritionDataMixin implements INutritionDataExtension {
         updateAllNutrients(nutrients, j -> nutrients[j.ordinal()] / hungerWindow);
         if (runningHungerTotal < hungerWindow) {
             float defaultModifier = 1 - (float) runningHungerTotal / hungerWindow;
-            for (Nutrient nutrient : Nutrient.values()) {
+            for (Nutrient nutrient : Nutrient.VALUES) {
                 if (TFGNutrients.isPositive(nutrient) && nutrient.ordinal() < nutrients.length) {
                     if (nutrient == Nutrient.DAIRY) {
                         nutrients[nutrient.ordinal()] += defaultDairyNutritionValue * defaultModifier;
@@ -131,7 +131,7 @@ public abstract class NutritionDataMixin implements INutritionDataExtension {
      */
     @Overwrite(remap = false)
     private void updateAllNutrients(float[] array, ToDoubleFunction<Nutrient> operator) {
-        for (Nutrient nutrient : Nutrient.values()) {
+        for (Nutrient nutrient : Nutrient.VALUES) {
             if (TFGNutrients.isPositive(nutrient) && nutrient.ordinal() < array.length) {
                 array[nutrient.ordinal()] = (float) operator.applyAsDouble(nutrient);
             }

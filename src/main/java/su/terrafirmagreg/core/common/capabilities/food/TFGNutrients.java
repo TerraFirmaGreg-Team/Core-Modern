@@ -10,9 +10,11 @@ public final class TFGNutrients {
 
     // GRAIN, FRUIT, VEGETABLES, PROTEIN, DAIRY
     public static final int POSITIVE_COUNT = 5;
+
     public static int getTotalCount() {
-        return Nutrient.values().length;
+        return Nutrient.VALUES.length;
     }
+
     public static int getNegativeCount() {
         return getTotalCount() - POSITIVE_COUNT;
     }

@@ -11,31 +11,37 @@ import com.notenoughmail.kubejs_tfc.util.implementation.data.BuildFoodItemData;
 
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 
+import su.terrafirmagreg.core.common.capabilities.food.INegativeNutrientBuilder;
 import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
 
 /**
  * Mixin to add support for new nutrients to KubeJS-TFC's BuildFoodItemData.
  */
-@Mixin(BuildFoodItemData.class)
-public class BuildFoodItemDataMixin {
+@Mixin(value = BuildFoodItemData.class, remap = false)
+public class BuildFoodItemDataMixin implements INegativeNutrientBuilder<BuildFoodItemData> {
 
     @Unique
     private float[] tfg$negativeNutrients;
 
-    @Unique
+    @Override
     public BuildFoodItemData toxins(float value) {
         return tfg$setNegativeNutrient("toxins", value);
     }
 
-    @Unique
+    @Override
     public BuildFoodItemData microplastics(float value) {
         return tfg$setNegativeNutrient("microplastics", value);
     }
 
     @Unique
     private BuildFoodItemData tfg$setNegativeNutrient(String name, float value) {
-        for (Nutrient nutrient : Nutrient.values()) {
-            if (TFGNutrients.isNegative(nutrient) && nutrient.getSerializedName().equals(name)) {
+        Nutrient[] allNutrients = Nutrient.VALUES;
+
+        for (Nutrient nutrient : allNutrients) {
+            boolean isNegative = TFGNutrients.isNegative(nutrient);
+            String serializedName = nutrient.getSerializedName();
+
+            if (isNegative && serializedName.equals(name)) {
                 if (tfg$negativeNutrients == null) {
                     tfg$negativeNutrients = new float[TFGNutrients.getNegativeCount()];
                 }
@@ -51,14 +57,17 @@ public class BuildFoodItemDataMixin {
 
     @Inject(method = "toJson", at = @At("RETURN"), remap = false)
     private void tfg$writeNegativeNutrients(CallbackInfoReturnable<JsonObject> cir) {
-        if (tfg$negativeNutrients == null)
+        if (tfg$negativeNutrients == null) {
             return;
+        }
         JsonObject json = cir.getReturnValue();
-        Nutrient[] values = Nutrient.values();
+        Nutrient[] values = Nutrient.VALUES;
         for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
             int index = i - TFGNutrients.POSITIVE_COUNT;
             if (index < tfg$negativeNutrients.length && tfg$negativeNutrients[index] != 0) {
-                json.addProperty(values[i].getSerializedName(), tfg$negativeNutrients[index]);
+                String name = values[i].getSerializedName();
+                float value = tfg$negativeNutrients[index];
+                json.addProperty(name, value);
             }
         }
     }

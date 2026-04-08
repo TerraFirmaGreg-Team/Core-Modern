@@ -62,7 +62,7 @@ public final class FoodDataExtension {
     public static float[] getAllNutrients(FoodData data) {
         float[] positive = data.nutrients();
         float[] negative = getNegativeNutrients(data);
-        float[] all = new float[Nutrient.values().length];
+        float[] all = new float[Nutrient.VALUES.length];
 
         System.arraycopy(positive, 0, all, 0, positive.length);
         System.arraycopy(negative, 0, all, TFGNutrients.POSITIVE_COUNT, negative.length);
@@ -75,7 +75,7 @@ public final class FoodDataExtension {
      */
     public static void writeToNbt(FoodData data, CompoundTag nbt) {
         float[] negatives = getNegativeNutrients(data);
-        Nutrient[] values = Nutrient.values();
+        Nutrient[] values = Nutrient.VALUES;
 
         for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
             Nutrient nutrient = values[i];
@@ -90,7 +90,7 @@ public final class FoodDataExtension {
      * Read negative nutrients from NBT and associate with FoodData.
      */
     public static void readFromNbt(FoodData data, CompoundTag nbt) {
-        Nutrient[] values = Nutrient.values();
+        Nutrient[] values = Nutrient.VALUES;
         int negativeCount = values.length - TFGNutrients.POSITIVE_COUNT;
 
         if (negativeCount <= 0)

@@ -44,11 +44,10 @@ public class FoodDataReadMixin {
             if (negativeCount <= 0)
                 return;
 
-
             float[] negatives = new float[negativeCount];
             boolean hasAny = false;
 
-            Nutrient[] values = Nutrient.values();
+            Nutrient[] values = Nutrient.VALUES;
             for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
                 Nutrient nutrient = values[i];
                 int index = i - TFGNutrients.POSITIVE_COUNT;
@@ -59,11 +58,10 @@ public class FoodDataReadMixin {
                         hasAny = true;
                     }
                 }
+            }
 
-
-                if (hasAny) {
-                    FoodDataExtension.setNegativeNutrients(data, negatives);
-                }
+            if (hasAny) {
+                FoodDataExtension.setNegativeNutrients(data, negatives);
             }
         }
     }

@@ -48,7 +48,7 @@ public abstract class FoodDataEncodeMixin {
         buffer.writeFloat(water);
         buffer.writeFloat(decayModifier);
 
-        for (Nutrient nutrient : Nutrient.values()) {
+        for (Nutrient nutrient : Nutrient.VALUES) {
             if (TFGNutrients.isPositive(nutrient)) {
                 buffer.writeFloat(nutrient(nutrient));
             }

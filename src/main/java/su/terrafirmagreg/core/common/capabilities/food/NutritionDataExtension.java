@@ -66,7 +66,7 @@ public final class NutritionDataExtension {
     public static void addNegativeNutrients(NutritionData data, FoodData foodData, float weight) {
         float[] negatives = getOrCreateNegativeNutrients(data);
 
-        for (Nutrient nutrient : Nutrient.values()) {
+        for (Nutrient nutrient : Nutrient.VALUES) {
             if (TFGNutrients.isNegative(nutrient)) {
                 int index = nutrient.ordinal() - TFGNutrients.POSITIVE_COUNT;
                 if (index >= 0 && index < negatives.length) {
@@ -114,7 +114,7 @@ public final class NutritionDataExtension {
         }
 
         CompoundTag negativeNbt = new CompoundTag();
-        Nutrient[] values = Nutrient.values();
+        Nutrient[] values = Nutrient.VALUES;
         boolean hasAny = false;
 
         for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
@@ -142,7 +142,7 @@ public final class NutritionDataExtension {
         CompoundTag negativeNbt = nbt.getCompound("tfg_negative_nutrients");
         float[] negatives = getOrCreateNegativeNutrients(data);
 
-        Nutrient[] values = Nutrient.values();
+        Nutrient[] values = Nutrient.VALUES;
         for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
             Nutrient nutrient = values[i];
             int index = i - TFGNutrients.POSITIVE_COUNT;
