@@ -74,6 +74,10 @@ public class TFGFeatures {
     public static final RegistryObject<FluidGasVentFeature> FLUID_GAS_VENT = register(
             "fluid_gas_vent", FluidGasVentFeature::new, FluidGasVentConfig.CODEC);
 
+    // Variant of vanilla block pile that uses TFC Rock Layers
+    public static final RegistryObject<RockPileFeature> ROCK_PILE = register(
+            "rock_pile", RockPileFeature::new, RockPileConfig.CODEC);
+
     private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
             Function<Codec<C>, F> factory, Codec<C> codec) {
         return FEATURES.register(name, () -> factory.apply(codec));
