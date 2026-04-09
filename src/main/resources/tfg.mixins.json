@@ -226,6 +226,7 @@
         "common.tfcimprovedbadlands.IBEventHandlerMixin",
         "common.vintageimprovements.CurvingRecipeMixin",
         "common.vintageimprovements.HelveItemsRendererMixin",
+        "common.vintageimprovements.VacuumChamberBlockEntityMixin",
         "common.vintageimprovements.VibratingRecipeMixin",
         "common.wab.ChargerMixin",
         "common.wab.CrusherMixin",
