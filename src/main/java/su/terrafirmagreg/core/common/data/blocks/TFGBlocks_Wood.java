@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -40,10 +41,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
+import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -175,6 +173,7 @@ public class TFGBlocks_Wood {
         blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(woodType));
         blocks.put(Wood.BlockType.SEWING_TABLE, sewingTable(woodType));
         blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(woodType));
+        blocks.put(Wood.BlockType.BOOKSHELF, bookshelf(woodType));
 
         WOOD_BLOCKS.put(woodType, blocks);
     }
@@ -303,7 +302,6 @@ public class TFGBlocks_Wood {
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "sluices"))).build()
                 .register();
-
     }
 
     private static BlockEntry<BarrelBlock> barrel(WoodType woodType) {
@@ -377,7 +375,6 @@ public class TFGBlocks_Wood {
         var lecternBlock = Wood.BlockType.LECTERN.create(woodType.registryWood).get();
         return TFGCore.REGISTRATE.block("wood/lectern/" + woodType.name, p -> lecternBlock)
                 .blockstate((ctx, prov) -> {
-
                     var path = "block/wood/lectern/" + woodType.name + "/";
                     ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("block/lectern"))
                             .texture("bottom", woodType.plankTexture)
@@ -455,6 +452,75 @@ public class TFGBlocks_Wood {
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "jar_shelves"))).build()
                 .register();
 
+    }
+
+    private static BlockEntry<Block> bookshelf(WoodType woodType) {
+        var bookshelfBlock = Wood.BlockType.BOOKSHELF.create(woodType.registryWood).get();
+        return TFGCore.REGISTRATE.block("wood/bookshelf/" + woodType.name, p -> bookshelfBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.models()
+                            .withExistingParent("wood/bookshelf/" + woodType.name + "_inventory", ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf_inventory"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"))
+                            .texture("front", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_empty"));
+
+                    ModelFile base = prov.models()
+                            .withExistingParent("wood/bookshelf/" + woodType.name, ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"));
+
+                    var builder = prov.getMultipartBuilder(ctx.getEntry());
+
+                    BooleanProperty[] slots = new BooleanProperty[] {
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_0_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_1_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_2_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_3_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_4_OCCUPIED,
+                            BlockStateProperties.CHISELED_BOOKSHELF_SLOT_5_OCCUPIED
+                    };
+                    String[] vertical = { "top", "top", "top", "bottom", "bottom", "bottom" };
+                    String[] horizontal = { "left", "mid", "right", "left", "mid", "right" };
+
+                    for (Direction dir : Direction.Plane.HORIZONTAL) {
+                        int rot = switch (dir) {
+                            case EAST -> 90;
+                            case SOUTH -> 180;
+                            case WEST -> 270;
+                            default -> 0;
+                        };
+
+                        builder.part()
+                                .modelFile(base)
+                                .rotationY(rot)
+                                .uvLock(true)
+                                .addModel()
+                                .condition(BlockStateProperties.HORIZONTAL_FACING, dir);
+
+                        for (int i = 0; i < slots.length; i++)
+                            for (boolean occupied : new boolean[] { false, true }) {
+                                String state = occupied ? "occupied" : "empty";
+
+                                ModelFile model = prov.models()
+                                        .withExistingParent(
+                                                ctx.getName() + "_" + state + "_" + vertical[i] + "_" + horizontal[i],
+                                                "block/chiseled_bookshelf_" + state + "_slot_" + vertical[i] + "_" + horizontal[i])
+                                        .texture("texture", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_" + state));
+
+                                builder.part()
+                                        .modelFile(model)
+                                        .rotationY(rot)
+                                        .addModel()
+                                        .condition(BlockStateProperties.HORIZONTAL_FACING, dir)
+                                        .condition(slots[i], occupied);
+                            }
+                    }
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/bookshelf/" + woodType.name + "_inventory")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves"))).build()
+                .register();
     }
 
     private static class FirmaCustomLoader extends CustomLoaderBuilder<BlockModelBuilder> {
