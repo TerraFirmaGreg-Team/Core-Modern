@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import com.negodya1.vintageimprovements.content.kinetics.vacuum_chamber.VacuumChamberBlockEntity;
 
+// NOTE: Delete once https://github.com/SSWTLZZ69/Create-Vintage-Improvements/pull/22 gets merged
 @Mixin(value = VacuumChamberBlockEntity.class, remap = false)
 public class VacuumChamberBlockEntityMixin {
 
