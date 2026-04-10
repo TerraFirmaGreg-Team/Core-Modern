@@ -174,6 +174,8 @@ public final class TFGTags {
 
         public static final TagKey<Biome> EarthIsSaltFlats = createBiomeTag("earth/is_salt_flats");
 
+        public static final TagKey<Biome> EarthIsOldGen = createBiomeTag("earth/is_oldgen");
+
         private static TagKey<Biome> createBiomeTag(String path) {
             return createBiomeTag(TFGCore.id(path));
         }
