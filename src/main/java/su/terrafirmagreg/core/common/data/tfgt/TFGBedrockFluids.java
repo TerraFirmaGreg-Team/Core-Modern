@@ -421,4 +421,54 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(0)
             .biomes(10, TFGTags.Biomes.EarthIsMountain));
+
+    // =========================================================
+    // OLD GEN
+    // =========================================================
+
+    public static BedrockFluidDefinition OLD_GEN_HEAVY_OIL = create(TFGCore.id("old_gen_heavy_oil_deposit"), builder -> builder
+            .dimensions(overworld)
+            .fluid(GTMaterials.OilHeavy::getFluid)
+            .weight(0)
+            .yield(100, 200)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(20)
+            .biomes(10, TFGTags.Biomes.EarthIsOldGen));
+
+    public static BedrockFluidDefinition OLD_GEN_LIGHT_OIL = create(TFGCore.id("old_gen_light_oil_deposit"), builder -> builder
+            .fluid(GTMaterials.OilLight::getFluid)
+            .weight(0)
+            .yield(175, 300)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(25)
+            .biomes(25, TFGTags.Biomes.EarthIsOldGen));
+
+    public static BedrockFluidDefinition OLD_GEN_NATURAL_GAS = create(TFGCore.id("old_gen_natural_gas_deposit"), builder -> builder
+            .fluid(GTMaterials.NaturalGas::getFluid)
+            .weight(0)
+            .yield(100, 175)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(20)
+            .biomes(15, TFGTags.Biomes.EarthIsOldGen));
+
+    public static BedrockFluidDefinition OLD_GEN_OIL = create(TFGCore.id("old_gen_oil_deposit"), builder -> builder
+            .fluid(GTMaterials.Oil::getFluid)
+            .weight(0)
+            .yield(175, 300)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(25)
+            .biomes(20, TFGTags.Biomes.EarthIsOldGen));
+
+    public static BedrockFluidDefinition OLD_GEN_RAW_OIL = create(TFGCore.id("old_gen_raw_oil_deposit"), builder -> builder
+            .fluid(GTMaterials.RawOil::getFluid)
+            .weight(0)
+            .yield(200, 300)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(25)
+            .biomes(20, TFGTags.Biomes.EarthIsOldGen));
 }
