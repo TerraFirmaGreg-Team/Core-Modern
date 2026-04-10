@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.compat.emi;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import com.forsteri.createliquidfuel.core.BurnerStomachHandler;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
@@ -32,6 +33,7 @@ import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
+import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
 
 @EmiEntrypoint
 public class TFGEmiPlugin implements EmiPlugin {
@@ -127,8 +129,20 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addCategory(FLUID_VEIN_INFO);
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_HV));
         emiRegistry.addWorkstation(FLUID_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
-        GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries().forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
+        GTRegistries.BEDROCK_FLUID_DEFINITIONS.entries().stream().filter(entry -> {
+            boolean legacyVein = LEGACY_FLUID_VEINS.contains(entry.getKey());
+            //Effectively this
+            // return onLegacyWorldgen() ? legacyVein : !legacyVein;
+            return onLegacyWorldgen() == legacyVein;
+        }).forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
     }
+
+    private static final Set<ResourceLocation> LEGACY_FLUID_VEINS = Set.of(
+            TFGCore.id("old_gen_heavy_oil_deposit"),
+            TFGCore.id("old_gen_light_oil_deposit"),
+            TFGCore.id("old_gen_natural_gas_deposit"),
+            TFGCore.id("old_gen_oil_deposit"),
+            TFGCore.id("old_gen_raw_oil_deposit"));
 
     private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
             "textures/gui/emi/arrow.png");
@@ -146,5 +160,9 @@ public class TFGEmiPlugin implements EmiPlugin {
     public static void createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
         SlotWidget widget = new SlotWidget(stack, offsetX, offsetY);
         holder.add(widget);
+    }
+
+    private boolean onLegacyWorldgen() {
+        return WorldgenVersionData.OVERWORLD_VERSION != WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
     }
 }
