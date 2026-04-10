@@ -111,7 +111,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
     }
 
     private AnimalProductEvent buildEvent(ServerLevel level,
-                                          TFCAnimalProperties animal) {
+            TFCAnimalProperties animal) {
         if (animal instanceof DairyAnimal dairy) {
             return new AnimalProductEvent(
                     level, dairy.blockPosition(), null, dairy,
@@ -224,13 +224,13 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
                             if (days > 0) {
                                 textList.add(Component.translatable(
-                                                "tfg.machine.pastoral_engine.next_harvest_days",
-                                                formattedName, days, hours)
+                                        "tfg.machine.pastoral_engine.next_harvest_days",
+                                        formattedName, days, hours)
                                         .withStyle(ChatFormatting.YELLOW));
                             } else {
                                 textList.add(Component.translatable(
-                                                "tfg.machine.pastoral_engine.next_harvest_hours",
-                                                formattedName, hours)
+                                        "tfg.machine.pastoral_engine.next_harvest_hours",
+                                        formattedName, hours)
                                         .withStyle(ChatFormatting.YELLOW));
                             }
                         }));
@@ -238,7 +238,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
         }
         // Toujours visible (client + server)
         textList.add(Component.translatable("tfg.machine.pastoral_engine.next_use",
-                        harvestCounter, HARVESTS_PER_USE)
+                harvestCounter, HARVESTS_PER_USE)
                 .withStyle(ChatFormatting.AQUA));
     }
 }
