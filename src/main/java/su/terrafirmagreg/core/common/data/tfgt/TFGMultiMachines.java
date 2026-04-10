@@ -1244,9 +1244,12 @@ public class TFGMultiMachines {
             .recipeType(TFGTRecipeTypes.PASTORAL_ENGINE_RECIPES)
             .recipeModifiers(AnimalProductModifier.INSTANCE)
             .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.pastoral_engine_1"),
+                    Component.translatable("tfg.tooltip.machine.pastoral_engine_2"))
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
-                    TFGCore.id("block/machines/pastoral_engine"))
+                    TFGCore.id("block/machines/pisciculture_fishery"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("BBBBBBBBB", "DDDDDDDDD", "AAAAAAAAA", "AAAAAAAAA")
                     .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
@@ -1254,19 +1257,18 @@ public class TFGMultiMachines {
                     .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
                     .aisle("BFFFBBBBB", "DAAACEEEC", "AAAACEEEC", "AAAACCCCC")
                     .aisle("BFFFBEEEB", "DAAAEHHGA", "AAAAEHHGA", "AAAACEEEC")
-                    .aisle("BFFFBEEEB", "DAAAEGGGA", "AAAAEGGGA", "AAAACEEEC")
-                    .aisle("BBBBBBBBB", "DDDDCAAAC", "AAAACASAC", "AAAACCCCC")
+                    .aisle("BFFFBEEEB", "DAAAEGGGA", "AAAAEGSGA", "AAAACEEEC")
+                    .aisle("BBBBBBBBB", "DDDDCAAAC", "AAAACAAAC", "AAAACCCCC")
                     .where('S', controller(blocks(definition.get())))
                     .where("A", Predicates.any())
                     .where("B", Predicates.blocks(GTBlocks.STEEL_HULL.get()))
-                    .where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK, TFGCore.id("brick_index"))))
-                    .where("D", Predicates.blockTag(TagKey.create(Registries.BLOCK,
-                            ResourceLocation.fromNamespaceAndPath("forge", "fences/wooden"))))
+                    .where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK,
+                            ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
+                    .where("D", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "fences/wooden")))
+                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "fence_gates")))))
                     .where("E", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                    .where("F", Predicates.blockTag(TagKey.create(Registries.BLOCK,
-                                    ResourceLocation.fromNamespaceAndPath("tfc", "dirt")))
-                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK,
-                                    ResourceLocation.fromNamespaceAndPath("tfc", "grass")))))
+                    .where("F", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "dirt")))
+                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "grass")))))
                     .where("G", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false))

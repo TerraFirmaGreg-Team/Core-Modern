@@ -39,7 +39,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
     @Persisted
     private int harvestCounter = 0;
 
-    private static final int HARVESTS_PER_USE = 3; // Number of time it harvests before it ages the animal
+    private static final int HARVESTS_PER_USE = 2; // Number of time it harvests before it ages the animal
 
     public PastoralEngineMachine(IMachineBlockEntity holder) {
         super(holder);
