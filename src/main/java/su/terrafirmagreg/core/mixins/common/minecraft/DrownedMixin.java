@@ -30,7 +30,6 @@ import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Husk;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -61,7 +60,7 @@ public abstract class DrownedMixin extends Zombie {
 
         spawnGroup = super.finalizeSpawn(accessor, difficulty, spawnType, spawnGroup, tag);
 
-        if (this.getItemBySlot(EquipmentSlot.OFFHAND).isEmpty() && accessor.getRandom().nextFloat() < 0.03F) {
+        if (this.getItemBySlot(EquipmentSlot.OFFHAND).isEmpty() && accessor.getRandom().nextFloat() < 0.05F) {
             this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(FLItems.HOLLOW_SHELL.get()));
             this.setGuaranteedDrop(EquipmentSlot.OFFHAND);
         }
@@ -86,11 +85,17 @@ public abstract class DrownedMixin extends Zombie {
 
     /**
      * @author Pyritie
-     * @reason Replace vanilla fishing rod
+     * @reason Replace vanilla fishing rod/trident, add tfc fishing rod/javelins instead
      */
     @Overwrite
     protected void populateDefaultEquipmentSlots(RandomSource random, @NotNull DifficultyInstance difficulty) {
+        if (random.nextFloat() < 0.67f) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            return;
+        }
+
         boolean isJavelin = false;
+
         int i = random.nextInt(10);
         if (i == 0) {
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.COPPER).get(Metal.ItemType.FISHING_ROD).get()));
@@ -107,10 +112,8 @@ public abstract class DrownedMixin extends Zombie {
         } else if (i < 6) {
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.BLACK_BRONZE).get(Metal.ItemType.JAVELIN).get()));
             isJavelin = true;
-        } else if (i == 9) {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
         } else {
-            // 30% for stone javelin
+            // 40% for stone javelin
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFCItems.ROCK_TOOLS.get(RockCategory.IGNEOUS_INTRUSIVE).get(RockCategory.ItemType.JAVELIN).get()));
             isJavelin = true;
         }

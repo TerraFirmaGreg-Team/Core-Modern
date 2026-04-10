@@ -1,5 +1,4 @@
 {
-    "__comment__": "This file was automatically created by mcresources",
     "type": "minecraft:simple_random_selector",
     "config": {"features": [
         "tfg:earth/topaz_tuya_fissure",

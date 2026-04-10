@@ -1,6 +1,6 @@
 package su.terrafirmagreg.core.common.tfgt.worldgen;
 
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.dries007.tfc.world.chunkdata.ChunkData;
@@ -35,6 +35,19 @@ public class ClimateWeightModifier {
         this.addedWeight = addedWeight;
     }
 
+    /// Returns Map keyed by "temperature" and/or "rainfall"
+    /// @return Map of List(float) containing minValue, maxValue
+    public Map<Mode, List<Float>> getClimates() {
+        List<Float> climate = new ArrayList<>(List.of(min, max));
+        return new HashMap<>(Map.of(mode, climate));
+    }
+
+    /// Return Null unless overridden, or
+    /// @return Set of ResourceKey(biome)
+    public Set<ResourceKey<Biome>> getBiomes() {
+        return null;
+    }
+
     public ChunkData getChunkData(ServerLevel level, BlockPos pos) {
         ChunkAccess currentChunk = CHUNK_ACCESS_CACHE.get(new ChunkPos(pos));
         return ChunkDataProvider.get(level.getChunkSource().getGenerator()).get(currentChunk);
@@ -54,6 +67,15 @@ public class ClimateWeightModifier {
             float rainMin, float rainMax,
             int addedWeight) {
         return new ClimateWeightModifier(null, 0, 0, addedWeight) {
+            @Override
+            public Map<Mode, List<Float>> getClimates() {
+                List<Float> tempList = new ArrayList<>(List.of(tempMin, tempMax));
+                List<Float> rainList = new ArrayList<>(List.of(rainMin, rainMax));
+                return new HashMap<>(Map.of(
+                        Mode.TEMPERATURE, tempList,
+                        Mode.RAINFALL, rainList));
+            }
+
             @Override
             public int applyAsInt(ServerLevel level, BlockPos pos) {
 
@@ -75,6 +97,20 @@ public class ClimateWeightModifier {
             Set<ResourceKey<Biome>> biomes,
             int addedWeight) {
         return new ClimateWeightModifier(null, 0, 0, addedWeight) {
+            @Override
+            public Set<ResourceKey<Biome>> getBiomes() {
+                return biomes;
+            }
+
+            @Override
+            public Map<Mode, List<Float>> getClimates() {
+                List<Float> tempList = new ArrayList<>(List.of(tempMin, tempMax));
+                List<Float> rainList = new ArrayList<>(List.of(rainMin, rainMax));
+                return new HashMap<>(Map.of(
+                        Mode.TEMPERATURE, tempList,
+                        Mode.RAINFALL, rainList));
+            }
+
             @Override
             public int applyAsInt(ServerLevel level, BlockPos pos) {
 
