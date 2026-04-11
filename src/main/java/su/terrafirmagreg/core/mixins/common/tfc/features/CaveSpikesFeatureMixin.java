@@ -70,6 +70,8 @@ public class CaveSpikesFeatureMixin {
             level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.SULFUR_FUMES.getSource())), 3);
         } else if (block == TFGBlocks.GEYSER_SLURRY.get()) {
             level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.GEYSER_SLURRY.getSource())), 3);
+        } else if (block == TFGBlocks.MUDDY_WATER.get()) {
+            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.MUDDY_WATER.getSource())), 3);
         }
     }
 

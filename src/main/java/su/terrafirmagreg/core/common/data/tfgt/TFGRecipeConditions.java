@@ -22,6 +22,8 @@ public class TFGRecipeConditions {
     public static RecipeConditionType<AverageRainfallCondition> CLIMATE_AVG_RAINFALL;
     public static RecipeConditionType<GravityCondition> GRAVITY;
 
+    public static RecipeConditionType<AnimalPresentCondition> ANIMAL_PRESENT;
+
     public static void init() {
         OXYGENATED = register("oxygenated", OxygenatedCondition::new, OxygenatedCondition.CODEC);
         MONTHS = register("months", MonthCondition::new, MonthCondition.CODEC);
@@ -29,6 +31,7 @@ public class TFGRecipeConditions {
         CLIMATE_AVG_TEMPERATURE = register("climate_avg_temperature", AverageTemperatureCondition::new, AverageTemperatureCondition.CODEC);
         CLIMATE_AVG_RAINFALL = register("climate_avg_rainfall", AverageRainfallCondition::new, AverageRainfallCondition.CODEC);
         GRAVITY = register("gravity", GravityCondition::new, GravityCondition.CODEC);
+        ANIMAL_PRESENT = register("animal_present", AnimalPresentCondition::new, AnimalPresentCondition.CODEC);
     }
 
     private static <T extends RecipeCondition<T>> RecipeConditionType<T> register(

@@ -335,8 +335,9 @@ public class TFGBlocks_Earth {
 
     private static BlockEntry<ConnectedDuffBlock> createDuff(String id, Supplier<? extends Block> dirt, Supplier<? extends Block> path, Supplier<? extends Block> farmland) {
         return TFGCore.REGISTRATE.block(id,
-                p -> new ConnectedDuffBlock(p.randomTicks(), dirt, path, farmland))
+                p -> new ConnectedDuffBlock(p, dirt, path, farmland))
                 .initialProperties(dirt::get)
+                .properties(p -> p.randomTicks().sound(SoundType.GRASS))
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
                 .tag(BlockTags.DIRT, TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCDirtBlockTag)
                 .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
