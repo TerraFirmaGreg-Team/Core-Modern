@@ -102,6 +102,7 @@ public class TFGBlocks_Wood {
             // TODO: HORIZONTAL_SUPPORT
         }
 
+        blocks.put(Wood.BlockType.BOOKSHELF, bookshelf(wood));
         blocks.put(Wood.BlockType.TOOL_RACK, toolRack(wood));
         blocks.put(Wood.BlockType.WORKBENCH, workbench(wood));
         blocks.put(Wood.BlockType.TRAPPED_CHEST, trappedChest(wood));
@@ -162,6 +163,7 @@ public class TFGBlocks_Wood {
                 .register();
     }
 
+    // TODO: Missing Particle?
     private static BlockEntry<Block> workbench(TFGWood wood) {
         var workbenchBlock = Wood.BlockType.WORKBENCH.create(wood).get();
         return TFGCore.REGISTRATE.block("wood/workbench/" + wood.serializedName, p -> workbenchBlock)
@@ -612,6 +614,7 @@ public class TFGBlocks_Wood {
                 .texture("12", wood.logTexture);
     }
 
+    // TODO: Wrong Particle?
     private static BlockEntry<BigBarrelBlock> bigBarrel(TFGWood wood) {
         var properties = ExtendedProperties.of().mapColor(wood.woodColor()).sound(SoundType.WOOD)
                 .noOcclusion().strength(10f).pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.BIG_BARREL);
@@ -674,6 +677,7 @@ public class TFGBlocks_Wood {
 
     }
 
+    // TODO: Wrong Particle?
     private static BlockEntry<StompingBarrelBlock> stompingBarrel(TFGWood wood) {
         var properties = ExtendedProperties.of().mapColor(wood.woodColor()).sound(SoundType.WOOD).noOcclusion().strength(4f)
                 .pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.STOMPING_BARREL);
