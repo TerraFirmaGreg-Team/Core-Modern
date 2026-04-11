@@ -17,21 +17,21 @@ import net.minecraft.world.level.material.MapColor;
 import su.terrafirmagreg.core.TFGCore;
 
 public enum TFGWood implements RegistryWood {
-    // ARAUCARIA(MapColor.WOOD, MapColor.WOOD, 10, 0),
+    ARAUCARIA(MapColor.WOOD, MapColor.WOOD, 10, 0),
 
-    GLACIAN("glacian", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
+    GLACIAN(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
             MapColor.NONE),
-    STROPHAR("strophar", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"),
+    STROPHAR(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
             MapColor.NONE),
-    AERONOS("aeronos", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"),
+    AERONOS(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
             MapColor.NONE),
-    GINKGO("ginkgo", ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
+    GINKGO( ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/stripped_ginkgo_log"),
             MapColor.NONE);
@@ -67,15 +67,15 @@ public enum TFGWood implements RegistryWood {
         this.strippedLogTexture = TFGCore.id("block/wood/stripped_log/" + serializedName);
     }
 
-    TFGWood(String name, ResourceLocation plank, ResourceLocation log, ResourceLocation stripped_log, MapColor mapColor) {
+    TFGWood(ResourceLocation plank, ResourceLocation log, ResourceLocation stripped_log, MapColor mapColor) {
         this.generateWood = false;
-        this.serializedName = name;
+        this.serializedName = this.name().toLowerCase(Locale.ROOT);
         this.woodColor = mapColor;
         this.barkColor = mapColor;
         this.autumnIndex = 0;
         this.tree = null;
         this.daysToGrow = 0;
-        this.blockSet = new BlockSetType(name);
+        this.blockSet = new BlockSetType(serializedName);
         this.woodType = new WoodType(TFGCore.id(serializedName).toString(), blockSet);
         this.plankTexture = plank;
         this.logTexture = log;

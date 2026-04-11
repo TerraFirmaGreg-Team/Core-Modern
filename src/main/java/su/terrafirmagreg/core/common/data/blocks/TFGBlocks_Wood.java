@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -133,13 +134,13 @@ public class TFGBlocks_Wood {
                 .register();
     }
 
+    // TODO: Proper Block (currently just a test)
     private static BlockEntry<Block> stripped_log(TFGWood wood) {
         var strippedLogBlock = Wood.BlockType.STRIPPED_LOG.create(wood).get();
         return TFGCore.REGISTRATE.block("wood/stripped_log/" + wood.serializedName, p -> strippedLogBlock)
                 .register();
     }
 
-    // TODO: Proper Block (currently just a test)
     private static BlockEntry<Block> toolRack(TFGWood wood) {
         var toolRackBlock = Wood.BlockType.TOOL_RACK.create(wood).get();
         return TFGCore.REGISTRATE.block("wood/tool_rack/" + wood.serializedName, p -> toolRackBlock)
@@ -418,20 +419,20 @@ public class TFGBlocks_Wood {
 
     }
 
-    private static BlockEntry<Block> bookshelf(WoodType woodType) {
-        var bookshelfBlock = Wood.BlockType.BOOKSHELF.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/bookshelf/" + woodType.name, p -> bookshelfBlock)
+    private static BlockEntry<Block> bookshelf(TFGWood woodType) {
+        var bookshelfBlock = Wood.BlockType.BOOKSHELF.create(woodType).get();
+        return TFGCore.REGISTRATE.block("wood/bookshelf/" + woodType.serializedName, p -> bookshelfBlock)
                 .blockstate((ctx, prov) -> {
                     prov.models()
-                            .withExistingParent("wood/bookshelf/" + woodType.name + "_inventory", ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf_inventory"))
-                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
-                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"))
-                            .texture("front", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_empty"));
+                            .withExistingParent("wood/bookshelf/" + woodType.serializedName + "_inventory", ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf_inventory"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.serializedName + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.serializedName + "_side"))
+                            .texture("front", TFGCore.id("block/wood/bookshelf/" + woodType.serializedName + "_empty"));
 
                     ModelFile base = prov.models()
-                            .withExistingParent("wood/bookshelf/" + woodType.name, ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf"))
-                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
-                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"));
+                            .withExistingParent("wood/bookshelf/" + woodType.serializedName, ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.serializedName + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.serializedName + "_side"));
 
                     var builder = prov.getMultipartBuilder(ctx.getEntry());
 
@@ -469,7 +470,7 @@ public class TFGBlocks_Wood {
                                         .withExistingParent(
                                                 ctx.getName() + "_" + state + "_" + vertical[i] + "_" + horizontal[i],
                                                 "block/chiseled_bookshelf_" + state + "_slot_" + vertical[i] + "_" + horizontal[i])
-                                        .texture("texture", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_" + state));
+                                        .texture("texture", TFGCore.id("block/wood/bookshelf/" + woodType.serializedName + "_" + state));
 
                                 builder.part()
                                         .modelFile(model)
@@ -482,7 +483,7 @@ public class TFGBlocks_Wood {
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/bookshelf/" + woodType.name + "_inventory")))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/bookshelf/" + woodType.serializedName + "_inventory")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves"))).build()
                 .register();
     }
