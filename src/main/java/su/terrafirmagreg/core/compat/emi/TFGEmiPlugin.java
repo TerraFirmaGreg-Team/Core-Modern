@@ -39,7 +39,7 @@ import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
 public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory ORE_VEIN_INFO = new EmiRecipeCategory(TFGCore.id("ore_vein_info"),
-            EmiStack.of(GTItems.PROSPECTOR_HV));
+            EmiStack.of(GTItems.PROSPECTOR_LV));
 
     public static final EmiRecipeCategory BLAZE_BURNER = new EmiRecipeCategory(TFGCore.id("blaze_burner"),
             EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
