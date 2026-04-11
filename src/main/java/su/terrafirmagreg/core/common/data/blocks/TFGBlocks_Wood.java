@@ -111,8 +111,8 @@ public class TFGBlocks_Wood {
         // TODO: SIGN
         // TODO: WALL SIGN
         blocks.put(Wood.BlockType.BARREL, barrel(wood));
-        blocks.put(Wood.BlockType.LECTERN, lectern(wood));
-        blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(wood));
+        // blocks.put(Wood.BlockType.LECTERN, lectern(wood));
+        // blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(wood));
         blocks.put(Wood.BlockType.SEWING_TABLE, sewingTable(wood));
         blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(wood));
 

@@ -31,7 +31,7 @@ public enum TFGWood implements RegistryWood {
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
             MapColor.NONE),
-    GINKGO( ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
+    GINKGO(ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
             ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/stripped_ginkgo_log"),
             MapColor.NONE);
