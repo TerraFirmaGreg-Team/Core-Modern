@@ -70,7 +70,7 @@ public class TFGBlocks_Wood {
             FOOD_SHELVES.put(value, foodShelf(value));
             HANGERS.put(value, hanger(value));
             JARBNETS.put(value, jarbnet(value));
-            // BIG_BARRELS.put(value, bigBarrel(value));
+            BIG_BARRELS.put(value, bigBarrel(value));
             WINE_SHELVES.put(value, wineShelf(value));
             STOMPING_BARRELS.put(value, stompingBarrel(value));
             BARREL_PRESSES.put(value, barrelPress(value));
@@ -105,28 +105,30 @@ public class TFGBlocks_Wood {
         }
 
         blocks.put(Wood.BlockType.TOOL_RACK, toolRack(wood));
-        // blocks.put(Wood.BlockType.WORKBENCH, workbench(wood));
-        // blocks.put(Wood.BlockType.TRAPPED_CHEST, trappedChest(wood));
-        // blocks.put(Wood.BlockType.CHEST, chest(wood));
+        blocks.put(Wood.BlockType.WORKBENCH, workbench(wood));
+        blocks.put(Wood.BlockType.TRAPPED_CHEST, trappedChest(wood));
+        blocks.put(Wood.BlockType.CHEST, chest(wood));
         blocks.put(Wood.BlockType.LOOM, loom(wood));
         blocks.put(Wood.BlockType.SLUICE, sluice(wood));
         // TODO: SIGN
         // TODO: WALL SIGN
         blocks.put(Wood.BlockType.BARREL, barrel(wood));
-        // blocks.put(Wood.BlockType.LECTERN, lectern(wood));
-        // blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(wood));
+        blocks.put(Wood.BlockType.LECTERN, lectern(wood));
+        blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(wood));
         blocks.put(Wood.BlockType.SEWING_TABLE, sewingTable(wood));
         blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(wood));
 
         WOODS.put(wood, blocks);
     }
 
+    // TODO: Proper Block (currently just a test)
     private static BlockEntry<Block> plank(TFGWood wood) {
         var plankBlock = Wood.BlockType.PLANKS.create(wood).get();
         return TFGCore.REGISTRATE.block("wood/planks/" + wood.serializedName, p -> plankBlock)
                 .register();
     }
 
+    // TODO: Proper Block (currently just a test)
     private static BlockEntry<LogBlock> log(TFGWood wood, Map<Wood.BlockType, BlockEntry<? extends Block>> blocks) {
         var properties = ExtendedProperties.of(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? wood.woodColor() : wood.barkColor()).strength(8f).sound(SoundType.WOOD)
                 .instrument(NoteBlockInstrument.BASS).requiresCorrectToolForDrops().flammableLikeLogs();
@@ -140,6 +142,7 @@ public class TFGBlocks_Wood {
                 .register();
     }
 
+    // TODO: Proper Block (currently just a test)
     private static BlockEntry<Block> toolRack(TFGWood wood) {
         var toolRackBlock = Wood.BlockType.TOOL_RACK.create(wood).get();
         return TFGCore.REGISTRATE.block("wood/tool_rack/" + wood.serializedName, p -> toolRackBlock)
