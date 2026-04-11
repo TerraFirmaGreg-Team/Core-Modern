@@ -1,0 +1,6 @@
+{
+  "parent": "tfc:block/sluice_lower",
+  "textures": {
+    "texture": "tfg:block/wood/sheet/araucaria"
+  }
+}
