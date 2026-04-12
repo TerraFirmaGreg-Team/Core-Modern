@@ -1,0 +1,8 @@
+{
+  "parent": "firmalife:block/wine_shelf",
+  "textures": {
+    "0": "tfg:block/wood/planks/araucaria",
+    "2": "tfg:block/wood/sheet/araucaria",
+    "3": "tfg:block/wood/stripped_log/araucaria"
+  }
+}

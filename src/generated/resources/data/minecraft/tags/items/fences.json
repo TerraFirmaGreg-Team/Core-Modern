@@ -1,5 +1,9 @@
 {
   "values": [
+    "tfg:wood/fence/araucaria",
+    "tfg:wood/log_fence/araucaria",
+    "tfg:wood/fence/beech",
+    "tfg:wood/log_fence/beech",
     "tfg:wood/fence/mahoe",
     "tfg:wood/log_fence/mahoe",
     "tfg:wood/log_fence/glacian",

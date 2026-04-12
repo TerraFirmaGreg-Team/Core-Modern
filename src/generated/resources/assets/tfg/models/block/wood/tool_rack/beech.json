@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/tool_rack",
+  "textures": {
+    "particle": "tfg:block/wood/planks/beech",
+    "texture": "tfg:block/wood/planks/beech"
+  }
+}

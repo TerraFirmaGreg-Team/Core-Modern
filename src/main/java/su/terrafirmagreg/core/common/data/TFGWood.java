@@ -20,6 +20,8 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Wood;
 
 public enum TFGWood implements RegistryWood {
+    ARAUCARIA(MapColor.WOOD, MapColor.WOOD, 10, 0),
+    BEECH(MapColor.WOOD, MapColor.WOOD, 10, 0),
     MAHOE(MapColor.WOOD, MapColor.WOOD, 10, 0),
 
     GLACIAN(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),

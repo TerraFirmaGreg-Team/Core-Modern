@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/jarbnet/beech"
+  },
+  "loader": "firmalife:jarbnet"
+}
