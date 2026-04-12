@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/log_fence_inventory",
+  "textures": {
+    "log": "ad_astra:block/aeronos_stem",
+    "planks": "ad_astra:block/aeronos_planks"
+  }
+}

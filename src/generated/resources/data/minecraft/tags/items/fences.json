@@ -1,5 +1,10 @@
 {
   "values": [
-    "tfg:wood/fence/mahoe"
+    "tfg:wood/fence/mahoe",
+    "tfg:wood/log_fence/mahoe",
+    "tfg:wood/log_fence/glacian",
+    "tfg:wood/log_fence/strophar",
+    "tfg:wood/log_fence/aeronos",
+    "tfg:wood/log_fence/ginkgo"
   ]
 }

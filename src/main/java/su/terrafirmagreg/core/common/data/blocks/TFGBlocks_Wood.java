@@ -78,17 +78,17 @@ public class TFGBlocks_Wood {
             blocks.put(Wood.BlockType.DOOR, door(wood));
             blocks.put(Wood.BlockType.TRAPDOOR, trapdoor(wood));
             blocks.put(Wood.BlockType.FENCE, fence(wood));
-            // TODO: LOG_FENCE
             blocks.put(Wood.BlockType.FENCE_GATE, fenceGate(wood));
             blocks.put(Wood.BlockType.BUTTON, button(wood));
             blocks.put(Wood.BlockType.PRESSURE_PLATE, pressurePlate(wood));
             blocks.put(Wood.BlockType.SLAB, slab(wood));
             blocks.put(Wood.BlockType.STAIRS, stairs(wood));
             blocks.put(Wood.BlockType.TWIG, twig(wood));
-            // TODO: VERTICAL_SUPPORT
-            // TODO: HORIZONTAL_SUPPORT
+            blocks.put(Wood.BlockType.VERTICAL_SUPPORT, verticalSupport(wood));
+            blocks.put(Wood.BlockType.HORIZONTAL_SUPPORT, horizontalSupport(wood));
         }
 
+        blocks.put(Wood.BlockType.LOG_FENCE, logFence(wood));
         blocks.put(Wood.BlockType.BOOKSHELF, bookshelf(wood));
         blocks.put(Wood.BlockType.TOOL_RACK, toolRack(wood));
         blocks.put(Wood.BlockType.WORKBENCH, workbench(wood));
@@ -170,6 +170,27 @@ public class TFGBlocks_Wood {
     private static BlockEntry<Block> logFence(TFGWood wood) {
         var logFenceBlock = Wood.BlockType.LOG_FENCE.create(wood).get();
         return TFGCore.REGISTRATE.block("wood/log_fence/" + wood.serializedName, p -> logFenceBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.models().withExistingParent(ctx.getName() + "_inventory", ResourceLocation.fromNamespaceAndPath("tfc", "block/log_fence_inventory"))
+                            .texture("log", wood.logTexture)
+                            .texture("planks", wood.plankTexture);
+
+                    ModelFile modelSide = prov.models().withExistingParent(ctx.getName() + "_side", ResourceLocation.withDefaultNamespace("block/fence_side"))
+                            .texture("texture", wood.plankTexture);
+
+                    ModelFile modelPost = prov.models().withExistingParent(ctx.getName() + "_post", ResourceLocation.withDefaultNamespace("block/fence_post"))
+                            .texture("texture", wood.logTexture);
+
+                    prov.getMultipartBuilder(ctx.getEntry()).part().modelFile(modelPost).addModel().end()
+                            .part().modelFile(modelSide).uvLock(true).addModel().condition(BlockStateProperties.NORTH, true).end()
+                            .part().modelFile(modelSide).rotationY(90).uvLock(true).addModel().condition(BlockStateProperties.EAST, true).end()
+                            .part().modelFile(modelSide).rotationY(180).uvLock(true).addModel().condition(BlockStateProperties.SOUTH, true).end()
+                            .part().modelFile(modelSide).rotationY(270).uvLock(true).addModel().condition(BlockStateProperties.WEST, true).end();
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("fences")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/log_fence/" + wood.serializedName + "_inventory")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("fences"))).build()
                 .register();
     }
 
@@ -273,7 +294,58 @@ public class TFGBlocks_Wood {
     }
 
     // TODO: VERTICAL_SUPPORT
+    private static BlockEntry<Block> verticalSupport(TFGWood wood) {
+        var verticalSupportBlock = Wood.BlockType.VERTICAL_SUPPORT.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/vertical_support/" + wood.serializedName, p -> verticalSupportBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.models().withExistingParent("wood/support/" + wood.serializedName + "_inventory", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/support/inventory"))
+                            .texture("texture", TFGCore.id("block/wood/sheet/" + wood.serializedName));
+
+                    ModelFile modelVertical = prov.models()
+                            .withExistingParent("wood/support/" + wood.serializedName + "_vertical", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/support/vertical"))
+                            .texture("texture", TFGCore.id("block/wood/sheet/" + wood.serializedName))
+                            .texture("particle", TFGCore.id("block/wood/sheet/" + wood.serializedName));
+
+                    ModelFile modelConnection = prov.models()
+                            .withExistingParent("wood/support/" + wood.serializedName + "_connection", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/support/connection"))
+                            .texture("texture", TFGCore.id("block/wood/sheet/" + wood.serializedName))
+                            .texture("particle", TFGCore.id("block/wood/sheet/" + wood.serializedName));
+
+                    prov.getMultipartBuilder(ctx.getEntry()).part().modelFile(modelVertical).addModel().end()
+                            .part().modelFile(modelConnection).uvLock(true).addModel().condition(BlockStateProperties.EAST, true).end()
+                            .part().modelFile(modelConnection).rotationY(90).addModel().condition(BlockStateProperties.SOUTH, true).end()
+                            .part().modelFile(modelConnection).rotationY(180).addModel().condition(BlockStateProperties.WEST, true).end()
+                            .part().modelFile(modelConnection).rotationY(270).addModel().condition(BlockStateProperties.NORTH, true).end();
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "support_beams")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/support/" + wood.serializedName + "_inventory")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "support_beams"))).build()
+                .register();
+    }
+
     // TODO: HORIZONTAL_SUPPORT
+    private static BlockEntry<Block> horizontalSupport(TFGWood wood) {
+        var horizontalSupportBlock = Wood.BlockType.HORIZONTAL_SUPPORT.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/horizontal_support/" + wood.serializedName, p -> horizontalSupportBlock)
+                .blockstate((ctx, prov) -> {
+                    ModelFile modelHorizontal = prov.models()
+                            .withExistingParent("wood/support/" + wood.serializedName + "_horizontal", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/support/connection"))
+                            .texture("texture", TFGCore.id("block/wood/sheet/" + wood.serializedName))
+                            .texture("particle", TFGCore.id("block/wood/sheet/" + wood.serializedName));
+
+                    ModelFile modelConnection = prov.models().getExistingFile(TFGCore.id("block/wood/support/" + wood.serializedName + "_connection"));
+
+                    prov.getMultipartBuilder(ctx.getEntry()).part().modelFile(modelHorizontal).addModel().end()
+                            .part().modelFile(modelConnection).uvLock(true).addModel().condition(BlockStateProperties.EAST, true).end()
+                            .part().modelFile(modelConnection).rotationY(90).addModel().condition(BlockStateProperties.SOUTH, true).end()
+                            .part().modelFile(modelConnection).rotationY(180).addModel().condition(BlockStateProperties.WEST, true).end()
+                            .part().modelFile(modelConnection).rotationY(270).addModel().condition(BlockStateProperties.NORTH, true).end();
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "support_beams")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .register();
+    }
 
     private static BlockEntry<Block> toolRack(TFGWood wood) {
         var toolRackBlock = Wood.BlockType.TOOL_RACK.create(wood).get();
