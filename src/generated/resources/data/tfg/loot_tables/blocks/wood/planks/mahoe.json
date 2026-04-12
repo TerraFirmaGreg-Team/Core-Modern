@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:air"
+          "name": "tfg:wood/planks/mahoe"
         }
       ],
       "rolls": 1.0

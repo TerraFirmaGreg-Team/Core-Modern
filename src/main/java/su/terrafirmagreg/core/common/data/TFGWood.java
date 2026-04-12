@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import com.tterrag.registrate.util.entry.BlockEntry;
+
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.dries007.tfc.world.feature.tree.TFCTreeGrower;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Wood;
 
 public enum TFGWood implements RegistryWood {
     MAHOE(MapColor.WOOD, MapColor.WOOD, 10, 0),
@@ -97,11 +100,10 @@ public enum TFGWood implements RegistryWood {
         return barkColor;
     }
 
-    // Due to the way we register wood - we can't really use this.
     @Override
     public Supplier<Block> getBlock(Wood.BlockType type) {
-        //noinspection DataFlowIssue
-        return null;
+        BlockEntry<? extends Block> entry = TFGBlocks_Wood.WOODS.get(this).get(type);
+        return entry::get;
     }
 
     @Override

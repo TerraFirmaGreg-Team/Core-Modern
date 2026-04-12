@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/lectern",
+  "textures": {
+    "base": "tfg:block/wood/lectern/mahoe/base",
+    "bottom": "tfg:block/wood/planks/mahoe",
+    "front": "tfg:block/wood/lectern/mahoe/front",
+    "particle": "tfg:block/wood/lectern/mahoe/sides",
+    "sides": "tfg:block/wood/lectern/mahoe/sides",
+    "top": "tfg:block/wood/lectern/mahoe/top"
+  }
+}
