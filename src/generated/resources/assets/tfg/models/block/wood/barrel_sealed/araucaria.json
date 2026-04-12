@@ -1,8 +1,0 @@
-{
-  "parent": "tfc:block/barrel_sealed",
-  "textures": {
-    "particle": "tfg:block/wood/planks/araucaria",
-    "planks": "tfg:block/wood/planks/araucaria",
-    "sheet": "tfg:block/wood/sheet/araucaria"
-  }
-}

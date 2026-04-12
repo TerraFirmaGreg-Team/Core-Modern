@@ -17,7 +17,7 @@ import net.minecraft.world.level.material.MapColor;
 import su.terrafirmagreg.core.TFGCore;
 
 public enum TFGWood implements RegistryWood {
-    ARAUCARIA(MapColor.WOOD, MapColor.WOOD, 10, 0),
+    MAHOE(MapColor.WOOD, MapColor.WOOD, 10, 0),
 
     GLACIAN(ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
             ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),

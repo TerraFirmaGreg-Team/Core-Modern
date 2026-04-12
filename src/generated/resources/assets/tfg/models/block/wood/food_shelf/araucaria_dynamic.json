@@ -1,6 +1,0 @@
-{
-  "base": {
-    "parent": "tfg:block/wood/food_shelf/araucaria"
-  },
-  "loader": "firmalife:food_shelf"
-}
