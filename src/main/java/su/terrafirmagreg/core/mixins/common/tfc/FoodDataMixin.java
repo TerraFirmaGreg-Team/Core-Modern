@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import net.dries007.tfc.common.capabilities.food.FoodData;
 import net.minecraft.nbt.CompoundTag;
 
-import su.terrafirmagreg.core.common.capabilities.food.FoodDataExtension;
+import su.terrafirmagreg.core.common.food.nutrient.FoodDataExtension;
 
 /**
  * Mixin for FoodData record to add negative nutrients.

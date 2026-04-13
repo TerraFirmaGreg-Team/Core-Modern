@@ -7,8 +7,8 @@ import net.dries007.tfc.common.capabilities.food.FoodData;
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.minecraft.network.FriendlyByteBuf;
 
-import su.terrafirmagreg.core.common.capabilities.food.FoodDataExtension;
-import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
+import su.terrafirmagreg.core.common.food.nutrient.FoodDataExtension;
+import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**
  * Mixin to fix FoodData network encoding/decoding to handle both positive and negative nutrients.
@@ -37,10 +37,10 @@ public abstract class FoodDataEncodeMixin {
             }
         }
 
-        // Write negative nutrients.
-        float[] negatives = FoodDataExtension.getNegativeNutrients(self);
-        buffer.writeVarInt(negatives.length);
-        for (float value : negatives) {
+        // Write extended nutrients
+        float[] extended = FoodDataExtension.getExtendedNutrients(self);
+        buffer.writeVarInt(extended.length);
+        for (float value : extended) {
             buffer.writeFloat(value);
         }
     }

@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.capabilities.food;
+package su.terrafirmagreg.core.common.food.nutrient;
 
 /**
  * Extension for TFC's Nutrient enum to support negative nutrients.

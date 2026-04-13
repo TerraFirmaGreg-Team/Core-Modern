@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.capabilities.food;
+package su.terrafirmagreg.core.common.food.nutrient;
 
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.common.capabilities.food.NutritionData;

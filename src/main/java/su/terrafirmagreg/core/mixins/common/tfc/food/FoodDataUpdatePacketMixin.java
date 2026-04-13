@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.dries007.tfc.network.FoodDataUpdatePacket;
 
-import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
+import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**
  * Mixin to fix network packet serialization for nutrition data.

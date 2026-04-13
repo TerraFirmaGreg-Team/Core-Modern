@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.Overwrite;
 import net.dries007.tfc.common.capabilities.food.FoodData;
 import net.minecraft.network.FriendlyByteBuf;
 
-import su.terrafirmagreg.core.common.capabilities.food.FoodDataExtension;
-import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
+import su.terrafirmagreg.core.common.food.nutrient.FoodDataExtension;
+import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**
  * Mixin to fix FoodData.decode() to read both positive and negative nutrients.
@@ -35,14 +35,14 @@ public class FoodDataDecodeMixin {
 
         FoodData data = FoodData.create(hunger, water, saturation, nutrition, decayModifier);
 
-        // Read negative nutrients
-        int negativeCount = buffer.readVarInt();
-        if (negativeCount > 0) {
-            float[] negatives = new float[negativeCount];
-            for (int i = 0; i < negativeCount; i++) {
-                negatives[i] = buffer.readFloat();
+        // Read extended nutrients
+        int extendedCount = buffer.readVarInt();
+        if (extendedCount > 0) {
+            float[] extended = new float[extendedCount];
+            for (int i = 0; i < extendedCount; i++) {
+                extended[i] = buffer.readFloat();
             }
-            FoodDataExtension.setNegativeNutrients(data, negatives);
+            FoodDataExtension.setExtendedNutrients(data, extended);
         }
 
         return data;

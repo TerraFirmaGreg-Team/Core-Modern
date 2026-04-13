@@ -23,8 +23,8 @@ import net.dries007.tfc.common.recipes.outputs.MealModifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 
-import su.terrafirmagreg.core.common.capabilities.food.FoodDataExtension;
-import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
+import su.terrafirmagreg.core.common.food.nutrient.FoodDataExtension;
+import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**
  * Mixin to extend MealModifier.apply() to support custom nutrients.
@@ -83,10 +83,10 @@ public abstract class MealModifierMixin {
         float saturation = baseFood.saturation();
         float water = baseFood.water();
 
-        float[] negativeNutrients = new float[TFGNutrients.getNegativeCount()];
-        float[] baseNegatives = FoodDataExtension.getNegativeNutrients(baseFood);
-        if (baseNegatives != null && baseNegatives.length > 0) {
-            System.arraycopy(baseNegatives, 0, negativeNutrients, 0, Math.min(baseNegatives.length, negativeNutrients.length));
+        float[] negativeNutrients = new float[TFGNutrients.getExtendedCount()];
+        float[] baseExtended = FoodDataExtension.getExtendedNutrients(baseFood);
+        if (baseExtended.length > 0) {
+            System.arraycopy(baseExtended, 0, negativeNutrients, 0, Math.min(baseExtended.length, negativeNutrients.length));
         }
 
         final Map<ItemStack, MealModifier.MealPortion> map = new HashMap<>();
@@ -129,9 +129,9 @@ public abstract class MealModifierMixin {
 
         FoodData createdFood = FoodData.create(baseFood.hunger(), water, saturation, nutrition, baseFood.decayModifier());
 
-        // Always set negative nutrients if there are any.
+        // Always set extended nutrients if there are any.
         if (negativeNutrients.length > 0) {
-            FoodDataExtension.setNegativeNutrients(createdFood, negativeNutrients);
+            FoodDataExtension.setExtendedNutrients(createdFood, negativeNutrients);
         }
 
         handler.setFood(createdFood);

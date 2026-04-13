@@ -16,11 +16,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.minecraft.ChatFormatting;
 
-import su.terrafirmagreg.core.common.capabilities.food.INutrientExtension;
+import su.terrafirmagreg.core.common.food.nutrient.INegativeNutrientBuilder;
+import su.terrafirmagreg.core.common.food.nutrient.INutrientExtension;
 
 /**
  * Mixin to add new nutrients to TFC's Nutrient enum. Including harmful ones.
  * These nutrients are tracked and displayed but do not affect player health.
+ * Use .tfg$isNegative() to check if a nutrient is harmful.
+ * <p>
+ * New nutrients should also be declared in {@link su.terrafirmagreg.core.mixins.common.kubejs_tfc.BuildFoodItemDataMixin}
+ * and {@link su.terrafirmagreg.core.mixins.common.kubejs_tfc.FoodComponentFoodDataMixin}
+ * and {@link INegativeNutrientBuilder}
+ * Setting up builders for mixins is annoying. So I didn't.
  */
 @Mixin(Nutrient.class)
 public class NutrientMixin implements INutrientExtension {
@@ -47,15 +54,17 @@ public class NutrientMixin implements INutrientExtension {
     private static void tfg$addNegativeNutrients(CallbackInfo ci) {
         var nutrients = new ArrayList<>(Arrays.asList(VALUES));
 
-        // Add TOXINS nutrient
-        var toxins = tfg$invokeInit("TOXINS", nutrients.size(), ChatFormatting.DARK_RED);
+        var toxins = tfg$invokeInit("TOXINS", nutrients.size(), ChatFormatting.LIGHT_PURPLE);
         ((NutrientMixin) (Object) toxins).tfg$negative = true;
         nutrients.add(toxins);
 
-        // Add MICROPLASTICS nutrient
-        var microplastics = tfg$invokeInit("MICROPLASTICS", nutrients.size(), ChatFormatting.GRAY);
+        var microplastics = tfg$invokeInit("MICROPLASTICS", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) microplastics).tfg$negative = true;
         nutrients.add(microplastics);
+
+        var parasites = tfg$invokeInit("PARASITES", nutrients.size(), ChatFormatting.DARK_RED);
+        ((NutrientMixin) (Object) parasites).tfg$negative = true;
+        nutrients.add(parasites);
 
         VALUES = nutrients.toArray(new Nutrient[0]);
         TOTAL = VALUES.length;

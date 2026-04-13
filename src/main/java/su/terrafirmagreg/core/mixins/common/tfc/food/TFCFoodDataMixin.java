@@ -13,7 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.PacketDistributor;
 
-import su.terrafirmagreg.core.common.capabilities.food.NutritionDataExtension;
+import su.terrafirmagreg.core.common.food.nutrient.NutritionDataExtension;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.NegativeNutrientsPacket;
 
@@ -28,16 +28,16 @@ public class TFCFoodDataMixin {
     private NutritionData nutritionData;
 
     /**
-     * After the tick method sends the FoodDataUpdatePacket, also send negative nutrients..
+     * After the tick method sends the FoodDataUpdatePacket, also send negative nutrients.
      */
     @Inject(method = "tick(Lnet/minecraft/world/entity/player/Player;)V", at = @At("TAIL"))
-    private void tfg$sendNegativeNutrients(Player player, CallbackInfo ci) {
+    private void tfg$sendExtendedNutrients(Player player, CallbackInfo ci) {
         if (player instanceof ServerPlayer serverPlayer) {
-            float[] negativeNutrients = NutritionDataExtension.getNegativeNutrients(nutritionData);
-            if (negativeNutrients != null && negativeNutrients.length > 0) {
+            float[] extendedNutrients = NutritionDataExtension.getExtendedNutrients(nutritionData);
+            if (extendedNutrients != null && extendedNutrients.length > 0) {
                 TFGNetworkHandler.INSTANCE.send(
                         PacketDistributor.PLAYER.with(() -> serverPlayer),
-                        new NegativeNutrientsPacket(negativeNutrients));
+                        new NegativeNutrientsPacket(extendedNutrients));
             }
         }
     }

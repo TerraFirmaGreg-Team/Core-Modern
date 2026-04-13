@@ -13,8 +13,8 @@ import com.notenoughmail.kubejs_tfc.addons.firmalife.recipe.component.FoodCompon
 
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 
-import su.terrafirmagreg.core.common.capabilities.food.INegativeNutrientBuilder;
-import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
+import su.terrafirmagreg.core.common.food.nutrient.INegativeNutrientBuilder;
+import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**
  * Mixin to add support for new nutrients to KubeJS-TFC's FoodComponent.FoodData.
@@ -35,12 +35,17 @@ public class FoodComponentFoodDataMixin implements INegativeNutrientBuilder<Food
         return tfg$setNegativeNutrient("microplastics", value);
     }
 
+    @Override
+    public FoodComponent.FoodData parasites(float value) {
+        return tfg$setNegativeNutrient("parasites", value);
+    }
+
     @Unique
     private FoodComponent.FoodData tfg$setNegativeNutrient(String name, float value) {
         for (Nutrient nutrient : Nutrient.VALUES) {
-            if (TFGNutrients.isNegative(nutrient) && nutrient.getSerializedName().equals(name)) {
+            if (TFGNutrients.isExtended(nutrient) && nutrient.getSerializedName().equals(name)) {
                 if (tfg$negativeNutrients == null) {
-                    tfg$negativeNutrients = new float[TFGNutrients.getNegativeCount()];
+                    tfg$negativeNutrients = new float[TFGNutrients.getExtendedCount()];
                 }
                 int index = nutrient.ordinal() - TFGNutrients.POSITIVE_COUNT;
                 if (index >= 0 && index < tfg$negativeNutrients.length) {

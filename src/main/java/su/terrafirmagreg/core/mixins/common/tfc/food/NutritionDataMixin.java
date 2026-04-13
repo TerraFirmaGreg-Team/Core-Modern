@@ -20,16 +20,12 @@ import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.config.TFCConfig;
 import net.minecraft.nbt.CompoundTag;
 
-import su.terrafirmagreg.core.common.capabilities.food.INutritionDataExtension;
-import su.terrafirmagreg.core.common.capabilities.food.NutritionDataExtension;
-import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
+import su.terrafirmagreg.core.common.food.nutrient.INutritionDataExtension;
+import su.terrafirmagreg.core.common.food.nutrient.NutritionDataExtension;
+import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**
- * Mixin to modify NutritionData to:
- * - Exclude negative nutrients from the health calculation.
- * - Track negative nutrients separately when eating food.
- * - Save/load negative nutrients with player data.
- * - Fix ArrayIndexOutOfBoundsException since nutrient enum is so hardcoded.
+ * Mixin to modify NutritionData to track extended nutrients when eating food.
  */
 @Mixin(NutritionData.class)
 public abstract class NutritionDataMixin implements INutritionDataExtension {
@@ -60,7 +56,7 @@ public abstract class NutritionDataMixin implements INutritionDataExtension {
     private int hunger;
 
     @Shadow(remap = false)
-    abstract void updateAverageNutrients();
+    protected abstract void updateAverageNutrients();
 
     /**
      * Overwrite calculateNutrition to only iterate over positive nutrients.
@@ -139,57 +135,57 @@ public abstract class NutritionDataMixin implements INutritionDataExtension {
     }
 
     /**
-     * When nutrients are added from food, also track negative nutrients.
+     * When nutrients are added from food, also track extended nutrients.
      */
     @Inject(method = "addNutrients", at = @At("HEAD"), remap = false)
-    private void tfg$addNegativeNutrients(FoodData data, CallbackInfo ci) {
+    private void tfg$addExtendedNutrients(FoodData data, CallbackInfo ci) {
         float weight = Math.max(data.hunger(), 4) / 100f;
-        NutritionDataExtension.addNegativeNutrients((NutritionData) (Object) this, data, weight);
+        NutritionDataExtension.addExtendedNutrients((NutritionData) (Object) this, data, weight);
     }
 
     /**
-     * When nutrition is reset, also reset negative nutrients.
+     * When nutrition is reset, also reset extended nutrients.
      */
     @Inject(method = "reset", at = @At("HEAD"), remap = false)
-    private void tfg$resetNegativeNutrients(CallbackInfo ci) {
+    private void tfg$resetExtendedNutrients(CallbackInfo ci) {
         NutritionDataExtension.reset((NutritionData) (Object) this);
     }
 
     /**
-     * Save negative nutrients to NBT.
+     * Save extended nutrients to NBT.
      */
     @Inject(method = "writeToNbt", at = @At("RETURN"), remap = false)
-    private void tfg$writeNegativeNutrients(CallbackInfoReturnable<CompoundTag> cir) {
+    private void tfg$writeExtendedNutrients(CallbackInfoReturnable<CompoundTag> cir) {
         CompoundTag nbt = cir.getReturnValue();
         NutritionDataExtension.writeToNbt((NutritionData) (Object) this, nbt);
     }
 
     /**
-     * Load negative nutrients from NBT.
+     * Load extended nutrients from NBT.
      */
     @Inject(method = "readFromNbt", at = @At("TAIL"), remap = false)
-    private void tfg$readNegativeNutrients(CompoundTag nbt, CallbackInfo ci) {
+    private void tfg$readExtendedNutrients(CompoundTag nbt, CallbackInfo ci) {
         NutritionDataExtension.readFromNbt((NutritionData) (Object) this, nbt);
     }
 
     /**
-     * Intercept getNutrient calls for negative nutrients to prevent ArrayIndexOutOfBoundsException againnn.
+     * Intercept getNutrient calls for extended nutrients to prevent ArrayIndexOutOfBoundsException.
      */
     @Inject(method = "getNutrient", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$handleNegativeNutrientAccess(Nutrient nutrient, CallbackInfoReturnable<Float> cir) {
-        if (TFGNutrients.isNegative(nutrient)) {
-            cir.setReturnValue(NutritionDataExtension.getNegativeNutrient((NutritionData) (Object) this, nutrient));
+    private void tfg$handleExtendedNutrientAccess(Nutrient nutrient, CallbackInfoReturnable<Float> cir) {
+        if (TFGNutrients.isExtended(nutrient)) {
+            cir.setReturnValue(NutritionDataExtension.getExtendedNutrient((NutritionData) (Object) this, nutrient));
         }
     }
 
     @Override
     public float tfg$getNegativeNutrient(Nutrient nutrient) {
-        return NutritionDataExtension.getNegativeNutrient((NutritionData) (Object) this, nutrient);
+        return NutritionDataExtension.getExtendedNutrient((NutritionData) (Object) this, nutrient);
     }
 
     @Override
     public float[] tfg$getNegativeNutrients() {
-        float[] negatives = NutritionDataExtension.getNegativeNutrients((NutritionData) (Object) this);
-        return negatives != null ? negatives : new float[TFGNutrients.getNegativeCount()];
+        float[] extended = NutritionDataExtension.getExtendedNutrients((NutritionData) (Object) this);
+        return extended != null ? extended : new float[TFGNutrients.getExtendedCount()];
     }
 }

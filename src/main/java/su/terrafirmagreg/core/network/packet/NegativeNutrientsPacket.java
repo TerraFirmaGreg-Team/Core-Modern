@@ -10,8 +10,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-import su.terrafirmagreg.core.common.capabilities.food.NutritionDataExtension;
-import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
+import su.terrafirmagreg.core.common.food.nutrient.NutritionDataExtension;
+import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**
  * Packet to sync negative nutrient values from server to client.
@@ -21,7 +21,7 @@ public class NegativeNutrientsPacket {
     private final float[] negativeNutrients;
 
     public NegativeNutrientsPacket(float[] negativeNutrients) {
-        this.negativeNutrients = negativeNutrients != null ? negativeNutrients : new float[TFGNutrients.getNegativeCount()];
+        this.negativeNutrients = negativeNutrients != null ? negativeNutrients : new float[TFGNutrients.getExtendedCount()];
     }
 
     public static void encode(NegativeNutrientsPacket packet, FriendlyByteBuf buffer) {
