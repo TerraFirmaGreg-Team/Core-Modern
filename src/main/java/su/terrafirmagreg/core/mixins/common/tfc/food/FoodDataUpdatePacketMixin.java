@@ -1,9 +1,9 @@
 package su.terrafirmagreg.core.mixins.common.tfc.food;
 
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.objectweb.asm.Opcodes;
 
 import net.dries007.tfc.network.FoodDataUpdatePacket;
 
@@ -20,11 +20,7 @@ public class FoodDataUpdatePacketMixin {
     /**
      * Redirect array creation in readNutrients to use POSITIVE_COUNT instead of Nutrient.TOTAL.
      */
-    @Redirect(
-        method = "readNutrients",
-        at = @At(value = "FIELD", target = "Lnet/dries007/tfc/common/capabilities/food/Nutrient;TOTAL:I", opcode = Opcodes.GETSTATIC),
-        remap = false
-    )
+    @Redirect(method = "readNutrients", at = @At(value = "FIELD", target = "Lnet/dries007/tfc/common/capabilities/food/Nutrient;TOTAL:I", opcode = Opcodes.GETSTATIC), remap = false)
     private static int tfg$usePositiveCountForRead() {
         return TFGNutrients.POSITIVE_COUNT;
     }

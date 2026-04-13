@@ -77,5 +77,6 @@ public class FoodComponentFoodDataMixin implements INegativeNutrientBuilder<Food
                 }
             }
         }
+        tfg$negativeNutrients = null;
     }
 }

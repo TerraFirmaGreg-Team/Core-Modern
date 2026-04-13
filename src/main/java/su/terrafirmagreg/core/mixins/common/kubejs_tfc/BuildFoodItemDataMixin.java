@@ -35,13 +35,8 @@ public class BuildFoodItemDataMixin implements INegativeNutrientBuilder<BuildFoo
 
     @Unique
     private BuildFoodItemData tfg$setNegativeNutrient(String name, float value) {
-        Nutrient[] allNutrients = Nutrient.VALUES;
-
-        for (Nutrient nutrient : allNutrients) {
-            boolean isNegative = TFGNutrients.isNegative(nutrient);
-            String serializedName = nutrient.getSerializedName();
-
-            if (isNegative && serializedName.equals(name)) {
+        for (Nutrient nutrient : Nutrient.VALUES) {
+            if (TFGNutrients.isNegative(nutrient) && nutrient.getSerializedName().equals(name)) {
                 if (tfg$negativeNutrients == null) {
                     tfg$negativeNutrients = new float[TFGNutrients.getNegativeCount()];
                 }
@@ -57,18 +52,18 @@ public class BuildFoodItemDataMixin implements INegativeNutrientBuilder<BuildFoo
 
     @Inject(method = "toJson", at = @At("RETURN"), remap = false)
     private void tfg$writeNegativeNutrients(CallbackInfoReturnable<JsonObject> cir) {
-        if (tfg$negativeNutrients == null) {
+        if (tfg$negativeNutrients == null)
             return;
-        }
         JsonObject json = cir.getReturnValue();
-        Nutrient[] values = Nutrient.VALUES;
-        for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
-            int index = i - TFGNutrients.POSITIVE_COUNT;
-            if (index < tfg$negativeNutrients.length && tfg$negativeNutrients[index] != 0) {
-                String name = values[i].getSerializedName();
-                float value = tfg$negativeNutrients[index];
-                json.addProperty(name, value);
+        if (json != null) {
+            Nutrient[] values = Nutrient.VALUES;
+            for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
+                int index = i - TFGNutrients.POSITIVE_COUNT;
+                if (index < tfg$negativeNutrients.length && tfg$negativeNutrients[index] != 0) {
+                    json.addProperty(values[i].getSerializedName(), tfg$negativeNutrients[index]);
+                }
             }
         }
+        tfg$negativeNutrients = null;
     }
 }

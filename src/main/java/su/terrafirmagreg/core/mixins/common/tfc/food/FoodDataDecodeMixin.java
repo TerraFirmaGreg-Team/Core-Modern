@@ -1,37 +1,50 @@
 package su.terrafirmagreg.core.mixins.common.tfc.food;
 
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.Overwrite;
 
 import net.dries007.tfc.common.capabilities.food.FoodData;
-import net.dries007.tfc.common.capabilities.food.Nutrient;
+import net.minecraft.network.FriendlyByteBuf;
 
+import su.terrafirmagreg.core.common.capabilities.food.FoodDataExtension;
 import su.terrafirmagreg.core.common.capabilities.food.TFGNutrients;
 
 /**
- * Mixin to fix FoodData.decode() to only read positive nutrients.
+ * Mixin to fix FoodData.decode() to read both positive and negative nutrients.
  */
 @Mixin(FoodData.class)
 public class FoodDataDecodeMixin {
 
     /**
-     * Redirect Nutrient.TOTAL field access in decode() to use POSITIVE_COUNT.
+     * Override decode to read positive nutrients followed by negative nutrients.
+     * @author Redeix
+     * @reason Fix network deserialization with extended Nutrient enum and support negative nutrients.
      */
-    @Redirect(method = "decode", at = @At(value = "FIELD", target = "Lnet/dries007/tfc/common/capabilities/food/Nutrient;TOTAL:I", opcode = Opcodes.GETSTATIC), remap = false)
-    private static int tfg$usePositiveCountForDecode() {
-        return TFGNutrients.POSITIVE_COUNT;
-    }
+    @Overwrite(remap = false)
+    public static FoodData decode(FriendlyByteBuf buffer) {
+        final int hunger = buffer.readVarInt();
+        final float saturation = buffer.readFloat();
+        final float water = buffer.readFloat();
+        final float decayModifier = buffer.readFloat();
 
-    /**
-     * Redirect Nutrient.VALUES field access in decode() to return only positive nutrients.
-     */
-    @Redirect(method = "decode", at = @At(value = "FIELD", target = "Lnet/dries007/tfc/common/capabilities/food/Nutrient;VALUES:[Lnet/dries007/tfc/common/capabilities/food/Nutrient;", opcode = Opcodes.GETSTATIC), remap = false)
-    private static Nutrient[] tfg$usePositiveValuesForDecode() {
-        Nutrient[] allValues = Nutrient.values();
-        Nutrient[] positiveValues = new Nutrient[TFGNutrients.POSITIVE_COUNT];
-        System.arraycopy(allValues, 0, positiveValues, 0, TFGNutrients.POSITIVE_COUNT);
-        return positiveValues;
+        // Read positive nutrients
+        final float[] nutrition = new float[TFGNutrients.POSITIVE_COUNT];
+        for (int i = 0; i < TFGNutrients.POSITIVE_COUNT; i++) {
+            nutrition[i] = buffer.readFloat();
+        }
+
+        FoodData data = FoodData.create(hunger, water, saturation, nutrition, decayModifier);
+
+        // Read negative nutrients
+        int negativeCount = buffer.readVarInt();
+        if (negativeCount > 0) {
+            float[] negatives = new float[negativeCount];
+            for (int i = 0; i < negativeCount; i++) {
+                negatives[i] = buffer.readFloat();
+            }
+            FoodDataExtension.setNegativeNutrients(data, negatives);
+        }
+
+        return data;
     }
 }

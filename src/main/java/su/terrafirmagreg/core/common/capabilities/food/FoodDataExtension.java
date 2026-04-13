@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.capabilities.food;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -20,6 +21,20 @@ public final class FoodDataExtension {
      */
     public static float[] getNegativeNutrients(FoodData data) {
         return NEGATIVE_NUTRIENTS.getOrDefault(data, new float[TFGNutrients.getNegativeCount()]);
+    }
+
+    /**
+     * Check if a FoodData instance has any negative nutrients stored.
+     */
+    public static boolean hasNegativeNutrients(FoodData data) {
+        float[] negatives = NEGATIVE_NUTRIENTS.get(data);
+        if (negatives == null)
+            return false;
+        for (float v : negatives) {
+            if (v != 0)
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -74,7 +89,7 @@ public final class FoodDataExtension {
      * Write negative nutrients to NBT.
      */
     public static void writeToNbt(FoodData data, CompoundTag nbt) {
-        float[] negatives = getNegativeNutrients(data);
+        float[] negatives = NEGATIVE_NUTRIENTS.get(data);
         Nutrient[] values = Nutrient.VALUES;
 
         for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
@@ -101,8 +116,9 @@ public final class FoodDataExtension {
 
         for (int i = TFGNutrients.POSITIVE_COUNT; i < values.length; i++) {
             Nutrient nutrient = values[i];
-            if (nbt.contains(nutrient.getSerializedName())) {
-                negatives[i - TFGNutrients.POSITIVE_COUNT] = nbt.getFloat(nutrient.getSerializedName());
+            String key = nutrient.getSerializedName();
+            if (nbt.contains(key)) {
+                negatives[i - TFGNutrients.POSITIVE_COUNT] = nbt.getFloat(key);
                 hasAny = true;
             }
         }
