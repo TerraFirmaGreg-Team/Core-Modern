@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.create;
+package su.terrafirmagreg.core.mixins.common.create.chains;
 
 import java.util.HashMap;
 import java.util.Map;

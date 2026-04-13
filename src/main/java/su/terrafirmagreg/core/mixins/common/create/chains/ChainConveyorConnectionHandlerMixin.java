@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.create;
+package su.terrafirmagreg.core.mixins.common.create.chains;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

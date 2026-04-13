@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.create;
+package su.terrafirmagreg.core.mixins.common.create.greate_tiering;
 
 import org.spongepowered.asm.mixin.Mixin;
 

@@ -192,10 +192,9 @@ public class OreVeinInfoRecipe implements EmiRecipe {
         var offsetX = offsetStart;
         var currentDrawPos = 1;
         for (String rockBlock : rockTypes) {
-            var block = ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse(rockBlock));
-            if (block == null)
+            var blockItem = parseRockBlock(rockBlock);
+            if (blockItem == null)
                 continue;
-            var blockItem = block.asItem();
 
             if (currentDrawPos > perLine) {
                 offsetY += 18;
@@ -213,6 +212,14 @@ public class OreVeinInfoRecipe implements EmiRecipe {
             currentDrawPos += 1;
         }
         return offsetY;
+    }
+
+    private Item parseRockBlock(String rockBlock) {
+        var block = ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse(rockBlock));
+        if (block == null)
+            return null;
+
+        return block.asItem();
     }
 
     private int createInfoWidget(WidgetHolder holder, int offsetY) {
@@ -255,7 +262,16 @@ public class OreVeinInfoRecipe implements EmiRecipe {
 
     @Override
     public List<EmiIngredient> getInputs() {
-        return List.of();
+        List<EmiIngredient> rockList = new ArrayList<>();
+
+        for (String rockBlock : rockTypes) {
+            var rockItem = parseRockBlock(rockBlock);
+            if (rockItem == null)
+                continue;
+            rockList.add(EmiStack.of(rockItem));
+        }
+
+        return rockList;
     }
 
     @Override

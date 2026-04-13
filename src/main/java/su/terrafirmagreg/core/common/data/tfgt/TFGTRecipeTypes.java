@@ -281,4 +281,11 @@ public class TFGTRecipeTypes {
             .setMaxIOSize(1, 0, 1, 1)
             .setSound(GTSoundEntries.FURNACE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_FUEL.get(true), FillDirection.DOWN_TO_UP);
+
+    public static final GTRecipeType PASTORAL_ENGINE_RECIPES = GTRecipeTypes
+            .register("pastoral_engine", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 1)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.BATH);
 }
