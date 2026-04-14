@@ -596,7 +596,7 @@ public class TFGBiomes {
                     builder().heightmap(seed -> TFGBiomeNoise.sunkenShieldVolcano(seed, TFGBiomeNoise.ancientHotSpots(seed)))
                             .surface(ShieldVolcanoSurfaceBuilder.DORMANT)
                             .aquiferHeightOffset(-16)
-                            .spawnable().salty()));
+                            .salty()));
 
     public static final BiomeExtension SHIELD_VOLCANO_SHORE = register("shield_volcano_shore",
             shoreType(TFGRiverBlendType.TALL_CANYON, ShoreBlendType.EMBAYMENTS, 0,

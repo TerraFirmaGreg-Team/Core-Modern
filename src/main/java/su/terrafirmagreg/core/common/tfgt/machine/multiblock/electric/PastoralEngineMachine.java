@@ -132,23 +132,31 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
     }
 
     public AABB getFormedBoundingBox() {
-        if (!isFormed() || getParts().isEmpty()) {
+        if (!isFormed()) {
             return new AABB(getPos()).inflate(2.5);
         }
 
-        BlockPos self = getPos();
+        BlockPos pos = getPos();
         Direction front = getFrontFacing();
-        Direction right = front.getClockWise();
+        Direction right = front.getClockWise(); // north to east
 
-        var min = self.relative(right, -6)
-                .relative(front, -6)
-                .relative(Direction.DOWN, 1);
-
-        var max = self.relative(right, 2)
+        BlockPos min = pos
                 .relative(front, 1)
+                .relative(right.getOpposite(), 2)
+                .relative(Direction.DOWN, 2);
+
+        BlockPos max = pos
+                .relative(front.getOpposite(), 6)
+                .relative(right, 6)
                 .relative(Direction.UP, 1);
 
-        return new AABB(min, max);
+        return new AABB(
+                Math.min(min.getX(), max.getX()),
+                Math.min(min.getY(), max.getY()),
+                Math.min(min.getZ(), max.getZ()),
+                Math.max(min.getX(), max.getX()) + 1,
+                Math.max(min.getY(), max.getY()) + 1,
+                Math.max(min.getZ(), max.getZ()) + 1);
     }
 
     @Override
@@ -158,7 +166,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
         if (!isFormed())
             return;
 
-        // Infos animaux — server only
+        // Infos aniamls — server only
         if (getLevel() instanceof ServerLevel serverLevel) {
             AABB box = getFormedBoundingBox();
 
@@ -235,7 +243,7 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                         }));
             }
         }
-        // Toujours visible (client + server)
+        // Always visible (client + server)
         textList.add(Component.translatable("tfg.machine.pastoral_engine.next_use",
                 harvestCounter, HARVESTS_PER_USE)
                 .withStyle(ChatFormatting.AQUA));
