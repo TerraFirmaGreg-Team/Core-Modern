@@ -75,9 +75,15 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 .setCenterLineColor(0x40AAAAAA)
                 .setCenterLineThickness(0.5f)
                 .setStartOffset(0.2f)
-                .setUseGradientFill(true)
-                .setUseGradientOutline(true)
-                .setCenterColor(0x00FFFFFF)
+                // Vertex gradient mode.
+                // .setUseGradientFill(true)
+                // .setUseGradientOutline(true)
+                // .setCenterColor(0x00FFFFFF)
+                // Radius gradient mode.
+                .setUseRadiusGradient(true)
+                .setRadiusInnerColor(0xDD9e0000)
+                .setRadiusMiddleColor(0xDDd1b500)
+                .setRadiusOuterColor(0xDD29b000)
                 .setGraphTooltip(() -> {
                     Player player = ClientHelpers.getPlayer();
                     if (player != null && player.getFoodData() instanceof TFCFoodData data) {

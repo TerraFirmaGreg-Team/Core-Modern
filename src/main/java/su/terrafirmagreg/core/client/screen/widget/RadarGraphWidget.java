@@ -66,6 +66,12 @@ public class RadarGraphWidget extends AbstractWidget {
     private boolean useGradientOutline = false;
     private int centerColor = 0x80FFFFFF;
 
+    // Radius gradient mode settings.
+    private boolean useRadiusGradient = false;
+    private int radiusInnerColor = 0xFFFF0000;
+    private int radiusMiddleColor = 0xFFFFFF00;
+    private int radiusOuterColor = 0xFF00FF00;
+
     // External polygon settings.
     private boolean drawExternalPolygon = true;
     private int externalLineColor = 0xFFAAAAAA;
@@ -152,12 +158,51 @@ public class RadarGraphWidget extends AbstractWidget {
     }
 
     /**
-     * Set the center color for gradient fill mode.
-     * This is the color at the center of the polygon when using gradient fill.
+     * Set the center color for vertex gradient fill mode.
+     * This is the color at the center of the polygon when using vertex gradient fill.
      * @param color ARGB color value.
      */
     public RadarGraphWidget setCenterColor(int color) {
         this.centerColor = color;
+        return this;
+    }
+
+    /**
+     * Enable radius gradient mode.
+     * When enabled, fill color is based on how far each point is from center to edge,
+     * using a 3-color gradient: inner -> middle -> outer.
+     * This overrides vertex gradient mode when enabled.
+     * @param useRadiusGradient Whether to use radius gradient mode.
+     */
+    public RadarGraphWidget setUseRadiusGradient(boolean useRadiusGradient) {
+        this.useRadiusGradient = useRadiusGradient;
+        return this;
+    }
+
+    /**
+     * Set the inner color for radius gradient mode (color at center).
+     * @param color ARGB color value.
+     */
+    public RadarGraphWidget setRadiusInnerColor(int color) {
+        this.radiusInnerColor = color;
+        return this;
+    }
+
+    /**
+     * Set the middle color for radius gradient mode (color at 50% radius).
+     * @param color ARGB color value.
+     */
+    public RadarGraphWidget setRadiusMiddleColor(int color) {
+        this.radiusMiddleColor = color;
+        return this;
+    }
+
+    /**
+     * Set the outer color for radius gradient mode (color at edge).
+     * @param color ARGB color value.
+     */
+    public RadarGraphWidget setRadiusOuterColor(int color) {
+        this.radiusOuterColor = color;
         return this;
     }
 
@@ -310,20 +355,36 @@ public class RadarGraphWidget extends AbstractWidget {
         }
 
         // Draw filled value polygon.
-        if (useGradientFill) {
-            // When using gradient fill, draw gradient polygon.
+        if (useRadiusGradient) {
+            // Radius gradient mode: color based on distance from center.
+            float[] normalizedValues = new float[n];
+            for (int i = 0; i < n; i++) {
+                normalizedValues[i] = variables.get(i).getNormalizedValue();
+            }
+            drawRadiusGradientFilledPolygon(matrix, cachedValueVertices, normalizedValues,
+                    radiusInnerColor, radiusMiddleColor, radiusOuterColor);
+        } else if (useGradientFill) {
+            // Vertex gradient mode: color per vertex.
             int[] vertexColors = new int[n];
             for (int i = 0; i < n; i++) {
                 vertexColors[i] = variables.get(i).getVertexColor();
             }
             drawGradientFilledPolygon(matrix, cachedValueVertices, vertexColors, centerColor);
         } else {
-            // When not using gradient, draw solid fill color.
+            // Solid fill color.
             drawFilledPolygon(matrix, cachedValueVertices, fillColor);
         }
 
         // Draw value polygon outline.
-        if (useGradientOutline) {
+        if (useRadiusGradient) {
+            // For radius gradient, use outline colors based on normalized values.
+            float[] normalizedValues = new float[n];
+            for (int i = 0; i < n; i++) {
+                normalizedValues[i] = variables.get(i).getNormalizedValue();
+            }
+            drawRadiusGradientPolygonOutline(matrix, cachedValueVertices, normalizedValues,
+                    radiusInnerColor, radiusMiddleColor, radiusOuterColor, lineThickness);
+        } else if (useGradientOutline) {
             int[] vertexColors = new int[n];
             for (int i = 0; i < n; i++) {
                 vertexColors[i] = variables.get(i).getVertexColor();
@@ -764,6 +825,249 @@ public class RadarGraphWidget extends AbstractWidget {
         RenderSystem.disableBlend();
     }
 
+    /**
+     * Interpolate between two colors based on a factor.
+     */
+    private int lerpColor(int color1, int color2, float factor) {
+        float a1 = ((color1 >> 24) & 0xFF) / 255f;
+        float r1 = ((color1 >> 16) & 0xFF) / 255f;
+        float g1 = ((color1 >> 8) & 0xFF) / 255f;
+        float b1 = (color1 & 0xFF) / 255f;
+
+        float a2 = ((color2 >> 24) & 0xFF) / 255f;
+        float r2 = ((color2 >> 16) & 0xFF) / 255f;
+        float g2 = ((color2 >> 8) & 0xFF) / 255f;
+        float b2 = (color2 & 0xFF) / 255f;
+
+        float a = a1 + (a2 - a1) * factor;
+        float r = r1 + (r2 - r1) * factor;
+        float g = g1 + (g2 - g1) * factor;
+        float b = b1 + (b2 - b1) * factor;
+
+        return ((int) (a * 255) << 24) | ((int) (r * 255) << 16) | ((int) (g * 255) << 8) | (int) (b * 255);
+    }
+
+    /**
+     * Get color for a normalized value using 3-point radius gradient.
+     */
+    private int getRadiusGradientColor(float normalizedValue, int innerColor, int middleColor, int outerColor) {
+        if (normalizedValue <= 0.5f) {
+            // Interpolate from inner to middle.
+            return lerpColor(innerColor, middleColor, normalizedValue * 2f);
+        } else {
+            // Interpolate from middle to outer.
+            return lerpColor(middleColor, outerColor, (normalizedValue - 0.5f) * 2f);
+        }
+    }
+
+    /**
+     * Draw a filled polygon with radius gradient colors based on normalized values.
+     * Uses multiple concentric rings to create a smooth 3-color radial gradient.
+     */
+    private void drawRadiusGradientFilledPolygon(Matrix4f matrix, double[][] vertices, float[] normalizedValues,
+            int innerColor, int middleColor, int outerColor) {
+        if (vertices.length < 3 || normalizedValues.length != vertices.length)
+            return;
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.disableCull();
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+        buffer.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
+
+        int n = vertices.length;
+
+        // Number of rings for smooth gradient.
+        int numRings = 10;
+
+        for (int i = 0; i < n; i++) {
+            int next = (i + 1) % n;
+
+            // Direction vectors from center to each vertex.
+            float dx1 = (float) vertices[i][0] - centerX;
+            float dy1 = (float) vertices[i][1] - centerY;
+            float dx2 = (float) vertices[next][0] - centerX;
+            float dy2 = (float) vertices[next][1] - centerY;
+
+            // For each ring segment.
+            for (int ring = 0; ring < numRings; ring++) {
+                float t0 = (float) ring / numRings;
+                float t1 = (float) (ring + 1) / numRings;
+
+                // Calculate positions at this ring level.
+                float x0_1 = centerX + dx1 * t0;
+                float y0_1 = centerY + dy1 * t0;
+                float x1_1 = centerX + dx1 * t1;
+                float y1_1 = centerY + dy1 * t1;
+
+                float x0_2 = centerX + dx2 * t0;
+                float y0_2 = centerY + dy2 * t0;
+                float x1_2 = centerX + dx2 * t1;
+                float y1_2 = centerY + dy2 * t1;
+
+                // Calculate the value at each ring position.
+                float value0_1 = t0 * normalizedValues[i];
+                float value1_1 = t1 * normalizedValues[i];
+                float value0_2 = t0 * normalizedValues[next];
+                float value1_2 = t1 * normalizedValues[next];
+
+                // Get colors based on value at each corner.
+                int c0_1 = getRadiusGradientColor(value0_1, innerColor, middleColor, outerColor);
+                int c1_1 = getRadiusGradientColor(value1_1, innerColor, middleColor, outerColor);
+                int c0_2 = getRadiusGradientColor(value0_2, innerColor, middleColor, outerColor);
+                int c1_2 = getRadiusGradientColor(value1_2, innerColor, middleColor, outerColor);
+
+                // Extract color components.
+                float a0_1 = ((c0_1 >> 24) & 0xFF) / 255f;
+                float r0_1 = ((c0_1 >> 16) & 0xFF) / 255f;
+                float g0_1 = ((c0_1 >> 8) & 0xFF) / 255f;
+                float b0_1 = (c0_1 & 0xFF) / 255f;
+
+                float a1_1 = ((c1_1 >> 24) & 0xFF) / 255f;
+                float r1_1 = ((c1_1 >> 16) & 0xFF) / 255f;
+                float g1_1 = ((c1_1 >> 8) & 0xFF) / 255f;
+                float b1_1 = (c1_1 & 0xFF) / 255f;
+
+                float a0_2 = ((c0_2 >> 24) & 0xFF) / 255f;
+                float r0_2 = ((c0_2 >> 16) & 0xFF) / 255f;
+                float g0_2 = ((c0_2 >> 8) & 0xFF) / 255f;
+                float b0_2 = (c0_2 & 0xFF) / 255f;
+
+                float a1_2 = ((c1_2 >> 24) & 0xFF) / 255f;
+                float r1_2 = ((c1_2 >> 16) & 0xFF) / 255f;
+                float g1_2 = ((c1_2 >> 8) & 0xFF) / 255f;
+                float b1_2 = (c1_2 & 0xFF) / 255f;
+
+                // Draw quad as two triangles.
+                buffer.vertex(matrix, x0_1, y0_1, 0).color(r0_1, g0_1, b0_1, a0_1).endVertex();
+                buffer.vertex(matrix, x1_1, y1_1, 0).color(r1_1, g1_1, b1_1, a1_1).endVertex();
+                buffer.vertex(matrix, x0_2, y0_2, 0).color(r0_2, g0_2, b0_2, a0_2).endVertex();
+
+                // Triangle 2
+                buffer.vertex(matrix, x1_1, y1_1, 0).color(r1_1, g1_1, b1_1, a1_1).endVertex();
+                buffer.vertex(matrix, x1_2, y1_2, 0).color(r1_2, g1_2, b1_2, a1_2).endVertex();
+                buffer.vertex(matrix, x0_2, y0_2, 0).color(r0_2, g0_2, b0_2, a0_2).endVertex();
+            }
+        }
+
+        tesselator.end();
+        RenderSystem.enableCull();
+        RenderSystem.disableBlend();
+    }
+
+    /**
+     * Draw a polygon outline with radius gradient colors based on normalized values.
+     */
+    private void drawRadiusGradientPolygonOutline(Matrix4f matrix, double[][] vertices, float[] normalizedValues,
+            int innerColor, int middleColor, int outerColor, float thickness) {
+        if (vertices.length < 3 || normalizedValues.length != vertices.length)
+            return;
+
+        int n = vertices.length;
+        float halfThickness = thickness / 2.0f;
+
+        // Calculate bevel points.
+        float[][] outerPoints = new float[n][2];
+        float[][] innerPoints = new float[n][2];
+
+        for (int i = 0; i < n; i++) {
+            int prev = (i - 1 + n) % n;
+            int next = (i + 1) % n;
+
+            float x0 = (float) vertices[prev][0];
+            float y0 = (float) vertices[prev][1];
+            float x1 = (float) vertices[i][0];
+            float y1 = (float) vertices[i][1];
+            float x2 = (float) vertices[next][0];
+            float y2 = (float) vertices[next][1];
+
+            float dx1 = x1 - x0;
+            float dy1 = y1 - y0;
+            float dx2 = x2 - x1;
+            float dy2 = y2 - y1;
+
+            float len1 = (float) Math.sqrt(dx1 * dx1 + dy1 * dy1);
+            float len2 = (float) Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            if (len1 < 0.0001f)
+                len1 = 1;
+            if (len2 < 0.0001f)
+                len2 = 1;
+            dx1 /= len1;
+            dy1 /= len1;
+            dx2 /= len2;
+            dy2 /= len2;
+
+            float nx1 = -dy1;
+            float ny1 = dx1;
+            float nx2 = -dy2;
+            float ny2 = dx2;
+
+            float mx = nx1 + nx2;
+            float my = ny1 + ny2;
+            float mLen = (float) Math.sqrt(mx * mx + my * my);
+            if (mLen < 0.0001f) {
+                mx = nx1;
+                my = ny1;
+                mLen = 1;
+            }
+            mx /= mLen;
+            my /= mLen;
+
+            float dot = nx1 * mx + ny1 * my;
+            if (Math.abs(dot) < 0.1f)
+                dot = 0.1f;
+            float miterLength = halfThickness / dot;
+
+            float maxMiter = halfThickness * 2.0f;
+            if (miterLength > maxMiter)
+                miterLength = maxMiter;
+            if (miterLength < -maxMiter)
+                miterLength = -maxMiter;
+
+            outerPoints[i][0] = x1 + mx * miterLength;
+            outerPoints[i][1] = y1 + my * miterLength;
+            innerPoints[i][0] = x1 - mx * miterLength;
+            innerPoints[i][1] = y1 - my * miterLength;
+        }
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.disableCull();
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+
+        for (int i = 0; i < n; i++) {
+            int next = (i + 1) % n;
+
+            int color1 = getRadiusGradientColor(normalizedValues[i], innerColor, middleColor, outerColor);
+            float a1 = ((color1 >> 24) & 0xFF) / 255f;
+            float r1 = ((color1 >> 16) & 0xFF) / 255f;
+            float g1 = ((color1 >> 8) & 0xFF) / 255f;
+            float b1 = (color1 & 0xFF) / 255f;
+
+            int color2 = getRadiusGradientColor(normalizedValues[next], innerColor, middleColor, outerColor);
+            float a2 = ((color2 >> 24) & 0xFF) / 255f;
+            float r2 = ((color2 >> 16) & 0xFF) / 255f;
+            float g2 = ((color2 >> 8) & 0xFF) / 255f;
+            float b2 = (color2 & 0xFF) / 255f;
+
+            buffer.vertex(matrix, innerPoints[i][0], innerPoints[i][1], 0).color(r1, g1, b1, a1).endVertex();
+            buffer.vertex(matrix, outerPoints[i][0], outerPoints[i][1], 0).color(r1, g1, b1, a1).endVertex();
+            buffer.vertex(matrix, outerPoints[next][0], outerPoints[next][1], 0).color(r2, g2, b2, a2).endVertex();
+            buffer.vertex(matrix, innerPoints[next][0], innerPoints[next][1], 0).color(r2, g2, b2, a2).endVertex();
+        }
+
+        tesselator.end();
+        RenderSystem.enableCull();
+        RenderSystem.disableBlend();
+    }
+
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narration) {
     }
@@ -792,7 +1096,6 @@ public class RadarGraphWidget extends AbstractWidget {
         private int labelOffset = 15;
         private int labelColor = 0x404040;
         /**
-         * -- GETTER --
          *  Get the vertex color for gradient mode.
          *
          * @return ARGB color value.
