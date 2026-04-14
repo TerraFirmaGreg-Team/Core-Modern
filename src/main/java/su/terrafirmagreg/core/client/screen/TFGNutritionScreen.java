@@ -65,7 +65,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         radarGraph = new RadarGraphWidget(graphX, graphY, graphDiameter);
 
         // Configure the radar graph appearance
-        radarGraph.setFillColor(0x4000AA00)
+        radarGraph.setFillColor(0xFFFFFF00)
                 .setLineColor(0xFF00DD00)
                 .setLineThickness(1.0f)
                 .setDrawExternalPolygon(true)
@@ -75,6 +75,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 .setCenterLineColor(0x40AAAAAA)
                 .setCenterLineThickness(0.5f)
                 .setStartOffset(0.2f)
+                .setUseGradientFill(true)
+                .setUseGradientOutline(true)
+                .setCenterColor(0x00FFFFFF)
                 .setGraphTooltip(() -> {
                     Player player = ClientHelpers.getPlayer();
                     if (player != null && player.getFoodData() instanceof TFCFoodData data) {
@@ -95,6 +98,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     }
 
     private RadarGraphWidget.Variable createNutrientVariable(Nutrient nutrient) {
+        // Get the color from the nutrient's ChatFormatting.
+        Integer colorValue = nutrient.getColor().getColor();
+        int vertexColor = colorValue != null ? (0xDD000000 | (colorValue & 0x00FFFFFF)) : 0xDDFFFFFF;
+
         return new RadarGraphWidget.Variable(
                 () -> {
                     Player player = ClientHelpers.getPlayer();
@@ -106,7 +113,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 0f, 1f)
                 .setLabel(Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()))
                 .setLabelOffset(12)
-                .setLabelColor(nutrient.getColor().getColor() != null ? nutrient.getColor().getColor() : 0x404040)
+                .setLabelColor(colorValue != null ? colorValue : 0x404040)
+                .setVertexColor(vertexColor)
                 .setTooltip(() -> {
                     Player player = ClientHelpers.getPlayer();
                     if (player != null && player.getFoodData() instanceof TFCFoodData data) {

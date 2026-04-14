@@ -61,6 +61,11 @@ public class RadarGraphWidget extends AbstractWidget {
     private int lineColor = 0xFF00FF00;
     private float lineThickness = 2.0f;
 
+    // Gradient mode settings.
+    private boolean useGradientFill = false;
+    private boolean useGradientOutline = false;
+    private int centerColor = 0x80FFFFFF;
+
     // External polygon settings.
     private boolean drawExternalPolygon = true;
     private int externalLineColor = 0xFFAAAAAA;
@@ -122,6 +127,37 @@ public class RadarGraphWidget extends AbstractWidget {
      */
     public RadarGraphWidget setLineThickness(float thickness) {
         this.lineThickness = thickness;
+        return this;
+    }
+
+    /**
+     * Enable gradient fill mode using per-vertex colors from each Variable.
+     * When enabled, the fill will blend from the center color to each vertex's color.
+     * The base fillColor is still drawn underneath as a background.
+     * @param useGradient Whether to use gradient fill.
+     */
+    public RadarGraphWidget setUseGradientFill(boolean useGradient) {
+        this.useGradientFill = useGradient;
+        return this;
+    }
+
+    /**
+     * Enable gradient outline mode using per-vertex colors from each Variable.
+     * When enabled, the outline will blend between adjacent vertex colors.
+     * @param useGradient Whether to use gradient outline.
+     */
+    public RadarGraphWidget setUseGradientOutline(boolean useGradient) {
+        this.useGradientOutline = useGradient;
+        return this;
+    }
+
+    /**
+     * Set the center color for gradient fill mode.
+     * This is the color at the center of the polygon when using gradient fill.
+     * @param color ARGB color value.
+     */
+    public RadarGraphWidget setCenterColor(int color) {
+        this.centerColor = color;
         return this;
     }
 
@@ -274,10 +310,28 @@ public class RadarGraphWidget extends AbstractWidget {
         }
 
         // Draw filled value polygon.
-        drawFilledPolygon(matrix, cachedValueVertices, fillColor);
+        if (useGradientFill) {
+            // When using gradient fill, draw gradient polygon.
+            int[] vertexColors = new int[n];
+            for (int i = 0; i < n; i++) {
+                vertexColors[i] = variables.get(i).getVertexColor();
+            }
+            drawGradientFilledPolygon(matrix, cachedValueVertices, vertexColors, centerColor);
+        } else {
+            // When not using gradient, draw solid fill color.
+            drawFilledPolygon(matrix, cachedValueVertices, fillColor);
+        }
 
         // Draw value polygon outline.
-        drawPolygonOutline(matrix, cachedValueVertices, lineColor, lineThickness);
+        if (useGradientOutline) {
+            int[] vertexColors = new int[n];
+            for (int i = 0; i < n; i++) {
+                vertexColors[i] = variables.get(i).getVertexColor();
+            }
+            drawGradientPolygonOutline(matrix, cachedValueVertices, vertexColors, lineThickness);
+        } else {
+            drawPolygonOutline(matrix, cachedValueVertices, lineColor, lineThickness);
+        }
 
         // Draw variable labels/icons at external vertices.
         Font font = Minecraft.getInstance().font;
@@ -544,6 +598,172 @@ public class RadarGraphWidget extends AbstractWidget {
         RenderSystem.disableBlend();
     }
 
+    /**
+     * Draw a filled polygon with gradient colors from center to each vertex.
+     */
+    private void drawGradientFilledPolygon(Matrix4f matrix, double[][] vertices, int[] vertexColors, int centerColorValue) {
+        if (vertices.length < 3 || vertexColors.length != vertices.length)
+            return;
+
+        float ca = ((centerColorValue >> 24) & 0xFF) / 255f;
+        float cr = ((centerColorValue >> 16) & 0xFF) / 255f;
+        float cg = ((centerColorValue >> 8) & 0xFF) / 255f;
+        float cb = (centerColorValue & 0xFF) / 255f;
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.disableCull();
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+
+        // Draw triangles from center to each edge with gradient.
+        buffer.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
+
+        int n = vertices.length;
+        for (int i = 0; i < n; i++) {
+            int next = (i + 1) % n;
+
+            // Get colors for this vertex and next vertex.
+            int color1 = vertexColors[i];
+            float a1 = ((color1 >> 24) & 0xFF) / 255f;
+            float r1 = ((color1 >> 16) & 0xFF) / 255f;
+            float g1 = ((color1 >> 8) & 0xFF) / 255f;
+            float b1 = (color1 & 0xFF) / 255f;
+
+            int color2 = vertexColors[next];
+            float a2 = ((color2 >> 24) & 0xFF) / 255f;
+            float r2 = ((color2 >> 16) & 0xFF) / 255f;
+            float g2 = ((color2 >> 8) & 0xFF) / 255f;
+            float b2 = (color2 & 0xFF) / 255f;
+
+            buffer.vertex(matrix, centerX, centerY, 0).color(cr, cg, cb, ca).endVertex();
+            buffer.vertex(matrix, (float) vertices[i][0], (float) vertices[i][1], 0).color(r1, g1, b1, a1).endVertex();
+            buffer.vertex(matrix, (float) vertices[next][0], (float) vertices[next][1], 0).color(r2, g2, b2, a2).endVertex();
+        }
+
+        tesselator.end();
+        RenderSystem.enableCull();
+        RenderSystem.disableBlend();
+    }
+
+    /**
+     * Draw a polygon outline with gradient colors between adjacent vertices.
+     */
+    private void drawGradientPolygonOutline(Matrix4f matrix, double[][] vertices, int[] vertexColors, float thickness) {
+        if (vertices.length < 3 || vertexColors.length != vertices.length)
+            return;
+
+        int n = vertices.length;
+        float halfThickness = thickness / 2.0f;
+
+        // Calculate bevel points for each vertex.
+        float[][] outerPoints = new float[n][2];
+        float[][] innerPoints = new float[n][2];
+
+        for (int i = 0; i < n; i++) {
+            int prev = (i - 1 + n) % n;
+            int next = (i + 1) % n;
+
+            float x0 = (float) vertices[prev][0];
+            float y0 = (float) vertices[prev][1];
+            float x1 = (float) vertices[i][0];
+            float y1 = (float) vertices[i][1];
+            float x2 = (float) vertices[next][0];
+            float y2 = (float) vertices[next][1];
+
+            // Direction vectors.
+            float dx1 = x1 - x0;
+            float dy1 = y1 - y0;
+            float dx2 = x2 - x1;
+            float dy2 = y2 - y1;
+
+            // Normalize.
+            float len1 = (float) Math.sqrt(dx1 * dx1 + dy1 * dy1);
+            float len2 = (float) Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            if (len1 < 0.0001f)
+                len1 = 1;
+            if (len2 < 0.0001f)
+                len2 = 1;
+            dx1 /= len1;
+            dy1 /= len1;
+            dx2 /= len2;
+            dy2 /= len2;
+
+            // Perpendicular vectors.
+            float nx1 = -dy1;
+            float ny1 = dx1;
+            float nx2 = -dy2;
+            float ny2 = dx2;
+
+            // Average normal for miter.
+            float mx = nx1 + nx2;
+            float my = ny1 + ny2;
+            float mLen = (float) Math.sqrt(mx * mx + my * my);
+            if (mLen < 0.0001f) {
+                mx = nx1;
+                my = ny1;
+                mLen = 1;
+            }
+            mx /= mLen;
+            my /= mLen;
+
+            // Calculate miter length.
+            float dot = nx1 * mx + ny1 * my;
+            if (Math.abs(dot) < 0.1f)
+                dot = 0.1f;
+            float miterLength = halfThickness / dot;
+
+            // Clamp miter length.
+            float maxMiter = halfThickness * 2.0f;
+            if (miterLength > maxMiter)
+                miterLength = maxMiter;
+            if (miterLength < -maxMiter)
+                miterLength = -maxMiter;
+
+            outerPoints[i][0] = x1 + mx * miterLength;
+            outerPoints[i][1] = y1 + my * miterLength;
+            innerPoints[i][0] = x1 - mx * miterLength;
+            innerPoints[i][1] = y1 - my * miterLength;
+        }
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.disableCull();
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+
+        // Draw quads connecting each edge with gradient colors.
+        for (int i = 0; i < n; i++) {
+            int next = (i + 1) % n;
+
+            int color1 = vertexColors[i];
+            float a1 = ((color1 >> 24) & 0xFF) / 255f;
+            float r1 = ((color1 >> 16) & 0xFF) / 255f;
+            float g1 = ((color1 >> 8) & 0xFF) / 255f;
+            float b1 = (color1 & 0xFF) / 255f;
+
+            int color2 = vertexColors[next];
+            float a2 = ((color2 >> 24) & 0xFF) / 255f;
+            float r2 = ((color2 >> 16) & 0xFF) / 255f;
+            float g2 = ((color2 >> 8) & 0xFF) / 255f;
+            float b2 = (color2 & 0xFF) / 255f;
+
+            buffer.vertex(matrix, innerPoints[i][0], innerPoints[i][1], 0).color(r1, g1, b1, a1).endVertex();
+            buffer.vertex(matrix, outerPoints[i][0], outerPoints[i][1], 0).color(r1, g1, b1, a1).endVertex();
+            buffer.vertex(matrix, outerPoints[next][0], outerPoints[next][1], 0).color(r2, g2, b2, a2).endVertex();
+            buffer.vertex(matrix, innerPoints[next][0], innerPoints[next][1], 0).color(r2, g2, b2, a2).endVertex();
+        }
+
+        tesselator.end();
+        RenderSystem.enableCull();
+        RenderSystem.disableBlend();
+    }
+
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narration) {
     }
@@ -571,6 +791,14 @@ public class RadarGraphWidget extends AbstractWidget {
         private int iconSize = 16;
         private int labelOffset = 15;
         private int labelColor = 0x404040;
+        /**
+         * -- GETTER --
+         *  Get the vertex color for gradient mode.
+         *
+         * @return ARGB color value.
+         */
+        @Getter
+        private int vertexColor = 0xFFFFFFFF; // Color for gradient mode (ARGB).
 
         @Nullable
         private Supplier<List<Component>> tooltipSupplier;
@@ -619,6 +847,16 @@ public class RadarGraphWidget extends AbstractWidget {
          */
         public Variable setLabelColor(int color) {
             this.labelColor = color;
+            return this;
+        }
+
+        /**
+         * Set the vertex color for gradient mode.
+         * This color is used when gradient fill or outline is enabled.
+         * @param color ARGB color value.
+         */
+        public Variable setVertexColor(int color) {
+            this.vertexColor = color;
             return this;
         }
 
