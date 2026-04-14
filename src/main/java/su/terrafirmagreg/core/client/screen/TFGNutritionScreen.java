@@ -67,13 +67,14 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         // Configure the radar graph appearance
         radarGraph.setFillColor(0x4000AA00)
                 .setLineColor(0xFF00DD00)
-                .setLineThickness(2.0f)
+                .setLineThickness(1.0f)
                 .setDrawExternalPolygon(true)
                 .setExternalLineColor(0xFFAAAAAA)
-                .setExternalLineThickness(1.0f)
+                .setExternalLineThickness(0.5f)
                 .setDrawCenterLines(true)
                 .setCenterLineColor(0x40AAAAAA)
-                .setCenterLineThickness(1.0f)
+                .setCenterLineThickness(0.5f)
+                .setStartOffset(0.2f)
                 .setGraphTooltip(() -> {
                     Player player = ClientHelpers.getPlayer();
                     if (player != null && player.getFoodData() instanceof TFCFoodData data) {
@@ -102,8 +103,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                     }
                     return 0f;
                 },
-                0f, 1f
-        )
+                0f, 1f)
                 .setLabel(Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()))
                 .setLabelOffset(12)
                 .setLabelColor(nutrient.getColor().getColor() != null ? nutrient.getColor().getColor() : 0x404040)
@@ -111,9 +111,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                     Player player = ClientHelpers.getPlayer();
                     if (player != null && player.getFoodData() instanceof TFCFoodData data) {
                         float value = data.getNutrition().getNutrient(nutrient);
+                        float maxValue = 1.0f;
                         return List.of(
                                 Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()),
-                                Component.translatable("tfc.tooltip.nutrition_value", String.format("%.1f%%", value * 100)));
+                                Component.literal(String.format("%.1f%% / %.1f%%", value * 100, maxValue * 100)));
                     }
                     return List.of(Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()));
                 });
