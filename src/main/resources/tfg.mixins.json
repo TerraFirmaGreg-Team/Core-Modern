@@ -2,8 +2,10 @@
     "mixins": [
         "client.create.ChainConveyorRendererMixin",
         "client.minecraft.IBlockModelGeneratorsInvoker",
+        "client.minecraft.MenuScreensMixin",
         "client.tfc.ClientForgeEventHandlerMixin",
         "client.tfc.DrinkableMixin",
+        "client.tfc.jei.JEIIntegrationMixin",
         "client.waterflasks.FlaskItemMixin",
         "common.ad_astra.EnvironmentEffectsMixin",
         "common.ad_astra.GasTankItemMixin",
