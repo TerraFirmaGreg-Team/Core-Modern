@@ -8,7 +8,9 @@ import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
 import com.eerussianguy.firmalife.common.blocks.*;
 import com.google.gson.JsonObject;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -28,7 +30,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -59,6 +60,7 @@ public class TFGBlocks_Wood {
     public static final Map<TFGWood, BlockEntry<? extends Block>> BARREL_PRESSES = new Object2ObjectOpenHashMap<>();
 
     public static void init() {
+        TFGWood.registerBlockSetTypes();
         for (TFGWood value : TFGWood.VALUES) {
             registerWood(value);
             // TODO: CEILING_HANGING_SIGNS (TFCCeilingHangingSignBlock)
@@ -98,8 +100,8 @@ public class TFGBlocks_Wood {
         blocks.put(Wood.BlockType.CHEST, chest(wood));
         blocks.put(Wood.BlockType.LOOM, loom(wood));
         blocks.put(Wood.BlockType.SLUICE, sluice(wood));
-        // blocks.put(Wood.BlockType.SIGN, sign(wood));
-        // blocks.put(Wood.BlockType.WALL_SIGN, wallSign(wood, blocks));
+        blocks.put(Wood.BlockType.SIGN, sign(wood));
+        blocks.put(Wood.BlockType.WALL_SIGN, wallSign(wood, blocks));
         blocks.put(Wood.BlockType.BARREL, barrel(wood));
         blocks.put(Wood.BlockType.LECTERN, lectern(wood));
         blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(wood));
@@ -442,46 +444,44 @@ public class TFGBlocks_Wood {
 
     // TODO: SIGN
     private static BlockEntry<TFCStandingSignBlock> sign(TFGWood wood) {
-        var properties = ExtendedProperties.of().mapColor(wood.woodColor).noCollission().strength(1.0F).flammableLikePlanks().blockEntity(TFCBlockEntities.SIGN).ticks(SignBlockEntity::tick);
+        var properties = ExtendedProperties.of().mapColor(wood.woodColor).noCollission().strength(1.0F).flammableLikePlanks().blockEntity(TFCBlockEntities.SIGN);
 
-        return TFGCore.REGISTRATE.block("wood/sign/" + wood.serializedName, p -> new TFCStandingSignBlock(properties, net.minecraft.world.level.block.state.properties.WoodType.OAK))
+        return TFGCore.REGISTRATE.block("wood/sign/" + wood.serializedName, p -> new TFCStandingSignBlock(properties, wood.getVanillaWoodType()))
                 .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().getBuilder("block/wood/sign/" + wood.serializedName)
+                            .texture("particle", wood.plankTexture);
+
                     prov.models().getBuilder("block/wood/sign/" + wood.serializedName + "_particle")
                             .texture("particle", wood.plankTexture);
+
+                    prov.simpleBlock(ctx.getEntry(), model);
                 })
                 .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "signs")))
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("standing_signs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .onRegister(block -> {
-                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.SIGN, block);
-                })
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/sign/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "signs"))).build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("signs"))).build()
                 .register();
     }
 
     // TODO: WALL SIGN
     private static BlockEntry<TFCWallSignBlock> wallSign(TFGWood wood, Map<Wood.BlockType, BlockEntry<? extends Block>> blocks) {
-        var properties = ExtendedProperties.of().mapColor(wood.woodColor).noCollission().strength(1.0F).dropsLike((Block) blocks.get(Wood.BlockType.SIGN).get()).flammableLikePlanks()
-                .blockEntity(TFCBlockEntities.SIGN).ticks(SignBlockEntity::tick);
+        var properties = ExtendedProperties.of().mapColor(wood.woodColor).noCollission().strength(1.0F).dropsLike(() -> blocks.get(Wood.BlockType.SIGN).get()).flammableLikePlanks()
+                .blockEntity(TFCBlockEntities.SIGN);
 
-        return TFGCore.REGISTRATE.block("wood/wall_sign/" + wood.serializedName, p -> new TFCWallSignBlock(properties, net.minecraft.world.level.block.state.properties.WoodType.OAK))
+        return TFGCore.REGISTRATE.block("wood/wall_sign/" + wood.serializedName, p -> new TFCWallSignBlock(properties, wood.getVanillaWoodType()))
+                .setData(ProviderType.LOOT, NonNullBiConsumer.noop())
                 .blockstate((ctx, prov) -> {
-                    prov.models().getBuilder("block/wood/sign/" + wood.serializedName + "_particle")
-                            .texture("particle", wood.plankTexture);
+                    ModelFile model = prov.models().getExistingFile(TFGCore.id("block/wood/sign/" + wood.serializedName));
+
+                    prov.simpleBlock(ctx.getEntry(), model);
                 })
                 .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "signs")))
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("wall_signs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .onRegister(block -> {
-                    TFGBlockEntities.addValidBEBlock(TFCBlockEntities.SIGN, block);
-                })
-                .item()
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
-                        TFGCore.id("item/wood/sign/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "signs"))).build()
+                .item().setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
                 .register();
     }
 

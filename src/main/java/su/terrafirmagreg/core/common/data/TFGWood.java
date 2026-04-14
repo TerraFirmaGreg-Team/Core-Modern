@@ -5,8 +5,6 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import com.tterrag.registrate.util.entry.BlockEntry;
-
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.dries007.tfc.world.feature.tree.TFCTreeGrower;
@@ -105,8 +103,7 @@ public enum TFGWood implements RegistryWood {
 
     @Override
     public Supplier<Block> getBlock(Wood.BlockType type) {
-        BlockEntry<? extends Block> entry = TFGBlocks_Wood.WOODS.get(this).get(type);
-        return entry::get;
+        return () -> TFGBlocks_Wood.WOODS.get(this).get(type).get();
     }
 
     @Override
@@ -134,5 +131,12 @@ public enum TFGWood implements RegistryWood {
 
     public int defaultDaysToGrow() {
         return daysToGrow;
+    }
+
+    public static void registerBlockSetTypes() {
+        for (TFGWood wood : VALUES) {
+            BlockSetType.register(wood.blockSet);
+            WoodType.register(wood.woodType);
+        }
     }
 }
