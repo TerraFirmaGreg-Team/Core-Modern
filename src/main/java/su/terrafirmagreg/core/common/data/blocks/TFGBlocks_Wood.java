@@ -77,6 +77,7 @@ public class TFGBlocks_Wood {
         Map<Wood.BlockType, BlockEntry<? extends Block>> blocks = new Object2ObjectOpenHashMap<>();
 
         if (wood.generateWood) {
+            blocks.put(Wood.BlockType.SAPLING, sapling(wood));
             blocks.put(Wood.BlockType.PLANKS, plank(wood));
             blocks.put(Wood.BlockType.DOOR, door(wood));
             blocks.put(Wood.BlockType.TRAPDOOR, trapdoor(wood));
@@ -106,6 +107,24 @@ public class TFGBlocks_Wood {
         blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(wood));
 
         WOODS.put(wood, blocks);
+    }
+
+    private static BlockEntry<Block> sapling(TFGWood wood) {
+        var saplingBlock = Wood.BlockType.SAPLING.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/sapling/" + wood.serializedName, p -> saplingBlock)
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().withExistingParent("wood/sapling/" + wood.serializedName, ResourceLocation.withDefaultNamespace("block/cross"))
+                            .texture("cross", TFGCore.id("block/wood/sapling/" + wood.serializedName));
+
+                    prov.simpleBlock(ctx.getEntry(), model);
+                })
+                .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("saplings")))
+                .item()
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                        TFGCore.id("block/wood/sapling/" + wood.serializedName)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("saplings"))).build()
+                .register();
     }
 
     private static BlockEntry<Block> plank(TFGWood wood) {
@@ -575,6 +594,7 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
+                .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "scribing_tables")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)

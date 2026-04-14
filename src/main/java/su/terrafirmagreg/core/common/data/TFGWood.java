@@ -62,7 +62,8 @@ public enum TFGWood implements RegistryWood {
         this.serializedName = this.name().toLowerCase(Locale.ROOT);
         this.woodColor = woodColor;
         this.barkColor = barkColor;
-        this.tree = null;
+        this.tree = new TFCTreeGrower(ResourceLocation.fromNamespaceAndPath("tfc", "tree/" + this.serializedName),
+                ResourceLocation.fromNamespaceAndPath("tfc", "tree/" + this.serializedName + "_large"));
         this.daysToGrow = daysToGrow;
         this.blockSet = new BlockSetType(serializedName);
         this.woodType = new WoodType(TFGCore.id(serializedName).toString(), blockSet);

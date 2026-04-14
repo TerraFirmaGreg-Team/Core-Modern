@@ -1,5 +1,8 @@
 {
   "values": [
+    "tfg:wood/sapling/araucaria",
+    "tfg:wood/sapling/beech",
+    "tfg:wood/sapling/mahoe",
     "tfg:fruit_trees/lavacado_sapling",
     "tfg:fruit_trees/magmango_sapling"
   ]
