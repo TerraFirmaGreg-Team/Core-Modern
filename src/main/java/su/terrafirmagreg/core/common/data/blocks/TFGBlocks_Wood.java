@@ -63,8 +63,6 @@ public class TFGBlocks_Wood {
         TFGWood.registerBlockSetTypes();
         for (TFGWood value : TFGWood.VALUES) {
             registerWood(value);
-            // TODO: CEILING_HANGING_SIGNS (TFCCeilingHangingSignBlock)
-            // TODO: WALL_HANGING_SIGNS (TFCWallHangingSignBlock)
             FOOD_SHELVES.put(value, foodShelf(value));
             HANGERS.put(value, hanger(value));
             JARBNETS.put(value, jarbnet(value));
@@ -79,7 +77,6 @@ public class TFGBlocks_Wood {
         Map<Wood.BlockType, BlockEntry<? extends Block>> blocks = new Object2ObjectOpenHashMap<>();
 
         if (wood.generateWood) {
-            blocks.put(Wood.BlockType.SAPLING, sapling(wood));
             blocks.put(Wood.BlockType.PLANKS, plank(wood));
             blocks.put(Wood.BlockType.DOOR, door(wood));
             blocks.put(Wood.BlockType.TRAPDOOR, trapdoor(wood));
@@ -100,8 +97,8 @@ public class TFGBlocks_Wood {
         blocks.put(Wood.BlockType.CHEST, chest(wood));
         blocks.put(Wood.BlockType.LOOM, loom(wood));
         blocks.put(Wood.BlockType.SLUICE, sluice(wood));
-        blocks.put(Wood.BlockType.SIGN, sign(wood));
-        blocks.put(Wood.BlockType.WALL_SIGN, wallSign(wood, blocks));
+        // blocks.put(Wood.BlockType.SIGN, sign(wood));
+        // blocks.put(Wood.BlockType.WALL_SIGN, wallSign(wood, blocks));
         blocks.put(Wood.BlockType.BARREL, barrel(wood));
         blocks.put(Wood.BlockType.LECTERN, lectern(wood));
         blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(wood));
@@ -109,24 +106,6 @@ public class TFGBlocks_Wood {
         blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(wood));
 
         WOODS.put(wood, blocks);
-    }
-
-    private static BlockEntry<Block> sapling(TFGWood wood) {
-        var saplingBlock = Wood.BlockType.SAPLING.create(wood).get();
-        return TFGCore.REGISTRATE.block("wood/sapling/" + wood.serializedName, p -> saplingBlock)
-                .blockstate((ctx, prov) -> {
-                    ModelFile model = prov.models().withExistingParent("wood/sapling/" + wood.serializedName, ResourceLocation.withDefaultNamespace("block/cross"))
-                            .texture("cross", TFGCore.id("block/wood/sapling/" + wood.serializedName));
-
-                    prov.simpleBlock(ctx.getEntry(), model);
-                })
-                .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("saplings")))
-                .item()
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
-                        TFGCore.id("block/wood/sapling/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("saplings"))).build()
-                .register();
     }
 
     private static BlockEntry<Block> plank(TFGWood wood) {
