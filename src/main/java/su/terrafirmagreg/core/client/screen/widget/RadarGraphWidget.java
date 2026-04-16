@@ -62,6 +62,10 @@ public class RadarGraphWidget extends AbstractWidget {
     private int lineColor = 0xFF00FF00;
     private float lineThickness = 2.0f;
 
+    // Dataset settings for multi-polygon mode.
+    private final List<Dataset> datasets = new ArrayList<>();
+    private static final int MAX_DATASETS = 8;
+
     // Gradient mode settings.
     private boolean useGradientFill = false;
     private boolean useGradientOutline = false;
@@ -115,6 +119,25 @@ public class RadarGraphWidget extends AbstractWidget {
      */
     public RadarGraphWidget addVariable(Variable variable) {
         this.variables.add(variable);
+        return this;
+    }
+
+    /**
+     * Add a dataset for multi-polygon mode.
+     * @param dataset The dataset to add.
+     */
+    public RadarGraphWidget addDataset(Dataset dataset) {
+        if (this.datasets.size() < MAX_DATASETS) {
+            this.datasets.add(dataset);
+        }
+        return this;
+    }
+
+    /**
+     * Clear all datasets.
+     */
+    public RadarGraphWidget clearDatasets() {
+        this.datasets.clear();
         return this;
     }
 
@@ -358,19 +381,6 @@ public class RadarGraphWidget extends AbstractWidget {
             cachedExternalVertices[i][1] = centerY + radius * Math.sin(angle);
         }
 
-        // Calculate value polygon vertices with start offset.
-        cachedValueVertices = new double[n][2];
-        for (int i = 0; i < n; i++) {
-            Variable var = variables.get(i);
-            double normalizedValue = var.getNormalizedValue();
-            double angle = startAngle + i * angleStep;
-            // Apply start offset.
-            double effectiveValue = startOffset + normalizedValue * (1.0 - startOffset);
-            double valueRadius = radius * effectiveValue;
-            cachedValueVertices[i][0] = centerX + valueRadius * Math.cos(angle);
-            cachedValueVertices[i][1] = centerY + valueRadius * Math.sin(angle);
-        }
-
         // Calculate label positions.
         cachedLabelPositions = new double[n][2];
         for (int i = 0; i < n; i++) {
@@ -403,62 +413,93 @@ public class RadarGraphWidget extends AbstractWidget {
             drawCircleOutline(matrix, centerX, centerY, radius, circleColor, circleThickness);
         }
 
-        // Draw filled value polygon.
-        if (useRadiusGradient) {
-            RenderSystem.enableDepthTest();
-            Minecraft.getInstance().getMainRenderTarget().enableStencil();
-            RenderSystem.clearStencil(0);
-            RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, false);
-            GL11.glEnable(GL11.GL_STENCIL_TEST);
-            RenderSystem.stencilMask(0xFF);
-            RenderSystem.stencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
-            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
-            RenderSystem.colorMask(false, false, false, false);
-
-            // Draw the mask into the stencil buffer.
-            drawFilledPolygon(matrix, cachedValueVertices, 0xFFFFFFFF);
-
-            // Render the full gradient over the mask.
-            RenderSystem.colorMask(true, true, true, true);
-            RenderSystem.stencilMask(0x00);
-            RenderSystem.stencilFunc(GL11.GL_EQUAL, 1, 0xFF);
-            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-
-            // Radius gradient mode: color based on distance from center.
-            drawRadiusGradientFilledPolygon(matrix, cachedExternalVertices, radiusInnerColor, radiusMiddleColor, radiusOuterColor);
-
-            GL11.glDisable(GL11.GL_STENCIL_TEST);
-            RenderSystem.stencilMask(0xFF);
-        } else if (useGradientFill) {
-            // Vertex gradient mode: color per vertex.
-            int[] vertexColors = new int[n];
-            for (int i = 0; i < n; i++) {
-                vertexColors[i] = variables.get(i).getVertexColor();
+        if (!datasets.isEmpty()) {
+            // Multi-polygon mode.
+            for (Dataset dataset : datasets) {
+                double[][] datasetVertices = new double[n][2];
+                for (int i = 0; i < n; i++) {
+                    Variable var = variables.get(i);
+                    float rawValue = dataset.getValue(i);
+                    float normalizedValue = Mth.clamp((rawValue - var.minValue) / (var.maxValue - var.minValue), 0f, 1f);
+                    double angle = startAngle + i * angleStep;
+                    double effectiveValue = startOffset + normalizedValue * (1.0 - startOffset);
+                    double valueRadius = radius * effectiveValue;
+                    datasetVertices[i][0] = centerX + valueRadius * Math.cos(angle);
+                    datasetVertices[i][1] = centerY + valueRadius * Math.sin(angle);
+                }
+                drawFilledPolygon(matrix, datasetVertices, dataset.fillColor);
+                drawPolygonOutline(matrix, datasetVertices, dataset.lineColor, lineThickness);
             }
-            drawGradientFilledPolygon(matrix, cachedValueVertices, vertexColors, centerColor);
         } else {
-            // Solid fill color.
-            drawFilledPolygon(matrix, cachedValueVertices, fillColor);
-        }
+            // Single polygon mode.
+            cachedValueVertices = new double[n][2];
+            for (int i = 0; i < n; i++) {
+                Variable var = variables.get(i);
+                double normalizedValue = var.getNormalizedValue();
+                double angle = startAngle + i * angleStep;
+                double effectiveValue = startOffset + normalizedValue * (1.0 - startOffset);
+                double valueRadius = radius * effectiveValue;
+                cachedValueVertices[i][0] = centerX + valueRadius * Math.cos(angle);
+                cachedValueVertices[i][1] = centerY + valueRadius * Math.sin(angle);
+            }
 
-        // Draw value polygon outline.
-        if (useRadiusGradient) {
-            // For radius gradient, use outline colors based on normalized values.
-            float[] normalizedValues = new float[n];
-            for (int i = 0; i < n; i++) {
-                normalizedValues[i] = variables.get(i).getNormalizedValue();
-                normalizedValues[i] = startOffset + normalizedValues[i] * (1.0f - startOffset);
+            // Draw filled value polygon.
+            if (useRadiusGradient) {
+                RenderSystem.enableDepthTest();
+                Minecraft.getInstance().getMainRenderTarget().enableStencil();
+                RenderSystem.clearStencil(0);
+                RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, false);
+                GL11.glEnable(GL11.GL_STENCIL_TEST);
+                RenderSystem.stencilMask(0xFF);
+                RenderSystem.stencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+                RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+                RenderSystem.colorMask(false, false, false, false);
+
+                // Draw the mask into the stencil buffer.
+                drawFilledPolygon(matrix, cachedValueVertices, 0xFFFFFFFF);
+
+                // Render the full gradient over the mask.
+                RenderSystem.colorMask(true, true, true, true);
+                RenderSystem.stencilMask(0x00);
+                RenderSystem.stencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+                RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+
+                // Radius gradient mode: color based on distance from center.
+                drawRadiusGradientFilledPolygon(matrix, cachedExternalVertices, radiusInnerColor, radiusMiddleColor, radiusOuterColor);
+
+                GL11.glDisable(GL11.GL_STENCIL_TEST);
+                RenderSystem.stencilMask(0xFF);
+            } else if (useGradientFill) {
+                // Vertex gradient mode: color per vertex.
+                int[] vertexColors = new int[n];
+                for (int i = 0; i < n; i++) {
+                    vertexColors[i] = variables.get(i).getVertexColor();
+                }
+                drawGradientFilledPolygon(matrix, cachedValueVertices, vertexColors, centerColor);
+            } else {
+                // Solid fill color.
+                drawFilledPolygon(matrix, cachedValueVertices, fillColor);
             }
-            drawRadiusGradientPolygonOutline(matrix, cachedValueVertices, normalizedValues,
-                    radiusInnerColor, radiusMiddleColor, radiusOuterColor, lineThickness);
-        } else if (useGradientOutline) {
-            int[] vertexColors = new int[n];
-            for (int i = 0; i < n; i++) {
-                vertexColors[i] = variables.get(i).getVertexColor();
+
+            // Draw value polygon outline.
+            if (useRadiusGradient) {
+                // For radius gradient, use outline colors based on normalized values.
+                float[] normalizedValues = new float[n];
+                for (int i = 0; i < n; i++) {
+                    normalizedValues[i] = variables.get(i).getNormalizedValue();
+                    normalizedValues[i] = startOffset + normalizedValues[i] * (1.0f - startOffset);
+                }
+                drawRadiusGradientPolygonOutline(matrix, cachedValueVertices, normalizedValues,
+                        radiusInnerColor, radiusMiddleColor, radiusOuterColor, lineThickness);
+            } else if (useGradientOutline) {
+                int[] vertexColors = new int[n];
+                for (int i = 0; i < n; i++) {
+                    vertexColors[i] = variables.get(i).getVertexColor();
+                }
+                drawGradientPolygonOutline(matrix, cachedValueVertices, vertexColors, lineThickness);
+            } else {
+                drawPolygonOutline(matrix, cachedValueVertices, lineColor, lineThickness);
             }
-            drawGradientPolygonOutline(matrix, cachedValueVertices, vertexColors, lineThickness);
-        } else {
-            drawPolygonOutline(matrix, cachedValueVertices, lineColor, lineThickness);
         }
 
         // Draw variable labels/icons at external vertices.
@@ -1161,6 +1202,43 @@ public class RadarGraphWidget extends AbstractWidget {
 
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narration) {
+    }
+
+    /**
+     * Represents a dataset for the radar graph.
+     */
+    public static class Dataset {
+        @Getter
+        private final Component title;
+        private final List<Supplier<Float>> values;
+        private final int fillColor;
+        private final int lineColor;
+
+        public Dataset(Component title, List<Supplier<Float>> values, int fillColor, int lineColor) {
+            this.title = title;
+            this.values = values;
+            this.fillColor = fillColor;
+            this.lineColor = lineColor;
+        }
+
+        public float getValue(int index) {
+            if (index >= 0 && index < values.size()) {
+                return values.get(index).get();
+            }
+            return 0f;
+        }
+
+        /**
+         * Create a dataset with random colors.
+         */
+        public static Dataset random(Component title, List<Supplier<Float>> values) {
+            int r = (int) (Math.random() * 255);
+            int g = (int) (Math.random() * 255);
+            int b = (int) (Math.random() * 255);
+            int fillColor = (0x80 << 24) | (r << 16) | (g << 8) | b;
+            int lineColor = (0xFF << 24) | (r << 16) | (g << 8) | b;
+            return new Dataset(title, values, fillColor, lineColor);
+        }
     }
 
     /**

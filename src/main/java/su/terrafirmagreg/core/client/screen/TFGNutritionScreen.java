@@ -8,6 +8,7 @@ package su.terrafirmagreg.core.client.screen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +36,7 @@ import net.minecraftforge.network.PacketDistributor;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
+import su.terrafirmagreg.core.common.container.widgets.ToggleButton;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 public class TFGNutritionScreen extends TFCContainerScreen<Container> {
@@ -44,6 +46,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     @Nullable
     private RadarGraphWidget postiveRadarGraph;
     private RadarGraphWidget negativeRadarGraph;
+
+    private boolean showTeamNutrition = false;
+    private final List<Float> stablePosValues = new ArrayList<>();
+    private final List<Float> stableNegValues = new ArrayList<>();
 
     public TFGNutritionScreen(Container container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TEXTURE);
@@ -72,6 +78,13 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         postiveRadarGraph = new RadarGraphWidget(positiveGraphX, graphY, graphDiameter);
         negativeRadarGraph = new RadarGraphWidget(negativeGraphX, graphY, graphDiameter);
+
+        // Toggle button for team nutrition.
+        ResourceLocation toggleTexture = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/toggle_button.png");
+        addRenderableWidget(new ToggleButton(leftPos + 5, topPos + 5, 20, 20, toggleTexture, 40, 20, () -> showTeamNutrition, button -> {
+            showTeamNutrition = !showTeamNutrition;
+            updateGraphs();
+        }));
 
         // Configure the radar graph appearance
         postiveRadarGraph.setFillColor(0xFFFFFF00)
@@ -144,13 +157,69 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         for (Nutrient nutrient : Nutrient.VALUES) {
             if (TFGNutrients.isPositive(nutrient)) {
                 postiveRadarGraph.addVariable(createNutrientVariable(nutrient));
+                stablePosValues.add((float) Math.random());
             } else if (TFGNutrients.isNegative(nutrient)) {
                 negativeRadarGraph.addVariable(createNutrientVariable(nutrient));
+                stableNegValues.add((float) Math.random());
             }
         }
 
         addRenderableWidget(postiveRadarGraph);
         addRenderableWidget(negativeRadarGraph);
+
+        updateGraphs();
+    }
+
+    private void updateGraphs() {
+        if (postiveRadarGraph == null || negativeRadarGraph == null)
+            return;
+
+        postiveRadarGraph.clearDatasets();
+        negativeRadarGraph.clearDatasets();
+
+        if (showTeamNutrition) {
+            // Team view.
+            postiveRadarGraph.setUseRadiusGradient(false);
+            negativeRadarGraph.setUseRadiusGradient(false);
+
+            // Current Player
+            List<Supplier<Float>> posValues1 = new ArrayList<>();
+            List<Supplier<Float>> negValues1 = new ArrayList<>();
+            for (Nutrient nutrient : Nutrient.VALUES) {
+                Supplier<Float> supplier = () -> {
+                    Player player = ClientHelpers.getPlayer();
+                    if (player != null && player.getFoodData() instanceof TFCFoodData data) {
+                        return data.getNutrition().getNutrient(nutrient);
+                    }
+                    return 0f;
+                };
+                if (TFGNutrients.isPositive(nutrient))
+                    posValues1.add(supplier);
+                else if (TFGNutrients.isNegative(nutrient))
+                    negValues1.add(supplier);
+            }
+            postiveRadarGraph.addDataset(new RadarGraphWidget.Dataset(Component.literal("Player 1"), posValues1, 0x8000FF00, 0xFF00FF00));
+            negativeRadarGraph.addDataset(new RadarGraphWidget.Dataset(Component.literal("Player 1"), negValues1, 0x8000FF00, 0xFF00FF00));
+
+            // "Second Player"
+            List<Supplier<Float>> posValues2 = new ArrayList<>();
+            List<Supplier<Float>> negValues2 = new ArrayList<>();
+            for (int i = 0; i < stablePosValues.size(); i++) {
+                final int index = i;
+                posValues2.add(() -> stablePosValues.get(index));
+            }
+            for (int i = 0; i < stableNegValues.size(); i++) {
+                final int index = i;
+                negValues2.add(() -> stableNegValues.get(index));
+            }
+            postiveRadarGraph.addDataset(new RadarGraphWidget.Dataset(Component.literal("Player 2"), posValues2, 0x80FF0000, 0xFFFF0000));
+            negativeRadarGraph.addDataset(new RadarGraphWidget.Dataset(Component.literal("Player 2"), negValues2, 0x80FF0000, 0xFFFF0000));
+
+        } else {
+            // Individual view: Radius gradient enabled.
+            postiveRadarGraph.setUseRadiusGradient(true);
+            negativeRadarGraph.setUseRadiusGradient(true);
+        }
     }
 
     private RadarGraphWidget.Variable createNutrientVariable(Nutrient nutrient) {
