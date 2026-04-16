@@ -47,17 +47,19 @@ public class RockPileFeature extends Feature<RockPileConfig> {
         final int size = config.size().sample(random);
         int placedAmount = 0;
 
-        for (int yPos = blockpos.getY(); yPos <= blockpos.getY() + height - 1; yPos++) {
+        int yStart = blockpos.getY() - 1;
+
+        for (int yPos = yStart; yPos <= yStart + height - 1; yPos++) {
             List<BlockPos> corners = getCorners(blockpos, yPos, radius);
-            System.out.println(yPos);
-            System.out.println(corners);
+            //System.out.println(yPos);
+            //System.out.println(corners);
             for (BlockPos placePos : BlockPos.betweenClosed(corners.get(0), corners.get(1))) {
                 if (placedAmount < size) {
-                    System.out.println("valid placement" + mayPlaceOn(level, placePos));
+                    //System.out.println("valid placement" + mayPlaceOn(level, placePos));
                     if (random.nextInt(1, 10) <= 8 && mayPlaceOn(level, placePos)) {
                         level.setBlock(placePos, localCobble.defaultBlockState(), 3);
                         placedAmount++;
-                        System.out.println(placedAmount);
+                        //System.out.println(placedAmount);
                     }
                 }
             }
@@ -67,7 +69,7 @@ public class RockPileFeature extends Feature<RockPileConfig> {
             }
         }
 
-        return false;
+        return placedAmount >= size;
     }
 
     private boolean mayPlaceOn(LevelAccessor level, BlockPos pos) {
