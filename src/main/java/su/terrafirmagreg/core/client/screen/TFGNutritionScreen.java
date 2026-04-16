@@ -8,6 +8,7 @@ package su.terrafirmagreg.core.client.screen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.PacketDistributor;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.screen.widget.PlayerListWidget;
 import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
 import su.terrafirmagreg.core.common.container.widgets.ToggleButton;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
@@ -46,10 +48,21 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     @Nullable
     private RadarGraphWidget postiveRadarGraph;
     private RadarGraphWidget negativeRadarGraph;
+    private PlayerListWidget playerList;
 
     private boolean showTeamNutrition = false;
     private final List<Float> stablePosValues = new ArrayList<>();
     private final List<Float> stableNegValues = new ArrayList<>();
+
+    private static final UUID[] DUMMY_UUIDS = {
+            UUID.fromString("c154610e-8875-4bb5-99ef-8c167a0f2237"),
+            UUID.fromString("6a85d348-cadf-4a8a-8a07-9e1a1f14ee15"),
+            UUID.fromString("f66762d1-789e-467d-9171-8ff510f2e11d"),
+            UUID.fromString("ffc23e0f-c6d8-4eba-b33a-cd0fccca6097"),
+            UUID.fromString("cc998bd8-ea24-46b5-b2c1-b2784107c612"),
+            UUID.fromString("9ca8866e-778b-46e8-b384-0af54ae3d399"),
+            UUID.fromString("e213327a-7538-49fa-86ab-8c54545ca95f")
+    };
 
     public TFGNutritionScreen(Container container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TEXTURE);
@@ -91,13 +104,13 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 .setLineColor(0xFF00DD00)
                 .setLineThickness(1.0f)
                 .setDrawExternalPolygon(true)
-                .setExternalLineColor(0xDD181818)
+                .setExternalLineColor(0xDD7A7A7A)
                 .setExternalLineThickness(0.5f)
                 .setDrawCenterLines(true)
-                .setCenterLineColor(0xDD181818)
+                .setCenterLineColor(0xDD7A7A7A)
                 .setCenterLineThickness(0.5f)
                 .setDrawCircle(true)
-                .setCircleColor(0xDD7A7A7A)
+                .setCircleColor(0xDDE9E9E9)
                 .setCircleThickness(0.5f)
                 .setStartOffset(0.2f)
                 // Vertex gradient mode.
@@ -124,13 +137,13 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 .setLineColor(0xFF00DD00)
                 .setLineThickness(1.0f)
                 .setDrawExternalPolygon(true)
-                .setExternalLineColor(0xDD181818)
+                .setExternalLineColor(0xDD7A7A7A)
                 .setExternalLineThickness(0.5f)
                 .setDrawCenterLines(true)
-                .setCenterLineColor(0xDD181818)
+                .setCenterLineColor(0xDD7A7A7A)
                 .setCenterLineThickness(0.5f)
                 .setDrawCircle(true)
-                .setCircleColor(0xDD7A7A7A)
+                .setCircleColor(0xDDE9E9E9)
                 .setCircleThickness(0.5f)
                 .setStartOffset(0.2f)
                 // Vertex gradient mode.
@@ -167,15 +180,24 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         addRenderableWidget(postiveRadarGraph);
         addRenderableWidget(negativeRadarGraph);
 
+        // Player list for team mode.
+        int listWidth = 60;
+        int listHeight = 110; // 5 players * 22 itemHeight
+        playerList = new PlayerListWidget(minecraft, listWidth, listHeight, topPos + 10, topPos + 10 + listHeight, 22);
+        playerList.setX(leftPos - listWidth - 6);
+        playerList.setLeftPos(leftPos - listWidth - 6);
+        addWidget(playerList);
+
         updateGraphs();
     }
 
     private void updateGraphs() {
-        if (postiveRadarGraph == null || negativeRadarGraph == null)
+        if (postiveRadarGraph == null || negativeRadarGraph == null || playerList == null)
             return;
 
         postiveRadarGraph.clearDatasets();
         negativeRadarGraph.clearDatasets();
+        playerList.clearPlayers();
 
         if (showTeamNutrition) {
             // Team view.
@@ -198,22 +220,49 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 else if (TFGNutrients.isNegative(nutrient))
                     negValues1.add(supplier);
             }
-            postiveRadarGraph.addDataset(new RadarGraphWidget.Dataset(Component.literal("Player 1"), posValues1, 0x8000FF00, 0xFF00FF00));
-            negativeRadarGraph.addDataset(new RadarGraphWidget.Dataset(Component.literal("Player 1"), negValues1, 0x8000FF00, 0xFF00FF00));
+            Player self = playerInventory.player;
+            RadarGraphWidget.Dataset dsPos1 = new RadarGraphWidget.Dataset(self.getName(), posValues1, 0x8000FF00, 0xFF00FF00);
+            RadarGraphWidget.Dataset dsNeg1 = new RadarGraphWidget.Dataset(self.getName(), negValues1, 0x8000FF00, 0xFF00FF00);
+            postiveRadarGraph.addDataset(dsPos1);
+            negativeRadarGraph.addDataset(dsNeg1);
+            playerList.addPlayer(self.getName(), self.getUUID(), dsPos1, dsNeg1, true);
 
-            // "Second Player"
-            List<Supplier<Float>> posValues2 = new ArrayList<>();
-            List<Supplier<Float>> negValues2 = new ArrayList<>();
-            for (int i = 0; i < stablePosValues.size(); i++) {
-                final int index = i;
-                posValues2.add(() -> stablePosValues.get(index));
+            // Dummy Players.
+            for (int i = 0; i < DUMMY_UUIDS.length; i++) {
+                UUID dummyUuid = DUMMY_UUIDS[i];
+                String dummyName = "Player " + (i + 2);
+                var connection = Minecraft.getInstance().getConnection();
+                if (connection != null) {
+                    var playerInfo = connection.getPlayerInfo(dummyUuid);
+                    if (playerInfo != null) {
+                        dummyName = playerInfo.getProfile().getName();
+                    }
+                }
+
+                boolean isMainPlayer = false;
+                List<Supplier<Float>> dummyPosValues = new ArrayList<>();
+                List<Supplier<Float>> dummyNegValues = new ArrayList<>();
+
+                for (int j = 0; j < stablePosValues.size(); j++) {
+                    final float base = stablePosValues.get(j);
+                    final float offset = (i + 1) * (j + 1) * 0.5f;
+                    dummyPosValues.add(() -> Math.max(0.1f, Math.min(0.9f, base + (float) Math.sin(offset) * 0.4f)));
+                }
+                for (int j = 0; j < stableNegValues.size(); j++) {
+                    final float base = stableNegValues.get(j);
+                    final float offset = (i + 1) * (j + 1) * 0.5f;
+                    dummyNegValues.add(() -> Math.max(0.1f, Math.min(0.9f, base + (float) Math.cos(offset) * 0.4f)));
+                }
+
+                int color = 0xFF000000 | java.util.concurrent.ThreadLocalRandom.current().nextInt(0xFFFFFF);
+                int fillColor = (color & 0x00FFFFFF) | 0x80000000;
+
+                RadarGraphWidget.Dataset dsPos = new RadarGraphWidget.Dataset(Component.literal(dummyName), dummyPosValues, fillColor, color);
+                RadarGraphWidget.Dataset dsNeg = new RadarGraphWidget.Dataset(Component.literal(dummyName), dummyNegValues, fillColor, color);
+                postiveRadarGraph.addDataset(dsPos);
+                negativeRadarGraph.addDataset(dsNeg);
+                playerList.addPlayer(Component.literal(dummyName), dummyUuid, dsPos, dsNeg, false);
             }
-            for (int i = 0; i < stableNegValues.size(); i++) {
-                final int index = i;
-                negValues2.add(() -> stableNegValues.get(index));
-            }
-            postiveRadarGraph.addDataset(new RadarGraphWidget.Dataset(Component.literal("Player 2"), posValues2, 0x80FF0000, 0xFFFF0000));
-            negativeRadarGraph.addDataset(new RadarGraphWidget.Dataset(Component.literal("Player 2"), negValues2, 0x80FF0000, 0xFFFF0000));
 
         } else {
             // Individual view: Radius gradient enabled.
@@ -267,10 +316,45 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     }
 
     @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (showTeamNutrition && playerList != null) {
+            if (playerList.mouseClicked(mouseX, mouseY, button)) {
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        if (showTeamNutrition && playerList != null) {
+            if (playerList.mouseScrolled(mouseX, mouseY, delta)) {
+                return true;
+            }
+        }
+        return super.mouseScrolled(mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (showTeamNutrition && playerList != null) {
+            if (playerList.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
+                return true;
+            }
+        }
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    }
+
+    @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         renderBackground(graphics);
         // Render background.
         renderBg(graphics, partialTicks, mouseX, mouseY);
+
+        if (showTeamNutrition && playerList != null) {
+            playerList.render(graphics, mouseX, mouseY, partialTicks);
+        }
+
         // Render widgets.
         for (var widget : this.renderables) {
             widget.render(graphics, mouseX, mouseY, partialTicks);

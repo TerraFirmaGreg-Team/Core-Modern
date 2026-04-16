@@ -29,6 +29,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A spider web /radar graph widget for displaying multiple variables on a regular polygon.
@@ -416,19 +417,21 @@ public class RadarGraphWidget extends AbstractWidget {
         if (!datasets.isEmpty()) {
             // Multi-polygon mode.
             for (Dataset dataset : datasets) {
-                double[][] datasetVertices = new double[n][2];
-                for (int i = 0; i < n; i++) {
-                    Variable var = variables.get(i);
-                    float rawValue = dataset.getValue(i);
-                    float normalizedValue = Mth.clamp((rawValue - var.minValue) / (var.maxValue - var.minValue), 0f, 1f);
-                    double angle = startAngle + i * angleStep;
-                    double effectiveValue = startOffset + normalizedValue * (1.0 - startOffset);
-                    double valueRadius = radius * effectiveValue;
-                    datasetVertices[i][0] = centerX + valueRadius * Math.cos(angle);
-                    datasetVertices[i][1] = centerY + valueRadius * Math.sin(angle);
+                if (dataset.isVisible()) {
+                    double[][] datasetVertices = new double[n][2];
+                    for (int i = 0; i < n; i++) {
+                        Variable var = variables.get(i);
+                        float rawValue = dataset.getValue(i);
+                        float normalizedValue = Mth.clamp((rawValue - var.minValue) / (var.maxValue - var.minValue), 0f, 1f);
+                        double angle = startAngle + i * angleStep;
+                        double effectiveValue = startOffset + normalizedValue * (1.0 - startOffset);
+                        double valueRadius = radius * effectiveValue;
+                        datasetVertices[i][0] = centerX + valueRadius * Math.cos(angle);
+                        datasetVertices[i][1] = centerY + valueRadius * Math.sin(angle);
+                    }
+                    drawFilledPolygon(matrix, datasetVertices, dataset.fillColor);
+                    drawPolygonOutline(matrix, datasetVertices, dataset.lineColor, lineThickness);
                 }
-                drawFilledPolygon(matrix, datasetVertices, dataset.fillColor);
-                drawPolygonOutline(matrix, datasetVertices, dataset.lineColor, lineThickness);
             }
         } else {
             // Single polygon mode.
@@ -1209,10 +1212,14 @@ public class RadarGraphWidget extends AbstractWidget {
      */
     public static class Dataset {
         @Getter
-        private final Component title;
+        @Setter
+        private Component title;
         private final List<Supplier<Float>> values;
         private final int fillColor;
         private final int lineColor;
+        @Getter
+        @Setter
+        private boolean visible = true;
 
         public Dataset(Component title, List<Supplier<Float>> values, int fillColor, int lineColor) {
             this.title = title;

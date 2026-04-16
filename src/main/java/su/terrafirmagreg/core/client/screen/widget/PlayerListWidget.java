@@ -1,0 +1,259 @@
+package su.terrafirmagreg.core.client.screen.widget;
+
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+
+import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Creates a widget that displays a list of players with checkboxes.
+ */
+public class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.PlayerEntry> {
+
+    @Setter
+    private int x;
+
+    private Component hoveredName;
+    private int tooltipX, tooltipY;
+
+    public PlayerListWidget(Minecraft minecraft, int width, int height, int top, int bottom, int itemHeight) {
+        super(minecraft, width, height, top, bottom, itemHeight);
+        this.setRenderBackground(false);
+        this.setRenderHeader(false, 0);
+    }
+
+    @Override
+    public void setLeftPos(int left) {
+        super.setLeftPos(left);
+        this.x = left;
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.hoveredName = null;
+        int i = this.getScrollbarPosition();
+        int j = i + 6;
+
+        graphics.enableScissor(this.x, this.y0, j, this.y1);
+        this.renderList(graphics, mouseX, mouseY, partialTick);
+        graphics.disableScissor();
+
+        if (this.hoveredName != null) {
+            graphics.renderTooltip(this.minecraft.font, this.hoveredName, this.tooltipX, this.tooltipY);
+        }
+
+        if (this.getMaxScroll() > 0) {
+            int k = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
+            k = Math.max(32, k);
+            int l = (int) this.getScrollAmount() * (this.y1 - this.y0 - k) / this.getMaxScroll() + this.y0;
+            if (l < this.y0) {
+                l = this.y0;
+            }
+
+            graphics.fill(i, this.y0, j, this.y1, -16777216);
+            graphics.fill(i, l, j, l + k, -8355712);
+            graphics.fill(i, l, j - 1, l + k - 1, -4144960);
+        }
+
+        this.renderDecorations(graphics, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderBackground(@NotNull GuiGraphics graphics) {
+    }
+
+    @Override
+    protected int getScrollbarPosition() {
+        return this.x + this.width;
+    }
+
+    @Override
+    public int getRowWidth() {
+        return this.width;
+    }
+
+    @Override
+    public int getRowLeft() {
+        return this.x;
+    }
+
+    public void addPlayer(Component name, UUID uuid, RadarGraphWidget.Dataset dataset1, RadarGraphWidget.Dataset dataset2, boolean visible) {
+        this.addEntry(new PlayerEntry(name, uuid, dataset1, dataset2, visible));
+    }
+
+    public void clearPlayers() {
+        this.clearEntries();
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        return super.mouseScrolled(mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    }
+
+    public class PlayerEntry extends ObjectSelectionList.Entry<PlayerEntry> {
+
+        @Getter
+        private Component name;
+        private final UUID uuid;
+        private final Checkbox checkbox;
+        private final RadarGraphWidget.Dataset dataset1;
+        private final RadarGraphWidget.Dataset dataset2;
+        private GameProfile profile;
+        private boolean profileResolved = false;
+        private boolean resolving = false;
+
+        public PlayerEntry(Component name, UUID uuid, RadarGraphWidget.Dataset dataset1, RadarGraphWidget.Dataset dataset2, boolean visible) {
+            this.name = name;
+            this.uuid = uuid;
+            this.dataset1 = dataset1;
+            this.dataset2 = dataset2;
+            this.profile = new GameProfile(uuid, name.getString());
+            this.checkbox = new Checkbox(0, 0, 20, 20, Component.empty(), visible) {
+                @Override
+                public void onPress() {
+                    super.onPress();
+                    boolean selected = this.selected();
+                    dataset1.setVisible(selected);
+                    dataset2.setVisible(selected);
+                }
+            };
+            dataset1.setVisible(visible);
+            dataset2.setVisible(visible);
+        }
+
+        private void resolveProfile() {
+            if (this.profileResolved || this.resolving) {
+                return;
+            }
+
+            Minecraft minecraft = Minecraft.getInstance();
+            var connection = minecraft.getConnection();
+            if (connection != null) {
+                var playerInfo = connection.getPlayerInfo(uuid);
+                if (playerInfo != null) {
+                    this.profile = playerInfo.getProfile();
+                    this.name = Component.literal(this.profile.getName());
+                    this.dataset1.setTitle(this.name);
+                    this.dataset2.setTitle(this.name);
+                    this.profileResolved = true;
+                    return;
+                }
+            }
+
+            this.resolving = true;
+            CompletableFuture.runAsync(() -> {
+                try {
+                    GameProfile filled = minecraft.getMinecraftSessionService().fillProfileProperties(this.profile, true);
+                    minecraft.execute(() -> {
+                        this.profile = filled;
+                        if (this.name.getString().startsWith("Player ")) {
+                            this.name = Component.literal(filled.getName());
+                            this.dataset1.setTitle(this.name);
+                            this.dataset2.setTitle(this.name);
+                        }
+                        this.profileResolved = true;
+                        this.resolving = false;
+                    });
+                } catch (Exception e) {
+                    this.resolving = false;
+                }
+            }, Util.backgroundExecutor());
+        }
+
+        public void setX(int x) {
+            this.checkbox.setX(x);
+        }
+
+        public void setY(int y) {
+            this.checkbox.setY(y);
+        }
+
+        @Override
+        public void render(@NotNull GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean isHovered, float partialTick) {
+            resolveProfile();
+            checkbox.setX(left);
+            checkbox.setY(top + (height - 20) / 2);
+            checkbox.render(graphics, mouseX, mouseY, partialTick);
+
+            int headX = left + 24;
+            int headY = top + (height - 16) / 2;
+
+            Minecraft minecraft = Minecraft.getInstance();
+            ResourceLocation skinLocation = DefaultPlayerSkin.getDefaultSkin(uuid);
+
+            var connection = minecraft.getConnection();
+            if (connection != null) {
+                var playerInfo = connection.getPlayerInfo(uuid);
+                if (playerInfo != null) {
+                    skinLocation = playerInfo.getSkinLocation();
+                    this.name = Component.literal(playerInfo.getProfile().getName());
+                    this.profile = playerInfo.getProfile();
+                    this.dataset1.setTitle(this.name);
+                    this.dataset2.setTitle(this.name);
+                    this.profileResolved = true;
+                } else {
+                    Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(this.profile);
+                    if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                        skinLocation = minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+                    }
+                }
+            } else {
+                Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(this.profile);
+                if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                    skinLocation = minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+                }
+            }
+
+            // Render player head.
+            graphics.blit(skinLocation, headX, headY, 16, 16, 8.0f, 8.0f, 8, 8, 64, 64); // Inner layer
+            graphics.blit(skinLocation, headX, headY, 16, 16, 40.0f, 8.0f, 8, 8, 64, 64); // Outer layer
+
+            if (mouseX >= headX && mouseX <= headX + 16 && mouseY >= headY && mouseY <= headY + 16) {
+                // Check if head is visible within the list's vertical bounds
+                if (headY >= y0 && headY + 16 <= y1) {
+                    PlayerListWidget.this.hoveredName = this.name;
+                    PlayerListWidget.this.tooltipX = mouseX;
+                    PlayerListWidget.this.tooltipY = mouseY;
+                }
+            }
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            if (mouseY < y0 || mouseY > y1) {
+                return false;
+            }
+            return checkbox.mouseClicked(mouseX, mouseY, button);
+        }
+
+        @Override
+        public @NotNull Component getNarration() {
+            return name;
+        }
+    }
+}
