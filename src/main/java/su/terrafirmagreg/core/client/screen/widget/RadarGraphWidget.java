@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -77,6 +78,11 @@ public class RadarGraphWidget extends AbstractWidget {
     private int externalLineColor = 0xFFAAAAAA;
     private float externalLineThickness = 1.0f;
 
+    // Circle settings.
+    private boolean drawCircle = false;
+    private int circleColor = 0xFFFFFFFF;
+    private float circleThickness = 1.0f;
+
     // Center lines settings.
     private boolean drawCenterLines = true;
     private int centerLineColor = 0x80AAAAAA;
@@ -84,6 +90,9 @@ public class RadarGraphWidget extends AbstractWidget {
 
     // Start offset from center (0-1).
     private float startOffset = 0.0f;
+
+    // Base rotation of the graph (in radians).
+    private float rotation = 0.0f;
 
     // Tooltip for the graph itself.
     @Nullable
@@ -233,6 +242,32 @@ public class RadarGraphWidget extends AbstractWidget {
     }
 
     /**
+     * Enable/disable drawing a circle that matches the external polygon's radius.
+     */
+    public RadarGraphWidget setDrawCircle(boolean draw) {
+        this.drawCircle = draw;
+        return this;
+    }
+
+    /**
+     * Set the circle line color.
+     * @param color ARGB color value.
+     */
+    public RadarGraphWidget setCircleColor(int color) {
+        this.circleColor = color;
+        return this;
+    }
+
+    /**
+     * Set the circle line thickness.
+     * @param thickness Line thickness in pixels.
+     */
+    public RadarGraphWidget setCircleThickness(float thickness) {
+        this.circleThickness = thickness;
+        return this;
+    }
+
+    /**
      * Enable/disable drawing lines from center to external vertices.
      */
     public RadarGraphWidget setDrawCenterLines(boolean draw) {
@@ -269,6 +304,15 @@ public class RadarGraphWidget extends AbstractWidget {
     }
 
     /**
+     * Set the base rotation of the graph.
+     * @param rotation Rotation in degrees.
+     */
+    public RadarGraphWidget setRotation(float rotation) {
+        this.rotation = rotation * (float) (Math.PI / 180.0);
+        return this;
+    }
+
+    /**
      * Set the tooltip supplier for when hovering over the graph itself.
      */
     public RadarGraphWidget setGraphTooltip(Supplier<List<Component>> tooltipSupplier) {
@@ -299,12 +343,12 @@ public class RadarGraphWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        if (variables.isEmpty())
+        if (variables.size() < 3)
             return;
 
         int n = variables.size();
         double angleStep = 2 * Math.PI / n;
-        double startAngle = -Math.PI / 2;
+        double startAngle = -Math.PI / 2 + rotation;
 
         // Calculate external polygon vertices.
         cachedExternalVertices = new double[n][2];
@@ -354,15 +398,37 @@ public class RadarGraphWidget extends AbstractWidget {
             drawPolygonOutline(matrix, cachedExternalVertices, externalLineColor, externalLineThickness);
         }
 
+        // Draw circle.
+        if (drawCircle) {
+            drawCircleOutline(matrix, centerX, centerY, radius, circleColor, circleThickness);
+        }
+
         // Draw filled value polygon.
         if (useRadiusGradient) {
+            RenderSystem.enableDepthTest();
+            Minecraft.getInstance().getMainRenderTarget().enableStencil();
+            RenderSystem.clearStencil(0);
+            RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, false);
+            GL11.glEnable(GL11.GL_STENCIL_TEST);
+            RenderSystem.stencilMask(0xFF);
+            RenderSystem.stencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+            RenderSystem.colorMask(false, false, false, false);
+
+            // Draw the mask into the stencil buffer.
+            drawFilledPolygon(matrix, cachedValueVertices, 0xFFFFFFFF);
+
+            // Render the full gradient over the mask.
+            RenderSystem.colorMask(true, true, true, true);
+            RenderSystem.stencilMask(0x00);
+            RenderSystem.stencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+
             // Radius gradient mode: color based on distance from center.
-            float[] normalizedValues = new float[n];
-            for (int i = 0; i < n; i++) {
-                normalizedValues[i] = variables.get(i).getNormalizedValue();
-            }
-            drawRadiusGradientFilledPolygon(matrix, cachedValueVertices, normalizedValues,
-                    radiusInnerColor, radiusMiddleColor, radiusOuterColor);
+            drawRadiusGradientFilledPolygon(matrix, cachedExternalVertices, radiusInnerColor, radiusMiddleColor, radiusOuterColor);
+
+            GL11.glDisable(GL11.GL_STENCIL_TEST);
+            RenderSystem.stencilMask(0xFF);
         } else if (useGradientFill) {
             // Vertex gradient mode: color per vertex.
             int[] vertexColors = new int[n];
@@ -381,6 +447,7 @@ public class RadarGraphWidget extends AbstractWidget {
             float[] normalizedValues = new float[n];
             for (int i = 0; i < n; i++) {
                 normalizedValues[i] = variables.get(i).getNormalizedValue();
+                normalizedValues[i] = startOffset + normalizedValues[i] * (1.0f - startOffset);
             }
             drawRadiusGradientPolygonOutline(matrix, cachedValueVertices, normalizedValues,
                     radiusInnerColor, radiusMiddleColor, radiusOuterColor, lineThickness);
@@ -423,7 +490,7 @@ public class RadarGraphWidget extends AbstractWidget {
      */
     @Nullable
     public Variable getHoveredVariable(int mouseX, int mouseY) {
-        if (variables.isEmpty() || cachedLabelPositions == null)
+        if (variables.size() < 3 || cachedLabelPositions == null)
             return null;
 
         Font font = Minecraft.getInstance().font;
@@ -513,6 +580,44 @@ public class RadarGraphWidget extends AbstractWidget {
 
         tesselator.end();
         RenderSystem.enableCull();
+        RenderSystem.disableBlend();
+    }
+
+    /**
+     * Draw a circle outline.
+     */
+    private void drawCircleOutline(Matrix4f matrix, float x, float y, float radius, int color, float thickness) {
+        float a = ((color >> 24) & 0xFF) / 255f;
+        float r = ((color >> 16) & 0xFF) / 255f;
+        float g = ((color >> 8) & 0xFF) / 255f;
+        float b = (color & 0xFF) / 255f;
+
+        int segments = 64;
+        float halfThickness = thickness / 2.0f;
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferbuilder = tesselator.getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
+
+        for (int i = 0; i <= segments; i++) {
+            float angle = i * (float) (2 * Math.PI) / segments;
+            float cos = Mth.cos(angle);
+            float sin = Mth.sin(angle);
+
+            float outerX = x + (radius + halfThickness) * cos;
+            float outerY = y + (radius + halfThickness) * sin;
+            float innerX = x + (radius - halfThickness) * cos;
+            float innerY = y + (radius - halfThickness) * sin;
+
+            bufferbuilder.vertex(matrix, outerX, outerY, 0).color(r, g, b, a).endVertex();
+            bufferbuilder.vertex(matrix, innerX, innerY, 0).color(r, g, b, a).endVertex();
+        }
+
+        tesselator.end();
         RenderSystem.disableBlend();
     }
 
@@ -864,9 +969,9 @@ public class RadarGraphWidget extends AbstractWidget {
      * Draw a filled polygon with radius gradient colors based on normalized values.
      * Uses multiple concentric rings to create a smooth 3-color radial gradient.
      */
-    private void drawRadiusGradientFilledPolygon(Matrix4f matrix, double[][] vertices, float[] normalizedValues,
+    private void drawRadiusGradientFilledPolygon(Matrix4f matrix, double[][] vertices,
             int innerColor, int middleColor, int outerColor) {
-        if (vertices.length < 3 || normalizedValues.length != vertices.length)
+        if (vertices.length < 3)
             return;
 
         RenderSystem.enableBlend();
@@ -881,7 +986,7 @@ public class RadarGraphWidget extends AbstractWidget {
         int n = vertices.length;
 
         // Number of rings for smooth gradient.
-        int numRings = 10;
+        int numRings = 20;
 
         for (int i = 0; i < n; i++) {
             int next = (i + 1) % n;
@@ -908,48 +1013,34 @@ public class RadarGraphWidget extends AbstractWidget {
                 float x1_2 = centerX + dx2 * t1;
                 float y1_2 = centerY + dy2 * t1;
 
-                // Calculate the value at each ring position.
-                float value0_1 = t0 * normalizedValues[i];
-                float value1_1 = t1 * normalizedValues[i];
-                float value0_2 = t0 * normalizedValues[next];
-                float value1_2 = t1 * normalizedValues[next];
+                // For the full gradient, value is just the ring ratio.
+                float value0 = t0;
+                float value1 = t1;
 
-                // Get colors based on value at each corner.
-                int c0_1 = getRadiusGradientColor(value0_1, innerColor, middleColor, outerColor);
-                int c1_1 = getRadiusGradientColor(value1_1, innerColor, middleColor, outerColor);
-                int c0_2 = getRadiusGradientColor(value0_2, innerColor, middleColor, outerColor);
-                int c1_2 = getRadiusGradientColor(value1_2, innerColor, middleColor, outerColor);
+                // Get colors based on radius at each corner.
+                int c0 = getRadiusGradientColor(value0, innerColor, middleColor, outerColor);
+                int c1 = getRadiusGradientColor(value1, innerColor, middleColor, outerColor);
 
                 // Extract color components.
-                float a0_1 = ((c0_1 >> 24) & 0xFF) / 255f;
-                float r0_1 = ((c0_1 >> 16) & 0xFF) / 255f;
-                float g0_1 = ((c0_1 >> 8) & 0xFF) / 255f;
-                float b0_1 = (c0_1 & 0xFF) / 255f;
+                float a0 = ((c0 >> 24) & 0xFF) / 255f;
+                float r0 = ((c0 >> 16) & 0xFF) / 255f;
+                float g0 = ((c0 >> 8) & 0xFF) / 255f;
+                float b0 = (c0 & 0xFF) / 255f;
 
-                float a1_1 = ((c1_1 >> 24) & 0xFF) / 255f;
-                float r1_1 = ((c1_1 >> 16) & 0xFF) / 255f;
-                float g1_1 = ((c1_1 >> 8) & 0xFF) / 255f;
-                float b1_1 = (c1_1 & 0xFF) / 255f;
-
-                float a0_2 = ((c0_2 >> 24) & 0xFF) / 255f;
-                float r0_2 = ((c0_2 >> 16) & 0xFF) / 255f;
-                float g0_2 = ((c0_2 >> 8) & 0xFF) / 255f;
-                float b0_2 = (c0_2 & 0xFF) / 255f;
-
-                float a1_2 = ((c1_2 >> 24) & 0xFF) / 255f;
-                float r1_2 = ((c1_2 >> 16) & 0xFF) / 255f;
-                float g1_2 = ((c1_2 >> 8) & 0xFF) / 255f;
-                float b1_2 = (c1_2 & 0xFF) / 255f;
+                float a1 = ((c1 >> 24) & 0xFF) / 255f;
+                float r1 = ((c1 >> 16) & 0xFF) / 255f;
+                float g1 = ((c1 >> 8) & 0xFF) / 255f;
+                float b1 = (c1 & 0xFF) / 255f;
 
                 // Draw quad as two triangles.
-                buffer.vertex(matrix, x0_1, y0_1, 0).color(r0_1, g0_1, b0_1, a0_1).endVertex();
-                buffer.vertex(matrix, x1_1, y1_1, 0).color(r1_1, g1_1, b1_1, a1_1).endVertex();
-                buffer.vertex(matrix, x0_2, y0_2, 0).color(r0_2, g0_2, b0_2, a0_2).endVertex();
+                buffer.vertex(matrix, x0_1, y0_1, 0).color(r0, g0, b0, a0).endVertex();
+                buffer.vertex(matrix, x1_1, y1_1, 0).color(r1, g1, b1, a1).endVertex();
+                buffer.vertex(matrix, x0_2, y0_2, 0).color(r0, g0, b0, a0).endVertex();
 
                 // Triangle 2
-                buffer.vertex(matrix, x1_1, y1_1, 0).color(r1_1, g1_1, b1_1, a1_1).endVertex();
-                buffer.vertex(matrix, x1_2, y1_2, 0).color(r1_2, g1_2, b1_2, a1_2).endVertex();
-                buffer.vertex(matrix, x0_2, y0_2, 0).color(r0_2, g0_2, b0_2, a0_2).endVertex();
+                buffer.vertex(matrix, x1_1, y1_1, 0).color(r1, g1, b1, a1).endVertex();
+                buffer.vertex(matrix, x1_2, y1_2, 0).color(r1, g1, b1, a1).endVertex();
+                buffer.vertex(matrix, x0_2, y0_2, 0).color(r0, g0, b0, a0).endVertex();
             }
         }
 
@@ -1097,8 +1188,6 @@ public class RadarGraphWidget extends AbstractWidget {
         private int labelColor = 0x404040;
         /**
          *  Get the vertex color for gradient mode.
-         *
-         * @return ARGB color value.
          */
         @Getter
         private int vertexColor = 0xFFFFFFFF; // Color for gradient mode (ARGB).

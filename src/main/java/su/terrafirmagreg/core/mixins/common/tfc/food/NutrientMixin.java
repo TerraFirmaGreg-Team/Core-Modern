@@ -58,7 +58,7 @@ public class NutrientMixin implements INutrientExtension {
         ((NutrientMixin) (Object) toxins).tfg$negative = true;
         nutrients.add(toxins);
 
-        var microplastics = tfg$invokeInit("MICROPLASTICS", nutrients.size(), ChatFormatting.WHITE);
+        var microplastics = tfg$invokeInit("MICROPLASTICS", nutrients.size(), ChatFormatting.DARK_AQUA);
         ((NutrientMixin) (Object) microplastics).tfg$negative = true;
         nutrients.add(microplastics);
 

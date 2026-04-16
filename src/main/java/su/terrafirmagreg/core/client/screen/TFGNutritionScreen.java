@@ -6,6 +6,7 @@
 
 package su.terrafirmagreg.core.client.screen;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,8 +22,10 @@ import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
 import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.SwitchInventoryTabPacket;
 import net.dries007.tfc.util.Helpers;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -30,13 +33,17 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.PacketDistributor;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
+import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 public class TFGNutritionScreen extends TFCContainerScreen<Container> {
-    public static final ResourceLocation TEXTURE = Helpers.identifier("textures/gui/player_nutrition.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/nutrition_screen.png");
+    public static final int ICON_SIZE = 10;
 
     @Nullable
-    private RadarGraphWidget radarGraph;
+    private RadarGraphWidget postiveRadarGraph;
+    private RadarGraphWidget negativeRadarGraph;
 
     public TFGNutritionScreen(Container container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TEXTURE);
@@ -58,22 +65,27 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Type.BOOK)));
 
         // Create radar graph widget.
-        int graphDiameter = 100;
-        int graphX = leftPos + (imageWidth - graphDiameter) / 2;
-        int graphY = topPos + 15;
+        int graphDiameter = 50;
+        int positiveGraphX = leftPos + (graphDiameter / 4) + (ICON_SIZE);
+        int negativeGraphX = positiveGraphX + ((graphDiameter / 2) * 3);
+        int graphY = topPos + (graphDiameter / 4) + (ICON_SIZE);
 
-        radarGraph = new RadarGraphWidget(graphX, graphY, graphDiameter);
+        postiveRadarGraph = new RadarGraphWidget(positiveGraphX, graphY, graphDiameter);
+        negativeRadarGraph = new RadarGraphWidget(negativeGraphX, graphY, graphDiameter);
 
         // Configure the radar graph appearance
-        radarGraph.setFillColor(0xFFFFFF00)
+        postiveRadarGraph.setFillColor(0xFFFFFF00)
                 .setLineColor(0xFF00DD00)
                 .setLineThickness(1.0f)
                 .setDrawExternalPolygon(true)
-                .setExternalLineColor(0xFFAAAAAA)
+                .setExternalLineColor(0xDD181818)
                 .setExternalLineThickness(0.5f)
                 .setDrawCenterLines(true)
-                .setCenterLineColor(0x40AAAAAA)
+                .setCenterLineColor(0xDD181818)
                 .setCenterLineThickness(0.5f)
+                .setDrawCircle(true)
+                .setCircleColor(0xDD7A7A7A)
+                .setCircleThickness(0.5f)
                 .setStartOffset(0.2f)
                 // Vertex gradient mode.
                 // .setUseGradientFill(true)
@@ -90,17 +102,55 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                         float avg = data.getNutrition().getAverageNutrition();
                         return List.of(
                                 Component.translatable("tfc.tooltip.nutrition"),
-                                Component.translatable("tfc.tooltip.nutrition_average", String.format("%.1f%%", avg * 100)));
+                                Component.translatable("tfc.tooltip.nutrition.positive_average", String.format("%.1f%%", avg * 100)));
+                    }
+                    return List.of(Component.translatable("tfc.tooltip.nutrition"));
+                });
+
+        negativeRadarGraph.setFillColor(0xFFFFFF00)
+                .setLineColor(0xFF00DD00)
+                .setLineThickness(1.0f)
+                .setDrawExternalPolygon(true)
+                .setExternalLineColor(0xDD181818)
+                .setExternalLineThickness(0.5f)
+                .setDrawCenterLines(true)
+                .setCenterLineColor(0xDD181818)
+                .setCenterLineThickness(0.5f)
+                .setDrawCircle(true)
+                .setCircleColor(0xDD7A7A7A)
+                .setCircleThickness(0.5f)
+                .setStartOffset(0.2f)
+                // Vertex gradient mode.
+                // .setUseGradientFill(true)
+                // .setUseGradientOutline(true)
+                // .setCenterColor(0x00FFFFFF)
+                // Radius gradient mode.
+                .setUseRadiusGradient(true)
+                .setRadiusInnerColor(0xDD29b000)
+                .setRadiusMiddleColor(0xDDd1b500)
+                .setRadiusOuterColor(0xDD9e0000)
+                .setGraphTooltip(() -> {
+                    Player player = ClientHelpers.getPlayer();
+                    if (player != null && player.getFoodData() instanceof TFCFoodData data) {
+                        float avg = data.getNutrition().getAverageNutrition();
+                        return List.of(
+                                Component.translatable("tfc.tooltip.nutrition"),
+                                Component.translatable("tfc.tooltip.nutrition.negative_average", String.format("%.1f%%", avg * 100)));
                     }
                     return List.of(Component.translatable("tfc.tooltip.nutrition"));
                 });
 
         // Add variables for each nutrient.
         for (Nutrient nutrient : Nutrient.VALUES) {
-            radarGraph.addVariable(createNutrientVariable(nutrient));
+            if (TFGNutrients.isPositive(nutrient)) {
+                postiveRadarGraph.addVariable(createNutrientVariable(nutrient));
+            } else if (TFGNutrients.isNegative(nutrient)) {
+                negativeRadarGraph.addVariable(createNutrientVariable(nutrient));
+            }
         }
 
-        addRenderableWidget(radarGraph);
+        addRenderableWidget(postiveRadarGraph);
+        addRenderableWidget(negativeRadarGraph);
     }
 
     private RadarGraphWidget.Variable createNutrientVariable(Nutrient nutrient) {
@@ -117,18 +167,31 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                     return 0f;
                 },
                 0f, 1f)
-                .setLabel(Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()))
-                .setLabelOffset(12)
-                .setLabelColor(colorValue != null ? colorValue : 0x404040)
+                //.setLabel(Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()))
+                .setTexture(ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_icon.png"), ICON_SIZE)
+                .setLabelOffset((ICON_SIZE / 2) + 1)
+                //.setLabelColor(colorValue != null ? colorValue : 0x404040)
                 .setVertexColor(vertexColor)
                 .setTooltip(() -> {
                     Player player = ClientHelpers.getPlayer();
                     if (player != null && player.getFoodData() instanceof TFCFoodData data) {
                         float value = data.getNutrition().getNutrient(nutrient);
                         float maxValue = 1.0f;
-                        return List.of(
-                                Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()),
-                                Component.literal(String.format("%.1f%% / %.1f%%", value * 100, maxValue * 100)));
+                        List<Component> components = new ArrayList<>();
+
+                        // Title and count.
+                        components.add(Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()));
+                        components.add(Component.literal(String.format("%.0f / %.0f%%", value * 100, maxValue * 100)));
+                        components.add(Component.literal(" "));
+
+                        // Hold Shift info.
+                        if (Screen.hasShiftDown()) {
+                            components.add(Component.translatable("tooltip.tfg.nutrition." + nutrient.getSerializedName() + "_info").withStyle(ChatFormatting.GRAY));
+                        } else {
+                            components.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
+                        }
+
+                        return components;
                     }
                     return List.of(Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()));
                 });
@@ -150,8 +213,11 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         graphics.pose().popPose();
 
         // Render radar graph tooltip.
-        if (radarGraph != null) {
-            radarGraph.getTooltip(mouseX, mouseY).ifPresent(tooltip -> graphics.renderComponentTooltip(font, tooltip, mouseX, mouseY));
+        if (postiveRadarGraph != null) {
+            postiveRadarGraph.getTooltip(mouseX, mouseY).ifPresent(tooltip -> graphics.renderComponentTooltip(font, tooltip, mouseX, mouseY));
+        }
+        if (negativeRadarGraph != null) {
+            negativeRadarGraph.getTooltip(mouseX, mouseY).ifPresent(tooltip -> graphics.renderComponentTooltip(font, tooltip, mouseX, mouseY));
         }
     }
 
