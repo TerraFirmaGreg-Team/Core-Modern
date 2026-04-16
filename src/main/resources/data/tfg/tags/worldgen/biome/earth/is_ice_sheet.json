@@ -1,0 +1,18 @@
+{
+    "values": [
+        "tfg:earth/ice_sheet",
+        "tfg:earth/ice_sheet_mountains",
+        "tfg:earth/ice_sheet_oceanic_mountains",
+        "tfg:earth/ice_sheet_shield_volcano",
+        "tfg:earth/ice_sheet_tuyas",
+        "tfg:earth/subglacial_lake",
+        "tfg:earth/ice_sheet_tuyas_edge",
+        "tfg:earth/ice_sheet_oceanic",
+        "tfg:earth/ice_sheet_shore",
+        "tfg:earth/glaciated_mountains",
+        "tfg:earth/glaciated_oceanic_mountains",
+        "tfg:earth/glaciated_shield_volcano"
+    ],
+    "replace": false,
+    "__comment__": "This is used to display rose quartz's ore vein in EMI, so it should match the biomes in tags.overworld.js"
+}
