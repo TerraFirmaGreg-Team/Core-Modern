@@ -168,14 +168,14 @@ public class TFGBiomes {
     public static final BiomeExtension VOLCANIC_MOUNTAINS = register("volcanic_mountains",
             cinderConesType(TFGRiverBlendType.CAVE, 4, 25, 50, 40, false,
                     builder().heightmap(seed -> BiomeNoise.mountains(seed, 10, 60))
-                            .spawnable().surface(SimpleSurfaceBuilder.ROCKY_VOLCANIC_SOIL)));
+                            .surface(SimpleSurfaceBuilder.ROCKY_VOLCANIC_SOIL)));
     // Volcanic oceanic islands. Slightly smaller and lower but with very plentiful volcanoes
     public static final BiomeExtension VOLCANIC_OCEANIC_MOUNTAINS = register("volcanic_oceanic_mountains",
             cinderConesType(TFGRiverBlendType.CAVE, 2, -12, 50, 20, false,
                     builder().heightmap(seed -> BiomeNoise.mountains(seed, -24, 50))
                             .surface(ShoreAndOceanSurfaceBuilder.VOLCANIC_MOUNTAINS)
                             .aquiferHeightOffset(-8)
-                            .spawnable().salty()));
+						.salty()));
 
     // Island Only
     // Mimic oceanic mountains
@@ -194,7 +194,7 @@ public class TFGBiomes {
                             .surface(ShoreAndOceanSurfaceBuilder.SANDY)
                             .aquiferHeightOffset(-16)
                             .type(BiomeBlendType.LAND).salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
     public static final BiomeExtension TIDAL_FLATS = register("tidal_flats",
             shoreType(TFGRiverBlendType.WIDE, ShoreBlendType.SANDY, -4,
                     builder().heightmap(BiomeNoise::shore)
@@ -202,7 +202,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-16)
                             .type(BiomeBlendType.OCEAN)
                             .salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
     // Inspired by Bay of Fundy, 12 Apostles, etc. -- High biome shore
     public static final BiomeExtension SEA_STACKS = register("sea_stacks",
             shoreType(TFGRiverBlendType.TALL_CANYON, ShoreBlendType.SEA_STACKS, -6,
@@ -211,7 +211,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-40)
                             .type(BiomeBlendType.LAND)
                             .salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
     // Multiple tiers of cliffs -- High to montane biome shore
     public static final BiomeExtension TERRACE_UPPER = register("terrace_upper",
             shoreType(TFGRiverBlendType.TALL_CANYON, ShoreBlendType.UPPER_TERRACE, 0,
@@ -220,7 +220,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-40)
                             .type(BiomeBlendType.LAND)
                             .salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
     public static final BiomeExtension TERRACE_LOWER = register("terrace_lower",
             shoreType(TFGRiverBlendType.TALL_CANYON, ShoreBlendType.LOWER_TERRACE, 0,
                     builder().heightmap(seed -> TFGBiomeNoise.constant(0))
@@ -228,7 +228,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-40)
                             .type(BiomeBlendType.LAND)
                             .salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
     // Vegetated zone below shore cliffs -- Mid-high biome shore
     public static final BiomeExtension SETBACK_CLIFFS = register("setback_cliffs",
             shoreType(TFGRiverBlendType.CANYON, ShoreBlendType.SETBACK_CLIFFS, 0,
@@ -237,7 +237,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-40)
                             .type(BiomeBlendType.LAND)
                             .salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
     // Vegetated coastal Dunes -- Below setback cliffs
     public static final BiomeExtension COASTAL_DUNES = register("coastal_dunes",
             shoreType(TFGRiverBlendType.WIDE_DEEP, ShoreBlendType.DUNES, 0,
@@ -246,7 +246,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-40)
                             .type(BiomeBlendType.LAND)
                             .salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
     // Chaotic rock formations, tide pools, and blowholes
     public static final BiomeExtension ROCKY_SHORES = register("rocky_shores",
             shoreType(TFGRiverBlendType.CANYON, ShoreBlendType.ROCKY_SHORES, 0,
@@ -255,7 +255,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-40)
                             .type(BiomeBlendType.LAND)
                             .salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
     // Similar to Rocky Shores, but with beaches mixed in
     public static final BiomeExtension EMBAYMENTS = register("embayments",
             shoreType(TFGRiverBlendType.CANYON, ShoreBlendType.EMBAYMENTS, 0,
@@ -264,7 +264,7 @@ public class TFGBiomes {
                             .aquiferHeightOffset(-40)
                             .type(BiomeBlendType.LAND)
                             .salty().shore()
-                            .spawnable().noRivers().noSandyRiverShores()));
+                            .noRivers().noSandyRiverShores()));
 
     // Water
     public static final BiomeExtension LAKE = register("lake",
@@ -602,12 +602,12 @@ public class TFGBiomes {
             shoreType(TFGRiverBlendType.TALL_CANYON, ShoreBlendType.EMBAYMENTS, 0,
                     builder().heightmap(BiomeNoise::shore)
                             .surface(ShoreAndOceanSurfaceBuilder.ACTIVE_SHIELD_VOLCANO)
-                            .spawnable().salty().shore()));
+                            .salty().shore()));
     public static final BiomeExtension OLD_SHIELD_VOLCANO_SHORE = register("old_shield_volcano_shore",
             tuffShoreType(TFGRiverBlendType.TALL_CANYON, ShoreBlendType.SANDY, 3, -8, 26,
                     builder().heightmap(BiomeNoise::shore)
                             .surface(ShoreAndOceanSurfaceBuilder.OLD_SHIELD_VOLCANO)
-                            .spawnable().salty().shore()));
+                            .salty().shore()));
 
     // Full Ice Sheet Biomes
     public static final BiomeExtension ICE_SHEET = register("ice_sheet",

@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 /**
  * Prefixes synthetic EMI recipe ID with "/" to avoid warnings about non-existent recipe IDs.
- * Remove this mixin with the next release of GT (after 7.5.2)
+ * Remove this mixin with the next release of GT (after 7.5.3)
  */
 @Mixin(value = MultiblockInfoEmiRecipe.class, remap = false)
 public class MultiblockInfoEmiRecipeMixin {
