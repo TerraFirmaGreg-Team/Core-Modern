@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "tfg:block/wood/stripped_log/araucaria_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "tfg:block/wood/stripped_log/araucaria"
+    },
+    "axis=z": {
+      "model": "tfg:block/wood/stripped_log/araucaria_horizontal",
+      "x": 90
+    }
+  }
+}
