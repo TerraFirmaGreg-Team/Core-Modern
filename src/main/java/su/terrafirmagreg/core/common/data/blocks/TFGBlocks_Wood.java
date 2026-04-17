@@ -8,7 +8,11 @@ import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
 import com.eerussianguy.firmalife.common.blocks.*;
 import com.google.gson.JsonObject;
+import com.gregtechceu.gtceu.common.block.GTCeilingHangingSignBlock;
 import com.gregtechceu.gtceu.common.block.GTStandingSignBlock;
+import com.gregtechceu.gtceu.common.block.GTWallHangingSignBlock;
+import com.gregtechceu.gtceu.common.block.GTWallSignBlock;
+import com.gregtechceu.gtceu.common.data.GTBlockEntities;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
@@ -18,7 +22,6 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.devices.BarrelBlock;
 import net.dries007.tfc.common.blocks.wood.LogBlock;
-import net.dries007.tfc.common.blocks.wood.TFCWallSignBlock;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.BarrelBlockItem;
 import net.dries007.tfc.common.items.ChestBlockItem;
@@ -28,8 +31,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.HangingSignItem;
+import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.PushReaction;
@@ -54,6 +60,8 @@ public class TFGBlocks_Wood {
 
     public static final Map<TFGWood, BlockEntry<? extends Block>> SIGN = new Object2ObjectOpenHashMap<>();
     public static final Map<TFGWood, BlockEntry<? extends Block>> WALL_SIGN = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> HANGING_SIGN = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> HANGING_WALL_SIGN = new Object2ObjectOpenHashMap<>();
     public static final Map<TFGWood, BlockEntry<? extends Block>> FOOD_SHELVES = new Object2ObjectOpenHashMap<>();
     public static final Map<TFGWood, BlockEntry<? extends Block>> HANGERS = new Object2ObjectOpenHashMap<>();
     public static final Map<TFGWood, BlockEntry<? extends Block>> JARBNETS = new Object2ObjectOpenHashMap<>();
@@ -66,6 +74,15 @@ public class TFGBlocks_Wood {
         TFGWood.registerBlockSetTypes();
         for (TFGWood value : TFGWood.VALUES) {
             registerWood(value);
+            if (!value.serializedName.equals("ginkgo")) {
+                // Do not touch!
+                BlockEntry<? extends Block> wallSign = wallSign(value);
+                SIGN.put(value, sign(value, wallSign));
+                WALL_SIGN.put(value, wallSign);
+                BlockEntry<? extends Block> wallHangingSign = wallHangingSign(value);
+                HANGING_SIGN.put(value, hangingSign(value, wallHangingSign));
+                HANGING_WALL_SIGN.put(value, wallHangingSign);
+            }
             FOOD_SHELVES.put(value, foodShelf(value));
             HANGERS.put(value, hanger(value));
             JARBNETS.put(value, jarbnet(value));
@@ -104,8 +121,6 @@ public class TFGBlocks_Wood {
         blocks.put(Wood.BlockType.CHEST, chest(wood));
         blocks.put(Wood.BlockType.LOOM, loom(wood));
         blocks.put(Wood.BlockType.SLUICE, sluice(wood));
-        // blocks.put(Wood.BlockType.SIGN, sign(wood));
-        // blocks.put(Wood.BlockType.WALL_SIGN, wallSign(wood, signBlock));
         blocks.put(Wood.BlockType.BARREL, barrel(wood));
         blocks.put(Wood.BlockType.LECTERN, lectern(wood));
         blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(wood));
@@ -492,44 +507,69 @@ public class TFGBlocks_Wood {
                 .register();
     }
 
-    // Signs use GT's way of doing it because TFC's just break
-    private static BlockEntry<GTStandingSignBlock> sign(TFGWood wood) {
+    // Signs use GT's way of doing it because TFC's just break.
+    // Unless you know what you are doing, please do not touch the code!
+    private static BlockEntry<GTStandingSignBlock> sign(TFGWood wood, BlockEntry<? extends Block> wallSign) {
         return TFGCore.REGISTRATE.block("wood/sign/" + wood.serializedName, (p) -> new GTStandingSignBlock(p, wood.getVanillaWoodType()))
                 .initialProperties(() -> Blocks.SPRUCE_SIGN)
                 .blockstate((ctx, prov) -> {
-                    ModelFile model = prov.models().getBuilder("block/wood/sign/" + wood.serializedName)
-                            .texture("particle", wood.plankTexture);
-
-                    prov.models().getBuilder("block/wood/sign/" + wood.serializedName + "_particle")
-                            .texture("particle", wood.plankTexture);
-
-                    prov.simpleBlock(ctx.getEntry(), model);
+                    prov.signBlock(ctx.getEntry(), (WallSignBlock) wallSign.get(), wood.plankTexture);
                 })
-                .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("standing_signs")))
-                .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item()
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
-                        TFGCore.id("item/wood/sign/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("signs"))).build()
+                .tag(BlockTags.STANDING_SIGNS, BlockTags.MINEABLE_WITH_AXE)
+                .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(GTBlockEntities.GT_SIGN, block);
+                })
+                .item((ctx, prov) -> new SignItem(prov, ctx, wallSign.get()))
+                .defaultModel()
+                .tag(ItemTags.SIGNS)
+                .build()
                 .register();
     }
 
-    private static BlockEntry<TFCWallSignBlock> wallSign(TFGWood wood, BlockEntry<? extends Block> sign) {
-        var properties = ExtendedProperties.of().mapColor(wood.woodColor).noCollission().strength(1.0F).flammableLikePlanks().blockEntity(TFCBlockEntities.SIGN);
+    private static BlockEntry<GTWallSignBlock> wallSign(TFGWood wood) {
+        return TFGCore.REGISTRATE.block("wood/wall_sign/" + wood.serializedName, (p) -> new GTWallSignBlock(p, wood.getVanillaWoodType()))
+                .initialProperties(() -> Blocks.SPRUCE_WALL_SIGN)
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.WALL_SIGNS, BlockTags.MINEABLE_WITH_AXE)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(GTBlockEntities.GT_SIGN, block);
+                })
+                .register();
+    }
 
-        return TFGCore.REGISTRATE.block("wood/wall_sign/" + wood.serializedName, (p) -> new TFCWallSignBlock(properties, wood.getVanillaWoodType()))
+    private static BlockEntry<GTCeilingHangingSignBlock> hangingSign(TFGWood wood, BlockEntry<? extends Block> wallHangingSign) {
+        return TFGCore.REGISTRATE.block("wood/hanging_sign/" + wood.serializedName, (p) -> new GTCeilingHangingSignBlock(p, wood.getVanillaWoodType()))
+                .initialProperties(() -> Blocks.SPRUCE_HANGING_SIGN)
                 .blockstate((ctx, prov) -> {
-                    ModelFile model = prov.models().getExistingFile(TFGCore.id("block/wood/sign/" + wood.serializedName));
+                    ModelFile model = prov.models().sign(ctx.getName(), wood.plankTexture);
 
                     prov.simpleBlock(ctx.getEntry(), model);
                 })
-                .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("wall_signs")))
-                .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item().setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-                .loot((prov, block) -> {
-                    prov.add(block, prov.createSingleItemTable(sign.asItem()));
+                .tag(BlockTags.CEILING_HANGING_SIGNS, BlockTags.MINEABLE_WITH_AXE)
+                .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(GTBlockEntities.GT_HANGING_SIGN, block);
+                })
+                .item((ctx, prov) -> new HangingSignItem(ctx, wallHangingSign.get(), prov))
+                .defaultModel()
+                .tag(ItemTags.HANGING_SIGNS)
+                .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<GTWallHangingSignBlock> wallHangingSign(TFGWood wood) {
+        return TFGCore.REGISTRATE.block("wood/wall_hanging_sign/" + wood.serializedName, (p) -> new GTWallHangingSignBlock(p, wood.getVanillaWoodType()))
+                .initialProperties(() -> Blocks.SPRUCE_WALL_HANGING_SIGN)
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().sign(ctx.getName(), wood.plankTexture);
+
+                    prov.simpleBlock(ctx.getEntry(), model);
+                })
+                .tag(BlockTags.WALL_HANGING_SIGNS, BlockTags.MINEABLE_WITH_AXE)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(GTBlockEntities.GT_HANGING_SIGN, block);
                 })
                 .register();
     }
