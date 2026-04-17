@@ -158,4 +158,7 @@ dependencies {
 
     // GT modern utils, gtmutils-2.8.0.jar, Feb 12, 2026
     modImplementation "curse.maven:gregtech-modern-utilities-1235020:7612516"
+
+    // Crafting Station Improved
+    modImplementation "curse.maven:crafting-station-improved-1310299:7463065"
 }

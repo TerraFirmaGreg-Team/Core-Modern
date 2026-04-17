@@ -49,6 +49,7 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import tfar.craftingstation.CraftingStationBlock;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
@@ -69,6 +70,7 @@ public class TFGBlocks_Wood {
     public static final Map<TFGWood, BlockEntry<? extends Block>> WINE_SHELVES = new Object2ObjectOpenHashMap<>();
     public static final Map<TFGWood, BlockEntry<? extends Block>> STOMPING_BARRELS = new Object2ObjectOpenHashMap<>();
     public static final Map<TFGWood, BlockEntry<? extends Block>> BARREL_PRESSES = new Object2ObjectOpenHashMap<>();
+    public static final Map<String, BlockEntry<? extends Block>> CRAFTING_STATIONS = new Object2ObjectOpenHashMap<>();
 
     public static void init() {
         TFGWood.registerBlockSetTypes();
@@ -90,6 +92,20 @@ public class TFGBlocks_Wood {
             WINE_SHELVES.put(value, wineShelf(value));
             STOMPING_BARRELS.put(value, stompingBarrel(value));
             BARREL_PRESSES.put(value, barrelPress(value));
+            CRAFTING_STATIONS.put(value.serializedName, craftingStation(value.serializedName,
+                    value.plankTexture, TFGCore.id("block/wood/workbench/" + value.serializedName + "_top")));
+        }
+
+        for (com.therighthon.afc.common.blocks.AFCWood value : com.therighthon.afc.common.blocks.AFCWood.VALUES) {
+            CRAFTING_STATIONS.put(value.getSerializedName(),
+                    craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("afc", "block/wood/planks/" + value.getSerializedName()),
+                            ResourceLocation.fromNamespaceAndPath("afc", "block/wood/planks/" + value.getSerializedName() + "_workbench_top")));
+        }
+
+        for (Wood value : Wood.VALUES) {
+            CRAFTING_STATIONS.put(value.getSerializedName(),
+                    craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/planks/" + value.getSerializedName()),
+                            ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/planks/" + value.getSerializedName() + "_workbench_top")));
         }
     }
 
@@ -1022,4 +1038,19 @@ public class TFGBlocks_Wood {
 
     }
 
+    private static BlockEntry<CraftingStationBlock> craftingStation(String name, ResourceLocation plank, ResourceLocation top) {
+        return TFGCore.REGISTRATE.block("wood/crafting_station/" + name, CraftingStationBlock::new)
+                .properties(p -> p)
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry(), prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("craftingstation", "block/crafting_station"))
+                            .texture("2", TFGCore.id("block/wood/crafting_station/side"))
+                            .texture("3", top)
+                            .texture("4", plank)
+                            .texture("particle", top));
+                })
+                .tag()
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).build()
+                .register();
+    }
 }

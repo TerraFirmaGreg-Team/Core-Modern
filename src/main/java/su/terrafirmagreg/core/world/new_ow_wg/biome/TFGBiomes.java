@@ -175,7 +175,7 @@ public class TFGBiomes {
                     builder().heightmap(seed -> BiomeNoise.mountains(seed, -24, 50))
                             .surface(ShoreAndOceanSurfaceBuilder.VOLCANIC_MOUNTAINS)
                             .aquiferHeightOffset(-8)
-						.salty()));
+                            .salty()));
 
     // Island Only
     // Mimic oceanic mountains

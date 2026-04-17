@@ -1,0 +1,9 @@
+{
+  "parent": "craftingstation:block/crafting_station",
+  "textures": {
+    "2": "tfg:block/wood/crafting_station/side",
+    "3": "tfc:block/wood/planks/rosewood_workbench_top",
+    "4": "tfc:block/wood/planks/rosewood",
+    "particle": "tfc:block/wood/planks/rosewood_workbench_top"
+  }
+}
