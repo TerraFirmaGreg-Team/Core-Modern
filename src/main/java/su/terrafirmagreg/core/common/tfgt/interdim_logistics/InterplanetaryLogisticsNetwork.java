@@ -53,7 +53,9 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
         var partsTag = tag.getList("networkParts", ListTag.TAG_COMPOUND);
         partsTag.forEach(t -> {
             var part = new NetworkPart((CompoundTag) t);
-            parts.put(part.getPartId(), part);
+            if (DIMENSION_DISTANCES.containsKey(part.getPartId().dimension())) {
+                parts.put(part.getPartId(), part);
+            }
         });
     }
 
@@ -68,6 +70,11 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
     }
 
     public void loadOrCreatePart(ILogisticsNetworkMachine machine) {
+        if (!DIMENSION_DISTANCES.containsKey(machine.getDimensionalPos().dimension())) {
+            TFGCore.LOGGER.warn("Interplanetary logistics machine is in an unsupported dimension. {} {}",
+                    machine.getDimensionalPos(), machine.getMachine());
+            return;
+        }
 
         boolean isReceiver = machine instanceof ILogisticsNetworkReceiver;
 
