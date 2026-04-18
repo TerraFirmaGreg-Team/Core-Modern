@@ -105,6 +105,10 @@ public class SnowCorrection {
             //In the original, this would've done the current melting / accumulation after, but since this is a backport, we just do the correction and leave it at that.
             ((IChunkData) data).tfg$setLastRandomTick(chunk, currentTick);
         }
+        //Random check if workers will be enraged by the snow (every 10 seconds)
+        if (currentTick % 240 == 0 && (model.getTemperature(level, climateCheckSurfacePos, currentCalendarTick, daysInMonth) > 2f)) {
+            handleSnowMelting(level, chunkPos, 1000);
+        }
     }
 
     private static BlockPos getRandomSurfacePos(ServerLevel level, ChunkPos chunkPos) {
