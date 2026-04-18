@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataCapability;
+import net.dries007.tfc.world.chunkdata.ChunkDataGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
@@ -133,7 +134,7 @@ public class ChunkDataMixin implements IChunkData {
     private ChunkData.Status status;
 
     @Inject(method = "serializeNBT", at = @At(value = "TAIL"))
-    private void SerializeInject(CallbackInfoReturnable<CompoundTag> cir) {
+    public void SerializeInject(CallbackInfoReturnable<CompoundTag> cir) {
         CompoundTag nbt = cir.getReturnValue();
         if (this.status == ChunkData.Status.FULL || this.status == ChunkData.Status.PARTIAL) {
             nbt.putLong("lastRandomTick", lastRandomTick);
@@ -142,10 +143,16 @@ public class ChunkDataMixin implements IChunkData {
     }
 
     @Inject(method = "deserializeNBT", at = @At(value = "TAIL"))
-    private void DeserializeInject(CompoundTag nbt, CallbackInfo ci) {
+    public void DeserializeInject(CompoundTag nbt, CallbackInfo ci) {
         if (this.status == ChunkData.Status.FULL || this.status == ChunkData.Status.PARTIAL) {
             lastRandomTick = nbt.getLong("lastRandomTick");
             nextSnowPosition = nbt.getByte("nextSnowPosition");
         }
+    }
+
+    @Inject(method = "<init>(Lnet/dries007/tfc/world/chunkdata/ChunkDataGenerator;Lnet/minecraft/world/level/ChunkPos;)V", at = @At("RETURN"))
+    public void onInit(ChunkDataGenerator generator, ChunkPos pos, CallbackInfo ci) {
+        this.lastRandomTick = Integer.MIN_VALUE;
+        this.nextSnowPosition = 0;
     }
 }

@@ -112,7 +112,7 @@ public class SnowCorrection {
 
     private static BlockPos getRandomSurfacePos(ServerLevel level, ChunkPos chunkPos) {
         final BlockPos randomPos = level.getBlockRandomPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), 15);
-        return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, randomPos);
+        return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, randomPos);
     }
 
     // Replicates normal rain chances
