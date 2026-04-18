@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "afc:block/wood/planks/ipe",
+    "east": "tfg:block/wood/crafting_station/ipe_slab_side",
+    "north": "tfg:block/wood/crafting_station/ipe_slab_side",
+    "particle": "afc:block/wood/planks/ipe",
+    "south": "tfg:block/wood/crafting_station/ipe_slab_side",
+    "up": "tfg:block/wood/crafting_station/ipe_top",
+    "west": "tfg:block/wood/crafting_station/ipe_slab_side"
+  }
+}

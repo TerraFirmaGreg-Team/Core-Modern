@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "tfc:block/wood/planks/willow",
+    "particle": "tfc:block/wood/planks/willow",
+    "side": "tfg:block/wood/crafting_station/willow_slab_side",
+    "top": "tfg:block/wood/crafting_station/willow_top"
+  }
+}

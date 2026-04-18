@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "beneath:block/wood/planks/crimson",
+    "particle": "beneath:block/wood/planks/crimson",
+    "side": "tfg:block/wood/crafting_station/crimson_slab_side",
+    "top": "tfg:block/wood/crafting_station/crimson_top"
+  }
+}
