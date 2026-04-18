@@ -139,11 +139,13 @@ public class TFGBlocks_Wood {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log_top/" + wood.serializedName));
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/log/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs"))).build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
                 .register();
     }
 
@@ -155,11 +157,13 @@ public class TFGBlocks_Wood {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log_top/" + wood.serializedName));
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/stripped_log/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs"))).build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
                 .register();
     }
 
@@ -172,11 +176,13 @@ public class TFGBlocks_Wood {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log/" + wood.serializedName));
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/wood/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs"))).build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
                 .register();
     }
 
@@ -187,11 +193,13 @@ public class TFGBlocks_Wood {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log/" + wood.serializedName));
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/stripped_wood/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs"))).build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
                 .register();
     }
 
