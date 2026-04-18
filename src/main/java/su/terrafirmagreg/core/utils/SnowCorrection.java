@@ -1,9 +1,6 @@
 package su.terrafirmagreg.core.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -81,10 +78,10 @@ public class SnowCorrection {
             while (calendarTick < currentCalendarTick) {
                 calendarTick += 4_000;
                 final float estimatedTemperature = model.getTemperature(level, climateCheckSurfacePos, calendarTick, daysInMonth);
-                if (estimatedTemperature > 2f) {
+                if (estimatedTemperature > 0.5f) {
                     netChangeInSnow = netChangeInSnow - UPDATES_PER_SNOW_MELT_SKIP;
                 }
-                if (estimatedTemperature < -2f && isRaining(rainfall)) {
+                if (estimatedTemperature < -2f && isRaining(rainfall, calendarTick, level)) {
                     final float fuzz = Mth.clampedMap(estimatedTemperature, -2f, -12f, 0.5f, 1f);
                     netChangeInSnow = netChangeInSnow + (int) (UPDATES_PER_SNOW_ACCUMULATION_SKIP * fuzz);
                 }
@@ -116,8 +113,8 @@ public class SnowCorrection {
     }
 
     // Replicates normal rain chances
-    private static boolean isRaining(float rainfall) {
-        if (Math.random() > 0.1875) {
+    private static boolean isRaining(float rainfall, float raintick, ServerLevel level) {
+        if ((new Random((long) (level.getSeed()+Math.floor(raintick/6000)))).nextDouble() > 0.1875) {
             return false;
         }
         return Math.random() - Mth.clampedMap(rainfall, 0f, 500f, 1, 0) > 0;
