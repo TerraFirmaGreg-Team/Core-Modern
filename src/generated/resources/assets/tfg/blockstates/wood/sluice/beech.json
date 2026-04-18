@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,upper=false": {
+      "model": "tfg:block/wood/sluice/beech_lower",
+      "y": 90
+    },
+    "facing=east,upper=true": {
+      "model": "tfg:block/wood/sluice/beech_upper",
+      "y": 90
+    },
+    "facing=north,upper=false": {
+      "model": "tfg:block/wood/sluice/beech_lower"
+    },
+    "facing=north,upper=true": {
+      "model": "tfg:block/wood/sluice/beech_upper"
+    },
+    "facing=south,upper=false": {
+      "model": "tfg:block/wood/sluice/beech_lower",
+      "y": 180
+    },
+    "facing=south,upper=true": {
+      "model": "tfg:block/wood/sluice/beech_upper",
+      "y": 180
+    },
+    "facing=west,upper=false": {
+      "model": "tfg:block/wood/sluice/beech_lower",
+      "y": 270
+    },
+    "facing=west,upper=true": {
+      "model": "tfg:block/wood/sluice/beech_upper",
+      "y": 270
+    }
+  }
+}

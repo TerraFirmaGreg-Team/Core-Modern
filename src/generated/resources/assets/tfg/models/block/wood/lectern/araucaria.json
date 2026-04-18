@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/lectern",
+  "textures": {
+    "base": "tfg:block/wood/lectern/araucaria/base",
+    "bottom": "tfg:block/wood/planks/araucaria",
+    "front": "tfg:block/wood/lectern/araucaria/front",
+    "particle": "tfg:block/wood/lectern/araucaria/sides",
+    "sides": "tfg:block/wood/lectern/araucaria/sides",
+    "top": "tfg:block/wood/lectern/araucaria/top"
+  }
+}
