@@ -22,7 +22,6 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.util.LazyOptional;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.utils.IChunkData;
 
 /**
  * ChunkData.get(LevelChunk) is called from ChunkDataProvider.get(ChunkAccess), which is used during world gen only.
@@ -134,7 +133,7 @@ public class ChunkDataMixin implements IChunkData {
     private ChunkData.Status status;
 
     @Inject(method = "serializeNBT", at = @At(value = "TAIL"))
-    public void SerializeInject(CallbackInfoReturnable<CompoundTag> cir) {
+    public void tfg$SerializeInject(CallbackInfoReturnable<CompoundTag> cir) {
         CompoundTag nbt = cir.getReturnValue();
         if (this.status == ChunkData.Status.FULL || this.status == ChunkData.Status.PARTIAL) {
             nbt.putLong("lastRandomTick", lastRandomTick);
@@ -143,7 +142,7 @@ public class ChunkDataMixin implements IChunkData {
     }
 
     @Inject(method = "deserializeNBT", at = @At(value = "TAIL"))
-    public void DeserializeInject(CompoundTag nbt, CallbackInfo ci) {
+    public void tfg$DeserializeInject(CompoundTag nbt, CallbackInfo ci) {
         if (this.status == ChunkData.Status.FULL || this.status == ChunkData.Status.PARTIAL) {
             lastRandomTick = nbt.getLong("lastRandomTick");
             nextSnowPosition = nbt.getByte("nextSnowPosition");
@@ -151,7 +150,7 @@ public class ChunkDataMixin implements IChunkData {
     }
 
     @Inject(method = "<init>(Lnet/dries007/tfc/world/chunkdata/ChunkDataGenerator;Lnet/minecraft/world/level/ChunkPos;)V", at = @At("RETURN"))
-    public void onInit(ChunkDataGenerator generator, ChunkPos pos, CallbackInfo ci) {
+    public void tfg$onChunkDataInit(ChunkDataGenerator generator, ChunkPos pos, CallbackInfo ci) {
         this.lastRandomTick = Integer.MIN_VALUE;
         this.nextSnowPosition = 0;
     }
