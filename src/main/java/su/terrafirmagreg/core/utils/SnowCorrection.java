@@ -40,6 +40,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
 
 import su.terrafirmagreg.core.common.data.TFGPoiTypes;
+import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.mixins.common.minecraft.PoiSectionAccessor;
 import su.terrafirmagreg.core.mixins.common.minecraft.SectionStorageAccessor;
 
@@ -59,7 +60,7 @@ public class SnowCorrection {
     private static final int UPDATES_PER_SNOW_MELT_SKIP = 1 + 4_000 / TICKS_PER_SNOW_MELT;
     private static final int UPDATES_PER_SNOW_ACCUMULATION_SKIP = 1 + 4_000 / TICKS_PER_SNOW_ACCUMULATION;
 
-    private static final int MAX_UPDATES_PER_TICK = 256;
+    private static final int MAX_UPDATES_PER_TICK = TFGConfig.SERVER.snowMaxAccumulationOnUpdate.get();
 
     public static void onTickChunk(ServerLevel level, ChunkAccess chunk) {
         final WorldTracker tracker = WorldTracker.get(level);

@@ -45,6 +45,7 @@ public final class ServerConfig {
 
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
     public final ForgeConfigSpec.IntValue sandDecumulateChance;
+    public final ForgeConfigSpec.IntValue snowMaxAccumulationOnUpdate;
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.push("hang_glider");
@@ -118,7 +119,9 @@ public final class ServerConfig {
         sandDecumulateChance = builder
                 .comment("The chance that sand piles will decumulate during a sandstoem. Lower values = faster sand dispersal, but also more block updates (aka lag).")
                 .defineInRange("sandDecumulateChance", 36, 1, Integer.MAX_VALUE);
-
+        snowMaxAccumulationOnUpdate = builder
+                .comment("The maximum amount of updates")
+                .defineInRange("snowMaxAccumulationOnUpdate", 64, 1, 256);
         builder.pop();
     }
 
