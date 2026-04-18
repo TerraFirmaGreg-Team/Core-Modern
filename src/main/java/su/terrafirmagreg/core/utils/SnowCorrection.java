@@ -40,7 +40,7 @@ import su.terrafirmagreg.core.common.data.TFGPoiTypes;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.mixins.common.minecraft.PoiSectionAccessor;
 import su.terrafirmagreg.core.mixins.common.minecraft.SectionStorageAccessor;
-import su.terrafirmagreg.core.mixins.common.tfc.IChunkData;
+import su.terrafirmagreg.core.world.IChunkData;
 
 /*
 port of TFC's 1.21 new snow melting logic

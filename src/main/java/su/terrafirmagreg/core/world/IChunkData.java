@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.tfc;
+package su.terrafirmagreg.core.world;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;

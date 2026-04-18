@@ -22,6 +22,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.util.LazyOptional;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.world.IChunkData;
 
 /**
  * ChunkData.get(LevelChunk) is called from ChunkDataProvider.get(ChunkAccess), which is used during world gen only.
