@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/chest",
+  "textures": {
+    "particle": "tfg:block/wood/planks/mahoe"
+  }
+}

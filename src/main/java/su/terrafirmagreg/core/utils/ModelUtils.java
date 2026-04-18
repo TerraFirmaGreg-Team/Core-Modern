@@ -60,6 +60,13 @@ public class ModelUtils {
         };
     }
 
+    public static void blockVariantsRotated(VariantBlockStateBuilder builder, ModelFile model) {
+        builder.partialState().addModels(new ConfiguredModel(model),
+                new ConfiguredModel(model, 0, 90, false),
+                new ConfiguredModel(model, 0, 180, false),
+                new ConfiguredModel(model, 0, 270, false));
+    }
+
     public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> blockVariants(ResourceLocation... variants) {
         return (ctx, prov) -> {
             List<ModelFile.ExistingModelFile> models = Arrays.stream(variants).map(v -> prov.models().getExistingFile(v)).toList();

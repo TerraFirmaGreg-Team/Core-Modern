@@ -327,7 +327,7 @@ package su.terrafirmagreg.core.compat.emi;
 				230, 0.28, 10, 70, 34, 10, 0, 
 				false, false, false, 70, 
 				new String[] {"tfc:rock/raw/quartzite","tfc:rock/raw/slate","tfc:rock/raw/phyllite","tfc:rock/raw/schist","tfc:rock/raw/gneiss","tfc:rock/raw/marble","minecraft:tuff",},
-				new OreVeinInfoRecipe.WeightedBlock[] {new OreVeinInfoRecipe.WeightedBlock("coal", 100), },
+				new OreVeinInfoRecipe.WeightedBlock[] {new OreVeinInfoRecipe.WeightedBlock("lignite", 70), new OreVeinInfoRecipe.WeightedBlock("coal", 30), },
 				null, null,
 				null, null, null, null,
 				null),

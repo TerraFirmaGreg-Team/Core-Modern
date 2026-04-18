@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/groundcover/twig",
+  "textures": {
+    "side": "tfg:block/wood/log/araucaria",
+    "top": "tfg:block/wood/log_top/araucaria"
+  }
+}

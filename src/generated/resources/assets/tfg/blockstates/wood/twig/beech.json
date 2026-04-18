@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "tfg:block/wood/twig/beech"
+      },
+      {
+        "model": "tfg:block/wood/twig/beech",
+        "y": 90
+      },
+      {
+        "model": "tfg:block/wood/twig/beech",
+        "y": 180
+      },
+      {
+        "model": "tfg:block/wood/twig/beech",
+        "y": 270
+      }
+    ]
+  }
+}
