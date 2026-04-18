@@ -114,7 +114,7 @@ public class SnowCorrection {
 
     // Replicates normal rain chances
     private static boolean isRaining(float rainfall, float raintick, ServerLevel level) {
-        if ((new Random((long) (level.getSeed()+Math.floor(raintick/6000)))).nextDouble() > 0.1875) {
+        if ((new Random((long) (level.getSeed() + Math.floor(raintick / 6000)))).nextDouble() > 0.1875) {
             return false;
         }
         return Math.random() - Mth.clampedMap(rainfall, 0f, 500f, 1, 0) > 0;

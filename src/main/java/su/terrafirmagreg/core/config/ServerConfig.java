@@ -119,9 +119,11 @@ public final class ServerConfig {
         sandDecumulateChance = builder
                 .comment("The chance that sand piles will decumulate during a sandstoem. Lower values = faster sand dispersal, but also more block updates (aka lag).")
                 .defineInRange("sandDecumulateChance", 36, 1, Integer.MAX_VALUE);
+
+        builder.pop().push("overworld_climate");
         snowMaxAccumulationOnUpdate = builder
-                .comment("The maximum amount of updates")
-                .defineInRange("snowMaxAccumulationOnUpdate", 64, 1, 256);
+                .comment("The maximum amount of snow update to apply for each correction tick")
+                .defineInRange("snowMaxAccumulationOnUpdate", 256, 1, Integer.MAX_VALUE);
         builder.pop();
     }
 
