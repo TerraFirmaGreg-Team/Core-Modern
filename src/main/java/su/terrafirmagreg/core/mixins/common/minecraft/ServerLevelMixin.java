@@ -11,11 +11,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
+import su.terrafirmagreg.core.utils.SnowCorrection;
 
 // higher priority to inject just before TFC does with its environmental helper
 @Mixin(value = ServerLevel.class, priority = 900)
@@ -31,6 +33,10 @@ public abstract class ServerLevelMixin {
         if (chunk.getLevel().dimension().equals(Planet.MARS)) {
             final ServerLevel level = (ServerLevel) (Object) this;
             MarsEnvironmentalHelpers.tickChunk(level, chunk, level.getProfiler());
+        }
+        if (chunk.getLevel().dimension().equals(Level.OVERWORLD)) {
+            final ServerLevel level = (ServerLevel) (Object) this;
+            SnowCorrection.onTickChunk(level, chunk);
         }
     }
 }
