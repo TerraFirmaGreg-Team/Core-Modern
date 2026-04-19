@@ -4,6 +4,7 @@ import static com.eerussianguy.firmalife.common.blocks.FLBlocks.*;
 
 import java.util.Map;
 
+import com.eerussianguy.beneath.common.blocks.Stem;
 import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
 import com.eerussianguy.firmalife.common.blocks.*;
@@ -13,6 +14,7 @@ import com.gregtechceu.gtceu.common.block.GTStandingSignBlock;
 import com.gregtechceu.gtceu.common.block.GTWallHangingSignBlock;
 import com.gregtechceu.gtceu.common.block.GTWallSignBlock;
 import com.gregtechceu.gtceu.common.data.GTBlockEntities;
+import com.therighthon.afc.common.blocks.AFCWood;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
@@ -99,7 +101,7 @@ public class TFGBlocks_Wood {
             SLAB_CRAFTING_STATIONS.put(value.serializedName, craftingStationSlab(value.serializedName, value.plankTexture, value.woodColor()));
         }
 
-        for (com.therighthon.afc.common.blocks.AFCWood value : com.therighthon.afc.common.blocks.AFCWood.VALUES) {
+        for (AFCWood value : AFCWood.VALUES) {
             CRAFTING_STATIONS.put(value.getSerializedName(),
                     craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("afc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
             SLAB_CRAFTING_STATIONS.put(value.getSerializedName(),
@@ -113,7 +115,7 @@ public class TFGBlocks_Wood {
                     craftingStationSlab(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
         }
 
-        for (com.eerussianguy.beneath.common.blocks.Stem value : com.eerussianguy.beneath.common.blocks.Stem.VALUES) {
+        for (Stem value : Stem.VALUES) {
             CRAFTING_STATIONS.put(value.getSerializedName(),
                     craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("beneath", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
             SLAB_CRAFTING_STATIONS.put(value.getSerializedName(),
