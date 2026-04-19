@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;

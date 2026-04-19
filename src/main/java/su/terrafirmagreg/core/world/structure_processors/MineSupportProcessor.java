@@ -1,15 +1,30 @@
 package su.terrafirmagreg.core.world.structure_processors;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
+import com.therighthon.afc.common.blocks.AFCWood;
 
+import net.dries007.tfc.common.blocks.wood.HorizontalSupportBlock;
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
+import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.util.registry.RegistryWood;
+import net.dries007.tfc.world.chunkdata.ChunkData;
+import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -19,45 +34,138 @@ import su.terrafirmagreg.core.world.TFGStructureProcessors;
 
 public class MineSupportProcessor extends StructureProcessor {
 
+    /// 1st Index = temperature
+    /// 2nd Index = rainfall
+    public static final RegistryWood[][] WOOD_CLIMATE_ARRAY = {
+            { Wood.PINE, Wood.DOUGLAS_FIR, Wood.SPRUCE, Wood.ASPEN },
+            { Wood.ASH, Wood.CHESTNUT, Wood.OAK, Wood.SEQUOIA },
+            { AFCWood.BAOBAB, Wood.ACACIA, AFCWood.IPE, AFCWood.HEVEA },
+            { Wood.PALM, AFCWood.IRONWOOD, Wood.KAPOK, AFCWood.TUALANG }
+    };
+
+    public static final Map<ChunkPos, RegistryWood> WOOD_CHUNK_CACHE = new HashMap<>();
+
     public static final MineSupportProcessor INSTANCE = new MineSupportProcessor();
     public static final Codec<MineSupportProcessor> CODEC = Codec.unit(() -> INSTANCE);
+
+    private RegistryWood getOrAddWoodCache(ChunkPos chunkPos, BlockPos blockPos, LevelReader levelReader) {
+        //Checks if this chunk has already been cached
+        if (WOOD_CHUNK_CACHE.containsKey(chunkPos)) {
+            return WOOD_CHUNK_CACHE.get(chunkPos);
+        }
+
+        //Checks if adjacent chunks have been cached, and use cached value
+        List<ChunkPos> adjChunks = findAdjChunks(chunkPos);
+        for (var adjChunk : adjChunks) {
+            if (WOOD_CHUNK_CACHE.containsKey(adjChunk)) {
+                var woodType = WOOD_CHUNK_CACHE.get(adjChunk);
+                WOOD_CHUNK_CACHE.put(chunkPos, woodType);
+
+                return woodType;
+            }
+        }
+
+        //Find wood if no nearby chunks have been cached
+        if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+            ChunkDataProvider dataProv = ChunkDataProvider.get(levelAccessor.getLevel().getChunkSource().getGenerator());
+            ChunkData data = dataProv.get(levelAccessor.getChunk(chunkPos.x, chunkPos.z));
+            System.out.println(chunkPos);
+
+            System.out.println(data.status());
+
+            BlockPos testPos = chunkPos.getMiddleBlockPosition(blockPos.getY());
+            var temp = data.getAverageTemp(testPos);
+            var rain = data.getRainfall(testPos);
+
+            System.out.println(temp);
+            System.out.println(rain);
+
+            int tempQuart = (int) Math.floor((temp + 20) / 15);
+            int rainQuart = (int) Math.floor(rain / 125);
+
+            System.out.println(tempQuart);
+            System.out.println(rainQuart);
+            RegistryWood woodType = WOOD_CLIMATE_ARRAY[tempQuart][rainQuart];
+
+            WOOD_CHUNK_CACHE.put(chunkPos, woodType);
+            System.out.println("added " + woodType + " at " + chunkPos);
+            return woodType;
+        }
+
+        //Fallback if everything breaks
+        return Wood.OAK;
+    }
+
+    private List<ChunkPos> findAdjChunks(ChunkPos chunkPos) {
+        List<ChunkPos> adjChunks = new ArrayList<>();
+        adjChunks.add(new ChunkPos(chunkPos.x + 1, chunkPos.z));
+        adjChunks.add(new ChunkPos(chunkPos.x - 1, chunkPos.z));
+        adjChunks.add(new ChunkPos(chunkPos.x, chunkPos.z + 1));
+        adjChunks.add(new ChunkPos(chunkPos.x, chunkPos.z - 1));
+
+        return adjChunks;
+    }
 
     @Override
     protected @NotNull StructureProcessorType<?> getType() {
         return TFGStructureProcessors.MINE_SUPPORT_PROCESSOR.get();
     }
 
+    //LevelReader here is actually a ServerLevelAccessor, since it's only called by a method that passes a ServerLevelAccessor
     @Override
     public @Nullable StructureTemplate.StructureBlockInfo process(@NotNull LevelReader levelReader, @NotNull BlockPos pos, @NotNull BlockPos pivot,
             StructureTemplate.@NotNull StructureBlockInfo rawBlockInfo, StructureTemplate.@NotNull StructureBlockInfo currentBlockInfo, @NotNull StructurePlaceSettings settings,
             @Nullable StructureTemplate template) {
 
-        BlockState mutableBlockState = currentBlockInfo.state();
+        BlockState originalBlockState = currentBlockInfo.state();
         BlockPos blockPos = currentBlockInfo.pos();
 
-        if (isSupportBlock(mutableBlockState)) {
-            //System.out.println("Found Support");
-            //Thread.dumpStack();
-            //System.out.println(currentBlockInfo.pos());
-            //System.out.println(mutableBlockState.getValues());
+        //Changes supports to regions wood type
+        if (isSupportBlock(originalBlockState)) {
+            var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
 
-            mutableBlockState.setValue(BlockStateProperties.NORTH, isSupportBlock(levelReader.getBlockState(blockPos.north())));
-            mutableBlockState.setValue(BlockStateProperties.EAST, isSupportBlock(levelReader.getBlockState(blockPos.east())));
-            mutableBlockState.setValue(BlockStateProperties.SOUTH, isSupportBlock(levelReader.getBlockState(blockPos.south())));
-            mutableBlockState.setValue(BlockStateProperties.WEST, isSupportBlock(levelReader.getBlockState(blockPos.west())));
+            Block newBlock;
 
-            //System.out.println(mutableBlockState.getValues());
+            if (isHorizSupportBlock(originalBlockState)) {
+                newBlock = woodType.getBlock(Wood.BlockType.HORIZONTAL_SUPPORT).get();
+            } else {
+                newBlock = woodType.getBlock(Wood.BlockType.VERTICAL_SUPPORT).get();
+            }
 
-            return new StructureTemplate.StructureBlockInfo(blockPos, mutableBlockState, currentBlockInfo.nbt());
+            BlockState newBlockState = newBlock.withPropertiesOf(originalBlockState);
+
+            return new StructureTemplate.StructureBlockInfo(blockPos, newBlockState, currentBlockInfo.nbt());
+        }
+
+        //Fills in air gaps in the floor with regions wood planks
+        if (isFloorBlock(originalBlockState)) {
+            if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+                BlockState levelBlockState = levelAccessor.getBlockState(blockPos);
+
+                if (levelBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.UP)) {
+                    return new StructureTemplate.StructureBlockInfo(blockPos, levelBlockState, currentBlockInfo.nbt());
+                }
+
+                var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
+
+                return new StructureTemplate.StructureBlockInfo(blockPos, woodType.getBlock(Wood.BlockType.PLANKS).get().defaultBlockState(), currentBlockInfo.nbt());
+            }
+
         }
 
         return currentBlockInfo;
     }
 
     private boolean isSupportBlock(BlockState blockState) {
-        var test = blockState.getBlock() instanceof VerticalSupportBlock;
-        //System.out.println(blockState.getBlock().toString() + test);
-        return test;
+        return blockState.getBlock() instanceof VerticalSupportBlock;
+    }
+
+    private boolean isHorizSupportBlock(BlockState blockState) {
+        return blockState.getBlock() instanceof HorizontalSupportBlock;
+    }
+
+    private boolean isFloorBlock(BlockState blockState) {
+        return blockState.getBlock() == Blocks.LIME_WOOL;
     }
 
 }
