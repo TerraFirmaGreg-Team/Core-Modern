@@ -1,6 +1,0 @@
-{
-  "base": {
-    "parent": "tfg:block/wood/jarbnet/beech_shut"
-  },
-  "loader": "firmalife:jarbnet"
-}

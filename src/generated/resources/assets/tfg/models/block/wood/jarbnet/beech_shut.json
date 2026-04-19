@@ -1,8 +1,0 @@
-{
-  "parent": "firmalife:block/jarbnet_shut",
-  "textures": {
-    "log": "tfg:block/wood/log/beech",
-    "planks": "tfg:block/wood/planks/beech",
-    "sheet": "tfg:block/wood/sheet/beech"
-  }
-}

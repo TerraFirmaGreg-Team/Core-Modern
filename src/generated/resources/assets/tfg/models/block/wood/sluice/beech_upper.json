@@ -1,6 +1,0 @@
-{
-  "parent": "tfc:block/sluice_upper",
-  "textures": {
-    "texture": "tfg:block/wood/sheet/beech"
-  }
-}

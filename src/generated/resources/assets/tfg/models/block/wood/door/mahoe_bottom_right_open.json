@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_bottom_right_open",
-  "textures": {
-    "bottom": "tfg:block/wood/door/mahoe_bottom",
-    "top": "tfg:block/wood/door/mahoe_top"
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/chiseled_bookshelf_inventory",
-  "textures": {
-    "front": "tfg:block/wood/bookshelf/mahoe_empty",
-    "side": "tfg:block/wood/bookshelf/mahoe_side",
-    "top": "tfg:block/wood/bookshelf/mahoe_top"
-  }
-}

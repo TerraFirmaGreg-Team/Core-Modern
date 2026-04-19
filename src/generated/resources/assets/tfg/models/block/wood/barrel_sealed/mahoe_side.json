@@ -1,8 +1,0 @@
-{
-  "parent": "tfc:block/barrel_side_sealed",
-  "textures": {
-    "particle": "tfg:block/wood/planks/mahoe",
-    "planks": "tfg:block/wood/planks/mahoe",
-    "sheet": "tfg:block/wood/sheet/mahoe"
-  }
-}

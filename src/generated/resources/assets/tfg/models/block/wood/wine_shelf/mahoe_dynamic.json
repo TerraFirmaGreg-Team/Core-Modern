@@ -1,6 +1,0 @@
-{
-  "base": {
-    "parent": "tfg:block/wood/wine_shelf/mahoe"
-  },
-  "loader": "firmalife:wine_shelf"
-}

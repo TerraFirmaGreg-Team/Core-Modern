@@ -1,6 +1,0 @@
-{
-  "base": {
-    "parent": "tfg:block/wood/hanger/mahoe"
-  },
-  "loader": "firmalife:hanger"
-}

@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_bottom_left",
-  "textures": {
-    "bottom": "tfg:block/wood/door/araucaria_bottom",
-    "top": "tfg:block/wood/door/araucaria_top"
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "parent": "firmalife:block/food_shelf_base",
-  "textures": {
-    "wood": "tfg:block/wood/planks/araucaria"
-  }
-}

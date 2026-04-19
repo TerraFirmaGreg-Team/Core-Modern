@@ -1,6 +1,0 @@
-{
-  "base": {
-    "parent": "tfg:block/wood/hanger/araucaria"
-  },
-  "loader": "firmalife:hanger"
-}

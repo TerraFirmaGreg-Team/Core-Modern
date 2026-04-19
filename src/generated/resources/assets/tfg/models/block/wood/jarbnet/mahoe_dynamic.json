@@ -1,6 +1,0 @@
-{
-  "base": {
-    "parent": "tfg:block/wood/jarbnet/mahoe"
-  },
-  "loader": "firmalife:jarbnet"
-}

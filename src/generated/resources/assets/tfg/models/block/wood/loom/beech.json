@@ -1,7 +1,0 @@
-{
-  "parent": "tfc:block/loom",
-  "textures": {
-    "particle": "tfg:block/wood/planks/beech",
-    "texture": "tfg:block/wood/planks/beech"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "parent": "tfc:block/groundcover/twig",
-  "textures": {
-    "side": "tfg:block/wood/log/beech",
-    "top": "tfg:block/wood/log_top/beech"
-  }
-}

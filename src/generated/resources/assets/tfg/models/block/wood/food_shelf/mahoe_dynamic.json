@@ -1,6 +1,0 @@
-{
-  "base": {
-    "parent": "tfg:block/wood/food_shelf/mahoe"
-  },
-  "loader": "firmalife:food_shelf"
-}

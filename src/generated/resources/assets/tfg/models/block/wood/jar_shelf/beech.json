@@ -1,6 +1,0 @@
-{
-  "parent": "tfc:block/jar_shelf",
-  "textures": {
-    "0": "tfg:block/wood/planks/beech"
-  }
-}
