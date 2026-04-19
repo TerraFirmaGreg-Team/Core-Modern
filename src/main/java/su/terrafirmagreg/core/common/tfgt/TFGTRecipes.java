@@ -5,7 +5,6 @@ import static com.gregtechceu.gtceu.common.data.GTMachines.ITEM_IMPORT_BUS;
 import java.util.function.Consumer;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
-import com.eerussianguy.firmalife.common.blocks.OvenType;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
@@ -20,6 +19,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import electrolyte.greate.registry.Pumps;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCraftingComponents;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 
@@ -36,7 +36,7 @@ public class TFGTRecipes {
 
         MetaTileEntityLoader.registerMachineRecipe(provider, true, TFGMachines.FOOD_OVEN,
                 "DTD", "AHB", "COC",
-                'T', FLBlocks.CURED_OVEN_TOP.get(OvenType.BRICK).get(),
+                'T', TFGTags.Blocks.FirmalifeOvenTops,
                 'H', GTCraftingComponents.HULL,
                 'A', GTCraftingComponents.ROBOT_ARM,
                 'B', GTCraftingComponents.CABLE,

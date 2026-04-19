@@ -102,6 +102,7 @@ public final class TFGTags {
         public static final TagKey<Block> IronGreenhouseCasings = createBlockTag("iron_greenhouse_casings");
         public static final TagKey<Block> CopperGreenhouseCasings = createBlockTag("copper_greenhouse_casings");
         public static final TagKey<Block> TreatedWoodGreenhouseCasings = createBlockTag("treated_wood_greenhouse_casings");
+        public static final TagKey<Block> FirmalifeOvenTops = createBlockTag("oven_tops");
 
         public static final TagKey<Block> SeaStackRocks = createBlockTag("sea_stack_rocks");
         public static final TagKey<Block> DryPlantPlantableOn = createBlockTag("dry_plant_plantable_on");
