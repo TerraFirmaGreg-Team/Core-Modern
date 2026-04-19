@@ -4,6 +4,7 @@ import static com.eerussianguy.firmalife.common.blocks.FLBlocks.*;
 
 import java.util.Map;
 
+import com.eerussianguy.beneath.common.blocks.Stem;
 import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
 import com.eerussianguy.firmalife.common.blocks.*;
@@ -13,6 +14,7 @@ import com.gregtechceu.gtceu.common.block.GTStandingSignBlock;
 import com.gregtechceu.gtceu.common.block.GTWallHangingSignBlock;
 import com.gregtechceu.gtceu.common.block.GTWallSignBlock;
 import com.gregtechceu.gtceu.common.data.GTBlockEntities;
+import com.therighthon.afc.common.blocks.AFCWood;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
@@ -38,6 +40,7 @@ import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -49,6 +52,8 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import tfar.craftingstation.CraftingStationBlock;
+import tfar.craftingstation.CraftingStationSlabBlock;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
@@ -69,6 +74,8 @@ public class TFGBlocks_Wood {
     public static final Map<TFGWood, BlockEntry<? extends Block>> WINE_SHELVES = new Object2ObjectOpenHashMap<>();
     public static final Map<TFGWood, BlockEntry<? extends Block>> STOMPING_BARRELS = new Object2ObjectOpenHashMap<>();
     public static final Map<TFGWood, BlockEntry<? extends Block>> BARREL_PRESSES = new Object2ObjectOpenHashMap<>();
+    public static final Map<String, BlockEntry<? extends Block>> CRAFTING_STATIONS = new Object2ObjectOpenHashMap<>();
+    public static final Map<String, BlockEntry<? extends Block>> SLAB_CRAFTING_STATIONS = new Object2ObjectOpenHashMap<>();
 
     public static void init() {
         TFGWood.registerBlockSetTypes();
@@ -90,6 +97,29 @@ public class TFGBlocks_Wood {
             WINE_SHELVES.put(value, wineShelf(value));
             STOMPING_BARRELS.put(value, stompingBarrel(value));
             BARREL_PRESSES.put(value, barrelPress(value));
+            CRAFTING_STATIONS.put(value.serializedName, craftingStation(value.serializedName, value.plankTexture, value.woodColor()));
+            SLAB_CRAFTING_STATIONS.put(value.serializedName, craftingStationSlab(value.serializedName, value.plankTexture, value.woodColor()));
+        }
+
+        for (AFCWood value : AFCWood.VALUES) {
+            CRAFTING_STATIONS.put(value.getSerializedName(),
+                    craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("afc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
+            SLAB_CRAFTING_STATIONS.put(value.getSerializedName(),
+                    craftingStationSlab(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("afc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
+        }
+
+        for (Wood value : Wood.VALUES) {
+            CRAFTING_STATIONS.put(value.getSerializedName(),
+                    craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
+            SLAB_CRAFTING_STATIONS.put(value.getSerializedName(),
+                    craftingStationSlab(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
+        }
+
+        for (Stem value : Stem.VALUES) {
+            CRAFTING_STATIONS.put(value.getSerializedName(),
+                    craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("beneath", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
+            SLAB_CRAFTING_STATIONS.put(value.getSerializedName(),
+                    craftingStationSlab(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("beneath", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
         }
     }
 
@@ -1028,6 +1058,58 @@ public class TFGBlocks_Wood {
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "barrel_presses"))).build()
                 .register();
 
+    }
+
+    private static BlockEntry<CraftingStationBlock> craftingStation(String name, ResourceLocation plank, MapColor color) {
+        return TFGCore.REGISTRATE.block("wood/crafting_station/" + name, CraftingStationBlock::new)
+                .properties(p -> ExtendedProperties.of()
+                        .mapColor(color)
+                        .sound(SoundType.WOOD)
+                        .strength(2.5F)
+                        .flammableLikeLogs()
+                        .properties())
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry(), prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("craftingstation", "block/crafting_station"))
+                            .texture("2", TFGCore.id("block/wood/crafting_station/" + name + "_side"))
+                            .texture("3", TFGCore.id("block/wood/crafting_station/" + name + "_top"))
+                            .texture("4", plank)
+                            .texture("particle", TFGCore.id("block/wood/crafting_station/" + name + "_top")));
+                })
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id("crafting_stations")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id("crafting_stations"))).build()
+                .register();
+    }
+
+    private static BlockEntry<CraftingStationSlabBlock> craftingStationSlab(String name, ResourceLocation plank, MapColor color) {
+        return TFGCore.REGISTRATE.block("wood/crafting_station/" + name + "_slab", CraftingStationSlabBlock::new)
+                .properties(p -> ExtendedProperties.of()
+                        .mapColor(color)
+                        .sound(SoundType.WOOD)
+                        .strength(2.5F)
+                        .flammableLikeLogs()
+                        .properties())
+                .blockstate((ctx, prov) -> {
+                    var topTex = TFGCore.id("block/wood/crafting_station/" + name + "_top");
+                    var sideTex = TFGCore.id("block/wood/crafting_station/" + name + "_slab_side");
+
+                    ModelFile base = prov.models().slab("wood/crafting_station/" + name + "_slab", sideTex, plank, topTex)
+                            .texture("particle", plank);
+
+                    ModelFile full = prov.models().cube("wood/crafting_station/" + name + "_slab_double", plank, topTex, sideTex, sideTex, sideTex, sideTex)
+                            .texture("particle", plank);
+
+                    ModelFile top = prov.models().slabTop("wood/crafting_station/" + name + "_slab_top", sideTex, plank, topTex)
+                            .texture("particle", plank);
+
+                    prov.slabBlock(ctx.getEntry(), base, top, full);
+                })
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id("crafting_stations")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id("crafting_stations"))).build()
+                .register();
     }
 
 }

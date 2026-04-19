@@ -1,0 +1,9 @@
+{
+  "parent": "craftingstation:block/crafting_station",
+  "textures": {
+    "2": "tfg:block/wood/crafting_station/hevea_side",
+    "3": "tfg:block/wood/crafting_station/hevea_top",
+    "4": "afc:block/wood/planks/hevea",
+    "particle": "tfg:block/wood/crafting_station/hevea_top"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "tfc:block/wood/planks/pine",
+    "particle": "tfc:block/wood/planks/pine",
+    "side": "tfg:block/wood/crafting_station/pine_slab_side",
+    "top": "tfg:block/wood/crafting_station/pine_top"
+  }
+}

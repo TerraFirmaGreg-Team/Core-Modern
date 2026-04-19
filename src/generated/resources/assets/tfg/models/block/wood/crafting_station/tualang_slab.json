@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "afc:block/wood/planks/tualang",
+    "particle": "afc:block/wood/planks/tualang",
+    "side": "tfg:block/wood/crafting_station/tualang_slab_side",
+    "top": "tfg:block/wood/crafting_station/tualang_top"
+  }
+}

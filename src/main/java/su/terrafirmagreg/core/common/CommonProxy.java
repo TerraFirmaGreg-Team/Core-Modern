@@ -22,7 +22,6 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.TFGModifyMaterials;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
@@ -78,6 +77,8 @@ public class CommonProxy {
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);
         TFGBrain.POI_TYPES.register(bus);
+
+        TFGPoiTypes.TYPES.register(bus);
 
         TFGFoodTraits.init();
 

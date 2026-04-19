@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "beneath:block/wood/planks/warped",
+    "particle": "beneath:block/wood/planks/warped",
+    "side": "tfg:block/wood/crafting_station/warped_slab_side",
+    "top": "tfg:block/wood/crafting_station/warped_top"
+  }
+}

@@ -236,6 +236,8 @@
         "common.wab.SoarerOverlayMixin",
         "common.wab.ToxlacanthMixin",
         "common.gtceu.medical.AntidoteBehaviorMixin"
+        "common.minecraft.SectionStorageAccessor",
+        "common.minecraft.PoiSectionAccessor"
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",
