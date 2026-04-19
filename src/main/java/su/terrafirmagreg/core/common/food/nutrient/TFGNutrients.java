@@ -9,6 +9,7 @@ import net.dries007.tfc.common.capabilities.food.Nutrient;
  * - Original nutrients (0-4): GRAIN, FRUIT, VEGETABLES, PROTEIN, DAIRY.
  * - Extended nutrients (5+): new nutrients added.
  */
+@SuppressWarnings("unused")
 public final class TFGNutrients {
 
     public static final int ORIGINAL_COUNT = 5;
@@ -20,6 +21,14 @@ public final class TFGNutrients {
 
     public static int getExtendedCount() {
         return getTotalCount() - ORIGINAL_COUNT;
+    }
+
+    public static int getNegativeCount() {
+        return getTotalCount() - POSITIVE_COUNT;
+    }
+
+    public static int getPositiveCount() {
+        return POSITIVE_COUNT;
     }
 
     public static boolean isNegative(Nutrient nutrient) {

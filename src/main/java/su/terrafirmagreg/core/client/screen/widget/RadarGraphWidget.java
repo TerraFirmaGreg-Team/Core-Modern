@@ -93,6 +93,12 @@ public class RadarGraphWidget extends AbstractWidget {
     private int centerLineColor = 0x80AAAAAA;
     private float centerLineThickness = 1.0f;
 
+    // Central icon settings.
+    @Nullable
+    private Supplier<ResourceLocation> centralIconTexture = null;
+    private int centralIconSize = 16;
+    private boolean showCentralIcon = false;
+
     // Start offset from center (0-1).
     private float startOffset = 0.0f;
 
@@ -337,6 +343,26 @@ public class RadarGraphWidget extends AbstractWidget {
     }
 
     /**
+     * Set the central icon texture supplier and size.
+     * @param texture Supplier for the texture ResourceLocation.
+     * @param size The size of the icon (it will be drawn centered at graph center).
+     */
+    public RadarGraphWidget setCentralIcon(Supplier<ResourceLocation> texture, int size) {
+        this.centralIconTexture = texture;
+        this.centralIconSize = size;
+        this.showCentralIcon = true;
+        return this;
+    }
+
+    /**
+     * Set whether to show the central icon.
+     */
+    public RadarGraphWidget setShowCentralIcon(boolean show) {
+        this.showCentralIcon = show;
+        return this;
+    }
+
+    /**
      * Set the tooltip supplier for when hovering over the graph itself.
      */
     public RadarGraphWidget setGraphTooltip(Supplier<List<Component>> tooltipSupplier) {
@@ -515,16 +541,33 @@ public class RadarGraphWidget extends AbstractWidget {
             if (var.texture != null) {
                 // Draw texture.
                 int texSize = var.iconSize;
+                RenderSystem.enableBlend();
+                RenderSystem.defaultBlendFunc();
                 graphics.blit(var.texture,
                         (int) labelX - texSize / 2,
                         (int) labelY - texSize / 2,
                         0, 0, texSize, texSize, texSize, texSize);
+                RenderSystem.disableBlend();
             } else if (var.label != null) {
                 // Draw text label.
                 int textWidth = font.width(var.label);
                 int textX = (int) labelX - textWidth / 2;
                 int textY = (int) labelY - font.lineHeight / 2;
                 graphics.drawString(font, var.label, textX, textY, var.labelColor, false);
+            }
+        }
+
+        // Draw central icon.
+        if (showCentralIcon && centralIconTexture != null) {
+            ResourceLocation texture = centralIconTexture.get();
+            if (texture != null) {
+                RenderSystem.enableBlend();
+                RenderSystem.defaultBlendFunc();
+                graphics.blit(texture,
+                        centerX - centralIconSize / 2,
+                        centerY - centralIconSize / 2,
+                        0, 0, centralIconSize, centralIconSize, centralIconSize, centralIconSize);
+                RenderSystem.disableBlend();
             }
         }
     }
@@ -1216,6 +1259,7 @@ public class RadarGraphWidget extends AbstractWidget {
         private Component title;
         private final List<Supplier<Float>> values;
         private final int fillColor;
+        @Getter
         private final int lineColor;
         @Getter
         @Setter
@@ -1304,8 +1348,8 @@ public class RadarGraphWidget extends AbstractWidget {
         /**
          * Set a texture icon for this variable.
          */
-        public Variable setTexture(ResourceLocation texture, int size) {
-            this.texture = texture;
+        public Variable setTexture(Supplier<ResourceLocation> texture, int size) {
+            this.texture = texture.get();
             this.iconSize = size;
             this.label = null;
             return this;

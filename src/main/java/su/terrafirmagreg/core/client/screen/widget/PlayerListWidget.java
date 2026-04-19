@@ -3,9 +3,13 @@ package su.terrafirmagreg.core.client.screen.widget;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.ToIntFunction;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -18,12 +22,21 @@ import net.minecraft.resources.ResourceLocation;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Creates a widget that displays a list of players with checkboxes.
  */
 public class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.PlayerEntry> {
+
+    private ResourceLocation playerHeadBackground;
+    private ToIntFunction<RadarGraphWidget.Dataset> playerHeadTintProvider;
+    private ResourceLocation checkboxTexture;
+    private int checkboxTextureWidth = 0;
+    private int checkboxTextureHeight = 0;
+    private int playerHeadBackgroundXOffset = 24;
+    private int playerHeadBackgroundYOffset = 0;
+    private int playerHeadBackgroundWidth = 16;
+    private int playerHeadBackgroundHeight = 16;
 
     @Setter
     private int x;
@@ -35,6 +48,31 @@ public class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Playe
         super(minecraft, width, height, top, bottom, itemHeight);
         this.setRenderBackground(false);
         this.setRenderHeader(false, 0);
+    }
+
+    public PlayerListWidget setPlayerHeadBackground(ResourceLocation playerHeadBackground) {
+        this.playerHeadBackground = playerHeadBackground;
+        return this;
+    }
+
+    public PlayerListWidget setPlayerHeadTintProvider(ToIntFunction<RadarGraphWidget.Dataset> playerHeadTintProvider) {
+        this.playerHeadTintProvider = playerHeadTintProvider;
+        return this;
+    }
+
+    public PlayerListWidget setPlayerHeadBackgroundBounds(int xOffset, int yOffset, int width, int height) {
+        this.playerHeadBackgroundXOffset = xOffset;
+        this.playerHeadBackgroundYOffset = yOffset;
+        this.playerHeadBackgroundWidth = Math.max(1, width);
+        this.playerHeadBackgroundHeight = Math.max(1, height);
+        return this;
+    }
+
+    public PlayerListWidget setCheckboxTextureOverride(ResourceLocation texture, int textureWidth, int textureHeight) {
+        this.checkboxTexture = texture;
+        this.checkboxTextureWidth = Math.max(2, textureWidth);
+        this.checkboxTextureHeight = Math.max(1, textureHeight);
+        return this;
     }
 
     @Override
@@ -196,12 +234,51 @@ public class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Playe
         @Override
         public void render(@NotNull GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean isHovered, float partialTick) {
             resolveProfile();
-            checkbox.setX(left);
-            checkbox.setY(top + (height - 20) / 2);
-            checkbox.render(graphics, mouseX, mouseY, partialTick);
 
             int headX = left + 24;
             int headY = top + (height - 16) / 2;
+
+            if (playerHeadBackground != null) {
+                int backgroundX = left + playerHeadBackgroundXOffset;
+                int backgroundY = headY + playerHeadBackgroundYOffset;
+                int color = this.dataset1.getLineColor();
+                if (playerHeadTintProvider != null) {
+                    color = playerHeadTintProvider.applyAsInt(this.dataset1);
+                }
+                float alpha = ((color >> 24) & 0xFF) / 255f;
+                float red = ((color >> 16) & 0xFF) / 255f;
+                float green = ((color >> 8) & 0xFF) / 255f;
+                float blue = (color & 0xFF) / 255f;
+
+                RenderSystem.enableBlend();
+                RenderSystem.defaultBlendFunc();
+                graphics.setColor(red, green, blue, Math.max(0.35f, alpha));
+                graphics.blit(playerHeadBackground, backgroundX, backgroundY, 0, 0, playerHeadBackgroundWidth, playerHeadBackgroundHeight, playerHeadBackgroundWidth, playerHeadBackgroundHeight);
+                graphics.setColor(1f, 1f, 1f, 1f);
+                RenderSystem.disableBlend();
+            }
+
+            checkbox.setX(left);
+            checkbox.setY(top + (height - 20) / 2);
+            if (checkboxTexture != null) {
+                final int frameW = checkboxTextureWidth / 2;
+                final int frameH = checkboxTextureHeight;
+                final int drawW = checkbox.getWidth();
+                final int drawH = checkbox.getHeight();
+                final int u = checkbox.selected() ? frameW : 0;
+
+                graphics.blit(checkboxTexture, checkbox.getX(), checkbox.getY(), drawW, drawH, (float) u, 0.0f, frameW, frameH, checkboxTextureWidth, checkboxTextureHeight);
+
+                if (checkbox.active && checkbox.isMouseOver(mouseX, mouseY)) {
+                    graphics.fill(checkbox.getX(), checkbox.getY(), checkbox.getX() + checkbox.getWidth(), checkbox.getY() + checkbox.getHeight(), 0x40FFFFFF);
+                }
+
+                if (!checkbox.active) {
+                    graphics.fill(checkbox.getX(), checkbox.getY(), checkbox.getX() + checkbox.getWidth(), checkbox.getY() + checkbox.getHeight(), 0x80000000);
+                }
+            } else {
+                checkbox.render(graphics, mouseX, mouseY, partialTick);
+            }
 
             Minecraft minecraft = Minecraft.getInstance();
             ResourceLocation skinLocation = DefaultPlayerSkin.getDefaultSkin(uuid);
