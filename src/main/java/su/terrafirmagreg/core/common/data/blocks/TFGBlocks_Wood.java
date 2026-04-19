@@ -3,37 +3,41 @@ package su.terrafirmagreg.core.common.data.blocks;
 import static com.eerussianguy.firmalife.common.blocks.FLBlocks.*;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 import com.eerussianguy.firmalife.common.blockentities.BarrelPressBlockEntity;
 import com.eerussianguy.firmalife.common.blockentities.FLBlockEntities;
 import com.eerussianguy.firmalife.common.blocks.*;
 import com.google.gson.JsonObject;
+import com.gregtechceu.gtceu.common.block.GTCeilingHangingSignBlock;
+import com.gregtechceu.gtceu.common.block.GTStandingSignBlock;
+import com.gregtechceu.gtceu.common.block.GTWallHangingSignBlock;
+import com.gregtechceu.gtceu.common.block.GTWallSignBlock;
+import com.gregtechceu.gtceu.common.data.GTBlockEntities;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.devices.BarrelBlock;
+import net.dries007.tfc.common.blocks.wood.LogBlock;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.BarrelBlockItem;
 import net.dries007.tfc.common.items.ChestBlockItem;
-import net.dries007.tfc.util.registry.RegistryWood;
-import net.dries007.tfc.world.feature.tree.TFCTreeGrower;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.item.HangingSignItem;
+import net.minecraft.world.item.SignItem;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -48,107 +52,37 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.TFGWood;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 public class TFGBlocks_Wood {
+    public static final Map<TFGWood, Map<Wood.BlockType, BlockEntry<? extends Block>>> WOODS = new Object2ObjectOpenHashMap<>();
 
-    public enum WoodType {
-        GLACIAN("glacian", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_planks"),
-                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/glacian_log"),
-                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/stripped_glacian_log"),
-                MapColor.NONE),
-        STROPHAR("strophar", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_planks"),
-                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
-                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/strophar_stem"),
-                MapColor.NONE),
-        AERONOS("aeronos", ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_planks"),
-                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
-                ResourceLocation.fromNamespaceAndPath("ad_astra", "block/aeronos_stem"),
-                MapColor.NONE),
-        GINKGO("ginkgo", ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_planks"),
-                ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/ginkgo_log"),
-                ResourceLocation.fromNamespaceAndPath("wan_ancient_beasts", "block/stripped_ginkgo_log"),
-                MapColor.NONE);
-
-        public final String name;
-        public final ResourceLocation plankTexture;
-        public final ResourceLocation logTexture;
-        public final ResourceLocation strippedLogTexture;
-        public final RegistryWood registryWood;
-
-        WoodType(String name, ResourceLocation plankTexture, ResourceLocation logBlock, ResourceLocation strippedLogTexture, MapColor col) {
-            this.name = name;
-            this.plankTexture = plankTexture;
-            this.logTexture = logBlock;
-            this.strippedLogTexture = strippedLogTexture;
-            // This is just needed for the TFC wood block ctors, only the colour method is used.
-            this.registryWood = new RegistryWood() {
-                @Override
-                public MapColor woodColor() {
-                    return col;
-                }
-
-                @Override
-                public MapColor barkColor() {
-                    return col;
-                }
-
-                @Override
-                public TFCTreeGrower tree() {
-                    //noinspection DataFlowIssue
-                    return null;
-                }
-
-                @Override
-                public int daysToGrow() {
-                    return 0;
-                }
-
-                @Override
-                public int autumnIndex() {
-                    return 0;
-                }
-
-                @Override
-                public Supplier<Block> getBlock(Wood.BlockType blockType) {
-                    //noinspection DataFlowIssue
-                    return null;
-                }
-
-                @Override
-                public BlockSetType getBlockSet() {
-                    //noinspection DataFlowIssue
-                    return null;
-                }
-
-                @Override
-                public net.minecraft.world.level.block.state.properties.WoodType getVanillaWoodType() {
-                    //noinspection DataFlowIssue
-                    return null;
-                }
-
-                @Override
-                public String getSerializedName() {
-                    return name;
-                }
-            };
-        }
-    }
-
-    public static final Map<WoodType, Map<Wood.BlockType, BlockEntry<? extends Block>>> WOOD_BLOCKS = new Object2ObjectOpenHashMap<>();
-
-    public static final Map<WoodType, BlockEntry<? extends Block>> FOOD_SHELVES = new Object2ObjectOpenHashMap<>();
-    public static final Map<WoodType, BlockEntry<? extends Block>> HANGERS = new Object2ObjectOpenHashMap<>();
-    public static final Map<WoodType, BlockEntry<? extends Block>> JARBNETS = new Object2ObjectOpenHashMap<>();
-    public static final Map<WoodType, BlockEntry<? extends Block>> BIG_BARRELS = new Object2ObjectOpenHashMap<>();
-    public static final Map<WoodType, BlockEntry<? extends Block>> WINE_SHELVES = new Object2ObjectOpenHashMap<>();
-    public static final Map<WoodType, BlockEntry<? extends Block>> STOMPING_BARRELS = new Object2ObjectOpenHashMap<>();
-    public static final Map<WoodType, BlockEntry<? extends Block>> BARREL_PRESSES = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> SIGN = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> WALL_SIGN = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> HANGING_SIGN = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> HANGING_WALL_SIGN = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> FOOD_SHELVES = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> HANGERS = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> JARBNETS = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> BIG_BARRELS = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> WINE_SHELVES = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> STOMPING_BARRELS = new Object2ObjectOpenHashMap<>();
+    public static final Map<TFGWood, BlockEntry<? extends Block>> BARREL_PRESSES = new Object2ObjectOpenHashMap<>();
 
     public static void init() {
-        for (WoodType value : WoodType.values()) {
-            registerBlocks(value);
-
+        TFGWood.registerBlockSetTypes();
+        for (TFGWood value : TFGWood.VALUES) {
+            registerWood(value);
+            if (!value.serializedName.equals("ginkgo")) {
+                // Do not touch!
+                BlockEntry<? extends Block> wallSign = wallSign(value);
+                SIGN.put(value, sign(value, wallSign));
+                WALL_SIGN.put(value, wallSign);
+                BlockEntry<? extends Block> wallHangingSign = wallHangingSign(value);
+                HANGING_SIGN.put(value, hangingSign(value, wallHangingSign));
+                HANGING_WALL_SIGN.put(value, wallHangingSign);
+            }
             FOOD_SHELVES.put(value, foodShelf(value));
             HANGERS.put(value, hanger(value));
             JARBNETS.put(value, jarbnet(value));
@@ -159,32 +93,308 @@ public class TFGBlocks_Wood {
         }
     }
 
-    private static void registerBlocks(WoodType woodType) {
+    private static void registerWood(TFGWood wood) {
         Map<Wood.BlockType, BlockEntry<? extends Block>> blocks = new Object2ObjectOpenHashMap<>();
 
-        blocks.put(Wood.BlockType.TOOL_RACK, toolRack(woodType));
-        blocks.put(Wood.BlockType.WORKBENCH, workbench(woodType));
-        blocks.put(Wood.BlockType.CHEST, chest(woodType));
-        blocks.put(Wood.BlockType.TRAPPED_CHEST, trappedChest(woodType));
-        blocks.put(Wood.BlockType.LOOM, loom(woodType));
-        blocks.put(Wood.BlockType.SLUICE, sluice(woodType));
-        blocks.put(Wood.BlockType.BARREL, barrel(woodType));
-        blocks.put(Wood.BlockType.LECTERN, lectern(woodType));
-        blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(woodType));
-        blocks.put(Wood.BlockType.SEWING_TABLE, sewingTable(woodType));
-        blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(woodType));
-        blocks.put(Wood.BlockType.BOOKSHELF, bookshelf(woodType));
+        if (wood.generateWood) {
+            blocks.put(Wood.BlockType.LOG, log(wood, blocks));
+            blocks.put(Wood.BlockType.STRIPPED_LOG, stripped_log(wood));
+            blocks.put(Wood.BlockType.WOOD, wood(wood, blocks));
+            blocks.put(Wood.BlockType.STRIPPED_WOOD, stripped_wood(wood));
+            blocks.put(Wood.BlockType.PLANKS, plank(wood));
+            blocks.put(Wood.BlockType.DOOR, door(wood));
+            blocks.put(Wood.BlockType.TRAPDOOR, trapdoor(wood));
+            blocks.put(Wood.BlockType.FENCE, fence(wood));
+            blocks.put(Wood.BlockType.FENCE_GATE, fenceGate(wood));
+            blocks.put(Wood.BlockType.BUTTON, button(wood));
+            blocks.put(Wood.BlockType.PRESSURE_PLATE, pressurePlate(wood));
+            blocks.put(Wood.BlockType.SLAB, slab(wood));
+            blocks.put(Wood.BlockType.STAIRS, stairs(wood));
+            blocks.put(Wood.BlockType.TWIG, twig(wood));
+        }
 
-        WOOD_BLOCKS.put(woodType, blocks);
+        blocks.put(Wood.BlockType.LOG_FENCE, logFence(wood));
+        blocks.put(Wood.BlockType.BOOKSHELF, bookshelf(wood));
+        blocks.put(Wood.BlockType.TOOL_RACK, toolRack(wood));
+        blocks.put(Wood.BlockType.WORKBENCH, workbench(wood));
+        blocks.put(Wood.BlockType.TRAPPED_CHEST, trappedChest(wood));
+        blocks.put(Wood.BlockType.CHEST, chest(wood));
+        blocks.put(Wood.BlockType.LOOM, loom(wood));
+        blocks.put(Wood.BlockType.SLUICE, sluice(wood));
+        blocks.put(Wood.BlockType.BARREL, barrel(wood));
+        blocks.put(Wood.BlockType.LECTERN, lectern(wood));
+        blocks.put(Wood.BlockType.SCRIBING_TABLE, scribingTable(wood));
+        blocks.put(Wood.BlockType.SEWING_TABLE, sewingTable(wood));
+        blocks.put(Wood.BlockType.JAR_SHELF, jarShelf(wood));
+
+        WOODS.put(wood, blocks);
     }
 
-    private static BlockEntry<Block> toolRack(WoodType woodType) {
-        var toolRackBlock = Wood.BlockType.TOOL_RACK.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/tool_rack/" + woodType.name, p -> toolRackBlock)
+    private static BlockEntry<LogBlock> log(TFGWood wood, Map<Wood.BlockType, BlockEntry<? extends Block>> blocks) {
+        var properties = ExtendedProperties.of(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? wood.woodColor() : wood.barkColor()).strength(8f).sound(SoundType.WOOD)
+                .instrument(NoteBlockInstrument.BASS).requiresCorrectToolForDrops().flammableLikeLogs();
+
+        return TFGCore.REGISTRATE.block("wood/log/" + wood.serializedName, p -> new LogBlock(properties, blocks.get(Wood.BlockType.STRIPPED_LOG)))
+                .blockstate((ctx, prov) -> {
+                    prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log_top/" + wood.serializedName));
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item()
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                        TFGCore.id("item/wood/log/" + wood.serializedName)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
+                .register();
+    }
+
+    private static BlockEntry<LogBlock> stripped_log(TFGWood wood) {
+        var properties = ExtendedProperties.of(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? wood.woodColor() : wood.barkColor()).strength(7.5f).sound(SoundType.WOOD)
+                .instrument(NoteBlockInstrument.BASS).requiresCorrectToolForDrops().flammableLikeLogs();
+        return TFGCore.REGISTRATE.block("wood/stripped_log/" + wood.serializedName, p -> new LogBlock(properties, null))
+                .blockstate((ctx, prov) -> {
+                    prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log_top/" + wood.serializedName));
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item()
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                        TFGCore.id("item/wood/stripped_log/" + wood.serializedName)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
+                .register();
+    }
+
+    private static BlockEntry<LogBlock> wood(TFGWood wood, Map<Wood.BlockType, BlockEntry<? extends Block>> blocks) {
+        var properties = ExtendedProperties.of(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? wood.woodColor() : wood.barkColor()).strength(8f).sound(SoundType.WOOD)
+                .instrument(NoteBlockInstrument.BASS).requiresCorrectToolForDrops().flammableLikeLogs();
+
+        return TFGCore.REGISTRATE.block("wood/wood/" + wood.serializedName, p -> new LogBlock(properties, blocks.get(Wood.BlockType.STRIPPED_LOG)))
+                .blockstate((ctx, prov) -> {
+                    prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log/" + wood.serializedName));
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item()
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                        TFGCore.id("item/wood/wood/" + wood.serializedName)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
+                .register();
+    }
+
+    private static BlockEntry<LogBlock> stripped_wood(TFGWood wood) {
+        var properties = ExtendedProperties.of().mapColor(wood.woodColor).strength(7.5f).sound(SoundType.WOOD).requiresCorrectToolForDrops().flammableLikeLogs();
+        return TFGCore.REGISTRATE.block("wood/stripped_wood/" + wood.serializedName, p -> new LogBlock(properties, null))
+                .blockstate((ctx, prov) -> {
+                    prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log/" + wood.serializedName));
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item()
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                        TFGCore.id("item/wood/stripped_wood/" + wood.serializedName)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> plank(TFGWood wood) {
+        var plankBlock = Wood.BlockType.PLANKS.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/planks/" + wood.serializedName, p -> plankBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.simpleBlock(ctx.getEntry());
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("planks")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("planks"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> door(TFGWood wood) {
+        var doorBlock = Wood.BlockType.DOOR.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/door/" + wood.serializedName, p -> doorBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.doorBlock((DoorBlock) ctx.getEntry(), TFGCore.id("block/wood/door/" + wood.serializedName + "_bottom"), TFGCore.id("block/wood/door/" + wood.serializedName + "_top"));
+                })
+                .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("doors")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item()
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                        TFGCore.id("item/wood/door/" + wood.serializedName)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("doors"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> trapdoor(TFGWood wood) {
+        var trapdoorBlock = Wood.BlockType.TRAPDOOR.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/trapdoor/" + wood.serializedName, p -> trapdoorBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.trapdoorBlock((TrapDoorBlock) ctx.getEntry(), TFGCore.id("block/wood/trapdoor/" + wood.serializedName), true);
+                })
+                .addLayer(() -> RenderType::cutout)
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("trapdoors")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/trapdoor/" + wood.serializedName + "_bottom")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("trapdoors"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> fence(TFGWood wood) {
+        var fenceBlock = Wood.BlockType.FENCE.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/fence/" + wood.serializedName, p -> fenceBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.models().withExistingParent(ctx.getName() + "_inventory", ResourceLocation.withDefaultNamespace("block/fence_inventory"))
+                            .texture("texture", TFGCore.id("block/wood/planks/" + wood.serializedName));
+
+                    prov.fenceBlock((FenceBlock) ctx.getEntry(), TFGCore.id("block/wood/planks/" + wood.serializedName));
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("fences")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/fence/" + wood.serializedName + "_inventory")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("fences"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> logFence(TFGWood wood) {
+        var logFenceBlock = Wood.BlockType.LOG_FENCE.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/log_fence/" + wood.serializedName, p -> logFenceBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.models().withExistingParent(ctx.getName() + "_inventory", ResourceLocation.fromNamespaceAndPath("tfc", "block/log_fence_inventory"))
+                            .texture("log", wood.logTexture)
+                            .texture("planks", wood.plankTexture);
+
+                    ModelFile modelSide = prov.models().withExistingParent(ctx.getName() + "_side", ResourceLocation.withDefaultNamespace("block/fence_side"))
+                            .texture("texture", wood.plankTexture);
+
+                    ModelFile modelPost = prov.models().withExistingParent(ctx.getName() + "_post", ResourceLocation.withDefaultNamespace("block/fence_post"))
+                            .texture("texture", wood.logTexture);
+
+                    prov.getMultipartBuilder(ctx.getEntry()).part().modelFile(modelPost).addModel().end()
+                            .part().modelFile(modelSide).uvLock(true).addModel().condition(BlockStateProperties.NORTH, true).end()
+                            .part().modelFile(modelSide).rotationY(90).uvLock(true).addModel().condition(BlockStateProperties.EAST, true).end()
+                            .part().modelFile(modelSide).rotationY(180).uvLock(true).addModel().condition(BlockStateProperties.SOUTH, true).end()
+                            .part().modelFile(modelSide).rotationY(270).uvLock(true).addModel().condition(BlockStateProperties.WEST, true).end();
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("fences")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/log_fence/" + wood.serializedName + "_inventory")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("fences"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> fenceGate(TFGWood wood) {
+        var fenceGateBlock = Wood.BlockType.FENCE_GATE.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/fence_gate/" + wood.serializedName, p -> fenceGateBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.fenceGateBlock((FenceGateBlock) ctx.getEntry(), TFGCore.id("block/wood/planks/" + wood.serializedName));
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("fence_gates")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("fence_gates"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> button(TFGWood wood) {
+        var buttonBlock = Wood.BlockType.BUTTON.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/button/" + wood.serializedName, p -> buttonBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.models().withExistingParent(ctx.getName() + "_inventory", ResourceLocation.withDefaultNamespace("block/button_inventory"))
+                            .texture("texture", TFGCore.id("block/wood/planks/" + wood.serializedName));
+
+                    prov.buttonBlock((ButtonBlock) ctx.getEntry(), TFGCore.id("block/wood/planks/" + wood.serializedName));
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("buttons")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/button/" + wood.serializedName + "_inventory")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("buttons"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> pressurePlate(TFGWood wood) {
+        var pressurePlateBlock = Wood.BlockType.PRESSURE_PLATE.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/pressure_plate/" + wood.serializedName, p -> pressurePlateBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.pressurePlateBlock((PressurePlateBlock) ctx.getEntry(), TFGCore.id("block/wood/planks/" + wood.serializedName));
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("pressure_plates")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("pressure_plates"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> slab(TFGWood wood) {
+        var slabBlock = Wood.BlockType.SLAB.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/slab/" + wood.serializedName, p -> slabBlock)
+                .blockstate((ctx, prov) -> {
+                    ModelFile modelTop = prov.models().withExistingParent(ctx.getName() + "_top", ResourceLocation.withDefaultNamespace("block/slab_top"))
+                            .texture("top", wood.plankTexture)
+                            .texture("bottom", wood.plankTexture)
+                            .texture("side", wood.plankTexture);
+
+                    ModelFile modelBottom = prov.models().withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("block/slab"))
+                            .texture("top", wood.plankTexture)
+                            .texture("bottom", wood.plankTexture)
+                            .texture("side", wood.plankTexture);
+
+                    ModelFile modelDouble = prov.models().getExistingFile(TFGCore.id("block/wood/planks/" + wood.serializedName));
+
+                    prov.slabBlock((SlabBlock) ctx.getEntry(), modelBottom, modelTop, modelDouble);
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("slabs")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("slabs"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> stairs(TFGWood wood) {
+        var stairsBlock = Wood.BlockType.STAIRS.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/stairs/" + wood.serializedName, p -> stairsBlock)
+                .blockstate((ctx, prov) -> {
+                    prov.stairsBlock((StairBlock) ctx.getEntry(), wood.plankTexture);
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("stairs")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("stairs"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> twig(TFGWood wood) {
+        var twigBlock = Wood.BlockType.TWIG.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/twig/" + wood.serializedName, p -> twigBlock)
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/groundcover/twig"))
+                            .texture("side", wood.logTexture)
+                            .texture("top", TFGCore.id("block/wood/log_top/" + wood.serializedName));
+
+                    ModelUtils.blockVariantsRotated(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item()
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                        TFGCore.id("item/wood/twig/" + wood.serializedName)))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden"))).build()
+                .register();
+    }
+
+    private static BlockEntry<Block> toolRack(TFGWood wood) {
+        var toolRackBlock = Wood.BlockType.TOOL_RACK.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/tool_rack/" + wood.serializedName, p -> toolRackBlock)
                 .blockstate((ctx, prov) -> {
                     ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/tool_rack"))
-                            .texture("texture", woodType.plankTexture)
-                            .texture("particle", woodType.plankTexture);
+                            .texture("texture", wood.plankTexture)
+                            .texture("particle", wood.plankTexture);
 
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
@@ -199,13 +409,14 @@ public class TFGBlocks_Wood {
                 .register();
     }
 
-    private static BlockEntry<Block> workbench(WoodType woodType) {
-        var workbenchBlock = Wood.BlockType.WORKBENCH.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/workbench/" + woodType.name, p -> workbenchBlock)
+    private static BlockEntry<Block> workbench(TFGWood wood) {
+        var workbenchBlock = Wood.BlockType.WORKBENCH.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/workbench/" + wood.serializedName, p -> workbenchBlock)
                 .blockstate((ctx, prov) -> {
-                    ResourceLocation path = TFGCore.id("block/wood/workbench/" + woodType.name);
-                    prov.simpleBlock(ctx.getEntry(), prov.models().cube(ctx.getName(), woodType.plankTexture, path.withSuffix("_top"), path.withSuffix("_front"),
-                            path.withSuffix("_side"), path.withSuffix("_side"), path.withSuffix("_front")));
+                    ResourceLocation path = TFGCore.id("block/wood/workbench/" + wood.serializedName);
+                    prov.simpleBlock(ctx.getEntry(), prov.models().cube(ctx.getName(), wood.plankTexture, path.withSuffix("_top"), path.withSuffix("_front"),
+                            path.withSuffix("_side"), path.withSuffix("_side"), path.withSuffix("_front"))
+                            .texture("particle", path.withSuffix("_front")));
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "workbenches")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
@@ -214,11 +425,11 @@ public class TFGBlocks_Wood {
                 .register();
     }
 
-    private static BlockEntry<Block> chest(WoodType woodType) {
-        var chestBlock = Wood.BlockType.CHEST.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/chest/" + woodType.name, p -> chestBlock)
+    private static BlockEntry<Block> chest(TFGWood wood) {
+        var chestBlock = Wood.BlockType.CHEST.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/chest/" + wood.serializedName, p -> chestBlock)
                 .blockstate((ctx, prov) -> {
-                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
+                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", wood.plankTexture));
                 })
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests")))
@@ -226,20 +437,20 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.CHEST, block);
                 })
-                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood))
+                .item((b, i) -> new ChestBlockItem(b, i, wood))
                 .model((ctx, prov) -> {
                     prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
-                            .texture("particle", woodType.plankTexture);
+                            .texture("particle", wood.plankTexture);
                 })
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests"))).build()
                 .register();
     }
 
-    private static BlockEntry<Block> trappedChest(WoodType woodType) {
-        var trappedChestBlock = Wood.BlockType.TRAPPED_CHEST.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/trapped_chest/" + woodType.name, p -> trappedChestBlock)
+    private static BlockEntry<Block> trappedChest(TFGWood wood) {
+        var trappedChestBlock = Wood.BlockType.TRAPPED_CHEST.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/trapped_chest/" + wood.serializedName, p -> trappedChestBlock)
                 .blockstate((ctx, prov) -> {
-                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", woodType.plankTexture));
+                    prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", wood.plankTexture));
                 })
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests")))
@@ -247,22 +458,22 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TRAPPED_CHEST, block);
                 })
-                .item((b, i) -> new ChestBlockItem(b, i, woodType.registryWood))
+                .item((b, i) -> new ChestBlockItem(b, i, wood))
                 .model((ctx, prov) -> {
                     prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
-                            .texture("particle", woodType.plankTexture);
+                            .texture("particle", wood.plankTexture);
                 })
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests"))).build()
                 .register();
     }
 
-    private static BlockEntry<Block> loom(WoodType woodType) {
-        var loomBlock = Wood.BlockType.LOOM.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/loom/" + woodType.name, p -> loomBlock)
+    private static BlockEntry<Block> loom(TFGWood wood) {
+        var loomBlock = Wood.BlockType.LOOM.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/loom/" + wood.serializedName, p -> loomBlock)
                 .blockstate((ctx, prov) -> {
                     ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/loom"))
-                            .texture("texture", woodType.plankTexture)
-                            .texture("particle", woodType.plankTexture);
+                            .texture("texture", wood.plankTexture)
+                            .texture("particle", wood.plankTexture);
 
                     ModelUtils.cardinalBlockInverted(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
@@ -278,15 +489,15 @@ public class TFGBlocks_Wood {
 
     }
 
-    private static BlockEntry<Block> sluice(WoodType woodType) {
-        var sluiceBlock = Wood.BlockType.SLUICE.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/sluice/" + woodType.name, p -> sluiceBlock)
+    private static BlockEntry<Block> sluice(TFGWood wood) {
+        var sluiceBlock = Wood.BlockType.SLUICE.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/sluice/" + wood.serializedName, p -> sluiceBlock)
                 .blockstate((ctx, prov) -> {
 
-                    ModelFile sluiceUpper = prov.models().withExistingParent("wood/sluice/" + woodType.name + "_upper", ResourceLocation.fromNamespaceAndPath("tfc", "block/sluice_upper"))
-                            .texture("texture", TFGCore.id("block/wood/sheet/" + woodType.name));
-                    ModelFile sluiceLower = prov.models().withExistingParent("wood/sluice/" + woodType.name + "_lower", ResourceLocation.fromNamespaceAndPath("tfc", "block/sluice_lower"))
-                            .texture("texture", TFGCore.id("block/wood/sheet/" + woodType.name));
+                    ModelFile sluiceUpper = prov.models().withExistingParent("wood/sluice/" + wood.serializedName + "_upper", ResourceLocation.fromNamespaceAndPath("tfc", "block/sluice_upper"))
+                            .texture("texture", TFGCore.id("block/wood/sheet/" + wood.serializedName));
+                    ModelFile sluiceLower = prov.models().withExistingParent("wood/sluice/" + wood.serializedName + "_lower", ResourceLocation.fromNamespaceAndPath("tfc", "block/sluice_lower"))
+                            .texture("texture", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
                     var builder = prov.getVariantBuilder(ctx.getEntry());
 
@@ -299,47 +510,115 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.SLUICE, block);
                 })
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + woodType.name + "_lower")))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/sluice/" + wood.serializedName + "_lower")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "sluices"))).build()
                 .register();
     }
 
-    private static BlockEntry<BarrelBlock> barrel(WoodType woodType) {
-        var barrelBlock = Wood.BlockType.BARREL.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/barrel/" + woodType.name, p -> (BarrelBlock) barrelBlock)
+    // Signs use GT's way of doing it because TFC's just break.
+    // Unless you know what you are doing, please do not touch the code!
+    private static BlockEntry<GTStandingSignBlock> sign(TFGWood wood, BlockEntry<? extends Block> wallSign) {
+        return TFGCore.REGISTRATE.block("wood/sign/" + wood.serializedName, (p) -> new GTStandingSignBlock(p, wood.getVanillaWoodType()))
+                .initialProperties(() -> Blocks.SPRUCE_SIGN)
+                .blockstate((ctx, prov) -> {
+                    prov.signBlock(ctx.getEntry(), (WallSignBlock) wallSign.get(), wood.plankTexture);
+                })
+                .tag(BlockTags.STANDING_SIGNS, BlockTags.MINEABLE_WITH_AXE)
+                .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(GTBlockEntities.GT_SIGN, block);
+                })
+                .item((ctx, prov) -> new SignItem(prov, ctx, wallSign.get()))
+                .defaultModel()
+                .tag(ItemTags.SIGNS)
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<GTWallSignBlock> wallSign(TFGWood wood) {
+        return TFGCore.REGISTRATE.block("wood/wall_sign/" + wood.serializedName, (p) -> new GTWallSignBlock(p, wood.getVanillaWoodType()))
+                .initialProperties(() -> Blocks.SPRUCE_WALL_SIGN)
+                .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+                .tag(BlockTags.WALL_SIGNS, BlockTags.MINEABLE_WITH_AXE)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(GTBlockEntities.GT_SIGN, block);
+                })
+                .register();
+    }
+
+    private static BlockEntry<GTCeilingHangingSignBlock> hangingSign(TFGWood wood, BlockEntry<? extends Block> wallHangingSign) {
+        return TFGCore.REGISTRATE.block("wood/hanging_sign/" + wood.serializedName, (p) -> new GTCeilingHangingSignBlock(p, wood.getVanillaWoodType()))
+                .initialProperties(() -> Blocks.SPRUCE_HANGING_SIGN)
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().sign(ctx.getName(), wood.plankTexture);
+
+                    prov.simpleBlock(ctx.getEntry(), model);
+                })
+                .tag(BlockTags.CEILING_HANGING_SIGNS, BlockTags.MINEABLE_WITH_AXE)
+                .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(GTBlockEntities.GT_HANGING_SIGN, block);
+                })
+                .item((ctx, prov) -> new HangingSignItem(ctx, wallHangingSign.get(), prov))
+                .defaultModel()
+                .tag(ItemTags.HANGING_SIGNS)
+                .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<GTWallHangingSignBlock> wallHangingSign(TFGWood wood) {
+        return TFGCore.REGISTRATE.block("wood/wall_hanging_sign/" + wood.serializedName, (p) -> new GTWallHangingSignBlock(p, wood.getVanillaWoodType()))
+                .initialProperties(() -> Blocks.SPRUCE_WALL_HANGING_SIGN)
+                .blockstate((ctx, prov) -> {
+                    ModelFile model = prov.models().sign(ctx.getName(), wood.plankTexture);
+
+                    prov.simpleBlock(ctx.getEntry(), model);
+                })
+                .tag(BlockTags.WALL_HANGING_SIGNS, BlockTags.MINEABLE_WITH_AXE)
+                .onRegister(block -> {
+                    TFGBlockEntities.addValidBEBlock(GTBlockEntities.GT_HANGING_SIGN, block);
+                })
+                .register();
+    }
+
+    private static BlockEntry<BarrelBlock> barrel(TFGWood wood) {
+        var barrelBlock = Wood.BlockType.BARREL.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/barrel/" + wood.serializedName, p -> (BarrelBlock) barrelBlock)
                 .blockstate((ctx, prov) -> {
 
-                    ModelFile barrel = prov.models().withExistingParent("wood/barrel/" + woodType.name, ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel"))
-                            .texture("particle", woodType.plankTexture)
-                            .texture("planks", woodType.plankTexture)
-                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+                    ModelFile barrel = prov.models().withExistingParent("wood/barrel/" + wood.serializedName, ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel"))
+                            .texture("particle", wood.plankTexture)
+                            .texture("planks", wood.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
-                    ModelFile barrelSide = prov.models().withExistingParent("wood/barrel/" + woodType.name + "_side", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side"))
-                            .texture("particle", woodType.plankTexture)
-                            .texture("planks", woodType.plankTexture)
-                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+                    ModelFile barrelSide = prov.models().withExistingParent("wood/barrel/" + wood.serializedName + "_side", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side"))
+                            .texture("particle", wood.plankTexture)
+                            .texture("planks", wood.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
-                    ModelFile barrelSideRack = prov.models().withExistingParent("wood/barrel/" + woodType.name + "_side_rack", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_rack"))
-                            .texture("particle", woodType.plankTexture)
-                            .texture("planks", woodType.plankTexture)
-                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+                    ModelFile barrelSideRack = prov.models()
+                            .withExistingParent("wood/barrel/" + wood.serializedName + "_side_rack", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_rack"))
+                            .texture("particle", wood.plankTexture)
+                            .texture("planks", wood.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
-                    ModelFile sealedBarrel = prov.models().withExistingParent("wood/barrel_sealed/" + woodType.name, ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_sealed"))
-                            .texture("particle", woodType.plankTexture)
-                            .texture("planks", woodType.plankTexture)
-                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+                    ModelFile sealedBarrel = prov.models().withExistingParent("wood/barrel_sealed/" + wood.serializedName, ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_sealed"))
+                            .texture("particle", wood.plankTexture)
+                            .texture("planks", wood.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
                     ModelFile sealedBarrelSide = prov.models()
-                            .withExistingParent("wood/barrel_sealed/" + woodType.name + "_side", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_sealed"))
-                            .texture("particle", woodType.plankTexture)
-                            .texture("planks", woodType.plankTexture)
-                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+                            .withExistingParent("wood/barrel_sealed/" + wood.serializedName + "_side", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_sealed"))
+                            .texture("particle", wood.plankTexture)
+                            .texture("planks", wood.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
                     ModelFile sealedBarrelSideRack = prov.models()
-                            .withExistingParent("wood/barrel_sealed/" + woodType.name + "_side_rack", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_sealed_rack"))
-                            .texture("particle", woodType.plankTexture)
-                            .texture("planks", woodType.plankTexture)
-                            .texture("sheet", TFGCore.id("block/wood/sheet/" + woodType.name));
+                            .withExistingParent("wood/barrel_sealed/" + wood.serializedName + "_side_rack", ResourceLocation.fromNamespaceAndPath("tfc", "block/barrel_side_sealed_rack"))
+                            .texture("particle", wood.plankTexture)
+                            .texture("planks", wood.plankTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
                     var builder = prov.getVariantBuilder(ctx.getEntry());
 
@@ -371,13 +650,14 @@ public class TFGBlocks_Wood {
                 .modelFile(sealedRack).addModel();
     }
 
-    private static BlockEntry<Block> lectern(WoodType woodType) {
-        var lecternBlock = Wood.BlockType.LECTERN.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/lectern/" + woodType.name, p -> lecternBlock)
+    private static BlockEntry<Block> lectern(TFGWood wood) {
+        var lecternBlock = Wood.BlockType.LECTERN.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/lectern/" + wood.serializedName, p -> lecternBlock)
                 .blockstate((ctx, prov) -> {
-                    var path = "block/wood/lectern/" + woodType.name + "/";
+
+                    var path = "block/wood/lectern/" + wood.serializedName + "/";
                     ModelFile model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("block/lectern"))
-                            .texture("bottom", woodType.plankTexture)
+                            .texture("bottom", wood.plankTexture)
                             .texture("base", TFGCore.id(path + "base"))
                             .texture("front", TFGCore.id(path + "front"))
                             .texture("sides", TFGCore.id(path + "sides"))
@@ -398,19 +678,20 @@ public class TFGBlocks_Wood {
 
     }
 
-    private static BlockEntry<Block> scribingTable(WoodType woodType) {
-        var scribingTableBlock = Wood.BlockType.SCRIBING_TABLE.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/scribing_table/" + woodType.name, p -> scribingTableBlock)
+    private static BlockEntry<Block> scribingTable(TFGWood wood) {
+        var scribingTableBlock = Wood.BlockType.SCRIBING_TABLE.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/scribing_table/" + wood.serializedName, p -> scribingTableBlock)
                 .blockstate((ctx, prov) -> {
                     var model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/scribing_table"))
-                            .texture("top", TFGCore.id("block/wood/scribing_table/" + woodType.name))
-                            .texture("leg", woodType.logTexture)
-                            .texture("side", woodType.plankTexture)
+                            .texture("top", TFGCore.id("block/wood/scribing_table/" + wood.serializedName))
+                            .texture("leg", wood.logTexture)
+                            .texture("side", wood.plankTexture)
                             .texture("misc", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/scribing_table/scribing_paraphernalia"))
-                            .texture("particle", woodType.plankTexture);
+                            .texture("particle", wood.plankTexture);
 
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
+                .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "scribing_tables")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
@@ -419,13 +700,13 @@ public class TFGBlocks_Wood {
 
     }
 
-    private static BlockEntry<Block> sewingTable(WoodType woodType) {
-        var sewingTableBlock = Wood.BlockType.SEWING_TABLE.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/sewing_table/" + woodType.name, p -> sewingTableBlock)
+    private static BlockEntry<Block> sewingTable(TFGWood wood) {
+        var sewingTableBlock = Wood.BlockType.SEWING_TABLE.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/sewing_table/" + wood.serializedName, p -> sewingTableBlock)
                 .blockstate((ctx, prov) -> {
                     var model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/sewing_table"))
-                            .texture("0", woodType.logTexture)
-                            .texture("1", woodType.plankTexture);
+                            .texture("0", wood.logTexture)
+                            .texture("1", wood.plankTexture);
 
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
@@ -437,12 +718,12 @@ public class TFGBlocks_Wood {
                 .register();
     }
 
-    private static BlockEntry<Block> jarShelf(WoodType woodType) {
-        var jarShelfBlock = Wood.BlockType.JAR_SHELF.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/jar_shelf/" + woodType.name, p -> jarShelfBlock)
+    private static BlockEntry<Block> jarShelf(TFGWood wood) {
+        var jarShelfBlock = Wood.BlockType.JAR_SHELF.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/jar_shelf/" + wood.serializedName, p -> jarShelfBlock)
                 .blockstate((ctx, prov) -> {
                     var model = prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/jar_shelf"))
-                            .texture("0", woodType.plankTexture);
+                            .texture("0", wood.plankTexture);
 
                     ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
@@ -454,20 +735,20 @@ public class TFGBlocks_Wood {
 
     }
 
-    private static BlockEntry<Block> bookshelf(WoodType woodType) {
-        var bookshelfBlock = Wood.BlockType.BOOKSHELF.create(woodType.registryWood).get();
-        return TFGCore.REGISTRATE.block("wood/bookshelf/" + woodType.name, p -> bookshelfBlock)
+    private static BlockEntry<Block> bookshelf(TFGWood wood) {
+        var bookshelfBlock = Wood.BlockType.BOOKSHELF.create(wood).get();
+        return TFGCore.REGISTRATE.block("wood/bookshelf/" + wood.serializedName, p -> bookshelfBlock)
                 .blockstate((ctx, prov) -> {
                     prov.models()
-                            .withExistingParent("wood/bookshelf/" + woodType.name + "_inventory", ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf_inventory"))
-                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
-                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"))
-                            .texture("front", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_empty"));
+                            .withExistingParent("wood/bookshelf/" + wood.serializedName + "_inventory", ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf_inventory"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + wood.serializedName + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + wood.serializedName + "_side"))
+                            .texture("front", TFGCore.id("block/wood/bookshelf/" + wood.serializedName + "_empty"));
 
                     ModelFile base = prov.models()
-                            .withExistingParent("wood/bookshelf/" + woodType.name, ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf"))
-                            .texture("top", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_top"))
-                            .texture("side", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_side"));
+                            .withExistingParent("wood/bookshelf/" + wood.serializedName, ResourceLocation.withDefaultNamespace("block/chiseled_bookshelf"))
+                            .texture("top", TFGCore.id("block/wood/bookshelf/" + wood.serializedName + "_top"))
+                            .texture("side", TFGCore.id("block/wood/bookshelf/" + wood.serializedName + "_side"));
 
                     var builder = prov.getMultipartBuilder(ctx.getEntry());
 
@@ -505,7 +786,7 @@ public class TFGBlocks_Wood {
                                         .withExistingParent(
                                                 ctx.getName() + "_" + state + "_" + vertical[i] + "_" + horizontal[i],
                                                 "block/chiseled_bookshelf_" + state + "_slot_" + vertical[i] + "_" + horizontal[i])
-                                        .texture("texture", TFGCore.id("block/wood/bookshelf/" + woodType.name + "_" + state));
+                                        .texture("texture", TFGCore.id("block/wood/bookshelf/" + wood.serializedName + "_" + state));
 
                                 builder.part()
                                         .modelFile(model)
@@ -518,7 +799,7 @@ public class TFGBlocks_Wood {
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/bookshelf/" + woodType.name + "_inventory")))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/bookshelf/" + wood.serializedName + "_inventory")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "bookshelves"))).build()
                 .register();
     }
@@ -546,14 +827,15 @@ public class TFGBlocks_Wood {
         }
     }
 
-    private static BlockEntry<FoodShelfBlock> foodShelf(WoodType type) {
-        return TFGCore.REGISTRATE.block("wood/food_shelf/" + type.name, p -> new FoodShelfBlock(shelfProperties().mapColor(type.registryWood.woodColor())))
+    private static BlockEntry<FoodShelfBlock> foodShelf(TFGWood wood) {
+        return TFGCore.REGISTRATE.block("wood/food_shelf/" + wood.serializedName, p -> new FoodShelfBlock(shelfProperties().mapColor(wood.woodColor())))
                 .blockstate((ctx, prov) -> {
                     prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/food_shelf_base"))
-                            .texture("wood", type.plankTexture);
+                            .texture("wood", wood.plankTexture);
 
-                    var dynamicModel = prov.models().getBuilder("wood/food_shelf/" + type.name + "_dynamic")
-                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelf"), TFGCore.id("block/wood/food_shelf/" + type.name), t,
+                    var dynamicModel = prov.models().getBuilder("wood/food_shelf/" + wood.serializedName + "_dynamic")
+                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelf"),
+                                    TFGCore.id("block/wood/food_shelf/" + wood.serializedName), t,
                                     existing))
                             .end();
 
@@ -562,21 +844,22 @@ public class TFGBlocks_Wood {
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelves")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + type.name)))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/food_shelf/" + wood.serializedName)))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "food_shelves"))).build()
                 .register();
     }
 
-    private static BlockEntry<HangerBlock> hanger(WoodType type) {
-        return TFGCore.REGISTRATE.block("wood/hanger/" + type.name, p -> new HangerBlock(hangerProperties().mapColor(type.registryWood.woodColor())))
+    private static BlockEntry<HangerBlock> hanger(TFGWood wood) {
+        return TFGCore.REGISTRATE.block("wood/hanger/" + wood.serializedName, p -> new HangerBlock(hangerProperties().mapColor(wood.woodColor())))
                 .blockstate((ctx, prov) -> {
                     prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/hanger_base"))
-                            .texture("wood", type.plankTexture)
+                            .texture("wood", wood.plankTexture)
                             .texture("string", ResourceLocation.withDefaultNamespace("block/white_wool"));
 
-                    var dynamicModel = prov.models().getBuilder("wood/hanger/" + type.name + "_dynamic")
+                    var dynamicModel = prov.models().getBuilder("wood/hanger/" + wood.serializedName + "_dynamic")
                             .customLoader(
-                                    (t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "hanger"), TFGCore.id("block/wood/hanger/" + type.name), t, existing))
+                                    (t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "hanger"), TFGCore.id("block/wood/hanger/" + wood.serializedName), t,
+                                            existing))
                             .end();
 
                     prov.simpleBlock(ctx.getEntry(), dynamicModel);
@@ -584,32 +867,34 @@ public class TFGBlocks_Wood {
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "hangers")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + type.name)))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/hanger/" + wood.serializedName)))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "hangers"))).build()
                 .register();
 
     }
 
-    private static BlockEntry<JarbnetBlock> jarbnet(WoodType type) {
-        return TFGCore.REGISTRATE.block("wood/jarbnet/" + type.name, p -> new JarbnetBlock(jarbnetProperties().mapColor(type.registryWood.woodColor())))
+    private static BlockEntry<JarbnetBlock> jarbnet(TFGWood wood) {
+        return TFGCore.REGISTRATE.block("wood/jarbnet/" + wood.serializedName, p -> new JarbnetBlock(jarbnetProperties().mapColor(wood.woodColor())))
                 .blockstate((ctx, prov) -> {
                     prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/jarbnet"))
-                            .texture("planks", type.plankTexture)
-                            .texture("log", type.logTexture)
-                            .texture("sheet", TFGCore.id("block/wood/sheet/" + type.name));
+                            .texture("planks", wood.plankTexture)
+                            .texture("log", wood.logTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
                     prov.models().withExistingParent(ctx.getName() + "_shut", ResourceLocation.fromNamespaceAndPath("firmalife", "block/jarbnet_shut"))
-                            .texture("planks", type.plankTexture)
-                            .texture("log", type.logTexture)
-                            .texture("sheet", TFGCore.id("block/wood/sheet/" + type.name));
+                            .texture("planks", wood.plankTexture)
+                            .texture("log", wood.logTexture)
+                            .texture("sheet", TFGCore.id("block/wood/sheet/" + wood.serializedName));
 
-                    var dynamicModel = prov.models().getBuilder("wood/jarbnet/" + type.name + "_dynamic")
+                    var dynamicModel = prov.models().getBuilder("wood/jarbnet/" + wood.serializedName + "_dynamic")
                             .customLoader(
-                                    (t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnet"), TFGCore.id("block/wood/jarbnet/" + type.name), t, existing))
+                                    (t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnet"), TFGCore.id("block/wood/jarbnet/" + wood.serializedName), t,
+                                            existing))
                             .end();
 
-                    var dynamicModelShut = prov.models().getBuilder("wood/jarbnet/" + type.name + "_shut_dynamic")
-                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnet"), TFGCore.id("block/wood/jarbnet/" + type.name + "_shut"),
+                    var dynamicModelShut = prov.models().getBuilder("wood/jarbnet/" + wood.serializedName + "_shut_dynamic")
+                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnet"),
+                                    TFGCore.id("block/wood/jarbnet/" + wood.serializedName + "_shut"),
                                     t, existing))
                             .end();
 
@@ -621,39 +906,39 @@ public class TFGBlocks_Wood {
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnets")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + type.name)))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/jarbnet/" + wood.serializedName)))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "jarbnets"))).build()
                 .register();
 
     }
 
-    private static BlockModelBuilder bigBarrelTextures(BlockModelBuilder builder, WoodType type) {
-        return builder.texture("0", TFGCore.id("block/wood/big_barrel/" + type.name + "_3_side"))
-                .texture("1", TFGCore.id("block/wood/big_barrel/" + type.name + "_0"))
-                .texture("2", TFGCore.id("block/wood/big_barrel/" + type.name + "_0_side"))
-                .texture("3", TFGCore.id("block/wood/big_barrel/" + type.name + "_1"))
-                .texture("4", TFGCore.id("block/wood/big_barrel/" + type.name + "_1_side"))
-                .texture("5", TFGCore.id("block/wood/big_barrel/" + type.name + "_2"))
-                .texture("6", TFGCore.id("block/wood/big_barrel/" + type.name + "_2_side"))
-                .texture("7", TFGCore.id("block/wood/big_barrel/" + type.name + "_3"))
-                .texture("8", TFGCore.id("block/wood/big_barrel/" + type.name + "_3_top"))
-                .texture("9", TFGCore.id("block/wood/big_barrel/" + type.name + "_0_top"))
-                .texture("10", TFGCore.id("block/wood/big_barrel/" + type.name + "_1_top"))
-                .texture("11", TFGCore.id("block/wood/big_barrel/" + type.name + "_2_top"))
-                .texture("12", type.logTexture);
+    private static BlockModelBuilder bigBarrelTextures(BlockModelBuilder builder, TFGWood wood) {
+        return builder.texture("0", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_3_side"))
+                .texture("1", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_0"))
+                .texture("2", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_0_side"))
+                .texture("3", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_1"))
+                .texture("4", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_1_side"))
+                .texture("5", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_2"))
+                .texture("6", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_2_side"))
+                .texture("7", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_3"))
+                .texture("8", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_3_top"))
+                .texture("9", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_0_top"))
+                .texture("10", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_1_top"))
+                .texture("11", TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_2_top"))
+                .texture("12", wood.logTexture);
     }
 
-    private static BlockEntry<BigBarrelBlock> bigBarrel(WoodType type) {
-        var properties = ExtendedProperties.of().mapColor(type.registryWood.woodColor()).sound(SoundType.WOOD)
+    private static BlockEntry<BigBarrelBlock> bigBarrel(TFGWood wood) {
+        var properties = ExtendedProperties.of().mapColor(wood.woodColor()).sound(SoundType.WOOD)
                 .noOcclusion().strength(10f).pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.BIG_BARREL);
 
-        return TFGCore.REGISTRATE.block("wood/big_barrel/" + type.name, p -> new BigBarrelBlock(properties))
+        return TFGCore.REGISTRATE.block("wood/big_barrel/" + wood.serializedName, p -> new BigBarrelBlock(properties))
                 .blockstate((ctx, prov) -> {
                     var builder = prov.getVariantBuilder(ctx.getEntry());
 
-                    bigBarrelTextures(prov.models().withExistingParent(ctx.getName() + "_item", ResourceLocation.fromNamespaceAndPath("firmalife", "block/big_barrel_item")), type);
+                    bigBarrelTextures(prov.models().withExistingParent(ctx.getName() + "_item", ResourceLocation.fromNamespaceAndPath("firmalife", "block/big_barrel_item")), wood);
                     for (int i = 0; i < 8; i++) {
-                        var model = bigBarrelTextures(prov.models().withExistingParent(ctx.getName() + "_" + i, ResourceLocation.fromNamespaceAndPath("firmalife", "block/big_barrel_" + i)), type);
+                        var model = bigBarrelTextures(prov.models().withExistingParent(ctx.getName() + "_" + i, ResourceLocation.fromNamespaceAndPath("firmalife", "block/big_barrel_" + i)), wood);
                         int finalI = i;
                         ModelUtils.forEachCardinalDirection(builder, model, b -> b.with(FLStateProperties.BARREL_PART, finalI));
                     }
@@ -661,7 +946,7 @@ public class TFGBlocks_Wood {
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "big_barrels")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/big_barrel/" + type.name + "_item")))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/big_barrel/" + wood.serializedName + "_item")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "big_barrels"))).build()
                 .loot((lt, block) -> lt.add(block, LootTable.lootTable()
                         .withPool(LootPool.lootPool()
@@ -676,20 +961,21 @@ public class TFGBlocks_Wood {
                 .register();
     }
 
-    private static BlockEntry<WineShelfBlock> wineShelf(WoodType type) {
-        var properties = ExtendedProperties.of().mapColor(type.registryWood.woodColor()).sound(SoundType.WOOD).noOcclusion()
+    private static BlockEntry<WineShelfBlock> wineShelf(TFGWood wood) {
+        var properties = ExtendedProperties.of().mapColor(wood.woodColor()).sound(SoundType.WOOD).noOcclusion()
                 .strength(4f).pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.WINE_SHELF);
 
-        return TFGCore.REGISTRATE.block("wood/wine_shelf/" + type.name, p -> new WineShelfBlock(properties))
+        return TFGCore.REGISTRATE.block("wood/wine_shelf/" + wood.serializedName, p -> new WineShelfBlock(properties))
                 .blockstate((ctx, prov) -> {
 
                     prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/wine_shelf"))
-                            .texture("0", type.plankTexture)
-                            .texture("2", TFGCore.id("block/wood/sheet/" + type.name))
-                            .texture("3", type.strippedLogTexture);
+                            .texture("0", wood.plankTexture)
+                            .texture("2", TFGCore.id("block/wood/sheet/" + wood.serializedName))
+                            .texture("3", wood.strippedLogTexture);
 
-                    var dynamicModel = prov.models().getBuilder("wood/wine_shelf/" + type.name + "_dynamic")
-                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelf"), TFGCore.id("block/wood/wine_shelf/" + type.name), t,
+                    var dynamicModel = prov.models().getBuilder("wood/wine_shelf/" + wood.serializedName + "_dynamic")
+                            .customLoader((t, existing) -> FirmaCustomLoader.get(ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelf"),
+                                    TFGCore.id("block/wood/wine_shelf/" + wood.serializedName), t,
                                     existing))
                             .end();
 
@@ -698,20 +984,20 @@ public class TFGBlocks_Wood {
                 })
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelves")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
-                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/wine_shelf/" + type.name)))
+                .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/wine_shelf/" + wood.serializedName)))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "wine_shelves"))).build()
                 .register();
 
     }
 
-    private static BlockEntry<StompingBarrelBlock> stompingBarrel(WoodType type) {
-        var properties = ExtendedProperties.of().mapColor(type.registryWood.woodColor()).sound(SoundType.WOOD).noOcclusion().strength(4f)
+    private static BlockEntry<StompingBarrelBlock> stompingBarrel(TFGWood wood) {
+        var properties = ExtendedProperties.of().mapColor(wood.woodColor()).sound(SoundType.WOOD).noOcclusion().strength(4f)
                 .pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.STOMPING_BARREL);
 
-        return TFGCore.REGISTRATE.block("wood/stomping_barrel/" + type.name, p -> new StompingBarrelBlock(properties))
+        return TFGCore.REGISTRATE.block("wood/stomping_barrel/" + wood.serializedName, p -> new StompingBarrelBlock(properties))
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                         prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/stomping_barrel"))
-                                .texture("0", TFGCore.id("block/wood/sheet/" + type.name))))
+                                .texture("0", TFGCore.id("block/wood/sheet/" + wood.serializedName))))
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "stomping_barrels")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
@@ -724,14 +1010,14 @@ public class TFGBlocks_Wood {
 
     }
 
-    private static BlockEntry<BarrelPressBlock> barrelPress(WoodType type) {
-        var properties = ExtendedProperties.of().mapColor(type.registryWood.woodColor()).sound(SoundType.WOOD).noOcclusion()
+    private static BlockEntry<BarrelPressBlock> barrelPress(TFGWood wood) {
+        var properties = ExtendedProperties.of().mapColor(wood.woodColor()).sound(SoundType.WOOD).noOcclusion()
                 .strength(4f).pushReaction(PushReaction.BLOCK).flammableLikeLogs().blockEntity(FLBlockEntities.BARREL_PRESS).ticks(BarrelPressBlockEntity::tick);
 
-        return TFGCore.REGISTRATE.block("wood/barrel_press/" + type.name, p -> new BarrelPressBlock(properties))
+        return TFGCore.REGISTRATE.block("wood/barrel_press/" + wood.serializedName, p -> new BarrelPressBlock(properties))
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                         prov.models().withExistingParent(ctx.getName(), ResourceLocation.fromNamespaceAndPath("firmalife", "block/barrel_press"))
-                                .texture("0", TFGCore.id("block/wood/sheet/" + type.name))))
+                                .texture("0", TFGCore.id("block/wood/sheet/" + wood.serializedName))))
                 .addLayer(() -> RenderType::cutout)
                 .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("firmalife", "barrel_presses")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)

@@ -1,0 +1,10 @@
+{
+  "parent": "tfc:block/scribing_table",
+  "textures": {
+    "leg": "tfg:block/wood/log/beech",
+    "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia",
+    "particle": "tfg:block/wood/planks/beech",
+    "side": "tfg:block/wood/planks/beech",
+    "top": "tfg:block/wood/scribing_table/beech"
+  }
+}

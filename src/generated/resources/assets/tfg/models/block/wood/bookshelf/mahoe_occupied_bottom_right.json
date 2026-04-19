@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/chiseled_bookshelf_occupied_slot_bottom_right",
+  "textures": {
+    "texture": "tfg:block/wood/bookshelf/mahoe_occupied"
+  }
+}

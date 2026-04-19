@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/log_fence_inventory",
+  "textures": {
+    "log": "wan_ancient_beasts:block/ginkgo_log",
+    "planks": "wan_ancient_beasts:block/ginkgo_planks"
+  }
+}

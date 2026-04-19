@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/scribing_table/araucaria",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/scribing_table/araucaria"
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/scribing_table/araucaria",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/scribing_table/araucaria",
+      "y": 270
+    }
+  }
+}

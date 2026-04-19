@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/loom",
+  "textures": {
+    "particle": "tfg:block/wood/planks/mahoe",
+    "texture": "tfg:block/wood/planks/mahoe"
+  }
+}
