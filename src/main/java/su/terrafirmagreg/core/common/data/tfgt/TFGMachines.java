@@ -349,7 +349,6 @@ public class TFGMachines {
                     .recipeTypes(TFGTRecipeTypes.ANVIL_RECIPES)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("electric_anvil"), TFGTRecipeTypes.ANVIL_SHRINK_RECIPES))
                     .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT)
-                    .workableTieredHullModel(TFGCore.id("block/machines/aqueous_accumulator"))
                     .register(),
             GTMachineUtils.ELECTRIC_TIERS);
 

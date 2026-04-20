@@ -34,6 +34,7 @@ public class TFCAnvilRecipeLogic extends RecipeLogic {
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(TFCAnvilRecipeLogic.class, RecipeLogic.MANAGED_FIELD_HOLDER);
 
+    // Maps item output name -> anvil recipe data
     private static final Map<String, TFCAnvilRecipeData> tfcAnvilRecipes = new HashMap<>();
 
     @Persisted
@@ -53,17 +54,12 @@ public class TFCAnvilRecipeLogic extends RecipeLogic {
         else
             sizedIngredient = SizedIngredient.create(input, 1);
 
+        // Get output item name from id
         List<String> idParts = Arrays.stream(id.split("/")).toList();
         String itemName = idParts.get(idParts.size() - 1);
         ResourceLocation resourceLocation = ResourceLocation.parse(id);
-        try {
-            tfcAnvilRecipes.put(itemName, new TFCAnvilRecipeData(resourceLocation, sizedIngredient, minTier, rules, applyForgingBonus, output));
-        } catch (Exception e) {
-            System.out.println("ANVIL MACHINE: Error reading forge rules");
-            tfcAnvilRecipes.put(itemName,
-                    new TFCAnvilRecipeData(resourceLocation, sizedIngredient, minTier, new ForgeRule[] { ForgeRule.HIT_LAST, ForgeRule.HIT_SECOND_LAST, ForgeRule.HIT_THIRD_LAST }, applyForgingBonus,
-                            output));
-        }
+
+        tfcAnvilRecipes.put(itemName, new TFCAnvilRecipeData(resourceLocation, sizedIngredient, minTier, rules, applyForgingBonus, output));
     }
 
     @Override
@@ -113,7 +109,6 @@ public class TFCAnvilRecipeLogic extends RecipeLogic {
     }
 
     private boolean consumeRecipeInputItems(TFCAnvilRecipeData currentRecipe, boolean simulate) {
-        System.out.println("ANVIL MACHINE: Consuming Input");
         if (currentRecipe.getInput() == null || currentRecipe.getInput().isEmpty())
             return true;
 
@@ -166,10 +161,15 @@ public class TFCAnvilRecipeLogic extends RecipeLogic {
 
         ItemStack inputStack = simulate ? simulatedStack : currentStack;
 
-        Forging forge = ForgingCapability.get(inputStack);
-        if (forge == null) {
-            return false;
+        Forging forge;
+        // TODO: Figure out why this breaks on world load
+        try {
+            forge = ForgingCapability.get(inputStack);
+        } catch (Exception e) {
+            forge = null;
         }
+        if (forge == null)
+            return false;
 
         // Create a simulated anvil inventory and anvil recipe to use TFC's forging logic
         SimulatedAnvilInventory inventory = new SimulatedAnvilInventory(inputStack);
@@ -177,17 +177,13 @@ public class TFCAnvilRecipeLogic extends RecipeLogic {
                 currentRecipe.getOutputIsp());
 
         // Check machine tier is valid for this recipe
-        if (!anvilRecipe.isCorrectTier(inventory.getTier())) {
-            System.out.println("ANVIL MACHINE: Incorrect Tier");
+        if (!anvilRecipe.isCorrectTier(inventory.getTier()))
             return false;
-        }
 
         // Prevent overworking
         int newWork = forge.getWork() + forgeStep.step();
-        if (newWork < 0 || newWork > ForgeStep.LIMIT) {
-            System.out.println("ANVIL MACHINE: Overworked");
+        if (newWork < 0 || newWork > ForgeStep.LIMIT)
             return false;
-        }
 
         // Work item
         forge.addStep(forgeStep);
@@ -198,6 +194,7 @@ public class TFCAnvilRecipeLogic extends RecipeLogic {
             outputStack = currentRecipe.getOutputIsp().getStack(inputStack);
 
             // Apply forging bonus
+            // TODO: Verify this works and create a way to select anvil recipes (e.g steel_ingot -> all tools)
             if (currentRecipe.isApplyForgingBonus()) {
                 float ratio = (float) forge.getSteps().total() / ForgeRule.calculateOptimalStepsToTarget(anvilRecipe.computeTarget(inventory), currentRecipe.getRules());
                 ForgingBonus bonus = ForgingBonus.byRatio(ratio);
@@ -225,8 +222,6 @@ public class TFCAnvilRecipeLogic extends RecipeLogic {
                         outputHandler.getClass());
             }
         }
-
-        System.out.println("ANVIL MACHINE: Output item: " + outputStack);
 
         return true;
     }
