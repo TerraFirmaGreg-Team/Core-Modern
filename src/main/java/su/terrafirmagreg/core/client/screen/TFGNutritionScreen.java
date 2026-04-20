@@ -9,6 +9,7 @@ package su.terrafirmagreg.core.client.screen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ import net.dries007.tfc.client.screen.TFCContainerScreen;
 import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
+import net.dries007.tfc.common.capabilities.player.PlayerData;
 import net.dries007.tfc.common.container.Container;
 import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
 import net.dries007.tfc.network.PacketHandler;
@@ -38,6 +40,7 @@ import net.minecraftforge.network.PacketDistributor;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.PlayerListWidget;
 import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
+import su.terrafirmagreg.core.client.screen.widget.ValueDisplayListWidget;
 import su.terrafirmagreg.core.common.container.widgets.MultiToggleButton;
 import su.terrafirmagreg.core.common.container.widgets.ToggleButton;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
@@ -55,19 +58,19 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     public static final int HEART_ICON_SIZE = 13;
     public static final int GUI_WIDTH = 176;
     public static final int GUI_HEIGHT = 166;
+    private static boolean RENDER_TEAM_NUTRITION = false;
+    private static int STYLE_BUTTON_STATE = 0;
 
     @Nullable
     private RadarGraphWidget positiveRadarGraph;
     private RadarGraphWidget negativeRadarGraph;
     private PlayerListWidget playerList;
+    private ValueDisplayListWidget valueDisplayList;
     private ToggleButton teamToggleButton;
     private MultiToggleButton styleToggleButton;
 
     private final List<Float> stablePosValues = new ArrayList<>();
     private final List<Float> stableNegValues = new ArrayList<>();
-
-    private static boolean RENDER_TEAM_NUTRITION = false;
-    private static int STYLE_BUTTON_STATE = 0;
 
     private static final UUID[] DUMMY_UUIDS = {
             UUID.fromString("c154610e-8875-4bb5-99ef-8c167a0f2237"),
@@ -87,6 +90,18 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     public void init() {
         super.init();
 
+        Player player = ClientHelpers.getPlayer();
+        assert player != null;
+        PlayerData playerData = PlayerData.get(player);
+        TFCFoodData foodData = (TFCFoodData) player.getFoodData();
+
+        float thirstModifier = foodData.getThirstModifier(player);
+        float saturation = foodData.getSaturationLevel();
+        long intoxication = (playerData.getIntoxicatedTicks() / 20) / 60;
+        float passiveExhaustion = TFCFoodData.PASSIVE_EXHAUSTION_PER_SECOND;
+        float exhaustionMultiplier = TFCFoodData.EXHAUSTION_MULTIPLIER;
+        float passiveHealing = TFCFoodData.PASSIVE_HEALING_PER_TEN_TICKS * 2 * 100 * 3;
+
         // Tab buttons.
         addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 4, 20, 22, 128, 0, 1, 3, 0, 0, button -> {
             playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
@@ -98,10 +113,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 73, 20, 22, 128, 0, 1, 3, 96, 0, SwitchInventoryTabPacket.Type.CLIMATE));
         PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Type.BOOK)));
 
-        // Graph Values.
+        // Screen Values.
         int positiveGraphDiameter = 75;
         int positiveGraphX = leftPos + (GUI_WIDTH / 3) - (positiveGraphDiameter / 2);
-        int positiveGraphY = topPos + (GUI_HEIGHT / 3) - (positiveGraphDiameter / 2) + (NUTRIENT_ICON_SIZE / 2);
+        int positiveGraphY = topPos + (GUI_HEIGHT / 3) - (positiveGraphDiameter / 2);
 
         int negativeGraphDiameter = 45;
         int negativeGraphX = positiveGraphX + ((GUI_WIDTH / 3) * 2) - (negativeGraphDiameter / 2);
@@ -116,14 +131,62 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         int styleToggleX = teamToggleX + (teamToggleSize + (teamToggleSize / 2));
         int styleToggleY = teamToggleY;
 
+        int variableDisplayOffset = 2;
+        int variableDisplayX = leftPos + (variableDisplayOffset * 4);
+        int variableDisplayY = positiveGraphY + positiveGraphDiameter + (variableDisplayOffset * 6);
+        int variableDisplayWidth = GUI_WIDTH - (variableDisplayOffset * 10);
+        int valueDisplayRowHeight = this.font.lineHeight + 2;
+        int valueDisplayRows = 4;
+        int variableDisplayHeight = (valueDisplayRowHeight * valueDisplayRows) + variableDisplayOffset;
+
+        // ---- Value Displays. ----
+
+        valueDisplayList = new ValueDisplayListWidget(minecraft, this.font, variableDisplayWidth, variableDisplayHeight, variableDisplayY, variableDisplayY + variableDisplayHeight,
+                valueDisplayRowHeight);
+        valueDisplayList.setX(variableDisplayX);
+        valueDisplayList.setLeftPos(variableDisplayX);
+
+        // Thirst Modifier Display.
+        valueDisplayList.addValue(
+                Component.translatable("tfg.tooltip.nutrition.thirst_modifier_display", Component.literal(String.format("%.1f%%", thirstModifier)).withStyle(ChatFormatting.BLUE)),
+                Component.translatable("tfg.tooltip.nutrition.thirst_modifier_info"));
+
+        // Saturation Level Display.
+        valueDisplayList.addValue(
+                Component.translatable("tfg.tooltip.nutrition.saturation_display", Component.literal(String.format("%.0f", saturation)).withStyle(ChatFormatting.YELLOW)),
+                Component.translatable("tfg.tooltip.nutrition.saturation_info"));
+
+        // Intoxication Display.
+        valueDisplayList.addValue(
+                Component.translatable("tfg.tooltip.nutrition.intoxication_display", Component.literal(String.format("%d", intoxication)).withStyle(ChatFormatting.LIGHT_PURPLE)),
+                Component.translatable("tfg.tooltip.nutrition.intoxication_info"));
+
+        // Passive Healing Display.
+        valueDisplayList.addValue(
+                Component.translatable("tfg.tooltip.nutrition.passive_healing_display", Component.literal(String.format("%.1f", passiveHealing)).withStyle(ChatFormatting.RED)),
+                Component.translatable("tfg.tooltip.nutrition.passive_healing_info", Component.literal(String.format("%.3f", passiveHealing / 100))));
+
+        // Exhaustion Display.
+        valueDisplayList.addValue(
+                Component.translatable("tfg.tooltip.nutrition.exhaustion_display", Component.literal(String.format("%.1f", passiveExhaustion)).withStyle(ChatFormatting.GREEN)),
+                Component.translatable("tfg.tooltip.nutrition.exhaustion_info"));
+
+        // Exhaustion Multiplier.
+        valueDisplayList.addValue(
+                Component.translatable("tfg.tooltip.nutrition.exhaustion_multiplier_display", Component.literal(String.format("%.1f", exhaustionMultiplier)).withStyle(ChatFormatting.DARK_GREEN)),
+                Component.translatable("tfg.tooltip.nutrition.exhaustion_multiplier_info"));
+
+        addWidget(valueDisplayList);
+
+        // ---- Radar Graphs ----
+
         // Create radar graph widget.
         positiveRadarGraph = new RadarGraphWidget(positiveGraphX, positiveGraphY, positiveGraphDiameter);
         negativeRadarGraph = new RadarGraphWidget(negativeGraphX, negativeGraphY, negativeGraphDiameter);
 
         // Heart icon.
         positiveRadarGraph.setCentralIcon(() -> {
-            Player player = ClientHelpers.getPlayer();
-            if (player != null && player.getFoodData() instanceof TFCFoodData data) {
+            if (player.getFoodData() instanceof TFCFoodData data) {
                 float avg = data.getNutrition().getAverageNutrition();
                 if (avg < 0.33f)
                     return HEART_1;
@@ -184,11 +247,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 .setRadiusMiddleColor(0xDDd1b500)
                 .setRadiusOuterColor(0xDD29b000)
                 .setGraphTooltip(() -> {
-                    Player player = ClientHelpers.getPlayer();
-                    if (player != null && player.getFoodData() instanceof TFCFoodData data) {
+                    if (player.getFoodData() instanceof TFCFoodData data) {
+                        List<Component> components = new ArrayList<>();
                         float avg = data.getNutrition().getAverageNutrition();
                         float maxHealth = (player.getMaxHealth() * data.getHealthModifier()) / 2;
-                        List<Component> components = new ArrayList<>();
 
                         // Title and count.
                         components.add(Component.translatable("tfg.tooltip.nutrition.positive_nutrients"));
@@ -250,15 +312,14 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 .setRadiusMiddleColor(0xDDd1b500)
                 .setRadiusOuterColor(0xDD9e0000)
                 .setGraphTooltip(() -> {
-                    Player player = ClientHelpers.getPlayer();
-                    if (player != null && player.getFoodData() instanceof TFCFoodData data) {
+                    if (player.getFoodData() instanceof TFCFoodData data) {
+                        List<Component> components = new ArrayList<>();
                         float negativeSum = 0;
                         for (Nutrient nutrient : Nutrient.VALUES) {
                             if (TFGNutrients.isNegative(nutrient))
                                 negativeSum += data.getNutrition().getNutrient(nutrient);
                         }
                         float avg = (negativeSum / TFGNutrients.getNegativeCount());
-                        List<Component> components = new ArrayList<>();
 
                         // Title and count.
                         components.add(Component.translatable("tfg.tooltip.nutrition.negative_nutrients"));
@@ -370,7 +431,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                     dummyNegValues.add(() -> Math.max(0.1f, Math.min(0.9f, base + (float) Math.cos(offset) * 0.4f)));
                 }
 
-                int color = 0xFF000000 | java.util.concurrent.ThreadLocalRandom.current().nextInt(0xFFFFFF);
+                int color = 0xFF000000 | ThreadLocalRandom.current().nextInt(0xFFFFFF);
                 int fillColor = (color & 0x55FFFFFF) | 0x55000000;
 
                 RadarGraphWidget.Dataset dsPos = new RadarGraphWidget.Dataset(Component.literal(dummyName), dummyPosValues, fillColor, color);
@@ -472,6 +533,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (valueDisplayList != null && valueDisplayList.mouseClicked(mouseX, mouseY, button)) {
+            return true;
+        }
         if (RENDER_TEAM_NUTRITION && playerList != null) {
             if (playerList.mouseClicked(mouseX, mouseY, button)) {
                 return true;
@@ -482,6 +546,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        if (valueDisplayList != null && valueDisplayList.mouseScrolled(mouseX, mouseY, delta)) {
+            return true;
+        }
         if (RENDER_TEAM_NUTRITION && playerList != null) {
             if (playerList.mouseScrolled(mouseX, mouseY, delta)) {
                 return true;
@@ -492,6 +559,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (valueDisplayList != null && valueDisplayList.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
+            return true;
+        }
         if (RENDER_TEAM_NUTRITION && playerList != null) {
             if (playerList.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
                 return true;
@@ -503,6 +573,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         super.render(graphics, mouseX, mouseY, partialTicks);
+
+        if (valueDisplayList != null) {
+            valueDisplayList.render(graphics, mouseX, mouseY, partialTicks);
+        }
 
         if (RENDER_TEAM_NUTRITION && playerList != null) {
             playerList.render(graphics, mouseX, mouseY, partialTicks);

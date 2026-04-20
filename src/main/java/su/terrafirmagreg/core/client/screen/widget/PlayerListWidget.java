@@ -21,12 +21,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Creates a widget that displays a list of players with checkboxes.
  */
-public class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.PlayerEntry> {
+public class PlayerListWidget extends GenericScrollableListWidget<PlayerListWidget.PlayerEntry> {
 
     private ResourceLocation playerHeadBackground;
     private ToIntFunction<RadarGraphWidget.Dataset> playerHeadTintProvider;
@@ -38,16 +37,11 @@ public class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Playe
     private int playerHeadBackgroundWidth = 16;
     private int playerHeadBackgroundHeight = 16;
 
-    @Setter
-    private int x;
-
     private Component hoveredName;
     private int tooltipX, tooltipY;
 
     public PlayerListWidget(Minecraft minecraft, int width, int height, int top, int bottom, int itemHeight) {
         super(minecraft, width, height, top, bottom, itemHeight);
-        this.setRenderBackground(false);
-        this.setRenderHeader(false, 0);
     }
 
     public PlayerListWidget setPlayerHeadBackground(ResourceLocation playerHeadBackground) {
@@ -76,58 +70,15 @@ public class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Playe
     }
 
     @Override
-    public void setLeftPos(int left) {
-        super.setLeftPos(left);
-        this.x = left;
+    protected void beforeRenderList(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.hoveredName = null;
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.hoveredName = null;
-        int i = this.getScrollbarPosition();
-        int j = i + 6;
-
-        graphics.enableScissor(this.x, this.y0, j, this.y1);
-        this.renderList(graphics, mouseX, mouseY, partialTick);
-        graphics.disableScissor();
-
+    protected void afterRenderList(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (this.hoveredName != null) {
             graphics.renderTooltip(this.minecraft.font, this.hoveredName, this.tooltipX, this.tooltipY);
         }
-
-        if (this.getMaxScroll() > 0) {
-            int k = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
-            k = Math.max(32, k);
-            int l = (int) this.getScrollAmount() * (this.y1 - this.y0 - k) / this.getMaxScroll() + this.y0;
-            if (l < this.y0) {
-                l = this.y0;
-            }
-
-            graphics.fill(i, this.y0, j, this.y1, -16777216);
-            graphics.fill(i, l, j, l + k, -8355712);
-            graphics.fill(i, l, j - 1, l + k - 1, -4144960);
-        }
-
-        this.renderDecorations(graphics, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderBackground(@NotNull GuiGraphics graphics) {
-    }
-
-    @Override
-    protected int getScrollbarPosition() {
-        return this.x + this.width;
-    }
-
-    @Override
-    public int getRowWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getRowLeft() {
-        return this.x;
     }
 
     public void addPlayer(Component name, UUID uuid, RadarGraphWidget.Dataset dataset1, RadarGraphWidget.Dataset dataset2, boolean visible) {
