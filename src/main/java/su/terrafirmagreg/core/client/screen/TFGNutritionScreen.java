@@ -502,23 +502,11 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(graphics);
-        // Render background.
-        renderBg(graphics, partialTicks, mouseX, mouseY);
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
         if (RENDER_TEAM_NUTRITION && playerList != null) {
             playerList.render(graphics, mouseX, mouseY, partialTicks);
         }
-
-        // Render widgets.
-        for (var widget : this.renderables) {
-            widget.render(graphics, mouseX, mouseY, partialTicks);
-        }
-        // Render labels.
-        graphics.pose().pushPose();
-        graphics.pose().translate(leftPos, topPos, 0);
-        renderLabels(graphics, mouseX, mouseY);
-        graphics.pose().popPose();
 
         // Render radar graph tooltip.
         if (positiveRadarGraph != null) {

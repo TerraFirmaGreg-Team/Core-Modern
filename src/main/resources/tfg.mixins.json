@@ -1,6 +1,7 @@
 {
     "mixins": [
         "client.create.ChainConveyorRendererMixin",
+        "client.minecraft.AbstractContainerScreenMixin",
         "client.minecraft.IBlockModelGeneratorsInvoker",
         "client.minecraft.MenuScreensMixin",
         "client.tfc.ClientForgeEventHandlerMixin",
