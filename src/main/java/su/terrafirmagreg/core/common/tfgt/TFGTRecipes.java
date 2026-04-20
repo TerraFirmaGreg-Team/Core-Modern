@@ -145,5 +145,7 @@ public class TFGTRecipes {
             }
         }
 
+        // TODO: Add electric anvil machine recipe
+
     }
 }

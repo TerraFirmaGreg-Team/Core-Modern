@@ -288,4 +288,72 @@ public class TFGTRecipeTypes {
             .setMaxIOSize(1, 1, 0, 1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.BATH);
+
+    public static final GTRecipeType ANVIL_LIGHT_HIT_RECIPES = GTRecipeTypes.register("anvil_light_hit", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setSlotOverlay(false, false, GuiTextures.HAMMER_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.FORGE_HAMMER);
+
+    public static final GTRecipeType ANVIL_MEDIUM_HIT_RECIPES = GTRecipeTypes.register("anvil_medium_hit", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setSlotOverlay(false, false, GuiTextures.HAMMER_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.FORGE_HAMMER);
+
+    public static final GTRecipeType ANVIL_HARD_HIT_RECIPES = GTRecipeTypes.register("anvil_hard_hit", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setSlotOverlay(false, false, GuiTextures.HAMMER_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.FORGE_HAMMER);
+
+    public static final GTRecipeType ANVIL_DRAW_RECIPES = GTRecipeTypes.register("anvil_draw", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setSlotOverlay(false, false, GuiTextures.HAMMER_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.FORGE_HAMMER);
+
+    public static final GTRecipeType ANVIL_PUNCH_RECIPES = GTRecipeTypes.register("anvil_punch", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setSlotOverlay(false, false, GuiTextures.HAMMER_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.FORGE_HAMMER);
+
+    public static final GTRecipeType ANVIL_BEND_RECIPES = GTRecipeTypes.register("anvil_bend", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setSlotOverlay(false, false, GuiTextures.HAMMER_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.FORGE_HAMMER);
+
+    public static final GTRecipeType ANVIL_UPSET_RECIPES = GTRecipeTypes.register("anvil_upset", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setSlotOverlay(false, false, GuiTextures.HAMMER_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.FORGE_HAMMER);
+
+    public static final GTRecipeType ANVIL_SHRINK_RECIPES = GTRecipeTypes.register("anvil_shrink", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setSlotOverlay(false, false, GuiTextures.HAMMER_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.FORGE_HAMMER);
+
+    public static final GTRecipeType[] ANVIL_RECIPES = {
+            ANVIL_LIGHT_HIT_RECIPES,
+            ANVIL_MEDIUM_HIT_RECIPES,
+            ANVIL_HARD_HIT_RECIPES,
+            ANVIL_DRAW_RECIPES,
+            ANVIL_PUNCH_RECIPES,
+            ANVIL_BEND_RECIPES,
+            ANVIL_UPSET_RECIPES,
+            ANVIL_SHRINK_RECIPES
+    };
+
 }

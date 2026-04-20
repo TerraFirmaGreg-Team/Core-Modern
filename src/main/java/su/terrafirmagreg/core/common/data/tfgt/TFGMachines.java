@@ -50,10 +50,7 @@ import net.minecraftforge.fluids.FluidType;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryLogisticsMonitorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.AqueousAccumulatorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.FoodRefrigeratorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.GasPressurizerMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.SimpleFoodProcessingMachine;
+import su.terrafirmagreg.core.common.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SMRFluidImportHatchPartMachine;
@@ -344,6 +341,17 @@ public class TFGMachines {
             "SMR Fluid Import Hatch",
             new int[] { GTValues.UV },
             TFGPartAbility.SMR_FLUID_INPUT);
+
+    public static final MachineDefinition[] ELECTRIC_ANVIL = registerTieredMachines(REGISTRATE, "electric_anvil",
+            AnvilMachine::new, (tier, builder) -> builder
+                    .langValue("%s Electric Anvil %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .recipeTypes(TFGTRecipeTypes.ANVIL_RECIPES)
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("electric_anvil"), TFGTRecipeTypes.ANVIL_SHRINK_RECIPES))
+                    .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT)
+                    .workableTieredHullModel(TFGCore.id("block/machines/aqueous_accumulator"))
+                    .register(),
+            GTMachineUtils.ELECTRIC_TIERS);
 
     private static MachineDefinition[] registerSMRFluidImportHatch(
             String name,
