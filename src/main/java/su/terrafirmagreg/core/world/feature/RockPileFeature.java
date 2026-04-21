@@ -40,7 +40,10 @@ public class RockPileFeature extends Feature<RockPileConfig> {
             return false;
         }
 
-        Block localCobble = ChunkDataProvider.get(level).get(level, blockpos).getRockData().getRock(blockpos).cobble();
+        var rockType = ChunkDataProvider.get(level).get(level, blockpos).getRockData().getRock(blockpos);
+
+        Block localCobble = rockType.cobble();
+        Block localGravel = rockType.gravel();
 
         int radius = config.radius();
         int height = config.height();
@@ -56,10 +59,15 @@ public class RockPileFeature extends Feature<RockPileConfig> {
             for (BlockPos placePos : BlockPos.betweenClosed(corners.get(0), corners.get(1))) {
                 if (placedAmount < size) {
                     //System.out.println("valid placement" + mayPlaceOn(level, placePos));
-                    if (random.nextInt(1, 10) <= 8 && mayPlaceOn(level, placePos)) {
-                        level.setBlock(placePos, localCobble.defaultBlockState(), 3);
-                        placedAmount++;
-                        //System.out.println(placedAmount);
+                    if (mayPlaceOn(level, placePos)) {
+                        if (random.nextInt(1, 10) <= 7) {
+                            level.setBlock(placePos, localCobble.defaultBlockState(), 3);
+                            placedAmount++;
+                            //System.out.println(placedAmount);
+                        } else if (random.nextBoolean()) {
+                            level.setBlock(placePos, localGravel.defaultBlockState(), 3);
+                            placedAmount++;
+                        }
                     }
                 }
             }

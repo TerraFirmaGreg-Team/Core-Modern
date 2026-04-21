@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.sugar.Local;
 
+import net.dries007.tfc.common.blocks.DeadTorchBlock;
+import net.dries007.tfc.common.blocks.devices.LampBlock;
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -18,8 +20,16 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 public class StructurePieceMixin {
 
     @Inject(method = "placeBlock", at = @At("TAIL"))
-    private void tfg$postProcessSupports(WorldGenLevel level, BlockState blockstate, int x, int y, int z, BoundingBox boundingbox, CallbackInfo ci, @Local(name = "blockpos") BlockPos blockpos) {
+    private void tfg$postProcessMoreStuff(WorldGenLevel level, BlockState blockstate, int x, int y, int z, BoundingBox boundingbox, CallbackInfo ci, @Local(name = "blockpos") BlockPos blockpos) {
         if (blockstate.getBlock() instanceof VerticalSupportBlock) {
+            level.getChunk(blockpos).markPosForPostprocessing(blockpos);
+        }
+
+        if (blockstate.getBlock() instanceof LampBlock) {
+            level.getChunk(blockpos).markPosForPostprocessing(blockpos);
+        }
+
+        if (blockstate.getBlock() instanceof DeadTorchBlock) {
             level.getChunk(blockpos).markPosForPostprocessing(blockpos);
         }
     }

@@ -11,14 +11,19 @@ import org.jetbrains.annotations.Nullable;
 import com.mojang.serialization.Codec;
 import com.therighthon.afc.common.blocks.AFCWood;
 
+import net.dries007.tfc.common.blocks.devices.LampBlock;
 import net.dries007.tfc.common.blocks.wood.HorizontalSupportBlock;
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
+import net.dries007.tfc.world.chunkdata.RockData;
+import net.dries007.tfc.world.settings.RockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -44,6 +49,9 @@ public class MineSupportProcessor extends StructureProcessor {
     };
 
     public static final Map<ChunkPos, RegistryWood> WOOD_CHUNK_CACHE = new HashMap<>();
+
+    /// Records if the chunk has already had a rock data cache generated
+    public static final Map<ChunkPos, Boolean> ROCK_CHUNK_CACHE = new HashMap<>();
 
     public static final MineSupportProcessor INSTANCE = new MineSupportProcessor();
     public static final Codec<MineSupportProcessor> CODEC = Codec.unit(() -> INSTANCE);
@@ -106,6 +114,23 @@ public class MineSupportProcessor extends StructureProcessor {
         return adjChunks;
     }
 
+    private RockSettings getRockType(ChunkPos chunkPos, BlockPos blockPos, LevelReader levelReader) {
+        if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+            ChunkDataProvider dataProv = ChunkDataProvider.get(levelAccessor.getLevel().getChunkSource().getGenerator());
+            RockData data = dataProv.get(levelAccessor.getChunk(chunkPos.x, chunkPos.z)).getRockData();
+
+            if (!ROCK_CHUNK_CACHE.containsKey(chunkPos)) {
+                data.useCache(chunkPos);
+                ROCK_CHUNK_CACHE.put(chunkPos, true);
+            }
+
+            return data.getRock(blockPos);
+        }
+
+        //This won't ever exist
+        return null;
+    }
+
     @Override
     protected @NotNull StructureProcessorType<?> getType() {
         return TFGStructureProcessors.MINE_SUPPORT_PROCESSOR.get();
@@ -119,6 +144,21 @@ public class MineSupportProcessor extends StructureProcessor {
 
         BlockState originalBlockState = currentBlockInfo.state();
         BlockPos blockPos = currentBlockInfo.pos();
+
+        //Fills in air gaps in the floor with regions wood planks
+        if (isFloorBlock(originalBlockState)) {
+            if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+                BlockState levelBlockState = levelAccessor.getBlockState(blockPos);
+
+                if (levelBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.UP)) {
+                    return new StructureTemplate.StructureBlockInfo(blockPos, levelBlockState, currentBlockInfo.nbt());
+                }
+
+                var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
+
+                return new StructureTemplate.StructureBlockInfo(blockPos, woodType.getBlock(Wood.BlockType.PLANKS).get().defaultBlockState(), currentBlockInfo.nbt());
+            }
+        }
 
         //Changes supports to regions wood type
         if (isSupportBlock(originalBlockState)) {
@@ -137,20 +177,46 @@ public class MineSupportProcessor extends StructureProcessor {
             return new StructureTemplate.StructureBlockInfo(blockPos, newBlockState, currentBlockInfo.nbt());
         }
 
-        //Fills in air gaps in the floor with regions wood planks
-        if (isFloorBlock(originalBlockState)) {
-            if (levelReader instanceof ServerLevelAccessor levelAccessor) {
-                BlockState levelBlockState = levelAccessor.getBlockState(blockPos);
+        if (isRandomRawRock(originalBlockState)) {
 
-                if (levelBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.UP)) {
-                    return new StructureTemplate.StructureBlockInfo(blockPos, levelBlockState, currentBlockInfo.nbt());
+            if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+                RandomSource random = levelAccessor.getRandom();
+                Block newBlock = random.nextBoolean() ? levelAccessor.getBlockState(blockPos).getBlock() : Blocks.AIR;
+
+                return new StructureTemplate.StructureBlockInfo(blockPos, newBlock.defaultBlockState(), currentBlockInfo.nbt());
+            }
+        }
+
+        //Changes wood planks to regions wood type
+        if (isPlankBlock(originalBlockState)) {
+            var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
+
+            Block newBlock = woodType.getBlock(Wood.BlockType.PLANKS).get();
+
+            return new StructureTemplate.StructureBlockInfo(blockPos, newBlock.defaultBlockState(), currentBlockInfo.nbt());
+        }
+
+        //Adds fuel to lamps and checks for block above
+        if (isLampBlock(originalBlockState)) {
+            if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+                RandomSource random = levelAccessor.getRandom();
+
+                BlockState aboveBlockState = levelAccessor.getBlockState(blockPos.above());
+
+                if (aboveBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.DOWN)) {
+                    CompoundTag lampTag = currentBlockInfo.nbt();
+                    assert lampTag != null;
+                    var tankTag = lampTag.getCompound("tank");
+
+                    tankTag.putString("FluidName", "gtceu:seed_oil");
+                    tankTag.putInt("Amount", random.nextInt(0, 100));
+                    lampTag.put("tank", tankTag);
+
+                    return new StructureTemplate.StructureBlockInfo(blockPos, originalBlockState, lampTag);
                 }
 
-                var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
-
-                return new StructureTemplate.StructureBlockInfo(blockPos, woodType.getBlock(Wood.BlockType.PLANKS).get().defaultBlockState(), currentBlockInfo.nbt());
+                return new StructureTemplate.StructureBlockInfo(blockPos, Blocks.CAVE_AIR.defaultBlockState(), new CompoundTag());
             }
-
         }
 
         return currentBlockInfo;
@@ -166,6 +232,18 @@ public class MineSupportProcessor extends StructureProcessor {
 
     private boolean isFloorBlock(BlockState blockState) {
         return blockState.getBlock() == Blocks.LIME_WOOL;
+    }
+
+    private boolean isPlankBlock(BlockState blockState) {
+        return blockState.getBlock() == Blocks.ORANGE_WOOL;
+    }
+
+    private boolean isRandomRawRock(BlockState blockState) {
+        return blockState.getBlock() == Blocks.MAGENTA_WOOL;
+    }
+
+    private boolean isLampBlock(BlockState blockState) {
+        return blockState.getBlock() instanceof LampBlock;
     }
 
 }
