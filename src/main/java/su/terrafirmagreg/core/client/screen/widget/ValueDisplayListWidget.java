@@ -125,7 +125,7 @@ public class ValueDisplayListWidget extends GenericScrollableListWidget<ValueDis
         @Override
         public void render(@NotNull GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean isHovered, float partialTick) {
             final int textY = top + (height - font.lineHeight) / 2;
-            graphics.drawString(font, this.label, left + 2, textY, 0xFFFFFF, false);
+            graphics.drawString(font, this.label, left + 2, textY, 0xFFFFFF, true);
 
             final boolean rowHovered = mouseX >= left && mouseX <= left + width
                     && mouseY >= top && mouseY <= top + height

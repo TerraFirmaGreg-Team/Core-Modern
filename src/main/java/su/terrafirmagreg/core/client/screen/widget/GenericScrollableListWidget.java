@@ -1,11 +1,12 @@
 package su.terrafirmagreg.core.client.screen.widget;
 
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+
+import lombok.Setter;
 
 /**
  * Generic scrollable list widget.

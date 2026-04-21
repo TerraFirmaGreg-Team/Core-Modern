@@ -29,6 +29,7 @@ import net.dries007.tfc.util.Helpers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
@@ -45,6 +46,10 @@ import su.terrafirmagreg.core.common.container.widgets.MultiToggleButton;
 import su.terrafirmagreg.core.common.container.widgets.ToggleButton;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
+/**
+ * TFG Nutrition Screen that overrides the default TFC Nutrition Screen.
+ */
+@SuppressWarnings({ "UnnecessaryLocalVariable" })
 public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/nutrition_screen.png");
     public static final ResourceLocation TEAM_LIST_TINT_BACKGROUND = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/team_list_tint_background.png");
@@ -57,7 +62,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     public static final int NUTRIENT_ICON_SIZE = 12;
     public static final int HEART_ICON_SIZE = 13;
     public static final int GUI_WIDTH = 176;
-    public static final int GUI_HEIGHT = 166;
+    public static final int GUI_HEIGHT = 188;
     private static boolean RENDER_TEAM_NUTRITION = false;
     private static int STYLE_BUTTON_STATE = 0;
 
@@ -84,6 +89,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
     public TFGNutritionScreen(Container container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name, TEXTURE);
+        this.imageHeight = GUI_HEIGHT;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
@@ -95,6 +102,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         PlayerData playerData = PlayerData.get(player);
         TFCFoodData foodData = (TFCFoodData) player.getFoodData();
 
+        // ---- Screen Values. ----
+
         float thirstModifier = foodData.getThirstModifier(player);
         float saturation = foodData.getSaturationLevel();
         long intoxication = (playerData.getIntoxicatedTicks() / 20) / 60;
@@ -102,18 +111,6 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         float exhaustionMultiplier = TFCFoodData.EXHAUSTION_MULTIPLIER;
         float passiveHealing = TFCFoodData.PASSIVE_HEALING_PER_TEN_TICKS * 2 * 100 * 3;
 
-        // Tab buttons.
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 4, 20, 22, 128, 0, 1, 3, 0, 0, button -> {
-            playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
-            Minecraft.getInstance().setScreen(new InventoryScreen(playerInventory.player));
-            PacketHandler.send(PacketDistributor.SERVER.noArg(), new SwitchInventoryTabPacket(SwitchInventoryTabPacket.Type.INVENTORY));
-        }));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 27, 20, 22, 128, 0, 1, 3, 32, 0, SwitchInventoryTabPacket.Type.CALENDAR));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176 - 3, 50, 20 + 3, 22, 128 + 20, 0, 1, 3, 64, 0, SwitchInventoryTabPacket.Type.NUTRITION));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 73, 20, 22, 128, 0, 1, 3, 96, 0, SwitchInventoryTabPacket.Type.CLIMATE));
-        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Type.BOOK)));
-
-        // Screen Values.
         int positiveGraphDiameter = 75;
         int positiveGraphX = leftPos + (GUI_WIDTH / 3) - (positiveGraphDiameter / 2);
         int positiveGraphY = topPos + (GUI_HEIGHT / 3) - (positiveGraphDiameter / 2);
@@ -133,11 +130,39 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         int variableDisplayOffset = 2;
         int variableDisplayX = leftPos + (variableDisplayOffset * 4);
-        int variableDisplayY = positiveGraphY + positiveGraphDiameter + (variableDisplayOffset * 6);
-        int variableDisplayWidth = GUI_WIDTH - (variableDisplayOffset * 10);
-        int valueDisplayRowHeight = this.font.lineHeight + 2;
+        int variableDisplayY = positiveGraphY + positiveGraphDiameter + 19;
+        int variableDisplayWidth = GUI_WIDTH - 22;
+        int valueDisplayRowHeight = this.font.lineHeight + 3;
         int valueDisplayRows = 4;
         int variableDisplayHeight = (valueDisplayRowHeight * valueDisplayRows) + variableDisplayOffset;
+
+        int titleLabelX = leftPos + 8;
+        int titleLabelY = topPos + 6;
+        int titleLabelWidth = positiveGraphDiameter;
+        int titleLabelHeight = 9;
+
+        int listItemSize = 16;
+        int listWidth = 60;
+        int listHeight = GUI_HEIGHT;
+        int listX = leftPos - listWidth - 7;
+
+        // ---- Tab Buttons. ----
+
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 4, 20, 22, 128, 0, 1, 3, 0, 0, button -> {
+            playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
+            Minecraft.getInstance().setScreen(new InventoryScreen(playerInventory.player));
+            PacketHandler.send(PacketDistributor.SERVER.noArg(), new SwitchInventoryTabPacket(SwitchInventoryTabPacket.Type.INVENTORY));
+        }));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 27, 20, 22, 128, 0, 1, 3, 32, 0, SwitchInventoryTabPacket.Type.CALENDAR));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176 - 3, 50, 20 + 3, 22, 128 + 20, 0, 1, 3, 64, 0, SwitchInventoryTabPacket.Type.NUTRITION));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 73, 20, 22, 128, 0, 1, 3, 96, 0, SwitchInventoryTabPacket.Type.CLIMATE));
+        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Type.BOOK)));
+
+        // ---- Title Display. ----
+
+        StringWidget titleLabel = new StringWidget(titleLabelX, titleLabelY, titleLabelWidth, titleLabelHeight, Component.translatable("tfg.tooltip.nutrition.health"), this.font);
+        titleLabel.alignLeft();
+        this.addRenderableWidget(titleLabel);
 
         // ---- Value Displays. ----
 
@@ -148,7 +173,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         // Thirst Modifier Display.
         valueDisplayList.addValue(
-                Component.translatable("tfg.tooltip.nutrition.thirst_modifier_display", Component.literal(String.format("%.1f%%", thirstModifier)).withStyle(ChatFormatting.BLUE)),
+                Component.translatable("tfg.tooltip.nutrition.thirst_modifier_display", Component.literal(String.format("%.1f", thirstModifier)).withStyle(ChatFormatting.AQUA)),
                 Component.translatable("tfg.tooltip.nutrition.thirst_modifier_info"));
 
         // Saturation Level Display.
@@ -163,8 +188,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         // Passive Healing Display.
         valueDisplayList.addValue(
-                Component.translatable("tfg.tooltip.nutrition.passive_healing_display", Component.literal(String.format("%.1f", passiveHealing)).withStyle(ChatFormatting.RED)),
-                Component.translatable("tfg.tooltip.nutrition.passive_healing_info", Component.literal(String.format("%.3f", passiveHealing / 100))));
+                Component.translatable("tfg.tooltip.nutrition.passive_healing_display", Component.literal(String.format("%.3f", passiveHealing / 100)).withStyle(ChatFormatting.RED)),
+                Component.translatable("tfg.tooltip.nutrition.passive_healing_info", Component.literal(String.format("%.1f", passiveHealing))));
 
         // Exhaustion Display.
         valueDisplayList.addValue(
@@ -352,16 +377,15 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         addRenderableWidget(positiveRadarGraph);
         addRenderableWidget(negativeRadarGraph);
 
-        // Player list for team mode.
-        int listWidth = 60;
-        int listHeight = 110; // 5 players * 22 itemHeight
-        playerList = new PlayerListWidget(minecraft, listWidth, listHeight, topPos + 10, topPos + 10 + listHeight, 22);
+        // ---- Player List. ----
+
+        playerList = new PlayerListWidget(minecraft, listWidth, listHeight, topPos, topPos + listHeight, listItemSize + 4);
         playerList.setPlayerHeadBackground(TEAM_LIST_TINT_BACKGROUND)
                 .setPlayerHeadTintProvider(RadarGraphWidget.Dataset::getLineColor)
-                .setPlayerHeadBackgroundBounds(0, 0, listWidth, 16);
-        playerList.setX(leftPos - listWidth - 6);
-        playerList.setLeftPos(leftPos - listWidth - 6);
-        playerList.setCheckboxTextureOverride(TEAM_LIST_TOGGLE, 16, 16);
+                .setPlayerHeadBackgroundBounds(0, 0, listWidth, listItemSize);
+        playerList.setX(listX);
+        playerList.setLeftPos(listX);
+        playerList.setCheckboxTextureOverride(TEAM_LIST_TOGGLE, listItemSize, listItemSize);
         addWidget(playerList);
 
         updateGraphs();
