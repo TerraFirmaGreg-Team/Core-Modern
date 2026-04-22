@@ -25,6 +25,7 @@ import lombok.Getter;
 /**
  * Creates a widget that displays a list of players with checkboxes.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class PlayerListWidget extends GenericScrollableListWidget<PlayerListWidget.PlayerEntry> {
 
     private ResourceLocation playerHeadBackground;

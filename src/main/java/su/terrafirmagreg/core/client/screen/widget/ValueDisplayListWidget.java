@@ -16,7 +16,7 @@ import net.minecraft.network.chat.Component;
 /**
  * Simple value display scrollable list for compact text rows with optional tooltip support.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public class ValueDisplayListWidget extends GenericScrollableListWidget<ValueDisplayListWidget.ValueDisplayEntry> {
 
     private final Font font;

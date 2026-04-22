@@ -9,7 +9,6 @@ package su.terrafirmagreg.core.client.screen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +35,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -65,6 +65,12 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     public static final int GUI_HEIGHT = 188;
     private static boolean RENDER_TEAM_NUTRITION = false;
     private static int STYLE_BUTTON_STATE = 0;
+    /**
+     * Enables development mode for team list features.
+     * When enabled, dummy team players are added to the radar graphs at {@link #addDummyTeamPlayers()}.
+     * And {@link #addFtbTeamPlayers(UUID)} is disabled.
+     */
+    private static final boolean TEAM_DEV_MODE = false;
 
     @Nullable
     private RadarGraphWidget positiveRadarGraph;
@@ -77,14 +83,17 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     private final List<Float> stablePosValues = new ArrayList<>();
     private final List<Float> stableNegValues = new ArrayList<>();
 
+    /**
+     * Dummy UUIDs for testing the team list when {@link #TEAM_DEV_MODE} is enabled.
+     */
     private static final UUID[] DUMMY_UUIDS = {
-            UUID.fromString("c154610e-8875-4bb5-99ef-8c167a0f2237"),
-            UUID.fromString("6a85d348-cadf-4a8a-8a07-9e1a1f14ee15"),
-            UUID.fromString("f66762d1-789e-467d-9171-8ff510f2e11d"),
-            UUID.fromString("ffc23e0f-c6d8-4eba-b33a-cd0fccca6097"),
-            UUID.fromString("cc998bd8-ea24-46b5-b2c1-b2784107c612"),
-            UUID.fromString("9ca8866e-778b-46e8-b384-0af54ae3d399"),
-            UUID.fromString("e213327a-7538-49fa-86ab-8c54545ca95f")
+            UUID.fromString("c154610e-8875-4bb5-99ef-8c167a0f2237"), // Pyritie
+            UUID.fromString("6a85d348-cadf-4a8a-8a07-9e1a1f14ee15"), // Mqrius
+            UUID.fromString("f66762d1-789e-467d-9171-8ff510f2e11d"), // SeuSherbert
+            UUID.fromString("ffc23e0f-c6d8-4eba-b33a-cd0fccca6097"), // Flurben
+            UUID.fromString("cc998bd8-ea24-46b5-b2c1-b2784107c612"), // Sakura
+            UUID.fromString("9ca8866e-778b-46e8-b384-0af54ae3d399"), // Totor1
+            UUID.fromString("e213327a-7538-49fa-86ab-8c54545ca95f") // broofsi
     };
 
     public TFGNutritionScreen(Container container, Inventory playerInventory, Component name) {
@@ -391,6 +400,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         updateGraphs();
     }
 
+    /**
+     * Updates the radar graphs and player list with current nutrition data.
+     */
     private void updateGraphs() {
         if (positiveRadarGraph == null || negativeRadarGraph == null || playerList == null)
             return;
@@ -428,41 +440,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
             negativeRadarGraph.addDataset(dsNeg1);
             playerList.addPlayer(self.getName(), self.getUUID(), dsPos1, dsNeg1, true);
 
-            // Dummy Players.
-            for (int i = 0; i < DUMMY_UUIDS.length; i++) {
-                UUID dummyUuid = DUMMY_UUIDS[i];
-                String dummyName = "Player " + (i + 2);
-                var connection = Minecraft.getInstance().getConnection();
-                if (connection != null) {
-                    var playerInfo = connection.getPlayerInfo(dummyUuid);
-                    if (playerInfo != null) {
-                        dummyName = playerInfo.getProfile().getName();
-                    }
-                }
-
-                boolean isMainPlayer = false;
-                List<Supplier<Float>> dummyPosValues = new ArrayList<>();
-                List<Supplier<Float>> dummyNegValues = new ArrayList<>();
-
-                for (int j = 0; j < stablePosValues.size(); j++) {
-                    final float base = stablePosValues.get(j);
-                    final float offset = (i + 1) * (j + 1) * 0.5f;
-                    dummyPosValues.add(() -> Math.max(0.1f, Math.min(0.9f, base + (float) Math.sin(offset) * 0.4f)));
-                }
-                for (int j = 0; j < stableNegValues.size(); j++) {
-                    final float base = stableNegValues.get(j);
-                    final float offset = (i + 1) * (j + 1) * 0.5f;
-                    dummyNegValues.add(() -> Math.max(0.1f, Math.min(0.9f, base + (float) Math.cos(offset) * 0.4f)));
-                }
-
-                int color = 0xFF000000 | ThreadLocalRandom.current().nextInt(0xFFFFFF);
-                int fillColor = (color & 0x55FFFFFF) | 0x55000000;
-
-                RadarGraphWidget.Dataset dsPos = new RadarGraphWidget.Dataset(Component.literal(dummyName), dummyPosValues, fillColor, color);
-                RadarGraphWidget.Dataset dsNeg = new RadarGraphWidget.Dataset(Component.literal(dummyName), dummyNegValues, fillColor, color);
-                positiveRadarGraph.addDataset(dsPos);
-                negativeRadarGraph.addDataset(dsNeg);
-                playerList.addPlayer(Component.literal(dummyName), dummyUuid, dsPos, dsNeg, false);
+            if (TEAM_DEV_MODE) {
+                addDummyTeamPlayers();
+            } else {
+                addFtbTeamPlayers(self.getUUID());
             }
 
         } else {
@@ -501,6 +482,290 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         }
     }
 
+    /**
+     * Adds dummy team players to the radar graphs for testing purposes.
+     * Only works if {@link #TEAM_DEV_MODE} is enabled.
+     */
+    private void addDummyTeamPlayers() {
+        if (positiveRadarGraph == null || negativeRadarGraph == null || playerList == null) {
+            return;
+        }
+        for (int i = 0; i < DUMMY_UUIDS.length; i++) {
+            UUID dummyUuid = DUMMY_UUIDS[i];
+            String dummyName = "Player " + (i + 2);
+            var connection = Minecraft.getInstance().getConnection();
+            if (connection != null) {
+                var playerInfo = connection.getPlayerInfo(dummyUuid);
+                if (playerInfo != null) {
+                    dummyName = playerInfo.getProfile().getName();
+                }
+            }
+
+            List<Supplier<Float>> dummyPosValues = new ArrayList<>();
+            List<Supplier<Float>> dummyNegValues = new ArrayList<>();
+
+            for (int j = 0; j < stablePosValues.size(); j++) {
+                final float base = stablePosValues.get(j);
+                final float offset = (i + 1) * (j + 1) * 0.5f;
+                dummyPosValues.add(() -> Math.max(0.1f, Math.min(0.9f, base + (float) Math.sin(offset) * 0.4f)));
+            }
+            for (int j = 0; j < stableNegValues.size(); j++) {
+                final float base = stableNegValues.get(j);
+                final float offset = (i + 1) * (j + 1) * 0.5f;
+                dummyNegValues.add(() -> Math.max(0.1f, Math.min(0.9f, base + (float) Math.cos(offset) * 0.4f)));
+            }
+
+            int color = getDistributedTeamColor(i, DUMMY_UUIDS.length);
+            int fillColor = (color & 0x55FFFFFF) | 0x55000000;
+
+            RadarGraphWidget.Dataset dsPos = new RadarGraphWidget.Dataset(Component.literal(dummyName), dummyPosValues, fillColor, color);
+            RadarGraphWidget.Dataset dsNeg = new RadarGraphWidget.Dataset(Component.literal(dummyName), dummyNegValues, fillColor, color);
+            positiveRadarGraph.addDataset(dsPos);
+            negativeRadarGraph.addDataset(dsNeg);
+            playerList.addPlayer(Component.literal(dummyName), dummyUuid, dsPos, dsNeg, false);
+        }
+    }
+
+    /**
+     * Adds team players from FTB Teams.
+     */
+    private void addFtbTeamPlayers(UUID selfUuid) {
+        if (positiveRadarGraph == null || negativeRadarGraph == null || playerList == null) {
+            return;
+        }
+        List<UUID> teamMembers = new ArrayList<>();
+        if (ModList.get().isLoaded("ftbteams")) {
+            teamMembers = resolveFtbTeamMembers(selfUuid);
+        }
+        if (teamMembers.isEmpty()) {
+            return;
+        }
+
+        int memberCount = Math.max(1, teamMembers.size() - 1);
+        int memberIndex = 0;
+        for (UUID memberUuid : teamMembers) {
+            if (memberUuid.equals(selfUuid)) {
+                continue;
+            }
+
+            String memberName = "Player";
+            var connection = Minecraft.getInstance().getConnection();
+            if (connection != null) {
+                var playerInfo = connection.getPlayerInfo(memberUuid);
+                if (playerInfo != null) {
+                    memberName = playerInfo.getProfile().getName();
+                }
+            }
+
+            List<Supplier<Float>> posValues = new ArrayList<>();
+            List<Supplier<Float>> negValues = new ArrayList<>();
+
+            for (Nutrient nutrient : Nutrient.VALUES) {
+                Supplier<Float> supplier = () -> {
+                    var level = Minecraft.getInstance().level;
+                    if (level == null) {
+                        return 0f;
+                    }
+                    Player member = level.getPlayerByUUID(memberUuid);
+                    if (member != null && member.getFoodData() instanceof TFCFoodData data) {
+                        return data.getNutrition().getNutrient(nutrient);
+                    }
+                    return 0f;
+                };
+                if (TFGNutrients.isPositive(nutrient)) {
+                    posValues.add(supplier);
+                } else if (TFGNutrients.isNegative(nutrient)) {
+                    negValues.add(supplier);
+                }
+            }
+
+            int color = getDistributedTeamColor(memberIndex, memberCount);
+            int fillColor = (color & 0x55FFFFFF) | 0x55000000;
+
+            RadarGraphWidget.Dataset dsPos = new RadarGraphWidget.Dataset(Component.literal(memberName), posValues, fillColor, color);
+            RadarGraphWidget.Dataset dsNeg = new RadarGraphWidget.Dataset(Component.literal(memberName), negValues, fillColor, color);
+            positiveRadarGraph.addDataset(dsPos);
+            negativeRadarGraph.addDataset(dsNeg);
+            playerList.addPlayer(Component.literal(memberName), memberUuid, dsPos, dsNeg, false);
+            memberIndex++;
+        }
+    }
+
+    /**
+     * Calculates a distributed color for team members based on their index and total count.
+     * @param index The index of the team member.
+     * @param totalPlayers The total number of team members.
+     * @return The ARGB color value for the team member.
+     */
+    private int getDistributedTeamColor(int index, int totalPlayers) {
+        int count = Math.max(1, totalPlayers);
+        float hueStep = 1.0f / count;
+        float hueOffset = 0.08f;
+        float hue = (hueOffset + (index * hueStep)) % 1.0f;
+
+        // Keep colors vivid
+        // Saturation > 50%, lightness in ~30-60% range.
+        float saturation = 0.65f;
+        float lightness = 0.45f;
+        if ((index & 1) == 1) {
+            lightness = 0.55f;
+        }
+        if (index % 3 == 2) {
+            saturation = 0.75f;
+        }
+
+        return hslToArgb(hue, saturation, lightness);
+    }
+
+    /**
+     * Converts HSL color model to ARGB color model.
+     * @param hue The hue [0, 1].
+     * @param saturation The saturation [0, 1].
+     * @param lightness The lightness [0, 1].
+     * @return The ARGB color value.
+     */
+    private int hslToArgb(float hue, float saturation, float lightness) {
+        float chroma = (1.0f - Math.abs((2.0f * lightness) - 1.0f)) * saturation;
+        float huePrime = (hue * 6.0f) % 6.0f;
+        float x = chroma * (1.0f - Math.abs((huePrime % 2.0f) - 1.0f));
+
+        float red1 = 0.0f;
+        float green1 = 0.0f;
+        float blue1 = 0.0f;
+
+        if (huePrime < 1.0f) {
+            red1 = chroma;
+            green1 = x;
+        } else if (huePrime < 2.0f) {
+            red1 = x;
+            green1 = chroma;
+        } else if (huePrime < 3.0f) {
+            green1 = chroma;
+            blue1 = x;
+        } else if (huePrime < 4.0f) {
+            green1 = x;
+            blue1 = chroma;
+        } else if (huePrime < 5.0f) {
+            red1 = x;
+            blue1 = chroma;
+        } else {
+            red1 = chroma;
+            blue1 = x;
+        }
+
+        float match = lightness - (chroma / 2.0f);
+        int red = Math.round((red1 + match) * 255.0f);
+        int green = Math.round((green1 + match) * 255.0f);
+        int blue = Math.round((blue1 + match) * 255.0f);
+
+        red = Math.max(0, Math.min(255, red));
+        green = Math.max(0, Math.min(255, green));
+        blue = Math.max(0, Math.min(255, blue));
+
+        return 0xFF000000 | (red << 16) | (green << 8) | blue;
+    }
+
+    /**
+     * Gets FTB team members for a given player UUID.
+     * @param selfUuid The UUID of the player.
+     * @return A list of UUIDs representing team members, including the player themselves.
+     */
+    private List<UUID> resolveFtbTeamMembers(UUID selfUuid) {
+        try {
+            Class<?> apiClass = Class.forName("dev.ftb.mods.ftbteams.api.FTBTeamsAPI");
+            Object api = apiClass.getMethod("api").invoke(null);
+            Object manager = api.getClass().getMethod("getManager").invoke(api);
+            Object teamOptional = manager.getClass().getMethod("getTeamForPlayerID", UUID.class).invoke(manager, selfUuid);
+
+            if (!(teamOptional instanceof java.util.Optional<?> optionalTeam) || optionalTeam.isEmpty()) {
+                return List.of(selfUuid);
+            }
+
+            Object team = optionalTeam.get();
+            List<UUID> members = extractUuidMembers(team);
+            if (members.isEmpty()) {
+                return List.of(selfUuid);
+            }
+            members = new ArrayList<>(new java.util.LinkedHashSet<>(members));
+            if (!members.contains(selfUuid)) {
+                members.add(0, selfUuid);
+            }
+            return members;
+        } catch (Exception ignored) {
+            return List.of(selfUuid);
+        }
+    }
+
+    /**
+     * Extracts UUID members from a team object.
+     * @param team The team object to extract members from.
+     * @return A list of UUID members, including the player.
+     */
+    private List<UUID> extractUuidMembers(Object team) {
+        List<UUID> members = new ArrayList<>();
+        for (String methodName : List.of("getMembers", "getMemberIds", "getPlayers")) {
+            try {
+                Object value = team.getClass().getMethod(methodName).invoke(team);
+                if (value instanceof List<?> list) {
+                    for (Object obj : list) {
+                        if (obj instanceof UUID id) {
+                            members.add(id);
+                        }
+                    }
+                } else if (value instanceof java.util.Collection<?> collection) {
+                    for (Object obj : collection) {
+                        if (obj instanceof UUID id) {
+                            members.add(id);
+                        } else {
+                            UUID id = extractUuidFromUnknownMember(obj);
+                            if (id != null) {
+                                members.add(id);
+                            }
+                        }
+                    }
+                } else if (value instanceof java.util.Map<?, ?> map) {
+                    for (Object key : map.keySet()) {
+                        if (key instanceof UUID id) {
+                            members.add(id);
+                        }
+                    }
+                }
+                if (!members.isEmpty()) {
+                    return members;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return members;
+    }
+
+    /**
+     * Extracts UUID from an unknown member object.
+     * @param member The member object to extract UUID from.
+     * @return The UUID if found, otherwise null.
+     */
+    @Nullable
+    private UUID extractUuidFromUnknownMember(Object member) {
+        if (member == null) {
+            return null;
+        }
+        for (String methodName : List.of("getId", "getUUID", "getPlayerId")) {
+            try {
+                Object value = member.getClass().getMethod(methodName).invoke(member);
+                if (value instanceof UUID id) {
+                    return id;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Creates a radar graph variable for a nutrient.
+     * @param nutrient The nutrient to create the variable for.
+     * @return The radar graph variable.
+     */
     private RadarGraphWidget.Variable createNutrientVariable(Nutrient nutrient) {
         // Get the color from the nutrient's ChatFormatting.
         Integer colorValue = nutrient.getColor().getColor();
@@ -515,7 +780,6 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                     return 0f;
                 },
                 0f, 1f)
-                //.setLabel(Helpers.translateEnum(nutrient).withStyle(nutrient.getColor()))
                 .setTexture(() -> {
                     if (TFGNutrients.isPositive(nutrient)) {
                         if (player != null && player.getFoodData() instanceof TFCFoodData data) {
@@ -530,7 +794,6 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                     return ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_icon.png");
                 }, NUTRIENT_ICON_SIZE)
                 .setLabelOffset((NUTRIENT_ICON_SIZE / 2) + 1)
-                //.setLabelColor(colorValue != null ? colorValue : 0x404040)
                 .setVertexColor(vertexColor)
                 .setTooltip(() -> {
                     if (player != null && player.getFoodData() instanceof TFCFoodData data) {
