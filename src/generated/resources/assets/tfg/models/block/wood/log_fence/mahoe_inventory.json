@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/log_fence_inventory",
+  "textures": {
+    "log": "tfg:block/wood/log/mahoe",
+    "planks": "tfg:block/wood/planks/mahoe"
+  }
+}

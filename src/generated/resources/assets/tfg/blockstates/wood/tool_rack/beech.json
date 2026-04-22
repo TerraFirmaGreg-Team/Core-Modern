@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/tool_rack/beech",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/tool_rack/beech",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/tool_rack/beech"
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/tool_rack/beech",
+      "y": 90
+    }
+  }
+}

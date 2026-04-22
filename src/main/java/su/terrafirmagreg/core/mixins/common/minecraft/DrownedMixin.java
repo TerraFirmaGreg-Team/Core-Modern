@@ -20,6 +20,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -89,7 +90,10 @@ public abstract class DrownedMixin extends Zombie {
      */
     @Overwrite
     protected void populateDefaultEquipmentSlots(RandomSource random, @NotNull DifficultyInstance difficulty) {
-        if (random.nextFloat() < 0.67f) {
+        super.populateDefaultEquipmentSlots(random, difficulty);
+
+        // Make them mostly empty-handed except for hard difficulty
+        if (this.level().getDifficulty() != Difficulty.HARD && random.nextFloat() < 0.67f) {
             this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             return;
         }

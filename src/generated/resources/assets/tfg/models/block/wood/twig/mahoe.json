@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/groundcover/twig",
+  "textures": {
+    "side": "tfg:block/wood/log/mahoe",
+    "top": "tfg:block/wood/log_top/mahoe"
+  }
+}

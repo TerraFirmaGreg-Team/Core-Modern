@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/chiseled_bookshelf_inventory",
+  "textures": {
+    "front": "tfg:block/wood/bookshelf/ginkgo_empty",
+    "side": "tfg:block/wood/bookshelf/ginkgo_side",
+    "top": "tfg:block/wood/bookshelf/ginkgo_top"
+  }
+}

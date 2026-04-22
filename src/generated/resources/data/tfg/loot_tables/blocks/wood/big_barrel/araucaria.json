@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "tfg:wood/big_barrel/araucaria",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "barrel_part": "0"
+              }
+            }
+          ],
+          "name": "tfg:wood/big_barrel/araucaria"
+        }
+      ],
+      "name": "loot_pool",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tfg:blocks/wood/big_barrel/araucaria"
+}

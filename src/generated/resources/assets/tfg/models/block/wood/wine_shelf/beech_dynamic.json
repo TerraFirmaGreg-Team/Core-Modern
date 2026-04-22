@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/wine_shelf/beech"
+  },
+  "loader": "firmalife:wine_shelf"
+}

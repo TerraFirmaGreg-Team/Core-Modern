@@ -2,12 +2,11 @@ package su.terrafirmagreg.core.world.feature;
 
 import com.mojang.serialization.Codec;
 
-import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.dries007.tfc.world.chunkdata.RockData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -52,10 +51,7 @@ public class FluidGasVentFeature extends Feature<FluidGasVentConfig> {
                     continue;
 
                 var existingState = level.getBlockState(mutablePos);
-                if (existingState == Blocks.ICE.defaultBlockState()
-                        || existingState == Blocks.PACKED_ICE.defaultBlockState()
-                        || existingState == Blocks.BLUE_ICE.defaultBlockState()
-                        || existingState == TFCBlocks.SEA_ICE.get().defaultBlockState())
+                if (!existingState.is(BlockTags.OVERWORLD_CARVER_REPLACEABLES))
                     continue;
 
                 if (dist < 1.5) {

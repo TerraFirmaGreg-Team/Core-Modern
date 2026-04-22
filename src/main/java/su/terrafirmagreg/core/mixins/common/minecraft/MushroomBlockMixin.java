@@ -28,11 +28,6 @@ public class MushroomBlockMixin {
         cir.setReturnValue(false);
     }
 
-    @Inject(method = "canSurvive", at = @At("HEAD"), cancellable = true)
-    public void tfg$canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(Block.isFaceFull(pState.getCollisionShape(pLevel, pPos.below()), Direction.UP));
-    }
-
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     public void tfg$randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom, CallbackInfo ci) {
         ci.cancel();

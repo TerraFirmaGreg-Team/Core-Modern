@@ -20,14 +20,15 @@ public class FluidHelpersMixin {
 
     @Inject(method = "isInWaterLikeFluid", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$isInWaterLikeFluid(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity.isInFluidType(((fluidType, aDouble) -> fluidType == TFGFluids.MARS_WATER.type().get()))) {
+        if (entity.isInFluidType(((fluidType, aDouble) -> fluidType == TFGFluids.MARS_WATER.type().get() || fluidType == TFGFluids.MUDDY_WATER.type().get()))) {
             cir.setReturnValue(true);
         }
     }
 
     @Inject(method = "isEyeInWaterLikeFluid", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$isEyeInWaterLikeFluid(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity.isEyeInFluidType(TFGFluids.MARS_WATER.type().get())) {
+        if (entity.isEyeInFluidType(TFGFluids.MARS_WATER.type().get())
+                || entity.isEyeInFluidType(TFGFluids.MUDDY_WATER.type().get())) {
             cir.setReturnValue(true);
         }
     }

@@ -4,6 +4,7 @@
     "down": "ad_astra:block/glacian_planks",
     "east": "tfg:block/wood/workbench/glacian_side",
     "north": "tfg:block/wood/workbench/glacian_front",
+    "particle": "tfg:block/wood/workbench/glacian_front",
     "south": "tfg:block/wood/workbench/glacian_side",
     "up": "tfg:block/wood/workbench/glacian_top",
     "west": "tfg:block/wood/workbench/glacian_front"

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left_open",
+  "textures": {
+    "bottom": "tfg:block/wood/door/beech_bottom",
+    "top": "tfg:block/wood/door/beech_top"
+  }
+}

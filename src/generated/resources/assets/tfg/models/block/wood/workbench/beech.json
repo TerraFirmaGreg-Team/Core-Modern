@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "tfg:block/wood/planks/beech",
+    "east": "tfg:block/wood/workbench/beech_side",
+    "north": "tfg:block/wood/workbench/beech_front",
+    "particle": "tfg:block/wood/workbench/beech_front",
+    "south": "tfg:block/wood/workbench/beech_side",
+    "up": "tfg:block/wood/workbench/beech_top",
+    "west": "tfg:block/wood/workbench/beech_front"
+  }
+}
