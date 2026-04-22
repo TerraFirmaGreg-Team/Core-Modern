@@ -236,7 +236,8 @@
         "common.wab.SoarerOverlayMixin",
         "common.wab.ToxlacanthMixin",
         "common.minecraft.SectionStorageAccessor",
-        "common.minecraft.PoiSectionAccessor"
+        "common.minecraft.PoiSectionAccessor",
+        "common.tfc.TFCFoxMixin"
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",

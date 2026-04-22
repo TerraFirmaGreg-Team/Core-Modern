@@ -18,6 +18,7 @@ import net.dries007.tfc.common.entities.livestock.horse.TFCChestedHorse;
 import net.dries007.tfc.common.entities.livestock.horse.TFCHorse;
 import net.dries007.tfc.common.entities.misc.TFCFishingHook;
 import net.dries007.tfc.common.entities.predator.Predator;
+import net.dries007.tfc.common.entities.prey.TFCFox;
 import net.dries007.tfc.common.entities.prey.TFCFrog;
 import net.dries007.tfc.common.entities.prey.TFCRabbit;
 import net.dries007.tfc.common.entities.prey.WildAnimal;
@@ -47,6 +48,7 @@ import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSea
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
 import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
 import su.terrafirmagreg.core.common.entity.charger.ChargerData;
+import su.terrafirmagreg.core.common.entity.fox.FoxData;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
@@ -88,7 +90,16 @@ public abstract class EntityTooltipsMixin {
         registry.register("lemming", TFC_1_21, TFCLemming.class);
         registry.register("jerboa", TFC_1_21, TFCJerboa.class);
         registry.register("mongoose", TFC_1_21, TFCMongoose.class);
+        registry.register("fox", TFG_FOX, TFCFox.class);
     }
+
+    @Unique
+    private static final EntityTooltip TFG_FOX = (level, entity, tooltip) -> {
+        if (entity instanceof TFCFox fox) {
+            String familiarityPercent = String.format("%.2f", FoxData.getFamiliarity(fox) * 100.0F);
+            tooltip.accept(Component.translatable("tfc.jade.familiarity", new Object[] { familiarityPercent }));
+        }
+    };
 
     @Unique
     private static final EntityTooltip TFG_RABBIT = (level, entity, tooltip) -> {
