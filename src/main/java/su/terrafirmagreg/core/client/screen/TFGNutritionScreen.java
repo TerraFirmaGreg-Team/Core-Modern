@@ -39,11 +39,11 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.screen.widget.MultiToggleButton;
 import su.terrafirmagreg.core.client.screen.widget.PlayerListWidget;
 import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
+import su.terrafirmagreg.core.client.screen.widget.ToggleButton;
 import su.terrafirmagreg.core.client.screen.widget.ValueDisplayListWidget;
-import su.terrafirmagreg.core.common.container.widgets.MultiToggleButton;
-import su.terrafirmagreg.core.common.container.widgets.ToggleButton;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**

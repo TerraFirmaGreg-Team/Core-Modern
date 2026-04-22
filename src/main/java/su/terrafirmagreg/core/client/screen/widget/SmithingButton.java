@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.container.widgets;
+package su.terrafirmagreg.core.client.screen.widget;
 
 import javax.annotation.Nullable;
 

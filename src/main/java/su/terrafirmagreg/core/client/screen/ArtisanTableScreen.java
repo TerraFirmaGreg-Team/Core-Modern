@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.container;
+package su.terrafirmagreg.core.client.screen;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.container.widgets.SmithingButton;
+import su.terrafirmagreg.core.client.screen.widget.SmithingButton;
+import su.terrafirmagreg.core.common.container.ArtisanTableContainer;
 import su.terrafirmagreg.core.common.recipe.ArtisanPattern;
 import su.terrafirmagreg.core.common.recipe.ArtisanType;
 
