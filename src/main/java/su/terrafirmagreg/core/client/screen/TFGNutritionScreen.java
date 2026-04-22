@@ -70,7 +70,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
      * When enabled, dummy team players are added to the radar graphs at {@link #addDummyTeamPlayers()}.
      * And {@link #addFtbTeamPlayers(UUID)} is disabled.
      */
-    private static final boolean TEAM_DEV_MODE = false;
+    private static final boolean NUTRITION_TEAM_DEV_MODE = false;
 
     @Nullable
     private RadarGraphWidget positiveRadarGraph;
@@ -84,7 +84,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     private final List<Float> stableNegValues = new ArrayList<>();
 
     /**
-     * Dummy UUIDs for testing the team list when {@link #TEAM_DEV_MODE} is enabled.
+     * Dummy UUIDs for testing the team list when {@link #NUTRITION_TEAM_DEV_MODE} is enabled.
      */
     private static final UUID[] DUMMY_UUIDS = {
             UUID.fromString("c154610e-8875-4bb5-99ef-8c167a0f2237"), // Pyritie
@@ -440,7 +440,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
             negativeRadarGraph.addDataset(dsNeg1);
             playerList.addPlayer(self.getName(), self.getUUID(), dsPos1, dsNeg1, true);
 
-            if (TEAM_DEV_MODE) {
+            if (NUTRITION_TEAM_DEV_MODE) {
                 addDummyTeamPlayers();
             } else {
                 addFtbTeamPlayers(self.getUUID());
@@ -484,7 +484,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
     /**
      * Adds dummy team players to the radar graphs for testing purposes.
-     * Only works if {@link #TEAM_DEV_MODE} is enabled.
+     * Only works if {@link #NUTRITION_TEAM_DEV_MODE} is enabled.
      */
     private void addDummyTeamPlayers() {
         if (positiveRadarGraph == null || negativeRadarGraph == null || playerList == null) {
