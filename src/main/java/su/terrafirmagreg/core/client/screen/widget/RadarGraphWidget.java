@@ -34,7 +34,7 @@ import lombok.Setter;
 /**
  * A spider web /radar graph widget for displaying multiple variables on a regular polygon.
  */
-@SuppressWarnings({"unused","UnusedReturnValue", "UnnecessaryLocalVariable"})
+@SuppressWarnings({ "unused", "UnusedReturnValue", "UnnecessaryLocalVariable" })
 public class RadarGraphWidget extends AbstractWidget {
 
     /**
