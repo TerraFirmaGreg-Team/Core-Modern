@@ -51,13 +51,13 @@ import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
  */
 @SuppressWarnings({ "UnnecessaryLocalVariable" })
 public class TFGNutritionScreen extends TFCContainerScreen<Container> {
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/nutrition_screen.png");
-    public static final ResourceLocation TEAM_LIST_TINT_BACKGROUND = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/team_list_tint_background.png");
-    public static final ResourceLocation TEAM_LIST_TOGGLE = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/team_list_player_toggle.png");
-    public static final ResourceLocation HEART_1 = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/heart_1_icon.png");
-    public static final ResourceLocation HEART_2 = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/heart_2_icon.png");
-    public static final ResourceLocation HEART_3 = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/heart_3_icon.png");
-    public static final ResourceLocation HEART_4 = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/heart_4_icon.png");
+    public static final ResourceLocation TEXTURE = TFGCore.id("textures/gui/nutrition_screen/nutrition_screen.png");
+    public static final ResourceLocation TEAM_LIST_TINT_BACKGROUND = TFGCore.id("textures/gui/nutrition_screen/team_list_tint_background.png");
+    public static final ResourceLocation TEAM_LIST_TOGGLE = TFGCore.id("textures/gui/nutrition_screen/team_list_player_toggle.png");
+    public static final ResourceLocation HEART_1 = TFGCore.id("textures/gui/nutrition_screen/heart_1_icon.png");
+    public static final ResourceLocation HEART_2 = TFGCore.id("textures/gui/nutrition_screen/heart_2_icon.png");
+    public static final ResourceLocation HEART_3 = TFGCore.id("textures/gui/nutrition_screen/heart_3_icon.png");
+    public static final ResourceLocation HEART_4 = TFGCore.id("textures/gui/nutrition_screen/heart_4_icon.png");
 
     public static final int NUTRIENT_ICON_SIZE = 12;
     public static final int HEART_ICON_SIZE = 13;
@@ -234,7 +234,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         }, HEART_ICON_SIZE);
 
         // Toggle button for team nutrition.
-        ResourceLocation toggleTexture = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/team_button.png");
+        ResourceLocation toggleTexture = TFGCore.id("textures/gui/nutrition_screen/team_button.png");
         ToggleButton teamToggleButton = new ToggleButton(teamToggleX, teamToggleY, teamToggleSize, teamToggleSize, toggleTexture, teamToggleSize * 2, teamToggleSize, () -> RENDER_TEAM_NUTRITION,
                 button -> {
                     RENDER_TEAM_NUTRITION = !RENDER_TEAM_NUTRITION;
@@ -249,7 +249,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 styleToggleSize, styleToggleSize,
                 () -> STYLE_BUTTON_STATE,
                 state -> STYLE_BUTTON_STATE = state,
-                state -> ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/style_button_" + state + ".png"),
+                state -> TFGCore.id("textures/gui/nutrition_screen/style_button_" + state + ".png"),
                 button -> {
                     updateGraphs();
                 });
@@ -785,13 +785,13 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                         if (player != null && player.getFoodData() instanceof TFCFoodData data) {
                             float avg = data.getNutrition().getNutrient(nutrient);
                             if (avg < 0.25f)
-                                return ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_bad_icon.png");
+                                return TFGCore.id("textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_bad_icon.png");
                             if (avg < 0.99f)
-                                return ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_icon.png");
-                            return ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_good_icon.png");
+                                return TFGCore.id("textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_icon.png");
+                            return TFGCore.id("textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_good_icon.png");
                         }
                     }
-                    return ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_icon.png");
+                    return TFGCore.id("textures/gui/nutrition_screen/" + nutrient.getSerializedName() + "_icon.png");
                 }, NUTRIENT_ICON_SIZE)
                 .setLabelOffset((NUTRIENT_ICON_SIZE / 2) + 1)
                 .setVertexColor(vertexColor)
