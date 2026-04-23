@@ -1,0 +1,9 @@
+{
+  "parent": "craftingstation:block/crafting_station",
+  "textures": {
+    "2": "tfg:block/wood/crafting_station/aeronos_side",
+    "3": "tfg:block/wood/crafting_station/aeronos_top",
+    "4": "ad_astra:block/aeronos_planks",
+    "particle": "tfg:block/wood/crafting_station/aeronos_top"
+  }
+}

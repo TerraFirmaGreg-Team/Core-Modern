@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "tfg:block/wood/twig/mahoe"
+      },
+      {
+        "model": "tfg:block/wood/twig/mahoe",
+        "y": 90
+      },
+      {
+        "model": "tfg:block/wood/twig/mahoe",
+        "y": 180
+      },
+      {
+        "model": "tfg:block/wood/twig/mahoe",
+        "y": 270
+      }
+    ]
+  }
+}

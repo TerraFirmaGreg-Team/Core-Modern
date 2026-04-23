@@ -23,6 +23,7 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
+import su.terrafirmagreg.core.common.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.NetworkReceiverConfigEntry;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBusMachine;
@@ -59,7 +60,7 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
     @Override
     public void onLoad() {
         super.onLoad();
-        if (getLevel() instanceof ServerLevel sLvl)
+        if (getLevel() instanceof ServerLevel sLvl && InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.containsKey(getDimensionalPos().dimension()))
             sLvl.getServer().tell(new TickTask(0, () -> getLogisticsNetwork().loadOrCreatePart(this)));
     }
 

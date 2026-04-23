@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/food_shelf/mahoe_dynamic",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/food_shelf/mahoe_dynamic",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/food_shelf/mahoe_dynamic"
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/food_shelf/mahoe_dynamic",
+      "y": 90
+    }
+  }
+}

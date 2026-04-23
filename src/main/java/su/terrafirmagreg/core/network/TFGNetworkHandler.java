@@ -12,6 +12,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
+import su.terrafirmagreg.core.network.packet.NegativeNutrientsPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
 import su.terrafirmagreg.core.network.packet.ParticlePacket;
@@ -62,6 +63,12 @@ public class TFGNetworkHandler {
                 FuelSyncPacket::encode,
                 FuelSyncPacket::decode,
                 FuelSyncPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                NegativeNutrientsPacket.class,
+                NegativeNutrientsPacket::encode,
+                NegativeNutrientsPacket::decode,
+                NegativeNutrientsPacket::handle);
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {

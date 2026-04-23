@@ -71,15 +71,31 @@ public class TFGEmiPlugin implements EmiPlugin {
                 .filter(r -> !r.getId().getPath().equals("/nether_anthracite_emi"))
                 .forEach(emiRegistry::addRecipe);
 
-        // These two aren't normal ores so add them separately
+        // These aren't normal ores so add them separately
         emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_anthracite", "minecraft:the_nether",
-                35, 0.8, 48, 127, 13, 4, 0, new String[] { "minecraft:deepslate" },
+                35, 0.8, 48, 127, 13, 4, 0, false, false, false, 1,
+                new String[] { "minecraft:deepslate" },
                 new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("cursecoal", 100) },
+                null, null,
+                null, null, null, null,
                 null));
         emiRegistry.addRecipe(new OreVeinInfoRecipe("rose_quartz", "minecraft:overworld",
-                80, 1, 60, 80, 10, 0, 0, new String[] { "minecraft:blue_ice", "minecraft:snow_block" },
+                80, 1, 60, 80, 10, 0, 0, false, false, false, 1,
+                new String[] { "minecraft:blue_ice", "minecraft:snow_block" },
                 new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("rose_quartz", 60), new OreVeinInfoRecipe.WeightedBlock("quartzite", 40) },
-                new String[] { "ore_vein.tfg.rose_quartz.emi.0", "ore_vein.tfg.rose_quartz.emi.1", "ore_vein.tfg.rose_quartz.emi.2" }));
+                "tfg:earth/is_ice_sheet",
+                new String[] { "biome.tfg.earth/ice_sheet", "biome.tfg.earth/ice_sheet_mountains", "biome.tfg.earth/ice_sheet_oceanic_mountains", "biome.tfg.earth/ice_sheet_shield_volcano",
+                        "biome.tfg.earth/ice_sheet_tuyas", "biome.tfg.earth/subglacial_lake", "biome.tfg.earth/ice_sheet_tuyas_edge", "biome.tfg.earth/ice_sheet_oceanic",
+                        "biome.tfg.earth/ice_sheet_shore", "biome.tfg.earth/glaciated_mountains", "biome.tfg.earth/glaciated_oceanic_mountains", "biome.tfg.earth/glaciated_shield_volcano" },
+                null, null, null, -10,
+                null));
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("oilsands", "minecraft:overworld",
+                80, 1, 60, 80, 0, 3, 5, false, true, false, 0,
+                new String[] { "tfc:sand/white", "tfc:sand/yellow", "tfc:sand/red", "tfc:sand/brown", "tfc:sand/pink", "tfc:sand/green", "tfc:sand/black" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("oilsands", 100) },
+                null, null,
+                null, null, null, null,
+                new String[] { "tfg.ore_vein.oilsands.emi.0", "tfg.ore_vein.oilsands.emi.1" }));
 
         //Blaze Burner
         emiRegistry.addCategory(BLAZE_BURNER);

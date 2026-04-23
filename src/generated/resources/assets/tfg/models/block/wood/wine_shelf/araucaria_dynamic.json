@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/wine_shelf/araucaria"
+  },
+  "loader": "firmalife:wine_shelf"
+}

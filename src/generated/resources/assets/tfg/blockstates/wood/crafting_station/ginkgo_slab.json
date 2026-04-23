@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "tfg:block/wood/crafting_station/ginkgo_slab"
+    },
+    "type=double": {
+      "model": "tfg:block/wood/crafting_station/ginkgo_slab_double"
+    },
+    "type=top": {
+      "model": "tfg:block/wood/crafting_station/ginkgo_slab_top"
+    }
+  }
+}

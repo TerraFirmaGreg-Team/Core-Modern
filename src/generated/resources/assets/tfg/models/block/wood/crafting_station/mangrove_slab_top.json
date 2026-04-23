@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "tfc:block/wood/planks/mangrove",
+    "particle": "tfc:block/wood/planks/mangrove",
+    "side": "tfg:block/wood/crafting_station/mangrove_slab_side",
+    "top": "tfg:block/wood/crafting_station/mangrove_top"
+  }
+}

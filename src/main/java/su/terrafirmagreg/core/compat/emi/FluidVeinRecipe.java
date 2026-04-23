@@ -115,7 +115,7 @@ public class FluidVeinRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return veinID.withSuffix("_emi");
+        return veinID.withPrefix("/").withSuffix("_emi");
     }
 
     @Override
@@ -303,7 +303,6 @@ public class FluidVeinRecipe implements EmiRecipe {
 
     private int addCenteredTextLine(WidgetHolder widgets, Component text, int x, int y) {
         var formText = text.getVisualOrderText();
-        var width = CLIENT.font.width(formText);
 
         var textWidget = new TextWidget(formText, x + getDisplayWidth() / 2, y, 0, false) {
 

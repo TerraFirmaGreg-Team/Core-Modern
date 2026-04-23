@@ -1,0 +1,9 @@
+{
+  "parent": "craftingstation:block/crafting_station",
+  "textures": {
+    "2": "tfg:block/wood/crafting_station/ginkgo_side",
+    "3": "tfg:block/wood/crafting_station/ginkgo_top",
+    "4": "wan_ancient_beasts:block/ginkgo_planks",
+    "particle": "tfg:block/wood/crafting_station/ginkgo_top"
+  }
+}
