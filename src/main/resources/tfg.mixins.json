@@ -121,6 +121,7 @@
         "common.gtceu.tools.GTToolTypeMixin",
         "common.gtceu.tools.HarvestCropsBehaviorMixin",
         "common.gtceu.tools.LighterBehaviorMixin",
+        "common.gtceu.tools.ToolHeadReplaceRecipeMixin",
         "common.gtceu.tools.ToolHelperMixin",
         "common.gtceu.tools.ToolRecipeHandlerMixin",
         "common.gtutilities.UtilToolRecipeHelperMixin",
