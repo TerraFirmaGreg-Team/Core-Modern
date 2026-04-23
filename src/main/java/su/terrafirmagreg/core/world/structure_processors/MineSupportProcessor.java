@@ -75,6 +75,7 @@ public class MineSupportProcessor extends StructureProcessor {
 
         //Find wood if no nearby chunks have been cached
         if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+
             ChunkDataProvider dataProv = ChunkDataProvider.get(levelAccessor.getLevel().getChunkSource().getGenerator());
             ChunkData data = dataProv.get(levelAccessor.getChunk(chunkPos.x, chunkPos.z));
             System.out.println(chunkPos);
@@ -245,5 +246,4 @@ public class MineSupportProcessor extends StructureProcessor {
     private boolean isLampBlock(BlockState blockState) {
         return blockState.getBlock() instanceof LampBlock;
     }
-
 }

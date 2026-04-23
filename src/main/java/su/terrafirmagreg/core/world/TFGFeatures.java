@@ -78,6 +78,9 @@ public class TFGFeatures {
     public static final RegistryObject<RockPileFeature> ROCK_PILE = register(
             "rock_pile", RockPileFeature::new, RockPileConfig.CODEC);
 
+    public static final RegistryObject<MineshaftOreFeature> MINESHAFT_ORE = register(
+            "mineshaft_ore", MineshaftOreFeature::new, MineshaftOreConfig.CODEC);
+
     private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
             Function<Codec<C>, F> factory, Codec<C> codec) {
         return FEATURES.register(name, () -> factory.apply(codec));
