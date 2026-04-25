@@ -104,14 +104,14 @@ public class TFCDogMixin extends TamableMammal implements TFCDog {
         KoppenClimateClassification climate = KoppenClimateClassification.classify(temperature, rainfall);
 
         TFCDogVariant variant = switch (climate) {
-            // Default
-            default -> TFCDogVariant.DEFAULT;
+            case HUMID_SUBTROPICAL, TROPICAL_RAINFOREST -> TFCDogVariant.RUSTY;
+            case HUMID_SUBARCTIC, TUNDRA -> this.random.nextBoolean() ? TFCDogVariant.BLACK : TFCDogVariant.CHESTNUT;
+            case SUBTROPICAL, HOT_DESERT, TROPICAL_SAVANNA -> this.random.nextBoolean() ? TFCDogVariant.SPOTTED : TFCDogVariant.STRIPED;
+            case TEMPERATE -> this.random.nextBoolean() ? TFCDogVariant.WOODS : TFCDogVariant.DEFAULT;
+            case SUBARCTIC, ARCTIC -> this.random.nextBoolean() ? TFCDogVariant.SNOWY : TFCDogVariant.ASHEN;
+            default -> TFCDogVariant.DEFAULT; // HUMID_OCEANIC, COLD_DESERT
         };
 
         this.tfg$setVariant(variant);
     }
 }
-
-// Core: TEMPERATE, HUMID_OCEANIC, SUBARCTIC, HUMID_SUBARCTIC, SUBTROPICAL, HUMID_SUBTROPICAL
-// Rare: TUNDRA, HOT_DESERT
-// No Spawn: ARCTIC, TROPICAL_RAINFOREST, TROPICAL_SAVANNA, COLD_DESERT, HOT_DESERT
