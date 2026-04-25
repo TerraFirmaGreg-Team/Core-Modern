@@ -5,7 +5,9 @@ import org.spongepowered.asm.mixin.Unique;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.entities.livestock.MammalProperties;
 import net.dries007.tfc.common.entities.livestock.TFCAnimal;
+import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.dries007.tfc.common.entities.livestock.pet.Dog;
 import net.dries007.tfc.common.entities.livestock.pet.TamableMammal;
 import net.dries007.tfc.config.TFCConfig;
@@ -62,6 +64,26 @@ public class TFCDogMixin extends TamableMammal implements TFCDog {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.tfg$setVariant(TFCDogVariant.byId(tag.getInt("TFCDogVariant")));
+    }
+
+    public void createGenes(CompoundTag tag, TFCAnimalProperties male) {
+        super.createGenes(tag, male);
+        if (male instanceof TFCDogMixin maleDog) {
+            TFCDogVariant variant = this.random.nextBoolean() ? maleDog.tfg$getVariant() : this.tfg$getVariant();
+            tag.putInt("TFCDogVariant", variant.id);
+        }
+    }
+
+    public void applyGenes(CompoundTag tag, MammalProperties baby) {
+        super.applyGenes(tag, baby);
+        if (baby instanceof TFCDogMixin dog) {
+            int id = tag.getInt("TFCDogVariant");
+
+            TFCDogVariant variant = TFCDogVariant.byId(id);
+
+            dog.tfg$setVariant(variant);
+        }
+
     }
 
     public TFCDogMixin(EntityType<? extends TFCAnimal> animal, Level level) {
