@@ -141,6 +141,7 @@
         "common.minecraft.DrownedMixin",
         "common.minecraft.EntitySnowshoesSpeedMixin",
         "common.minecraft.PowderSnowBlockSnowshoesMixin",
+        "common.minecraft.SnowLayerBlockSnowshoesMixin",
         "common.minecraft.HeightmapMixin",
         "common.minecraft.HugeFungusFeatureInvoker",
         "common.minecraft.HugeFungusFeatureMixin",
