@@ -139,6 +139,8 @@
         "common.minecraft.BlazeMixin",
         "common.minecraft.BlockEntityTypeAccessor",
         "common.minecraft.DrownedMixin",
+        "common.minecraft.EntitySnowshoesSpeedMixin",
+        "common.minecraft.PowderSnowBlockSnowshoesMixin",
         "common.minecraft.HeightmapMixin",
         "common.minecraft.HugeFungusFeatureInvoker",
         "common.minecraft.HugeFungusFeatureMixin",
