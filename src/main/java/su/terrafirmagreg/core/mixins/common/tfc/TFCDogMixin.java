@@ -106,10 +106,10 @@ public class TFCDogMixin extends TamableMammal implements TFCDog {
         TFCDogVariant variant = switch (climate) {
             case HUMID_SUBTROPICAL, TROPICAL_RAINFOREST -> TFCDogVariant.RUSTY;
             case HUMID_SUBARCTIC, TUNDRA -> this.random.nextBoolean() ? TFCDogVariant.BLACK : TFCDogVariant.CHESTNUT;
-            case HUMID_OCEANIC, COLD_DESERT -> TFCDogVariant.DEFAULT;
             case SUBTROPICAL, HOT_DESERT, TROPICAL_SAVANNA -> this.random.nextBoolean() ? TFCDogVariant.SPOTTED : TFCDogVariant.STRIPED;
             case TEMPERATE -> this.random.nextBoolean() ? TFCDogVariant.WOODS : TFCDogVariant.DEFAULT;
             case SUBARCTIC, ARCTIC -> this.random.nextBoolean() ? TFCDogVariant.SNOWY : TFCDogVariant.ASHEN;
+            default -> TFCDogVariant.DEFAULT; // HUMID_OCEANIC, COLD_DESERT
         };
 
         this.tfg$setVariant(variant);
