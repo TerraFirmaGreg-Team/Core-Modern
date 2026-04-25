@@ -99,17 +99,17 @@ public class TFCDogMixin extends TamableMammal implements TFCDog {
         super.initCommonAnimalData(level, difficulty, reason);
 
         BlockPos pos = this.blockPosition();
-        float temperature = Climate.getTemperature(level.getLevel(), pos);
+        float temperature = Climate.getAverageTemperature(level.getLevel(), pos);
         float rainfall = Climate.getRainfall(level.getLevel(), pos);
         KoppenClimateClassification climate = KoppenClimateClassification.classify(temperature, rainfall);
 
         TFCDogVariant variant = switch (climate) {
             case HUMID_SUBTROPICAL, TROPICAL_RAINFOREST -> TFCDogVariant.RUSTY;
             case HUMID_SUBARCTIC, TUNDRA -> this.random.nextBoolean() ? TFCDogVariant.BLACK : TFCDogVariant.CHESTNUT;
+            case HUMID_OCEANIC, COLD_DESERT -> TFCDogVariant.DEFAULT;
             case SUBTROPICAL, HOT_DESERT, TROPICAL_SAVANNA -> this.random.nextBoolean() ? TFCDogVariant.SPOTTED : TFCDogVariant.STRIPED;
             case TEMPERATE -> this.random.nextBoolean() ? TFCDogVariant.WOODS : TFCDogVariant.DEFAULT;
             case SUBARCTIC, ARCTIC -> this.random.nextBoolean() ? TFCDogVariant.SNOWY : TFCDogVariant.ASHEN;
-            default -> TFCDogVariant.DEFAULT; // HUMID_OCEANIC, COLD_DESERT
         };
 
         this.tfg$setVariant(variant);
