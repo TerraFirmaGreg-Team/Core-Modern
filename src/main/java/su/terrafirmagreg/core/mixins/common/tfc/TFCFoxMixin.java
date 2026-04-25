@@ -9,8 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
-import net.dries007.tfc.common.entities.TFCEntities;
-import net.dries007.tfc.common.entities.livestock.pet.TFCCat;
 import net.dries007.tfc.common.entities.prey.TFCFox;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -27,7 +25,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
+import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.entity.fox.FoxData;
+import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 
 @Mixin(value = TFCFox.class)
 public abstract class TFCFoxMixin extends Fox {
@@ -79,15 +79,15 @@ public abstract class TFCFoxMixin extends Fox {
             if (!level().isClientSide) {
                 final long ticks = Calendars.SERVER.getTicks();
                 if (ticks > tfg$nextFeedTime) {
-                    tfg$setFamiliarity(tfg$getFamiliarity() + 0.07f);
+                    tfg$setFamiliarity(tfg$getFamiliarity() + 0.5f);
                     tfg$nextFeedTime = ticks + ICalendar.TICKS_IN_DAY;
                     usePlayerItem(player, hand, held);
                     playSound(SoundEvents.PLAYER_BURP);
 
                     if (tfg$getFamiliarity() > 0.99f) {
-                        final TFCCat cat = convertTo(TFCEntities.CAT.get(), false);
-                        if (cat != null && level() instanceof ServerLevelAccessor server) {
-                            cat.finalizeSpawn(server, level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.CONVERSION, null, null);
+                        final TFGFox fox = convertTo(TFGEntities.TFG_FOX.get(), false);
+                        if (fox != null && level() instanceof ServerLevelAccessor server) {
+                            fox.finalizeSpawn(server, level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.CONVERSION, null, null);
                         }
                     }
                 }

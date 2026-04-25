@@ -33,6 +33,8 @@ import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongooseRende
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
+import su.terrafirmagreg.core.common.entity.fox.TFGFox;
+import su.terrafirmagreg.core.common.entity.fox.TFGFoxRenderer;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamModel;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamRenderer;
@@ -51,6 +53,12 @@ public class TFGEntities {
 
     public static void init() {
     }
+
+    public static final EntityEntry<TFGFox> TFG_FOX = TFGCore.REGISTRATE.entity("fox", TFGFox::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.6F, 0.7F).clientTrackingRange(8))
+            .attributes(TFGFox::createAttributes)
+            .renderer(() -> TFGFoxRenderer::new)
+            .register();
 
     public static final EntityEntry<MoonRabbit> MOON_RABBIT = TFGCore.REGISTRATE.entity("moon_rabbit", MoonRabbit::makeMoonRabbit, MobCategory.CREATURE)
             .properties(p -> p.sized(1.0F, 1.3F).clientTrackingRange(10))

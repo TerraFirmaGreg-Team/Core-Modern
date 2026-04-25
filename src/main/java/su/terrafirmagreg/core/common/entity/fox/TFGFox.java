@@ -1,4 +1,95 @@
 package su.terrafirmagreg.core.common.entity.fox;
 
-public class TFGFox {
+import net.dries007.tfc.client.TFCSounds;
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.entities.livestock.TFCAnimal;
+import net.dries007.tfc.common.entities.livestock.pet.TamableMammal;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.Helpers;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+
+public class TFGFox extends TamableMammal {
+
+    private static final EntityDataAccessor<Integer> DATA_VARIANT;
+
+    static {
+        DATA_VARIANT = SynchedEntityData.defineId(TFGFox.class, EntityDataSerializers.INT);
+    }
+
+    public Fox.Type getVariant() {
+        return Fox.Type.byId((Integer) this.entityData.get(DATA_VARIANT));
+    }
+
+    public void setVariant(Fox.Type id) {
+        this.entityData.set(DATA_VARIANT, id.getId());
+    }
+
+    public TFGFox(EntityType<? extends TFCAnimal> animal, Level level) {
+        super(animal, level, TFCSounds.CAT, TFCConfig.SERVER.catConfig);
+    }
+
+    @Override
+    public boolean willListenTo(Command command, boolean isClientSide) {
+        if (!isClientSide && command == Command.SIT && getRandom().nextFloat() < 0.1f) {
+            return false;
+        }
+        return super.willListenTo(command, isClientSide);
+    }
+
+    @Override
+    public void initCommonAnimalData(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason) {
+        super.initCommonAnimalData(level, difficulty, reason);
+
+        this.setVariant(Fox.Type.SNOW);
+    }
+
+    @Override
+    public TagKey<Item> getFoodTag() {
+        return TFCTags.Items.CAT_FOOD;
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_VARIANT, 0);
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity entity) {
+        return super.canAttack(entity) && (Helpers.isEntity(entity, TFCTags.Entities.HUNTED_BY_DOGS) || entity instanceof Monster);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+    }
+
+    @Override
+    public void receiveCommand(ServerPlayer player, Command command) {
+        if (getOwner() != null && getOwner().equals(player)) {
+            playSound(SoundEvents.CAT_PURREOW, getSoundVolume(), getVoicePitch());
+        }
+        super.receiveCommand(player, command);
+    }
+
 }
