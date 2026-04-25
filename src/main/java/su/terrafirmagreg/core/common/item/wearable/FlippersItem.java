@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
  * Modifier is applied by {@link su.terrafirmagreg.core.common.event.TFGWearableAccessoryHandler}.
  */
 public class FlippersItem extends Item {
-    
+
     public static final UUID SWIM_SPEED_MODIFIER_UUID = UUID.fromString("83f4e257-cd5c-4a36-ba4b-c052422ce7cf");
     public static final String SWIM_SPEED_MODIFIER_NAME = "tfg:flippers_swim_speed_bonus";
     public static final double DEFAULT_SWIM_SPEED_ADDITION = 1.0D;
