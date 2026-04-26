@@ -34,14 +34,14 @@ public class ChunkSerializerMixin {
                 CompoundTag tag1 = (CompoundTag) tag;
 
                 String name = tag1.getString("Name");
-                if (name.equals("create_factory_logistics:factory_fluid_gauge")) {
+                if (name.equals("create_factory_logistics:factory_fluid_gauge")) { //replace gauge blocks
                     tag1.remove("Name");
                     tag1.putString("Name", "create:factory_gauge");
-                    TFGCore.LOGGER.debug("Replacing create_factory_logistics:factory_fluid_gauge block");
-                } else if (name.equals("create_factory_logistics:jar_packager")) {
+                    //TFGCore.LOGGER.debug("Replacing create_factory_logistics:factory_fluid_gauge block");
+                } else if (name.equals("create_factory_logistics:jar_packager")) { //replace bottler blocks
                     tag1.remove("Name");
                     tag1.putString("Name", "fluidlogistics:fluid_packager");
-                    TFGCore.LOGGER.debug("Replacing create_factory_logistics:jar_packager block");
+                    //TFGCore.LOGGER.debug("Replacing create_factory_logistics:jar_packager block");
                 }
             }
 
@@ -61,38 +61,42 @@ public class ChunkSerializerMixin {
             for (int i = 0; i < listtag1.size(); ++i) {
                 CompoundTag compoundtag = listtag1.getCompound(i);
                 String id = compoundtag.getString("id");
-                if (id.equals("create_factory_logistics:factory_fluid_panel")) {
+                if (id.equals("create_factory_logistics:factory_fluid_panel")) { //replace gauge blockEntities
                     compoundtag.remove("id");
-                    compoundtag.putString("id", "create:factory_panel");
-                    TFGCore.LOGGER.debug("Replacing create_factory_logistics:factory_fluid_panel blockEntity");
+                    compoundtag.putString("id", "create:factory_panel"); //reference to the new blockEntity
+                    //TFGCore.LOGGER.debug("Replacing create_factory_logistics:factory_fluid_panel blockEntity");
 
+                    // Everything below here is to change the gauge programing to work automatically with fluidlogistics
                     String[] corners = { "top_right", "top_left", "bottom_left", "bottom_right" };
 
-                    for (String corner : corners) {
+                    for (String corner : corners) { //Runs for each of the 4 corners of the gauge
                         var cornerTag = compoundtag.getCompound(corner);
-                        var itemFilter = ItemStack.of(cornerTag.getCompound("Filter"));
+                        var itemFilter = ItemStack.of(cornerTag.getCompound("Filter")); //get the current set item (a bucket or cell with fluid)
 
-                        Pair<FluidStack, ItemStack> emptyResult = GenericItemEmptying.emptyItem(level, itemFilter, true);
+                        Pair<FluidStack, ItemStack> emptyResult = GenericItemEmptying.emptyItem(level, itemFilter, true); //empty it to get the fluid it contains
                         FluidStack fluidStack = emptyResult.getFirst();
                         if (!fluidStack.isEmpty()) {
-                            String fluidID = fluidStack.getFluid().getFluidType().toString();
+                            String fluidID = fluidStack.getFluid().getFluidType().toString(); //get the ID of the fluid
                             TFGCore.LOGGER.debug("Section {} contains fluid {}", corner, fluidID);
                             try {
+                                // Create a new filter tag that will work with fluidlogistics
+                                // Yes this is hard-coded, but it should be fine
                                 var newFilter = TagParser.parseTag("{id:\"fluidlogistics:compressed_storage_tank\",Count: 1b, tag:{Virtual: 1b, Fluid: {FluidName: \"" + fluidID + "\", Amount: 1}}}");
                                 cornerTag.remove("Filter");
                                 cornerTag.put("Filter", newFilter);
-                                TFGCore.LOGGER.info("created new tag for gauge migration");
+                                //TFGCore.LOGGER.info("created new tag for gauge migration");
                             } catch (CommandSyntaxException e) {
-                                TFGCore.LOGGER.error("Error migrating fluid gauge containing fluid {}", fluidID);
+                                TFGCore.LOGGER.error("Error migrating fluid gauge containing fluid {}. Removing filter instead", fluidID);
+                                cornerTag.getCompound("Filter").remove("id"); //remove item as fallback
                             }
                         }
                     }
 
 
-                } else if (id.equals("create_factory_logistics:jar_packager")) {
+                } else if (id.equals("create_factory_logistics:jar_packager")) { //replace bottler blockEntities
                     compoundtag.remove("id");
-                    compoundtag.putString("id", "fluidlogistics:fluid_packager");
-                    TFGCore.LOGGER.debug("Replacing create_factory_logistics:jar_packager blockEntity");
+                    compoundtag.putString("id", "fluidlogistics:fluid_packager");//reference to the new blockEntity
+                    //TFGCore.LOGGER.debug("Replacing create_factory_logistics:jar_packager blockEntity");
                 }
             }
         }
