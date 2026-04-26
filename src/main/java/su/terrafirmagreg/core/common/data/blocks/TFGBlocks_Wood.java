@@ -1087,19 +1087,7 @@ public class TFGBlocks_Wood {
                 .properties(p -> p.stacksTo(32))
                 .model(ModelUtils.blockItemModel(TFGCore.id("block/wood/rope_ladder/" + name)))
                 .tag(TagKey.create(Registries.ITEM, TFGCore.id("rope_ladders"))).build()
-                .lang(displayName(name) + " Rope Ladder")
                 .register();
-    }
-
-    private static String displayName(String name) {
-        StringBuilder builder = new StringBuilder();
-        for (String part : name.split("_")) {
-            if (!builder.isEmpty()) {
-                builder.append(' ');
-            }
-            builder.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
-        }
-        return builder.toString();
     }
 
     private static BlockEntry<CraftingStationBlock> craftingStation(String name, ResourceLocation plank, MapColor color) {

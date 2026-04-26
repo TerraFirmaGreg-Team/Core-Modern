@@ -26,7 +26,9 @@ import su.terrafirmagreg.core.common.item.wearable.SnowshoesItem;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class WearableAccessoryHandler {
 
-    private static final String PERSIST_SNORKEL = TFGCore.MOD_ID + ":had_snorkel_equipped";
+    private static final String PERSIST_SNORKEL = TFGCore.id("had_snorkel_equipped").toString();
+
+    private static final int WEARABLE_LOGIC_INTERVAL = 5;
 
     private WearableAccessoryHandler() {
     }
@@ -63,6 +65,9 @@ public final class WearableAccessoryHandler {
             return;
         }
         if (player.level().isClientSide()) {
+            return;
+        }
+        if (player.tickCount % WEARABLE_LOGIC_INTERVAL != 0) {
             return;
         }
 
