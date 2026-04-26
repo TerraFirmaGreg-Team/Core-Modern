@@ -28,46 +28,54 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
+    public static final Map<String, VeinConfig> configMap = new HashMap<>();
+    public static final Map<String, Integer> sizeMap = new HashMap<>();
+    public static final Map<String, ConfiguredFeature<?, ?>> featureMap = new HashMap<>();
+
     public MineshaftOreFeature(Codec<MineshaftOreConfig> codec) {
         super(codec);
     }
 
     @Override
     public boolean place(FeaturePlaceContext<MineshaftOreConfig> context) {
-        Map<String, VeinConfig> configMap = new HashMap<>();
-        Map<String, Integer> sizeMap = new HashMap<>();
-        Map<String, ConfiguredFeature<?, ?>> featureMap = new HashMap<>();
+        System.out.println("start ore place");
 
-        var registry = context.level().getLevel().registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
+        if (configMap.isEmpty()) {
+            System.out.println("maps are empty");
+            var registry = context.level().getLevel().registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
+            System.out.println("got registry");
 
-        registry.forEach(configuredFeature -> {
-            var feature = configuredFeature.feature();
-            var config = configuredFeature.config();
+            registry.forEach(configuredFeature -> {
+                var feature = configuredFeature.feature();
+                var config = configuredFeature.config();
 
-            if (feature instanceof ClusterVeinFeature clusterFeature && config instanceof ClusterVeinConfig clusterConfig) {
-                var id = registry.getKey(configuredFeature);
+                if (feature instanceof ClusterVeinFeature clusterFeature && config instanceof ClusterVeinConfig clusterConfig) {
+                    var id = registry.getKey(configuredFeature);
 
-                assert id != null;
-                if (id.toString().startsWith("tfg:earth/vein/")) {
-                    String name = id.toString().split("tfg:earth/vein/")[1];
+                    assert id != null;
+                    if (id.toString().startsWith("tfg:earth/vein/")) {
+                        String name = id.toString().split("tfg:earth/vein/")[1];
 
-                    featureMap.put(name, configuredFeature);
-                    sizeMap.put(name, clusterConfig.size());
-                    configMap.put(name, clusterConfig.config());
+                        featureMap.put(name, configuredFeature);
+                        sizeMap.put(name, clusterConfig.size());
+                        configMap.put(name, clusterConfig.config());
+                    }
+                } else if (feature instanceof DiscVeinFeature discFeature && config instanceof DiscVeinConfig discConfig) {
+                    var id = registry.getKey(configuredFeature);
+
+                    assert id != null;
+                    if (id.toString().startsWith("tfg:earth/vein/")) {
+                        String name = id.toString().split("tfg:earth/vein/")[1];
+
+                        featureMap.put(name, configuredFeature);
+                        sizeMap.put(name, discConfig.size());
+                        configMap.put(name, discConfig.config());
+                    }
                 }
-            } else if (feature instanceof DiscVeinFeature discFeature && config instanceof DiscVeinConfig discConfig) {
-                var id = registry.getKey(configuredFeature);
+            });
+        }
 
-                assert id != null;
-                if (id.toString().startsWith("tfg:earth/vein/")) {
-                    String name = id.toString().split("tfg:earth/vein/")[1];
-
-                    featureMap.put(name, configuredFeature);
-                    sizeMap.put(name, discConfig.size());
-                    configMap.put(name, discConfig.config());
-                }
-            }
-        });
+        System.out.println("check veins");
 
         Map<String, VeinData> potentialVeins = new HashMap<>();
         int offset = 0;
@@ -105,14 +113,17 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
         if (!(origin.getY() >= minY && origin.getY() <= maxY)) {
             return false;
         }
+        System.out.println("valid y");
 
         //If there is a biome tag, stops if origin is not within said biome
         if (biomes.isPresent() && !wgLevel.getBiome(origin).containsTag(biomes.get())) {
             return false;
         }
 
+        System.out.println("valid biome");
         //Doesn't work for tuff and basalt since it uses tfc rock layers
-        RockSettings originRockType = ChunkDataProvider.get(wgLevel.getLevel()).get(wgLevel.getLevel(), origin).getRockData().getRock(origin);
+        RockSettings originRockType = ChunkDataProvider.get(wgLevel.getLevel()).get(wgLevel.getChunk(origin)).getRockData().getRock(origin);
+        System.out.println("origin rock " + originRockType);
 
         Pair<Block, IWeighted<BlockState>> rockOrePair = new MutablePair<>();
 
@@ -210,9 +221,9 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
             for (int z = box.minZ(); z <= box.maxZ(); ++z) {
                 if (metaball.inside(x - origin.getX(), z - origin.getZ())) {
                     for (int y = box.minY(); y <= maxY; ++y) {
-                        cursor.set(x, y, z);
+                        if (random.nextFloat() < density) {
+                            cursor.set(x, y, z);
 
-                        if (((float) random.nextInt(0, 100) / 100) >= density) {
                             if (level.getBlockState(cursor).is(targetBlock)) {
                                 BlockState placedOre = oreBlock.get(random);
                                 level.setBlock(cursor, placedOre, 3);
