@@ -138,6 +138,7 @@
         "common.minecraft.BeardifierAccessor",
         "common.minecraft.BlazeMixin",
         "common.minecraft.BlockEntityTypeAccessor",
+        "common.minecraft.ChunkSerializerMixin",
         "common.minecraft.DrownedMixin",
         "common.minecraft.HeightmapMixin",
         "common.minecraft.HugeFungusFeatureInvoker",
