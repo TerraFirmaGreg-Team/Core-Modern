@@ -74,7 +74,13 @@ public enum TFGPlant implements RegistryPlant {
     FLAME_VINE_PLANT(BlockType.WEEPING, 1.0F),
     FLAME_VINE(BlockType.WEEPING_TOP, 1.0F),
     CYCAD_PLANT(BlockType.TWISTING_SOLID, 0F),
-    CYCAD(BlockType.TWISTING_SOLID_TOP, 0F);
+    CYCAD(BlockType.TWISTING_SOLID_TOP, 0F),
+
+    // Backports
+    EYEBLOSSOM(BlockType.STANDARD, 1.0F),
+    PALE_HANGING_MOSS(BlockType.WEEPING, 1.0F),
+    PALE_HANGING_MOSS_PLANT(BlockType.WEEPING_TOP, 1.0F),
+    ;
 
     private final float speedFactor;
     @Nullable
@@ -121,6 +127,8 @@ public enum TFGPlant implements RegistryPlant {
             case CYCAD_PLANT -> CYCAD;
             case FLAME_VINE -> FLAME_VINE_PLANT;
             case FLAME_VINE_PLANT -> FLAME_VINE;
+            case PALE_HANGING_MOSS -> PALE_HANGING_MOSS_PLANT;
+            case PALE_HANGING_MOSS_PLANT -> PALE_HANGING_MOSS;
             default -> throw new IllegalStateException("Uhh why did you try to transform something that's not a tall plant?");
         });
     }
