@@ -16,6 +16,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
+import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
 import su.terrafirmagreg.core.utils.SnowCorrection;
 
@@ -34,7 +35,7 @@ public abstract class ServerLevelMixin {
             final ServerLevel level = (ServerLevel) (Object) this;
             MarsEnvironmentalHelpers.tickChunk(level, chunk, level.getProfiler());
         }
-        if (chunk.getLevel().dimension().equals(Level.OVERWORLD)) {
+        if (TFGConfig.SERVER.enableSnowCorrection.get() && chunk.getLevel().dimension().equals(Level.OVERWORLD)) {
             final ServerLevel level = (ServerLevel) (Object) this;
             SnowCorrection.onTickChunk(level, chunk);
         }

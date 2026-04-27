@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.minecraft;
+package su.terrafirmagreg.core.mixins.common.minecraft.entities;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
