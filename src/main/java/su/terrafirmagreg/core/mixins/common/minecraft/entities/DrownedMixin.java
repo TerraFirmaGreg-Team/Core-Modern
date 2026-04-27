@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.minecraft;
+package su.terrafirmagreg.core.mixins.common.minecraft.entities;
 
 import javax.annotation.Nullable;
 

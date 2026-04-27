@@ -8,13 +8,13 @@ package su.terrafirmagreg.core.world.surface_rule;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.notenoughmail.kubejs_tfc.util.implementation.mixin.accessor.SurfaceRulesContextAccessor;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.SurfaceRules;
+
+import su.terrafirmagreg.core.mixins.common.minecraft.SurfaceRulesContextAccessor;
 
 public record NeedsPostProcessingSurfaceRuleSource(BlockState state,
         SurfaceRules.SurfaceRule fallbackRule) implements SurfaceRules.RuleSource {
@@ -38,7 +38,7 @@ public record NeedsPostProcessingSurfaceRuleSource(BlockState state,
         final SurfaceRulesContextAccessor access = (SurfaceRulesContextAccessor) (Object) context;
         assert access != null;
 
-        var chunk = access.kubejs_tfc$GetChunk();
+        var chunk = access.tfg$GetChunk();
         if (chunk != null) {
             return new NeedsPostProcessingRule(state, chunk);
         }

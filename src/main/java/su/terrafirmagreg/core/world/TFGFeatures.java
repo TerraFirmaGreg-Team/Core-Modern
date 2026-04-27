@@ -60,10 +60,12 @@ public class TFGFeatures {
     public static final RegistryObject<RotatableWaterPlantFeature> ROTATABLE_WATER_PLANT = register(
             "rotatable_water_plant", RotatableWaterPlantFeature::new, RotatableWaterPlantFeature.CODEC);
 
+    public static final RegistryObject<FluidPlugFeature> FLUID_PLUG = register(
+            "fluid_plug", FluidPlugFeature::new, NoneFeatureConfiguration.CODEC);
+
     // Used for lava in volcanoes
     public static final RegistryObject<EncasedSpoutFeature> ENCASED_SPOUT = register(
             "encased_spout", EncasedSpoutFeature::new, FluidSproutConfiguration.CODEC);
-
     // Used for GT fluid vein spouts
     public static final RegistryObject<BedrockSpoutFeature> BEDROCK_SPOUT = register(
             "bedrock_spout", BedrockSpoutFeature::new, BedrockSpoutConfig.CODEC);
