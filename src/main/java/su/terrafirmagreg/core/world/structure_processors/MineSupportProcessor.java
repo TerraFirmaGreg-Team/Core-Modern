@@ -115,8 +115,9 @@ public class MineSupportProcessor extends StructureProcessor {
         return adjChunks;
     }
 
-    private RockSettings getRockType(ChunkPos chunkPos, BlockPos blockPos, LevelReader levelReader) {
+    private RockSettings getRockType(BlockPos blockPos, LevelReader levelReader) {
         if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+            ChunkPos chunkPos = levelAccessor.getChunk(blockPos).getPos();
             ChunkDataProvider dataProv = ChunkDataProvider.get(levelAccessor.getLevel().getChunkSource().getGenerator());
             RockData data = dataProv.get(levelAccessor.getChunk(chunkPos.x, chunkPos.z)).getRockData();
 
@@ -178,6 +179,7 @@ public class MineSupportProcessor extends StructureProcessor {
             return new StructureTemplate.StructureBlockInfo(blockPos, newBlockState, currentBlockInfo.nbt());
         }
 
+        //Adds some random air pockets to simulate mining
         if (isRandomRawRock(originalBlockState)) {
 
             if (levelReader instanceof ServerLevelAccessor levelAccessor) {
@@ -195,6 +197,20 @@ public class MineSupportProcessor extends StructureProcessor {
             Block newBlock = woodType.getBlock(Wood.BlockType.PLANKS).get();
 
             return new StructureTemplate.StructureBlockInfo(blockPos, newBlock.defaultBlockState(), currentBlockInfo.nbt());
+        }
+
+        //Adds hardened stone to unstable roofs
+        if (isHardenedRock(originalBlockState)) {
+            if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+                BlockState levelBlockState = levelAccessor.getBlockState(blockPos);
+
+                if (levelBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.DOWN)) {
+                    var hardRock = getRockType(blockPos, levelReader).hardened().defaultBlockState();
+                    return new StructureTemplate.StructureBlockInfo(blockPos, hardRock, currentBlockInfo.nbt());
+                }
+
+                return new StructureTemplate.StructureBlockInfo(blockPos, levelBlockState, currentBlockInfo.nbt());
+            }
         }
 
         //Adds fuel to lamps and checks for block above
@@ -241,6 +257,10 @@ public class MineSupportProcessor extends StructureProcessor {
 
     private boolean isRandomRawRock(BlockState blockState) {
         return blockState.getBlock() == Blocks.MAGENTA_WOOL;
+    }
+
+    private boolean isHardenedRock(BlockState blockState) {
+        return blockState.getBlock() == Blocks.PURPLE_WOOL;
     }
 
     private boolean isLampBlock(BlockState blockState) {

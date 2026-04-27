@@ -190,24 +190,25 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
         return translationMap.get(pickFromWeighted(nameWeightMap, random));
     }
 
-    private BoundingBox getBoundingBox(BlockPos origin, int size) {
-        return new BoundingBox(-size, -size, -size, size, size, size).moved(origin.getX(), origin.getY(), origin.getZ());
+    private BoundingBox getBoundingBox(BlockPos origin, int size, int height) {
+        return new BoundingBox(-size, -height / 2, -size, size, height / 2, size).moved(origin.getX(), origin.getY(), origin.getZ());
     }
 
     private Metaballs2D getMetaball(RandomSource random, int size) {
-        return Metaballs2D.simple(random, size);
+        return new Metaballs2D(random, 3, 6, size * 0.3, size * 0.5, size * 0.6);
     }
 
     private void placeMetaball(FeaturePlaceContext<MineshaftOreConfig> context, VeinData veinData) {
         RandomSource random = context.random();
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
+        MineshaftOreConfig config = context.config();
 
-        int size = veinData.size;
-        float density = veinData.density;
+        int size = Math.min(veinData.size, config.horizontal_range().sample(random));
+        float density = veinData.density * 0.9f;
         IWeighted<BlockState> oreBlock = veinData.wightedOres;
 
-        BoundingBox box = getBoundingBox(origin, size);
+        BoundingBox box = getBoundingBox(origin, size, config.vertical_range().sample(random));
         System.out.println(box);
         Metaballs2D metaball = getMetaball(random, size);
         System.out.println(metaball);
