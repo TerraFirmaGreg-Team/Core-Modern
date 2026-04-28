@@ -274,5 +274,7 @@ public final class ForgeCommonEventListener {
 
         if (mapping.getKey().toString().equals("create_factory_logistics:jar_packager"))
             mapping.remap(com.yision.fluidlogistics.registry.AllBlockEntities.FLUID_PACKAGER.get());
+        //create_factory_logistics:factory_fluid_panel is migrated using a mxin so that the blockEntity tags can be modified to work with normal create gauges
+        //the mixin is at su.terrafirmagreg.core.mixins.common.minecraft.ChunkSerializerMixin
     }
 }

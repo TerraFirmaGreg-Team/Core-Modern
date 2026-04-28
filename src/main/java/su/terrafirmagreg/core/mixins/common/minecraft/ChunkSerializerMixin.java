@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 
 import net.createmod.catnip.data.Pair;
@@ -15,7 +14,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.storage.ChunkSerializer;
 import net.minecraftforge.fluids.FluidStack;
@@ -56,7 +54,8 @@ public class ChunkSerializerMixin {
                 cornerTag.put("Filter", newFilter);
 
             } catch (Exception e) {
-                TFGCore.LOGGER.error("Error migrating fluid gauge containing fluid {} at position ({} {} {}). Removing filter instead", fluidID, compoundtag.getInt("x"), compoundtag.getInt("y"), compoundtag.getInt("z"));
+                TFGCore.LOGGER.error("Error migrating fluid gauge containing fluid {} at position ({} {} {}). Removing filter instead", fluidID, compoundtag.getInt("x"), compoundtag.getInt("y"),
+                        compoundtag.getInt("z"));
                 cornerTag.getCompound("Filter").remove("id"); //remove filter as fallback
             }
 

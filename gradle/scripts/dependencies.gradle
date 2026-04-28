@@ -38,8 +38,8 @@ dependencies {
 
     //modImplementation ("maven.modrinth:create_factory_logistics:cFuYsO3r") { transitive = false }
 
-    //modCompileOnly("maven.modrinth:createfluidlogistic:ugYeV8wB") { transitive = false }
-    modImplementation ("maven.modrinth:createfluidlogistic:ugYeV8wB") { transitive = false }
+    //modCompileOnly("maven.modrinth:createfluidlogistic:jIcz91lT") { transitive = false }
+    modImplementation ("maven.modrinth:createfluidlogistic:jIcz91lT") { transitive = false }
 
     // Create: Vintage Improvements
     modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
