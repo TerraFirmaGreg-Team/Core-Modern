@@ -59,6 +59,9 @@ public class TFGFeatures {
     // TFC 1.21 feature backport
     public static final RegistryObject<RotatableWaterPlantFeature> ROTATABLE_WATER_PLANT = register(
             "rotatable_water_plant", RotatableWaterPlantFeature::new, RotatableWaterPlantFeature.CODEC);
+    // Modification of a TFC 1.21 feature backport
+    public static final RegistryObject<CreepingUnderwaterPlantFeature> CREEPING_UNDERWATER_PLANT = register(
+            "creeping_underwater_plant", CreepingUnderwaterPlantFeature::new, CreepingPlantConfig.CODEC);
 
     public static final RegistryObject<FluidPlugFeature> FLUID_PLUG = register(
             "fluid_plug", FluidPlugFeature::new, NoneFeatureConfiguration.CODEC);

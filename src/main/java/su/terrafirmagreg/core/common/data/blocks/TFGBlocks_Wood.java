@@ -56,6 +56,7 @@ import tfar.craftingstation.CraftingStationBlock;
 import tfar.craftingstation.CraftingStationSlabBlock;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.RopeLadderBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGWood;
 import su.terrafirmagreg.core.utils.ModelUtils;
@@ -76,6 +77,7 @@ public class TFGBlocks_Wood {
     public static final Map<TFGWood, BlockEntry<? extends Block>> BARREL_PRESSES = new Object2ObjectOpenHashMap<>();
     public static final Map<String, BlockEntry<? extends Block>> CRAFTING_STATIONS = new Object2ObjectOpenHashMap<>();
     public static final Map<String, BlockEntry<? extends Block>> SLAB_CRAFTING_STATIONS = new Object2ObjectOpenHashMap<>();
+    public static final Map<String, BlockEntry<RopeLadderBlock>> ROPE_LADDERS = new Object2ObjectOpenHashMap<>();
 
     public static void init() {
         TFGWood.registerBlockSetTypes();
@@ -99,6 +101,7 @@ public class TFGBlocks_Wood {
             BARREL_PRESSES.put(value, barrelPress(value));
             CRAFTING_STATIONS.put(value.serializedName, craftingStation(value.serializedName, value.plankTexture, value.woodColor()));
             SLAB_CRAFTING_STATIONS.put(value.serializedName, craftingStationSlab(value.serializedName, value.plankTexture, value.woodColor()));
+            ROPE_LADDERS.put(value.serializedName, ropeLadder(value.serializedName, value.woodColor()));
         }
 
         for (AFCWood value : AFCWood.VALUES) {
@@ -106,6 +109,7 @@ public class TFGBlocks_Wood {
                     craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("afc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
             SLAB_CRAFTING_STATIONS.put(value.getSerializedName(),
                     craftingStationSlab(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("afc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
+            ROPE_LADDERS.put(value.getSerializedName(), ropeLadder(value.getSerializedName(), value.woodColor()));
         }
 
         for (Wood value : Wood.VALUES) {
@@ -113,6 +117,7 @@ public class TFGBlocks_Wood {
                     craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
             SLAB_CRAFTING_STATIONS.put(value.getSerializedName(),
                     craftingStationSlab(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
+            ROPE_LADDERS.put(value.getSerializedName(), ropeLadder(value.getSerializedName(), value.woodColor()));
         }
 
         for (Stem value : Stem.VALUES) {
@@ -120,6 +125,7 @@ public class TFGBlocks_Wood {
                     craftingStation(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("beneath", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
             SLAB_CRAFTING_STATIONS.put(value.getSerializedName(),
                     craftingStationSlab(value.getSerializedName(), ResourceLocation.fromNamespaceAndPath("beneath", "block/wood/planks/" + value.getSerializedName()), value.woodColor()));
+            ROPE_LADDERS.put(value.getSerializedName(), ropeLadder(value.getSerializedName(), value.woodColor()));
         }
     }
 
@@ -1058,6 +1064,30 @@ public class TFGBlocks_Wood {
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmalife", "barrel_presses"))).build()
                 .register();
 
+    }
+
+    private static BlockEntry<RopeLadderBlock> ropeLadder(String name, MapColor color) {
+        return TFGCore.REGISTRATE.block("wood/rope_ladder/" + name, RopeLadderBlock::new)
+                .properties(p -> p
+                        .mapColor(color)
+                        .sound(SoundType.LADDER)
+                        .strength(0.5F)
+                        .noOcclusion())
+                .blockstate((ctx, prov) -> {
+                    ResourceLocation texture = TFGCore.id("block/wood/rope_ladder/" + name);
+                    ModelFile model = prov.models()
+                            .withExistingParent(ctx.getName(), TFGCore.id("block/rope_ladder_template"))
+                            .texture("particle", texture)
+                            .texture("texture", texture);
+                    ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), model);
+                })
+                .tag(TagKey.create(Registries.BLOCK, TFGCore.id("rope_ladders")))
+                .tag(BlockTags.MINEABLE_WITH_AXE)
+                .item(BlockItem::new)
+                .properties(p -> p.stacksTo(32))
+                .model(ModelUtils.blockItemModel(TFGCore.id("block/wood/rope_ladder/" + name)))
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id("rope_ladders"))).build()
+                .register();
     }
 
     private static BlockEntry<CraftingStationBlock> craftingStation(String name, ResourceLocation plank, MapColor color) {

@@ -26,6 +26,9 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
 import su.terrafirmagreg.core.common.item.*;
+import su.terrafirmagreg.core.common.item.wearable.FlippersItem;
+import su.terrafirmagreg.core.common.item.wearable.SnorkelItem;
+import su.terrafirmagreg.core.common.item.wearable.SnowshoesItem;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings("unused")
@@ -37,6 +40,21 @@ public class TFGItems {
     public static final ItemEntry<PiglinDisguise> PIGLIN_DISGUISE = TFGCore.REGISTRATE.item("piglin_disguise",
             (p) -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), p))
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/piglin_disguise_block")))
+            .register();
+
+    public static final ItemEntry<SnorkelItem> SNORKEL = TFGCore.REGISTRATE.item("snorkel", SnorkelItem::new)
+            .properties(p -> p.stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<FlippersItem> FLIPPERS = TFGCore.REGISTRATE.item("flippers", FlippersItem::new)
+            .properties(p -> p.stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<SnowshoesItem> SNOWSHOES = TFGCore.REGISTRATE.item("snowshoes", SnowshoesItem::new)
+            .properties(p -> p.stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
     public static final ItemEntry<TrowelItem> TROWEL = TFGCore.REGISTRATE.item("trowel", TrowelItem::new)
