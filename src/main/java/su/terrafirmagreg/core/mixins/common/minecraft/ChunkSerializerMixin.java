@@ -26,7 +26,7 @@ public class ChunkSerializerMixin {
     @Inject(method = "lambda$postLoadChunk$10(Lnet/minecraft/nbt/ListTag;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/nbt/ListTag;Lnet/minecraft/world/level/chunk/LevelChunk;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;getBoolean(Ljava/lang/String;)Z", shift = At.Shift.AFTER))
     private static void tfg$postLoadChunk(ListTag listtag, ServerLevel level, ListTag listtag1, LevelChunk p_196904_, CallbackInfo ci, @Local(name = "compoundtag") CompoundTag compoundtag) {
         String id = compoundtag.getString("id");
-        if (!id.equals("create_factory_logistics:factory_fluid_panel")) //replace gauge blockEntities
+        if (!id.equals("create_factory_logistics:factory_fluid_panel")) //replace fluid gauge blockEntities
             return;
 
         compoundtag.remove("id");
@@ -45,7 +45,6 @@ public class ChunkSerializerMixin {
                 continue;
 
             String fluidID = fluidStack.getFluid().getFluidType().toString(); //get the ID of the fluid
-            TFGCore.LOGGER.debug("Section {} contains fluid {}", corner, fluidID);
             try {
                 // Create a new filter tag that will work with fluidlogistics
                 // Yes this is hard-coded, but it should be fine
@@ -58,7 +57,8 @@ public class ChunkSerializerMixin {
                         compoundtag.getInt("z"));
                 cornerTag.getCompound("Filter").remove("id"); //remove filter as fallback
             }
-
+            TFGCore.LOGGER.info("Successfully migrated fluid gauge containing fluid {} at position ({} {} {})", fluidID, compoundtag.getInt("x"), compoundtag.getInt("y"),
+                    compoundtag.getInt("z"));
         }
     }
 
