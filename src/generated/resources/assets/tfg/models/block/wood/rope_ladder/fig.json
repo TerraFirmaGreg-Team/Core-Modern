@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/rope_ladder_template",
+  "textures": {
+    "particle": "tfg:block/wood/rope_ladder/fig",
+    "texture": "tfg:block/wood/rope_ladder/fig"
+  }
+}

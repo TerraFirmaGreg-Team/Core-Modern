@@ -77,7 +77,7 @@ public enum TFGPlant implements RegistryPlant {
     CYCAD(BlockType.TWISTING_SOLID_TOP, 0F),
 
     // Backports
-    EYEBLOSSOM(BlockType.STANDARD, 1.0F, new int[] { 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3 }),
+    EYEBLOSSOM(BlockType.STANDARD, 1.0F),
     PALE_HANGING_MOSS(BlockType.WEEPING, 1.0F),
     PALE_HANGING_MOSS_PLANT(BlockType.WEEPING_TOP, 1.0F),
     ;
