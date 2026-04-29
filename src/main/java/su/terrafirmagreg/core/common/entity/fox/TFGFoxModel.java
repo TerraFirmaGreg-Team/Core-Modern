@@ -73,6 +73,9 @@ public class TFGFoxModel<E extends TFGFox> extends AgeableListModel<E> {
         this.leftHindLeg.setPos(-1.0F, 17.5F, 7.0F);
         if (entity.isCrouching()) {
             this.body.xRot = 1.6755161F;
+            float f = entity.getCrouchAmount(partialTick);
+            this.body.setPos(0.0F, 16.0F + entity.getCrouchAmount(partialTick), -6.0F);
+            this.head.setPos(-1.0F, 16.5F + f, -3.0F);
             this.head.yRot = 0.0F;
         } else if (entity.isSleeping()) {
             this.body.zRot = (-(float) Math.PI / 2F);

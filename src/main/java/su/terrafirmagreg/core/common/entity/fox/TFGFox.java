@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.common.entity.fox;
 
-import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.livestock.TFCAnimal;
 import net.dries007.tfc.common.entities.livestock.pet.TamableMammal;
@@ -13,19 +12,22 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
+import su.terrafirmagreg.core.common.data.TFGSounds;
+
 public class TFGFox extends TamableMammal {
 
     private static final EntityDataAccessor<Integer> DATA_VARIANT;
+    float crouchAmount;
+    float crouchAmountO;
 
     static {
         DATA_VARIANT = SynchedEntityData.defineId(TFGFox.class, EntityDataSerializers.INT);
@@ -40,7 +42,7 @@ public class TFGFox extends TamableMammal {
     }
 
     public TFGFox(EntityType<? extends TFCAnimal> animal, Level level) {
-        super(animal, level, TFCSounds.CAT, TFCConfig.SERVER.catConfig);
+        super(animal, level, TFGSounds.FOX, TFCConfig.SERVER.catConfig);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class TFGFox extends TamableMammal {
 
     @Override
     public boolean canAttack(LivingEntity entity) {
-        return super.canAttack(entity) && (Helpers.isEntity(entity, TFCTags.Entities.HUNTED_BY_DOGS) || entity instanceof Monster);
+        return super.canAttack(entity) && (Helpers.isEntity(entity, TFCTags.Entities.HUNTED_BY_CATS) || entity instanceof Monster);
     }
 
     @Override
@@ -87,9 +89,32 @@ public class TFGFox extends TamableMammal {
     @Override
     public void receiveCommand(ServerPlayer player, Command command) {
         if (getOwner() != null && getOwner().equals(player)) {
-            playSound(SoundEvents.CAT_PURREOW, getSoundVolume(), getVoicePitch());
+            playSound(SoundEvents.FOX_AMBIENT, getSoundVolume(), getVoicePitch());
         }
         super.receiveCommand(player, command);
     }
 
+    @Override
+    protected float getStandingEyeHeight(Pose pose, EntityDimensions size)
+    {
+        return size.height * 0.5F;
+    }
+
+    public float getCrouchAmount(float partialTick) {
+        return Mth.lerp(partialTick, this.crouchAmountO, this.crouchAmount);
+    }
+
+    public void tick() {
+        super.tick();
+
+        this.crouchAmountO = this.crouchAmount;
+        if (this.isCrouching()) {
+            this.crouchAmount += 0.2F;
+            if (this.crouchAmount > 3.0F) {
+                this.crouchAmount = 3.0F;
+            }
+        } else {
+            this.crouchAmount = 0.0F;
+        }
+    }
 }

@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import net.dries007.tfc.client.TFCSounds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -17,6 +18,8 @@ public final class TFGSounds {
 
     public static final TFCSounds.EntitySound SEAL = createTfcEntitySounds("seal", true, false);
     public static final TFCSounds.EntitySound BISON = createTfcEntitySounds("bison", true, false);
+    public static final TFCSounds.EntitySound FOX = new TFCSounds.EntitySound(() -> SoundEvents.FOX_AMBIENT, () -> SoundEvents.FOX_DEATH, () -> SoundEvents.FOX_HURT, () -> SoundEvents.CHICKEN_STEP,
+            Optional.of((Supplier) () -> SoundEvents.FOX_BITE), Optional.of((Supplier) () -> SoundEvents.FOX_SLEEP));
 
     private static RegistryObject<SoundEvent> createSound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(
@@ -40,4 +43,5 @@ public final class TFGSounds {
         );
     }
     //spotless:on
+
 }
