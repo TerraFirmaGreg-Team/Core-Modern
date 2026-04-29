@@ -21,7 +21,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfVariant;
 
-@Mixin(value = DogRenderer.class)
+@Mixin(value = DogRenderer.class, remap = false)
 public class TFCDogRendererMixin extends MobRenderer<Dog, DogModel> {
     @Unique
     private static final Map<TFCWolfVariant, ResourceLocation> LOCATION_BY_VARIANT = Util.make(Maps.newEnumMap(TFCWolfVariant.class), (map) -> {

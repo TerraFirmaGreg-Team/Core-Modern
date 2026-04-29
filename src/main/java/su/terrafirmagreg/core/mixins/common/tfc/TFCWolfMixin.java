@@ -34,12 +34,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfVariant;
 
-@Mixin(value = PackPredator.class, remap = false)
+@Mixin(value = PackPredator.class)
 public abstract class TFCWolfMixin extends Predator implements TFCWolfInterface {
-    @Shadow
+    @Shadow(remap = false)
     public abstract void setRespect(int amount);
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private boolean tamable;
     @Unique

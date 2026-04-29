@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfVariant;
 
-@Mixin(value = Dog.class)
+@Mixin(value = Dog.class, remap = false)
 public class TFCDogMixin extends TamableMammal implements TFCWolfInterface {
     @Unique
     private static final EntityDataAccessor<Integer> DATA_VARIANT;
