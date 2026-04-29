@@ -141,6 +141,9 @@ dependencies {
     // ArborFirmaCraft, afc-1.0.20-1.20.1.jar, Nov 8, 2025
     modImplementation "curse.maven:arborfirmacraft-877545:7200580"
 
+    // TFCGenViewer (optional in dev; modpack always includes it) — mixins for TFG + new overworld gen
+    modCompileOnly "maven.modrinth:tfcgenviewer:1.5.1"
+
     // TFC Improved Badlands
     modCompileOnly "curse.maven:tfc-improved-badlands-969207:5126426"
 
