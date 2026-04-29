@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.entity.animals.tfcdog;
+package su.terrafirmagreg.core.common.entity.animals.tfcwolf;
 
 import java.util.function.IntFunction;
 
@@ -9,7 +9,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 
-public enum TFCDogVariant implements StringRepresentable {
+public enum TFCWolfVariant implements StringRepresentable {
     DEFAULT(0, "default"),
     ASHEN(1, "ashen"),
     BLACK(2, "black"),
@@ -20,12 +20,12 @@ public enum TFCDogVariant implements StringRepresentable {
     STRIPED(7, "striped"),
     WOODS(8, "woods");
 
-    private static final IntFunction<TFCDogVariant> BY_ID = ByIdMap.sparse(TFCDogVariant::id, values(), DEFAULT);
-    public static final Codec<TFCDogVariant> CODEC = StringRepresentable.fromEnum(TFCDogVariant::values);
+    private static final IntFunction<TFCWolfVariant> BY_ID = ByIdMap.sparse(TFCWolfVariant::id, values(), DEFAULT);
+    public static final Codec<TFCWolfVariant> CODEC = StringRepresentable.fromEnum(TFCWolfVariant::values);
     public final int id;
     private final String name;
 
-    TFCDogVariant(int id, String name) {
+    TFCWolfVariant(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -38,7 +38,7 @@ public enum TFCDogVariant implements StringRepresentable {
         return this.id;
     }
 
-    public static TFCDogVariant byId(int id) {
-        return (TFCDogVariant) BY_ID.apply(id);
+    public static TFCWolfVariant byId(int id) {
+        return BY_ID.apply(id);
     }
 }

@@ -11,26 +11,20 @@ import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.dries007.tfc.common.entities.livestock.pet.Dog;
 import net.dries007.tfc.common.entities.livestock.pet.TamableMammal;
 import net.dries007.tfc.config.TFCConfig;
-import net.dries007.tfc.util.climate.Climate;
-import net.dries007.tfc.util.climate.KoppenClimateClassification;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 
-import su.terrafirmagreg.core.common.entity.animals.tfcdog.TFCDog;
-import su.terrafirmagreg.core.common.entity.animals.tfcdog.TFCDogVariant;
+import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
+import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfVariant;
 
 @Mixin(value = Dog.class)
-public class TFCDogMixin extends TamableMammal implements TFCDog {
+public class TFCDogMixin extends TamableMammal implements TFCWolfInterface {
     @Unique
     private static final EntityDataAccessor<Integer> DATA_VARIANT;
 
@@ -39,47 +33,50 @@ public class TFCDogMixin extends TamableMammal implements TFCDog {
     }
 
     @Unique
-    public TFCDogVariant tfg$getVariant() {
-        return TFCDogVariant.byId((Integer) this.entityData.get(DATA_VARIANT));
+    public TFCWolfVariant tfg$getVariant() {
+        if (!this.entityData.hasItem(DATA_VARIANT)) {
+            return TFCWolfVariant.DEFAULT;
+        }
+        return TFCWolfVariant.byId((Integer) this.entityData.get(DATA_VARIANT));
     }
 
     @Unique
-    public void tfg$setVariant(TFCDogVariant id) {
+    public void tfg$setVariant(TFCWolfVariant id) {
         this.entityData.set(DATA_VARIANT, id.id);
     }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_VARIANT, TFCDogVariant.DEFAULT.id);
+        this.entityData.define(DATA_VARIANT, TFCWolfVariant.DEFAULT.id);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putInt("TFCDogVariant", this.tfg$getVariant().id);
+        tag.putInt("TFCWolfVariant", this.tfg$getVariant().id);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.tfg$setVariant(TFCDogVariant.byId(tag.getInt("TFCDogVariant")));
+        this.tfg$setVariant(TFCWolfVariant.byId(tag.getInt("TFCWolfVariant")));
     }
 
     public void createGenes(CompoundTag tag, TFCAnimalProperties male) {
         super.createGenes(tag, male);
         if (male instanceof TFCDogMixin maleDog) {
-            TFCDogVariant variant = this.random.nextBoolean() ? maleDog.tfg$getVariant() : this.tfg$getVariant();
-            tag.putInt("TFCDogVariant", variant.id);
+            TFCWolfVariant variant = this.random.nextBoolean() ? maleDog.tfg$getVariant() : this.tfg$getVariant();
+            tag.putInt("TFCWolfVariant", variant.id);
         }
     }
 
     public void applyGenes(CompoundTag tag, MammalProperties baby) {
         super.applyGenes(tag, baby);
         if (baby instanceof TFCDogMixin dog) {
-            int id = tag.getInt("TFCDogVariant");
+            int id = tag.getInt("TFCWolfVariant");
 
-            TFCDogVariant variant = TFCDogVariant.byId(id);
+            TFCWolfVariant variant = TFCWolfVariant.byId(id);
 
             dog.tfg$setVariant(variant);
         }
@@ -92,26 +89,5 @@ public class TFCDogMixin extends TamableMammal implements TFCDog {
 
     public TagKey<Item> getFoodTag() {
         return TFCTags.Items.DOG_FOOD;
-    }
-
-    @Override
-    public void initCommonAnimalData(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason) {
-        super.initCommonAnimalData(level, difficulty, reason);
-
-        BlockPos pos = this.blockPosition();
-        float temperature = Climate.getAverageTemperature(level.getLevel(), pos);
-        float rainfall = Climate.getRainfall(level.getLevel(), pos);
-        KoppenClimateClassification climate = KoppenClimateClassification.classify(temperature, rainfall);
-
-        TFCDogVariant variant = switch (climate) {
-            case HUMID_SUBTROPICAL, TROPICAL_RAINFOREST -> TFCDogVariant.RUSTY;
-            case HUMID_SUBARCTIC, TUNDRA -> this.random.nextBoolean() ? TFCDogVariant.BLACK : TFCDogVariant.CHESTNUT;
-            case SUBTROPICAL, HOT_DESERT, TROPICAL_SAVANNA -> this.random.nextBoolean() ? TFCDogVariant.SPOTTED : TFCDogVariant.STRIPED;
-            case TEMPERATE -> this.random.nextBoolean() ? TFCDogVariant.WOODS : TFCDogVariant.DEFAULT;
-            case SUBARCTIC, ARCTIC -> this.random.nextBoolean() ? TFCDogVariant.SNOWY : TFCDogVariant.ASHEN;
-            default -> TFCDogVariant.DEFAULT; // HUMID_OCEANIC, COLD_DESERT
-        };
-
-        this.tfg$setVariant(variant);
     }
 }

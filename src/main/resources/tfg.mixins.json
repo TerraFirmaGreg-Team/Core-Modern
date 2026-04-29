@@ -252,8 +252,10 @@
         "common.wab.ToxlacanthMixin",
         "common.minecraft.SectionStorageAccessor",
         "common.minecraft.PoiSectionAccessor",
+        "common.tfc.ClientEvenHandlerMixin",
         "common.tfc.TFCDogRendererMixin",
-        "common.tfc.TFCDogMixin"
+        "common.tfc.TFCDogMixin",
+        "common.tfc.TFCWolfMixin"
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",
