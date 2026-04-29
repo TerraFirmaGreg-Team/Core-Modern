@@ -113,17 +113,17 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
         if (!(origin.getY() >= minY && origin.getY() <= maxY)) {
             return false;
         }
-        System.out.println("valid y");
+        //System.out.println("valid y");
 
         //If there is a biome tag, stops if origin is not within said biome
         if (biomes.isPresent() && !wgLevel.getBiome(origin).containsTag(biomes.get())) {
             return false;
         }
 
-        System.out.println("valid biome");
+        //System.out.println("valid biome");
         //Doesn't work for tuff and basalt since it uses tfc rock layers
         RockSettings originRockType = ChunkDataProvider.get(wgLevel.getLevel()).get(wgLevel.getChunk(origin)).getRockData().getRock(origin);
-        System.out.println("origin rock " + originRockType);
+        //System.out.println("origin rock " + originRockType);
 
         Pair<Block, IWeighted<BlockState>> rockOrePair = new MutablePair<>();
 
