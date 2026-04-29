@@ -110,6 +110,7 @@ public final class TFGTags {
         public static final TagKey<Block> AnemonePlantableOn = createBlockTag("anemone_plantable_on");
         public static final TagKey<Block> IsAnemone = createBlockTag("is_anemone");
         public static final TagKey<Block> NoIcicles = createBlockTag("no_icicle_generation");
+        public static final TagKey<Block> NOT_SLOWED_WITH_SNOWSHOES = createBlockTag("not_slowed_with_snowshoes");
 
         private static TagKey<Block> createBlockTag(String path) {
             return createBlockTag(TFGCore.id(path));

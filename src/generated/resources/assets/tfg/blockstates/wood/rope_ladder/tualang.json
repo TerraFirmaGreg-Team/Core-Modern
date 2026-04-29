@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/rope_ladder/tualang",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/rope_ladder/tualang"
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/rope_ladder/tualang",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/rope_ladder/tualang",
+      "y": 270
+    }
+  }
+}
