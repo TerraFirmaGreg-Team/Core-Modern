@@ -26,6 +26,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 
 public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
     public static final Map<String, VeinConfig> configMap = new HashMap<>();
@@ -195,7 +196,7 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
     }
 
     private Metaballs2D getMetaball(RandomSource random, int size) {
-        return new Metaballs2D(random, 3, 6, size * 0.3, size * 0.5, size * 0.6);
+        return new Metaballs2D(random, 4, 6, size * 0.4, size * 0.5, size * 0.6);
     }
 
     private void placeMetaball(FeaturePlaceContext<MineshaftOreConfig> context, VeinData veinData) {
@@ -203,6 +204,7 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
         MineshaftOreConfig config = context.config();
+        PoolElementStructurePiece piece;
 
         int size = Math.min(veinData.size, config.horizontal_range().sample(random));
         float density = veinData.density * 0.9f;

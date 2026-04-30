@@ -1,6 +1,5 @@
 package su.terrafirmagreg.core.mixins.common.tfc;
 
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
@@ -10,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 @Mixin(value = VerticalSupportBlock.class, remap = false)
-@Debug(export = true)
 public abstract class VerticalSupportBlockMixin extends Block {
 
     public VerticalSupportBlockMixin(Properties properties) {

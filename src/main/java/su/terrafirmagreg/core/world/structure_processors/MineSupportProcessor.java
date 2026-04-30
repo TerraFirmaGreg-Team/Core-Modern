@@ -1,9 +1,7 @@
 package su.terrafirmagreg.core.world.structure_processors;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import com.mojang.serialization.Codec;
 import com.therighthon.afc.common.blocks.AFCWood;
 
+import net.dries007.tfc.common.blocks.DeadWallTorchBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
 import net.dries007.tfc.common.blocks.wood.HorizontalSupportBlock;
@@ -32,10 +31,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import lombok.Getter;
@@ -185,6 +186,15 @@ public class MineSupportProcessor extends StructureProcessor {
         return null;
     }
 
+    private Set<BlockPos> getBoxEdges(BoundingBox outerBox, BoundingBox innerBox) {
+        var outerArea = BlockPos.betweenClosedStream(outerBox);
+        //System.out.println(BlockPos.betweenClosedStream(outerBox).map(BlockPos::immutable).collect(Collectors.toSet()));
+        var innerArea = BlockPos.betweenClosedStream(innerBox).map(BlockPos::immutable).collect(Collectors.toSet());
+        //System.out.println(innerArea);
+
+        return outerArea.map(BlockPos::immutable).filter(pos -> !innerArea.contains(pos)).collect(Collectors.toSet());
+    }
+
     @Override
     protected @NotNull StructureProcessorType<?> getType() {
         return TFGStructureProcessors.MINE_SUPPORT_PROCESSOR.get();
@@ -199,8 +209,30 @@ public class MineSupportProcessor extends StructureProcessor {
         BlockState originalBlockState = currentBlockInfo.state();
         BlockPos blockPos = currentBlockInfo.pos();
 
+        if (blockPos.equals(pos)) {
+            //System.out.println("first pos of piece");
+            if (template != null) {
+                BoundingBox pieceBounds = template.getBoundingBox(settings, pos);
+                //System.out.println("piece bounds " + pieceBounds);
+                var outerEdge = new BoundingBox(pieceBounds.minX() - 1, pieceBounds.minY(), pieceBounds.minZ() - 1, pieceBounds.maxX() + 1, pieceBounds.maxY() + 1, pieceBounds.maxZ() + 1);
+
+                //System.out.println("outer edge " + outerEdge);
+                Set<BlockPos> outerBlocks = getBoxEdges(outerEdge, pieceBounds);
+
+                if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+                    outerBlocks.forEach(checkedPos -> {
+                        if (levelAccessor.getBlockState(checkedPos).getFluidState() != Fluids.EMPTY.defaultFluidState()) {
+                            //System.out.println("found liquid at " + checkedPos);
+                            levelAccessor.setBlock(checkedPos,
+                                    getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader).getBlock(Wood.BlockType.PLANKS).get().defaultBlockState(), 2);
+                        }
+                    });
+                }
+            }
+        }
+
         //Quick exit to help performance
-        if(originalBlockState.isAir()){
+        if (originalBlockState.isAir()) {
             return currentBlockInfo;
         }
 
@@ -246,6 +278,24 @@ public class MineSupportProcessor extends StructureProcessor {
             }
         }
 
+        //Cyan wool acts as anti-fluid structure void
+        if (isFluidVoid(originalBlockState)) {
+            BlockState levelBlockState = levelReader.getBlockState(blockPos);
+            if (levelBlockState.getFluidState() != Fluids.EMPTY.defaultFluidState()) {
+                var newBlock = getRockType(blockPos, levelReader).raw();
+
+                return new StructureTemplate.StructureBlockInfo(blockPos, newBlock.defaultBlockState(), currentBlockInfo.nbt());
+            }
+
+            return new StructureTemplate.StructureBlockInfo(blockPos, levelBlockState, currentBlockInfo.nbt());
+        }
+
+        //Cyan concrete is just there so the start pos can be recognized
+        if (isTempVoid(originalBlockState)) {
+            BlockState levelBlockState = levelReader.getBlockState(blockPos);
+            return new StructureTemplate.StructureBlockInfo(blockPos, levelBlockState, currentBlockInfo.nbt());
+        }
+
         //Changes wood planks to regions wood type
         if (isPlankBlock(originalBlockState)) {
             var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
@@ -267,6 +317,24 @@ public class MineSupportProcessor extends StructureProcessor {
 
                 return new StructureTemplate.StructureBlockInfo(blockPos, levelBlockState, currentBlockInfo.nbt());
             }
+        }
+
+        if (isTorchBlock(originalBlockState)) {
+            if (levelReader instanceof ServerLevelAccessor levelAccessor) {
+
+                if (levelAccessor.getBlockState(blockPos.north()).isFaceSturdy(levelAccessor, blockPos, Direction.SOUTH)) {
+                    return currentBlockInfo;
+                } else if (levelAccessor.getBlockState(blockPos.south()).isFaceSturdy(levelAccessor, blockPos, Direction.NORTH)) {
+                    return currentBlockInfo;
+                } else if (levelAccessor.getBlockState(blockPos.west()).isFaceSturdy(levelAccessor, blockPos, Direction.EAST)) {
+                    return currentBlockInfo;
+                } else if (levelAccessor.getBlockState(blockPos.east()).isFaceSturdy(levelAccessor, blockPos, Direction.WEST)) {
+                    return currentBlockInfo;
+                }
+            }
+
+            return new StructureTemplate.StructureBlockInfo(blockPos, Blocks.CAVE_AIR.defaultBlockState(), new CompoundTag());
+
         }
 
         //Adds fuel to hanging lamps, changes material, and checks for block above
@@ -294,6 +362,7 @@ public class MineSupportProcessor extends StructureProcessor {
             }
         }
 
+        //Changes material of fallen lamps
         if (isFallenLampBlock(originalBlockState)) {
             if (levelReader instanceof ServerLevelAccessor levelAccessor) {
                 BlockState belowBlockState = levelAccessor.getBlockState(blockPos.below());
@@ -310,6 +379,14 @@ public class MineSupportProcessor extends StructureProcessor {
 
         //Fallback if block doesn't need to be changed
         return currentBlockInfo;
+    }
+
+    @Override
+    public @NotNull List<StructureTemplate.StructureBlockInfo> finalizeProcessing(@NotNull ServerLevelAccessor serverLevel, @NotNull BlockPos offset, @NotNull BlockPos pos,
+            @NotNull List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
+            @NotNull List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
+        settings.setKeepLiquids(false);
+        return super.finalizeProcessing(serverLevel, offset, pos, originalBlockInfos, processedBlockInfos, settings);
     }
 
     private boolean isSupportBlock(BlockState blockState) {
@@ -342,6 +419,18 @@ public class MineSupportProcessor extends StructureProcessor {
 
     private boolean isFallenLampBlock(BlockState blockState) {
         return blockState.getBlock() == BRONZE_LAMP || blockState.getBlock() == BLACK_BRONZE_LAMP || blockState.getBlock() == BISMUTH_BRONZE_LAMP || blockState.getBlock() == WROUGHT_IRON_LAMP;
+    }
+
+    private boolean isTorchBlock(BlockState blockState) {
+        return blockState.getBlock() instanceof DeadWallTorchBlock;
+    }
+
+    private boolean isFluidVoid(BlockState blockState) {
+        return blockState.getBlock() == Blocks.CYAN_WOOL;
+    }
+
+    private boolean isTempVoid(BlockState blockState) {
+        return blockState.getBlock() == Blocks.CYAN_CONCRETE;
     }
 
     @Getter
