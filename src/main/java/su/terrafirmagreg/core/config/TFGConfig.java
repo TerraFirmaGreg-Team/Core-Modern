@@ -9,9 +9,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
-
 /**
  * base of TFG config options. This is where each side-specific config is initialized and registered. Use
  * {@link ServerConfig}, {@link CommonConfig}, {@link ClientConfig} instead for side-specific configuration.
@@ -36,9 +33,6 @@ public final class TFGConfig {
      */
     @SuppressWarnings("unused")
     public static void onLoad(final ModConfigEvent event) {
-        if (event.getConfig().getModId().equals(TFGCore.MOD_ID) && event.getConfig().getType() == ModConfig.Type.SERVER) {
-            TfgClientPreviewState.invalidateWorldgenInferCache();
-        }
     }
 
     @SuppressWarnings("removal")

@@ -21,7 +21,6 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.mixins.common.minecraft.AccessorMinecraftServer;
 import su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg.AccessorTFCBiomes;
-import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
@@ -148,6 +147,5 @@ public class WorldgenVersionEvents {
         WorldgenVersionData.OVERWORLD_SESSION_VERSION_RESOLVED = false;
         pendingOpWarnings.clear();
         opWarningsSentThisSession.clear();
-        TfgClientPreviewState.invalidateWorldgenInferCache();
     }
 }
