@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.notenoughmail.tfcgenviewer.color.Colors;
 
 import net.dries007.tfc.util.DataManager;
 import net.minecraft.resources.ResourceLocation;
@@ -35,7 +36,7 @@ public class DataManagerTfcgenRemapMixin {
             return op.call(use);
         } catch (IllegalArgumentException e) {
             if (TfgClientPreviewState.useTfgOverworldPipeline() || !id.equals(use)) {
-                return op.call(ResourceLocation.fromNamespaceAndPath("tfcgenviewer", "unknown"));
+                return op.call(Colors.UNKNOWN);
             }
             throw e;
         }
