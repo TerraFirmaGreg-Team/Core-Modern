@@ -3,6 +3,9 @@ package su.terrafirmagreg.core.world.new_ow_wg;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Tracks TFCGenViewer preview sessions on the logical client.
  * {@link WorldgenVersionData#OVERWORLD_VERSION} is set on the server JVM; multiplayer clients often
@@ -11,7 +14,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
  * paired with preview {@link #enter()}.
  * <p>
  * The create-world {@code PreviewGenerationScreen} runs {@link net.dries007.tfc.world.region.RegionGenerator} locally
- * without a {@link ViewerResponsePacket}, while {@link WorldgenVersionData#OVERWORLD_VERSION} stays {@code 0}
+ * without a {@link com.notenoughmail.tfcgenviewer.network.packets.ViewerResponsePacket}, while {@link WorldgenVersionData#OVERWORLD_VERSION} stays {@code 0}
  * until {@link WorldgenVersionData#OVERWORLD_SESSION_VERSION_RESOLVED}. During that gap we deliberately assume the
  * 1.21-backport overworld pipeline for preview only . Server-side resolution in
  * {@link su.terrafirmagreg.core.common.event.WorldgenVersionEvents} still decides the real saved version once a logical
@@ -20,18 +23,16 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 public final class TfgClientPreviewState {
 
     /** Server appends overworld version to {@link com.notenoughmail.tfcgenviewer.network.packets.ViewerResponsePacket} after decode reads the vanilla tail. */
+    @Setter
     private static volatile int pendingPacketOverworldVersion;
 
+    @Getter
     private static volatile boolean active;
 
     /** Effective overworld gen version for this TFCGenViewer preview session (from decoded packet tail). */
     private static volatile int previewSessionOverworldVersion;
 
     private TfgClientPreviewState() {
-    }
-
-    public static void setPendingPacketOverworldVersion(int overworldGenVersionFromPacketTail) {
-        pendingPacketOverworldVersion = overworldGenVersionFromPacketTail;
     }
 
     /**
@@ -60,10 +61,6 @@ public final class TfgClientPreviewState {
     public static void leave() {
         resetSessionPreserveDecodedTail();
         pendingPacketOverworldVersion = 0;
-    }
-
-    public static boolean isActive() {
-        return active;
     }
 
     /**
@@ -104,13 +101,7 @@ public final class TfgClientPreviewState {
             return false;
         }
         final Minecraft mc = Minecraft.getInstance();
-        if (mc == null) {
-            return false;
-        }
-        if (mc.level != null && mc.getConnection() != null && !mc.hasSingleplayerServer()) {
-            return false;
-        }
-        return true;
+        return mc.level == null || mc.getConnection() == null || mc.hasSingleplayerServer();
     }
 
 }

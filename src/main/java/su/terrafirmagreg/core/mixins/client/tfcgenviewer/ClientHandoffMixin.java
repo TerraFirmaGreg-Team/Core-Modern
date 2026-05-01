@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -28,6 +29,7 @@ import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 public class ClientHandoffMixin {
 
     /** @ModifyArgs on ViewWorldScreen ctor can load Args$1 in a classloader that fails; filter at the handoff call. */
+    @Unique
     private static final ThreadLocal<ViewerResponsePacket> TFG_TFCGEN_VIEWER_PACKET = new ThreadLocal<>();
 
     /**
@@ -65,6 +67,7 @@ public class ClientHandoffMixin {
         return tfg$retainTagKeysPresentInPacket(packet, biomeTags);
     }
 
+    @Unique
     private static Map<TagKey<Biome>, List<ResourceKey<Biome>>> tfg$retainTagKeysPresentInPacket(
             ViewerResponsePacket info, Map<TagKey<Biome>, List<ResourceKey<Biome>>> biomeTags) {
         final Map<ResourceKey<Biome>, Biome> biomeInformation = info.biomeInfo();
