@@ -7,7 +7,9 @@
 package su.terrafirmagreg.core.client.screen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -38,6 +40,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 
+import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.MultiToggleButton;
 import su.terrafirmagreg.core.client.screen.widget.PlayerListWidget;
@@ -45,6 +49,8 @@ import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
 import su.terrafirmagreg.core.client.screen.widget.ToggleButton;
 import su.terrafirmagreg.core.client.screen.widget.ValueDisplayListWidget;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
+import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.network.packet.RequestTeamNutritionPacket;
 
 /**
  * TFG Nutrition Screen that overrides the default TFC Nutrition Screen.
@@ -65,6 +71,12 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     public static final int GUI_HEIGHT = 188;
     private static boolean RENDER_TEAM_NUTRITION = false;
     private static int STYLE_BUTTON_STATE = 0;
+    private static final Map<UUID, float[]> CACHED_TEAM_NUTRITION = new HashMap<>();
+
+    public static void receiveTeamNutrition(Map<UUID, float[]> data) {
+        CACHED_TEAM_NUTRITION.putAll(data);
+    }
+
     /**
      * Enables development mode for team list features.
      * When enabled, dummy team players are added to the radar graphs at {@link #addDummyTeamPlayers()}.
@@ -404,8 +416,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
      * Updates the radar graphs and player list with current nutrition data.
      */
     private void updateGraphs() {
-        if (positiveRadarGraph == null || negativeRadarGraph == null || playerList == null)
+        if (positiveRadarGraph == null || negativeRadarGraph == null || playerList == null) {
             return;
+        }
 
         positiveRadarGraph.clearDatasets();
         negativeRadarGraph.clearDatasets();
@@ -416,6 +429,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
             positiveRadarGraph.setUseRadiusGradient(false);
             negativeRadarGraph.setUseRadiusGradient(false);
             positiveRadarGraph.setShowCentralIcon(false);
+
+            TFGNetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(), new RequestTeamNutritionPacket());
 
             // Current Player
             List<Supplier<Float>> posValues1 = new ArrayList<>();
@@ -566,6 +581,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                     if (level == null) {
                         return 0f;
                     }
+                    float[] cached = CACHED_TEAM_NUTRITION.get(memberUuid);
+                    if (cached != null && nutrient.ordinal() < cached.length) {
+                        return cached[nutrient.ordinal()];
+                    }
                     Player member = level.getPlayerByUUID(memberUuid);
                     if (member != null && member.getFoodData() instanceof TFCFoodData data) {
                         return data.getNutrition().getNutrient(nutrient);
@@ -671,18 +690,19 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
      * @return A list of UUIDs representing team members, including the player themselves.
      */
     private List<UUID> resolveFtbTeamMembers(UUID selfUuid) {
+        if (!ModList.get().isLoaded("ftbteams")) {
+            return List.of(selfUuid);
+        }
         try {
-            Class<?> apiClass = Class.forName("dev.ftb.mods.ftbteams.api.FTBTeamsAPI");
-            Object api = apiClass.getMethod("api").invoke(null);
-            Object manager = api.getClass().getMethod("getManager").invoke(api);
-            Object teamOptional = manager.getClass().getMethod("getTeamForPlayerID", UUID.class).invoke(manager, selfUuid);
+            var api = FTBTeamsAPI.api();
+            var manager = api.getClientManager();
+            var team = manager.selfTeam();
 
-            if (!(teamOptional instanceof java.util.Optional<?> optionalTeam) || optionalTeam.isEmpty()) {
+            if (team == null) {
                 return List.of(selfUuid);
             }
 
-            Object team = optionalTeam.get();
-            List<UUID> members = extractUuidMembers(team);
+            List<UUID> members = new ArrayList<>(team.getMembers());
             if (members.isEmpty()) {
                 return List.of(selfUuid);
             }
@@ -691,74 +711,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 members.add(0, selfUuid);
             }
             return members;
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            TFGCore.LOGGER.error("Failed to resolve FTB team members", e);
             return List.of(selfUuid);
         }
-    }
-
-    /**
-     * Extracts UUID members from a team object.
-     * @param team The team object to extract members from.
-     * @return A list of UUID members, including the player.
-     */
-    private List<UUID> extractUuidMembers(Object team) {
-        List<UUID> members = new ArrayList<>();
-        for (String methodName : List.of("getMembers", "getMemberIds", "getPlayers")) {
-            try {
-                Object value = team.getClass().getMethod(methodName).invoke(team);
-                if (value instanceof List<?> list) {
-                    for (Object obj : list) {
-                        if (obj instanceof UUID id) {
-                            members.add(id);
-                        }
-                    }
-                } else if (value instanceof java.util.Collection<?> collection) {
-                    for (Object obj : collection) {
-                        if (obj instanceof UUID id) {
-                            members.add(id);
-                        } else {
-                            UUID id = extractUuidFromUnknownMember(obj);
-                            if (id != null) {
-                                members.add(id);
-                            }
-                        }
-                    }
-                } else if (value instanceof java.util.Map<?, ?> map) {
-                    for (Object key : map.keySet()) {
-                        if (key instanceof UUID id) {
-                            members.add(id);
-                        }
-                    }
-                }
-                if (!members.isEmpty()) {
-                    return members;
-                }
-            } catch (Exception ignored) {
-            }
-        }
-        return members;
-    }
-
-    /**
-     * Extracts UUID from an unknown member object.
-     * @param member The member object to extract UUID from.
-     * @return The UUID if found, otherwise null.
-     */
-    @Nullable
-    private UUID extractUuidFromUnknownMember(Object member) {
-        if (member == null) {
-            return null;
-        }
-        for (String methodName : List.of("getId", "getUUID", "getPlayerId")) {
-            try {
-                Object value = member.getClass().getMethod(methodName).invoke(member);
-                if (value instanceof UUID id) {
-                    return id;
-                }
-            } catch (Exception ignored) {
-            }
-        }
-        return null;
     }
 
     /**

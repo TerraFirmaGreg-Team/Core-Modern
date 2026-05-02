@@ -16,7 +16,9 @@ import su.terrafirmagreg.core.network.packet.NegativeNutrientsPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
 import su.terrafirmagreg.core.network.packet.ParticlePacket;
+import su.terrafirmagreg.core.network.packet.RequestTeamNutritionPacket;
 import su.terrafirmagreg.core.network.packet.SoundPacket;
+import su.terrafirmagreg.core.network.packet.SyncTeamNutritionPacket;
 
 public class TFGNetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
@@ -69,6 +71,18 @@ public class TFGNetworkHandler {
                 NegativeNutrientsPacket::encode,
                 NegativeNutrientsPacket::decode,
                 NegativeNutrientsPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                RequestTeamNutritionPacket.class,
+                RequestTeamNutritionPacket::encode,
+                RequestTeamNutritionPacket::decode,
+                RequestTeamNutritionPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                SyncTeamNutritionPacket.class,
+                SyncTeamNutritionPacket::encode,
+                SyncTeamNutritionPacket::decode,
+                SyncTeamNutritionPacket::handle);
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {
