@@ -1,31 +1,25 @@
 package su.terrafirmagreg.core.world.structure_processors;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.ldtteam.domumornamentum.block.decorative.PanelBlock;
 import com.mojang.serialization.Codec;
-import com.therighthon.afc.common.blocks.AFCWood;
 
 import net.dries007.tfc.common.blocks.DeadWallTorchBlock;
-import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
+import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.wood.HorizontalSupportBlock;
+import net.dries007.tfc.common.blocks.wood.LogBlock;
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
 import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.util.Metal;
-import net.dries007.tfc.util.registry.RegistryWood;
-import net.dries007.tfc.world.chunkdata.ChunkData;
-import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
-import net.dries007.tfc.world.chunkdata.RockData;
-import net.dries007.tfc.world.settings.RockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -39,161 +33,13 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import lombok.Getter;
-
-import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.utils.MineshaftHelpers;
 import su.terrafirmagreg.core.world.TFGStructureProcessors;
 
 public class MineSupportProcessor extends StructureProcessor {
-    /// 1st Index = temperature
-    /// 2nd Index = rainfall
-    public static final RegistryWood[][] WOOD_CLIMATE_ARRAY = {
-            { Wood.PINE, Wood.DOUGLAS_FIR, Wood.SPRUCE, Wood.ASPEN },
-            { Wood.ASH, Wood.CHESTNUT, Wood.OAK, Wood.SEQUOIA },
-            { AFCWood.BAOBAB, Wood.ACACIA, AFCWood.IPE, AFCWood.HEVEA },
-            { Wood.PALM, AFCWood.IRONWOOD, Wood.KAPOK, AFCWood.TUALANG }
-    };
-
-    public static final Map<ChunkPos, RegistryWood> WOOD_CHUNK_CACHE = new HashMap<>();
-
-    /// Records if the chunk has already had a rock data cache generated
-    public static final Map<ChunkPos, Boolean> ROCK_CHUNK_CACHE = new HashMap<>();
-
-    public static final Map<ChunkPos, PlacableLamp> LAMP_CHUNK_CACHE = new HashMap<>();
 
     public static final MineSupportProcessor INSTANCE = new MineSupportProcessor();
     public static final Codec<MineSupportProcessor> CODEC = Codec.unit(() -> INSTANCE);
-
-    private static final Block BRONZE_LAMP = ForgeRegistries.BLOCKS.getValue(TFGCore.id("groundcover/fallen_bronze_lamp"));
-    private static final Block BLACK_BRONZE_LAMP = ForgeRegistries.BLOCKS.getValue(TFGCore.id("groundcover/fallen_black_bronze_lamp"));
-    private static final Block BISMUTH_BRONZE_LAMP = ForgeRegistries.BLOCKS.getValue(TFGCore.id("groundcover/fallen_bismuth_bronze_lamp"));
-    private static final Block WROUGHT_IRON_LAMP = ForgeRegistries.BLOCKS.getValue(TFGCore.id("groundcover/fallen_wrought_iron_lamp"));
-
-    private RegistryWood getOrAddWoodCache(ChunkPos chunkPos, BlockPos blockPos, LevelReader levelReader) {
-        //Checks if this chunk has already been cached
-        if (WOOD_CHUNK_CACHE.containsKey(chunkPos)) {
-            return WOOD_CHUNK_CACHE.get(chunkPos);
-        }
-
-        //Checks if adjacent chunks have been cached, and use cached value
-        List<ChunkPos> adjChunks = findAdjChunks(chunkPos);
-        for (var adjChunk : adjChunks) {
-            if (WOOD_CHUNK_CACHE.containsKey(adjChunk)) {
-                var woodType = WOOD_CHUNK_CACHE.get(adjChunk);
-                WOOD_CHUNK_CACHE.put(chunkPos, woodType);
-
-                return woodType;
-            }
-        }
-
-        //Find wood if no nearby chunks have been cached
-        if (levelReader instanceof ServerLevelAccessor levelAccessor) {
-
-            ChunkDataProvider dataProv = ChunkDataProvider.get(levelAccessor.getLevel().getChunkSource().getGenerator());
-            ChunkData data = dataProv.get(levelAccessor.getChunk(chunkPos.x, chunkPos.z));
-            System.out.println(chunkPos);
-
-            System.out.println(data.status());
-
-            BlockPos testPos = chunkPos.getMiddleBlockPosition(blockPos.getY());
-            var temp = data.getAverageTemp(testPos);
-            var rain = data.getRainfall(testPos);
-
-            System.out.println(temp);
-            System.out.println(rain);
-
-            int tempQuart = (int) Math.floor((temp + 20) / 15);
-            int rainQuart = (int) Math.floor(rain / 125);
-
-            System.out.println(tempQuart);
-            System.out.println(rainQuart);
-            RegistryWood woodType = WOOD_CLIMATE_ARRAY[tempQuart][rainQuart];
-
-            WOOD_CHUNK_CACHE.put(chunkPos, woodType);
-            System.out.println("added " + woodType + " at " + chunkPos);
-            return woodType;
-        }
-
-        //Fallback if everything breaks
-        return Wood.OAK;
-    }
-
-    private PlacableLamp getOrAddLampCache(ChunkPos chunkPos, LevelReader levelReader) {
-        //Checks if this chunk has already been cached
-        if (LAMP_CHUNK_CACHE.containsKey(chunkPos)) {
-            return LAMP_CHUNK_CACHE.get(chunkPos);
-        }
-
-        //Checks if adjacent chunks have been cached, and use cached value
-        List<ChunkPos> adjChunks = findAdjChunks(chunkPos);
-        for (var adjChunk : adjChunks) {
-            if (LAMP_CHUNK_CACHE.containsKey(adjChunk)) {
-                var lamp = LAMP_CHUNK_CACHE.get(adjChunk);
-                LAMP_CHUNK_CACHE.put(chunkPos, lamp);
-
-                return lamp;
-            }
-        }
-
-        if (levelReader instanceof ServerLevelAccessor levelAccessor) {
-            //40% chance for bronze. 20% chance for black bronze. 20% chance for bismuth bronze. 20% chance for wrought iron
-            int randInt = levelAccessor.getRandom().nextInt(1, 10);
-
-            PlacableLamp chosenMat;
-
-            if (randInt <= 4)
-                chosenMat = PlacableLamp.BRONZE;
-            else if (randInt <= 6)
-                chosenMat = PlacableLamp.BLACK_BRONZE;
-            else if (randInt <= 8)
-                chosenMat = PlacableLamp.BISMUTH_BRONZE;
-            else
-                chosenMat = PlacableLamp.WROUGHT_IRON;
-
-            LAMP_CHUNK_CACHE.put(chunkPos, chosenMat);
-            return chosenMat;
-        }
-
-        //Fallback if everything fails
-        return PlacableLamp.BRONZE;
-    }
-
-    private List<ChunkPos> findAdjChunks(ChunkPos chunkPos) {
-        List<ChunkPos> adjChunks = new ArrayList<>();
-        adjChunks.add(new ChunkPos(chunkPos.x + 1, chunkPos.z));
-        adjChunks.add(new ChunkPos(chunkPos.x - 1, chunkPos.z));
-        adjChunks.add(new ChunkPos(chunkPos.x, chunkPos.z + 1));
-        adjChunks.add(new ChunkPos(chunkPos.x, chunkPos.z - 1));
-
-        return adjChunks;
-    }
-
-    private RockSettings getRockType(BlockPos blockPos, LevelReader levelReader) {
-        if (levelReader instanceof ServerLevelAccessor levelAccessor) {
-            ChunkPos chunkPos = levelAccessor.getChunk(blockPos).getPos();
-            ChunkDataProvider dataProv = ChunkDataProvider.get(levelAccessor.getLevel().getChunkSource().getGenerator());
-            RockData data = dataProv.get(levelAccessor.getChunk(chunkPos.x, chunkPos.z)).getRockData();
-
-            if (!ROCK_CHUNK_CACHE.containsKey(chunkPos)) {
-                data.useCache(chunkPos);
-                ROCK_CHUNK_CACHE.put(chunkPos, true);
-            }
-
-            return data.getRock(blockPos);
-        }
-
-        //This won't ever exist
-        return null;
-    }
-
-    private Set<BlockPos> getBoxEdges(BoundingBox outerBox, BoundingBox innerBox) {
-        var outerArea = BlockPos.betweenClosedStream(outerBox);
-        //System.out.println(BlockPos.betweenClosedStream(outerBox).map(BlockPos::immutable).collect(Collectors.toSet()));
-        var innerArea = BlockPos.betweenClosedStream(innerBox).map(BlockPos::immutable).collect(Collectors.toSet());
-        //System.out.println(innerArea);
-
-        return outerArea.map(BlockPos::immutable).filter(pos -> !innerArea.contains(pos)).collect(Collectors.toSet());
-    }
 
     @Override
     protected @NotNull StructureProcessorType<?> getType() {
@@ -217,14 +63,14 @@ public class MineSupportProcessor extends StructureProcessor {
                 var outerEdge = new BoundingBox(pieceBounds.minX() - 1, pieceBounds.minY(), pieceBounds.minZ() - 1, pieceBounds.maxX() + 1, pieceBounds.maxY() + 1, pieceBounds.maxZ() + 1);
 
                 //System.out.println("outer edge " + outerEdge);
-                Set<BlockPos> outerBlocks = getBoxEdges(outerEdge, pieceBounds);
+                Set<BlockPos> outerBlocks = MineshaftHelpers.getBoxEdges(outerEdge, pieceBounds);
 
                 if (levelReader instanceof ServerLevelAccessor levelAccessor) {
                     outerBlocks.forEach(checkedPos -> {
                         if (levelAccessor.getBlockState(checkedPos).getFluidState() != Fluids.EMPTY.defaultFluidState()) {
                             //System.out.println("found liquid at " + checkedPos);
                             levelAccessor.setBlock(checkedPos,
-                                    getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader).getBlock(Wood.BlockType.PLANKS).get().defaultBlockState(), 2);
+                                    MineshaftHelpers.getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader).getBlock(Wood.BlockType.PLANKS).get().defaultBlockState(), 2);
                         }
                     });
                 }
@@ -236,6 +82,19 @@ public class MineSupportProcessor extends StructureProcessor {
             return currentBlockInfo;
         }
 
+        if (originalBlockState.getBlock() instanceof PanelBlock) {
+            ResourceLocation plankKey = ForgeRegistries.BLOCKS
+                    .getKey(MineshaftHelpers.getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader).getBlock(Wood.BlockType.PLANKS).get());
+
+            CompoundTag originalTag = currentBlockInfo.nbt();
+            assert originalTag != null;
+            assert plankKey != null;
+
+            originalTag.getCompound("textureData").putString("minecraft:block/oak_planks", plankKey.toString());
+
+            return new StructureTemplate.StructureBlockInfo(blockPos, originalBlockState, originalTag);
+        }
+
         //Fills in air gaps in the floor with regions wood planks
         if (isFloorBlock(originalBlockState)) {
             if (levelReader instanceof ServerLevelAccessor levelAccessor) {
@@ -245,7 +104,7 @@ public class MineSupportProcessor extends StructureProcessor {
                     return new StructureTemplate.StructureBlockInfo(blockPos, levelBlockState, currentBlockInfo.nbt());
                 }
 
-                var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
+                var woodType = MineshaftHelpers.getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
 
                 return new StructureTemplate.StructureBlockInfo(blockPos, woodType.getBlock(Wood.BlockType.PLANKS).get().defaultBlockState(), currentBlockInfo.nbt());
             }
@@ -253,7 +112,7 @@ public class MineSupportProcessor extends StructureProcessor {
 
         //Changes supports to regions wood type
         if (isSupportBlock(originalBlockState)) {
-            var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
+            var woodType = MineshaftHelpers.getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
 
             Block newBlock;
 
@@ -282,7 +141,7 @@ public class MineSupportProcessor extends StructureProcessor {
         if (isFluidVoid(originalBlockState)) {
             BlockState levelBlockState = levelReader.getBlockState(blockPos);
             if (levelBlockState.getFluidState() != Fluids.EMPTY.defaultFluidState()) {
-                var newBlock = getRockType(blockPos, levelReader).raw();
+                var newBlock = MineshaftHelpers.getRockType(blockPos, levelReader).raw();
 
                 return new StructureTemplate.StructureBlockInfo(blockPos, newBlock.defaultBlockState(), currentBlockInfo.nbt());
             }
@@ -298,11 +157,20 @@ public class MineSupportProcessor extends StructureProcessor {
 
         //Changes wood planks to regions wood type
         if (isPlankBlock(originalBlockState)) {
-            var woodType = getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
+            var woodType = MineshaftHelpers.getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
 
             Block newBlock = woodType.getBlock(Wood.BlockType.PLANKS).get();
 
             return new StructureTemplate.StructureBlockInfo(blockPos, newBlock.defaultBlockState(), currentBlockInfo.nbt());
+        }
+
+        //Changes logs to regions wood type
+        if (isLogBlock(originalBlockState)) {
+            var woodType = MineshaftHelpers.getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader);
+
+            Block newBlock = woodType.getBlock(Wood.BlockType.LOG).get();
+
+            return new StructureTemplate.StructureBlockInfo(blockPos, newBlock.withPropertiesOf(originalBlockState), currentBlockInfo.nbt());
         }
 
         //Adds hardened stone to unstable roofs
@@ -311,7 +179,7 @@ public class MineSupportProcessor extends StructureProcessor {
                 BlockState levelBlockState = levelAccessor.getBlockState(blockPos);
 
                 if (levelBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.DOWN)) {
-                    var hardRock = getRockType(blockPos, levelReader).hardened().defaultBlockState();
+                    var hardRock = MineshaftHelpers.getRockType(blockPos, levelReader).hardened().defaultBlockState();
                     return new StructureTemplate.StructureBlockInfo(blockPos, hardRock, currentBlockInfo.nbt());
                 }
 
@@ -319,6 +187,14 @@ public class MineSupportProcessor extends StructureProcessor {
             }
         }
 
+        //Adds correct stone brick
+        if (isBrickBlock(originalBlockState)) {
+            var brickBlock = MineshaftHelpers.ROCK_ACCESOR_MAP.get(MineshaftHelpers.getRockType(blockPos, levelReader).raw()).getBlock(Rock.BlockType.BRICKS);
+
+            return new StructureTemplate.StructureBlockInfo(blockPos, brickBlock.get().defaultBlockState(), currentBlockInfo.nbt());
+        }
+
+        //"fixes" torches most of the time
         if (isTorchBlock(originalBlockState)) {
             if (levelReader instanceof ServerLevelAccessor levelAccessor) {
 
@@ -353,7 +229,7 @@ public class MineSupportProcessor extends StructureProcessor {
                     tankTag.putInt("Amount", random.nextInt(0, 80));
                     lampTag.put("tank", tankTag);
 
-                    BlockState newLamp = getOrAddLampCache(levelAccessor.getChunk(blockPos).getPos(), levelReader).hangingLamp.withPropertiesOf(originalBlockState);
+                    BlockState newLamp = MineshaftHelpers.getOrAddLampCache(levelAccessor.getChunk(blockPos).getPos(), levelReader).getHangingLamp().withPropertiesOf(originalBlockState);
 
                     return new StructureTemplate.StructureBlockInfo(blockPos, newLamp, lampTag);
                 }
@@ -368,7 +244,7 @@ public class MineSupportProcessor extends StructureProcessor {
                 BlockState belowBlockState = levelAccessor.getBlockState(blockPos.below());
 
                 if (belowBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.UP)) {
-                    BlockState newLamp = getOrAddLampCache(levelAccessor.getChunk(blockPos).getPos(), levelReader).fallenLamp.withPropertiesOf(originalBlockState);
+                    BlockState newLamp = MineshaftHelpers.getOrAddLampCache(levelAccessor.getChunk(blockPos).getPos(), levelReader).getFallenLamp().withPropertiesOf(originalBlockState);
 
                     return new StructureTemplate.StructureBlockInfo(blockPos, newLamp, currentBlockInfo.nbt());
                 }
@@ -405,6 +281,14 @@ public class MineSupportProcessor extends StructureProcessor {
         return blockState.getBlock() == Blocks.ORANGE_WOOL;
     }
 
+    private boolean isLogBlock(BlockState blockState) {
+        return blockState.getBlock() instanceof LogBlock;
+    }
+
+    private boolean isBrickBlock(BlockState blockState) {
+        return blockState.getBlock() == Blocks.PINK_WOOL;
+    }
+
     private boolean isRandomRawRock(BlockState blockState) {
         return blockState.getBlock() == Blocks.MAGENTA_WOOL;
     }
@@ -418,7 +302,8 @@ public class MineSupportProcessor extends StructureProcessor {
     }
 
     private boolean isFallenLampBlock(BlockState blockState) {
-        return blockState.getBlock() == BRONZE_LAMP || blockState.getBlock() == BLACK_BRONZE_LAMP || blockState.getBlock() == BISMUTH_BRONZE_LAMP || blockState.getBlock() == WROUGHT_IRON_LAMP;
+        return blockState.getBlock() == MineshaftHelpers.FALLEN_BRONZE_LAMP || blockState.getBlock() == MineshaftHelpers.FALLEN_BLACK_BRONZE_LAMP
+                || blockState.getBlock() == MineshaftHelpers.FALLEN_BISMUTH_BRONZE_LAMP || blockState.getBlock() == MineshaftHelpers.FALLEN_WROUGHT_IRON_LAMP;
     }
 
     private boolean isTorchBlock(BlockState blockState) {
@@ -431,22 +316,6 @@ public class MineSupportProcessor extends StructureProcessor {
 
     private boolean isTempVoid(BlockState blockState) {
         return blockState.getBlock() == Blocks.CYAN_CONCRETE;
-    }
-
-    @Getter
-    public enum PlacableLamp {
-        BRONZE(TFCBlocks.METALS.get(Metal.Default.BRONZE).get(Metal.BlockType.LAMP).get(), BRONZE_LAMP),
-        BLACK_BRONZE(TFCBlocks.METALS.get(Metal.Default.BLACK_BRONZE).get(Metal.BlockType.LAMP).get(), BLACK_BRONZE_LAMP),
-        BISMUTH_BRONZE(TFCBlocks.METALS.get(Metal.Default.BISMUTH_BRONZE).get(Metal.BlockType.LAMP).get(), BISMUTH_BRONZE_LAMP),
-        WROUGHT_IRON(TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.LAMP).get(), WROUGHT_IRON_LAMP);
-
-        private final Block hangingLamp;
-        private final Block fallenLamp;
-
-        PlacableLamp(Block hangingLamp, Block fallenLamp) {
-            this.hangingLamp = hangingLamp;
-            this.fallenLamp = fallenLamp;
-        }
     }
 
 }
