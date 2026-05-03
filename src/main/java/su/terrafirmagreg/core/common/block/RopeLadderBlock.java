@@ -33,6 +33,7 @@ public class RopeLadderBlock extends Block {
 
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     private static final int MAX_LENGTH = 64;
+    private static final int REMOVE_NO_LOOT = Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS | Block.UPDATE_SUPPRESS_DROPS;
 
     private static final VoxelShape EAST_AABB = Block.box(0, 0, 0, 4, 16, 16);
     private static final VoxelShape WEST_AABB = Block.box(12, 0, 0, 16, 16, 16);
@@ -84,8 +85,12 @@ public class RopeLadderBlock extends Block {
                 break;
             }
 
-            ItemStack ladderStack = findMatchingLadderInInventory(player);
+            ItemStack ladderStack = findMatchingLadderInInventory(player, stack);
             if (ladderStack.isEmpty()) {
+                break;
+            }
+
+            if (ladderStack == stack && ladderStack.getCount() <= 1) {
                 break;
             }
 
@@ -127,7 +132,7 @@ public class RopeLadderBlock extends Block {
         BlockPos below = pos.below();
         while (level.getBlockState(below).is(this)) {
             popResource(level, below, new ItemStack(this));
-            level.removeBlock(below, false);
+            level.setBlock(below, Blocks.AIR.defaultBlockState(), REMOVE_NO_LOOT);
             below = below.below();
         }
     }
@@ -151,7 +156,7 @@ public class RopeLadderBlock extends Block {
 
             for (int i = chain.size() - 1; i >= 0; i--) {
                 giveLadderToPlayer(player);
-                level.removeBlock(chain.get(i), false);
+                level.setBlock(chain.get(i), Blocks.AIR.defaultBlockState(), REMOVE_NO_LOOT);
             }
 
             if (!chain.isEmpty()) {
@@ -185,11 +190,14 @@ public class RopeLadderBlock extends Block {
         return level.getBlockState(pos).isFaceSturdy(level, pos, direction);
     }
 
-    private ItemStack findMatchingLadderInInventory(Player player) {
+    private ItemStack findMatchingLadderInInventory(Player player, ItemStack placementStack) {
+        if (placementStack.is(asItem()) && !placementStack.isEmpty()) {
+            return placementStack;
+        }
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-            ItemStack stack = player.getInventory().getItem(i);
-            if (stack.is(asItem())) {
-                return stack;
+            ItemStack s = player.getInventory().getItem(i);
+            if (s.is(asItem())) {
+                return s;
             }
         }
         return ItemStack.EMPTY;
