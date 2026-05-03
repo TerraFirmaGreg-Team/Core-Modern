@@ -244,7 +244,6 @@
         "common.tfc.recipes.MealModifierMixin",
         "common.tfc_astikor_carts.TFCSupplyCartEntityMixin",
         "common.tfcambiental.TemperatureCapabilityMixin",
-        "common.tfchotornot.ClientEventHandlerMixin",
         "common.tfchotornot.EventHandlerMixin",
         "common.tfchotornot.FluidEffectMixin",
         "common.tfcimprovedbadlands.IBEventHandlerMixin",
@@ -264,8 +263,6 @@
         "common.wab.ToxlacanthMixin",
         "common.minecraft.SectionStorageAccessor",
         "common.minecraft.PoiSectionAccessor",
-        "common.tfc.ClientEvenHandlerMixin",
-        "common.tfc.TFCDogRendererMixin",
         "common.tfc.TFCDogMixin",
         "common.tfc.TFCWolfMixin"
     ],
@@ -275,6 +272,9 @@
     "injectors": {"defaultRequire": 1},
     "compatibilityLevel": "JAVA_17",
     "client": [
+        "common.tfc.ClientEventHandlerMixin",
+        "common.tfc.TFCDogRendererMixin",
+        "common.tfchotornot.ClientEventHandlerMixin",
         "client.afc.TapBlockEntityProviderMixin",
         "client.carryon.ClientEventsMixin",
         "client.firmalife.FLBeehiveBlockMixin",

@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 
 import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.fluids.TFCFluids;
-import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.world.feature.plant.CreepingPlantConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -29,6 +28,7 @@ public class CreepingUnderwaterPlantFeature extends Feature<CreepingPlantConfig>
         final int radius = context.config().radius();
         final int height = context.config().height();
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+        final BlockState fluidSourceState = TFCFluids.SALT_WATER.createSourceBlock();
 
         boolean isSuccessful = false;
         for (int x = -radius; x <= radius; x++) {
@@ -36,7 +36,8 @@ public class CreepingUnderwaterPlantFeature extends Feature<CreepingPlantConfig>
                 for (int y = 0; y < height; y++) {
                     if (x * x + z * z < radius * radius && context.random().nextFloat() < context.config().integrity()) {
                         cursor.setWithOffset(pos, x, y, z);
-                        if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor)) {
+                        BlockState currentState = level.getBlockState(cursor);
+                        if (currentState.isAir() || currentState == fluidSourceState) {
                             final BlockState newState = CreepingWaterPlantBlock.updateStateFromSides(level, cursor, state);
                             if (!newState.isAir()) {
                                 final Fluid fluidAt = level.getFluidState(cursor).getType();
