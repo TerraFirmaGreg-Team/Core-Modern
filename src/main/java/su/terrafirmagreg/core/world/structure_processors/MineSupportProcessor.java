@@ -5,20 +5,19 @@ import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.ldtteam.domumornamentum.block.decorative.PanelBlock;
 import com.mojang.serialization.Codec;
 
 import net.dries007.tfc.common.blocks.DeadWallTorchBlock;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
-import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.wood.HorizontalSupportBlock;
 import net.dries007.tfc.common.blocks.wood.LogBlock;
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
 import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.util.Metal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -31,7 +30,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.utils.MineshaftHelpers;
 import su.terrafirmagreg.core.world.TFGStructureProcessors;
@@ -40,6 +38,8 @@ public class MineSupportProcessor extends StructureProcessor {
 
     public static final MineSupportProcessor INSTANCE = new MineSupportProcessor();
     public static final Codec<MineSupportProcessor> CODEC = Codec.unit(() -> INSTANCE);
+
+    private static final Block FORCED_LAMP = TFCBlocks.METALS.get(Metal.Default.BLUE_STEEL).get(Metal.BlockType.LAMP).get();
 
     @Override
     protected @NotNull StructureProcessorType<?> getType() {
@@ -54,7 +54,6 @@ public class MineSupportProcessor extends StructureProcessor {
 
         BlockState originalBlockState = currentBlockInfo.state();
         BlockPos blockPos = currentBlockInfo.pos();
-
         if (blockPos.equals(pos)) {
             //System.out.println("first pos of piece");
             if (template != null) {
@@ -80,19 +79,6 @@ public class MineSupportProcessor extends StructureProcessor {
         //Quick exit to help performance
         if (originalBlockState.isAir()) {
             return currentBlockInfo;
-        }
-
-        if (originalBlockState.getBlock() instanceof PanelBlock) {
-            ResourceLocation plankKey = ForgeRegistries.BLOCKS
-                    .getKey(MineshaftHelpers.getOrAddWoodCache(levelReader.getChunk(blockPos).getPos(), blockPos, levelReader).getBlock(Wood.BlockType.PLANKS).get());
-
-            CompoundTag originalTag = currentBlockInfo.nbt();
-            assert originalTag != null;
-            assert plankKey != null;
-
-            originalTag.getCompound("textureData").putString("minecraft:block/oak_planks", plankKey.toString());
-
-            return new StructureTemplate.StructureBlockInfo(blockPos, originalBlockState, originalTag);
         }
 
         //Fills in air gaps in the floor with regions wood planks
@@ -189,9 +175,9 @@ public class MineSupportProcessor extends StructureProcessor {
 
         //Adds correct stone brick
         if (isBrickBlock(originalBlockState)) {
-            var brickBlock = MineshaftHelpers.ROCK_ACCESOR_MAP.get(MineshaftHelpers.getRockType(blockPos, levelReader).raw()).getBlock(Rock.BlockType.BRICKS);
+            var brickBlock = MineshaftHelpers.getRuinedBrick(blockPos, levelReader, settings.getRandom(blockPos), false);
 
-            return new StructureTemplate.StructureBlockInfo(blockPos, brickBlock.get().defaultBlockState(), currentBlockInfo.nbt());
+            return new StructureTemplate.StructureBlockInfo(blockPos, brickBlock.defaultBlockState(), currentBlockInfo.nbt());
         }
 
         //"fixes" torches most of the time
@@ -220,7 +206,7 @@ public class MineSupportProcessor extends StructureProcessor {
 
                 BlockState aboveBlockState = levelAccessor.getBlockState(blockPos.above());
 
-                if (aboveBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.DOWN)) {
+                if (aboveBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.DOWN) || originalBlockState.is(FORCED_LAMP)) {
                     CompoundTag lampTag = currentBlockInfo.nbt();
                     assert lampTag != null;
                     var tankTag = lampTag.getCompound("tank");
@@ -243,7 +229,7 @@ public class MineSupportProcessor extends StructureProcessor {
             if (levelReader instanceof ServerLevelAccessor levelAccessor) {
                 BlockState belowBlockState = levelAccessor.getBlockState(blockPos.below());
 
-                if (belowBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.UP)) {
+                if (belowBlockState.isFaceSturdy(levelAccessor, blockPos, Direction.UP) || originalBlockState.is(FORCED_LAMP)) {
                     BlockState newLamp = MineshaftHelpers.getOrAddLampCache(levelAccessor.getChunk(blockPos).getPos(), levelReader).getFallenLamp().withPropertiesOf(originalBlockState);
 
                     return new StructureTemplate.StructureBlockInfo(blockPos, newLamp, currentBlockInfo.nbt());
@@ -261,6 +247,7 @@ public class MineSupportProcessor extends StructureProcessor {
     public @NotNull List<StructureTemplate.StructureBlockInfo> finalizeProcessing(@NotNull ServerLevelAccessor serverLevel, @NotNull BlockPos offset, @NotNull BlockPos pos,
             @NotNull List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
             @NotNull List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
+
         settings.setKeepLiquids(false);
         return super.finalizeProcessing(serverLevel, offset, pos, originalBlockInfos, processedBlockInfos, settings);
     }

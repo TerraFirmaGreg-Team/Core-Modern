@@ -14,6 +14,7 @@ import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.dries007.tfc.world.chunkdata.RockData;
 import net.dries007.tfc.world.settings.RockSettings;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -174,6 +175,19 @@ public class MineshaftHelpers {
         //System.out.println(innerArea);
 
         return outerArea.map(BlockPos::immutable).filter(pos -> !innerArea.contains(pos)).collect(Collectors.toSet());
+    }
+
+    public static Block getRuinedBrick(BlockPos blockPos, LevelReader levelReader, RandomSource random, boolean mossy) {
+        Rock rock = ROCK_ACCESOR_MAP.get(getRockType(blockPos, levelReader).raw());
+
+        int i = random.nextInt(0, 11);
+        if (i <= 7) {
+            return rock.getBlock(Rock.BlockType.BRICKS).get();
+        } else if (i <= 9 && mossy) {
+            return rock.getBlock(Rock.BlockType.MOSSY_BRICKS).get();
+        } else {
+            return rock.getBlock(Rock.BlockType.CRACKED_BRICKS).get();
+        }
     }
 
     //Just easier to do the map this way
