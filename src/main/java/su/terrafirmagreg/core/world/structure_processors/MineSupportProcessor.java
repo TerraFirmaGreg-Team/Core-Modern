@@ -29,6 +29,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
 import su.terrafirmagreg.core.utils.MineshaftHelpers;
@@ -117,7 +118,8 @@ public class MineSupportProcessor extends StructureProcessor {
         if (isRandomRawRock(originalBlockState)) {
             if (levelReader instanceof ServerLevelAccessor levelAccessor) {
                 RandomSource random = levelAccessor.getRandom();
-                Block newBlock = random.nextBoolean() ? levelAccessor.getBlockState(blockPos).getBlock() : Blocks.AIR;
+                FluidState worldFluid = levelAccessor.getFluidState(blockPos);
+                Block newBlock = random.nextBoolean() && worldFluid == Fluids.EMPTY.defaultFluidState() ? levelAccessor.getBlockState(blockPos).getBlock() : Blocks.AIR;
 
                 return new StructureTemplate.StructureBlockInfo(blockPos, newBlock.defaultBlockState(), currentBlockInfo.nbt());
             }
