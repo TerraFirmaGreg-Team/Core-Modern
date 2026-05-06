@@ -7,6 +7,10 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -17,18 +21,18 @@ import net.dries007.tfc.util.Metal;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.Level;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.IngotPedestalBlock.IngotPedestalBlockEntity;
 import su.terrafirmagreg.core.utils.TFGHelpers;
 
 @Mixin(value = IngotPileBlockEntity.class, remap = false)
-@OnlyIn(Dist.CLIENT)
 public abstract class IngotPileBlockEntityMixin {
+
     @Shadow
     @Final
     private List<?> entries;
@@ -93,5 +97,49 @@ public abstract class IngotPileBlockEntityMixin {
         if (numberOfUnknown > 0) {
             tooltip.accept(Component.literal(numberOfUnknown + "x ").append(Metal.unknown().getDisplayName().copy().withStyle(ChatFormatting.RED)));
         }
+    }
+
+    /** Updates a potential ingot pedestal that an ingot was manually removed. */
+    @Inject(method = "removeIngot", at = @At("RETURN"), remap = false)
+    private void tfg$removeIngot(CallbackInfoReturnable<ItemStack> cir) {
+        if (IngotPedestalBlockEntity.SUPPRESSING)
+            return;
+        if (cir.getReturnValue().isEmpty())
+            return; // no-op branch, nothing changed
+
+        IngotPileBlockEntity self = (IngotPileBlockEntity) (Object) this;
+        Level level = self.getLevel();
+        if (level == null || level.isClientSide())
+            return;
+
+        IngotPedestalBlockEntity.notifyExternalColumnChange(level, self.getBlockPos());
+    }
+
+    /** Updates a potential ingot pedestal that an ingot was manually added. */
+    @Inject(method = "addIngot", at = @At("TAIL"), remap = false)
+    private void tfg$addIngot(ItemStack stack, CallbackInfo ci) {
+        if (IngotPedestalBlockEntity.SUPPRESSING)
+            return;
+
+        IngotPileBlockEntity self = (IngotPileBlockEntity) (Object) this;
+        Level level = self.getLevel();
+        if (level == null || level.isClientSide())
+            return;
+
+        IngotPedestalBlockEntity.notifyExternalColumnChange(level, self.getBlockPos());
+    }
+
+    /** Updates a potential ingot pedestal that a  pedestal was destroyed. */
+    @Inject(method = "removeAllIngots", at = @At("TAIL"), remap = false)
+    private void tfg$removeAllIngots(java.util.function.Consumer<ItemStack> consumer, CallbackInfo ci) {
+        if (IngotPedestalBlockEntity.SUPPRESSING)
+            return;
+
+        IngotPileBlockEntity self = (IngotPileBlockEntity) (Object) this;
+        Level level = self.getLevel();
+        if (level == null || level.isClientSide())
+            return;
+
+        IngotPedestalBlockEntity.notifyExternalColumnChange(level, self.getBlockPos());
     }
 }

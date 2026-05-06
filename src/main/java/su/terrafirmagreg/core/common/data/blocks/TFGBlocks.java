@@ -39,6 +39,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.block.IngotPedestalBlock;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -226,6 +227,12 @@ public final class TFGBlocks {
     public static final BlockEntry<ArtisanTableBlock> ARTISAN_TABLE = TFGCore.REGISTRATE.block("artisan_table",
             (p) -> new ArtisanTableBlock(ExtendedProperties.of(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.SEWING_TABLE).get())))
             .blockstate((ctx, prov) -> ModelUtils.cardinalBlock(prov.getVariantBuilder(ctx.getEntry()), prov.models().getExistingFile(TFGCore.id("block/artisan_table"))))
+            .item(BlockItem::new).build()
+            .register();
+
+    public static final BlockEntry<IngotPedestalBlock> INGOT_PEDESTAL = TFGCore.REGISTRATE.block("ingot_pedestal", IngotPedestalBlock::new)
+            .properties(p -> p.sound(SoundType.METAL).strength(3.0f, 6.0f).mapColor(MapColor.METAL).noOcclusion())
+            .blockstate(ModelUtils.blockVariants(TFGCore.id("block/ingot_pedestal")))
             .item(BlockItem::new).build()
             .register();
 

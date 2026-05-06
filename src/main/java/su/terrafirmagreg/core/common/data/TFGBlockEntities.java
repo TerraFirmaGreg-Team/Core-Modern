@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.Block;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.IngotPedestalBlock;
 import su.terrafirmagreg.core.common.blockentity.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
@@ -74,6 +75,11 @@ public class TFGBlockEntities {
                             TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree),
                             TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree)))
                     .toArray(NonNullSupplier[]::new))
+            .register();
+
+    public static final BlockEntityEntry<IngotPedestalBlock.IngotPedestalBlockEntity> INGOT_PEDESTAL = TFGCore.REGISTRATE
+            .blockEntity("ingot_pedestal", IngotPedestalBlock.IngotPedestalBlockEntity::new)
+            .validBlock(TFGBlocks.INGOT_PEDESTAL)
             .register();
 
     private static final Map<Supplier<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();
