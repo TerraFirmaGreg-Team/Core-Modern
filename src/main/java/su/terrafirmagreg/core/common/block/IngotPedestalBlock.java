@@ -15,8 +15,6 @@ import net.dries007.tfc.common.blocks.devices.DoubleIngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -75,14 +73,8 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
         /** Prevent the ingot pile from giving BUs, depends on minecraft being single-threaded. */
         public static boolean SUPPRESSING = false;
         private boolean cacheValid = false;
-        /** Stack representing the accessible type; count is always 1 when used as a key. */
-        private ItemStack accessibleType = ItemStack.EMPTY;
-        /** How many contiguous ingots of accessibleType sit at the top of the pile. */
-        private int accessibleCount = 0;
-        /** Every individual ingot below the accessible ones, top to bottom. */
-        private final ArrayList<ItemStack> inaccessibleStacks = new ArrayList<>();
-        /** 1 + inaccessibleStacks.size() */
-        private int cachedTotalSlots = 1;
+        /** Cached contiguous stacks of ingots in the pile, last entry represents the ingots at the top. */
+        private final ArrayList<ItemStack> stacks = new ArrayList<>();
         /** Position of the topmost IngotPileBlock. Null when the column is empty. */
         @Nullable
         private BlockPos cachedTopPos = null;
@@ -129,10 +121,7 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
 
         public void invalidateCache() {
             cacheValid = false;
-            accessibleType = ItemStack.EMPTY;
-            accessibleCount = 0;
-            inaccessibleStacks.clear();
-            cachedTotalSlots = 1;
+            stacks.clear();
             cachedTopPos = null;
         }
 
@@ -142,25 +131,20 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
         }
 
         private void rebuildCache() {
-            inaccessibleStacks.clear();
-            accessibleCount = 0;
-            accessibleType = ItemStack.EMPTY;
+            stacks.clear();
             cachedTopPos = null;
 
             if (level == null) {
-                cachedTotalSlots = 1;
                 cacheValid = true;
                 return;
             }
 
             cachedTopPos = findTopPilePosRaw();
             if (cachedTopPos == null) {
-                cachedTotalSlots = 1;
                 cacheValid = true;
                 return;
             }
 
-            boolean accessibleRunEnded = false;
             BlockPos cur = cachedTopPos;
 
             while (level.getBlockState(cur).getBlock() instanceof IngotPileBlock) {
@@ -172,28 +156,22 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
                 for (int i = raw.size() - 1; i >= 0; i--) {
                     ItemStack stack = entryStack(raw.get(i)).copyWithCount(1);
 
-                    if (!accessibleRunEnded) {
-                        if (accessibleType.isEmpty()) {
-                            accessibleType = stack; // first ingot sets the accessible type
-                            accessibleCount = 1;
-                        } else if (ItemStack.isSameItemSameTags(accessibleType, stack)) {
-                            accessibleCount++;
-                        } else {
-                            accessibleRunEnded = true;
-                            inaccessibleStacks.add(stack);
-                        }
+                    if (stacks.isEmpty()) {
+                        stacks.add(stack.copyWithCount(1));
                     } else {
-                        inaccessibleStacks.add(stack);
+                        ItemStack lastStack = stacks.get(stacks.size() - 1);
+                        if (ItemStack.isSameItemSameTags(lastStack, stack)) {
+                            lastStack.setCount(lastStack.getCount() + 1);
+                        } else {
+                            stacks.add(stack.copyWithCount(1));
+                        }
                     }
                 }
                 cur = cur.below();
             }
 
-            inaccessibleStacks.trimToSize();
-            cachedTotalSlots = 1 + inaccessibleStacks.size();
             cacheValid = true;
         }
-
 
         private IItemHandler createItemHandler() {
             return new IItemHandler() {
@@ -202,27 +180,27 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
                     if (level == null)
                         return 1;
                     ensureCache();
-                    return cachedTotalSlots;
+                    return Math.max(1, stacks.size());
                 }
 
-                /** Slot 0 accessible ingot stack, slot 1 onwards individual inaccessible ingots. */
+                /** Slot 0 accessible, slot 1+ inaccessible. */
                 @Override
                 public ItemStack getStackInSlot(int slot) {
                     if (level == null || slot < 0)
                         return ItemStack.EMPTY;
                     ensureCache();
-                    if (slot == 0) {
-                        return accessibleType.isEmpty() ? ItemStack.EMPTY : accessibleType.copyWithCount(accessibleCount);
-                    }
-                    int iIdx = slot - 1;
-                    return iIdx < inaccessibleStacks.size() ? inaccessibleStacks.get(iIdx).copyWithCount(1) : ItemStack.EMPTY;
+                    if (stacks.isEmpty() || slot < 0 || slot >= stacks.size())
+                        return ItemStack.EMPTY;
+                    return stacks.get(slot).copy();
                 }
 
                 @Override
                 public int getSlotLimit(int slot) {
                     if (slot == 0) {
                         ensureCache();
-                        return Math.max(1, accessibleCount);
+                        if (stacks.isEmpty() || slot < 0 || slot >= stacks.size())
+                            return 1;
+                        return stacks.get(slot).getCount();
                     }
                     return 1;
                 }
@@ -239,30 +217,23 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
                         return ItemStack.EMPTY;
                     ensureCache();
 
-                    if (slot != 0 || accessibleCount == 0)
+                    if (slot != 0 || stacks.isEmpty())
                         return ItemStack.EMPTY;
-
-                    int toExtract = Math.min(amount, accessibleCount);
+                    ItemStack lastRun = stacks.get(stacks.size() - 1);
+                    int toExtract = Math.min(amount, lastRun.getCount());
                     if (simulate) {
-                        return accessibleType.copyWithCount(toExtract);
+                        return lastRun.copyWithCount(toExtract);
                     }
 
-                    // slight hack thanks to mc being single-threaded
                     SUPPRESSING = true;
                     try {
                         int extracted = batchExtractLive(toExtract);
                         if (extracted == 0)
                             return ItemStack.EMPTY;
 
-                        ItemStack result = accessibleType.copyWithCount(extracted);
-
-                        // rebuild cache only if topmost stack type changed
-                        // TODO: This may cause performance issues if pedestal uses random ingots.
-                        if (accessibleCount > extracted) {
-                            accessibleCount -= extracted;
-                        } else {
-                            invalidateCache();
-                        }
+                        ItemStack result = lastRun.copyWithCount(extracted);
+                        // Always invalidate after extraction to sync cache with pile state
+                        invalidateCache();
                         return result;
                     } finally {
                         SUPPRESSING = false;
@@ -279,15 +250,20 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
 
                     ensureCache();
 
-                    // slight hack thanks to mc being single-threaded
                     SUPPRESSING = true;
                     try {
                         int inserted = batchInsertLive(stack, stack.getCount(), simulate);
                         if (!simulate && inserted > 0) {
-                            if (accessibleType.isEmpty()) {
-                                accessibleType = stack.copyWithCount(1);
+                            if (stacks.isEmpty()) {
+                                stacks.add(stack.copyWithCount(inserted));
+                            } else {
+                                ItemStack topStack = stacks.get(0); // stacks[0] is now the top
+                                if (ItemStack.isSameItemSameTags(topStack, stack)) {
+                                    topStack.setCount(topStack.getCount() + inserted);
+                                } else {
+                                    stacks.add(0, stack.copyWithCount(inserted)); // insert at top
+                                }
                             }
-                            accessibleCount += inserted;
                         }
                         int leftover = stack.getCount() - inserted;
                         return leftover <= 0 ? ItemStack.EMPTY : stack.copyWithCount(leftover);
@@ -467,7 +443,7 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
             }
         }
 
-        private static void appendEntries(IngotPileBlockEntity pile, ItemStack stack, int count) {
+        private void appendEntries(IngotPileBlockEntity pile, ItemStack stack, int count) {
             List<Object> entries = rawEntries(pile);
             ItemStack single = stack.copyWithCount(1);
             try {
