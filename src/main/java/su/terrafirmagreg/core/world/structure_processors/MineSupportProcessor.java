@@ -82,6 +82,10 @@ public class MineSupportProcessor extends StructureProcessor {
             return currentBlockInfo;
         }
 
+        if (isCobwebBlock(originalBlockState)) {
+            return currentBlockInfo;
+        }
+
         //Fills in air gaps in the floor with regions wood planks
         if (isFloorBlock(originalBlockState)) {
             if (levelReader instanceof ServerLevelAccessor levelAccessor) {
@@ -305,6 +309,10 @@ public class MineSupportProcessor extends StructureProcessor {
 
     private boolean isTempVoid(BlockState blockState) {
         return blockState.getBlock() == Blocks.CYAN_CONCRETE;
+    }
+
+    private boolean isCobwebBlock(BlockState blockState) {
+        return blockState.getBlock() == Blocks.COBWEB;
     }
 
 }
