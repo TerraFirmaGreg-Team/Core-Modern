@@ -180,28 +180,27 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
                     if (level == null)
                         return 1;
                     ensureCache();
-                    return Math.max(1, stacks.size());
+                    return stacks.size() + 1;
                 }
 
-                /** Slot 0 accessible, slot 1+ inaccessible. */
+                /** Slots 0 is accessible, slots 1+ inaccessible, last slot always empty. */
                 @Override
                 public ItemStack getStackInSlot(int slot) {
                     if (level == null || slot < 0)
                         return ItemStack.EMPTY;
                     ensureCache();
-                    if (stacks.isEmpty() || slot < 0 || slot >= stacks.size())
+                    if (slot >= stacks.size())
                         return ItemStack.EMPTY;
                     return stacks.get(slot).copy();
                 }
 
                 @Override
                 public int getSlotLimit(int slot) {
-                    if (slot == 0) {
-                        ensureCache();
-                        if (stacks.isEmpty() || slot < 0 || slot >= stacks.size())
-                            return 1;
+                    ensureCache();
+                    if (slot < 0 || slot >= stacks.size())
+                        return 64;
+                    if (slot < stacks.size())
                         return stacks.get(slot).getCount();
-                    }
                     return 1;
                 }
 
@@ -219,10 +218,10 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
 
                     if (slot != 0 || stacks.isEmpty())
                         return ItemStack.EMPTY;
-                    ItemStack lastRun = stacks.get(stacks.size() - 1);
-                    int toExtract = Math.min(amount, lastRun.getCount());
+                    ItemStack topStack = stacks.get(0);
+                    int toExtract = Math.min(amount, topStack.getCount());
                     if (simulate) {
-                        return lastRun.copyWithCount(toExtract);
+                        return topStack.copyWithCount(toExtract);
                     }
 
                     SUPPRESSING = true;
@@ -231,9 +230,11 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
                         if (extracted == 0)
                             return ItemStack.EMPTY;
 
-                        ItemStack result = lastRun.copyWithCount(extracted);
-                        // Always invalidate after extraction to sync cache with pile state
-                        invalidateCache();
+                        ItemStack result = topStack.copyWithCount(extracted);
+                        topStack.setCount(topStack.getCount() - extracted);
+                        if (topStack.getCount() <= 0) {
+                            stacks.remove(0);
+                        }
                         return result;
                     } finally {
                         SUPPRESSING = false;
