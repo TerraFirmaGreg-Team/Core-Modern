@@ -283,7 +283,7 @@ public class IngotPedestalBlock extends Block implements EntityBlock {
             int extracted = 0;
             BlockPos cur = cachedTopPos;
 
-            while (extracted < toExtract) {
+            while (extracted < toExtract && cur != null) {
                 BlockState state = level.getBlockState(cur);
                 if (!(state.getBlock() instanceof IngotPileBlock pileBlock))
                     break;
