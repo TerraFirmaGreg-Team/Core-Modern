@@ -1,0 +1,19 @@
+{
+    "seed": 820843910007917,
+    "marking_grain": 0.35,
+    "blue_tint": 0.08,
+    "line_width_px": 6,
+    "noise_level": 16,
+    "export_files": [
+        "block.png",
+        "pouring.png",
+        "hot.png",
+        "horizontal_white.png",
+        "vertical_white.png",
+        "cross_white.png"
+    ],
+    "tile_size": 16,
+    "tool": "AsphaltRoadApp",
+    "base_color": "#262628",
+    "edge_bleed": 0.7
+}

@@ -1,0 +1,38 @@
+{
+    "parent": "block/block",
+    "textures": {"line": "tfg:block/asphalt_road/horizontal_white"},
+    "elements": [{
+        "from": [
+            -0.01,
+            6.99,
+            -0.01
+        ],
+        "to": [
+            16.01,
+            7.01,
+            16.01
+        ],
+        "faces": {
+            "up": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    16
+                ],
+                "texture": "#line",
+                "tintindex": 1
+            },
+            "down": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    16
+                ],
+                "texture": "#line",
+                "tintindex": 1
+            }
+        }
+    }]
+}

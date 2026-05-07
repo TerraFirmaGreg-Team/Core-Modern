@@ -37,6 +37,11 @@ public class TFGItems {
         TFGItems_Medicines.init();
     }
 
+    public static final ItemEntry<Item> TAR_CHUNK = TFGCore.REGISTRATE.item("tar_chunk", Item::new).defaultModel().register();
+    public static final ItemEntry<Item> GILSONITE_DUST = TFGCore.REGISTRATE.item("gilsonite_dust", Item::new).defaultModel().register();
+    public static final ItemEntry<Item> ASPHALT_BINDER = TFGCore.REGISTRATE.item("asphalt_binder", Item::new).defaultModel().register();
+    public static final ItemEntry<Item> ASPHALT_RUBBLE = TFGCore.REGISTRATE.item("asphalt_rubble", Item::new).defaultModel().register();
+
     public static final ItemEntry<PiglinDisguise> PIGLIN_DISGUISE = TFGCore.REGISTRATE.item("piglin_disguise",
             (p) -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), p))
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/piglin_disguise_block")))
@@ -119,6 +124,13 @@ public class TFGItems {
     @SuppressWarnings("deprecation")
     public static final ItemEntry<BucketItem> GEYSER_SLURRY_BUCKET = TFGCore.REGISTRATE.item("geyser_slurry_bucket",
             p -> new BucketItem(TFGFluids.GEYSER_SLURRY.getSource(), p))
+            .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .register();
+
+    @SuppressWarnings("deprecation")
+    public static final ItemEntry<BucketItem> ASPHALT_MIX_BUCKET = TFGCore.REGISTRATE.item("asphalt_mix_bucket",
+            p -> new BucketItem(TFGFluids.ASPHALT_MIX.getSource(), p))
             .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();

@@ -112,6 +112,10 @@ public final class TFGTags {
         public static final TagKey<Block> NoIcicles = createBlockTag("no_icicle_generation");
         public static final TagKey<Block> NOT_SLOWED_WITH_SNOWSHOES = createBlockTag("not_slowed_with_snowshoes");
 
+        public static final TagKey<Block> FUNCTIONAL_ASPHALT_ROADS = createBlockTag("functional_asphalt_roads");
+        public static final TagKey<Block> FUNCTIONAL_ASPHALT_ROAD_STAIRS = createBlockTag("functional_asphalt_road_stairs");
+        public static final TagKey<Block> FUNCTIONAL_ASPHALT_ROAD_SLABS = createBlockTag("functional_asphalt_road_slabs");
+
         private static TagKey<Block> createBlockTag(String path) {
             return createBlockTag(TFGCore.id(path));
         }

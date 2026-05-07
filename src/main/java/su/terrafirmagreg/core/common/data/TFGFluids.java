@@ -98,6 +98,34 @@ public class TFGFluids {
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
 
+    public static final FluidRegistryObject<ForgeFlowingFluid> ASPHALT_MIX = register(
+            "asphalt_mix",
+            properties -> properties
+                    .block(TFGBlocks.ASPHALT_MIX_FLUID_BLOCK)
+                    .bucket(TFGItems.ASPHALT_MIX_BUCKET),
+            FluidType.Properties.create()
+                    .adjacentPathType(BlockPathTypes.LAVA)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
+                    .density(2600)
+                    .viscosity(5000)
+                    .canConvertToSource(false)
+                    .canExtinguish(false)
+                    .canHydrate(false)
+                    .supportsBoating(false)
+                    .canDrown(true)
+                    .canSwim(false)
+                    .canPushEntity(true)
+                    .temperature(420)
+                    .descriptionId("fluid.tfg.asphalt_mix"),
+            new FluidTypeClientProperties(ALPHA_MASK | 0x1A1A1A,
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "block/lava_still"),
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "block/lava_flow"),
+                    null,
+                    null),
+            MixingFluid.Source::new,
+            MixingFluid.Flowing::new);
+
     // TFC, why did you have to make this private
 
     private static FluidType.Properties waterLike() {

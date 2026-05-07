@@ -1,0 +1,108 @@
+{
+    "parent": "block/block",
+    "textures": {"line": "tfg:block/asphalt_road/vertical_white"},
+    "elements": [
+        {
+            "from": [
+                -0.01,
+                6.98,
+                -0.01
+            ],
+            "to": [
+                16.01,
+                7,
+                7.01
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        -0.01,
+                        -0.01,
+                        16.01,
+                        7.01
+                    ],
+                    "texture": "#line",
+                    "tintindex": 2
+                },
+                "down": {
+                    "uv": [
+                        -0.01,
+                        -0.01,
+                        16.01,
+                        7.01
+                    ],
+                    "texture": "#line",
+                    "tintindex": 2
+                }
+            }
+        },
+        {
+            "from": [
+                7.99,
+                6.98,
+                -0.01
+            ],
+            "to": [
+                16.01,
+                7,
+                16.01
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        7.99,
+                        -0.01,
+                        16.01,
+                        16.01
+                    ],
+                    "texture": "#line",
+                    "tintindex": 2
+                },
+                "down": {
+                    "uv": [
+                        7.99,
+                        -0.01,
+                        16.01,
+                        16.01
+                    ],
+                    "texture": "#line",
+                    "tintindex": 2
+                }
+            }
+        },
+        {
+            "from": [
+                -0.01,
+                6.98,
+                7.99
+            ],
+            "to": [
+                8.01,
+                7,
+                16.01
+            ],
+            "faces": {
+                "up": {
+                    "uv": [
+                        -0.01,
+                        7.99,
+                        8.01,
+                        16.01
+                    ],
+                    "texture": "#line",
+                    "tintindex": 2
+                },
+                "down": {
+                    "uv": [
+                        -0.01,
+                        7.99,
+                        8.01,
+                        16.01
+                    ],
+                    "texture": "#line",
+                    "tintindex": 2
+                }
+            }
+        }
+    ]
+}

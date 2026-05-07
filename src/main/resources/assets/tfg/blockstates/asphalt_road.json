@@ -1,0 +1,49 @@
+{"multipart": [
+    {"apply": {"model": "tfg:block/asphalt_road/block_base"}},
+    {
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_horizontal_upper"},
+        "when": {
+            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "vertical_color": "none"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_vertical_upper"},
+        "when": {
+            "horizontal_color": "none",
+            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_vertical_lower"},
+        "when": {
+            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "top_layer": "horizontal"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_horizontal_upper"},
+        "when": {
+            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "top_layer": "horizontal"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_horizontal_lower"},
+        "when": {
+            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "top_layer": "vertical"
+        }
+    },
+    {
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_vertical_upper"},
+        "when": {
+            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "top_layer": "vertical"
+        }
+    }
+]}

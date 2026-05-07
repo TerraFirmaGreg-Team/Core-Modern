@@ -44,3 +44,4 @@ src/generated/resources/.cache/*
 src/dev/java/resources/assets/*
 src/generated/resources/assets/tfg/lang/*
 *.jar
+.java-version
