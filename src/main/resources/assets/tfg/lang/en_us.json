@@ -1,5 +1,3 @@
 {
-    "item.tfg.asphalt_road_stencil_arrow": "Road Marking Stencil (Arrow)",
-    "config.jade.plugin_tfg.tier_locked_block_info": "Tier-locked blocks",
-    "config.jade.plugin_tfg.hot_asphalt_info": "Hot asphalt road"
+    "config.jade.plugin_tfg.tier_locked_block_info": "Tier-locked blocks"
 }
