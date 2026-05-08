@@ -8,9 +8,9 @@
         "block.png",
         "pouring.png",
         "hot.png",
-        "horizontal_white.png",
-        "vertical_white.png",
-        "cross_white.png"
+        "mask_line_horizontal.png",
+        "mask_line_vertical.png",
+        "mask_cross.png"
     ],
     "tile_size": 16,
     "tool": "AsphaltRoadApp",

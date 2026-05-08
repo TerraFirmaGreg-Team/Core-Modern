@@ -1,15 +1,15 @@
 {
     "parent": "block/block",
-    "textures": {"line": "tfg:block/asphalt_road/horizontal_white"},
+    "textures": {"decal": "tfg:block/asphalt_road/mask_line_vertical"},
     "elements": [{
         "from": [
             -0.01,
-            6.98,
+            6.978,
             -0.01
         ],
         "to": [
             16.01,
-            7,
+            7.005,
             16.01
         ],
         "faces": {
@@ -20,8 +20,8 @@
                     16,
                     16
                 ],
-                "texture": "#line",
-                "tintindex": 1
+                "texture": "#decal",
+                "tintindex": 2
             },
             "down": {
                 "uv": [
@@ -30,8 +30,8 @@
                     16,
                     16
                 ],
-                "texture": "#line",
-                "tintindex": 1
+                "texture": "#decal",
+                "tintindex": 2
             }
         }
     }]

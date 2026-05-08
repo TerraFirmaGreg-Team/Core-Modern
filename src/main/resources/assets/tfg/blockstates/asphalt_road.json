@@ -1,49 +1,24 @@
 {"multipart": [
     {"apply": {"model": "tfg:block/asphalt_road/block_base"}},
     {
-        "apply": {"model": "tfg:block/asphalt_road/block_overlay_horizontal_upper"},
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_horizontal"},
         "when": {
-            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "vertical_color": "none"
+            "color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "decal": "line_horizontal"
         }
     },
     {
-        "apply": {"model": "tfg:block/asphalt_road/block_overlay_vertical_upper"},
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_vertical"},
         "when": {
-            "horizontal_color": "none",
-            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black"
+            "color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "decal": "line_vertical"
         }
     },
     {
-        "apply": {"model": "tfg:block/asphalt_road/block_overlay_vertical_lower"},
+        "apply": {"model": "tfg:block/asphalt_road/block_overlay_cross"},
         "when": {
-            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "top_layer": "horizontal"
-        }
-    },
-    {
-        "apply": {"model": "tfg:block/asphalt_road/block_overlay_horizontal_upper"},
-        "when": {
-            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "top_layer": "horizontal"
-        }
-    },
-    {
-        "apply": {"model": "tfg:block/asphalt_road/block_overlay_horizontal_lower"},
-        "when": {
-            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "top_layer": "vertical"
-        }
-    },
-    {
-        "apply": {"model": "tfg:block/asphalt_road/block_overlay_vertical_upper"},
-        "when": {
-            "horizontal_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "vertical_color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
-            "top_layer": "vertical"
+            "color": "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black",
+            "decal": "cross"
         }
     }
 ]}

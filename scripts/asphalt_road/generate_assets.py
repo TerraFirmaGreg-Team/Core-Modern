@@ -29,10 +29,14 @@ def gen_models():
             'stairs.json', 'stairs_outer.json', 'stairs_inner.json'
         }:
             path.unlink(missing_ok=True)
-        if name in {'block.json', 'slab.json',
-                    'block_overlay_horizontal.json', 'block_overlay_vertical.json',
-                    'slab_overlay_horizontal.json', 'slab_overlay_vertical.json'}:
+        if name in {'block.json', 'slab.json'}:
             path.unlink(missing_ok=True)
+        if 'overlay' in name and name.endswith('_lower.json'):
+            path.unlink(missing_ok=True)
+
+    for legacy in ('block_overlay_horizontal_upper.json', 'block_overlay_vertical_upper.json',
+                   'slab_overlay_horizontal_upper.json', 'slab_overlay_vertical_upper.json'):
+        (MODELS_BLOCK / legacy).unlink(missing_ok=True)
 
     # Base asphalt models (untinted)
     dump(MODELS_BLOCK / 'block_base.json', {
@@ -44,100 +48,76 @@ def gen_models():
         'textures': {'top': tex('block'), 'gravel': 'minecraft:block/gravel'}
     })
 
-    # Overlay models: lower/upper to represent draw order at intersections.
-    dump(MODELS_BLOCK / 'block_overlay_horizontal_lower.json', {
+    # One decal layer; block state uses `decal` + `color` (see AsphaltRoadDecal / AsphaltRoadMarkingColor in Java).
+    dump(MODELS_BLOCK / 'block_overlay_horizontal.json', {
         'parent': 'block/block',
-        'textures': {'line': tex('horizontal_white')},
+        'textures': {'decal': tex('mask_line_horizontal')},
         'elements': [{
-            'from': [-0.01, 14.98, -0.01],
-            'to': [16.01, 15.00, 16.01],
+            'from': [-0.01, 14.992, -0.01],
+            'to': [16.01, 15.015, 16.01],
             'faces': {
-                'up': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 1},
-                'down': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 1}
+                'up': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 1},
+                'down': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 1}
             }
         }]
     })
-    dump(MODELS_BLOCK / 'block_overlay_horizontal_upper.json', {
+    dump(MODELS_BLOCK / 'block_overlay_vertical.json', {
         'parent': 'block/block',
-        'textures': {'line': tex('horizontal_white')},
+        'textures': {'decal': tex('mask_line_vertical')},
         'elements': [{
-            'from': [-0.01, 14.99, -0.01],
-            'to': [16.01, 15.01, 16.01],
+            'from': [-0.01, 14.992, -0.01],
+            'to': [16.01, 15.015, 16.01],
             'faces': {
-                'up': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 1},
-                'down': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 1}
+                'up': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 2},
+                'down': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 2}
             }
         }]
     })
-    dump(MODELS_BLOCK / 'block_overlay_vertical_lower.json', {
+    dump(MODELS_BLOCK / 'slab_overlay_horizontal.json', {
         'parent': 'block/block',
-        'textures': {'line': tex('vertical_white')},
+        'textures': {'decal': tex('mask_line_horizontal')},
         'elements': [{
-            'from': [-0.01, 14.98, -0.01],
-            'to': [16.01, 15.00, 16.01],
+            'from': [-0.01, 6.978, -0.01],
+            'to': [16.01, 7.005, 16.01],
             'faces': {
-                'up': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 2},
-                'down': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 2}
+                'up': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 1},
+                'down': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 1}
             }
         }]
     })
-    dump(MODELS_BLOCK / 'block_overlay_vertical_upper.json', {
+    dump(MODELS_BLOCK / 'slab_overlay_vertical.json', {
         'parent': 'block/block',
-        'textures': {'line': tex('vertical_white')},
+        'textures': {'decal': tex('mask_line_vertical')},
         'elements': [{
-            'from': [-0.01, 14.99, -0.01],
-            'to': [16.01, 15.01, 16.01],
+            'from': [-0.01, 6.978, -0.01],
+            'to': [16.01, 7.005, 16.01],
             'faces': {
-                'up': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 2},
-                'down': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 2}
+                'up': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 2},
+                'down': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 2}
             }
         }]
     })
-    dump(MODELS_BLOCK / 'slab_overlay_horizontal_lower.json', {
+    dump(MODELS_BLOCK / 'block_overlay_cross.json', {
         'parent': 'block/block',
-        'textures': {'line': tex('horizontal_white')},
+        'textures': {'decal': tex('mask_cross')},
         'elements': [{
-            'from': [-0.01, 6.98, -0.01],
-            'to': [16.01, 7.00, 16.01],
+            'from': [-0.01, 14.992, -0.01],
+            'to': [16.01, 15.015, 16.01],
             'faces': {
-                'up': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 1},
-                'down': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 1}
+                'up': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 3},
+                'down': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 3}
             }
         }]
     })
-    dump(MODELS_BLOCK / 'slab_overlay_horizontal_upper.json', {
+    dump(MODELS_BLOCK / 'slab_overlay_cross.json', {
         'parent': 'block/block',
-        'textures': {'line': tex('horizontal_white')},
+        'textures': {'decal': tex('mask_cross')},
         'elements': [{
-            'from': [-0.01, 6.99, -0.01],
-            'to': [16.01, 7.01, 16.01],
+            'from': [-0.01, 6.978, -0.01],
+            'to': [16.01, 7.005, 16.01],
             'faces': {
-                'up': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 1},
-                'down': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 1}
-            }
-        }]
-    })
-    dump(MODELS_BLOCK / 'slab_overlay_vertical_lower.json', {
-        'parent': 'block/block',
-        'textures': {'line': tex('vertical_white')},
-        'elements': [{
-            'from': [-0.01, 6.98, -0.01],
-            'to': [16.01, 7.00, 16.01],
-            'faces': {
-                'up': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 2},
-                'down': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 2}
-            }
-        }]
-    })
-    dump(MODELS_BLOCK / 'slab_overlay_vertical_upper.json', {
-        'parent': 'block/block',
-        'textures': {'line': tex('vertical_white')},
-        'elements': [{
-            'from': [-0.01, 6.99, -0.01],
-            'to': [16.01, 7.01, 16.01],
-            'faces': {
-                'up': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 2},
-                'down': {'uv': [0, 0, 16, 16], 'texture': '#line', 'tintindex': 2}
+                'up': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 3},
+                'down': {'uv': [0, 0, 16, 16], 'texture': '#decal', 'tintindex': 3}
             }
         }]
     })
@@ -155,101 +135,56 @@ def gen_models():
         'textures': {'bottom': tex('block'), 'top': tex('block'), 'side': tex('block')}
     })
 
-    def stair_overlay_model(name: str, texture_name: str, tint_index: int, y_min: float, y_max: float):
-        # Match RNR path stair geometry (lower 1/2 slab top at y=7 and upper steps at y=15).
-        def top_patch(x1, z1, x2, z2):
-            return {
-                'from': [x1, y_min, z1],
-                'to': [x2, y_max, z2],
-                'faces': {
-                    'up': {'uv': [x1, z1, x2, z2], 'texture': '#line', 'tintindex': tint_index},
-                    'down': {'uv': [x1, z1, x2, z2], 'texture': '#line', 'tintindex': tint_index}
-                }
-            }
-
-        variants = {
-            'straight': [top_patch(-0.01, -0.01, 16.01, 7.01), top_patch(7.99, -0.01, 16.01, 16.01)],
-            'outer': [top_patch(-0.01, -0.01, 16.01, 7.01), top_patch(7.99, 7.99, 16.01, 16.01)],
-            'inner': [top_patch(-0.01, -0.01, 16.01, 7.01), top_patch(7.99, -0.01, 16.01, 16.01), top_patch(-0.01, 7.99, 8.01, 16.01)]
-        }
-        for shape, elements in variants.items():
-            dump(MODELS_BLOCK / f'stairs_overlay_{shape}_{name}.json', {
-                'parent': 'block/block',
-                'textures': {'line': tex(texture_name)},
-                'elements': elements
-            })
-
-    stair_overlay_model('horizontal_lower', 'horizontal_white', 1, 6.98, 7.00)
-    stair_overlay_model('horizontal_upper', 'horizontal_white', 1, 6.99, 7.01)
-    stair_overlay_model('vertical_lower', 'vertical_white', 2, 6.98, 7.00)
-    stair_overlay_model('vertical_upper', 'vertical_white', 2, 6.99, 7.01)
-
 
 def gen_blockstates():
     colors = "white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black"
     dump(BLOCKSTATES / 'asphalt_road.json', {
         'multipart': [
             {'apply': {'model': model_path('block_base')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': 'none'}, 'apply': {'model': model_path('block_overlay_horizontal_upper')}},
-            {'when': {'vertical_color': colors, 'horizontal_color': 'none'}, 'apply': {'model': model_path('block_overlay_vertical_upper')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': colors, 'top_layer': 'horizontal'}, 'apply': {'model': model_path('block_overlay_vertical_lower')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': colors, 'top_layer': 'horizontal'}, 'apply': {'model': model_path('block_overlay_horizontal_upper')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': colors, 'top_layer': 'vertical'}, 'apply': {'model': model_path('block_overlay_horizontal_lower')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': colors, 'top_layer': 'vertical'}, 'apply': {'model': model_path('block_overlay_vertical_upper')}}
+            {'when': {'decal': 'line_horizontal', 'color': colors}, 'apply': {'model': model_path('block_overlay_horizontal')}},
+            {'when': {'decal': 'line_vertical', 'color': colors}, 'apply': {'model': model_path('block_overlay_vertical')}},
+            {'when': {'decal': 'cross', 'color': colors}, 'apply': {'model': model_path('block_overlay_cross')}},
         ]
     })
     dump(BLOCKSTATES / 'asphalt_road_slab.json', {
         'multipart': [
             {'apply': {'model': model_path('slab_base')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': 'none'}, 'apply': {'model': model_path('slab_overlay_horizontal_upper')}},
-            {'when': {'vertical_color': colors, 'horizontal_color': 'none'}, 'apply': {'model': model_path('slab_overlay_vertical_upper')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': colors, 'top_layer': 'horizontal'}, 'apply': {'model': model_path('slab_overlay_vertical_lower')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': colors, 'top_layer': 'horizontal'}, 'apply': {'model': model_path('slab_overlay_horizontal_upper')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': colors, 'top_layer': 'vertical'}, 'apply': {'model': model_path('slab_overlay_horizontal_lower')}},
-            {'when': {'horizontal_color': colors, 'vertical_color': colors, 'top_layer': 'vertical'}, 'apply': {'model': model_path('slab_overlay_vertical_upper')}}
+            {'when': {'decal': 'line_horizontal', 'color': colors}, 'apply': {'model': model_path('slab_overlay_horizontal')}},
+            {'when': {'decal': 'line_vertical', 'color': colors}, 'apply': {'model': model_path('slab_overlay_vertical')}},
+            {'when': {'decal': 'cross', 'color': colors}, 'apply': {'model': model_path('slab_overlay_cross')}},
         ]
     })
 
     stair_base = []
-    stair_variant_refs = []
 
-    def base_rule(facing, shape, model, overlay_shape, y=None):
+    def base_rule(facing, shape, model, y=None):
         when = {'facing': facing, 'shape': shape}
         apply = {'model': model}
         if y is not None:
             apply['y'] = y
             apply['uvlock'] = True
         stair_base.append({'when': when, 'apply': apply})
-        stair_variant_refs.append((when, y, overlay_shape))
 
-    base_rule('east', 'straight', model_path('stairs'), 'straight')
-    base_rule('west', 'straight', model_path('stairs'), 'straight', 180)
-    base_rule('south', 'straight', model_path('stairs'), 'straight', 90)
-    base_rule('north', 'straight', model_path('stairs'), 'straight', 270)
-    base_rule('east', 'outer_right', model_path('stairs_outer'), 'outer')
-    base_rule('west', 'outer_right', model_path('stairs_outer'), 'outer', 180)
-    base_rule('south', 'outer_right', model_path('stairs_outer'), 'outer', 90)
-    base_rule('north', 'outer_right', model_path('stairs_outer'), 'outer', 270)
-    base_rule('east', 'outer_left', model_path('stairs_outer'), 'outer', 270)
-    base_rule('west', 'outer_left', model_path('stairs_outer'), 'outer', 90)
-    base_rule('south', 'outer_left', model_path('stairs_outer'), 'outer')
-    base_rule('north', 'outer_left', model_path('stairs_outer'), 'outer', 180)
-    base_rule('east', 'inner_right', model_path('stairs_inner'), 'inner')
-    base_rule('west', 'inner_right', model_path('stairs_inner'), 'inner', 180)
-    base_rule('south', 'inner_right', model_path('stairs_inner'), 'inner', 90)
-    base_rule('north', 'inner_right', model_path('stairs_inner'), 'inner', 270)
-    base_rule('east', 'inner_left', model_path('stairs_inner'), 'inner', 270)
-    base_rule('west', 'inner_left', model_path('stairs_inner'), 'inner', 90)
-    base_rule('south', 'inner_left', model_path('stairs_inner'), 'inner')
-    base_rule('north', 'inner_left', model_path('stairs_inner'), 'inner', 180)
-
-    def add_stair_overlay(entries: list, color_when: dict, suffix: str):
-        for base_when, y, overlay_shape in stair_variant_refs:
-            apply = {'model': model_path(f'stairs_overlay_{overlay_shape}_{suffix}')}
-            if y is not None:
-                apply['y'] = y
-                apply['uvlock'] = True
-            entries.append({'when': {**base_when, **color_when}, 'apply': apply})
+    base_rule('east', 'straight', model_path('stairs'))
+    base_rule('west', 'straight', model_path('stairs'), 180)
+    base_rule('south', 'straight', model_path('stairs'), 90)
+    base_rule('north', 'straight', model_path('stairs'), 270)
+    base_rule('east', 'outer_right', model_path('stairs_outer'))
+    base_rule('west', 'outer_right', model_path('stairs_outer'), 180)
+    base_rule('south', 'outer_right', model_path('stairs_outer'), 90)
+    base_rule('north', 'outer_right', model_path('stairs_outer'), 270)
+    base_rule('east', 'outer_left', model_path('stairs_outer'), 270)
+    base_rule('west', 'outer_left', model_path('stairs_outer'), 90)
+    base_rule('south', 'outer_left', model_path('stairs_outer'))
+    base_rule('north', 'outer_left', model_path('stairs_outer'), 180)
+    base_rule('east', 'inner_right', model_path('stairs_inner'))
+    base_rule('west', 'inner_right', model_path('stairs_inner'), 180)
+    base_rule('south', 'inner_right', model_path('stairs_inner'), 90)
+    base_rule('north', 'inner_right', model_path('stairs_inner'), 270)
+    base_rule('east', 'inner_left', model_path('stairs_inner'), 270)
+    base_rule('west', 'inner_left', model_path('stairs_inner'), 90)
+    base_rule('south', 'inner_left', model_path('stairs_inner'))
+    base_rule('north', 'inner_left', model_path('stairs_inner'), 180)
 
     # Stairs use plain asphalt surface only (no painted line overlays).
     dump(BLOCKSTATES / 'asphalt_road_stairs.json', {'multipart': stair_base})

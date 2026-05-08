@@ -23,6 +23,7 @@ import de.mennomax.astikorcarts.item.CartItem;
 import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStencilPattern;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
 import su.terrafirmagreg.core.common.item.*;
@@ -41,6 +42,20 @@ public class TFGItems {
     public static final ItemEntry<Item> GILSONITE_DUST = TFGCore.REGISTRATE.item("gilsonite_dust", Item::new).defaultModel().register();
     public static final ItemEntry<Item> ASPHALT_BINDER = TFGCore.REGISTRATE.item("asphalt_binder", Item::new).defaultModel().register();
     public static final ItemEntry<Item> ASPHALT_RUBBLE = TFGCore.REGISTRATE.item("asphalt_rubble", Item::new).defaultModel().register();
+
+    /** Line-marking stencil; orientation still follows player facing (same as painting without any stencil). */
+    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_LINES = TFGCore.REGISTRATE
+            .item("asphalt_road_stencil_lines", p -> new RoadMarkingStencilItem(p, AsphaltRoadStencilPattern.LINE))
+            .properties(p -> p.stacksTo(16))
+            .defaultModel()
+            .register();
+
+    /** Cross intersection stencil; spray paints {@code decal=cross} (ignores facing). */
+    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_CROSS = TFGCore.REGISTRATE
+            .item("asphalt_road_stencil_cross", p -> new RoadMarkingStencilItem(p, AsphaltRoadStencilPattern.CROSS))
+            .properties(p -> p.stacksTo(16))
+            .defaultModel()
+            .register();
 
     public static final ItemEntry<PiglinDisguise> PIGLIN_DISGUISE = TFGCore.REGISTRATE.item("piglin_disguise",
             (p) -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), p))

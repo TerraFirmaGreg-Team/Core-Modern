@@ -1,34 +1,65 @@
 package su.terrafirmagreg.core.common.block.asphalt;
 
-import com.therighthon.rnr.common.RNRTags;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
+import su.terrafirmagreg.core.common.blockentity.AsphaltPouringSpreadBlockEntity;
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 @SuppressWarnings("deprecation")
-public class PouringAsphaltRoadBlock extends Block {
+public class PouringAsphaltRoadBlock extends Block implements EntityBlock {
+
+    /** Same geometry as {@link AsphaltRoadBlock} / RNR path_block. */
+    protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
     public static final int TICKS_UNTIL_HOT = 10;
-    public static final int DEFAULT_ASPHALT_LEVEL = 4;
-    public static final IntegerProperty ASPHALT_LEVEL = IntegerProperty.create("asphalt_level", 0, DEFAULT_ASPHALT_LEVEL);
+    /** Manual paving target: one bucket should spread to at most 20 road blocks. */
+    public static final int MAX_SPREAD_BLOCKS = 20;
+    /** For staged spread, process one target per tick for better visual flow and stable TPS. */
+    public static final int SPREAD_BATCH_PER_TICK = 1;
+    /** Visual-only level for model variants / height rendering. */
+    public static final int MAX_VISUAL_LEVEL = 4;
+    public static final IntegerProperty ASPHALT_LEVEL = IntegerProperty.create("asphalt_level", 0, MAX_VISUAL_LEVEL);
 
     public PouringAsphaltRoadBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(ASPHALT_LEVEL, DEFAULT_ASPHALT_LEVEL));
+        registerDefaultState(defaultBlockState().setValue(ASPHALT_LEVEL, MAX_VISUAL_LEVEL));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(ASPHALT_LEVEL);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return PATH_SHAPE;
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return Shapes.empty();
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return Shapes.empty();
     }
 
     @Override
@@ -42,22 +73,29 @@ public class PouringAsphaltRoadBlock extends Block {
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
-        int asphaltLevel = state.getValue(ASPHALT_LEVEL);
-        if (asphaltLevel > 0) {
-            spreadAsphalt(level, pos.north(), asphaltLevel);
-            spreadAsphalt(level, pos.south(), asphaltLevel);
-            spreadAsphalt(level, pos.west(), asphaltLevel);
-            spreadAsphalt(level, pos.east(), asphaltLevel);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof AsphaltPouringSpreadBlockEntity spreadEntity) {
+            boolean done = spreadEntity.spreadStep(level, pos);
+            int visualLevel = spreadEntity.currentVisualLevel();
+            if (state.getValue(ASPHALT_LEVEL) != visualLevel) {
+                level.setBlock(pos, state.setValue(ASPHALT_LEVEL, visualLevel), Block.UPDATE_CLIENTS);
+                state = level.getBlockState(pos);
+            }
+            if (!done) {
+                level.scheduleTick(pos, this, 1);
+                return;
+            }
+        } else {
+            level.scheduleTick(pos, this, 1);
+            return;
         }
         level.setBlock(pos, TFGBlocks.HOT_ASPHALT_ROAD.getDefaultState(), Block.UPDATE_ALL);
         level.updateNeighborsAt(pos, TFGBlocks.HOT_ASPHALT_ROAD.get());
     }
 
-    private static void spreadAsphalt(Level level, BlockPos spreadPos, int sourceLevel) {
-        if (level.getBlockState(spreadPos).is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-            level.setBlock(spreadPos,
-                    TFGBlocks.POURING_ASPHALT_ROAD.getDefaultState().setValue(ASPHALT_LEVEL, sourceLevel - 1),
-                    Block.UPDATE_ALL);
-        }
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new AsphaltPouringSpreadBlockEntity(TFGBlockEntities.ASPHALT_POURING_SPREAD.get(), pos, state);
     }
 }

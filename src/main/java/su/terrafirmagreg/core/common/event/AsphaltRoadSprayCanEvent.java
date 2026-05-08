@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -15,9 +16,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadTopLayer;
+import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public class AsphaltRoadSprayCanEvent {
@@ -36,7 +38,7 @@ public class AsphaltRoadSprayCanEvent {
         }
 
         if (isSolventSprayCan(held)) {
-            if (currentVerticalColor(state).isNone() && currentHorizontalColor(state).isNone()) {
+            if (currentDecal(state).isNone()) {
                 return;
             }
             event.getLevel().setBlockAndUpdate(event.getPos(), clearMarking(state));
@@ -52,20 +54,37 @@ public class AsphaltRoadSprayCanEvent {
             return;
         }
 
-        Direction facing = player.getDirection();
-        boolean vertical = facing == Direction.NORTH || facing == Direction.SOUTH;
-        AsphaltRoadTopLayer topLayer = vertical ? AsphaltRoadTopLayer.VERTICAL : AsphaltRoadTopLayer.HORIZONTAL;
-        if (isSameMarking(state, vertical, targetColor, topLayer)) {
+        AsphaltRoadDecal targetDecal = resolveTargetDecal(player, event.getHand());
+        if (isSameMarking(state, targetDecal, targetColor)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             return;
         }
 
-        event.getLevel().setBlockAndUpdate(event.getPos(), applyMarking(state, vertical, targetColor, topLayer));
+        event.getLevel().setBlockAndUpdate(event.getPos(), applyMarking(state, targetDecal, targetColor));
         damageSprayCan(player, held, event);
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         player.swing(event.getHand(), true);
+    }
+
+    /**
+     * No stencil or line stencil: decal follows facing. Cross stencil: {@link AsphaltRoadDecal#CROSS}, ignores facing.
+     */
+    private static AsphaltRoadDecal resolveTargetDecal(Player player, InteractionHand sprayHand) {
+        ItemStack opposite = player.getItemInHand(sprayHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+        return RoadMarkingStencilItem.patternFrom(opposite)
+                .map(pattern -> switch (pattern) {
+                    case LINE -> decalFromPlayerFacing(player);
+                    case CROSS -> AsphaltRoadDecal.CROSS;
+                })
+                .orElseGet(() -> decalFromPlayerFacing(player));
+    }
+
+    private static AsphaltRoadDecal decalFromPlayerFacing(Player player) {
+        Direction facing = player.getDirection();
+        boolean vertical = facing == Direction.NORTH || facing == Direction.SOUTH;
+        return vertical ? AsphaltRoadDecal.LINE_VERTICAL : AsphaltRoadDecal.LINE_HORIZONTAL;
     }
 
     private static void damageSprayCan(Player player, ItemStack held, PlayerInteractEvent.RightClickBlock event) {
@@ -98,49 +117,37 @@ public class AsphaltRoadSprayCanEvent {
                 || state.getBlock() instanceof AsphaltRoadSlabBlock;
     }
 
-    private static AsphaltRoadMarkingColor currentVerticalColor(BlockState state) {
+    private static AsphaltRoadDecal currentDecal(BlockState state) {
         if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.getValue(AsphaltRoadBlock.VERTICAL_COLOR);
+            return state.getValue(AsphaltRoadBlock.DECAL);
         }
-        return state.getValue(AsphaltRoadSlabBlock.VERTICAL_COLOR);
+        return state.getValue(AsphaltRoadSlabBlock.DECAL);
     }
 
-    private static AsphaltRoadMarkingColor currentHorizontalColor(BlockState state) {
+    private static AsphaltRoadMarkingColor currentMarkingColor(BlockState state) {
         if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.getValue(AsphaltRoadBlock.HORIZONTAL_COLOR);
+            return state.getValue(AsphaltRoadBlock.COLOR);
         }
-        return state.getValue(AsphaltRoadSlabBlock.HORIZONTAL_COLOR);
+        return state.getValue(AsphaltRoadSlabBlock.COLOR);
     }
 
-    private static AsphaltRoadTopLayer currentTopLayer(BlockState state) {
-        if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.getValue(AsphaltRoadBlock.TOP_LAYER);
-        }
-        return state.getValue(AsphaltRoadSlabBlock.TOP_LAYER);
+    private static boolean isSameMarking(BlockState state, AsphaltRoadDecal targetDecal, AsphaltRoadMarkingColor targetColor) {
+        return currentDecal(state) == targetDecal && currentMarkingColor(state) == targetColor;
     }
 
-    private static boolean isSameMarking(BlockState state, boolean vertical, AsphaltRoadMarkingColor targetColor, AsphaltRoadTopLayer targetTopLayer) {
-        AsphaltRoadMarkingColor current = vertical ? currentVerticalColor(state) : currentHorizontalColor(state);
-        return current == targetColor && currentTopLayer(state) == targetTopLayer;
-    }
-
-    private static BlockState applyMarking(BlockState state, boolean vertical, AsphaltRoadMarkingColor color, AsphaltRoadTopLayer topLayer) {
+    private static BlockState applyMarking(BlockState state, AsphaltRoadDecal decal, AsphaltRoadMarkingColor color) {
         if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return vertical
-                    ? state.setValue(AsphaltRoadBlock.VERTICAL_COLOR, color).setValue(AsphaltRoadBlock.TOP_LAYER, topLayer)
-                    : state.setValue(AsphaltRoadBlock.HORIZONTAL_COLOR, color).setValue(AsphaltRoadBlock.TOP_LAYER, topLayer);
+            return state.setValue(AsphaltRoadBlock.DECAL, decal).setValue(AsphaltRoadBlock.COLOR, color);
         }
-        return vertical
-                ? state.setValue(AsphaltRoadSlabBlock.VERTICAL_COLOR, color).setValue(AsphaltRoadSlabBlock.TOP_LAYER, topLayer)
-                : state.setValue(AsphaltRoadSlabBlock.HORIZONTAL_COLOR, color).setValue(AsphaltRoadSlabBlock.TOP_LAYER, topLayer);
+        return state.setValue(AsphaltRoadSlabBlock.DECAL, decal).setValue(AsphaltRoadSlabBlock.COLOR, color);
     }
 
     private static BlockState clearMarking(BlockState state) {
         if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.setValue(AsphaltRoadBlock.VERTICAL_COLOR, AsphaltRoadMarkingColor.NONE)
-                    .setValue(AsphaltRoadBlock.HORIZONTAL_COLOR, AsphaltRoadMarkingColor.NONE);
+            return state.setValue(AsphaltRoadBlock.DECAL, AsphaltRoadDecal.NONE)
+                    .setValue(AsphaltRoadBlock.COLOR, AsphaltRoadMarkingColor.NONE);
         }
-        return state.setValue(AsphaltRoadSlabBlock.VERTICAL_COLOR, AsphaltRoadMarkingColor.NONE)
-                .setValue(AsphaltRoadSlabBlock.HORIZONTAL_COLOR, AsphaltRoadMarkingColor.NONE);
+        return state.setValue(AsphaltRoadSlabBlock.DECAL, AsphaltRoadDecal.NONE)
+                .setValue(AsphaltRoadSlabBlock.COLOR, AsphaltRoadMarkingColor.NONE);
     }
 }

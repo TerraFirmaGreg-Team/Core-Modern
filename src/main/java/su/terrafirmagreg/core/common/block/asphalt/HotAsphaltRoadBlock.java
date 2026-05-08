@@ -7,19 +7,41 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 @SuppressWarnings("deprecation")
 public class HotAsphaltRoadBlock extends Block {
 
-    public static final int TICKS_UNTIL_SET = 100;
+    /** Same geometry as {@link AsphaltRoadBlock} / RNR path_block. */
+    protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+
+    /** Keep hot asphalt for about one minute before setting. */
+    public static final int TICKS_UNTIL_SET = 20 * 60;
 
     public HotAsphaltRoadBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return PATH_SHAPE;
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return PATH_SHAPE;
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return PATH_SHAPE;
     }
 
     @Override

@@ -16,9 +16,9 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
@@ -46,25 +46,26 @@ public class ForgeClientEventListener {
         final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
         final BlockColor grassBlockColor = (state, level, pos, tintIndex) -> state.getValue(ConnectedGrassBlock.SNOWY) || tintIndex != 1 ? -1 : grassColor.getColor(state, level, pos, tintIndex);
         final BlockColor asphaltLineColor = (state, level, pos, tintIndex) -> {
-            if (tintIndex != 1 && tintIndex != 2)
+            if (tintIndex != 1 && tintIndex != 2 && tintIndex != 3)
                 return -1;
+            AsphaltRoadDecal decal;
             AsphaltRoadMarkingColor color;
-            if (state.hasProperty(AsphaltRoadBlock.HORIZONTAL_COLOR) && state.hasProperty(AsphaltRoadBlock.VERTICAL_COLOR)) {
-                color = tintIndex == 1
-                        ? state.getValue(AsphaltRoadBlock.HORIZONTAL_COLOR)
-                        : state.getValue(AsphaltRoadBlock.VERTICAL_COLOR);
-            } else if (state.hasProperty(AsphaltRoadSlabBlock.HORIZONTAL_COLOR) && state.hasProperty(AsphaltRoadSlabBlock.VERTICAL_COLOR)) {
-                color = tintIndex == 1
-                        ? state.getValue(AsphaltRoadSlabBlock.HORIZONTAL_COLOR)
-                        : state.getValue(AsphaltRoadSlabBlock.VERTICAL_COLOR);
-            } else if (state.hasProperty(AsphaltRoadStairsBlock.HORIZONTAL_COLOR) && state.hasProperty(AsphaltRoadStairsBlock.VERTICAL_COLOR)) {
-                color = tintIndex == 1
-                        ? state.getValue(AsphaltRoadStairsBlock.HORIZONTAL_COLOR)
-                        : state.getValue(AsphaltRoadStairsBlock.VERTICAL_COLOR);
+            if (state.hasProperty(AsphaltRoadBlock.DECAL) && state.hasProperty(AsphaltRoadBlock.COLOR)) {
+                decal = state.getValue(AsphaltRoadBlock.DECAL);
+                color = state.getValue(AsphaltRoadBlock.COLOR);
+            } else if (state.hasProperty(AsphaltRoadSlabBlock.DECAL) && state.hasProperty(AsphaltRoadSlabBlock.COLOR)) {
+                decal = state.getValue(AsphaltRoadSlabBlock.DECAL);
+                color = state.getValue(AsphaltRoadSlabBlock.COLOR);
             } else {
                 return -1;
             }
-            return color.getTextColor();
+            if (tintIndex == 1 && decal == AsphaltRoadDecal.LINE_HORIZONTAL)
+                return color.getTextColor();
+            if (tintIndex == 2 && decal == AsphaltRoadDecal.LINE_VERTICAL)
+                return color.getTextColor();
+            if (tintIndex == 3 && decal == AsphaltRoadDecal.CROSS)
+                return color.getTextColor();
+            return -1;
         };
 
         event.register(tallGrassColor,
@@ -89,7 +90,7 @@ public class ForgeClientEventListener {
 
     public static void registerColorHandlerItems(RegisterColorHandlersEvent.Item event) {
         final ItemColor grassColor = (stack, tintIndex) -> TFCColors.getGrassColor(null, tintIndex);
-        final ItemColor asphaltLineColor = (stack, tintIndex) -> tintIndex == 1 || tintIndex == 2 ? DyeColor.WHITE.getTextColor() : -1;
+        final ItemColor asphaltLineColor = (stack, tintIndex) -> tintIndex == 1 || tintIndex == 2 || tintIndex == 3 ? DyeColor.WHITE.getTextColor() : -1;
 
         event.register(grassColor,
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());

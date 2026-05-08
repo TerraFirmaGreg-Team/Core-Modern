@@ -6,32 +6,51 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 @SuppressWarnings("deprecation")
 public class AsphaltRoadBlock extends Block {
 
-    public static final EnumProperty<AsphaltRoadMarkingColor> HORIZONTAL_COLOR = EnumProperty.create("horizontal_color", AsphaltRoadMarkingColor.class);
-    public static final EnumProperty<AsphaltRoadMarkingColor> VERTICAL_COLOR = EnumProperty.create("vertical_color", AsphaltRoadMarkingColor.class);
-    public static final EnumProperty<AsphaltRoadTopLayer> TOP_LAYER = EnumProperty.create("top_layer", AsphaltRoadTopLayer.class);
+    /** Same as {@code com.therighthon.rnr.common.block.PathHeightBlock}: matches {@code rnr:block/path_block} height (one voxel short). */
+    protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+
+    public static final EnumProperty<AsphaltRoadDecal> DECAL = EnumProperty.create("decal", AsphaltRoadDecal.class);
+    public static final EnumProperty<AsphaltRoadMarkingColor> COLOR = EnumProperty.create("color", AsphaltRoadMarkingColor.class);
 
     public AsphaltRoadBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
-                .setValue(HORIZONTAL_COLOR, AsphaltRoadMarkingColor.NONE)
-                .setValue(VERTICAL_COLOR, AsphaltRoadMarkingColor.NONE)
-                .setValue(TOP_LAYER, AsphaltRoadTopLayer.HORIZONTAL));
+                .setValue(DECAL, AsphaltRoadDecal.NONE)
+                .setValue(COLOR, AsphaltRoadMarkingColor.NONE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(HORIZONTAL_COLOR, VERTICAL_COLOR, TOP_LAYER);
+        builder.add(DECAL, COLOR);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return PATH_SHAPE;
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return PATH_SHAPE;
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return PATH_SHAPE;
     }
 
     @Override

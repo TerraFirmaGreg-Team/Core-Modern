@@ -24,23 +24,21 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 @SuppressWarnings("deprecation")
 public class AsphaltRoadSlabBlock extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final EnumProperty<AsphaltRoadMarkingColor> HORIZONTAL_COLOR = EnumProperty.create("horizontal_color", AsphaltRoadMarkingColor.class);
-    public static final EnumProperty<AsphaltRoadMarkingColor> VERTICAL_COLOR = EnumProperty.create("vertical_color", AsphaltRoadMarkingColor.class);
-    public static final EnumProperty<AsphaltRoadTopLayer> TOP_LAYER = EnumProperty.create("top_layer", AsphaltRoadTopLayer.class);
+    public static final EnumProperty<AsphaltRoadDecal> DECAL = EnumProperty.create("decal", AsphaltRoadDecal.class);
+    public static final EnumProperty<AsphaltRoadMarkingColor> COLOR = EnumProperty.create("color", AsphaltRoadMarkingColor.class);
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 7.0D, 16.0D);
 
     public AsphaltRoadSlabBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState()
                 .setValue(WATERLOGGED, false)
-                .setValue(HORIZONTAL_COLOR, AsphaltRoadMarkingColor.NONE)
-                .setValue(VERTICAL_COLOR, AsphaltRoadMarkingColor.NONE)
-                .setValue(TOP_LAYER, AsphaltRoadTopLayer.HORIZONTAL));
+                .setValue(DECAL, AsphaltRoadDecal.NONE)
+                .setValue(COLOR, AsphaltRoadMarkingColor.NONE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED, HORIZONTAL_COLOR, VERTICAL_COLOR, TOP_LAYER);
+        builder.add(WATERLOGGED, DECAL, COLOR);
     }
 
     @Override
@@ -50,6 +48,16 @@ public class AsphaltRoadSlabBlock extends Block implements SimpleWaterloggedBloc
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
         return SHAPE;
     }
 

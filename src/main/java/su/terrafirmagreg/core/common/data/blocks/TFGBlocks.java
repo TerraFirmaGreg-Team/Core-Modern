@@ -280,7 +280,7 @@ public final class TFGBlocks {
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
-    public static final BlockEntry<PouringAsphaltRoadBlock> POURING_ASPHALT_ROAD = TFGCore.REGISTRATE.block("pouring_asphalt_road", PouringAsphaltRoadBlock::new)
+    public static final BlockEntry<PouringAsphaltRoadBlock> ASPHALT_MIX = TFGCore.REGISTRATE.block("asphalt_mix", PouringAsphaltRoadBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
             .properties(p -> p.strength(1.4f, 6).sound(SoundType.TUFF).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())

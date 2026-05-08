@@ -54,6 +54,11 @@ public class TFGBlockEntities {
             .validBlock(TFGBlocks_Casings.REFLECTOR_BLOCK)
             .register();
 
+    public static final BlockEntityEntry<AsphaltPouringSpreadBlockEntity> ASPHALT_POURING_SPREAD = TFGCore.REGISTRATE
+            .blockEntity("asphalt_pouring_spread", AsphaltPouringSpreadBlockEntity::new)
+            .validBlock(TFGBlocks.ASPHALT_MIX)
+            .register();
+
     public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)
             .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
             .register();
