@@ -35,6 +35,7 @@ import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadEvent {
+    private record SprayContext(InteractionHand hand, ItemStack stack) {}
 
     private AsphaltRoadEvent() {
     }
@@ -51,7 +52,7 @@ public final class AsphaltRoadEvent {
         BlockState state = level.getBlockState(event.getPos());
 
         // Prefer spray logic first on asphalt road blocks.
-        if (!held.isEmpty() && supportsRoadMarking(state) && handleSprayOnRoad(event, player, held, state)) {
+        if (supportsRoadMarking(state) && handleSprayOnRoad(event, player, state)) {
             return;
         }
         handleAsphaltMixPour(event, player, hand, held);
@@ -87,25 +88,29 @@ public final class AsphaltRoadEvent {
         event.setCancellationResult(InteractionResult.SUCCESS);
     }
 
-    private static boolean handleSprayOnRoad(PlayerInteractEvent.RightClickBlock event, Player player, ItemStack held, BlockState state) {
-        if (isSolventSprayCan(held)) {
+    private static boolean handleSprayOnRoad(PlayerInteractEvent.RightClickBlock event, Player player, BlockState state) {
+        SprayContext spray = resolveSprayContext(player, event.getHand());
+        if (spray == null) {
+            return false;
+        }
+        InteractionHand sprayHand = spray.hand();
+        ItemStack sprayStack = spray.stack();
+
+        if (isSolventSprayCan(sprayStack)) {
             if (currentDecal(state).isNone()) {
                 return false;
             }
             event.getLevel().setBlockAndUpdate(event.getPos(), clearMarking(state));
-            damageSprayCan(player, held, event);
+            damageSprayCan(player, sprayStack, sprayHand);
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
-            player.swing(event.getHand(), true);
+            player.swing(sprayHand, true);
             return true;
         }
 
-        AsphaltRoadMarkingColor targetColor = sprayCanColor(held);
-        if (targetColor.isNone()) {
-            return false;
-        }
+        AsphaltRoadMarkingColor targetColor = sprayCanColor(sprayStack);
 
-        AsphaltRoadDecal targetDecal = resolveTargetDecal(player, event.getHand());
+        AsphaltRoadDecal targetDecal = resolveTargetDecal(player, sprayHand);
         if (isSameMarking(state, targetDecal, targetColor)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
@@ -113,11 +118,24 @@ public final class AsphaltRoadEvent {
         }
 
         event.getLevel().setBlockAndUpdate(event.getPos(), applyMarking(state, targetDecal, targetColor));
-        damageSprayCan(player, held, event);
+        damageSprayCan(player, sprayStack, sprayHand);
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
-        player.swing(event.getHand(), true);
+        player.swing(sprayHand, true);
         return true;
+    }
+
+    private static SprayContext resolveSprayContext(Player player, InteractionHand usedHand) {
+        ItemStack usedStack = player.getItemInHand(usedHand);
+        if (isSprayCan(usedStack)) {
+            return new SprayContext(usedHand, usedStack);
+        }
+        InteractionHand oppositeHand = usedHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+        ItemStack oppositeStack = player.getItemInHand(oppositeHand);
+        if (isSprayCan(oppositeStack)) {
+            return new SprayContext(oppositeHand, oppositeStack);
+        }
+        return null;
     }
 
     private static boolean containsAsphaltMix(ItemStack stack) {
@@ -156,11 +174,11 @@ public final class AsphaltRoadEvent {
         };
     }
 
-    private static void damageSprayCan(Player player, ItemStack held, PlayerInteractEvent.RightClickBlock event) {
+    private static void damageSprayCan(Player player, ItemStack held, InteractionHand sprayHand) {
         if (player.getAbilities().instabuild) {
             return;
         }
-        held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(event.getHand()));
+        held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(sprayHand));
     }
 
     private static AsphaltRoadMarkingColor sprayCanColor(ItemStack stack) {
@@ -179,6 +197,10 @@ public final class AsphaltRoadEvent {
     private static boolean isSolventSprayCan(ItemStack stack) {
         ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
         return id != null && "gtceu".equals(id.getNamespace()) && "solvent_spray_can".equals(id.getPath());
+    }
+
+    private static boolean isSprayCan(ItemStack stack) {
+        return isSolventSprayCan(stack) || !sprayCanColor(stack).isNone();
     }
 
     private static boolean supportsRoadMarking(BlockState state) {
