@@ -6,7 +6,8 @@ import net.minecraft.util.StringRepresentable;
 
 public enum AsphaltRoadStencilPattern implements StringRepresentable {
     LINE("line"),
-    CROSS("cross");
+    CROSS("cross"),
+    ARROW("arrow");
 
     private final String name;
 

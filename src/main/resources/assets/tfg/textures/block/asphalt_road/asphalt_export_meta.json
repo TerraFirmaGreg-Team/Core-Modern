@@ -10,7 +10,11 @@
         "hot.png",
         "mask_line_horizontal.png",
         "mask_line_vertical.png",
-        "mask_cross.png"
+        "mask_cross.png",
+        "mask_arrow_north.png",
+        "mask_arrow_east.png",
+        "mask_arrow_south.png",
+        "mask_arrow_west.png"
     ],
     "tile_size": 16,
     "tool": "AsphaltRoadApp",

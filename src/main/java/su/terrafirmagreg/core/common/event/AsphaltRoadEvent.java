@@ -2,15 +2,24 @@ package su.terrafirmagreg.core.common.event;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.therighthon.rnr.common.RNRTags;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -19,46 +28,87 @@ import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
+import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
-public class AsphaltRoadSprayCanEvent {
+public final class AsphaltRoadEvent {
 
-    @SubscribeEvent
+    private AsphaltRoadEvent() {
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onRightClickBlock(PlayerInteractEvent.@NotNull RightClickBlock event) {
-        if (event.getLevel().isClientSide()) {
+        Level level = event.getLevel();
+        if (level.isClientSide()) {
             return;
         }
         Player player = event.getEntity();
-        ItemStack held = player.getItemInHand(event.getHand());
-        BlockState state = event.getLevel().getBlockState(event.getPos());
+        InteractionHand hand = event.getHand();
+        ItemStack held = player.getItemInHand(hand);
+        BlockState state = level.getBlockState(event.getPos());
 
-        if (!supportsRoadMarking(state) || held.isEmpty()) {
+        // Prefer spray logic first on asphalt road blocks.
+        if (!held.isEmpty() && supportsRoadMarking(state) && handleSprayOnRoad(event, player, held, state)) {
             return;
         }
+        handleAsphaltMixPour(event, player, hand, held);
+    }
 
+    private static void handleAsphaltMixPour(PlayerInteractEvent.RightClickBlock event, Player player, InteractionHand hand, ItemStack held) {
+        Level level = event.getLevel();
+        if (!event.getFace().getAxis().isVertical() || event.getFace().getStepY() <= 0) {
+            return;
+        }
+        if (!containsAsphaltMix(held)) {
+            return;
+        }
+        BlockPos clicked = event.getPos();
+        BlockState ground = level.getBlockState(clicked);
+        if (!ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
+            return;
+        }
+        BlockPos pourAbove = clicked.above();
+        BlockState above = level.getBlockState(pourAbove);
+        if (!above.isAir() && !above.canBeReplaced()) {
+            return;
+        }
+        BlockState pourState = TFGBlocks.ASPHALT_MIX.getDefaultState();
+        if (!level.setBlock(pourAbove, pourState, Block.UPDATE_ALL)) {
+            return;
+        }
+        if (!player.getAbilities().instabuild) {
+            player.setItemInHand(hand, new ItemStack(Items.BUCKET));
+        }
+        player.swing(hand, true);
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.SUCCESS);
+    }
+
+    private static boolean handleSprayOnRoad(PlayerInteractEvent.RightClickBlock event, Player player, ItemStack held, BlockState state) {
         if (isSolventSprayCan(held)) {
             if (currentDecal(state).isNone()) {
-                return;
+                return false;
             }
             event.getLevel().setBlockAndUpdate(event.getPos(), clearMarking(state));
             damageSprayCan(player, held, event);
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             player.swing(event.getHand(), true);
-            return;
+            return true;
         }
 
         AsphaltRoadMarkingColor targetColor = sprayCanColor(held);
         if (targetColor.isNone()) {
-            return;
+            return false;
         }
 
         AsphaltRoadDecal targetDecal = resolveTargetDecal(player, event.getHand());
         if (isSameMarking(state, targetDecal, targetColor)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
-            return;
+            return true;
         }
 
         event.getLevel().setBlockAndUpdate(event.getPos(), applyMarking(state, targetDecal, targetColor));
@@ -66,6 +116,14 @@ public class AsphaltRoadSprayCanEvent {
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         player.swing(event.getHand(), true);
+        return true;
+    }
+
+    private static boolean containsAsphaltMix(ItemStack stack) {
+        return FluidUtil.getFluidContained(stack)
+                .map(FluidStack::getFluid)
+                .filter(f -> f.isSame(TFGFluids.ASPHALT_MIX.getSource()))
+                .isPresent();
     }
 
     /**
@@ -77,6 +135,7 @@ public class AsphaltRoadSprayCanEvent {
                 .map(pattern -> switch (pattern) {
                     case LINE -> decalFromPlayerFacing(player);
                     case CROSS -> AsphaltRoadDecal.CROSS;
+                    case ARROW -> arrowFromPlayerFacing(player);
                 })
                 .orElseGet(() -> decalFromPlayerFacing(player));
     }
@@ -85,6 +144,15 @@ public class AsphaltRoadSprayCanEvent {
         Direction facing = player.getDirection();
         boolean vertical = facing == Direction.NORTH || facing == Direction.SOUTH;
         return vertical ? AsphaltRoadDecal.LINE_VERTICAL : AsphaltRoadDecal.LINE_HORIZONTAL;
+    }
+
+    private static AsphaltRoadDecal arrowFromPlayerFacing(Player player) {
+        return switch (player.getDirection()) {
+            case NORTH -> AsphaltRoadDecal.ARROW_NORTH;
+            case EAST -> AsphaltRoadDecal.ARROW_EAST;
+            case SOUTH -> AsphaltRoadDecal.ARROW_SOUTH;
+            default -> AsphaltRoadDecal.ARROW_WEST;
+        };
     }
 
     private static void damageSprayCan(Player player, ItemStack held, PlayerInteractEvent.RightClickBlock event) {

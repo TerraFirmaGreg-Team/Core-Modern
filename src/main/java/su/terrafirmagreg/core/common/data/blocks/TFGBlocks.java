@@ -20,26 +20,18 @@ import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.DeferredRegister;
@@ -47,15 +39,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltMixBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
 import su.terrafirmagreg.core.common.block.asphalt.HotAsphaltRoadBlock;
-import su.terrafirmagreg.core.common.block.asphalt.PouringAsphaltRoadBlock;
-import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
-import su.terrafirmagreg.core.common.data.TFGItems;
-import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings({ "unused" })
@@ -69,6 +58,7 @@ public final class TFGBlocks {
         TFGBlocks_Casings.init();
         TFGBlocks_Buds.init();
         TFGBlocks_Wood.init();
+        TFGBlocksAsphalt.init();
     }
 
     ////// Decoration blocks
@@ -219,11 +209,7 @@ public final class TFGBlocks {
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable())
             .register();
 
-    public static final BlockEntry<LiquidBlock> ASPHALT_MIX_FLUID_BLOCK = TFGCore.REGISTRATE.block("fluid/asphalt_mix", p -> new LiquidBlock(TFGFluids.ASPHALT_MIX.source(), p))
-            .initialProperties(() -> Blocks.WATER)
-            .blockstate(ModelUtils.blockVariants(TFGCore.id("block/fluid/asphalt_mix")))
-            .properties(p -> p.mapColor(MapColor.COLOR_BLACK).noLootTable())
-            .register();
+    public static final BlockEntry<LiquidBlock> ASPHALT_MIX_FLUID_BLOCK = TFGBlocksAsphalt.ASPHALT_MIX_FLUID_BLOCK;
 
     ///// Misc blocks
 
@@ -280,63 +266,11 @@ public final class TFGBlocks {
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
-    public static final BlockEntry<PouringAsphaltRoadBlock> ASPHALT_MIX = TFGCore.REGISTRATE.block("asphalt_mix", PouringAsphaltRoadBlock::new)
-            .initialProperties(() -> Blocks.BLACK_CONCRETE)
-            .properties(p -> p.strength(1.4f, 6).sound(SoundType.TUFF).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .loot(asphaltFamilyLoot())
-            .register();
-
-    public static final BlockEntry<HotAsphaltRoadBlock> HOT_ASPHALT_ROAD = TFGCore.REGISTRATE.block("hot_asphalt_road", HotAsphaltRoadBlock::new)
-            .initialProperties(() -> Blocks.BLACK_CONCRETE)
-            .properties(p -> p.strength(1.4f, 6).sound(SoundType.TUFF).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .onRegister(block -> TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TICK_COUNTER, block))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .loot(asphaltFamilyLoot())
-            .register();
-
-    public static final BlockEntry<AsphaltRoadBlock> ASPHALT_ROAD = TFGCore.REGISTRATE.block("asphalt_road", AsphaltRoadBlock::new)
-            .initialProperties(() -> Blocks.BLACK_CONCRETE)
-            .properties(p -> p.strength(1.6f, 6).sound(SoundType.DEEPSLATE_TILES).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFGTags.Blocks.FUNCTIONAL_ASPHALT_ROADS)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .loot(asphaltFamilyLoot())
-            .register();
-
-    public static final BlockEntry<AsphaltRoadStairsBlock> ASPHALT_ROAD_STAIRS = TFGCore.REGISTRATE.block("asphalt_road_stairs",
-            p -> new AsphaltRoadStairsBlock(ASPHALT_ROAD.get().defaultBlockState(), p))
-            .initialProperties(ASPHALT_ROAD::get)
-            .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.STAIRS, TFGTags.Blocks.FUNCTIONAL_ASPHALT_ROAD_STAIRS)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .loot(asphaltFamilyLoot())
-            .register();
-
-    public static final BlockEntry<AsphaltRoadSlabBlock> ASPHALT_ROAD_SLAB = TFGCore.REGISTRATE.block("asphalt_road_slab", AsphaltRoadSlabBlock::new)
-            .initialProperties(ASPHALT_ROAD::get)
-            .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.SLABS, TFGTags.Blocks.FUNCTIONAL_ASPHALT_ROAD_SLABS)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
-            .loot(asphaltFamilyLoot())
-            .register();
-
-    private static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> asphaltFamilyLoot() {
-        var silkTouch = MatchTool.toolMatches(ItemPredicate.Builder.item()
-                .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
-        return (ctx, block) -> ctx.add(block, LootTable.lootTable()
-                .withPool(LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1))
-                        .add(AlternativesEntry.alternatives(
-                                LootItem.lootTableItem(block.asItem()).when(silkTouch),
-                                LootItem.lootTableItem(TFGItems.ASPHALT_RUBBLE.get()).when(ExplosionCondition.survivesExplosion())))));
-    }
+    public static final BlockEntry<AsphaltMixBlock> ASPHALT_MIX = TFGBlocksAsphalt.ASPHALT_MIX;
+    public static final BlockEntry<HotAsphaltRoadBlock> HOT_ASPHALT_ROAD = TFGBlocksAsphalt.HOT_ASPHALT_ROAD;
+    public static final BlockEntry<AsphaltRoadBlock> ASPHALT_ROAD = TFGBlocksAsphalt.ASPHALT_ROAD;
+    public static final BlockEntry<AsphaltRoadStairsBlock> ASPHALT_ROAD_STAIRS = TFGBlocksAsphalt.ASPHALT_ROAD_STAIRS;
+    public static final BlockEntry<AsphaltRoadSlabBlock> ASPHALT_ROAD_SLAB = TFGBlocksAsphalt.ASPHALT_ROAD_SLAB;
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {
         return (ctx, b) -> ctx.add(b, LootTable.lootTable().withPool(

@@ -8,7 +8,11 @@ public enum AsphaltRoadDecal implements StringRepresentable {
     NONE("none"),
     LINE_HORIZONTAL("line_horizontal"),
     LINE_VERTICAL("line_vertical"),
-    CROSS("cross");
+    CROSS("cross"),
+    ARROW_NORTH("arrow_north"),
+    ARROW_EAST("arrow_east"),
+    ARROW_SOUTH("arrow_south"),
+    ARROW_WEST("arrow_west");
 
     private final String name;
 

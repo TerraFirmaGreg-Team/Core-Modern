@@ -32,27 +32,6 @@ public enum AsphaltRoadMarkingColor implements StringRepresentable {
         this.dye = dye;
     }
 
-    public static AsphaltRoadMarkingColor fromDye(DyeColor dyeColor) {
-        return switch (dyeColor) {
-            case WHITE -> WHITE;
-            case ORANGE -> ORANGE;
-            case MAGENTA -> MAGENTA;
-            case LIGHT_BLUE -> LIGHT_BLUE;
-            case YELLOW -> YELLOW;
-            case LIME -> LIME;
-            case PINK -> PINK;
-            case GRAY -> GRAY;
-            case LIGHT_GRAY -> LIGHT_GRAY;
-            case CYAN -> CYAN;
-            case PURPLE -> PURPLE;
-            case BLUE -> BLUE;
-            case BROWN -> BROWN;
-            case GREEN -> GREEN;
-            case RED -> RED;
-            case BLACK -> BLACK;
-        };
-    }
-
     public static AsphaltRoadMarkingColor fromSerializedName(String name) {
         for (AsphaltRoadMarkingColor color : values()) {
             if (color.name.equals(name)) {

@@ -102,27 +102,29 @@ public class TFGFluids {
             "asphalt_mix",
             properties -> properties
                     .block(TFGBlocks.ASPHALT_MIX_FLUID_BLOCK)
-                    .bucket(TFGItems.ASPHALT_MIX_BUCKET),
+                    .bucket(TFGItems.ASPHALT_MIX_BUCKET)
+                    .slopeFindDistance(2)
+                    .levelDecreasePerBlock(2)
+                    .tickRate(20),
             FluidType.Properties.create()
                     .adjacentPathType(BlockPathTypes.LAVA)
-                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
                     .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
                     .density(2600)
                     .viscosity(5000)
                     .canConvertToSource(false)
-                    .canExtinguish(false)
+                    .canExtinguish(true)
                     .canHydrate(false)
                     .supportsBoating(false)
                     .canDrown(true)
-                    .canSwim(false)
-                    .canPushEntity(true)
+                    .canSwim(true)
                     .temperature(420)
+                    .canPushEntity(true)
                     .descriptionId("fluid.tfg.asphalt_mix"),
-            new FluidTypeClientProperties(ALPHA_MASK | 0x1A1A1A,
-                    ResourceLocation.fromNamespaceAndPath("minecraft", "block/lava_still"),
-                    ResourceLocation.fromNamespaceAndPath("minecraft", "block/lava_flow"),
-                    null,
-                    null),
+            new FluidTypeClientProperties(ALPHA_MASK | 0x262628,
+                    ResourceLocation.withDefaultNamespace("block/lava_still"),
+                    ResourceLocation.withDefaultNamespace("block/lava_flow"),
+                    null, null),
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
 

@@ -23,7 +23,6 @@ import de.mennomax.astikorcarts.item.CartItem;
 import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStencilPattern;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
 import su.terrafirmagreg.core.common.item.*;
@@ -35,27 +34,17 @@ import su.terrafirmagreg.core.utils.ModelUtils;
 @SuppressWarnings("unused")
 public class TFGItems {
     public static void init() {
+        TFGItemsAsphalt.init();
         TFGItems_Medicines.init();
     }
 
-    public static final ItemEntry<Item> TAR_CHUNK = TFGCore.REGISTRATE.item("tar_chunk", Item::new).defaultModel().register();
-    public static final ItemEntry<Item> GILSONITE_DUST = TFGCore.REGISTRATE.item("gilsonite_dust", Item::new).defaultModel().register();
-    public static final ItemEntry<Item> ASPHALT_BINDER = TFGCore.REGISTRATE.item("asphalt_binder", Item::new).defaultModel().register();
-    public static final ItemEntry<Item> ASPHALT_RUBBLE = TFGCore.REGISTRATE.item("asphalt_rubble", Item::new).defaultModel().register();
-
-    /** Line-marking stencil; orientation still follows player facing (same as painting without any stencil). */
-    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_LINES = TFGCore.REGISTRATE
-            .item("asphalt_road_stencil_lines", p -> new RoadMarkingStencilItem(p, AsphaltRoadStencilPattern.LINE))
-            .properties(p -> p.stacksTo(16))
-            .defaultModel()
-            .register();
-
-    /** Cross intersection stencil; spray paints {@code decal=cross} (ignores facing). */
-    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_CROSS = TFGCore.REGISTRATE
-            .item("asphalt_road_stencil_cross", p -> new RoadMarkingStencilItem(p, AsphaltRoadStencilPattern.CROSS))
-            .properties(p -> p.stacksTo(16))
-            .defaultModel()
-            .register();
+    public static final ItemEntry<Item> TAR_CHUNK = TFGItemsAsphalt.TAR_CHUNK;
+    public static final ItemEntry<Item> GILSONITE_DUST = TFGItemsAsphalt.GILSONITE_DUST;
+    public static final ItemEntry<Item> ASPHALT_BINDER = TFGItemsAsphalt.ASPHALT_BINDER;
+    public static final ItemEntry<Item> ASPHALT_RUBBLE = TFGItemsAsphalt.ASPHALT_RUBBLE;
+    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_LINES = TFGItemsAsphalt.ASPHALT_ROAD_STENCIL_LINES;
+    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_CROSS = TFGItemsAsphalt.ASPHALT_ROAD_STENCIL_CROSS;
+    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_ARROW = TFGItemsAsphalt.ASPHALT_ROAD_STENCIL_ARROW;
 
     public static final ItemEntry<PiglinDisguise> PIGLIN_DISGUISE = TFGCore.REGISTRATE.item("piglin_disguise",
             (p) -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), p))
@@ -143,12 +132,7 @@ public class TFGItems {
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
-    @SuppressWarnings("deprecation")
-    public static final ItemEntry<BucketItem> ASPHALT_MIX_BUCKET = TFGCore.REGISTRATE.item("asphalt_mix_bucket",
-            p -> new BucketItem(TFGFluids.ASPHALT_MIX.getSource(), p))
-            .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))
-            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
-            .register();
+    public static final ItemEntry<BucketItem> ASPHALT_MIX_BUCKET = TFGItemsAsphalt.ASPHALT_MIX_BUCKET;
 
     public static final ItemEntry<Item> RAILGUN_AMMO_SHELL = TFGCore.REGISTRATE.item("railgun_ammo_shell", Item::new)
             .properties(p -> p.stacksTo(16))

@@ -19,6 +19,7 @@ import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStencilPattern;
  * <p>
  * {@link AsphaltRoadStencilPattern#LINE}: same as holding nothing — orientation follows player facing.
  * {@link AsphaltRoadStencilPattern#CROSS}: paints intersection cross ({@code decal=cross}), ignores facing.
+ * {@link AsphaltRoadStencilPattern#ARROW}: paints directional arrow following player facing.
  */
 public class RoadMarkingStencilItem extends Item {
 

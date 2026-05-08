@@ -46,7 +46,7 @@ public class ForgeClientEventListener {
         final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
         final BlockColor grassBlockColor = (state, level, pos, tintIndex) -> state.getValue(ConnectedGrassBlock.SNOWY) || tintIndex != 1 ? -1 : grassColor.getColor(state, level, pos, tintIndex);
         final BlockColor asphaltLineColor = (state, level, pos, tintIndex) -> {
-            if (tintIndex != 1 && tintIndex != 2 && tintIndex != 3)
+            if (tintIndex < 1 || tintIndex > 7)
                 return -1;
             AsphaltRoadDecal decal;
             AsphaltRoadMarkingColor color;
@@ -64,6 +64,14 @@ public class ForgeClientEventListener {
             if (tintIndex == 2 && decal == AsphaltRoadDecal.LINE_VERTICAL)
                 return color.getTextColor();
             if (tintIndex == 3 && decal == AsphaltRoadDecal.CROSS)
+                return color.getTextColor();
+            if (tintIndex == 4 && decal == AsphaltRoadDecal.ARROW_NORTH)
+                return color.getTextColor();
+            if (tintIndex == 5 && decal == AsphaltRoadDecal.ARROW_EAST)
+                return color.getTextColor();
+            if (tintIndex == 6 && decal == AsphaltRoadDecal.ARROW_SOUTH)
+                return color.getTextColor();
+            if (tintIndex == 7 && decal == AsphaltRoadDecal.ARROW_WEST)
                 return color.getTextColor();
             return -1;
         };
@@ -90,7 +98,7 @@ public class ForgeClientEventListener {
 
     public static void registerColorHandlerItems(RegisterColorHandlersEvent.Item event) {
         final ItemColor grassColor = (stack, tintIndex) -> TFCColors.getGrassColor(null, tintIndex);
-        final ItemColor asphaltLineColor = (stack, tintIndex) -> tintIndex == 1 || tintIndex == 2 || tintIndex == 3 ? DyeColor.WHITE.getTextColor() : -1;
+        final ItemColor asphaltLineColor = (stack, tintIndex) -> tintIndex >= 1 && tintIndex <= 7 ? DyeColor.WHITE.getTextColor() : -1;
 
         event.register(grassColor,
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());
