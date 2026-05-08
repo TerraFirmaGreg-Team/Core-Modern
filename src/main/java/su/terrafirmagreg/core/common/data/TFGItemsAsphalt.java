@@ -18,11 +18,6 @@ public final class TFGItemsAsphalt {
     public static void init() {
     }
 
-    public static final ItemEntry<Item> TAR_CHUNK = TFGCore.REGISTRATE.item("tar_chunk", Item::new).defaultModel().register();
-    public static final ItemEntry<Item> GILSONITE_DUST = TFGCore.REGISTRATE.item("gilsonite_dust", Item::new).defaultModel().register();
-    public static final ItemEntry<Item> ASPHALT_BINDER = TFGCore.REGISTRATE.item("asphalt_binder", Item::new)
-            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("item/asphalt_road/" + ctx.getName())))
-            .register();
     public static final ItemEntry<Item> ASPHALT_RUBBLE = TFGCore.REGISTRATE.item("asphalt_rubble", Item::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("item/asphalt_road/" + ctx.getName())))
             .register();

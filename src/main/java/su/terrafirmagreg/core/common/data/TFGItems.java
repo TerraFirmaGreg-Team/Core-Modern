@@ -38,14 +38,6 @@ public class TFGItems {
         TFGItems_Medicines.init();
     }
 
-    public static final ItemEntry<Item> TAR_CHUNK = TFGItemsAsphalt.TAR_CHUNK;
-    public static final ItemEntry<Item> GILSONITE_DUST = TFGItemsAsphalt.GILSONITE_DUST;
-    public static final ItemEntry<Item> ASPHALT_BINDER = TFGItemsAsphalt.ASPHALT_BINDER;
-    public static final ItemEntry<Item> ASPHALT_RUBBLE = TFGItemsAsphalt.ASPHALT_RUBBLE;
-    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_LINES = TFGItemsAsphalt.ASPHALT_ROAD_STENCIL_LINES;
-    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_CROSS = TFGItemsAsphalt.ASPHALT_ROAD_STENCIL_CROSS;
-    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_ARROW = TFGItemsAsphalt.ASPHALT_ROAD_STENCIL_ARROW;
-
     public static final ItemEntry<PiglinDisguise> PIGLIN_DISGUISE = TFGCore.REGISTRATE.item("piglin_disguise",
             (p) -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), p))
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/piglin_disguise_block")))
