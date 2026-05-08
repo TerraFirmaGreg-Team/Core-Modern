@@ -211,4 +211,24 @@ public class TFGItems_Medicines {
                     GTMedicalConditions.CARCINOGEN,
                     TFGMedicalConditions.RADIOACTIVE)))
             .register();
+
+    public static final ItemEntry<ComponentItem> ESTROGEN_PILL = TFGCore.REGISTRATE.item("estrogen_pill", ComponentItem::create)
+            .defaultModel()
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().build()))
+            .register();
+
+    public static final ItemEntry<ComponentItem> ESTROGEN_TABLET = TFGCore.REGISTRATE.item("estrogen_tablet", ComponentItem::create)
+            .defaultModel()
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().build()))
+            .register();
+
+    public static final ItemEntry<ComponentItem> TESTOSTERONE_PILL = TFGCore.REGISTRATE.item("testosterone_pill", ComponentItem::create)
+            .defaultModel()
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().build()))
+            .register();
+
+    public static final ItemEntry<ComponentItem> TESTOSTERONE_TABLET = TFGCore.REGISTRATE.item("testosterone_tablet", ComponentItem::create)
+            .defaultModel()
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().build()))
+            .register();
 }

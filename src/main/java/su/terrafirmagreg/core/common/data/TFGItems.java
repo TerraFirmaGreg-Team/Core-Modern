@@ -66,6 +66,10 @@ public class TFGItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<Item> ANDROGENIC_TISSUE = TFGCore.REGISTRATE.item("androgenic_tissue", Item::new)
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<EmptyDnaSyringeItem> EMPTY_DNA_SYRINGE = TFGCore.REGISTRATE.item("empty_dna_syringe", EmptyDnaSyringeItem::new)
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
