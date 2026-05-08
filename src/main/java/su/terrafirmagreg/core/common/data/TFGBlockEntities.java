@@ -19,6 +19,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.blockentity.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
@@ -56,7 +57,7 @@ public class TFGBlockEntities {
 
     public static final BlockEntityEntry<AsphaltPouringSpreadBlockEntity> ASPHALT_POURING_SPREAD = TFGCore.REGISTRATE
             .blockEntity("asphalt_pouring_spread", AsphaltPouringSpreadBlockEntity::new)
-            .validBlock(TFGBlocks.ASPHALT_MIX)
+            .validBlock(TFGBlocksAsphalt.ASPHALT_MIX)
             .register();
 
     public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)

@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltMixBlock;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
 
@@ -71,7 +72,7 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
                 BlockPos pourNeighbor = baseNeighbor.above();
                 BlockState above = level.getBlockState(pourNeighbor);
                 if (above.isAir() || above.canBeReplaced()) {
-                    level.setBlock(pourNeighbor, TFGBlocks.ASPHALT_MIX.getDefaultState(), Block.UPDATE_ALL);
+                    level.setBlock(pourNeighbor, TFGBlocksAsphalt.ASPHALT_MIX.getDefaultState(), Block.UPDATE_ALL);
                     if (level.getBlockEntity(pourNeighbor) instanceof AsphaltPouringSpreadBlockEntity neighborBe) {
                         neighborBe.initAsSpreadLeaf();
                     }

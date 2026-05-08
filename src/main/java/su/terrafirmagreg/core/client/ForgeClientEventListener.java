@@ -4,6 +4,7 @@ import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -21,12 +22,14 @@ import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.perf.SupportCache;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class ForgeClientEventListener {
+    private record AsphaltMarking(AsphaltRoadDecal decal, AsphaltRoadMarkingColor color) {}
 
     /**
      * Evict client-side SupportCache chunk to prevent stale cache info.
@@ -45,35 +48,23 @@ public class ForgeClientEventListener {
         final BlockColor grassColor = (state, level, pos, tintIndex) -> TFCColors.getGrassColor(pos, tintIndex);
         final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
         final BlockColor grassBlockColor = (state, level, pos, tintIndex) -> state.getValue(ConnectedGrassBlock.SNOWY) || tintIndex != 1 ? -1 : grassColor.getColor(state, level, pos, tintIndex);
-        final BlockColor asphaltLineColor = (state, level, pos, tintIndex) -> {
+        final BlockColor asphaltDecalColor = (state, level, pos, tintIndex) -> {
             if (tintIndex < 1 || tintIndex > 7)
                 return -1;
-            AsphaltRoadDecal decal;
-            AsphaltRoadMarkingColor color;
-            if (state.hasProperty(AsphaltRoadBlock.DECAL) && state.hasProperty(AsphaltRoadBlock.COLOR)) {
-                decal = state.getValue(AsphaltRoadBlock.DECAL);
-                color = state.getValue(AsphaltRoadBlock.COLOR);
-            } else if (state.hasProperty(AsphaltRoadSlabBlock.DECAL) && state.hasProperty(AsphaltRoadSlabBlock.COLOR)) {
-                decal = state.getValue(AsphaltRoadSlabBlock.DECAL);
-                color = state.getValue(AsphaltRoadSlabBlock.COLOR);
-            } else {
+            AsphaltMarking marking = getAsphaltMarking(state);
+            if (marking == null)
                 return -1;
-            }
-            if (tintIndex == 1 && decal == AsphaltRoadDecal.LINE_HORIZONTAL)
-                return color.getTextColor();
-            if (tintIndex == 2 && decal == AsphaltRoadDecal.LINE_VERTICAL)
-                return color.getTextColor();
-            if (tintIndex == 3 && decal == AsphaltRoadDecal.CROSS)
-                return color.getTextColor();
-            if (tintIndex == 4 && decal == AsphaltRoadDecal.ARROW_NORTH)
-                return color.getTextColor();
-            if (tintIndex == 5 && decal == AsphaltRoadDecal.ARROW_EAST)
-                return color.getTextColor();
-            if (tintIndex == 6 && decal == AsphaltRoadDecal.ARROW_SOUTH)
-                return color.getTextColor();
-            if (tintIndex == 7 && decal == AsphaltRoadDecal.ARROW_WEST)
-                return color.getTextColor();
-            return -1;
+            AsphaltRoadDecal expectedDecal = switch (tintIndex) {
+                case 1 -> AsphaltRoadDecal.LINE_HORIZONTAL;
+                case 2 -> AsphaltRoadDecal.LINE_VERTICAL;
+                case 3 -> AsphaltRoadDecal.CROSS;
+                case 4 -> AsphaltRoadDecal.ARROW_NORTH;
+                case 5 -> AsphaltRoadDecal.ARROW_EAST;
+                case 6 -> AsphaltRoadDecal.ARROW_SOUTH;
+                case 7 -> AsphaltRoadDecal.ARROW_WEST;
+                default -> null;
+            };
+            return marking.decal() == expectedDecal ? marking.color().getTextColor() : -1;
         };
 
         event.register(tallGrassColor,
@@ -91,9 +82,9 @@ public class ForgeClientEventListener {
                 TFGBlocks_Earth.OXISOL_CLAY_GRASS.get(),
                 TFGBlocks_Earth.PODZOL_GRASS.get(),
                 TFGBlocks_Earth.PODZOL_CLAY_GRASS.get());
-        event.register(asphaltLineColor,
-                TFGBlocks.ASPHALT_ROAD.get(),
-                TFGBlocks.ASPHALT_ROAD_SLAB.get());
+        event.register(asphaltDecalColor,
+                TFGBlocksAsphalt.ASPHALT_ROAD.get(),
+                TFGBlocksAsphalt.ASPHALT_ROAD_SLAB.get());
     }
 
     public static void registerColorHandlerItems(RegisterColorHandlersEvent.Item event) {
@@ -103,7 +94,17 @@ public class ForgeClientEventListener {
         event.register(grassColor,
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());
         event.register(asphaltLineColor,
-                TFGBlocks.ASPHALT_ROAD.get().asItem(),
-                TFGBlocks.ASPHALT_ROAD_SLAB.get().asItem());
+                TFGBlocksAsphalt.ASPHALT_ROAD.get().asItem(),
+                TFGBlocksAsphalt.ASPHALT_ROAD_SLAB.get().asItem());
+    }
+
+    private static AsphaltMarking getAsphaltMarking(BlockState state) {
+        if (state.hasProperty(AsphaltRoadBlock.DECAL) && state.hasProperty(AsphaltRoadBlock.COLOR)) {
+            return new AsphaltMarking(state.getValue(AsphaltRoadBlock.DECAL), state.getValue(AsphaltRoadBlock.COLOR));
+        }
+        if (state.hasProperty(AsphaltRoadSlabBlock.DECAL) && state.hasProperty(AsphaltRoadSlabBlock.COLOR)) {
+            return new AsphaltMarking(state.getValue(AsphaltRoadSlabBlock.DECAL), state.getValue(AsphaltRoadSlabBlock.COLOR));
+        }
+        return null;
     }
 }

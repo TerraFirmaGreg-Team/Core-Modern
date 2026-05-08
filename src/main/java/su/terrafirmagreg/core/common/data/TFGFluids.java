@@ -20,6 +20,7 @@ import net.minecraftforge.registries.DeferredRegister;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 public class TFGFluids {
 
@@ -101,8 +102,8 @@ public class TFGFluids {
     public static final FluidRegistryObject<ForgeFlowingFluid> ASPHALT_MIX = register(
             "asphalt_mix",
             properties -> properties
-                    .block(TFGBlocks.ASPHALT_MIX_FLUID_BLOCK)
-                    .bucket(TFGItems.ASPHALT_MIX_BUCKET)
+                    .block(TFGBlocksAsphalt.ASPHALT_MIX_FLUID_BLOCK)
+                    .bucket(TFGItemsAsphalt.ASPHALT_MIX_BUCKET)
                     .slopeFindDistance(2)
                     .levelDecreasePerBlock(2)
                     .tickRate(20),
@@ -118,7 +119,7 @@ public class TFGFluids {
                     .supportsBoating(false)
                     .canDrown(true)
                     .canSwim(true)
-                    .temperature(420)
+                    .temperature(430)
                     .canPushEntity(true)
                     .descriptionId("fluid.tfg.asphalt_mix"),
             new FluidTypeClientProperties(ALPHA_MASK | 0x262628,

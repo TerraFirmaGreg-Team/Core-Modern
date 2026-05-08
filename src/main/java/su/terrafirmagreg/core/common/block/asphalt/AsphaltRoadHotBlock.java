@@ -15,9 +15,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 @SuppressWarnings("deprecation")
-public class HotAsphaltRoadBlock extends Block {
+public class AsphaltRoadHotBlock extends Block {
 
     /** Same geometry as {@link AsphaltRoadBlock} / RNR path_block. */
     protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
@@ -25,7 +26,7 @@ public class HotAsphaltRoadBlock extends Block {
     /** Keep hot asphalt for about one minute before setting. */
     public static final int TICKS_UNTIL_SET = 20 * 60;
 
-    public HotAsphaltRoadBlock(Properties properties) {
+    public AsphaltRoadHotBlock(Properties properties) {
         super(properties);
     }
 
@@ -56,8 +57,8 @@ public class HotAsphaltRoadBlock extends Block {
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
-        level.setBlock(pos, TFGBlocks.ASPHALT_ROAD.getDefaultState(), Block.UPDATE_ALL);
-        level.updateNeighborsAt(pos, TFGBlocks.ASPHALT_ROAD.get());
+        level.setBlock(pos, TFGBlocksAsphalt.ASPHALT_ROAD.getDefaultState(), Block.UPDATE_ALL);
+        level.updateNeighborsAt(pos, TFGBlocksAsphalt.ASPHALT_ROAD.get());
     }
 
     @Override

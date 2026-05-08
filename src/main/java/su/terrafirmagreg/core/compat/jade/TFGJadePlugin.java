@@ -8,17 +8,14 @@ import snownee.jade.api.WailaPlugin;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.TierLockedBlock;
-import su.terrafirmagreg.core.common.block.asphalt.HotAsphaltRoadBlock;
 
 @WailaPlugin
 public class TFGJadePlugin implements IWailaPlugin {
 
     public static final ResourceLocation TLB_Info = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "tier_locked_block_info");
-    public static final ResourceLocation HOT_ASPHALT_INFO = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "hot_asphalt_info");
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(TierLockedProvider.INSTANCE, TierLockedBlock.class);
-        registration.registerBlockComponent(HotAsphaltProvider.INSTANCE, HotAsphaltRoadBlock.class);
     }
 }

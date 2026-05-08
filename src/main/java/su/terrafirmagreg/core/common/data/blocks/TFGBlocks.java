@@ -41,9 +41,9 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltMixBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHotBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
-import su.terrafirmagreg.core.common.block.asphalt.HotAsphaltRoadBlock;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -265,12 +265,6 @@ public final class TFGBlocks {
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
-
-    public static final BlockEntry<AsphaltMixBlock> ASPHALT_MIX = TFGBlocksAsphalt.ASPHALT_MIX;
-    public static final BlockEntry<HotAsphaltRoadBlock> HOT_ASPHALT_ROAD = TFGBlocksAsphalt.HOT_ASPHALT_ROAD;
-    public static final BlockEntry<AsphaltRoadBlock> ASPHALT_ROAD = TFGBlocksAsphalt.ASPHALT_ROAD;
-    public static final BlockEntry<AsphaltRoadStairsBlock> ASPHALT_ROAD_STAIRS = TFGBlocksAsphalt.ASPHALT_ROAD_STAIRS;
-    public static final BlockEntry<AsphaltRoadSlabBlock> ASPHALT_ROAD_SLAB = TFGBlocksAsphalt.ASPHALT_ROAD_SLAB;
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {
         return (ctx, b) -> ctx.add(b, LootTable.lootTable().withPool(

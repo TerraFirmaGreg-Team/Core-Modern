@@ -8,7 +8,6 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -18,15 +17,14 @@ import net.minecraft.world.level.material.MapColor;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltMixBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHotBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
-import su.terrafirmagreg.core.common.block.asphalt.HotAsphaltRoadBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
-@SuppressWarnings("unused")
 public final class TFGBlocksAsphalt {
 
     public static void init() {
@@ -47,7 +45,7 @@ public final class TFGBlocksAsphalt {
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
-    public static final BlockEntry<HotAsphaltRoadBlock> HOT_ASPHALT_ROAD = TFGCore.REGISTRATE.block("asphalt_road_hot", HotAsphaltRoadBlock::new)
+    public static final BlockEntry<AsphaltRoadHotBlock> ASPHALT_ROAD_HOT = TFGCore.REGISTRATE.block("asphalt_road_hot", AsphaltRoadHotBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
             .properties(p -> p.strength(1.4f, 6).sound(SoundType.TUFF).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())

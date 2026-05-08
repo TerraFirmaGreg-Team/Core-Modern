@@ -22,6 +22,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import su.terrafirmagreg.core.common.blockentity.AsphaltPouringSpreadBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 @SuppressWarnings("deprecation")
 public class AsphaltMixBlock extends Block implements EntityBlock {
@@ -94,8 +95,8 @@ public class AsphaltMixBlock extends Block implements EntityBlock {
         BlockPos baseBelow = pos.below();
         level.removeBlock(pos, false);
         if (level.getBlockState(baseBelow).is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-            level.setBlock(baseBelow, TFGBlocks.HOT_ASPHALT_ROAD.getDefaultState(), Block.UPDATE_ALL);
-            level.updateNeighborsAt(baseBelow, TFGBlocks.HOT_ASPHALT_ROAD.get());
+            level.setBlock(baseBelow, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL);
+            level.updateNeighborsAt(baseBelow, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.get());
         }
     }
 

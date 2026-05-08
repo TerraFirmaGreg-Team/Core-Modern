@@ -30,6 +30,7 @@ import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
@@ -74,7 +75,7 @@ public final class AsphaltRoadEvent {
         if (!above.isAir() && !above.canBeReplaced()) {
             return;
         }
-        BlockState pourState = TFGBlocks.ASPHALT_MIX.getDefaultState();
+        BlockState pourState = TFGBlocksAsphalt.ASPHALT_MIX.getDefaultState();
         if (!level.setBlock(pourAbove, pourState, Block.UPDATE_ALL)) {
             return;
         }
