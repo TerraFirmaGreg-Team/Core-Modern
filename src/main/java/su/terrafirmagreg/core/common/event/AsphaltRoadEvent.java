@@ -57,11 +57,16 @@ public final class AsphaltRoadEvent {
         if (supportsRoadMarking(state) && handleSprayOnRoad(event, player, state)) {
             return;
         }
-        handleAsphaltMixPour(event, player, hand, held);
+        handleAsphaltMixPour(event, level, player, hand, held);
     }
 
-    private static void handleAsphaltMixPour(PlayerInteractEvent.RightClickBlock event, Player player, InteractionHand hand, ItemStack held) {
-        Level level = event.getLevel();
+    /** Asphalt mix containers must not fall through to vanilla fluid placement (often no fluid block). */
+    private static void cancelAsphaltMixFluidPlacement(PlayerInteractEvent.RightClickBlock event) {
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.FAIL);
+    }
+
+    private static void handleAsphaltMixPour(PlayerInteractEvent.RightClickBlock event, Level level, Player player, InteractionHand hand, ItemStack held) {
         if (!containsAsphaltMix(held)) {
             return;
         }
@@ -69,23 +74,27 @@ public final class AsphaltRoadEvent {
         BlockState ground = level.getBlockState(clicked);
         // Prevent vanilla fluid placement on asphalt roads.
         if (isAsphaltRoadFamily(ground) && !ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-            event.setCanceled(true);
-            event.setCancellationResult(InteractionResult.FAIL);
+            cancelAsphaltMixFluidPlacement(event);
             return;
         }
         if (!event.getFace().getAxis().isVertical() || event.getFace().getStepY() <= 0) {
+            // Otherwise Forge tries fluid placement; noBlock fluids spawn break particles then vanish.
+            cancelAsphaltMixFluidPlacement(event);
             return;
         }
         if (!ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
+            cancelAsphaltMixFluidPlacement(event);
             return;
         }
         BlockPos pourAbove = clicked.above();
         BlockState above = level.getBlockState(pourAbove);
         if (!above.isAir() && !above.canBeReplaced()) {
+            cancelAsphaltMixFluidPlacement(event);
             return;
         }
         BlockState pourState = TFGBlocksAsphalt.ASPHALT_ROAD_POURING.getDefaultState();
         if (!level.setBlock(pourAbove, pourState, Block.UPDATE_ALL)) {
+            cancelAsphaltMixFluidPlacement(event);
             return;
         }
         if (!player.getAbilities().instabuild) {
