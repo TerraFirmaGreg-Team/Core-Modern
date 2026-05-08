@@ -26,16 +26,18 @@ import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHotBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
-import su.terrafirmagreg.core.common.data.TFGFluids;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadEvent {
-    private record SprayContext(InteractionHand hand, ItemStack stack) {}
+    private static final ResourceLocation ASPHALT_MIX_ID = ResourceLocation.fromNamespaceAndPath("tfg", "asphalt_mix");
+
+    private record SprayContext(InteractionHand hand, ItemStack stack) {
+    }
 
     private AsphaltRoadEvent() {
     }
@@ -60,14 +62,20 @@ public final class AsphaltRoadEvent {
 
     private static void handleAsphaltMixPour(PlayerInteractEvent.RightClickBlock event, Player player, InteractionHand hand, ItemStack held) {
         Level level = event.getLevel();
-        if (!event.getFace().getAxis().isVertical() || event.getFace().getStepY() <= 0) {
-            return;
-        }
         if (!containsAsphaltMix(held)) {
             return;
         }
         BlockPos clicked = event.getPos();
         BlockState ground = level.getBlockState(clicked);
+        // Prevent vanilla fluid placement on asphalt roads.
+        if (isAsphaltRoadFamily(ground) && !ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.FAIL);
+            return;
+        }
+        if (!event.getFace().getAxis().isVertical() || event.getFace().getStepY() <= 0) {
+            return;
+        }
         if (!ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
             return;
         }
@@ -76,7 +84,7 @@ public final class AsphaltRoadEvent {
         if (!above.isAir() && !above.canBeReplaced()) {
             return;
         }
-        BlockState pourState = TFGBlocksAsphalt.ASPHALT_MIX.getDefaultState();
+        BlockState pourState = TFGBlocksAsphalt.ASPHALT_ROAD_POURING.getDefaultState();
         if (!level.setBlock(pourAbove, pourState, Block.UPDATE_ALL)) {
             return;
         }
@@ -86,6 +94,10 @@ public final class AsphaltRoadEvent {
         player.swing(hand, true);
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
+    }
+
+    private static boolean isAsphaltRoadFamily(BlockState state) {
+        return supportsRoadMarking(state) || state.getBlock() instanceof AsphaltRoadHotBlock;
     }
 
     private static boolean handleSprayOnRoad(PlayerInteractEvent.RightClickBlock event, Player player, BlockState state) {
@@ -132,17 +144,38 @@ public final class AsphaltRoadEvent {
         }
         InteractionHand oppositeHand = usedHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
         ItemStack oppositeStack = player.getItemInHand(oppositeHand);
-        if (isSprayCan(oppositeStack)) {
+        if (isSprayCan(oppositeStack) && canUseOffhandSpray(player, oppositeHand)) {
             return new SprayContext(oppositeHand, oppositeStack);
         }
         return null;
     }
 
+    /**
+     * Offhand spray can is only valid when main hand is empty or holding a stencil.
+     */
+    private static boolean canUseOffhandSpray(Player player, InteractionHand sprayHand) {
+        InteractionHand mainHand = InteractionHand.MAIN_HAND;
+        if (sprayHand == mainHand) {
+            return true;
+        }
+        ItemStack mainStack = player.getItemInHand(mainHand);
+        return mainStack.isEmpty() || RoadMarkingStencilItem.patternFrom(mainStack).isPresent();
+    }
+
     private static boolean containsAsphaltMix(ItemStack stack) {
         return FluidUtil.getFluidContained(stack)
                 .map(FluidStack::getFluid)
-                .filter(f -> f.isSame(TFGFluids.ASPHALT_MIX.getSource()))
+                .map(ForgeRegistries.FLUIDS::getKey)
+                .filter(AsphaltRoadEvent::isAsphaltMixId)
                 .isPresent();
+    }
+
+    private static boolean isAsphaltMixId(ResourceLocation fluidId) {
+        if (fluidId == null || !ASPHALT_MIX_ID.getNamespace().equals(fluidId.getNamespace())) {
+            return false;
+        }
+        String path = fluidId.getPath();
+        return path.equals(ASPHALT_MIX_ID.getPath());
     }
 
     /**

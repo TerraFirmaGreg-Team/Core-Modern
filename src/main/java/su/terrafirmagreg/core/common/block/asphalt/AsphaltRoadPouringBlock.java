@@ -2,8 +2,6 @@ package su.terrafirmagreg.core.common.block.asphalt;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.therighthon.rnr.common.RNRTags;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -21,11 +19,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.blockentity.AsphaltPouringSpreadBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
-@SuppressWarnings("deprecation")
-public class AsphaltMixBlock extends Block implements EntityBlock {
+public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
 
     /** Same geometry as {@link AsphaltRoadBlock} / RNR path_block. */
     protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
@@ -39,7 +34,7 @@ public class AsphaltMixBlock extends Block implements EntityBlock {
     public static final int MAX_VISUAL_LEVEL = 4;
     public static final IntegerProperty ASPHALT_LEVEL = IntegerProperty.create("asphalt_level", 0, MAX_VISUAL_LEVEL);
 
-    public AsphaltMixBlock(Properties properties) {
+    public AsphaltRoadPouringBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(ASPHALT_LEVEL, MAX_VISUAL_LEVEL));
     }
@@ -92,12 +87,8 @@ public class AsphaltMixBlock extends Block implements EntityBlock {
             level.scheduleTick(pos, this, 1);
             return;
         }
-        BlockPos baseBelow = pos.below();
+        // Center base + neighbors are converted by AsphaltPouringSpreadBlockEntity from the BFS plan.
         level.removeBlock(pos, false);
-        if (level.getBlockState(baseBelow).is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-            level.setBlock(baseBelow, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL);
-            level.updateNeighborsAt(baseBelow, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.get());
-        }
     }
 
     @Nullable

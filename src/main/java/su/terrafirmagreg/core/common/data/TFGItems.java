@@ -124,8 +124,6 @@ public class TFGItems {
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
-    public static final ItemEntry<BucketItem> ASPHALT_MIX_BUCKET = TFGItemsAsphalt.ASPHALT_MIX_BUCKET;
-
     public static final ItemEntry<Item> RAILGUN_AMMO_SHELL = TFGCore.REGISTRATE.item("railgun_ammo_shell", Item::new)
             .properties(p -> p.stacksTo(16))
             .register();

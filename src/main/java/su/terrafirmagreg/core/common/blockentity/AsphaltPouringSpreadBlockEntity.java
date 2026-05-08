@@ -16,48 +16,22 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltMixBlock;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadPouringBlock;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
 
-    /** Spread tiles placed by the orchestrator settle visually without running flood-fill. */
-    private static final int LEAF_SETTLE_TICKS = 48;
-
     private long[] spreadPlan = new long[0];
     private int spreadIndex = 0;
 
-    private boolean leafOnly;
-    private int leafTicksRemaining;
-    private int leafInitialTicks;
-
     public AsphaltPouringSpreadBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    /** Secondary pours spawned onto neighboring bases; no horizontal spread. */
-    public void initAsSpreadLeaf() {
-        this.leafOnly = true;
-        this.leafInitialTicks = LEAF_SETTLE_TICKS;
-        this.leafTicksRemaining = LEAF_SETTLE_TICKS;
-        this.spreadPlan = new long[0];
-        this.spreadIndex = 0;
-        setChanged();
     }
 
     /**
      * @return true when this pour tile is finished spreading / settling and ready to merge onto the base below.
      */
     public boolean spreadStep(ServerLevel level, BlockPos pourPos) {
-        if (leafOnly) {
-            if (leafTicksRemaining > 0) {
-                leafTicksRemaining--;
-            }
-            setChanged();
-            return leafTicksRemaining <= 0;
-        }
-
         if (spreadPlan.length == 0) {
             spreadPlan = buildSpreadPlan(level, pourPos);
             spreadIndex = 0;
@@ -65,18 +39,12 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
         }
 
         int processed = 0;
-        while (spreadIndex < spreadPlan.length && processed < AsphaltMixBlock.SPREAD_BATCH_PER_TICK) {
+        while (spreadIndex < spreadPlan.length && processed < AsphaltRoadPouringBlock.SPREAD_BATCH_PER_TICK) {
             BlockPos baseNeighbor = BlockPos.of(spreadPlan[spreadIndex++]);
             BlockState baseState = level.getBlockState(baseNeighbor);
             if (baseState.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-                BlockPos pourNeighbor = baseNeighbor.above();
-                BlockState above = level.getBlockState(pourNeighbor);
-                if (above.isAir() || above.canBeReplaced()) {
-                    level.setBlock(pourNeighbor, TFGBlocksAsphalt.ASPHALT_MIX.getDefaultState(), Block.UPDATE_ALL);
-                    if (level.getBlockEntity(pourNeighbor) instanceof AsphaltPouringSpreadBlockEntity neighborBe) {
-                        neighborBe.initAsSpreadLeaf();
-                    }
-                }
+                level.setBlock(baseNeighbor, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL);
+                level.updateNeighborsAt(baseNeighbor, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.get());
             }
             processed++;
         }
@@ -91,20 +59,12 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
     }
 
     public int currentVisualLevel() {
-        if (leafOnly) {
-            if (leafInitialTicks <= 0) {
-                return AsphaltMixBlock.MAX_VISUAL_LEVEL;
-            }
-            double ratio = leafTicksRemaining / (double) leafInitialTicks;
-            int level = (int) Math.ceil(ratio * AsphaltMixBlock.MAX_VISUAL_LEVEL);
-            return Math.max(0, Math.min(AsphaltMixBlock.MAX_VISUAL_LEVEL, level));
-        }
         if (spreadPlan.length == 0) {
-            return AsphaltMixBlock.MAX_VISUAL_LEVEL;
+            return AsphaltRoadPouringBlock.MAX_VISUAL_LEVEL;
         }
         double remainingRatio = (double) (spreadPlan.length - spreadIndex) / (double) spreadPlan.length;
-        int level = (int) Math.ceil(remainingRatio * AsphaltMixBlock.MAX_VISUAL_LEVEL);
-        return Math.max(0, Math.min(AsphaltMixBlock.MAX_VISUAL_LEVEL, level));
+        int level = (int) Math.ceil(remainingRatio * AsphaltRoadPouringBlock.MAX_VISUAL_LEVEL);
+        return Math.max(0, Math.min(AsphaltRoadPouringBlock.MAX_VISUAL_LEVEL, level));
     }
 
     private static long[] buildSpreadPlan(ServerLevel level, BlockPos pourSourcePos) {
@@ -123,7 +83,7 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
         visited.put(sourceBase, 0);
         queue.add(new Path(sourceBase, 0));
 
-        while (!queue.isEmpty() && visited.size() < AsphaltMixBlock.MAX_SPREAD_BLOCKS) {
+        while (!queue.isEmpty() && visited.size() < AsphaltRoadPouringBlock.MAX_SPREAD_BLOCKS) {
             final Path current = queue.remove();
 
             for (Direction direction : Direction.Plane.HORIZONTAL) {
@@ -136,15 +96,15 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
                 visited.put(next, current.cost + 1);
                 queue.add(new Path(next, current.cost + 1));
 
-                if (visited.size() >= AsphaltMixBlock.MAX_SPREAD_BLOCKS) {
+                if (visited.size() >= AsphaltRoadPouringBlock.MAX_SPREAD_BLOCKS) {
                     break;
                 }
             }
         }
 
+        // Include pour-center base first (cost 0), then neighbors by BFS depth then distance.
         return visited.entrySet()
                 .stream()
-                .filter(entry -> !entry.getKey().equals(sourceBase))
                 .sorted(Map.Entry.<BlockPos, Integer>comparingByValue()
                         .thenComparing(entry -> entry.getKey().distSqr(sourceBase)))
                 .mapToLong(entry -> entry.getKey().asLong())
@@ -156,18 +116,12 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
         tag.putLongArray("spreadPlan", spreadPlan);
         tag.putInt("spreadIndex", spreadIndex);
-        tag.putBoolean("leafOnly", leafOnly);
-        tag.putInt("leafTicksRemaining", leafTicksRemaining);
-        tag.putInt("leafInitialTicks", leafInitialTicks);
     }
 
     @Override
     public void load(CompoundTag tag) {
         spreadPlan = tag.getLongArray("spreadPlan");
         spreadIndex = tag.getInt("spreadIndex");
-        leafOnly = tag.getBoolean("leafOnly");
-        leafTicksRemaining = tag.getInt("leafTicksRemaining");
-        leafInitialTicks = tag.getInt("leafInitialTicks");
         super.load(tag);
     }
 }

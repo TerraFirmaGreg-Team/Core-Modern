@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 @SuppressWarnings("deprecation")
@@ -24,7 +23,7 @@ public class AsphaltRoadHotBlock extends Block {
     protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
     /** Keep hot asphalt for about one minute before setting. */
-    public static final int TICKS_UNTIL_SET = 20 * 60;
+    public static final int TICKS_UNTIL_SET = 200;
 
     public AsphaltRoadHotBlock(Properties properties) {
         super(properties);

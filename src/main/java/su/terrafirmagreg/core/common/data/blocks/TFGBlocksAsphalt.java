@@ -9,34 +9,25 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltMixBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHotBlock;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadPouringBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
-import su.terrafirmagreg.core.common.data.TFGFluids;
-import su.terrafirmagreg.core.utils.ModelUtils;
 
 public final class TFGBlocksAsphalt {
 
     public static void init() {
     }
 
-    public static final BlockEntry<LiquidBlock> ASPHALT_MIX_FLUID_BLOCK = TFGCore.REGISTRATE
-            .block("fluid/asphalt_mix", p -> new LiquidBlock(TFGFluids.ASPHALT_MIX.source(), p))
-            .initialProperties(() -> Blocks.WATER)
-            .blockstate(ModelUtils.blockVariants(TFGCore.id("block/fluid/asphalt_mix")))
-            .properties(p -> p.mapColor(MapColor.COLOR_BLACK).noLootTable())
-            .register();
-
-    public static final BlockEntry<AsphaltMixBlock> ASPHALT_MIX = TFGCore.REGISTRATE.block("asphalt_mix", AsphaltMixBlock::new)
+    public static final BlockEntry<AsphaltRoadPouringBlock> ASPHALT_ROAD_POURING = TFGCore.REGISTRATE.block("asphalt_road_pouring",
+            AsphaltRoadPouringBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
             .properties(p -> p.strength(1.4f, 6).sound(SoundType.TUFF).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())

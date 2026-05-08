@@ -20,7 +20,6 @@ import net.minecraftforge.registries.DeferredRegister;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 public class TFGFluids {
 
@@ -95,36 +94,6 @@ public class TFGFluids {
             new FluidTypeClientProperties(ALPHA_MASK | 0xFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/geyser_slurry_still"),
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/geyser_slurry_flow"),
-                    null, null),
-            MixingFluid.Source::new,
-            MixingFluid.Flowing::new);
-
-    public static final FluidRegistryObject<ForgeFlowingFluid> ASPHALT_MIX = register(
-            "asphalt_mix",
-            properties -> properties
-                    .block(TFGBlocksAsphalt.ASPHALT_MIX_FLUID_BLOCK)
-                    .bucket(TFGItemsAsphalt.ASPHALT_MIX_BUCKET)
-                    .slopeFindDistance(2)
-                    .levelDecreasePerBlock(2)
-                    .tickRate(20),
-            FluidType.Properties.create()
-                    .adjacentPathType(BlockPathTypes.LAVA)
-                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
-                    .density(2600)
-                    .viscosity(5000)
-                    .canConvertToSource(false)
-                    .canExtinguish(true)
-                    .canHydrate(false)
-                    .supportsBoating(false)
-                    .canDrown(true)
-                    .canSwim(true)
-                    .temperature(430)
-                    .canPushEntity(true)
-                    .descriptionId("fluid.tfg.asphalt_mix"),
-            new FluidTypeClientProperties(ALPHA_MASK | 0x262628,
-                    ResourceLocation.withDefaultNamespace("block/lava_still"),
-                    ResourceLocation.withDefaultNamespace("block/lava_flow"),
                     null, null),
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
