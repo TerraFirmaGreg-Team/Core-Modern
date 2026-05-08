@@ -22,7 +22,6 @@ import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGFluids;
-import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 public final class TFGBlocksAsphalt {
@@ -59,7 +58,7 @@ public final class TFGBlocksAsphalt {
             .properties(p -> p.strength(1.6f, 6).sound(SoundType.DEEPSLATE_TILES).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
             .addLayer(() -> RenderType::cutout)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFGTags.Blocks.FUNCTIONAL_ASPHALT_ROADS)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
@@ -68,7 +67,7 @@ public final class TFGBlocksAsphalt {
             .initialProperties(ASPHALT_ROAD)
             .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.STAIRS, TFGTags.Blocks.FUNCTIONAL_ASPHALT_ROAD_STAIRS)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.STAIRS)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
@@ -77,7 +76,7 @@ public final class TFGBlocksAsphalt {
             .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
             .addLayer(() -> RenderType::cutout)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.SLABS, TFGTags.Blocks.FUNCTIONAL_ASPHALT_ROAD_SLABS)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.SLABS)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 }

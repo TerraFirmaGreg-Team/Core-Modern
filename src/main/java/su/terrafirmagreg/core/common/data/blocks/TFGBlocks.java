@@ -39,11 +39,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltMixBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHotBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -208,8 +203,6 @@ public final class TFGBlocks {
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_BLUE).noLootTable())
             .register();
-
-    public static final BlockEntry<LiquidBlock> ASPHALT_MIX_FLUID_BLOCK = TFGBlocksAsphalt.ASPHALT_MIX_FLUID_BLOCK;
 
     ///// Misc blocks
 
