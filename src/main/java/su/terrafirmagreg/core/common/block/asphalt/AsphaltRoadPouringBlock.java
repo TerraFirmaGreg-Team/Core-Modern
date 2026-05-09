@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -26,11 +27,8 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
     protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
     public static final int TICKS_UNTIL_HOT = 10;
-    /** Manual paving target: one bucket should spread to at most 20 road blocks. */
     public static final int MAX_SPREAD_BLOCKS = 20;
-    /** For staged spread, process one target per tick for better visual flow and stable TPS. */
     public static final int SPREAD_BATCH_PER_TICK = 1;
-    /** Visual-only level for model variants / height rendering. */
     public static final int MAX_VISUAL_LEVEL = 4;
     public static final IntegerProperty ASPHALT_LEVEL = IntegerProperty.create("asphalt_level", 0, MAX_VISUAL_LEVEL);
 
@@ -71,7 +69,13 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);
-        AsphaltRoadHeatVisuals.spawnHotAsphaltAmbient(level, pos, random);
+        AsphaltRoadHelper.spawnHotAsphaltAmbient(level, pos, random);
+    }
+
+    @Override
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        super.entityInside(state, level, pos, entity);
+        AsphaltRoadHelper.tickBurn(level, pos, entity);
     }
 
     @Override
@@ -93,7 +97,6 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
             level.scheduleTick(pos, this, 1);
             return;
         }
-        // Center base + neighbors are converted by AsphaltPouringSpreadBlockEntity from the BFS plan.
         level.removeBlock(pos, false);
     }
 

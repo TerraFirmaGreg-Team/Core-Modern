@@ -4,9 +4,7 @@ import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -63,21 +61,12 @@ public class AsphaltRoadHotBlock extends Block {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);
-        AsphaltRoadHeatVisuals.spawnHotAsphaltAmbient(level, pos, random);
+        AsphaltRoadHelper.spawnHotAsphaltAmbient(level, pos, random);
     }
 
     @Override
-    public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
-        super.stepOn(level, pos, state, entity);
-        if (level.isClientSide() || !(entity instanceof LivingEntity living) || living.isSteppingCarefully()) {
-            return;
-        }
-        if (level.getGameTime() % 20L != 0L) {
-            return;
-        }
-        DamageSource src = level.damageSources().hotFloor();
-        if (!living.isInvulnerableTo(src)) {
-            living.hurt(src, 0.5F);
-        }
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        super.entityInside(state, level, pos, entity);
+        AsphaltRoadHelper.tickBurn(level, pos, entity);
     }
 }

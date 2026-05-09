@@ -102,7 +102,6 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
             }
         }
 
-        // Include pour-center base first (cost 0), then neighbors by BFS depth then distance.
         return visited.entrySet()
                 .stream()
                 .sorted(Map.Entry.<BlockPos, Integer>comparingByValue()
