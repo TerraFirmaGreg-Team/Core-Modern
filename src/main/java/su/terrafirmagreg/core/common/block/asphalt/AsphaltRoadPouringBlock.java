@@ -69,6 +69,12 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
     }
 
     @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+        AsphaltRoadHeatVisuals.spawnHotAsphaltAmbient(level, pos, random);
+    }
+
+    @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
         BlockEntity blockEntity = level.getBlockEntity(pos);

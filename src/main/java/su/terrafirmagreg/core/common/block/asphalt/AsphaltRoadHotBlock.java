@@ -61,6 +61,12 @@ public class AsphaltRoadHotBlock extends Block {
     }
 
     @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+        AsphaltRoadHeatVisuals.spawnHotAsphaltAmbient(level, pos, random);
+    }
+
+    @Override
     public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
         super.stepOn(level, pos, state, entity);
         if (level.isClientSide() || !(entity instanceof LivingEntity living) || living.isSteppingCarefully()) {

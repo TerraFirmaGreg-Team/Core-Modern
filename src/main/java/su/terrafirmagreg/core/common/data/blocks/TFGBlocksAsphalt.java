@@ -54,7 +54,7 @@ public final class TFGBlocksAsphalt {
             .register();
 
     public static final BlockEntry<AsphaltRoadStairsBlock> ASPHALT_ROAD_STAIRS = TFGCore.REGISTRATE.block("asphalt_road_stairs",
-            p -> new AsphaltRoadStairsBlock(ASPHALT_ROAD.get().defaultBlockState(), p))
+            p -> new AsphaltRoadStairsBlock(() -> ASPHALT_ROAD.get().defaultBlockState(), p))
             .initialProperties(ASPHALT_ROAD)
             .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
