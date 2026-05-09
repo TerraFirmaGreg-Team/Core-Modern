@@ -1,9 +1,13 @@
 package su.terrafirmagreg.core.common.block.asphalt;
 
+import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
+import com.gregtechceu.gtceu.common.data.GTDamageTypes;
+import com.gregtechceu.gtceu.data.recipe.CustomTags;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,7 +18,13 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 
 public final class AsphaltRoadHelper {
 
-    public static final float DAMAGE_PER_TICK = 0.5F;
+    /**
+     * Scales GregTech {@link com.gregtechceu.gtceu.utils.EntityDamageUtil#applyTemperatureDamage}-style heat from
+     * {@link AsphaltRoadHotBlock#TEMPERATURE_KELVIN}; ~0.2 matches prior ~0.5 vanilla damage per throttle when
+     * standing on the block.
+     */
+    private static final float HEAT_DAMAGE_MULTIPLIER = 0.2F;
+
     public static final long THROTTLE_TICKS = 20L;
 
     private AsphaltRoadHelper() {
@@ -53,11 +63,32 @@ public final class AsphaltRoadHelper {
             return;
         }
 
-        DamageSource src = level.damageSources().hotFloor();
-        if (living.isInvulnerableTo(src)) {
+        int tempK = AsphaltRoadHotBlock.TEMPERATURE_KELVIN;
+        if (tempK <= 320) {
             return;
         }
 
-        living.hurt(src, DAMAGE_PER_TICK);
+        float mult = HEAT_DAMAGE_MULTIPLIER;
+        ItemStack chest = living.getItemBySlot(EquipmentSlot.CHEST);
+        if (!chest.isEmpty() && chest.getItem() instanceof ArmorComponentItem armorItem) {
+            mult *= armorItem.getArmorLogic().getHeatResistance();
+        }
+
+        // Same baseline as EntityDamageUtil.applyTemperatureDamage for T > 300 K (hot fluid / pipe contact).
+        float damage = mult * (tempK - 300) / 50.0F;
+        if (damage <= 0.0F) {
+            return;
+        }
+        if (!living.isAlive()) {
+            return;
+        }
+        if (living.getType().is(CustomTags.HEAT_IMMUNE)) {
+            return;
+        }
+        if (living.getEffect(MobEffects.FIRE_RESISTANCE) != null) {
+            return;
+        }
+
+        living.hurt(GTDamageTypes.HEAT.source(level), damage);
     }
 }

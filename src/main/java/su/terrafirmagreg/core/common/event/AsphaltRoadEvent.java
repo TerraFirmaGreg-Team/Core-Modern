@@ -3,11 +3,14 @@ package su.terrafirmagreg.core.common.event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.therighthon.rnr.common.RNRTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -78,10 +81,6 @@ public final class AsphaltRoadEvent {
         if (!carriesAsphaltMix(held)) {
             return;
         }
-        if (!canAffordPour(held, player)) {
-            cancelAsphaltMixFluidPlacement(event);
-            return;
-        }
         BlockPos clicked = event.getPos();
         BlockState ground = level.getBlockState(clicked);
         if (isAsphaltRoadFamily(ground) && !ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
@@ -90,6 +89,9 @@ public final class AsphaltRoadEvent {
         }
         BlockPos pourPos = resolvePourPos(level, clicked, ground);
         if (pourPos == null) {
+            return;
+        }
+        if (!canAffordPour(held, player)) {
             cancelAsphaltMixFluidPlacement(event);
             return;
         }
@@ -118,6 +120,7 @@ public final class AsphaltRoadEvent {
             cancelAsphaltMixFluidPlacement(event);
             return;
         }
+        playAsphaltMixPourSound(level, pourPos);
         player.swing(hand, true);
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
@@ -201,9 +204,22 @@ public final class AsphaltRoadEvent {
             if (drained.getAmount() < POUR_FLUID_MB) {
                 return false;
             }
-            player.setItemInHand(hand, handler.getContainer());
+            ItemStack updated = handler.getContainer();
+            ItemStack inHand = player.getItemInHand(hand);
+            // GregTech drums (and similar) mutate the held stack in place; replacing the same reference causes a
+            // visible inventory flicker. Buckets that swap to a new ItemStack still need setItemInHand.
+            if (inHand != updated) {
+                player.setItemInHand(hand, updated);
+            }
             return true;
         }).orElse(false);
+    }
+
+    private static void playAsphaltMixPourSound(Level level, BlockPos pourPos) {
+        double x = pourPos.getX() + 0.5;
+        double y = pourPos.getY() + 0.5;
+        double z = pourPos.getZ() + 0.5;
+        level.playSound(null, x, y, z, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 0.95F + level.getRandom().nextFloat() * 0.1F);
     }
 
     private static Fluid asphaltMixFluid() {
@@ -236,6 +252,7 @@ public final class AsphaltRoadEvent {
             }
             event.getLevel().setBlockAndUpdate(event.getPos(), clearMarking(state));
             damageSprayCan(player, sprayStack, sprayHand);
+            playSprayCanSound(event.getLevel(), player, event.getPos());
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             player.swing(sprayHand, true);
@@ -253,6 +270,7 @@ public final class AsphaltRoadEvent {
 
         event.getLevel().setBlockAndUpdate(event.getPos(), applyMarking(state, targetDecal, targetColor));
         damageSprayCan(player, sprayStack, sprayHand);
+        playSprayCanSound(event.getLevel(), player, event.getPos());
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         player.swing(sprayHand, true);
@@ -262,25 +280,28 @@ public final class AsphaltRoadEvent {
     private static SprayContext resolveSprayContext(Player player, InteractionHand usedHand) {
         ItemStack usedStack = player.getItemInHand(usedHand);
         if (isSprayCan(usedStack)) {
+            // RightClickBlock runs per hand: offhand pass must not skip the main-hand guard.
+            if (!canUseSprayFromHand(player, usedHand)) {
+                return null;
+            }
             return new SprayContext(usedHand, usedStack);
         }
         InteractionHand oppositeHand = usedHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
         ItemStack oppositeStack = player.getItemInHand(oppositeHand);
-        if (isSprayCan(oppositeStack) && canUseOffhandSpray(player, oppositeHand)) {
+        if (isSprayCan(oppositeStack) && canUseSprayFromHand(player, oppositeHand)) {
             return new SprayContext(oppositeHand, oppositeStack);
         }
         return null;
     }
 
     /**
-     * Offhand spray can is only valid when main hand is empty or holding a stencil.
+     * Spray in main hand: always allowed. Spray in off hand: only when main is empty or holding a road stencil.
      */
-    private static boolean canUseOffhandSpray(Player player, InteractionHand sprayHand) {
-        InteractionHand mainHand = InteractionHand.MAIN_HAND;
-        if (sprayHand == mainHand) {
+    private static boolean canUseSprayFromHand(Player player, InteractionHand sprayHand) {
+        if (sprayHand == InteractionHand.MAIN_HAND) {
             return true;
         }
-        ItemStack mainStack = player.getItemInHand(mainHand);
+        ItemStack mainStack = player.getItemInHand(InteractionHand.MAIN_HAND);
         return mainStack.isEmpty() || RoadMarkingStencilItem.patternFrom(mainStack).isPresent();
     }
 
@@ -326,6 +347,10 @@ public final class AsphaltRoadEvent {
             return;
         }
         held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(sprayHand));
+    }
+
+    private static void playSprayCanSound(Level level, Player player, BlockPos pos) {
+        GTSoundEntries.SPRAY_CAN_TOOL.play(level, player, pos, 0.85F, 1.0F);
     }
 
     private static AsphaltRoadMarkingColor sprayCanColor(ItemStack stack) {

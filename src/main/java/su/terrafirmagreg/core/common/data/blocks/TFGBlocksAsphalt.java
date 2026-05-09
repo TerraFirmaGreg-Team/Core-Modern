@@ -29,7 +29,7 @@ public final class TFGBlocksAsphalt {
     public static final BlockEntry<AsphaltRoadPouringBlock> ASPHALT_ROAD_POURING = TFGCore.REGISTRATE.block("asphalt_road_pouring",
             AsphaltRoadPouringBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
-            .properties(p -> p.strength(1.4f, 6).sound(SoundType.TUFF).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
+            .properties(p -> p.strength(1.4f, 6).sound(SoundType.MUD).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
