@@ -22,6 +22,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
@@ -53,38 +54,63 @@ public final class AsphaltRoadEvent {
     private AsphaltRoadEvent() {
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRightClickBlock(PlayerInteractEvent.@NotNull RightClickBlock event) {
         Level level = event.getLevel();
-        if (level.isClientSide()) {
-            return;
-        }
         Player player = event.getEntity();
         InteractionHand hand = event.getHand();
         ItemStack held = player.getItemInHand(hand);
         BlockState state = level.getBlockState(event.getPos());
 
-        // Prefer spray logic first on asphalt road blocks.
-        if (supportsRoadMarking(state) && handleSprayOnRoad(event, player, state)) {
+        // Prefer spray logic first on asphalt road blocks (server only; effects are authoritative).
+        if (!level.isClientSide() && supportsRoadMarking(state) && handleSprayOnRoad(event, player, state)) {
             return;
         }
-        handleAsphaltMixPour(event, level, player, hand, held);
-    }
 
-    /** Asphalt mix containers must not fall through to vanilla fluid placement (often no fluid block). */
-    private static void cancelAsphaltMixFluidPlacement(PlayerInteractEvent.RightClickBlock event) {
-        event.setCanceled(true);
-        event.setCancellationResult(InteractionResult.FAIL);
-    }
-
-    private static void handleAsphaltMixPour(PlayerInteractEvent.RightClickBlock event, Level level, Player player, InteractionHand hand, ItemStack held) {
         if (!carriesAsphaltMix(held)) {
             return;
         }
+
+        /*
+         * GregTech drums use BlockItem: if we only cancel on the server, the client still predicts block placement and
+         * plays place sounds. Cancel on both sides whenever we own this interaction (pour cell or finished road).
+         */
+        if (suppressDefaultUseForAsphaltMixContainer(level, event.getPos(), state)) {
+            stopVanillaAndItemUseForAsphaltMix(event);
+            if (!level.isClientSide()) {
+                handleAsphaltMixPourOnServer(event, level, player, hand, held);
+            }
+        }
+    }
+
+    /**
+     * Blocks fluid/vanilla follow-up and GregTech drum {@link net.minecraft.world.item.BlockItem} placement when the
+     * click is on a finished road or on a valid pour cell above spreadable base (RNR-style).
+     */
+    private static boolean suppressDefaultUseForAsphaltMixContainer(Level level, BlockPos clicked, BlockState ground) {
+        if (isAsphaltRoadFamily(ground) && !ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
+            return true;
+        }
+        return resolvePourPos(level, clicked, ground) != null;
+    }
+
+    /**
+     * Stops vanilla fluid use, block activation, and {@link net.minecraft.world.item.BlockItem} placement (GregTech
+     * drums). {@link PlayerInteractEvent#setCanceled(boolean)} alone is not always enough; item/block {@link Event.Result}
+     * must be denied on both sides to avoid place sounds and client container desync (e.g. buckets vanishing on roads).
+     */
+    private static void stopVanillaAndItemUseForAsphaltMix(PlayerInteractEvent.RightClickBlock event) {
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.SUCCESS);
+        event.setUseItem(Event.Result.DENY);
+        event.setUseBlock(Event.Result.DENY);
+    }
+
+    private static void handleAsphaltMixPourOnServer(PlayerInteractEvent.RightClickBlock event, Level level, Player player, InteractionHand hand, ItemStack held) {
         BlockPos clicked = event.getPos();
         BlockState ground = level.getBlockState(clicked);
         if (isAsphaltRoadFamily(ground) && !ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-            cancelAsphaltMixFluidPlacement(event);
+            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         BlockPos pourPos = resolvePourPos(level, clicked, ground);
@@ -92,38 +118,37 @@ public final class AsphaltRoadEvent {
             return;
         }
         if (!canAffordPour(held, player)) {
-            cancelAsphaltMixFluidPlacement(event);
+            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         // Same guard as RNR wet concrete: {@link com.therighthon.rnr.RNRHelpers#blockModRecipeCompatible}
         BlockPos basePos = pourPos.below();
         if (player.blockPosition().equals(basePos)) {
-            cancelAsphaltMixFluidPlacement(event);
+            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         BlockState space = level.getBlockState(pourPos);
         if (!space.isAir() && !space.canBeReplaced()) {
-            cancelAsphaltMixFluidPlacement(event);
+            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         if (!player.getAbilities().instabuild && !simulatePourDrain(held)) {
-            cancelAsphaltMixFluidPlacement(event);
+            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         BlockState pourState = TFGBlocksAsphalt.ASPHALT_ROAD_POURING.getDefaultState();
         if (!level.setBlock(pourPos, pourState, Block.UPDATE_ALL)) {
-            cancelAsphaltMixFluidPlacement(event);
+            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         if (!player.getAbilities().instabuild && !tryConsumePourFluid(player, hand, held)) {
             level.removeBlock(pourPos, false);
-            cancelAsphaltMixFluidPlacement(event);
+            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         playAsphaltMixPourSound(level, pourPos);
         player.swing(hand, true);
-        event.setCanceled(true);
-        event.setCancellationResult(InteractionResult.SUCCESS);
+        stopVanillaAndItemUseForAsphaltMix(event);
     }
 
     /**
