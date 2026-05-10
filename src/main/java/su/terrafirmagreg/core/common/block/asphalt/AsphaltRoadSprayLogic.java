@@ -2,12 +2,15 @@ package su.terrafirmagreg.core.common.block.asphalt;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
@@ -46,14 +49,54 @@ public final class AsphaltRoadSprayLogic {
     }
 
     public static AsphaltRoadDecal resolveTargetDecal(Player player, InteractionHand sprayHand) {
+        return resolveTargetDecal(player, sprayHand, null, null, null);
+    }
+
+    /**
+     * When {@code hitWorld}, {@code hitFace}, and {@code clickedPos} are set and the hit is on a horizontal face
+     * ({@link Axis#Y}), line and arrow decals use the hit position on that face (automation-friendly). Otherwise
+     * falls back to {@link Player#getDirection()} like a standing player.
+     */
+    public static AsphaltRoadDecal resolveTargetDecal(
+            Player player,
+            InteractionHand sprayHand,
+            @Nullable Vec3 hitWorld,
+            @Nullable Direction hitFace,
+            @Nullable BlockPos clickedPos) {
         ItemStack opposite = player.getItemInHand(sprayHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+        boolean usePlanarHit = hitWorld != null && hitFace != null && clickedPos != null && hitFace.getAxis() == Axis.Y;
         return RoadMarkingStencilItem.patternFrom(opposite)
                 .map(pattern -> switch (pattern) {
-                    case LINE -> decalFromHorizontalFacing(player.getDirection());
+                    case LINE -> usePlanarHit ? lineDecalFromHitOnTop(hitWorld, clickedPos) : decalFromHorizontalFacing(player.getDirection());
                     case CROSS -> AsphaltRoadDecal.CROSS;
-                    case ARROW -> arrowFromHorizontalFacing(player.getDirection());
+                    case ARROW -> usePlanarHit ? arrowDecalFromHitOnTop(hitWorld, clickedPos, player.getDirection())
+                            : arrowFromHorizontalFacing(player.getDirection());
                 })
-                .orElseGet(() -> decalFromHorizontalFacing(player.getDirection()));
+                .orElseGet(() -> usePlanarHit ? lineDecalFromHitOnTop(hitWorld, clickedPos) : decalFromHorizontalFacing(player.getDirection()));
+    }
+
+    /** Hit offset from block center on XZ; larger east–west offset → line runs north–south ({@link AsphaltRoadDecal#LINE_VERTICAL}). */
+    public static AsphaltRoadDecal lineDecalFromHitOnTop(Vec3 hitWorld, BlockPos clickedPos) {
+        double dx = hitWorld.x() - (clickedPos.getX() + 0.5);
+        double dz = hitWorld.z() - (clickedPos.getZ() + 0.5);
+        boolean vertical = Math.abs(dx) < Math.abs(dz);
+        return vertical ? AsphaltRoadDecal.LINE_VERTICAL : AsphaltRoadDecal.LINE_HORIZONTAL;
+    }
+
+    /** Nearest horizontal facing from hit on top/bottom face; nearly centered hits use {@code fallback}. */
+    public static AsphaltRoadDecal arrowDecalFromHitOnTop(Vec3 hitWorld, BlockPos clickedPos, Direction fallback) {
+        double dx = hitWorld.x() - (clickedPos.getX() + 0.5);
+        double dz = hitWorld.z() - (clickedPos.getZ() + 0.5);
+        if (dx * dx + dz * dz < 1.0E-8) {
+            return arrowFromHorizontalFacing(fallback);
+        }
+        Direction facing;
+        if (Math.abs(dx) >= Math.abs(dz)) {
+            facing = dx >= 0.0 ? Direction.EAST : Direction.WEST;
+        } else {
+            facing = dz >= 0.0 ? Direction.SOUTH : Direction.NORTH;
+        }
+        return arrowFromHorizontalFacing(facing);
     }
 
     public static AsphaltRoadDecal decalFromHorizontalFacing(Direction facing) {

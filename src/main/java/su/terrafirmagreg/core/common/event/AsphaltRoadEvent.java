@@ -1,11 +1,13 @@
 package su.terrafirmagreg.core.common.event;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.therighthon.rnr.common.RNRTags;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,6 +20,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -268,7 +272,11 @@ public final class AsphaltRoadEvent {
 
         AsphaltRoadMarkingColor targetColor = AsphaltRoadSprayLogic.sprayCanColor(sprayStack);
 
-        AsphaltRoadDecal targetDecal = AsphaltRoadSprayLogic.resolveTargetDecal(player, sprayHand);
+        @Nullable
+        BlockHitResult blockHit = event.getHitVec();
+        Vec3 hitWorld = blockHit != null ? blockHit.getLocation() : null;
+        Direction hitFace = blockHit != null ? blockHit.getDirection() : event.getFace();
+        AsphaltRoadDecal targetDecal = AsphaltRoadSprayLogic.resolveTargetDecal(player, sprayHand, hitWorld, hitFace, event.getPos());
         if (AsphaltRoadSprayLogic.isSameMarking(state, targetDecal, targetColor)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
