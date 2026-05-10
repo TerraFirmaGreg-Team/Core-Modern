@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.common.event;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.therighthon.rnr.common.RNRTags;
@@ -35,18 +34,26 @@ import net.minecraftforge.registries.ForgeRegistries;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHotBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadPouringBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadEvent {
-    private static final ResourceLocation ASPHALT_MIX_ID = ResourceLocation.fromNamespaceAndPath("tfg", "asphalt_mix");
-    /** Matches RNR wet-concrete block_mod cost: one pour per 1000 mB from multi-tank containers. */
-    private static final int POUR_FLUID_MB = 1000;
+    private static final ResourceLocation ASPHALT_MIX_ID = TFGCore.id("asphalt_mix");
+    /** Matches RNR wet-concrete style field pour: one spread operation per 1000 mB. */
+    private static final int FIELD_POUR_MB = 1000;
+    /** Sneak-use on base course: spot-repair one base block to hot asphalt. */
+    private static final int PATCH_POUR_MB = 50;
+
+    private enum AsphaltMixInteraction {
+        NONE,
+        /** Place pouring block above clicked base; spreads to nearby bases. */
+        FIELD_POUR,
+        /** Replace clicked base block with hot asphalt; small fluid cost. */
+        PATCH_BASE_TO_HOT
+    }
 
     private record SprayContext(InteractionHand hand, ItemStack stack) {
     }
@@ -54,7 +61,7 @@ public final class AsphaltRoadEvent {
     private AsphaltRoadEvent() {
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onRightClickBlock(PlayerInteractEvent.@NotNull RightClickBlock event) {
         Level level = event.getLevel();
         Player player = event.getEntity();
@@ -62,122 +69,126 @@ public final class AsphaltRoadEvent {
         ItemStack held = player.getItemInHand(hand);
         BlockState state = level.getBlockState(event.getPos());
 
-        // Prefer spray logic first on asphalt road blocks (server only; effects are authoritative).
         if (!level.isClientSide() && supportsRoadMarking(state) && handleSprayOnRoad(event, player, state)) {
             return;
         }
 
-        if (!carriesAsphaltMix(held)) {
+        if (!heldItemContainsAsphaltMix(held)) {
+            return;
+        }
+
+        AsphaltMixInteraction mode = resolveAsphaltMixInteraction(level, event.getPos(), state, player);
+        if (mode == AsphaltMixInteraction.NONE) {
+            return;
+        }
+
+        int costMb = mode == AsphaltMixInteraction.FIELD_POUR ? FIELD_POUR_MB : PATCH_POUR_MB;
+        if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, costMb)) {
             return;
         }
 
         /*
-         * GregTech drums use BlockItem: if we only cancel on the server, the client still predicts block placement and
-         * plays place sounds. Cancel on both sides whenever we own this interaction (pour cell or finished road).
+         * Do not cancel or setUseItem(DENY) on the client: Forge will then refuse to apply the server-side slot update
+         * after IFluidHandlerItem drains/fills (KubeJS asphalt bucket, GregTech drums), causing the "two clicks to
+         * update bucket" desync. Vanilla/GT fluid transfer is unchanged because we return early when mode == NONE.
          */
-        if (suppressDefaultUseForAsphaltMixContainer(level, event.getPos(), state)) {
-            stopVanillaAndItemUseForAsphaltMix(event);
-            if (!level.isClientSide()) {
-                handleAsphaltMixPourOnServer(event, level, player, hand, held);
+        if (!level.isClientSide()) {
+            stopVanillaAndItemUse(event);
+            switch (mode) {
+                case FIELD_POUR -> handleFieldPourOnServer(event, level, player, hand, held);
+                case PATCH_BASE_TO_HOT -> handlePatchBaseOnServer(event, level, player, hand, held);
+                default -> {
+                }
             }
         }
     }
 
     /**
-     * Blocks fluid/vanilla follow-up and GregTech drum {@link net.minecraft.world.item.BlockItem} placement when the
-     * click is on a finished road or on a valid pour cell above spreadable base (RNR-style).
+     * Only when the clicked block is spreadable base: sneak = patch hot on that block; normal = field pour above it
      */
-    private static boolean suppressDefaultUseForAsphaltMixContainer(Level level, BlockPos clicked, BlockState ground) {
-        if (isAsphaltRoadFamily(ground) && !ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-            return true;
+    private static AsphaltMixInteraction resolveAsphaltMixInteraction(Level level, BlockPos clicked, BlockState clickedState, Player player) {
+        if (!clickedState.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
+            return AsphaltMixInteraction.NONE;
         }
-        return resolvePourPos(level, clicked, ground) != null;
+        if (player.isShiftKeyDown()) {
+            return AsphaltMixInteraction.PATCH_BASE_TO_HOT;
+        }
+        BlockState above = level.getBlockState(clicked.above());
+        if (!above.isAir() && !above.canBeReplaced()) {
+            return AsphaltMixInteraction.NONE;
+        }
+        return AsphaltMixInteraction.FIELD_POUR;
     }
 
-    /**
-     * Stops vanilla fluid use, block activation, and {@link net.minecraft.world.item.BlockItem} placement (GregTech
-     * drums). {@link PlayerInteractEvent#setCanceled(boolean)} alone is not always enough; item/block {@link Event.Result}
-     * must be denied on both sides to avoid place sounds and client container desync (e.g. buckets vanishing on roads).
-     */
-    private static void stopVanillaAndItemUseForAsphaltMix(PlayerInteractEvent.RightClickBlock event) {
+    private static void stopVanillaAndItemUse(PlayerInteractEvent.RightClickBlock event) {
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         event.setUseItem(Event.Result.DENY);
         event.setUseBlock(Event.Result.DENY);
     }
 
-    private static void handleAsphaltMixPourOnServer(PlayerInteractEvent.RightClickBlock event, Level level, Player player, InteractionHand hand, ItemStack held) {
+    private static void handleFieldPourOnServer(PlayerInteractEvent.RightClickBlock event, Level level, Player player, InteractionHand hand, ItemStack held) {
         BlockPos clicked = event.getPos();
-        BlockState ground = level.getBlockState(clicked);
-        if (isAsphaltRoadFamily(ground) && !ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-            stopVanillaAndItemUseForAsphaltMix(event);
+        BlockState baseState = level.getBlockState(clicked);
+        if (!baseState.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
             return;
         }
-        BlockPos pourPos = resolvePourPos(level, clicked, ground);
-        if (pourPos == null) {
+        BlockPos pourPos = clicked.above();
+        if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, FIELD_POUR_MB)) {
             return;
         }
-        if (!canAffordPour(held, player)) {
-            stopVanillaAndItemUseForAsphaltMix(event);
-            return;
-        }
-        // Same guard as RNR wet concrete: {@link com.therighthon.rnr.RNRHelpers#blockModRecipeCompatible}
-        BlockPos basePos = pourPos.below();
-        if (player.blockPosition().equals(basePos)) {
-            stopVanillaAndItemUseForAsphaltMix(event);
+        if (player.blockPosition().equals(clicked)) {
             return;
         }
         BlockState space = level.getBlockState(pourPos);
         if (!space.isAir() && !space.canBeReplaced()) {
-            stopVanillaAndItemUseForAsphaltMix(event);
-            return;
-        }
-        if (!player.getAbilities().instabuild && !simulatePourDrain(held)) {
-            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         BlockState pourState = TFGBlocksAsphalt.ASPHALT_ROAD_POURING.getDefaultState();
         if (!level.setBlock(pourPos, pourState, Block.UPDATE_ALL)) {
-            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
-        if (!player.getAbilities().instabuild && !tryConsumePourFluid(player, hand, held)) {
+        if (!player.getAbilities().instabuild && !tryConsumeFluidMb(player, hand, held, FIELD_POUR_MB)) {
             level.removeBlock(pourPos, false);
-            stopVanillaAndItemUseForAsphaltMix(event);
             return;
         }
         playAsphaltMixPourSound(level, pourPos);
         player.swing(hand, true);
-        stopVanillaAndItemUseForAsphaltMix(event);
     }
 
-    /**
-     * Cell for the pouring source block: above a hit spreadable base (any hit face), or the clicked replaceable/air
-     * block when it sits directly above spreadable base course.
-     */
-    @Nullable
-    private static BlockPos resolvePourPos(Level level, BlockPos clicked, BlockState ground) {
-        if (ground.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-            return clicked.above();
+    private static void handlePatchBaseOnServer(PlayerInteractEvent.RightClickBlock event, Level level, Player player, InteractionHand hand, ItemStack held) {
+        BlockPos clicked = event.getPos();
+        BlockState baseState = level.getBlockState(clicked);
+        if (!baseState.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
+            return;
         }
-        BlockPos base = clicked.below();
-        if (level.getBlockState(base).is(RNRTags.Blocks.CONCRETE_SPREADABLE) && (ground.isAir() || ground.canBeReplaced())) {
-            return clicked;
+        if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, PATCH_POUR_MB)) {
+            return;
         }
-        return null;
+        if (!level.setBlock(clicked, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL)) {
+            return;
+        }
+        if (!player.getAbilities().instabuild && !tryConsumeFluidMb(player, hand, held, PATCH_POUR_MB)) {
+            level.setBlock(clicked, baseState, Block.UPDATE_ALL);
+            return;
+        }
+        playAsphaltMixPourSound(level, clicked);
+        player.swing(hand, true);
     }
 
-    private static boolean carriesAsphaltMix(ItemStack stack) {
+    private static boolean heldItemContainsAsphaltMix(ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
         }
-        if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(AsphaltRoadEvent::handlerContainsAsphaltMix).orElse(false)) {
+        if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(AsphaltRoadEvent::handlerHasNonEmptyAsphaltMix).orElse(false)) {
             return true;
         }
-        return FluidUtil.getFluidContained(stack).map(fs -> isAsphaltMixFluid(fs.getFluid())).orElse(false);
+        return FluidUtil.getFluidContained(stack)
+                .map(fs -> isAsphaltMixFluid(fs.getFluid()) && !fs.isEmpty())
+                .orElse(false);
     }
 
-    private static boolean handlerContainsAsphaltMix(IFluidHandler handler) {
+    private static boolean handlerHasNonEmptyAsphaltMix(IFluidHandler handler) {
         for (int i = 0; i < handler.getTanks(); i++) {
             FluidStack inTank = handler.getFluidInTank(i);
             if (!inTank.isEmpty() && isAsphaltMixFluid(inTank.getFluid())) {
@@ -187,19 +198,16 @@ public final class AsphaltRoadEvent {
         return false;
     }
 
-    private static boolean canAffordPour(ItemStack stack, Player player) {
-        if (player.getAbilities().instabuild) {
-            return true;
-        }
-        return simulatedAsphaltMixDrainMb(stack) >= POUR_FLUID_MB;
+    private static boolean canAffordFluidDrain(ItemStack stack, int mb) {
+        return simulateFluidDrain(stack, mb) >= mb;
     }
 
-    private static int simulatedAsphaltMixDrainMb(ItemStack stack) {
+    private static int simulateFluidDrain(ItemStack stack, int mb) {
         Fluid mix = asphaltMixFluid();
         if (mix == Fluids.EMPTY) {
             return 0;
         }
-        FluidStack want = new FluidStack(mix, POUR_FLUID_MB);
+        FluidStack want = new FluidStack(mix, mb);
         return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
                 .map(handler -> handler.drain(want, FluidAction.SIMULATE).getAmount())
                 .orElseGet(() -> FluidUtil.getFluidContained(stack)
@@ -208,11 +216,7 @@ public final class AsphaltRoadEvent {
                         .orElse(0));
     }
 
-    private static boolean simulatePourDrain(ItemStack stack) {
-        return simulatedAsphaltMixDrainMb(stack) >= POUR_FLUID_MB;
-    }
-
-    private static boolean tryConsumePourFluid(Player player, InteractionHand hand, ItemStack held) {
+    private static boolean tryConsumeFluidMb(Player player, InteractionHand hand, ItemStack held, int mb) {
         if (player.getAbilities().instabuild) {
             return true;
         }
@@ -220,19 +224,17 @@ public final class AsphaltRoadEvent {
         if (mix == Fluids.EMPTY) {
             return false;
         }
-        FluidStack want = new FluidStack(mix, POUR_FLUID_MB);
+        FluidStack want = new FluidStack(mix, mb);
         return held.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler -> {
-            if (handler.drain(want, FluidAction.SIMULATE).getAmount() < POUR_FLUID_MB) {
+            if (handler.drain(want, FluidAction.SIMULATE).getAmount() < mb) {
                 return false;
             }
             FluidStack drained = handler.drain(want, FluidAction.EXECUTE);
-            if (drained.getAmount() < POUR_FLUID_MB) {
+            if (drained.getAmount() < mb) {
                 return false;
             }
             ItemStack updated = handler.getContainer();
             ItemStack inHand = player.getItemInHand(hand);
-            // GregTech drums (and similar) mutate the held stack in place; replacing the same reference causes a
-            // visible inventory flicker. Buckets that swap to a new ItemStack still need setItemInHand.
             if (inHand != updated) {
                 player.setItemInHand(hand, updated);
             }
@@ -253,14 +255,11 @@ public final class AsphaltRoadEvent {
     }
 
     private static boolean isAsphaltMixFluid(Fluid fluid) {
+        if (fluid == null || fluid == Fluids.EMPTY) {
+            return false;
+        }
         ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
-        return id != null && isAsphaltMixId(id);
-    }
-
-    private static boolean isAsphaltRoadFamily(BlockState state) {
-        return supportsRoadMarking(state)
-                || state.getBlock() instanceof AsphaltRoadHotBlock
-                || state.getBlock() instanceof AsphaltRoadPouringBlock;
+        return ASPHALT_MIX_ID.equals(id);
     }
 
     private static boolean handleSprayOnRoad(PlayerInteractEvent.RightClickBlock event, Player player, BlockState state) {
@@ -277,7 +276,7 @@ public final class AsphaltRoadEvent {
             }
             event.getLevel().setBlockAndUpdate(event.getPos(), clearMarking(state));
             damageSprayCan(player, sprayStack, sprayHand);
-            playSprayCanSound(event.getLevel(), player, event.getPos());
+            playSprayCanSound(event.getLevel(), event.getPos());
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             player.swing(sprayHand, true);
@@ -295,7 +294,7 @@ public final class AsphaltRoadEvent {
 
         event.getLevel().setBlockAndUpdate(event.getPos(), applyMarking(state, targetDecal, targetColor));
         damageSprayCan(player, sprayStack, sprayHand);
-        playSprayCanSound(event.getLevel(), player, event.getPos());
+        playSprayCanSound(event.getLevel(), event.getPos());
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         player.swing(sprayHand, true);
@@ -305,7 +304,6 @@ public final class AsphaltRoadEvent {
     private static SprayContext resolveSprayContext(Player player, InteractionHand usedHand) {
         ItemStack usedStack = player.getItemInHand(usedHand);
         if (isSprayCan(usedStack)) {
-            // RightClickBlock runs per hand: offhand pass must not skip the main-hand guard.
             if (!canUseSprayFromHand(player, usedHand)) {
                 return null;
             }
@@ -319,23 +317,12 @@ public final class AsphaltRoadEvent {
         return null;
     }
 
-    /**
-     * Spray in main hand: always allowed. Spray in off hand: only when main is empty or holding a road stencil.
-     */
     private static boolean canUseSprayFromHand(Player player, InteractionHand sprayHand) {
         if (sprayHand == InteractionHand.MAIN_HAND) {
             return true;
         }
         ItemStack mainStack = player.getItemInHand(InteractionHand.MAIN_HAND);
         return mainStack.isEmpty() || RoadMarkingStencilItem.patternFrom(mainStack).isPresent();
-    }
-
-    private static boolean isAsphaltMixId(ResourceLocation fluidId) {
-        if (fluidId == null || !ASPHALT_MIX_ID.getNamespace().equals(fluidId.getNamespace())) {
-            return false;
-        }
-        String path = fluidId.getPath();
-        return path.equals(ASPHALT_MIX_ID.getPath());
     }
 
     /**
@@ -374,8 +361,13 @@ public final class AsphaltRoadEvent {
         held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(sprayHand));
     }
 
-    private static void playSprayCanSound(Level level, Player player, BlockPos pos) {
-        GTSoundEntries.SPRAY_CAN_TOOL.play(level, player, pos, 0.85F, 1.0F);
+    /**
+     * Match {@link com.gregtechceu.gtceu.common.item.ColorSprayBehaviour}: pass {@code null} as the player argument so
+     * {@link Level#playSound} broadcasts to everyone in range. A non-null player can suppress or mis-route the packet
+     * on the dedicated server / integrated server path, which made spray silent after we kept logic server-only.
+     */
+    private static void playSprayCanSound(Level level, BlockPos pos) {
+        GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, pos, 0.85F, 1.0F);
     }
 
     private static AsphaltRoadMarkingColor sprayCanColor(ItemStack stack) {
