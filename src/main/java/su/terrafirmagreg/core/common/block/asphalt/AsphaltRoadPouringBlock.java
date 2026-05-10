@@ -29,7 +29,7 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
     public static final int TICKS_UNTIL_HOT = 10;
     public static final int MAX_SPREAD_BLOCKS = 20;
     public static final int SPREAD_BATCH_PER_TICK = 1;
-    public static final int MAX_VISUAL_LEVEL = 4;
+    public static final int MAX_VISUAL_LEVEL = 7;
     public static final IntegerProperty ASPHALT_LEVEL = IntegerProperty.create("asphalt_level", 0, MAX_VISUAL_LEVEL);
 
     public AsphaltRoadPouringBlock(Properties properties) {

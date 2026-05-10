@@ -6,7 +6,6 @@ import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.therighthon.rnr.common.RNRTags;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -32,30 +31,21 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSprayLogic;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
-import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadEvent {
     private static final ResourceLocation ASPHALT_MIX_ID = TFGCore.id("asphalt_mix");
-    /** Matches RNR wet-concrete style field pour: one spread operation per 1000 mB. */
     private static final int FIELD_POUR_MB = 1000;
-    /** Sneak-use on base course: spot-repair one base block to hot asphalt. */
     private static final int PATCH_POUR_MB = 50;
 
     private enum AsphaltMixInteraction {
         NONE,
-        /** Place pouring block above clicked base; spreads to nearby bases. */
         FIELD_POUR,
-        /** Replace clicked base block with hot asphalt; small fluid cost. */
         PATCH_BASE_TO_HOT
-    }
-
-    private record SprayContext(InteractionHand hand, ItemStack stack) {
     }
 
     private AsphaltRoadEvent() {
@@ -69,7 +59,7 @@ public final class AsphaltRoadEvent {
         ItemStack held = player.getItemInHand(hand);
         BlockState state = level.getBlockState(event.getPos());
 
-        if (!level.isClientSide() && supportsRoadMarking(state) && handleSprayOnRoad(event, player, state)) {
+        if (!level.isClientSide() && AsphaltRoadSprayLogic.supportsRoadMarking(state) && handleSprayOnRoad(event, player, state)) {
             return;
         }
 
@@ -87,13 +77,9 @@ public final class AsphaltRoadEvent {
             return;
         }
 
-        /*
-         * Do not cancel or setUseItem(DENY) on the client: Forge will then refuse to apply the server-side slot update
-         * after IFluidHandlerItem drains/fills (KubeJS asphalt bucket, GregTech drums), causing the "two clicks to
-         * update bucket" desync. Vanilla/GT fluid transfer is unchanged because we return early when mode == NONE.
-         */
+        stopVanillaAndItemUse(event);
+
         if (!level.isClientSide()) {
-            stopVanillaAndItemUse(event);
             switch (mode) {
                 case FIELD_POUR -> handleFieldPourOnServer(event, level, player, hand, held);
                 case PATCH_BASE_TO_HOT -> handlePatchBaseOnServer(event, level, player, hand, held);
@@ -103,15 +89,15 @@ public final class AsphaltRoadEvent {
         }
     }
 
-    /**
-     * Only when the clicked block is spreadable base: sneak = patch hot on that block; normal = field pour above it
-     */
     private static AsphaltMixInteraction resolveAsphaltMixInteraction(Level level, BlockPos clicked, BlockState clickedState, Player player) {
         if (!clickedState.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
             return AsphaltMixInteraction.NONE;
         }
         if (player.isShiftKeyDown()) {
             return AsphaltMixInteraction.PATCH_BASE_TO_HOT;
+        }
+        if (player.blockPosition().equals(clicked)) {
+            return AsphaltMixInteraction.NONE;
         }
         BlockState above = level.getBlockState(clicked.above());
         if (!above.isAir() && !above.canBeReplaced()) {
@@ -135,9 +121,6 @@ public final class AsphaltRoadEvent {
         }
         BlockPos pourPos = clicked.above();
         if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, FIELD_POUR_MB)) {
-            return;
-        }
-        if (player.blockPosition().equals(clicked)) {
             return;
         }
         BlockState space = level.getBlockState(pourPos);
@@ -263,18 +246,18 @@ public final class AsphaltRoadEvent {
     }
 
     private static boolean handleSprayOnRoad(PlayerInteractEvent.RightClickBlock event, Player player, BlockState state) {
-        SprayContext spray = resolveSprayContext(player, event.getHand());
+        AsphaltRoadSprayLogic.SprayContext spray = AsphaltRoadSprayLogic.resolveSprayContext(player, event.getHand());
         if (spray == null) {
             return false;
         }
         InteractionHand sprayHand = spray.hand();
         ItemStack sprayStack = spray.stack();
 
-        if (isSolventSprayCan(sprayStack)) {
-            if (currentDecal(state).isNone() && currentMarkingColor(state).isNone()) {
+        if (AsphaltRoadSprayLogic.isSolventSprayCan(sprayStack)) {
+            if (AsphaltRoadSprayLogic.currentDecal(state).isNone() && AsphaltRoadSprayLogic.currentMarkingColor(state).isNone()) {
                 return false;
             }
-            event.getLevel().setBlockAndUpdate(event.getPos(), clearMarking(state));
+            event.getLevel().setBlockAndUpdate(event.getPos(), AsphaltRoadSprayLogic.clearMarking(state));
             damageSprayCan(player, sprayStack, sprayHand);
             playSprayCanSound(event.getLevel(), event.getPos());
             event.setCanceled(true);
@@ -283,75 +266,22 @@ public final class AsphaltRoadEvent {
             return true;
         }
 
-        AsphaltRoadMarkingColor targetColor = sprayCanColor(sprayStack);
+        AsphaltRoadMarkingColor targetColor = AsphaltRoadSprayLogic.sprayCanColor(sprayStack);
 
-        AsphaltRoadDecal targetDecal = resolveTargetDecal(player, sprayHand);
-        if (isSameMarking(state, targetDecal, targetColor)) {
+        AsphaltRoadDecal targetDecal = AsphaltRoadSprayLogic.resolveTargetDecal(player, sprayHand);
+        if (AsphaltRoadSprayLogic.isSameMarking(state, targetDecal, targetColor)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             return true;
         }
 
-        event.getLevel().setBlockAndUpdate(event.getPos(), applyMarking(state, targetDecal, targetColor));
+        event.getLevel().setBlockAndUpdate(event.getPos(), AsphaltRoadSprayLogic.applyMarking(state, targetDecal, targetColor));
         damageSprayCan(player, sprayStack, sprayHand);
         playSprayCanSound(event.getLevel(), event.getPos());
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         player.swing(sprayHand, true);
         return true;
-    }
-
-    private static SprayContext resolveSprayContext(Player player, InteractionHand usedHand) {
-        ItemStack usedStack = player.getItemInHand(usedHand);
-        if (isSprayCan(usedStack)) {
-            if (!canUseSprayFromHand(player, usedHand)) {
-                return null;
-            }
-            return new SprayContext(usedHand, usedStack);
-        }
-        InteractionHand oppositeHand = usedHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-        ItemStack oppositeStack = player.getItemInHand(oppositeHand);
-        if (isSprayCan(oppositeStack) && canUseSprayFromHand(player, oppositeHand)) {
-            return new SprayContext(oppositeHand, oppositeStack);
-        }
-        return null;
-    }
-
-    private static boolean canUseSprayFromHand(Player player, InteractionHand sprayHand) {
-        if (sprayHand == InteractionHand.MAIN_HAND) {
-            return true;
-        }
-        ItemStack mainStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-        return mainStack.isEmpty() || RoadMarkingStencilItem.patternFrom(mainStack).isPresent();
-    }
-
-    /**
-     * No stencil or line stencil: decal follows facing. Cross stencil: {@link AsphaltRoadDecal#CROSS}, ignores facing.
-     */
-    private static AsphaltRoadDecal resolveTargetDecal(Player player, InteractionHand sprayHand) {
-        ItemStack opposite = player.getItemInHand(sprayHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
-        return RoadMarkingStencilItem.patternFrom(opposite)
-                .map(pattern -> switch (pattern) {
-                    case LINE -> decalFromPlayerFacing(player);
-                    case CROSS -> AsphaltRoadDecal.CROSS;
-                    case ARROW -> arrowFromPlayerFacing(player);
-                })
-                .orElseGet(() -> decalFromPlayerFacing(player));
-    }
-
-    private static AsphaltRoadDecal decalFromPlayerFacing(Player player) {
-        Direction facing = player.getDirection();
-        boolean vertical = facing == Direction.NORTH || facing == Direction.SOUTH;
-        return vertical ? AsphaltRoadDecal.LINE_VERTICAL : AsphaltRoadDecal.LINE_HORIZONTAL;
-    }
-
-    private static AsphaltRoadDecal arrowFromPlayerFacing(Player player) {
-        return switch (player.getDirection()) {
-            case NORTH -> AsphaltRoadDecal.ARROW_NORTH;
-            case EAST -> AsphaltRoadDecal.ARROW_EAST;
-            case SOUTH -> AsphaltRoadDecal.ARROW_SOUTH;
-            default -> AsphaltRoadDecal.ARROW_WEST;
-        };
     }
 
     private static void damageSprayCan(Player player, ItemStack held, InteractionHand sprayHand) {
@@ -361,73 +291,7 @@ public final class AsphaltRoadEvent {
         held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(sprayHand));
     }
 
-    /**
-     * Match {@link com.gregtechceu.gtceu.common.item.ColorSprayBehaviour}: pass {@code null} as the player argument so
-     * {@link Level#playSound} broadcasts to everyone in range. A non-null player can suppress or mis-route the packet
-     * on the dedicated server / integrated server path, which made spray silent after we kept logic server-only.
-     */
     private static void playSprayCanSound(Level level, BlockPos pos) {
         GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, pos, 0.85F, 1.0F);
-    }
-
-    private static AsphaltRoadMarkingColor sprayCanColor(ItemStack stack) {
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
-        if (id == null || !"gtceu".equals(id.getNamespace())) {
-            return AsphaltRoadMarkingColor.NONE;
-        }
-        String path = id.getPath();
-        if (!path.endsWith("_dye_spray_can")) {
-            return AsphaltRoadMarkingColor.NONE;
-        }
-        String colorName = path.substring(0, path.length() - "_dye_spray_can".length());
-        return AsphaltRoadMarkingColor.fromSerializedName(colorName);
-    }
-
-    private static boolean isSolventSprayCan(ItemStack stack) {
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
-        return id != null && "gtceu".equals(id.getNamespace()) && "solvent_spray_can".equals(id.getPath());
-    }
-
-    private static boolean isSprayCan(ItemStack stack) {
-        return isSolventSprayCan(stack) || !sprayCanColor(stack).isNone();
-    }
-
-    private static boolean supportsRoadMarking(BlockState state) {
-        return state.getBlock() instanceof AsphaltRoadBlock
-                || state.getBlock() instanceof AsphaltRoadSlabBlock;
-    }
-
-    private static AsphaltRoadDecal currentDecal(BlockState state) {
-        if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.getValue(AsphaltRoadBlock.DECAL);
-        }
-        return state.getValue(AsphaltRoadSlabBlock.DECAL);
-    }
-
-    private static AsphaltRoadMarkingColor currentMarkingColor(BlockState state) {
-        if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.getValue(AsphaltRoadBlock.COLOR);
-        }
-        return state.getValue(AsphaltRoadSlabBlock.COLOR);
-    }
-
-    private static boolean isSameMarking(BlockState state, AsphaltRoadDecal targetDecal, AsphaltRoadMarkingColor targetColor) {
-        return currentDecal(state) == targetDecal && currentMarkingColor(state) == targetColor;
-    }
-
-    private static BlockState applyMarking(BlockState state, AsphaltRoadDecal decal, AsphaltRoadMarkingColor color) {
-        if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.setValue(AsphaltRoadBlock.DECAL, decal).setValue(AsphaltRoadBlock.COLOR, color);
-        }
-        return state.setValue(AsphaltRoadSlabBlock.DECAL, decal).setValue(AsphaltRoadSlabBlock.COLOR, color);
-    }
-
-    private static BlockState clearMarking(BlockState state) {
-        if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.setValue(AsphaltRoadBlock.DECAL, AsphaltRoadDecal.NONE)
-                    .setValue(AsphaltRoadBlock.COLOR, AsphaltRoadMarkingColor.NONE);
-        }
-        return state.setValue(AsphaltRoadSlabBlock.DECAL, AsphaltRoadDecal.NONE)
-                .setValue(AsphaltRoadSlabBlock.COLOR, AsphaltRoadMarkingColor.NONE);
     }
 }
