@@ -11,7 +11,12 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tfg:asphalt_road_stairs"
+          "functions": [
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "tfg:asphalt_rubble"
         }
       ],
       "rolls": 1.0
