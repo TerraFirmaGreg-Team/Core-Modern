@@ -7,6 +7,10 @@
     "tfg:tamped/dirt/oxisol",
     "tfg:tamped/mud/oxisol",
     "tfg:tamped/dirt/podzol",
-    "tfg:tamped/mud/podzol"
+    "tfg:tamped/mud/podzol",
+    "tfg:asphalt_road_hot",
+    "tfg:asphalt_road",
+    "tfg:asphalt_road_stairs",
+    "tfg:asphalt_road_slab"
   ]
 }

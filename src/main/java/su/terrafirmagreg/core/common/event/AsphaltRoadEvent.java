@@ -3,7 +3,11 @@ package su.terrafirmagreg.core.common.event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.gregtechceu.gtceu.api.item.IComponentItem;
+import com.gregtechceu.gtceu.api.item.component.IItemComponent;
+import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
+import com.gregtechceu.gtceu.common.item.ColorSprayBehaviour;
 import com.therighthon.rnr.common.RNRTags;
 
 import net.minecraft.core.BlockPos;
@@ -295,6 +299,14 @@ public final class AsphaltRoadEvent {
     private static void damageSprayCan(Player player, ItemStack held, InteractionHand sprayHand) {
         if (player.getAbilities().instabuild) {
             return;
+        }
+        if (held.getItem() instanceof IComponentItem componentItem) {
+            for (IItemComponent component : componentItem.getComponents()) {
+                if (component instanceof ColorSprayBehaviour spray) {
+                    spray.useItemDurability(player, sprayHand, held, GTItems.SPRAY_EMPTY.asStack());
+                    return;
+                }
+            }
         }
         held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(sprayHand));
     }
