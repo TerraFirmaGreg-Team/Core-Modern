@@ -104,12 +104,19 @@ public final class TFGBlocksAsphalt {
         builder.part().modelFile(base).addModel().end();
 
         ModelFile overlay = overlayTemplate(prov, "block_overlay", 14.992F, 15.015F);
-        ModelFile line = overlayModel(prov, "block_overlay_line", overlay, "mask_line");
-        ModelFile cross = overlayModel(prov, "block_overlay_cross", overlay, "mask_cross");
-        ModelFile arrow = overlayModel(prov, "block_overlay_arrow", overlay, "mask_arrow");
-        addTwoWayOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, AsphaltRoadMarkingMask.LINE, line);
-        addFlatOverlay(builder, AsphaltRoadBlock.MASK, AsphaltRoadMarkingMask.CROSS, cross);
-        addDirectionalOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, AsphaltRoadMarkingMask.ARROW, arrow);
+        for (AsphaltRoadMarkingMask mask : AsphaltRoadMarkingMask.values()) {
+            if (mask.isNone()) {
+                continue;
+            }
+            ModelFile modelFile = overlayModel(prov, "block_overlay_" + mask.getSerializedName(), overlay, "mask_" + mask.getSerializedName());
+            if (mask.getDirs() == 0) {
+                addFlatOverlay(builder, AsphaltRoadBlock.MASK, mask, modelFile);
+            } else if (mask.getDirs() == 2) {
+                addTwoWayOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, mask, modelFile);
+            } else {
+                addDirectionalOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, mask, modelFile);
+            }
+        }
     }
 
     private static void asphaltRoadSlabBlockstate(DataGenContext<Block, AsphaltRoadSlabBlock> ctx, RegistrateBlockstateProvider prov) {
@@ -121,12 +128,19 @@ public final class TFGBlocksAsphalt {
         builder.part().modelFile(base).addModel().end();
 
         ModelFile overlay = overlayTemplate(prov, "slab_overlay", 6.992F, 7.015F);
-        ModelFile line = overlayModel(prov, "slab_overlay_line", overlay, "mask_line");
-        ModelFile cross = overlayModel(prov, "slab_overlay_cross", overlay, "mask_cross");
-        ModelFile arrow = overlayModel(prov, "slab_overlay_arrow", overlay, "mask_arrow");
-        addTwoWayOverlays(builder, AsphaltRoadSlabBlock.MASK, AsphaltRoadSlabBlock.FACING, AsphaltRoadMarkingMask.LINE, line);
-        addFlatOverlay(builder, AsphaltRoadSlabBlock.MASK, AsphaltRoadMarkingMask.CROSS, cross);
-        addDirectionalOverlays(builder, AsphaltRoadSlabBlock.MASK, AsphaltRoadSlabBlock.FACING, AsphaltRoadMarkingMask.ARROW, arrow);
+        for (AsphaltRoadMarkingMask mask : AsphaltRoadMarkingMask.values()) {
+            if (mask.isNone()) {
+                continue;
+            }
+            ModelFile modelFile = overlayModel(prov, "slab_overlay_" + mask.getSerializedName(), overlay, "mask_" + mask.getSerializedName());
+            if (mask.getDirs() == 0) {
+                addFlatOverlay(builder, AsphaltRoadBlock.MASK, mask, modelFile);
+            } else if (mask.getDirs() == 2) {
+                addTwoWayOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, mask, modelFile);
+            } else {
+                addDirectionalOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, mask, modelFile);
+            }
+        }
     }
 
     private static ModelFile overlayTemplate(RegistrateBlockstateProvider prov, String name, float yMin, float yMax) {
