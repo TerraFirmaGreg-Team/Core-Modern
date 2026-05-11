@@ -171,11 +171,19 @@ public final class AsphaltRoadSprayEvent {
     @Nullable
     private static AsphaltRoadMarkingMask resolveStencilMask(Player player, InteractionHand sprayHand) {
         ItemStack opposite = player.getItemInHand(sprayHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+
+        if (sprayHand == InteractionHand.MAIN_HAND) {
+            if (opposite.is(TFGTags.Items.ROAD_MARKING_STENCILS)) {
+                return TFGAsphaltRoadMarkings.maskForStencil(opposite).orElse(null);
+            }
+            return AsphaltRoadMarkingMask.LINE;
+        }
+
         if (opposite.isEmpty()) {
             return AsphaltRoadMarkingMask.LINE;
         }
         if (!opposite.is(TFGTags.Items.ROAD_MARKING_STENCILS)) {
-            return AsphaltRoadMarkingMask.LINE;
+            return null;
         }
         return TFGAsphaltRoadMarkings.maskForStencil(opposite).orElse(null);
     }
