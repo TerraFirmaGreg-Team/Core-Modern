@@ -32,6 +32,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.utils.MineshaftHelpers;
 import su.terrafirmagreg.core.world.TFGStructureProcessors;
 
@@ -82,7 +83,7 @@ public class MineSupportProcessor extends StructureProcessor {
             return currentBlockInfo;
         }
 
-        if (isCobwebBlock(originalBlockState)) {
+        if (isSpiderWeb(originalBlockState)) {
             return currentBlockInfo;
         }
 
@@ -311,8 +312,8 @@ public class MineSupportProcessor extends StructureProcessor {
         return blockState.getBlock() == Blocks.CYAN_CONCRETE;
     }
 
-    private boolean isCobwebBlock(BlockState blockState) {
-        return blockState.getBlock() == Blocks.COBWEB;
+    private boolean isSpiderWeb(BlockState blockState) {
+        return blockState.getBlock() == TFGBlocks_Earth.SPIDER_WEB.get();
     }
 
 }

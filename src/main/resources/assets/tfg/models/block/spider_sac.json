@@ -1,0 +1,241 @@
+{
+    "format_version": "1.9.0",
+    "textures": {
+        "0": "tfg:block/spider_web",
+        "1": "tfg:block/spider_sac",
+        "particle": "tfg:block/spider_web"
+    },
+    "texture_size": [
+        32,
+        32
+    ],
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    5,
+                    16,
+                    3
+                ],
+                "angle": 0,
+                "axis": "x"
+            },
+            "from": [
+                4,
+                11,
+                2
+            ],
+            "to": [
+                14,
+                16,
+                12
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        5,
+                        0,
+                        7.5,
+                        5
+                    ],
+                    "texture": "#1",
+                    "rotation": 270
+                },
+                "south": {
+                    "uv": [
+                        15,
+                        2.5,
+                        10,
+                        0
+                    ],
+                    "texture": "#1"
+                },
+                "north": {
+                    "uv": [
+                        15,
+                        2.5,
+                        10,
+                        5
+                    ],
+                    "texture": "#1",
+                    "rotation": 180
+                },
+                "west": {
+                    "uv": [
+                        7.5,
+                        0,
+                        10,
+                        5
+                    ],
+                    "texture": "#1",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        5,
+                        5
+                    ],
+                    "texture": "#1"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    0,
+                    9,
+                    0
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "from": [
+                0,
+                9,
+                0
+            ],
+            "to": [
+                22.627,
+                16,
+                0
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        9,
+                        0,
+                        12.5
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        16,
+                        16,
+                        0,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        11,
+                        9,
+                        11,
+                        12.5
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        11,
+                        9,
+                        0,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        22,
+                        9,
+                        11,
+                        9
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    0,
+                    9,
+                    16
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "from": [
+                0,
+                9,
+                16
+            ],
+            "to": [
+                22.627,
+                16,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        9,
+                        0,
+                        12.5
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        16,
+                        16,
+                        0,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        16,
+                        16,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        11,
+                        9,
+                        11,
+                        12.5
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        11,
+                        9,
+                        0,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        22,
+                        9,
+                        11,
+                        9
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench",
+    "render_type": "minecraft:cutout"
+}

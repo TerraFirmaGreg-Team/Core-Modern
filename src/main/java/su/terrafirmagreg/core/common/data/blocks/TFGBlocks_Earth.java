@@ -240,6 +240,34 @@ public class TFGBlocks_Earth {
     public static BlockEntry<OilSlickBlock> LIGHT_OIL_SLICK = createOilSlick("light_oil");
     public static BlockEntry<OilSlickBlock> HEAVY_OIL_SLICK = createOilSlick("heavy_oil");
 
+    public static final BlockEntry<WebBlock> SPIDER_WEB = TFGCore.REGISTRATE.block("spider_web", WebBlock::new)
+            .properties(p -> p
+                    .mapColor(MapColor.NONE)
+                    .strength(0.05F)
+                    .sound(SoundType.WOOL)
+                    .forceSolidOn()
+                    .noCollission()
+                    .requiresCorrectToolForDrops())
+            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.get(), provider.models().cross(ctx.getName(), provider.blockTexture(ctx.getEntry())).renderType("minecraft:cutout")))
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_HOE, BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_AXE, BlockTags.NEEDS_STONE_TOOL)
+            .loot((lootTables, block) -> TFGBlocks.dropBetween(SILK_FIBERS, 1, 3).accept(lootTables, block))
+            .item(BlockItem::new).build()
+            .register();
+
+    public static final BlockEntry<SpiderSacBlock> SPIDER_SAC = TFGCore.REGISTRATE.block("spider_sac", SpiderSacBlock::new)
+            .properties(p -> p
+                    .mapColor(MapColor.NONE)
+                    .strength(0.1F)
+                    .sound(SoundType.WOOL)
+                    .forceSolidOn()
+                    .noCollission()
+                    .requiresCorrectToolForDrops())
+            .blockstate((ctx, provider) -> provider.directionalBlock(ctx.get(), provider.models().getExistingFile(TFGCore.id("block/spider_sac"))))
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_HOE, BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_AXE, BlockTags.NEEDS_STONE_TOOL)
+            .loot((lootTables, block) -> TFGBlocks.dropBetween(SILK_FIBERS, 1, 2).accept(lootTables, block))
+            .item(BlockItem::new).build()
+            .register();
+
     // These are done separately to avoid cyclic references
     static {
         COARSE_SILTY_LOAM_DIRT = createCoarse("coarse_dirt/silty_loam",

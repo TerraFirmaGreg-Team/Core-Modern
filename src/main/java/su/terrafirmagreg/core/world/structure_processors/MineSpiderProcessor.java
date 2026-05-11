@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.world.TFGStructureProcessors;
 
 public class MineSpiderProcessor extends StructureProcessor {
@@ -46,8 +47,8 @@ public class MineSpiderProcessor extends StructureProcessor {
         if (originalBlockState.isAir()) {
             RandomSource random = settings.getRandom(blockPos);
 
-            if (random.nextBoolean()) {
-                return new StructureTemplate.StructureBlockInfo(blockPos, Blocks.COBWEB.defaultBlockState(), new CompoundTag());
+            if (random.nextBoolean() && random.nextBoolean()) {
+                return new StructureTemplate.StructureBlockInfo(blockPos, TFGBlocks_Earth.SPIDER_WEB.get().defaultBlockState(), new CompoundTag());
             }
 
             return currentBlockInfo;
@@ -72,7 +73,7 @@ public class MineSpiderProcessor extends StructureProcessor {
                 case 1 ->
                     new StructureTemplate.StructureBlockInfo(blockPos, COBWEB_SKELETON_B.defaultBlockState(), new CompoundTag());
                 case 2 ->
-                    new StructureTemplate.StructureBlockInfo(blockPos, Blocks.COBWEB.defaultBlockState(), new CompoundTag());
+                    new StructureTemplate.StructureBlockInfo(blockPos, TFGBlocks_Earth.SPIDER_WEB.get().defaultBlockState(), new CompoundTag());
                 default ->
                     new StructureTemplate.StructureBlockInfo(blockPos, Blocks.CAVE_AIR.defaultBlockState(), new CompoundTag());
             };
