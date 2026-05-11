@@ -20,6 +20,15 @@ public enum AsphaltRoadMarkingMask implements StringRepresentable {
         return this == NONE;
     }
 
+    public static AsphaltRoadMarkingMask fromSerializedName(String name) {
+        for (AsphaltRoadMarkingMask mask : values()) {
+            if (mask.name.equals(name)) {
+                return mask;
+            }
+        }
+        throw new IllegalArgumentException("Unknown asphalt road marking mask: " + name);
+    }
+
     @Override
     public @NotNull String getSerializedName() {
         return name;

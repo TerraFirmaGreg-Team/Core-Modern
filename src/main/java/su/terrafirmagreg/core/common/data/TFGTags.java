@@ -55,6 +55,7 @@ public final class TFGTags {
 
         public static final TagKey<Item> Explosives = createItemTag("explosives");
         public static final TagKey<Item> FirmalifeOvenTops = createItemTag("oven_tops");
+        public static final TagKey<Item> ROAD_MARKING_STENCILS = createItemTag("road_marking_stencils");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("interaction/brick");

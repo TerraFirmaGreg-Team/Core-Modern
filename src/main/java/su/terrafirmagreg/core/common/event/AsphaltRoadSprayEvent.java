@@ -31,8 +31,8 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStencilPattern;
-import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
+import su.terrafirmagreg.core.common.block.asphalt.TFGAsphaltRoadMarkings;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadSprayEvent {
@@ -76,8 +76,10 @@ public final class AsphaltRoadSprayEvent {
                 return;
             }
 
-            AsphaltRoadStencilPattern stencilPattern = resolveStencilPattern(player, sprayHand);
-            AsphaltRoadMarkingMask targetMask = maskFromPattern(stencilPattern);
+            AsphaltRoadMarkingMask targetMask = resolveStencilMask(player, sprayHand);
+            if (targetMask == null) {
+                return;
+            }
             DyeColor targetColor = sprayCanColor(sprayStack);
             if (targetColor == null) {
                 return;
@@ -107,7 +109,7 @@ public final class AsphaltRoadSprayEvent {
             return true;
         }
         ItemStack mainStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-        return mainStack.isEmpty() || RoadMarkingStencilItem.patternFrom(mainStack).isPresent();
+        return mainStack.isEmpty() || mainStack.is(TFGTags.Items.ROAD_MARKING_STENCILS);
     }
 
     @Nullable
@@ -166,17 +168,16 @@ public final class AsphaltRoadSprayEvent {
         return null;
     }
 
-    private static AsphaltRoadStencilPattern resolveStencilPattern(Player player, InteractionHand sprayHand) {
+    @Nullable
+    private static AsphaltRoadMarkingMask resolveStencilMask(Player player, InteractionHand sprayHand) {
         ItemStack opposite = player.getItemInHand(sprayHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
-        return RoadMarkingStencilItem.patternFrom(opposite).orElse(AsphaltRoadStencilPattern.LINE);
-    }
-
-    private static AsphaltRoadMarkingMask maskFromPattern(AsphaltRoadStencilPattern pattern) {
-        return switch (pattern) {
-            case LINE -> AsphaltRoadMarkingMask.LINE;
-            case CROSS -> AsphaltRoadMarkingMask.CROSS;
-            case ARROW -> AsphaltRoadMarkingMask.ARROW;
-        };
+        if (opposite.isEmpty()) {
+            return AsphaltRoadMarkingMask.LINE;
+        }
+        if (!opposite.is(TFGTags.Items.ROAD_MARKING_STENCILS)) {
+            return AsphaltRoadMarkingMask.LINE;
+        }
+        return TFGAsphaltRoadMarkings.maskForStencil(opposite).orElse(null);
     }
 
     @Nullable
