@@ -694,6 +694,45 @@
         "facing": "west",
         "mask": "slash_r"
       }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/block_overlay_t"
+      },
+      "when": {
+        "facing": "north",
+        "mask": "t"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/block_overlay_t",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "mask": "t"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/block_overlay_t",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "mask": "t"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/block_overlay_t",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "mask": "t"
+      }
     }
   ]
 }
