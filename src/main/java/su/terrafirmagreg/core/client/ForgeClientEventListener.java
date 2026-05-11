@@ -17,8 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
@@ -28,7 +27,7 @@ import su.terrafirmagreg.core.common.perf.SupportCache;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class ForgeClientEventListener {
-    private record AsphaltMarking(AsphaltRoadDecal decal, AsphaltRoadMarkingColor color) {
+    private record AsphaltMarking(AsphaltRoadMarkingMask mask, DyeColor color) {
     }
 
     /**
@@ -49,22 +48,12 @@ public class ForgeClientEventListener {
         final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
         final BlockColor grassBlockColor = (state, level, pos, tintIndex) -> state.getValue(ConnectedGrassBlock.SNOWY) || tintIndex != 1 ? -1 : grassColor.getColor(state, level, pos, tintIndex);
         final BlockColor asphaltDecalColor = (state, level, pos, tintIndex) -> {
-            if (tintIndex < 1 || tintIndex > 7)
+            if (tintIndex != 1)
                 return -1;
             AsphaltMarking marking = getAsphaltMarking(state);
-            if (marking == null)
+            if (marking == null || marking.mask().isNone())
                 return -1;
-            AsphaltRoadDecal expectedDecal = switch (tintIndex) {
-                case 1 -> AsphaltRoadDecal.LINE_HORIZONTAL;
-                case 2 -> AsphaltRoadDecal.LINE_VERTICAL;
-                case 3 -> AsphaltRoadDecal.CROSS;
-                case 4 -> AsphaltRoadDecal.ARROW_NORTH;
-                case 5 -> AsphaltRoadDecal.ARROW_EAST;
-                case 6 -> AsphaltRoadDecal.ARROW_SOUTH;
-                case 7 -> AsphaltRoadDecal.ARROW_WEST;
-                default -> null;
-            };
-            return marking.decal() == expectedDecal ? marking.color().getTextColor() : -1;
+            return marking.color().getTextColor();
         };
 
         event.register(tallGrassColor,
@@ -89,7 +78,7 @@ public class ForgeClientEventListener {
 
     public static void registerColorHandlerItems(RegisterColorHandlersEvent.Item event) {
         final ItemColor grassColor = (stack, tintIndex) -> TFCColors.getGrassColor(null, tintIndex);
-        final ItemColor asphaltLineColor = (stack, tintIndex) -> tintIndex >= 1 && tintIndex <= 7 ? DyeColor.WHITE.getTextColor() : -1;
+        final ItemColor asphaltLineColor = (stack, tintIndex) -> tintIndex == 1 ? DyeColor.WHITE.getTextColor() : -1;
 
         event.register(grassColor,
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());
@@ -99,11 +88,11 @@ public class ForgeClientEventListener {
     }
 
     private static AsphaltMarking getAsphaltMarking(BlockState state) {
-        if (state.hasProperty(AsphaltRoadBlock.DECAL) && state.hasProperty(AsphaltRoadBlock.COLOR)) {
-            return new AsphaltMarking(state.getValue(AsphaltRoadBlock.DECAL), state.getValue(AsphaltRoadBlock.COLOR));
+        if (state.hasProperty(AsphaltRoadBlock.MASK) && state.hasProperty(AsphaltRoadBlock.COLOR)) {
+            return new AsphaltMarking(state.getValue(AsphaltRoadBlock.MASK), state.getValue(AsphaltRoadBlock.COLOR));
         }
-        if (state.hasProperty(AsphaltRoadSlabBlock.DECAL) && state.hasProperty(AsphaltRoadSlabBlock.COLOR)) {
-            return new AsphaltMarking(state.getValue(AsphaltRoadSlabBlock.DECAL), state.getValue(AsphaltRoadSlabBlock.COLOR));
+        if (state.hasProperty(AsphaltRoadSlabBlock.MASK) && state.hasProperty(AsphaltRoadSlabBlock.COLOR)) {
+            return new AsphaltMarking(state.getValue(AsphaltRoadSlabBlock.MASK), state.getValue(AsphaltRoadSlabBlock.COLOR));
         }
         return null;
     }

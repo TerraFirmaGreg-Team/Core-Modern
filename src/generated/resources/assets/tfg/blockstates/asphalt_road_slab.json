@@ -1,0 +1,75 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_base"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_line"
+      },
+      "when": {
+        "facing": "north|south",
+        "mask": "line"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_line",
+        "y": 90
+      },
+      "when": {
+        "facing": "east|west",
+        "mask": "line"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_cross"
+      },
+      "when": {
+        "mask": "cross"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_arrow"
+      },
+      "when": {
+        "facing": "north",
+        "mask": "arrow"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_arrow",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "mask": "arrow"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_arrow",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "mask": "arrow"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/slab_overlay_arrow",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "mask": "arrow"
+      }
+    }
+  ]
+}

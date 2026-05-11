@@ -4,19 +4,15 @@ import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.util.StringRepresentable;
 
-public enum AsphaltRoadDecal implements StringRepresentable {
+public enum AsphaltRoadMarkingMask implements StringRepresentable {
     NONE("none"),
-    LINE_HORIZONTAL("line_horizontal"),
-    LINE_VERTICAL("line_vertical"),
+    LINE("line"),
     CROSS("cross"),
-    ARROW_NORTH("arrow_north"),
-    ARROW_EAST("arrow_east"),
-    ARROW_SOUTH("arrow_south"),
-    ARROW_WEST("arrow_west");
+    ARROW("arrow");
 
     private final String name;
 
-    AsphaltRoadDecal(String name) {
+    AsphaltRoadMarkingMask(String name) {
         this.name = name;
     }
 

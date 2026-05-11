@@ -29,8 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStencilPattern;
 import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
@@ -66,7 +65,7 @@ public final class AsphaltRoadSprayEvent {
 
         BlockState targetState;
         if (sprayStack.is(GTItems.SPRAY_SOLVENT.get())) {
-            if (currentDecal(state).isNone() && currentMarkingColor(state).isNone()) {
+            if (currentMask(state).isNone()) {
                 return;
             }
 
@@ -78,16 +77,19 @@ public final class AsphaltRoadSprayEvent {
             }
 
             AsphaltRoadStencilPattern stencilPattern = resolveStencilPattern(player, sprayHand);
-            AsphaltRoadDecal targetDecal = decalFromPattern(stencilPattern, sprayDirection);
-            AsphaltRoadMarkingColor targetColor = sprayCanColor(sprayStack);
+            AsphaltRoadMarkingMask targetMask = maskFromPattern(stencilPattern);
+            DyeColor targetColor = sprayCanColor(sprayStack);
+            if (targetColor == null) {
+                return;
+            }
 
-            if (isSameMarking(state, targetDecal, targetColor)) {
+            if (isSameMarking(state, targetMask, sprayDirection, targetColor)) {
                 event.setCanceled(true);
                 event.setCancellationResult(InteractionResult.SUCCESS);
                 return;
             }
 
-            targetState = applyMarking(state, targetDecal, targetColor);
+            targetState = applyMarking(state, targetMask, sprayDirection, targetColor);
         }
 
         level.setBlockAndUpdate(event.getPos(), targetState);
@@ -169,41 +171,28 @@ public final class AsphaltRoadSprayEvent {
         return RoadMarkingStencilItem.patternFrom(opposite).orElse(AsphaltRoadStencilPattern.LINE);
     }
 
-    private static AsphaltRoadDecal decalFromPattern(AsphaltRoadStencilPattern pattern, Direction direction) {
+    private static AsphaltRoadMarkingMask maskFromPattern(AsphaltRoadStencilPattern pattern) {
         return switch (pattern) {
-            case LINE -> decalFromHorizontalFacing(direction);
-            case CROSS -> AsphaltRoadDecal.CROSS;
-            case ARROW -> arrowFromHorizontalFacing(direction);
+            case LINE -> AsphaltRoadMarkingMask.LINE;
+            case CROSS -> AsphaltRoadMarkingMask.CROSS;
+            case ARROW -> AsphaltRoadMarkingMask.ARROW;
         };
     }
 
-    private static AsphaltRoadDecal decalFromHorizontalFacing(Direction facing) {
-        boolean vertical = facing == Direction.NORTH || facing == Direction.SOUTH;
-        return vertical ? AsphaltRoadDecal.LINE_VERTICAL : AsphaltRoadDecal.LINE_HORIZONTAL;
-    }
-
-    private static AsphaltRoadDecal arrowFromHorizontalFacing(Direction facing) {
-        return switch (facing) {
-            case NORTH -> AsphaltRoadDecal.ARROW_NORTH;
-            case EAST -> AsphaltRoadDecal.ARROW_EAST;
-            case SOUTH -> AsphaltRoadDecal.ARROW_SOUTH;
-            default -> AsphaltRoadDecal.ARROW_WEST;
-        };
-    }
-
-    private static AsphaltRoadMarkingColor sprayCanColor(ItemStack stack) {
+    @Nullable
+    private static DyeColor sprayCanColor(ItemStack stack) {
         DyeColor[] dyeColors = DyeColor.values();
         int limit = Math.min(GTItems.SPRAY_CAN_DYES.length, dyeColors.length);
         for (int i = 0; i < limit; i++) {
             if (stack.is(GTItems.SPRAY_CAN_DYES[i].get())) {
-                return AsphaltRoadMarkingColor.fromSerializedName(dyeColors[i].getName());
+                return dyeColors[i];
             }
         }
-        return AsphaltRoadMarkingColor.NONE;
+        return null;
     }
 
     private static boolean isSprayCan(ItemStack stack) {
-        return stack.is(GTItems.SPRAY_SOLVENT.get()) || !sprayCanColor(stack).isNone();
+        return stack.is(GTItems.SPRAY_SOLVENT.get()) || sprayCanColor(stack) != null;
     }
 
     private static boolean supportsRoadMarking(BlockState state) {
@@ -211,38 +200,48 @@ public final class AsphaltRoadSprayEvent {
                 || state.getBlock() instanceof AsphaltRoadSlabBlock;
     }
 
-    private static AsphaltRoadDecal currentDecal(BlockState state) {
+    private static AsphaltRoadMarkingMask currentMask(BlockState state) {
         if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.getValue(AsphaltRoadBlock.DECAL);
+            return state.getValue(AsphaltRoadBlock.MASK);
         }
-        return state.getValue(AsphaltRoadSlabBlock.DECAL);
+        return state.getValue(AsphaltRoadSlabBlock.MASK);
     }
 
-    private static AsphaltRoadMarkingColor currentMarkingColor(BlockState state) {
+    private static DyeColor currentMarkingColor(BlockState state) {
         if (state.getBlock() instanceof AsphaltRoadBlock) {
             return state.getValue(AsphaltRoadBlock.COLOR);
         }
         return state.getValue(AsphaltRoadSlabBlock.COLOR);
     }
 
-    private static boolean isSameMarking(BlockState state, AsphaltRoadDecal targetDecal, AsphaltRoadMarkingColor targetColor) {
-        return currentDecal(state) == targetDecal && currentMarkingColor(state) == targetColor;
+    private static Direction currentFacing(BlockState state) {
+        if (state.getBlock() instanceof AsphaltRoadBlock) {
+            return state.getValue(AsphaltRoadBlock.FACING);
+        }
+        return state.getValue(AsphaltRoadSlabBlock.FACING);
     }
 
-    private static BlockState applyMarking(BlockState state, AsphaltRoadDecal decal, AsphaltRoadMarkingColor color) {
+    private static boolean isSameMarking(BlockState state, AsphaltRoadMarkingMask targetMask, Direction targetFacing, DyeColor targetColor) {
+        return currentMask(state) == targetMask && currentFacing(state) == targetFacing && currentMarkingColor(state) == targetColor;
+    }
+
+    private static BlockState applyMarking(BlockState state, AsphaltRoadMarkingMask mask, Direction facing, DyeColor color) {
         if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.setValue(AsphaltRoadBlock.DECAL, decal).setValue(AsphaltRoadBlock.COLOR, color);
+            return state.setValue(AsphaltRoadBlock.MASK, mask)
+                    .setValue(AsphaltRoadBlock.FACING, facing)
+                    .setValue(AsphaltRoadBlock.COLOR, color);
         }
-        return state.setValue(AsphaltRoadSlabBlock.DECAL, decal).setValue(AsphaltRoadSlabBlock.COLOR, color);
+        return state.setValue(AsphaltRoadSlabBlock.MASK, mask)
+                .setValue(AsphaltRoadSlabBlock.FACING, facing)
+                .setValue(AsphaltRoadSlabBlock.COLOR, color);
     }
 
     private static BlockState clearMarking(BlockState state) {
         if (state.getBlock() instanceof AsphaltRoadBlock) {
-            return state.setValue(AsphaltRoadBlock.DECAL, AsphaltRoadDecal.NONE)
-                    .setValue(AsphaltRoadBlock.COLOR, AsphaltRoadMarkingColor.NONE);
+            return state.getBlock().defaultBlockState();
         }
-        return state.setValue(AsphaltRoadSlabBlock.DECAL, AsphaltRoadDecal.NONE)
-                .setValue(AsphaltRoadSlabBlock.COLOR, AsphaltRoadMarkingColor.NONE);
+        return state.getBlock().defaultBlockState()
+                .setValue(AsphaltRoadSlabBlock.WATERLOGGED, state.getValue(AsphaltRoadSlabBlock.WATERLOGGED));
     }
 
     private static void damageSprayCan(Player player, ItemStack held, InteractionHand sprayHand) {

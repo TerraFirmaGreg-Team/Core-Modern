@@ -3,14 +3,18 @@ package su.terrafirmagreg.core.common.block.asphalt;
 import com.therighthon.rnr.RNRHelpers;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -22,20 +26,22 @@ public class AsphaltRoadBlock extends Block {
     /** Same as {@code com.therighthon.rnr.common.block.PathHeightBlock}: matches {@code rnr:block/path_block} height (one voxel short). */
     protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
-    public static final EnumProperty<AsphaltRoadDecal> DECAL = EnumProperty.create("decal", AsphaltRoadDecal.class);
-    public static final EnumProperty<AsphaltRoadMarkingColor> COLOR = EnumProperty.create("color", AsphaltRoadMarkingColor.class);
+    public static final EnumProperty<AsphaltRoadMarkingMask> MASK = EnumProperty.create("mask", AsphaltRoadMarkingMask.class);
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
 
     public AsphaltRoadBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
-                .setValue(DECAL, AsphaltRoadDecal.NONE)
-                .setValue(COLOR, AsphaltRoadMarkingColor.NONE));
+                .setValue(MASK, AsphaltRoadMarkingMask.NONE)
+                .setValue(FACING, Direction.NORTH)
+                .setValue(COLOR, DyeColor.WHITE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(DECAL, COLOR);
+        builder.add(MASK, FACING, COLOR);
     }
 
     @Override
@@ -58,4 +64,5 @@ public class AsphaltRoadBlock extends Block {
         InteractionResult result = RNRHelpers.blockModRecipeCompatible(state, level, pos, player, hand, hit);
         return result == InteractionResult.FAIL ? InteractionResult.PASS : result;
     }
+
 }
