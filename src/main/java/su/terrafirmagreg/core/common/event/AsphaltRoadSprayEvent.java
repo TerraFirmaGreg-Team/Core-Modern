@@ -1,8 +1,5 @@
 package su.terrafirmagreg.core.common.event;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +18,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,18 +37,6 @@ import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadSprayEvent {
-
-    private static final Map<Item, AsphaltRoadMarkingColor> SPRAY_CAN_COLORS;
-
-    static {
-        DyeColor[] dyeColors = DyeColor.values();
-        int limit = Math.min(GTItems.SPRAY_CAN_DYES.length, dyeColors.length);
-        Map<Item, AsphaltRoadMarkingColor> colors = new HashMap<>(limit);
-        for (int i = 0; i < limit; i++) {
-            colors.put(GTItems.SPRAY_CAN_DYES[i].get(), AsphaltRoadMarkingColor.fromSerializedName(dyeColors[i].getName()));
-        }
-        SPRAY_CAN_COLORS = Map.copyOf(colors);
-    }
 
     private AsphaltRoadSprayEvent() {
     }
@@ -208,7 +192,14 @@ public final class AsphaltRoadSprayEvent {
     }
 
     private static AsphaltRoadMarkingColor sprayCanColor(ItemStack stack) {
-        return SPRAY_CAN_COLORS.getOrDefault(stack.getItem(), AsphaltRoadMarkingColor.NONE);
+        DyeColor[] dyeColors = DyeColor.values();
+        int limit = Math.min(GTItems.SPRAY_CAN_DYES.length, dyeColors.length);
+        for (int i = 0; i < limit; i++) {
+            if (stack.is(GTItems.SPRAY_CAN_DYES[i].get())) {
+                return AsphaltRoadMarkingColor.fromSerializedName(dyeColors[i].getName());
+            }
+        }
+        return AsphaltRoadMarkingColor.NONE;
     }
 
     private static boolean isSprayCan(ItemStack stack) {

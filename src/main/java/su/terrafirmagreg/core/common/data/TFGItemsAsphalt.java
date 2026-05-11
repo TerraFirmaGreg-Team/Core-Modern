@@ -19,8 +19,8 @@ public final class TFGItemsAsphalt {
             .defaultModel()
             .register();
 
-    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_LINES = TFGCore.REGISTRATE
-            .item("asphalt_road_stencil_lines", p -> new RoadMarkingStencilItem(p, AsphaltRoadStencilPattern.LINE))
+    public static final ItemEntry<RoadMarkingStencilItem> ASPHALT_ROAD_STENCIL_LINE = TFGCore.REGISTRATE
+            .item("asphalt_road_stencil_line", p -> new RoadMarkingStencilItem(p, AsphaltRoadStencilPattern.LINE))
             .properties(p -> p.stacksTo(16))
             .defaultModel()
             .register();
