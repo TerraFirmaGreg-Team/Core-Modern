@@ -1,17 +1,10 @@
 package su.terrafirmagreg.core.common.event;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import com.gregtechceu.gtceu.api.item.IComponentItem;
-import com.gregtechceu.gtceu.api.item.component.IItemComponent;
-import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.data.GTSoundEntries;
-import com.gregtechceu.gtceu.common.item.ColorSprayBehaviour;
 import com.therighthon.rnr.common.RNRTags;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -24,8 +17,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -39,13 +30,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadDecal;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingColor;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSprayLogic;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
-public final class AsphaltRoadEvent {
+public final class AsphaltRoadPourEvent {
     private static final ResourceLocation ASPHALT_MIX_ID = TFGCore.id("asphalt_mix");
     private static final int FIELD_POUR_MB = 1000;
     private static final int PATCH_POUR_MB = 50;
@@ -56,7 +44,7 @@ public final class AsphaltRoadEvent {
         PATCH_BASE_TO_HOT
     }
 
-    private AsphaltRoadEvent() {
+    private AsphaltRoadPourEvent() {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -66,10 +54,6 @@ public final class AsphaltRoadEvent {
         InteractionHand hand = event.getHand();
         ItemStack held = player.getItemInHand(hand);
         BlockState state = level.getBlockState(event.getPos());
-
-        if (!level.isClientSide() && AsphaltRoadSprayLogic.supportsRoadMarking(state) && handleSprayOnRoad(event, player, state)) {
-            return;
-        }
 
         if (!heldItemContainsAsphaltMix(held)) {
             return;
@@ -171,7 +155,7 @@ public final class AsphaltRoadEvent {
         if (stack.isEmpty()) {
             return false;
         }
-        if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(AsphaltRoadEvent::handlerHasNonEmptyAsphaltMix).orElse(false)) {
+        if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(AsphaltRoadPourEvent::handlerHasNonEmptyAsphaltMix).orElse(false)) {
             return true;
         }
         return FluidUtil.getFluidContained(stack)
@@ -251,67 +235,5 @@ public final class AsphaltRoadEvent {
         }
         ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
         return ASPHALT_MIX_ID.equals(id);
-    }
-
-    private static boolean handleSprayOnRoad(PlayerInteractEvent.RightClickBlock event, Player player, BlockState state) {
-        AsphaltRoadSprayLogic.SprayContext spray = AsphaltRoadSprayLogic.resolveSprayContext(player, event.getHand());
-        if (spray == null) {
-            return false;
-        }
-        InteractionHand sprayHand = spray.hand();
-        ItemStack sprayStack = spray.stack();
-
-        if (AsphaltRoadSprayLogic.isSolventSprayCan(sprayStack)) {
-            if (AsphaltRoadSprayLogic.currentDecal(state).isNone() && AsphaltRoadSprayLogic.currentMarkingColor(state).isNone()) {
-                return false;
-            }
-            event.getLevel().setBlockAndUpdate(event.getPos(), AsphaltRoadSprayLogic.clearMarking(state));
-            damageSprayCan(player, sprayStack, sprayHand);
-            playSprayCanSound(event.getLevel(), event.getPos());
-            event.setCanceled(true);
-            event.setCancellationResult(InteractionResult.SUCCESS);
-            player.swing(sprayHand, true);
-            return true;
-        }
-
-        AsphaltRoadMarkingColor targetColor = AsphaltRoadSprayLogic.sprayCanColor(sprayStack);
-
-        @Nullable
-        BlockHitResult blockHit = event.getHitVec();
-        Vec3 hitWorld = blockHit != null ? blockHit.getLocation() : null;
-        Direction hitFace = blockHit != null ? blockHit.getDirection() : event.getFace();
-        AsphaltRoadDecal targetDecal = AsphaltRoadSprayLogic.resolveTargetDecal(player, sprayHand, hitWorld, hitFace, event.getPos());
-        if (AsphaltRoadSprayLogic.isSameMarking(state, targetDecal, targetColor)) {
-            event.setCanceled(true);
-            event.setCancellationResult(InteractionResult.SUCCESS);
-            return true;
-        }
-
-        event.getLevel().setBlockAndUpdate(event.getPos(), AsphaltRoadSprayLogic.applyMarking(state, targetDecal, targetColor));
-        damageSprayCan(player, sprayStack, sprayHand);
-        playSprayCanSound(event.getLevel(), event.getPos());
-        event.setCanceled(true);
-        event.setCancellationResult(InteractionResult.SUCCESS);
-        player.swing(sprayHand, true);
-        return true;
-    }
-
-    private static void damageSprayCan(Player player, ItemStack held, InteractionHand sprayHand) {
-        if (player.getAbilities().instabuild) {
-            return;
-        }
-        if (held.getItem() instanceof IComponentItem componentItem) {
-            for (IItemComponent component : componentItem.getComponents()) {
-                if (component instanceof ColorSprayBehaviour spray) {
-                    spray.useItemDurability(player, sprayHand, held, GTItems.SPRAY_EMPTY.asStack());
-                    return;
-                }
-            }
-        }
-        held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(sprayHand));
-    }
-
-    private static void playSprayCanSound(Level level, BlockPos pos) {
-        GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, pos, 0.85F, 1.0F);
     }
 }
