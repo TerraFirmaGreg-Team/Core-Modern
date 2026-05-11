@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.common.event;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,10 +17,11 @@ import com.simibubi.create.content.kinetics.deployer.DeployerFakePlayer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,7 +30,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
@@ -39,7 +42,16 @@ import su.terrafirmagreg.core.common.item.RoadMarkingStencilItem;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadSprayEvent {
 
-    private record SprayContext(InteractionHand hand, ItemStack stack) {
+    private static final Map<Item, AsphaltRoadMarkingColor> SPRAY_CAN_COLORS;
+
+    static {
+        DyeColor[] dyeColors = DyeColor.values();
+        int limit = Math.min(GTItems.SPRAY_CAN_DYES.length, dyeColors.length);
+        Map<Item, AsphaltRoadMarkingColor> colors = new HashMap<>(limit);
+        for (int i = 0; i < limit; i++) {
+            colors.put(GTItems.SPRAY_CAN_DYES[i].get(), AsphaltRoadMarkingColor.fromSerializedName(dyeColors[i].getName()));
+        }
+        SPRAY_CAN_COLORS = Map.copyOf(colors);
     }
 
     private AsphaltRoadSprayEvent() {
@@ -54,84 +66,54 @@ public final class AsphaltRoadSprayEvent {
         }
 
         Player player = event.getEntity();
-        SprayContext spray = resolveSprayContext(player, event.getHand());
-        if (spray == null) {
-            return;
+        InteractionHand sprayHand = event.getHand();
+        ItemStack sprayStack = player.getItemInHand(sprayHand);
+        if (isSprayCan(sprayStack)) {
+            if (!canUseSprayFromHand(player, sprayHand)) {
+                return;
+            }
+        } else {
+            sprayHand = sprayHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+            sprayStack = player.getItemInHand(sprayHand);
+            if (!isSprayCan(sprayStack) || !canUseSprayFromHand(player, sprayHand)) {
+                return;
+            }
         }
 
-        if (isSolventSprayCan(spray.stack())) {
-            handleSolventSpray(event, player, state, spray);
-            return;
+        BlockState targetState;
+        if (sprayStack.is(GTItems.SPRAY_SOLVENT.get())) {
+            if (currentDecal(state).isNone() && currentMarkingColor(state).isNone()) {
+                return;
+            }
+
+            targetState = clearMarking(state);
+        } else {
+            Direction sprayDirection = resolveSprayDirection(event, player);
+            if (sprayDirection == null) {
+                return;
+            }
+
+            AsphaltRoadStencilPattern stencilPattern = resolveStencilPattern(player, sprayHand);
+            AsphaltRoadDecal targetDecal = decalFromPattern(stencilPattern, sprayDirection);
+            AsphaltRoadMarkingColor targetColor = sprayCanColor(sprayStack);
+
+            if (isSameMarking(state, targetDecal, targetColor)) {
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.SUCCESS);
+                return;
+            }
+
+            targetState = applyMarking(state, targetDecal, targetColor);
         }
 
-        handleColorSpray(event, player, state, spray);
-    }
+        level.setBlockAndUpdate(event.getPos(), targetState);
+        damageSprayCan(player, sprayStack, sprayHand);
 
-    private static void handleSolventSpray(
-            PlayerInteractEvent.RightClickBlock event,
-            Player player,
-            BlockState state,
-            SprayContext spray) {
-        if (currentDecal(state).isNone() && currentMarkingColor(state).isNone()) {
-            return;
-        }
+        GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, event.getPos(), 0.85F, 1.0F);
+        player.swing(sprayHand, true);
 
-        finishSpray(event, player, spray, clearMarking(state), true);
-    }
-
-    private static void handleColorSpray(
-            PlayerInteractEvent.RightClickBlock event,
-            Player player,
-            BlockState state,
-            SprayContext spray) {
-        AsphaltRoadMarkingColor targetColor = sprayCanColor(spray.stack());
-        Direction sprayDirection = resolveSprayDirection(event, player);
-        if (sprayDirection == null) {
-            return;
-        }
-        AsphaltRoadStencilPattern stencilPattern = resolveStencilPattern(player, spray.hand());
-        AsphaltRoadDecal targetDecal = decalFromPattern(stencilPattern, sprayDirection);
-
-        if (isSameMarking(state, targetDecal, targetColor)) {
-            event.setCanceled(true);
-            event.setCancellationResult(InteractionResult.SUCCESS);
-            return;
-        }
-
-        finishSpray(event, player, spray, applyMarking(state, targetDecal, targetColor), true);
-    }
-
-    private static void finishSpray(
-            PlayerInteractEvent.RightClickBlock event,
-            Player player,
-            SprayContext spray,
-            BlockState targetState,
-            boolean consumeDurability) {
-        event.getLevel().setBlockAndUpdate(event.getPos(), targetState);
-        if (consumeDurability) {
-            damageSprayCan(player, spray.stack(), spray.hand());
-            playSprayCanSound(event.getLevel(), event.getPos());
-            player.swing(spray.hand(), true);
-        }
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
-    }
-
-    @Nullable
-    private static SprayContext resolveSprayContext(Player player, InteractionHand usedHand) {
-        ItemStack usedStack = player.getItemInHand(usedHand);
-        if (isSprayCan(usedStack)) {
-            if (!canUseSprayFromHand(player, usedHand)) {
-                return null;
-            }
-            return new SprayContext(usedHand, usedStack);
-        }
-        InteractionHand oppositeHand = usedHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-        ItemStack oppositeStack = player.getItemInHand(oppositeHand);
-        if (isSprayCan(oppositeStack) && canUseSprayFromHand(player, oppositeHand)) {
-            return new SprayContext(oppositeHand, oppositeStack);
-        }
-        return null;
     }
 
     private static boolean canUseSprayFromHand(Player player, InteractionHand sprayHand) {
@@ -226,25 +208,11 @@ public final class AsphaltRoadSprayEvent {
     }
 
     private static AsphaltRoadMarkingColor sprayCanColor(ItemStack stack) {
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
-        if (id == null || !"gtceu".equals(id.getNamespace())) {
-            return AsphaltRoadMarkingColor.NONE;
-        }
-        String path = id.getPath();
-        if (!path.endsWith("_dye_spray_can")) {
-            return AsphaltRoadMarkingColor.NONE;
-        }
-        String colorName = path.substring(0, path.length() - "_dye_spray_can".length());
-        return AsphaltRoadMarkingColor.fromSerializedName(colorName);
-    }
-
-    private static boolean isSolventSprayCan(ItemStack stack) {
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
-        return id != null && "gtceu".equals(id.getNamespace()) && "solvent_spray_can".equals(id.getPath());
+        return SPRAY_CAN_COLORS.getOrDefault(stack.getItem(), AsphaltRoadMarkingColor.NONE);
     }
 
     private static boolean isSprayCan(ItemStack stack) {
-        return isSolventSprayCan(stack) || !sprayCanColor(stack).isNone();
+        return stack.is(GTItems.SPRAY_SOLVENT.get()) || !sprayCanColor(stack).isNone();
     }
 
     private static boolean supportsRoadMarking(BlockState state) {
@@ -299,10 +267,6 @@ public final class AsphaltRoadSprayEvent {
             }
         }
         held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(sprayHand));
-    }
-
-    private static void playSprayCanSound(Level level, BlockPos pos) {
-        GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, pos, 0.85F, 1.0F);
     }
 
 }
