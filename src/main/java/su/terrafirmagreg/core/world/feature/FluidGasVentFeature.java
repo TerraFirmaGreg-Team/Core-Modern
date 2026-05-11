@@ -55,15 +55,15 @@ public class FluidGasVentFeature extends Feature<FluidGasVentConfig> {
                     continue;
 
                 if (dist < 1.5) {
-                    level.setBlock(mutablePos, cobbleState, 3);
+                    setBlock(level, mutablePos, cobbleState);
                     if (random.nextFloat() < 0.8) {
-                        level.setBlock(mutablePos.offset(0, 1, 0), config.ventState(), 3);
+                        setBlock(level, mutablePos.offset(0, 1, 0), config.ventState());
                     }
                     placed = true;
                 } else if (random.nextFloat() < config.chance()) {
-                    level.setBlock(mutablePos, cobbleState, 3);
+                    setBlock(level, mutablePos, cobbleState);
                     if (random.nextFloat() < 0.2) {
-                        level.setBlock(mutablePos.offset(0, 1, 0), config.ventState(), 3);
+                        setBlock(level, mutablePos.offset(0, 1, 0), config.ventState());
                     }
                     placed = true;
                 }

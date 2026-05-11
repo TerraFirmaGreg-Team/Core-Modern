@@ -32,6 +32,9 @@ public class WorldgenVersionEvents {
     // Cleared at server start so stale warnings from previous sessions don't persist.
     private static final List<String> pendingOpWarnings = new ArrayList<>();
 
+    /** Ops who already received {@link #pendingOpWarnings} this server session — avoid repeating on reconnect. */
+    private static final Set<UUID> opWarningsSentThisSession = new HashSet<>();
+
     @SubscribeEvent
     public void onServerAboutToStart(ServerAboutToStartEvent event) {
         final MinecraftServer server = event.getServer();
@@ -57,6 +60,7 @@ public class WorldgenVersionEvents {
             final int defaultVersion = isNewWorld ? WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT : 0;
             WorldgenVersionData.OVERWORLD_VERSION = data.getGeneratedVersion(overworld).orElse(defaultVersion);
         }
+        WorldgenVersionData.OVERWORLD_SESSION_VERSION_RESOLVED = true;
     }
 
     @SubscribeEvent
@@ -128,6 +132,9 @@ public class WorldgenVersionEvents {
         final MinecraftServer server = player.getServer();
         if (server == null || !server.getPlayerList().isOp(player.getGameProfile()))
             return;
+        if (!opWarningsSentThisSession.add(player.getUUID())) {
+            return;
+        }
 
         for (String msg : pendingOpWarnings) {
             player.sendSystemMessage(Component.literal(msg));
@@ -137,6 +144,8 @@ public class WorldgenVersionEvents {
     @SubscribeEvent
     public void onServerStopped(ServerStoppedEvent event) {
         WorldgenVersionData.OVERWORLD_VERSION = 0;
+        WorldgenVersionData.OVERWORLD_SESSION_VERSION_RESOLVED = false;
         pendingOpWarnings.clear();
+        opWarningsSentThisSession.clear();
     }
 }

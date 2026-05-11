@@ -1,4 +1,0 @@
-{
-    "parent": "minecraft:block/cross",
-    "textures": {"cross": "tfg:block/plant/flame_vine/body_1"}
-}

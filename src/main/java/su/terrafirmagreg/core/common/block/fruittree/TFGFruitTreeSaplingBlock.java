@@ -77,7 +77,7 @@ public class TFGFruitTreeSaplingBlock extends FruitTreeSaplingBlock {
                         .setValue(PipeBlock.DOWN, true)
                         .setValue(TFCBlockStateProperties.SAPLINGS, internalSapling)
                         .setValue(TFCBlockStateProperties.STAGE_3, onBranch ? 1 : 0),
-                3);
+                Block.UPDATE_ALL);
         TFGTickCounterBlockEntity.reset(level, pos);
     }
 }

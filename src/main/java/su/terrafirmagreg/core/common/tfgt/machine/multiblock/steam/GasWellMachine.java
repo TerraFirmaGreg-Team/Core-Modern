@@ -11,11 +11,16 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.client.model.machine.MachineRenderState;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
@@ -25,6 +30,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
+
+import lombok.Getter;
 
 import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellRecipeLogic;
 
@@ -36,19 +43,14 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
     private NotifiableFluidTank inputFluidTank;
     @Nullable
     private NotifiableFluidTank outputFluidTank;
-    @Nullable
-    private NotifiableItemStackHandler inputItemHandler;
 
+    @Getter
     private final GasWellRecipeLogic logic;
-    private com.gregtechceu.gtceu.api.machine.TickableSubscription tickSubscription;
+    private TickableSubscription tickSubscription;
 
     public GasWellMachine(IMachineBlockEntity holder) {
         super(holder);
         this.logic = new GasWellRecipeLogic(this);
-    }
-
-    public GasWellRecipeLogic getLogic() {
-        return logic;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
         super.onStructureFormed();
         inputFluidTank = null;
         outputFluidTank = null;
-        inputItemHandler = null;
+        setActive(false);
 
         for (IMultiPart part : getParts()) {
             for (var handlerList : part.getRecipeHandlers()) {
@@ -69,12 +71,6 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
                     } else if (handlerList.getHandlerIO().support(IO.OUT) && outputFluidTank == null) {
                         outputFluidTank = (NotifiableFluidTank) fluidCap.get(0);
                     }
-                }
-
-                if (!itemCap.isEmpty()
-                        && handlerList.getHandlerIO().support(IO.IN)
-                        && inputItemHandler == null) {
-                    inputItemHandler = (NotifiableItemStackHandler) itemCap.get(0);
                 }
             }
         }
@@ -97,7 +93,11 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
     @Override
     public void onUnload() {
         super.onUnload();
-        resetState();
+        logic.resetFull();
+        unsubscribe(tickSubscription);
+        tickSubscription = null;
+        inputFluidTank = null;
+        outputFluidTank = null;
     }
 
     private void resetState() {
@@ -106,7 +106,7 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
         logic.reset();
         inputFluidTank = null;
         outputFluidTank = null;
-        inputItemHandler = null;
+        setActive(false);
     }
 
     @Nullable
@@ -119,9 +119,28 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
         return outputFluidTank;
     }
 
+    public void setActive(boolean active) {
+        MachineRenderState renderState = getRenderState();
+        if (renderState == null)
+            return;
+        if (renderState.hasProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS)) {
+            setRenderState(renderState.setValue(
+                    GTMachineModelProperties.RECIPE_LOGIC_STATUS,
+                    active ? RecipeLogic.Status.WORKING : RecipeLogic.Status.IDLE));
+        }
+    }
+
     @Nullable
     public NotifiableItemStackHandler getInputItemHandler() {
-        return inputItemHandler;
+        for (IMultiPart part : getParts()) {
+            if (!(part instanceof ItemBusPartMachine bus))
+                continue;
+            var inventory = bus.getInventory();
+            if (inventory.getHandlerIO() == IO.IN) {
+                return inventory;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -157,7 +176,7 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
             if (getLevel() instanceof ServerLevel serverLevel) {
                 int chunkX = SectionPos.blockToSectionCoord(getPos().getX());
                 int chunkZ = SectionPos.blockToSectionCoord(getPos().getZ());
-                var savedData = BedrockFluidVeinSavedData.getOrCreate(serverLevel);
+                var savedData = logic.getSavedData(serverLevel);
                 var entry = savedData.getFluidVeinWorldEntry(chunkX, chunkZ);
 
                 if (entry != null && entry.getDefinition() != null) {

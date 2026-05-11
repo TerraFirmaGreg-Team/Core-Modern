@@ -78,8 +78,8 @@ public enum TFGPlant implements RegistryPlant {
 
     // Backports
     EYEBLOSSOM(BlockType.STANDARD, 1.0F),
-    PALE_HANGING_MOSS(BlockType.WEEPING, 1.0F),
-    PALE_HANGING_MOSS_PLANT(BlockType.WEEPING_TOP, 1.0F),
+    PALE_HANGING_MOSS_PLANT(BlockType.WEEPING, 1.0F),
+    PALE_HANGING_MOSS(BlockType.WEEPING_TOP, 1.0F),
     ;
 
     private final float speedFactor;

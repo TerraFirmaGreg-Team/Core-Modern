@@ -53,9 +53,9 @@ public abstract class AbstractLayerBlock extends SnowLayerBlock {
         playerWillDestroy(level, pos, state, player);
         final int prevLayers = state.getValue(LAYERS);
         if (prevLayers > 1 && !player.isCreative()) {
-            return level.setBlock(pos, state.setValue(LAYERS, prevLayers - 1), level.isClientSide ? 11 : 3);
+            return level.setBlock(pos, state.setValue(LAYERS, prevLayers - 1), level.isClientSide ? 11 : Block.UPDATE_ALL);
         }
-        return level.setBlock(pos, fluid.createLegacyBlock(), level.isClientSide ? 11 : 3);
+        return level.setBlock(pos, fluid.createLegacyBlock(), level.isClientSide ? 11 : Block.UPDATE_ALL);
     }
 
     @Nullable

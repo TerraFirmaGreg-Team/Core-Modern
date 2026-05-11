@@ -276,7 +276,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
             return false;
 
         // Place the base course block. And play sound.
-        server.setBlock(pos, baseCourse.defaultBlockState(), 3);
+        server.setBlock(pos, baseCourse.defaultBlockState(), Block.UPDATE_ALL);
         server.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 0.2f, 1.0f);
 
         if (tryApplyTopInventoryTransformation(server, pos)) {
@@ -375,7 +375,7 @@ public final class RNRPlow extends AbstractDrawnInventoryEntity {
             return null;
         }
 
-        level.setBlock(pos, out, 3);
+        level.setBlock(pos, out, Block.UPDATE_ALL);
         return Boolean.TRUE.equals(recipe.consumesItem());
     }
 
