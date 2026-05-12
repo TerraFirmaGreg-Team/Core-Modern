@@ -28,6 +28,8 @@ public final class AsphaltRoadHelper {
     public static final int POURING_SPREAD_BATCH_PER_TICK = 1;
     public static final int POURING_TICKS_UNTIL_HOT = 10;
     public static final int POURING_TICK_DELAY = 1;
+    public static final int FIELD_POUR_MB = 1000;
+    public static final int PATCH_POUR_MB = 50;
 
     // Asphalt Road Properties
     public static final EnumProperty<AsphaltRoadMarkingMask> MASK = EnumProperty.create("mask", AsphaltRoadMarkingMask.class);

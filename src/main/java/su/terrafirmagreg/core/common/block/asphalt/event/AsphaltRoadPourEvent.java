@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import com.therighthon.rnr.common.RNRTags;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -16,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -27,16 +25,14 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
+import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadPourEvent {
-    private static final ResourceLocation ASPHALT_MIX_ID = TFGCore.id("asphalt_mix");
-    private static final int FIELD_POUR_MB = 1000;
-    private static final int PATCH_POUR_MB = 50;
 
     private enum AsphaltMixInteraction {
         NONE,
@@ -64,7 +60,9 @@ public final class AsphaltRoadPourEvent {
             return;
         }
 
-        int costMb = mode == AsphaltMixInteraction.FIELD_POUR ? FIELD_POUR_MB : PATCH_POUR_MB;
+        int costMb = mode == AsphaltMixInteraction.FIELD_POUR
+                ? AsphaltRoadHelper.FIELD_POUR_MB
+                : AsphaltRoadHelper.PATCH_POUR_MB;
         if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, costMb)) {
             return;
         }
@@ -112,7 +110,7 @@ public final class AsphaltRoadPourEvent {
             return;
         }
         BlockPos pourPos = clicked.above();
-        if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, FIELD_POUR_MB)) {
+        if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, AsphaltRoadHelper.FIELD_POUR_MB)) {
             return;
         }
         BlockState space = level.getBlockState(pourPos);
@@ -123,7 +121,7 @@ public final class AsphaltRoadPourEvent {
         if (!level.setBlock(pourPos, pourState, Block.UPDATE_ALL)) {
             return;
         }
-        if (!player.getAbilities().instabuild && !tryConsumeFluidMb(player, hand, held, FIELD_POUR_MB)) {
+        if (!player.getAbilities().instabuild && !tryConsumeFluidMb(player, hand, held, AsphaltRoadHelper.FIELD_POUR_MB)) {
             level.removeBlock(pourPos, false);
             return;
         }
@@ -137,13 +135,13 @@ public final class AsphaltRoadPourEvent {
         if (!baseState.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
             return;
         }
-        if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, PATCH_POUR_MB)) {
+        if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, AsphaltRoadHelper.PATCH_POUR_MB)) {
             return;
         }
         if (!level.setBlock(clicked, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL)) {
             return;
         }
-        if (!player.getAbilities().instabuild && !tryConsumeFluidMb(player, hand, held, PATCH_POUR_MB)) {
+        if (!player.getAbilities().instabuild && !tryConsumeFluidMb(player, hand, held, AsphaltRoadHelper.PATCH_POUR_MB)) {
             level.setBlock(clicked, baseState, Block.UPDATE_ALL);
             return;
         }
@@ -178,10 +176,7 @@ public final class AsphaltRoadPourEvent {
     }
 
     private static int simulateFluidDrain(ItemStack stack, int mb) {
-        Fluid mix = asphaltMixFluid();
-        if (mix == Fluids.EMPTY) {
-            return 0;
-        }
+        Fluid mix = TFGFluids.ASPHALT_MIX.getSource();
         FluidStack want = new FluidStack(mix, mb);
         return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
                 .map(handler -> handler.drain(want, FluidAction.SIMULATE).getAmount())
@@ -195,10 +190,7 @@ public final class AsphaltRoadPourEvent {
         if (player.getAbilities().instabuild) {
             return true;
         }
-        Fluid mix = asphaltMixFluid();
-        if (mix == Fluids.EMPTY) {
-            return false;
-        }
+        Fluid mix = TFGFluids.ASPHALT_MIX.getSource();
         FluidStack want = new FluidStack(mix, mb);
         return held.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler -> {
             if (handler.drain(want, FluidAction.SIMULATE).getAmount() < mb) {
@@ -224,16 +216,8 @@ public final class AsphaltRoadPourEvent {
         level.playSound(null, x, y, z, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 0.95F + level.getRandom().nextFloat() * 0.1F);
     }
 
-    private static Fluid asphaltMixFluid() {
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(ASPHALT_MIX_ID);
-        return fluid == null || fluid == Fluids.EMPTY ? Fluids.EMPTY : fluid;
-    }
-
     private static boolean isAsphaltMixFluid(Fluid fluid) {
-        if (fluid == null || fluid == Fluids.EMPTY) {
-            return false;
-        }
-        ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
-        return ASPHALT_MIX_ID.equals(id);
+        return fluid == TFGFluids.ASPHALT_MIX.getSource()
+                || fluid == TFGFluids.ASPHALT_MIX.getFlowing();
     }
 }
