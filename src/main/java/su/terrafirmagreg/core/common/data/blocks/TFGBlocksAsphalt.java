@@ -18,8 +18,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -110,11 +108,11 @@ public final class TFGBlocksAsphalt {
             }
             ModelFile modelFile = overlayModel(prov, "block_overlay_" + mask.getSerializedName(), overlay, "mask_" + mask.getSerializedName());
             if (mask.getDirs() == 0) {
-                addFlatOverlay(builder, AsphaltRoadBlock.MASK, mask, modelFile);
+                addFlatOverlay(builder, mask, modelFile);
             } else if (mask.getDirs() == 2) {
-                addTwoWayOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, mask, modelFile);
+                addTwoWayOverlays(builder, mask, modelFile);
             } else {
-                addDirectionalOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, mask, modelFile);
+                addDirectionalOverlays(builder, mask, modelFile);
             }
         }
     }
@@ -134,11 +132,11 @@ public final class TFGBlocksAsphalt {
             }
             ModelFile modelFile = overlayModel(prov, "slab_overlay_" + mask.getSerializedName(), overlay, "mask_" + mask.getSerializedName());
             if (mask.getDirs() == 0) {
-                addFlatOverlay(builder, AsphaltRoadBlock.MASK, mask, modelFile);
+                addFlatOverlay(builder, mask, modelFile);
             } else if (mask.getDirs() == 2) {
-                addTwoWayOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, mask, modelFile);
+                addTwoWayOverlays(builder, mask, modelFile);
             } else {
-                addDirectionalOverlays(builder, AsphaltRoadBlock.MASK, AsphaltRoadBlock.FACING, mask, modelFile);
+                addDirectionalOverlays(builder, mask, modelFile);
             }
         }
     }
@@ -161,40 +159,35 @@ public final class TFGBlocksAsphalt {
     }
 
     private static void addTwoWayOverlays(MultiPartBlockStateBuilder builder,
-            EnumProperty<AsphaltRoadMarkingMask> maskProperty,
-            DirectionProperty facingProperty,
-            AsphaltRoadMarkingMask mask, ModelFile model) {
+                                          AsphaltRoadMarkingMask mask, ModelFile model) {
         builder.part()
                 .modelFile(model).addModel()
-                .condition(maskProperty, mask)
-                .condition(facingProperty, Direction.NORTH, Direction.SOUTH)
+                .condition(AsphaltRoadBlock.MASK, mask)
+                .condition(AsphaltRoadBlock.FACING, Direction.NORTH, Direction.SOUTH)
                 .end();
         builder.part()
                 .modelFile(model).rotationY(90).addModel()
-                .condition(maskProperty, mask)
-                .condition(facingProperty, Direction.EAST, Direction.WEST)
+                .condition(AsphaltRoadBlock.MASK, mask)
+                .condition(AsphaltRoadBlock.FACING, Direction.EAST, Direction.WEST)
                 .end();
     }
 
     private static void addDirectionalOverlays(MultiPartBlockStateBuilder builder,
-            EnumProperty<AsphaltRoadMarkingMask> maskProperty,
-            DirectionProperty facingProperty,
-            AsphaltRoadMarkingMask mask, ModelFile model) {
+                                               AsphaltRoadMarkingMask mask, ModelFile model) {
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             builder.part()
                     .modelFile(model).rotationY(rotationY(direction)).addModel()
-                    .condition(maskProperty, mask)
-                    .condition(facingProperty, direction)
+                    .condition(AsphaltRoadBlock.MASK, mask)
+                    .condition(AsphaltRoadBlock.FACING, direction)
                     .end();
         }
     }
 
     private static void addFlatOverlay(MultiPartBlockStateBuilder builder,
-            EnumProperty<AsphaltRoadMarkingMask> maskProperty,
-            AsphaltRoadMarkingMask mask, ModelFile model) {
+                                       AsphaltRoadMarkingMask mask, ModelFile model) {
         builder.part()
                 .modelFile(model).addModel()
-                .condition(maskProperty, mask)
+                .condition(AsphaltRoadBlock.MASK, mask)
                 .end();
     }
 

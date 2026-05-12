@@ -7,11 +7,14 @@ import net.minecraft.util.StringRepresentable;
 public enum AsphaltRoadMarkingMask implements StringRepresentable {
     NONE("none"),
     ARROW("arrow"),
-    CORNER("corner"),
-    CROSS("cross", 0),
     LINE("line", 2),
     LINE_SLASH_L("line_slash_l"),
     LINE_SLASH_R("line_slash_r"),
+    SLASH_L("slash_l"),
+    SLASH_R("slash_r"),
+    CROSS("cross", 0),
+    T("t"),
+    CORNER("corner"),
     NUM_0("num_0"),
     NUM_1("num_1"),
     NUM_2("num_2"),
@@ -22,10 +25,7 @@ public enum AsphaltRoadMarkingMask implements StringRepresentable {
     NUM_7("num_7"),
     NUM_8("num_8"),
     NUM_9("num_9"),
-    NUMBER("number"),
-    SLASH_L("slash_l"),
-    SLASH_R("slash_r"),
-    T("t"),
+    NUMBER("number")
     ;
 
     private final String name;
