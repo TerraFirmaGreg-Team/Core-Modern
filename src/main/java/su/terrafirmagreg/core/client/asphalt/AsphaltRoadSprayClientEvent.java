@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.event;
+package su.terrafirmagreg.core.client.asphalt;
 
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.Mod;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
+import su.terrafirmagreg.core.common.block.asphalt.event.AsphaltRoadSprayEvent;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 @OnlyIn(Dist.CLIENT)
@@ -42,8 +43,8 @@ public final class AsphaltRoadSprayClientEvent {
     private static final float ROAD_PREVIEW_Y = 15.03F / 16.0F;
     private static final float SLAB_PREVIEW_Y = 7.03F / 16.0F;
     private static final float GUIDE_LINE_OFFSET_Y = 0.01F / 16.0F;
-    private static final float PREVIEW_MIN = -0.01F;
-    private static final float PREVIEW_MAX = 1.01F;
+    private static final float MIN = -0.01F;
+    private static final float MAX = 1.01F;
 
     private AsphaltRoadSprayClientEvent() {
     }
@@ -109,10 +110,10 @@ public final class AsphaltRoadSprayClientEvent {
         PoseStack.Pose pose = poseStack.last();
         Matrix4f position = pose.pose();
         Matrix3f normal = pose.normal();
-        vertex(buffer, position, normal, PREVIEW_MIN, 0.0F, PREVIEW_MIN, sprite.getU(0.0F), sprite.getV(0.0F), color);
-        vertex(buffer, position, normal, PREVIEW_MIN, 0.0F, PREVIEW_MAX, sprite.getU(0.0F), sprite.getV(16.0F), color);
-        vertex(buffer, position, normal, PREVIEW_MAX, 0.0F, PREVIEW_MAX, sprite.getU(16.0F), sprite.getV(16.0F), color);
-        vertex(buffer, position, normal, PREVIEW_MAX, 0.0F, PREVIEW_MIN, sprite.getU(16.0F), sprite.getV(0.0F), color);
+        vertex(buffer, position, normal, MIN, 0.0F, MIN, sprite.getU(0.0F), sprite.getV(0.0F), color);
+        vertex(buffer, position, normal, MIN, 0.0F, MAX, sprite.getU(0.0F), sprite.getV(16.0F), color);
+        vertex(buffer, position, normal, MAX, 0.0F, MAX, sprite.getU(16.0F), sprite.getV(16.0F), color);
+        vertex(buffer, position, normal, MAX, 0.0F, MIN, sprite.getU(16.0F), sprite.getV(0.0F), color);
 
         poseStack.popPose();
     }
@@ -154,17 +155,17 @@ public final class AsphaltRoadSprayClientEvent {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.lineWidth(2.0F);
 
-        float r = 1.0F;
-        float g = 1.0F;
+        float r = 0.25F;
+        float g = 0.8F;
         float b = 1.0F;
-        float a = 0.6F;
+        float a = 0.75F;
 
-        line(pose, buffer, 0.0F, topY, 0.0F, 1.0F, topY, 0.0F, r, g, b, a);
-        line(pose, buffer, 1.0F, topY, 0.0F, 1.0F, topY, 1.0F, r, g, b, a);
-        line(pose, buffer, 1.0F, topY, 1.0F, 0.0F, topY, 1.0F, r, g, b, a);
-        line(pose, buffer, 0.0F, topY, 1.0F, 0.0F, topY, 0.0F, r, g, b, a);
-        line(pose, buffer, 0.0F, topY, 0.0F, 1.0F, topY, 1.0F, r, g, b, a);
-        line(pose, buffer, 0.0F, topY, 1.0F, 1.0F, topY, 0.0F, r, g, b, a);
+        line(pose, buffer, MIN, topY, MIN, MAX, topY, MIN, r, g, b, a);
+        line(pose, buffer, MAX, topY, MIN, MAX, topY, MAX, r, g, b, a);
+        line(pose, buffer, MAX, topY, MAX, MIN, topY, MAX, r, g, b, a);
+        line(pose, buffer, MIN, topY, MAX, MIN, topY, MIN, r, g, b, a);
+        line(pose, buffer, MIN, topY, MIN, MAX, topY, MAX, r, g, b, a);
+        line(pose, buffer, MIN, topY, MAX, MAX, topY, MIN, r, g, b, a);
     }
 
     private static void line(PoseStack.Pose pose, VertexConsumer buffer, float x1, float y1, float z1, float x2, float y2, float z2,

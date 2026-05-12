@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.blockentity;
+package su.terrafirmagreg.core.common.block.asphalt.blockentity;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;

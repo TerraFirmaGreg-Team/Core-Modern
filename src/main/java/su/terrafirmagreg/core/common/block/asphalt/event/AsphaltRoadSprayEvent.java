@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.event;
+package su.terrafirmagreg.core.common.block.asphalt.event;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +41,7 @@ public final class AsphaltRoadSprayEvent {
     private AsphaltRoadSprayEvent() {
     }
 
-    record SprayAction(
+    public record SprayAction(
             InteractionHand sprayHand,
             ItemStack sprayStack,
             boolean solvent,
@@ -85,7 +85,7 @@ public final class AsphaltRoadSprayEvent {
     }
 
     @Nullable
-    static SprayAction resolveSprayAction(Level level, BlockPos pos, BlockState state, Player player, InteractionHand hand,
+    public static SprayAction resolveSprayAction(Level level, BlockPos pos, BlockState state, Player player, InteractionHand hand,
             @Nullable Direction hitFace, @Nullable BlockHitResult hit) {
         if (!supportsRoadMarking(state)) {
             return null;
@@ -226,7 +226,7 @@ public final class AsphaltRoadSprayEvent {
         return null;
     }
 
-    static boolean isSprayCan(ItemStack stack) {
+    public static boolean isSprayCan(ItemStack stack) {
         return stack.is(GTItems.SPRAY_SOLVENT.get()) || sprayCanColor(stack) != null;
     }
 

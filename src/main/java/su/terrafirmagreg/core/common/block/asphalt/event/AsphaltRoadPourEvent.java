@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.event;
+package su.terrafirmagreg.core.common.block.asphalt.event;
 
 import org.jetbrains.annotations.NotNull;
 

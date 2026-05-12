@@ -18,7 +18,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import su.terrafirmagreg.core.common.blockentity.AsphaltPouringSpreadBlockEntity;
+import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
 public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
