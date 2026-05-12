@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import com.therighthon.rnr.common.block.PathStairBlock;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -48,7 +50,7 @@ public final class TFGBlocksAsphalt {
             AsphaltRoadPouringBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
             .properties(p -> p.strength(-1.0F, 3600000.0F).sound(SoundType.MUD).mapColor(MapColor.COLOR_BLACK).noLootTable())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .blockstate(TFGBlocksAsphalt::asphaltRoadPouringBlockstate)
             .loot((prov, block) -> prov.add(block, LootTable.lootTable()))
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
@@ -56,7 +58,7 @@ public final class TFGBlocksAsphalt {
     public static final BlockEntry<AsphaltRoadHotBlock> ASPHALT_ROAD_HOT = TFGCore.REGISTRATE.block("asphalt_road_hot", AsphaltRoadHotBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
             .properties(p -> p.strength(1.3f, 6).sound(SoundType.TUFF).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .blockstate(TFGBlocksAsphalt::asphaltRoadHotBlockstate)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
             .onRegister(block -> TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TICK_COUNTER, block))
             .loot(TFGBlocksAsphalt::asphaltLoot)
@@ -77,7 +79,7 @@ public final class TFGBlocksAsphalt {
             p -> new AsphaltRoadStairsBlock(() -> ASPHALT_ROAD.get().defaultBlockState(), p))
             .initialProperties(ASPHALT_ROAD)
             .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
-            .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
+            .blockstate(TFGBlocksAsphalt::asphaltRoadStairsBlockstate)
             .loot(TFGBlocksAsphalt::asphaltLoot)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.STAIRS, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
@@ -93,12 +95,25 @@ public final class TFGBlocksAsphalt {
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
             .register();
 
+    private static void asphaltRoadPouringBlockstate(DataGenContext<Block, AsphaltRoadPouringBlock> ctx, RegistrateBlockstateProvider prov) {
+        ModelFile parent = asphaltPathBlockModel(prov, "pouring", TFGCore.id("block/asphalt_road/hot"), TFGCore.id("block/asphalt_road/hot"));
+        var builder = prov.getVariantBuilder(ctx.getEntry());
+        for (int level = 0; level <= AsphaltRoadPouringBlock.MAX_VISUAL_LEVEL; level++) {
+            builder.partialState()
+                    .with(AsphaltRoadPouringBlock.ASPHALT_LEVEL, level)
+                    .modelForState()
+                    .modelFile(asphaltPouringLevelModel(prov, parent, level))
+                    .addModel();
+        }
+    }
+
+    private static void asphaltRoadHotBlockstate(DataGenContext<Block, AsphaltRoadHotBlock> ctx, RegistrateBlockstateProvider prov) {
+        prov.simpleBlock(ctx.getEntry(), asphaltPathBlockModel(prov, "hot", TFGCore.id("block/asphalt_road/hot"), ResourceLocation.withDefaultNamespace("block/gravel")));
+    }
+
     private static void asphaltRoadBlockstate(DataGenContext<Block, AsphaltRoadBlock> ctx, RegistrateBlockstateProvider prov) {
         MultiPartBlockStateBuilder builder = prov.getMultipartBuilder(ctx.getEntry());
-        ModelFile base = prov.models()
-                .withExistingParent("asphalt_road/block_base", ResourceLocation.fromNamespaceAndPath("rnr", "block/path_block"))
-                .texture("gravel", ResourceLocation.withDefaultNamespace("block/gravel"))
-                .texture("top", TFGCore.id("block/asphalt_road/block"));
+        ModelFile base = asphaltPathBlockModel(prov, "block_base", TFGCore.id("block/asphalt_road/block"), ResourceLocation.withDefaultNamespace("block/gravel"));
         builder.part().modelFile(base).addModel().end();
 
         ModelFile overlay = overlayTemplate(prov, "block_overlay", 14.992F, 15.015F);
@@ -115,6 +130,19 @@ public final class TFGBlocksAsphalt {
                 addDirectionalOverlays(builder, mask, modelFile);
             }
         }
+    }
+
+    private static void asphaltRoadStairsBlockstate(DataGenContext<Block, AsphaltRoadStairsBlock> ctx, RegistrateBlockstateProvider prov) {
+        ModelFile straight = asphaltStairsModel(prov, "stairs", ResourceLocation.fromNamespaceAndPath("rnr", "block/path_stairs"));
+        ModelFile inner = asphaltStairsModel(prov, "stairs_inner", ResourceLocation.fromNamespaceAndPath("rnr", "block/path_inner_stairs"));
+        ModelFile outer = asphaltStairsModel(prov, "stairs_outer", ResourceLocation.fromNamespaceAndPath("rnr", "block/path_outer_stairs"));
+        MultiPartBlockStateBuilder builder = prov.getMultipartBuilder(ctx.getEntry());
+
+        addStairModel(builder, StairsShape.STRAIGHT, straight);
+        addStairModel(builder, StairsShape.OUTER_RIGHT, outer);
+        addStairModel(builder, StairsShape.OUTER_LEFT, outer);
+        addStairModel(builder, StairsShape.INNER_RIGHT, inner);
+        addStairModel(builder, StairsShape.INNER_LEFT, inner);
     }
 
     private static void asphaltRoadSlabBlockstate(DataGenContext<Block, AsphaltRoadSlabBlock> ctx, RegistrateBlockstateProvider prov) {
@@ -141,6 +169,37 @@ public final class TFGBlocksAsphalt {
         }
     }
 
+    private static ModelFile asphaltPathBlockModel(RegistrateBlockstateProvider prov, String name, ResourceLocation top, ResourceLocation gravel) {
+        return prov.models()
+                .withExistingParent("asphalt_road/" + name, ResourceLocation.fromNamespaceAndPath("rnr", "block/path_block"))
+                .texture("gravel", gravel)
+                .texture("top", top);
+    }
+
+    private static ModelFile asphaltPouringLevelModel(RegistrateBlockstateProvider prov, ModelFile parent, int level) {
+        return prov.models()
+                .withExistingParent("asphalt_road/pouring_" + level, parent.getLocation())
+                .ao(false)
+                .element()
+                .from(0.0F, 0.0F, 0.0F)
+                .to(16.0F, 1.0F + 14.0F * level / AsphaltRoadPouringBlock.MAX_VISUAL_LEVEL, 16.0F)
+                .face(Direction.EAST).texture("#top").end()
+                .face(Direction.SOUTH).texture("#top").end()
+                .face(Direction.NORTH).texture("#top").end()
+                .face(Direction.WEST).texture("#top").end()
+                .face(Direction.UP).texture("#top").end()
+                .face(Direction.DOWN).cullface(Direction.DOWN).texture("#gravel").end()
+                .end();
+    }
+
+    private static ModelFile asphaltStairsModel(RegistrateBlockstateProvider prov, String name, ResourceLocation parent) {
+        return prov.models()
+                .withExistingParent("asphalt_road/" + name, parent)
+                .texture("side", TFGCore.id("block/asphalt_road/block"))
+                .texture("top", TFGCore.id("block/asphalt_road/block"))
+                .texture("bottom", TFGCore.id("block/asphalt_road/block"));
+    }
+
     private static ModelFile overlayTemplate(RegistrateBlockstateProvider prov, String name, float yMin, float yMax) {
         return prov.models()
                 .withExistingParent("asphalt_road/" + name, ResourceLocation.withDefaultNamespace("block/block"))
@@ -158,8 +217,38 @@ public final class TFGBlocksAsphalt {
                 .texture("decal", TFGCore.id("block/asphalt_road/" + texture));
     }
 
+    private static void addStairModel(MultiPartBlockStateBuilder builder, StairsShape shape, ModelFile model) {
+        if (shape == StairsShape.OUTER_LEFT || shape == StairsShape.INNER_LEFT) {
+            addStairPart(builder, shape, Direction.EAST, model, 270);
+            addStairPart(builder, shape, Direction.WEST, model, 90);
+            addStairPart(builder, shape, Direction.SOUTH, model, 0);
+            addStairPart(builder, shape, Direction.NORTH, model, 180);
+            return;
+        }
+        addStairPart(builder, shape, Direction.EAST, model, 0);
+        addStairPart(builder, shape, Direction.WEST, model, 180);
+        addStairPart(builder, shape, Direction.SOUTH, model, 90);
+        addStairPart(builder, shape, Direction.NORTH, model, 270);
+    }
+
+    private static void addStairPart(MultiPartBlockStateBuilder builder, StairsShape shape, Direction facing, ModelFile model, int rotationY) {
+        if (rotationY == 0) {
+            builder.part()
+                    .modelFile(model).addModel()
+                    .condition(PathStairBlock.SHAPE, shape)
+                    .condition(PathStairBlock.FACING, facing)
+                    .end();
+            return;
+        }
+        builder.part()
+                .modelFile(model).rotationY(rotationY).uvLock(true).addModel()
+                .condition(PathStairBlock.SHAPE, shape)
+                .condition(PathStairBlock.FACING, facing)
+                .end();
+    }
+
     private static void addTwoWayOverlays(MultiPartBlockStateBuilder builder,
-                                          AsphaltRoadMarkingMask mask, ModelFile model) {
+            AsphaltRoadMarkingMask mask, ModelFile model) {
         builder.part()
                 .modelFile(model).addModel()
                 .condition(AsphaltRoadBlock.MASK, mask)
@@ -173,7 +262,7 @@ public final class TFGBlocksAsphalt {
     }
 
     private static void addDirectionalOverlays(MultiPartBlockStateBuilder builder,
-                                               AsphaltRoadMarkingMask mask, ModelFile model) {
+            AsphaltRoadMarkingMask mask, ModelFile model) {
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             builder.part()
                     .modelFile(model).rotationY(rotationY(direction)).addModel()
@@ -184,7 +273,7 @@ public final class TFGBlocksAsphalt {
     }
 
     private static void addFlatOverlay(MultiPartBlockStateBuilder builder,
-                                       AsphaltRoadMarkingMask mask, ModelFile model) {
+            AsphaltRoadMarkingMask mask, ModelFile model) {
         builder.part()
                 .modelFile(model).addModel()
                 .condition(AsphaltRoadBlock.MASK, mask)
