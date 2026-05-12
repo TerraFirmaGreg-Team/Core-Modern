@@ -188,7 +188,7 @@ public class InterplanetaryLogisticsMonitorMachine extends MetaMachine implement
                     .setButtonBackground(GuiTextures.BUTTON);
             if (!isRemote())
                 destinationSelector.setCandidatesSupplier(() -> uiParts.stream()
-                        .filter((p) -> p.isReceiverPart() && !Objects.equals(p.getUiLabel(), "[unnamed]") && !p.getPartId().dimension().equals(part.getPartId().dimension()))
+                        .filter((p) -> p.isReceiverPart() && !Objects.equals(p.getUiLabel(), "[unnamed]"))
                         .map(NetworkPart::getUiLabel).toList());
             destinationSelector.setValue("[none]");
             DimensionalBlockPos receiver = config.getReceiverPartID();
