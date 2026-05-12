@@ -15,10 +15,11 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 public final class AsphaltRoadHelper {
 
-    public static final long HEAT_DAMAGE_INTERVAL_TICKS = 20L;
+    public static final int TEMPERATURE = 430;
 
-    public static final int HOT_TEMPERATURE_KELVIN = 430;
     public static final int HOT_TICKS_UNTIL_SET = 200;
+
+    public static final long HEAT_DAMAGE_INTERVAL_TICKS = 20L;
     public static final int HOT_CONTACT_MAX_DAMAGE = 1;
     public static final float HOT_CONTACT_DAMAGE_MULTIPLIER = 1.0F;
     public static final float HOT_ITEM_DAMAGE = 1.0F;
@@ -64,7 +65,7 @@ public final class AsphaltRoadHelper {
             return;
         }
 
-        EntityDamageUtil.applyTemperatureDamage(living, HOT_TEMPERATURE_KELVIN, HOT_CONTACT_DAMAGE_MULTIPLIER,
+        EntityDamageUtil.applyTemperatureDamage(living, TEMPERATURE, HOT_CONTACT_DAMAGE_MULTIPLIER,
                 HOT_CONTACT_MAX_DAMAGE);
     }
 }

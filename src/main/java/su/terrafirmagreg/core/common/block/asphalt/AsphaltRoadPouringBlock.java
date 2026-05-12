@@ -84,14 +84,13 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
             int visualLevel = spreadEntity.currentVisualLevel();
             if (state.getValue(ASPHALT_LEVEL) != visualLevel) {
                 level.setBlock(pos, state.setValue(ASPHALT_LEVEL, visualLevel), Block.UPDATE_CLIENTS);
-                state = level.getBlockState(pos);
             }
             if (!done) {
                 level.scheduleTick(pos, this, AsphaltRoadHelper.POURING_TICK_DELAY);
                 return;
             }
         } else {
-            level.scheduleTick(pos, this, AsphaltRoadHelper.POURING_TICK_DELAY);
+            level.removeBlock(pos, false);
             return;
         }
         level.removeBlock(pos, false);

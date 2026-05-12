@@ -11,12 +11,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 @SuppressWarnings("deprecation")
-public class AsphaltRoadStairsBlock extends PathStairBlock {
+public class AsphaltRoadStairsBlock extends PathStairBlock implements SimpleWaterloggedBlock {
 
     public AsphaltRoadStairsBlock(Supplier<BlockState> referenceBlockState, BlockBehaviour.Properties properties) {
         super(referenceBlockState, properties, RoadsAndRoofs.FAST_PATH_SPEED);
