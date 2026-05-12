@@ -20,16 +20,6 @@ public class AsphaltRoadHotBlock extends Block {
     /** Same geometry as {@link AsphaltRoadBlock} / RNR path_block. */
     protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
-    /**
-     * Surface temperature in Kelvin. Used with GregTech-style heat damage scaling (see
-     * {@link com.gregtechceu.gtceu.utils.EntityDamageUtil#applyTemperatureDamage}) so standing on hot asphalt behaves
-     * like touching a warm/hot fluid or carrying a hot ingot, including GT chest armor heat resistance.
-     */
-    public static final int TEMPERATURE_KELVIN = 430;
-
-    /** Keep hot asphalt for about one minute before setting. */
-    public static final int TICKS_UNTIL_SET = 200;
-
     public AsphaltRoadHotBlock(Properties properties) {
         super(properties);
     }
@@ -54,7 +44,7 @@ public class AsphaltRoadHotBlock extends Block {
         super.onPlace(state, level, pos, oldState, isMoving);
         TickCounterBlockEntity.reset(level, pos);
         if (!level.isClientSide) {
-            level.scheduleTick(pos, this, TICKS_UNTIL_SET);
+            level.scheduleTick(pos, this, AsphaltRoadHelper.HOT_TICKS_UNTIL_SET);
         }
     }
 

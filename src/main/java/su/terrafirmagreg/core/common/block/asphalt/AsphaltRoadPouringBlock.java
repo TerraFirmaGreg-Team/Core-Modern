@@ -26,9 +26,6 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
     /** Same geometry as {@link AsphaltRoadBlock} / RNR path_block. */
     protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
-    public static final int TICKS_UNTIL_HOT = 10;
-    public static final int MAX_SPREAD_BLOCKS = 20;
-    public static final int SPREAD_BATCH_PER_TICK = 1;
     public static final int MAX_VISUAL_LEVEL = 7;
     public static final IntegerProperty ASPHALT_LEVEL = IntegerProperty.create("asphalt_level", 0, MAX_VISUAL_LEVEL);
 
@@ -62,7 +59,7 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
         if (!level.isClientSide) {
-            level.scheduleTick(pos, this, TICKS_UNTIL_HOT);
+            level.scheduleTick(pos, this, AsphaltRoadHelper.POURING_TICKS_UNTIL_HOT);
         }
     }
 
@@ -90,11 +87,11 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
                 state = level.getBlockState(pos);
             }
             if (!done) {
-                level.scheduleTick(pos, this, 1);
+                level.scheduleTick(pos, this, AsphaltRoadHelper.POURING_TICK_DELAY);
                 return;
             }
         } else {
-            level.scheduleTick(pos, this, 1);
+            level.scheduleTick(pos, this, AsphaltRoadHelper.POURING_TICK_DELAY);
             return;
         }
         level.removeBlock(pos, false);

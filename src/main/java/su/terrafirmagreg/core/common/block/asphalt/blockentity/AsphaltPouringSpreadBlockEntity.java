@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadPouringBlock;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 
@@ -39,7 +40,7 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
         }
 
         int processed = 0;
-        while (spreadIndex < spreadPlan.length && processed < AsphaltRoadPouringBlock.SPREAD_BATCH_PER_TICK) {
+        while (spreadIndex < spreadPlan.length && processed < AsphaltRoadHelper.POURING_SPREAD_BATCH_PER_TICK) {
             BlockPos baseNeighbor = BlockPos.of(spreadPlan[spreadIndex++]);
             BlockState baseState = level.getBlockState(baseNeighbor);
             if (baseState.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
@@ -83,7 +84,7 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
         visited.put(sourceBase, 0);
         queue.add(new Path(sourceBase, 0));
 
-        while (!queue.isEmpty() && visited.size() < AsphaltRoadPouringBlock.MAX_SPREAD_BLOCKS) {
+        while (!queue.isEmpty() && visited.size() < AsphaltRoadHelper.POURING_SPREAD_MAX_BLOCKS) {
             final Path current = queue.remove();
 
             for (Direction direction : Direction.Plane.HORIZONTAL) {
@@ -96,7 +97,7 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
                 visited.put(next, current.cost + 1);
                 queue.add(new Path(next, current.cost + 1));
 
-                if (visited.size() >= AsphaltRoadPouringBlock.MAX_SPREAD_BLOCKS) {
+                if (visited.size() >= AsphaltRoadHelper.POURING_SPREAD_MAX_BLOCKS) {
                     break;
                 }
             }
