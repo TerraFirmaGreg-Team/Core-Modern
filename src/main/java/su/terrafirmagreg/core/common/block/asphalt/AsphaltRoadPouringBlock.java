@@ -23,11 +23,9 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
 public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
 
-    /** Same geometry as {@link AsphaltRoadBlock} / RNR path_block. */
-    protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
-
     public static final int MAX_VISUAL_LEVEL = 7;
     public static final IntegerProperty ASPHALT_LEVEL = IntegerProperty.create("asphalt_level", 0, MAX_VISUAL_LEVEL);
+    protected static final VoxelShape[] SHAPES = createShapes();
 
     public AsphaltRoadPouringBlock(Properties properties) {
         super(properties);
@@ -42,7 +40,7 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return PATH_SHAPE;
+        return SHAPES[state.getValue(ASPHALT_LEVEL)];
     }
 
     @Override
@@ -100,5 +98,13 @@ public class AsphaltRoadPouringBlock extends Block implements EntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new AsphaltPouringSpreadBlockEntity(TFGBlockEntities.ASPHALT_POURING_SPREAD.get(), pos, state);
+    }
+
+    private static VoxelShape[] createShapes() {
+        VoxelShape[] shapes = new VoxelShape[MAX_VISUAL_LEVEL + 1];
+        for (int level = 0; level <= MAX_VISUAL_LEVEL; level++) {
+            shapes[level] = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D + 14.0D * level / MAX_VISUAL_LEVEL, 16.0D);
+        }
+        return shapes;
     }
 }
