@@ -13,9 +13,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -26,22 +23,18 @@ public class AsphaltRoadBlock extends Block {
     /** Same as {@code com.therighthon.rnr.common.block.PathHeightBlock}: matches {@code rnr:block/path_block} height (one voxel short). */
     protected static final VoxelShape PATH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
-    public static final EnumProperty<AsphaltRoadMarkingMask> MASK = EnumProperty.create("mask", AsphaltRoadMarkingMask.class);
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
-
     public AsphaltRoadBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
-                .setValue(MASK, AsphaltRoadMarkingMask.NONE)
-                .setValue(FACING, Direction.NORTH)
-                .setValue(COLOR, DyeColor.WHITE));
+                .setValue(AsphaltRoadHelper.MASK, AsphaltRoadMarkingMask.NONE)
+                .setValue(AsphaltRoadHelper.FACING, Direction.NORTH)
+                .setValue(AsphaltRoadHelper.COLOR, DyeColor.WHITE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(MASK, FACING, COLOR);
+        builder.add(AsphaltRoadHelper.MASK, AsphaltRoadHelper.FACING, AsphaltRoadHelper.COLOR);
     }
 
     @Override

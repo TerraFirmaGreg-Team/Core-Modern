@@ -16,9 +16,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
@@ -88,11 +87,8 @@ public class ForgeClientEventListener {
     }
 
     private static AsphaltMarking getAsphaltMarking(BlockState state) {
-        if (state.hasProperty(AsphaltRoadBlock.MASK) && state.hasProperty(AsphaltRoadBlock.COLOR)) {
-            return new AsphaltMarking(state.getValue(AsphaltRoadBlock.MASK), state.getValue(AsphaltRoadBlock.COLOR));
-        }
-        if (state.hasProperty(AsphaltRoadSlabBlock.MASK) && state.hasProperty(AsphaltRoadSlabBlock.COLOR)) {
-            return new AsphaltMarking(state.getValue(AsphaltRoadSlabBlock.MASK), state.getValue(AsphaltRoadSlabBlock.COLOR));
+        if (state.hasProperty(AsphaltRoadHelper.MASK) && state.hasProperty(AsphaltRoadHelper.COLOR)) {
+            return new AsphaltMarking(state.getValue(AsphaltRoadHelper.MASK), state.getValue(AsphaltRoadHelper.COLOR));
         }
         return null;
     }

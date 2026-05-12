@@ -16,8 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -27,23 +25,20 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 @SuppressWarnings("deprecation")
 public class AsphaltRoadSlabBlock extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final EnumProperty<AsphaltRoadMarkingMask> MASK = EnumProperty.create("mask", AsphaltRoadMarkingMask.class);
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 7.0D, 16.0D);
 
     public AsphaltRoadSlabBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState()
                 .setValue(WATERLOGGED, false)
-                .setValue(MASK, AsphaltRoadMarkingMask.NONE)
-                .setValue(FACING, Direction.NORTH)
-                .setValue(COLOR, DyeColor.WHITE));
+                .setValue(AsphaltRoadHelper.MASK, AsphaltRoadMarkingMask.NONE)
+                .setValue(AsphaltRoadHelper.FACING, Direction.NORTH)
+                .setValue(AsphaltRoadHelper.COLOR, DyeColor.WHITE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED, MASK, FACING, COLOR);
+        builder.add(WATERLOGGED, AsphaltRoadHelper.MASK, AsphaltRoadHelper.FACING, AsphaltRoadHelper.COLOR);
     }
 
     @Override

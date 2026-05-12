@@ -30,6 +30,7 @@ import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHotBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadPouringBlock;
@@ -250,13 +251,13 @@ public final class TFGBlocksAsphalt {
             AsphaltRoadMarkingMask mask, ModelFile model) {
         builder.part()
                 .modelFile(model).addModel()
-                .condition(AsphaltRoadBlock.MASK, mask)
-                .condition(AsphaltRoadBlock.FACING, Direction.NORTH, Direction.SOUTH)
+                .condition(AsphaltRoadHelper.MASK, mask)
+                .condition(AsphaltRoadHelper.FACING, Direction.NORTH, Direction.SOUTH)
                 .end();
         builder.part()
                 .modelFile(model).rotationY(90).addModel()
-                .condition(AsphaltRoadBlock.MASK, mask)
-                .condition(AsphaltRoadBlock.FACING, Direction.EAST, Direction.WEST)
+                .condition(AsphaltRoadHelper.MASK, mask)
+                .condition(AsphaltRoadHelper.FACING, Direction.EAST, Direction.WEST)
                 .end();
     }
 
@@ -265,8 +266,8 @@ public final class TFGBlocksAsphalt {
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             builder.part()
                     .modelFile(model).rotationY(rotationY(direction)).addModel()
-                    .condition(AsphaltRoadBlock.MASK, mask)
-                    .condition(AsphaltRoadBlock.FACING, direction)
+                    .condition(AsphaltRoadHelper.MASK, mask)
+                    .condition(AsphaltRoadHelper.FACING, direction)
                     .end();
         }
     }
@@ -275,7 +276,7 @@ public final class TFGBlocksAsphalt {
             AsphaltRoadMarkingMask mask, ModelFile model) {
         builder.part()
                 .modelFile(model).addModel()
-                .condition(AsphaltRoadBlock.MASK, mask)
+                .condition(AsphaltRoadHelper.MASK, mask)
                 .end();
     }
 
