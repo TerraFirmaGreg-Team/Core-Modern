@@ -91,13 +91,12 @@ public final class TFGBlocksAsphalt {
             .register();
 
     private static void asphaltRoadPouringBlockstate(DataGenContext<Block, AsphaltRoadPouringBlock> ctx, RegistrateBlockstateProvider prov) {
-        ModelFile parent = asphaltPathBlockModel(prov, "pouring", TFGCore.id("block/asphalt_road/hot"), TFGCore.id("block/asphalt_road/hot"));
         var builder = prov.getVariantBuilder(ctx.getEntry());
         for (int level = 0; level <= AsphaltRoadPouringBlock.MAX_VISUAL_LEVEL; level++) {
             builder.partialState()
                     .with(AsphaltRoadPouringBlock.ASPHALT_LEVEL, level)
                     .modelForState()
-                    .modelFile(asphaltPouringLevelModel(prov, parent, level))
+                    .modelFile(asphaltPouringLevelModel(prov, level))
                     .addModel();
         }
     }
@@ -171,9 +170,11 @@ public final class TFGBlocksAsphalt {
                 .texture("top", top);
     }
 
-    private static ModelFile asphaltPouringLevelModel(RegistrateBlockstateProvider prov, ModelFile parent, int level) {
+    private static ModelFile asphaltPouringLevelModel(RegistrateBlockstateProvider prov, int level) {
         return prov.models()
-                .withExistingParent("asphalt_road/pouring_" + level, parent.getLocation())
+                .withExistingParent("asphalt_road/pouring_" + level, ResourceLocation.withDefaultNamespace("block/block"))
+                .texture("particle", TFGCore.id("block/asphalt_road/hot"))
+                .texture("top", TFGCore.id("block/asphalt_road/hot"))
                 .ao(false)
                 .element()
                 .from(0.0F, 0.0F, 0.0F)
@@ -183,7 +184,7 @@ public final class TFGBlocksAsphalt {
                 .face(Direction.NORTH).texture("#top").end()
                 .face(Direction.WEST).texture("#top").end()
                 .face(Direction.UP).texture("#top").end()
-                .face(Direction.DOWN).cullface(Direction.DOWN).texture("#gravel").end()
+                .face(Direction.DOWN).cullface(Direction.DOWN).texture("#top").end()
                 .end();
     }
 

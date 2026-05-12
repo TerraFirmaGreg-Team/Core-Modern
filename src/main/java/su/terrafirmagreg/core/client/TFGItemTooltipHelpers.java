@@ -26,9 +26,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
-import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.event.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.NormalOreProspectorEventHelper;

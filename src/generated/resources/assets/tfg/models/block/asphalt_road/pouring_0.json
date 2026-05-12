@@ -1,12 +1,12 @@
 {
-  "parent": "tfg:block/asphalt_road/pouring",
+  "parent": "minecraft:block/block",
   "ambientocclusion": false,
   "elements": [
     {
       "faces": {
         "down": {
           "cullface": "down",
-          "texture": "#gravel"
+          "texture": "#top"
         },
         "east": {
           "texture": "#top"
@@ -35,5 +35,9 @@
         16
       ]
     }
-  ]
+  ],
+  "textures": {
+    "particle": "tfg:block/asphalt_road/hot",
+    "top": "tfg:block/asphalt_road/hot"
+  }
 }
