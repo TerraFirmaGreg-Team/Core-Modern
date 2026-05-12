@@ -2,11 +2,9 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import com.therighthon.rnr.common.block.PathStairBlock;
 import com.tterrag.registrate.providers.DataGenContext;
-import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
@@ -39,6 +37,7 @@ import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGItemsAsphalt;
+import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings("unused")
 public final class TFGBlocksAsphalt {
@@ -52,7 +51,7 @@ public final class TFGBlocksAsphalt {
             .properties(p -> p.strength(-1.0F, 3600000.0F).sound(SoundType.MUD).mapColor(MapColor.COLOR_BLACK).noLootTable())
             .blockstate(TFGBlocksAsphalt::asphaltRoadPouringBlockstate)
             .loot((prov, block) -> prov.add(block, LootTable.lootTable()))
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/pouring_" + AsphaltRoadPouringBlock.MAX_VISUAL_LEVEL))).build()
             .register();
 
     public static final BlockEntry<AsphaltRoadHotBlock> ASPHALT_ROAD_HOT = TFGCore.REGISTRATE.block("asphalt_road_hot", AsphaltRoadHotBlock::new)
@@ -62,7 +61,7 @@ public final class TFGBlocksAsphalt {
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
             .onRegister(block -> TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TICK_COUNTER, block))
             .loot(TFGBlocksAsphalt::asphaltLoot)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/hot"))).build()
             .register();
 
     public static final BlockEntry<AsphaltRoadBlock> ASPHALT_ROAD = TFGCore.REGISTRATE.block("asphalt_road", AsphaltRoadBlock::new)
@@ -72,7 +71,7 @@ public final class TFGBlocksAsphalt {
             .blockstate(TFGBlocksAsphalt::asphaltRoadBlockstate)
             .loot(TFGBlocksAsphalt::asphaltLoot)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/block_base"))).build()
             .register();
 
     public static final BlockEntry<AsphaltRoadStairsBlock> ASPHALT_ROAD_STAIRS = TFGCore.REGISTRATE.block("asphalt_road_stairs",
@@ -82,7 +81,7 @@ public final class TFGBlocksAsphalt {
             .blockstate(TFGBlocksAsphalt::asphaltRoadStairsBlockstate)
             .loot(TFGBlocksAsphalt::asphaltLoot)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.STAIRS, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/stairs"))).build()
             .register();
 
     public static final BlockEntry<AsphaltRoadSlabBlock> ASPHALT_ROAD_SLAB = TFGCore.REGISTRATE.block("asphalt_road_slab", AsphaltRoadSlabBlock::new)
@@ -92,7 +91,7 @@ public final class TFGBlocksAsphalt {
             .blockstate(TFGBlocksAsphalt::asphaltRoadSlabBlockstate)
             .loot(TFGBlocksAsphalt::asphaltLoot)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.SLABS, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
-            .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/slab_base"))).build()
             .register();
 
     private static void asphaltRoadPouringBlockstate(DataGenContext<Block, AsphaltRoadPouringBlock> ctx, RegistrateBlockstateProvider prov) {
