@@ -31,7 +31,6 @@ import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadPouringBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadStairsBlock;
-import su.terrafirmagreg.core.common.block.asphalt.HotAsphaltRoadBlockItem;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -57,7 +56,7 @@ public final class TFGBlocksAsphalt {
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
             .onRegister(block -> TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TICK_COUNTER, block))
             .loot(RegistrateBlockLootTables::dropSelf)
-            .item(HotAsphaltRoadBlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/hot"))).build()
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/hot"))).build()
             .register();
 
     public static final BlockEntry<AsphaltRoadBlock> ASPHALT_ROAD = TFGCore.REGISTRATE.block("asphalt_road", AsphaltRoadBlock::new)

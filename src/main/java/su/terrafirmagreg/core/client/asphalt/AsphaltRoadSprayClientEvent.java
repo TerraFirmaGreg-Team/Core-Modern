@@ -140,9 +140,9 @@ public final class AsphaltRoadSprayClientEvent {
             return facing.getAxis() == Direction.Axis.X ? 90.0F : 0.0F;
         }
         return switch (facing) {
-            case EAST -> 90.0F;
+            case EAST -> 270.0F;
             case SOUTH -> 180.0F;
-            case WEST -> 270.0F;
+            case WEST -> 90.0F;
             default -> 0.0F;
         };
     }
@@ -155,8 +155,8 @@ public final class AsphaltRoadSprayClientEvent {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.lineWidth(2.0F);
 
-        float r = 0.25F;
-        float g = 0.8F;
+        float r = 1.0F;
+        float g = 1.0F;
         float b = 1.0F;
         float a = 0.75F;
 
