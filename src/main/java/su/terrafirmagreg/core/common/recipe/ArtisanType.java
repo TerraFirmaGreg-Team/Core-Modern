@@ -236,7 +236,7 @@ public class ArtisanType {
 
     public static final ArtisanType ROAD_MARKING_STENCIL = new ArtisanType(
             "road_marking_stencil",
-            Ingredient.of(new ItemStack(Objects.requireNonNullElse(ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath("gtceu", "treated_wood_plate")), Items.AIR))),
+            Ingredient.of(ChemicalHelper.get(TagPrefix.plate, GTMaterials.TreatedWood, 1)),
             null,
             Ingredient.of(CustomTags.KNIVES),
             Ingredient.of(CustomTags.SAWS),
