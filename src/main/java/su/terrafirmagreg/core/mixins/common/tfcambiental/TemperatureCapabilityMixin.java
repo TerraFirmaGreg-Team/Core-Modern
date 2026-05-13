@@ -11,6 +11,7 @@ import com.lumintorious.tfcambiental.modifier.TempModifierStorage;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 
@@ -56,7 +57,16 @@ public abstract class TemperatureCapabilityMixin {
         boolean heatproof = suitType == TFCAmbientalCompat.SuitType.HEATPROOF;
 
         EquipmentTemperatureProvider.evaluateAll(this.player, this.modifiers);
-        EnvironmentalTemperatureProvider.evaluateAll(this.player, this.modifiers);
+        if (this.player.level().dimension() == Level.NETHER) {
+            for (var fn : AmbientalRegistry.ENVIRONMENT) {
+                var modifier = fn.getModifier(this.player);
+                if (modifier.isPresent() && !"cozy".equals(modifier.get().getUnlocalizedName())) {
+                    this.modifiers.add(modifier);
+                }
+            }
+        } else {
+            EnvironmentalTemperatureProvider.evaluateAll(this.player, this.modifiers);
+        }
         if (!fullyInsulated) {
             ItemTemperatureProvider.evaluateAll(this.player, this.modifiers);
             BlockTemperatureProvider.evaluateAll(this.player, this.modifiers);
