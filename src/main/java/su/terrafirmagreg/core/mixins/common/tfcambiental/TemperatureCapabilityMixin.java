@@ -10,8 +10,12 @@ import com.lumintorious.tfcambiental.capability.TemperatureCapability;
 import com.lumintorious.tfcambiental.modifier.TempModifierStorage;
 
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import top.theillusivec4.curios.api.CuriosApi;
 
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 
@@ -56,15 +60,38 @@ public abstract class TemperatureCapabilityMixin {
         boolean fullyInsulated = suitType == TFCAmbientalCompat.SuitType.FULLY_INSULATED;
         boolean heatproof = suitType == TFCAmbientalCompat.SuitType.HEATPROOF;
 
-        EquipmentTemperatureProvider.evaluateAll(this.player, this.modifiers);
         if (this.player.level().dimension() == Level.NETHER) {
-            for (var fn : AmbientalRegistry.ENVIRONMENT) {
-                var modifier = fn.getModifier(this.player);
-                if (modifier.isPresent() && !"cozy".equals(modifier.get().getUnlocalizedName())) {
-                    this.modifiers.add(modifier);
+            // unroll EnvironmentalTemperatureProvider.evaluateAll but skip EquipmentTemperatureProvider::handleSunlightCap
+            CuriosApi.getCuriosHelper().getEquippedCurios(player).ifPresent(c -> {
+                for (int i = 0; i < c.getSlots(); i++) {
+                    ItemStack stack = c.getStackInSlot(i);
+                    for (var fn : AmbientalRegistry.EQUIPMENT) {
+                        this.modifiers.add(fn.getModifier(player, stack));
+                    }
                 }
-            }
+            });
+            this.modifiers.add(EquipmentTemperatureProvider.handleClothes(player, player.getItemBySlot(EquipmentSlot.HEAD)));
+            this.modifiers.add(EquipmentTemperatureProvider.handleClothes(player, player.getItemBySlot(EquipmentSlot.CHEST)));
+            this.modifiers.add(EquipmentTemperatureProvider.handleClothes(player, player.getItemBySlot(EquipmentSlot.LEGS)));
+            this.modifiers.add(EquipmentTemperatureProvider.handleClothes(player, player.getItemBySlot(EquipmentSlot.FEET)));
+
+            // unroll EnvironmentalTemperatureProvider.evaluateAll but skip select checks
+            this.modifiers.add(EnvironmentalTemperatureProvider.handleGeneralTemperature(player));
+            // this.modifiers.add(EnvironmentalTemperatureProvider.handleTimeOfDay(player));
+            // this.modifiers.add(EnvironmentalTemperatureProvider.handleShade(player));
+            // this.modifiers.add(EnvironmentalTemperatureProvider.handleCozy(player));
+            this.modifiers.add(EnvironmentalTemperatureProvider.handleThirst(player));
+            this.modifiers.add(EnvironmentalTemperatureProvider.handleFood(player));
+            this.modifiers.add(EnvironmentalTemperatureProvider.handleDiet(player));
+            this.modifiers.add(EnvironmentalTemperatureProvider.handleFire(player));
+            this.modifiers.add(EnvironmentalTemperatureProvider.handleWater(player));
+            // this.modifiers.add(EnvironmentalTemperatureProvider.handleRain(player));
+            // this.modifiers.add(EnvironmentalTemperatureProvider.handleWind(player));
+            this.modifiers.add(EnvironmentalTemperatureProvider.handleSprinting(player));
+            // this.modifiers.add(EnvironmentalTemperatureProvider.handleUnderground(player));
+            this.modifiers.add(EnvironmentalTemperatureProvider.handleWetness(player));
         } else {
+            EquipmentTemperatureProvider.evaluateAll(this.player, this.modifiers);
             EnvironmentalTemperatureProvider.evaluateAll(this.player, this.modifiers);
         }
         if (!fullyInsulated) {
