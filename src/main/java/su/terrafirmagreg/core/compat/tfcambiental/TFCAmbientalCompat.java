@@ -31,6 +31,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.RegistryObject;
 
 import earth.terrarium.adastra.common.registry.ModItems;
+import mod.traister101.sns.common.items.SNSItems;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 
@@ -244,6 +245,12 @@ public final class TFCAmbientalCompat {
         }
         if (ADVANCED_ARMOR.contains(item)) {
             return Optional.of(new TempModifier("advanced_armor", 0F, FULLY_INSULATED));
+        }
+        if (item == SNSItems.BLUE_STEEL_TOE_HIKING_BOOTS.get()) {
+            return Optional.of(new TempModifier("blue_steel_hiking_boots", -2f, 0.2F));
+        }
+        if (item == SNSItems.RED_STEEL_TOE_HIKING_BOOTS.get()) {
+            return Optional.of(new TempModifier("red_steel_hiking_boots", 2f, 0.2F));
         }
 
         return Optional.empty();
