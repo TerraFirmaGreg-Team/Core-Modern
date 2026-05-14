@@ -88,6 +88,8 @@ public abstract class TFCFoxMixin extends Fox {
                         final TFGFox fox = convertTo(TFGEntities.TFG_FOX.get(), false);
                         if (fox != null && level() instanceof ServerLevelAccessor server) {
                             fox.finalizeSpawn(server, level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.CONVERSION, null, null);
+                            fox.setVariant(this.getVariant());
+                            fox.setBirthDay(Calendars.get(this.level()).getTotalDays() - 120L);
                         }
                     }
                 }

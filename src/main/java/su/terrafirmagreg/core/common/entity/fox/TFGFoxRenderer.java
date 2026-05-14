@@ -1,15 +1,26 @@
 package su.terrafirmagreg.core.common.entity.fox;
 
+import java.util.Map;
+
+import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.minecraft.Util;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.animal.Fox;
 
 public class TFGFoxRenderer extends MobRenderer<TFGFox, TFGFoxModel<TFGFox>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("textures/entity/fox/snow_fox.png");
-    private static final ResourceLocation SLEEP_TEXTURE = ResourceLocation.withDefaultNamespace("textures/entity/fox/snow_fox_sleep.png");
+    private static final Map<Fox.Type, ResourceLocation> MAIN_TEXTURE = Util.make(Maps.newEnumMap(Fox.Type.class), (map) -> {
+        map.put(Fox.Type.SNOW, ResourceLocation.withDefaultNamespace("textures/entity/fox/snow_fox.png"));
+        map.put(Fox.Type.RED, ResourceLocation.withDefaultNamespace("textures/entity/fox/fox.png"));
+    });
+    private static final Map<Fox.Type, ResourceLocation> SLEEP_TEXTURE = Util.make(Maps.newEnumMap(Fox.Type.class), (map) -> {
+        map.put(Fox.Type.SNOW, ResourceLocation.withDefaultNamespace("textures/entity/fox/snow_fox_sleep.png"));
+        map.put(Fox.Type.RED, ResourceLocation.withDefaultNamespace("textures/entity/fox/fox_sleep.png"));
+    });
 
     public TFGFoxRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new TFGFoxModel<>(ctx.bakeLayer(ModelLayers.FOX)), 0.4F);
@@ -20,6 +31,7 @@ public class TFGFoxRenderer extends MobRenderer<TFGFox, TFGFoxModel<TFGFox>> {
     }
 
     public ResourceLocation getTextureLocation(TFGFox entity) {
-        return entity.isSleeping() ? SLEEP_TEXTURE : TEXTURE;
+        Fox.Type variant = entity.getVariant();
+        return entity.isSleeping() ? SLEEP_TEXTURE.get(variant) : MAIN_TEXTURE.get(variant);
     }
 }

@@ -24,8 +24,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 
 public class TFGFox extends TamableMammal {
-
     private static final EntityDataAccessor<Integer> DATA_VARIANT;
+
     float crouchAmount;
     float crouchAmountO;
 
@@ -47,22 +47,21 @@ public class TFGFox extends TamableMammal {
 
     @Override
     public boolean willListenTo(Command command, boolean isClientSide) {
-        if (!isClientSide && command == Command.SIT && getRandom().nextFloat() < 0.1f) {
+        if (!isClientSide && command == Command.SIT && getRandom().nextFloat() < 0.25f) {
             return false;
+        } else {
+            return super.willListenTo(command, isClientSide);
         }
-        return super.willListenTo(command, isClientSide);
     }
 
     @Override
     public void initCommonAnimalData(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason) {
         super.initCommonAnimalData(level, difficulty, reason);
-
-        this.setVariant(Fox.Type.SNOW);
     }
 
     @Override
     public TagKey<Item> getFoodTag() {
-        return TFCTags.Items.CAT_FOOD;
+        return TFCTags.Items.FOODS;
     }
 
     @Override
@@ -79,11 +78,13 @@ public class TFGFox extends TamableMammal {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putInt("FoxType", this.getVariant().getId());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setVariant(Fox.Type.byId(tag.getInt("FoxType")));
     }
 
     @Override
@@ -95,13 +96,17 @@ public class TFGFox extends TamableMammal {
     }
 
     @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions size)
-    {
+    protected float getStandingEyeHeight(Pose pose, EntityDimensions size) {
         return size.height * 0.5F;
     }
 
     public float getCrouchAmount(float partialTick) {
         return Mth.lerp(partialTick, this.crouchAmountO, this.crouchAmount);
+    }
+
+    @Override
+    public boolean isReadyToMate() {
+        return false;
     }
 
     public void tick() {
