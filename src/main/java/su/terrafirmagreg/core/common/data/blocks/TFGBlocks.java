@@ -53,6 +53,7 @@ public final class TFGBlocks {
         TFGBlocks_Casings.init();
         TFGBlocks_Buds.init();
         TFGBlocks_Wood.init();
+        TFGBlocksAsphalt.init();
     }
 
     ////// Decoration blocks
@@ -182,12 +183,14 @@ public final class TFGBlocks {
             .initialProperties(() -> Blocks.WATER)
             .blockstate(ModelUtils.blockVariants(TFGCore.id("block/fluid/semiheavy_ammoniacal_water")))
             .properties(p -> p.mapColor(MapColor.WARPED_WART_BLOCK).noLootTable())
+            .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0x55d9b1))
             .register();
 
     public static final BlockEntry<LiquidBlock> MUDDY_WATER = TFGCore.REGISTRATE.block("fluid/muddy_water", p -> new LiquidBlock(TFGFluids.MUDDY_WATER.source(), p))
             .initialProperties(() -> Blocks.WATER)
             .blockstate(ModelUtils.blockVariants(TFGCore.id("block/fluid/muddy_water")))
             .properties(p -> p.mapColor(MapColor.TERRACOTTA_BROWN).noLootTable())
+            .color(() -> () -> ((blockState, blockAndTintGetter, blockPos, i) -> 0x734B26))
             .register();
 
     public static final BlockEntry<LiquidBlock> SULFUR_FUMES = TFGCore.REGISTRATE.block("fluid/sulfur_fumes",

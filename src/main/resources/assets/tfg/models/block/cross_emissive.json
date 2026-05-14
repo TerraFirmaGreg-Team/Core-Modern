@@ -1,0 +1,180 @@
+{
+    "textures": {"particle": "#cross"},
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                0.8,
+                0,
+                8
+            ],
+            "to": [
+                15.2,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                0.8
+            ],
+            "to": [
+                8,
+                16,
+                15.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        },
+        {
+            "light_emission": 15,
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                0.8,
+                0,
+                8
+            ],
+            "to": [
+                15.2,
+                16,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross_emissive"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross_emissive"
+                }
+            }
+        },
+        {
+            "light_emission": 15,
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                0.8
+            ],
+            "to": [
+                8,
+                16,
+                15.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross_emissive"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross_emissive"
+                }
+            }
+        }
+    ]
+}

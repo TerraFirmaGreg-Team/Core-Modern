@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,9 +27,8 @@ import earth.terrarium.adastra.client.models.entities.vehicles.RocketModel;
 import earth.terrarium.adastra.client.renderers.entities.vehicles.RocketRenderer;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.screen.*;
 import su.terrafirmagreg.core.common.CommonProxy;
-import su.terrafirmagreg.core.common.container.ArtisanTableScreen;
-import su.terrafirmagreg.core.common.container.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
@@ -36,6 +36,8 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.particle.*;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
+import su.terrafirmagreg.core.world.dimension_effects.BeneathEffects;
+import su.terrafirmagreg.core.world.dimension_effects.VenusEffects;
 
 public class ClientProxy extends CommonProxy {
     @SuppressWarnings("removal")
@@ -128,5 +130,11 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void registerSpecialModels(ModelEvent.RegisterAdditional event) {
         event.register(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern"));
+    }
+
+    @SubscribeEvent
+    public void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
+        event.register(TFGCore.id("beneath_effects"), new BeneathEffects());
+        event.register(TFGCore.id("venus_effects"), new VenusEffects());
     }
 }

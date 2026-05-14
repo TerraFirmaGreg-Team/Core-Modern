@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SnifferEggBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -34,7 +35,7 @@ public abstract class SnifferEggBlockMixin {
 
         if (!isReadyToHatch(pState)) {
             pLevel.playSound(null, pPos, SoundEvents.SNIFFER_EGG_CRACK, SoundSource.BLOCKS, 0.7F, 0.9F + pRandom.nextFloat() * 0.2F);
-            pLevel.setBlock(pPos, pState.setValue(SnifferEggBlock.HATCH, ((SnifferEggBlock) (Object) this).getHatchLevel(pState) + 1), 2);
+            pLevel.setBlock(pPos, pState.setValue(SnifferEggBlock.HATCH, ((SnifferEggBlock) (Object) this).getHatchLevel(pState) + 1), Block.UPDATE_CLIENTS);
         } else {
             pLevel.playSound(null, pPos, SoundEvents.SNIFFER_EGG_HATCH, SoundSource.BLOCKS, 0.7F, 0.9F + pRandom.nextFloat() * 0.2F);
             pLevel.destroyBlock(pPos, false);

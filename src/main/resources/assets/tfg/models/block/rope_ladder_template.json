@@ -1,0 +1,637 @@
+{
+    "textures": {
+        "particle": "#texture",
+        "rope_bridge": "#texture"
+    },
+    "ambientocclusion": false,
+    "display": {
+        "head": {
+            "rotation": [
+                0,
+                180,
+                0
+            ],
+            "translation": [
+                0,
+                0,
+                0
+            ],
+            "scale": [
+                1,
+                1,
+                1
+            ]
+        },
+        "firstperson_righthand": {
+            "rotation": [
+                0,
+                315,
+                0
+            ],
+            "translation": [
+                0,
+                2.5,
+                0
+            ],
+            "scale": [
+                0.4,
+                0.4,
+                0.4
+            ]
+        },
+        "gui": {
+            "rotation": [
+                30,
+                45,
+                0
+            ],
+            "translation": [
+                0,
+                0,
+                0
+            ],
+            "scale": [
+                0.625,
+                0.625,
+                0.625
+            ]
+        },
+        "ground": {
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "translation": [
+                0,
+                3,
+                0
+            ],
+            "scale": [
+                0.25,
+                0.25,
+                0.25
+            ]
+        },
+        "fixed": {
+            "rotation": [
+                0,
+                180,
+                0
+            ],
+            "translation": [
+                0,
+                0,
+                0
+            ],
+            "scale": [
+                1,
+                1,
+                1
+            ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [
+                75,
+                315,
+                0
+            ],
+            "translation": [
+                0,
+                2.5,
+                0
+            ],
+            "scale": [
+                0.375,
+                0.375,
+                0.375
+            ]
+        }
+    },
+    "elements": [
+        {
+            "name": "Knot1",
+            "from": [
+                0,
+                0,
+                12
+            ],
+            "to": [
+                3,
+                1,
+                15
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        9,
+                        13,
+                        12,
+                        14
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "south": {
+                    "uv": [
+                        8,
+                        11,
+                        11,
+                        12
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "north": {
+                    "uv": [
+                        8,
+                        12,
+                        11,
+                        13
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "west": {
+                    "uv": [
+                        6,
+                        11,
+                        9,
+                        12
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "up": {
+                    "uv": [
+                        4,
+                        10,
+                        7,
+                        13
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "down": {
+                    "uv": [
+                        6,
+                        9,
+                        9,
+                        12
+                    ],
+                    "texture": "#rope_bridge"
+                }
+            }
+        },
+        {
+            "name": "Knot2",
+            "from": [
+                13,
+                0,
+                12
+            ],
+            "to": [
+                16,
+                1,
+                15
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        7,
+                        13,
+                        10,
+                        14
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "south": {
+                    "uv": [
+                        11,
+                        13,
+                        14,
+                        14
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "north": {
+                    "uv": [
+                        7,
+                        11,
+                        10,
+                        12
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "west": {
+                    "uv": [
+                        6,
+                        13,
+                        9,
+                        15
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "up": {
+                    "uv": [
+                        2,
+                        12,
+                        5,
+                        15
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "down": {
+                    "uv": [
+                        11,
+                        11,
+                        14,
+                        14
+                    ],
+                    "texture": "#rope_bridge"
+                }
+            }
+        },
+        {
+            "name": "Rope1",
+            "from": [
+                14,
+                1,
+                13
+            ],
+            "to": [
+                15,
+                15,
+                14
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        9,
+                        14,
+                        10
+                    ],
+                    "texture": "#rope_bridge",
+                    "rotation": 90
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        12,
+                        14,
+                        13
+                    ],
+                    "texture": "#rope_bridge",
+                    "rotation": 90
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        9,
+                        14,
+                        10
+                    ],
+                    "texture": "#rope_bridge",
+                    "rotation": 90
+                },
+                "west": {
+                    "uv": [
+                        1,
+                        11,
+                        15,
+                        12
+                    ],
+                    "texture": "#rope_bridge",
+                    "rotation": 90
+                }
+            }
+        },
+        {
+            "name": "Rope2",
+            "from": [
+                1,
+                1,
+                13
+            ],
+            "to": [
+                2,
+                15,
+                14
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        1,
+                        14,
+                        15,
+                        15
+                    ],
+                    "texture": "#rope_bridge",
+                    "rotation": 90
+                },
+                "south": {
+                    "uv": [
+                        2,
+                        12,
+                        16,
+                        13
+                    ],
+                    "texture": "#rope_bridge",
+                    "rotation": 90
+                },
+                "north": {
+                    "uv": [
+                        1,
+                        12,
+                        15,
+                        13
+                    ],
+                    "texture": "#rope_bridge",
+                    "rotation": 90
+                },
+                "west": {
+                    "uv": [
+                        1,
+                        13,
+                        15,
+                        14
+                    ],
+                    "texture": "#rope_bridge",
+                    "rotation": 90
+                }
+            }
+        },
+        {
+            "name": "Knot3",
+            "from": [
+                0,
+                15,
+                12
+            ],
+            "to": [
+                3,
+                16,
+                15
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        10,
+                        12,
+                        13,
+                        13
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "south": {
+                    "uv": [
+                        5,
+                        10,
+                        8,
+                        11
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "north": {
+                    "uv": [
+                        8,
+                        12,
+                        11,
+                        13
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "west": {
+                    "uv": [
+                        5,
+                        14,
+                        8,
+                        15
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "up": {
+                    "uv": [
+                        11,
+                        12,
+                        14,
+                        15
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "down": {
+                    "uv": [
+                        3,
+                        12,
+                        6,
+                        15
+                    ],
+                    "texture": "#rope_bridge"
+                }
+            }
+        },
+        {
+            "name": "Knot4",
+            "from": [
+                13,
+                15,
+                12
+            ],
+            "to": [
+                16,
+                16,
+                15
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        13,
+                        13,
+                        16,
+                        14
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "south": {
+                    "uv": [
+                        5,
+                        13,
+                        8,
+                        14
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "north": {
+                    "uv": [
+                        5,
+                        12,
+                        8,
+                        13
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "west": {
+                    "uv": [
+                        5,
+                        12,
+                        8,
+                        13
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "up": {
+                    "uv": [
+                        5,
+                        11,
+                        8,
+                        14
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "down": {
+                    "uv": [
+                        1,
+                        9,
+                        4,
+                        12
+                    ],
+                    "texture": "#rope_bridge"
+                }
+            }
+        },
+        {
+            "name": "Plank1",
+            "from": [
+                0,
+                11,
+                11
+            ],
+            "to": [
+                16,
+                12,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        5,
+                        5,
+                        6
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        4,
+                        16,
+                        5
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        2,
+                        16,
+                        3
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "west": {
+                    "uv": [
+                        3,
+                        2,
+                        8,
+                        3
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        1,
+                        16,
+                        6
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        2,
+                        16,
+                        7
+                    ],
+                    "texture": "#rope_bridge"
+                }
+            }
+        },
+        {
+            "name": "Plank2",
+            "from": [
+                0,
+                4,
+                11
+            ],
+            "to": [
+                16,
+                5,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        5,
+                        5,
+                        6
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        4,
+                        16,
+                        5
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        2,
+                        16,
+                        3
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "west": {
+                    "uv": [
+                        3,
+                        2,
+                        8,
+                        3
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        1,
+                        16,
+                        6
+                    ],
+                    "texture": "#rope_bridge"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        2,
+                        16,
+                        7
+                    ],
+                    "texture": "#rope_bridge"
+                }
+            }
+        }
+    ]
+}

@@ -1,11 +1,13 @@
 package su.terrafirmagreg.core.client;
 
 import net.dries007.tfc.client.TFCColors;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -14,6 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.perf.SupportCache;
@@ -38,6 +41,7 @@ public class ForgeClientEventListener {
     public static void registerColorHandlerBlocks(RegisterColorHandlersEvent.Block event) {
         final BlockColor grassColor = (state, level, pos, tintIndex) -> TFCColors.getGrassColor(pos, tintIndex);
         final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
+        final BlockColor magmaColor = (blockState, blockAndTintGetter, blockPos, i) -> 0xFF5500;
         final BlockColor grassBlockColor = (state, level, pos, tintIndex) -> state.getValue(ConnectedGrassBlock.SNOWY) || tintIndex != 1 ? -1 : grassColor.getColor(state, level, pos, tintIndex);
 
         event.register(tallGrassColor,
@@ -55,6 +59,12 @@ public class ForgeClientEventListener {
                 TFGBlocks_Earth.OXISOL_CLAY_GRASS.get(),
                 TFGBlocks_Earth.PODZOL_GRASS.get(),
                 TFGBlocks_Earth.PODZOL_CLAY_GRASS.get());
+        event.register(magmaColor, Blocks.MAGMA_BLOCK);
+        TFCBlocks.MAGMA_BLOCKS.values().forEach(registryObject -> {
+            event.register(magmaColor, registryObject.get());
+        });
+
+        AsphaltRoadColorHandlers.registerBlocks(event);
     }
 
     public static void registerColorHandlerItems(RegisterColorHandlersEvent.Item event) {
@@ -62,5 +72,7 @@ public class ForgeClientEventListener {
 
         event.register(grassColor,
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());
+
+        AsphaltRoadColorHandlers.registerItems(event);
     }
 }

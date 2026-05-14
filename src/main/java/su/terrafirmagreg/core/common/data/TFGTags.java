@@ -54,6 +54,8 @@ public final class TFGTags {
         public static final TagKey<Item> PrecisionFabricatorHolderRods = createItemTag("precision_fabricator_holder_rods");
 
         public static final TagKey<Item> Explosives = createItemTag("explosives");
+        public static final TagKey<Item> FirmalifeOvenTops = createItemTag("oven_tops");
+        public static final TagKey<Item> ROAD_MARKING_STENCILS = createItemTag("road_marking_stencils");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("interaction/brick");
@@ -102,13 +104,13 @@ public final class TFGTags {
         public static final TagKey<Block> IronGreenhouseCasings = createBlockTag("iron_greenhouse_casings");
         public static final TagKey<Block> CopperGreenhouseCasings = createBlockTag("copper_greenhouse_casings");
         public static final TagKey<Block> TreatedWoodGreenhouseCasings = createBlockTag("treated_wood_greenhouse_casings");
-        public static final TagKey<Block> FirmalifeOvenTops = createBlockTag("oven_tops");
 
         public static final TagKey<Block> SeaStackRocks = createBlockTag("sea_stack_rocks");
         public static final TagKey<Block> DryPlantPlantableOn = createBlockTag("dry_plant_plantable_on");
         public static final TagKey<Block> EpiphytePlantableOn = createBlockTag("epiphyte_plantable_on");
         public static final TagKey<Block> AnemonePlantableOn = createBlockTag("anemone_plantable_on");
         public static final TagKey<Block> IsAnemone = createBlockTag("is_anemone");
+        public static final TagKey<Block> NOT_SLOWED_WITH_SNOWSHOES = createBlockTag("not_slowed_with_snowshoes");
 
         private static TagKey<Block> createBlockTag(String path) {
             return createBlockTag(TFGCore.id(path));

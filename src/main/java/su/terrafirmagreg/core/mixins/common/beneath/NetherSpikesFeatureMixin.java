@@ -26,13 +26,13 @@ public class NetherSpikesFeatureMixin {
     protected void replaceBlock(WorldGenLevel level, BlockPos pos, BlockState state) {
         final Block block = level.getBlockState(pos).getBlock();
         if (block == Blocks.AIR) {
-            level.setBlock(pos, state, 3);
+            level.setBlock(pos, state, Block.UPDATE_ALL);
         } else if (block != Blocks.WATER && block != TFCBlocks.RIVER_WATER.get()) {
             if (block == Blocks.LAVA) {
-                level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(Fluids.LAVA)), 3);
+                level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(Fluids.LAVA)), Block.UPDATE_ALL);
             }
         } else {
-            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(Fluids.WATER)), 3);
+            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(Fluids.WATER)), Block.UPDATE_ALL);
         }
     }
 }

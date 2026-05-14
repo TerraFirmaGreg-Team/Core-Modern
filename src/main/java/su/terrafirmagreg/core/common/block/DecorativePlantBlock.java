@@ -78,7 +78,7 @@ public class DecorativePlantBlock extends ExtendedBlock implements IFluidLoggabl
     public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
         if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
             level.destroyBlock(pos, true);
-            level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
+            level.setBlock(pos, fluidStateIn.createLegacyBlock(), Block.UPDATE_CLIENTS);
             return true;
         }
         return IFluidLoggable.super.placeLiquid(level, pos, state, fluidStateIn);

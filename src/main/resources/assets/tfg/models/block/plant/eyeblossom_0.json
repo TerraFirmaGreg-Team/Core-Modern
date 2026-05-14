@@ -1,0 +1,7 @@
+{
+    "parent": "tfg:block/cross_emissive",
+    "textures": {
+        "cross": "tfg:block/plant/eyeblossom/open_eyeblossom",
+        "cross_emissive": "tfg:block/plant/eyeblossom/open_eyeblossom_emissive"
+    }
+}

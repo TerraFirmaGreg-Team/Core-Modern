@@ -260,9 +260,9 @@ public class SnowCorrection {
                     return;
                 }
                 if (Helpers.isBlock(stateAbove, TFCBlocks.ICICLE.get())) {
-                    level.setBlock(posAbove, stateAbove.setValue(ThinSpikeBlock.TIP, false), 3 | 16);
+                    level.setBlock(posAbove, stateAbove.setValue(ThinSpikeBlock.TIP, false), Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                 }
-                level.setBlock(iciclePos, TFCBlocks.ICICLE.get().defaultBlockState().setValue(ThinSpikeBlock.TIP, true), 3);
+                level.setBlock(iciclePos, TFCBlocks.ICICLE.get().defaultBlockState().setValue(ThinSpikeBlock.TIP, true), Block.UPDATE_ALL);
             }
         }
     }
@@ -290,7 +290,7 @@ public class SnowCorrection {
             KrummholzBlock.updateFreezingInColumn(level, pos, true);
         } else if (state.isAir() && Blocks.SNOW.defaultBlockState().canSurvive(level, pos)) {
             // Vanilla snow placement (single layers)
-            level.setBlock(pos, Blocks.SNOW.defaultBlockState(), 3);
+            level.setBlock(pos, Blocks.SNOW.defaultBlockState(), Block.UPDATE_ALL);
             return true;
         } else {
             // Fills cauldrons with snow

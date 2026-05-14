@@ -36,7 +36,7 @@ public class TFGTRecipes {
 
         MetaTileEntityLoader.registerMachineRecipe(provider, true, TFGMachines.FOOD_OVEN,
                 "DTD", "AHB", "COC",
-                'T', TFGTags.Blocks.FirmalifeOvenTops,
+                'T', TFGTags.Items.FirmalifeOvenTops,
                 'H', GTCraftingComponents.HULL,
                 'A', GTCraftingComponents.ROBOT_ARM,
                 'B', GTCraftingComponents.CABLE,

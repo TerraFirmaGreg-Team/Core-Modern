@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/rope_ladder/ginkgo",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/rope_ladder/ginkgo"
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/rope_ladder/ginkgo",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/rope_ladder/ginkgo",
+      "y": 270
+    }
+  }
+}
