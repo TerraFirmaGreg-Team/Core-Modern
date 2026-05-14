@@ -197,6 +197,8 @@
         "common.tfc.IIngotPileBlockEntityEntryAccessor",
         "common.tfc.LivestockAiMixin",
         "common.tfc.MoldCapabilityMixin",
+        "common.tfc.IDelegateIngredientAccessor",
+        "common.tfc.NotRottenIngredientMixin",
         "common.tfc.OverworldClimateModelMixin",
         "common.tfc.PotBlockEntityMixin",
         "common.tfc.RammingPreyAiMixin",
