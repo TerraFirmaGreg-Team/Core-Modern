@@ -69,7 +69,7 @@ public abstract class TFCFoxMixin extends Fox {
 
     @Inject(method = "isFood", at = @At("HEAD"), cancellable = true)
     public void tfg$isFood(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(!FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFCTags.Items.CAT_FOOD));
+        cir.setReturnValue(!FoodCapability.isRotten(stack) && Helpers.isItem(stack, TFCTags.Items.FOODS));
     }
 
     @Override
