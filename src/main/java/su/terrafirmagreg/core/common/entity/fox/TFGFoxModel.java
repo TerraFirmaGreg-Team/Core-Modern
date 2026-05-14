@@ -3,12 +3,19 @@ package su.terrafirmagreg.core.common.entity.fox;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.model.AgeableListModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+import su.terrafirmagreg.core.TFGCore;
+
 public class TFGFoxModel<E extends TFGFox> extends AgeableListModel<E> {
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "fox_collar"), "main");
+
     public final ModelPart head;
     private final ModelPart body;
     private final ModelPart rightHindLeg;
@@ -32,10 +39,10 @@ public class TFGFoxModel<E extends TFGFox> extends AgeableListModel<E> {
         this.tail = this.body.getChild("tail");
     }
 
-    public static LayerDefinition createBodyLayer() {
+    public static MeshDefinition createBodyMesh(CubeDeformation cubeDeformation) {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        PartDefinition partdefinition1 = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(1, 5).addBox(-3.0F, -2.0F, -5.0F, 8.0F, 6.0F, 6.0F),
+        PartDefinition partdefinition1 = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(1, 5).addBox(-3.0F, -2.0F, -5.0F, 8.0F, 6.0F, 6.0F, cubeDeformation),
                 PartPose.offset(-1.0F, 16.5F, -3.0F));
         partdefinition1.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(8, 1).addBox(-3.0F, -4.0F, -4.0F, 2.0F, 2.0F, 1.0F), PartPose.ZERO);
         partdefinition1.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(15, 1).addBox(3.0F, -4.0F, -4.0F, 2.0F, 2.0F, 1.0F), PartPose.ZERO);
@@ -51,7 +58,7 @@ public class TFGFoxModel<E extends TFGFox> extends AgeableListModel<E> {
         partdefinition.addOrReplaceChild("left_front_leg", cubelistbuilder, PartPose.offset(-1.0F, 17.5F, 0.0F));
         partdefinition2.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(30, 0).addBox(2.0F, 0.0F, -1.0F, 4.0F, 9.0F, 5.0F),
                 PartPose.offsetAndRotation(-4.0F, 15.0F, -1.0F, -0.05235988F, 0.0F, 0.0F));
-        return LayerDefinition.create(meshdefinition, 48, 32);
+        return meshdefinition;
     }
 
     public void prepareMobModel(E entity, float limbSwing, float limbSwingAmount, float partialTick) {

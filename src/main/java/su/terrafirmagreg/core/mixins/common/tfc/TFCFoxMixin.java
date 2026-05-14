@@ -79,7 +79,7 @@ public abstract class TFCFoxMixin extends Fox {
             if (!level().isClientSide) {
                 final long ticks = Calendars.SERVER.getTicks();
                 if (ticks > tfg$nextFeedTime) {
-                    tfg$setFamiliarity(tfg$getFamiliarity() + 0.5f);
+                    tfg$setFamiliarity(tfg$getFamiliarity() + 0.1f);
                     tfg$nextFeedTime = ticks + ICalendar.TICKS_IN_DAY;
                     usePlayerItem(player, hand, held);
                     playSound(SoundEvents.PLAYER_BURP);

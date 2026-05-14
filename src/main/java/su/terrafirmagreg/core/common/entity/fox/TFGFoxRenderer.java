@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.Util;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +22,8 @@ public class TFGFoxRenderer extends MobRenderer<TFGFox, TFGFoxModel<TFGFox>> {
     });
 
     public TFGFoxRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new TFGFoxModel<>(ctx.bakeLayer(ModelLayers.FOX)), 0.4F);
+        super(ctx, new TFGFoxModel<>(ctx.bakeLayer(TFGFoxModel.LAYER_LOCATION)), 0.4F);
+        this.addLayer(new TFGFoxCollarLayer(this, ctx.getModelSet()));
     }
 
     protected void setupRotations(TFGFox entityLiving, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks) {

@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.common.data;
 
 import com.tterrag.registrate.util.entry.EntityEntry;
 
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -34,6 +36,8 @@ import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
+import su.terrafirmagreg.core.common.entity.fox.TFGFoxCollarLayer;
+import su.terrafirmagreg.core.common.entity.fox.TFGFoxModel;
 import su.terrafirmagreg.core.common.entity.fox.TFGFoxRenderer;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamModel;
@@ -175,5 +179,7 @@ public class TFGEntities {
         event.registerLayerDefinition(TFCJerboaModel.LAYER_LOCATION, TFCJerboaModel::createBodyLayer);
         event.registerLayerDefinition(TFCLemmingModel.LAYER_LOCATION, TFCLemmingModel::createBodyLayer);
         event.registerLayerDefinition(TFCMongooseModel.LAYER_LOCATION, TFCMongooseModel::createBodyLayer);
+        event.registerLayerDefinition(TFGFoxModel.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(CubeDeformation.NONE), 48, 32));
+        event.registerLayerDefinition(TFGFoxCollarLayer.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(new CubeDeformation(0.01f)), 48, 32));
     }
 }
