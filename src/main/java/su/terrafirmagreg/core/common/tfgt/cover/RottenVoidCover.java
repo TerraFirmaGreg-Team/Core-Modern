@@ -80,7 +80,7 @@ public class RottenVoidCover extends ItemVoidingCover {
         group.addWidget(new LabelWidget(
                 10,
                 45,
-                "tfg.tooltip.cover.rotten_void_days"));
+                "tfg.gui.cover.rotten_void_days"));
         group.addWidget(new IntInputWidget(
                 10,
                 58,
