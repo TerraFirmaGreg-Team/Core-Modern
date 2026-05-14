@@ -27,7 +27,7 @@ public class TFGFox extends TamableMammal {
     private static final EntityDataAccessor<Integer> DATA_VARIANT;
 
     float crouchAmount;
-    float crouchAmountO;
+    float previousCrouchAmount;
 
     static {
         DATA_VARIANT = SynchedEntityData.defineId(TFGFox.class, EntityDataSerializers.INT);
@@ -101,7 +101,7 @@ public class TFGFox extends TamableMammal {
     }
 
     public float getCrouchAmount(float partialTick) {
-        return Mth.lerp(partialTick, this.crouchAmountO, this.crouchAmount);
+        return Mth.lerp(partialTick, this.previousCrouchAmount, this.crouchAmount);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class TFGFox extends TamableMammal {
     public void tick() {
         super.tick();
 
-        this.crouchAmountO = this.crouchAmount;
+        this.previousCrouchAmount = this.crouchAmount;
         if (this.isCrouching()) {
             this.crouchAmount += 0.2F;
             if (this.crouchAmount > 3.0F) {
