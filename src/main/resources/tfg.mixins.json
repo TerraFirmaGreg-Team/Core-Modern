@@ -264,7 +264,8 @@
         "common.wab.SnatcherMixin",
         "common.wab.SoarerMixin",
         "common.wab.SoarerOverlayMixin",
-        "common.wab.ToxlacanthMixin"
+        "common.wab.ToxlacanthMixin",
+        "common.tfc.TFCFoxMixin"
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",

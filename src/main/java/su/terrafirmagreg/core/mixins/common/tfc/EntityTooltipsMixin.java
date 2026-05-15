@@ -19,6 +19,7 @@ import net.dries007.tfc.common.entities.livestock.horse.TFCHorse;
 import net.dries007.tfc.common.entities.livestock.pet.Dog;
 import net.dries007.tfc.common.entities.misc.TFCFishingHook;
 import net.dries007.tfc.common.entities.predator.Predator;
+import net.dries007.tfc.common.entities.prey.TFCFox;
 import net.dries007.tfc.common.entities.prey.TFCFrog;
 import net.dries007.tfc.common.entities.prey.TFCRabbit;
 import net.dries007.tfc.common.entities.prey.WildAnimal;
@@ -49,6 +50,8 @@ import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
 import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
 import su.terrafirmagreg.core.common.entity.charger.ChargerData;
+import su.terrafirmagreg.core.common.entity.fox.FoxData;
+import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
@@ -92,6 +95,8 @@ public abstract class EntityTooltipsMixin {
         registry.register("lemming", TFC_1_21, TFCLemming.class);
         registry.register("jerboa", TFC_1_21, TFCJerboa.class);
         registry.register("mongoose", TFC_1_21, TFCMongoose.class);
+        registry.register("fox", TFC_FOX, TFCFox.class);
+        registry.register("tamed_fox", TFG_FOX, TFGFox.class);
     }
 
     @Unique
@@ -107,6 +112,26 @@ public abstract class EntityTooltipsMixin {
     private static final EntityTooltip TFG_DOG = (level, entity, tooltip) -> {
         if (entity instanceof TFCWolfInterface dog) {
             tooltip.accept(Helpers.translateEnum(dog.tfg$getVariant(), "TFCWolfVariant"));
+        }
+    };
+
+    @Unique
+    private static final EntityTooltip TFC_FOX = (level, entity, tooltip) -> {
+        if (entity instanceof TFCFox fox) {
+            String familiarityPercent = String.format("%.2f", FoxData.getFamiliarity(fox) * 100.0F);
+            tooltip.accept(Component.translatable("tfc.jade.familiarity", new Object[] { familiarityPercent }));
+            tooltip.accept(Component.translatable(
+                    (TFGCore.MOD_ID + ".tooltip.tamed_fox.variant." + fox.getVariant().name())
+                            .toLowerCase(Locale.ROOT)));
+        }
+    };
+
+    @Unique
+    private static final EntityTooltip TFG_FOX = (level, entity, tooltip) -> {
+        if (entity instanceof TFGFox fox) {
+            tooltip.accept(Component.translatable(
+                    (TFGCore.MOD_ID + ".tooltip.tamed_fox.variant." + fox.getVariant().name())
+                            .toLowerCase(Locale.ROOT)));
         }
     };
 
