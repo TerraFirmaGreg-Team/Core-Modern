@@ -16,6 +16,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -23,9 +24,9 @@ import net.minecraft.world.phys.Vec2;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.AbstractLayerBlock;
-import su.terrafirmagreg.core.common.data.blocks.SandPileBlock;
+import su.terrafirmagreg.core.common.block.AbstractLayerBlock;
+import su.terrafirmagreg.core.common.block.SandPileBlock;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 // Most of this code is from TFC's EnvironmentHelpers class for its snow stuff
@@ -122,7 +123,7 @@ public final class MarsEnvironmentalHelpers {
             final int currentLayers = state.getValue(AbstractLayerBlock.LAYERS);
             final BlockState newState = state.setValue(AbstractLayerBlock.LAYERS, currentLayers + 1);
             if (newState.canSurvive(level, pos) && random.nextInt(1 + 3 * currentLayers) == 0 && expectedLayers > currentLayers) {
-                level.setBlock(pos, newState, 3);
+                level.setBlock(pos, newState, Block.UPDATE_ALL);
             }
             return true;
         } else if (SandPileBlock.canPlaceSandPile(level, pos, state)) {
@@ -130,7 +131,7 @@ public final class MarsEnvironmentalHelpers {
             return true;
         } else if (state.isAir() && TFGBlocks.MARS_SAND_LAYER_BLOCK.get().defaultBlockState().canSurvive(level, pos)) {
             // Vanilla sand placement (single layers)
-            level.setBlock(pos, PlanetEnvironmentalHelpers.getSandBlockForBiome(level, pos).defaultBlockState(), 3);
+            level.setBlock(pos, PlanetEnvironmentalHelpers.getSandBlockForBiome(level, pos).defaultBlockState(), Block.UPDATE_ALL);
             return true;
         }
 

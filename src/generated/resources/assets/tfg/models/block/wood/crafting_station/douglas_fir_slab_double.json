@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "tfc:block/wood/planks/douglas_fir",
+    "east": "tfg:block/wood/crafting_station/douglas_fir_slab_side",
+    "north": "tfg:block/wood/crafting_station/douglas_fir_slab_side",
+    "particle": "tfc:block/wood/planks/douglas_fir",
+    "south": "tfg:block/wood/crafting_station/douglas_fir_slab_side",
+    "up": "tfg:block/wood/crafting_station/douglas_fir_top",
+    "west": "tfg:block/wood/crafting_station/douglas_fir_slab_side"
+  }
+}

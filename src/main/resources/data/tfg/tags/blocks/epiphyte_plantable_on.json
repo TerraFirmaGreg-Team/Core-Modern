@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#minecraft:logs",
+        "#forge:stone",
+        "#forge:sandstone",
+        "#forge:gravel"
+    ],
+    "replace": false
+}

@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 import su.terrafirmagreg.core.common.data.TFGFoodTraits;
-import su.terrafirmagreg.core.common.data.tfgt.machine.electric.FoodRefrigeratorMachine;
+import su.terrafirmagreg.core.common.tfgt.machine.electric.FoodRefrigeratorMachine;
 
 @Mixin(value = ModularUIContainer.class)
 public class ModularUIContainerMixin {

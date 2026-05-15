@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.TFCFluids;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluids;
 
@@ -11,11 +12,13 @@ public class TFGBlockProperties {
 
     public static final FluidProperty SPACE_WATER = FluidProperty.create("fluid",
             Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER,
-                    TFGFluids.MARS_WATER, TFGFluids.SULFUR_FUMES, TFGFluids.GEYSER_SLURRY));
+                    TFGFluids.MARS_WATER, TFGFluids.SULFUR_FUMES, TFGFluids.GEYSER_SLURRY, TFGFluids.MUDDY_WATER));
 
     public static final FluidProperty SPACE_WATER_AND_LAVA = FluidProperty.create("fluid",
             Stream.of(Fluids.EMPTY, Fluids.WATER, TFCFluids.SALT_WATER, TFCFluids.SPRING_WATER, TFGFluids.MARS_WATER, Fluids.LAVA,
-                    TFGFluids.SULFUR_FUMES, TFGFluids.GEYSER_SLURRY));
+                    TFGFluids.SULFUR_FUMES, TFGFluids.GEYSER_SLURRY, TFGFluids.MUDDY_WATER));
 
     public static final IntegerProperty HEIGHT = IntegerProperty.create("height", 0, 5);
+
+    public static final BooleanProperty OPEN = BooleanProperty.create("open");
 }

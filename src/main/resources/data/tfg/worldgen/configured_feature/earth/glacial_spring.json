@@ -1,0 +1,10 @@
+{
+    "type": "tfc:spring",
+    "config": {
+        "valid_blocks": ["minecraft:packed_ice"],
+        "state": {
+            "Properties": {"falling": "true"},
+            "Name": "minecraft:water"
+        }
+    }
+}

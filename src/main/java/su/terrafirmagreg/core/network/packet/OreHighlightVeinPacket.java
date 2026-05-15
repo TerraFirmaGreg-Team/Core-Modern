@@ -11,7 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-import su.terrafirmagreg.core.client.OreHighlightVeinRenderer;
+import su.terrafirmagreg.core.client.renderer.OreHighlightVeinRenderer;
 
 public record OreHighlightVeinPacket(List<BlockPos> veinCenters) {
 

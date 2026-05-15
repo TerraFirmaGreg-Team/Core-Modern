@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:random_patch",
+    "config": {
+        "xz_spread": 15,
+        "tries": 50,
+        "y_spread": 6,
+        "feature": "tfg:earth/plant/tank_bromeliad"
+    }
+}

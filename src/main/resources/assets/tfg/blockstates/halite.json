@@ -1,0 +1,34 @@
+{"variants": {"": [
+    {
+        "weight": 6,
+        "model": "tfg:block/halite"
+    },
+    {
+        "weight": 6,
+        "y": 90,
+        "model": "tfg:block/halite"
+    },
+    {
+        "weight": 6,
+        "y": 180,
+        "model": "tfg:block/halite"
+    },
+    {
+        "weight": 6,
+        "y": 270,
+        "model": "tfg:block/halite"
+    },
+    {"model": "tfg:block/halite2"},
+    {
+        "y": 90,
+        "model": "tfg:block/halite2"
+    },
+    {
+        "y": 180,
+        "model": "tfg:block/halite2"
+    },
+    {
+        "y": 270,
+        "model": "tfg:block/halite2"
+    }
+]}}

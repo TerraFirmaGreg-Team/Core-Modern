@@ -1,0 +1,13 @@
+{
+    "variants": {
+        "count=2,dried=true": {"model": "tfg:block/mud_bricks/dry_2_podzol"},
+        "count=2,dried=false": {"model": "tfg:block/mud_bricks/wet_2_podzol"},
+        "count=1,dried=true": {"model": "tfg:block/mud_bricks/dry_1_podzol"},
+        "count=4,dried=true": {"model": "tfg:block/mud_bricks/dry_4_podzol"},
+        "count=3,dried=true": {"model": "tfg:block/mud_bricks/dry_3_podzol"},
+        "count=3,dried=false": {"model": "tfg:block/mud_bricks/wet_3_podzol"},
+        "count=4,dried=false": {"model": "tfg:block/mud_bricks/wet_4_podzol"},
+        "count=1,dried=false": {"model": "tfg:block/mud_bricks/wet_1_podzol"}
+    },
+    "__comment__": "This file was automatically created by mcresources"
+}

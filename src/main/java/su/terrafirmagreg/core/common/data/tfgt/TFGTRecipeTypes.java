@@ -1,6 +1,6 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
-import static su.terrafirmagreg.core.common.data.container.ProgressBars.*;
+import static su.terrafirmagreg.core.common.container.ProgressBars.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,7 +97,7 @@ public class TFGTRecipeTypes {
 
     public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
-            .setMaxIOSize(1, 2, 1, 0)
+            .setMaxIOSize(2, 2, 1, 1)
             .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.FURNACE);
@@ -170,6 +170,12 @@ public class TFGTRecipeTypes {
     public final static GTRecipeType COOLING_TOWER = GTRecipeTypes
             .register("cooling_tower", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(2, 2, 2, 2)
+            .setSound(GTSoundEntries.TURBINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP);
+
+    public final static GTRecipeType HEAT_EXCHANGER = GTRecipeTypes
+            .register("heat_exchanger", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 3, 3)
             .setSound(GTSoundEntries.TURBINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP);
 
@@ -269,4 +275,17 @@ public class TFGTRecipeTypes {
                 widgetGroup.addWidget(new SlotWidget(new CycleItemStackHandler(items), 0,
                         widgetGroup.getSize().width - 25, widgetGroup.getSize().height - 32, false, false));
             });
+
+    public static final GTRecipeType SUPER_BOILER = GTRecipeTypes
+            .register("super_boiler", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 1, 1)
+            .setSound(GTSoundEntries.FURNACE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_FUEL.get(true), FillDirection.DOWN_TO_UP);
+
+    public static final GTRecipeType PASTORAL_ENGINE_RECIPES = GTRecipeTypes
+            .register("pastoral_engine", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 1)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.BATH);
 }

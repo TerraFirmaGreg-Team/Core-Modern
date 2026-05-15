@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#top"
+        },
+        "east": {
+          "texture": "#top"
+        },
+        "north": {
+          "texture": "#top"
+        },
+        "south": {
+          "texture": "#top"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#top"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        7,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "particle": "tfg:block/asphalt_road/hot",
+    "top": "tfg:block/asphalt_road/hot"
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "type": "tfc:fissure",
+    "config": {
+        "wall_state": "tfc:rock/raw/basalt",
+        "count": 3,
+        "radius": 6,
+        "fluid_state": "minecraft:lava"
+    }
+}

@@ -19,6 +19,8 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 public class TFGFluids {
 
@@ -34,6 +36,20 @@ public class TFGFluids {
                     .descriptionId("fluid.tfg.semiheavy_ammoniacal_water"),
 
             new FluidTypeClientProperties(ALPHA_MASK | 0x55d9b1, WATER_STILL, WATER_FLOW, WATER_OVERLAY,
+                    UNDERWATER_LOCATION),
+            MixingFluid.Source::new,
+            MixingFluid.Flowing::new);
+
+    public static final FluidRegistryObject<ForgeFlowingFluid> MUDDY_WATER = register(
+            "muddy_water",
+            properties -> properties
+                    .block(TFGBlocks.MUDDY_WATER)
+                    .bucket(TFGItems.MUDDY_WATER_BUCKET),
+            waterLike()
+                    .temperature(273)
+                    .descriptionId("fluid.tfg.muddy_water"),
+
+            new FluidTypeClientProperties(ALPHA_MASK | 0x734B26, WATER_STILL, WATER_FLOW, WATER_OVERLAY,
                     UNDERWATER_LOCATION),
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
@@ -80,6 +96,29 @@ public class TFGFluids {
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/geyser_slurry_still"),
                     ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/planets/venus/geyser_slurry_flow"),
                     null, null),
+            MixingFluid.Source::new,
+            MixingFluid.Flowing::new);
+
+    public static final FluidRegistryObject<ForgeFlowingFluid> ASPHALT_MIX = register(
+            "asphalt_mix",
+            properties -> properties
+                    .bucket(TFGItemsAsphalt.ASPHALT_MIX_BUCKET),
+            FluidType.Properties.create()
+                    .adjacentPathType(BlockPathTypes.LAVA)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
+                    .density(3000)
+                    .viscosity(6000)
+                    .canConvertToSource(false)
+                    .canExtinguish(false)
+                    .canHydrate(false)
+                    .supportsBoating(false)
+                    .canDrown(false)
+                    .canSwim(false)
+                    .temperature(AsphaltRoadHelper.TEMPERATURE)
+                    .canPushEntity(false)
+                    .descriptionId("fluid.tfg.asphalt_mix"),
+            new FluidTypeClientProperties(ALPHA_MASK | 0x141418, WATER_STILL, WATER_FLOW, null, null),
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
 

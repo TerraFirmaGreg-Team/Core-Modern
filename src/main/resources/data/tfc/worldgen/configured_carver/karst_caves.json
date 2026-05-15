@@ -1,0 +1,42 @@
+{
+    "type": "tfc:cave",
+    "config": {
+        "probability": 0.07,
+        "replaceable": "#tfg:karst_cave_carver_replaceable",
+        "y": {
+            "min_inclusive": {"absolute": -20},
+            "max_inclusive": {"absolute": 70},
+            "type": "uniform"
+        },
+        "yScale": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": 0.1,
+                "max_exclusive": 0.9
+            }
+        },
+        "lava_level": {"above_bottom": 8},
+        "aquifers_enabled": true,
+        "horizontal_radius_multiplier": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": 1,
+                "max_exclusive": 3.1
+            }
+        },
+        "floor_level": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": -1,
+                "max_exclusive": 0.2
+            }
+        },
+        "vertical_radius_multiplier": {
+            "type": "uniform",
+            "value": {
+                "min_inclusive": 1,
+                "max_exclusive": 3.1
+            }
+        }
+    }
+}

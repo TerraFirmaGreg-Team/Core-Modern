@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SnowyDirtBlock;
@@ -22,9 +23,10 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.material.Fluids;
 
+import su.terrafirmagreg.core.common.block.SandLayerBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockProperties;
-import su.terrafirmagreg.core.common.data.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.SandLayerBlock;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 
 // Most of this code is taken from TFC's OverworldClimateModel::onChunkLoad(),
 // since that's where it does its initial snow placement
@@ -65,7 +67,7 @@ public class MartianPolesFeature extends Feature<MartianPolesConfig> {
         final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         final BlockState snowState = Blocks.SNOW.defaultBlockState();
         final BlockState piledSnowState = Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 2);
-        final BlockState iceState = TFGBlocks.MARS_ICE.get().defaultBlockState();
+        final BlockState iceState = TFGBlocks_Mars.MARS_ICE.get().defaultBlockState();
 
         for (int x = startX; x <= startX + 15; x++) {
             for (int z = startZ; z <= startZ + 15; z++) {
@@ -82,16 +84,16 @@ public class MartianPolesFeature extends Feature<MartianPolesConfig> {
                 if (snowTempNoise < 0) {
                     if ((stateAt.isAir() || stateAt.getBlock() instanceof SandLayerBlock) && snowState.canSurvive(level, mutablePos)) {
                         // Place snow
-                        level.setBlock(mutablePos, snowTempNoise < -1 ? piledSnowState : snowState, 2);
+                        level.setBlock(mutablePos, snowTempNoise < -1 ? piledSnowState : snowState, Block.UPDATE_CLIENTS);
                         mutablePos.move(Direction.DOWN);
-                        level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), 2);
+                        level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), Block.UPDATE_CLIENTS);
                         mutablePos.move(Direction.UP);
                     } else if (SnowPileBlock.canPlaceSnowPile(level, mutablePos, stateAt)) {
                         // If it's waterlogged, don't snow pile it
                         if (!stateAt.hasProperty(TFGBlockProperties.SPACE_WATER) || stateAt.getValue(TFGBlockProperties.SPACE_WATER).getFluid() == Fluids.EMPTY) {
                             // Place snow pile
                             SnowPileBlock.placeSnowPile(level, mutablePos, stateAt, false);
-                            level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), 2);
+                            level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), Block.UPDATE_CLIENTS);
                         }
                     }
                     // TODO: check if the below block is spice, and place a different layer instead?
@@ -110,7 +112,7 @@ public class MartianPolesFeature extends Feature<MartianPolesConfig> {
                     float tempModifier = Mth.clampedMap(temperature, snowFinishTemp, snowStartTemp, -0.2f, 1);
 
                     if (waterDepthModifier + tempModifier < threshold && tempModifier < 1) {
-                        level.setBlock(mutablePos, iceState, 3);
+                        level.setBlock(mutablePos, iceState, Block.UPDATE_ALL);
                     }
                 }
             }

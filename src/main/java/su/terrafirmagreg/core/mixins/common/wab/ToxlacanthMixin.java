@@ -18,7 +18,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.LevelAccessor;
 import net.wanmine.wab.entity.Toxlacanth;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 @Mixin(value = Toxlacanth.class, remap = false)
 public class ToxlacanthMixin {

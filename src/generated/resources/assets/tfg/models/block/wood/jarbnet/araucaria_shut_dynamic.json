@@ -1,0 +1,6 @@
+{
+  "base": {
+    "parent": "tfg:block/wood/jarbnet/araucaria_shut"
+  },
+  "loader": "firmalife:jarbnet"
+}

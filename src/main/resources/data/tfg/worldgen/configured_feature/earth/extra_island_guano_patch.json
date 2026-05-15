@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:random_patch",
+    "config": {
+        "xz_spread": 3,
+        "tries": 15,
+        "y_spread": 1,
+        "feature": "tfg:earth/extra_island_guano"
+    }
+}

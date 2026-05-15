@@ -1,0 +1,15 @@
+{
+    "feature": "tfg:earth/plant/starfish_patch_patch",
+    "placement": [
+        {
+            "chance": 2,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

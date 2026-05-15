@@ -15,7 +15,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import appeng.api.stacks.GenericStack;
 import appeng.util.ConfigMenuInventory;
 
-import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
+import su.terrafirmagreg.core.common.data.tfgt.TFGPropertyKeys;
 
 /**
  * Mixin to make TFC items with heat data compatible with AE2. This mixin is for creating patterns.

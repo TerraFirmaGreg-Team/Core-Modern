@@ -1,0 +1,19 @@
+{
+    "values": [
+        "tfg:earth/badlands",
+        "tfg:earth/canyons",
+        "tfg:earth/low_canyons",
+        "tfg:earth/whorled_canyons",
+        "tfg:earth/stair_step_canyons",
+        "tfg:earth/mesas",
+        "tfg:earth/buttes",
+        "tfg:earth/hoodoos",
+        "tfg:earth/burren_badlands",
+        "tfg:earth/burren_badlands_tall",
+        "tfg:earth/shilin_canyons",
+        "tfg:earth/doline_canyons",
+        "tfg:earth/cenote_canyons"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

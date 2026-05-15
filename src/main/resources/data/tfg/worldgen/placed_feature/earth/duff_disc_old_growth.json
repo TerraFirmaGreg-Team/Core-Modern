@@ -1,0 +1,18 @@
+{
+    "feature": "tfg:earth/duff_disc_normal",
+    "placement": [
+        {
+            "type": "tfc:climate",
+            "min_forest": "old_growth"
+        },
+        {
+            "count": 7,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ]
+}

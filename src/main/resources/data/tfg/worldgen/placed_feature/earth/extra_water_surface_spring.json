@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/extra_water_surface_spring",
+    "placement": [
+        {
+            "count": 30,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": 64},
+                "max_inclusive": {"absolute": 180},
+                "type": "uniform"
+            }
+        },
+        {
+            "type": "tfc:climate",
+            "min_rainfall": 390,
+            "min_temperature": -16
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

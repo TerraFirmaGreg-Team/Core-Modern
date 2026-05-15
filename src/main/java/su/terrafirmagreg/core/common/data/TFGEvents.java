@@ -8,6 +8,7 @@ public class TFGEvents {
 
     public static void register() {
         MinecraftForge.EVENT_BUS.register(new HarvesterEvent());
+        MinecraftForge.EVENT_BUS.register(new WorldgenVersionEvents());
         MinecraftForge.EVENT_BUS.register(new FishingNetEvent());
     }
 }

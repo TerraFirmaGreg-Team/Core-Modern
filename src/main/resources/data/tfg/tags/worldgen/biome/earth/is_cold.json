@@ -1,0 +1,29 @@
+{
+    "values": [
+        "tfg:earth/burren_roche_moutonee",
+        "tfg:earth/ice_sheet",
+        "tfg:earth/ice_sheet_mountains",
+        "tfg:earth/ice_sheet_oceanic_mountains",
+        "tfg:earth/ice_sheet_shield_volcano",
+        "tfg:earth/ice_sheet_tuyas",
+        "tfg:earth/subglacial_lake",
+        "tfg:earth/ice_sheet_edge",
+        "tfg:earth/ice_sheet_tuyas_edge",
+        "tfg:earth/ice_sheet_mountains_edge",
+        "tfg:earth/ice_sheet_oceanic_mountains_edge",
+        "tfg:earth/meltwater_lake",
+        "tfg:earth/ice_sheet_oceanic",
+        "tfg:earth/ice_sheet_shore",
+        "tfg:earth/glaciated_mountains",
+        "tfg:earth/glaciated_oceanic_mountains",
+        "tfg:earth/glaciated_shield_volcano",
+        "tfg:earth/tuyas",
+        "tfg:earth/drumlins",
+        "tfg:earth/knob_and_kettle",
+        "tfg:earth/patterned_ground",
+        "tfg:earth/inverted_patterned_ground",
+        "tfg:earth/stone_circles"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
+}

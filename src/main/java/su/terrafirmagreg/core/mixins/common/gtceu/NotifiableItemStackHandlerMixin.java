@@ -13,7 +13,7 @@ import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
-import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
+import su.terrafirmagreg.core.common.data.tfgt.TFGPropertyKeys;
 
 // This mixin is used to fix compatibility between TFC, GTCEu-M & AE2
 // GTMachines produce items with their capabilities lazily initialized

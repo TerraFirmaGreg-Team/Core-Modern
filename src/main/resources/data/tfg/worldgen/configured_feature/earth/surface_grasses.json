@@ -1,0 +1,4 @@
+{
+    "type": "tfc:noisy_multiple",
+    "config": {"features": "#tfg:feature/surface_grasses"}
+}

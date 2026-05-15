@@ -1,0 +1,4 @@
+{
+    "type": "tfg:rotatable_water_plant",
+    "config": {"block": "tfg:plant/starfish"}
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/asphalt_road/slab_overlay",
+  "textures": {
+    "decal": "tfg:block/asphalt_road/mask_fill"
+  }
+}

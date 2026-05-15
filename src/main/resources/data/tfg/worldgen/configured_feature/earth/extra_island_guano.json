@@ -1,0 +1,10 @@
+{
+    "type": "minecraft:simple_block",
+    "config": {"to_place": {
+        "state": {
+            "Properties": {"fluid": "empty"},
+            "Name": "tfc:groundcover/guano"
+        },
+        "type": "minecraft:simple_state_provider"
+    }}
+}

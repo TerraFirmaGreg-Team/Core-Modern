@@ -22,23 +22,23 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.TFGModifyMaterials;
-import su.terrafirmagreg.core.common.data.entities.ai.TFGBrain;
-import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeConditions;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
+import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
+import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTRecipeTypes;
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMachines;
-import su.terrafirmagreg.core.common.data.tfgt.machine.TFGMultiMachines;
+import su.terrafirmagreg.core.common.entity.ai.TFGBrain;
+import su.terrafirmagreg.core.common.tfgt.material.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
 import su.terrafirmagreg.core.compat.create.CustomArmInteractionPointTypes;
 import su.terrafirmagreg.core.compat.grappling_hook.GrapplehookCompat;
-import su.terrafirmagreg.core.compat.gtceu.materials.TFGMaterialHandler;
 import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.utils.TFGHelpers;
 import su.terrafirmagreg.core.utils.TFGModsResolver;
-import su.terrafirmagreg.core.world.TFGFeatures;
-import su.terrafirmagreg.core.world.TFGSurfaceRules;
+import su.terrafirmagreg.core.world.*;
 
 public class CommonProxy {
 
@@ -53,14 +53,16 @@ public class CommonProxy {
 
         TFGNetworkHandler.init();
         TFGBlocks.init();
-        TFGBlockEntities.BLOCK_ENTITIES.register(bus);
+        TFGBlockEntities.init();
         TFGItems.init();
         TFGCreativeTab.init();
         TFGFeatures.FEATURES.register(bus);
         TFGEntities.init();
         TFGParticles.register(bus);
+        TFGPlacements.PLACEMENT_MODIFIERS.register(bus);
         TFGFluids.FLUIDS.register(bus);
         TFGSurfaceRules.SURFACE_RULES.register(bus);
+        TFGSurfaceConditions.SURFACE_CONDITIONS.register(bus);
         TFGContainers.CONTAINERS.register(bus);
         TFGEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(bus);
         TFGEffects.EFFECTS.register(bus);
@@ -68,10 +70,13 @@ public class CommonProxy {
         TFGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
         TFGEvents.register();
         TFGSounds.SOUNDS.register(bus);
+        TFGCarvers.CARVERS.register(bus);
 
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);
         TFGBrain.POI_TYPES.register(bus);
+
+        TFGPoiTypes.TYPES.register(bus);
 
         TFGFoodTraits.init();
 
@@ -107,6 +112,8 @@ public class CommonProxy {
             addUpgrades(AE2wtlib.PATTERN_ENCODING_TERMINAL);
             addUpgrades(AE2wtlib.PATTERN_ACCESS_TERMINAL);
             addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
+
+            TFGBlockEntities.finaliseBEModification();
         });
     }
 
@@ -124,6 +131,6 @@ public class CommonProxy {
     }
 
     public void registerRecipeConditions(GTCEuAPI.RegisterEvent<ResourceLocation, RecipeConditionType<?>> event) {
-        TFGTRecipeConditions.init();
+        TFGRecipeConditions.init();
     }
 }

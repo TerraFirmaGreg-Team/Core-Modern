@@ -1,0 +1,8 @@
+{
+    "parent": "tfg:block/short_bush",
+    "textures": {
+        "side": "tfg:block/plant/kinnikinnick/kinnikinnick_1",
+        "top": "tfg:block/plant/kinnikinnick/kinnikinnick_1",
+        "particle": "tfg:block/plant/kinnikinnick/kinnikinnick_1"
+    }
+}

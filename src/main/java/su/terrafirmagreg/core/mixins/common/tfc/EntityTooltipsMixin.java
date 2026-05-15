@@ -16,6 +16,7 @@ import net.dries007.tfc.common.entities.livestock.TFCAnimal;
 import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.dries007.tfc.common.entities.livestock.horse.TFCChestedHorse;
 import net.dries007.tfc.common.entities.livestock.horse.TFCHorse;
+import net.dries007.tfc.common.entities.livestock.pet.Dog;
 import net.dries007.tfc.common.entities.misc.TFCFishingHook;
 import net.dries007.tfc.common.entities.predator.Predator;
 import net.dries007.tfc.common.entities.prey.TFCFrog;
@@ -40,15 +41,21 @@ import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.entity.Soarer;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.entities.axolotl.AxolotlData;
-import su.terrafirmagreg.core.common.data.entities.charger.ChargerData;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
-import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
-import su.terrafirmagreg.core.common.data.entities.snatcher.SnatcherData;
-import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
-import su.terrafirmagreg.core.common.data.entities.soarer.SoarerData;
-import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
-import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
+import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBison;
+import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboa;
+import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemming;
+import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSeal;
+import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
+import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
+import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
+import su.terrafirmagreg.core.common.entity.charger.ChargerData;
+import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
+import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
+import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
+import su.terrafirmagreg.core.common.entity.soarer.SoarerData;
+import su.terrafirmagreg.core.common.entity.surfer.TFCSurfer;
+import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptor;
 
 @Mixin(value = EntityTooltips.class, remap = false)
 public abstract class EntityTooltipsMixin {
@@ -78,7 +85,30 @@ public abstract class EntityTooltipsMixin {
         registry.register("axolotl", TFG_AXOLOTL, Axolotl.class);
         registry.register("charger", TFG_CHARGER, Charger.class);
         registry.register("snatcher", TFG_SNATCHER, Snatcher.class);
+        registry.register("wolf", TFG_WOLF, PackPredator.class);
+        registry.register("dog", TFG_DOG, Dog.class);
+        registry.register("leopard_seal", TFC_1_21, TFCLeopardSeal.class);
+        registry.register("bison", TFC_1_21, TFCBison.class);
+        registry.register("lemming", TFC_1_21, TFCLemming.class);
+        registry.register("jerboa", TFC_1_21, TFCJerboa.class);
+        registry.register("mongoose", TFC_1_21, TFCMongoose.class);
     }
+
+    @Unique
+    private static final EntityTooltip TFG_WOLF = (level, entity, tooltip) -> {
+        if (entity instanceof TFCWolfInterface wolf && entity instanceof PackPredator predator) {
+            if (predator.isTamable()) {
+                tooltip.accept(Helpers.translateEnum(wolf.tfg$getVariant(), "TFCWolfVariant"));
+            }
+        }
+    };
+
+    @Unique
+    private static final EntityTooltip TFG_DOG = (level, entity, tooltip) -> {
+        if (entity instanceof TFCWolfInterface dog) {
+            tooltip.accept(Helpers.translateEnum(dog.tfg$getVariant(), "TFCWolfVariant"));
+        }
+    };
 
     @Unique
     private static final EntityTooltip TFG_RABBIT = (level, entity, tooltip) -> {
@@ -144,6 +174,11 @@ public abstract class EntityTooltipsMixin {
         if (entity instanceof Axolotl axolotl) {
             tooltip.accept(Helpers.translateEnum(AxolotlData.isMale(axolotl) ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
         }
+    };
+
+    @Unique
+    private static final EntityTooltip TFC_1_21 = (level, entity, tooltip) -> {
+        tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.tfc"));
     };
 
     @Unique

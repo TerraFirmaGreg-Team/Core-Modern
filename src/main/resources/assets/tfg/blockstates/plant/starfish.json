@@ -1,0 +1,44 @@
+{"multipart": [
+    {
+        "apply": [{
+            "x": 90,
+            "y": 90,
+            "model": "tfg:block/plant/starfish"
+        }],
+        "when": {"facing": "east"}
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "y": 180,
+            "model": "tfg:block/plant/starfish"
+        }],
+        "when": {"facing": "south"}
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "y": 270,
+            "model": "tfg:block/plant/starfish"
+        }],
+        "when": {"facing": "west"}
+    },
+    {
+        "apply": [{
+            "x": 90,
+            "model": "tfg:block/plant/starfish"
+        }],
+        "when": {"facing": "north"}
+    },
+    {
+        "apply": [{"model": "tfg:block/plant/starfish"}],
+        "when": {"facing": "up"}
+    },
+    {
+        "apply": [{
+            "x": 180,
+            "model": "tfg:block/plant/starfish"
+        }],
+        "when": {"facing": "down"}
+    }
+]}

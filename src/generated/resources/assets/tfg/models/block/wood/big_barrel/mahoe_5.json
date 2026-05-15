@@ -1,0 +1,18 @@
+{
+  "parent": "firmalife:block/big_barrel_5",
+  "textures": {
+    "0": "tfg:block/wood/big_barrel/mahoe_3_side",
+    "1": "tfg:block/wood/big_barrel/mahoe_0",
+    "10": "tfg:block/wood/big_barrel/mahoe_1_top",
+    "11": "tfg:block/wood/big_barrel/mahoe_2_top",
+    "12": "tfg:block/wood/log/mahoe",
+    "2": "tfg:block/wood/big_barrel/mahoe_0_side",
+    "3": "tfg:block/wood/big_barrel/mahoe_1",
+    "4": "tfg:block/wood/big_barrel/mahoe_1_side",
+    "5": "tfg:block/wood/big_barrel/mahoe_2",
+    "6": "tfg:block/wood/big_barrel/mahoe_2_side",
+    "7": "tfg:block/wood/big_barrel/mahoe_3",
+    "8": "tfg:block/wood/big_barrel/mahoe_3_top",
+    "9": "tfg:block/wood/big_barrel/mahoe_0_top"
+  }
+}

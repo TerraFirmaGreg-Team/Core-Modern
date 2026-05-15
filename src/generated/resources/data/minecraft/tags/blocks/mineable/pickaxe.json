@@ -1,6 +1,15 @@
 {
   "values": [
     "tfg:quartz_crucible",
+    "tfg:halite",
+    "tfg:carbonate_hornfels",
+    "tfg:pelitic_hornfels",
+    "tfg:mafic_hornfels",
+    "tfg:gilsonite",
+    "tfg:oil_slick",
+    "tfg:raw_oil_slick",
+    "tfg:light_oil_slick",
+    "tfg:heavy_oil_slick",
     "tfg:casings/greenhouse/copper_greenhouse_casing_0",
     "tfg:casings/greenhouse/copper_greenhouse_casing_1",
     "tfg:casings/greenhouse/copper_greenhouse_casing_2",
@@ -15,6 +24,10 @@
     "tfg:casings/greenhouse/stainless_greenhouse_casing_1",
     "tfg:casings/greenhouse/stainless_greenhouse_casing_2",
     "tfg:casings/greenhouse/stainless_greenhouse_casing_3",
-    "tfg:casings/greenhouse/stainless_greenhouse_casing_4"
+    "tfg:casings/greenhouse/stainless_greenhouse_casing_4",
+    "tfg:asphalt_road_hot",
+    "tfg:asphalt_road",
+    "tfg:asphalt_road_stairs",
+    "tfg:asphalt_road_slab"
   ]
 }

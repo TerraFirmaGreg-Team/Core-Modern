@@ -1,0 +1,24 @@
+{
+    "feature": "tfg:earth/podzol_disc",
+    "placement": [
+        {
+            "max_temperature": 5,
+            "max_rainfall": 400,
+            "type": "tfc:climate",
+            "min_forest": "edge",
+            "min_rainfall": 170,
+            "min_temperature": -14.2,
+            "fuzzy": true
+        },
+        {
+            "count": 3,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

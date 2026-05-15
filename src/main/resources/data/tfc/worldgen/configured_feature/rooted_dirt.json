@@ -1,0 +1,107 @@
+{
+    "type": "tfc:soil_disc",
+    "config": {
+        "integrity": 0.8,
+        "max_radius": 6,
+        "min_radius": 4,
+        "height": 2,
+        "states": [
+            {
+                "with": "tfc:rooted_dirt/silt",
+                "replace": "tfc:grass/silt"
+            },
+            {
+                "with": "tfc:rooted_dirt/silt",
+                "replace": "tfc:dirt/silt"
+            },
+            {
+                "with": "tfc:rooted_dirt/loam",
+                "replace": "tfc:grass/loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/loam",
+                "replace": "tfc:dirt/loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/sandy_loam",
+                "replace": "tfc:grass/sandy_loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/sandy_loam",
+                "replace": "tfc:dirt/sandy_loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/silty_loam",
+                "replace": "tfc:grass/silty_loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/silty_loam",
+                "replace": "tfc:dirt/silty_loam"
+            },
+            {
+                "with": "tfg:rooted_dirt/alfisol",
+                "replace": "tfg:grass/alfisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/alfisol",
+                "replace": "tfg:dirt/alfisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/mollisol",
+                "replace": "tfg:grass/mollisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/mollisol",
+                "replace": "tfg:dirt/mollisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/oxisol",
+                "replace": "tfg:grass/oxisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/oxisol",
+                "replace": "tfg:dirt/oxisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/podzol",
+                "replace": "tfg:grass/podzol"
+            },
+            {
+                "with": "tfg:rooted_dirt/podzol",
+                "replace": "tfg:dirt/podzol"
+            },
+            {
+                "with": "tfc:rooted_dirt/silt",
+                "replace": "tfg:coarse_dirt/silt"
+            },
+            {
+                "with": "tfc:rooted_dirt/loam",
+                "replace": "tfg:coarse_dirt/loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/sandy_loam",
+                "replace": "tfg:coarse_dirt/sandy_loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/silty_loam",
+                "replace": "tfg:coarse_dirt/silty_loam"
+            },
+            {
+                "with": "tfg:rooted_dirt/alfisol",
+                "replace": "tfg:coarse_dirt/alfisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/mollisol",
+                "replace": "tfg:coarse_dirt/mollisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/oxisol",
+                "replace": "tfg:coarse_dirt/oxisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/podzol",
+                "replace": "tfg:coarse_dirt/podzol"
+            }
+        ]
+    }
+}

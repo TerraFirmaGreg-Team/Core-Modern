@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "tfc:block/wood/planks/hickory",
+    "east": "tfg:block/wood/crafting_station/hickory_slab_side",
+    "north": "tfg:block/wood/crafting_station/hickory_slab_side",
+    "particle": "tfc:block/wood/planks/hickory",
+    "south": "tfg:block/wood/crafting_station/hickory_slab_side",
+    "up": "tfg:block/wood/crafting_station/hickory_top",
+    "west": "tfg:block/wood/crafting_station/hickory_slab_side"
+  }
+}

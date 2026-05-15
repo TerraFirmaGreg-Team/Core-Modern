@@ -16,7 +16,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 
 import earth.terrarium.adastra.api.planets.PlanetApi;
 
-import su.terrafirmagreg.core.common.data.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 
 @Mixin(value = EnvironmentHelpers.class, remap = false)
 public abstract class EnvironmentHelpersMixin {

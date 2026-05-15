@@ -1,0 +1,39 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#decal",
+          "tintindex": 1,
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#decal",
+          "tintindex": 1,
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        -0.01,
+        14.992,
+        -0.01
+      ],
+      "to": [
+        16.01,
+        15.015,
+        16.01
+      ]
+    }
+  ]
+}

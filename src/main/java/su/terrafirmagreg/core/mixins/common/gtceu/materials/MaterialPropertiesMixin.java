@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.MaterialProperties;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 
-import su.terrafirmagreg.core.compat.gtceu.TFGPropertyKeys;
+import su.terrafirmagreg.core.common.data.tfgt.TFGPropertyKeys;
 
 @Mixin(value = MaterialProperties.class, remap = false)
 public abstract class MaterialPropertiesMixin {

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/chiseled_bookshelf_empty_slot_top_right",
+  "textures": {
+    "texture": "tfg:block/wood/bookshelf/strophar_empty"
+  }
+}

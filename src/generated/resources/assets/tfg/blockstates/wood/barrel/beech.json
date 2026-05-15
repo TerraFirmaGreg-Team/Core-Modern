@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "facing=east,rack=false,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech_side"
+    },
+    "facing=east,rack=false,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech_side"
+    },
+    "facing=east,rack=true,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech_side_rack"
+    },
+    "facing=east,rack=true,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech_side_rack"
+    },
+    "facing=north,rack=false,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech_side",
+      "y": 270
+    },
+    "facing=north,rack=false,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech_side",
+      "y": 270
+    },
+    "facing=north,rack=true,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech_side_rack",
+      "y": 270
+    },
+    "facing=north,rack=true,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech_side_rack",
+      "y": 270
+    },
+    "facing=south,rack=false,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech_side",
+      "y": 90
+    },
+    "facing=south,rack=false,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech_side",
+      "y": 90
+    },
+    "facing=south,rack=true,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech_side_rack",
+      "y": 90
+    },
+    "facing=south,rack=true,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech_side_rack",
+      "y": 90
+    },
+    "facing=up,rack=false,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech"
+    },
+    "facing=up,rack=false,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech"
+    },
+    "facing=up,rack=true,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech"
+    },
+    "facing=up,rack=true,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech"
+    },
+    "facing=west,rack=false,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech_side",
+      "y": 180
+    },
+    "facing=west,rack=false,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech_side",
+      "y": 180
+    },
+    "facing=west,rack=true,sealed=false": {
+      "model": "tfg:block/wood/barrel/beech_side_rack",
+      "y": 180
+    },
+    "facing=west,rack=true,sealed=true": {
+      "model": "tfg:block/wood/barrel_sealed/beech_side_rack",
+      "y": 180
+    }
+  }
+}

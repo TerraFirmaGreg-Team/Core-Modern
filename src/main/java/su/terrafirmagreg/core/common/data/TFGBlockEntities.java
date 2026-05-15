@@ -1,31 +1,33 @@
 package su.terrafirmagreg.core.common.data;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.util.Arrays.stream;
+
+import java.util.*;
+import java.util.function.Supplier;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
+import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.blockentity.ArtisanTableBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.GTGreenhousePortBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.LargeNestBoxBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.ReflectorBlockEntity;
-import su.terrafirmagreg.core.common.data.blockentity.TickerBlockEntity;
-import su.terrafirmagreg.core.compat.kjs.GTActiveParticleBuilder;
-import su.terrafirmagreg.core.compat.kjs.ParticleEmitterBlockBuilder;
-import su.terrafirmagreg.core.compat.kjs.ParticleEmitterDecorationBlockBuilder;
+import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
+import su.terrafirmagreg.core.common.blockentity.*;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
+import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
 
 public class TFGBlockEntities {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister
-            .create(ForgeRegistries.BLOCK_ENTITY_TYPES, TFGCore.MOD_ID);
+    public static void init() {
+    }
 
     public static final BlockEntityEntry<GTGreenhousePortBlockEntity> GT_GREENHOUSE_PORT = TFGCore.REGISTRATE.blockEntity("gt_greenhouse_port", GTGreenhousePortBlockEntity::new)
             .validBlocks(FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.STAINLESS_STEEL).get(Greenhouse.BlockType.PORT)::get,
@@ -43,26 +45,58 @@ public class TFGBlockEntities {
     // TFGBlocks.LARGE_NEST_BOX_WARPED.get()};
 
     public static final BlockEntityEntry<LargeNestBoxBlockEntity> LARGE_NEST_BOX = TFGCore.REGISTRATE.blockEntity("large_nest_box", LargeNestBoxBlockEntity::new)
-            .validBlocks(TFGBlocks.LARGE_NEST_BOX::get, TFGBlocks.LARGE_NEST_BOX_WARPED::get)
+            .validBlocks(TFGBlocks_Mars.LARGE_NEST_BOX, TFGBlocks_Mars.LARGE_NEST_BOX_WARPED)
             .register();
 
     public static final BlockEntityEntry<ArtisanTableBlockEntity> ARTISAN_TABLE = TFGCore.REGISTRATE.blockEntity("artisan_table", ArtisanTableBlockEntity::new)
-            .validBlock(TFGBlocks.ARTISAN_TABLE::get)
+            .validBlock(TFGBlocks.ARTISAN_TABLE)
             .register();
 
     public static final BlockEntityEntry<ReflectorBlockEntity> REFLECTOR_BLOCK_ENTITY = TFGCore.REGISTRATE.blockEntity("reflector", ReflectorBlockEntity::new)
-            .validBlock(TFGBlocks.REFLECTOR_BLOCK::get)
+            .validBlock(TFGBlocks_Casings.REFLECTOR_BLOCK)
             .register();
 
-    public static final RegistryObject<BlockEntityType<TickerBlockEntity>> TICKER_ENTITY = BLOCK_ENTITIES
-            .register("particle_emitter", () -> {
-                List<Block> blocks = new ArrayList<>();
-                blocks.addAll(ParticleEmitterBlockBuilder.REGISTERED_BLOCKS);
-                blocks.addAll(ParticleEmitterDecorationBlockBuilder.REGISTERED_BLOCKS);
-                blocks.addAll(GTActiveParticleBuilder.REGISTERED_BLOCKS);
-                blocks.add(TFGBlocks.GROW_LIGHT.get());
-                blocks.add(TFGBlocks.EGH_PLANTER.get());
-                blocks.add(TFGBlocks.PISCICULTURE_CORE.get());
-                return BlockEntityType.Builder.of(TickerBlockEntity::new, blocks.toArray(Block[]::new)).build(null);
-            });
+    public static final BlockEntityEntry<AsphaltPouringSpreadBlockEntity> ASPHALT_POURING_SPREAD = TFGCore.REGISTRATE
+            .blockEntity("asphalt_pouring_spread", AsphaltPouringSpreadBlockEntity::new)
+            .validBlock(TFGBlocksAsphalt.ASPHALT_ROAD_POURING)
+            .register();
+
+    public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)
+            .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
+            .register();
+
+    @SuppressWarnings("unchecked")
+    public static final BlockEntityEntry<BerryBushBlockEntity> FRUIT_TREE_BERRY_BUSH = TFGCore.REGISTRATE
+            .<BerryBushBlockEntity>blockEntity("fruit_tree_berry_bush", (type, pos, state) -> new TFGBerryBushBlockEntity(pos, state))
+            .validBlocks(stream(TFGFruitTree.FruitTreeType.values())
+                    .map(TFGFruitTree.FRUIT_TREE_LEAVES::get)
+                    .toArray(NonNullSupplier[]::new))
+            .register();
+
+    @SuppressWarnings("unchecked")
+    public static final BlockEntityEntry<TickCounterBlockEntity> FRUIT_TREE_TICK_COUNTER = TFGCore.REGISTRATE
+            .<TickCounterBlockEntity>blockEntity("fruit_tree_tick_counter", (type, pos, state) -> new TFGTickCounterBlockEntity(pos, state))
+            .validBlocks(stream(TFGFruitTree.FruitTreeType.values())
+                    .flatMap(tree -> java.util.stream.Stream.of(
+                            TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree),
+                            TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree)))
+                    .toArray(NonNullSupplier[]::new))
+            .register();
+
+    private static final Map<Supplier<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();
+
+    public static void addValidBEBlock(Supplier<?> type, Block block) {
+        beModification.computeIfAbsent(type, t -> new HashSet<>());
+        beModification.get(type).add(block);
+    }
+
+    public static void finaliseBEModification() {
+        for (var key : beModification.keySet()) {
+            var beType = (BlockEntityTypeAccessor) key.get();
+            Set<Block> blocks = new HashSet<>();
+            blocks.addAll(beType.tfg$getValidBlocks());
+            blocks.addAll(beModification.get(key));
+            beType.tfg$setValidBlocks(blocks);
+        }
+    }
 }

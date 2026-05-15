@@ -1,0 +1,10 @@
+{
+    "type": "tfg:creeping_ocean_plant",
+    "config": {
+        "integrity": 0.6,
+        "block": "tfg:plant/mussels",
+        "tide_height": 2,
+        "radius": 3,
+        "height": 5
+    }
+}

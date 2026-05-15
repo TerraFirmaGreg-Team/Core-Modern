@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/cross",
+    "textures": {
+        "cross": "tfg:block/plant/cornflower/cornflower_1",
+        "particle": "tfg:block/plant/cornflower/cornflower_1"
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "feature": "tfc:tree/aspen_krummholz",
+    "placement": [
+        {
+            "count": 2,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "MOTION_BLOCKING",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": -4.1,
+            "max_rainfall": 500,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 350,
+            "min_forest": "edge",
+            "min_temperature": -18.7
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

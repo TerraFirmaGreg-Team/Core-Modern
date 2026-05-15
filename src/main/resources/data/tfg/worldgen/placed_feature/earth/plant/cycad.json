@@ -1,0 +1,28 @@
+{
+    "feature": "tfg:earth/plant/cycad",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 22,
+            "max_rainfall": 400,
+            "max_forest": "normal",
+            "type": "tfc:climate",
+            "min_rainfall": 120,
+            "min_forest": "sparse",
+            "min_temperature": 13
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

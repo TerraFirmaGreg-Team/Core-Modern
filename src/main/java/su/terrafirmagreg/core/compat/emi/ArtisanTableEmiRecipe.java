@@ -21,9 +21,9 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
-import su.terrafirmagreg.core.common.data.recipes.ArtisanPattern;
-import su.terrafirmagreg.core.common.data.recipes.ArtisanRecipe;
-import su.terrafirmagreg.core.common.data.recipes.ArtisanType;
+import su.terrafirmagreg.core.common.recipe.ArtisanPattern;
+import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
+import su.terrafirmagreg.core.common.recipe.ArtisanType;
 
 /**
  * EMI recipe wrapper for the Artisan Table.
@@ -151,7 +151,7 @@ public class ArtisanTableEmiRecipe implements EmiRecipe {
         }
 
         if (!this.getOutputs().isEmpty()) {
-            holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, yPos + 5).recipeContext(this);
+            holder.addSlot(this.getOutputs().get(0), xPos - xDiff + 11, 10 + yDiff * 2 + 5).recipeContext(this);
         }
 
         displayPattern(holder);

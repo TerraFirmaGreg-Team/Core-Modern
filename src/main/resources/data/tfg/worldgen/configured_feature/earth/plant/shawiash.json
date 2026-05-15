@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:simple_block",
+    "config": {"to_place": {
+        "property": "age",
+        "state": {
+            "Properties": {
+                "stage": "1",
+                "age": "1"
+            },
+            "Name": "tfg:plant/shawiash"
+        },
+        "type": "tfc:random_property"
+    }}
+}

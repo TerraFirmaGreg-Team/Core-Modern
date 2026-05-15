@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/lectern/aeronos",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/lectern/aeronos"
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/lectern/aeronos",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/lectern/aeronos",
+      "y": 270
+    }
+  }
+}

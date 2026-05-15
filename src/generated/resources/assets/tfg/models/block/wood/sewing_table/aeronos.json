@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/sewing_table",
+  "textures": {
+    "0": "ad_astra:block/aeronos_stem",
+    "1": "ad_astra:block/aeronos_planks"
+  }
+}

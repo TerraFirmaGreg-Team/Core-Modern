@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "tfg:block/wood/planks/araucaria",
+    "side": "tfg:block/wood/planks/araucaria",
+    "top": "tfg:block/wood/planks/araucaria"
+  }
+}

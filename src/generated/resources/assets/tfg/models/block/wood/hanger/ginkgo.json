@@ -1,0 +1,7 @@
+{
+  "parent": "firmalife:block/hanger_base",
+  "textures": {
+    "string": "minecraft:block/white_wool",
+    "wood": "wan_ancient_beasts:block/ginkgo_planks"
+  }
+}

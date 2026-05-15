@@ -1,0 +1,18 @@
+{
+    "variants": {"": [
+        {"model": "tfg:block/coarse_dirt/loam"},
+        {
+            "y": 90,
+            "model": "tfg:block/coarse_dirt/loam"
+        },
+        {
+            "y": 180,
+            "model": "tfg:block/coarse_dirt/loam"
+        },
+        {
+            "y": 270,
+            "model": "tfg:block/coarse_dirt/loam"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
+}

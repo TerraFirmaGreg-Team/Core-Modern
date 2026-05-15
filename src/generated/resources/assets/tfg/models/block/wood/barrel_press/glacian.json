@@ -1,0 +1,6 @@
+{
+  "parent": "firmalife:block/barrel_press",
+  "textures": {
+    "0": "tfg:block/wood/sheet/glacian"
+  }
+}

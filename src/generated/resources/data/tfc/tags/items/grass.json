@@ -1,0 +1,21 @@
+{
+  "values": [
+    "tfg:grass/alfisol",
+    "tfg:clay_grass/alfisol",
+    "tfg:grass/mollisol",
+    "tfg:clay_grass/mollisol",
+    "tfg:grass/oxisol",
+    "tfg:clay_grass/oxisol",
+    "tfg:grass/podzol",
+    "tfg:clay_grass/podzol",
+    "tfg:grass/amber_mycelium",
+    "tfg:grass/amber_clay_mycelium",
+    "tfg:grass/amber_kaolin_mycelium",
+    "tfg:grass/rusticus_mycelium",
+    "tfg:grass/rusticus_clay_mycelium",
+    "tfg:grass/rusticus_kaolin_mycelium",
+    "tfg:grass/sangnum_mycelium",
+    "tfg:grass/sangnum_clay_mycelium",
+    "tfg:grass/sangnum_kaolin_mycelium"
+  ]
+}

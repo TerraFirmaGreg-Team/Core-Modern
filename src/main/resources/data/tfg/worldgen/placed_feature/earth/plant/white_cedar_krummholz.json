@@ -1,0 +1,24 @@
+{
+    "feature": "tfc:tree/white_cedar_krummholz",
+    "placement": [
+        {
+            "count": 2,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "MOTION_BLOCKING",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": -6,
+            "max_rainfall": 285,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_forest": "edge",
+            "min_temperature": -18.2
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}

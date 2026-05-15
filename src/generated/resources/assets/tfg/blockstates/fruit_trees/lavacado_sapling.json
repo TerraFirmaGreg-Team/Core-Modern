@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "saplings=1": {
+      "model": "tfg:block/fruit_trees/lavacado_sapling_1"
+    },
+    "saplings=2": {
+      "model": "tfg:block/fruit_trees/lavacado_sapling_2"
+    },
+    "saplings=3": {
+      "model": "tfg:block/fruit_trees/lavacado_sapling_3"
+    },
+    "saplings=4": {
+      "model": "tfg:block/fruit_trees/lavacado_sapling_4"
+    }
+  }
+}

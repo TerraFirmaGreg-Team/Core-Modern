@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/wood/loom/mahoe",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "tfg:block/wood/loom/mahoe",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "tfg:block/wood/loom/mahoe"
+    },
+    "facing=west": {
+      "model": "tfg:block/wood/loom/mahoe",
+      "y": 90
+    }
+  }
+}

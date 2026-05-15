@@ -15,28 +15,39 @@ import net.wanmine.wab.entity.render.model.SurferModel;
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBison;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBisonModel;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcbison.TFCBisonRenderer;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSeal;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSealModel;
-import su.terrafirmagreg.core.common.data.entities.animals.tfcleopardseal.TFCLeopardSealRenderer;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlow;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowModel;
-import su.terrafirmagreg.core.common.data.entities.astikorcarts.RNRPlowRenderer;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRam;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamModel;
-import su.terrafirmagreg.core.common.data.entities.glacianram.TFCGlacianRamRenderer;
-import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbit;
-import su.terrafirmagreg.core.common.data.entities.moonrabbit.MoonRabbitRenderer;
-import su.terrafirmagreg.core.common.data.entities.rocket.RocketHelper;
-import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSniffer;
-import su.terrafirmagreg.core.common.data.entities.sniffer.TFCSnifferRenderer;
-import su.terrafirmagreg.core.common.data.entities.surfer.TFCSurfer;
-import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptor;
-import su.terrafirmagreg.core.common.data.entities.wraptor.TFCWraptorRenderer;
+import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBison;
+import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBisonModel;
+import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBisonRenderer;
+import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboa;
+import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboaModel;
+import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboaRenderer;
+import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemming;
+import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemmingModel;
+import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemmingRenderer;
+import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSeal;
+import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSealModel;
+import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSealRenderer;
+import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
+import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongooseModel;
+import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongooseRenderer;
+import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFGWolfModel;
+import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlow;
+import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
+import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
+import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
+import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamModel;
+import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamRenderer;
+import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbitRenderer;
+import su.terrafirmagreg.core.common.entity.rocket.RocketHelper;
+import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
+import su.terrafirmagreg.core.common.entity.sniffer.TFCSnifferRenderer;
+import su.terrafirmagreg.core.common.entity.surfer.TFCSurfer;
+import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptor;
+import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptorRenderer;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@SuppressWarnings("unused")
 public class TFGEntities {
 
     public static void init() {
@@ -98,6 +109,30 @@ public class TFGEntities {
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCBison::spawnRules)
             .register();
 
+    public static final EntityEntry<TFCJerboa> JERBOA = TFGCore.REGISTRATE.entity("jerboa", TFCJerboa::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.4F, 0.23F).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCJerboa::createAttributes)
+            .renderer(() -> TFCJerboaRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCJerboa::spawnRules)
+            .register();
+
+    public static final EntityEntry<TFCLemming> LEMMING = TFGCore.REGISTRATE.entity("lemming", TFCLemming::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.3F, 0.23F).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCLemming::createAttributes)
+            .renderer(() -> TFCLemmingRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCLemming::spawnRules)
+            .register();
+
+    public static final EntityEntry<TFCMongoose> MONGOOSE = TFGCore.REGISTRATE.entity("mongoose", TFCMongoose::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.6F, 0.4F).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCMongoose::createAttributes)
+            .renderer(() -> TFCMongooseRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCMongoose::spawnRules)
+            .register();
+
     public static final EntityEntry<Rocket> TIER_1_DOUBLE_ROCKET = TFGCore.REGISTRATE.entity("tier_1_double_rocket", RocketHelper::makeRocket, MobCategory.MISC)
             .properties(p -> p.sized(1.1f, 4.6f).clientTrackingRange(10).fireImmune())
             .renderer(() -> RocketHelper::makeRocketRendererT1)
@@ -130,5 +165,9 @@ public class TFGEntities {
         event.registerLayerDefinition(RNRPlowModel.LAYER_LOCATION, RNRPlowModel::createLayer);
         event.registerLayerDefinition(TFCLeopardSealModel.LAYER_LOCATION, TFCLeopardSealModel::createBodyLayer);
         event.registerLayerDefinition(TFCBisonModel.LAYER_LOCATION, TFCBisonModel::createBodyLayer);
+        event.registerLayerDefinition(TFCJerboaModel.LAYER_LOCATION, TFCJerboaModel::createBodyLayer);
+        event.registerLayerDefinition(TFCLemmingModel.LAYER_LOCATION, TFCLemmingModel::createBodyLayer);
+        event.registerLayerDefinition(TFCMongooseModel.LAYER_LOCATION, TFCMongooseModel::createBodyLayer);
+        event.registerLayerDefinition(TFGWolfModel.LAYER_LOCATION, TFGWolfModel::createBodyLayer);
     }
 }

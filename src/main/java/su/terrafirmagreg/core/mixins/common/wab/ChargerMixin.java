@@ -35,7 +35,7 @@ import net.wanmine.wab.entity.Charger;
 import net.wanmine.wab.init.world.WabSounds;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.entities.charger.ChargerData;
+import su.terrafirmagreg.core.common.entity.charger.ChargerData;
 
 @Mixin(value = Charger.class)
 public abstract class ChargerMixin extends AbstractHorse {
