@@ -141,6 +141,9 @@ dependencies {
     // ArborFirmaCraft, afc-1.0.20-1.20.1.jar, Nov 8, 2025
     modImplementation "curse.maven:arborfirmacraft-877545:7200580"
 
+    // TFCGenViewer (optional in dev; modpack always includes it) — mixins for TFG + new overworld gen
+    modImplementation "maven.modrinth:tfcgenviewer:1.5.1"
+
     // TFC Improved Badlands
     modCompileOnly "curse.maven:tfc-improved-badlands-969207:5126426"
 
@@ -158,4 +161,7 @@ dependencies {
 
     // GT modern utils, gtmutils-2.8.0.jar, Feb 12, 2026
     modImplementation "curse.maven:gregtech-modern-utilities-1235020:7612516"
+
+    // Crafting Station Improved
+    modImplementation "curse.maven:crafting-station-improved-1310299:7463065"
 }

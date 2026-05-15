@@ -1,0 +1,10 @@
+{
+  "values": [
+    "tfg:hardened_clay",
+    "tfg:clay/alfisol",
+    "tfg:clay/mollisol",
+    "tfg:clay/oxisol",
+    "tfg:clay/podzol",
+    "tfg:grass/mars_clay_dirt"
+  ]
+}

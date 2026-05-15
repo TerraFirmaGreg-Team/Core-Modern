@@ -1,0 +1,8 @@
+{
+  "parent": "tfc:block/barrel_side_rack",
+  "textures": {
+    "particle": "tfg:block/wood/planks/beech",
+    "planks": "tfg:block/wood/planks/beech",
+    "sheet": "tfg:block/wood/sheet/beech"
+  }
+}

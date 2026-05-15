@@ -33,7 +33,6 @@
         "charge": 1,
         "energy_budget": 0.12
     }},
-    "__comment__": "This file was automatically created by mcresources",
     "spawners": {
         "water_creature": [
             {
@@ -362,33 +361,33 @@
         "monster": [
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:spider",
-                "maxCount": 4
+                "maxCount": 2
             },
             {
-                "weight": 95,
-                "minCount": 4,
+                "weight": 100,
+                "minCount": 1,
                 "type": "minecraft:zombie",
-                "maxCount": 4
+                "maxCount": 2
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:skeleton",
-                "maxCount": 4
+                "maxCount": 1
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:creeper",
-                "maxCount": 4
+                "maxCount": 1
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:slime",
-                "maxCount": 4
+                "maxCount": 1
             },
             {
                 "weight": 50,
@@ -404,15 +403,15 @@
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:husk",
-                "maxCount": 4
+                "maxCount": 1
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:drowned",
-                "maxCount": 4
+                "maxCount": 1
             }
         ]
     },

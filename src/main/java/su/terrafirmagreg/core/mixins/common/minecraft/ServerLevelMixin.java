@@ -11,11 +11,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
+import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
+import su.terrafirmagreg.core.utils.SnowCorrection;
 
 // higher priority to inject just before TFC does with its environmental helper
 @Mixin(value = ServerLevel.class, priority = 900)
@@ -32,6 +35,10 @@ public abstract class ServerLevelMixin {
 
         if (level.dimension().equals(Planet.MARS)) {
             MarsEnvironmentalHelpers.tickChunk(level, chunk, level.getProfiler());
+        }
+
+        if (TFGConfig.SERVER.enableSnowCorrection.get() && chunk.getLevel().dimension().equals(Level.OVERWORLD)) {
+            SnowCorrection.onTickChunk(level, chunk);
         }
 
         // Ad Astra's ServerLevelMixin also injects at TAIL with a popPush, which pops a section

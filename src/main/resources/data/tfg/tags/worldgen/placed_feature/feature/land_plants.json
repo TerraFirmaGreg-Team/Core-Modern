@@ -127,7 +127,9 @@
         "tfc:plant/moss_patch",
         "tfc:plant/reindeer_lichen_cover",
         "tfc:plant/morning_glory_cover",
-        "tfc:plant/philodendron_cover"
+        "tfc:plant/philodendron_cover",
+        "firmalife:wild_red_grapes_patch",
+        "firmalife:wild_white_grapes_patch"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

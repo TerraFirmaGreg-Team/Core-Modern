@@ -111,6 +111,12 @@ public final class TFGMaterialHandler {
         // Misc
 
         block.setIgnored(Stone, Blocks.STONE);
+        gem.setIgnored(Coal, () -> TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
+
+        var lignite = TFGHelpers.getMaterial("lignite");
+        if (lignite != null) {
+            gem.setIgnored(lignite, () -> TFCItems.ORES.get(Ore.LIGNITE).get());
+        }
 
         // Create materials
 

@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SnowyDirtBlock;
@@ -83,16 +84,16 @@ public class MartianPolesFeature extends Feature<MartianPolesConfig> {
                 if (snowTempNoise < 0) {
                     if ((stateAt.isAir() || stateAt.getBlock() instanceof SandLayerBlock) && snowState.canSurvive(level, mutablePos)) {
                         // Place snow
-                        level.setBlock(mutablePos, snowTempNoise < -1 ? piledSnowState : snowState, 2);
+                        level.setBlock(mutablePos, snowTempNoise < -1 ? piledSnowState : snowState, Block.UPDATE_CLIENTS);
                         mutablePos.move(Direction.DOWN);
-                        level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), 2);
+                        level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), Block.UPDATE_CLIENTS);
                         mutablePos.move(Direction.UP);
                     } else if (SnowPileBlock.canPlaceSnowPile(level, mutablePos, stateAt)) {
                         // If it's waterlogged, don't snow pile it
                         if (!stateAt.hasProperty(TFGBlockProperties.SPACE_WATER) || stateAt.getValue(TFGBlockProperties.SPACE_WATER).getFluid() == Fluids.EMPTY) {
                             // Place snow pile
                             SnowPileBlock.placeSnowPile(level, mutablePos, stateAt, false);
-                            level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), 2);
+                            level.setBlock(mutablePos, Helpers.setProperty(level.getBlockState(mutablePos), SnowyDirtBlock.SNOWY, true), Block.UPDATE_CLIENTS);
                         }
                     }
                     // TODO: check if the below block is spice, and place a different layer instead?
@@ -111,7 +112,7 @@ public class MartianPolesFeature extends Feature<MartianPolesConfig> {
                     float tempModifier = Mth.clampedMap(temperature, snowFinishTemp, snowStartTemp, -0.2f, 1);
 
                     if (waterDepthModifier + tempModifier < threshold && tempModifier < 1) {
-                        level.setBlock(mutablePos, iceState, 3);
+                        level.setBlock(mutablePos, iceState, Block.UPDATE_ALL);
                     }
                 }
             }

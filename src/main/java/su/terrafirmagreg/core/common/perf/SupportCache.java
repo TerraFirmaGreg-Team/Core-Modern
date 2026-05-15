@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.EmptyLevelChunk;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 
@@ -65,7 +66,10 @@ public class SupportCache {
 
                 // Build cache if needed
                 if (!scannedChunks.contains(key)) {
-                    scanChunk(level, cx, cz);
+                    if (!scanChunk(level, cx, cz)) {
+                        // Chunk not loaded, pretend it's supported
+                        return true;
+                    }
                 }
 
                 Map<BlockPos, SupportEntry> entries = chunkSupports.get(key);
@@ -94,14 +98,14 @@ public class SupportCache {
     /**
      * Find all support blocks in a chunk.
      * Does a very low-level scan of the raw PalettedContainer data to make things fast.
+     * @return true if the chunk was available and scanned, false if it wasn't loaded
      */
-    private void scanChunk(Level level, int cx, int cz) {
+    private boolean scanChunk(Level level, int cx, int cz) {
         long key = ChunkPos.asLong(cx, cz);
 
-        ChunkAccess chunk = level.getChunkSource().getChunk(cx, cz, ChunkStatus.FULL, true);
-        if (chunk == null || chunk instanceof EmptyLevelChunk)
-            // Clientside returns EmptyLevelChunk for unloaded chunks, we don't want to scan those or mark them as scanned
-            return;
+        ChunkAccess chunk = level.getChunkSource().getChunk(cx, cz, ChunkStatus.FULL, false);
+        if (!(chunk instanceof LevelChunk) || chunk instanceof EmptyLevelChunk)
+            return false;
 
         scannedChunks.add(key);
 
@@ -149,6 +153,7 @@ public class SupportCache {
         if (!entries.isEmpty()) {
             chunkSupports.put(key, entries);
         }
+        return true;
     }
 
     /**
@@ -178,7 +183,10 @@ public class SupportCache {
             for (int cz = minCZ; cz <= maxCZ; cz++) {
                 long key = ChunkPos.asLong(cx, cz);
                 if (!scannedChunks.contains(key)) {
-                    scanChunk(level, cx, cz);
+                    if (!scanChunk(level, cx, cz)) {
+                        // Chunk not loaded, pretend it's supported
+                        return Set.of();
+                    }
                 }
                 Map<BlockPos, SupportEntry> entries = chunkSupports.get(key);
                 if (entries == null)

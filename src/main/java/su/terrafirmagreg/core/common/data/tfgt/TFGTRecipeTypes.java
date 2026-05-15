@@ -97,7 +97,7 @@ public class TFGTRecipeTypes {
 
     public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
-            .setMaxIOSize(1, 2, 1, 0)
+            .setMaxIOSize(2, 2, 1, 1)
             .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.FURNACE);
@@ -281,6 +281,13 @@ public class TFGTRecipeTypes {
             .setMaxIOSize(1, 0, 1, 1)
             .setSound(GTSoundEntries.FURNACE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_FUEL.get(true), FillDirection.DOWN_TO_UP);
+
+    public static final GTRecipeType PASTORAL_ENGINE_RECIPES = GTRecipeTypes
+            .register("pastoral_engine", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 1, 0, 1)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.BATH);
 
     // While oxygen distribution recipes are running the room is oxygenated.
     public static final GTRecipeType OXYGEN_DISTRIBUTION = GTRecipeTypes

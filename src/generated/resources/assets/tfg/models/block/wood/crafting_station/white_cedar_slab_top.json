@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "tfc:block/wood/planks/white_cedar",
+    "particle": "tfc:block/wood/planks/white_cedar",
+    "side": "tfg:block/wood/crafting_station/white_cedar_slab_side",
+    "top": "tfg:block/wood/crafting_station/white_cedar_top"
+  }
+}

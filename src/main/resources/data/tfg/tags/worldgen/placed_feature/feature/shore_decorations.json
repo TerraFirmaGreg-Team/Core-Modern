@@ -6,7 +6,8 @@
         "tfc:mussel_patch",
         "tfc:seaweed_patch",
         "tfc:sticks_shore_patch",
-        "tfc:guano_patch"
+        "tfc:guano_patch",
+        "firmalife:hollow_shell"
     ],
     "replace": false,
     "__comment__": "This file was automatically created by mcresources"

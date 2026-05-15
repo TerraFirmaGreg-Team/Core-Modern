@@ -1,0 +1,9 @@
+{
+  "parent": "craftingstation:block/crafting_station",
+  "textures": {
+    "2": "tfg:block/wood/crafting_station/white_cedar_side",
+    "3": "tfg:block/wood/crafting_station/white_cedar_top",
+    "4": "tfc:block/wood/planks/white_cedar",
+    "particle": "tfg:block/wood/crafting_station/white_cedar_top"
+  }
+}

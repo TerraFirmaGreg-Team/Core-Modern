@@ -40,7 +40,7 @@ jobs:
           fetch-depth: 0
 
       - name: "[🔍] Check required files and folders"
-        uses: andstor/file-existence-action@v3.0.0
+        uses: andstor/file-existence-action@v3.1.0
         with:
           fail: true
           ignore_case: true
@@ -151,7 +151,7 @@ jobs:
           ls -la build/libs/
 
       - name: "[🚀] Upload Artifact"
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: ${{ needs.info.outputs.full_name }}
           path: build/libs/${{ needs.info.outputs.full_name }}.jar
@@ -217,7 +217,7 @@ jobs:
             echo ""
 
         - name: "[🚀] Release"
-          uses: Xikaro/game-publish@3.3.1
+          uses: Xikaro/game-publish@3.3.3
           with:
             modrinth-id: ${{ vars.MODRINTH_ID }}
             modrinth-token: ${{ secrets.MODRINTH_TOKEN }}

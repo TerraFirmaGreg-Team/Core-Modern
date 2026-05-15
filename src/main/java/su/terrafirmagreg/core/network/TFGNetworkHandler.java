@@ -65,6 +65,24 @@ public class TFGNetworkHandler {
                 FuelSyncPacket::handle);
         INSTANCE.registerMessage(
                 id(),
+                NegativeNutrientsPacket.class,
+                NegativeNutrientsPacket::encode,
+                NegativeNutrientsPacket::decode,
+                NegativeNutrientsPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                RequestTeamNutritionPacket.class,
+                RequestTeamNutritionPacket::encode,
+                RequestTeamNutritionPacket::decode,
+                RequestTeamNutritionPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                SyncTeamNutritionPacket.class,
+                SyncTeamNutritionPacket::encode,
+                SyncTeamNutritionPacket::decode,
+                SyncTeamNutritionPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
                 EnvironmentQueryPacket.class,
                 EnvironmentQueryPacket::encode,
                 EnvironmentQueryPacket::decode,

@@ -1,0 +1,4 @@
+{
+    "parent": "minecraft:block/cross",
+    "textures": {"cross": "tfg:block/plant/pale_hanging_moss/body"}
+}

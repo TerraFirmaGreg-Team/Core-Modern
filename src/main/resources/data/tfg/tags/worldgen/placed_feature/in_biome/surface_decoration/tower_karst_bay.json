@@ -1,5 +1,6 @@
 {
     "values": [
+        "tfg:earth/sea_stacks_patch",
         "#tfg:feature/ocean_plants",
         "#tfg:feature/shore_decorations",
         "#tfg:feature/land_plants"

@@ -57,12 +57,10 @@ public class TFCMongooseModel extends HierarchicalAnimatedModel<TFCMongoose> {
 
         PartDefinition head = upperpart.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -2.0F, -11.0F));
 
-        PartDefinition head_q = head.addOrReplaceChild("head_q", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition head_q = head.addOrReplaceChild("head_q", CubeListBuilder.create().texOffs(22, 18).addBox(-2.5F, -3.0F, -3.0F, 5.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition head_r1 = head_q.addOrReplaceChild("head_r1", CubeListBuilder.create().texOffs(22, 18).addBox(-2.5F, -2.0F, -3.0F, 5.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)),
-                PartPose.offsetAndRotation(0.0F, 0.0F, -1.0F, -1.5708F, 0.0F, 0.0F));
-
-        PartDefinition head_r2 = head_q.addOrReplaceChild("head_r2", CubeListBuilder.create().texOffs(4, 29).addBox(-1.0F, 7.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)),
+        PartDefinition head_r1 = head_q.addOrReplaceChild("head_r1", CubeListBuilder.create().texOffs(4, 29).addBox(-1.0F, 7.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)),
                 PartPose.offsetAndRotation(0.0F, 0.0F, -12.0F, 1.5708F, 0.0F, 0.0F));
 
         PartDefinition right_ear = head_q.addOrReplaceChild("right_ear", CubeListBuilder.create(), PartPose.offset(-1.0F, -1.0F, -1.0F));

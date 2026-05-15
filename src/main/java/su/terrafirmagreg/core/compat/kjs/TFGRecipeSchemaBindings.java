@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema.GTRecipeJS;
 
+import net.minecraft.resources.ResourceLocation;
+
 import su.terrafirmagreg.core.common.tfgt.recipe.condition.*;
 
 /**
@@ -104,5 +106,19 @@ public final class TFGRecipeSchemaBindings {
 
     public static GTRecipeJS gravityRange(GTRecipeJS recipe, float start, float end, boolean reverse) {
         return recipe.addCondition(GravityCondition.ofRange(reverse, start, end));
+    }
+
+    // Animal Present Conditions
+    public static GTRecipeJS animalPresent(GTRecipeJS recipe, String animalType) {
+        return recipe.addCondition(new AnimalPresentCondition(false, animalType, null));
+    }
+
+    public static GTRecipeJS animalPresentEntity(GTRecipeJS recipe, String entityTypeId) {
+        return recipe.addCondition(AnimalPresentCondition.ofEntityType(entityTypeId));
+    }
+
+    public static GTRecipeJS animalPresentEntity(GTRecipeJS recipe, String entityTypeId, boolean reverse) {
+        return recipe.addCondition(new AnimalPresentCondition(
+                reverse, "any", ResourceLocation.tryParse(entityTypeId)));
     }
 }

@@ -3,6 +3,7 @@
         "tfc:coral_mushroom",
         "tfc:coral_tree",
         "tfc:coral_claw",
+        "tfc:coral_reef",
         "#tfg:feature/surface_flood_fill_lakes"
     ],
     "replace": false,

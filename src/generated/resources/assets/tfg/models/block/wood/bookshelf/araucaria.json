@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/chiseled_bookshelf",
+  "textures": {
+    "side": "tfg:block/wood/bookshelf/araucaria_side",
+    "top": "tfg:block/wood/bookshelf/araucaria_top"
+  }
+}

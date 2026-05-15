@@ -5,6 +5,7 @@ import java.util.function.Function;
 import com.gregtechceu.gtceu.common.worldgen.feature.configurations.FluidSproutConfiguration;
 import com.mojang.serialization.Codec;
 
+import net.dries007.tfc.world.feature.HotSpringConfig;
 import net.dries007.tfc.world.feature.plant.CreepingPlantConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -45,6 +46,9 @@ public class TFGFeatures {
     // Variant of TFC's ice caves feature but for Mars
     public static final RegistryObject<MarsIceCaveFeature> MARS_ICE_CAVES = register(
             "mars_ice_caves", MarsIceCaveFeature::new, NoneFeatureConfiguration.CODEC);
+    // Variant of TFC's hot spring feature but with any block as the wall block
+    public static final RegistryObject<CustomSpringFeature> CUSTOM_SPRING = register(
+            "custom_spring", CustomSpringFeature::new, HotSpringConfig.CODEC);
 
     // TFC 1.21 feature backport
     public static final RegistryObject<SeaStacksFeature> SEA_STACKS = register(
@@ -55,11 +59,18 @@ public class TFGFeatures {
     // TFC 1.21 feature backport
     public static final RegistryObject<RotatableWaterPlantFeature> ROTATABLE_WATER_PLANT = register(
             "rotatable_water_plant", RotatableWaterPlantFeature::new, RotatableWaterPlantFeature.CODEC);
+    // Modification of a TFC 1.21 feature backport
+    public static final RegistryObject<CreepingUnderwaterPlantFeature> CREEPING_UNDERWATER_PLANT = register(
+            "creeping_underwater_plant", CreepingUnderwaterPlantFeature::new, CreepingPlantConfig.CODEC);
+
+    public static final RegistryObject<FluidPlugFeature> FLUID_PLUG = register(
+            "fluid_plug", FluidPlugFeature::new, NoneFeatureConfiguration.CODEC);
+    public static final RegistryObject<LargeLakeFeature> LARGE_LAKE = register(
+            "large_lake", LargeLakeFeature::new, LargeLakeConfig.CODEC);
 
     // Used for lava in volcanoes
     public static final RegistryObject<EncasedSpoutFeature> ENCASED_SPOUT = register(
             "encased_spout", EncasedSpoutFeature::new, FluidSproutConfiguration.CODEC);
-
     // Used for GT fluid vein spouts
     public static final RegistryObject<BedrockSpoutFeature> BEDROCK_SPOUT = register(
             "bedrock_spout", BedrockSpoutFeature::new, BedrockSpoutConfig.CODEC);

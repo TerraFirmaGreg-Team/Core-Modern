@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "tfg:block/wood/pressure_plate/beech"
+    },
+    "powered=true": {
+      "model": "tfg:block/wood/pressure_plate/beech_down"
+    }
+  }
+}

@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import com.gregtechceu.gtceu.GTCEu;
 
+import net.dries007.tfc.common.blocks.rock.Ore;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
@@ -215,17 +217,51 @@ public final class ForgeCommonEventListener {
     }
 
     private static void remapBlocks(MissingMappingsEvent.Mapping<Block> mapping) {
-        if (mapping.getKey() == GTCEu.id("heat_exchanger"))
+
+        if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlock());
+        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlock());
+        if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
+            mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getBlock());
+        if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock());
+        if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlock());
     }
 
     private static void remapItems(MissingMappingsEvent.Mapping<Item> mapping) {
-        if (mapping.getKey() == GTCEu.id("heat_exchanger"))
+
+        if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getItem());
+        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getItem());
+        if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
+            mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getItem());
+        if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
+        if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getItem());
+
+        if (mapping.getKey().equals(GTCEu.id("rich_raw_coal")))
+            mapping.remap(TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
+        if (mapping.getKey().equals(GTCEu.id("raw_coal")))
+            mapping.remap(TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
+        if (mapping.getKey().equals(GTCEu.id("poor_raw_coal")))
+            mapping.remap(TFCItems.ORES.get(Ore.LIGNITE).get());
     }
 
     private static void remapBlockEntities(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {
-        if (mapping.getKey() == GTCEu.id("heat_exchanger"))
+
+        if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlockEntityType());
+        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlockEntityType());
+        if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
+            mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getBlockEntityType());
+        if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
+        if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
+            mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlockEntityType());
     }
 }

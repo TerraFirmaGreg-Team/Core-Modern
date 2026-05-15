@@ -17,8 +17,10 @@ import net.minecraft.world.level.block.Block;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
@@ -52,6 +54,11 @@ public class TFGBlockEntities {
 
     public static final BlockEntityEntry<ReflectorBlockEntity> REFLECTOR_BLOCK_ENTITY = TFGCore.REGISTRATE.blockEntity("reflector", ReflectorBlockEntity::new)
             .validBlock(TFGBlocks_Casings.REFLECTOR_BLOCK)
+            .register();
+
+    public static final BlockEntityEntry<AsphaltPouringSpreadBlockEntity> ASPHALT_POURING_SPREAD = TFGCore.REGISTRATE
+            .blockEntity("asphalt_pouring_spread", AsphaltPouringSpreadBlockEntity::new)
+            .validBlock(TFGBlocksAsphalt.ASPHALT_ROAD_POURING)
             .register();
 
     public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)

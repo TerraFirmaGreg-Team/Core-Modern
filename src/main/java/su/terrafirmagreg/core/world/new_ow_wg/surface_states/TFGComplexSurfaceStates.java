@@ -27,6 +27,9 @@ import su.terrafirmagreg.core.world.new_ow_wg.RockSettingsHelpers;
 // Split from TFC's SurfaceStates because of looping references.
 
 public class TFGComplexSurfaceStates {
+    private static final Noise2D SAND_VARIANT_NOISE = new OpenSimplex2D(36263276L).octaves(5).spread(0.0003f).abs();
+    private static final Noise2D SAND_GRAVEL_BEACH_NOISE = new OpenSimplex2D(124154L).octaves(3).spread(0.00002f);
+
     private static TFGComplexSurfaceStates instance = null;
 
     public static TFGComplexSurfaceStates INSTANCE() {
@@ -103,7 +106,7 @@ public class TFGComplexSurfaceStates {
                 final BlockPos pos = context.pos();
                 final int x = pos.getX();
                 final int z = pos.getZ();
-                final float variantNoiseValue = (float) sandVariantNoise().noise(x, z);
+                final float variantNoiseValue = (float) SAND_VARIANT_NOISE.noise(x, z);
                 if (variantNoiseValue > 0.55)
                     return RARE_SHORE_SAND.getState(context);
                 else if (variantNoiseValue > 0.2)
@@ -144,7 +147,7 @@ public class TFGComplexSurfaceStates {
                 final BlockPos pos = context.pos();
                 final int x = pos.getX();
                 final int z = pos.getZ();
-                final float variantNoiseValue = (float) sandGravelBeachNoise().noise(x, z);
+                final float variantNoiseValue = (float) SAND_GRAVEL_BEACH_NOISE.noise(x, z);
                 final double gravelCutoff = Mth.clampedMap(context.averageTemperature(), -15, 25, -0.7, 0.7);
                 return (variantNoiseValue > gravelCutoff ? SurfaceStates.GRAVEL : SHORE_SAND).getState(context);
             }
@@ -194,7 +197,7 @@ public class TFGComplexSurfaceStates {
                 final BlockPos pos = context.pos();
                 final int x = pos.getX();
                 final int z = pos.getZ();
-                final float variantNoiseValue = (float) sandVariantNoise().noise(x, z);
+                final float variantNoiseValue = (float) SAND_VARIANT_NOISE.noise(x, z);
                 if (variantNoiseValue > 0.8)
                     return RARE_SHORE_SANDSTONE.getState(context);
                 else if (variantNoiseValue > 0.4)
@@ -212,18 +215,11 @@ public class TFGComplexSurfaceStates {
                 final BlockPos pos = context.pos();
                 final int x = pos.getX();
                 final int z = pos.getZ();
-                final float variantNoiseValue = (float) sandGravelBeachNoise().noise(x, z);
+                final float variantNoiseValue = (float) SAND_GRAVEL_BEACH_NOISE.noise(x, z);
                 final double gravelCutoff = Mth.clampedMap(context.averageTemperature(), -15, 25, -0.7, 0.7);
                 return (variantNoiseValue > gravelCutoff ? SurfaceStates.RAW : SHORE_SANDSTONE).getState(context);
             }
         };
     }
 
-    public static Noise2D sandVariantNoise() {
-        return new OpenSimplex2D(36263276L).octaves(5).spread(0.0003f).abs();
-    }
-
-    public static Noise2D sandGravelBeachNoise() {
-        return new OpenSimplex2D(124154L).octaves(3).spread(0.00002f);
-    }
 }

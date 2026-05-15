@@ -1,0 +1,28 @@
+{
+  "values": [
+    "tfg:asphalt_road_stencil_arrow",
+    "tfg:asphalt_road_stencil_line",
+    "tfg:asphalt_road_stencil_double_line",
+    "tfg:asphalt_road_stencil_line_slash_l",
+    "tfg:asphalt_road_stencil_line_slash_r",
+    "tfg:asphalt_road_stencil_line_slash_rl",
+    "tfg:asphalt_road_stencil_slash_l",
+    "tfg:asphalt_road_stencil_slash_r",
+    "tfg:asphalt_road_stencil_slash_rl",
+    "tfg:asphalt_road_stencil_fill",
+    "tfg:asphalt_road_stencil_cross",
+    "tfg:asphalt_road_stencil_t",
+    "tfg:asphalt_road_stencil_corner",
+    "tfg:asphalt_road_stencil_num_0",
+    "tfg:asphalt_road_stencil_num_1",
+    "tfg:asphalt_road_stencil_num_2",
+    "tfg:asphalt_road_stencil_num_3",
+    "tfg:asphalt_road_stencil_num_4",
+    "tfg:asphalt_road_stencil_num_5",
+    "tfg:asphalt_road_stencil_num_6",
+    "tfg:asphalt_road_stencil_num_7",
+    "tfg:asphalt_road_stencil_num_8",
+    "tfg:asphalt_road_stencil_num_9",
+    "tfg:asphalt_road_stencil_number"
+  ]
+}

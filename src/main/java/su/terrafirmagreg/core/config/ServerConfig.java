@@ -45,6 +45,8 @@ public final class ServerConfig {
 
     public final ForgeConfigSpec.IntValue sandAccumulateChance;
     public final ForgeConfigSpec.IntValue sandDecumulateChance;
+    public final ForgeConfigSpec.BooleanValue enableSnowCorrection;
+    public final ForgeConfigSpec.IntValue snowMaxAccumulationOnUpdate;
 
     // Atmosphere system config
     public final ForgeConfigSpec.IntValue atmosphereMaxHorizontalDimension;
@@ -125,6 +127,14 @@ public final class ServerConfig {
         sandDecumulateChance = builder
                 .comment("The chance that sand piles will decumulate during a sandstoem. Lower values = faster sand dispersal, but also more block updates (aka lag).")
                 .defineInRange("sandDecumulateChance", 36, 1, Integer.MAX_VALUE);
+
+        builder.pop().push("overworld_climate");
+        enableSnowCorrection = builder
+                .comment("Enables instant snow and ice removal as chunks are loaded in and the temperature is warm enough.")
+                .define("enableSnowCorrection", true);
+        snowMaxAccumulationOnUpdate = builder
+                .comment("The maximum amount of snow update to apply for each correction tick")
+                .defineInRange("snowMaxAccumulationOnUpdate", 256, 1, Integer.MAX_VALUE);
 
         builder.pop().push("atmosphere_system");
 

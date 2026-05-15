@@ -26,8 +26,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
+import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.event.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.OreProspectorEvent;
@@ -119,6 +121,14 @@ public class TFGItemTooltipHelpers {
                     return;
 
                 Fluid fluid = fluidStack.getFluid();
+                if (fluid == TFGFluids.ASPHALT_MIX.getSource() || fluid == TFGFluids.ASPHALT_MIX.getFlowing()) {
+                    text.add(1, Component.translatable("tfg.tooltip.asphalt_mix.pouring",
+                            AsphaltRoadHelper.FIELD_POUR_MB));
+                    text.add(2, Component.translatable("tfg.tooltip.asphalt_mix.patch",
+                            AsphaltRoadHelper.PATCH_POUR_MB));
+                    return;
+                }
+
                 if (fluid.is(TFC_DRINKABLE) && !fluid.is(TFC_AGED_ALCOHOLS)) {
                     Drinkable drink = Drinkable.get(fluid);
                     if (drink == null)

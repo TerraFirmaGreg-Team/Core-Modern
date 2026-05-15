@@ -30,8 +30,44 @@
         ]
     },
     "downfall": 0.5,
-    "spawn_costs": {},
-    "__comment__": "This file was automatically created by mcresources",
+    "spawn_costs": {
+        "minecraft:skeleton": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "minecraft:enderman": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "minecraft:spider": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "minecraft:zombie": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "minecraft:creeper": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "minecraft:drowned": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "minecraft:husk": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "minecraft:slime": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "endermanoverhaul:flower_fields_enderman": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        }
+    },
     "spawners": {
         "creature": [
             {
@@ -290,33 +326,33 @@
         "monster": [
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:spider",
-                "maxCount": 4
+                "maxCount": 2
             },
             {
-                "weight": 95,
-                "minCount": 4,
+                "weight": 100,
+                "minCount": 1,
                 "type": "minecraft:zombie",
-                "maxCount": 4
+                "maxCount": 2
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:skeleton",
-                "maxCount": 4
+                "maxCount": 1
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:creeper",
-                "maxCount": 4
+                "maxCount": 1
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:slime",
-                "maxCount": 4
+                "maxCount": 1
             },
             {
                 "weight": 50,
@@ -332,15 +368,15 @@
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:husk",
-                "maxCount": 4
+                "maxCount": 1
             },
             {
                 "weight": 100,
-                "minCount": 4,
+                "minCount": 1,
                 "type": "minecraft:drowned",
-                "maxCount": 4
+                "maxCount": 1
             }
         ]
     },

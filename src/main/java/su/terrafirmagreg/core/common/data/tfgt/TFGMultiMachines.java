@@ -89,6 +89,7 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.GasWellMachin
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellRecipeLogic;
+import su.terrafirmagreg.core.common.tfgt.recipe.modifier.AnimalProductModifier;
 
 @SuppressWarnings({ "unused", "SpellCheckingInspection" })
 public class TFGMultiMachines {
@@ -861,7 +862,11 @@ public class TFGMultiMachines {
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .where('X', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
-                    .where('P', blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .where('P', blocks(GTBlocks.CASING_BRONZE_PIPE.get())
+							.or(blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+							.or(blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+							.or(blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+							.or(blocks(GTBlocks.CASING_TUNGSTENSTEEL_PIPE.get())))
                     .where('B', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
@@ -1225,7 +1230,7 @@ public class TFGMultiMachines {
                     .where('S', controller(blocks(definition.get())))
                     .where('X', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(1)
                             .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setMaxGlobalLimited(1).setPreviewCount(1))
-                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
+                            .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
                     .where('A', blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
                     .where('F', Predicates.frames(GTMaterials.Steel))
                     .where('B', abilities(PartAbility.EXPORT_FLUIDS_1X).setMinGlobalLimited(1).setMaxGlobalLimited(1).setPreviewCount(1))
@@ -1235,6 +1240,46 @@ public class TFGMultiMachines {
                     GTCEu.id("block/generators/naquadah_reactor_solid"))
             .register();
 
+    public static final MultiblockMachineDefinition PASTORAL_ENGINE = REGISTRATE
+            .multiblock("pastoral_engine", PastoralEngineMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
+            .allowExtendedFacing(false)
+            .recipeType(TFGTRecipeTypes.PASTORAL_ENGINE_RECIPES)
+            .recipeModifiers(AnimalProductModifier.INSTANCE)
+            .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.pastoral_engine_1"),
+                    Component.translatable("tfg.tooltip.machine.pastoral_engine_2"))
+            .workableCasingModel(
+                    GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+                    TFGCore.id("block/machines/pisciculture_fishery"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("BBBBBBBBB", "DDDDDDDDD", "AAAAAAAAA", "AAAAAAAAA")
+                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
+                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
+                    .aisle("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
+                    .aisle("BFFFBBBBB", "DAAACEEEC", "AAAACEEEC", "AAAACCCCC")
+                    .aisle("BFFFBEEEB", "DAAAEHHGA", "AAAAEHHGA", "AAAACEEEC")
+                    .aisle("BFFFBEEEB", "DAAAEGGGA", "AAAAEGSGA", "AAAACEEEC")
+                    .aisle("BBBBBBBBB", "DDDDCAAAC", "AAAACAAAC", "AAAACCCCC")
+                    .where('S', controller(blocks(definition.get())))
+                    .where("A", Predicates.any())
+                    .where("B", Predicates.blocks(GTBlocks.STEEL_HULL.get()))
+                    .where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK,
+                            ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
+                    .where("D", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "fences/wooden")))
+                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "fence_gates")))))
+                    .where("E", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where("F", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "dirt")))
+                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "grass")))))
+                    .where("G", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, false, false))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                    .where("H", Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .build())
+            .register();
 
     // I made this beautiful and well-designed multiblock that looks aesthetically perfect especially for Tom
     public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR_MULTI = REGISTRATE

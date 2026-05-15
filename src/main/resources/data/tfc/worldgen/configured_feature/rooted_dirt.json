@@ -1,5 +1,4 @@
 {
-    "__comment__": "This file was automatically created by mcresources",
     "type": "tfc:soil_disc",
     "config": {
         "integrity": 0.8,
@@ -70,6 +69,38 @@
             {
                 "with": "tfg:rooted_dirt/podzol",
                 "replace": "tfg:dirt/podzol"
+            },
+            {
+                "with": "tfc:rooted_dirt/silt",
+                "replace": "tfg:coarse_dirt/silt"
+            },
+            {
+                "with": "tfc:rooted_dirt/loam",
+                "replace": "tfg:coarse_dirt/loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/sandy_loam",
+                "replace": "tfg:coarse_dirt/sandy_loam"
+            },
+            {
+                "with": "tfc:rooted_dirt/silty_loam",
+                "replace": "tfg:coarse_dirt/silty_loam"
+            },
+            {
+                "with": "tfg:rooted_dirt/alfisol",
+                "replace": "tfg:coarse_dirt/alfisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/mollisol",
+                "replace": "tfg:coarse_dirt/mollisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/oxisol",
+                "replace": "tfg:coarse_dirt/oxisol"
+            },
+            {
+                "with": "tfg:rooted_dirt/podzol",
+                "replace": "tfg:coarse_dirt/podzol"
             }
         ]
     }

@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "tfc:block/wood/planks/hickory",
+    "particle": "tfc:block/wood/planks/hickory",
+    "side": "tfg:block/wood/crafting_station/hickory_slab_side",
+    "top": "tfg:block/wood/crafting_station/hickory_top"
+  }
+}

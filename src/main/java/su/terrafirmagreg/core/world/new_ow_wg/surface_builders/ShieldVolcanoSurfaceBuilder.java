@@ -25,6 +25,8 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder {
     private final boolean hasLavaFlows;
     private final boolean isSandy;
     private final long seed;
+    private final Noise2D lavaFlowMaterialNoise;
+    private final Noise2D lavaFlowNoise;
     private final TFGSimpleSurfaceStates simpleStates;
     private final TFGComplexSurfaceStates complexStates;
 
@@ -32,6 +34,8 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder {
         this.hasLavaFlows = hasLavaFlows;
         this.isSandy = isSandy;
         this.seed = seed;
+        this.lavaFlowMaterialNoise = TFGBiomeNoise.lavaFlowMaterial(seed);
+        this.lavaFlowNoise = TFGBiomeNoise.lavaFlow(seed);
         this.simpleStates = TFGSimpleSurfaceStates.INSTANCE();
         this.complexStates = TFGComplexSurfaceStates.INSTANCE();
     }
@@ -60,10 +64,8 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder {
         if (!hasLavaFlows) {
             buildSurface(context, startY, endY, top, mid, bot, underwater);
         } else {
-            final Noise2D smoothNoise = TFGBiomeNoise.lavaFlowMaterial(seed);
-            final double noiseValue = smoothNoise.noise(x, z);
-            final Noise2D lavaFlows = TFGBiomeNoise.lavaFlow(seed);
-            final double flowValue = lavaFlows.noise(x, z);
+            final double noiseValue = lavaFlowMaterialNoise.noise(x, z);
+            final double flowValue = lavaFlowNoise.noise(x, z);
 
             if (flowValue < 0.40)
                 buildSurface(context, startY, endY, top, mid, bot, underwater);
