@@ -17,7 +17,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
+//import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
 
 /**
  * Item for fish roe which can store a mob id in its NBT data.
@@ -58,11 +58,13 @@ public class FishRoeItem extends Item {
 
         String mobId = stack.getTag().getString("mob_type");
 
+        /*
         // Check if this is a Starcatcher fish and use the fish item translation.
         String fishName = StarcatcherFishVariants.getFishName(stack);
         if (fishName != null) {
             return Component.translatable("item.starcatcher." + fishName);
         }
+        */
 
         // Ue cached entity name translation.
         if (!mobId.isEmpty()) {

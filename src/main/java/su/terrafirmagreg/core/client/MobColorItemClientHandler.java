@@ -15,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGItems;
-import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
+//import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
 
 @SuppressWarnings("deprecation")
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -84,7 +84,7 @@ public class MobColorItemClientHandler {
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
 
-        StarcatcherFishVariants.initializeFishVariants();
+        //StarcatcherFishVariants.initializeFishVariants();
 
         ItemColor colorProvider = (stack, tintIndex) -> {
             // Only tint layer 1 and 2. Layers 0 and 3+ are not tinted.
@@ -95,10 +95,12 @@ public class MobColorItemClientHandler {
             if (stack.hasTag()) {
                 assert stack.getTag() != null;
                 if (stack.getTag().contains("mob_type")) {
+                    /*
                     // Check if this is a Starcatcher fish.
                     if (StarcatcherFishVariants.isStarcatcherFish(stack)) {
                         return StarcatcherFishVariants.getStarcatcherFishColor(stack, tintIndex);
                     }
+                    */
 
                     String mobId = stack.getTag().getString("mob_type");
 

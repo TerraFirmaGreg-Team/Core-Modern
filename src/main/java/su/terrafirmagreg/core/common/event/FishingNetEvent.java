@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data.events;
+package su.terrafirmagreg.core.common.event;
 
 import java.util.List;
 

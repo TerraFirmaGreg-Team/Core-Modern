@@ -2,7 +2,7 @@ package su.terrafirmagreg.core.common.data;
 
 import net.minecraftforge.common.MinecraftForge;
 
-import su.terrafirmagreg.core.common.data.events.*;
+import su.terrafirmagreg.core.common.event.*;
 
 public class TFGEvents {
 

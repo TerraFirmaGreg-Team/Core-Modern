@@ -1,18 +1,9 @@
+/*
 package su.terrafirmagreg.core.compat.starcatcher;
 
-import net.dries007.tfc.util.climate.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 
-/**
- * Utility class for determining the appropriate fishing screen type.
- */
+
+ // Utility class for determining the appropriate fishing screen type.
 public class FishingScreenTypeUtils {
 
     private static final ResourceKey<Level> MARS_DIMENSION = ResourceKey.create(
@@ -28,9 +19,7 @@ public class FishingScreenTypeUtils {
     private static final float COLD_2_THRESHOLD = -8;
     private static final float COLD_3_THRESHOLD = -20;
 
-    /**
-     * Determines the fishing screen type based on current environment.
-     */
+     // Determines the fishing screen type based on current environment.
     public static FishingScreenType determineScreenType() {
         ClientLevel level = Minecraft.getInstance().level;
         Player player = Minecraft.getInstance().player;
@@ -81,3 +70,4 @@ public class FishingScreenTypeUtils {
         return FishingScreenType.SURFACE;
     }
 }
+*/

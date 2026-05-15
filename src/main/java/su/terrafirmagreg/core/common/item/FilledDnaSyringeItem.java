@@ -17,7 +17,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
+//import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
 
 public class FilledDnaSyringeItem extends Item {
 
@@ -66,6 +66,7 @@ public class FilledDnaSyringeItem extends Item {
 
         String mobId = stack.getTag().getString("mob_type");
 
+        /*
         // Check if this is a Starcatcher fish and use the fish item translation.
         String fishName = StarcatcherFishVariants.getFishName(stack);
         if (fishName != null) {
@@ -74,22 +75,22 @@ public class FilledDnaSyringeItem extends Item {
                     .append(fishDisplayName)
                     .withStyle(ChatFormatting.GOLD);
         } else {
-            // Use entity name translation.
-            Component entityName = ENTITY_DISPLAY_CACHE.computeIfAbsent(mobId, id -> {
-                try {
-                    ResourceLocation entityId = ResourceLocation.parse(id);
-                    EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(entityId);
-                    if (type != null) {
-                        return Component.translatable("entity." + id.replace(":", "."));
-                    }
-                } catch (Exception ignored) {
+        */
+        // Use entity name translation.
+        Component entityName = ENTITY_DISPLAY_CACHE.computeIfAbsent(mobId, id -> {
+            try {
+                ResourceLocation entityId = ResourceLocation.parse(id);
+                EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(entityId);
+                if (type != null) {
+                    return Component.translatable("entity." + id.replace(":", "."));
                 }
-                return Component.empty();
-            });
-
-            return Component.translatable("tfg.tooltip.dna_syringe.full")
-                    .append(entityName)
-                    .withStyle(ChatFormatting.GOLD);
-        }
+            } catch (Exception ignored) {
+            }
+            return Component.empty();
+        });
+        return Component.translatable("tfg.tooltip.dna_syringe.full")
+                .append(entityName)
+                .withStyle(ChatFormatting.GOLD);
+        //}
     }
 }

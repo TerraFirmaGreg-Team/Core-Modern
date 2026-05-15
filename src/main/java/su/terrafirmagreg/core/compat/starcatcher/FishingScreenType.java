@@ -1,13 +1,11 @@
+/*
 package su.terrafirmagreg.core.compat.starcatcher;
 
-import net.minecraft.resources.ResourceLocation;
 
-import lombok.Getter;
 
-/**
- * Enum representing different screen types for the fishing minigame.
- * Each screen type has its own tank texture and condition.
- */
+ // Enum representing different screen types for the fishing minigame.
+ // Each screen type has its own tank texture and condition.
+
 @Getter
 public enum FishingScreenType {
     SURFACE("surface"),
@@ -29,3 +27,4 @@ public enum FishingScreenType {
     }
 
 }
+*/

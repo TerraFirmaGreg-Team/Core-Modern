@@ -299,8 +299,7 @@
         "common.minecraft.FogRendererMixin",
         "common.tfc.ClientEventHandlerMixin",
         "common.tfc.TFCDogRendererMixin",
-        "common.tfchotornot.ClientEventHandlerMixin",
-        "common.starcatcher.FishingScreenTypeMixin"
+        "common.tfchotornot.ClientEventHandlerMixin"
     ],
     "required": true,
     "refmap": "tfg.refmap.json"

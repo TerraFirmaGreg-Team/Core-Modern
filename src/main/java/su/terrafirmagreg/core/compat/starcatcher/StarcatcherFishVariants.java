@@ -1,22 +1,14 @@
+/*
 package su.terrafirmagreg.core.compat.starcatcher;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
-
-/**
- * Utility class for handling Starcatcher fish delegation for `mob_type` extracting items.
- */
+ // Utility class for handling Starcatcher fish delegation for `mob_type` extracting items.
 public class StarcatcherFishVariants {
 
     public record FishVariant(String fishItemName, int baseColor, int overlayColor) {
     }
 
-    /**
-     * Cached fish info.
-     */
+     // Cached fish info.
     public record CachedFishInfo(String mobType, boolean isStarcatcherFish, String fishName) {
     }
 
@@ -156,19 +148,15 @@ public class StarcatcherFishVariants {
         return FISH_VARIANTS.get(fishName);
     }
 
-    /**
-     * Check if an item contains a Starcatcher fish mob type nbt.
-     */
+     // Check if an item contains a Starcatcher fish mob type nbt.
     public static boolean isStarcatcherFish(ItemStack stack) {
         return getCachedFishInfo(stack).isStarcatcherFish;
     }
 
-    /**
-     * Get the colors for a Starcatcher fish.
-     * @param stack The ItemStack to check.
-     * @param tintIndex The color layer index.
-     * @return The color for this layer.
-     */
+     // Get the colors for a Starcatcher fish.
+     // @param stack The ItemStack to check.
+     // @param tintIndex The color layer index.
+     // @return The color for this layer.
     public static int getStarcatcherFishColor(ItemStack stack, int tintIndex) {
         CachedFishInfo fishInfo = getCachedFishInfo(stack);
         if (!fishInfo.isStarcatcherFish) {
@@ -183,12 +171,11 @@ public class StarcatcherFishVariants {
         return 0xFFFFFF;
     }
 
-    /**
-     * Get the fish name for display in tooltips.
-     * @param stack The ItemStack to check.
-     * @return The fish name for translation.
-     */
+     // Get the fish name for display in tooltips.
+     // @param stack The ItemStack to check.
+     // @return The fish name for translation.
     public static String getFishName(ItemStack stack) {
         return getCachedFishInfo(stack).fishName;
     }
 }
+*/
