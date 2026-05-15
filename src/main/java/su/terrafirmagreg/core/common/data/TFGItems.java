@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data;
 
+import com.eerussianguy.beneath.common.items.BeneathItemTags;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
@@ -10,13 +11,18 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.common.Tags;
 
 import appeng.api.upgrades.Upgrades;
 import de.mennomax.astikorcarts.item.CartItem;
@@ -213,4 +219,11 @@ public class TFGItems {
                 .setData(ProviderType.ITEM_MODEL, (ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/template_spawn_egg")))
                 .register();
     }
+
+    public static final ItemEntry<Item> FLY_AGARIC = TFGCore.REGISTRATE.item("food/fly_agaric", Item::new)
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().nutrition(4).saturationMod(0.3f)
+                    .effect(() -> new MobEffectInstance(MobEffects.POISON, 1200, 1), 1.0F).build()))
+            .model((ctx, prov) -> prov.generated(ctx, ResourceLocation.withDefaultNamespace("block/red_mushroom")))
+            .tag(Tags.Items.MUSHROOMS, TFCTags.Items.FOODS, BeneathItemTags.UNPOSTABLE)
+            .register();
 }
