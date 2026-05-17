@@ -45,6 +45,9 @@ public class NutrientMixin implements INutrientExtension {
     @Unique
     private boolean tfg$negative = false;
 
+    @Unique
+    private boolean tfg$transient = false;
+
     @Invoker(value = "<init>", remap = false)
     private static Nutrient tfg$invokeInit(String name, int ordinal, ChatFormatting color) {
         throw new AssertionError();
@@ -66,6 +69,10 @@ public class NutrientMixin implements INutrientExtension {
         ((NutrientMixin) (Object) parasites).tfg$negative = true;
         nutrients.add(parasites);
 
+        var deadly = tfg$invokeInit("DEADLY", nutrients.size(), ChatFormatting.BLACK);
+        ((NutrientMixin) (Object) deadly).tfg$transient = true;
+        nutrients.add(deadly);
+
         VALUES = nutrients.toArray(new Nutrient[0]);
         TOTAL = VALUES.length;
     }
@@ -73,5 +80,10 @@ public class NutrientMixin implements INutrientExtension {
     @Override
     public boolean tfg$isNegative() {
         return this.tfg$negative;
+    }
+
+    @Override
+    public boolean tfg$isTransient() {
+        return this.tfg$transient;
     }
 }

@@ -4,7 +4,7 @@ import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.common.capabilities.food.NutritionData;
 
 /**
- * Extension interface for NutritionData to access negative nutrients.
+ * Extension interface for NutritionData to access extended nutrients.
  */
 public interface INutritionDataExtension {
 
