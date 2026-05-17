@@ -266,7 +266,9 @@
         "common.wab.SoarerMixin",
         "common.wab.SoarerOverlayMixin",
         "common.wab.ToxlacanthMixin",
-        "common.tfc.TFCFoxMixin"
+        "common.tfc.TFCFoxMixin",
+        "common.gtceu.GTForgeCommonEventListenerMixin",
+        "client.gtceu.GTForgeClientEventListenerMixin"
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",
