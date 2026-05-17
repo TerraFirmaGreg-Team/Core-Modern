@@ -5,9 +5,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.common.data.GTMedicalConditions;
+
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.common.capabilities.food.NutritionData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -27,13 +31,27 @@ public final class NutrientEffectsHandler {
     private static final String GRAIN_SPEED_MODIFIER_NAME = "tfg:grain_speed_boost";
 
     private static final Map<UUID, Float> THIRST_MODIFIER = new ConcurrentHashMap<>();
-    private static final Map<UUID, Float> EXHAUSTION_MODIFIER = new ConcurrentHashMap<>();
+    private static final Map<UUID, Float> MICROPLASTICS_THIRST_DECAY_MODIFIER = new ConcurrentHashMap<>();
+    private static final Map<UUID, Float> PROTEIN_EXHAUSTION_MODIFIER = new ConcurrentHashMap<>();
+    private static final Map<UUID, Float> PARASITES_EXHAUSTION_MODIFIER = new ConcurrentHashMap<>();
     private static final Map<UUID, Float> HEALING_MODIFIER = new ConcurrentHashMap<>();
     private static final Map<UUID, Integer> DAIRY_FEATHER_FALLING = new ConcurrentHashMap<>();
     private static final Map<UUID, Integer> VEGETABLE_AQUA_AFFINITY = new ConcurrentHashMap<>();
     private static final Map<UUID, Integer> VEGETABLE_RESPIRATION = new ConcurrentHashMap<>();
     private static final Map<UUID, Boolean> FRUIT_MINING_SPEED = new ConcurrentHashMap<>();
     private static final Map<UUID, Boolean> PROTEIN_HEAVY_ITEM_BOOST = new ConcurrentHashMap<>();
+
+    /**
+     * List of hazard effects that can be applied from toxins.
+     */
+    private static final MobEffect[] HAZARDOUS_EFFECTS = {
+            MobEffects.POISON,
+            MobEffects.WITHER,
+            MobEffects.CONFUSION,
+            MobEffects.MOVEMENT_SLOWDOWN,
+            MobEffects.BLINDNESS,
+            MobEffects.DIG_SLOWDOWN
+    };
 
     /**
      * Tracks the last nutrition update to avoid re-applying unchanged effects.
@@ -48,10 +66,24 @@ public final class NutrientEffectsHandler {
     }
 
     /**
-     * Returns the exhaustion modifier multiplier for the player.
+     * Returns the microplastics high-temperature thirst decay modifier for the player.
      */
-    public static float getExhaustionModifierMultiplier(UUID playerUuid) {
-        return EXHAUSTION_MODIFIER.getOrDefault(playerUuid, 1.0f);
+    public static float getMicroplasticsThirstTemperatureModifier(UUID playerUuid) {
+        return MICROPLASTICS_THIRST_DECAY_MODIFIER.getOrDefault(playerUuid, 1.0f);
+    }
+
+    /**
+     * Returns the protein exhaustion modifier multiplier for the player.
+     */
+    public static float getProteinExhaustionMultiplier(UUID playerUuid) {
+        return PROTEIN_EXHAUSTION_MODIFIER.getOrDefault(playerUuid, 1.0f);
+    }
+
+    /**
+     * Returns the parasites passive exhaustion modifier for the player.
+     */
+    public static float getParasitesPassiveExhaustionModifier(UUID playerUuid) {
+        return PARASITES_EXHAUSTION_MODIFIER.getOrDefault(playerUuid, 1.0f);
     }
 
     /**
@@ -103,14 +135,14 @@ public final class NutrientEffectsHandler {
      */
     public static void tick(ServerPlayer player, NutritionData nutritionData) {
         processTransientNutrients(player, nutritionData);
-        applyPositiveNutrientEffects(player, nutritionData);
+        applyNutrientEffects(player, nutritionData);
     }
 
     /**
      * Called on the client side when nutrients are updated.
      */
     public static void onClientUpdate(Player player, NutritionData nutritionData) {
-        applyPositiveNutrientEffects(player, nutritionData);
+        applyNutrientEffects(player, nutritionData);
     }
 
     // ---- Transient Nutrients ----
@@ -130,8 +162,7 @@ public final class NutrientEffectsHandler {
                 continue;
 
             if (nutrient.getSerializedName().equals("deadly")) {
-                int duration = Math.max(1, Math.round(value * 2000));
-                player.addEffect(new MobEffectInstance(MobEffects.WITHER, duration, 3, false, true));
+                player.kill();
             }
 
             // Reset the transient nutrient to 0 immediately.
@@ -141,14 +172,15 @@ public final class NutrientEffectsHandler {
         }
     }
 
-    // ---- Positive Nutrients ----
+    // ---- Nutrient Effects ----
 
     /**
-     * Applies effects based on positive nutrients.
+     * Applies effects based on positive and negative nutrients.
      * @param player the player to apply effects to.
      * @param nutritionData the nutrition data to evaluate.
      */
-    private static void applyPositiveNutrientEffects(Player player, NutritionData nutritionData) {
+    private static void applyNutrientEffects(Player player, NutritionData nutritionData) {
+        float[] oldNutrients = LAST_NUTRITION_SNAPSHOT.get(nutritionData);
         if (!hasNutritionChanged(nutritionData))
             return;
 
@@ -178,6 +210,40 @@ public final class NutrientEffectsHandler {
         applyFruitEffects(player, fruit);
         applyProteinEffects(player, protein);
         applyAverageEffects(player, avgNutrition);
+
+        // Negative Nutrients
+        float toxins = 0;
+        float parasites = 0;
+        float microplastics = 0;
+        float oldToxins = 0;
+        float oldMicroplastics = 0;
+        Nutrient toxinsNutrient = null;
+
+        for (Nutrient nutrient : Nutrient.VALUES) {
+            String name = nutrient.name();
+            switch (name) {
+                case "TOXINS" -> {
+                    toxinsNutrient = nutrient;
+                    toxins = nutritionData.getNutrient(nutrient);
+                    if (oldNutrients != null && nutrient.ordinal() < oldNutrients.length) {
+                        oldToxins = oldNutrients[nutrient.ordinal()];
+                    }
+                }
+                case "PARASITES" -> parasites = nutritionData.getNutrient(nutrient);
+                case "MICROPLASTICS" -> {
+                    microplastics = nutritionData.getNutrient(nutrient);
+                    if (oldNutrients != null && nutrient.ordinal() < oldNutrients.length) {
+                        oldMicroplastics = oldNutrients[nutrient.ordinal()];
+                    }
+                }
+            }
+        }
+
+        if (toxinsNutrient != null) {
+            applyToxinsEffects(player, toxins, oldToxins, toxinsNutrient, nutritionData);
+        }
+        applyParasitesEffects(player, parasites);
+        applyMicroplasticsEffects(player, microplastics, oldMicroplastics);
     }
 
     /**
@@ -282,14 +348,83 @@ public final class NutrientEffectsHandler {
     private static void applyProteinEffects(Player player, float protein) {
         UUID uuid = player.getUUID();
         if (protein > 0.55f) {
-            EXHAUSTION_MODIFIER.put(uuid, 0.75f);
+            PROTEIN_EXHAUSTION_MODIFIER.put(uuid, 0.75f);
         } else {
-            EXHAUSTION_MODIFIER.remove(uuid);
+            PROTEIN_EXHAUSTION_MODIFIER.remove(uuid);
         }
         if (protein > 0.85f) {
             PROTEIN_HEAVY_ITEM_BOOST.put(uuid, true);
         } else {
             PROTEIN_HEAVY_ITEM_BOOST.remove(uuid);
+        }
+    }
+
+    /**
+     * Toxins
+     * >0% -> On any new increase -> 25% chance to get a random hazardous mob effect for 10sec.
+     * >99% -> Death.
+     * @param player the player to apply effects to.
+     * @param toxins the toxins nutrition value.
+     * @param oldToxins the toxins nutrition value from the last update.
+     */
+    private static void applyToxinsEffects(Player player, float toxins, float oldToxins, Nutrient toxinsNutrient, NutritionData nutritionData) {
+        if (player.level().isClientSide()) {
+            return;
+        }
+
+        if (toxins > oldToxins && toxins > 0) {
+            if (player.getRandom().nextFloat() < 0.25f) {
+                MobEffect effect = HAZARDOUS_EFFECTS[player.getRandom().nextInt(HAZARDOUS_EFFECTS.length)];
+                player.addEffect(new MobEffectInstance(effect, 200, 0));
+            }
+        }
+
+        if (toxins > 0.99f && !player.getAbilities().invulnerable) {
+            NutritionDataExtension.setExtendedNutrient(nutritionData, toxinsNutrient, 0.90f);
+            player.kill();
+        }
+    }
+
+    /**
+     * Parasites
+     * >33% -> Increases passive exhaustion by 50%.
+     * >66% -> Increases passive exhaustion by 100%.
+     * @param player the player to apply effects to.
+     * @param parasites the parasites nutrition value.
+     */
+    private static void applyParasitesEffects(Player player, float parasites) {
+        UUID uuid = player.getUUID();
+        if (parasites > 0.66f) {
+            PARASITES_EXHAUSTION_MODIFIER.put(uuid, 10.0f);
+        } else if (parasites > 0.33f) {
+            PARASITES_EXHAUSTION_MODIFIER.put(uuid, 5.0f);
+        } else {
+            PARASITES_EXHAUSTION_MODIFIER.remove(uuid);
+        }
+    }
+
+    /**
+     * Microplastics
+     * >33% -> Increase high-temperature thirst decay multiplier by 25%
+     * >66% -> Increase high-temperature thirst decay multiplier by 50%. On any new increase -> 5% chance to get the cancer condition from GTCEU.
+     * @param player the player to apply effects to.
+     * @param microplastics the microplastics nutrition value.
+     * @param oldMicroplastics the microplastics nutrition value from the last update.
+     */
+    private static void applyMicroplasticsEffects(Player player, float microplastics, float oldMicroplastics) {
+        UUID uuid = player.getUUID();
+        if (microplastics > 0.66f) {
+            MICROPLASTICS_THIRST_DECAY_MODIFIER.put(uuid, 1.50f);
+            if (microplastics > oldMicroplastics && player.getRandom().nextFloat() < 0.05f) {
+                var tracker = GTCapabilityHelper.getMedicalConditionTracker(player);
+                if (tracker != null) {
+                    tracker.progressCondition(GTMedicalConditions.CARCINOGEN, 20000.0f);
+                }
+            }
+        } else if (microplastics > 0.33f) {
+            MICROPLASTICS_THIRST_DECAY_MODIFIER.put(uuid, 1.25f);
+        } else {
+            MICROPLASTICS_THIRST_DECAY_MODIFIER.remove(uuid);
         }
     }
 
@@ -322,8 +457,6 @@ public final class NutrientEffectsHandler {
             return true;
 
         for (Nutrient nutrient : Nutrient.VALUES) {
-            if (!TFGNutrients.isPositive(nutrient))
-                continue;
             int idx = nutrient.ordinal();
             if (idx >= snapshot.length)
                 return true;
@@ -338,10 +471,8 @@ public final class NutrientEffectsHandler {
      * @param nutritionData the player's NutritionData.
      */
     private static void updateSnapshot(NutritionData nutritionData) {
-        float[] snapshot = new float[TFGNutrients.POSITIVE_COUNT];
+        float[] snapshot = new float[Nutrient.VALUES.length];
         for (Nutrient nutrient : Nutrient.VALUES) {
-            if (!TFGNutrients.isPositive(nutrient))
-                continue;
             int idx = nutrient.ordinal();
             if (idx < snapshot.length) {
                 snapshot[idx] = nutritionData.getNutrient(nutrient);
@@ -362,7 +493,9 @@ public final class NutrientEffectsHandler {
 
         UUID uuid = player.getUUID();
         THIRST_MODIFIER.remove(uuid);
-        EXHAUSTION_MODIFIER.remove(uuid);
+        MICROPLASTICS_THIRST_DECAY_MODIFIER.remove(uuid);
+        PROTEIN_EXHAUSTION_MODIFIER.remove(uuid);
+        PARASITES_EXHAUSTION_MODIFIER.remove(uuid);
         HEALING_MODIFIER.remove(uuid);
         DAIRY_FEATHER_FALLING.remove(uuid);
         VEGETABLE_AQUA_AFFINITY.remove(uuid);

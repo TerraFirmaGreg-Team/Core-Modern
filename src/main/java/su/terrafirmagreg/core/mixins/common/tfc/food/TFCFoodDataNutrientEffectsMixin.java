@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -29,7 +30,15 @@ public class TFCFoodDataNutrientEffectsMixin {
      */
     @ModifyVariable(method = "addExhaustion(F)V", at = @At("HEAD"), argsOnly = true)
     private float tfg$applyExhaustionMultiplier(float exhaustion) {
-        return exhaustion * NutrientEffectsHandler.getExhaustionModifierMultiplier(sourcePlayer.getUUID());
+        return exhaustion * NutrientEffectsHandler.getProteinExhaustionMultiplier(sourcePlayer.getUUID());
+    }
+
+    /**
+     * Applies the parasites passive exhaustion increase.
+     */
+    @ModifyArg(method = "tick(Lnet/minecraft/world/entity/player/Player;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V"))
+    private float tfg$applyPassiveExhaustionModifier(float exhaustion) {
+        return exhaustion * NutrientEffectsHandler.getParasitesPassiveExhaustionModifier(sourcePlayer.getUUID());
     }
 
     /**
@@ -38,6 +47,14 @@ public class TFCFoodDataNutrientEffectsMixin {
     @Inject(method = "getThirstModifier(Lnet/minecraft/world/entity/player/Player;)F", at = @At("RETURN"), remap = false, cancellable = true)
     private void tfg$applyThirstMultiplier(Player player, CallbackInfoReturnable<Float> cir) {
         cir.setReturnValue(cir.getReturnValue() * NutrientEffectsHandler.getThirstModifierMultiplier(sourcePlayer.getUUID()));
+    }
+
+    /**
+     * Applies the microplastics thirst temperature multiplier.
+     */
+    @Inject(method = "getThirstContributionFromTemperature(Lnet/minecraft/world/entity/player/Player;)F", at = @At("RETURN"), remap = false, cancellable = true)
+    private void tfg$applyMicroplasticsThirstTemperatureMultiplier(Player player, CallbackInfoReturnable<Float> cir) {
+        cir.setReturnValue(cir.getReturnValue() * NutrientEffectsHandler.getMicroplasticsThirstTemperatureModifier(sourcePlayer.getUUID()));
     }
 
     /**

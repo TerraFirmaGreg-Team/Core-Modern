@@ -129,8 +129,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         float thirstModifier = foodData.getThirstModifier(player);
         float saturation = foodData.getSaturationLevel();
         long intoxication = (playerData.getIntoxicatedTicks() / 20) / 60;
-        float passiveExhaustion = TFCFoodData.PASSIVE_EXHAUSTION_PER_SECOND;
-        float exhaustionMultiplier = TFCFoodData.EXHAUSTION_MULTIPLIER * NutrientEffectsHandler.getExhaustionModifierMultiplier(player.getUUID());
+        float passiveExhaustion = TFCFoodData.PASSIVE_EXHAUSTION_PER_SECOND * NutrientEffectsHandler.getParasitesPassiveExhaustionModifier(player.getUUID());
+        float exhaustionMultiplier = TFCFoodData.EXHAUSTION_MULTIPLIER * NutrientEffectsHandler.getProteinExhaustionMultiplier(player.getUUID());
         float passiveHealing = TFCFoodData.PASSIVE_HEALING_PER_TEN_TICKS * 2 * 100 * 3 * NutrientEffectsHandler.getHealingModifierMultiplier(player.getUUID());
 
         int positiveGraphDiameter = 75;
