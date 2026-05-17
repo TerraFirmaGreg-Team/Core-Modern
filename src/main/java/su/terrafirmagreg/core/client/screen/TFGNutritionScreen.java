@@ -48,6 +48,7 @@ import su.terrafirmagreg.core.client.screen.widget.PlayerListWidget;
 import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
 import su.terrafirmagreg.core.client.screen.widget.ToggleButton;
 import su.terrafirmagreg.core.client.screen.widget.ValueDisplayListWidget;
+import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.network.packet.RequestTeamNutritionPacket;
@@ -129,8 +130,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         float saturation = foodData.getSaturationLevel();
         long intoxication = (playerData.getIntoxicatedTicks() / 20) / 60;
         float passiveExhaustion = TFCFoodData.PASSIVE_EXHAUSTION_PER_SECOND;
-        float exhaustionMultiplier = TFCFoodData.EXHAUSTION_MULTIPLIER;
-        float passiveHealing = TFCFoodData.PASSIVE_HEALING_PER_TEN_TICKS * 2 * 100 * 3;
+        float exhaustionMultiplier = TFCFoodData.EXHAUSTION_MULTIPLIER * NutrientEffectsHandler.getExhaustionModifierMultiplier(player.getUUID());
+        float passiveHealing = TFCFoodData.PASSIVE_HEALING_PER_TEN_TICKS * 2 * 100 * 3 * NutrientEffectsHandler.getHealingModifierMultiplier(player.getUUID());
 
         int positiveGraphDiameter = 75;
         int positiveGraphX = leftPos + (GUI_WIDTH / 3) - (positiveGraphDiameter / 2);

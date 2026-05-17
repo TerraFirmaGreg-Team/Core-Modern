@@ -15,7 +15,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
@@ -103,6 +105,33 @@ public final class ForgeCommonEventListener {
                 }
 
             }
+        }
+    }
+
+    /**
+     * Break speed modifications.
+     */
+    @SubscribeEvent
+    public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+        Player player = event.getEntity();
+        float newSpeed = event.getNewSpeed();
+        boolean changed = false;
+
+        // Vegetable nutrition >55%: Aqua Affinity equivalent (cancel 5x underwater penalty)
+        if (NutrientEffectsHandler.getAquaAffinityLevel(player.getUUID()) > 0
+                && player.isEyeInFluid(FluidTags.WATER)) {
+            newSpeed *= 5.0f;
+            changed = true;
+        }
+
+        // Fruit nutrition >85%: +30% mining speed boost
+        if (NutrientEffectsHandler.hasFruitMiningSpeedBoost(player.getUUID())) {
+            newSpeed *= 1.3f;
+            changed = true;
+        }
+
+        if (changed) {
+            event.setNewSpeed(newSpeed);
         }
     }
 

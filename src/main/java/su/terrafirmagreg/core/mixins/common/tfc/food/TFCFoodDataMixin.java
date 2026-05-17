@@ -26,6 +26,10 @@ public class TFCFoodDataMixin {
 
     @Shadow(remap = false)
     @Final
+    private Player sourcePlayer;
+
+    @Shadow(remap = false)
+    @Final
     private NutritionData nutritionData;
 
     /**
@@ -43,5 +47,14 @@ public class TFCFoodDataMixin {
             }
             NutrientEffectsHandler.tick(serverPlayer, nutritionData);
         }
+    }
+
+    /**
+     * When the client receives a nutrition update re-evaluate nutrient effects so
+     * multipliers are available for the UI.
+     */
+    @Inject(method = "onClientUpdate([FF)V", at = @At("TAIL"), remap = false)
+    private void tfg$onClientUpdate(float[] nutrients, float thirst, CallbackInfo ci) {
+        NutrientEffectsHandler.onClientUpdate(sourcePlayer, nutritionData);
     }
 }

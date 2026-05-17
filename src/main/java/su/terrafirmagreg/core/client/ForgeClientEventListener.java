@@ -53,7 +53,7 @@ public class ForgeClientEventListener {
         if (player == null)
             return;
         AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speedAttr != null && speedAttr.getModifier(NutrientEffectsHandler.DAIRY_SPEED_MODIFIER_UUID) != null) {
+        if (speedAttr != null && speedAttr.getModifier(NutrientEffectsHandler.GRAIN_SPEED_MODIFIER_UUID) != null) {
             event.setNewFovModifier(1.0f);
         }
     }
