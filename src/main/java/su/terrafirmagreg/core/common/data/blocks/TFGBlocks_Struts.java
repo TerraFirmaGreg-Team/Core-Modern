@@ -16,14 +16,16 @@ import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.strut.TFGStrutBlock;
+import su.terrafirmagreg.core.common.block.TFGStrutBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
+@SuppressWarnings({ "unused" })
 public class TFGBlocks_Struts {
     public static final ObjectOpenHashSet<BlockEntry<? extends Block>> STRUTS_AND_CABLES = new ObjectOpenHashSet<>();
 
     public static void init() {
         STRUTS_AND_CABLES.add(basicStrut("steel", TFGCore.id("block/strut/basic/steel"), TFGCore.id("block/strut/basic/steel_attachment"), TFGCore.id("block/strut/basic/steel_particle")));
+        STRUTS_AND_CABLES.add(basicStrut("brass", TFGCore.id("block/strut/basic/brass"), TFGCore.id("block/strut/basic/brass"), TFGCore.id("block/strut/basic/brass")));
     }
 
     public static BlockEntry<TFGStrutBlock> basicStrut(String id, ResourceLocation texLoc, ResourceLocation texLocAttachment, ResourceLocation texLocParticle) {
@@ -40,7 +42,7 @@ public class TFGBlocks_Struts {
                             .texture("0", texLocAttachment)
                             .texture("particle", texLocParticle);
 
-                    ModelFile extraModel = prov.models().withExistingParent("strut/basic/steel", TFGCore.id("block/strut/basic"))
+                    ModelFile extraModel = prov.models().withExistingParent("strut/basic/" + id, TFGCore.id("block/strut/basic"))
                             .texture("0", texLoc)
                             .texture("particle", texLocParticle);
 

@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.block.strut;
+package su.terrafirmagreg.core.common.block;
 
 import com.cake.struts.content.StrutModelType;
 import com.cake.struts.content.block.StrutBlock;

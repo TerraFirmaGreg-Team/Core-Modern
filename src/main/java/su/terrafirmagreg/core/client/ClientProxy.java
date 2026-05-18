@@ -45,7 +45,6 @@ public class ClientProxy extends CommonProxy {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(ForgeClientEventListener::registerColorHandlerBlocks);
         bus.addListener(ForgeClientEventListener::registerColorHandlerItems);
-        bus.addListener(ForgeClientEventListener::registerRenderers);
     }
 
     @SubscribeEvent
@@ -128,8 +127,10 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void registerSpecialModels(ModelEvent.RegisterAdditional event) {
         TFGBlocks_Struts.STRUTS_AND_CABLES.forEach(blockEntry -> {
-            event.register(blockEntry.getId().withPrefix("block/"));
+            ResourceLocation loc = blockEntry.getId().withPrefix("block/");
+            event.register(loc);
         });
+
         event.register(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern"));
     }
 
