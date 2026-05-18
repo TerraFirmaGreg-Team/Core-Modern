@@ -24,7 +24,6 @@ public final class AsphaltRoadHelper {
     public static final long HEAT_DAMAGE_INTERVAL_TICKS = 20L;
     public static final int HOT_CONTACT_MAX_DAMAGE = 1;
     public static final float HOT_CONTACT_DAMAGE_MULTIPLIER = 1.0F;
-    public static final float HOT_ITEM_DAMAGE = 1.0F;
 
     public static final int POURING_SPREAD_MAX_BLOCKS = 20;
     public static final int POURING_SPREAD_BATCH_PER_TICK = 1;
