@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.minecraft.world.entity.player.Player;
 
+import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 
 /**
@@ -42,11 +43,15 @@ public class TFCFoodDataNutrientEffectsMixin {
     }
 
     /**
-     * Applies the fruit thirst reduction.
+     * Applies the fruit thirst reduction and the quenched mob effect.
      */
     @Inject(method = "getThirstModifier(Lnet/minecraft/world/entity/player/Player;)F", at = @At("RETURN"), remap = false, cancellable = true)
     private void tfg$applyThirstMultiplier(Player player, CallbackInfoReturnable<Float> cir) {
-        cir.setReturnValue(cir.getReturnValue() * NutrientEffectsHandler.getThirstModifierMultiplier(sourcePlayer.getUUID()));
+        if (player.hasEffect(TFGEffects.QUENCHED.get())) {
+            cir.setReturnValue(0f);
+        } else {
+            cir.setReturnValue(cir.getReturnValue() * NutrientEffectsHandler.getThirstModifierMultiplier(sourcePlayer.getUUID()));
+        }
     }
 
     /**

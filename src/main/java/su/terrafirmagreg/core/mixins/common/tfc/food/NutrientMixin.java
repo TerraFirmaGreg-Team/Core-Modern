@@ -16,17 +16,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.minecraft.ChatFormatting;
 
-import su.terrafirmagreg.core.common.food.nutrient.INegativeNutrientBuilder;
+import su.terrafirmagreg.core.common.food.nutrient.IExtendedNutrientBuilder;
 import su.terrafirmagreg.core.common.food.nutrient.INutrientExtension;
 
 /**
- * Mixin to add new nutrients to TFC's Nutrient enum. Including harmful ones.
+ * Mixin to add new nutrients to TFC's Nutrient enum. Including harmful and transient ones.
  * These nutrients are tracked and displayed but do not affect player health.
- * Use .tfg$isNegative() to check if a nutrient is harmful.
+ * Use .tfg$isNegative() to check if a nutrient is harmful, or .tfg$isTransient() for transient ones.
  * <p>
- * New nutrients should also be declared in {@link su.terrafirmagreg.core.mixins.common.kubejs_tfc.BuildFoodItemDataMixin}
+ * For Kubejs support new nutrients should also be declared in {@link su.terrafirmagreg.core.mixins.common.kubejs_tfc.BuildFoodItemDataMixin}
  * and {@link su.terrafirmagreg.core.mixins.common.kubejs_tfc.FoodComponentFoodDataMixin}
- * and {@link INegativeNutrientBuilder}
+ * and {@link IExtendedNutrientBuilder}
  * Setting up builders for mixins is annoying. So I didn't.
  */
 @Mixin(Nutrient.class)
@@ -54,9 +54,10 @@ public class NutrientMixin implements INutrientExtension {
     }
 
     @Inject(method = "<clinit>", at = @At("TAIL"), remap = false)
-    private static void tfg$addNegativeNutrients(CallbackInfo ci) {
+    private static void tfg$addExtendedNutrients(CallbackInfo ci) {
         var nutrients = new ArrayList<>(Arrays.asList(VALUES));
 
+        // --------- Negative Nutrients -----------
         var toxins = tfg$invokeInit("TOXINS", nutrients.size(), ChatFormatting.LIGHT_PURPLE);
         ((NutrientMixin) (Object) toxins).tfg$negative = true;
         nutrients.add(toxins);
@@ -69,9 +70,65 @@ public class NutrientMixin implements INutrientExtension {
         ((NutrientMixin) (Object) parasites).tfg$negative = true;
         nutrients.add(parasites);
 
-        var deadly = tfg$invokeInit("DEADLY", nutrients.size(), ChatFormatting.BLACK);
+        // --------- Transient Nutrients -----------
+        // === Instant Effects ===
+        var deadly = tfg$invokeInit("DEADLY", nutrients.size(), ChatFormatting.DARK_PURPLE);
         ((NutrientMixin) (Object) deadly).tfg$transient = true;
         nutrients.add(deadly);
+
+        // === Mob Effects ===
+        var cooling = tfg$invokeInit("COOLING", nutrients.size(), ChatFormatting.BLUE);
+        ((NutrientMixin) (Object) cooling).tfg$transient = true;
+        nutrients.add(cooling);
+
+        var warming = tfg$invokeInit("WARMING", nutrients.size(), ChatFormatting.RED);
+        ((NutrientMixin) (Object) warming).tfg$transient = true;
+        nutrients.add(warming);
+
+        var radiating = tfg$invokeInit("RADIATING", nutrients.size(), ChatFormatting.GREEN);
+        ((NutrientMixin) (Object) radiating).tfg$transient = true;
+        nutrients.add(radiating);
+
+        var nauseating = tfg$invokeInit("NAUSEATING", nutrients.size(), ChatFormatting.DARK_GREEN);
+        ((NutrientMixin) (Object) nauseating).tfg$transient = true;
+        nutrients.add(nauseating);
+
+        var parching = tfg$invokeInit("PARCHING", nutrients.size(), ChatFormatting.YELLOW);
+        ((NutrientMixin) (Object) parching).tfg$transient = true;
+        nutrients.add(parching);
+
+        var quenching = tfg$invokeInit("QUENCHING", nutrients.size(), ChatFormatting.AQUA);
+        ((NutrientMixin) (Object) quenching).tfg$transient = true;
+        nutrients.add(quenching);
+
+        var bolstering = tfg$invokeInit("BOLSTERING", nutrients.size(), ChatFormatting.GOLD);
+        ((NutrientMixin) (Object) bolstering).tfg$transient = true;
+        nutrients.add(bolstering);
+
+        var hearty = tfg$invokeInit("HEARTY", nutrients.size(), ChatFormatting.DARK_RED);
+        ((NutrientMixin) (Object) hearty).tfg$transient = true;
+        nutrients.add(hearty);
+
+        var rejuvenating = tfg$invokeInit("REJUVENATING", nutrients.size(), ChatFormatting.LIGHT_PURPLE);
+        ((NutrientMixin) (Object) rejuvenating).tfg$transient = true;
+        nutrients.add(rejuvenating);
+
+        // === Meal Effects ===
+        var sugary = tfg$invokeInit("SUGARY", nutrients.size(), ChatFormatting.WHITE);
+        ((NutrientMixin) (Object) sugary).tfg$transient = true;
+        nutrients.add(sugary);
+
+        var spicy = tfg$invokeInit("SPICY", nutrients.size(), ChatFormatting.RED);
+        ((NutrientMixin) (Object) spicy).tfg$transient = true;
+        nutrients.add(spicy);
+
+        var fulfilling = tfg$invokeInit("FULFILLING", nutrients.size(), ChatFormatting.YELLOW);
+        ((NutrientMixin) (Object) fulfilling).tfg$transient = true;
+        nutrients.add(fulfilling);
+
+        var hydrating = tfg$invokeInit("HYDRATING", nutrients.size(), ChatFormatting.DARK_AQUA);
+        ((NutrientMixin) (Object) hydrating).tfg$transient = true;
+        nutrients.add(hydrating);
 
         VALUES = nutrients.toArray(new Nutrient[0]);
         TOTAL = VALUES.length;

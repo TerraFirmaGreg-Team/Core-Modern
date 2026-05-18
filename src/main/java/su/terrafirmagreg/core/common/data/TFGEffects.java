@@ -9,6 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.effect.FinalMomentsEffect;
 import su.terrafirmagreg.core.common.effect.InstantDamageEffect;
 import su.terrafirmagreg.core.common.effect.MedicalConditionEffect;
 import su.terrafirmagreg.core.common.effect.TemperatureChangeEffect;
@@ -20,10 +21,15 @@ public class TFGEffects {
 
     public static final RegistryObject<MobEffect> COOLING = register("cooling",
             () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xAEBDD));
+    public static final RegistryObject<MobEffect> QUENCHED = register("quenched",
+            () -> new MobEffect(MobEffectCategory.BENEFICIAL, 0x3ED5E0) {
+            });
     public static final RegistryObject<MobEffect> WARMING = register("warming",
             () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xEDA02D));
     public static final RegistryObject<MobEffect> INSTANT_RADIATION = register("instant_radiation",
             () -> new InstantDamageEffect(MobEffectCategory.HARMFUL, 0x94fc03));
+    public static final RegistryObject<MobEffect> FINAL_MOMENTS = register("final_moments",
+            FinalMomentsEffect::new);
 
     public static final RegistryObject<MobEffect> CHEMICAL_BURNS_WARNING = register("chemical_burns_warning",
             () -> new MedicalConditionEffect(0xfa8723));

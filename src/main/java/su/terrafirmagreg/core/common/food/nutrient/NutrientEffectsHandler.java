@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.common.data.GTMedicalConditions;
 
+import net.dries007.tfc.common.TFCEffects;
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.common.capabilities.food.NutritionData;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,9 +20,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
+import su.terrafirmagreg.core.common.data.TFGEffects;
+
 /**
  * Handles applying effects to players based on their nutrition values.
- * Effects based on positive & negative nutrients are cached until the next nutrition value change.
+ * Effects based on positive & extended nutrients are cached until the next nutrition value change.
  * Transient nutrients are consumed immediately and trigger instant effects.
  */
 public final class NutrientEffectsHandler {
@@ -157,12 +160,73 @@ public final class NutrientEffectsHandler {
             if (!TFGNutrients.isTransient(nutrient))
                 continue;
 
-            float value = NutritionDataExtension.getExtendedNutrient(nutritionData, nutrient);
+            float value = NutritionDataExtension.getExtendedNutrient(nutritionData, nutrient) * 100;
+            // Food value to seconds of effect duration.
+            int effectDuration = Math.max(1, Math.round(value * 1200));
             if (value <= 0)
                 continue;
 
-            if (nutrient.getSerializedName().equals("deadly")) {
-                player.kill();
+            // Deadly
+            if (nutrient.getSerializedName().equals("deadly") && !player.getAbilities().invulnerable) {
+                player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), 18000, 0, false, true));
+            }
+            // Cooling
+            if (nutrient.getSerializedName().equals("cooling")) {
+                player.addEffect(new MobEffectInstance(TFGEffects.COOLING.get(), Math.min(effectDuration, 36000), 0, false, false));
+            }
+            // Warming
+            if (nutrient.getSerializedName().equals("warming")) {
+                player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
+            }
+            // Radiating
+            if (nutrient.getSerializedName().equals("radiating")) {
+                player.addEffect(new MobEffectInstance(MobEffects.GLOWING, 480, 0, false, true));
+                player.addEffect(new MobEffectInstance(TFGEffects.INSTANT_RADIATION.get(), 480, (int) Math.min(Math.max(value, 0), 5), false, true));
+            }
+            // Nauseating
+            if (nutrient.getSerializedName().equals("nauseating")) {
+                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, Math.min(effectDuration, 480) / 2, 0, false, true));
+                player.addEffect(new MobEffectInstance(MobEffects.HUNGER, Math.min(effectDuration, 480), 6, false, true));
+            }
+            // Parching
+            if (nutrient.getSerializedName().equals("parching")) {
+                player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration, 36000), 0, false, true));
+            }
+            // Quenching
+            if (nutrient.getSerializedName().equals("quenching")) {
+                player.addEffect(new MobEffectInstance(TFGEffects.QUENCHED.get(), Math.min(effectDuration, 36000), 0, false, false));
+            }
+            // Bolstering
+            if (nutrient.getSerializedName().equals("bolstering")) {
+                player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 9600, (int) Math.min(Math.max(value, 0), 5), false, false));
+            }
+            // Hearty
+            if (nutrient.getSerializedName().equals("hearty")) {
+                player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 18000, (int) Math.min(Math.max(value, 0), 5), false, false));
+            }
+            // Rejuvenating
+            if (nutrient.getSerializedName().equals("rejuvenating")) {
+                player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Math.min(effectDuration, 3600), 0, false, false));
+            }
+            // Sugary
+            if (nutrient.getSerializedName().equals("sugary")) {
+                player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, Math.min(effectDuration / 4, 6000), 0, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Math.min(effectDuration, 36000), 0, false, false));
+            }
+            // Spicy
+            if (nutrient.getSerializedName().equals("spicy")) {
+                player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration / 4, 6000), 0, false, false));
+                player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
+            }
+            // Fulfilling
+            if (nutrient.getSerializedName().equals("fulfilling")) {
+                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Math.min(effectDuration, 18000), 0, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, (int) Math.min(Math.max(value, 0), 2), false, false));
+            }
+            // Hydrating
+            if (nutrient.getSerializedName().equals("hydrating")) {
+                player.addEffect(new MobEffectInstance(TFGEffects.COOLING.get(), Math.min(effectDuration, 6000), 0, false, false));
+                player.addEffect(new MobEffectInstance(TFGEffects.QUENCHED.get(), Math.min(effectDuration, 18000), 0, false, false));
             }
 
             // Reset the transient nutrient to 0 immediately.
@@ -175,7 +239,7 @@ public final class NutrientEffectsHandler {
     // ---- Nutrient Effects ----
 
     /**
-     * Applies effects based on positive and negative nutrients.
+     * Applies effects based on positive and extended nutrients.
      * @param player the player to apply effects to.
      * @param nutritionData the nutrition data to evaluate.
      */
@@ -381,7 +445,7 @@ public final class NutrientEffectsHandler {
 
         if (toxins > 0.99f && !player.getAbilities().invulnerable) {
             NutritionDataExtension.setExtendedNutrient(nutritionData, toxinsNutrient, 0.90f);
-            player.kill();
+            player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), 18000, 0, false, true));
         }
     }
 

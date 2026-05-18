@@ -14,33 +14,33 @@ import su.terrafirmagreg.core.common.food.nutrient.NutritionDataExtension;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 
 /**
- * Packet to sync negative nutrient values from server to client.
+ * Packet to sync extended nutrient values from server to client.
  */
-public class NegativeNutrientsPacket {
+public class ExtendedNutrientsPacket {
 
-    private final float[] negativeNutrients;
+    private final float[] extendedNutrients;
 
-    public NegativeNutrientsPacket(float[] negativeNutrients) {
-        this.negativeNutrients = negativeNutrients != null ? negativeNutrients : new float[TFGNutrients.getExtendedCount()];
+    public ExtendedNutrientsPacket(float[] extendedNutrients) {
+        this.extendedNutrients = extendedNutrients != null ? extendedNutrients : new float[TFGNutrients.getExtendedCount()];
     }
 
-    public static void encode(NegativeNutrientsPacket packet, FriendlyByteBuf buffer) {
-        buffer.writeVarInt(packet.negativeNutrients.length);
-        for (float value : packet.negativeNutrients) {
+    public static void encode(ExtendedNutrientsPacket packet, FriendlyByteBuf buffer) {
+        buffer.writeVarInt(packet.extendedNutrients.length);
+        for (float value : packet.extendedNutrients) {
             buffer.writeFloat(value);
         }
     }
 
-    public static NegativeNutrientsPacket decode(FriendlyByteBuf buffer) {
+    public static ExtendedNutrientsPacket decode(FriendlyByteBuf buffer) {
         int count = buffer.readVarInt();
-        float[] negativeNutrients = new float[count];
+        float[] extendedNutrients = new float[count];
         for (int i = 0; i < count; i++) {
-            negativeNutrients[i] = buffer.readFloat();
+            extendedNutrients[i] = buffer.readFloat();
         }
-        return new NegativeNutrientsPacket(negativeNutrients);
+        return new ExtendedNutrientsPacket(extendedNutrients);
     }
 
-    public static void handle(NegativeNutrientsPacket packet, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(ExtendedNutrientsPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleClient(packet));
         });
@@ -48,12 +48,12 @@ public class NegativeNutrientsPacket {
     }
 
     @net.minecraftforge.api.distmarker.OnlyIn(Dist.CLIENT)
-    private static void handleClient(NegativeNutrientsPacket packet) {
+    private static void handleClient(ExtendedNutrientsPacket packet) {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         Player player = mc.player;
         if (player != null && player.getFoodData() instanceof TFCFoodData tfcFoodData) {
             NutritionData nutritionData = tfcFoodData.getNutrition();
-            NutritionDataExtension.onClientUpdate(nutritionData, packet.negativeNutrients);
+            NutritionDataExtension.onClientUpdate(nutritionData, packet.extendedNutrients);
         }
     }
 }
