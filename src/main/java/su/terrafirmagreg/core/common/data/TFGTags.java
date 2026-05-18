@@ -55,6 +55,7 @@ public final class TFGTags {
 
         public static final TagKey<Item> Explosives = createItemTag("explosives");
         public static final TagKey<Item> FirmalifeOvenTops = createItemTag("oven_tops");
+        public static final TagKey<Item> ROAD_MARKING_STENCILS = createItemTag("road_marking_stencils");
 
         //Block Interaction tags for use in EMI
         public static final TagKey<Item> INTERACTIONBRICK = createItemTag("interaction/brick");
@@ -136,6 +137,7 @@ public final class TFGTags {
         public static final TagKey<EntityType<?>> IgnoresGravity = createEntityTag("ignores_gravity");
         public static final TagKey<EntityType<?>> IgnoresCacti = createEntityTag("ignores_cacti");
         public static final TagKey<EntityType<?>> NotRammedByRammers = createEntityTag("not_rammed_by_rammers");
+        public static final TagKey<EntityType<?>> FishingNetScoopable = createEntityTag("fishing_net_scoopable");
 
         private static TagKey<EntityType<?>> createEntityTag(String path) {
             return createEntityTag(TFGCore.id(path));

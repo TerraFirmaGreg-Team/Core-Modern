@@ -51,6 +51,7 @@
         "common.create.DepotBehaviorMixin",
         "common.create.OpenEndedPipeMixin",
         "common.create.ProcessingRecipeMixin",
+        "common.create.RecipeGridHandlerMixin",
         "common.create.SuperGlueHandlerMixin",
         "common.create.chains.ChainConveyorBlockEntityMixin",
         "common.create.chains.ChainConveyorBlockMixin",
@@ -198,6 +199,8 @@
         "common.tfc.IIngotPileBlockEntityEntryAccessor",
         "common.tfc.LivestockAiMixin",
         "common.tfc.MoldCapabilityMixin",
+        "common.tfc.IDelegateIngredientAccessor",
+        "common.tfc.NotRottenIngredientMixin",
         "common.tfc.OverworldClimateModelMixin",
         "common.tfc.PotBlockEntityMixin",
         "common.tfc.RammingPreyAiMixin",
@@ -263,7 +266,10 @@
         "common.wab.SnatcherMixin",
         "common.wab.SoarerMixin",
         "common.wab.SoarerOverlayMixin",
-        "common.wab.ToxlacanthMixin"
+        "common.wab.ToxlacanthMixin",
+        "common.tfc.TFCFoxMixin",
+        "common.gtceu.GTForgeCommonEventListenerMixin",
+        "client.gtceu.GTForgeClientEventListenerMixin"
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",

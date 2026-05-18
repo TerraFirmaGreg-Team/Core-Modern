@@ -39,7 +39,7 @@ public class ModelUtils {
         };
     }
 
-    public static NonNullBiConsumer<DataGenContext<Item, BlockItem>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
+    public static <T extends BlockItem> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
         return (ctx, prov) -> prov.withExistingParent(ctx.getName(), blockModel);
     }
 

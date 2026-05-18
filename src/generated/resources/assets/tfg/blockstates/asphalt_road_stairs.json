@@ -1,0 +1,214 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs"
+      },
+      "when": {
+        "facing": "east",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "shape": "straight"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_outer"
+      },
+      "when": {
+        "facing": "east",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_outer",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_outer",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_outer",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "shape": "outer_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_outer",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_outer",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_outer"
+      },
+      "when": {
+        "facing": "south",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_outer",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "shape": "outer_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_inner"
+      },
+      "when": {
+        "facing": "east",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_inner",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_inner",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_inner",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "shape": "inner_right"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_inner",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_inner",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_inner"
+      },
+      "when": {
+        "facing": "south",
+        "shape": "inner_left"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/asphalt_road/stairs_inner",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "shape": "inner_left"
+      }
+    }
+  ]
+}
