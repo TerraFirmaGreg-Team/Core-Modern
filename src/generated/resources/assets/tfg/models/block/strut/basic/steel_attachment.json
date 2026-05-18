@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/strut/basic_attachment",
+  "textures": {
+    "0": "tfg:block/strut/basic/steel_attachment",
+    "particle": "tfg:block/strut/basic/steel_particle"
+  }
+}

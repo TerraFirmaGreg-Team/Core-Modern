@@ -54,6 +54,7 @@ public final class TFGBlocks {
         TFGBlocks_Buds.init();
         TFGBlocks_Wood.init();
         TFGBlocksAsphalt.init();
+        TFGBlocks_Struts.init();
     }
 
     ////// Decoration blocks

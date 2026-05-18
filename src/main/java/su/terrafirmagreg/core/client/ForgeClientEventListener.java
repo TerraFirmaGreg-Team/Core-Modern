@@ -1,5 +1,8 @@
 package su.terrafirmagreg.core.client;
 
+import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
+import com.cake.struts.content.block.StrutBlockEntityRenderer;
+
 import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
@@ -10,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,6 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.perf.SupportCache;
@@ -74,5 +79,10 @@ public class ForgeClientEventListener {
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());
 
         AsphaltRoadColorHandlers.registerItems(event);
+    }
+
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(TFGBlockEntities.STRUT.get(), StrutBlockEntityRenderer::new);
+        StrutsFlywheelCompatLoader.registerStrutVisual(TFGBlockEntities.STRUT.get());
     }
 }
