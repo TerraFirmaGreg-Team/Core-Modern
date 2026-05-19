@@ -19,18 +19,31 @@ public class TFGEffects {
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS,
             TFGCore.MOD_ID);
 
+    // Beneficial
     public static final RegistryObject<MobEffect> COOLING = register("cooling",
             () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xAEBDD));
+
+    public static final RegistryObject<MobEffect> WARMING = register("warming",
+            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xEDA02D));
+
     public static final RegistryObject<MobEffect> QUENCHED = register("quenched",
             () -> new MobEffect(MobEffectCategory.BENEFICIAL, 0x3ED5E0) {
             });
-    public static final RegistryObject<MobEffect> WARMING = register("warming",
-            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xEDA02D));
+
+    // Harmful
+    public static final RegistryObject<MobEffect> FREEZING = register("freezing",
+            () -> new TemperatureChangeEffect(MobEffectCategory.HARMFUL, 0xA8D9FF));
+
+    public static final RegistryObject<MobEffect> BLAZING = register("blazing",
+            () -> new TemperatureChangeEffect(MobEffectCategory.HARMFUL, 0xF27552));
+
     public static final RegistryObject<MobEffect> INSTANT_RADIATION = register("instant_radiation",
             () -> new InstantDamageEffect(MobEffectCategory.HARMFUL, 0x94fc03));
+
     public static final RegistryObject<MobEffect> FINAL_MOMENTS = register("final_moments",
             FinalMomentsEffect::new);
 
+    // Medical Conditions.
     public static final RegistryObject<MobEffect> CHEMICAL_BURNS_WARNING = register("chemical_burns_warning",
             () -> new MedicalConditionEffect(0xfa8723));
     public static final RegistryObject<MobEffect> POISON_WARNING = register("poison_warning",

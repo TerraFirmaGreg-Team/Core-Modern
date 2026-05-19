@@ -58,6 +58,16 @@ public class FoodComponentFoodDataMixin implements IExtendedNutrientBuilder<Food
     }
 
     @Override
+    public FoodComponent.FoodData freezing(float value) {
+        return tfg$setExtendedNutrient("freezing", value);
+    }
+
+    @Override
+    public FoodComponent.FoodData blazing(float value) {
+        return tfg$setExtendedNutrient("blazing", value);
+    }
+
+    @Override
     public FoodComponent.FoodData radiating(float value) {
         return tfg$setExtendedNutrient("radiating", value);
     }
@@ -105,11 +115,6 @@ public class FoodComponentFoodDataMixin implements IExtendedNutrientBuilder<Food
     @Override
     public FoodComponent.FoodData fulfilling(float value) {
         return tfg$setExtendedNutrient("fulfilling", value);
-    }
-
-    @Override
-    public FoodComponent.FoodData hydrating(float value) {
-        return tfg$setExtendedNutrient("hydrating", value);
     }
 
     @Unique

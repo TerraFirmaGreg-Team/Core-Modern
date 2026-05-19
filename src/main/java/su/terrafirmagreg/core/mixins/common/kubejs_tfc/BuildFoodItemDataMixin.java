@@ -56,6 +56,16 @@ public class BuildFoodItemDataMixin implements IExtendedNutrientBuilder<BuildFoo
     }
 
     @Override
+    public BuildFoodItemData freezing(float value) {
+        return tfg$setExtendedNutrient("freezing", value);
+    }
+
+    @Override
+    public BuildFoodItemData blazing(float value) {
+        return tfg$setExtendedNutrient("blazing", value);
+    }
+
+    @Override
     public BuildFoodItemData radiating(float value) {
         return tfg$setExtendedNutrient("radiating", value);
     }
@@ -103,11 +113,6 @@ public class BuildFoodItemDataMixin implements IExtendedNutrientBuilder<BuildFoo
     @Override
     public BuildFoodItemData fulfilling(float value) {
         return tfg$setExtendedNutrient("fulfilling", value);
-    }
-
-    @Override
-    public BuildFoodItemData hydrating(float value) {
-        return tfg$setExtendedNutrient("hydrating", value);
     }
 
     @Unique

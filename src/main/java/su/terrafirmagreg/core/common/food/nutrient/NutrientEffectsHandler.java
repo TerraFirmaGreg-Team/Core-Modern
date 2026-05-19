@@ -161,72 +161,67 @@ public final class NutrientEffectsHandler {
                 continue;
 
             float value = NutritionDataExtension.getExtendedNutrient(nutritionData, nutrient) * 100;
-            // Food value to seconds of effect duration.
-            int effectDuration = Math.max(1, Math.round(value * 1200));
             if (value <= 0)
                 continue;
 
-            // Deadly
-            if (nutrient.getSerializedName().equals("deadly") && !player.getAbilities().invulnerable) {
-                player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), 18000, 0, false, true));
-            }
-            // Cooling
-            if (nutrient.getSerializedName().equals("cooling")) {
-                player.addEffect(new MobEffectInstance(TFGEffects.COOLING.get(), Math.min(effectDuration, 36000), 0, false, false));
-            }
-            // Warming
-            if (nutrient.getSerializedName().equals("warming")) {
-                player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
-            }
-            // Radiating
-            if (nutrient.getSerializedName().equals("radiating")) {
-                player.addEffect(new MobEffectInstance(MobEffects.GLOWING, 480, 0, false, true));
-                player.addEffect(new MobEffectInstance(TFGEffects.INSTANT_RADIATION.get(), 480, (int) Math.min(Math.max(value, 0), 5), false, true));
-            }
-            // Nauseating
-            if (nutrient.getSerializedName().equals("nauseating")) {
-                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, Math.min(effectDuration, 480) / 2, 0, false, true));
-                player.addEffect(new MobEffectInstance(MobEffects.HUNGER, Math.min(effectDuration, 480), 6, false, true));
-            }
-            // Parching
-            if (nutrient.getSerializedName().equals("parching")) {
-                player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration, 36000), 0, false, true));
-            }
-            // Quenching
-            if (nutrient.getSerializedName().equals("quenching")) {
-                player.addEffect(new MobEffectInstance(TFGEffects.QUENCHED.get(), Math.min(effectDuration, 36000), 0, false, false));
-            }
-            // Bolstering
-            if (nutrient.getSerializedName().equals("bolstering")) {
-                player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 9600, (int) Math.min(Math.max(value, 0), 5), false, false));
-            }
-            // Hearty
-            if (nutrient.getSerializedName().equals("hearty")) {
-                player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 18000, (int) Math.min(Math.max(value, 0), 5), false, false));
-            }
-            // Rejuvenating
-            if (nutrient.getSerializedName().equals("rejuvenating")) {
-                player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Math.min(effectDuration, 3600), 0, false, false));
-            }
-            // Sugary
-            if (nutrient.getSerializedName().equals("sugary")) {
-                player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, Math.min(effectDuration / 4, 6000), 0, false, false));
-                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Math.min(effectDuration, 36000), 0, false, false));
-            }
-            // Spicy
-            if (nutrient.getSerializedName().equals("spicy")) {
-                player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration / 4, 6000), 0, false, false));
-                player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
-            }
-            // Fulfilling
-            if (nutrient.getSerializedName().equals("fulfilling")) {
-                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Math.min(effectDuration, 18000), 0, false, false));
-                player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, (int) Math.min(Math.max(value, 0), 2), false, false));
-            }
-            // Hydrating
-            if (nutrient.getSerializedName().equals("hydrating")) {
-                player.addEffect(new MobEffectInstance(TFGEffects.COOLING.get(), Math.min(effectDuration, 6000), 0, false, false));
-                player.addEffect(new MobEffectInstance(TFGEffects.QUENCHED.get(), Math.min(effectDuration, 18000), 0, false, false));
+            // Food value to seconds of effect duration.
+            int effectDuration = Math.max(1, Math.round(value * 12));
+
+            switch (nutrient.getSerializedName()) {
+                case "deadly" -> {
+                    if (!player.getAbilities().invulnerable) {
+                        player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), 9600, 0, false, true));
+                    }
+                }
+                case "cooling" ->
+                    player.addEffect(new MobEffectInstance(TFGEffects.COOLING.get(), Math.min(effectDuration, 36000), 0, false, false));
+
+                case "warming" ->
+                    player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
+
+                case "freezing" ->
+                    player.addEffect(new MobEffectInstance(TFGEffects.FREEZING.get(), Math.min(effectDuration, 600), 0, false, true));
+
+                case "blazing" ->
+                    player.addEffect(new MobEffectInstance(TFGEffects.BLAZING.get(), Math.min(effectDuration, 600), 0, false, true));
+
+                case "radiating" -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.GLOWING, 480, 0, false, true));
+                    player.addEffect(new MobEffectInstance(TFGEffects.INSTANT_RADIATION.get(), 480, (int) Math.min(Math.max(value, 0), 5), false, true));
+                }
+                case "nauseating" -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, Math.min(effectDuration, 480) / 2, 0, false, true));
+                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, Math.min(effectDuration, 480), 6, false, true));
+                }
+                case "parching" ->
+                    player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration, 36000), 0, false, true));
+
+                case "quenching" ->
+                    player.addEffect(new MobEffectInstance(TFGEffects.QUENCHED.get(), Math.min(effectDuration, 36000), 0, false, false));
+
+                case "bolstering" ->
+                    player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 9600, (int) Math.min(Math.max(value, 0), 5), false, false));
+
+                case "hearty" ->
+                    player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 9600, (int) Math.min(Math.max(value, 0), 5), false, false));
+
+                case "rejuvenating" ->
+                    player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Math.min(effectDuration, 3600), 0, false, false));
+
+                case "sugary" -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, Math.min(effectDuration / 4, 6000), 0, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Math.min(effectDuration, 36000), 0, false, false));
+                }
+                case "spicy" -> {
+                    player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration / 4, 6000), 0, false, false));
+                    player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
+                }
+                case "fulfilling" -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Math.min(effectDuration, 18000), 0, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, (int) Math.min(Math.max(value, 0), 2), false, false));
+                }
+                default -> {
+                }
             }
 
             // Reset the transient nutrient to 0 immediately.

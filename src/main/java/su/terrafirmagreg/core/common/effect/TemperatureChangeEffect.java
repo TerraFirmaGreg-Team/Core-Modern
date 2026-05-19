@@ -16,9 +16,11 @@ public class TemperatureChangeEffect extends MobEffect {
     // How many ticks per effect trigger
     private static final int defaultTime = 20;
 
-    //Min/Max temp so people don't die
-    private static final float maxTemp = 25;
-    private static final float minTemp = 5;
+    //Min/Max temps.
+    private static final float maxWarmingTemp = 25;
+    private static final float minCoolingTemp = 5;
+    private static final float maxBlazingTemp = 60;
+    private static final float minFreezingTemp = -40;
 
     public TemperatureChangeEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
@@ -29,12 +31,23 @@ public class TemperatureChangeEffect extends MobEffect {
         TemperatureCapability tempCap = livingEntity.getCapability(TemperatureCapability.CAPABILITY)
                 .orElse(TemperatureCapability.DEFAULT);
 
+        // Cooling and warming have safe temperature caps.
         if (this == TFGEffects.COOLING.get()) {
-            if (tempCap.getTemperature() >= minTemp) {
+            if (tempCap.getTemperature() >= minCoolingTemp) {
                 tempCap.setTemperature(tempCap.getTemperature() - deltaTemp * (amplifier + 1));
             }
         } else if (this == TFGEffects.WARMING.get()) {
-            if (tempCap.getTemperature() <= maxTemp) {
+            if (tempCap.getTemperature() <= maxWarmingTemp) {
+                tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
+            }
+        }
+        // Freezing and blazing have dangerous temperature caps.
+        if (this == TFGEffects.FREEZING.get()) {
+            if (tempCap.getTemperature() >= minFreezingTemp) {
+                tempCap.setTemperature(tempCap.getTemperature() - deltaTemp * (amplifier + 1));
+            }
+        } else if (this == TFGEffects.BLAZING.get()) {
+            if (tempCap.getTemperature() <= maxBlazingTemp) {
                 tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
             }
         }
@@ -42,7 +55,7 @@ public class TemperatureChangeEffect extends MobEffect {
 
     @Override
     public boolean isDurationEffectTick(int duration, int amplitude) {
-        if (this == TFGEffects.COOLING.get() || this == TFGEffects.WARMING.get()) {
+        if (this == TFGEffects.COOLING.get() || this == TFGEffects.WARMING.get() || this == TFGEffects.FREEZING.get() || this == TFGEffects.BLAZING.get()) {
             return duration % defaultTime == 0;
         } else {
             return false;

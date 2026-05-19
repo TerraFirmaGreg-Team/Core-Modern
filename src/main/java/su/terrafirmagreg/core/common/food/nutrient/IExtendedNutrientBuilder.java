@@ -19,6 +19,10 @@ public interface IExtendedNutrientBuilder<T> {
 
     T warming(float value);
 
+    T freezing(float value);
+
+    T blazing(float value);
+
     T radiating(float value);
 
     T nauseating(float value);
@@ -38,6 +42,4 @@ public interface IExtendedNutrientBuilder<T> {
     T spicy(float value);
 
     T fulfilling(float value);
-
-    T hydrating(float value);
 }

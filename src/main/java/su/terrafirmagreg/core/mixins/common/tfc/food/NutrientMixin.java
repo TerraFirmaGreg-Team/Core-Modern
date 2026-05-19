@@ -72,44 +72,52 @@ public class NutrientMixin implements INutrientExtension {
 
         // --------- Transient Nutrients -----------
         // === Instant Effects ===
-        var deadly = tfg$invokeInit("DEADLY", nutrients.size(), ChatFormatting.DARK_PURPLE);
+        var deadly = tfg$invokeInit("DEADLY", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) deadly).tfg$transient = true;
         nutrients.add(deadly);
 
         // === Mob Effects ===
-        var cooling = tfg$invokeInit("COOLING", nutrients.size(), ChatFormatting.BLUE);
+        var cooling = tfg$invokeInit("COOLING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) cooling).tfg$transient = true;
         nutrients.add(cooling);
 
-        var warming = tfg$invokeInit("WARMING", nutrients.size(), ChatFormatting.RED);
+        var warming = tfg$invokeInit("WARMING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) warming).tfg$transient = true;
         nutrients.add(warming);
 
-        var radiating = tfg$invokeInit("RADIATING", nutrients.size(), ChatFormatting.GREEN);
+        var freezing = tfg$invokeInit("FREEZING", nutrients.size(), ChatFormatting.WHITE);
+        ((NutrientMixin) (Object) freezing).tfg$transient = true;
+        nutrients.add(freezing);
+
+        var blazing = tfg$invokeInit("BLAZING", nutrients.size(), ChatFormatting.WHITE);
+        ((NutrientMixin) (Object) blazing).tfg$transient = true;
+        nutrients.add(blazing);
+
+        var radiating = tfg$invokeInit("RADIATING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) radiating).tfg$transient = true;
         nutrients.add(radiating);
 
-        var nauseating = tfg$invokeInit("NAUSEATING", nutrients.size(), ChatFormatting.DARK_GREEN);
+        var nauseating = tfg$invokeInit("NAUSEATING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) nauseating).tfg$transient = true;
         nutrients.add(nauseating);
 
-        var parching = tfg$invokeInit("PARCHING", nutrients.size(), ChatFormatting.YELLOW);
+        var parching = tfg$invokeInit("PARCHING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) parching).tfg$transient = true;
         nutrients.add(parching);
 
-        var quenching = tfg$invokeInit("QUENCHING", nutrients.size(), ChatFormatting.AQUA);
+        var quenching = tfg$invokeInit("QUENCHING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) quenching).tfg$transient = true;
         nutrients.add(quenching);
 
-        var bolstering = tfg$invokeInit("BOLSTERING", nutrients.size(), ChatFormatting.GOLD);
+        var bolstering = tfg$invokeInit("BOLSTERING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) bolstering).tfg$transient = true;
         nutrients.add(bolstering);
 
-        var hearty = tfg$invokeInit("HEARTY", nutrients.size(), ChatFormatting.DARK_RED);
+        var hearty = tfg$invokeInit("HEARTY", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) hearty).tfg$transient = true;
         nutrients.add(hearty);
 
-        var rejuvenating = tfg$invokeInit("REJUVENATING", nutrients.size(), ChatFormatting.LIGHT_PURPLE);
+        var rejuvenating = tfg$invokeInit("REJUVENATING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) rejuvenating).tfg$transient = true;
         nutrients.add(rejuvenating);
 
@@ -118,17 +126,13 @@ public class NutrientMixin implements INutrientExtension {
         ((NutrientMixin) (Object) sugary).tfg$transient = true;
         nutrients.add(sugary);
 
-        var spicy = tfg$invokeInit("SPICY", nutrients.size(), ChatFormatting.RED);
+        var spicy = tfg$invokeInit("SPICY", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) spicy).tfg$transient = true;
         nutrients.add(spicy);
 
-        var fulfilling = tfg$invokeInit("FULFILLING", nutrients.size(), ChatFormatting.YELLOW);
+        var fulfilling = tfg$invokeInit("FULFILLING", nutrients.size(), ChatFormatting.WHITE);
         ((NutrientMixin) (Object) fulfilling).tfg$transient = true;
         nutrients.add(fulfilling);
-
-        var hydrating = tfg$invokeInit("HYDRATING", nutrients.size(), ChatFormatting.DARK_AQUA);
-        ((NutrientMixin) (Object) hydrating).tfg$transient = true;
-        nutrients.add(hydrating);
 
         VALUES = nutrients.toArray(new Nutrient[0]);
         TOTAL = VALUES.length;
