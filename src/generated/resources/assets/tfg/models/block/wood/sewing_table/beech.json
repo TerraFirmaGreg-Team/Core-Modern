@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/sewing_table",
+  "textures": {
+    "0": "tfg:block/wood/log/beech",
+    "1": "tfg:block/wood/planks/beech"
+  }
+}

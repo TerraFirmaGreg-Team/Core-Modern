@@ -20,15 +20,15 @@ public final class DeadCoralHelpers {
         if ((level.isEmptyBlock(pos) || Helpers.isBlock(blockstate, BlockTags.CORALS))
                 && level.isEmptyBlock(abovePos)) {
             if (coralBlockState.is(Blocks.FIRE_CORAL_BLOCK)) {
-                level.setBlock(pos, Blocks.DEAD_FIRE_CORAL_BLOCK.defaultBlockState(), 3);
+                level.setBlock(pos, Blocks.DEAD_FIRE_CORAL_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
             } else if (coralBlockState.is(Blocks.BUBBLE_CORAL_BLOCK)) {
-                level.setBlock(pos, Blocks.DEAD_BUBBLE_CORAL_BLOCK.defaultBlockState(), 3);
+                level.setBlock(pos, Blocks.DEAD_BUBBLE_CORAL_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
             } else if (coralBlockState.is(Blocks.HORN_CORAL_BLOCK)) {
-                level.setBlock(pos, Blocks.DEAD_HORN_CORAL_BLOCK.defaultBlockState(), 3);
+                level.setBlock(pos, Blocks.DEAD_HORN_CORAL_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
             } else if (coralBlockState.is(Blocks.BRAIN_CORAL_BLOCK)) {
-                level.setBlock(pos, Blocks.DEAD_BRAIN_CORAL_BLOCK.defaultBlockState(), 3);
+                level.setBlock(pos, Blocks.DEAD_BRAIN_CORAL_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
             } else if (coralBlockState.is(Blocks.TUBE_CORAL_BLOCK)) {
-                level.setBlock(pos, Blocks.DEAD_TUBE_CORAL_BLOCK.defaultBlockState(), 3);
+                level.setBlock(pos, Blocks.DEAD_TUBE_CORAL_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
             }
 
             if (rand.nextFloat() < 0.25F) {
@@ -40,7 +40,7 @@ public final class DeadCoralHelpers {
                     default -> Blocks.DEAD_TUBE_CORAL_BLOCK.defaultBlockState();
                 };
 
-                level.setBlock(abovePos, coralState, 2);
+                level.setBlock(abovePos, coralState, Block.UPDATE_CLIENTS);
             }
 
             for (Direction direction : Direction.Plane.HORIZONTAL) {
@@ -59,7 +59,7 @@ public final class DeadCoralHelpers {
                             coralState = coralState.setValue(CoralWallFanBlock.FACING, direction);
                         }
 
-                        level.setBlock(relativePos, coralState, 2);
+                        level.setBlock(relativePos, coralState, Block.UPDATE_CLIENTS);
                     }
                 }
             }

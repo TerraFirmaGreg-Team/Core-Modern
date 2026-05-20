@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/lectern",
+  "textures": {
+    "base": "tfg:block/wood/lectern/beech/base",
+    "bottom": "tfg:block/wood/planks/beech",
+    "front": "tfg:block/wood/lectern/beech/front",
+    "particle": "tfg:block/wood/lectern/beech/sides",
+    "sides": "tfg:block/wood/lectern/beech/sides",
+    "top": "tfg:block/wood/lectern/beech/top"
+  }
+}

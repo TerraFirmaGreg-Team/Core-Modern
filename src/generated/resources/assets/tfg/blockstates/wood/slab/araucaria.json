@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "tfg:block/wood/slab/araucaria"
+    },
+    "type=double": {
+      "model": "tfg:block/wood/planks/araucaria"
+    },
+    "type=top": {
+      "model": "tfg:block/wood/slab/araucaria_top"
+    }
+  }
+}

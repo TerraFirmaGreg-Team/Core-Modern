@@ -1,11 +1,17 @@
 package su.terrafirmagreg.core.common.block;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.dries007.tfc.common.blocks.ExtendedBlock;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -32,10 +38,13 @@ public class DecorativePlantBlock extends ExtendedBlock implements IFluidLoggabl
     public static final VoxelShape DEFAULT_SHAPE = Block.box(3.0F, 0.0F, 3.0F, 13.0F, 7.0F, 13.0F);
 
     private final VoxelShape shape;
+    @Nullable
+    private final MobEffect effect;
 
-    public DecorativePlantBlock(ExtendedProperties properties, VoxelShape shape) {
+    public DecorativePlantBlock(ExtendedProperties properties, VoxelShape shape, @Nullable MobEffect effect) {
         super(properties);
         this.shape = shape;
+        this.effect = effect;
 
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
@@ -78,7 +87,7 @@ public class DecorativePlantBlock extends ExtendedBlock implements IFluidLoggabl
     public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
         if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
             level.destroyBlock(pos, true);
-            level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
+            level.setBlock(pos, fluidStateIn.createLegacyBlock(), Block.UPDATE_CLIENTS);
             return true;
         }
         return IFluidLoggable.super.placeLiquid(level, pos, state, fluidStateIn);
@@ -119,6 +128,14 @@ public class DecorativePlantBlock extends ExtendedBlock implements IFluidLoggabl
 
         if (!canSurvive(state, level, pos)) {
             Block.updateOrDestroy(state, Blocks.AIR.defaultBlockState(), level, pos, Block.UPDATE_ALL);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (effect != null && entity instanceof Player player) {
+            player.addEffect(new MobEffectInstance(effect, 50));
         }
     }
 }

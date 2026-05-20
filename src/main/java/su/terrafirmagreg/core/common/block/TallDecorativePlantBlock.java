@@ -75,7 +75,7 @@ public class TallDecorativePlantBlock extends ExtendedBlock implements IFluidLog
     public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
         if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
             level.destroyBlock(pos, true);
-            level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
+            level.setBlock(pos, fluidStateIn.createLegacyBlock(), Block.UPDATE_CLIENTS);
             return true;
         }
         return IFluidLoggable.super.placeLiquid(level, pos, state, fluidStateIn);
@@ -127,7 +127,7 @@ public class TallDecorativePlantBlock extends ExtendedBlock implements IFluidLog
 
         test = pos.above();
         for (int i = 1; i < maxHeight; i++) {
-            level.setBlock(test, this.defaultBlockState().setValue(TFGBlockProperties.HEIGHT, i), 3);
+            level.setBlock(test, this.defaultBlockState().setValue(TFGBlockProperties.HEIGHT, i), Block.UPDATE_ALL);
             test = test.above();
         }
     }

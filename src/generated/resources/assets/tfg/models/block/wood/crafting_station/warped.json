@@ -1,0 +1,9 @@
+{
+  "parent": "craftingstation:block/crafting_station",
+  "textures": {
+    "2": "tfg:block/wood/crafting_station/warped_side",
+    "3": "tfg:block/wood/crafting_station/warped_top",
+    "4": "beneath:block/wood/planks/warped",
+    "particle": "tfg:block/wood/crafting_station/warped_top"
+  }
+}

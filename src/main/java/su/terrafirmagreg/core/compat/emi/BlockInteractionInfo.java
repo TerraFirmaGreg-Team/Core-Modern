@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.compat.emi;
 
 import java.util.function.Supplier;
 
+import com.eerussianguy.firmalife.common.blocks.FLBlocks;
+import com.eerussianguy.firmalife.common.blocks.OvenType;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.*;
@@ -12,6 +14,8 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.GroundcoverBlockType;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,6 +26,7 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 public class BlockInteractionInfo {
     private static final Item pumice_item = TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.PUMICE).get().asItem();
     private static final Item incoloy_frame = ChemicalHelper.get(TagPrefix.frameGt, GTMaterials.IncoloyMA956).getItem();
+    private static final TagKey<Item> igniters = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("forge", "tools/igniter"));
 
     private static final Supplier<Item> glacian_frame = () -> ForgeRegistries.BLOCKS
             .getValue(TFGCore.id("glacian_wool_frame")).asItem();
@@ -113,6 +118,12 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe("insulation_moderate_remove", moderate_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
             new BlockInteractionRecipe("insulation_copper_sandy_remove", copper_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
             new BlockInteractionRecipe("insulation_beryllium_sandy_remove", beryllium_sandy_frame.get(), incoloy_frame, CustomTags.WIRE_CUTTERS),
+
+            // Firmalife ovens
+            new BlockInteractionRecipe("oven_top", FLBlocks.OVEN_TOP.get().asItem(), FLBlocks.CURED_OVEN_TOP.get(OvenType.BRICK).get().asItem(), igniters),
+            new BlockInteractionRecipe("oven_bottom", FLBlocks.OVEN_BOTTOM.get().asItem(), FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.BRICK).get().asItem(), igniters),
+            new BlockInteractionRecipe("oven_chimney", FLBlocks.OVEN_CHIMNEY.get().asItem(), FLBlocks.CURED_OVEN_CHIMNEY.get(OvenType.BRICK).get().asItem(), igniters),
+            new BlockInteractionRecipe("oven_hopper", FLBlocks.OVEN_HOPPER.get().asItem(), FLBlocks.CURED_OVEN_HOPPER.get(OvenType.BRICK).get().asItem(), igniters),
     };
 
 }

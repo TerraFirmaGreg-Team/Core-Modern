@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +38,7 @@ public class ReflectorBlockEntity extends BlockEntity {
         BlockState currentState = level.getBlockState(pos);
         int currentLight = currentState.getValue(ReflectorBlock.LIGHT_LEVEL);
         if (currentLight != lightLevel) {
-            level.setBlock(pos, currentState.setValue(ReflectorBlock.LIGHT_LEVEL, lightLevel), 3);
+            level.setBlock(pos, currentState.setValue(ReflectorBlock.LIGHT_LEVEL, lightLevel), Block.UPDATE_ALL);
         }
     }
 }

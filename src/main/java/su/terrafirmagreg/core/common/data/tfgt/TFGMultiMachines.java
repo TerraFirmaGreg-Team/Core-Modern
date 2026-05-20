@@ -521,7 +521,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGTRecipeTypes.GROWTH_CHAMBER_RECIPES)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks_Casings.BIOCULTURE_CASING)
             .tooltips(Component.translatable("tfg.tooltip.machine.parallel"),
                     Component.translatable("tfg.tooltip.growth_chamber"))
@@ -684,7 +684,7 @@ public class TFGMultiMachines {
             .allowFlip(false)
             .allowExtendedFacing(false)
             .recipeType(TFGTRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks_Casings.EGH_CASING)
             .model(GTMachineModels.createWorkableCasingMachineModel(
                             TFGCore.id( "block/casings/machine_casing_egh"),
@@ -731,7 +731,7 @@ public class TFGMultiMachines {
             .allowFlip(false)
             .allowExtendedFacing(false)
             .recipeType(TFGTRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .workableCasingModel(
@@ -862,7 +862,11 @@ public class TFGMultiMachines {
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .where('X', blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .where('G', blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
-                    .where('P', blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .where('P', blocks(GTBlocks.CASING_BRONZE_PIPE.get())
+							.or(blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+							.or(blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+							.or(blocks(GTBlocks.CASING_TITANIUM_PIPE.get()))
+							.or(blocks(GTBlocks.CASING_TUNGSTENSTEEL_PIPE.get())))
                     .where('B', blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setExactLimit(1))
@@ -1226,7 +1230,7 @@ public class TFGMultiMachines {
                     .where('S', controller(blocks(definition.get())))
                     .where('X', blocks(GTBlocks.STEEL_HULL.get()).setMinGlobalLimited(1)
                             .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setMaxGlobalLimited(1).setPreviewCount(1))
-                            .or(abilities(PartAbility.STEAM_IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
+                            .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
                     .where('A', blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
                     .where('F', Predicates.frames(GTMaterials.Steel))
                     .where('B', abilities(PartAbility.EXPORT_FLUIDS_1X).setMinGlobalLimited(1).setMaxGlobalLimited(1).setPreviewCount(1))

@@ -39,7 +39,7 @@ public class ModelUtils {
         };
     }
 
-    public static NonNullBiConsumer<DataGenContext<Item, BlockItem>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
+    public static <T extends BlockItem> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
         return (ctx, prov) -> prov.withExistingParent(ctx.getName(), blockModel);
     }
 
@@ -58,6 +58,13 @@ public class ModelUtils {
                     new ConfiguredModel(model, 0, 180, false),
                     new ConfiguredModel(model, 0, 270, false));
         };
+    }
+
+    public static void blockVariantsRotated(VariantBlockStateBuilder builder, ModelFile model) {
+        builder.partialState().addModels(new ConfiguredModel(model),
+                new ConfiguredModel(model, 0, 90, false),
+                new ConfiguredModel(model, 0, 180, false),
+                new ConfiguredModel(model, 0, 270, false));
     }
 
     public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> blockVariants(ResourceLocation... variants) {

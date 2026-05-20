@@ -24,6 +24,10 @@
     "tfg:casings/greenhouse/stainless_greenhouse_casing_1",
     "tfg:casings/greenhouse/stainless_greenhouse_casing_2",
     "tfg:casings/greenhouse/stainless_greenhouse_casing_3",
-    "tfg:casings/greenhouse/stainless_greenhouse_casing_4"
+    "tfg:casings/greenhouse/stainless_greenhouse_casing_4",
+    "tfg:asphalt_road_hot",
+    "tfg:asphalt_road",
+    "tfg:asphalt_road_stairs",
+    "tfg:asphalt_road_slab"
   ]
 }

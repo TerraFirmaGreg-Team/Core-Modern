@@ -60,7 +60,7 @@ public class LunarChorusFlowerBlock extends Block {
 
     private void setBodyBlock(LevelAccessor level, BlockPos pos) {
         LunarChorusPlantBlock plantBlock = (LunarChorusPlantBlock) plant.get();
-        level.setBlock(pos, plantBlock.getStateForPlacement(level, pos), 2);
+        level.setBlock(pos, plantBlock.getStateForPlacement(level, pos), Block.UPDATE_CLIENTS);
     }
 
     public static boolean isGroundBlock(BlockState state) {
@@ -155,12 +155,12 @@ public class LunarChorusFlowerBlock extends Block {
     }
 
     private void placeGrownFlower(Level pLevel, BlockPos pPos, int pAge) {
-        pLevel.setBlock(pPos, this.defaultBlockState().setValue(AGE, pAge), 2);
+        pLevel.setBlock(pPos, this.defaultBlockState().setValue(AGE, pAge), Block.UPDATE_CLIENTS);
         pLevel.levelEvent(1033, pPos, 0);
     }
 
     private void placeDeadFlower(Level pLevel, BlockPos pPos) {
-        pLevel.setBlock(pPos, this.defaultBlockState().setValue(AGE, 5), 2);
+        pLevel.setBlock(pPos, this.defaultBlockState().setValue(AGE, 5), Block.UPDATE_CLIENTS);
         pLevel.levelEvent(1034, pPos, 0);
     }
 
@@ -228,7 +228,7 @@ public class LunarChorusFlowerBlock extends Block {
             return true;
         } else {
             // Revert the original state
-            pLevel.setBlock(pPos, originalState, 3);
+            pLevel.setBlock(pPos, originalState, Block.UPDATE_ALL);
             return false;
         }
     }
@@ -275,7 +275,7 @@ public class LunarChorusFlowerBlock extends Block {
             }
         }
         if (!willContinue) {
-            level.setBlock(branchPos.above(i), defaultBlockState().setValue(AGE, rand.nextInt(10) == 1 ? 3 : 5), 2);
+            level.setBlock(branchPos.above(i), defaultBlockState().setValue(AGE, rand.nextInt(10) == 1 ? 3 : 5), Block.UPDATE_CLIENTS);
         }
         return true;
     }

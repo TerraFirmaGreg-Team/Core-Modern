@@ -189,8 +189,6 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     private boolean tryLaunchItemPayload(NetworkSenderConfigEntry config) {
         if (energyInputs == null || !isFormed || !isWorkingEnabled())
             return false;
-        if (config.getReceiverPartID().dimension().equals(config.getSenderPartID().dimension()))
-            return false;
         var destination = getLogisticsNetwork().getNetworkMachine(config.getReceiverPartID());
         if (!(destination instanceof ILogisticsNetworkReceiver receiver))
             return false;
@@ -258,6 +256,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
         var sendPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES.get(getDimensionalPos().dimension());
         var receiverPos = InterplanetaryLogisticsNetwork.DIMENSION_DISTANCES
                 .get(receiver.getDimensionalPos().dimension());
+        if (sendPos == null || receiverPos == null)
+            return false;
         var travelTime = Math.abs(sendPos - receiverPos);
 
         if (!tryExtractFromCircuitInventory(itemsToExtract, config.getSenderDistinctInventory(), true)

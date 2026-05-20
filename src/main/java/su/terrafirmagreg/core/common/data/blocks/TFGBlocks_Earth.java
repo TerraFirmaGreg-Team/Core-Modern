@@ -9,6 +9,8 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.eerussianguy.beneath.common.blocks.BeneathBlockTags;
+import com.eerussianguy.beneath.common.blocks.NFlowerBlock;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.therighthon.rnr.common.block.TampedMudBlock;
 import com.therighthon.rnr.common.block.TampedSoilBlock;
@@ -26,6 +28,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.DryingBricksBlock;
 import net.dries007.tfc.common.blocks.soil.*;
 import net.dries007.tfc.util.Helpers;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -38,12 +41,15 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 
 @SuppressWarnings("unused")
@@ -64,6 +70,21 @@ public class TFGBlocks_Earth {
     public static TagKey<Block> TFCMudBricksBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "mud_bricks"));
     public static TagKey<Block> TFCClayBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "clay"));
     public static TagKey<Block> TFCClayGrassBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "clay_grass"));
+
+    //Fly Agaric
+    public static final BlockEntry<NFlowerBlock> FLY_AGARIC = TFGCore.REGISTRATE.block("fly_agaric", p -> new NFlowerBlock(ExtendedProperties.of(Blocks.CRIMSON_FUNGUS)))
+            .blockstate((ctx, prov) -> {
+                prov.simpleBlock(ctx.getEntry(), prov.models().withExistingParent("block/fly_agaric", ResourceLocation.withDefaultNamespace("block/cross"))
+                        .texture("cross", ResourceLocation.withDefaultNamespace("block/red_mushroom")));
+            })
+            .addLayer(() -> RenderType::cutout)
+            .tag(BeneathBlockTags.MUSHROOMS)
+            .loot((lt, block) -> lt.add(block,
+                    LootTable.lootTable()
+                            .withPool(
+                                    LootPool.lootPool()
+                                            .add(LootItem.lootTableItem(TFGItems.FLY_AGARIC)))))
+            .register();
 
     // New TFC Worldgen
     public static final BlockEntry<Block> TUFF_GRAVEL = TFGCore.REGISTRATE.block("tuff_gravel", Block::new)

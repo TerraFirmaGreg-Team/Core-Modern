@@ -40,12 +40,12 @@ public class OffsetStackedTreeFeature extends Feature<OffsetStackedTreeConfig> {
 
         if (TreeHelpers.isValidGround(level, pos, settings, config.placement())) {
             final boolean placeTree = config.rootSystem().map(
-                    roots -> TreeHelpers.placeRoots(level, pos.below(), roots, random)
+                    roots -> TreeHelpers.placeRoots(level, pos.below().mutable(), roots, random)
                             || !roots.required())
                     .orElse(true);
 
             if (placeTree) {
-                config.rootSystem().ifPresent(roots -> TreeHelpers.placeRoots(level, pos.below(), roots, random));
+                config.rootSystem().ifPresent(roots -> TreeHelpers.placeRoots(level, pos.below().mutable(), roots, random));
 
                 mutablePos.move(0, config.yOffset(), 0);
 

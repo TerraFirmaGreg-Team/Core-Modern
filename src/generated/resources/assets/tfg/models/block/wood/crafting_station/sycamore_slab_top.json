@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "tfc:block/wood/planks/sycamore",
+    "particle": "tfc:block/wood/planks/sycamore",
+    "side": "tfg:block/wood/crafting_station/sycamore_slab_side",
+    "top": "tfg:block/wood/crafting_station/sycamore_top"
+  }
+}

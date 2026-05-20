@@ -1,0 +1,9 @@
+{
+  "parent": "craftingstation:block/crafting_station",
+  "textures": {
+    "2": "tfg:block/wood/crafting_station/mahoe_side",
+    "3": "tfg:block/wood/crafting_station/mahoe_top",
+    "4": "tfg:block/wood/planks/mahoe",
+    "particle": "tfg:block/wood/crafting_station/mahoe_top"
+  }
+}

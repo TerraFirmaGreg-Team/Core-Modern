@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "tfg:block/wood/twig/araucaria"
+      },
+      {
+        "model": "tfg:block/wood/twig/araucaria",
+        "y": 90
+      },
+      {
+        "model": "tfg:block/wood/twig/araucaria",
+        "y": 180
+      },
+      {
+        "model": "tfg:block/wood/twig/araucaria",
+        "y": 270
+      }
+    ]
+  }
+}

@@ -38,6 +38,8 @@ public class CaveSpikesFeatureMixin {
 
         if (dim == Level.OVERWORLD) {
             return BlockTags.BASE_STONE_OVERWORLD;
+        } else if (dim == Level.NETHER) {
+            return BlockTags.BASE_STONE_NETHER;
         } else if (dim == Planet.MARS) {
             return ModBlockTags.MARS_STONE_REPLACEABLES;
         } else if (dim == Planet.VENUS) {
@@ -59,19 +61,19 @@ public class CaveSpikesFeatureMixin {
     protected void replaceBlock(WorldGenLevel level, BlockPos pos, BlockState state) {
         final Block block = level.getBlockState(pos).getBlock();
         if (block == Blocks.AIR || block == Blocks.CAVE_AIR) {
-            level.setBlock(pos, state, 3);
+            level.setBlock(pos, state, Block.UPDATE_ALL);
         } else if (block == Blocks.WATER || block == TFCBlocks.RIVER_WATER.get()) {
-            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(Fluids.WATER)), 3);
+            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(Fluids.WATER)), Block.UPDATE_ALL);
         } else if (block == Blocks.LAVA) {
-            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(Fluids.LAVA)), 3);
+            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(Fluids.LAVA)), Block.UPDATE_ALL);
         } else if (block == TFGBlocks.MARS_WATER.get()) {
-            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.MARS_WATER.getSource())), 3);
+            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.MARS_WATER.getSource())), Block.UPDATE_ALL);
         } else if (block == TFGBlocks.SULFUR_FUMES.get()) {
-            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.SULFUR_FUMES.getSource())), 3);
+            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.SULFUR_FUMES.getSource())), Block.UPDATE_ALL);
         } else if (block == TFGBlocks.GEYSER_SLURRY.get()) {
-            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.GEYSER_SLURRY.getSource())), 3);
+            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.GEYSER_SLURRY.getSource())), Block.UPDATE_ALL);
         } else if (block == TFGBlocks.MUDDY_WATER.get()) {
-            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.MUDDY_WATER.getSource())), 3);
+            level.setBlock(pos, state.setValue(TFGBlockProperties.SPACE_WATER_AND_LAVA, TFGBlockProperties.SPACE_WATER_AND_LAVA.keyFor(TFGFluids.MUDDY_WATER.getSource())), Block.UPDATE_ALL);
         }
     }
 
@@ -84,8 +86,8 @@ public class CaveSpikesFeatureMixin {
         final Block block = level.getBlockState(pos).getBlock();
         if (block == Blocks.AIR || block == Blocks.CAVE_AIR || block == Blocks.WATER || block == TFCBlocks.RIVER_WATER.get()
                 || block == Blocks.LAVA || block == TFGBlocks.MARS_WATER.get() || block == TFGBlocks.SULFUR_FUMES.get()
-                || block == TFGBlocks.GEYSER_SLURRY.get()) {
-            level.setBlock(pos, state, 3);
+                || block == TFGBlocks.GEYSER_SLURRY.get() || block == TFGBlocks.MUDDY_WATER.get()) {
+            level.setBlock(pos, state, Block.UPDATE_ALL);
         }
     }
 }

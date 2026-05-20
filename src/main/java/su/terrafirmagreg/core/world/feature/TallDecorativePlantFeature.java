@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -73,7 +74,7 @@ public class TallDecorativePlantFeature extends Feature<TallDecorativePlantConfi
 
             // If we're under the normal height, replace the top with air
             if (height < plantHeight && i == height) {
-                level.setBlock(cursor, Blocks.AIR.defaultBlockState(), 2);
+                level.setBlock(cursor, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
                 break;
             }
 

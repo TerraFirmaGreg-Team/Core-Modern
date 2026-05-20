@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tfg:item/asphalt_road_stencil_line_slash_r"
+  }
+}

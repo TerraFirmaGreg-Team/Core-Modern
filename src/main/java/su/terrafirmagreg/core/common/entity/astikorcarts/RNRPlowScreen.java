@@ -8,8 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.container.widgets.Slider;
-import su.terrafirmagreg.core.common.container.widgets.ToggleButton;
+import su.terrafirmagreg.core.client.screen.widget.Slider;
+import su.terrafirmagreg.core.client.screen.widget.ToggleButton;
 
 /**
  * GUI for the RNR Plow entity.

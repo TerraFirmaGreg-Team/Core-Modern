@@ -10,6 +10,7 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -45,8 +46,8 @@ public class DecorativeAttachedPlantBlock extends DecorativePlantBlock {
             Direction.UP, UP_SHAPE,
             Direction.DOWN, DOWN_SHAPE);
 
-    public DecorativeAttachedPlantBlock(ExtendedProperties properties, boolean allowVertical) {
-        super(properties, DecorativePlantBlock.DEFAULT_SHAPE);
+    public DecorativeAttachedPlantBlock(ExtendedProperties properties, @Nullable MobEffect effect, boolean allowVertical) {
+        super(properties, DecorativePlantBlock.DEFAULT_SHAPE, effect);
         this.allowVertical = allowVertical;
     }
 

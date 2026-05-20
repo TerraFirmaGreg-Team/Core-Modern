@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "tfg:block/wood/slab/mahoe"
+    },
+    "type=double": {
+      "model": "tfg:block/wood/planks/mahoe"
+    },
+    "type=top": {
+      "model": "tfg:block/wood/slab/mahoe_top"
+    }
+  }
+}

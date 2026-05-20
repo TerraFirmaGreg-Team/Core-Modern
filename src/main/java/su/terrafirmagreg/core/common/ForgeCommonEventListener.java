@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import com.gregtechceu.gtceu.GTCEu;
 
+import net.dries007.tfc.common.blocks.rock.Ore;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
@@ -240,6 +242,13 @@ public final class ForgeCommonEventListener {
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getItem());
+
+        if (mapping.getKey().equals(GTCEu.id("rich_raw_coal")))
+            mapping.remap(TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
+        if (mapping.getKey().equals(GTCEu.id("raw_coal")))
+            mapping.remap(TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
+        if (mapping.getKey().equals(GTCEu.id("poor_raw_coal")))
+            mapping.remap(TFCItems.ORES.get(Ore.LIGNITE).get());
     }
 
     private static void remapBlockEntities(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {

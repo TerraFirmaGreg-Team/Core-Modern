@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.data;
 
+import com.eerussianguy.beneath.common.items.BeneathItemTags;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
@@ -10,13 +11,18 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.common.Tags;
 
 import appeng.api.upgrades.Upgrades;
 import de.mennomax.astikorcarts.item.CartItem;
@@ -26,17 +32,36 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
 import su.terrafirmagreg.core.common.item.*;
+import su.terrafirmagreg.core.common.item.wearable.FlippersItem;
+import su.terrafirmagreg.core.common.item.wearable.SnorkelItem;
+import su.terrafirmagreg.core.common.item.wearable.SnowshoesItem;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings("unused")
 public class TFGItems {
     public static void init() {
+        TFGItemsAsphalt.init();
         TFGItems_Medicines.init();
     }
 
     public static final ItemEntry<PiglinDisguise> PIGLIN_DISGUISE = TFGCore.REGISTRATE.item("piglin_disguise",
             (p) -> new PiglinDisguise(TFGBlocks.PIGLIN_DISGUISE_BLOCK.get(), p))
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/piglin_disguise_block")))
+            .register();
+
+    public static final ItemEntry<SnorkelItem> SNORKEL = TFGCore.REGISTRATE.item("snorkel", SnorkelItem::new)
+            .properties(p -> p.stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<FlippersItem> FLIPPERS = TFGCore.REGISTRATE.item("flippers", FlippersItem::new)
+            .properties(p -> p.stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<SnowshoesItem> SNOWSHOES = TFGCore.REGISTRATE.item("snowshoes", SnowshoesItem::new)
+            .properties(p -> p.stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
     public static final ItemEntry<TrowelItem> TROWEL = TFGCore.REGISTRATE.item("trowel", TrowelItem::new)
@@ -194,4 +219,11 @@ public class TFGItems {
                 .setData(ProviderType.ITEM_MODEL, (ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/template_spawn_egg")))
                 .register();
     }
+
+    public static final ItemEntry<Item> FLY_AGARIC = TFGCore.REGISTRATE.item("food/fly_agaric", Item::new)
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().nutrition(4).saturationMod(0.3f)
+                    .effect(() -> new MobEffectInstance(MobEffects.POISON, 1200, 1), 1.0F).build()))
+            .model((ctx, prov) -> prov.generated(ctx, ResourceLocation.withDefaultNamespace("block/red_mushroom")))
+            .tag(Tags.Items.MUSHROOMS, TFCTags.Items.FOODS, BeneathItemTags.UNPOSTABLE)
+            .register();
 }
