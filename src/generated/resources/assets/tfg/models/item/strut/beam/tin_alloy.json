@@ -1,5 +1,5 @@
 {
-  "parent": "tfg:block/strut/item",
+  "parent": "tfg:block/strut/beam_item",
   "textures": {
     "0": "tfg:block/girder/beam/tin_alloy",
     "1_0": "tfg:block/girder/beam/tin_alloy",

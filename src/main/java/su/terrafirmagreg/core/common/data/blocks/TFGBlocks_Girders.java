@@ -2,33 +2,42 @@ package su.terrafirmagreg.core.common.data.blocks;
 
 import com.simibubi.create.content.decoration.girder.GirderBlock;
 import com.simibubi.create.content.decoration.girder.GirderEncasedShaftBlock;
+import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
+import com.tterrag.registrate.util.entry.BlockEntry;
 
+import net.createmod.catnip.placement.PlacementHelpers;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.girder.TFGGirderBlock;
+import su.terrafirmagreg.core.common.block.girder.TFGGirderConnectedBeamModel;
+import su.terrafirmagreg.core.common.block.girder.TFGGirderPlacementHelper;
 
 public class TFGBlocks_Girders {
     public static void init() {
 
     }
 
-    //    public static final BlockEntry<TFGGirderBlock> TIN_ALLOY_GIRDER = TFGCore.REGISTRATE
-    //            .block("girder/beam/tin_alloy", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.TIN_ALLOY_GIRDER))))
-    //            .initialProperties(SharedProperties::softMetal)
-    //            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
-    //            .blockstate((ctx, prov) -> {
-    //                buildGirderBlockStateEntry(ctx, prov, TFGCore.id("block/girder/beam/tin_alloy"), TFGCore.id("block/girder/pole/tin_alloy"), TFGCore.id("block/girder/pole_side/tin_alloy"));
-    //            })
-    //            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
-    //            .item().model((ctx, prov) -> {
-    //                prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/beam/item")).texture("0", TFGCore.id("block/girder/beam/tin_alloy"));
-    //            }).build()
-    //            .register();
+    public static final BlockEntry<TFGGirderBlock> TIN_ALLOY_GIRDER = TFGCore.REGISTRATE
+            .block("girder/beam/tin_alloy", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.TIN_ALLOY_GIRDER))))
+            .initialProperties(SharedProperties::softMetal)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
+            .blockstate((ctx, prov) -> {
+                buildGirderBlockStateEntry(ctx, prov, TFGCore.id("block/girder/beam/tin_alloy"), TFGCore.id("block/girder/pole/tin_alloy"), TFGCore.id("block/girder/pole_side/tin_alloy"));
+            })
+            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
+            .item().model((ctx, prov) -> {
+                prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/beam/item")).texture("0", TFGCore.id("block/girder/beam/tin_alloy"));
+            }).build()
+            .register();
 
     private static void buildGirderBlockStateEntry(DataGenContext<Block, ? extends Block> context, RegistrateBlockstateProvider provider, ResourceLocation texLoc, ResourceLocation poleTexLoc,
             ResourceLocation poleCtTexLoc) {
