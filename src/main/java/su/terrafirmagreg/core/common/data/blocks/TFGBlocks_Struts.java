@@ -28,20 +28,20 @@ public class TFGBlocks_Struts {
 
     public static void init() {
         // beam Struts
-        STRUTS_AND_CABLES.add(beamStrut("steel", TFGCore.id("block/girder/beam/steel"), TFGCore.id("block/girder/beam/steel"), TFGCore.id("block/girder/beam/steel")));
-        STRUTS_AND_CABLES.add(beamStrut("brass", TFGCore.id("block/girder/beam/brass"), TFGCore.id("block/girder/beam/brass"), TFGCore.id("block/girder/beam/brass")));
-        STRUTS_AND_CABLES.add(beamStrut("copper", TFGCore.id("block/girder/beam/copper"), TFGCore.id("block/girder/beam/copper"), TFGCore.id("block/girder/beam/copper")));
+        // STRUTS_AND_CABLES.add(beamStrut("steel", TFGCore.id("block/girder/beam/steel"), TFGCore.id("block/girder/beam/steel"), TFGCore.id("block/girder/beam/steel")));
+        // STRUTS_AND_CABLES.add(beamStrut("brass", TFGCore.id("block/girder/beam/brass"), TFGCore.id("block/girder/beam/brass"), TFGCore.id("block/girder/beam/brass")));
+        // STRUTS_AND_CABLES.add(beamStrut("copper", TFGCore.id("block/girder/beam/copper"), TFGCore.id("block/girder/beam/copper"), TFGCore.id("block/girder/beam/copper")));
         STRUTS_AND_CABLES.add(beamStrut("tin_alloy", TFGCore.id("block/girder/beam/tin_alloy"), TFGCore.id("block/girder/beam/tin_alloy"), TFGCore.id("block/girder/beam/tin_alloy")));
-        STRUTS_AND_CABLES.add(beamStrut("zinc", TFGCore.id("block/girder/beam/zinc"), TFGCore.id("block/girder/beam/zinc"), TFGCore.id("block/girder/beam/zinc")));
-        STRUTS_AND_CABLES.add(beamStrut("iron", TFGCore.id("block/girder/beam/iron"), TFGCore.id("block/girder/beam/iron"), TFGCore.id("block/girder/beam/iron")));
+        // STRUTS_AND_CABLES.add(beamStrut("zinc", TFGCore.id("block/girder/beam/zinc"), TFGCore.id("block/girder/beam/zinc"), TFGCore.id("block/girder/beam/zinc")));
+        // STRUTS_AND_CABLES.add(beamStrut("iron", TFGCore.id("block/girder/beam/iron"), TFGCore.id("block/girder/beam/iron"), TFGCore.id("block/girder/beam/iron")));
 
         // Truss Struts
-        STRUTS_AND_CABLES.add(trussStrut("steel", TFGCore.id("block/girder/truss/steel"), TFGCore.id("block/girder/truss/steel"), TFGCore.id("block/girder/truss/steel")));
-        STRUTS_AND_CABLES.add(trussStrut("brass", TFGCore.id("block/girder/truss/brass"), TFGCore.id("block/girder/truss/brass"), TFGCore.id("block/girder/truss/brass")));
-        STRUTS_AND_CABLES.add(trussStrut("copper", TFGCore.id("block/girder/truss/copper"), TFGCore.id("block/girder/truss/copper"), TFGCore.id("block/girder/truss/copper")));
-        STRUTS_AND_CABLES.add(trussStrut("tin_alloy", TFGCore.id("block/girder/truss/tin_alloy"), TFGCore.id("block/girder/truss/tin_alloy"), TFGCore.id("block/girder/truss/tin_alloy")));
-        STRUTS_AND_CABLES.add(trussStrut("zinc", TFGCore.id("block/girder/truss/zinc"), TFGCore.id("block/girder/truss/zinc"), TFGCore.id("block/girder/truss/zinc")));
-        STRUTS_AND_CABLES.add(trussStrut("iron", TFGCore.id("block/girder/truss/iron"), TFGCore.id("block/girder/truss/iron"), TFGCore.id("block/girder/truss/iron")));
+        // STRUTS_AND_CABLES.add(trussStrut("steel", TFGCore.id("block/girder/truss/steel"), TFGCore.id("block/girder/truss/steel"), TFGCore.id("block/girder/truss/steel")));
+        // STRUTS_AND_CABLES.add(trussStrut("brass", TFGCore.id("block/girder/truss/brass"), TFGCore.id("block/girder/truss/brass"), TFGCore.id("block/girder/truss/brass")));
+        // STRUTS_AND_CABLES.add(trussStrut("copper", TFGCore.id("block/girder/truss/copper"), TFGCore.id("block/girder/truss/copper"), TFGCore.id("block/girder/truss/copper")));
+        // STRUTS_AND_CABLES.add(trussStrut("tin_alloy", TFGCore.id("block/girder/truss/tin_alloy"), TFGCore.id("block/girder/truss/tin_alloy"), TFGCore.id("block/girder/truss/tin_alloy")));
+        // STRUTS_AND_CABLES.add(trussStrut("zinc", TFGCore.id("block/girder/truss/zinc"), TFGCore.id("block/girder/truss/zinc"), TFGCore.id("block/girder/truss/zinc")));
+        // STRUTS_AND_CABLES.add(trussStrut("iron", TFGCore.id("block/girder/truss/iron"), TFGCore.id("block/girder/truss/iron"), TFGCore.id("block/girder/truss/iron")));
     }
 
     public static boolean isAnyGirder(BlockState state) {

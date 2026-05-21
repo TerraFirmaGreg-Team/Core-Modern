@@ -1,8 +1,0 @@
-{
-  "parent": "tfg:block/strut/item",
-  "textures": {
-    "0": "tfg:block/girder/beam/copper",
-    "1_0": "tfg:block/girder/beam/copper",
-    "particle": "tfg:block/girder/beam/copper"
-  }
-}
