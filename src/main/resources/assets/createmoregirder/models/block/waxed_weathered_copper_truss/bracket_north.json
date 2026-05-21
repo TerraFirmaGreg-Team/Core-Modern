@@ -1,0 +1,5 @@
+{
+    "parent": "createmoregirder:block/andesite_truss/bracket_north",
+    "textures": {"0": "createmoregirder:block/weathered_copper_truss"},
+    "credit": "Copied from Create Diesel Generators"
+}

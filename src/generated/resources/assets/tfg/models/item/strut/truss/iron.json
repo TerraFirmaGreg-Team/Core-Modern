@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/strut/truss_item",
+  "textures": {
+    "1": "tfg:block/strut/truss/iron",
+    "particle": "tfg:block/strut/truss/iron"
+  }
+}

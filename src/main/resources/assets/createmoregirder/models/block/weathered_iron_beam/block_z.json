@@ -1,0 +1,7 @@
+{
+    "parent": "createmoregirder:block/andesite_beam/block_z",
+    "textures": {
+        "0": "createmoregirder:block/weathered_iron_beam",
+        "particle": "createmoregirder:block/weathered_iron_beam"
+    }
+}

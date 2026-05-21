@@ -1,0 +1,5 @@
+{
+    "parent": "createmoregirder:block/andesite_truss/block_top",
+    "textures": {"0": "createmoregirder:block/exposed_copper_truss"},
+    "credit": "Copied from Create Diesel Generators"
+}

@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
+import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
+
 import java.util.function.Supplier;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -7,12 +9,15 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import net.createmod.catnip.placement.PlacementHelpers;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -39,6 +44,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.block.girder.*;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -267,5 +273,25 @@ public final class TFGBlocks {
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(item.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))))));
     }
+
+    public static final BlockEntry<TFGGirderBlock> TIN_ALLOY_GIRDER = TFGCore.REGISTRATE
+            .block("tin_alloy_beam", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks.TIN_ALLOY_GIRDER))))
+            .initialProperties(SharedProperties::softMetal)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
+            .transform(pickaxeOnly())
+            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedModel2::new))
+            .blockstate(TFGGirderGenerator::blockState)
+            .item().model(TFGGirderGenerator::itemModel).build()
+            .register();
+
+    public static final BlockEntry<TFGGirderBlock> BRASS_GIRDER = TFGCore.REGISTRATE
+            .block("brass_beam", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks.BRASS_GIRDER))))
+            .initialProperties(SharedProperties::softMetal)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
+            .transform(pickaxeOnly())
+            .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedModel2::new))
+            .blockstate(TFGGirderGenerator::blockState)
+            .item().model(TFGGirderGenerator::itemModel).build()
+            .register();
 
 }

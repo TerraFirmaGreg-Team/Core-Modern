@@ -1,0 +1,7 @@
+{
+    "parent": "createmoregirder:block/truss_strut/item",
+    "textures": {
+        "1": "createmoregirder:block/weathered_iron_truss",
+        "particle": "createmoregirder:block/weathered_iron_truss"
+    }
+}

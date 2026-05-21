@@ -1,0 +1,8 @@
+{
+    "parent": "createmoregirder:block/andesite_truss/block_pole",
+    "textures": {
+        "3": "createmoregirder:block/brass_truss",
+        "particle": "createmoregirder:block/brass_truss"
+    },
+    "credit": "Copied from Create Diesel Generators"
+}

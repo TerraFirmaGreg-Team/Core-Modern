@@ -1,0 +1,82 @@
+{
+    "format_version": "1.21.11",
+    "textures": {
+        "0": "createmoregirder:block/copycat_truss/brace_side",
+        "1": "createmoregirder:block/copycat_truss/brace_top",
+        "particle": "createmoregirder:block/copycat_truss/brace_side"
+    },
+    "elements": [{
+        "from": [
+            2.9,
+            -5,
+            2.9
+        ],
+        "to": [
+            13.1,
+            1,
+            13.1
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "south": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "north": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "west": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "up": {
+                "uv": [
+                    3,
+                    3,
+                    13,
+                    13
+                ],
+                "texture": "#1"
+            },
+            "down": {
+                "uv": [
+                    3,
+                    3,
+                    13,
+                    13
+                ],
+                "texture": "#1",
+                "rotation": 180
+            }
+        }
+    }],
+    "credit": "Copycat Girder Strut anchor - derived from copycat_truss/block_bottom"
+}

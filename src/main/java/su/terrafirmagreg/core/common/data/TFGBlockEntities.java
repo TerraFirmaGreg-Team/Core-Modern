@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import com.cake.struts.content.block.StrutBlockEntity;
-import com.cake.struts.content.block.StrutBlockEntityRenderer;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -84,7 +83,7 @@ public class TFGBlockEntities {
 
     public static final BlockEntityEntry<StrutBlockEntity> STRUT = TFGCore.REGISTRATE
             .blockEntity("strut", StrutBlockEntity::new)
-            .renderer(() -> StrutBlockEntityRenderer::new)
+            .renderer(() -> TFGStrutBlockEntityRenderer::new)
             .register();
 
     private static final Map<Supplier<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();

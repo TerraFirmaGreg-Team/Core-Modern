@@ -1,7 +1,7 @@
 {
   "parent": "tfg:block/strut/basic",
   "textures": {
-    "0": "tfg:block/strut/basic/steel",
-    "particle": "tfg:block/strut/basic/steel_particle"
+    "0": "tfg:block/girder/basic/steel",
+    "particle": "tfg:block/strut/basic/steel"
   }
 }

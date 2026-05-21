@@ -1,0 +1,8 @@
+{
+    "parent": "createmoregirder:block/andesite_beam/block_pole_top",
+    "textures": {
+        "2": "createmoregirder:block/poles/weathered_iron_beam_pole",
+        "3": "createmoregirder:block/poles/weathered_iron_beam_pole_side_connected",
+        "particle": "createmoregirder:block/weathered_iron_beam"
+    }
+}

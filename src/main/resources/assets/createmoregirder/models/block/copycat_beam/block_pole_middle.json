@@ -1,0 +1,80 @@
+{
+    "format_version": "1.21.11",
+    "textures": {
+        "1": "createmoregirder:block/copycat_truss/copycat_beam_pole_top",
+        "3": "createmoregirder:block/poles/copycat_beam_pole_side_connected",
+        "particle": "createmoregirder:block/copycat_truss/copycat_beam_pole_top"
+    },
+    "elements": [{
+        "from": [
+            4,
+            0,
+            4
+        ],
+        "to": [
+            12,
+            16,
+            12
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    10,
+                    8,
+                    14,
+                    16
+                ],
+                "texture": "#3"
+            },
+            "south": {
+                "uv": [
+                    10,
+                    8,
+                    14,
+                    16
+                ],
+                "texture": "#3"
+            },
+            "north": {
+                "uv": [
+                    10,
+                    8,
+                    14,
+                    16
+                ],
+                "texture": "#3"
+            },
+            "west": {
+                "uv": [
+                    10,
+                    8,
+                    14,
+                    16
+                ],
+                "texture": "#3"
+            },
+            "up": {
+                "uv": [
+                    4,
+                    4,
+                    12,
+                    12
+                ],
+                "cullface": "up",
+                "texture": "#1"
+            },
+            "down": {
+                "uv": [
+                    4,
+                    4,
+                    12,
+                    12
+                ],
+                "cullface": "down",
+                "texture": "#1"
+            }
+        }
+    }],
+    "credit": "Made with Blockbench",
+    "render_type": "cutout_mipped"
+}

@@ -1,6 +1,8 @@
 {
   "values": [
     "tfg:quartz_crucible",
+    "tfg:tin_alloy_beam",
+    "tfg:brass_beam",
     "tfg:halite",
     "tfg:carbonate_hornfels",
     "tfg:pelitic_hornfels",
