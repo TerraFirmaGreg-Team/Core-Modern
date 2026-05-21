@@ -30,7 +30,12 @@ public class TFGPartialModels {
     }
 
     private static final String[] GIRDER_VARIANTS = {
-            "tin_alloy_beam"
+            "girder/truss/tin_alloy",
+            "girder/truss/brass",
+            "girder/truss/wrought_iron",
+            "girder/truss/copper",
+            "girder/truss/steel",
+            "girder/truss/zinc"
     };
 
     static {
@@ -52,8 +57,11 @@ public class TFGPartialModels {
     }
 
     private static final String[] METAL_GIRDER_VARIANTS = {
-            "tin_alloy_beam",
-            "brass_beam"
+            "girder/beam/tin_alloy",
+            "girder/beam/brass",
+            "girder/beam/wrought_iron",
+            "girder/beam/copper",
+            "girder/beam/zinc"
     };
 
     private static final Map<String, Map<String, PartialModel>> METAL_GIRDER_CT_POLES = new HashMap<>();

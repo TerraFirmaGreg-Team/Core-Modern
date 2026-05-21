@@ -32,7 +32,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Struts;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
 
 public class TFGGirderWrenchBehavior {
     @OnlyIn(Dist.CLIENT)
@@ -50,7 +50,7 @@ public class TFGGirderWrenchBehavior {
             return;
 
         BlockState hovered = world.getBlockState(pos);
-        if (!TFGBlocks_Struts.isAnyGirder(hovered) && !TFGBlocks_Struts.isAnyGirder(hovered))
+        if (!TFGBlocks_Girders.isAnyGirder(hovered) && !TFGBlocks_Girders.isAnyGirder(hovered))
             return;
 
         if (!AllItems.WRENCH.isIn(heldItem))
@@ -111,7 +111,7 @@ public class TFGGirderWrenchBehavior {
         // the shaft out by looking at the middle 50%.
         BlockState hovered = world.getBlockState(pos);
         List<Pair<Direction, Action>> reachable;
-        if (TFGBlocks_Struts.isAnyGirder(hovered)) {
+        if (TFGBlocks_Girders.isAnyGirder(hovered)) {
             double hitY = result.getLocation().y - pos.getY();
             reachable = validDirections.stream()
                     .filter(pair -> {
@@ -147,8 +147,8 @@ public class TFGGirderWrenchBehavior {
     public static List<Pair<Direction, Action>> getValidDirections(BlockGetter level, BlockPos pos) {
         BlockState blockState = level.getBlockState(pos);
 
-        boolean isGirder = TFGBlocks_Struts.isAnyGirder(blockState);
-        boolean isEncasedShaft = TFGBlocks_Struts.isAnyGirder(blockState);
+        boolean isGirder = TFGBlocks_Girders.isAnyGirder(blockState);
+        boolean isEncasedShaft = TFGBlocks_Girders.isAnyGirder(blockState);
 
         if (!isGirder && !isEncasedShaft)
             return Collections.emptyList();
@@ -163,8 +163,8 @@ public class TFGGirderWrenchBehavior {
                         return;
 
                     BlockState other = level.getBlockState(pos.relative(direction));
-                    boolean otherIsGirder = TFGBlocks_Struts.isAnyGirder(other);
-                    boolean otherIsEncasedShaft = TFGBlocks_Struts.isAnyGirder(other);
+                    boolean otherIsGirder = TFGBlocks_Girders.isAnyGirder(other);
+                    boolean otherIsEncasedShaft = TFGBlocks_Girders.isAnyGirder(other);
                     boolean otherIsHorizontalGirder = otherIsGirder
                             && other.getValue(GirderBlock.X) != other.getValue(GirderBlock.Z);
 
@@ -213,8 +213,8 @@ public class TFGGirderWrenchBehavior {
         if (level.isClientSide)
             return true;
 
-        boolean isGirder = TFGBlocks_Struts.isAnyGirder(state);
-        boolean isEncasedShaft = TFGBlocks_Struts.isAnyGirder(state);
+        boolean isGirder = TFGBlocks_Girders.isAnyGirder(state);
+        boolean isEncasedShaft = TFGBlocks_Girders.isAnyGirder(state);
 
         if (isGirder && !state.getValue(GirderBlock.X) && !state.getValue(GirderBlock.Z))
             return false;
@@ -227,7 +227,7 @@ public class TFGGirderWrenchBehavior {
         if (dir == Direction.UP) {
             level.setBlock(pos, cycleConnector(state, true), 2 | 16);
             if (dirPair.getSecond() == Action.PAIR
-                    && (TFGBlocks_Struts.isAnyGirder(other) || TFGBlocks_Struts.isAnyGirder(other)))
+                    && (TFGBlocks_Girders.isAnyGirder(other) || TFGBlocks_Girders.isAnyGirder(other)))
                 level.setBlock(otherPos, cycleConnector(other, false), 2 | 16);
             return true;
         }
@@ -235,7 +235,7 @@ public class TFGGirderWrenchBehavior {
         if (dir == Direction.DOWN) {
             level.setBlock(pos, cycleConnector(state, false), 2 | 16);
             if (dirPair.getSecond() == Action.PAIR
-                    && (TFGBlocks_Struts.isAnyGirder(other) || TFGBlocks_Struts.isAnyGirder(other)))
+                    && (TFGBlocks_Girders.isAnyGirder(other) || TFGBlocks_Girders.isAnyGirder(other)))
                 level.setBlock(otherPos, cycleConnector(other, true), 2 | 16);
             return true;
         }
@@ -244,7 +244,7 @@ public class TFGGirderWrenchBehavior {
     }
 
     private static BlockState cycleConnector(BlockState state, boolean top) {
-        if (TFGBlocks_Struts.isAnyGirder(state))
+        if (TFGBlocks_Girders.isAnyGirder(state))
             return cycleByName(state, top ? "top" : "bottom");
         return postProcess(state.cycle(top ? GirderBlock.TOP : GirderBlock.BOTTOM));
     }

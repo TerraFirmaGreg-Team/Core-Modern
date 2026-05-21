@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/beam/segment_middle_alt",
+  "textures": {
+    "0": "tfg:block/girder/beam/brass",
+    "particle": "tfg:block/girder/beam/brass"
+  }
+}

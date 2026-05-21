@@ -1,0 +1,8 @@
+{
+  "parent": "tfg:block/strut/beam_item",
+  "textures": {
+    "0": "tfg:block/girder/beam/wrought_iron",
+    "1_0": "tfg:block/girder/beam/wrought_iron",
+    "particle": "tfg:block/girder/beam/wrought_iron"
+  }
+}

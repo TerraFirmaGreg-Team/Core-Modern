@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/beam/segment_bottom",
+  "textures": {
+    "0": "tfg:block/girder/beam/tin_alloy",
+    "particle": "tfg:block/girder/beam/tin_alloy"
+  }
+}

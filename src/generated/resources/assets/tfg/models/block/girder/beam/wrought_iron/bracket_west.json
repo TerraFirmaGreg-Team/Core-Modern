@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/beam/bracket_west",
+  "textures": {
+    "0": "tfg:block/girder/beam/wrought_iron",
+    "particle": "tfg:block/girder/beam/wrought_iron"
+  }
+}

@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -23,8 +22,6 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 @SuppressWarnings({ "unused" })
 public class TFGBlocks_Struts {
     public static final ObjectOpenHashSet<BlockEntry<? extends Block>> STRUTS_AND_CABLES = new ObjectOpenHashSet<>();
-    public static final ObjectOpenHashSet<BlockEntry<? extends Block>> GIRDER = new ObjectOpenHashSet<>();
-    public static final ObjectOpenHashSet<BlockEntry<? extends Block>> GIRDER_ENCASED_SHAFT = new ObjectOpenHashSet<>();
 
     public static void init() {
         // Beam Struts
@@ -33,7 +30,7 @@ public class TFGBlocks_Struts {
         STRUTS_AND_CABLES.add(beamStrut("copper", TFGCore.id("block/girder/beam/copper"), TFGCore.id("block/girder/beam/copper"), TFGCore.id("block/girder/beam/copper")));
         STRUTS_AND_CABLES.add(beamStrut("tin_alloy", TFGCore.id("block/girder/beam/tin_alloy"), TFGCore.id("block/girder/beam/tin_alloy"), TFGCore.id("block/girder/beam/tin_alloy")));
         STRUTS_AND_CABLES.add(beamStrut("zinc", TFGCore.id("block/girder/beam/zinc"), TFGCore.id("block/girder/beam/zinc"), TFGCore.id("block/girder/beam/zinc")));
-        STRUTS_AND_CABLES.add(beamStrut("iron", TFGCore.id("block/girder/beam/iron"), TFGCore.id("block/girder/beam/iron"), TFGCore.id("block/girder/beam/iron")));
+        STRUTS_AND_CABLES.add(beamStrut("wrought_iron", TFGCore.id("block/girder/beam/wrought_iron"), TFGCore.id("block/girder/beam/wrought_iron"), TFGCore.id("block/girder/beam/wrought_iron")));
 
         // Truss Struts
         STRUTS_AND_CABLES.add(trussStrut("steel", TFGCore.id("block/girder/truss/steel"), TFGCore.id("block/girder/truss/steel"), TFGCore.id("block/girder/truss/steel")));
@@ -41,15 +38,7 @@ public class TFGBlocks_Struts {
         STRUTS_AND_CABLES.add(trussStrut("copper", TFGCore.id("block/girder/truss/copper"), TFGCore.id("block/girder/truss/copper"), TFGCore.id("block/girder/truss/copper")));
         STRUTS_AND_CABLES.add(trussStrut("tin_alloy", TFGCore.id("block/girder/truss/tin_alloy"), TFGCore.id("block/girder/truss/tin_alloy"), TFGCore.id("block/girder/truss/tin_alloy")));
         STRUTS_AND_CABLES.add(trussStrut("zinc", TFGCore.id("block/girder/truss/zinc"), TFGCore.id("block/girder/truss/zinc"), TFGCore.id("block/girder/truss/zinc")));
-        STRUTS_AND_CABLES.add(trussStrut("iron", TFGCore.id("block/girder/truss/iron"), TFGCore.id("block/girder/truss/iron"), TFGCore.id("block/girder/truss/iron")));
-    }
-
-    public static boolean isAnyGirder(BlockState state) {
-        return GIRDER.contains(state.getBlock());
-    }
-
-    public static boolean isAnyGirderEncasedShaft(BlockState state) {
-        return GIRDER_ENCASED_SHAFT.contains(state.getBlock());
+        STRUTS_AND_CABLES.add(trussStrut("wrought_iron", TFGCore.id("block/girder/truss/wrought_iron"), TFGCore.id("block/girder/truss/wrought_iron"), TFGCore.id("block/girder/truss/wrought_iron")));
     }
 
     public static BlockEntry<TFGStrutBlock> beamStrut(String id, ResourceLocation texLoc, ResourceLocation texLocAttachment, ResourceLocation texLocParticle) {

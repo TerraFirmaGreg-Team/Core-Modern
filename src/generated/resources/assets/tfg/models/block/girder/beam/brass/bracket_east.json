@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/beam/bracket_east",
+  "textures": {
+    "0": "tfg:block/girder/beam/brass",
+    "particle": "tfg:block/girder/beam/brass"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "tfg:block/girder/beam/block_pole_middle",
+  "textures": {
+    "2": "tfg:block/girder/pole/brass",
+    "3": "tfg:block/girder/pole_side/brass",
+    "particle": "tfg:block/girder/beam/brass"
+  }
+}

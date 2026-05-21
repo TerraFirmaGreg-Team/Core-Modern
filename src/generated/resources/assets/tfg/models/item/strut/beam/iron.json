@@ -1,8 +1,0 @@
-{
-  "parent": "tfg:block/strut/beam_item",
-  "textures": {
-    "0": "tfg:block/girder/beam/iron",
-    "1_0": "tfg:block/girder/beam/iron",
-    "particle": "tfg:block/girder/beam/iron"
-  }
-}
