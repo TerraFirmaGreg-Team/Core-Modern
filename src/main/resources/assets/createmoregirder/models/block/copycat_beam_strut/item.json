@@ -1,7 +1,0 @@
-{
-    "parent": "createmoregirder:block/beam_strut/item",
-    "textures": {
-        "1": "createmoregirder:block/copycat_beam",
-        "particle": "createmoregirder:block/copycat_beam"
-    }
-}

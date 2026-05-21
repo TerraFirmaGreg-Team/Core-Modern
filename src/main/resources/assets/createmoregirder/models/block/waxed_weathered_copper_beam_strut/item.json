@@ -1,7 +1,0 @@
-{
-    "parent": "createmoregirder:block/beam_strut/item",
-    "textures": {
-        "1": "createmoregirder:block/weathered_copper_beam",
-        "particle": "createmoregirder:block/weathered_copper_beam"
-    }
-}

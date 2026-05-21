@@ -1,7 +1,0 @@
-{
-    "parent": "createmoregirder:block/andesite_beam/segment_middle_alt",
-    "textures": {
-        "0": "createmoregirder:block/weathered_iron_beam",
-        "particle": "createmoregirder:block/weathered_iron_beam"
-    }
-}

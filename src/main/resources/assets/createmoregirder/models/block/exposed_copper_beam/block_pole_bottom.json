@@ -1,8 +1,0 @@
-{
-    "parent": "createmoregirder:block/andesite_beam/block_pole_bottom",
-    "textures": {
-        "2": "createmoregirder:block/poles/exposed_copper_beam_pole",
-        "3": "createmoregirder:block/poles/exposed_copper_beam_pole_side_connected",
-        "particle": "createmoregirder:block/exposed_copper_beam"
-    }
-}

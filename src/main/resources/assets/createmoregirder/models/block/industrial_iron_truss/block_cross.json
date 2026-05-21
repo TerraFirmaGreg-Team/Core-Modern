@@ -1,6 +1,0 @@
-{
-    "parent": "createmoregirder:block/andesite_truss/block_cross",
-    "textures": {"0": "createmoregirder:block/industrial_iron_truss"},
-    "credit": "Copied from Create Diesel Generators",
-    "render_type": "cutout"
-}

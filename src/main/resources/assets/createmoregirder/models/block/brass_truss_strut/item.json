@@ -1,7 +1,0 @@
-{
-    "parent": "createmoregirder:block/truss_strut/item",
-    "textures": {
-        "1": "createmoregirder:block/brass_truss",
-        "particle": "createmoregirder:block/brass_truss"
-    }
-}

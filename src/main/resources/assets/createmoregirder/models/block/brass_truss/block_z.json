@@ -1,5 +1,0 @@
-{
-    "parent": "createmoregirder:block/andesite_truss/block_z",
-    "textures": {"0": "createmoregirder:block/brass_truss"},
-    "credit": "Copied from Create Diesel Generators"
-}

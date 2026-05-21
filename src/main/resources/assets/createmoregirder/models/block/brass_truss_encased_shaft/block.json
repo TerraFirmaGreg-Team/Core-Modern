@@ -1,8 +1,0 @@
-{
-    "parent": "createmoregirder:block/andesite_truss_encased_shaft/block",
-    "textures": {
-        "0": "createmoregirder:block/brass_truss",
-        "particle": "create:block/industrial_iron_block"
-    },
-    "credit": "Copied from Create Diesel Generators"
-}
