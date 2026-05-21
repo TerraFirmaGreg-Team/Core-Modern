@@ -1,7 +1,8 @@
 {
-  "parent": "tfg:block/strut/truss_item",
+  "parent": "tfg:block/strut/item",
   "textures": {
-    "1": "tfg:block/strut/truss/steel",
-    "particle": "tfg:block/strut/truss/steel"
+    "0": "tfg:block/girder/truss/steel",
+    "1_0": "tfg:block/girder/truss/steel",
+    "particle": "tfg:block/girder/truss/steel"
   }
 }

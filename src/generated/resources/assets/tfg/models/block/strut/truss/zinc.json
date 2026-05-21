@@ -1,7 +1,7 @@
 {
   "parent": "tfg:block/strut/truss",
   "textures": {
-    "0": "tfg:block/strut/truss/zinc",
-    "particle": "tfg:block/strut/truss/zinc"
+    "0": "tfg:block/girder/truss/zinc",
+    "particle": "tfg:block/girder/truss/zinc"
   }
 }

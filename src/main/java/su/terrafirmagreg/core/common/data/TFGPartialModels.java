@@ -26,9 +26,11 @@ public class TFGPartialModels {
     private static volatile Map<Block, PartialModel[]> SEGMENT_MODELS_BY_BLOCK;
     private static volatile Map<Block, EnumMap<Direction, PartialModel>> BRACKET_MODELS_BY_BLOCK;
 
+    public static void init() {
+    }
+
     private static final String[] GIRDER_VARIANTS = {
-            "tin_alloy_beam",
-            "brass_beam"
+            "tin_alloy_beam"
     };
 
     static {
@@ -147,10 +149,6 @@ public class TFGPartialModels {
 
     private static PartialModel createBlock(String path) {
         return PartialModel.of(Create.asResource("block/" + path));
-    }
-
-    public static void init() {
-        // Called to ensure static initialization
     }
 
     public static void register() {

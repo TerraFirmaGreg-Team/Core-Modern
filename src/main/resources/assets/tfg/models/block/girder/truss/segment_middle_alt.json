@@ -1,5 +1,5 @@
 {
-    "textures": {"0": "createmoregirder:block/weathered_iron_truss"},
+    "textures": {"0": "createmoregirder:block/andesite_truss"},
     "elements": [{
         "rotation": {
             "origin": [

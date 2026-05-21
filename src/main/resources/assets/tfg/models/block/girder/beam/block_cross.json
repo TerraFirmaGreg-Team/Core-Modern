@@ -1,8 +1,8 @@
 {
     "format_version": "1.21.11",
     "textures": {
-        "0": "createmoregirder:block/brass_beam",
-        "particle": "createmoregirder:block/brass_beam"
+        "0": "createmoregirder:block/andesite_beam",
+        "particle": "createmoregirder:block/andesite_beam"
     },
     "elements": [
         {

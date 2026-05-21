@@ -1,8 +1,0 @@
-{
-  "parent": "tfg:block/strut/basic_item",
-  "textures": {
-    "0": "tfg:block/strut/basic/brass",
-    "1_0": "tfg:block/strut/basic/brass",
-    "particle": "tfg:block/strut/basic/brass"
-  }
-}

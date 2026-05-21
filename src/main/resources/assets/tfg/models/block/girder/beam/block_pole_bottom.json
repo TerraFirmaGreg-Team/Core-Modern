@@ -1,9 +1,9 @@
 {
     "format_version": "1.21.11",
     "textures": {
-        "2": "createmoregirder:block/poles/brass_beam_pole",
-        "3": "createmoregirder:block/poles/brass_beam_pole_side_connected",
-        "particle": "createmoregirder:block/brass_beam"
+        "2": "createmoregirder:block/poles/andesite_beam_pole",
+        "3": "createmoregirder:block/poles/andesite_beam_pole_side_connected",
+        "particle": "createmoregirder:block/andesite_beam"
     },
     "elements": [{
         "from": [
