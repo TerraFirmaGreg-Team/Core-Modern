@@ -21,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 import su.terrafirmagreg.core.common.data.TFGEffects;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 /**
  * Handles applying effects to players based on their nutrition values.
@@ -43,6 +44,10 @@ public final class NutrientEffectsHandler {
     private static final Map<UUID, Integer> VEGETABLE_RESPIRATION = new ConcurrentHashMap<>();
     private static final Map<UUID, Boolean> FRUIT_MINING_SPEED = new ConcurrentHashMap<>();
     private static final Map<UUID, Boolean> PROTEIN_HEAVY_ITEM_BOOST = new ConcurrentHashMap<>();
+    private static final Map<UUID, Float> MEDICAL_CONDITION_PROGRESSION_MODIFIER = new ConcurrentHashMap<>();
+
+    private static final boolean ENABLE_FOOD_DEBUFFS = TFGConfig.SERVER.enableTFGFoodDebuffs.get();
+    private static final boolean ENABLE_FOOD_BUFFS = TFGConfig.SERVER.enableTFGFoodBuffs.get();
 
     /**
      * List of hazard effects that can be applied from toxins.
@@ -132,6 +137,13 @@ public final class NutrientEffectsHandler {
     }
 
     /**
+     * Returns the medical condition progression modifier for the player.
+     */
+    public static float getMedicalConditionProgressionModifier(UUID playerUuid) {
+        return MEDICAL_CONDITION_PROGRESSION_MODIFIER.getOrDefault(playerUuid, 1.0f);
+    }
+
+    /**
      * Tick call from TFCFoodDataMixin.
      * @param player the server player.
      * @param nutritionData the player's NutritionData.
@@ -160,65 +172,106 @@ public final class NutrientEffectsHandler {
             if (!TFGNutrients.isTransient(nutrient))
                 continue;
 
-            float value = NutritionDataExtension.getExtendedNutrient(nutritionData, nutrient) * 100;
+            float value = NutritionDataExtension.getExtendedNutrient(nutritionData, nutrient);
             if (value <= 0)
                 continue;
 
             // Food value to seconds of effect duration.
-            int effectDuration = Math.max(1, Math.round(value * 12));
+            int effectDuration = Math.max(1, Math.round(value * 1200));
 
             switch (nutrient.getSerializedName()) {
                 case "deadly" -> {
-                    if (!player.getAbilities().invulnerable) {
-                        player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), 9600, 0, false, true));
+                    if (!player.getAbilities().invulnerable && ENABLE_FOOD_DEBUFFS) {
+                        player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), Math.max((int) (9600 / (value)), 600), 0, true, true));
                     }
                 }
-                case "cooling" ->
-                    player.addEffect(new MobEffectInstance(TFGEffects.COOLING.get(), Math.min(effectDuration, 36000), 0, false, false));
+                case "cooling" -> {
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(TFGEffects.COOLING.get(), Math.min(effectDuration, 36000), 0, false, false));
+                    }
+                }
 
-                case "warming" ->
-                    player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
+                case "warming" -> {
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
+                    }
+                }
 
-                case "freezing" ->
-                    player.addEffect(new MobEffectInstance(TFGEffects.FREEZING.get(), Math.min(effectDuration, 600), 0, false, true));
+                case "freezing" -> {
+                    if (ENABLE_FOOD_DEBUFFS) {
+                        player.addEffect(new MobEffectInstance(TFGEffects.FREEZING.get(), Math.min(effectDuration, 600), 0, false, true));
+                    }
+                }
 
-                case "blazing" ->
-                    player.addEffect(new MobEffectInstance(TFGEffects.BLAZING.get(), Math.min(effectDuration, 600), 0, false, true));
+                case "blazing" -> {
+                    if (ENABLE_FOOD_DEBUFFS) {
+                        player.addEffect(new MobEffectInstance(TFGEffects.BLAZING.get(), Math.min(effectDuration, 600), 0, false, true));
+                    }
+                }
 
                 case "radiating" -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.GLOWING, 480, 0, false, true));
-                    player.addEffect(new MobEffectInstance(TFGEffects.INSTANT_RADIATION.get(), 480, (int) Math.min(Math.max(value, 0), 5), false, true));
+                    if (ENABLE_FOOD_DEBUFFS) {
+                        player.addEffect(new MobEffectInstance(MobEffects.GLOWING, 480, 0, false, true));
+                        player.addEffect(new MobEffectInstance(TFGEffects.INSTANT_RADIATION.get(), 480, (int) ((value * 5) / 100), false, true));
+                    }
                 }
                 case "nauseating" -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, Math.min(effectDuration, 480) / 2, 0, false, true));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, Math.min(effectDuration, 480), 6, false, true));
+                    if (ENABLE_FOOD_DEBUFFS) {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, Math.min(effectDuration, 480) / 2, 0, false, true));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, Math.min(effectDuration, 480), 6, false, true));
+                    }
                 }
-                case "parching" ->
-                    player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration, 36000), 0, false, true));
+                case "parching" -> {
+                    if (ENABLE_FOOD_DEBUFFS) {
+                        player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration, 36000), 0, false, true));
+                    }
+                }
 
-                case "quenching" ->
-                    player.addEffect(new MobEffectInstance(TFGEffects.QUENCHED.get(), Math.min(effectDuration, 36000), 0, false, false));
+                case "quenching" -> {
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(TFGEffects.QUENCHED.get(), Math.min(effectDuration, 36000), 0, false, false));
+                    }
+                }
 
-                case "bolstering" ->
-                    player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 9600, (int) Math.min(Math.max(value, 0), 5), false, false));
+                case "bolstering" -> {
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 9600, (int) ((value * 5) / 100), false, false));
+                    }
+                }
 
-                case "hearty" ->
-                    player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 9600, (int) Math.min(Math.max(value, 0), 5), false, false));
+                case "hearty" -> {
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 9600, (int) ((value * 5) / 100), false, false));
+                    }
+                }
 
-                case "rejuvenating" ->
-                    player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Math.min(effectDuration, 3600), 0, false, false));
+                case "rejuvenating" -> {
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Math.min(effectDuration, 3600), 0, false, false));
+                    }
+                }
 
                 case "sugary" -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, Math.min(effectDuration / 4, 6000), 0, false, false));
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Math.min(effectDuration, 36000), 0, false, false));
+                    if (ENABLE_FOOD_DEBUFFS) {
+                        player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, Math.min(effectDuration / 4, 6000), 0, false, false));
+                    }
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Math.min(effectDuration, 36000), 0, false, false));
+                    }
                 }
                 case "spicy" -> {
-                    player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration / 4, 6000), 0, false, false));
-                    player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
+                    if (ENABLE_FOOD_DEBUFFS) {
+                        player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration / 4, 6000), 0, false, false));
+                    }
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(TFGEffects.WARMING.get(), Math.min(effectDuration, 36000), 0, false, false));
+                    }
                 }
                 case "fulfilling" -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Math.min(effectDuration, 18000), 0, false, false));
-                    player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, (int) Math.min(Math.max(value, 0), 2), false, false));
+                    if (ENABLE_FOOD_BUFFS) {
+                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Math.min(effectDuration, 18000), 0, false, false));
+                        player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, (int) ((value * 2) / 100), false, false));
+                    }
                 }
                 default -> {
                 }
@@ -263,12 +316,14 @@ public final class NutrientEffectsHandler {
         if (positiveCount > 0)
             avgNutrition /= positiveCount;
 
-        applyGrainEffects(player, grain);
-        applyDairyEffects(player, dairy);
-        applyVegetableEffects(player, vegetables);
-        applyFruitEffects(player, fruit);
-        applyProteinEffects(player, protein);
-        applyAverageEffects(player, avgNutrition);
+        if (ENABLE_FOOD_BUFFS) {
+            applyGrainEffects(player, grain);
+            applyDairyEffects(player, dairy);
+            applyVegetableEffects(player, vegetables);
+            applyFruitEffects(player, fruit);
+            applyProteinEffects(player, protein);
+            applyAverageEffects(player, avgNutrition);
+        }
 
         // Negative Nutrients
         float toxins = 0;
@@ -298,11 +353,13 @@ public final class NutrientEffectsHandler {
             }
         }
 
-        if (toxinsNutrient != null) {
-            applyToxinsEffects(player, toxins, oldToxins, toxinsNutrient, nutritionData);
+        if (ENABLE_FOOD_DEBUFFS) {
+            if (toxinsNutrient != null) {
+                applyToxinsEffects(player, toxins, oldToxins, toxinsNutrient, nutritionData);
+            }
+            applyParasitesEffects(player, parasites);
+            applyMicroplasticsEffects(player, microplastics, oldMicroplastics);
         }
-        applyParasitesEffects(player, parasites);
-        applyMicroplasticsEffects(player, microplastics, oldMicroplastics);
     }
 
     /**
@@ -489,19 +546,27 @@ public final class NutrientEffectsHandler {
 
     /**
      * Average
-     * >55% -> increase passive health regen by 50%.
-     * >85% -> increase passive health regen by 100%.
+     * >55% -> increase passive health regen by 50%. Decrease medical condition progression rate by 25%.
+     * >85% -> increase passive health regen by 100%. Decrease medical condition progression rate by 50%.
      * @param player the player to apply effects to.
      * @param avg the average nutrition across all positive nutrients.
      */
     private static void applyAverageEffects(Player player, float avg) {
         UUID uuid = player.getUUID();
+
+        if (!ENABLE_FOOD_BUFFS) {
+            return;
+        }
+
         if (avg > 0.85f) {
             HEALING_MODIFIER.put(uuid, 2.0f);
+            MEDICAL_CONDITION_PROGRESSION_MODIFIER.put(uuid, 0.5f);
         } else if (avg > 0.55f) {
             HEALING_MODIFIER.put(uuid, 1.5f);
+            MEDICAL_CONDITION_PROGRESSION_MODIFIER.put(uuid, 0.75f);
         } else {
             HEALING_MODIFIER.remove(uuid);
+            MEDICAL_CONDITION_PROGRESSION_MODIFIER.remove(uuid);
         }
     }
 
@@ -544,7 +609,7 @@ public final class NutrientEffectsHandler {
      * Removes all attribute modifiers and cached multipliers for a player.
      * @param player the player to remove modifiers from.
      */
-    public static void removePlayer(Player player) {
+    public static void removeFromPlayer(Player player) {
         AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttr != null) {
             speedAttr.removeModifier(GRAIN_SPEED_MODIFIER_UUID);
@@ -561,6 +626,7 @@ public final class NutrientEffectsHandler {
         VEGETABLE_RESPIRATION.remove(uuid);
         FRUIT_MINING_SPEED.remove(uuid);
         PROTEIN_HEAVY_ITEM_BOOST.remove(uuid);
+        MEDICAL_CONDITION_PROGRESSION_MODIFIER.remove(uuid);
     }
 
     /**

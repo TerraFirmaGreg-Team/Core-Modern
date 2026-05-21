@@ -137,7 +137,7 @@ public final class ForgeCommonEventListener {
 
     @SubscribeEvent
     public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        NutrientEffectsHandler.removePlayer(event.getEntity());
+        NutrientEffectsHandler.removeFromPlayer(event.getEntity());
     }
 
     @SubscribeEvent

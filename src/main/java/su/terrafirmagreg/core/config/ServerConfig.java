@@ -47,6 +47,8 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue sandDecumulateChance;
     public final ForgeConfigSpec.BooleanValue enableSnowCorrection;
     public final ForgeConfigSpec.IntValue snowMaxAccumulationOnUpdate;
+    public final ForgeConfigSpec.BooleanValue enableTFGFoodDebuffs;
+    public final ForgeConfigSpec.BooleanValue enableTFGFoodBuffs;
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.push("hang_glider");
@@ -128,6 +130,15 @@ public final class ServerConfig {
         snowMaxAccumulationOnUpdate = builder
                 .comment("The maximum amount of snow update to apply for each correction tick")
                 .defineInRange("snowMaxAccumulationOnUpdate", 256, 1, Integer.MAX_VALUE);
+
+        builder.pop().push("tfg_food_effects");
+        enableTFGFoodDebuffs = builder
+                .comment("Enables TFG food debuff effects. Allows receiving harmful effects from contaminants like Toxins, or transient nutrients like Freezing.")
+                .define("disableTFGFoodDebuffs", true);
+        enableTFGFoodBuffs = builder
+                .comment("Enables TFG food buff effects. Allows receiving helpful effects from nutrients like Fruits, or transient nutrients like Fulfilling.")
+                .define("enableTFGFoodBuffs", true);
+
         builder.pop();
     }
 
