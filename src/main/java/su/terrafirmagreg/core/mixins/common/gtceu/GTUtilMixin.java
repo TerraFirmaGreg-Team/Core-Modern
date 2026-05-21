@@ -5,9 +5,9 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 import com.gregtechceu.gtceu.utils.GTUtil;
 
-import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
@@ -43,7 +43,7 @@ public abstract class GTUtilMixin {
             }
             // No solar power during mars sandstorms
             else if (world.dimension() == Planet.MARS) {
-                final float windStrength = ClimateRenderCache.INSTANCE.getWind().length();
+                final float windStrength = Climate.getWindVector(world, blockPos).length();
                 return windStrength < MarsEnvironmentalHelpers.DUST_LOOSEN_SPEED && isDay;
             }
             // Other planets just use day/night only (orbits count as planets)
