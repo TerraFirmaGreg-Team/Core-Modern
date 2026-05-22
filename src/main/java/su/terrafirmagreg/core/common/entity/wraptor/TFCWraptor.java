@@ -49,8 +49,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
-import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.entity.TFGWoolEggProducingAnimal;
 
 public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShearable {

@@ -6,9 +6,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import com.simibubi.create.content.trains.track.BezierConnection;
 import com.simibubi.create.content.trains.track.TrackPlacement;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
-
 /***
  * Credit: Adapted from Create: More Girders
  */

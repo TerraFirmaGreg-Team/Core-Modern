@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
 import com.simibubi.create.content.decoration.girder.GirderBlock;
-import com.simibubi.create.content.decoration.girder.GirderEncasedShaftBlock;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.providers.DataGenContext;
@@ -9,13 +8,11 @@ import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.createmod.catnip.placement.PlacementHelpers;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
@@ -313,38 +310,6 @@ public class TFGBlocks_Girders {
         provider.models().withExistingParent(context.getName() + "/segment_top", TFGCore.id("block/girder/truss/segment_top")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_bottom", TFGCore.id("block/girder/truss/segment_bottom")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_middle_alt", TFGCore.id("block/girder/truss/segment_middle_alt")).texture("0", texLoc).texture("particle", texLoc);
-    }
-
-    private static void buildGirderShaftBlockStateEntry(DataGenContext<Block, ? extends Block> c, RegistrateBlockstateProvider p) {
-        MultiPartBlockStateBuilder builder = p.getMultipartBuilder(c.get());
-        String blockName = c.getName();
-        String modId = c.getId().getNamespace();
-
-        builder.part()
-                .modelFile(p.models().getExistingFile(ResourceLocation.fromNamespaceAndPath(modId, "block/" + blockName + "/block")))
-                .rotationY(0)
-                .addModel()
-                .condition(GirderEncasedShaftBlock.HORIZONTAL_AXIS, Direction.Axis.Z)
-                .end();
-
-        builder.part()
-                .modelFile(p.models().getExistingFile(ResourceLocation.fromNamespaceAndPath(modId, "block/" + blockName + "/block")))
-                .rotationY(90)
-                .addModel()
-                .condition(GirderEncasedShaftBlock.HORIZONTAL_AXIS, Direction.Axis.X)
-                .end();
-
-        builder.part()
-                .modelFile(p.models().getExistingFile(ResourceLocation.fromNamespaceAndPath(modId, "block/" + blockName + "/block_top")))
-                .addModel()
-                .condition(GirderEncasedShaftBlock.TOP, true)
-                .end();
-
-        builder.part()
-                .modelFile(p.models().getExistingFile(ResourceLocation.fromNamespaceAndPath(modId, "block/" + blockName + "/block_bottom")))
-                .addModel()
-                .condition(GirderEncasedShaftBlock.BOTTOM, true)
-                .end();
     }
 
     public static boolean isAnyGirder(BlockState state) {

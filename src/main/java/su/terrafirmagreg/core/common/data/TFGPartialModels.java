@@ -8,7 +8,6 @@ import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.Create;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -32,6 +31,9 @@ public class TFGPartialModels {
     public static void init() {
     }
 
+    public static void register() {
+    }
+
     private static final String[] GIRDER_VARIANTS = {
             "girder/beam/tin_alloy",
             "girder/beam/brass",
@@ -44,6 +46,14 @@ public class TFGPartialModels {
             "girder/truss/copper",
             "girder/truss/steel",
             "girder/truss/zinc"
+    };
+
+    private static final String[] BEAM_GIRDER_VARIANTS = {
+            "girder/beam/tin_alloy",
+            "girder/beam/brass",
+            "girder/beam/wrought_iron",
+            "girder/beam/copper",
+            "girder/beam/zinc"
     };
 
     static {
@@ -64,33 +74,25 @@ public class TFGPartialModels {
         }
     }
 
-    private static final String[] METAL_GIRDER_VARIANTS = {
-            "girder/beam/tin_alloy",
-            "girder/beam/brass",
-            "girder/beam/wrought_iron",
-            "girder/beam/copper",
-            "girder/beam/zinc"
-    };
-
-    private static final Map<String, Map<String, PartialModel>> METAL_GIRDER_CT_POLES = new HashMap<>();
-    private static volatile Map<Block, Map<String, PartialModel>> METAL_GIRDER_CT_POLES_BY_BLOCK;
+    private static final Map<String, Map<String, PartialModel>> BEAM_GIRDER_CT_POLES = new HashMap<>();
+    private static volatile Map<Block, Map<String, PartialModel>> BEAM_GIRDER_CT_POLES_BY_BLOCK;
 
     static {
-        for (String variant : METAL_GIRDER_VARIANTS) {
+        for (String variant : BEAM_GIRDER_VARIANTS) {
             Map<String, PartialModel> poles = new HashMap<>();
             poles.put("top", block(variant + "/block_pole_top"));
             poles.put("middle", block(variant + "/block_pole_middle"));
             poles.put("bottom", block(variant + "/block_pole_bottom"));
-            METAL_GIRDER_CT_POLES.put(variant, poles);
+            BEAM_GIRDER_CT_POLES.put(variant, poles);
         }
     }
 
     @Nullable
     public static PartialModel getMetalGirderConnectedPole(Block girderBlock, String key) {
-        Map<Block, Map<String, PartialModel>> result = METAL_GIRDER_CT_POLES_BY_BLOCK;
+        Map<Block, Map<String, PartialModel>> result = BEAM_GIRDER_CT_POLES_BY_BLOCK;
         if (result == null) {
-            result = buildBlockMap(METAL_GIRDER_CT_POLES);
-            METAL_GIRDER_CT_POLES_BY_BLOCK = result;
+            result = buildBlockMap(BEAM_GIRDER_CT_POLES);
+            BEAM_GIRDER_CT_POLES_BY_BLOCK = result;
         }
         Map<String, PartialModel> poles = result.get(girderBlock);
         if (poles == null)
@@ -162,8 +164,4 @@ public class TFGPartialModels {
     private static PartialModel block(String path) {
         return PartialModel.of(TFGCore.id("block/" + path));
     }
-
-    public static void register() {
-    }
-
 }
