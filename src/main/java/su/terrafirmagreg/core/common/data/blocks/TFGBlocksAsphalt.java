@@ -61,7 +61,7 @@ public final class TFGBlocksAsphalt {
 
     public static final BlockEntry<AsphaltRoadBlock> ASPHALT_ROAD = TFGCore.REGISTRATE.block("asphalt_road", AsphaltRoadBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
-            .properties(p -> p.strength(5F, 64).sound(SoundType.STONE).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
+            .properties(p -> p.strength(5F, 64).sound(SoundType.STONE).mapColor(AsphaltRoadHelper::getMapColor).requiresCorrectToolForDrops())
             .addLayer(() -> RenderType::cutout)
             .blockstate(TFGBlocksAsphalt::asphaltRoadBlockstate)
             .loot(RegistrateBlockLootTables::dropSelf)
@@ -81,7 +81,7 @@ public final class TFGBlocksAsphalt {
 
     public static final BlockEntry<AsphaltRoadSlabBlock> ASPHALT_ROAD_SLAB = TFGCore.REGISTRATE.block("asphalt_road_slab", AsphaltRoadSlabBlock::new)
             .initialProperties(ASPHALT_ROAD)
-            .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+            .properties(p -> p.mapColor(AsphaltRoadHelper::getMapColor).requiresCorrectToolForDrops())
             .addLayer(() -> RenderType::cutout)
             .blockstate(TFGBlocksAsphalt::asphaltRoadSlabBlockstate)
             .loot(RegistrateBlockLootTables::dropSelf)
