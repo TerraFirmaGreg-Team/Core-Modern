@@ -5,15 +5,23 @@ import static net.dries007.tfc.common.fluids.TFCFluids.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
+
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.fluids.*;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.SoundActions;
+import net.minecraftforge.fluids.FluidInteractionRegistry;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
@@ -149,6 +157,53 @@ public class TFGFluids {
                 .canPushEntity(false)
                 .canSwim(false)
                 .supportsBoating(false);
+    }
+
+    public static void registerFluidInteractions() {
+        FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
+                MARS_WATER.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return Blocks.OBSIDIAN.defaultBlockState();
+                    else
+                        return GTBlocks.RED_GRANITE.get().defaultBlockState();
+                }));
+
+        FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
+                MUDDY_WATER.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return Blocks.OBSIDIAN.defaultBlockState();
+                    else
+                        return TFCBlocks.ROCK_BLOCKS.get(Rock.DACITE).get(Rock.BlockType.RAW).get().defaultBlockState();
+                }));
+
+        FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
+                SULFUR_FUMES.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return Blocks.OBSIDIAN.defaultBlockState();
+                    else
+                        return AllPaletteStoneTypes.SCORIA.getBaseBlock().get().defaultBlockState();
+                }));
+
+        FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
+                GEYSER_SLURRY.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return Blocks.OBSIDIAN.defaultBlockState();
+                    else
+                        return Blocks.DRIPSTONE_BLOCK.defaultBlockState();
+                }));
+
+        FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
+                SPRING_WATER.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return Blocks.OBSIDIAN.defaultBlockState();
+                    else
+                        return Blocks.CALCITE.defaultBlockState();
+                }));
     }
 
     // Registration helpers

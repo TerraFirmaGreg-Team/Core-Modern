@@ -63,7 +63,7 @@ public class ClimateWeightModifier {
                     ? chunkData.getAverageTemp(pos)
                     : chunkData.getRainfall(pos);
             return value >= min && value <= max ? addedWeight : 0;
-        } catch (NullPointerException ex) {
+        } catch (NullPointerException | IllegalStateException ex) {
             TFGCore.LOGGER.error(ex.toString());
             return 0;
         }
@@ -94,7 +94,7 @@ public class ClimateWeightModifier {
                             && rain >= rainMin && rain <= rainMax
                                     ? addedWeight
                                     : 0;
-                } catch (NullPointerException ex) {
+                } catch (NullPointerException | IllegalStateException ex) {
                     TFGCore.LOGGER.error(ex.toString());
                     return 0;
                 }
@@ -135,7 +135,7 @@ public class ClimateWeightModifier {
                             && (biomes.isEmpty() || biomes.contains(biome))
                                     ? addedWeight
                                     : 0;
-                } catch (NullPointerException ex) {
+                } catch (NullPointerException | IllegalStateException ex) {
                     TFGCore.LOGGER.error(ex.toString());
                     return 0;
                 }

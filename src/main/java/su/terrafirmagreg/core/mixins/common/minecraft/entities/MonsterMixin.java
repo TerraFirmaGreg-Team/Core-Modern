@@ -37,6 +37,9 @@ public class MonsterMixin {
                             && levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) == 0
                             && levelAccessor.getBrightness(LightLayer.SKY, blockPos) == 0
                             && belowBlock.isValidSpawn(levelAccessor, blockPos, pType));
+        } else if (pType == SpeciesEntities.GHOUL.get() || pType == EntityType.ZOGLIN) {
+            BlockState belowBlock = levelAccessor.getBlockState(blockPos.below());
+            cir.setReturnValue(belowBlock.is(TFCTags.Blocks.MONSTER_SPAWNS_ON) && belowBlock.isValidSpawn(levelAccessor, blockPos, pType));
         }
     }
 }

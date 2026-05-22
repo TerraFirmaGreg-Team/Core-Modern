@@ -10,6 +10,7 @@ import com.notenoughmail.kubejs_tfc.event.RegisterInteractionsEventJS;
 import com.notenoughmail.kubejs_tfc.util.ResourceUtils;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -33,6 +34,8 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
     public transient Supplier<Item> preexistingItem;
     @Nullable
     public transient String lootItem;
+    @Nullable
+    public transient MobEffect effect;
 
     public DecorativePlantBlockBuilder(ResourceLocation i) {
         super(i);
@@ -63,6 +66,12 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
         return this;
     }
 
+    @Info("Apply an effect to the player as long as they're standing inside this block")
+    public DecorativePlantBlockBuilder effect(MobEffect effect) {
+        this.effect = effect;
+        return this;
+    }
+
     @HideFromJS
     public VoxelShape getShape() {
         if (customShape.isEmpty()) {
@@ -88,7 +97,8 @@ public class DecorativePlantBlockBuilder extends ExtendedPropertiesBlockBuilder 
     @Override
     public DecorativePlantBlock createObject() {
         return new DecorativePlantBlock(createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ),
-                getShape());
+                getShape(),
+                effect);
     }
 
     @Override
