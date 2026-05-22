@@ -18,6 +18,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.TFGStrutBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 @SuppressWarnings({ "unused" })
 public class TFGBlocks_Struts {
@@ -67,11 +68,13 @@ public class TFGBlocks_Struts {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFGBlockEntities.STRUT, block);
                 })
+                .tag(TFGTags.Blocks.STRUT)
                 .item(StrutBlockItem::new)
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/beam_item"))
                         .texture("0", texLoc)
                         .texture("1_0", texLocAttachment)
                         .texture("particle", texLocParticle))
+                .tag(TFGTags.Items.STRUT)
                 .build()
                 .register();
     }
@@ -99,6 +102,7 @@ public class TFGBlocks_Struts {
                     buildGirderStrutBlockStateEntry(builder, model, false);
                     buildGirderStrutBlockStateEntry(builder, model, true);
                 })
+                .tag(TFGTags.Blocks.STRUT)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFGBlockEntities.STRUT, block);
                 })
@@ -107,6 +111,7 @@ public class TFGBlocks_Struts {
                         .texture("0", texLoc)
                         .texture("1_0", texLocAttachment)
                         .texture("particle", texLocParticle))
+                .tag(TFGTags.Items.STRUT)
                 .build()
                 .register();
     }

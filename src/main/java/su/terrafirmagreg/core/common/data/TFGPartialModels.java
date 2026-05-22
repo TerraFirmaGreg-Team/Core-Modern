@@ -30,6 +30,11 @@ public class TFGPartialModels {
     }
 
     private static final String[] GIRDER_VARIANTS = {
+            "girder/beam/tin_alloy",
+            "girder/beam/brass",
+            "girder/beam/wrought_iron",
+            "girder/beam/copper",
+            "girder/beam/zinc",
             "girder/truss/tin_alloy",
             "girder/truss/brass",
             "girder/truss/wrought_iron",
