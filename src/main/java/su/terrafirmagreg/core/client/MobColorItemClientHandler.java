@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 //import su.terrafirmagreg.core.compat.starcatcher.StarcatcherFishVariants;
 
 @SuppressWarnings("deprecation")

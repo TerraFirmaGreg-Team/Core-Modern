@@ -7,7 +7,7 @@ import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 
-import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 
 public class RailgunAmmoLoaderMachine extends ItemBusPartMachine {
     public RailgunAmmoLoaderMachine(IMachineBlockEntity holder) {

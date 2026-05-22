@@ -22,6 +22,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+/***
+ * Credit: Adapted from Create: More Girders
+ */
 public class TFGGirderBlock extends GirderBlock {
     boolean climbable;
     int placementHelperId;
@@ -99,7 +102,6 @@ public class TFGGirderBlock extends GirderBlock {
 
         BlockState result = super.updateShape(state, direction, neighbourState, world, pos, neighbourPos);
 
-        // Preserve horizontal orientation if super cleared it
         if (wasHorizontal && !result.getValue(X) && !result.getValue(Z)) {
             result = result.setValue(X, prevX).setValue(Z, prevZ);
         }
@@ -107,10 +109,8 @@ public class TFGGirderBlock extends GirderBlock {
         boolean isHorizontal = result.getValue(X) ^ result.getValue(Z);
 
         if (isHorizontal) {
-            // Restore previous TOP/BOTTOM — never clear via neighbor updates
             result = result.setValue(TOP, prevTop).setValue(BOTTOM, prevBottom);
 
-            // Enable connector when a non-air block appears above or below
             if (direction == Direction.UP && !neighbourState.isAir())
                 result = result.setValue(TOP, true);
             else if (direction == Direction.DOWN && !neighbourState.isAir())

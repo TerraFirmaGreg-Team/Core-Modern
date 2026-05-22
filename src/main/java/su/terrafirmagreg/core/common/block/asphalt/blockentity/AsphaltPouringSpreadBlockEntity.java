@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadPouringBlock;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Asphalt;
 
 public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
 
@@ -44,8 +44,8 @@ public class AsphaltPouringSpreadBlockEntity extends BlockEntity {
             BlockPos baseNeighbor = BlockPos.of(spreadPlan[spreadIndex++]);
             BlockState baseState = level.getBlockState(baseNeighbor);
             if (baseState.is(RNRTags.Blocks.CONCRETE_SPREADABLE)) {
-                level.setBlock(baseNeighbor, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL);
-                level.updateNeighborsAt(baseNeighbor, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.get());
+                level.setBlock(baseNeighbor, TFGBlocks_Asphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL);
+                level.updateNeighborsAt(baseNeighbor, TFGBlocks_Asphalt.ASPHALT_ROAD_HOT.get());
             }
             processed++;
         }

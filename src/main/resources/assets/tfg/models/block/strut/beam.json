@@ -1,10 +1,6 @@
 {
     "parent": "block/block",
     "format_version": "1.21.6",
-    "textures": {
-        "0": "tfg:block/strut/steel",
-        "particle": "tfg:block/strut/steel_particle"
-    },
     "elements": [
         {
             "rotation": {
@@ -383,5 +379,5 @@
             "name": "girder_strut_attachment"
         }
     ],
-    "credit": "Made with Blockbench"
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT License)"
 }

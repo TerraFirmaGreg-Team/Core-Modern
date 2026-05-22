@@ -31,6 +31,7 @@ import su.terrafirmagreg.core.client.screen.*;
 import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.particle.*;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.world.dimension_effects.BeneathEffects;

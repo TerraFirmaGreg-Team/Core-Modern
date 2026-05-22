@@ -1,8 +1,4 @@
 {
-    "textures": {
-        "0": "tfg:block/strut/steel_attachment",
-        "particle": "tfg:block/strut/steel_particle"
-    },
     "elements": [{
         "rotation": {
             "origin": [

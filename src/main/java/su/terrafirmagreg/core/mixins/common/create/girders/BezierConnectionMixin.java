@@ -19,6 +19,9 @@ import net.minecraft.world.level.block.Block;
 
 import su.terrafirmagreg.core.common.block.girder.TFGGirderData;
 
+/***
+ * Credit: Create: More Girders
+ */
 @Mixin(value = BezierConnection.class)
 public abstract class BezierConnectionMixin implements TFGGirderData {
     @Unique

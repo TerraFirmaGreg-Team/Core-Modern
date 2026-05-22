@@ -19,6 +19,9 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 
 import su.terrafirmagreg.core.TFGCore;
 
+/***
+ * Credit: Create: More Girders
+ */
 public class TFGPartialModels {
     private static final Map<String, PartialModel[]> SEGMENT_MODELS = new HashMap<>();
     private static final Map<String, EnumMap<Direction, PartialModel>> BRACKET_MODELS = new HashMap<>();
@@ -158,10 +161,6 @@ public class TFGPartialModels {
 
     private static PartialModel block(String path) {
         return PartialModel.of(TFGCore.id("block/" + path));
-    }
-
-    private static PartialModel createBlock(String path) {
-        return PartialModel.of(Create.asResource("block/" + path));
     }
 
     public static void register() {

@@ -26,6 +26,9 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 
 import su.terrafirmagreg.core.common.data.TFGPartialModels;
 
+/***
+ * Credit: Create More Girders
+ */
 public class TFGGirderConnectedTrussModel extends BakedModelWrapper<BakedModel> {
     private static final ModelProperty<ConnectionData> CONNECTION_PROPERTY = new ModelProperty<>();
 

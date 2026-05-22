@@ -15,6 +15,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
+/***
+ * Credit: Create: More Girders
+ */
 @Mixin(value = TrackPaver.class)
 public abstract class TrackPaverMixin {
     @Redirect(method = "paveCurve", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/track/TrackPaver;isWallLike(Lnet/minecraft/world/level/block/state/BlockState;)Z", remap = false), remap = false)
@@ -38,11 +41,6 @@ public abstract class TrackPaverMixin {
         return entry.has(state);
     }
 
-    /**
-     * Sets TOP bracket for CMG girders during straight track paving.
-     * The base class {@code CMGGirderBlock.updateShape} preserves TOP once set,
-     * so the neighbor cascade from placement cannot undo this.
-     */
     @ModifyArg(method = "paveStraight", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/track/TrackPaver;placeBlockIfFree(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)Z", remap = false), index = 2, remap = false)
     private static BlockState tfg$setTopBracketForPaving(BlockState state) {
         if (state.is(TFGTags.Blocks.GIRDER)) {
@@ -51,10 +49,6 @@ public abstract class TrackPaverMixin {
         return state;
     }
 
-    /**
-     * Same for girders placed during curve paving — straight sections
-     * adjacent to curves also need the TOP bracket.
-     */
     @ModifyArg(method = "paveCurve", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/track/TrackPaver;placeBlockIfFree(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)Z", remap = false), index = 2, remap = false)
     private static BlockState tfg$setTopBracketForCurvePaving(BlockState state) {
         if (state.is(TFGTags.Blocks.GIRDER)) {

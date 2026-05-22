@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data;
+package su.terrafirmagreg.core.common.data.items;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +15,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
+import su.terrafirmagreg.core.common.data.TFGFluids;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 @SuppressWarnings("unused")
-public final class TFGItemsAsphalt {
+public final class TFGItems_Asphalt {
 
     private static final Map<ResourceLocation, AsphaltRoadMarkingMask> STENCIL_MASKS = new HashMap<>();
 

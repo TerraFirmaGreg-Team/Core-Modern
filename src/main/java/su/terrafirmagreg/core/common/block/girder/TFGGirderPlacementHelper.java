@@ -9,6 +9,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+/***
+ * Credit: Create: More Girders
+ */
 public class TFGGirderPlacementHelper extends GirderPlacementHelper {
     private final Supplier<? extends Block> block;
 

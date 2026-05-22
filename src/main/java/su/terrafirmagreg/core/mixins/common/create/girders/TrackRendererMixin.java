@@ -25,6 +25,9 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import su.terrafirmagreg.core.common.block.girder.TFGGirderData;
 import su.terrafirmagreg.core.common.data.TFGPartialModels;
 
+/***
+ * Credit: Create: More Girders
+ */
 @Mixin(value = TrackRenderer.class)
 public class TrackRendererMixin {
     @Unique
@@ -54,7 +57,6 @@ public class TrackRendererMixin {
             return CachedBuffers.partial(original, state);
 
         if (original == AllPartialModels.GIRDER_SEGMENT_MIDDLE) {
-            // 2 partial() calls per segment (first=true, first=false); flip on every other segment
             int callIndex = tfg$middleCallCounter.get()[0]++;
             boolean useAlt = (callIndex / 2) % 2 != 0;
             PartialModel model = useAlt

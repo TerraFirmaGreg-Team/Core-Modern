@@ -1,9 +1,5 @@
 {
     "format_version": "1.21.6",
-    "textures": {
-        "3": "createmoregirder:block/andesite_truss",
-        "particle": "createmoregirder:block/andesite_truss"
-    },
     "elements": [
         {
             "rotation": {
@@ -506,6 +502,6 @@
         6,
         7
     ],
-    "credit": "Made with Blockbench",
+    "credit": "Create: More Girders by Agent772 (MIT)",
     "render_type": "cutout"
 }

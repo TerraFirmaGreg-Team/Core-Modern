@@ -1,6 +1,5 @@
 {
     "format_version": "1.21.6",
-    "textures": {"0": "createmoregirder:block/andesite_truss"},
     "elements": [
         {
             "rotation": {
@@ -258,6 +257,6 @@
         ],
         "name": "Beam X"
     }],
-    "credit": "Made with Blockbench",
+    "credit": "Create: More Girders by Agent772 (MIT)",
     "render_type": "cutout"
 }

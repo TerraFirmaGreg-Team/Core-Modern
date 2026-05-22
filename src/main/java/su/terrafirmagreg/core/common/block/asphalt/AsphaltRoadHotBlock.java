@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Asphalt;
 
 @SuppressWarnings("deprecation")
 public class AsphaltRoadHotBlock extends Block {
@@ -51,8 +51,8 @@ public class AsphaltRoadHotBlock extends Block {
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
-        level.setBlock(pos, TFGBlocksAsphalt.ASPHALT_ROAD.getDefaultState(), Block.UPDATE_ALL);
-        level.updateNeighborsAt(pos, TFGBlocksAsphalt.ASPHALT_ROAD.get());
+        level.setBlock(pos, TFGBlocks_Asphalt.ASPHALT_ROAD.getDefaultState(), Block.UPDATE_ALL);
+        level.updateNeighborsAt(pos, TFGBlocks_Asphalt.ASPHALT_ROAD.get());
     }
 
     @Override

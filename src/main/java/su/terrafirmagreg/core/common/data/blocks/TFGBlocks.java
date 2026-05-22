@@ -39,7 +39,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
-import su.terrafirmagreg.core.common.block.girder.*;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -54,7 +53,7 @@ public final class TFGBlocks {
         TFGBlocks_Casings.init();
         TFGBlocks_Buds.init();
         TFGBlocks_Wood.init();
-        TFGBlocksAsphalt.init();
+        TFGBlocks_Asphalt.init();
         TFGBlocks_Girders.init();
         TFGBlocks_Struts.init();
     }

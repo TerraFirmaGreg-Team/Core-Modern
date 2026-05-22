@@ -1,9 +1,5 @@
 {
     "format_version": "1.21.11",
-    "textures": {
-        "0": "createmoregirder:block/andesite_beam",
-        "particle": "createmoregirder:block/andesite_beam"
-    },
     "elements": [
         {
             "from": [
@@ -175,5 +171,5 @@
         "scope": 0,
         "name": "Brace"
     }],
-    "credit": "Made with Blockbench"
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT)"
 }

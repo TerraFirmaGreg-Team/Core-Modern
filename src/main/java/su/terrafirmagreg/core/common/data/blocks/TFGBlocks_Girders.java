@@ -28,7 +28,6 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFGBlocks_Girders {
     public static final ObjectOpenHashSet<BlockEntry<? extends Block>> GIRDERS = new ObjectOpenHashSet<>();
-    public static final ObjectOpenHashSet<BlockEntry<? extends Block>> GIRDER_ENCASED_SHAFTS = new ObjectOpenHashSet<>();
 
     public static void init() {
         GIRDERS.add(TIN_ALLOY_BEAM);
@@ -350,9 +349,5 @@ public class TFGBlocks_Girders {
 
     public static boolean isAnyGirder(BlockState state) {
         return GIRDERS.contains(state.getBlock());
-    }
-
-    public static boolean isAnyGirderEncasedShaft(BlockState state) {
-        return GIRDER_ENCASED_SHAFTS.contains(state.getBlock());
     }
 }

@@ -1,6 +1,6 @@
-package su.terrafirmagreg.core.common.data;
+package su.terrafirmagreg.core.common.data.items;
 
-import static su.terrafirmagreg.core.common.data.TFGItems.attach;
+import static su.terrafirmagreg.core.common.data.items.TFGItems.attach;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;

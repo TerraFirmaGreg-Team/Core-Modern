@@ -34,6 +34,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
 
+/***
+ * Credit: Create: More Girders
+ */
 public class TFGGirderWrenchBehavior {
     @OnlyIn(Dist.CLIENT)
     public static void tick() {

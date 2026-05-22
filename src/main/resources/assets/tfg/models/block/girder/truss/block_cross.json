@@ -1,5 +1,4 @@
 {
-    "textures": {"0": "createmoregirder:block/andesite_truss"},
     "elements": [
         {
             "from": [
@@ -170,5 +169,5 @@
         ],
         "name": "Brace"
     }],
-    "credit": "Made with Blockbench"
+    "credit": "Create: More Girders by Agent772 (MIT)"
 }

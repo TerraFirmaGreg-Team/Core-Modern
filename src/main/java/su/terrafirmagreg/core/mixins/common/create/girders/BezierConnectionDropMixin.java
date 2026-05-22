@@ -12,6 +12,9 @@ import net.minecraft.world.level.block.Block;
 
 import su.terrafirmagreg.core.common.block.girder.TFGGirderData;
 
+/***
+ * Credit: Create: More Girders
+ */
 @Mixin(value = BezierConnection.class)
 public abstract class BezierConnectionDropMixin implements TFGGirderData {
     @Redirect(method = "addItemsToPlayer", at = @At(value = "INVOKE", target = "Lcom/tterrag/registrate/util/entry/BlockEntry;asStack(I)Lnet/minecraft/world/item/ItemStack;", ordinal = 0, remap = false), remap = false)

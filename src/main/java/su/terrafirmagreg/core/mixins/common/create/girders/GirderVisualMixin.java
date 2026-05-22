@@ -26,6 +26,9 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import su.terrafirmagreg.core.common.block.girder.TFGGirderData;
 import su.terrafirmagreg.core.common.data.TFGPartialModels;
 
+/***
+ * Credit: Create: More Girders
+ */
 @Mixin(targets = "com.simibubi.create.content.trains.track.TrackVisual$BezierTrackVisual$GirderVisual")
 public class GirderVisualMixin {
     @Shadow(remap = false)

@@ -1,9 +1,5 @@
 {
     "format_version": "1.21.11",
-    "textures": {
-        "0": "createmoregirder:block/andesite_beam",
-        "particle": "createmoregirder:block/andesite_beam"
-    },
     "elements": [
         {
             "rotation": {
@@ -240,5 +236,5 @@
         "scope": 0,
         "name": "Beam X"
     }],
-    "credit": "Made with Blockbench"
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT)"
 }

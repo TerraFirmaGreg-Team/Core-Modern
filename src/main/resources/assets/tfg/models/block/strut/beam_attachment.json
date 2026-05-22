@@ -1,9 +1,5 @@
 {
     "format_version": "1.21.6",
-    "textures": {
-        "0": "tfg:block/strut/steel_attachment",
-        "particle": "tfg:block/strut/steel_particle"
-    },
     "elements": [{
         "rotation": {
             "origin": [
@@ -98,5 +94,5 @@
         "name": "Brace",
         "stepParentName": ""
     }],
-    "credit": "Made with Blockbench"
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT License)"
 }
