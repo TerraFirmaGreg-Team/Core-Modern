@@ -2,31 +2,57 @@ package su.terrafirmagreg.core.common.block.girder;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.decoration.girder.GirderBlock;
-import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.createmod.catnip.placement.IPlacementHelper;
 import net.createmod.catnip.placement.PlacementHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class TFGGirderBlock extends GirderBlock {
-    BlockEntry<? extends Block> encasedShaftBlock;
+    boolean climbable;
     int placementHelperId;
 
-    public TFGGirderBlock(Properties properties, int placementHelperId) {
+    public TFGGirderBlock(Properties properties, int placementHelperId, boolean climbable) {
         super(properties);
         this.placementHelperId = placementHelperId;
+        this.climbable = climbable;
+    }
+
+    @Override
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (climbable && entity instanceof LivingEntity livingEntity) {
+            double currentAccel = 0.15D * (livingEntity.getDeltaMovement().y < 0.3D ? 2.5D : 1.0D);
+            Vec3 deltaMovement = livingEntity.getDeltaMovement();
+            livingEntity.resetFallDistance();
+            float f = 0.10F;
+            double d0 = Mth.clamp(deltaMovement.x, -f, f);
+            double d1 = Mth.clamp(deltaMovement.z, -f, f);
+            double d2 = Math.max(deltaMovement.y, -f);
+            if (d2 < 0.0 && !livingEntity.getFeetBlockState().isScaffolding(livingEntity) &&
+                    livingEntity.isSuppressingSlidingDownLadder() &&
+                    livingEntity instanceof Player) {
+                d2 = Math.min(deltaMovement.y + currentAccel, 0.0D);
+            }
+            if (livingEntity.horizontalCollision) {
+                d2 = 0.22F;
+            }
+            deltaMovement = new Vec3(d0, d2, d1);
+            entity.setDeltaMovement(deltaMovement);
+        }
     }
 
     @Override

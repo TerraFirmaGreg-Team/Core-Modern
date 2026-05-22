@@ -117,6 +117,7 @@ public final class TFGTags {
 
         public static final TagKey<Block> GIRDER = createBlockTag("girder");
         public static final TagKey<Block> PAVING_GIRDER = createBlockTag("paving_girder");
+        public static final TagKey<Block> TRUSS = createBlockTag("truss");
         public static final TagKey<Block> STRUT = createBlockTag("strut");
 
         private static TagKey<Block> createBlockTag(String path) {

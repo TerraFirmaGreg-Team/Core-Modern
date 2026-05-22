@@ -46,7 +46,7 @@ public class TFGBlocks_Girders {
     }
 
     public static final BlockEntry<TFGGirderBlock> TIN_ALLOY_BEAM = TFGCore.REGISTRATE
-            .block("girder/beam/tin_alloy", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.TIN_ALLOY_BEAM))))
+            .block("girder/beam/tin_alloy", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.TIN_ALLOY_BEAM)), false))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
@@ -61,7 +61,7 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> BRASS_BEAM = TFGCore.REGISTRATE
-            .block("girder/beam/brass", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.BRASS_BEAM))))
+            .block("girder/beam/brass", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.BRASS_BEAM)), false))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
@@ -76,7 +76,7 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> WROUGHT_IRON_BEAM = TFGCore.REGISTRATE
-            .block("girder/beam/wrought_iron", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.WROUGHT_IRON_BEAM))))
+            .block("girder/beam/wrought_iron", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.WROUGHT_IRON_BEAM)), false))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
@@ -92,7 +92,7 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> COPPER_BEAM = TFGCore.REGISTRATE
-            .block("girder/beam/copper", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.COPPER_BEAM))))
+            .block("girder/beam/copper", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.COPPER_BEAM)), false))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
@@ -107,7 +107,7 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> ZINC_BEAM = TFGCore.REGISTRATE
-            .block("girder/beam/zinc", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.ZINC_BEAM))))
+            .block("girder/beam/zinc", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.ZINC_BEAM)), false))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
@@ -122,13 +122,13 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> TIN_ALLOY_TRUSS = TFGCore.REGISTRATE
-            .block("girder/truss/tin_alloy", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.TIN_ALLOY_TRUSS))))
+            .block("girder/truss/tin_alloy", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.TIN_ALLOY_TRUSS)), true))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/tin_alloy"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/tin_alloy"));
@@ -137,13 +137,13 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> BRASS_TRUSS = TFGCore.REGISTRATE
-            .block("girder/truss/brass", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.BRASS_TRUSS))))
+            .block("girder/truss/brass", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.BRASS_TRUSS)), true))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/brass"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/brass"));
@@ -152,13 +152,13 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> WROUGHT_IRON_TRUSS = TFGCore.REGISTRATE
-            .block("girder/truss/wrought_iron", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.WROUGHT_IRON_TRUSS))))
+            .block("girder/truss/wrought_iron", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.WROUGHT_IRON_TRUSS)), true))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/wrought_iron"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/wrought_iron"));
@@ -167,13 +167,13 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> COPPER_TRUSS = TFGCore.REGISTRATE
-            .block("girder/truss/copper", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.COPPER_TRUSS))))
+            .block("girder/truss/copper", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.COPPER_TRUSS)), true))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/copper"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/copper"));
@@ -182,13 +182,13 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> STEEL_TRUSS = TFGCore.REGISTRATE
-            .block("girder/truss/steel", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.STEEL_TRUSS))))
+            .block("girder/truss/steel", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.STEEL_TRUSS)), true))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/steel"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/steel"));
@@ -197,13 +197,13 @@ public class TFGBlocks_Girders {
             .register();
 
     public static final BlockEntry<TFGGirderBlock> ZINC_TRUSS = TFGCore.REGISTRATE
-            .block("girder/truss/zinc", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.ZINC_TRUSS))))
+            .block("girder/truss/zinc", p -> new TFGGirderBlock(p, PlacementHelpers.register(new TFGGirderPlacementHelper(TFGBlocks_Girders.ZINC_TRUSS)), true))
             .initialProperties(SharedProperties::softMetal)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/zinc"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/zinc"));
