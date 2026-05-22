@@ -45,6 +45,7 @@ public final class NutrientEffectsHandler {
     private static final Map<UUID, Boolean> FRUIT_MINING_SPEED = new ConcurrentHashMap<>();
     private static final Map<UUID, Boolean> PROTEIN_HEAVY_ITEM_BOOST = new ConcurrentHashMap<>();
     private static final Map<UUID, Float> MEDICAL_CONDITION_PROGRESSION_MODIFIER = new ConcurrentHashMap<>();
+    private static final Map<UUID, Float> MEDICAL_CONDITION_HEALING_MODIFIER = new ConcurrentHashMap<>();
 
     private static final boolean ENABLE_FOOD_DEBUFFS = TFGConfig.SERVER.enableTFGFoodDebuffs.get();
     private static final boolean ENABLE_FOOD_BUFFS = TFGConfig.SERVER.enableTFGFoodBuffs.get();
@@ -144,6 +145,13 @@ public final class NutrientEffectsHandler {
     }
 
     /**
+     * Returns the medical condition healing modifier for the player.
+     */
+    public static float getMedicalConditionHealingModifier(UUID playerUuid) {
+        return MEDICAL_CONDITION_HEALING_MODIFIER.getOrDefault(playerUuid, 1.0f);
+    }
+
+    /**
      * Tick call from TFCFoodDataMixin.
      * @param player the server player.
      * @param nutritionData the player's NutritionData.
@@ -199,13 +207,13 @@ public final class NutrientEffectsHandler {
 
                 case "freezing" -> {
                     if (ENABLE_FOOD_DEBUFFS) {
-                        player.addEffect(new MobEffectInstance(TFGEffects.FREEZING.get(), Math.min(effectDuration, 600), 0, false, true));
+                        player.addEffect(new MobEffectInstance(TFGEffects.FREEZING.get(), Math.min(effectDuration / 12, 600), 0, false, true));
                     }
                 }
 
                 case "blazing" -> {
                     if (ENABLE_FOOD_DEBUFFS) {
-                        player.addEffect(new MobEffectInstance(TFGEffects.BLAZING.get(), Math.min(effectDuration, 600), 0, false, true));
+                        player.addEffect(new MobEffectInstance(TFGEffects.BLAZING.get(), Math.min(effectDuration / 12, 600), 0, false, true));
                     }
                 }
 
@@ -217,13 +225,13 @@ public final class NutrientEffectsHandler {
                 }
                 case "nauseating" -> {
                     if (ENABLE_FOOD_DEBUFFS) {
-                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, Math.min(effectDuration, 480) / 2, 0, false, true));
-                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, Math.min(effectDuration, 480), 6, false, true));
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, Math.min(effectDuration / 12, 240), 0, false, true));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, Math.min(effectDuration / 6, 600), 6, false, true));
                     }
                 }
                 case "parching" -> {
                     if (ENABLE_FOOD_DEBUFFS) {
-                        player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration, 36000), 0, false, true));
+                        player.addEffect(new MobEffectInstance(TFCEffects.THIRST.get(), Math.min(effectDuration, 9600), 0, false, true));
                     }
                 }
 
@@ -546,8 +554,8 @@ public final class NutrientEffectsHandler {
 
     /**
      * Average
-     * >55% -> increase passive health regen by 50%. Decrease medical condition progression rate by 25%.
-     * >85% -> increase passive health regen by 100%. Decrease medical condition progression rate by 50%.
+     * >55% -> increase passive health regen by 50%. Decrease medical condition progression rate by 25%. Increase medical condition healing rate by 50%.
+     * >85% -> increase passive health regen by 100%. Decrease medical condition progression rate by 50%. Increase medical condition healing rate by 100%.
      * @param player the player to apply effects to.
      * @param avg the average nutrition across all positive nutrients.
      */
@@ -561,12 +569,15 @@ public final class NutrientEffectsHandler {
         if (avg > 0.85f) {
             HEALING_MODIFIER.put(uuid, 2.0f);
             MEDICAL_CONDITION_PROGRESSION_MODIFIER.put(uuid, 0.5f);
+            MEDICAL_CONDITION_HEALING_MODIFIER.put(uuid, 2.0f);
         } else if (avg > 0.55f) {
             HEALING_MODIFIER.put(uuid, 1.5f);
             MEDICAL_CONDITION_PROGRESSION_MODIFIER.put(uuid, 0.75f);
+            MEDICAL_CONDITION_HEALING_MODIFIER.put(uuid, 1.5f);
         } else {
             HEALING_MODIFIER.remove(uuid);
             MEDICAL_CONDITION_PROGRESSION_MODIFIER.remove(uuid);
+            MEDICAL_CONDITION_HEALING_MODIFIER.remove(uuid);
         }
     }
 
@@ -627,6 +638,7 @@ public final class NutrientEffectsHandler {
         FRUIT_MINING_SPEED.remove(uuid);
         PROTEIN_HEAVY_ITEM_BOOST.remove(uuid);
         MEDICAL_CONDITION_PROGRESSION_MODIFIER.remove(uuid);
+        MEDICAL_CONDITION_HEALING_MODIFIER.remove(uuid);
     }
 
     /**

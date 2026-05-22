@@ -82,6 +82,8 @@ public abstract class MedicalConditionTrackerMixin {
     private float tfg$modifyTickProgressionRate(float original, @Local(name = "multiplier") int multiplier) {
         if (multiplier == 1) {
             return original * NutrientEffectsHandler.getMedicalConditionProgressionModifier(getPlayer().getUUID());
+        } else if (multiplier == -1) {
+            return original * NutrientEffectsHandler.getMedicalConditionHealingModifier(getPlayer().getUUID());
         }
         return original;
     }

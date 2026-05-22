@@ -20,7 +20,7 @@ public class TemperatureChangeEffect extends MobEffect {
     private static final float maxWarmingTemp = 25;
     private static final float minCoolingTemp = 5;
     private static final float maxBlazingTemp = 60;
-    private static final float minFreezingTemp = -40;
+    private static final float minFreezingTemp = -20;
 
     public TemperatureChangeEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
