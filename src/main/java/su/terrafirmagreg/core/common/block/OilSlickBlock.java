@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.common.block;
 
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,7 +14,7 @@ public class OilSlickBlock extends DecorativeFloatingPlantBlock {
     protected static final VoxelShape COLLISION_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
 
     public OilSlickBlock(Properties properties) {
-        super(ExtendedProperties.of(properties), OUTLINE_SHAPE);
+        super(ExtendedProperties.of(properties), OUTLINE_SHAPE, MobEffects.MOVEMENT_SLOWDOWN);
     }
 
     @SuppressWarnings("deprecation")

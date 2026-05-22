@@ -116,6 +116,7 @@ public class CommonProxy {
             addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
 
             TFGBlockEntities.finaliseBEModification();
+            TFGFluids.registerFluidInteractions();
         });
     }
 

@@ -52,9 +52,10 @@ public class BeneathForgeEventsMixin {
             } else {
                 entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
             }
-        } else if (entity instanceof WitherSkeleton) {
+        } else if (entity instanceof WitherSkeleton ws) {
             if (slot == EquipmentSlot.MAINHAND) {
-                entity.setItemSlot(slot, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.BISMUTH_BRONZE).get(Metal.ItemType.MACE).get()));
+                entity.setItemSlot(slot, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.Default.BLACK_STEEL).get(Metal.ItemType.MACE).get()));
+                ws.setDropChance(slot, 0f);
             }
         } else if (entity instanceof ZombifiedPiglin) {
             entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));

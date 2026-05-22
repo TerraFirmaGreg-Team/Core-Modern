@@ -228,6 +228,10 @@ public final class ForgeCommonEventListener {
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlock());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlock());
+        if (mapping.getKey().toString().equals("create_factory_logistics:jar_packager"))
+            mapping.remap(com.yision.fluidlogistics.registry.AllBlocks.FLUID_PACKAGER.get());
+        if (mapping.getKey().toString().equals("create_factory_logistics:factory_fluid_gauge"))
+            mapping.remap(com.simibubi.create.AllBlocks.FACTORY_GAUGE.get());
     }
 
     private static void remapItems(MissingMappingsEvent.Mapping<Item> mapping) {
@@ -242,6 +246,10 @@ public final class ForgeCommonEventListener {
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getItem());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getItem());
+        if (mapping.getKey().toString().equals("create_factory_logistics:jar_packager"))
+            mapping.remap(com.yision.fluidlogistics.registry.AllBlocks.FLUID_PACKAGER.asItem());
+        if (mapping.getKey().toString().equals("create_factory_logistics:factory_fluid_gauge"))
+            mapping.remap(com.simibubi.create.AllBlocks.FACTORY_GAUGE.asItem());
 
         if (mapping.getKey().equals(GTCEu.id("rich_raw_coal")))
             mapping.remap(TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
@@ -263,5 +271,10 @@ public final class ForgeCommonEventListener {
             mapping.remap(TFGMultiMachines.LARGE_BOILER_BRONZE.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("steel_large_boiler")))
             mapping.remap(TFGMultiMachines.LARGE_STEEL_BOILER.getBlockEntityType());
+
+        if (mapping.getKey().toString().equals("create_factory_logistics:jar_packager"))
+            mapping.remap(com.yision.fluidlogistics.registry.AllBlockEntities.FLUID_PACKAGER.get());
+        //create_factory_logistics:factory_fluid_panel is migrated using a mxin so that the blockEntity tags can be modified to work with normal create gauges
+        //the mixin is at su.terrafirmagreg.core.mixins.common.minecraft.ChunkSerializerMixin
     }
 }
