@@ -319,7 +319,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                             components.add(Component.translatable("tfg.tooltip.nutrition.health_modifier",
                                     Component.literal(String.format("%.1f", maxHealth)).withStyle(ChatFormatting.GREEN)));
                         }
-                        if (avg >= 0.95) {
+                        if (avg >= 0.95f) {
                             components.add(Component.translatable("tfg.tooltip.nutrition.positive_average", String.format("%.0f%%", avg * 100)).withStyle(ChatFormatting.GOLD));
                             components.add(Component.translatable("tfg.tooltip.nutrition.health_modifier", String.format("%.1f", maxHealth)).withStyle(ChatFormatting.GOLD));
                         }
