@@ -71,6 +71,7 @@ public class CommonProxy {
         TFGEvents.register();
         TFGSounds.SOUNDS.register(bus);
         TFGCarvers.CARVERS.register(bus);
+        TFGLootConditions.LOOT_CONDITIONS.register(bus);
 
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);
