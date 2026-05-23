@@ -20,31 +20,32 @@ import su.terrafirmagreg.core.common.block.TFGStrutBlock;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
-@SuppressWarnings({ "unused" })
 public class TFGBlocks_Struts {
-    public static final ObjectOpenHashSet<BlockEntry<? extends Block>> STRUTS_AND_CABLES = new ObjectOpenHashSet<>();
+    public static final ObjectOpenHashSet<BlockEntry<? extends Block>> STRUTS = new ObjectOpenHashSet<>();
 
     public static void init() {
         // Beam Struts
-        STRUTS_AND_CABLES.add(beamStrut("steel", TFGCore.id("block/girder/beam/steel")));
-        STRUTS_AND_CABLES.add(beamStrut("brass", TFGCore.id("block/girder/beam/brass")));
-        STRUTS_AND_CABLES.add(beamStrut("copper", TFGCore.id("block/girder/beam/copper")));
-        STRUTS_AND_CABLES.add(beamStrut("tin_alloy", TFGCore.id("block/girder/beam/tin_alloy")));
-        STRUTS_AND_CABLES.add(beamStrut("zinc", TFGCore.id("block/girder/beam/zinc")));
-        STRUTS_AND_CABLES.add(beamStrut("wrought_iron", TFGCore.id("block/girder/beam/wrought_iron")));
+        STRUTS.add(strut("steel", "beam", TFGCore.id("block/girder/beam/steel")));
+        STRUTS.add(strut("brass", "beam", TFGCore.id("block/girder/beam/brass")));
+        STRUTS.add(strut("copper", "beam", TFGCore.id("block/girder/beam/copper")));
+        STRUTS.add(strut("tin_alloy", "beam", TFGCore.id("block/girder/beam/tin_alloy")));
+        STRUTS.add(strut("zinc", "beam", TFGCore.id("block/girder/beam/zinc")));
+        STRUTS.add(strut("wrought_iron", "beam", TFGCore.id("block/girder/beam/wrought_iron")));
 
         // Truss Struts
-        STRUTS_AND_CABLES.add(trussStrut("steel", TFGCore.id("block/girder/truss/steel")));
-        STRUTS_AND_CABLES.add(trussStrut("brass", TFGCore.id("block/girder/truss/brass")));
-        STRUTS_AND_CABLES.add(trussStrut("copper", TFGCore.id("block/girder/truss/copper")));
-        STRUTS_AND_CABLES.add(trussStrut("tin_alloy", TFGCore.id("block/girder/truss/tin_alloy")));
-        STRUTS_AND_CABLES.add(trussStrut("zinc", TFGCore.id("block/girder/truss/zinc")));
-        STRUTS_AND_CABLES.add(trussStrut("wrought_iron", TFGCore.id("block/girder/truss/wrought_iron")));
+        STRUTS.add(strut("steel", "truss", TFGCore.id("block/girder/truss/steel")));
+        STRUTS.add(strut("brass", "truss", TFGCore.id("block/girder/truss/brass")));
+        STRUTS.add(strut("copper", "truss", TFGCore.id("block/girder/truss/copper")));
+        STRUTS.add(strut("tin_alloy", "truss", TFGCore.id("block/girder/truss/tin_alloy")));
+        STRUTS.add(strut("zinc", "truss", TFGCore.id("block/girder/truss/zinc")));
+        STRUTS.add(strut("wrought_iron", "truss", TFGCore.id("block/girder/truss/wrought_iron")));
     }
 
-    public static BlockEntry<TFGStrutBlock> beamStrut(String id, ResourceLocation texLoc) {
-        return TFGCore.REGISTRATE.block("strut/beam/" + id, p -> new TFGStrutBlock(p, new StrutModelType(
-                TFGCore.id("block/strut/beam/" + id),
+    public static BlockEntry<TFGStrutBlock> strut(String id, String type, ResourceLocation texLoc) {
+        String fullId = "strut/" + type + "/" + id;
+
+        return TFGCore.REGISTRATE.block(fullId, p -> new TFGStrutBlock(p, new StrutModelType(
+                TFGCore.id("block/" + fullId),
                 texLoc)))
                 .properties(p -> p
                         .mapColor(MapColor.METAL)
@@ -52,11 +53,11 @@ public class TFGBlocks_Struts {
                         .noOcclusion()
                         .sound(SoundType.NETHERITE_BLOCK))
                 .blockstate((ctx, prov) -> {
-                    ModelFile model = prov.models().withExistingParent("strut/beam/" + id + "_attachment", TFGCore.id("block/strut/beam_attachment"))
+                    ModelFile model = prov.models().withExistingParent(fullId + "_attachment", TFGCore.id("block/strut/" + type + "_attachment"))
                             .texture("0", texLoc)
                             .texture("particle", texLoc);
 
-                    ModelFile extraModel = prov.models().withExistingParent("strut/beam/" + id, TFGCore.id("block/strut/beam"))
+                    ModelFile extraModel = prov.models().withExistingParent(fullId, TFGCore.id("block/strut/" + type))
                             .texture("0", texLoc)
                             .texture("particle", texLoc);
 
@@ -70,44 +71,7 @@ public class TFGBlocks_Struts {
                 })
                 .tag(TFGTags.Blocks.STRUT)
                 .item(StrutBlockItem::new)
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/beam_item"))
-                        .texture("0", texLoc)
-                        .texture("1_0", texLoc)
-                        .texture("particle", texLoc))
-                .tag(TFGTags.Items.STRUT)
-                .build()
-                .register();
-    }
-
-    public static BlockEntry<TFGStrutBlock> trussStrut(String id, ResourceLocation texLoc) {
-        return TFGCore.REGISTRATE.block("strut/truss/" + id, p -> new TFGStrutBlock(p, new StrutModelType(
-                TFGCore.id("block/strut/truss/" + id),
-                texLoc)))
-                .properties(p -> p
-                        .mapColor(MapColor.METAL)
-                        .strength(3f, 6f)
-                        .noOcclusion()
-                        .sound(SoundType.NETHERITE_BLOCK))
-                .blockstate((ctx, prov) -> {
-                    ModelFile model = prov.models().withExistingParent("strut/truss/" + id + "_attachment", TFGCore.id("block/strut/truss_attachment"))
-                            .texture("0", texLoc)
-                            .texture("particle", texLoc);
-
-                    ModelFile extraModel = prov.models().withExistingParent("strut/truss/" + id, TFGCore.id("block/strut/truss"))
-                            .texture("0", texLoc)
-                            .texture("particle", texLoc);
-
-                    var builder = prov.getVariantBuilder(ctx.getEntry());
-
-                    buildGirderStrutBlockStateEntry(builder, model, false);
-                    buildGirderStrutBlockStateEntry(builder, model, true);
-                })
-                .tag(TFGTags.Blocks.STRUT)
-                .onRegister(block -> {
-                    TFGBlockEntities.addValidBEBlock(TFGBlockEntities.STRUT, block);
-                })
-                .item(StrutBlockItem::new)
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/truss_item"))
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/" + type + "_item"))
                         .texture("0", texLoc)
                         .texture("1_0", texLoc)
                         .texture("particle", texLoc))

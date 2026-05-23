@@ -127,7 +127,7 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void registerSpecialModels(ModelEvent.RegisterAdditional event) {
-        TFGBlocks_Struts.STRUTS_AND_CABLES.forEach(blockEntry -> {
+        TFGBlocks_Struts.STRUTS.forEach(blockEntry -> {
             ResourceLocation loc = blockEntry.getId().withPrefix("block/");
             event.register(loc);
         });
