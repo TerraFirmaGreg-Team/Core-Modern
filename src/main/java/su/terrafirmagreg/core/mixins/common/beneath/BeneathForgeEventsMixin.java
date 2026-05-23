@@ -38,7 +38,6 @@ public class BeneathForgeEventsMixin {
                     entity.setItemSlot(slot, new ItemStack(Items.CROSSBOW));
                 } else {
                     entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
-                    entity.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(TFCItems.TORCH.get()));
                 }
             } else {
                 entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));

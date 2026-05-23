@@ -35,6 +35,7 @@ dependencies {
     modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
     modImplementation ("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
+    modImplementation ("maven.modrinth:createfluidlogistic:jIcz91lT") { transitive = false }
 
     // Create: Vintage Improvements
     modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
