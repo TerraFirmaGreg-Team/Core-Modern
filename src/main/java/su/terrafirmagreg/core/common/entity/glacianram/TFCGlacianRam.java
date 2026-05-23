@@ -31,7 +31,7 @@ import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.MinecraftForge;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.items.TFGItems;
+import su.terrafirmagreg.core.common.data.TFGItems;
 
 public class TFCGlacianRam extends ProducingMammal implements IForgeShearable {
 
