@@ -279,7 +279,8 @@
         "common.wab.SoarerMixin",
         "common.wab.SoarerOverlayMixin",
         "common.wab.ToxlacanthMixin",
-        "common.minecraft.entities.MagmaCubeMixin"
+        "common.minecraft.entities.MagmaCubeMixin",
+        "common.strutyourstuff.StrutBlockEntityRendererMixin"
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",
