@@ -64,12 +64,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import earth.terrarium.adastra.common.registry.ModBlocks;
@@ -1266,13 +1268,12 @@ public class TFGMultiMachines {
                     .where('S', controller(blocks(definition.get())))
                     .where("A", Predicates.any())
                     .where("B", Predicates.blocks(GTBlocks.STEEL_HULL.get()))
-                    .where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK,
-                            ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
-                    .where("D", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "fences/wooden")))
-                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "fence_gates")))))
+                    .where("C", Predicates.blockTag(BlockTags.STONE_BRICKS))
+                    .where("D", Predicates.blockTag(Tags.Blocks.FENCES)
+                            .or(Predicates.blockTag(Tags.Blocks.FENCE_GATES))
+							.or(Predicates.blockTag(BlockTags.WALLS)))
                     .where("E", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                    .where("F", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "dirt")))
-                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "grass")))))
+                    .where("F", Predicates.blockTag(BlockTags.DIRT))
                     .where("G", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false))

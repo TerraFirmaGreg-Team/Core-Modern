@@ -56,7 +56,7 @@ public abstract class SpectreMixin extends Monster {
         } else if (getVariant() == Spectre.Type.JOUSTING_SPECTRE) {
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(10.0F);
         } else {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(15.0F);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(16.0F);
         }
     }
 }
