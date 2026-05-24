@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.common.data.GTMedicalConditions;
 import net.dries007.tfc.common.TFCEffects;
 import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.common.capabilities.food.NutritionData;
+import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -46,6 +47,7 @@ public final class NutrientEffectsHandler {
     private static final Map<UUID, Boolean> PROTEIN_HEAVY_ITEM_BOOST = new ConcurrentHashMap<>();
     private static final Map<UUID, Float> MEDICAL_CONDITION_PROGRESSION_MODIFIER = new ConcurrentHashMap<>();
     private static final Map<UUID, Float> MEDICAL_CONDITION_HEALING_MODIFIER = new ConcurrentHashMap<>();
+    private static final Map<UUID, Long> LAST_DAILY_UPDATE = new ConcurrentHashMap<>();
 
     private static final boolean ENABLE_FOOD_DEBUFFS = TFGConfig.SERVER.enableTFGFoodDebuffs.get();
     private static final boolean ENABLE_FOOD_BUFFS = TFGConfig.SERVER.enableTFGFoodBuffs.get();
@@ -159,6 +161,57 @@ public final class NutrientEffectsHandler {
     public static void tick(ServerPlayer player, NutritionData nutritionData) {
         processTransientNutrients(player, nutritionData);
         applyNutrientEffects(player, nutritionData);
+        handleDailyEffects(player, nutritionData);
+    }
+
+    /**
+     * Handles once per day effects.
+     * @param player the player to apply effects to.
+     * @param nutritionData the nutrition data to evaluate.
+     */
+    private static void handleDailyEffects(ServerPlayer player, NutritionData nutritionData) {
+        long currentDay = Calendars.get(player.level()).getTotalDays();
+        UUID uuid = player.getUUID();
+        Long lastUpdateDay = LAST_DAILY_UPDATE.get(uuid);
+
+        if (lastUpdateDay == null || lastUpdateDay != currentDay) {
+            LAST_DAILY_UPDATE.put(uuid, currentDay);
+
+            // Toxins
+            // Decrease by 3% each day.
+            Nutrient toxinsNutrient = TFGNutrients.getByName("TOXINS");
+            if (toxinsNutrient != null) {
+                float toxins = NutritionDataExtension.getExtendedNutrient(nutritionData, toxinsNutrient);
+                if (toxins > 0) {
+                    NutritionDataExtension.setExtendedNutrient(nutritionData, toxinsNutrient, toxins - 0.03f);
+                }
+            }
+
+            // Microplastics
+            // Decrease by 1% each day.
+            Nutrient microplasticsNutrient = TFGNutrients.getByName("MICROPLASTICS");
+            if (microplasticsNutrient != null) {
+                float microplastics = NutritionDataExtension.getExtendedNutrient(nutritionData, microplasticsNutrient);
+                if (microplastics > 0) {
+                    NutritionDataExtension.setExtendedNutrient(nutritionData, microplasticsNutrient, microplastics - 0.01f);
+                }
+            }
+
+            // Parasites
+            // >10% -> 20% chance to increase by 10% daily to a max of 60% parasites.
+            Nutrient parasitesNutrient = TFGNutrients.getByName("PARASITES");
+            if (parasitesNutrient != null) {
+                float parasites = NutritionDataExtension.getExtendedNutrient(nutritionData, parasitesNutrient);
+                if (parasites > 0.1f) {
+                    if (player.getRandom().nextFloat() < 0.20f) {
+                        float newParasites = Math.min(0.6f, parasites + 0.1f);
+                        if (newParasites != parasites) {
+                            NutritionDataExtension.setExtendedNutrient(nutritionData, parasitesNutrient, newParasites);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -287,8 +340,6 @@ public final class NutrientEffectsHandler {
 
             // Reset the transient nutrient to 0 immediately.
             NutritionDataExtension.setExtendedNutrient(nutritionData, nutrient, 0f);
-            // Invalidate cache so positive effects are re-evaluated.
-            LAST_NUTRITION_SNAPSHOT.remove(nutritionData);
         }
     }
 
@@ -337,27 +388,30 @@ public final class NutrientEffectsHandler {
         float toxins = 0;
         float parasites = 0;
         float microplastics = 0;
+        Nutrient toxinsNutrient = TFGNutrients.getByName("TOXINS");
+        Nutrient parasitesNutrient = TFGNutrients.getByName("PARASITES");
+        Nutrient microplasticsNutrient = TFGNutrients.getByName("MICROPLASTICS");
+
         float oldToxins = 0;
         float oldMicroplastics = 0;
-        Nutrient toxinsNutrient = null;
 
-        for (Nutrient nutrient : Nutrient.VALUES) {
-            String name = nutrient.name();
-            switch (name) {
-                case "TOXINS" -> {
-                    toxinsNutrient = nutrient;
-                    toxins = nutritionData.getNutrient(nutrient);
-                    if (oldNutrients != null && nutrient.ordinal() < oldNutrients.length) {
-                        oldToxins = oldNutrients[nutrient.ordinal()];
-                    }
-                }
-                case "PARASITES" -> parasites = nutritionData.getNutrient(nutrient);
-                case "MICROPLASTICS" -> {
-                    microplastics = nutritionData.getNutrient(nutrient);
-                    if (oldNutrients != null && nutrient.ordinal() < oldNutrients.length) {
-                        oldMicroplastics = oldNutrients[nutrient.ordinal()];
-                    }
-                }
+        if (toxinsNutrient != null) {
+            toxins = nutritionData.getNutrient(toxinsNutrient);
+            oldToxins = toxins;
+            if (oldNutrients != null && toxinsNutrient.ordinal() < oldNutrients.length) {
+                oldToxins = oldNutrients[toxinsNutrient.ordinal()];
+            }
+        }
+
+        if (parasitesNutrient != null) {
+            parasites = nutritionData.getNutrient(parasitesNutrient);
+        }
+
+        if (microplasticsNutrient != null) {
+            microplastics = nutritionData.getNutrient(microplasticsNutrient);
+            oldMicroplastics = microplastics;
+            if (oldNutrients != null && microplasticsNutrient.ordinal() < oldNutrients.length) {
+                oldMicroplastics = oldNutrients[microplasticsNutrient.ordinal()];
             }
         }
 
@@ -639,6 +693,7 @@ public final class NutrientEffectsHandler {
         PROTEIN_HEAVY_ITEM_BOOST.remove(uuid);
         MEDICAL_CONDITION_PROGRESSION_MODIFIER.remove(uuid);
         MEDICAL_CONDITION_HEALING_MODIFIER.remove(uuid);
+        LAST_DAILY_UPDATE.remove(uuid);
     }
 
     /**

@@ -9,10 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.effect.FinalMomentsEffect;
-import su.terrafirmagreg.core.common.effect.InstantDamageEffect;
-import su.terrafirmagreg.core.common.effect.MedicalConditionEffect;
-import su.terrafirmagreg.core.common.effect.TemperatureChangeEffect;
+import su.terrafirmagreg.core.common.effect.*;
 
 public class TFGEffects {
 
@@ -42,6 +39,13 @@ public class TFGEffects {
 
     public static final RegistryObject<MobEffect> FINAL_MOMENTS = register("final_moments",
             FinalMomentsEffect::new);
+
+    public static final RegistryObject<MobEffect> CURE_PARASITES = register("cure_parasites",
+            () -> new ContaminantReductionEffect(MobEffectCategory.BENEFICIAL, 0xeb9f91));
+    public static final RegistryObject<MobEffect> CURE_MICROPLASTICS = register("cure_microplastics",
+            () -> new ContaminantReductionEffect(MobEffectCategory.BENEFICIAL, 0x32edb5));
+    public static final RegistryObject<MobEffect> CURE_TOXINS = register("cure_toxins",
+            () -> new ContaminantReductionEffect(MobEffectCategory.BENEFICIAL, 0xb832ed));
 
     // Medical Conditions.
     public static final RegistryObject<MobEffect> CHEMICAL_BURNS_WARNING = register("chemical_burns_warning",

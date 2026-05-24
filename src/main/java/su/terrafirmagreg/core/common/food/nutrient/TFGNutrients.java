@@ -56,6 +56,15 @@ public final class TFGNutrients {
         return nutrient.ordinal() >= ORIGINAL_COUNT;
     }
 
+    public static Nutrient getByName(String name) {
+        for (Nutrient nutrient : Nutrient.VALUES) {
+            if (nutrient.name().equalsIgnoreCase(name)) {
+                return nutrient;
+            }
+        }
+        return null;
+    }
+
     public static int getTransientCount() {
         int count = 0;
         for (Nutrient nutrient : Nutrient.VALUES) {

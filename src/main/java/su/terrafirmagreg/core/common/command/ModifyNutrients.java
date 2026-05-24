@@ -35,6 +35,7 @@ public class ModifyNutrients {
         names.add("all");
         names.add("allPositive");
         names.add("allNegative");
+        names.add("allTransient");
         for (Nutrient nutrient : Nutrient.VALUES) {
             names.add(nutrient.getSerializedName());
         }
@@ -55,7 +56,7 @@ public class ModifyNutrients {
                                                 "reset",
                                                 0f)))
                                 .then(literal("set")
-                                        .then(argument("value", FloatArgumentType.floatArg(0f, 100f))
+                                        .then(argument("value", FloatArgumentType.floatArg(0f))
                                                 .executes(c -> execute(
                                                         c.getSource(),
                                                         EntityArgument.getPlayer(c, "player"),
@@ -63,7 +64,7 @@ public class ModifyNutrients {
                                                         "set",
                                                         FloatArgumentType.getFloat(c, "value")))))
                                 .then(literal("add")
-                                        .then(argument("value", FloatArgumentType.floatArg(0f, 100f))
+                                        .then(argument("value", FloatArgumentType.floatArg(0f))
                                                 .executes(c -> execute(
                                                         c.getSource(),
                                                         EntityArgument.getPlayer(c, "player"),
@@ -71,7 +72,7 @@ public class ModifyNutrients {
                                                         "add",
                                                         FloatArgumentType.getFloat(c, "value")))))
                                 .then(literal("subtract")
-                                        .then(argument("value", FloatArgumentType.floatArg(0f, 100f))
+                                        .then(argument("value", FloatArgumentType.floatArg(0f))
                                                 .executes(c -> execute(
                                                         c.getSource(),
                                                         EntityArgument.getPlayer(c, "player"),
@@ -88,26 +89,28 @@ public class ModifyNutrients {
 
         NutritionData nutritionData = tfcFoodData.getNutrition();
 
-        // Handle "all", "allPositive", "allNegative".
-        if (nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allPositive") || nutrientName.equalsIgnoreCase("allNegative")) {
-            boolean doPositive = !nutrientName.equalsIgnoreCase("allNegative");
-            boolean doNegative = !nutrientName.equalsIgnoreCase("allPositive");
+        // Handle "all", "allPositive", "allNegative", "allTransient".
+        if (nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allPositive") || nutrientName.equalsIgnoreCase("allNegative") || nutrientName.equalsIgnoreCase("allTransient")) {
+            boolean doPositive = nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allPositive");
+            boolean doNegative = nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allNegative");
+            boolean doTransient = nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allTransient");
             INutritionDataExtension ext = INutritionDataExtension.of(nutritionData);
             if (operation.equals("reset")) {
                 // Clear records so TFC recalculates from defaults.
                 if (doPositive) {
                     nutritionData.reset();
                 }
-                if (doNegative) {
+                if (doNegative || doTransient) {
                     NutritionDataExtension.reset((NutritionData) nutritionData);
                 }
             } else {
                 // Only handle extended nutrients. Positive nutrients are not supported.
-                if (doNegative) {
-                    for (Nutrient nutrient : Nutrient.VALUES) {
-                        if (nutrient.ordinal() >= TFGNutrients.ORIGINAL_COUNT) {
-                            applyToNutrient(nutritionData, ext, nutrient, operation, value);
-                        }
+                for (Nutrient nutrient : Nutrient.VALUES) {
+                    if (TFGNutrients.isOriginal(nutrient))
+                        continue;
+
+                    if ((doNegative && TFGNutrients.isNegative(nutrient)) || (doTransient && TFGNutrients.isTransient(nutrient))) {
+                        applyToNutrient(nutritionData, ext, nutrient, operation, value);
                     }
                 }
             }
@@ -127,7 +130,7 @@ public class ModifyNutrients {
         }
 
         if (target == null) {
-            StringBuilder names = new StringBuilder("all, allPositive, allNegative");
+            StringBuilder names = new StringBuilder("all, allPositive, allNegative, allTransient");
             for (Nutrient nutrient : Nutrient.VALUES) {
                 names.append(", ").append(nutrient.getSerializedName());
             }
@@ -178,7 +181,12 @@ public class ModifyNutrients {
             case "subtract" -> current01 - value01;
             default -> current01;
         };
-        newValue01 = Math.min(1f, Math.max(0f, newValue01));
+
+        if (TFGNutrients.isTransient(nutrient)) {
+            newValue01 = Math.max(0f, newValue01);
+        } else {
+            newValue01 = Math.min(1f, Math.max(0f, newValue01));
+        }
 
         NutritionDataExtension.setExtendedNutrient(nutritionData, nutrient, newValue01);
     }
