@@ -23,6 +23,7 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.NetworkReceiverConfigEntry;
@@ -118,8 +119,13 @@ public class InterplanetaryItemReceiverMachine extends WorkableElectricMultibloc
         if (withCircuit.isEmpty())
             return false;
 
-        var config = Objects.requireNonNull(getLogisticsNetwork().getPart(getDimensionalPos())).receiverLogisticsConfigs
-                .get(inventoryIndex);
+        var part = getLogisticsNetwork().getPart(getDimensionalPos());
+        if (part == null) {
+            TFGCore.LOGGER.warn("Interplanetary logistics receiver is missing its network part. {}", getDimensionalPos());
+            return false;
+        }
+
+        var config = part.receiverLogisticsConfigs.get(inventoryIndex);
         var currentTick = Objects.requireNonNull(getLevel()).getGameTime();
         if (config.getCurrentMode() == NetworkReceiverConfigEntry.LogicMode.COOLDOWN
                 && lastActiveTime[inventoryIndex] + 20L * config.getCurrentCooldown() > currentTick) {
