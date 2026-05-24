@@ -30,10 +30,8 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.*;
 import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
+import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.particle.*;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.world.dimension_effects.BeneathEffects;
@@ -129,6 +127,11 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void registerSpecialModels(ModelEvent.RegisterAdditional event) {
+        TFGBlocks_Struts.STRUTS.forEach(blockEntry -> {
+            ResourceLocation loc = blockEntry.getId().withPrefix("block/");
+            event.register(loc);
+        });
+
         event.register(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern"));
     }
 

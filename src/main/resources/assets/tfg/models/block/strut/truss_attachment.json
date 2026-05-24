@@ -1,0 +1,85 @@
+{
+    "elements": [{
+        "rotation": {
+            "origin": [
+                8,
+                -1.5,
+                8
+            ],
+            "angle": 0,
+            "axis": "y"
+        },
+        "from": [
+            2.9,
+            -5,
+            2.9
+        ],
+        "to": [
+            13.1,
+            1,
+            13.1
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "south": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "north": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "west": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "up": {
+                "uv": [
+                    8,
+                    8,
+                    13,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 180
+            },
+            "down": {
+                "uv": [
+                    8,
+                    8,
+                    13,
+                    13
+                ],
+                "texture": "#0"
+            }
+        }
+    }],
+    "credit": "Adapted from Bits-n-Bobs by Industrialists-Of-Create (MIT License)"
+}

@@ -67,6 +67,8 @@ public class TFGFeatures {
             "fluid_plug", FluidPlugFeature::new, NoneFeatureConfiguration.CODEC);
     public static final RegistryObject<LargeLakeFeature> LARGE_LAKE = register(
             "large_lake", LargeLakeFeature::new, LargeLakeConfig.CODEC);
+    public static final RegistryObject<LargeDripstoneFeature> LARGE_DRIPSTONE = register(
+            "large_dripstone", LargeDripstoneFeature::new, LargeDripstoneConfig.CODEC);
 
     // Used for lava in volcanoes
     public static final RegistryObject<EncasedSpoutFeature> ENCASED_SPOUT = register(

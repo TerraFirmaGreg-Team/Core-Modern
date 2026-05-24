@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/truss/bracket_west",
+  "textures": {
+    "0": "tfg:block/girder/truss/brass",
+    "particle": "tfg:block/girder/truss/brass"
+  }
+}

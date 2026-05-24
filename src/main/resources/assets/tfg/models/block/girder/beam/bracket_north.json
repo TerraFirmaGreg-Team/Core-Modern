@@ -1,0 +1,85 @@
+{
+    "parent": "create:block/beam/block_x",
+    "format_version": "1.21.11",
+    "elements": [{
+        "rotation": {
+            "origin": [
+                8,
+                8,
+                8
+            ],
+            "angle": 0,
+            "axis": "y"
+        },
+        "from": [
+            2.95,
+            0.95,
+            -2
+        ],
+        "to": [
+            13.05,
+            15.05,
+            1
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    5,
+                    9,
+                    6.5,
+                    16
+                ],
+                "texture": "#0"
+            },
+            "south": {
+                "uv": [
+                    0,
+                    9,
+                    5,
+                    16
+                ],
+                "texture": "#0"
+            },
+            "north": {
+                "uv": [
+                    8,
+                    8,
+                    15,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 90
+            },
+            "west": {
+                "uv": [
+                    6.5,
+                    9,
+                    5,
+                    16
+                ],
+                "texture": "#0"
+            },
+            "up": {
+                "uv": [
+                    6.5,
+                    11,
+                    8,
+                    16
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "down": {
+                "uv": [
+                    6.5,
+                    11,
+                    8,
+                    16
+                ],
+                "texture": "#0",
+                "rotation": 90
+            }
+        }
+    }],
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT)"
+}

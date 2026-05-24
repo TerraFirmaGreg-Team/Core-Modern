@@ -1,0 +1,8 @@
+{
+  "parent": "tfg:block/girder/beam/block_pole_middle",
+  "textures": {
+    "2": "tfg:block/girder/pole/wrought_iron",
+    "3": "tfg:block/girder/pole_side/wrought_iron",
+    "particle": "tfg:block/girder/beam/wrought_iron"
+  }
+}

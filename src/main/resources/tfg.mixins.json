@@ -65,6 +65,13 @@
         "common.create.greate_tiering.WaterWheelBlockMixin",
         "common.create.greate_tiering.WindmillBearingBlockEntityMixin",
         "common.create.greate_tiering.WindmillBearingBlockMixin",
+        "common.create.girders.PlacementInfoAccessor",
+        "common.create.girders.BezierConnectionDropMixin",
+        "common.create.girders.BezierConnectionMixin",
+        "common.create.girders.TrackBlockItemMixin",
+        "common.create.girders.TrackPaverMixin",
+        "common.create.girders.GirderVisualMixin",
+        "common.create.girders.TrackRendererMixin",
         "common.createliquidfuel.LiquidBurnerFuelJsonLoaderMixin",
         "common.emi.ItemEmiStackMixin",
         "common.fallingtrees.StandardTreeMixin",
@@ -274,7 +281,8 @@
         "common.wab.SoarerMixin",
         "common.wab.SoarerOverlayMixin",
         "common.wab.ToxlacanthMixin",
-        "common.minecraft.entities.MagmaCubeMixin"
+        "common.minecraft.entities.MagmaCubeMixin",
+        "common.strutyourstuff.StrutBlockEntityRendererMixin"
     ],
     "minVersion": "0.8",
     "package": "su.terrafirmagreg.core.mixins",

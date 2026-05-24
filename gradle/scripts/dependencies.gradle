@@ -165,4 +165,7 @@ dependencies {
 
     // Crafting Station Improved
     modImplementation "curse.maven:crafting-station-improved-1310299:7463065"
+
+    // Strut Your Stuff
+    modImplementation "maven.modrinth:strut-your-stuff:1.1.0+mc1.20.1"
 }

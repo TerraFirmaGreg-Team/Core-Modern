@@ -82,6 +82,9 @@ public final class TFGTags {
         public static final TagKey<Item> INTERACTIONMOSSYCOBBLESLAB = createItemTag("interaction/mossy_cobble_slab");
         public static final TagKey<Item> INTERACTIONMOSSYCOBBLEWALL = createItemTag("interaction/mossy_cobble_wall");
 
+        public static final TagKey<Item> GIRDER = createItemTag("girder");
+        public static final TagKey<Item> STRUT = createItemTag("strut");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }
@@ -111,6 +114,11 @@ public final class TFGTags {
         public static final TagKey<Block> AnemonePlantableOn = createBlockTag("anemone_plantable_on");
         public static final TagKey<Block> IsAnemone = createBlockTag("is_anemone");
         public static final TagKey<Block> NOT_SLOWED_WITH_SNOWSHOES = createBlockTag("not_slowed_with_snowshoes");
+
+        public static final TagKey<Block> GIRDER = createBlockTag("girder");
+        public static final TagKey<Block> PAVING_GIRDER = createBlockTag("paving_girder");
+        public static final TagKey<Block> TRUSS = createBlockTag("truss");
+        public static final TagKey<Block> STRUT = createBlockTag("strut");
 
         private static TagKey<Block> createBlockTag(String path) {
             return createBlockTag(TFGCore.id(path));
