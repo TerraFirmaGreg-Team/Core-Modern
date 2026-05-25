@@ -160,6 +160,21 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
         return TFGTags.Items.MartianHerbivoreFoods;
     }
 
+    @Override
+    protected Item getWoolItemType() {
+        return woolItem;
+    }
+
+    @Override
+    protected int getMaxWool() {
+        return maxWool;
+    }
+
+    @Override
+    protected int getWoolProduceTicks() {
+        return woolProduceTicks;
+    }
+
     // Sound Handlers
     protected SoundEvent getAmbientSound() {
         return SpeciesSoundEvents.WRAPTOR_IDLE.get();
@@ -248,7 +263,7 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
         playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
 
         // if the event was not cancelled
-        AnimalProductEvent event = new AnimalProductEvent(level, pos, player, this, getWoolItem(woolItem, maxWool), item, 1);
+        AnimalProductEvent event = new AnimalProductEvent(level, pos, player, this, getWoolItem(), item, 1);
         if (!MinecraftForge.EVENT_BUS.post(event)) {
             addUses(event.getUses());
         }

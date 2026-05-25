@@ -130,6 +130,21 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
                 && (getGender() == Gender.FEMALE || (getGender() == Gender.MALE && isFertilized()));
     }
 
+    @Override
+    protected Item getWoolItemType() {
+        return woolItem;
+    }
+
+    @Override
+    protected int getMaxWool() {
+        return maxWool;
+    }
+
+    @Override
+    protected int getWoolProduceTicks() {
+        return woolProduceTicks;
+    }
+
     // Egg Stuff
     @Override
     public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob other) {
@@ -197,7 +212,7 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
         playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
 
         // if the event was not cancelled
-        AnimalProductEvent event = new AnimalProductEvent(level, pos, player, this, getWoolItem(woolItem, maxWool),
+        AnimalProductEvent event = new AnimalProductEvent(level, pos, player, this, getWoolItem(),
                 item, 1);
         if (!MinecraftForge.EVENT_BUS.post(event)) {
             addUses(event.getUses());
@@ -206,12 +221,12 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
     }
 
     public boolean hasWool() {
-        long cooldown = getWoolCooldown(woolProduceTicks);
+        long cooldown = getWoolCooldown(getWoolProduceTicks());
         return cooldown == 0;
     }
 
     public boolean isReadyForWoolProduct() {
-        return getFamiliarity() > produceFamiliarity && hasWoolProduct(woolProduceTicks);
+        return getFamiliarity() > produceFamiliarity && hasWoolProduct(getWoolProduceTicks());
     }
 
     // Sound Handlers

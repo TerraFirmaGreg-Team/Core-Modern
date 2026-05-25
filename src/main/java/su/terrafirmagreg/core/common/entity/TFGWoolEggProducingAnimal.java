@@ -26,13 +26,19 @@ public abstract class TFGWoolEggProducingAnimal extends ProducingAnimal {
         super(type, level, sounds, config);
     }
 
-    public ItemStack getWoolItem(Item woolItem, int maxWool) {
-        final int amount = (int) Math.ceil(getFamiliarity() * maxWool);
-        return new ItemStack(woolItem, amount);
+    protected abstract Item getWoolItemType();
+
+    protected abstract int getMaxWool();
+
+    public ItemStack getWoolItem() {
+        final int amount = (int) Math.ceil(getFamiliarity() * getMaxWool());
+        return new ItemStack(getWoolItemType(), amount);
     }
 
-    public boolean hasWool(int woolProduceTicks) {
-        long cooldown = getWoolCooldown(woolProduceTicks);
+    protected abstract int getWoolProduceTicks();
+
+    public boolean hasWool() {
+        long cooldown = getWoolCooldown(getWoolProduceTicks());
         if (cooldown == 0) {
             return true;
         } else {
@@ -72,7 +78,7 @@ public abstract class TFGWoolEggProducingAnimal extends ProducingAnimal {
     }
 
     public long getWoolCooldown(int woolProduceTicks) {
-        return Math.max(0, woolProduceTicks + getWoolProducedTick() - Calendars.get(level()).getTicks());
+        return Math.max(0, getWoolProduceTicks() + getWoolProducedTick() - Calendars.get(level()).getTicks());
     }
 
     public boolean hasWoolProduct(int woolProduceTicks) {
