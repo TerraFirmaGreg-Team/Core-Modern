@@ -84,18 +84,14 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                 (Entity) null,
                 getFormedBoundingBox(),
                 entity -> {
-                    if (!(entity instanceof TFCAnimalProperties animal))
+                    if (!(entity instanceof TFCAnimalProperties animal) ||
+                            animal.getAgeType() == TFCAnimalProperties.Age.OLD ||
+                            finalCondition != null && !finalCondition.matchesEntity(entity)) {
                         return false;
-
-                    if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
-                        return false;
-
-                    if (finalCondition != null && !finalCondition.matchesEntity(entity))
-                        return false;
-
-                    if (animal instanceof TFGWoolEggProducingAnimal woolAnimal)
-                        return woolAnimal.hasWool();
-
+                    }
+                    if (animal instanceof TFGWoolEggProducingAnimal woolAnimal && woolAnimal.hasWool()) {
+                        return true;
+                    }
                     return animal.isReadyForAnimalProduct();
                 });
 
@@ -227,10 +223,8 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
             // Cooldown par type
             boolean hasAnimalOnCooldown = allAnimals.stream()
                     .anyMatch(e -> {
-                        if (!(e instanceof TFCAnimalProperties animal)) {
-                            return false;
-                        }
-                        if (animal.getAgeType() == TFCAnimalProperties.Age.OLD) {
+                        if (!(e instanceof TFCAnimalProperties animal) ||
+                                animal.getAgeType() == TFCAnimalProperties.Age.OLD) {
                             return false;
                         }
                         if (animal instanceof TFGWoolEggProducingAnimal woolAnimal) {
