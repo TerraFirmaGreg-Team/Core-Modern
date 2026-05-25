@@ -241,14 +241,11 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                 allAnimals.stream()
                         .filter(e -> {
                             if (!(e instanceof TFCAnimalProperties animal) ||
-                                    animal.getAgeType() != TFCAnimalProperties.Age.ADULT) {
-                                return false;
-                            }
-                            if (animal instanceof TFGWoolEggProducingAnimal woolAnimal) {
-                                return !woolAnimal.hasWool();
-                            }
-                            if (animal instanceof ProducingMammal producer) {
-                                return !animal.isReadyForAnimalProduct() && producer.getProducedTick() > 0;
+                                    (animal.getAgeType() == TFCAnimalProperties.Age.ADULT) ||
+                                    (animal instanceof TFGWoolEggProducingAnimal woolAnimal) && (!woolAnimal.hasWool()) ||
+                                    (animal instanceof ProducingMammal producer) &&
+                                            !(animal.isReadyForAnimalProduct() || producer.getProducedTick() > 0)) {
+                                return true;
                             }
                             return false;
                         })
