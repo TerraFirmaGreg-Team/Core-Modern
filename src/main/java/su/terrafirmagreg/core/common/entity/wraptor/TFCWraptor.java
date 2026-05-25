@@ -161,17 +161,17 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
     }
 
     @Override
-    protected Item getWoolItemType() {
+    public Item getWoolItemType() {
         return woolItem;
     }
 
     @Override
-    protected int getMaxWool() {
+    public int getMaxWool() {
         return maxWool;
     }
 
     @Override
-    protected int getWoolProduceTicks() {
+    public int getWoolProduceTicks() {
         return woolProduceTicks;
     }
 
@@ -272,11 +272,11 @@ public class TFCWraptor extends TFGWoolEggProducingAnimal implements IForgeShear
 
     public int getFeatherStage() {
         int usesLeft = getUsesToElderly();
-        return hasWoolProduct(woolProduceTicks) ? 6 * (usesLeft / uses) : 0;
+        return hasWoolProduct() ? 6 * (usesLeft / uses) : 0;
     }
 
     public boolean isReadyForWoolProduct() {
-        return getFamiliarity() > produceFamiliarity && hasWoolProduct(woolProduceTicks);
+        return getFamiliarity() > produceFamiliarity && hasWoolProduct();
     }
 
     // AI Handlers

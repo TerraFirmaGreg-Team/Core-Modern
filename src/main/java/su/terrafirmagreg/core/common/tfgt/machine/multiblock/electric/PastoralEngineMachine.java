@@ -246,10 +246,8 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
                 allAnimals.stream()
                         .filter(e -> {
-                            if (!(e instanceof TFCAnimalProperties animal)) {
-                                return false;
-                            }
-                            if (animal.getAgeType() != TFCAnimalProperties.Age.ADULT) {
+                            if (!(e instanceof TFCAnimalProperties animal) ||
+                                    animal.getAgeType() != TFCAnimalProperties.Age.ADULT) {
                                 return false;
                             }
                             if (animal instanceof TFGWoolEggProducingAnimal woolAnimal) {
@@ -263,10 +261,21 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                         .collect(java.util.stream.Collectors.groupingBy(
                                 e -> ForgeRegistries.ENTITY_TYPES.getKey(e.getType()),
                                 java.util.stream.Collectors.minBy(
-                                        java.util.Comparator.comparingLong(
-                                                e -> ((TFCAnimalProperties) e).getProductsCooldown()))))
+                                        java.util.Comparator.comparingLong(e -> {
+                                            if (e instanceof TFGWoolEggProducingAnimal woolAnimal) {
+                                                return woolAnimal.getWoolCooldown();
+                                            }
+                                            return ((TFCAnimalProperties) e).getProductsCooldown();
+                                        }))))
                         .forEach((entityTypeId, optAnimal) -> optAnimal.ifPresent(e -> {
-                            long minCooldown = ((TFCAnimalProperties) e).getProductsCooldown();
+
+                            long minCooldown;
+                            if (e instanceof TFGWoolEggProducingAnimal woolAnimal) {
+                                minCooldown = woolAnimal.getWoolCooldown();
+                            } else {
+                                minCooldown = ((TFCAnimalProperties) e).getProductsCooldown();
+                            }
+
                             long totalHours = minCooldown / ICalendar.TICKS_IN_HOUR;
                             long days = totalHours / ICalendar.HOURS_IN_DAY;
                             long hours = totalHours % ICalendar.HOURS_IN_DAY;

@@ -131,17 +131,17 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
     }
 
     @Override
-    protected Item getWoolItemType() {
+    public Item getWoolItemType() {
         return woolItem;
     }
 
     @Override
-    protected int getMaxWool() {
+    public int getMaxWool() {
         return maxWool;
     }
 
     @Override
-    protected int getWoolProduceTicks() {
+    public int getWoolProduceTicks() {
         return woolProduceTicks;
     }
 
@@ -221,12 +221,12 @@ public class TFCSniffer extends TFGWoolEggProducingAnimal implements IForgeShear
     }
 
     public boolean hasWool() {
-        long cooldown = getWoolCooldown(getWoolProduceTicks());
+        long cooldown = getWoolCooldown();
         return cooldown == 0;
     }
 
     public boolean isReadyForWoolProduct() {
-        return getFamiliarity() > produceFamiliarity && hasWoolProduct(getWoolProduceTicks());
+        return getFamiliarity() > produceFamiliarity && hasWoolProduct();
     }
 
     // Sound Handlers
