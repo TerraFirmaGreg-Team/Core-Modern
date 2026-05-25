@@ -20,7 +20,7 @@ import earth.terrarium.adastra.common.registry.ModEntityTypes;
 import earth.terrarium.adastra.common.tags.ModFluidTags;
 
 import su.terrafirmagreg.core.common.data.TFGEntities;
-import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.entity.rocket.RocketHelper;
 
 @Mixin(value = Rocket.class, remap = false)

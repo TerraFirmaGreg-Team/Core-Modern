@@ -32,7 +32,7 @@ import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadBlock;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadMarkingMask;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadSlabBlock;
-import su.terrafirmagreg.core.common.data.TFGItemsAsphalt;
+import su.terrafirmagreg.core.common.data.items.TFGItems_Asphalt;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
@@ -200,7 +200,7 @@ public final class AsphaltRoadSprayEvent {
 
         if (sprayHand == InteractionHand.MAIN_HAND) {
             if (opposite.is(TFGTags.Items.ROAD_MARKING_STENCILS)) {
-                return TFGItemsAsphalt.maskForStencil(opposite).orElse(null);
+                return TFGItems_Asphalt.maskForStencil(opposite).orElse(null);
             }
             return AsphaltRoadMarkingMask.LINE;
         }
@@ -211,7 +211,7 @@ public final class AsphaltRoadSprayEvent {
         if (!opposite.is(TFGTags.Items.ROAD_MARKING_STENCILS)) {
             return null;
         }
-        return TFGItemsAsphalt.maskForStencil(opposite).orElse(null);
+        return TFGItems_Asphalt.maskForStencil(opposite).orElse(null);
     }
 
     @Nullable

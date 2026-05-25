@@ -57,7 +57,7 @@ public class TFGBlockEntities {
 
     public static final BlockEntityEntry<AsphaltPouringSpreadBlockEntity> ASPHALT_POURING_SPREAD = TFGCore.REGISTRATE
             .blockEntity("asphalt_pouring_spread", AsphaltPouringSpreadBlockEntity::new)
-            .validBlock(TFGBlocksAsphalt.ASPHALT_ROAD_POURING)
+            .validBlock(TFGBlocks_Asphalt.ASPHALT_ROAD_POURING)
             .register();
 
     public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)
