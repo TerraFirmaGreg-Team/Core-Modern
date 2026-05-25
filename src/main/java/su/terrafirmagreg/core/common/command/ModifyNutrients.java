@@ -33,8 +33,8 @@ public class ModifyNutrients {
     private static final SuggestionProvider<CommandSourceStack> NUTRIENT_SUGGESTIONS = (ctx, builder) -> {
         List<String> names = new ArrayList<>();
         names.add("all");
-        names.add("allPositive");
-        names.add("allNegative");
+        names.add("allNutrients");
+        names.add("allContaminants");
         names.add("allTransient");
         for (Nutrient nutrient : Nutrient.VALUES) {
             names.add(nutrient.getSerializedName());
@@ -89,10 +89,11 @@ public class ModifyNutrients {
 
         NutritionData nutritionData = tfcFoodData.getNutrition();
 
-        // Handle "all", "allPositive", "allNegative", "allTransient".
-        if (nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allPositive") || nutrientName.equalsIgnoreCase("allNegative") || nutrientName.equalsIgnoreCase("allTransient")) {
-            boolean doPositive = nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allPositive");
-            boolean doNegative = nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allNegative");
+        // Handle "all", "allNutrients", "allContaminants", "allTransient".
+        if (nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allNutrients") || nutrientName.equalsIgnoreCase("allContaminants")
+                || nutrientName.equalsIgnoreCase("allTransient")) {
+            boolean doPositive = nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allNutrients");
+            boolean doNegative = nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allContaminants");
             boolean doTransient = nutrientName.equalsIgnoreCase("all") || nutrientName.equalsIgnoreCase("allTransient");
             INutritionDataExtension ext = INutritionDataExtension.of(nutritionData);
             if (operation.equals("reset")) {

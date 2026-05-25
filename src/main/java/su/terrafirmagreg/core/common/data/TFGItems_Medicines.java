@@ -151,23 +151,24 @@ public class TFGItems_Medicines {
     // Contaminant Capsules
     public static final ItemEntry<ComponentItem> PARASITICIDE_CAPSULE = TFGCore.REGISTRATE.item("parasiticide_capsule", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
-                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_PARASITES.get(), 20 * 45, 10, false, false), 1)
+                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_PARASITES.get(), 20 * 150, 1, false, false), 1)
                     .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 20 * 20, 4), 1)
-                    .effect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20 * 60 * 5, 0), 0.5f).build()))
+                    .effect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20 * 60 * 5, 0), 1).build()))
+            .onRegister(attach(new AntidoteBehavior(30, GTMedicalConditions.IRRITANT)))
             .register();
 
     public static final ItemEntry<ComponentItem> DETOX_CAPSULE = TFGCore.REGISTRATE.item("detox_capsule", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
-                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_TOXINS.get(), 20 * 45, 10, false, false), 1)
+                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_TOXINS.get(), 20 * 150, 1, false, false), 1)
                     .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 20 * 60 * 5, 0), 1).build()))
-            .onRegister(attach(new AntidoteBehavior(60, GTMedicalConditions.POISON, GTMedicalConditions.WEAK_POISON)))
+            .onRegister(attach(new AntidoteBehavior(-1, GTMedicalConditions.POISON, GTMedicalConditions.WEAK_POISON)))
             .register();
 
     public static final ItemEntry<ComponentItem> NANOFILTRATION_CAPSULE = TFGCore.REGISTRATE.item("nanofiltration_capsule", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
-                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_MICROPLASTICS.get(), 20 * 450, 0, false, false), 1)
+                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_MICROPLASTICS.get(), 20 * 300, 0, false, false), 1)
                     .effect(() -> new MobEffectInstance(TFCEffects.THIRST.get(), 20 * 60 * 2, 0), 1).build()))
-            .onRegister(attach(new AntidoteBehavior(40,
+            .onRegister(attach(new AntidoteBehavior(60,
                     GTMedicalConditions.POISON,
                     GTMedicalConditions.WEAK_POISON,
                     GTMedicalConditions.ARSENICOSIS,
