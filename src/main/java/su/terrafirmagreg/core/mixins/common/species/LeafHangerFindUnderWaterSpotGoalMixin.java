@@ -20,6 +20,7 @@ public class LeafHangerFindUnderWaterSpotGoalMixin {
     private boolean tfg$tick(BlockState instance, Block block) {
         return instance.is(Blocks.WATER)
                 || instance.is(TFCBlocks.SALT_WATER.get())
-                || instance.is(TFGBlocks.MUDDY_WATER.get());
+                || instance.is(TFGBlocks.MUDDY_WATER.get())
+                || instance.is(TFCBlocks.SPRING_WATER.get());
     }
 }

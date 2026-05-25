@@ -11,7 +11,7 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public record CoolingSteamProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+public record GeothermalSteamProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 
     @Override
     public Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level,
@@ -22,7 +22,7 @@ public record CoolingSteamProvider(SpriteSet spriteSet) implements ParticleProvi
             return null;
         }
 
-        CoolingSteam particle = new CoolingSteam(level, x, y, z, spriteSet);
+        GeothermalSteam particle = new GeothermalSteam(level, x, y, z, spriteSet);
         particle.pickSprite(spriteSet);
         return particle;
     }

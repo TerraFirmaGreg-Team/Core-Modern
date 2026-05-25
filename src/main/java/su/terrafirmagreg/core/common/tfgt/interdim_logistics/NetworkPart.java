@@ -42,7 +42,7 @@ public class NetworkPart {
     public NetworkPart(CompoundTag tag) {
         partId = new InterplanetaryLogisticsNetwork.DimensionalBlockPos(tag.getCompound("partId"));
         uiLabel = tag.getString("uiLabel");
-        ownerId = tag.getUUID("ftbOwner");
+        ownerId = tag.contains("ftbOwner") ? tag.getUUID("ftbOwner") : null;
         isReceiverPart = tag.getBoolean("isReceiverPart");
         senderLogisticsConfigs = new ArrayList<>();
         receiverLogisticsConfigs = new ArrayList<>();
@@ -58,7 +58,9 @@ public class NetworkPart {
         var tag = new CompoundTag();
         tag.put("partId", partId.save());
         tag.putString("uiLabel", uiLabel);
-        tag.putUUID("ftbOwner", ownerId);
+        if (ownerId != null) {
+            tag.putUUID("ftbOwner", ownerId);
+        }
         tag.putBoolean("isReceiverPart", isReceiverPart);
         var sendConfigs = new ListTag();
         var receiveConfigs = new ListTag();

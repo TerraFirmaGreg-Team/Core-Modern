@@ -60,10 +60,14 @@ public class ClientProxy extends CommonProxy {
         event.registerSpriteSet(TFGParticles.DARK_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xbe6621))); // avg color of red sand
         event.registerSpriteSet(TFGParticles.MEDIUM_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xc48456))); // avg color of ad astra mars sand
         event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
-        // Other
-        event.registerSpriteSet(TFGParticles.COOLING_STEAM.get(), CoolingSteamProvider::new);
-        event.registerSpriteSet(TFGParticles.FISH_SCHOOL.get(), FishSchoolProvider::new);
+        // environmental
         event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
+        // for machines
+        event.registerSpriteSet(TFGParticles.COOLING_STEAM.get(), CoolingSteamProvider::new);
+        event.registerSpriteSet(TFGParticles.GEOTHERMAL_STEAM.get(), GeothermalSteamProvider::new);
+        event.registerSpriteSet(TFGParticles.GEYSER_POOF.get(), GeyserPoofProvider::new);
+        event.registerSpriteSet(TFGParticles.NOXIOUS_GAS.get(), NoxiousGasProvider::new);
+        event.registerSpriteSet(TFGParticles.FISH_SCHOOL.get(), FishSchoolProvider::new);
     }
 
     @SuppressWarnings("removal")

@@ -36,4 +36,9 @@ public class GhoulMixin extends Monster {
     private int tfg$doHurtTarget(int duration) {
         return 20 * 30;
     }
+
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
 }

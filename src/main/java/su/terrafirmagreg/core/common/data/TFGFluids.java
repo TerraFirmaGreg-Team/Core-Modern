@@ -204,6 +204,15 @@ public class TFGFluids {
                     else
                         return Blocks.CALCITE.defaultBlockState();
                 }));
+
+        FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
+                SPRING_WATER.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return Blocks.OBSIDIAN.defaultBlockState();
+                    else
+                        return TFCBlocks.ROCK_BLOCKS.get(Rock.ANDESITE).get(Rock.BlockType.RAW).get().defaultBlockState();
+                }));
     }
 
     // Registration helpers

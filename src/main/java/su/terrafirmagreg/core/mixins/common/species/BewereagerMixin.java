@@ -34,6 +34,11 @@ public class BewereagerMixin extends Monster {
         cir.setReturnValue(accessor.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(entityType, accessor, spawnType, pos, random));
     }
 
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
+
     // Remove transforming
     @Inject(method = "transform", at = @At("HEAD"), remap = false, cancellable = true)
     public void tfg$transform(CallbackInfo ci) {
