@@ -15,6 +15,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMedicalConditions;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
