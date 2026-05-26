@@ -46,7 +46,7 @@ import de.mennomax.astikorcarts.entity.AbstractDrawnInventoryEntity;
 import de.mennomax.astikorcarts.util.CartItemStackHandler;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 
 /**
  * The RNR Plow entity, an extension of the Astikor Carts mod which

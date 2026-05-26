@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.data;
+package su.terrafirmagreg.core.common.data.items;
 
 import com.eerussianguy.beneath.common.items.BeneathItemTags;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
@@ -29,6 +29,8 @@ import de.mennomax.astikorcarts.item.CartItem;
 import earth.terrarium.adastra.common.items.vehicles.RocketItem;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGEntities;
+import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.tfgt.TFGCovers;
 import su.terrafirmagreg.core.common.item.*;
@@ -40,7 +42,7 @@ import su.terrafirmagreg.core.utils.ModelUtils;
 @SuppressWarnings("unused")
 public class TFGItems {
     public static void init() {
-        TFGItemsAsphalt.init();
+        TFGItems_Asphalt.init();
         TFGItems_Medicines.init();
     }
 

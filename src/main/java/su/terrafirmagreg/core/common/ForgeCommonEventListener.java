@@ -11,7 +11,6 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,7 +41,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.capability.LargeEggHandler;
 import su.terrafirmagreg.core.common.data.TFGCommands;
-import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.perf.SupportCache;
@@ -218,7 +217,10 @@ public final class ForgeCommonEventListener {
                                 ResourceKey<Biome> biomeKey = targetLevel.getBiome(mutableTestPos).unwrapKey().orElse(null);
 
                                 //System.out.println(biomeKey);
-                                if (Objects.nonNull(biomeKey) && biomeKey.location().equals(ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "nether/lush_hollow"))) {
+                                if (Objects.nonNull(biomeKey) &&
+                                        (biomeKey.location().equals(TFGCore.id("nether/salt_caves")) ||
+                                                biomeKey.location().equals(TFGCore.id("nether/decaying_caverns")) ||
+                                                biomeKey.location().equals(TFGCore.id("nether/muggy_bog")))) {
                                     validSpawn = mutableTestPos.immutable();
                                 }
                                 //If it is not in the right biome it is unlikely that going down more will be in the valid biome

@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.data.TFGFluids;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocksAsphalt;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Asphalt;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class AsphaltRoadPourEvent {
@@ -117,7 +117,7 @@ public final class AsphaltRoadPourEvent {
         if (!space.isAir() && !space.canBeReplaced()) {
             return;
         }
-        BlockState pourState = TFGBlocksAsphalt.ASPHALT_ROAD_POURING.getDefaultState();
+        BlockState pourState = TFGBlocks_Asphalt.ASPHALT_ROAD_POURING.getDefaultState();
         if (!level.setBlock(pourPos, pourState, Block.UPDATE_ALL)) {
             return;
         }
@@ -138,7 +138,7 @@ public final class AsphaltRoadPourEvent {
         if (!player.getAbilities().instabuild && !canAffordFluidDrain(held, AsphaltRoadHelper.PATCH_POUR_MB)) {
             return;
         }
-        if (!level.setBlock(clicked, TFGBlocksAsphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL)) {
+        if (!level.setBlock(clicked, TFGBlocks_Asphalt.ASPHALT_ROAD_HOT.getDefaultState(), Block.UPDATE_ALL)) {
             return;
         }
         if (!player.getAbilities().instabuild && !tryConsumeFluidMb(player, hand, held, AsphaltRoadHelper.PATCH_POUR_MB)) {

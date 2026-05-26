@@ -5,12 +5,7 @@
             "count": 10,
             "type": "minecraft:count"
         },
-        {"type": "minecraft:in_square"},
-        {
-            "max_temperature": 15,
-            "type": "tfc:climate",
-            "min_temperature": -30
-        }
+        {"type": "minecraft:in_square"}
     ],
     "__comment__": "This file was automatically created by mcresources"
 }

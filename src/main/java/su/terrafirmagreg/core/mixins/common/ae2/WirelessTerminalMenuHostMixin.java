@@ -19,7 +19,7 @@ import appeng.api.networking.IGrid;
 import appeng.blockentity.networking.WirelessAccessPointBlockEntity;
 import appeng.helpers.WirelessTerminalMenuHost;
 
-import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.compat.ae2.WirelessCardAccessor;
 import su.terrafirmagreg.core.compat.kjs.events.TFGAE2PowerConsumption;
 

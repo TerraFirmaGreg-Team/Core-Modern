@@ -68,17 +68,10 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(ORE_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_HV));
         emiRegistry.addWorkstation(ORE_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
         Arrays.stream(ExportedOreVeinInfo.RECIPES)
-                .filter(r -> !r.getId().getPath().equals("/nether_anthracite_emi"))
+                //.filter(r -> !r.getId().getPath().equals("/nether_anthracite_emi"))
                 .forEach(emiRegistry::addRecipe);
 
         // These aren't normal ores so add them separately
-        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_anthracite", "minecraft:the_nether",
-                35, 0.8, 48, 127, 13, 4, 0, false, false, false, 1,
-                new String[] { "minecraft:deepslate" },
-                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("cursecoal", 100) },
-                null, null,
-                null, null, null, null,
-                null));
         emiRegistry.addRecipe(new OreVeinInfoRecipe("rose_quartz", "minecraft:overworld",
                 80, 1, 60, 80, 10, 0, 0, false, false, false, 1,
                 new String[] { "minecraft:blue_ice", "minecraft:snow_block" },
@@ -96,6 +89,13 @@ public class TFGEmiPlugin implements EmiPlugin {
                 null, null,
                 null, null, null, null,
                 new String[] { "tfg.ore_vein.oilsands.emi.0", "tfg.ore_vein.oilsands.emi.1" }));
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_oilsands", "minecraft:the_nether",
+                1, 1, 50, 180, 0, 2, 3, false, false, false, 0,
+                new String[] { "tfc:sand/white", "tfc:sand/yellow", "tfc:sand/red", "tfc:sand/brown", "tfc:sand/pink", "tfc:sand/green", "tfc:sand/black" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("oilsands", 100) },
+                "tfg:nether/has_oilsands", new String[] { "biome.tfg.nether/tar_pools" },
+                null, null, null, null,
+                null));
 
         //Blaze Burner
         emiRegistry.addCategory(BLAZE_BURNER);

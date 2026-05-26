@@ -35,7 +35,7 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
 @SuppressWarnings("unused")
-public final class TFGBlocksAsphalt {
+public final class TFGBlocks_Asphalt {
 
     public static void init() {
     }
@@ -44,7 +44,7 @@ public final class TFGBlocksAsphalt {
             AsphaltRoadPouringBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
             .properties(p -> p.strength(-1.0F, 3600000.0F).sound(SoundType.MUD).mapColor(MapColor.COLOR_BLACK).noLootTable())
-            .blockstate(TFGBlocksAsphalt::asphaltRoadPouringBlockstate)
+            .blockstate(TFGBlocks_Asphalt::asphaltRoadPouringBlockstate)
             .loot((prov, block) -> prov.add(block, LootTable.lootTable()))
             .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/pouring_" + AsphaltRoadPouringBlock.MAX_VISUAL_LEVEL))).build()
             .register();
@@ -52,7 +52,7 @@ public final class TFGBlocksAsphalt {
     public static final BlockEntry<AsphaltRoadHotBlock> ASPHALT_ROAD_HOT = TFGCore.REGISTRATE.block("asphalt_road_hot", AsphaltRoadHotBlock::new)
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
             .properties(p -> p.strength(1.5F, 6).sound(SoundType.TUFF).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops())
-            .blockstate(TFGBlocksAsphalt::asphaltRoadHotBlockstate)
+            .blockstate(TFGBlocks_Asphalt::asphaltRoadHotBlockstate)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
             .onRegister(block -> TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TICK_COUNTER, block))
             .loot(RegistrateBlockLootTables::dropSelf)
@@ -63,7 +63,7 @@ public final class TFGBlocksAsphalt {
             .initialProperties(() -> Blocks.BLACK_CONCRETE)
             .properties(p -> p.strength(5F, 64).sound(SoundType.STONE).mapColor(AsphaltRoadHelper::getMapColor).requiresCorrectToolForDrops())
             .addLayer(() -> RenderType::cutout)
-            .blockstate(TFGBlocksAsphalt::asphaltRoadBlockstate)
+            .blockstate(TFGBlocks_Asphalt::asphaltRoadBlockstate)
             .loot(RegistrateBlockLootTables::dropSelf)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
             .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/block_base"))).build()
@@ -73,7 +73,7 @@ public final class TFGBlocksAsphalt {
             p -> new AsphaltRoadStairsBlock(() -> ASPHALT_ROAD.get().defaultBlockState(), p))
             .initialProperties(ASPHALT_ROAD)
             .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
-            .blockstate(TFGBlocksAsphalt::asphaltRoadStairsBlockstate)
+            .blockstate(TFGBlocks_Asphalt::asphaltRoadStairsBlockstate)
             .loot(RegistrateBlockLootTables::dropSelf)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.STAIRS, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
             .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/stairs"))).build()
@@ -83,7 +83,7 @@ public final class TFGBlocksAsphalt {
             .initialProperties(ASPHALT_ROAD)
             .properties(p -> p.mapColor(AsphaltRoadHelper::getMapColor).requiresCorrectToolForDrops())
             .addLayer(() -> RenderType::cutout)
-            .blockstate(TFGBlocksAsphalt::asphaltRoadSlabBlockstate)
+            .blockstate(TFGBlocks_Asphalt::asphaltRoadSlabBlockstate)
             .loot(RegistrateBlockLootTables::dropSelf)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.SLABS, TFCTags.Blocks.SUPPORTS_LANDSLIDE, TFCTags.Blocks.TOUGHNESS_2)
             .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/asphalt_road/slab_base"))).build()

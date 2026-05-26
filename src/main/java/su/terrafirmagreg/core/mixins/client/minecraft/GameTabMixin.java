@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.mixins.client.minecraft;
 
+import java.util.ArrayList;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,13 +27,22 @@ public abstract class GameTabMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void tfg$addCustomSpawn(CreateWorldScreen this$0, CallbackInfo ci, @Local(ordinal = 0) GridLayout.RowHelper gridlayout$rowhelper) {
 
+        var conditionList = new ArrayList<CustomSpawnHelper.CustomSpawnCondition>();
+        conditionList.add(CustomSpawnHelper.DEFAULT_SPAWN);
+        conditionList.add(CustomSpawnHelper.TROPICAL_SPAWN);
+        conditionList.add(CustomSpawnHelper.TEMPERATE_SPAWN);
+        conditionList.add(CustomSpawnHelper.TUNDRA_SPAWN);
+        conditionList.add(CustomSpawnHelper.DESERT_SPAWN);
+        conditionList.add(CustomSpawnHelper.POLAR_SPAWN);
+        conditionList.add(CustomSpawnHelper.BENEATH_SPAWN);
+
         CycleButton<CustomSpawnHelper.CustomSpawnCondition> spawnCycleButton = gridlayout$rowhelper
                 .addChild(CycleButton.<CustomSpawnHelper.CustomSpawnCondition>builder(s -> (Component.translatable("tfg.gui.spawn_condition." + s.id()).append(" ").append(s.difficulty())))
-                        .withValues(CustomSpawnHelper.CUSTOM_SPAWN_CONDITIONS.values()).create(0, 0, 210, 20, Component.translatable("tfg.gui.spawn_condition.title"), (button, condition) -> {
+                        .withValues(conditionList).create(0, 0, 210, 20, Component.translatable("tfg.gui.spawn_condition.title"), (button, condition) -> {
                             TFGConfig.COMMON.NEW_WORLD_SPAWN.set(condition.id());
                             button.setTooltip(Tooltip.create(Component.translatable("tfg.gui.spawn_condition.tooltip." + condition.id())));
                         }));
-        spawnCycleButton.setValue(CustomSpawnHelper.CUSTOM_SPAWN_CONDITIONS.get("default"));
+        spawnCycleButton.setValue(CustomSpawnHelper.DEFAULT_SPAWN);
         spawnCycleButton.setTooltip(Tooltip.create(Component.translatable("tfg.gui.spawn_condition.tooltip.default")));
     }
 

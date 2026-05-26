@@ -19,6 +19,7 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
@@ -174,7 +175,7 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log_top/" + wood.serializedName));
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(BlockTags.LOGS, TFCTags.Blocks.LOGS_THAT_LOG)
                 .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
@@ -192,7 +193,7 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log_top/" + wood.serializedName));
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(BlockTags.LOGS, TFCTags.Blocks.LOGS_THAT_LOG)
                 .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
@@ -211,7 +212,7 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/log/" + wood.serializedName), TFGCore.id("block/wood/log/" + wood.serializedName));
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(BlockTags.LOGS, TFCTags.Blocks.LOGS_THAT_LOG)
                 .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
@@ -228,7 +229,7 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     prov.axisBlock(ctx.getEntry(), TFGCore.id("block/wood/stripped_log/" + wood.serializedName), TFGCore.id("block/wood/stripped_log/" + wood.serializedName));
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(BlockTags.LOGS, TFCTags.Blocks.LOGS_THAT_LOG)
                 .tag(TagKey.create(Registries.BLOCK, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()

@@ -273,10 +273,10 @@ public final class TFCAmbientalCompat {
                 && ADVANCED_ARMOR.contains(legs) && ADVANCED_ARMOR.contains(feet)) {
             return SuitType.FULLY_INSULATED;
         }
-        if (BLUE_STEEL_DIVING_SUIT.contains(head) && BLUE_STEEL_DIVING_SUIT.contains(chest)
-                && BLUE_STEEL_DIVING_SUIT.contains(legs) && BLUE_STEEL_DIVING_SUIT.contains(feet)) {
-            return SuitType.HEATPROOF;
-        }
+        //        if (BLUE_STEEL_DIVING_SUIT.contains(head) && BLUE_STEEL_DIVING_SUIT.contains(chest)
+        //                && BLUE_STEEL_DIVING_SUIT.contains(legs) && BLUE_STEEL_DIVING_SUIT.contains(feet)) {
+        //            return SuitType.HEATPROOF;
+        //        }
         return SuitType.NONE;
     }
 
