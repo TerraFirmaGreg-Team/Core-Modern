@@ -11,6 +11,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.simibubi.create.content.logistics.BigItemStack;
 import com.simibubi.create.content.logistics.packager.InventorySummary;
+import com.simibubi.create.content.logistics.packager.PackagingRequest;
 import com.simibubi.create.content.logistics.packagerLink.PackagerLinkBlockEntity;
 import com.simibubi.create.content.logistics.stockTicker.PackageOrderWithCrafts;
 
@@ -29,7 +30,7 @@ public abstract class PackagerLinkBlockEntityMixin {
     }
 
     @WrapOperation(method = "processRequest", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/logistics/packager/PackagingRequest;create(Lnet/minecraft/world/item/ItemStack;ILjava/lang/String;ILorg/apache/commons/lang3/mutable/MutableBoolean;IILcom/simibubi/create/content/logistics/stockTicker/PackageOrderWithCrafts;)Lcom/simibubi/create/content/logistics/packager/PackagingRequest;"), remap = false)
-    private com.simibubi.create.content.logistics.packager.PackagingRequest tfg$useMatchedGregTechToolStack(
+        private PackagingRequest tfg$useMatchedGregTechToolStack(
             ItemStack stack,
             int count,
             String address,
@@ -38,7 +39,7 @@ public abstract class PackagerLinkBlockEntityMixin {
             int packageCount,
             int orderId,
             PackageOrderWithCrafts context,
-            Operation<com.simibubi.create.content.logistics.packager.PackagingRequest> original,
+            Operation<PackagingRequest> original,
             @Local InventorySummary summary) {
         if (stack.getItem() instanceof IGTTool) {
             ItemStack matchedToolStack = ItemStack.EMPTY;
