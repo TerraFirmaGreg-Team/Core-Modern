@@ -60,8 +60,7 @@ public class ValueDisplayListWidget extends GenericScrollableListWidget<ValueDis
         this.hoveredTooltip = null;
     }
 
-    @Override
-    protected void afterRenderList(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderTooltip(GuiGraphics graphics) {
         if (this.hoveredTooltip != null && !this.hoveredTooltip.isEmpty()) {
             graphics.renderComponentTooltip(this.font, this.hoveredTooltip, this.tooltipX, this.tooltipY);
         }
