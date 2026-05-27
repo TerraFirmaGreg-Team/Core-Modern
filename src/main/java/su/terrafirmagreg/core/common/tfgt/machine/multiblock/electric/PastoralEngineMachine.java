@@ -29,6 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import su.terrafirmagreg.core.common.entity.TFGWoolEggProducingAnimal;
 import su.terrafirmagreg.core.common.tfgt.recipe.condition.AnimalPresentCondition;
 
 public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
@@ -80,12 +81,19 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
         final AnimalPresentCondition finalCondition = condition;
 
         List<Entity> ready = serverLevel.getEntities(
-                (Entity) null, getFormedBoundingBox(),
-                entity -> entity instanceof TFCAnimalProperties animal
-                        && animal.isReadyForAnimalProduct()
-                        && animal.getAgeType() != TFCAnimalProperties.Age.OLD // Not old so can still produce
-                        // Filter from condition
-                        && (finalCondition == null || finalCondition.matchesEntity(entity)));
+                (Entity) null,
+                getFormedBoundingBox(),
+                entity -> {
+                    if (!(entity instanceof TFCAnimalProperties animal) ||
+                            animal.getAgeType() == TFCAnimalProperties.Age.OLD ||
+                            finalCondition != null && !finalCondition.matchesEntity(entity)) {
+                        return false;
+                    }
+                    if (animal instanceof TFGWoolEggProducingAnimal woolAnimal && woolAnimal.hasWool()) {
+                        return true;
+                    }
+                    return animal.isReadyForAnimalProduct();
+                });
 
         for (Entity entity : ready) {
             if (!(entity instanceof TFCAnimalProperties animal))
@@ -93,7 +101,13 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
             AnimalProductEvent event = buildEvent(serverLevel, animal);
             if (!MinecraftForge.EVENT_BUS.post(event)) {
-                animal.setProductsCooldown(); // Animals products put on cooldown
+                // Animals products put on cooldown
+                if (animal instanceof TFGWoolEggProducingAnimal woolAnimal) {
+                    woolAnimal.setWoolCooldown();
+                } else {
+                    animal.setProductsCooldown();
+                }
+
                 /*
                 TFGCore.LOGGER.info("[Pastoral] Cooldown appliqué sur {} — cooldown restant: {}",
                         animal.getEntity().getType().getDescriptionId(),
@@ -125,6 +139,13 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                     wooly.getWoolItem(),
                     ItemStack.EMPTY, 1);
         }
+        if (animal instanceof TFGWoolEggProducingAnimal woollyeggy) {
+            return new AnimalProductEvent(
+                    level, woollyeggy.blockPosition(), null, woollyeggy,
+                    woollyeggy.getWoolItem(),
+                    ItemStack.EMPTY, 1);
+        }
+
         // Fallback for the other ProducingAnimal
         return new AnimalProductEvent(
                 level, animal.getEntity().blockPosition(), null, animal,
@@ -182,6 +203,10 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
                 if (e instanceof TFCAnimalProperties animal) {
                     if (animal.getAgeType() == TFCAnimalProperties.Age.OLD) {
                         old++;
+                    } else if (animal instanceof TFGWoolEggProducingAnimal wooly) {
+                        if (wooly.hasWool()) {
+                            ready++;
+                        }
                     } else if (animal.isReadyForAnimalProduct()) {
                         ready++;
                     }
@@ -197,29 +222,51 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
             // Cooldown par type
             boolean hasAnimalOnCooldown = allAnimals.stream()
-                    .anyMatch(e -> e instanceof TFCAnimalProperties animal
-                            && animal.getAgeType() != TFCAnimalProperties.Age.OLD
-                            && !animal.isReadyForAnimalProduct());
+                    .anyMatch(e -> {
+                        if (!(e instanceof TFCAnimalProperties animal) ||
+                                animal.getAgeType() == TFCAnimalProperties.Age.OLD) {
+                            return false;
+                        }
+                        if (animal instanceof TFGWoolEggProducingAnimal woolAnimal) {
+                            return !woolAnimal.hasWool();
+                        }
+                        return !animal.isReadyForAnimalProduct();
+
+                    });
 
             if (hasAnimalOnCooldown) {
                 textList.add(Component.translatable("tfg.machine.pastoral_engine.next_harvest_title")
                         .withStyle(ChatFormatting.YELLOW));
 
                 allAnimals.stream()
-                        .filter(e -> e instanceof TFCAnimalProperties animal
-                                // Filter so only animals that can produce milk have their cooldown checked
-                                && e instanceof ProducingMammal producer
-                                && animal.getAgeType() == TFCAnimalProperties.Age.ADULT
-                                && animal.getGender() == TFCAnimalProperties.Gender.FEMALE
-                                && !animal.isReadyForAnimalProduct()
-                                && producer.getProducedTick() > 0) // Check that the animal already produced milk at least once
+                        .filter(e -> {
+                            if (!(e instanceof TFCAnimalProperties animal) ||
+                                    (animal.getAgeType() == TFCAnimalProperties.Age.ADULT) ||
+                                    (animal instanceof TFGWoolEggProducingAnimal woolAnimal) && (!woolAnimal.hasWool()) ||
+                                    (animal instanceof ProducingMammal producer) &&
+                                            !(animal.isReadyForAnimalProduct() || producer.getProducedTick() > 0)) {
+                                return true;
+                            }
+                            return false;
+                        })
                         .collect(java.util.stream.Collectors.groupingBy(
                                 e -> ForgeRegistries.ENTITY_TYPES.getKey(e.getType()),
                                 java.util.stream.Collectors.minBy(
-                                        java.util.Comparator.comparingLong(
-                                                e -> ((TFCAnimalProperties) e).getProductsCooldown()))))
+                                        java.util.Comparator.comparingLong(e -> {
+                                            if (e instanceof TFGWoolEggProducingAnimal woolAnimal) {
+                                                return woolAnimal.getWoolCooldown();
+                                            }
+                                            return ((TFCAnimalProperties) e).getProductsCooldown();
+                                        }))))
                         .forEach((entityTypeId, optAnimal) -> optAnimal.ifPresent(e -> {
-                            long minCooldown = ((TFCAnimalProperties) e).getProductsCooldown();
+
+                            long minCooldown;
+                            if (e instanceof TFGWoolEggProducingAnimal woolAnimal) {
+                                minCooldown = woolAnimal.getWoolCooldown();
+                            } else {
+                                minCooldown = ((TFCAnimalProperties) e).getProductsCooldown();
+                            }
+
                             long totalHours = minCooldown / ICalendar.TICKS_IN_HOUR;
                             long days = totalHours / ICalendar.HOURS_IN_DAY;
                             long hours = totalHours % ICalendar.HOURS_IN_DAY;
