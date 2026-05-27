@@ -30,7 +30,7 @@ public abstract class PackagerLinkBlockEntityMixin {
     }
 
     @WrapOperation(method = "processRequest", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/logistics/packager/PackagingRequest;create(Lnet/minecraft/world/item/ItemStack;ILjava/lang/String;ILorg/apache/commons/lang3/mutable/MutableBoolean;IILcom/simibubi/create/content/logistics/stockTicker/PackageOrderWithCrafts;)Lcom/simibubi/create/content/logistics/packager/PackagingRequest;"), remap = false)
-        private PackagingRequest tfg$useMatchedGregTechToolStack(
+    private PackagingRequest tfg$useMatchedGregTechToolStack(
             ItemStack stack,
             int count,
             String address,
