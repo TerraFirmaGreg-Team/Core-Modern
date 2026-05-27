@@ -48,6 +48,7 @@ import su.terrafirmagreg.core.client.screen.widget.PlayerListWidget;
 import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
 import su.terrafirmagreg.core.client.screen.widget.ToggleButton;
 import su.terrafirmagreg.core.client.screen.widget.ValueDisplayListWidget;
+import su.terrafirmagreg.core.client.util.TFGTooltipUtils;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
@@ -338,7 +339,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
                         // Hold Shift info.
                         if (Screen.hasShiftDown()) {
-                            components.add(Component.translatable("tfg.tooltip.nutrition.positive_info").withStyle(ChatFormatting.GRAY));
+                            components.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.nutrition.positive_info").withStyle(ChatFormatting.GRAY)));
                         } else {
                             components.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
                         }
@@ -387,7 +388,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
                         // Hold Shift info.
                         if (Screen.hasShiftDown()) {
-                            components.add(Component.translatable("tfg.tooltip.nutrition.negative_info").withStyle(ChatFormatting.GRAY));
+                            components.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.nutrition.negative_info").withStyle(ChatFormatting.GRAY)));
                         } else {
                             components.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
                         }
@@ -779,7 +780,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
                         // Hold Shift info.
                         if (Screen.hasShiftDown()) {
-                            components.add(Component.translatable("tfg.tooltip.nutrition." + nutrient.getSerializedName() + "_info").withStyle(ChatFormatting.GRAY));
+                            components.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.nutrition." + nutrient.getSerializedName() + "_info").withStyle(ChatFormatting.GRAY)));
                         } else {
                             components.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
                         }
