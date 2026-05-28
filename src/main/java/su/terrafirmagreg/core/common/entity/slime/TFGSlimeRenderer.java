@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class TFGSlimeRenderer extends MobRenderer<TFGSlime, TFGSlimeModel<TFGSlime>> {
-    private static final ResourceLocation SLIME_LOCATION = ResourceLocation.withDefaultNamespace("textures/entity/slime/slime.png");
 
     public TFGSlimeRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new TFGSlimeModel<>(ctx.bakeLayer(TFGSlimeModel.INNER_LAYER_LOCATION)), 0.4F);
@@ -19,12 +18,12 @@ public class TFGSlimeRenderer extends MobRenderer<TFGSlime, TFGSlimeModel<TFGSli
     }
 
     protected void scale(TFGSlime entity, PoseStack poseStack, float scale) {
-        float amount = entity.getGeneticSize();
+        float amount = entity.getSize();
         poseStack.scale(amount, amount, amount);
         super.scale(entity, poseStack, scale);
     }
 
     public ResourceLocation getTextureLocation(TFGSlime entity) {
-        return SLIME_LOCATION;
+        return entity.getTextureLocation();
     }
 }

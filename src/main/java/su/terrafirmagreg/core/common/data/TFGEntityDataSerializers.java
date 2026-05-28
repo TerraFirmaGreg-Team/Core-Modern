@@ -8,7 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.entity.slime.SlimeVariant;
+import su.terrafirmagreg.core.common.entity.slime.TFGSlimeVariant;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 
 public final class TFGEntityDataSerializers {
@@ -19,14 +19,10 @@ public final class TFGEntityDataSerializers {
     public static final RegistryObject<EntityDataSerializer<TFCSniffer.State>> SNIFFER_STATE = register("sniffer_state",
             () -> EntityDataSerializer.simpleEnum(TFCSniffer.State.class));
 
-    public static final RegistryObject<EntityDataSerializer<SlimeVariant>> SLIME_VARIANT = register("slime_variant",
-            () -> EntityDataSerializer.simple((buf, variant) -> buf.writeUtf(variant.id()), buf -> {
-                String id = buf.readUtf();
-                return switch (id) {
-                    case "green" -> SlimeVariant.GREEN;
-                    default -> SlimeVariant.GREEN;
-                };
-            }));
+    public static final RegistryObject<EntityDataSerializer<TFGSlimeVariant>> SLIME_VARIANT = register("slime_variant",
+            () -> EntityDataSerializer.simple(
+                    (buf, variant) -> buf.writeUtf(variant.getSerializedName()),
+                    buf -> TFGSlimeVariant.byName(buf.readUtf())));
 
     private static <T extends EntityDataSerializer<?>> RegistryObject<T> register(String name,
             Supplier<T> dataSerializer) {
