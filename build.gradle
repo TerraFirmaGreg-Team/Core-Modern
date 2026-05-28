@@ -204,7 +204,7 @@ tasks.withType(JavaCompile).configureEach {
 // Compile our patched Species.class, and use it instead of the normal one in the species-3.5.jar.
 // Put the result in run/server/mods
 tasks.register("patchSpeciesJar", Jar) {
-    dependsOn compileDevJava
+    dependsOn compileDevJava, tasks.named("createMinecraftArtifacts")
 
     archiveFileName = 'species-3.5.jar'
     destinationDirectory = file("run/server/mods")
