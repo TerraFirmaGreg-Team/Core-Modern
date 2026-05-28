@@ -64,6 +64,11 @@ sourceSets {
         compileClasspath += sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
+
+    test {
+        compileClasspath += main.output + main.compileClasspath
+        runtimeClasspath += main.output + main.runtimeClasspath
+    }
 }
 
 // gradle-local.properties should have the following:
@@ -137,11 +142,22 @@ legacyForge {
             }
         }
 
+        gameTestServer {
+            type = "gameTestServer"
+            sourceSet = sourceSets.test
+            ideName = "Game Tests"
+
+            gameDirectory.set(file('run/gametest'))
+            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+            environment('TEST', 'true')
+        }
+
     }
 
     mods {
         "${mod_id}" {
             sourceSet sourceSets.main
+            sourceSet sourceSets.test
         }
     }
 }
@@ -228,7 +244,7 @@ tasks.register("prepareServerDev") {
 
 // Runs Species patch before runServer.
 allprojects {
-    tasks.matching { it.name == "prepareServerRun" }.configureEach {
+    tasks.matching { it.name == "prepareServerRun" || it.name == "runGameTestServer" }.configureEach {
         dependsOn("prepareServerDev")
     }
 }
