@@ -101,10 +101,9 @@ public abstract class RocketMixin extends Entity {
     @Redirect(method = "burnEntitiesUnderRocket", at = @At(value = "INVOKE", target = "net/minecraft/world/entity/LivingEntity.equals (Ljava/lang/Object;)Z"))
     private boolean tfg$dontBurnPassengers(LivingEntity instance, Object o) {
         List<Entity> passengers = tfg$self.getPassengers();
-
-        for (var entity : passengers) {
-            return instance.equals(entity);
-        }
+        for (var entity : passengers)
+            if (instance.equals(entity))
+                return true;
         return false;
     }
 

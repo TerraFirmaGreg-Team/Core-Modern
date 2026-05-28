@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.tfc;
+package su.terrafirmagreg.core.mixins.common.tfc.entities;
 
 import java.util.ArrayList;
 import java.util.List;

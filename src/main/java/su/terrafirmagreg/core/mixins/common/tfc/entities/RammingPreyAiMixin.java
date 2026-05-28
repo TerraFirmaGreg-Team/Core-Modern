@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.mixins.common.tfc;
+package su.terrafirmagreg.core.mixins.common.tfc.entities;
 
 import static net.dries007.tfc.common.entities.ai.prey.RammingPreyAi.*;
 

@@ -53,6 +53,7 @@ public abstract class TemperatureCapabilityMixin {
      * Should save about 1ms per 10 players wearing fully insulated armor (spacesuits, nano, quark)
      */
     @Overwrite
+    @SuppressWarnings({ "deprecation", "removal" })
     public void evaluateModifiers() {
         this.clearModifiers();
 
