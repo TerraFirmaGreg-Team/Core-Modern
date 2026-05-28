@@ -142,7 +142,6 @@ legacyForge {
     mods {
         "${mod_id}" {
             sourceSet sourceSets.main
-            sourceSet sourceSets.dev
         }
     }
 }
