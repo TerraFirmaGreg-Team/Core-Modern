@@ -196,6 +196,7 @@
         "common.species.LeafHangerMixin",
         "common.species.LimpetMixin",
         "common.species.MammutilationMixin",
+        "common.species.SpeciesProxyMixin",
         "common.species.SpectreMixin",
         "common.species.SpringlingMixin",
         "common.species.TrooperMixin",
