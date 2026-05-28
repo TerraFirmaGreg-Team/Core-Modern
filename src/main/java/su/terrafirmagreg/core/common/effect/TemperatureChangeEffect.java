@@ -6,60 +6,55 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-import su.terrafirmagreg.core.common.data.TFGEffects;
-
 public class TemperatureChangeEffect extends MobEffect {
 
-    // How much the temperature is changed each effect trigger
-    private static float deltaTemp = 2;
-
-    // How many ticks per effect trigger
+    private static final float deltaTemp = 2;
     private static final int defaultTime = 20;
 
-    //Min/Max temps.
-    private static final float maxWarmingTemp = 25;
-    private static final float minCoolingTemp = 5;
-    private static final float maxBlazingTemp = 60;
-    private static final float minFreezingTemp = -20;
+    private final float targetTemperature;
+    private final boolean isHeating;
 
-    public TemperatureChangeEffect(MobEffectCategory pCategory, int pColor) {
+    /**
+     * Constructor for TemperatureChangeEffect.
+     * @param pCategory The category of the effect.
+     * @param pColor The color of the effect.
+     * @param targetTemperature The target temperature for the effect.
+     * @param isHeating Whether the effect is heating or cooling.
+     */
+    public TemperatureChangeEffect(MobEffectCategory pCategory, int pColor, float targetTemperature, boolean isHeating) {
         super(pCategory, pColor);
+        this.targetTemperature = targetTemperature;
+        this.isHeating = isHeating;
     }
 
+    /**
+     * Applies the effect tick to the living entity.
+     * @param livingEntity The entity to apply the effect to.
+     * @param amplifier The amplifier level of the effect.
+     */
     @Override
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         TemperatureCapability tempCap = livingEntity.getCapability(TemperatureCapability.CAPABILITY)
                 .orElse(TemperatureCapability.DEFAULT);
 
-        // Cooling and warming have safe temperature caps.
-        if (this == TFGEffects.COOLING.get()) {
-            if (tempCap.getTemperature() >= minCoolingTemp) {
-                tempCap.setTemperature(tempCap.getTemperature() - deltaTemp * (amplifier + 1));
+        float currentTemp = tempCap.getTemperature();
+        float change = deltaTemp * (amplifier + 1);
+
+        if (isHeating) {
+            // If heating check max temp.
+            if (currentTemp < targetTemperature) {
+                tempCap.setTemperature(Math.min(currentTemp + change, targetTemperature));
             }
-        } else if (this == TFGEffects.WARMING.get()) {
-            if (tempCap.getTemperature() <= maxWarmingTemp) {
-                tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
-            }
-        }
-        // Freezing and blazing have dangerous temperature caps.
-        if (this == TFGEffects.FREEZING.get()) {
-            if (tempCap.getTemperature() >= minFreezingTemp) {
-                tempCap.setTemperature(tempCap.getTemperature() - deltaTemp * (amplifier + 1));
-            }
-        } else if (this == TFGEffects.BLAZING.get()) {
-            if (tempCap.getTemperature() <= maxBlazingTemp) {
-                tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
+        } else {
+            // If cooling check min temp.
+            if (currentTemp > targetTemperature) {
+                tempCap.setTemperature(Math.max(currentTemp - change, targetTemperature));
             }
         }
     }
 
     @Override
     public boolean isDurationEffectTick(int duration, int amplitude) {
-        if (this == TFGEffects.COOLING.get() || this == TFGEffects.WARMING.get() || this == TFGEffects.FREEZING.get() || this == TFGEffects.BLAZING.get()) {
-            return duration % defaultTime == 0;
-        } else {
-            return false;
-        }
+        return duration % defaultTime == 0;
     }
-
 }
