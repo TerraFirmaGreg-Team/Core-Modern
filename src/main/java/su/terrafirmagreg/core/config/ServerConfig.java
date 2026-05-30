@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import earth.terrarium.adastra.api.planets.Planet;
@@ -129,7 +130,7 @@ public final class ServerConfig {
                 .define("enableSnowCorrection", true);
         snowMaxAccumulationOnUpdate = builder
                 .comment("The maximum amount of snow update to apply for each correction tick")
-                .defineInRange("snowMaxAccumulationOnUpdate", 256, 1, Integer.MAX_VALUE);
+                .defineInRange("snowMaxAccumulationOnUpdate", FMLEnvironment.dist.isClient() ? 256 : 0, 0, Integer.MAX_VALUE);
 
         builder.pop().push("tfg_food_effects");
         enableTFGFoodDebuffs = builder
