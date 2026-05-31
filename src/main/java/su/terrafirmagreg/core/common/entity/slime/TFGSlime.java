@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.entity.slime;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.EntityHelpers;
@@ -12,6 +14,7 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.events.AnimalProductEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -133,17 +136,32 @@ public class TFGSlime extends TamableMammal {
         this.setProducedTick(tag.getLong("produced"));
     }
 
-    public void initCommonAnimalData(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason) {
-        super.initCommonAnimalData(level, difficulty, reason);
-        this.setVariant(TFGSlimeVariant.VALUES[this.random.nextInt(4)]);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
+        SpawnGroupData spawnData = super.finalizeSpawn(level, difficulty, type, data, tag);
         this.setGender(Gender.FEMALE);
+        this.setBaby(this.random.nextFloat() < 0.1F);
+        this.setVariant(this.initialVariant(level));
+        return super.finalizeSpawn(level, difficulty, type, spawnData, tag);
+    }
+
+    public TFGSlimeVariant initialVariant(ServerLevelAccessor level) {
+        BlockPos pos = this.blockPosition();
+        ResourceKey<Level> dimension = level.getLevel().dimension();
+        Holder<Biome> biome = level.getBiome(pos);
+
+        for (TFGSlimeVariant variant : TFGSlimeVariant.VALUES) {
+            if ((variant.getDimension() == null || dimension == variant.getDimension()) && (variant.getBiome() == null || biome.is(variant.getBiome()))) {
+                return variant;
+            }
+        }
+
+        return TFGSlimeVariant.SPRING;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0F).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
-    // TODO: Add Biome and Dimension check
     public static boolean spawnRules(EntityType<? extends TFGSlime> type, LevelAccessor level, MobSpawnType spawn,
             BlockPos pos, RandomSource rand) {
         return level.getBlockState(pos).isAir();
