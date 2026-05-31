@@ -22,7 +22,7 @@ public final class TFGEntityDataSerializers {
     public static final RegistryObject<EntityDataSerializer<TFGSlimeVariant>> SLIME_VARIANT = register("slime_variant",
             () -> EntityDataSerializer.simple(
                     (buf, variant) -> buf.writeUtf(variant.getSerializedName()),
-                    buf -> TFGSlimeVariant.byName(buf.readUtf())));
+                    buf -> TFGSlimeVariant.getByName(buf.readUtf())));
 
     private static <T extends EntityDataSerializer<?>> RegistryObject<T> register(String name,
             Supplier<T> dataSerializer) {

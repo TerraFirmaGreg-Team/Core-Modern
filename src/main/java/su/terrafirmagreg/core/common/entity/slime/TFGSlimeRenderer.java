@@ -9,18 +9,13 @@ import net.minecraft.resources.ResourceLocation;
 public class TFGSlimeRenderer extends MobRenderer<TFGSlime, TFGSlimeModel<TFGSlime>> {
 
     public TFGSlimeRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new TFGSlimeModel<>(ctx.bakeLayer(TFGSlimeModel.INNER_LAYER_LOCATION)), 0.4F);
+        super(ctx, new TFGSlimeModel<>(ctx.bakeLayer(TFGSlimeModel.LAYER_LOCATION)), 0.4F);
         this.addLayer(new TFGSlimeOuterLayer(this, ctx.getModelSet()));
+        this.addLayer(new TFGSlimeFaceLayer(this, ctx.getModelSet()));
     }
 
     protected void setupRotations(TFGSlime entityLiving, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks) {
         super.setupRotations(entityLiving, poseStack, ageInTicks, rotationYaw, partialTicks);
-    }
-
-    protected void scale(TFGSlime entity, PoseStack poseStack, float scale) {
-        float amount = entity.getSize();
-        poseStack.scale(amount, amount, amount);
-        super.scale(entity, poseStack, scale);
     }
 
     public ResourceLocation getTextureLocation(TFGSlime entity) {

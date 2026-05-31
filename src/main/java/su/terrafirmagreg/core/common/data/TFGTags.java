@@ -146,6 +146,7 @@ public final class TFGTags {
         public static final TagKey<EntityType<?>> IgnoresCacti = createEntityTag("ignores_cacti");
         public static final TagKey<EntityType<?>> NotRammedByRammers = createEntityTag("not_rammed_by_rammers");
         public static final TagKey<EntityType<?>> FishingNetScoopable = createEntityTag("fishing_net_scoopable");
+        public static final TagKey<EntityType<?>> Genderless = createEntityTag("genderless");
 
         private static TagKey<EntityType<?>> createEntityTag(String path) {
             return createEntityTag(TFGCore.id(path));
@@ -188,6 +189,12 @@ public final class TFGTags {
         public static final TagKey<Biome> EarthIsVolcanic = createBiomeTag("earth/is_volcanic");
 
         public static final TagKey<Biome> EarthIsOldGen = createBiomeTag("earth/is_oldgen");
+
+        public static final TagKey<Biome> PlantSlimeHabitat = createBiomeTag("nether/plant_slime_habitat");
+        public static final TagKey<Biome> GlowberrySlimeHabitat = createBiomeTag("nether/glowberry_slime_habitat");
+        public static final TagKey<Biome> SpringSlimeHabitat = createBiomeTag("nether/spring_slime_habitat");
+        public static final TagKey<Biome> IceSlimeHabitat = createBiomeTag("nether/ice_slime_habitat");
+        public static final TagKey<Biome> LavaSlimeHabitat = createBiomeTag("nether/lava_slime_habitat");
 
         private static TagKey<Biome> createBiomeTag(String path) {
             return createBiomeTag(TFGCore.id(path));

@@ -46,10 +46,7 @@ import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamRenderer;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbitRenderer;
 import su.terrafirmagreg.core.common.entity.rocket.RocketHelper;
-import su.terrafirmagreg.core.common.entity.slime.TFGSlime;
-import su.terrafirmagreg.core.common.entity.slime.TFGSlimeModel;
-import su.terrafirmagreg.core.common.entity.slime.TFGSlimeOuterLayer;
-import su.terrafirmagreg.core.common.entity.slime.TFGSlimeRenderer;
+import su.terrafirmagreg.core.common.entity.slime.*;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSnifferRenderer;
 import su.terrafirmagreg.core.common.entity.surfer.TFCSurfer;
@@ -66,8 +63,10 @@ public class TFGEntities {
     public static final EntityEntry<TFGSlime> TFG_SLIME = TFGCore.REGISTRATE.entity("slime", TFGSlime::new, MobCategory.CREATURE)
             .properties(p -> p.sized(1F, 1F).clientTrackingRange(8))
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .tag(TFGTags.Entities.Genderless)
             .attributes(TFGSlime::createAttributes)
             .renderer(() -> TFGSlimeRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFGSlime::spawnRules)
             .register();
 
     public static final EntityEntry<TFGFox> TFG_FOX = TFGCore.REGISTRATE.entity("fox", TFGFox::new, MobCategory.CREATURE)
@@ -195,7 +194,8 @@ public class TFGEntities {
         event.registerLayerDefinition(TFGWolfModel.LAYER_LOCATION, TFGWolfModel::createBodyLayer);
         event.registerLayerDefinition(TFGFoxModel.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(CubeDeformation.NONE), 48, 32));
         event.registerLayerDefinition(TFGFoxCollarLayer.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(new CubeDeformation(0.01f)), 48, 32));
-        event.registerLayerDefinition(TFGSlimeModel.INNER_LAYER_LOCATION, TFGSlimeModel::createInnerBodyLayer);
-        event.registerLayerDefinition(TFGSlimeOuterLayer.OUTER_LAYER_LOCATION, TFGSlimeModel::createOuterBodyLayer);
+        event.registerLayerDefinition(TFGSlimeModel.LAYER_LOCATION, TFGSlimeModel::createInnerBodyLayer);
+        event.registerLayerDefinition(TFGSlimeOuterLayer.LAYER_LOCATION, TFGSlimeModel::createOuterBodyLayer);
+        event.registerLayerDefinition(TFGSlimeFaceLayer.LAYER_LOCATION, TFGSlimeModel::createFaceLayer);
     }
 }

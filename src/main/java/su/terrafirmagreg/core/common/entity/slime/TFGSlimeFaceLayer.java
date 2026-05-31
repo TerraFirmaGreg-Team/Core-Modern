@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.common.entity.slime;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,34 +14,28 @@ import net.minecraft.resources.ResourceLocation;
 
 import su.terrafirmagreg.core.TFGCore;
 
-public class TFGSlimeOuterLayer extends RenderLayer<TFGSlime, TFGSlimeModel<TFGSlime>> {
+@SuppressWarnings({ "unchecked" })
+public class TFGSlimeFaceLayer extends RenderLayer<TFGSlime, TFGSlimeModel<TFGSlime>> {
+    private static final ResourceLocation TEXTURE_LOCATION = TFGCore.id("textures/entity/slime/face/latex_smile.png");
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-            ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "slime_outer"), "main");
+            ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "slime_face"), "main");
 
     private final TFGSlimeModel model;
 
-    public TFGSlimeOuterLayer(RenderLayerParent<TFGSlime, TFGSlimeModel<TFGSlime>> renderer, EntityModelSet modelSet) {
+    public TFGSlimeFaceLayer(RenderLayerParent<TFGSlime, TFGSlimeModel<TFGSlime>> renderer, EntityModelSet ctx) {
         super(renderer);
-        this.model = new TFGSlimeModel(modelSet.bakeLayer(LAYER_LOCATION));
+        this.model = new TFGSlimeModel(ctx.bakeLayer(LAYER_LOCATION));
     }
 
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, TFGSlime livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
             float netHeadYaw, float headPitch) {
-        Minecraft minecraft = Minecraft.getInstance();
-        boolean flag = minecraft.shouldEntityAppearGlowing(livingEntity) && livingEntity.isInvisible();
-        if (!livingEntity.isInvisible() || flag) {
-            VertexConsumer vertexconsumer;
-            if (flag) {
-                vertexconsumer = buffer.getBuffer(RenderType.outline(this.getTextureLocation(livingEntity)));
-            } else {
-                vertexconsumer = buffer.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(livingEntity)));
-            }
+        if (!livingEntity.isInvisible()) {
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutout(TEXTURE_LOCATION));
 
             this.getParentModel().copyPropertiesTo(this.model);
             this.model.prepareMobModel(livingEntity, limbSwing, limbSwingAmount, partialTicks);
             this.model.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            this.model.renderToBuffer(poseStack, vertexconsumer, packedLight, LivingEntityRenderer.getOverlayCoords(livingEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+            this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, LivingEntityRenderer.getOverlayCoords(livingEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
         }
-
     }
 }
