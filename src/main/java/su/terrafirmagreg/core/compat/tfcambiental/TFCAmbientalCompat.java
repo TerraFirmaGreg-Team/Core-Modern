@@ -280,7 +280,7 @@ public final class TFCAmbientalCompat {
             return Optional.empty();
         }
 
-        return Optional.of(new TempModifier("tfg_slime_entity", change, 0F));
+        return Optional.of(new TempModifier("tfg_entity_temperature", change, 0F));
     }
 
     // ==================== SUIT DETECTION ====================
