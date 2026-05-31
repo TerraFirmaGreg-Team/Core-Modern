@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.compat.tfcambiental;
 
 import java.util.*;
 
-import com.eerussianguy.beneath.common.blocks.LavaAqueductBlock;
 import com.eerussianguy.firmalife.common.blocks.OvenBottomBlock;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
@@ -166,11 +165,14 @@ public final class TFCAmbientalCompat {
         }
 
         // Special cases
-        if (block instanceof LavaAqueductBlock && state.getValue(LavaAqueductBlock.FLUID).getFluid() == Fluids.LAVA)
-            return Optional.of(new TempModifier("aqueduct_lava", 5.0F, 1.0F));
-
-        if (block instanceof AqueductBlock && state.getValue(AqueductBlock.FLUID).getFluid() == TFCFluids.SPRING_WATER.getFlowing())
-            return Optional.of(new TempModifier("aqueduct_spring_water", 2.0F, 1.0F));
+        if (block instanceof AqueductBlock aqueduct) {
+            var fluid = state.getValue(aqueduct.getFluidProperty()).getFluid();
+            if (fluid == Fluids.LAVA) {
+                return Optional.of(new TempModifier("aqueduct_lava", 5.0F, 1.0F));
+            } else if (fluid == TFCFluids.SPRING_WATER.getFlowing()) {
+                return Optional.of(new TempModifier("aqueduct_spring_water", 2.0F, 1.0F));
+            }
+        }
 
         if (block instanceof IceBlock)
             return Optional.of(new TempModifier("ice_block", -4.0F, 1.0F));

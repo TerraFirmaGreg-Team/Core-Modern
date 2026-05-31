@@ -9,11 +9,13 @@ import com.gregtechceu.gtceu.common.data.materials.GTFoods;
 import com.gregtechceu.gtceu.common.item.AntidoteBehavior;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
+import net.dries007.tfc.common.TFCEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMedicalConditions;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -25,6 +27,7 @@ public class TFGItems_Medicines {
     public static void init() {
     }
 
+    // Powders
     public static final ItemEntry<ComponentItem> COMBAT_POWDER = TFGCore.REGISTRATE.item("combat_powder", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
                     .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 60 * 20, 1), 1)
@@ -55,6 +58,8 @@ public class TFGItems_Medicines {
                     .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 3 * 60 * 20, 2), 1).build()))
             .onRegister(attach(new AntidoteBehavior(10, GTMedicalConditions.SILICOSIS, GTMedicalConditions.ARSENICOSIS, GTMedicalConditions.ASBESTOSIS)))
             .register();
+
+    // Pills & Tablets
     public static final ItemEntry<ComponentItem> ANTIPOISON_PILL = TFGCore.REGISTRATE.item("antipoison_pill", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 3 * 60 * 20, 0), 1).build()))
             .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.POISON, GTMedicalConditions.WEAK_POISON, GTMedicalConditions.NAUSEA)))
@@ -144,6 +149,36 @@ public class TFGItems_Medicines {
             .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.IRRITANT)))
             .register();
 
+    // Contaminant Capsules
+    public static final ItemEntry<ComponentItem> PARASITICIDE_CAPSULE = TFGCore.REGISTRATE.item("parasiticide_capsule", ComponentItem::create)
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
+                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_PARASITES.get(), 20 * 150, 1, false, false), 1)
+                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 20 * 20, 4), 1)
+                    .effect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20 * 60 * 5, 0), 1).build()))
+            .onRegister(attach(new AntidoteBehavior(30, GTMedicalConditions.IRRITANT)))
+            .register();
+
+    public static final ItemEntry<ComponentItem> DETOX_CAPSULE = TFGCore.REGISTRATE.item("detox_capsule", ComponentItem::create)
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
+                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_TOXINS.get(), 20 * 150, 1, false, false), 1)
+                    .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 20 * 60 * 5, 0), 1).build()))
+            .onRegister(attach(new AntidoteBehavior(-1, GTMedicalConditions.POISON, GTMedicalConditions.WEAK_POISON)))
+            .register();
+
+    public static final ItemEntry<ComponentItem> NANOFILTRATION_CAPSULE = TFGCore.REGISTRATE.item("nanofiltration_capsule", ComponentItem::create)
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
+                    .effect(() -> new MobEffectInstance(TFGEffects.CURE_MICROPLASTICS.get(), 20 * 300, 0, false, false), 1)
+                    .effect(() -> new MobEffectInstance(TFCEffects.THIRST.get(), 20 * 60 * 2, 0), 1).build()))
+            .onRegister(attach(new AntidoteBehavior(60,
+                    GTMedicalConditions.POISON,
+                    GTMedicalConditions.WEAK_POISON,
+                    GTMedicalConditions.ARSENICOSIS,
+                    GTMedicalConditions.ASBESTOSIS,
+                    GTMedicalConditions.BERYLLIOSIS,
+                    GTMedicalConditions.SILICOSIS)))
+            .register();
+
+    // Salvos
     public static final ItemEntry<ComponentItem> ABSORPTION_SALVO = TFGCore.REGISTRATE.item("absorption_salvo", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, shortBuff, 0), 1).build()))
             .onRegister(attach(new AntidoteBehavior(40, GTMedicalConditions.CHEMICAL_BURNS)))
@@ -176,6 +211,7 @@ public class TFGItems_Medicines {
             .onRegister(attach(new AntidoteBehavior(40, GTMedicalConditions.IRRITANT)))
             .register();
 
+    // Antidotes
     public static final ItemEntry<ComponentItem> PARACETAMOL_PILL = TFGCore.REGISTRATE.item("paracetamol_pill", ComponentItem::create)
             .model(ModelUtils.layeredItemModel(GTCEu.id("item/paracetamol_pill")))
             .properties(p -> p.food(GTFoods.ANTIDOTE))

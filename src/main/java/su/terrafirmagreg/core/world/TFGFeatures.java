@@ -65,10 +65,15 @@ public class TFGFeatures {
 
     public static final RegistryObject<FluidPlugFeature> FLUID_PLUG = register(
             "fluid_plug", FluidPlugFeature::new, NoneFeatureConfiguration.CODEC);
+    // A copy of minecraft:lake but bigger and deeper
     public static final RegistryObject<LargeLakeFeature> LARGE_LAKE = register(
             "large_lake", LargeLakeFeature::new, LargeLakeConfig.CODEC);
+    // A copy of minecraft:large_dripstone but uses the local tfc rock block
     public static final RegistryObject<LargeDripstoneFeature> LARGE_DRIPSTONE = register(
             "large_dripstone", LargeDripstoneFeature::new, LargeDripstoneConfig.CODEC);
+    // A copy of minecraft:waterlogged_vegetation_patch but with an arbitrary fluid
+    public static final RegistryObject<FluidloggedVegetationPatchFeature> FLUIDLOGGED_VEGETATION_PATCH = register(
+            "fluidlogged_vegetation_patch", FluidloggedVegetationPatchFeature::new, FluidloggedVegetationPatchConfig.CODEC);
 
     // Used for lava in volcanoes
     public static final RegistryObject<EncasedSpoutFeature> ENCASED_SPOUT = register(

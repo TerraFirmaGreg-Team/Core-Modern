@@ -25,6 +25,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
+import su.terrafirmagreg.core.common.entity.TFGWoolEggProducingAnimal;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric.PastoralEngineMachine;
 
 public class AnimalPresentCondition extends RecipeCondition<AnimalPresentCondition> {
@@ -117,12 +118,22 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
         AABB box = getSearchBox(machine);
 
         return !level.getEntities((Entity) null, box, entity -> {
-            if (!(entity instanceof TFCAnimalProperties animal))
+            if (entity instanceof TFGWoolEggProducingAnimal animal) {
+                if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
+                    return false;
+                if (animalType.equals("producing") && !animal.hasWool())
+                    return false;
+                // In case we have a machine in the future that wants eggs
+                if (animalType.equals("dairy") && !animal.isReadyForAnimalProduct())
+                    return false;
+            } else if (entity instanceof TFCAnimalProperties animal) {
+                if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
+                    return false;
+                if (!animal.isReadyForAnimalProduct())
+                    return false;
+            } else {
                 return false;
-            if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
-                return false;
-            if (!animal.isReadyForAnimalProduct())
-                return false;
+            }
 
             // Filter through entity type if defined
             if (entityTypeId != null) {
@@ -153,8 +164,17 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
             return false;
         if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
             return false;
-        if (!animal.isReadyForAnimalProduct())
-            return false;
+
+        if (animal instanceof TFGWoolEggProducingAnimal woolAnimal) {
+            if (animalType.equals("producing") && !woolAnimal.hasWool())
+                return false;
+            // In case we have a machine in the future that wants eggs 
+            if (animalType.equals("dairy") && !woolAnimal.isReadyForAnimalProduct())
+                return false;
+        } else {
+            if (!animal.isReadyForAnimalProduct())
+                return false;
+        }
 
         // Filter per entity type if specified
         if (entityTypeId != null) {

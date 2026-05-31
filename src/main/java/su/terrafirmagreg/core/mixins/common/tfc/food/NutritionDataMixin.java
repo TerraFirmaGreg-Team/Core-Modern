@@ -179,12 +179,12 @@ public abstract class NutritionDataMixin implements INutritionDataExtension {
     }
 
     @Override
-    public float tfg$getNegativeNutrient(Nutrient nutrient) {
+    public float tfg$getExtendedNutrient(Nutrient nutrient) {
         return NutritionDataExtension.getExtendedNutrient((NutritionData) (Object) this, nutrient);
     }
 
     @Override
-    public float[] tfg$getNegativeNutrients() {
+    public float[] tfg$getExtendedNutrients() {
         float[] extended = NutritionDataExtension.getExtendedNutrients((NutritionData) (Object) this);
         return extended != null ? extended : new float[TFGNutrients.getExtendedCount()];
     }

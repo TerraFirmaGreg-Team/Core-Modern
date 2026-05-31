@@ -16,7 +16,7 @@ public class InstantDamageEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         if (this == TFGEffects.INSTANT_RADIATION.get()) {
-            livingEntity.hurt(GTDamageTypes.RADIATION.source(livingEntity.level()), (float) 50);
+            livingEntity.hurt(GTDamageTypes.RADIATION.source(livingEntity.level()), (float) 5);
         }
     }
 

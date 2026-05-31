@@ -6,43 +6,55 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-import su.terrafirmagreg.core.common.data.TFGEffects;
-
 public class TemperatureChangeEffect extends MobEffect {
 
-    // How much the temperature is changed each effect trigger
-    private static float deltaTemp = 2;
-
-    // How many ticks per effect trigger
+    private static final float deltaTemp = 2;
     private static final int defaultTime = 20;
 
-    //Max temp so people don't die
-    private static final float maxTemp = 25;
+    private final float targetTemperature;
+    private final boolean isHeating;
 
-    public TemperatureChangeEffect(MobEffectCategory pCategory, int pColor) {
+    /**
+     * Constructor for TemperatureChangeEffect.
+     * @param pCategory The category of the effect.
+     * @param pColor The color of the effect.
+     * @param targetTemperature The target temperature for the effect.
+     * @param isHeating Whether the effect is heating or cooling.
+     */
+    public TemperatureChangeEffect(MobEffectCategory pCategory, int pColor, float targetTemperature, boolean isHeating) {
         super(pCategory, pColor);
+        this.targetTemperature = targetTemperature;
+        this.isHeating = isHeating;
     }
 
+    /**
+     * Applies the effect tick to the living entity.
+     * @param livingEntity The entity to apply the effect to.
+     * @param amplifier The amplifier level of the effect.
+     */
     @Override
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         TemperatureCapability tempCap = livingEntity.getCapability(TemperatureCapability.CAPABILITY)
                 .orElse(TemperatureCapability.DEFAULT);
 
-        if (this == TFGEffects.COOLING.get()) {
-            tempCap.setTemperature(tempCap.getTemperature() - deltaTemp * (amplifier + 1));
-        } else if (this == TFGEffects.WARMING.get()) {
-            if (tempCap.getTemperature() <= maxTemp)
-                tempCap.setTemperature(tempCap.getTemperature() + deltaTemp * (amplifier + 1));
+        float currentTemp = tempCap.getTemperature();
+        float change = deltaTemp * (amplifier + 1);
+
+        if (isHeating) {
+            // If heating check max temp.
+            if (currentTemp < targetTemperature) {
+                tempCap.setTemperature(Math.min(currentTemp + change, targetTemperature));
+            }
+        } else {
+            // If cooling check min temp.
+            if (currentTemp > targetTemperature) {
+                tempCap.setTemperature(Math.max(currentTemp - change, targetTemperature));
+            }
         }
     }
 
     @Override
     public boolean isDurationEffectTick(int duration, int amplitude) {
-        if (this == TFGEffects.COOLING.get() || this == TFGEffects.WARMING.get()) {
-            return duration % defaultTime == 0;
-        } else {
-            return false;
-        }
+        return duration % defaultTime == 0;
     }
-
 }

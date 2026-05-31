@@ -9,22 +9,45 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.effect.InstantDamageEffect;
-import su.terrafirmagreg.core.common.effect.MedicalConditionEffect;
-import su.terrafirmagreg.core.common.effect.TemperatureChangeEffect;
+import su.terrafirmagreg.core.common.effect.*;
 
 public class TFGEffects {
 
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS,
             TFGCore.MOD_ID);
 
+    // Beneficial
     public static final RegistryObject<MobEffect> COOLING = register("cooling",
-            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xAEBDD));
+            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xAEBDD, 5f, false));
+
     public static final RegistryObject<MobEffect> WARMING = register("warming",
-            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xEDA02D));
+            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xEDA02D, 25f, true));
+
+    public static final RegistryObject<MobEffect> QUENCHED = register("quenched",
+            () -> new MobEffect(MobEffectCategory.BENEFICIAL, 0x3ED5E0) {
+            });
+
+    // Harmful
+    public static final RegistryObject<MobEffect> FREEZING = register("freezing",
+            () -> new TemperatureChangeEffect(MobEffectCategory.HARMFUL, 0xA8D9FF, -20f, false));
+
+    public static final RegistryObject<MobEffect> BLAZING = register("blazing",
+            () -> new TemperatureChangeEffect(MobEffectCategory.HARMFUL, 0xF27552, 60f, true));
+
     public static final RegistryObject<MobEffect> INSTANT_RADIATION = register("instant_radiation",
             () -> new InstantDamageEffect(MobEffectCategory.HARMFUL, 0x94fc03));
 
+    public static final RegistryObject<MobEffect> FINAL_MOMENTS = register("final_moments",
+            FinalMomentsEffect::new);
+
+    public static final RegistryObject<MobEffect> CURE_PARASITES = register("cure_parasites",
+            () -> new ContaminantReductionEffect(MobEffectCategory.BENEFICIAL, 0xeb9f91));
+    public static final RegistryObject<MobEffect> CURE_MICROPLASTICS = register("cure_microplastics",
+            () -> new ContaminantReductionEffect(MobEffectCategory.BENEFICIAL, 0x32edb5));
+    public static final RegistryObject<MobEffect> CURE_TOXINS = register("cure_toxins",
+            () -> new ContaminantReductionEffect(MobEffectCategory.BENEFICIAL, 0xb832ed));
+
+    // Medical Conditions.
     public static final RegistryObject<MobEffect> CHEMICAL_BURNS_WARNING = register("chemical_burns_warning",
             () -> new MedicalConditionEffect(0xfa8723));
     public static final RegistryObject<MobEffect> POISON_WARNING = register("poison_warning",

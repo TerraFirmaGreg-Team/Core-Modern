@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.resources.ResourceLocation;
 
 import lombok.Setter;
 
@@ -15,6 +16,21 @@ import lombok.Setter;
 public class GenericScrollableListWidget<E extends ObjectSelectionList.Entry<E>> extends ObjectSelectionList<E> {
 
     protected int x;
+
+    protected ResourceLocation scrollbarBackgroundTexture;
+    protected int scrollbarBackgroundWidth;
+    protected ResourceLocation scrollbarGrabberTexture;
+    protected int scrollbarGrabberWidth;
+
+    public void setScrollbarBackgroundTexture(ResourceLocation texture, int width) {
+        this.scrollbarBackgroundTexture = texture;
+        this.scrollbarBackgroundWidth = width;
+    }
+
+    public void setScrollbarGrabberTexture(ResourceLocation texture, int width) {
+        this.scrollbarGrabberTexture = texture;
+        this.scrollbarGrabberWidth = width;
+    }
 
     /**
      * Constructor.
@@ -41,8 +57,9 @@ public class GenericScrollableListWidget<E extends ObjectSelectionList.Entry<E>>
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         beforeRenderList(graphics, mouseX, mouseY, partialTick);
 
+        int scrollbarWidth = scrollbarBackgroundTexture != null ? scrollbarBackgroundWidth : 6;
         int scrollbarLeft = this.getScrollbarPosition();
-        int scrollbarRight = scrollbarLeft + 6;
+        int scrollbarRight = scrollbarLeft + scrollbarWidth;
 
         graphics.enableScissor(this.x, this.y0, scrollbarRight, this.y1);
         this.renderList(graphics, mouseX, mouseY, partialTick);
@@ -58,9 +75,34 @@ public class GenericScrollableListWidget<E extends ObjectSelectionList.Entry<E>>
                 handleTop = this.y0;
             }
 
-            graphics.fill(scrollbarLeft, this.y0, scrollbarRight, this.y1, -16777216);
-            graphics.fill(scrollbarLeft, handleTop, scrollbarRight, handleTop + handleHeight, -8355712);
-            graphics.fill(scrollbarLeft, handleTop, scrollbarRight - 1, handleTop + handleHeight - 1, -4144960);
+            if (scrollbarBackgroundTexture != null) {
+                int totalHeight = this.y1 - this.y0;
+                // 1st row.
+                graphics.blit(scrollbarBackgroundTexture, scrollbarLeft, this.y0, scrollbarWidth, 1, 0, 0, scrollbarWidth, 1, scrollbarWidth, 3);
+                // 2nd row stretched.
+                if (totalHeight > 2) {
+                    graphics.blit(scrollbarBackgroundTexture, scrollbarLeft, this.y0 + 1, scrollbarWidth, totalHeight - 2, 0, 1, scrollbarWidth, 1, scrollbarWidth, 3);
+                }
+                // 3rd row.
+                if (totalHeight > 1) {
+                    graphics.blit(scrollbarBackgroundTexture, scrollbarLeft, this.y1 - 1, scrollbarWidth, 1, 0, 2, scrollbarWidth, 1, scrollbarWidth, 3);
+                }
+            } else {
+                graphics.fill(scrollbarLeft, this.y0, scrollbarRight, this.y1, -16777216);
+            }
+
+            if (scrollbarGrabberTexture != null) {
+                int grabberWidth = scrollbarGrabberWidth > 0 ? scrollbarGrabberWidth : scrollbarWidth;
+                // 1st row.
+                graphics.blit(scrollbarGrabberTexture, scrollbarLeft, handleTop, grabberWidth, 1, 0, 0, grabberWidth, 1, grabberWidth, 3);
+                // 2nd row stretched.
+                graphics.blit(scrollbarGrabberTexture, scrollbarLeft, handleTop + 1, grabberWidth, handleHeight - 2, 0, 1, grabberWidth, 1, grabberWidth, 3);
+                // 3rd row.
+                graphics.blit(scrollbarGrabberTexture, scrollbarLeft, handleTop + handleHeight - 1, grabberWidth, 1, 0, 2, grabberWidth, 1, grabberWidth, 3);
+            } else {
+                graphics.fill(scrollbarLeft, handleTop, scrollbarRight, handleTop + handleHeight, -8355712);
+                graphics.fill(scrollbarLeft, handleTop, scrollbarRight - 1, handleTop + handleHeight - 1, -4144960);
+            }
         }
 
         this.renderDecorations(graphics, mouseX, mouseY);

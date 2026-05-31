@@ -33,5 +33,6 @@ public record LargeDripstoneConfig(HolderSet<Block> replaceableBlocks, int floor
             Codecs.optionalFieldOf(FloatProvider.CODEC, "stalagmite_bluntness", UniformFloat.of(0.1f, 10.0f)).forGetter(LargeDripstoneConfig::stalagmiteBluntness),
             Codecs.optionalFieldOf(FloatProvider.CODEC, "wind_speed", UniformFloat.of(0.0f, 2.0f)).forGetter(LargeDripstoneConfig::windSpeed),
             Codec.intRange(0, 100).fieldOf("min_radius_for_wind").forGetter(LargeDripstoneConfig::minRadiusForWind),
-            Codec.floatRange(0.0f, 5.0f).fieldOf("min_bluntness_for_wind").forGetter(LargeDripstoneConfig::minBluntnessForWind)).apply(instance, LargeDripstoneConfig::new));
+            Codec.floatRange(0.0f, 5.0f).fieldOf("min_bluntness_for_wind").forGetter(LargeDripstoneConfig::minBluntnessForWind))
+            .apply(instance, LargeDripstoneConfig::new));
 }
