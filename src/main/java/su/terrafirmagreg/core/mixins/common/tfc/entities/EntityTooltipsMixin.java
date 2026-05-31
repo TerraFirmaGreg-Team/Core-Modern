@@ -253,7 +253,7 @@ public abstract class EntityTooltipsMixin {
             } else if (familiarity >= TFCConfig.SERVER.familiarityDecayLimit.get()) {
                 familiarityStyle = ChatFormatting.WHITE;
             }
-            if (!genderless) {
+            if (!genderless || animal.isFertilized()) {
                 line1.append(", ");
             }
             line1.append(
