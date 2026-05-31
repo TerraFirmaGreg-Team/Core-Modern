@@ -195,6 +195,14 @@ public class TFGSlime extends TamableMammal {
     public Item getProduct() {
         return this.getVariant().getItem();
     }
+
+    public float getAmbientalTemperature() {
+        return switch (this.getVariant()) {
+            case LAVA -> 5F;
+            case ICE -> -5F;
+            default -> 0F;
+        };
+    }
     // endregion
 
     // region Production Stuff
