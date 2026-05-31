@@ -34,14 +34,12 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 
-import net.minecraftforge.items.ItemHandlerHelper;
 import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 
