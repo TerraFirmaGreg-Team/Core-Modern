@@ -140,7 +140,7 @@ public class TFGSlime extends TamableMammal {
         SpawnGroupData spawnData = super.finalizeSpawn(level, difficulty, type, data, tag);
         this.setGender(Gender.FEMALE);
         this.setBaby(this.random.nextFloat() < 0.1F);
-        this.setVariant(tag != null && tag.contains("variant", 8) ? TFGSlimeVariant.getByName(tag.getString("variant")) : this.initialVariant(level));
+        this.setVariant(this.initialVariant(level));
         return super.finalizeSpawn(level, difficulty, type, spawnData, tag);
     }
 
