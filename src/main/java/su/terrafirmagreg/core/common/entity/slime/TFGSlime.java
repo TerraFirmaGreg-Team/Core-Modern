@@ -47,8 +47,13 @@ import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 
 public class TFGSlime extends TamableMammal {
-    public static final EntityDataAccessor<TFGSlimeVariant> DATA_VARIANT;
+    public static final EntityDataAccessor<SlimeVariant> DATA_VARIANT;
     public static final EntityDataAccessor<Long> DATA_PRODUCED;
+
+    static {
+        DATA_VARIANT = SynchedEntityData.defineId(TFGSlime.class, TFGEntityDataSerializers.SLIME_VARIANT.get());
+        DATA_PRODUCED = SynchedEntityData.defineId(TFGSlime.class, EntityHelpers.LONG_SERIALIZER);
+    }
 
     static double familiarityCap = 1;
     static int adulthoodDays = 10;
@@ -120,7 +125,7 @@ public class TFGSlime extends TamableMammal {
     // region Data/Init Stuff
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_VARIANT, TFGSlimeVariant.SPRING);
+        this.entityData.define(DATA_VARIANT, SlimeVariant.SPRING);
         this.entityData.define(DATA_PRODUCED, 0L);
     }
 
@@ -132,7 +137,7 @@ public class TFGSlime extends TamableMammal {
 
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariant(TFGSlimeVariant.getByName(tag.getString("variant")));
+        this.setVariant(SlimeVariant.getByName(tag.getString("variant")));
         this.setProducedTick(tag.getLong("produced"));
     }
 
@@ -144,18 +149,12 @@ public class TFGSlime extends TamableMammal {
         return super.finalizeSpawn(level, difficulty, type, spawnData, tag);
     }
 
-    public TFGSlimeVariant initialVariant(ServerLevelAccessor level) {
+    public SlimeVariant initialVariant(ServerLevelAccessor level) {
         BlockPos pos = this.blockPosition();
         ResourceKey<Level> dimension = level.getLevel().dimension();
         Holder<Biome> biome = level.getBiome(pos);
 
-        for (TFGSlimeVariant variant : TFGSlimeVariant.VALUES) {
-            if ((variant.getDimension() == null || dimension == variant.getDimension()) && (variant.getBiome() == null || biome.is(variant.getBiome()))) {
-                return variant;
-            }
-        }
-
-        return TFGSlimeVariant.SPRING;
+        return SlimeVariant.getByHabitat(dimension, biome);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -169,14 +168,14 @@ public class TFGSlime extends TamableMammal {
     // endregion
 
     // region Variant Stuff
-    public TFGSlimeVariant getVariant() {
+    public SlimeVariant getVariant() {
         if (!this.entityData.hasItem(DATA_VARIANT)) {
-            return TFGSlimeVariant.SPRING;
+            return SlimeVariant.SPRING;
         }
         return this.entityData.get(DATA_VARIANT);
     }
 
-    public void setVariant(TFGSlimeVariant type) {
+    public void setVariant(SlimeVariant type) {
         this.entityData.set(DATA_VARIANT, type);
     }
 
@@ -324,8 +323,8 @@ public class TFGSlime extends TamableMammal {
     public void createGenes(CompoundTag tag, TFCAnimalProperties mate) {
         super.createGenes(tag, mate);
         if (mate instanceof TFGSlime slimeMate) {
-            TFGSlimeVariant hybridVariant = TFGSlimeHybrid.getHybrid(this.getVariant(), slimeMate.getVariant());
-            TFGSlimeVariant childVariant;
+            SlimeVariant hybridVariant = SlimeHybrid.getHybrid(this.getVariant(), slimeMate.getVariant());
+            SlimeVariant childVariant;
 
             if (hybridVariant != null) {
                 childVariant = hybridVariant;
@@ -341,7 +340,7 @@ public class TFGSlime extends TamableMammal {
         super.applyGenes(tag, baby);
         if (baby instanceof TFGSlime slime) {
             String variantName = tag.getString("variant");
-            TFGSlimeVariant variant = TFGSlimeVariant.getByName(variantName);
+            SlimeVariant variant = SlimeVariant.getByName(variantName);
             slime.setVariant(variant);
         }
     }
@@ -358,9 +357,4 @@ public class TFGSlime extends TamableMammal {
         return size.height * 0.5F;
     }
     // endregion
-
-    static {
-        DATA_VARIANT = SynchedEntityData.defineId(TFGSlime.class, TFGEntityDataSerializers.SLIME_VARIANT.get());
-        DATA_PRODUCED = SynchedEntityData.defineId(TFGSlime.class, EntityHelpers.LONG_SERIALIZER);
-    }
 }
