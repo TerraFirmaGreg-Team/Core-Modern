@@ -44,6 +44,7 @@
         "common.beneath.NetherSpikesFeatureMixin",
         "common.beneath.PortalUtilMixin",
         "common.cc_tweaked.ModRegistryMixin",
+        "common.cc_tweaked.TermMethodsMixin",
         "common.create.BasinBlockEntityMixin",
         "common.create.BasinCategoryMixin",
         "common.create.BlazeBurnerBlockEntityMixin",
