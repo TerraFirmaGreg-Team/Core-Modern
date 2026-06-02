@@ -55,7 +55,7 @@ public class TFGSlimeModel<T extends TFGSlime> extends HierarchicalModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        partdefinition.addOrReplaceChild("outer", CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, 12.0F, -6.0F, 13.0F, 11.0F, 13.0F, new CubeDeformation(0.0F))
+        partdefinition.addOrReplaceChild("outer", CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, 12.0F, -6.0F, 13.0F, 11.0F, 13.0F, new CubeDeformation(0.01F))
                 .texOffs(0, 24).addBox(-6.0F, 10.0F, -5.0F, 11.0F, 14.0F, 11.0F, new CubeDeformation(0.01F)), PartPose.offset(0.5F, 0.0F, -0.5F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
