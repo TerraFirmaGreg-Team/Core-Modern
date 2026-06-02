@@ -67,7 +67,7 @@ public class TFGSlime extends TamableMammal {
     static long gestationDays = 64;
 
     public TFGSlime(EntityType<? extends TFCAnimal> animal, Level level) {
-        super(animal, level, TFGSounds.FOX, TFCConfig.SERVER.catConfig);
+        super(animal, level, TFGSounds.SLIME, TFCConfig.SERVER.catConfig);
     }
 
     // region Config Bypass
