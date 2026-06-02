@@ -49,6 +49,7 @@
         "common.cc_tweaked.NetworkedTerminalMixin",
         "common.cc_tweaked.TextBufferMixin",
         "common.cc_tweaked.TerminalStateAccessor",
+        "common.cc_tweaked.ResourceMountMixin",
         "common.create.BasinBlockEntityMixin",
         "common.create.BasinCategoryMixin",
         "common.create.BlazeBurnerBlockEntityMixin",
