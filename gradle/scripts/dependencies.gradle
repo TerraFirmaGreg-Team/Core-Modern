@@ -1,3 +1,9 @@
+repositories {
+    flatDir {
+        dirs rootProject.file("libs")
+    }
+}
+
 dependencies {
 
     compileOnly 'org.jetbrains:annotations:26.0.+'
@@ -83,9 +89,10 @@ dependencies {
     modImplementation "curse.maven:applied-energistics-2-wireless-terminals-459929:7014805"
 
     // ComputerCraft
-    modCompileOnly "cc.tweaked:cc-tweaked-1.20.1-core-api:${cc_tweaked_version}"
-    modCompileOnly "cc.tweaked:cc-tweaked-1.20.1-forge-api:${cc_tweaked_version}"
-    modImplementation "cc.tweaked:cc-tweaked-1.20.1-forge:${cc_tweaked_version}"
+    //modCompileOnly "cc.tweaked:cc-tweaked-1.20.1-core-api:${cc_tweaked_version}"
+    //modCompileOnly "cc.tweaked:cc-tweaked-1.20.1-forge-api:${cc_tweaked_version}"
+    //modImplementation "cc.tweaked:cc-tweaked-1.20.1-forge:${cc_tweaked_version}"
+    modImplementation "cc.tweaked:cc-tweaked-1.20.1-forge:1.116.1"
 
     // FTB
     modImplementation ("curse.maven:ftb-teams-forge-404468:6130786") { transitive = false }
