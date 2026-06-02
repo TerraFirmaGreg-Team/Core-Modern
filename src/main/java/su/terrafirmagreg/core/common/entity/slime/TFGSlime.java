@@ -25,6 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -152,7 +153,9 @@ public class TFGSlime extends TamableMammal {
 
     public static boolean spawnRules(EntityType<? extends TFGSlime> type, LevelAccessor level, MobSpawnType spawn,
             BlockPos pos, RandomSource rand) {
-        return level.getBlockState(pos).isAir();
+        return level.getFluidState(pos).isEmpty()
+                && !level.getFluidState(pos.below()).is(FluidTags.LAVA)
+                && !level.getBlockState(pos.below()).isAir();
     }
     // endregion
 
