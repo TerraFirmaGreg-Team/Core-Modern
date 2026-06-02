@@ -70,18 +70,6 @@ public class TFGSlime extends TamableMammal {
         super(animal, level, TFGSounds.FOX, TFCConfig.SERVER.catConfig);
     }
 
-    // region DEBUG
-    @Override
-    public boolean shouldShowName() {
-        return true;
-    }
-
-    @Override
-    public Component getName() {
-        return Component.literal(getVariant().getSerializedName());
-    }
-    // endregion
-
     // region Config Bypass
     @Override
     public float getAdultFamiliarityCap() {
@@ -160,7 +148,7 @@ public class TFGSlime extends TamableMammal {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0F).add(Attributes.MOVEMENT_SPEED, 0.25F);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0F).add(Attributes.MOVEMENT_SPEED, 0.25F).add(Attributes.ATTACK_DAMAGE, 2F);
     }
 
     public static boolean spawnRules(EntityType<? extends TFGSlime> type, LevelAccessor level, MobSpawnType spawn,
