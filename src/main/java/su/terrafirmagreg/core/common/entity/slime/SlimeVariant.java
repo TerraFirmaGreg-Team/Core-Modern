@@ -4,17 +4,15 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.core.Holder;
-import net.minecraft.server.packs.resources.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -23,16 +21,16 @@ import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.items.TFGItems_Slimes;
 
 @MethodsReturnNonnullByDefault
 public enum SlimeVariant implements StringRepresentable {
-    PLANT(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, TFGTags.Biomes.PlantSlimeHabitat, Items.SLIME_BALL),
-    GLOWBERRY(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, TFGTags.Biomes.GlowberrySlimeHabitat, Items.SLIME_BALL),
-    SPRING(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, TFGTags.Biomes.SpringSlimeHabitat, null),
-    ICE(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, TFGTags.Biomes.IceSlimeHabitat, null),
-    LAVA(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, TFGTags.Biomes.LavaSlimeHabitat, null),
-    RESIN(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, null, Items.SLIME_BALL),
-    LATEX(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, null, Items.SLIME_BALL);
+    PLANT(TFGCore.id("textures/entity/slime/plant.png"), Level.NETHER, TFGTags.Biomes.PlantSlimeHabitat, TFGItems_Slimes.PLANT_SLIME_BALL.asItem()),
+    GLOWBERRY(TFGCore.id("textures/entity/slime/glowberry.png"), Level.NETHER, TFGTags.Biomes.GlowberrySlimeHabitat, TFGItems_Slimes.GLOWBERRY_SLIME_BALL.asItem()),
+    SPRING(TFGCore.id("textures/entity/slime/spring.png"), Level.NETHER, TFGTags.Biomes.SpringSlimeHabitat, null),
+    ICE(TFGCore.id("textures/entity/slime/ice.png"), Level.NETHER, TFGTags.Biomes.IceSlimeHabitat, null),
+    LAVA(TFGCore.id("textures/entity/slime/lava.png"), Level.NETHER, TFGTags.Biomes.LavaSlimeHabitat, null),
+    LATEX(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, TFGTags.Biomes.LatexSlimeHabitat, TFGItems_Slimes.LATEX_SLIME_BALL.asItem());
 
     private static final Map<String, SlimeVariant> variantNameMap = new HashMap<>();
 

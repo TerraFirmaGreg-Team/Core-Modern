@@ -44,6 +44,7 @@ public class TFGItems {
     public static void init() {
         TFGItems_Asphalt.init();
         TFGItems_Medicines.init();
+        TFGItems_Slimes.init();
     }
 
     public static final ItemEntry<PiglinDisguise> PIGLIN_DISGUISE = TFGCore.REGISTRATE.item("piglin_disguise",

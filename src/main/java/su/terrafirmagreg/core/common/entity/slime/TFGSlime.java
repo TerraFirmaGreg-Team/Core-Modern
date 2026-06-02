@@ -45,6 +45,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
 import su.terrafirmagreg.core.common.data.TFGSounds;
+import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.items.TFGItems_Slimes;
 
 public class TFGSlime extends TamableMammal {
     public static final EntityDataAccessor<SlimeVariant> DATA_VARIANT;
@@ -56,13 +58,13 @@ public class TFGSlime extends TamableMammal {
     }
 
     static double familiarityCap = 1;
-    static int adulthoodDays = 10;
-    static int uses = 160;
+    static int adulthoodDays = 32;
+    static int uses = 230;
     static boolean eatsRottenFood = false;
-    static int produceTicks = 96000;
+    static int produceTicks = 23500;
     static double produceFamiliarity = 0.15;
-    static int childCount = 10;
-    static long gestationDays = 10;
+    static int childCount = 1;
+    static long gestationDays = 64;
 
     public TFGSlime(EntityType<? extends TFCAnimal> animal, Level level) {
         super(animal, level, TFGSounds.FOX, TFCConfig.SERVER.catConfig);
@@ -197,8 +199,8 @@ public class TFGSlime extends TamableMammal {
 
     public float getAmbientalTemperature() {
         return switch (this.getVariant()) {
-            case LAVA -> 5F;
-            case ICE -> -5F;
+            case LAVA -> 10F;
+            case ICE -> -10F;
             default -> 0F;
         };
     }
@@ -236,9 +238,9 @@ public class TFGSlime extends TamableMammal {
 
             return InteractionResult.SUCCESS;
         } else {
-            // TODO: Currently can't be tamed, need to add a unique taming item.
-            if (this.getFamiliarity() > 0.99F && this.getOwnerUUID() == null && this.isFood(held)) {
+            if (this.getFamiliarity() > 0.99F && this.getOwnerUUID() == null && held.is(TFGItems_Slimes.GOLDEN_SLIME_FOOD.asItem())) {
                 this.tame(player);
+                held.shrink(1);
 
                 return InteractionResult.SUCCESS;
             }
@@ -323,15 +325,7 @@ public class TFGSlime extends TamableMammal {
     public void createGenes(CompoundTag tag, TFCAnimalProperties mate) {
         super.createGenes(tag, mate);
         if (mate instanceof TFGSlime slimeMate) {
-            SlimeVariant hybridVariant = SlimeHybrid.getHybrid(this.getVariant(), slimeMate.getVariant());
-            SlimeVariant childVariant;
-
-            if (hybridVariant != null) {
-                childVariant = hybridVariant;
-            } else {
-                childVariant = random.nextBoolean() ? this.getVariant() : slimeMate.getVariant();
-            }
-
+            SlimeVariant childVariant = random.nextBoolean() ? this.getVariant() : slimeMate.getVariant();
             tag.putString("variant", childVariant.getSerializedName());
         }
     }
@@ -349,7 +343,7 @@ public class TFGSlime extends TamableMammal {
     // region Other / Unsorted
     @Override
     public TagKey<Item> getFoodTag() {
-        return TFCTags.Items.FOODS;
+        return TFGTags.Items.SLIME_FOOD;
     }
 
     @Override

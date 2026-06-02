@@ -16,7 +16,6 @@ import su.terrafirmagreg.core.TFGCore;
 
 @SuppressWarnings({ "unchecked" })
 public class TFGSlimeFaceLayer extends RenderLayer<TFGSlime, TFGSlimeModel<TFGSlime>> {
-    private static final ResourceLocation TEXTURE_LOCATION = TFGCore.id("textures/entity/slime/face/latex_smile.png");
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "slime_face"), "main");
 
@@ -30,7 +29,7 @@ public class TFGSlimeFaceLayer extends RenderLayer<TFGSlime, TFGSlimeModel<TFGSl
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, TFGSlime livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
             float netHeadYaw, float headPitch) {
         if (!livingEntity.isInvisible()) {
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutout(TEXTURE_LOCATION));
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutout(TFGCore.id("textures/entity/slime/face/" + livingEntity.getVariant().getSerializedName() + "_smile.png")));
 
             this.getParentModel().copyPropertiesTo(this.model);
             this.model.prepareMobModel(livingEntity, limbSwing, limbSwingAmount, partialTicks);

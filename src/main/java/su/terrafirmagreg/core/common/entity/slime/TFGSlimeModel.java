@@ -28,8 +28,15 @@ public class TFGSlimeModel<T extends TFGSlime> extends HierarchicalModel<T> {
 
         partdefinition.addOrReplaceChild("inner", CubeListBuilder.create().texOffs(44, 15).addBox(-6.0F, 15.0F, -6.0F, 11.0F, 11.0F, 11.0F, new CubeDeformation(0.0F))
                 .texOffs(80, 0).addBox(-5.0F, 14.0F, -5.0F, 9.0F, 1.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, -3.0F, 0.5F));
-        partdefinition.addOrReplaceChild("antenna", CubeListBuilder.create().texOffs(52, -14).addBox(-0.5F, -26.0F, -3.0F, 0.0F, 15.0F, 14.0F, new CubeDeformation(0.0F)),
+        partdefinition.addOrReplaceChild("antenna", CubeListBuilder.create().texOffs(52, -14).addBox(-0.5F, -26.0F, -3.0F, 0.0F, 13.0F, 14.0F, new CubeDeformation(0.0F)),
                 PartPose.offset(0.5F, 24.0F, -0.5F));
+        partdefinition.addOrReplaceChild("other_antenna", CubeListBuilder.create().texOffs(44, 23).addBox(0.5F, -26.0F, -3.0F, 0.0F, 13.0F, 14.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(4.5F, 24.0F, -0.5F, 0.0F, -1.5708F, 0.0F));
+        partdefinition
+                .addOrReplaceChild("cross", CubeListBuilder.create().texOffs(80, -2).addBox(0.0F, -5.0F, -6.0F, 0.0F, 10.0F, 12.0F, new CubeDeformation(0.0F)),
+                        PartPose.offsetAndRotation(0.0F, 6.0F, 0.0F, 0.0F, -0.7854F, 0.0F))
+                .addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(80, -2).addBox(0.0F, -9.0F, -6.0F, 0.0F, 10.0F, 12.0F, new CubeDeformation(0.0F)),
+                        PartPose.offsetAndRotation(0.0F, 4.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
@@ -48,7 +55,7 @@ public class TFGSlimeModel<T extends TFGSlime> extends HierarchicalModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        partdefinition.addOrReplaceChild("face", CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, 12.0F, -6.0F, 13.0F, 11.0F, 13.0F, new CubeDeformation(0.01F))
+        partdefinition.addOrReplaceChild("outer", CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, 12.0F, -6.0F, 13.0F, 11.0F, 13.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 24).addBox(-6.0F, 10.0F, -5.0F, 11.0F, 14.0F, 11.0F, new CubeDeformation(0.01F)), PartPose.offset(0.5F, 0.0F, -0.5F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
