@@ -46,7 +46,6 @@ import net.minecraftforge.common.MinecraftForge;
 import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.items.TFGItems_Slimes;
 
 public class TFGSlime extends TamableMammal {
     public static final EntityDataAccessor<SlimeVariant> DATA_VARIANT;
