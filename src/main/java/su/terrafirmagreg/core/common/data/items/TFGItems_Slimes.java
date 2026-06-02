@@ -13,11 +13,6 @@ public class TFGItems_Slimes {
 
     }
 
-    public static final ItemEntry<Item> SLIME_FOOD = TFGCore.REGISTRATE.item("slime/slime_food", Item::new)
-            .defaultModel()
-            .tag(TFGTags.Items.SLIME_FOOD)
-            .register();
-
     public static final ItemEntry<Item> PLANT_SLIME_BALL = TFGCore.REGISTRATE.item("slime/slime_ball/plant", Item::new)
             .defaultModel()
             .tag(TFGTags.Items.SLIME_BALL)
