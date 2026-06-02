@@ -7,6 +7,11 @@
 -- Ideally we'd use require, but that is part of the shell, and so is not
 -- available to the BIOS or any APIs. All APIs load this using dofile, but that
 -- has not been defined at this point.
+
+function tfg_utf8_bios_loaded()
+    return true
+end
+
 local expect
 
 local utf8_len = utf8.len

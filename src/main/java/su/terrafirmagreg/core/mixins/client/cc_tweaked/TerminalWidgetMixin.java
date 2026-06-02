@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,12 +19,18 @@ import dan200.computercraft.client.gui.widgets.TerminalWidget;
 import dan200.computercraft.client.render.text.FixedWidthFontRenderer;
 import dan200.computercraft.core.terminal.Terminal;
 import dan200.computercraft.core.util.Colour;
+import dan200.computercraft.shared.computer.core.InputHandler;
 
+import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8ClientInputAccess;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mixin(value = TerminalWidget.class, remap = false)
 public class TerminalWidgetMixin {
+
+    @Shadow
+    @Final
+    private InputHandler computer;
 
     @Shadow
     @Final
@@ -81,6 +88,26 @@ public class TerminalWidgetMixin {
 
                 graphics.drawString(font, text, drawX + xOffset, drawY, textColour, false);
             }
+        }
+    }
+
+    @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true, remap = false)
+    private void tfg$charTypedUtf8(char ch, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        if (!TFGConfig.COMMON.ENABLE_CC_UTF8_COMPAT.get()) {
+            return;
+        }
+
+        if (ch == 0 || ch == '\r' || ch == '\n') {
+            return;
+        }
+
+        if (ch <= 255) {
+            return;
+        }
+
+        if (computer instanceof CcUtf8ClientInputAccess input) {
+            input.tfg$charTypedCodepoint(ch);
+            cir.setReturnValue(true);
         }
     }
 }
