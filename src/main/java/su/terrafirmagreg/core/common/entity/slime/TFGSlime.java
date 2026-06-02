@@ -226,7 +226,7 @@ public class TFGSlime extends TamableMammal {
 
             return InteractionResult.SUCCESS;
         } else {
-            if (this.getFamiliarity() > 0.99F && this.getOwnerUUID() == null && held.is(TFGItems_Slimes.GOLDEN_SLIME_FOOD.asItem())) {
+            if (this.getFamiliarity() > 0.99F && this.getOwnerUUID() == null && this.isFood(held)) {
                 this.tame(player);
                 held.shrink(1);
 
