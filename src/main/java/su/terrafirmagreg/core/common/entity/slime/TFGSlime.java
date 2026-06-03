@@ -155,16 +155,10 @@ public class TFGSlime extends TamableMammal {
             BlockPos pos, RandomSource rand) {
         final BlockPos.MutableBlockPos cursor = pos.mutable();
 
-        if (!level.getBiome(pos).is(TFGTags.Biomes.SlimeHabitat)) {
-            return false;
-        }
-
-        if (level.getBlockState(cursor.below()).isAir()) {
-            return false;
-        }
-
-        if (Helpers.isFluid(level.getFluidState(cursor), FluidTags.LAVA)
-                || Helpers.isFluid(level.getFluidState(cursor.below()), FluidTags.LAVA)) {
+        if (!level.getBiome(pos).is(TFGTags.Biomes.SlimeHabitat) ||
+                level.getBlockState(cursor.below()).isAir() ||
+                Helpers.isFluid(level.getFluidState(cursor), FluidTags.LAVA) ||
+                Helpers.isFluid(level.getFluidState(cursor.below()), FluidTags.LAVA)) {
             return false;
         }
 
