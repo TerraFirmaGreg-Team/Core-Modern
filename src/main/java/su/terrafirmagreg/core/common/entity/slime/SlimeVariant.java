@@ -64,8 +64,9 @@ public enum SlimeVariant implements StringRepresentable {
     }
 
     public static SlimeVariant getByName(String name) {
-        if (variantNameMap.get(name) != null) {
-            return variantNameMap.get(name);
+        SlimeVariant variant = variantNameMap.get(name);
+        if (variant != null) {
+            return variant;
         }
 
         return SPRING;
