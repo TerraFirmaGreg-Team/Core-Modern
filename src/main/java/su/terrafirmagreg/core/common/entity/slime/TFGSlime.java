@@ -332,7 +332,12 @@ public class TFGSlime extends TamableMammal {
     public void createGenes(CompoundTag tag, TFCAnimalProperties mate) {
         super.createGenes(tag, mate);
         if (mate instanceof TFGSlime slimeMate) {
-            SlimeVariant childVariant = random.nextBoolean() ? this.getVariant() : slimeMate.getVariant();
+            SlimeVariant childVariant;
+            if ((this.getVariant() == SlimeVariant.LAVA && slimeMate.getVariant() == SlimeVariant.PLANT) || (this.getVariant() == SlimeVariant.PLANT && slimeMate.getVariant() == SlimeVariant.LAVA)) {
+                childVariant = SlimeVariant.LATEX;
+            } else {
+                childVariant = random.nextBoolean() ? this.getVariant() : slimeMate.getVariant();
+            }
             tag.putString("variant", childVariant.getSerializedName());
         }
     }

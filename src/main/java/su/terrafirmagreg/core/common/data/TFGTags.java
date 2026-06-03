@@ -198,7 +198,6 @@ public final class TFGTags {
         public static final TagKey<Biome> SpringSlimeHabitat = createBiomeTag("nether/spring_slime_habitat");
         public static final TagKey<Biome> IceSlimeHabitat = createBiomeTag("nether/ice_slime_habitat");
         public static final TagKey<Biome> LavaSlimeHabitat = createBiomeTag("nether/lava_slime_habitat");
-        public static final TagKey<Biome> LatexSlimeHabitat = createBiomeTag("nether/latex_slime_habitat");
 
         private static TagKey<Biome> createBiomeTag(String path) {
             return createBiomeTag(TFGCore.id(path));

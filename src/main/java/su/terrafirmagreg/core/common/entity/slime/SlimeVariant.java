@@ -30,7 +30,7 @@ public enum SlimeVariant implements StringRepresentable {
     SPRING(TFGCore.id("textures/entity/slime/spring.png"), Level.NETHER, TFGTags.Biomes.SpringSlimeHabitat, null),
     ICE(TFGCore.id("textures/entity/slime/ice.png"), Level.NETHER, TFGTags.Biomes.IceSlimeHabitat, null),
     LAVA(TFGCore.id("textures/entity/slime/lava.png"), Level.NETHER, TFGTags.Biomes.LavaSlimeHabitat, null),
-    LATEX(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, TFGTags.Biomes.LatexSlimeHabitat, TFGItems_Slimes.LATEX_SLIME_BALL.asItem());
+    LATEX(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, null, TFGItems_Slimes.LATEX_SLIME_BALL.asItem());
 
     private static final Map<String, SlimeVariant> variantNameMap = new HashMap<>();
 
