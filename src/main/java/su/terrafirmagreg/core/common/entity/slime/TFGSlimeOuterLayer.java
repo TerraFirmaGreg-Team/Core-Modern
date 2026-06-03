@@ -17,7 +17,7 @@ import su.terrafirmagreg.core.TFGCore;
 
 public class TFGSlimeOuterLayer extends RenderLayer<TFGSlime, TFGSlimeModel<TFGSlime>> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-            ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "slime_outer"), "main");
+            TFGCore.id("slime_outer"), "main");
 
     private final TFGSlimeModel model;
 

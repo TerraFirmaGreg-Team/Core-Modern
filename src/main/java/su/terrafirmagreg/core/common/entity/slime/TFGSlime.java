@@ -136,7 +136,7 @@ public class TFGSlime extends TamableMammal {
         this.setGender(Gender.FEMALE);
         this.setBaby(this.random.nextFloat() < 0.1F);
         this.setVariant(this.initialVariant(level));
-        return super.finalizeSpawn(level, difficulty, type, spawnData, tag);
+        return spawnData;
     }
 
     public SlimeVariant initialVariant(ServerLevelAccessor level) {

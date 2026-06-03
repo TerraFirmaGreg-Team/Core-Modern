@@ -17,7 +17,7 @@ import su.terrafirmagreg.core.TFGCore;
 @SuppressWarnings({ "unchecked" })
 public class TFGSlimeFaceLayer extends RenderLayer<TFGSlime, TFGSlimeModel<TFGSlime>> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-            ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "slime_face"), "main");
+            TFGCore.id("slime_face"), "main");
 
     private final TFGSlimeModel model;
 

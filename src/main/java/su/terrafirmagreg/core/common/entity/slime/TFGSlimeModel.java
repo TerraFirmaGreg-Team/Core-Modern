@@ -14,7 +14,7 @@ import su.terrafirmagreg.core.TFGCore;
 
 public class TFGSlimeModel<T extends TFGSlime> extends HierarchicalModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-            ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "slime"), "main");
+            TFGCore.id("slime"), "main");
 
     private final ModelPart root;
 
