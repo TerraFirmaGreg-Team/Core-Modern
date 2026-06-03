@@ -153,9 +153,21 @@ public class TFGSlime extends TamableMammal {
 
     public static boolean spawnRules(EntityType<? extends TFGSlime> type, LevelAccessor level, MobSpawnType spawn,
             BlockPos pos, RandomSource rand) {
-        return level.getFluidState(pos).isEmpty()
-                && !level.getFluidState(pos.below()).is(FluidTags.LAVA)
-                && !level.getBlockState(pos.below()).isAir();
+        final BlockPos.MutableBlockPos cursor = pos.mutable();
+
+        if (level.getFluidState(cursor).is(FluidTags.LAVA)
+                || level.getFluidState(cursor.below()).is(FluidTags.LAVA)) {
+            return false;
+        }
+
+        while (!level.getFluidState(cursor).isEmpty()) {
+            if (level.getFluidState(cursor).is(FluidTags.LAVA)) {
+                return false;
+            }
+            cursor.move(0, 1, 0);
+        }
+
+        return !level.getBlockState(cursor.below()).isAir();
     }
     // endregion
 

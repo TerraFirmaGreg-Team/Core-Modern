@@ -89,7 +89,7 @@ public class TFGEntities {
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFCGlacianRam::createMobAttributes)
             .renderer(() -> TFCGlacianRamRenderer::new)
-            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCGlacianRam::spawnRules)
+            .spawnPlacement(SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCGlacianRam::spawnRules)
             .register();
 
     public static final EntityEntry<TFCSniffer> SNIFFER = TFGCore.REGISTRATE.entity("sniffer", TFCSniffer::makeTFCSniffer, MobCategory.CREATURE)
