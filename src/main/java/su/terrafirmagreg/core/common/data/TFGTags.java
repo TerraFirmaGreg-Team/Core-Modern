@@ -85,6 +85,8 @@ public final class TFGTags {
         public static final TagKey<Item> GIRDER = createItemTag("girder");
         public static final TagKey<Item> STRUT = createItemTag("strut");
 
+        public static final TagKey<Item> DYNAMIC_COLOR = createItemTag("dynamic_color");
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }
