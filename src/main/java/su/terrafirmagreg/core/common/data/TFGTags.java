@@ -192,6 +192,7 @@ public final class TFGTags {
 
         public static final TagKey<Biome> EarthIsOldGen = createBiomeTag("earth/is_oldgen");
 
+        public static final TagKey<Biome> SlimeHabitat = createBiomeTag("slime_habitat");
         public static final TagKey<Biome> PlantSlimeHabitat = createBiomeTag("nether/plant_slime_habitat");
         public static final TagKey<Biome> GlowberrySlimeHabitat = createBiomeTag("nether/glowberry_slime_habitat");
         public static final TagKey<Biome> SpringSlimeHabitat = createBiomeTag("nether/spring_slime_habitat");
