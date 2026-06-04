@@ -336,6 +336,7 @@
         "client.cc_tweaked.DirectFixedWidthFontRendererMixin",
         "client.cc_tweaked.FixedWidthFontRendererMixin",
         "client.cc_tweaked.PocketItemRendererMixin",
+        "client.cc_tweaked.CustomLecternRendererMixin",
         "common.ad_astra.PlanetsScreenMixin",
         "common.minecraft.FogRendererMixin",
         "common.tfc.entities.ClientEventHandlerMixin",
