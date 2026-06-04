@@ -3,6 +3,9 @@ package su.terrafirmagreg.core.mixins.client.cc_tweaked;
 import static dan200.computercraft.client.render.text.FixedWidthFontRenderer.FONT_HEIGHT;
 import static dan200.computercraft.client.render.text.FixedWidthFontRenderer.FONT_WIDTH;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,6 +22,7 @@ import dan200.computercraft.client.gui.widgets.TerminalWidget;
 import dan200.computercraft.client.render.text.FixedWidthFontRenderer;
 import dan200.computercraft.core.terminal.Terminal;
 import dan200.computercraft.core.util.Colour;
+import dan200.computercraft.core.util.StringUtil;
 import dan200.computercraft.shared.computer.core.InputHandler;
 
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8ClientInputAccess;
@@ -89,6 +93,48 @@ public class TerminalWidgetMixin {
                 graphics.drawString(font, text, drawX + xOffset, drawY, textColour, false);
             }
         }
+    }
+
+    @Inject(method = "paste", at = @At("HEAD"), cancellable = true, remap = false)
+    private void tfg$pasteUtf8(CallbackInfo ci) {
+        if (!TFGConfig.COMMON.ENABLE_CC_UTF8_COMPAT.get()) {
+            return;
+        }
+
+        var clipboard = Minecraft.getInstance().keyboardHandler.getClipboard();
+        var paste = tfg$encodePasteUtf8(clipboard);
+
+        if (paste.remaining() > 0) {
+            computer.paste(paste);
+        }
+
+        ci.cancel();
+    }
+
+    @Unique
+    private static ByteBuffer tfg$encodePasteUtf8(String clipboard) {
+        var output = ByteBuffer.allocate(StringUtil.MAX_PASTE_LENGTH);
+        var iterator = clipboard.codePoints().iterator();
+
+        while (iterator.hasNext()) {
+            var codepoint = iterator.nextInt();
+
+            if (codepoint == '\r' || codepoint == '\n' || codepoint == 0) {
+                break;
+            }
+
+            var bytes = new String(Character.toChars(codepoint)).getBytes(StandardCharsets.UTF_8);
+
+            if (bytes.length > output.remaining()) {
+                break;
+            }
+
+            output.put(bytes);
+        }
+
+        output.flip();
+
+        return output.asReadOnlyBuffer();
     }
 
     @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true, remap = false)
