@@ -75,6 +75,7 @@
         "common.create.greate_tiering.WaterWheelBlockMixin",
         "common.create.greate_tiering.WindmillBearingBlockEntityMixin",
         "common.create.greate_tiering.WindmillBearingBlockMixin",
+        "common.create.TrackPlacementMixin",
         "common.createliquidfuel.LiquidBurnerFuelJsonLoaderMixin",
         "common.emi.ItemEmiStackMixin",
         "common.fallingtrees.StandardTreeMixin",
