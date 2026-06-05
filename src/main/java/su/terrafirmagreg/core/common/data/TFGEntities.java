@@ -60,13 +60,13 @@ public class TFGEntities {
     public static void init() {
     }
 
-    public static final EntityEntry<TFGSlime> TFG_SLIME = TFGCore.REGISTRATE.entity("slime", TFGSlime::new, MobCategory.CREATURE)
+    public static final EntityEntry<TFGSlime> TFG_SLIME = TFGCore.REGISTRATE.entity("slime", TFGSlime::new, MobCategory.AMBIENT)
             .properties(p -> p.sized(1F, 1F).clientTrackingRange(8))
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .tag(TFGTags.Entities.Genderless)
             .attributes(TFGSlime::createAttributes)
             .renderer(() -> TFGSlimeRenderer::new)
-            .spawnPlacement(SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFGSlime::spawnRules)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFGSlime::spawnRules)
             .register();
 
     public static final EntityEntry<TFGFox> TFG_FOX = TFGCore.REGISTRATE.entity("fox", TFGFox::new, MobCategory.CREATURE)
