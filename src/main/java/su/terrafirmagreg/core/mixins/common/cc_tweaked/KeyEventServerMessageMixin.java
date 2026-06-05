@@ -15,6 +15,10 @@ import dan200.computercraft.shared.network.server.ServerNetworkContext;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Preserves UTF-8 input bytes before keyboard events reach the server terminal.
+ */
+
 @Mixin(value = KeyEventServerMessage.class, remap = false)
 public class KeyEventServerMessageMixin {
 

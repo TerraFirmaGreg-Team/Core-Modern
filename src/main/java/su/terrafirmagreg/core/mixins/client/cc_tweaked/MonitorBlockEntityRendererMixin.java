@@ -28,6 +28,10 @@ import dan200.computercraft.shared.peripheral.monitor.MonitorBlockEntity;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Renders Unicode text on CC:Tweaked monitors with Minecraft's font.
+ */
+
 @Mixin(value = MonitorBlockEntityRenderer.class, remap = false)
 public class MonitorBlockEntityRendererMixin {
 

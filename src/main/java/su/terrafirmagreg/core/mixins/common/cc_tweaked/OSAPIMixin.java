@@ -20,6 +20,10 @@ import dan200.computercraft.core.apis.OSAPI;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Converts computer labels between Lua UTF-8 byte strings and Java Unicode strings.
+ */
+
 @Mixin(value = OSAPI.class, remap = false)
 public class OSAPIMixin {
 

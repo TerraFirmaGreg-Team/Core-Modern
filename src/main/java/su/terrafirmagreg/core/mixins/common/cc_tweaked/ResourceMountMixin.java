@@ -22,6 +22,10 @@ import dan200.computercraft.shared.computer.core.ResourceMount;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Loads UTF-8 patched CraftOS Lua resources before CC:Tweaked's bundled resources.
+ */
+
 @Mixin(value = ResourceMount.class, remap = false)
 public class ResourceMountMixin {
 
@@ -80,6 +84,10 @@ public class ResourceMountMixin {
                 "computercraft/" + path);
     }
 }
+
+/**
+ * Applies UTF-8 patched CraftOS Lua resources to CC:Tweaked API mounts.
+ */
 
 @Mixin(value = AbstractComputerCraftAPI.class, remap = false)
 class AbstractComputerCraftAPIMixin {

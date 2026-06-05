@@ -25,6 +25,10 @@ import dan200.computercraft.core.util.Colour;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Renders UTF-8 text on printed pages and books with Minecraft's font.
+ */
+
 @Mixin(value = PrintoutRenderer.class, remap = false)
 public class PrintoutRendererMixin {
 

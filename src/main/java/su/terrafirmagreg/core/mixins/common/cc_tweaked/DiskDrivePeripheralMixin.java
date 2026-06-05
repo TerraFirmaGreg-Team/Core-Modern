@@ -18,6 +18,10 @@ import dan200.computercraft.shared.peripheral.diskdrive.DiskDrivePeripheral;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Converts disk labels between Lua UTF-8 byte strings and Java Unicode strings.
+ */
+
 @Mixin(value = DiskDrivePeripheral.class, remap = false)
 public class DiskDrivePeripheralMixin {
 

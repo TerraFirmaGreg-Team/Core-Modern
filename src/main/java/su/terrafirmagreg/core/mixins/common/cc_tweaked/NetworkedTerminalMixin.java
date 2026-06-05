@@ -21,6 +21,10 @@ import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TerminalStateAccess;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Synchronizes UTF-8 terminal data through CC:Tweaked's networked terminal updates.
+ */
+
 @Mixin(value = NetworkedTerminal.class, remap = false)
 public class NetworkedTerminalMixin {
 

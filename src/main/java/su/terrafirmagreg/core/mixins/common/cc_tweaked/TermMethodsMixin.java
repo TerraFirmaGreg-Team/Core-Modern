@@ -20,6 +20,10 @@ import dan200.computercraft.core.terminal.Terminal;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Decodes Lua UTF-8 byte strings before writing them to CC:Tweaked terminals.
+ */
+
 @Mixin(value = TermMethods.class, remap = false)
 public abstract class TermMethodsMixin {
 

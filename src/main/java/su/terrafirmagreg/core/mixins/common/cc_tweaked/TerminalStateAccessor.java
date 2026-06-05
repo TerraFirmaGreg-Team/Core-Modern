@@ -5,6 +5,10 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import dan200.computercraft.shared.computer.terminal.TerminalState;
 
+/**
+ * Exposes terminal state internals needed for UTF-8 synchronization.
+ */
+
 @Mixin(value = TerminalState.class, remap = false)
 public interface TerminalStateAccessor {
 

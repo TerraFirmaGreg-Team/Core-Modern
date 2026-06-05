@@ -12,13 +12,13 @@ import dan200.computercraft.core.util.Colour;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Prevents CC:Tweaked's fixed-width renderer from drawing non-ASCII placeholder glyphs.
+ */
+
 @Mixin(value = FixedWidthFontRenderer.class, remap = false)
 public class FixedWidthFontRendererMixin {
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public static void drawString(FixedWidthFontRenderer.QuadEmitter emitter, float x, float y, TextBuffer text, TextBuffer textColour, Palette palette, int light) {
         var enabled = TFGConfig.COMMON.ENABLE_CC_UTF8_COMPAT.get();

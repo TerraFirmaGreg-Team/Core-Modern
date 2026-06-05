@@ -14,6 +14,10 @@ import dan200.computercraft.shared.computer.terminal.TerminalState;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TerminalStateAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Saves and restores UTF-8 terminal data in terminal state packets.
+ */
+
 @Mixin(value = TerminalState.class, remap = false)
 public class TerminalStateMixin implements CcUtf8TerminalStateAccess {
 

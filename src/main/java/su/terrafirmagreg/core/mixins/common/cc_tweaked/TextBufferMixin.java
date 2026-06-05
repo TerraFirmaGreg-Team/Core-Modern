@@ -16,6 +16,10 @@ import dan200.computercraft.core.terminal.TextBuffer;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Stores Unicode codepoints alongside CC:Tweaked's legacy text buffer so terminal cells can keep UTF-8 text.
+ */
+
 @Mixin(value = TextBuffer.class, remap = false)
 public class TextBufferMixin implements CcUtf8TextBufferAccess {
 
@@ -81,28 +85,16 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
         }
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public int length() {
         return text.length;
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public void write(String value) {
         write(value, 0);
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public void write(String value, int start) {
         if (!TFGConfig.COMMON.ENABLE_CC_UTF8_COMPAT.get()) {
@@ -123,10 +115,6 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
         tfg$writeCodepoints(value, start);
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public void write(ByteBuffer value, int start) {
         var codepoints = tfg$getCodepoints();
@@ -148,10 +136,6 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
         }
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public void write(TextBuffer value) {
         var codepoints = tfg$getCodepoints();
@@ -167,19 +151,11 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
         }
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public void fill(char c) {
         fill(c, 0, text.length);
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public void fill(char c, int start, int end) {
         var codepoints = tfg$getCodepoints();
@@ -193,10 +169,6 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
         }
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public char charAt(int index) {
         if (!TFGConfig.COMMON.ENABLE_CC_UTF8_COMPAT.get()) {
@@ -208,10 +180,6 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
         return codepoint >= 0 && codepoint <= Character.MAX_VALUE ? (char) codepoint : '?';
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public void setChar(int index, char c) {
         if (index >= 0 && index < text.length) {
@@ -233,10 +201,6 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
         }
     }
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public String toString() {
         if (!TFGConfig.COMMON.ENABLE_CC_UTF8_COMPAT.get()) {

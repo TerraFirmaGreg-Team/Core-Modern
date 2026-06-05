@@ -12,13 +12,13 @@ import dan200.computercraft.core.util.Colour;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Prevents direct fixed-width rendering from drawing non-ASCII placeholder glyphs.
+ */
+
 @Mixin(value = DirectFixedWidthFontRenderer.class, remap = false)
 public class DirectFixedWidthFontRendererMixin {
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public static void drawString(DirectFixedWidthFontRenderer.QuadEmitter emitter, float x, float y, TextBuffer text, TextBuffer textColour, Palette palette) {
         var enabled = TFGConfig.COMMON.ENABLE_CC_UTF8_COMPAT.get();

@@ -29,6 +29,10 @@ import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8ClientInputAccess;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Adds UTF-8 paste handling and Unicode rendering to CC:Tweaked's terminal widget.
+ */
+
 @Mixin(value = TerminalWidget.class, remap = false)
 public class TerminalWidgetMixin {
 

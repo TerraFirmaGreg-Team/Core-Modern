@@ -22,6 +22,10 @@ import dan200.computercraft.shared.peripheral.printer.PrinterPeripheral;
 
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Decodes UTF-8 Lua strings before printer page text and titles are saved.
+ */
+
 @Mixin(value = PrinterPeripheral.class, remap = false)
 public class PrinterPeripheralMixin {
 

@@ -13,6 +13,10 @@ import dan200.computercraft.shared.network.server.KeyEventServerMessage;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8ClientInputAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Sends UTF-8 character and paste input without CC:Tweaked's legacy filtering.
+ */
+
 @Mixin(value = ClientInputHandler.class, remap = false)
 public class ClientInputHandlerMixin implements CcUtf8ClientInputAccess {
 

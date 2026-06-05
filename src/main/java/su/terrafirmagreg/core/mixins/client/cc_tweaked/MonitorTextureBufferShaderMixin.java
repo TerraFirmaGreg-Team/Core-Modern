@@ -13,13 +13,13 @@ import dan200.computercraft.core.util.Colour;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Adds UTF-8 support to CC:Tweaked's text buffer.
+ */
+
 @Mixin(value = MonitorTextureBufferShader.class, remap = false)
 public class MonitorTextureBufferShaderMixin {
 
-    /**
-     * @author TFG
-     * @reason UTF-8 support
-     */
     @Overwrite(remap = false)
     public static void setTerminalData(ByteBuffer buffer, Terminal terminal) {
         var width = terminal.getWidth();

@@ -24,6 +24,10 @@ import dan200.computercraft.core.util.Colour;
 import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
+/**
+ * Renders Unicode text on pocket computers displayed as items.
+ */
+
 @Mixin(value = PocketItemRenderer.class, remap = false)
 public class PocketItemRendererMixin {
 
