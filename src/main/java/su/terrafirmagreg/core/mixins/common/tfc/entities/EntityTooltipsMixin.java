@@ -42,6 +42,7 @@ import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.entity.Soarer;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBison;
 import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboa;
 import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemming;
@@ -54,6 +55,7 @@ import su.terrafirmagreg.core.common.entity.fox.FoxData;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
+import su.terrafirmagreg.core.common.entity.slime.TFGSlime;
 import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.entity.soarer.SoarerData;
@@ -97,7 +99,17 @@ public abstract class EntityTooltipsMixin {
         registry.register("mongoose", TFC_1_21, TFCMongoose.class);
         registry.register("fox", TFC_FOX, TFCFox.class);
         registry.register("tamed_fox", TFG_FOX, TFGFox.class);
+        registry.register("slime", TFG_SLIME, TFGSlime.class);
     }
+
+    @Unique
+    private static final EntityTooltip TFG_SLIME = (level, entity, tooltip) -> {
+        if (entity instanceof TFGSlime slime) {
+            tooltip.accept(Component.translatable(
+                    (TFGCore.MOD_ID + ".tooltip.slime.variant." + slime.getVariant().getSerializedName())
+                            .toLowerCase(Locale.ROOT)));
+        }
+    };
 
     @Unique
     private static final EntityTooltip TFG_WOLF = (level, entity, tooltip) -> {
@@ -219,10 +231,17 @@ public abstract class EntityTooltipsMixin {
             }
         }
         if (entity instanceof TFCAnimalProperties animal) {
-            final MutableComponent line1 = Helpers.translateEnum(animal.getGender());
+            final MutableComponent line1 = Component.empty();
+            boolean genderless = entity.getType().is(TFGTags.Entities.Genderless);
+            if (!genderless) {
+                line1.append(Helpers.translateEnum(animal.getGender()));
+            }
 
             if (animal.isFertilized()) {
-                line1.append(", ").append(Component.translatable("tfc.tooltip.fertilized"));
+                if (!genderless) {
+                    line1.append(", ");
+                }
+                line1.append(Component.translatable("tfc.tooltip.fertilized"));
             }
             final float familiarity = Math.max(0.0F, Math.min(1.0F, animal.getFamiliarity()));
             final String familiarityPercent = String.format("%.2f", familiarity * 100);
@@ -234,7 +253,10 @@ public abstract class EntityTooltipsMixin {
             } else if (familiarity >= TFCConfig.SERVER.familiarityDecayLimit.get()) {
                 familiarityStyle = ChatFormatting.WHITE;
             }
-            line1.append(", ").append(
+            if (!genderless || animal.isFertilized()) {
+                line1.append(", ");
+            }
+            line1.append(
                     Component.translatable("tfc.jade.familiarity", familiarityPercent).withStyle(familiarityStyle));
             tooltip.accept(line1);
             tooltip.accept(Component.translatable("tfc.jade.animal_size", animal.getGeneticSize()));
