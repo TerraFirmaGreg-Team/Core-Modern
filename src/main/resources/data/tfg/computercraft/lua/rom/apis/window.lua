@@ -61,6 +61,7 @@ local string_rep = string.rep
 local string_sub = string.sub
 local utf8_len = utf8.len
 local utf8_offset = utf8.offset
+local table_concat = table.concat
 
 local function text_len(text)
     return utf8_len(text) or #text
@@ -88,6 +89,28 @@ local function text_sub(text, i, j)
     else
         return string_sub(text, start_byte)
     end
+end
+
+local function normalise_blit_colours(text, colours, text_len)
+    if #colours == text_len then
+        return colours
+    end
+
+    if #colours ~= #text then
+        return nil
+    end
+
+    local out = {}
+    for i = 1, text_len do
+        local byte = utf8_offset(text, i)
+        if not byte then
+            return nil
+        end
+
+        out[i] = string_sub(colours, byte, byte)
+    end
+
+    return table_concat(out)
 end
 
 --- A custom version of [`colors.toBlit`], specialised for the window API.
@@ -314,7 +337,11 @@ function create(parent, nX, nY, nWidth, nHeight, bStartVisible)
         if type(sBackgroundColor) ~= "string" then expect(3, sBackgroundColor, "string") end
 
         local nTextLen = text_len(sText)
-        if #sTextColor ~= nTextLen or #sBackgroundColor ~= nTextLen then
+
+        sTextColor = normalise_blit_colours(sText, sTextColor, nTextLen)
+        sBackgroundColor = normalise_blit_colours(sText, sBackgroundColor, nTextLen)
+
+        if not sTextColor or not sBackgroundColor then
             error("Arguments must be the same length", 2)
         end
 
