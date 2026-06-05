@@ -55,6 +55,7 @@
         "common.cc_tweaked.PrinterBlockEntityAccessor",
         "common.cc_tweaked.PrinterPeripheralMixin",
         "common.cc_tweaked.OSAPIMixin",
+        "common.cc_tweaked.DiskDrivePeripheralMixin",
         "common.create.BasinBlockEntityMixin",
         "common.create.BasinCategoryMixin",
         "common.create.BlazeBurnerBlockEntityMixin",
