@@ -47,7 +47,7 @@ public class LargeNestBoxBlockEntity
                 return;
             Entity sitter = Seat.getSittingEntity(level, pos);
             if (sitter instanceof TFGWoolEggProducingAnimal animal) {
-                if (animal.isReadyForAnimalProduct() && !nest.isFull()) {
+                if (animal.isReadyForAnimalProduct() && Helpers.isFull(nest.inventory)) {
                     final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos().set(pos);
 
                     final Direction backward = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
@@ -190,9 +190,5 @@ public class LargeNestBoxBlockEntity
                 level.setBlockAndUpdate(cursor, targetState.setValue(LargeNestBoxBlock.HAS_EGG_TYPE, newEggState));
             }
         }
-    }
-
-    private boolean isFull() {
-        return Helpers.isFull(this.inventory);
     }
 }
