@@ -1,0 +1,72 @@
+{
+    "format_version": "1.21.11",
+    "elements": [{
+        "from": [
+            4,
+            0,
+            4
+        ],
+        "to": [
+            12,
+            16,
+            12
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    10,
+                    8,
+                    14,
+                    16
+                ],
+                "texture": "#3"
+            },
+            "south": {
+                "uv": [
+                    10,
+                    8,
+                    14,
+                    16
+                ],
+                "texture": "#3"
+            },
+            "north": {
+                "uv": [
+                    10,
+                    8,
+                    14,
+                    16
+                ],
+                "texture": "#3"
+            },
+            "west": {
+                "uv": [
+                    10,
+                    8,
+                    14,
+                    16
+                ],
+                "texture": "#3"
+            },
+            "up": {
+                "uv": [
+                    8,
+                    0,
+                    16,
+                    8
+                ],
+                "texture": "#2"
+            },
+            "down": {
+                "uv": [
+                    8,
+                    0,
+                    16,
+                    8
+                ],
+                "texture": "#2"
+            }
+        }
+    }],
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT)"
+}

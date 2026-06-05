@@ -11,12 +11,7 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public class CoolingSteamProvider implements ParticleProvider<SimpleParticleType> {
-    private final SpriteSet spriteSet;
-
-    public CoolingSteamProvider(SpriteSet spriteSet) {
-        this.spriteSet = spriteSet;
-    }
+public record CoolingSteamProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 
     @Override
     public Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level,

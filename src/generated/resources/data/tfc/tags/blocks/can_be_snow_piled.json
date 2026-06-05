@@ -38,6 +38,9 @@
     "tfg:plant/cycad",
     "tfg:plant/eyeblossom",
     "tfg:plant/pale_hanging_moss_plant",
-    "tfg:plant/pale_hanging_moss"
+    "tfg:plant/pale_hanging_moss",
+    "tfg:wood/twig/araucaria",
+    "tfg:wood/twig/beech",
+    "tfg:wood/twig/mahoe"
   ]
 }

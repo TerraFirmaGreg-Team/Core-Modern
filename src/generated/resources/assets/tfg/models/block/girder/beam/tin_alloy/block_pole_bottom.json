@@ -1,0 +1,8 @@
+{
+  "parent": "tfg:block/girder/beam/block_pole_bottom",
+  "textures": {
+    "2": "tfg:block/girder/pole/tin_alloy",
+    "3": "tfg:block/girder/pole_side/tin_alloy",
+    "particle": "tfg:block/girder/beam/tin_alloy"
+  }
+}

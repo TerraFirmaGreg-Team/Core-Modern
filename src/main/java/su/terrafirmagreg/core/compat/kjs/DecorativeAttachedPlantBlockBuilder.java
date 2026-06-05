@@ -24,6 +24,6 @@ public class DecorativeAttachedPlantBlockBuilder extends DecorativePlantBlockBui
 
     @Override
     public DecorativeAttachedPlantBlock createObject() {
-        return new DecorativeAttachedPlantBlock(createExtendedProperties(), allowVertical);
+        return new DecorativeAttachedPlantBlock(createExtendedProperties(), effect, allowVertical);
     }
 }

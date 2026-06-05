@@ -24,7 +24,12 @@ public final class TFGNutrients {
     }
 
     public static int getNegativeCount() {
-        return getTotalCount() - POSITIVE_COUNT;
+        int count = 0;
+        for (Nutrient nutrient : Nutrient.VALUES) {
+            if (isNegative(nutrient))
+                count++;
+        }
+        return count;
     }
 
     public static int getPositiveCount() {
@@ -35,8 +40,12 @@ public final class TFGNutrients {
         return ((INutrientExtension) (Object) nutrient).tfg$isNegative();
     }
 
+    public static boolean isTransient(Nutrient nutrient) {
+        return ((INutrientExtension) (Object) nutrient).tfg$isTransient();
+    }
+
     public static boolean isPositive(Nutrient nutrient) {
-        return !isNegative(nutrient);
+        return ((INutrientExtension) (Object) nutrient).tfg$isPositive();
     }
 
     public static boolean isOriginal(Nutrient nutrient) {
@@ -45,6 +54,24 @@ public final class TFGNutrients {
 
     public static boolean isExtended(Nutrient nutrient) {
         return nutrient.ordinal() >= ORIGINAL_COUNT;
+    }
+
+    public static Nutrient getByName(String name) {
+        for (Nutrient nutrient : Nutrient.VALUES) {
+            if (nutrient.name().equalsIgnoreCase(name)) {
+                return nutrient;
+            }
+        }
+        return null;
+    }
+
+    public static int getTransientCount() {
+        int count = 0;
+        for (Nutrient nutrient : Nutrient.VALUES) {
+            if (isTransient(nutrient))
+                count++;
+        }
+        return count;
     }
 
     private TFGNutrients() {

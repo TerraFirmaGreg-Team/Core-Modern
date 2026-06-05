@@ -11,8 +11,8 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.network.packet.ExtendedNutrientsPacket;
 import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
-import su.terrafirmagreg.core.network.packet.NegativeNutrientsPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
 import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
 import su.terrafirmagreg.core.network.packet.ParticlePacket;
@@ -67,10 +67,10 @@ public class TFGNetworkHandler {
                 FuelSyncPacket::handle);
         INSTANCE.registerMessage(
                 id(),
-                NegativeNutrientsPacket.class,
-                NegativeNutrientsPacket::encode,
-                NegativeNutrientsPacket::decode,
-                NegativeNutrientsPacket::handle);
+                ExtendedNutrientsPacket.class,
+                ExtendedNutrientsPacket::encode,
+                ExtendedNutrientsPacket::decode,
+                ExtendedNutrientsPacket::handle);
         INSTANCE.registerMessage(
                 id(),
                 RequestTeamNutritionPacket.class,

@@ -3,17 +3,20 @@ package su.terrafirmagreg.core.mixins.common.gtceu.medical;
 import java.util.Map;
 import java.util.Set;
 
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.gregtechceu.gtceu.api.data.medicalcondition.MedicalCondition;
 import com.gregtechceu.gtceu.common.capability.MedicalConditionTracker;
 import com.gregtechceu.gtceu.common.data.GTMedicalConditions;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import net.minecraft.world.effect.MobEffect;
@@ -24,6 +27,7 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 
 import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMedicalConditions;
+import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 
 @Mixin(value = MedicalConditionTracker.class, remap = false)
 public abstract class MedicalConditionTrackerMixin {
@@ -72,5 +76,23 @@ public abstract class MedicalConditionTrackerMixin {
     @Inject(method = "removeMedicalCondition", at = @At("TAIL"), remap = false)
     private void tfg$removeMedicalCondition(MedicalCondition condition, CallbackInfo ci) {
         getPlayer().removeEffect(tfg$warningEffects.get(condition));
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD", target = "Lcom/gregtechceu/gtceu/api/data/medicalcondition/MedicalCondition;idleProgressionRate:F", opcode = Opcodes.GETFIELD), remap = false)
+    private float tfg$modifyTickProgressionRate(float original, @Local(name = "multiplier") int multiplier) {
+        if (multiplier == 1) {
+            return original * NutrientEffectsHandler.getMedicalConditionProgressionModifier(getPlayer().getUUID());
+        } else if (multiplier == -1) {
+            return original * NutrientEffectsHandler.getMedicalConditionHealingModifier(getPlayer().getUUID());
+        }
+        return original;
+    }
+
+    @ModifyVariable(method = "progressCondition", at = @At("HEAD"), argsOnly = true, remap = false)
+    private float tfg$modifyProgressConditionStrength(float strength) {
+        if (strength > 0) {
+            return strength * NutrientEffectsHandler.getMedicalConditionProgressionModifier(getPlayer().getUUID());
+        }
+        return strength;
     }
 }

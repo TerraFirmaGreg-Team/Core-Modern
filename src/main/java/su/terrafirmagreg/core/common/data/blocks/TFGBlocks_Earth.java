@@ -1,7 +1,7 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import static su.terrafirmagreg.core.common.data.TFGItems.*;
 import static su.terrafirmagreg.core.common.data.blocks.TFGBlocks.dropBetween;
+import static su.terrafirmagreg.core.common.data.items.TFGItems.*;
 
 import java.util.Locale;
 import java.util.Map;
@@ -49,8 +49,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
-import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGPlant;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 
 @SuppressWarnings("unused")
 public class TFGBlocks_Earth {

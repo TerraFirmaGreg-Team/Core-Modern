@@ -21,9 +21,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import su.terrafirmagreg.core.TFGCore;
 
 @Mixin(value = LeafHanger.class, remap = false)
 public abstract class LeafHangerMixin implements AquaticMob {
@@ -36,7 +33,7 @@ public abstract class LeafHangerMixin implements AquaticMob {
 
     /**
      * @author Pyritie
-     * @reason Lets leaf hangers spawn in salt water, and above the sea level
+     * @reason Lets leaf hangers spawn in other kinds of water, and above the sea level
      */
     @Overwrite
     public static boolean canSpawn(EntityType<? extends Hanger> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
@@ -47,11 +44,6 @@ public abstract class LeafHangerMixin implements AquaticMob {
 
     @Redirect(method = "defineSynchedData", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;defaultBlockState()Lnet/minecraft/world/level/block/state/BlockState;"), remap = true)
     protected BlockState tfg$defineSynchedData(Block instance) {
-        Block paleMossCarpet = ForgeRegistries.BLOCKS.getValue(TFGCore.id("pale_moss_carpet"));
-        if (paleMossCarpet != null) {
-            return paleMossCarpet.defaultBlockState();
-        } else {
-            return TFCBlocks.PLANTS.get(Plant.RED_ALGAE).get().defaultBlockState();
-        }
+        return TFCBlocks.PLANTS.get(Plant.RED_ALGAE).get().defaultBlockState();
     }
 }

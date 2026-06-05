@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/girder/truss/item",
+  "textures": {
+    "0": "tfg:block/girder/truss/zinc"
+  }
+}

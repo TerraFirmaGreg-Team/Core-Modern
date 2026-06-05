@@ -23,6 +23,7 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGRecipeConditions;
@@ -54,6 +55,7 @@ public class CommonProxy {
         TFGNetworkHandler.init();
         TFGBlocks.init();
         TFGBlockEntities.init();
+        TFGPartialModels.init();
         TFGItems.init();
         TFGCreativeTab.init();
         TFGFeatures.FEATURES.register(bus);
@@ -71,6 +73,7 @@ public class CommonProxy {
         TFGEvents.register();
         TFGSounds.SOUNDS.register(bus);
         TFGCarvers.CARVERS.register(bus);
+        TFGLootConditions.LOOT_CONDITIONS.register(bus);
 
         TFGBrain.MEMORY_TYPES.register(bus);
         TFGBrain.SENSOR_TYPES.register(bus);
@@ -114,6 +117,7 @@ public class CommonProxy {
             addUpgrades(AE2wtlib.UNIVERSAL_TERMINAL);
 
             TFGBlockEntities.finaliseBEModification();
+            TFGFluids.registerFluidInteractions();
         });
     }
 

@@ -8,10 +8,13 @@ import java.util.Objects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
 
 import earth.terrarium.adastra.common.container.VehicleContainer;
@@ -29,6 +32,10 @@ public class ModUtilsMixin {
      */
     @Overwrite
     public static void land(ServerPlayer pilotPlayer, ServerLevel targetLevel, Vec3 pos) {
+        BlockPos landingPos = BlockPos.containing(pos);
+        targetLevel.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(landingPos), 1, landingPos);
+        targetLevel.getChunk(landingPos);
+
         Entity vehicle = pilotPlayer.getVehicle();
 
         if (vehicle instanceof Rocket rocket) {
