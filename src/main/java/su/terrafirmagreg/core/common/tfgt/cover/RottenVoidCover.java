@@ -10,6 +10,8 @@ import com.gregtechceu.gtceu.common.cover.voiding.ItemVoidingCover;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.IFood;
@@ -27,6 +29,14 @@ import net.minecraftforge.items.IItemHandlerModifiable;
  */
 public class RottenVoidCover extends ItemVoidingCover {
 
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(RottenVoidCover.class, ItemVoidingCover.MANAGED_FIELD_HOLDER);
+
+    @Override
+    public ManagedFieldHolder getFieldHolder() {
+        return MANAGED_FIELD_HOLDER;
+    }
+
+    @Persisted
     protected int minimumDaysRemaining = 0;
 
     public RottenVoidCover(CoverDefinition definition, ICoverable coverHolder, Direction attachedSide) {

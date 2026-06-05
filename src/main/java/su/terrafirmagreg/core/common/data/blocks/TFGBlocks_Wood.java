@@ -416,7 +416,8 @@ public class TFGBlocks_Wood {
 
                     ModelUtils.blockVariantsRotated(prov.getVariantBuilder(ctx.getEntry()), model);
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden")))
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden")),
+                        TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "can_be_snow_piled")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
