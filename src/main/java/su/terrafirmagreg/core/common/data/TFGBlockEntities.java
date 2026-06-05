@@ -87,6 +87,17 @@ public class TFGBlockEntities {
             .renderer(() -> StrutBlockEntityRenderer::new)
             .register();
 
+    public static final Map<PalmTrees, BlockEntityEntry<PalmHeadBlockEntity>> PALM_HEADS = new EnumMap<>(PalmTrees.class);
+
+    static {
+        for (PalmTrees tree : PalmTrees.values()) {
+            PALM_HEADS.put(tree, TFGCore.REGISTRATE
+                    .<PalmHeadBlockEntity>blockEntity(tree.getSerializedName() + "_palm_head", (type, pos, state) -> new PalmHeadBlockEntity(type, pos, state, tree))
+                    .validBlock(() -> TFGBlocks_PalmTrees.PALM_HEADS.get(tree).get())
+                    .register());
+        }
+    }
+
     private static final Map<Supplier<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();
 
     public static void addValidBEBlock(Supplier<?> type, Block block) {
