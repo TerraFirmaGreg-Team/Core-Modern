@@ -25,9 +25,8 @@ import dan200.computercraft.core.util.Colour;
 import dan200.computercraft.core.util.StringUtil;
 import dan200.computercraft.shared.computer.core.InputHandler;
 
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8ClientInputAccess;
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.mixins.common.cc_tweaked.CcUtf8TextBufferAccess;
 
 /**
  * Adds UTF-8 paste handling and Unicode rendering to CC:Tweaked's terminal widget.

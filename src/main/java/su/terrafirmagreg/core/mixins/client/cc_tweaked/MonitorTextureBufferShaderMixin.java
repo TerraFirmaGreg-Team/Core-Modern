@@ -10,8 +10,8 @@ import dan200.computercraft.client.render.text.FixedWidthFontRenderer;
 import dan200.computercraft.core.terminal.Terminal;
 import dan200.computercraft.core.util.Colour;
 
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.mixins.common.cc_tweaked.CcUtf8TextBufferAccess;
 
 /**
  * Adds UTF-8 support to CC:Tweaked's text buffer.

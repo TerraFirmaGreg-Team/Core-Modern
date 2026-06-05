@@ -11,7 +11,6 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import dan200.computercraft.shared.computer.terminal.TerminalState;
 
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TerminalStateAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 /**

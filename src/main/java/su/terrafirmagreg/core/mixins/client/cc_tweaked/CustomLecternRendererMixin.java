@@ -24,8 +24,8 @@ import dan200.computercraft.core.terminal.Terminal;
 import dan200.computercraft.core.util.Colour;
 import dan200.computercraft.shared.lectern.CustomLecternBlockEntity;
 
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.mixins.common.cc_tweaked.CcUtf8TextBufferAccess;
 
 /**
  * Renders Unicode text on pocket computers mounted on lecterns.

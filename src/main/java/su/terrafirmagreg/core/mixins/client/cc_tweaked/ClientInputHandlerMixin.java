@@ -10,7 +10,6 @@ import dan200.computercraft.client.gui.ClientInputHandler;
 import dan200.computercraft.client.network.ClientNetworking;
 import dan200.computercraft.shared.network.server.KeyEventServerMessage;
 
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8ClientInputAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 /**

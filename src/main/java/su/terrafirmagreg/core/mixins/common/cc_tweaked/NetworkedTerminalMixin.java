@@ -17,8 +17,6 @@ import dan200.computercraft.core.util.Colour;
 import dan200.computercraft.shared.computer.terminal.NetworkedTerminal;
 import dan200.computercraft.shared.computer.terminal.TerminalState;
 
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TerminalStateAccess;
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 /**

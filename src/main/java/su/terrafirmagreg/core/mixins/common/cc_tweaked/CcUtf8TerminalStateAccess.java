@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.compat.cc_tweaked;
+package su.terrafirmagreg.core.mixins.common.cc_tweaked;
 
 /**
  * Exposes raw UTF-8 client input data used by keyboard handling.

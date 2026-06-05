@@ -6,11 +6,12 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import dan200.computercraft.client.render.text.DirectFixedWidthFontRenderer;
 import dan200.computercraft.core.terminal.Palette;
+import dan200.computercraft.core.terminal.Terminal;
 import dan200.computercraft.core.terminal.TextBuffer;
 import dan200.computercraft.core.util.Colour;
 
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.mixins.common.cc_tweaked.CcUtf8TextBufferAccess;
 
 /**
  * Prevents direct fixed-width rendering from drawing non-ASCII placeholder glyphs.
@@ -25,7 +26,7 @@ public class DirectFixedWidthFontRendererMixin {
         var textAccess = (CcUtf8TextBufferAccess) (Object) text;
 
         for (var i = 0; i < text.length(); i++) {
-            var colour = palette.getRenderColours(15 - dan200.computercraft.core.terminal.Terminal.getColour(textColour.charAt(i), Colour.BLACK));
+            var colour = palette.getRenderColours(15 - Terminal.getColour(textColour.charAt(i), Colour.BLACK));
             var codepoint = enabled ? textAccess.tfg$codePointAt(i) : text.charAt(i);
 
             if (enabled && (codepoint < 0 || codepoint > 255)) {

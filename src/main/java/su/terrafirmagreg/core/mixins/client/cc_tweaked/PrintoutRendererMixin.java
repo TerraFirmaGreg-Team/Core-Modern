@@ -22,8 +22,8 @@ import dan200.computercraft.core.terminal.Palette;
 import dan200.computercraft.core.terminal.TextBuffer;
 import dan200.computercraft.core.util.Colour;
 
-import su.terrafirmagreg.core.compat.cc_tweaked.CcUtf8TextBufferAccess;
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.mixins.common.cc_tweaked.CcUtf8TextBufferAccess;
 
 /**
  * Renders UTF-8 text on printed pages and books with Minecraft's font.

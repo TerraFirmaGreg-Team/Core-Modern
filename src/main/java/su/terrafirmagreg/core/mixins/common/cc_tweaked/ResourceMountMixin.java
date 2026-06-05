@@ -79,9 +79,7 @@ public class ResourceMountMixin {
 
     @Unique
     private static ResourceLocation tfg$overrideLocation(String path) {
-        return ResourceLocation.fromNamespaceAndPath(
-                TFGCore.MOD_ID,
-                "computercraft/" + path);
+        return TFGCore.id("computercraft/" + path);
     }
 }
 
@@ -136,8 +134,6 @@ class AbstractComputerCraftAPIMixin {
 
     @Unique
     private static ResourceLocation tfg$overrideLocation(String path) {
-        return ResourceLocation.fromNamespaceAndPath(
-                TFGCore.MOD_ID,
-                "computercraft/" + path);
+        return TFGCore.id("computercraft/" + path);
     }
 }
