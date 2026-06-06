@@ -13,6 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
 
+@SuppressWarnings({ "unchecked" })
 public final class TFGSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, TFGCore.MOD_ID);
 
@@ -20,6 +21,9 @@ public final class TFGSounds {
     public static final TFCSounds.EntitySound BISON = createTfcEntitySounds("bison", true, false);
     public static final TFCSounds.EntitySound FOX = new TFCSounds.EntitySound(() -> SoundEvents.FOX_AMBIENT, () -> SoundEvents.FOX_DEATH, () -> SoundEvents.FOX_HURT, () -> SoundEvents.CHICKEN_STEP,
             Optional.of((Supplier) () -> SoundEvents.FOX_BITE), Optional.of((Supplier) () -> SoundEvents.FOX_SLEEP));
+    public static final TFCSounds.EntitySound SLIME = new TFCSounds.EntitySound(() -> SoundEvents.SLIME_SQUISH_SMALL, () -> SoundEvents.SLIME_DEATH_SMALL, () -> SoundEvents.SLIME_HURT_SMALL,
+            () -> SoundEvents.EMPTY,
+            Optional.of((Supplier) () -> SoundEvents.SLIME_ATTACK), Optional.of((Supplier) () -> SoundEvents.EMPTY));
 
     private static RegistryObject<SoundEvent> createSound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(

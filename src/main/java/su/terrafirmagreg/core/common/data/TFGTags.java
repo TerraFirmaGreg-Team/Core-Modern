@@ -49,6 +49,8 @@ public final class TFGTags {
         public static final TagKey<Item> TreatedWoodGreenhouseCasings = createItemTag("treated_wood_greenhouse_casings");
 
         public static final TagKey<Item> SEAL_FOOD = createItemTag("seal_food");
+        public static final TagKey<Item> SLIME_FOOD = createItemTag("slime_food");
+        public static final TagKey<Item> SLIME_BALL = createItemTag("slime_ball");
 
         public static final TagKey<Item> PrecisionFabricatorDippedItems = createItemTag("precision_fabricator_dipped_items");
         public static final TagKey<Item> PrecisionFabricatorHolderRods = createItemTag("precision_fabricator_holder_rods");
@@ -116,6 +118,7 @@ public final class TFGTags {
         public static final TagKey<Block> AnemonePlantableOn = createBlockTag("anemone_plantable_on");
         public static final TagKey<Block> IsAnemone = createBlockTag("is_anemone");
         public static final TagKey<Block> NOT_SLOWED_WITH_SNOWSHOES = createBlockTag("not_slowed_with_snowshoes");
+        public static final TagKey<Block> TRACK_REPLACEABLE = createBlockTag("track_replaceable");
 
         public static final TagKey<Block> GIRDER = createBlockTag("girder");
         public static final TagKey<Block> PAVING_GIRDER = createBlockTag("paving_girder");
@@ -148,6 +151,7 @@ public final class TFGTags {
         public static final TagKey<EntityType<?>> IgnoresCacti = createEntityTag("ignores_cacti");
         public static final TagKey<EntityType<?>> NotRammedByRammers = createEntityTag("not_rammed_by_rammers");
         public static final TagKey<EntityType<?>> FishingNetScoopable = createEntityTag("fishing_net_scoopable");
+        public static final TagKey<EntityType<?>> Genderless = createEntityTag("genderless");
 
         private static TagKey<EntityType<?>> createEntityTag(String path) {
             return createEntityTag(TFGCore.id(path));
@@ -190,6 +194,13 @@ public final class TFGTags {
         public static final TagKey<Biome> EarthIsVolcanic = createBiomeTag("earth/is_volcanic");
 
         public static final TagKey<Biome> EarthIsOldGen = createBiomeTag("earth/is_oldgen");
+
+        public static final TagKey<Biome> SlimeHabitat = createBiomeTag("slime_habitat");
+        public static final TagKey<Biome> PlantSlimeHabitat = createBiomeTag("nether/plant_slime_habitat");
+        public static final TagKey<Biome> GlowberrySlimeHabitat = createBiomeTag("nether/glowberry_slime_habitat");
+        public static final TagKey<Biome> SpringSlimeHabitat = createBiomeTag("nether/spring_slime_habitat");
+        public static final TagKey<Biome> IceSlimeHabitat = createBiomeTag("nether/ice_slime_habitat");
+        public static final TagKey<Biome> LavaSlimeHabitat = createBiomeTag("nether/lava_slime_habitat");
 
         private static TagKey<Biome> createBiomeTag(String path) {
             return createBiomeTag(TFGCore.id(path));

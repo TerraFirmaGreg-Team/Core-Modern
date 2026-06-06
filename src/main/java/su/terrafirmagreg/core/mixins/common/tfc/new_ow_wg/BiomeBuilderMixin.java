@@ -1,8 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
-import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
-import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_VERSION;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -95,14 +93,14 @@ public class BiomeBuilderMixin implements IBiomeBuilder {
         return (BiomeBuilder) (Object) this;
     }
 
+    // Wrap every surface builder factory with the centered-feature (cinder cone / tuff ring / tuya) decorators.
+    // If the biome doesn't exist (eg with old worldgen) then the wrappers exit through a null check.
     @Inject(method = "surface", at = @At("TAIL"), remap = false, cancellable = true)
     private void tfg$surface(SurfaceBuilderFactory surfaceBuilderFactory, CallbackInfoReturnable<BiomeBuilder> cir) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
-            this.surfaceBuilderFactory = CinderConeSurfaceBuilder.create(surfaceBuilderFactory);
-            this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(this.surfaceBuilderFactory);
-            this.surfaceBuilderFactory = TuyaSurfaceBuilder.create(this.surfaceBuilderFactory);
-            cir.setReturnValue((BiomeBuilder) (Object) this);
-        }
+        this.surfaceBuilderFactory = CinderConeSurfaceBuilder.create(surfaceBuilderFactory);
+        this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(this.surfaceBuilderFactory);
+        this.surfaceBuilderFactory = TuyaSurfaceBuilder.create(this.surfaceBuilderFactory);
+        cir.setReturnValue((BiomeBuilder) (Object) this);
     }
 
     public BiomeBuilder tfg$tuffRings(int frequency, int baseHeight, int scaleHeight) {

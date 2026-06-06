@@ -99,7 +99,7 @@ public abstract class TemperatureCapabilityMixin {
             ItemTemperatureProvider.evaluateAll(this.player, this.modifiers);
             BlockTemperatureProvider.evaluateAll(this.player, this.modifiers);
             BlockEntityTemperatureProvider.evaluateAll(this.player, this.modifiers);
-            EntityTemperatureProvider.evaluateAll(this.player, this.modifiers);
+            this.modifiers.add(TFCAmbientalCompat.getEntityTempModifier(this.player));
         }
         this.modifiers.keepOnlyNEach(3);
 
