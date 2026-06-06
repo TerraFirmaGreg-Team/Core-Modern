@@ -1,24 +1,20 @@
 package su.terrafirmagreg.core.network;
 
+import java.util.Optional;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.network.packet.ExtendedNutrientsPacket;
-import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
-import su.terrafirmagreg.core.network.packet.OreHighlightPacket;
-import su.terrafirmagreg.core.network.packet.OreHighlightVeinPacket;
-import su.terrafirmagreg.core.network.packet.ParticlePacket;
-import su.terrafirmagreg.core.network.packet.RequestTeamNutritionPacket;
-import su.terrafirmagreg.core.network.packet.SoundPacket;
-import su.terrafirmagreg.core.network.packet.SyncTeamNutritionPacket;
+import su.terrafirmagreg.core.network.packet.*;
 
 public class TFGNetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
@@ -83,6 +79,20 @@ public class TFGNetworkHandler {
                 SyncTeamNutritionPacket::encode,
                 SyncTeamNutritionPacket::decode,
                 SyncTeamNutritionPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                SelectColorPacket.class,
+                SelectColorPacket::encode,
+                SelectColorPacket::decode,
+                SelectColorPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(
+                id(),
+                SelectChromaticCodePacket.class,
+                SelectChromaticCodePacket::encode,
+                SelectChromaticCodePacket::decode,
+                SelectChromaticCodePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {
