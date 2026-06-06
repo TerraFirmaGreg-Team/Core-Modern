@@ -56,8 +56,7 @@ public class ChromaticEffectSelectScreen extends Screen {
         for (Character code : availableCodes) {
             Component codeTypeLabel = Component.translatable("gui.tfgc.chromatic_select.code_type");
             Component preview = ChromaticEffectsRegistry.parseCustomEffects(
-                    Component.translatable("gui.tfgc.chromatic_select.format", code, codeTypeLabel).getString()
-            );
+                    Component.translatable("gui.tfgc.chromatic_select.format", code, codeTypeLabel).getString());
 
             boolean hovering = mouseX >= x && mouseX <= x + 200 && mouseY >= y && mouseY <= y + (ENTRY_HEIGHT - 2);
 
