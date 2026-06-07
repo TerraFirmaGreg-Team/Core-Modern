@@ -9,6 +9,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
@@ -100,24 +102,23 @@ public class ClientTickHandler {
     }
 
     @SubscribeEvent
-    public static void onPickBlockColor(InputEvent.InteractionKeyMappingTriggered event) {
+    public static void onKeyInput(InputEvent.InteractionKeyMappingTriggered event) {
         if (!event.isPickBlock())
             return;
 
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.level == null)
+        var mc = Minecraft.getInstance();
+        if (mc.player == null)
             return;
 
         var player = mc.player;
-        ItemStack stack = player.getMainHandItem();
+        var stack = player.getMainHandItem();
         if (!(stack.getItem() instanceof ChameleonSprayCanItem))
             return;
+        event.setCanceled(true);
 
         var target = mc.hitResult;
         if (target == null || target.getType() != HitResult.Type.BLOCK)
             return;
-
-        event.setCanceled(true);
 
         var level = player.level();
         var blockHit = (BlockHitResult) target;
@@ -160,7 +161,22 @@ public class ClientTickHandler {
                     }
                 }
             }
+        } else {
+            Integer colorIndex = getBlockPickedColorIndex(level.getBlockState(pos));
+            if (colorIndex != null) {
+                TFGNetworkHandler.INSTANCE.sendToServer(new SelectColorPacket(InteractionHand.MAIN_HAND, colorIndex));
+            }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Integer getBlockPickedColorIndex(BlockState state) {
+        for (Property<?> property : state.getProperties()) {
+            if (property.getValueClass() == DyeColor.class) {
+                return state.getValue((Property<DyeColor>) property).ordinal();
+            }
+        }
+        return null;
     }
 
     @SubscribeEvent
