@@ -39,7 +39,7 @@ public class ColorRadialMenuScreen extends Screen {
     private static final int COLOR_BTN_BORDER = 0xFF00FF00;
 
     public ColorRadialMenuScreen(InteractionHand hand) {
-        super(Component.translatable("gui.tfgc.color_select.title"));
+        super(Component.translatable("gui.tfg.color_select.title"));
         this.hand = hand;
     }
 
@@ -101,7 +101,7 @@ public class ColorRadialMenuScreen extends Screen {
         guiGraphics.fill(buttonX, buttonY, buttonX + BTN_WIDTH, buttonY + BTN_HEIGHT, hoveringCustom ? COLOR_BTN_BG_HOVER : COLOR_BTN_BG);
         guiGraphics.renderOutline(buttonX, buttonY, BTN_WIDTH, BTN_HEIGHT, COLOR_BTN_BORDER);
 
-        guiGraphics.drawCenteredString(this.font, Component.translatable("gui.tfgc.color_select.chromatic_btn"), centerX, buttonY + 6, COLOR_WHITE);
+        guiGraphics.drawCenteredString(this.font, Component.translatable("gui.tfg.color_select.chromatic_btn"), centerX, buttonY + 6, COLOR_WHITE);
     }
 
     @Override

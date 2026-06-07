@@ -24,7 +24,7 @@ public class ChromaticEffectSelectScreen extends Screen {
     private static final int ENTRY_HEIGHT = 18;
 
     public ChromaticEffectSelectScreen(InteractionHand hand) {
-        super(Component.translatable("gui.tfgc.chromatic_select.title"));
+        super(Component.translatable("gui.tfg.chromatic_select.title"));
         this.hand = hand;
 
         for (String entry : ModConfig.INSTANCE.colors.customColors) {
@@ -50,13 +50,13 @@ public class ChromaticEffectSelectScreen extends Screen {
         int x = centerX - 100;
         int y = 50;
 
-        guiGraphics.drawCenteredString(this.font, Component.translatable("gui.tfgc.chromatic_select.header"), centerX, 20, 0x00FF00);
-        guiGraphics.drawCenteredString(this.font, Component.translatable("gui.tfgc.chromatic_select.subtitle"), centerX, 32, 0xAAAAAA);
+        guiGraphics.drawCenteredString(this.font, Component.translatable("gui.tfg.chromatic_select.header"), centerX, 20, 0x00FF00);
+        guiGraphics.drawCenteredString(this.font, Component.translatable("gui.tfg.chromatic_select.subtitle"), centerX, 32, 0xAAAAAA);
 
         for (Character code : availableCodes) {
-            Component codeTypeLabel = Component.translatable("gui.tfgc.chromatic_select.code_type");
+            Component codeTypeLabel = Component.translatable("gui.tfg.chromatic_select.code_type");
             Component preview = ChromaticEffectsRegistry.parseCustomEffects(
-                    Component.translatable("gui.tfgc.chromatic_select.format", code, codeTypeLabel).getString());
+                    Component.translatable("gui.tfg.chromatic_select.format", code, codeTypeLabel).getString());
 
             boolean hovering = mouseX >= x && mouseX <= x + 200 && mouseY >= y && mouseY <= y + (ENTRY_HEIGHT - 2);
 

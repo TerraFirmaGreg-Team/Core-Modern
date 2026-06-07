@@ -19,6 +19,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
+import net.dries007.tfc.common.entities.livestock.pet.TamableMammal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,10 +30,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +39,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
@@ -65,9 +62,7 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
     private static final ImmutableMap<DyeColor, Block> CARPET_MAP;
     private static final ImmutableMap<DyeColor, Block> CONCRETE_MAP;
     private static final ImmutableMap<DyeColor, Block> CONCRETE_POWDER_MAP;
-    private static final ImmutableMap<DyeColor, Block> SHULKER_BOX_MAP;
     private static final ImmutableMap<DyeColor, Block> BED_MAP;
-    private static final ImmutableMap<DyeColor, Block> CANDLE_MAP;
     private static final ImmutableMap<DyeColor, Block> BANNER_MAP;
 
     @SuppressWarnings("deprecation")
@@ -84,10 +79,7 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
         ImmutableMap.Builder<DyeColor, Block> carpetBuilder = ImmutableMap.builder();
         ImmutableMap.Builder<DyeColor, Block> concreteBuilder = ImmutableMap.builder();
         ImmutableMap.Builder<DyeColor, Block> concretePowderBuilder = ImmutableMap.builder();
-        ImmutableMap.Builder<DyeColor, Block> shulkerBoxBuilder = ImmutableMap.builder();
-
         ImmutableMap.Builder<DyeColor, Block> bedBuilder = ImmutableMap.builder();
-        ImmutableMap.Builder<DyeColor, Block> candleBuilder = ImmutableMap.builder();
         ImmutableMap.Builder<DyeColor, Block> bannerBuilder = ImmutableMap.builder();
 
         for (DyeColor color : DyeColor.values()) {
@@ -98,10 +90,8 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
             carpetBuilder.put(color, getBlock(color, "carpet"));
             concreteBuilder.put(color, getBlock(color, "concrete"));
             concretePowderBuilder.put(color, getBlock(color, "concrete_powder"));
-            shulkerBoxBuilder.put(color, getBlock(color, "shulker_box"));
 
             bedBuilder.put(color, getBlock(color, "bed"));
-            candleBuilder.put(color, getBlock(color, "candle"));
             bannerBuilder.put(color, getBlock(color, "banner"));
         }
         GLASS_MAP = glassBuilder.build();
@@ -111,10 +101,8 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
         CARPET_MAP = carpetBuilder.build();
         CONCRETE_MAP = concreteBuilder.build();
         CONCRETE_POWDER_MAP = concretePowderBuilder.build();
-        SHULKER_BOX_MAP = shulkerBoxBuilder.build();
 
         BED_MAP = bedBuilder.build();
-        CANDLE_MAP = candleBuilder.build();
         BANNER_MAP = bannerBuilder.build();
     }
 
@@ -158,15 +146,12 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
 
         if (first != null && handleSpecialBlockEntities(first, selectedColor, maxBlocksToRecolor, context)) {
             changesMade = true;
-        } else if (first == null || !(first instanceof SignBlockEntity || first instanceof IColorableBlockEntity || first instanceof IPipeNode || first instanceof IPaintable
-                || first instanceof ShulkerBoxBlockEntity)) {
-            changesMade = handleBlocks(context.getClickedPos(), selectedColor, maxBlocksToRecolor, context);
-        }
+        } else if (first == null || !(first instanceof SignBlockEntity || first instanceof IColorableBlockEntity || first instanceof IPipeNode || first instanceof IPaintable))
 
-        if (changesMade) {
-            GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
-            return InteractionResult.SUCCESS;
-        }
+            if (changesMade) {
+                GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
+                return InteractionResult.SUCCESS;
+            }
 
         return InteractionResult.PASS;
     }
@@ -364,17 +349,6 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
                 return true;
             }
             return false;
-        } else if (first instanceof ShulkerBoxBlockEntity shulkerBox) {
-            var tag = shulkerBox.saveWithoutMetadata();
-            var level = first.getLevel();
-            var pos = first.getBlockPos();
-            if (recolorBlockNoState(SHULKER_BOX_MAP, color, level, pos, Blocks.SHULKER_BOX)) {
-                if (level.getBlockEntity(pos) instanceof ShulkerBoxBlockEntity newShulker) {
-                    newShulker.load(tag);
-                }
-                consumePaint(stack, 1, false);
-                return true;
-            }
         }
 
         return false;
@@ -504,7 +478,7 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
             return false;
         }
 
-        if (block.defaultBlockState().is(BlockTags.BEDS) || block.defaultBlockState().is(BlockTags.BANNERS) || block.defaultBlockState().is(BlockTags.CANDLES)) {
+        if (block.defaultBlockState().is(BlockTags.BEDS) || block.defaultBlockState().is(BlockTags.BANNERS)) {
             return tryPaintSpecialBlock(level, pos, block, color);
         }
 
@@ -586,9 +560,6 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
                 return true;
             }
         }
-
-        if (block.defaultBlockState().is(BlockTags.CANDLES))
-            return recolorBlockNoState(CANDLE_MAP, activeColor, world, pos, Blocks.CANDLE);
 
         if (block.defaultBlockState().is(BlockTags.BANNERS)) {
             BlockState bannerState = world.getBlockState(pos);
@@ -682,10 +653,7 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
             world.setBlockAndUpdate(pos, Blocks.WHITE_BED.defaultBlockState());
             return true;
         }
-        if (block.defaultBlockState().is(BlockTags.CANDLES) && block != Blocks.CANDLE) {
-            world.setBlockAndUpdate(pos, Blocks.CANDLE.defaultBlockState());
-            return true;
-        }
+
         if (block.defaultBlockState().is(BlockTags.BANNERS) && block != Blocks.WHITE_BANNER) {
             world.setBlockAndUpdate(pos, Blocks.WHITE_BANNER.defaultBlockState());
             return true;
@@ -771,6 +739,7 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
         Level level = target.level();
         DyeColor color = getColor(stack);
         DyeColor targetColor = (color == null) ? DyeColor.WHITE : color;
+        DyeColor collarTargetColor = (color == null) ? DyeColor.RED : color;
         boolean changed = false;
 
         if (target instanceof Sheep sheep) {
@@ -779,27 +748,11 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
                     sheep.setColor(targetColor);
                 changed = true;
             }
-        } else if (target instanceof Wolf wolf && wolf.isTame()) {
-            DyeColor wolfTarget = (color == null) ? DyeColor.RED : color;
-            if (wolf.getCollarColor() != wolfTarget) {
+        } else if (target instanceof TamableMammal pet && pet.getOwnerUUID() != null) {
+            if (pet.getCollarColor() != collarTargetColor) {
                 if (!level.isClientSide)
-                    wolf.setCollarColor(wolfTarget);
+                    pet.setCollarColor(collarTargetColor);
                 changed = true;
-            }
-        } else if (target instanceof Cat cat && cat.isTame()) {
-            DyeColor catTarget = (color == null) ? DyeColor.RED : color;
-            if (cat.getCollarColor() != catTarget) {
-                if (!level.isClientSide)
-                    cat.setCollarColor(catTarget);
-                changed = true;
-            }
-        } else if (target instanceof Shulker shulker) {
-            if (!level.isClientSide) {
-                java.util.Optional<DyeColor> targetVariant = java.util.Optional.ofNullable(color);
-                if (!shulker.getVariant().equals(targetVariant)) {
-                    shulker.setVariant(targetVariant);
-                    changed = true;
-                }
             }
         }
 
