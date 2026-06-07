@@ -1,9 +1,15 @@
 package su.terrafirmagreg.core.client.event;
 
+import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.blockentity.IPaintable;
+import com.gregtechceu.gtceu.api.pipenet.IPipeNode;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -11,6 +17,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import appeng.api.implementations.blockentities.IColorableBlockEntity;
+import appeng.api.util.AEColor;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.TFGKeybinds;
@@ -91,9 +100,72 @@ public class ClientTickHandler {
     }
 
     @SubscribeEvent
+    public static void onPickBlockColor(InputEvent.InteractionKeyMappingTriggered event) {
+        if (!event.isPickBlock())
+            return;
+
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.level == null)
+            return;
+
+        var player = mc.player;
+        ItemStack stack = player.getMainHandItem();
+        if (!(stack.getItem() instanceof ChameleonSprayCanItem))
+            return;
+
+        var target = mc.hitResult;
+        if (target == null || target.getType() != HitResult.Type.BLOCK)
+            return;
+
+        event.setCanceled(true);
+
+        var level = player.level();
+        var blockHit = (BlockHitResult) target;
+        var pos = blockHit.getBlockPos();
+        var be = level.getBlockEntity(pos);
+
+        if (GTCEu.Mods.isAE2Loaded() && be instanceof IColorableBlockEntity colorable) {
+            if (colorable.getColor().equals(AEColor.TRANSPARENT)) {
+                TFGNetworkHandler.INSTANCE.sendToServer(new SelectColorPacket(InteractionHand.MAIN_HAND, -1));
+                return;
+            }
+
+            for (AEColor color : AEColor.values()) {
+                if (color.equals(colorable.getColor())) {
+                    TFGNetworkHandler.INSTANCE.sendToServer(new SelectColorPacket(InteractionHand.MAIN_HAND, color.ordinal()));
+                    return;
+                }
+            }
+        } else if (be instanceof IPipeNode pipe) {
+            if (!pipe.isPainted()) {
+                TFGNetworkHandler.INSTANCE.sendToServer(new SelectColorPacket(InteractionHand.MAIN_HAND, -1));
+            } else {
+                for (int i = 0; i < DyeColor.values().length; i++) {
+                    DyeColor color = DyeColor.byId(i);
+                    if (color.getMapColor().col == pipe.getPaintingColor()) {
+                        TFGNetworkHandler.INSTANCE.sendToServer(new SelectColorPacket(InteractionHand.MAIN_HAND, i));
+                        return;
+                    }
+                }
+            }
+        } else if (be instanceof IPaintable paintable) {
+            if (!paintable.isPainted()) {
+                TFGNetworkHandler.INSTANCE.sendToServer(new SelectColorPacket(InteractionHand.MAIN_HAND, -1));
+            } else {
+                for (int i = 0; i < DyeColor.values().length; i++) {
+                    DyeColor color = DyeColor.byId(i);
+                    if (color.getMapColor().col == paintable.getRealColor()) {
+                        TFGNetworkHandler.INSTANCE.sendToServer(new SelectColorPacket(InteractionHand.MAIN_HAND, i));
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getItemStack();
-        if (stack.getItem() instanceof ChameleonSprayCanItem) {
-        }
+        stack.getItem();
     }
 }
