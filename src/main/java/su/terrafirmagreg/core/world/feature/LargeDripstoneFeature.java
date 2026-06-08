@@ -170,7 +170,7 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
                                 BlockPos dripstonePos = windOffsetter.offset(pos);
                                 if (EnvironmentHelpers.isWorldgenReplaceable(level, dripstonePos)) {
                                     placedBlock = true;
-                                    level.setBlock(dripstonePos, rockData.getRock(dripstonePos).hardened().defaultBlockState(), 2);
+                                    level.setBlock(dripstonePos, rockData.getRock(dripstonePos).raw().defaultBlockState(), 2);
                                 } else if (placedBlock && level.getBlockState(dripstonePos).is(TFCTags.Blocks.CAN_CARVE)) {
                                     break;
                                 }
