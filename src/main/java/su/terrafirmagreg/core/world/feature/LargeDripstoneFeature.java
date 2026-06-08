@@ -121,22 +121,22 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             return this.getHeightAtRadius(0.0F);
         }
 
-        boolean moveBackUntilBaseIsInsideStoneAndShrinkRadiusIfNecessary(WorldGenLevel $$0, LargeDripstoneFeature.WindOffsetter $$1) {
+        boolean moveBackUntilBaseIsInsideStoneAndShrinkRadiusIfNecessary(WorldGenLevel level, LargeDripstoneFeature.WindOffsetter wind) {
             while (this.radius > 1) {
-                BlockPos.MutableBlockPos $$2 = this.root.mutable();
-                int $$3 = Math.min(10, this.getHeight());
+                BlockPos.MutableBlockPos mutablePos = this.root.mutable();
+                int height = Math.min(10, this.getHeight());
 
-                for (int $$4 = 0; $$4 < $$3; $$4++) {
-                    if ($$0.getBlockState($$2).is(Blocks.LAVA)) {
+                for (int y = 0; y < height; y++) {
+                    if (level.getBlockState(mutablePos).is(Blocks.LAVA)) {
                         return false;
                     }
 
-                    if (isCircleMostlyEmbeddedInStone($$0, $$1.offset($$2), this.radius)) {
-                        this.root = $$2;
+                    if (isCircleMostlyEmbeddedInStone(level, wind.offset(mutablePos), this.radius)) {
+                        this.root = mutablePos;
                         return true;
                     }
 
-                    $$2.move(this.pointingUp ? Direction.DOWN : Direction.UP);
+                    mutablePos.move(this.pointingUp ? Direction.DOWN : Direction.UP);
                 }
 
                 this.radius /= 2;
@@ -145,8 +145,8 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             return false;
         }
 
-        private int getHeightAtRadius(float $$0) {
-            return (int) getDripstoneHeight($$0, this.radius, this.scale, this.bluntness);
+        private int getHeightAtRadius(float distance) {
+            return (int) getDripstoneHeight(distance, this.radius, this.scale, this.bluntness);
         }
 
         void placeBlocks(WorldGenLevel level, RandomSource random, LargeDripstoneFeature.WindOffsetter windOffsetter) {
@@ -166,7 +166,7 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
                             boolean placedBlock = false;
                             int maxY = this.pointingUp ? level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX(), pos.getZ()) : Integer.MAX_VALUE;
 
-                            for (int $$10 = 0; $$10 < height && pos.getY() < maxY; $$10++) {
+                            for (int y = 0; y < height && pos.getY() < maxY; y++) {
                                 BlockPos dripstonePos = windOffsetter.offset(pos);
                                 if (EnvironmentHelpers.isWorldgenReplaceable(level, dripstonePos)) {
                                     placedBlock = true;
@@ -183,21 +183,21 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             }
         }
 
-        boolean isSuitableForWind(LargeDripstoneConfig $$0) {
-            return this.radius >= $$0.minRadiusForWind() && this.bluntness >= (double) $$0.minBluntnessForWind();
+        boolean isSuitableForWind(LargeDripstoneConfig config) {
+            return this.radius >= config.minRadiusForWind() && this.bluntness >= (double) config.minBluntnessForWind();
         }
 
-        static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel $$0, BlockPos $$1, int $$2) {
-            if (EnvironmentHelpers.isWorldgenReplaceable($$0, $$1)) {
+        static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel level, BlockPos pos, int radius) {
+            if (EnvironmentHelpers.isWorldgenReplaceable(level, pos)) {
                 return false;
             } else {
                 float $$3 = 6.0F;
-                float $$4 = 6.0F / (float) $$2;
+                float $$4 = 6.0F / (float) radius;
 
                 for (float $$5 = 0.0F; $$5 < (float) (Math.PI * 2); $$5 += $$4) {
-                    int $$6 = (int) (Mth.cos($$5) * (float) $$2);
-                    int $$7 = (int) (Mth.sin($$5) * (float) $$2);
-                    if (EnvironmentHelpers.isWorldgenReplaceable($$0, $$1.offset($$6, 0, $$7))) {
+                    int $$6 = (int) (Mth.cos($$5) * (float) radius);
+                    int $$7 = (int) (Mth.sin($$5) * (float) radius);
+                    if (EnvironmentHelpers.isWorldgenReplaceable(level, pos.offset($$6, 0, $$7))) {
                         return false;
                     }
                 }
@@ -206,19 +206,19 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             }
         }
 
-        static double getDripstoneHeight(double $$0, double $$1, double $$2, double $$3) {
-            if ($$0 < $$3) {
-                $$0 = $$3;
+        static double getDripstoneHeight(double distance, double radius, double scale, double bluntness) {
+            if (distance < bluntness) {
+                distance = bluntness;
             }
 
             double $$4 = 0.384;
-            double $$5 = $$0 / $$1 * 0.384;
+            double $$5 = distance / radius * 0.384;
             double $$6 = 0.75 * Math.pow($$5, 1.3333333333333333);
             double $$7 = Math.pow($$5, 0.6666666666666666);
             double $$8 = 0.3333333333333333 * Math.log($$5);
-            double $$9 = $$2 * ($$6 - $$7 - $$8);
+            double $$9 = scale * ($$6 - $$7 - $$8);
             $$9 = Math.max($$9, 0.0);
-            return $$9 / 0.384 * $$1;
+            return $$9 / 0.384 * radius;
         }
     }
 
@@ -226,11 +226,11 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
         private final int originY;
         private final Vec3 windSpeed;
 
-        WindOffsetter(int y, RandomSource random, FloatProvider $$2) {
+        WindOffsetter(int y, RandomSource random, FloatProvider windSpeed) {
             this.originY = y;
-            float $$3 = $$2.sample(random);
+            float wind = windSpeed.sample(random);
             float $$4 = Mth.randomBetween(random, 0.0F, (float) Math.PI);
-            this.windSpeed = new Vec3(Mth.cos($$4) * $$3, 0.0, Mth.sin($$4) * $$3);
+            this.windSpeed = new Vec3(Mth.cos($$4) * wind, 0.0, Mth.sin($$4) * wind);
         }
 
         private WindOffsetter() {
@@ -242,13 +242,13 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             return new LargeDripstoneFeature.WindOffsetter();
         }
 
-        BlockPos offset(BlockPos $$0) {
+        BlockPos offset(BlockPos pos) {
             if (this.windSpeed == null) {
-                return $$0;
+                return pos;
             } else {
-                int $$1 = this.originY - $$0.getY();
-                Vec3 $$2 = this.windSpeed.scale($$1);
-                return $$0.offset(Mth.floor($$2.x), 0, Mth.floor($$2.z));
+                int offset = this.originY - pos.getY();
+                Vec3 scaled = this.windSpeed.scale(offset);
+                return pos.offset(Mth.floor(scaled.x), 0, Mth.floor(scaled.z));
             }
         }
     }
