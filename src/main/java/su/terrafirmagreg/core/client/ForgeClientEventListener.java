@@ -3,10 +3,10 @@ package su.terrafirmagreg.core.client;
 import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
@@ -49,12 +49,24 @@ public class ForgeClientEventListener {
      */
     @SubscribeEvent
     public static void onComputeFovModifier(ComputeFovModifierEvent event) {
-        Player player = Minecraft.getInstance().player;
-        if (player == null)
-            return;
+        Player player = event.getPlayer();
         AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speedAttr != null && speedAttr.getModifier(NutrientEffectsHandler.GRAIN_SPEED_MODIFIER_UUID) != null) {
-            event.setNewFovModifier(1.0f);
+        if (speedAttr != null) {
+            AttributeModifier grainModifier = speedAttr.getModifier(NutrientEffectsHandler.GRAIN_SPEED_MODIFIER_UUID);
+            if (grainModifier != null) {
+                float walkingSpeed = player.getAbilities().getWalkingSpeed();
+                if (walkingSpeed > 0) {
+                    double speedWithGrain = speedAttr.getValue();
+                    double speedWithoutGrain = speedWithGrain / (1.0 + grainModifier.getAmount());
+
+                    float fWith = (float) ((speedWithGrain / walkingSpeed + 1.0) / 2.0);
+                    float fWithout = (float) ((speedWithoutGrain / walkingSpeed + 1.0) / 2.0);
+
+                    if (fWith > 0) {
+                        event.setNewFovModifier(event.getFovModifier() * (fWithout / fWith));
+                    }
+                }
+            }
         }
     }
 
