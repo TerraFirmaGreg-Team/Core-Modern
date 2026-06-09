@@ -13,6 +13,6 @@ public class SearchGoalMixin {
 
     @ModifyConstant(method = "start", constant = @Constant(floatValue = 3f))
     private float tfg$modifySearchVolume(float constant) {
-        return 1f;
+        return 1.7f;
     }
 }
