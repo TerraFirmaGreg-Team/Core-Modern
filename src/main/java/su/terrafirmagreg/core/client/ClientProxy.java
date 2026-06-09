@@ -46,6 +46,7 @@ public class ClientProxy extends CommonProxy {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(ForgeClientEventListener::registerColorHandlerBlocks);
         bus.addListener(ForgeClientEventListener::registerColorHandlerItems);
+        bus.addListener(ForgeClientEventListener::registerRenderers);
     }
 
     @SubscribeEvent
