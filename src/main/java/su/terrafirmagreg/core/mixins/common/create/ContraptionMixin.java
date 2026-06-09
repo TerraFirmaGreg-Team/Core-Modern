@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.create;
 
+import net.minecraft.server.level.DistanceManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,7 +23,7 @@ public class ContraptionMixin {
     @Inject(method = "onEntityCreated", at = @At("TAIL"), remap = false)
     private void tfg$onEntityCreated(AbstractContraptionEntity entity, CallbackInfo ci) {
         var player = Minecraft.getInstance().player;
-        if (player != null) {
+        if (player != null && player.position().distanceTo(entity.position()) < 20) {
             var dim = entity.level().dimension();
             if (dim == Level.NETHER && TFGConfig.SERVER.enableBeneathMiningRestrictions.get()) {
                 final int y = TFGConfig.SERVER.disabledBeneathMiningYLevel.get();
