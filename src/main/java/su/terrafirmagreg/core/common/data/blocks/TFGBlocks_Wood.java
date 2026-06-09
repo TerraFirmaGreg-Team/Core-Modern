@@ -422,7 +422,9 @@ public class TFGBlocks_Wood {
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/twig/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden"))).build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden")),
+                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "twigs")))
+                .build()
                 .register();
     }
 
