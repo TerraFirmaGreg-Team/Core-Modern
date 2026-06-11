@@ -160,6 +160,7 @@
         "common.minecraft.HugeFungusFeatureInvoker",
         "common.minecraft.HugeFungusFeatureMixin",
         "common.minecraft.IBlockLootSubProviderAccessor",
+        "common.minecraft.ItemStackMixin",
         "common.minecraft.MinecartFurnaceMixin",
         "common.minecraft.ModelProviderMixin",
         "common.minecraft.MushroomBlockMixin",
