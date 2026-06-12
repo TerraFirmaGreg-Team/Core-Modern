@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
@@ -12,6 +11,7 @@ import net.dries007.tfc.world.chunkdata.RockData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.FloatProvider;
@@ -121,7 +121,7 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             return this.getHeightAtRadius(0.0F);
         }
 
-        boolean moveBackUntilBaseIsInsideStoneAndShrinkRadiusIfNecessary(WorldGenLevel level, LargeDripstoneFeature.WindOffsetter wind) {
+        private boolean moveBackUntilBaseIsInsideStoneAndShrinkRadiusIfNecessary(WorldGenLevel level, LargeDripstoneFeature.WindOffsetter wind) {
             while (this.radius > 1) {
                 BlockPos.MutableBlockPos mutablePos = this.root.mutable();
                 int height = Math.min(10, this.getHeight());
@@ -149,7 +149,7 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             return (int) getDripstoneHeight(distance, this.radius, this.scale, this.bluntness);
         }
 
-        void placeBlocks(WorldGenLevel level, RandomSource random, LargeDripstoneFeature.WindOffsetter windOffsetter) {
+        private void placeBlocks(WorldGenLevel level, RandomSource random, LargeDripstoneFeature.WindOffsetter windOffsetter) {
             for (int x = -this.radius; x <= this.radius; x++) {
                 for (int z = -this.radius; z <= this.radius; z++) {
 
@@ -169,9 +169,13 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
                             for (int y = 0; y < height && pos.getY() < maxY; y++) {
                                 BlockPos dripstonePos = windOffsetter.offset(pos);
                                 if (EnvironmentHelpers.isWorldgenReplaceable(level, dripstonePos)) {
+                                    if (!placedBlock && !this.pointingUp) {
+                                        level.setBlock(dripstonePos, rockData.getRock(dripstonePos).hardened().defaultBlockState(), Block.UPDATE_CLIENTS);
+                                    } else {
+                                        level.setBlock(dripstonePos, rockData.getRock(dripstonePos).raw().defaultBlockState(), Block.UPDATE_CLIENTS);
+                                    }
                                     placedBlock = true;
-                                    level.setBlock(dripstonePos, rockData.getRock(dripstonePos).raw().defaultBlockState(), 2);
-                                } else if (placedBlock && level.getBlockState(dripstonePos).is(TFCTags.Blocks.CAN_CARVE)) {
+                                } else if (placedBlock && level.getBlockState(dripstonePos).is(BlockTags.NETHER_CARVER_REPLACEABLES)) {
                                     break;
                                 }
 
@@ -183,11 +187,11 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             }
         }
 
-        boolean isSuitableForWind(LargeDripstoneConfig config) {
+        private boolean isSuitableForWind(LargeDripstoneConfig config) {
             return this.radius >= config.minRadiusForWind() && this.bluntness >= (double) config.minBluntnessForWind();
         }
 
-        static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel level, BlockPos pos, int radius) {
+        private static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel level, BlockPos pos, int radius) {
             if (EnvironmentHelpers.isWorldgenReplaceable(level, pos)) {
                 return false;
             } else {
@@ -206,7 +210,7 @@ public class LargeDripstoneFeature extends Feature<LargeDripstoneConfig> {
             }
         }
 
-        static double getDripstoneHeight(double distance, double radius, double scale, double bluntness) {
+        private static double getDripstoneHeight(double distance, double radius, double scale, double bluntness) {
             if (distance < bluntness) {
                 distance = bluntness;
             }

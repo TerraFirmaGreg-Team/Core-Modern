@@ -341,5 +341,11 @@ public class TFGSlime extends TamableMammal {
     protected float getStandingEyeHeight(Pose pose, EntityDimensions size) {
         return size.height * 0.5F;
     }
+
+    @Override
+    public boolean fireImmune() {
+        return getVariant() == SlimeVariant.LAVA;
+    }
+
     // endregion
 }

@@ -24,10 +24,12 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.devices.BarrelBlock;
+import net.dries007.tfc.common.blocks.wood.BranchDirection;
 import net.dries007.tfc.common.blocks.wood.LogBlock;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.BarrelBlockItem;
 import net.dries007.tfc.common.items.ChestBlockItem;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
@@ -36,19 +38,21 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.HangingSignItem;
-import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -200,7 +204,9 @@ public class TFGBlocks_Wood {
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/stripped_log/" + wood.serializedName)))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
-                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "stripped_logs")))
+                .build()
                 .register();
     }
 
@@ -220,6 +226,22 @@ public class TFGBlocks_Wood {
                         TFGCore.id("item/wood/wood/" + wood.serializedName)))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
                 .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
+                .loot((lt, block) -> lt.add(block, LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .name("loot_pool")
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(AlternativesEntry.alternatives(
+                                        LootItem.lootTableItem(Items.STICK)
+                                                .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFCTags.Items.HAMMERS)))
+                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))),
+                                        LootItem.lootTableItem(block)
+                                                .when(LootItemBlockStatePropertyCondition
+                                                        .hasBlockStateProperties(block)
+                                                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                                .hasProperty(TFCBlockStateProperties.BRANCH_DIRECTION, BranchDirection.NONE))),
+                                        LootItem.lootTableItem(blocks.get(Wood.BlockType.LOG))))
+                                .when(ExplosionCondition.survivesExplosion()))))
+
                 .register();
     }
 
@@ -236,7 +258,9 @@ public class TFGBlocks_Wood {
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/stripped_wood/" + wood.serializedName)))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
-                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
+                .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "stripped_logs")))
+                .build()
                 .register();
     }
 
@@ -422,7 +446,9 @@ public class TFGBlocks_Wood {
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/twig/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden"))).build()
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden")),
+                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "twigs")))
+                .build()
                 .register();
     }
 
