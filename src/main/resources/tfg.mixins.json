@@ -282,7 +282,6 @@
         "common.tfc.recipes.MealModifierMixin",
         "common.tfc.recipes.SoupPotRecipeMixin",
         "common.tfc_astikor_carts.TFCSupplyCartEntityMixin",
-        "common.tfcambiental.TemperatureCapabilityMixin",
         "common.tfcgenviewer.ViewerRequestPacketGetBiomesMixin",
         "common.tfcgenviewer.ViewerResponsePacketMixin",
         "common.tfchotornot.EventHandlerMixin",

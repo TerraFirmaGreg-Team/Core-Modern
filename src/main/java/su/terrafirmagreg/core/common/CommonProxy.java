@@ -34,7 +34,6 @@ import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
 import su.terrafirmagreg.core.compat.create.CustomArmInteractionPointTypes;
 import su.terrafirmagreg.core.compat.grappling_hook.GrapplehookCompat;
-import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.utils.TFGHelpers;
@@ -106,8 +105,6 @@ public class CommonProxy {
     @SubscribeEvent
     public void onCommonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            if (TFGConfig.COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get() && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
-                TFCAmbientalCompat.register();
             if (TFGModsResolver.GRAPPLEMOD.isLoaded())
                 GrapplehookCompat.init();
             addUpgrades(AEItems.WIRELESS_TERMINAL);

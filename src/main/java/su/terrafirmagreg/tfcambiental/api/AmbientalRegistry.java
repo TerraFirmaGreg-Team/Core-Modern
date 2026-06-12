@@ -22,6 +22,7 @@ public class AmbientalRegistry<Type> implements Iterable<Type> {
     static {
         EQUIPMENT.register(EquipmentTemperatureProvider::handleSunlightCap);
         EQUIPMENT.register(EquipmentTemperatureProvider::handleClothes);
+        EQUIPMENT.register(EquipmentTemperatureProvider::getEquipmentTempModifier);
 
         ITEMS.register(ItemTemperatureProvider::handleTemperatureCapability);
         ITEMS.register(ItemTemperatureProvider::handleHotIngots);
@@ -41,6 +42,7 @@ public class AmbientalRegistry<Type> implements Iterable<Type> {
             return state.is(Blocks.SNOW) && EquipmentTemperatureProvider.getEquipmentByType(player, ArmorItem.Type.BOOTS).isEmpty();
         }));
         BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("warm_block", 1f, 0f, -5f)).filter((mod) -> state.is(TFCAmbiental.WARM_STUFF)));
+        BLOCKS.register(BlockEntityTemperatureProvider::getBlockTempModifier);
 
         ENVIRONMENT.register(EnvironmentalTemperatureProvider::handleGeneralTemperature);
         ENVIRONMENT.register(EnvironmentalTemperatureProvider::handleTimeOfDay);
