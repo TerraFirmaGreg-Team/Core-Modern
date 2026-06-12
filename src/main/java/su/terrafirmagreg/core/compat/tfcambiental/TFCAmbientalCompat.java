@@ -8,9 +8,6 @@ import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMachines;
-import com.lumintorious.tfcambiental.TFCAmbiental;
-import com.lumintorious.tfcambiental.api.AmbientalRegistry;
-import com.lumintorious.tfcambiental.modifier.TempModifier;
 import com.simibubi.create.AllItems;
 
 import net.dries007.tfc.common.blocks.SeaIceBlock;
@@ -37,6 +34,9 @@ import mod.traister101.sns.common.items.SNSItems;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.entity.slime.TFGSlime;
+import su.terrafirmagreg.tfcambiental.TFCAmbiental;
+import su.terrafirmagreg.tfcambiental.api.AmbientalRegistry;
+import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
 
 /**
  * Compatibility for TFC Ambiental

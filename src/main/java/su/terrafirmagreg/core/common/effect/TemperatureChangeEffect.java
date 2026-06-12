@@ -1,10 +1,10 @@
 package su.terrafirmagreg.core.common.effect;
 
-import com.lumintorious.tfcambiental.capability.TemperatureCapability;
-
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+
+import su.terrafirmagreg.tfcambiental.capability.TemperatureCapability;
 
 public class TemperatureChangeEffect extends MobEffect {
 
