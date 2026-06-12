@@ -176,4 +176,7 @@ dependencies {
 
     // Create: Connected, May 25 2026
     modImplementation "curse.maven:create-connected-947914:8143922"
+
+    // Create: Repair
+    modImplementation "curse.maven:create-repair-1477958:8034105"
 }

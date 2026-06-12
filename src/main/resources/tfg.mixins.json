@@ -70,6 +70,7 @@
         "common.create.girders.TrackBlockItemMixin",
         "common.create.girders.TrackPaverMixin",
         "common.create.girders.TrackRendererMixin",
+        "common.create.StrutBakeModelMixin",
         "common.create.greate_tiering.LargeWaterWheelBlockEntityMixin",
         "common.create.greate_tiering.LargeWaterWheelBlockMixin",
         "common.create.greate_tiering.WaterWheelBlockEntityMixin",
