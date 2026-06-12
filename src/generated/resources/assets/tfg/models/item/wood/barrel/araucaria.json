@@ -1,3 +1,11 @@
 {
-  "parent": "tfg:block/wood/barrel/araucaria"
+  "parent": "tfg:block/wood/barrel/araucaria",
+  "overrides": [
+    {
+      "model": "tfg:block/wood/barrel_sealed/araucaria",
+      "predicate": {
+        "tfc:sealed": 1.0
+      }
+    }
+  ]
 }

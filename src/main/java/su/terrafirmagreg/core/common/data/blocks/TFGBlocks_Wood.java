@@ -47,10 +47,13 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.client.model.generators.*;
@@ -698,8 +701,25 @@ public class TFGBlocks_Wood {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.BARREL, block);
                 })
-                .item(BarrelBlockItem::new)
+                .item(BarrelBlockItem::new).model(ModelUtils.barrelItemModel(
+                        TFGCore.id("block/wood/barrel/" + wood.serializedName),
+                        TFGCore.id("block/wood/barrel_sealed/" + wood.serializedName)))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "barrels"))).build()
+                .loot((lt, block) -> lt.add(block, LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .name("loot_pool")
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(AlternativesEntry.alternatives(
+                                        LootItem.lootTableItem(block)
+                                                .when(LootItemBlockStatePropertyCondition
+                                                        .hasBlockStateProperties(block)
+                                                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                                .hasProperty(TFCBlockStateProperties.SEALED, true)))
+                                                .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                                                .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                                                        .copy("", "BlockEntityTag", CopyNbtFunction.MergeStrategy.REPLACE)),
+                                        LootItem.lootTableItem(block)))
+                                .when(ExplosionCondition.survivesExplosion()))))
                 .register();
     }
 
