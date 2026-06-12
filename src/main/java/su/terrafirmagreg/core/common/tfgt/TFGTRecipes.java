@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.data.recipes.FinishedRecipe;
 
+import appeng.core.definitions.AEItems;
 import electrolyte.greate.registry.Pumps;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -74,6 +75,15 @@ public class TFGTRecipes {
                 'C', GTCraftingComponents.CIRCUIT,
                 'G', GTCraftingComponents.GLASS,
                 'E', GTCraftingComponents.PIPE_NORMAL);
+
+        MetaTileEntityLoader.registerMachineRecipe(provider, true, TFGMachines.WIRELESS_CHARGER,
+                "AGA", "IHP", "ACA",
+                'H', GTCraftingComponents.HULL,
+                'I', GTCraftingComponents.SENSOR,
+                'P', GTCraftingComponents.EMITTER,
+                'C', GTCraftingComponents.CIRCUIT,
+                'G', TFGCraftingComponents.FIELD_GENERATOR_TIER_DOWN,
+                'A', AEItems.FLUIX_PEARL.asItem());
 
         VanillaRecipeHelper.addShapedRecipe(provider, true, TFGCore.id("super_chest_ulv"),
                 TFGMachines.ULV_SUPER_CHEST.asStack(),
