@@ -35,13 +35,13 @@ public class AmbientalRegistry<Type> implements Iterable<Type> {
         BLOCK_ENTITIES.register(BlockEntityTemperatureProvider::handleLitBlock);
         BLOCK_ENTITIES.register(BlockEntityTemperatureProvider::handleIHeatBlock);
 
-        BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("hot_block", 3f, 0.2f, -15f)).filter((mod) -> state.is(TFCAmbiental.HOT_STUFF)));
-        BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("cold_stuff", -0.5f, 0.2f))
+        BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier(3f, 0.2f, -15f)).filter((mod) -> state.is(TFCAmbiental.HOT_STUFF)));
+        BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier(-0.5f, 0.2f))
                 .filter((mod) -> state.is(TFCAmbiental.COLD_STUFF) && player.level().getBrightness(LightLayer.SKY, pos) == 15));
-        BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("cold_feet", -0.5f, 0.5f)).filter((mod) -> {
+        BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier(-0.5f, 0.5f)).filter((mod) -> {
             return state.is(Blocks.SNOW) && EquipmentTemperatureProvider.getEquipmentByType(player, ArmorItem.Type.BOOTS).isEmpty();
         }));
-        BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("warm_block", 1f, 0f, -5f)).filter((mod) -> state.is(TFCAmbiental.WARM_STUFF)));
+        BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier(1f, 0f, -5f)).filter((mod) -> state.is(TFCAmbiental.WARM_STUFF)));
         BLOCKS.register(BlockEntityTemperatureProvider::getBlockTempModifier);
 
         ENVIRONMENT.register(EnvironmentalTemperatureProvider::handleGeneralTemperature);

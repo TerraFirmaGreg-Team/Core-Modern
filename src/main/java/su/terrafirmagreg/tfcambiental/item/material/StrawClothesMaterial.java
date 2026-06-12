@@ -9,7 +9,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
@@ -61,6 +60,6 @@ public class StrawClothesMaterial implements ArmorMaterial, TemperatureAlteringM
 
     @Override
     public TempModifier getTempModifier(ItemStack stack) {
-        return new TempModifier(ForgeRegistries.ITEMS.getKey(stack.getItem()).toString(), 0, -0.1f);
+        return new TempModifier(0, -0.1f);
     }
 }

@@ -32,7 +32,7 @@ public interface EntityTemperatureProvider {
                     change.updateAndGet(v -> v + 1.0f);
                 }
             });
-            return TempModifier.defined("hot_entity", change.get(), 0);
+            return TempModifier.defined(change.get(), 0);
         }
         return TempModifier.none();
     }
@@ -46,7 +46,7 @@ public interface EntityTemperatureProvider {
                     change.updateAndGet(v -> v + 1.0f);
                 }
             });
-            return TempModifier.defined("cold_entity", -1 * change.get(), 0);
+            return TempModifier.defined(-1 * change.get(), 0);
         }
         return TempModifier.none();
     }
@@ -69,6 +69,6 @@ public interface EntityTemperatureProvider {
             return Optional.empty();
         }
 
-        return Optional.of(new TempModifier("tfg_entity_temperature", change, 0F));
+        return Optional.of(new TempModifier(change, 0F));
     }
 }

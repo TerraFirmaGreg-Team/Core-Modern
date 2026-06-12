@@ -5,15 +5,12 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 public class TempModifier implements Comparable<TempModifier> {
-    private String unlocalizedName;
     private float change;
     private float potency;
     private float wetness;
-    private int count = 1;
-    private float multiplier = 1f;
 
     public float getChange() {
-        return change * multiplier;
+        return change;
     }
 
     public void setChange(float change) {
@@ -21,7 +18,7 @@ public class TempModifier implements Comparable<TempModifier> {
     }
 
     public float getPotency() {
-        return potency * multiplier;
+        return potency;
     }
 
     public void setPotency(float potency) {
@@ -36,31 +33,22 @@ public class TempModifier implements Comparable<TempModifier> {
         this.wetness = wetness;
     }
 
-    public String getUnlocalizedName() {
-        return unlocalizedName;
+    public TempModifier(float change, float potency) {
+        this(change, potency, 0f);
     }
 
-    public TempModifier(String unlocalizedName) {
-        this(unlocalizedName, 0f, 0f, 0f);
-    }
-
-    public TempModifier(String unlocalizedName, float change, float potency) {
-        this(unlocalizedName, change, potency, 0f);
-    }
-
-    public TempModifier(String unlocalizedName, float change, float potency, float wetness) {
-        this.unlocalizedName = unlocalizedName;
+    public TempModifier(float change, float potency, float wetness) {
         this.change = change;
         this.potency = potency;
         this.wetness = wetness;
     }
 
-    public static Optional<TempModifier> defined(String unlocalizedName, float change, float potency) {
-        return Optional.of(new TempModifier(unlocalizedName, change, potency, 0));
+    public static Optional<TempModifier> defined(float change, float potency) {
+        return Optional.of(new TempModifier(change, potency, 0));
     }
 
-    public static Optional<TempModifier> defined(String unlocalizedName, float change, float potency, float wetness) {
-        return Optional.of(new TempModifier(unlocalizedName, change, potency, wetness));
+    public static Optional<TempModifier> defined(float change, float potency, float wetness) {
+        return Optional.of(new TempModifier(change, potency, wetness));
     }
 
     public static Optional<TempModifier> none() {

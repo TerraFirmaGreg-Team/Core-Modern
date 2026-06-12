@@ -9,7 +9,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
@@ -61,6 +60,6 @@ public class InsulatedLeatherClothesMaterial implements ArmorMaterial, Temperatu
 
     @Override
     public TempModifier getTempModifier(ItemStack stack) {
-        return new TempModifier(ForgeRegistries.ITEMS.getKey(stack.getItem()).toString(), 2f, -0.15f);
+        return new TempModifier(2f, -0.15f);
     }
 }

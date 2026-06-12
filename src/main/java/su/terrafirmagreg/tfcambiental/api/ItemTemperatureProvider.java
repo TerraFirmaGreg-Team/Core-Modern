@@ -26,12 +26,12 @@ public interface ItemTemperatureProvider {
     static Optional<TempModifier> handleTemperatureCapability(Player player, ItemStack stack) {
         return stack.getCapability(HeatCapability.CAPABILITY).map(cap -> {
             float temp = cap.getTemperature() / 800;
-            return new TempModifier("heat_item", temp, 0.1f * stack.getCount());
+            return new TempModifier(temp, 0.1f * stack.getCount());
         });
     }
 
     static Optional<TempModifier> handleHotIngots(Player player, ItemStack stack) {
-        return stack.is(TFCAmbiental.HOT_INGOTS) ? Optional.of(new TempModifier("heat_item", TFCAmbientalConfig.COMMON.hotIngotTemperature.get().floatValue(), 0.1f * stack.getCount()))
+        return stack.is(TFCAmbiental.HOT_INGOTS) ? Optional.of(new TempModifier(TFCAmbientalConfig.COMMON.hotIngotTemperature.get().floatValue(), 0.1f * stack.getCount()))
                 : TempModifier.none();
     }
 }

@@ -50,7 +50,7 @@ public interface EquipmentTemperatureProvider {
                     } else {
                         diff -= 1;
                     }
-                    return TempModifier.defined("sunlight_protection", diff * -0.2f, -0.5f);
+                    return TempModifier.defined(diff * -0.2f, -0.5f);
                 }
             }
         }
@@ -104,19 +104,19 @@ public interface EquipmentTemperatureProvider {
         Item item = stack.getItem();
 
         if (COPPER_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier("copper_diving_suit", -1F, 0.1F));
+            return Optional.of(new TempModifier(-1F, 0.1F));
         }
         if (BLUE_STEEL_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier("blue_steel_diving_suit", -3F, 0.9F));
+            return Optional.of(new TempModifier(-3F, 0.9F));
         }
         if (ADVANCED_ARMOR.contains(item)) {
-            return Optional.of(new TempModifier("advanced_armor", 0F, FULLY_INSULATED));
+            return Optional.of(new TempModifier(0F, FULLY_INSULATED));
         }
         if (item == SNSItems.BLUE_STEEL_TOE_HIKING_BOOTS.get()) {
-            return Optional.of(new TempModifier("blue_steel_hiking_boots", -2f, 0.2F));
+            return Optional.of(new TempModifier(-2f, 0.2F));
         }
         if (item == SNSItems.RED_STEEL_TOE_HIKING_BOOTS.get()) {
-            return Optional.of(new TempModifier("red_steel_hiking_boots", 2f, 0.2F));
+            return Optional.of(new TempModifier(2f, 0.2F));
         }
 
         return Optional.empty();
