@@ -9,6 +9,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.renderer.SprayCanHudOverlay;
+import su.terrafirmagreg.core.client.screen.ArtisanTableScreen;
+import su.terrafirmagreg.core.client.screen.LargeNestBoxScreen;
 import su.terrafirmagreg.core.common.data.TFGContainers;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowScreen;
 
@@ -19,7 +21,11 @@ public final class TFGClientScreens {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> MenuScreens.register(TFGContainers.RNR_PLOW_MENU.get(), RNRPlowScreen::new));
+        event.enqueueWork(() -> {
+            MenuScreens.register(TFGContainers.RNR_PLOW_MENU.get(), RNRPlowScreen::new);
+            MenuScreens.register(TFGContainers.LARGE_NEST_BOX.get(), LargeNestBoxScreen::new);
+            MenuScreens.register(TFGContainers.ARTISAN_TABLE.get(), ArtisanTableScreen::new);
+        });
     }
 
     @SubscribeEvent
