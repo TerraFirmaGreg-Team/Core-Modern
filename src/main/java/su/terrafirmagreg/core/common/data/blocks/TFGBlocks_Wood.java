@@ -188,7 +188,7 @@ public class TFGBlocks_Wood {
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/log/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(ItemTags.LOGS)
                 .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
                 .register();
     }
@@ -206,7 +206,7 @@ public class TFGBlocks_Wood {
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/stripped_log/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(ItemTags.LOGS)
                 .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "stripped_logs")))
                 .build()
@@ -227,7 +227,7 @@ public class TFGBlocks_Wood {
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/wood/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(ItemTags.LOGS)
                 .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs"))).build()
                 .loot((lt, block) -> lt.add(block, LootTable.lootTable()
                         .withPool(LootPool.lootPool()
@@ -260,7 +260,7 @@ public class TFGBlocks_Wood {
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/stripped_wood/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("logs")))
+                .tag(ItemTags.LOGS)
                 .tag(TagKey.create(Registries.ITEM, TFGCore.id(wood.serializedName + "_logs")))
                 .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "stripped_logs")))
                 .build()
@@ -273,10 +273,10 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     prov.simpleBlock(ctx.getEntry());
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("planks")))
+                .tag(BlockTags.PLANKS)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("planks"))).build()
+                .tag(ItemTags.PLANKS).build()
                 .register();
     }
 
@@ -287,12 +287,12 @@ public class TFGBlocks_Wood {
                     prov.doorBlock((DoorBlock) ctx.getEntry(), TFGCore.id("block/wood/door/" + wood.serializedName + "_bottom"), TFGCore.id("block/wood/door/" + wood.serializedName + "_top"));
                 })
                 .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("doors")))
+                .tag(BlockTags.DOORS)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/door/" + wood.serializedName)))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("doors"))).build()
+                .tag(ItemTags.DOORS).build()
                 .register();
     }
 
@@ -303,10 +303,10 @@ public class TFGBlocks_Wood {
                     prov.trapdoorBlock((TrapDoorBlock) ctx.getEntry(), TFGCore.id("block/wood/trapdoor/" + wood.serializedName), true);
                 })
                 .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("trapdoors")))
+                .tag(BlockTags.TRAPDOORS)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/trapdoor/" + wood.serializedName + "_bottom")))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("trapdoors"))).build()
+                .tag(ItemTags.TRAPDOORS).build()
                 .register();
     }
 
@@ -319,10 +319,10 @@ public class TFGBlocks_Wood {
 
                     prov.fenceBlock((FenceBlock) ctx.getEntry(), TFGCore.id("block/wood/planks/" + wood.serializedName));
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("fences")))
+                .tag(BlockTags.FENCES)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/fence/" + wood.serializedName + "_inventory")))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("fences"))).build()
+                .tag(ItemTags.FENCES).build()
                 .register();
     }
 
@@ -346,10 +346,10 @@ public class TFGBlocks_Wood {
                             .part().modelFile(modelSide).rotationY(180).uvLock(true).addModel().condition(BlockStateProperties.SOUTH, true).end()
                             .part().modelFile(modelSide).rotationY(270).uvLock(true).addModel().condition(BlockStateProperties.WEST, true).end();
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("fences")))
+                .tag(BlockTags.FENCES)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/log_fence/" + wood.serializedName + "_inventory")))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("fences"))).build()
+                .tag(ItemTags.FENCES).build()
                 .register();
     }
 
@@ -359,10 +359,11 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     prov.fenceGateBlock((FenceGateBlock) ctx.getEntry(), TFGCore.id("block/wood/planks/" + wood.serializedName));
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("fence_gates")))
+                .tag(BlockTags.FENCE_GATES)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("fence_gates"))).build()
+                .tag(ItemTags.FENCE_GATES)
+                .build()
                 .register();
     }
 
@@ -375,10 +376,11 @@ public class TFGBlocks_Wood {
 
                     prov.buttonBlock((ButtonBlock) ctx.getEntry(), TFGCore.id("block/wood/planks/" + wood.serializedName));
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("buttons")))
+                .tag(BlockTags.BUTTONS)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/wood/button/" + wood.serializedName + "_inventory")))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("buttons"))).build()
+                .tag(ItemTags.BUTTONS)
+                .build()
                 .register();
     }
 
@@ -388,10 +390,11 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     prov.pressurePlateBlock((PressurePlateBlock) ctx.getEntry(), TFGCore.id("block/wood/planks/" + wood.serializedName));
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("pressure_plates")))
+                .tag(BlockTags.PRESSURE_PLATES)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("pressure_plates"))).build()
+                .tag(ItemTags.WOODEN_PRESSURE_PLATES)
+                .build()
                 .register();
     }
 
@@ -413,10 +416,10 @@ public class TFGBlocks_Wood {
 
                     prov.slabBlock((SlabBlock) ctx.getEntry(), modelBottom, modelTop, modelDouble);
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("slabs")))
+                .tag(BlockTags.SLABS)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("slabs"))).build()
+                .tag(ItemTags.SLABS).build()
                 .register();
     }
 
@@ -426,10 +429,10 @@ public class TFGBlocks_Wood {
                 .blockstate((ctx, prov) -> {
                     prov.stairsBlock((StairBlock) ctx.getEntry(), wood.plankTexture);
                 })
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("stairs")))
+                .tag(BlockTags.STAIRS)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .item(BlockItem::new)
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("stairs"))).build()
+                .tag(ItemTags.STAIRS).build()
                 .register();
     }
 
