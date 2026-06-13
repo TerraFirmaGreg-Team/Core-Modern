@@ -133,7 +133,9 @@ public class ClientProxy extends CommonProxy {
                 }
             });
             for (TFGWood wood : TFGWood.VALUES) {
-                Sheets.addWoodType(wood.getVanillaWoodType());
+				if (wood.generateWood) {
+					Sheets.addWoodType(wood.getVanillaWoodType());
+				}
             }
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
