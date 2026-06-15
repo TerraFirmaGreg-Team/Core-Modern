@@ -171,6 +171,9 @@ dependencies {
     // Strut Your Stuff
     modImplementation "maven.modrinth:strut-your-stuff:1.1.0+mc1.20.1"
 
+    // Phoenix's Chromatic Codes
+    modImplementation("curse.maven:phoenixs-chromatic-colors-1483210:7980147")
+
     // Create: Connected, May 25 2026
     modImplementation "curse.maven:create-connected-947914:8143922"
 }

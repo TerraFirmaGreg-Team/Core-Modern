@@ -302,8 +302,8 @@ public class TFGBlocks_Earth {
         ALFISOL_FARMLAND = createFarmland("farmland/alfisol", ALFISOL_DIRT);
         ALFISOL_GRASS = createGrass("grass/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
         ALFISOL_ROOTED = createRooted("rooted_dirt/alfisol", ALFISOL_DIRT, ALFISOL_MUD);
-        ALFISOL_CLAY = createClay("clay/alfisol", ALFISOL_GRASS, ALFISOL_PATH, ALFISOL_FARMLAND, ALFISOL_ROOTED, ALFISOL_MUD);
         ALFISOL_CLAY_GRASS = createClayGrass("clay_grass/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
+        ALFISOL_CLAY = createClay("clay/alfisol", ALFISOL_CLAY_GRASS, ALFISOL_PATH, ALFISOL_FARMLAND, ALFISOL_ROOTED, ALFISOL_MUD);
         ALFISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/alfisol", ALFISOL_MUD_BRICK);
         ALFISOL_COARSE = createCoarse("coarse_dirt/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
         ALFISOL_DUFF = createDuff("duff/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
@@ -313,8 +313,8 @@ public class TFGBlocks_Earth {
         MOLLISOL_FARMLAND = createFarmland("farmland/mollisol", MOLLISOL_DIRT);
         MOLLISOL_GRASS = createGrass("grass/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
         MOLLISOL_ROOTED = createRooted("rooted_dirt/mollisol", MOLLISOL_DIRT, MOLLISOL_MUD);
-        MOLLISOL_CLAY = createClay("clay/mollisol", MOLLISOL_GRASS, MOLLISOL_PATH, MOLLISOL_FARMLAND, MOLLISOL_ROOTED, MOLLISOL_MUD);
         MOLLISOL_CLAY_GRASS = createClayGrass("clay_grass/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
+        MOLLISOL_CLAY = createClay("clay/mollisol", MOLLISOL_CLAY_GRASS, MOLLISOL_PATH, MOLLISOL_FARMLAND, MOLLISOL_ROOTED, MOLLISOL_MUD);
         MOLLISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/mollisol", MOLLISOL_MUD_BRICK);
         MOLLISOL_COARSE = createCoarse("coarse_dirt/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
         MOLLISOL_DUFF = createDuff("duff/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
@@ -324,8 +324,8 @@ public class TFGBlocks_Earth {
         OXISOL_FARMLAND = createFarmland("farmland/oxisol", OXISOL_DIRT);
         OXISOL_GRASS = createGrass("grass/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
         OXISOL_ROOTED = createRooted("rooted_dirt/oxisol", OXISOL_DIRT, OXISOL_MUD);
-        OXISOL_CLAY = createClay("clay/oxisol", OXISOL_GRASS, OXISOL_PATH, OXISOL_FARMLAND, OXISOL_ROOTED, OXISOL_MUD);
         OXISOL_CLAY_GRASS = createClayGrass("clay_grass/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
+        OXISOL_CLAY = createClay("clay/oxisol", OXISOL_CLAY_GRASS, OXISOL_PATH, OXISOL_FARMLAND, OXISOL_ROOTED, OXISOL_MUD);
         OXISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/oxisol", OXISOL_MUD_BRICK);
         OXISOL_COARSE = createCoarse("coarse_dirt/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
         OXISOL_DUFF = createDuff("duff/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
@@ -335,8 +335,8 @@ public class TFGBlocks_Earth {
         PODZOL_FARMLAND = createFarmland("farmland/podzol", PODZOL_DIRT);
         PODZOL_GRASS = createGrass("grass/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
         PODZOL_ROOTED = createRooted("rooted_dirt/podzol", PODZOL_DIRT, PODZOL_MUD);
-        PODZOL_CLAY = createClay("clay/podzol", PODZOL_GRASS, PODZOL_PATH, PODZOL_FARMLAND, PODZOL_ROOTED, PODZOL_MUD);
         PODZOL_CLAY_GRASS = createClayGrass("clay_grass/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
+        PODZOL_CLAY = createClay("clay/podzol", PODZOL_CLAY_GRASS, PODZOL_PATH, PODZOL_FARMLAND, PODZOL_ROOTED, PODZOL_MUD);
         PODZOL_DRYING_BRICKS = createDryingBricks("drying_bricks/podzol", PODZOL_MUD_BRICK);
         PODZOL_COARSE = createCoarse("coarse_dirt/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
         PODZOL_DUFF = createDuff("duff/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
