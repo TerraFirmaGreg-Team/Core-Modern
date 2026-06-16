@@ -5,3 +5,6 @@
 3) Install the Minecraft Development and Lombok plugins
 4) Make your own fork of Core-Modern and clone it to your PC
 5) Run `./gradlew "-Dforge.forceNoSTB=true" runClient` and/or `./gradlew createMinecraftArtifacts` if you have build errors
+
+### Datagen
+If you are interested in setting up and running datagen on your machine, please follow the instructions [here](https://wiki.terrafirmagreg.team/modern/en_us/developer/datagen)   
