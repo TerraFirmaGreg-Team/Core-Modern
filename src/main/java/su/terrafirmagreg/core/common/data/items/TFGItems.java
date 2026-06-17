@@ -134,6 +134,19 @@ public class TFGItems {
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .register();
 
+    public static final ItemEntry<ChameleonSprayCanItem> CHAMELEON_SPRAY_CAN = TFGCore.REGISTRATE
+            .item("chameleon_spray_can", ChameleonSprayCanItem::new)
+            .properties(p -> p.stacksTo(1))
+            .model((ctx, prov) -> prov.handheld(ctx, prov.modLoc("item/tools/chameleon_spray_can")))
+            .register();
+
+    @SuppressWarnings("deprecation")
+    public static final ItemEntry<BucketItem> PRISMATIC_PAINT_BUCKET = TFGCore.REGISTRATE.item("prismatic_paint_bucket",
+            p -> new BucketItem(TFGFluids.PRISMATIC_PAINT.getSource(), p))
+            .properties(p -> p.craftRemainder(Items.BUCKET).stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .register();
+
     public static final ItemEntry<Item> RAILGUN_AMMO_SHELL = TFGCore.REGISTRATE.item("railgun_ammo_shell", Item::new)
             .properties(p -> p.stacksTo(16))
             .register();

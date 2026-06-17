@@ -51,12 +51,14 @@ public abstract class SpectreMixin extends Monster {
     private void tfg$changeAttributes(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance, MobSpawnType spawnType, SpawnGroupData spawnGroupData, CompoundTag tag,
             CallbackInfoReturnable<SpawnGroupData> cir) {
         if (getVariant() == Spectre.Type.HULKING_SPECTRE) {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20.0F);
-            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7.0F);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20);
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7);
         } else if (getVariant() == Spectre.Type.JOUSTING_SPECTRE) {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(10.0F);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(10);
         } else {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(16.0F);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(16);
         }
+
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(16);
     }
 }

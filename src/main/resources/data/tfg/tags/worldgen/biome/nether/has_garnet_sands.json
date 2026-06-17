@@ -1,0 +1,8 @@
+{
+    "values": [
+        "tfg:nether/tar_pools",
+        "tfg:nether/salt_caves",
+        "tfg:nether/thorny_brambles"
+    ],
+    "replace": false
+}

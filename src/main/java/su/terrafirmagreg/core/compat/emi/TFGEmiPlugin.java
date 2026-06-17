@@ -91,10 +91,17 @@ public class TFGEmiPlugin implements EmiPlugin {
                 null, null, null, null,
                 new String[] { "tfg.ore_vein.oilsands.emi.0", "tfg.ore_vein.oilsands.emi.1" }));
         emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_oilsands", "minecraft:the_nether",
-                1, 1, 50, 180, 0, 2, 3, false, false, false, 0,
+                1, 0.6, 50, 180, 0, 2, 3, false, true, false, 0,
                 new String[] { "tfc:sand/white", "tfc:sand/yellow", "tfc:sand/red", "tfc:sand/brown", "tfc:sand/pink", "tfc:sand/green", "tfc:sand/black" },
                 new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("oilsands", 100) },
                 "tfg:nether/has_oilsands", new String[] { "biome.tfg.nether/tar_pools" },
+                null, null, null, null,
+                null));
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_garnet_sands", "minecraft:the_nether",
+                2, 0.8, 50, 200, 0, 4, 4, false, true, false, 0,
+                new String[] { "tfc:sand/white", "tfc:sand/yellow", "tfc:sand/red", "tfc:sand/brown", "tfc:sand/pink", "tfc:sand/green", "tfc:sand/black" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("garnet_sand", 100) },
+                "tfg:nether/has_garnet_sands", new String[] { "biome.tfg.nether/tar_pools", "biome.tfg.nether/salt_caves", "biome.tfg.nether/thorny_brambles" },
                 null, null, null, null,
                 null));
 
