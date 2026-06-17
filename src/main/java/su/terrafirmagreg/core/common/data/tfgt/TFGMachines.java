@@ -360,6 +360,16 @@ public class TFGMachines {
             new int[] { GTValues.UV },
             TFGPartAbility.SMR_FLUID_INPUT);
 
+    public static final MachineDefinition[] ELECTRIC_ANVIL = registerTieredMachines(REGISTRATE, "electric_anvil",
+            AnvilMachine::new, (tier, builder) -> builder
+                    .langValue("%s Electric Anvil %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .recipeTypes(TFGTRecipeTypes.ANVIL_RECIPES)
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("electric_anvil"), TFGTRecipeTypes.ANVIL_SHRINK_RECIPES))
+                    .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT)
+                    .register(),
+            GTMachineUtils.ELECTRIC_TIERS);
+
     private static MachineDefinition[] registerSMRFluidImportHatch(
             String name,
             String displayName,
