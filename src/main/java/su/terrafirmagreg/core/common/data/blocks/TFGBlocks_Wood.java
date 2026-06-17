@@ -502,8 +502,8 @@ public class TFGBlocks_Wood {
                     prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", wood.plankTexture));
                 })
                 .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests")))
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests/wooden")))
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests")),
+                        TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests/wooden")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.CHEST, block);
@@ -513,9 +513,10 @@ public class TFGBlocks_Wood {
                     prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
                             .texture("particle", wood.plankTexture);
                 })
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests")))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests/wooden")))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfg", "default_chests")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests")),
+                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests/wooden")),
+                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfg", "default_chests")),
+                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmaciv", "chests")))
                 .build()
                 .register();
     }
@@ -527,8 +528,8 @@ public class TFGBlocks_Wood {
                     prov.simpleBlock(ctx.getEntry(), prov.models().getBuilder(ctx.getName()).texture("particle", wood.plankTexture));
                 })
                 .addLayer(() -> RenderType::cutout)
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests")))
-                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests/wooden")))
+                .tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests")),
+                        TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "chests/wooden")))
                 .tag(BlockTags.MINEABLE_WITH_AXE)
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFCBlockEntities.TRAPPED_CHEST, block);
@@ -538,9 +539,10 @@ public class TFGBlocks_Wood {
                     prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/chest"))
                             .texture("particle", wood.plankTexture);
                 })
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests")))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests/wooden")))
-                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfg", "default_chests")))
+                .tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests")),
+                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "chests/wooden")),
+                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfg", "default_chests")),
+                        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("firmaciv", "chests")))
                 .build()
                 .register();
     }
