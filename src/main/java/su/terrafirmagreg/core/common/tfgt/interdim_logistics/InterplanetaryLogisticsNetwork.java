@@ -79,16 +79,20 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
         boolean isReceiver = machine instanceof ILogisticsNetworkReceiver;
 
         var owner = machine.getMachine().getOwner();
+        UUID ownerId = null;
         if (owner instanceof FTBOwner ftbOwner) {
-            loadedMachines.put(machine.getDimensionalPos(), machine);
-            parts.computeIfAbsent(machine.getDimensionalPos(), k -> {
-                setDirty();
-                return new NetworkPart(k, ftbOwner.getTeam().getTeamId(), isReceiver);
-            });
-            return;
+            ownerId = ftbOwner.getTeam().getTeamId();
+        } else {
+            TFGCore.LOGGER.warn("Interplanetary logistics machine does not have a valid owner. {} {}",
+                    machine.getDimensionalPos(), machine.getMachine());
         }
-        TFGCore.LOGGER.warn("Interplanetary logistics machine does not have a valid FTB owner. {} {}",
-                machine.getDimensionalPos(), machine.getMachine());
+
+        var partId = machine.getDimensionalPos();
+        loadedMachines.put(partId, machine);
+        if (!parts.containsKey(partId)) {
+            parts.put(partId, new NetworkPart(partId, ownerId, isReceiver));
+            setDirty();
+        }
 
     }
 
@@ -106,6 +110,10 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
         var id = player.getUUID();
         List<NetworkPart> visible = new ArrayList<>();
         parts.forEach((k, v) -> {
+            if (v.getOwnerId() == null) {
+                return;
+            }
+
             var team = FTBTeamsAPI.api().getManager().getTeamByID(v.getOwnerId());
 
             if (team.isPresent() && team.get().getRankForPlayer(id).isAllyOrBetter()) {
@@ -145,8 +153,12 @@ public class InterplanetaryLogisticsNetwork extends SavedData {
 
     public non-sealed interface ILogisticsNetworkSender extends ILogisticsNetworkMachine {
         default List<NetworkSenderConfigEntry> getSendConfigurations() {
-            return Collections.unmodifiableList(
-                    Objects.requireNonNull(getLogisticsNetwork().getPart(getDimensionalPos())).senderLogisticsConfigs);
+            var part = getLogisticsNetwork().getPart(getDimensionalPos());
+            if (part == null) {
+                TFGCore.LOGGER.warn("Interplanetary logistics sender is missing its network part. {}", getDimensionalPos());
+                return List.of();
+            }
+            return Collections.unmodifiableList(part.senderLogisticsConfigs);
         }
     }
 

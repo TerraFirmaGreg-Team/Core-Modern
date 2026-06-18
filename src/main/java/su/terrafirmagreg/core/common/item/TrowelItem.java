@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
@@ -85,7 +86,7 @@ public class TrowelItem extends Item {
             HotbarEntry chosen = validEntries.get(new Random().nextInt(validEntries.size()));
             BlockState newState = chosen.recipe.getOutputBlock();
 
-            level.setBlock(targetPos, newState, 3);
+            level.setBlock(targetPos, newState, Block.UPDATE_ALL);
             level.updateNeighborsAt(targetPos, newState.getBlock());
 
             level.playSound(null, targetPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 0.4f);

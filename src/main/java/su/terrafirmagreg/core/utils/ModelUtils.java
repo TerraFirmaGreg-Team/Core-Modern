@@ -12,6 +12,7 @@ import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -39,8 +40,14 @@ public class ModelUtils {
         };
     }
 
-    public static NonNullBiConsumer<DataGenContext<Item, BlockItem>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
+    public static <T extends BlockItem> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateItemModelProvider> blockItemModel(ResourceLocation blockModel) {
         return (ctx, prov) -> prov.withExistingParent(ctx.getName(), blockModel);
+    }
+
+    public static <T extends BlockItem> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateItemModelProvider> barrelItemModel(ResourceLocation openBarrelModel, ResourceLocation sealedBarrelModel) {
+        return (ctx, prov) -> prov.withExistingParent(ctx.getName(), openBarrelModel)
+                .override().predicate(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "sealed"), 1.0f)
+                .model(prov.getExistingFile(sealedBarrelModel));
     }
 
     public static ModelFile cube2Layer(RegistrateBlockstateProvider prov, String name, ResourceLocation texture) {

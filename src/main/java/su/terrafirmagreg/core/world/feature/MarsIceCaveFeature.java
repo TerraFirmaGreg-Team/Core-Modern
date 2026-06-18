@@ -13,6 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -83,7 +84,7 @@ public class MarsIceCaveFeature extends Feature<NoneFeatureConfiguration> {
                 if (FluidHelpers.isAirOrEmptyFluid(level.getBlockState(mutablePos))) {
                     mutablePos.move(Direction.UP);
                     if (Helpers.isBlock(level.getBlockState(mutablePos), Tags.Blocks.STONE)) {
-                        level.setBlock(mutablePos, TFGFluids.MARS_WATER.createSourceBlock(), 3);
+                        level.setBlock(mutablePos, TFGFluids.MARS_WATER.createSourceBlock(), Block.UPDATE_ALL);
                         level.scheduleTick(mutablePos, TFGFluids.MARS_WATER.getSource(), 0);
                     }
                 }
@@ -123,7 +124,7 @@ public class MarsIceCaveFeature extends Feature<NoneFeatureConfiguration> {
                     if ((float) (x * x + y * y + z * z) <= radiusSquared) {
                         mutablePos.set(pos).move(x, y, z);
                         if (world.isEmptyBlock(mutablePos)) {
-                            world.setBlock(mutablePos, ice, 3);
+                            world.setBlock(mutablePos, ice, Block.UPDATE_CLIENTS);
                         }
                     }
                 }

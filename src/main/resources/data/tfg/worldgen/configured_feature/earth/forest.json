@@ -1,7 +1,7 @@
 {
     "type": "tfc:forest",
     "config": {
-        "entries": "#tfc:forest_trees",
+        "entries": "#tfg:forest_trees",
         "types": {
             "normal": {
                 "groundcover_count": 25,

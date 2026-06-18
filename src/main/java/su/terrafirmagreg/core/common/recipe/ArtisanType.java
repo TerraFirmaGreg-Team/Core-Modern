@@ -234,6 +234,19 @@ public class ArtisanType {
             0.5f,
             2.0f);
 
+    public static final ArtisanType ROAD_MARKING_STENCIL = new ArtisanType(
+            "road_marking_stencil",
+            Ingredient.of(ChemicalHelper.get(TagPrefix.plate, GTMaterials.TreatedWood, 1)),
+            null,
+            Ingredient.of(CustomTags.KNIVES),
+            Ingredient.of(CustomTags.SAWS),
+            textureLocation("blank_phenolic_board"),
+            null,
+            GTSoundEntries.SAW_TOOL.getMainEvent(),
+            textureLocation("phenolic_board_border"),
+            0.5f,
+            2.0f);
+
     /**
      * Registers a new ArtisanType in the ARTISAN_TYPES map.
      * @param type The ArtisanType to register.
@@ -250,5 +263,6 @@ public class ArtisanType {
         initNewType(PHENOLIC_BOARD);
         initNewType(PHENOLIC_BOARD_FOUR);
         initNewType(GLASS_LENS);
+        initNewType(ROAD_MARKING_STENCIL);
     }
 }

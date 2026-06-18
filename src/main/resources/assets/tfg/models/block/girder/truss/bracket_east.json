@@ -1,0 +1,83 @@
+{
+    "parent": "create:block/beam/block_x",
+    "format_version": "1.21.6",
+    "elements": [{
+        "rotation": {
+            "origin": [
+                8,
+                8,
+                8
+            ],
+            "angle": 0,
+            "axis": "y"
+        },
+        "from": [
+            15,
+            0.95,
+            2.95
+        ],
+        "to": [
+            18,
+            15.05,
+            13.05
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    8,
+                    8,
+                    15,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 90
+            },
+            "south": {
+                "uv": [
+                    5,
+                    9,
+                    6.5,
+                    16
+                ],
+                "texture": "#0"
+            },
+            "north": {
+                "uv": [
+                    6.5,
+                    9,
+                    5,
+                    16
+                ],
+                "texture": "#0"
+            },
+            "west": {
+                "uv": [
+                    0,
+                    9,
+                    5,
+                    16
+                ],
+                "texture": "#0"
+            },
+            "up": {
+                "uv": [
+                    6.5,
+                    11,
+                    8,
+                    16
+                ],
+                "texture": "#0"
+            },
+            "down": {
+                "uv": [
+                    6.5,
+                    11,
+                    8,
+                    16
+                ],
+                "texture": "#0"
+            }
+        }
+    }],
+    "credit": "Create: More Girders by Agent772 (MIT)"
+}

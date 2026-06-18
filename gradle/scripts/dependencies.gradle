@@ -35,11 +35,14 @@ dependencies {
     modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
     modImplementation ("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
+    modImplementation ("maven.modrinth:createfluidlogistic:jIcz91lT") { transitive = false }
 
     // Create: Vintage Improvements
     modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
 
     // Greate
+    modRuntimeOnly "curse.maven:copycats-968398:7634682"
+    modRuntimeOnly "curse.maven:create-repair-1477958:8034105"
     modImplementation ("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
@@ -141,6 +144,9 @@ dependencies {
     // ArborFirmaCraft, afc-1.0.20-1.20.1.jar, Nov 8, 2025
     modImplementation "curse.maven:arborfirmacraft-877545:7200580"
 
+    // TFCGenViewer (optional in dev; modpack always includes it) — mixins for TFG + new overworld gen
+    modImplementation "maven.modrinth:tfcgenviewer:1.5.1"
+
     // TFC Improved Badlands
     modCompileOnly "curse.maven:tfc-improved-badlands-969207:5126426"
 
@@ -161,6 +167,15 @@ dependencies {
 
     // Crafting Station Improved
     modImplementation "curse.maven:crafting-station-improved-1310299:7463065"
+
+    // Strut Your Stuff
+    modImplementation "maven.modrinth:strut-your-stuff:1.1.0+mc1.20.1"
+
+    // Phoenix's Chromatic Codes
+    modImplementation("curse.maven:phoenixs-chromatic-colors-1483210:7980147")
+
+    // Create: Connected, May 25 2026
+    modImplementation "curse.maven:create-connected-947914:8143922"
 
     // Additional Placements, [1.20.1 Forge] Additional Placements 3.0.1.jar, Apr 10, 2026
     modCompileOnly "curse.maven:additional-placements-674852:7905535"

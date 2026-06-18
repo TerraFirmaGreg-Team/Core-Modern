@@ -61,10 +61,16 @@ public class SnowCorrection {
     private static final int MAX_UPDATES_PER_TICK = TFGConfig.SERVER.snowMaxAccumulationOnUpdate.get();
 
     public static void onTickChunk(ServerLevel level, ChunkAccess chunk) {
+        if (MAX_UPDATES_PER_TICK <= 0) {
+            return;
+        }
+        if (!(chunk instanceof LevelChunk levelChunk)) {
+            return;
+        }
+
         final WorldTracker tracker = WorldTracker.get(level);
         final ClimateModel model = tracker.getClimateModel();
         final ChunkPos chunkPos = chunk.getPos();
-        final LevelChunk levelChunk = level.getChunk(chunkPos.x, chunkPos.z);
         final ChunkData data = ChunkData.get(levelChunk);
         final long currentTick = Calendars.SERVER.getTicks();
         final long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
@@ -260,9 +266,9 @@ public class SnowCorrection {
                     return;
                 }
                 if (Helpers.isBlock(stateAbove, TFCBlocks.ICICLE.get())) {
-                    level.setBlock(posAbove, stateAbove.setValue(ThinSpikeBlock.TIP, false), 3 | 16);
+                    level.setBlock(posAbove, stateAbove.setValue(ThinSpikeBlock.TIP, false), Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                 }
-                level.setBlock(iciclePos, TFCBlocks.ICICLE.get().defaultBlockState().setValue(ThinSpikeBlock.TIP, true), 3);
+                level.setBlock(iciclePos, TFCBlocks.ICICLE.get().defaultBlockState().setValue(ThinSpikeBlock.TIP, true), Block.UPDATE_ALL);
             }
         }
     }
@@ -290,7 +296,7 @@ public class SnowCorrection {
             KrummholzBlock.updateFreezingInColumn(level, pos, true);
         } else if (state.isAir() && Blocks.SNOW.defaultBlockState().canSurvive(level, pos)) {
             // Vanilla snow placement (single layers)
-            level.setBlock(pos, Blocks.SNOW.defaultBlockState(), 3);
+            level.setBlock(pos, Blocks.SNOW.defaultBlockState(), Block.UPDATE_ALL);
             return true;
         } else {
             // Fills cauldrons with snow

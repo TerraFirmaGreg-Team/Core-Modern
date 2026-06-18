@@ -13,6 +13,10 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -66,6 +70,8 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     private final float red, green, blue, scale;
     private final boolean hasTicker;
     private final int emitDelay;
+    @Nullable
+    private final MobEffect effect;
 
     /**
      * Create a decoration particle emitter.
@@ -106,7 +112,8 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
             boolean useDustOptions,
             float red, float green, float blue, float scale,
             boolean hasTicker,
-            int emitDelay) {
+            int emitDelay,
+            @Nullable MobEffect effect) {
 
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
@@ -132,6 +139,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
         this.scale = scale;
         this.hasTicker = hasTicker;
         this.emitDelay = Math.max(0, emitDelay);
+        this.effect = effect;
     }
 
     private boolean shouldEmit(RandomSource random) {
@@ -177,7 +185,7 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
     public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
         if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
             level.destroyBlock(pos, true);
-            level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
+            level.setBlock(pos, fluidStateIn.createLegacyBlock(), Block.UPDATE_CLIENTS);
             return true;
         }
         return IFluidLoggable.super.placeLiquid(level, pos, state, fluidStateIn);
@@ -294,6 +302,14 @@ public class ParticleEmitterDecorationBlock extends Block implements EntityBlock
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (!canSurvive(state, level, pos)) {
             Block.updateOrDestroy(state, Blocks.AIR.defaultBlockState(), level, pos, Block.UPDATE_ALL);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (effect != null && entity instanceof Player player) {
+            player.addEffect(new MobEffectInstance(effect, 100));
         }
     }
 }

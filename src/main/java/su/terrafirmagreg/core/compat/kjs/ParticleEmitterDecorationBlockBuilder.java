@@ -3,12 +3,15 @@ package su.terrafirmagreg.core.compat.kjs;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import com.notenoughmail.kubejs_tfc.block.internal.ExtendedPropertiesBlockBuilder;
 import com.notenoughmail.kubejs_tfc.event.RegisterInteractionsEventJS;
 
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -18,6 +21,7 @@ import net.minecraftforge.common.util.Lazy;
 
 import dev.latvian.mods.kubejs.block.BlockBuilder;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
+import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
 
 import su.terrafirmagreg.core.common.block.ParticleEmitterDecorationBlock;
@@ -39,6 +43,8 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
     private final ParticleSetBuilder set = new ParticleSetBuilder();
     private transient boolean hasTicker = false;
     public transient int emitDelay = 0;
+    @Nullable
+    public transient MobEffect effect;
 
     public ParticleEmitterDecorationBlockBuilder(ResourceLocation i) {
         super(i);
@@ -204,6 +210,12 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
         return dustColor(r, g, b, scale);
     }
 
+    @Info("Apply an effect to the player as long as they're standing inside this block")
+    public ParticleEmitterDecorationBlockBuilder effect(MobEffect effect) {
+        this.effect = effect;
+        return this;
+    }
+
     public ParticleEmitterDecorationBlockBuilder withPreexistingItem(ResourceLocation item) {
         itemBuilder = null;
         preexistingItem = Lazy.of(() -> RegistryInfo.ITEM.getValue(item));
@@ -255,7 +267,8 @@ public class ParticleEmitterDecorationBlockBuilder extends ExtendedPropertiesBlo
                 set.useDust,
                 set.dustR, set.dustG, set.dustB, set.dustScale,
                 hasTicker,
-                emitDelay);
+                emitDelay,
+                effect);
         if (hasTicker) {
             TFGBlockEntities.addValidBEBlock(TFGBlockEntities.TICKER_ENTITY, block);
         }

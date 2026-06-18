@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.client.screen.widget;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +9,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+
+import su.terrafirmagreg.core.client.util.TFGTooltipUtils;
 
 /**
  * Simple value display scrollable list for compact text rows with optional tooltip support.
@@ -42,12 +43,12 @@ public class ValueDisplayListWidget extends GenericScrollableListWidget<ValueDis
     }
 
     public ValueDisplayListWidget addValue(Component label, @Nullable Component tooltip) {
-        this.addEntry(new ValueDisplayEntry(label, normalizeTooltip(tooltip)));
+        this.addEntry(new ValueDisplayEntry(label, TFGTooltipUtils.normalize(tooltip)));
         return this;
     }
 
     public ValueDisplayListWidget addValue(Component label, @Nullable List<Component> tooltip) {
-        this.addEntry(new ValueDisplayEntry(label, normalizeTooltip(tooltip)));
+        this.addEntry(new ValueDisplayEntry(label, TFGTooltipUtils.normalize(tooltip)));
         return this;
     }
 
@@ -60,42 +61,10 @@ public class ValueDisplayListWidget extends GenericScrollableListWidget<ValueDis
         this.hoveredTooltip = null;
     }
 
-    @Override
-    protected void afterRenderList(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderTooltip(GuiGraphics graphics) {
         if (this.hoveredTooltip != null && !this.hoveredTooltip.isEmpty()) {
             graphics.renderComponentTooltip(this.font, this.hoveredTooltip, this.tooltipX, this.tooltipY);
         }
-    }
-
-    @NotNull
-    private static List<Component> normalizeTooltip(@Nullable Component tooltip) {
-        if (tooltip == null) {
-            return Collections.emptyList();
-        }
-
-        final String[] lines = tooltip.getString().split("\\R", -1);
-        if (lines.length <= 1) {
-            return List.of(tooltip);
-        }
-
-        final List<Component> components = new ArrayList<>(lines.length);
-        for (String line : lines) {
-            components.add(Component.literal(line).withStyle(tooltip.getStyle()));
-        }
-        return components;
-    }
-
-    @NotNull
-    private static List<Component> normalizeTooltip(@Nullable List<Component> tooltip) {
-        if (tooltip == null || tooltip.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        final List<Component> components = new ArrayList<>();
-        for (Component component : tooltip) {
-            components.addAll(normalizeTooltip(component));
-        }
-        return components;
     }
 
     public class ValueDisplayEntry extends ObjectSelectionList.Entry<ValueDisplayEntry> {
@@ -132,9 +101,11 @@ public class ValueDisplayListWidget extends GenericScrollableListWidget<ValueDis
                     && mouseY >= ValueDisplayListWidget.this.y0 && mouseY <= ValueDisplayListWidget.this.y1;
 
             if (rowHovered && this.tooltip != null && !this.tooltip.isEmpty()) {
-                ValueDisplayListWidget.this.hoveredTooltip = this.tooltip;
-                ValueDisplayListWidget.this.tooltipX = mouseX;
-                ValueDisplayListWidget.this.tooltipY = mouseY;
+                if (Screen.hasShiftDown()) {
+                    ValueDisplayListWidget.this.hoveredTooltip = this.tooltip;
+                    ValueDisplayListWidget.this.tooltipX = mouseX;
+                    ValueDisplayListWidget.this.tooltipY = mouseY;
+                }
             }
         }
 

@@ -47,7 +47,7 @@ public abstract class DrownedMixin extends Zombie {
     }
 
     @Inject(method = "travel", at = @At("HEAD"), remap = true)
-    private void tfg$travel(Vec3 p_32394_, CallbackInfo ci) {
+    private void tfg$travel(Vec3 target, CallbackInfo ci) {
         this.setAirSupply(99999);
     }
 

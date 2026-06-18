@@ -5,6 +5,8 @@ import static java.util.Arrays.stream;
 import java.util.*;
 import java.util.function.Supplier;
 
+import com.cake.struts.content.block.StrutBlockEntity;
+import com.cake.struts.content.block.StrutBlockEntityRenderer;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -17,10 +19,9 @@ import net.minecraft.world.level.block.Block;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.*;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
+import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
 
 public class TFGBlockEntities {
@@ -54,6 +55,11 @@ public class TFGBlockEntities {
             .validBlock(TFGBlocks_Casings.REFLECTOR_BLOCK)
             .register();
 
+    public static final BlockEntityEntry<AsphaltPouringSpreadBlockEntity> ASPHALT_POURING_SPREAD = TFGCore.REGISTRATE
+            .blockEntity("asphalt_pouring_spread", AsphaltPouringSpreadBlockEntity::new)
+            .validBlock(TFGBlocks_Asphalt.ASPHALT_ROAD_POURING)
+            .register();
+
     public static final BlockEntityEntry<TickerBlockEntity> TICKER_ENTITY = TFGCore.REGISTRATE.blockEntity("particle_emitter", TickerBlockEntity::new)
             .validBlocks(TFGBlocks_Casings.GROW_LIGHT, TFGBlocks_Casings.EGH_PLANTER, TFGBlocks_Casings.PISCICULTURE_CORE)
             .register();
@@ -74,6 +80,11 @@ public class TFGBlockEntities {
                             TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree),
                             TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree)))
                     .toArray(NonNullSupplier[]::new))
+            .register();
+
+    public static final BlockEntityEntry<StrutBlockEntity> STRUT = TFGCore.REGISTRATE
+            .blockEntity("strut", StrutBlockEntity::new)
+            .renderer(() -> StrutBlockEntityRenderer::new)
             .register();
 
     private static final Map<Supplier<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();

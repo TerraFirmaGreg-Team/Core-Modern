@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/truss/block_bottom",
+  "textures": {
+    "0": "tfg:block/girder/truss/steel",
+    "particle": "tfg:block/girder/truss/steel"
+  }
+}

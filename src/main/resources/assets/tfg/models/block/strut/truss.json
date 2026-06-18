@@ -1,0 +1,227 @@
+{
+    "parent": "block/block",
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                6,
+                4,
+                0
+            ],
+            "to": [
+                10,
+                12,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        5,
+                        8,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        8,
+                        1,
+                        12,
+                        3
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                },
+                "north": {
+                    "uv": [
+                        8,
+                        1,
+                        12,
+                        3
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        5,
+                        8,
+                        9
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                4,
+                2,
+                0
+            ],
+            "to": [
+                12,
+                4,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        4,
+                        8,
+                        5
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "south": {
+                    "uv": [
+                        12,
+                        2,
+                        16,
+                        3
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        12,
+                        2,
+                        16,
+                        3
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        4,
+                        8,
+                        5
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "up": {
+                    "uv": [
+                        8,
+                        0,
+                        16,
+                        4
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        8,
+                        4
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                4,
+                12,
+                0
+            ],
+            "to": [
+                12,
+                14,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        4,
+                        8,
+                        5
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        12,
+                        1,
+                        16,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        12,
+                        1,
+                        16,
+                        2
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        4,
+                        8,
+                        5
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        8,
+                        4
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                },
+                "down": {
+                    "uv": [
+                        8,
+                        0,
+                        16,
+                        4
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                }
+            }
+        }
+    ],
+    "credit": "Adapted from Bits-n-Bobs by Industrialists-Of-Create (MIT License)"
+}

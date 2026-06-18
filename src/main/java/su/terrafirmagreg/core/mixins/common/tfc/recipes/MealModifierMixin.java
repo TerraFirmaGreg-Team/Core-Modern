@@ -41,9 +41,9 @@ public abstract class MealModifierMixin {
     private List<MealModifier.MealPortion> portions;
 
     /**
-     * Overwritten apply() that handles both positive and negative nutrients.
+     * Overwritten apply() that handles both positive and extended nutrients.
      * @author Redeix
-     * @reason Support negative nutrients in meals.
+     * @reason Support extended nutrients in meals.
      */
     @Overwrite(remap = false)
     public ItemStack apply(ItemStack stack, ItemStack input) {
@@ -83,10 +83,10 @@ public abstract class MealModifierMixin {
         float saturation = baseFood.saturation();
         float water = baseFood.water();
 
-        float[] negativeNutrients = new float[TFGNutrients.getExtendedCount()];
+        float[] extendedNutrients = new float[TFGNutrients.getExtendedCount()];
         float[] baseExtended = FoodDataExtension.getExtendedNutrients(baseFood);
         if (baseExtended.length > 0) {
-            System.arraycopy(baseExtended, 0, negativeNutrients, 0, Math.min(baseExtended.length, negativeNutrients.length));
+            System.arraycopy(baseExtended, 0, extendedNutrients, 0, Math.min(baseExtended.length, extendedNutrients.length));
         }
 
         final Map<ItemStack, MealModifier.MealPortion> map = new HashMap<>();
@@ -115,10 +115,10 @@ public abstract class MealModifierMixin {
                         // Positive nutrients go to the array.
                         nutrition[nutrient.ordinal()] += value;
                     } else {
-                        // Negative nutrients accumulate separately.
+                        // Extended nutrients accumulate separately.
                         int index = nutrient.ordinal() - TFGNutrients.POSITIVE_COUNT;
-                        if (index >= 0 && index < negativeNutrients.length) {
-                            negativeNutrients[index] += value;
+                        if (index >= 0 && index < extendedNutrients.length) {
+                            extendedNutrients[index] += value;
                         }
                     }
                 }
@@ -130,8 +130,8 @@ public abstract class MealModifierMixin {
         FoodData createdFood = FoodData.create(baseFood.hunger(), water, saturation, nutrition, baseFood.decayModifier());
 
         // Always set extended nutrients if there are any.
-        if (negativeNutrients.length > 0) {
-            FoodDataExtension.setExtendedNutrients(createdFood, negativeNutrients);
+        if (extendedNutrients.length > 0) {
+            FoodDataExtension.setExtendedNutrients(createdFood, extendedNutrients);
         }
 
         handler.setFood(createdFood);

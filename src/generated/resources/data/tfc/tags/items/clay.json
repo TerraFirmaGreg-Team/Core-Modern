@@ -1,14 +1,14 @@
 {
   "values": [
     "tfg:hardened_clay",
-    "tfg:clay/alfisol",
     "tfg:clay_grass/alfisol",
-    "tfg:clay/mollisol",
+    "tfg:clay/alfisol",
     "tfg:clay_grass/mollisol",
-    "tfg:clay/oxisol",
+    "tfg:clay/mollisol",
     "tfg:clay_grass/oxisol",
-    "tfg:clay/podzol",
+    "tfg:clay/oxisol",
     "tfg:clay_grass/podzol",
+    "tfg:clay/podzol",
     "tfg:grass/amber_clay_mycelium",
     "tfg:grass/rusticus_clay_mycelium",
     "tfg:grass/sangnum_clay_mycelium",

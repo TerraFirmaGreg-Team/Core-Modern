@@ -1,0 +1,175 @@
+{
+    "format_version": "1.21.11",
+    "elements": [
+        {
+            "from": [
+                3,
+                11,
+                3
+            ],
+            "to": [
+                13,
+                16,
+                13
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        13,
+                        8,
+                        15.5,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "south": {
+                    "uv": [
+                        13,
+                        8,
+                        15.5,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "north": {
+                    "uv": [
+                        13,
+                        8,
+                        15.5,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "west": {
+                    "uv": [
+                        13,
+                        8,
+                        15.5,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "up": {
+                    "uv": [
+                        8,
+                        8,
+                        13,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        8,
+                        8,
+                        13,
+                        13
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    2.5,
+                    8
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "from": [
+                3,
+                0,
+                3
+            ],
+            "to": [
+                13,
+                5,
+                13
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        13,
+                        8,
+                        15.5,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                },
+                "south": {
+                    "uv": [
+                        13,
+                        8,
+                        15.5,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                },
+                "north": {
+                    "uv": [
+                        13,
+                        8,
+                        15.5,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                },
+                "west": {
+                    "uv": [
+                        13,
+                        8,
+                        15.5,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                },
+                "up": {
+                    "uv": [
+                        8,
+                        8,
+                        13,
+                        13
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        8,
+                        8,
+                        13,
+                        13
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ],
+    "groups": [{
+        "color": 0,
+        "children": [
+            0,
+            1
+        ],
+        "origin": [
+            0,
+            0,
+            0
+        ],
+        "scope": 0,
+        "name": "Brace"
+    }],
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT)"
+}

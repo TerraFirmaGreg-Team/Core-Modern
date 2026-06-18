@@ -18,7 +18,9 @@ public abstract class MoldCapabilityMixin {
 
     /**
      * @author Ujhik
-     * @reason To fix ingot molds having different heat values on server and client because of a dummy initial value on heatCapacity messing up with the forge Capability sync system generating inconsistencies. By initializing it to the correct value, we ensure the temperature calculations stay consistent between client and server
+     * @reason To fix ingot molds having different heat values on server and client because of a dummy initial value on
+     * heatCapacity messing up with the forge Capability sync system generating inconsistencies.
+     * By initializing it to the correct value, we ensure the temperature calculations stay consistent between client and server
      */
     @Inject(method = "<init>(Lnet/minecraft/world/item/ItemStack;ILnet/minecraft/tags/TagKey;)V", at = @At("TAIL"), remap = false)
     private void onInit(ItemStack stack, int capacity, TagKey<Fluid> fluidTag, CallbackInfo ci) {

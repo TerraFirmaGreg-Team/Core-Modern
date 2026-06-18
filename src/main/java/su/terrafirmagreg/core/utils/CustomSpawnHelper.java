@@ -124,7 +124,7 @@ public class CustomSpawnHelper {
         }
     }
 
-    public static final HashMap<String, CustomSpawnCondition> CUSTOM_SPAWN_CONDITIONS = new HashMap<>();
+    public static final TreeMap<String, CustomSpawnCondition> CUSTOM_SPAWN_CONDITIONS = new TreeMap<>();
 
     public static final HashMap<String, MutableComponent> SPAWN_DIFFICULTIES = new HashMap<>(Map.of(
             "easy", Component.translatable("tfg.gui.spawn_difficulty.easy"),
@@ -217,7 +217,7 @@ public class CustomSpawnHelper {
         initNewType(TUNDRA_SPAWN);
         initNewType(POLAR_SPAWN);
         initNewType(DESERT_SPAWN);
-        //initNewType(BENEATH_SPAWN); //Disabled for now
+        initNewType(BENEATH_SPAWN);
     }
 
     /// Holds spawn conditions for a particular custom world spawn

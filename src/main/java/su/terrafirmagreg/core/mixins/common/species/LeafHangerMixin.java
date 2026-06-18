@@ -2,22 +2,39 @@ package su.terrafirmagreg.core.mixins.common.species;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.ninni.species.server.entity.mob.update_3.Hanger;
 import com.ninni.species.server.entity.mob.update_3.LeafHanger;
 
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.plant.Plant;
 import net.dries007.tfc.common.entities.aquatic.AquaticMob;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 
 @Mixin(value = LeafHanger.class, remap = false)
-public abstract class LeafHangerMixin implements AquaticMob {
+public abstract class LeafHangerMixin extends Hanger implements AquaticMob {
+
+    @Shadow
+    public abstract void setPullingTarget(boolean bl);
+
+    protected LeafHangerMixin(EntityType<? extends Monster> entityType, Level level) {
+        super(entityType, level);
+    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -27,12 +44,25 @@ public abstract class LeafHangerMixin implements AquaticMob {
 
     /**
      * @author Pyritie
-     * @reason Lets leaf hangers spawn in salt water, and above the sea level
+     * @reason Lets leaf hangers spawn in other kinds of water, and above the sea level
      */
     @Overwrite
     public static boolean canSpawn(EntityType<? extends Hanger> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
         return world.getFluidState(pos).is(FluidTags.WATER)
                 && world.getFluidState(pos.above()).is(FluidTags.WATER)
                 && world.getDifficulty() != Difficulty.PEACEFUL;
+    }
+
+    @Redirect(method = "defineSynchedData", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;defaultBlockState()Lnet/minecraft/world/level/block/state/BlockState;"), remap = true)
+    protected BlockState tfg$defineSynchedData(Block instance) {
+        return TFCBlocks.PLANTS.get(Plant.RED_ALGAE).get().defaultBlockState();
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        setPullingTarget(false);
+        deactivateTongue();
+        setCantAttackTicks(20);
+        return super.hurt(source, amount);
     }
 }

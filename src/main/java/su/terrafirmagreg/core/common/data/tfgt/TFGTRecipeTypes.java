@@ -97,7 +97,7 @@ public class TFGTRecipeTypes {
 
     public static final GTRecipeType FOOD_OVEN_RECIPES = GTRecipeTypes.register("food_oven", GTRecipeTypes.ELECTRIC)
             .setEUIO(IO.IN)
-            .setMaxIOSize(1, 2, 1, 0)
+            .setMaxIOSize(2, 2, 1, 1)
             .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.FURNACE);
@@ -288,4 +288,13 @@ public class TFGTRecipeTypes {
             .setMaxIOSize(1, 1, 0, 1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.BATH);
+
+    public static final GTRecipeType ORE_PROCESSING_GAS = GTRecipeTypes
+            .register("ore_processing_gas", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 6, 2, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.COMBUSTION)
+            .addDataInfo(data -> LocalizationUtils.format("tfg.gui.ore_processing_gas.optimal_ratio.1"))
+            .addDataInfo(data -> LocalizationUtils.format("tfg.gui.ore_processing_gas.optimal_ratio.2"));
 }

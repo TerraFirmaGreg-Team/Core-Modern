@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.common.data;
 
 import com.tterrag.registrate.util.entry.EntityEntry;
 
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -30,15 +32,21 @@ import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSea
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongooseModel;
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongooseRenderer;
+import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFGWolfModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
+import su.terrafirmagreg.core.common.entity.fox.TFGFox;
+import su.terrafirmagreg.core.common.entity.fox.TFGFoxCollarLayer;
+import su.terrafirmagreg.core.common.entity.fox.TFGFoxModel;
+import su.terrafirmagreg.core.common.entity.fox.TFGFoxRenderer;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamModel;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRamRenderer;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbitRenderer;
 import su.terrafirmagreg.core.common.entity.rocket.RocketHelper;
+import su.terrafirmagreg.core.common.entity.slime.*;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSnifferRenderer;
 import su.terrafirmagreg.core.common.entity.surfer.TFCSurfer;
@@ -51,6 +59,22 @@ public class TFGEntities {
 
     public static void init() {
     }
+
+    public static final EntityEntry<TFGSlime> TFG_SLIME = TFGCore.REGISTRATE.entity("slime", TFGSlime::new, MobCategory.AMBIENT)
+            .properties(p -> p.sized(1F, 1F).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .tag(TFGTags.Entities.Genderless)
+            .attributes(TFGSlime::createAttributes)
+            .renderer(() -> TFGSlimeRenderer::new)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFGSlime::spawnRules)
+            .register();
+
+    public static final EntityEntry<TFGFox> TFG_FOX = TFGCore.REGISTRATE.entity("fox", TFGFox::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(0.6F, 0.7F).clientTrackingRange(8))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFGFox::createAttributes)
+            .renderer(() -> TFGFoxRenderer::new)
+            .register();
 
     public static final EntityEntry<MoonRabbit> MOON_RABBIT = TFGCore.REGISTRATE.entity("moon_rabbit", MoonRabbit::makeMoonRabbit, MobCategory.CREATURE)
             .properties(p -> p.sized(1.0F, 1.3F).clientTrackingRange(10))
@@ -167,5 +191,11 @@ public class TFGEntities {
         event.registerLayerDefinition(TFCJerboaModel.LAYER_LOCATION, TFCJerboaModel::createBodyLayer);
         event.registerLayerDefinition(TFCLemmingModel.LAYER_LOCATION, TFCLemmingModel::createBodyLayer);
         event.registerLayerDefinition(TFCMongooseModel.LAYER_LOCATION, TFCMongooseModel::createBodyLayer);
+        event.registerLayerDefinition(TFGWolfModel.LAYER_LOCATION, TFGWolfModel::createBodyLayer);
+        event.registerLayerDefinition(TFGFoxModel.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(CubeDeformation.NONE), 48, 32));
+        event.registerLayerDefinition(TFGFoxCollarLayer.LAYER_LOCATION, () -> LayerDefinition.create(TFGFoxModel.createBodyMesh(new CubeDeformation(0.01f)), 48, 32));
+        event.registerLayerDefinition(TFGSlimeModel.LAYER_LOCATION, TFGSlimeModel::createInnerBodyLayer);
+        event.registerLayerDefinition(TFGSlimeOuterLayer.LAYER_LOCATION, TFGSlimeModel::createOuterBodyLayer);
+        event.registerLayerDefinition(TFGSlimeFaceLayer.LAYER_LOCATION, TFGSlimeModel::createFaceLayer);
     }
 }

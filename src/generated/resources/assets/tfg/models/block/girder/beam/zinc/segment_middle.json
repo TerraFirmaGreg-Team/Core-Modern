@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/beam/segment_middle",
+  "textures": {
+    "0": "tfg:block/girder/beam/zinc",
+    "particle": "tfg:block/girder/beam/zinc"
+  }
+}

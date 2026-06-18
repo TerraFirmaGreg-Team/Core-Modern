@@ -7,7 +7,9 @@
 package su.terrafirmagreg.core.client.screen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -38,13 +40,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 
+import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.widget.MultiToggleButton;
 import su.terrafirmagreg.core.client.screen.widget.PlayerListWidget;
 import su.terrafirmagreg.core.client.screen.widget.RadarGraphWidget;
 import su.terrafirmagreg.core.client.screen.widget.ToggleButton;
 import su.terrafirmagreg.core.client.screen.widget.ValueDisplayListWidget;
+import su.terrafirmagreg.core.client.util.TFGTooltipUtils;
+import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.food.nutrient.TFGNutrients;
+import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.network.packet.RequestTeamNutritionPacket;
 
 /**
  * TFG Nutrition Screen that overrides the default TFC Nutrition Screen.
@@ -58,6 +66,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     public static final ResourceLocation HEART_2 = TFGCore.id("textures/gui/nutrition_screen/heart_2_icon.png");
     public static final ResourceLocation HEART_3 = TFGCore.id("textures/gui/nutrition_screen/heart_3_icon.png");
     public static final ResourceLocation HEART_4 = TFGCore.id("textures/gui/nutrition_screen/heart_4_icon.png");
+    public static final ResourceLocation SCROLLBAR_BACKGROUND = TFGCore.id("textures/gui/nutrition_screen/scrollbar_background.png");
+    public static final ResourceLocation SCROLLBAR_GRABBER = TFGCore.id("textures/gui/nutrition_screen/scrollbar_grabber.png");
 
     public static final int NUTRIENT_ICON_SIZE = 12;
     public static final int HEART_ICON_SIZE = 13;
@@ -65,6 +75,12 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
     public static final int GUI_HEIGHT = 188;
     private static boolean RENDER_TEAM_NUTRITION = false;
     private static int STYLE_BUTTON_STATE = 0;
+    private static final Map<UUID, float[]> CACHED_TEAM_NUTRITION = new HashMap<>();
+
+    public static void receiveTeamNutrition(Map<UUID, float[]> data) {
+        CACHED_TEAM_NUTRITION.putAll(data);
+    }
+
     /**
      * Enables development mode for team list features.
      * When enabled, dummy team players are added to the radar graphs at {@link #addDummyTeamPlayers()}.
@@ -93,7 +109,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
             UUID.fromString("ffc23e0f-c6d8-4eba-b33a-cd0fccca6097"), // Flurben
             UUID.fromString("cc998bd8-ea24-46b5-b2c1-b2784107c612"), // Sakura
             UUID.fromString("9ca8866e-778b-46e8-b384-0af54ae3d399"), // Totor1
-            UUID.fromString("e213327a-7538-49fa-86ab-8c54545ca95f") // broofsi
+            UUID.fromString("e213327a-7538-49fa-86ab-8c54545ca95f"), // Broofsi
+            UUID.fromString("a54aeee0-fc04-41a6-8ae8-5b7eab34c16c"), // Arke
+            UUID.fromString("57b3dfb5-f8a6-49e2-8b54-4e4ffc63256f"), // Xikaro
     };
 
     public TFGNutritionScreen(Container container, Inventory playerInventory, Component name) {
@@ -116,9 +134,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         float thirstModifier = foodData.getThirstModifier(player);
         float saturation = foodData.getSaturationLevel();
         long intoxication = (playerData.getIntoxicatedTicks() / 20) / 60;
-        float passiveExhaustion = TFCFoodData.PASSIVE_EXHAUSTION_PER_SECOND;
-        float exhaustionMultiplier = TFCFoodData.EXHAUSTION_MULTIPLIER;
-        float passiveHealing = TFCFoodData.PASSIVE_HEALING_PER_TEN_TICKS * 2 * 100 * 3;
+        float passiveExhaustion = TFCFoodData.PASSIVE_EXHAUSTION_PER_SECOND * NutrientEffectsHandler.getParasitesPassiveExhaustionModifier(player.getUUID());
+        float exhaustionMultiplier = TFCFoodData.EXHAUSTION_MULTIPLIER * NutrientEffectsHandler.getProteinExhaustionMultiplier(player.getUUID());
+        float passiveHealing = TFCFoodData.PASSIVE_HEALING_PER_TEN_TICKS * 2 * 100 * 3 * NutrientEffectsHandler.getHealingModifierMultiplier(player.getUUID());
 
         int positiveGraphDiameter = 75;
         int positiveGraphX = leftPos + (GUI_WIDTH / 3) - (positiveGraphDiameter / 2);
@@ -139,9 +157,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         int variableDisplayOffset = 2;
         int variableDisplayX = leftPos + (variableDisplayOffset * 4);
-        int variableDisplayY = positiveGraphY + positiveGraphDiameter + 19;
+        int variableDisplayY = positiveGraphY + positiveGraphDiameter + 17;
         int variableDisplayWidth = GUI_WIDTH - 22;
-        int valueDisplayRowHeight = this.font.lineHeight + 3;
+        int valueDisplayRowHeight = this.font.lineHeight + 5;
         int valueDisplayRows = 4;
         int variableDisplayHeight = (valueDisplayRowHeight * valueDisplayRows) + variableDisplayOffset;
 
@@ -169,7 +187,12 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         // ---- Title Display. ----
 
-        StringWidget titleLabel = new StringWidget(titleLabelX, titleLabelY, titleLabelWidth, titleLabelHeight, Component.translatable("tfg.tooltip.nutrition.health"), this.font);
+        StringWidget titleLabel = new StringWidget(titleLabelX, titleLabelY, titleLabelWidth, titleLabelHeight, Component.translatable("tfg.tooltip.nutrition.health"), this.font) {
+            @Override
+            public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+                graphics.drawString(TFGNutritionScreen.this.font, this.getMessage(), this.getX(), this.getY() + (this.height - 9) / 2, 0x000000, false);
+            }
+        };
         titleLabel.alignLeft();
         this.addRenderableWidget(titleLabel);
 
@@ -177,6 +200,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         valueDisplayList = new ValueDisplayListWidget(minecraft, this.font, variableDisplayWidth, variableDisplayHeight, variableDisplayY, variableDisplayY + variableDisplayHeight,
                 valueDisplayRowHeight);
+        valueDisplayList.setScrollbarBackgroundTexture(SCROLLBAR_BACKGROUND, 6);
+        valueDisplayList.setScrollbarGrabberTexture(SCROLLBAR_GRABBER, 6);
         valueDisplayList.setX(variableDisplayX);
         valueDisplayList.setLeftPos(variableDisplayX);
 
@@ -300,13 +325,13 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                             components.add(Component.translatable("tfg.tooltip.nutrition.health_modifier",
                                     Component.literal(String.format("%.1f", maxHealth)).withStyle(ChatFormatting.YELLOW)));
                         }
-                        if (avg < 0.9f && avg >= 0.6f) {
+                        if (avg < 0.95f && avg >= 0.6f) {
                             components.add(Component.translatable("tfg.tooltip.nutrition.positive_average",
                                     Component.literal(String.format("%.0f%%", avg * 100)).withStyle(ChatFormatting.GREEN)));
                             components.add(Component.translatable("tfg.tooltip.nutrition.health_modifier",
                                     Component.literal(String.format("%.1f", maxHealth)).withStyle(ChatFormatting.GREEN)));
                         }
-                        if (avg >= 0.99) {
+                        if (avg >= 0.95f) {
                             components.add(Component.translatable("tfg.tooltip.nutrition.positive_average", String.format("%.0f%%", avg * 100)).withStyle(ChatFormatting.GOLD));
                             components.add(Component.translatable("tfg.tooltip.nutrition.health_modifier", String.format("%.1f", maxHealth)).withStyle(ChatFormatting.GOLD));
                         }
@@ -314,7 +339,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
                         // Hold Shift info.
                         if (Screen.hasShiftDown()) {
-                            components.add(Component.translatable("tfg.tooltip.nutrition.positive_info").withStyle(ChatFormatting.GRAY));
+                            components.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.nutrition.positive_info").withStyle(ChatFormatting.GRAY)));
                         } else {
                             components.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
                         }
@@ -363,7 +388,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
                         // Hold Shift info.
                         if (Screen.hasShiftDown()) {
-                            components.add(Component.translatable("tfg.tooltip.nutrition.negative_info").withStyle(ChatFormatting.GRAY));
+                            components.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.nutrition.negative_info").withStyle(ChatFormatting.GRAY)));
                         } else {
                             components.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
                         }
@@ -389,6 +414,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
         // ---- Player List. ----
 
         playerList = new PlayerListWidget(minecraft, listWidth, listHeight, topPos, topPos + listHeight, listItemSize + 4);
+        playerList.setScrollbarBackgroundTexture(SCROLLBAR_BACKGROUND, 6);
+        playerList.setScrollbarGrabberTexture(SCROLLBAR_GRABBER, 6);
         playerList.setPlayerHeadBackground(TEAM_LIST_TINT_BACKGROUND)
                 .setPlayerHeadTintProvider(RadarGraphWidget.Dataset::getLineColor)
                 .setPlayerHeadBackgroundBounds(0, 0, listWidth, listItemSize);
@@ -404,8 +431,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
      * Updates the radar graphs and player list with current nutrition data.
      */
     private void updateGraphs() {
-        if (positiveRadarGraph == null || negativeRadarGraph == null || playerList == null)
+        if (positiveRadarGraph == null || negativeRadarGraph == null || playerList == null) {
             return;
+        }
 
         positiveRadarGraph.clearDatasets();
         negativeRadarGraph.clearDatasets();
@@ -416,6 +444,8 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
             positiveRadarGraph.setUseRadiusGradient(false);
             negativeRadarGraph.setUseRadiusGradient(false);
             positiveRadarGraph.setShowCentralIcon(false);
+
+            TFGNetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(), new RequestTeamNutritionPacket());
 
             // Current Player
             List<Supplier<Float>> posValues1 = new ArrayList<>();
@@ -438,7 +468,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
             RadarGraphWidget.Dataset dsNeg1 = new RadarGraphWidget.Dataset(self.getName(), negValues1, 0x8000FF00, 0xFF00FF00);
             positiveRadarGraph.addDataset(dsPos1);
             negativeRadarGraph.addDataset(dsNeg1);
-            playerList.addPlayer(self.getName(), self.getUUID(), dsPos1, dsNeg1, true);
+            playerList.addPlayer(self.getName(), self.getUUID(), dsPos1, dsNeg1, true, true);
 
             if (NUTRITION_TEAM_DEV_MODE) {
                 addDummyTeamPlayers();
@@ -522,7 +552,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
             RadarGraphWidget.Dataset dsNeg = new RadarGraphWidget.Dataset(Component.literal(dummyName), dummyNegValues, fillColor, color);
             positiveRadarGraph.addDataset(dsPos);
             negativeRadarGraph.addDataset(dsNeg);
-            playerList.addPlayer(Component.literal(dummyName), dummyUuid, dsPos, dsNeg, false);
+            playerList.addPlayer(Component.literal(dummyName), dummyUuid, dsPos, dsNeg, false, i % 2 == 0);
         }
     }
 
@@ -566,6 +596,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                     if (level == null) {
                         return 0f;
                     }
+                    float[] cached = CACHED_TEAM_NUTRITION.get(memberUuid);
+                    if (cached != null && nutrient.ordinal() < cached.length) {
+                        return cached[nutrient.ordinal()];
+                    }
                     Player member = level.getPlayerByUUID(memberUuid);
                     if (member != null && member.getFoodData() instanceof TFCFoodData data) {
                         return data.getNutrition().getNutrient(nutrient);
@@ -586,7 +620,9 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
             RadarGraphWidget.Dataset dsNeg = new RadarGraphWidget.Dataset(Component.literal(memberName), negValues, fillColor, color);
             positiveRadarGraph.addDataset(dsPos);
             negativeRadarGraph.addDataset(dsNeg);
-            playerList.addPlayer(Component.literal(memberName), memberUuid, dsPos, dsNeg, false);
+
+            boolean memberOnline = connection != null && connection.getPlayerInfo(memberUuid) != null;
+            playerList.addPlayer(Component.literal(memberName), memberUuid, dsPos, dsNeg, false, memberOnline);
             memberIndex++;
         }
     }
@@ -671,18 +707,19 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
      * @return A list of UUIDs representing team members, including the player themselves.
      */
     private List<UUID> resolveFtbTeamMembers(UUID selfUuid) {
+        if (!ModList.get().isLoaded("ftbteams")) {
+            return List.of(selfUuid);
+        }
         try {
-            Class<?> apiClass = Class.forName("dev.ftb.mods.ftbteams.api.FTBTeamsAPI");
-            Object api = apiClass.getMethod("api").invoke(null);
-            Object manager = api.getClass().getMethod("getManager").invoke(api);
-            Object teamOptional = manager.getClass().getMethod("getTeamForPlayerID", UUID.class).invoke(manager, selfUuid);
+            var api = FTBTeamsAPI.api();
+            var manager = api.getClientManager();
+            var team = manager.selfTeam();
 
-            if (!(teamOptional instanceof java.util.Optional<?> optionalTeam) || optionalTeam.isEmpty()) {
+            if (team == null) {
                 return List.of(selfUuid);
             }
 
-            Object team = optionalTeam.get();
-            List<UUID> members = extractUuidMembers(team);
+            List<UUID> members = new ArrayList<>(team.getMembers());
             if (members.isEmpty()) {
                 return List.of(selfUuid);
             }
@@ -691,74 +728,10 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
                 members.add(0, selfUuid);
             }
             return members;
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            TFGCore.LOGGER.error("Failed to resolve FTB team members", e);
             return List.of(selfUuid);
         }
-    }
-
-    /**
-     * Extracts UUID members from a team object.
-     * @param team The team object to extract members from.
-     * @return A list of UUID members, including the player.
-     */
-    private List<UUID> extractUuidMembers(Object team) {
-        List<UUID> members = new ArrayList<>();
-        for (String methodName : List.of("getMembers", "getMemberIds", "getPlayers")) {
-            try {
-                Object value = team.getClass().getMethod(methodName).invoke(team);
-                if (value instanceof List<?> list) {
-                    for (Object obj : list) {
-                        if (obj instanceof UUID id) {
-                            members.add(id);
-                        }
-                    }
-                } else if (value instanceof java.util.Collection<?> collection) {
-                    for (Object obj : collection) {
-                        if (obj instanceof UUID id) {
-                            members.add(id);
-                        } else {
-                            UUID id = extractUuidFromUnknownMember(obj);
-                            if (id != null) {
-                                members.add(id);
-                            }
-                        }
-                    }
-                } else if (value instanceof java.util.Map<?, ?> map) {
-                    for (Object key : map.keySet()) {
-                        if (key instanceof UUID id) {
-                            members.add(id);
-                        }
-                    }
-                }
-                if (!members.isEmpty()) {
-                    return members;
-                }
-            } catch (Exception ignored) {
-            }
-        }
-        return members;
-    }
-
-    /**
-     * Extracts UUID from an unknown member object.
-     * @param member The member object to extract UUID from.
-     * @return The UUID if found, otherwise null.
-     */
-    @Nullable
-    private UUID extractUuidFromUnknownMember(Object member) {
-        if (member == null) {
-            return null;
-        }
-        for (String methodName : List.of("getId", "getUUID", "getPlayerId")) {
-            try {
-                Object value = member.getClass().getMethod(methodName).invoke(member);
-                if (value instanceof UUID id) {
-                    return id;
-                }
-            } catch (Exception ignored) {
-            }
-        }
-        return null;
     }
 
     /**
@@ -807,7 +780,7 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
                         // Hold Shift info.
                         if (Screen.hasShiftDown()) {
-                            components.add(Component.translatable("tfg.tooltip.nutrition." + nutrient.getSerializedName() + "_info").withStyle(ChatFormatting.GRAY));
+                            components.addAll(TFGTooltipUtils.normalize(Component.translatable("tfg.tooltip.nutrition." + nutrient.getSerializedName() + "_info").withStyle(ChatFormatting.GRAY)));
                         } else {
                             components.add(Component.translatable("tfg.tooltip.shift_hint").withStyle(ChatFormatting.GOLD));
                         }
@@ -867,6 +840,15 @@ public class TFGNutritionScreen extends TFCContainerScreen<Container> {
 
         if (RENDER_TEAM_NUTRITION && playerList != null) {
             playerList.render(graphics, mouseX, mouseY, partialTicks);
+        }
+
+        // Render tooltips last.
+        if (valueDisplayList != null) {
+            valueDisplayList.renderTooltip(graphics);
+        }
+
+        if (RENDER_TEAM_NUTRITION && playerList != null) {
+            playerList.renderTooltip(graphics);
         }
 
         // Render radar graph tooltip.

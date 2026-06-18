@@ -1,6 +1,8 @@
 package su.terrafirmagreg.core.common.data.tfgt;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.CraftingComponent;
 
@@ -9,6 +11,7 @@ import electrolyte.greate.registry.GreateTagPrefixes;
 public class TFGCraftingComponents {
     public static CraftingComponent WHISK;
     public static CraftingComponent HERMETIC_CASING;
+    public static CraftingComponent FIELD_GENERATOR_TIER_DOWN;
 
     public TFGCraftingComponents() {
     }
@@ -37,5 +40,14 @@ public class TFGCraftingComponents {
                 .add(7, GTBlocks.HERMETIC_CASING_ZPM.asStack())
                 .add(8, GTBlocks.HERMETIC_CASING_UV.asStack())
                 .add(9, GTBlocks.HERMETIC_CASING_UHV.asStack());
+
+        FIELD_GENERATOR_TIER_DOWN = CraftingComponent.of("field_generator_tier_down", GTItems.FIELD_GENERATOR_LV.asStack())
+                .add(GTValues.HV, GTItems.FIELD_GENERATOR_MV.asStack())
+                .add(GTValues.EV, GTItems.FIELD_GENERATOR_HV.asStack())
+                .add(GTValues.IV, GTItems.FIELD_GENERATOR_EV.asStack())
+                .add(GTValues.LuV, GTItems.FIELD_GENERATOR_IV.asStack())
+                .add(GTValues.ZPM, GTItems.FIELD_GENERATOR_LuV.asStack())
+                .add(GTValues.UV, GTItems.FIELD_GENERATOR_ZPM.asStack())
+                .add(GTValues.UHV, GTItems.FIELD_GENERATOR_UV.asStack());
     }
 }

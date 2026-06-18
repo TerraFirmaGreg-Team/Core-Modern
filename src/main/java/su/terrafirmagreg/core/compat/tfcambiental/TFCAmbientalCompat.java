@@ -2,13 +2,13 @@ package su.terrafirmagreg.core.compat.tfcambiental;
 
 import java.util.*;
 
-import com.eerussianguy.beneath.common.blocks.LavaAqueductBlock;
 import com.eerussianguy.firmalife.common.blocks.OvenBottomBlock;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMachines;
+import com.lumintorious.tfcambiental.TFCAmbiental;
 import com.lumintorious.tfcambiental.api.AmbientalRegistry;
 import com.lumintorious.tfcambiental.modifier.TempModifier;
 import com.simibubi.create.AllItems;
@@ -18,6 +18,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.AqueductBlock;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -28,11 +29,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.RegistryObject;
 
 import earth.terrarium.adastra.common.registry.ModItems;
+import mod.traister101.sns.common.items.SNSItems;
 
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
+import su.terrafirmagreg.core.common.entity.slime.TFGSlime;
 
 /**
  * Compatibility for TFC Ambiental
@@ -165,11 +169,14 @@ public final class TFCAmbientalCompat {
         }
 
         // Special cases
-        if (block instanceof LavaAqueductBlock && state.getValue(LavaAqueductBlock.FLUID).getFluid() == Fluids.LAVA)
-            return Optional.of(new TempModifier("aqueduct_lava", 5.0F, 1.0F));
-
-        if (block instanceof AqueductBlock && state.getValue(AqueductBlock.FLUID).getFluid() == TFCFluids.SPRING_WATER.getFlowing())
-            return Optional.of(new TempModifier("aqueduct_spring_water", 2.0F, 1.0F));
+        if (block instanceof AqueductBlock aqueduct) {
+            var fluid = state.getValue(aqueduct.getFluidProperty()).getFluid();
+            if (fluid == Fluids.LAVA) {
+                return Optional.of(new TempModifier("aqueduct_lava", 5.0F, 1.0F));
+            } else if (fluid == TFCFluids.SPRING_WATER.getFlowing()) {
+                return Optional.of(new TempModifier("aqueduct_spring_water", 2.0F, 1.0F));
+            }
+        }
 
         if (block instanceof IceBlock)
             return Optional.of(new TempModifier("ice_block", -4.0F, 1.0F));
@@ -240,13 +247,40 @@ public final class TFCAmbientalCompat {
             return Optional.of(new TempModifier("copper_diving_suit", -1F, 0.1F));
         }
         if (BLUE_STEEL_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier("blue_steel_diving_suit", -3F, HEATPROOF));
+            return Optional.of(new TempModifier("blue_steel_diving_suit", -3F, 0.9F));
         }
         if (ADVANCED_ARMOR.contains(item)) {
             return Optional.of(new TempModifier("advanced_armor", 0F, FULLY_INSULATED));
         }
+        if (item == SNSItems.BLUE_STEEL_TOE_HIKING_BOOTS.get()) {
+            return Optional.of(new TempModifier("blue_steel_hiking_boots", -2f, 0.2F));
+        }
+        if (item == SNSItems.RED_STEEL_TOE_HIKING_BOOTS.get()) {
+            return Optional.of(new TempModifier("red_steel_hiking_boots", 2f, 0.2F));
+        }
 
         return Optional.empty();
+    }
+
+    public static Optional<TempModifier> getEntityTempModifier(Player player) {
+        float change = 0F;
+
+        for (Entity entity : player.level().getEntitiesOfClass(Entity.class,
+                new AABB(player.blockPosition()).inflate(5.0D, 2.0D, 5.0D))) {
+            if (entity.getType().is(TFCAmbiental.HOT_ENTITIES)) {
+                change += 1F;
+            } else if (entity.getType().is(TFCAmbiental.COLD_ENTITIES)) {
+                change -= 1F;
+            } else if (entity instanceof TFGSlime slime) {
+                change += slime.getAmbientalTemperature();
+            }
+        }
+
+        if (change == 0F) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new TempModifier("tfg_entity_temperature", change, 0F));
     }
 
     // ==================== SUIT DETECTION ====================
@@ -266,10 +300,10 @@ public final class TFCAmbientalCompat {
                 && ADVANCED_ARMOR.contains(legs) && ADVANCED_ARMOR.contains(feet)) {
             return SuitType.FULLY_INSULATED;
         }
-        if (BLUE_STEEL_DIVING_SUIT.contains(head) && BLUE_STEEL_DIVING_SUIT.contains(chest)
-                && BLUE_STEEL_DIVING_SUIT.contains(legs) && BLUE_STEEL_DIVING_SUIT.contains(feet)) {
-            return SuitType.HEATPROOF;
-        }
+        //        if (BLUE_STEEL_DIVING_SUIT.contains(head) && BLUE_STEEL_DIVING_SUIT.contains(chest)
+        //                && BLUE_STEEL_DIVING_SUIT.contains(legs) && BLUE_STEEL_DIVING_SUIT.contains(feet)) {
+        //            return SuitType.HEATPROOF;
+        //        }
         return SuitType.NONE;
     }
 

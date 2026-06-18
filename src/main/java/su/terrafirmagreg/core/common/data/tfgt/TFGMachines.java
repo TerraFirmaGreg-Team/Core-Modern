@@ -50,10 +50,7 @@ import net.minecraftforge.fluids.FluidType;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryLogisticsMonitorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.AqueousAccumulatorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.FoodRefrigeratorMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.GasPressurizerMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.electric.SimpleFoodProcessingMachine;
+import su.terrafirmagreg.core.common.tfgt.machine.electric.*;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SMRFluidImportHatchPartMachine;
@@ -130,6 +127,24 @@ public class TFGMachines {
                     .workableTieredHullModel(TFGCore.id("block/machines/food_refrigerator"))
                     .register(),
             GTValues.tiersBetween(GTValues.MV, GTValues.IV));
+
+    public static final MachineDefinition[] WIRELESS_CHARGER = registerTieredMachines(REGISTRATE, "wireless_charger",
+            WirelessChargerMachine::new, (tier, builder) -> builder
+                    .langValue("%s Wireless Charger %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .tooltips(
+                            Component.translatable("gtceu.universal.tooltip.voltage_in",
+                                    FormattingUtil.formatNumbers(GTValues.V[tier]), GTValues.VNF[tier]),
+                            Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
+                                    FormattingUtil.formatNumbers(GTValues.V[tier] * 64)),
+                            Component.translatable("tfg.tooltip.machine.wireless_charger.short_range",
+                                    FormattingUtil.formatNumbers(WirelessChargerMachine.shortRangeFor(tier))),
+                            Component.translatable("tfg.tooltip.machine.wireless_charger.long_range",
+                                    FormattingUtil.formatNumbers(WirelessChargerMachine.longRangeFor(tier))),
+                            Component.translatable("tfg.tooltip.machine.wireless_charger.usage"))
+                    .workableTieredHullModel(TFGCore.id("block/machines/wireless_charger"))
+                    .register(),
+            GTValues.tiersBetween(GTValues.HV, GTValues.UHV));
 
     public static final MachineDefinition[] AQUEOUS_ACCUMULATOR = registerTieredMachines(REGISTRATE, "aqueous_accumulator",
             AqueousAccumulatorMachine::new, (tier, builder) -> builder

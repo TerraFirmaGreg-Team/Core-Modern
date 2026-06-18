@@ -26,6 +26,13 @@ public class WorldgenVersionData extends SavedData {
     /** Effective overworld worldgen version for the current server session. Set on server start. */
     public static volatile int OVERWORLD_VERSION = 0;
 
+    /**
+     * Set to true at the end of {@link su.terrafirmagreg.core.common.event.WorldgenVersionEvents#onServerAboutToStart}
+     * after {@link #OVERWORLD_VERSION} is resolved from save/config. Used on the client to tell apart "0 because the
+     * logical server has not published a session yet" (e.g. create-world preview) from "0 stored for a classic overworld".
+     */
+    public static volatile boolean OVERWORLD_SESSION_VERSION_RESOLVED = false;
+
     public static WorldgenVersionData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(
                 WorldgenVersionData::new,

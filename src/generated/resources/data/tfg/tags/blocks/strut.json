@@ -1,0 +1,16 @@
+{
+  "values": [
+    "tfg:strut/beam/steel",
+    "tfg:strut/beam/brass",
+    "tfg:strut/beam/copper",
+    "tfg:strut/beam/tin_alloy",
+    "tfg:strut/beam/zinc",
+    "tfg:strut/beam/wrought_iron",
+    "tfg:strut/truss/steel",
+    "tfg:strut/truss/brass",
+    "tfg:strut/truss/copper",
+    "tfg:strut/truss/tin_alloy",
+    "tfg:strut/truss/zinc",
+    "tfg:strut/truss/wrought_iron"
+  ]
+}

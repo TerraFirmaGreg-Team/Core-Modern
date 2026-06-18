@@ -2,6 +2,7 @@
   "values": [
     "tfg:wood/slab/araucaria",
     "tfg:wood/slab/beech",
-    "tfg:wood/slab/mahoe"
+    "tfg:wood/slab/mahoe",
+    "tfg:asphalt_road_slab"
   ]
 }
