@@ -10,10 +10,46 @@
       ],
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "tfg:wood/barrel/araucaria"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "tfg:wood/barrel/araucaria",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "sealed": "true"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:copy_name",
+                  "source": "block_entity"
+                },
+                {
+                  "function": "minecraft:copy_nbt",
+                  "ops": [
+                    {
+                      "op": "replace",
+                      "source": "",
+                      "target": "BlockEntityTag"
+                    }
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "tfg:wood/barrel/araucaria"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "tfg:wood/barrel/araucaria"
+            }
+          ]
         }
       ],
+      "name": "loot_pool",
       "rolls": 1.0
     }
   ],

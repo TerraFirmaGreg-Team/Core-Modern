@@ -1,3 +1,11 @@
 {
-  "parent": "tfg:block/wood/barrel/aeronos"
+  "parent": "tfg:block/wood/barrel/aeronos",
+  "overrides": [
+    {
+      "model": "tfg:block/wood/barrel_sealed/aeronos",
+      "predicate": {
+        "tfc:sealed": 1.0
+      }
+    }
+  ]
 }

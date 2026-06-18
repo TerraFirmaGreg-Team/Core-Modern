@@ -55,6 +55,10 @@ public final class ServerConfig {
     public final ForgeConfigSpec.BooleanValue enableTFGFoodDebuffs;
     public final ForgeConfigSpec.BooleanValue enableTFGFoodBuffs;
 
+    public final ForgeConfigSpec.BooleanValue enableBeneathMiningRestrictions;
+    public final ForgeConfigSpec.IntValue disabledBeneathMiningYLevel;
+    public final ForgeConfigSpec.BooleanValue enableHotPlanetMiningRestrictions;
+
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.push("hang_glider");
 
@@ -144,8 +148,18 @@ public final class ServerConfig {
                 .comment("Enables TFG food buff effects. Allows receiving helpful effects from nutrients like Fruits, or transient nutrients like Fulfilling.")
                 .define("enableTFGFoodBuffs", true);
 
-        builder.pop().push("chameleon_spray_can");
+        builder.pop().push("mining_restrictions");
+        enableBeneathMiningRestrictions = builder
+                .comment("Enables restrictions on automatic mining machines in the Beneath.")
+                .define("enableBeneathMiningRestrictions", true);
+        disabledBeneathMiningYLevel = builder
+                .comment("Below this Y level, single block gregtech miners and create contraptions cannot mine ores.")
+                .defineInRange("disabledBeneathMiningYLevel", 80, 1, Integer.MAX_VALUE);
+        enableHotPlanetMiningRestrictions = builder
+                .comment("Enables restrictions on automatic mining machines on hot planets.")
+                .define("enableHotPlanetMiningRestrictions", true);
 
+        builder.pop().push("chameleon_spray_can");
         CHAMELEON_SPRAY_CAN_CAPACITY = builder
                 .comment("\nThe maximum Prismatic Paint capacity of the Chameleon Spray Can (in mB). Default: 8000")
                 .defineInRange("chameleonSprayCanCapacity", 2000, 1, Integer.MAX_VALUE);
