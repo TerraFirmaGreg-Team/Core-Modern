@@ -67,14 +67,14 @@ public class MineSpiderProcessor extends StructureProcessor {
         if (isSkeletonBlock(originalBlockState)) {
             RandomSource random = settings.getRandom(blockPos);
 
-            return switch (random.nextIntBetweenInclusive(0, 3)) {
+            return switch (random.nextIntBetweenInclusive(0, 8)) {
                 case 0 ->
                     new StructureTemplate.StructureBlockInfo(blockPos, COBWEB_SKELETON_A.defaultBlockState(), new CompoundTag());
                 case 1 ->
                     new StructureTemplate.StructureBlockInfo(blockPos, COBWEB_SKELETON_B.defaultBlockState(), new CompoundTag());
-                case 2 ->
+                case 2, 3, 4 ->
                     new StructureTemplate.StructureBlockInfo(blockPos, TFGBlocks_Earth.SPIDER_WEB.get().defaultBlockState(), new CompoundTag());
-                default ->
+				default ->
                     new StructureTemplate.StructureBlockInfo(blockPos, Blocks.CAVE_AIR.defaultBlockState(), new CompoundTag());
             };
         }
