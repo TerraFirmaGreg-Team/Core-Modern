@@ -148,6 +148,8 @@ public final class TFGTags {
         private static TagKey<Fluid> createFluidTag(ResourceLocation resLoc) {
             return TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), resLoc);
         }
+
+        public static final TagKey<Fluid> OreProcGas = createFluidTag("ore_proc_gas");
     }
 
     public static final class Entities {
