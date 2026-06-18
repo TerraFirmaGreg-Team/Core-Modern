@@ -74,6 +74,8 @@ public class MineSpiderProcessor extends StructureProcessor {
                     new StructureTemplate.StructureBlockInfo(blockPos, COBWEB_SKELETON_B.defaultBlockState(), new CompoundTag());
                 case 2, 3, 4 ->
                     new StructureTemplate.StructureBlockInfo(blockPos, TFGBlocks_Earth.SPIDER_WEB.get().defaultBlockState(), new CompoundTag());
+				case 5 ->
+					new StructureTemplate.StructureBlockInfo(blockPos, TFGBlocks_Earth.SPIDER_SAC.get().defaultBlockState(), new CompoundTag());
 				default ->
                     new StructureTemplate.StructureBlockInfo(blockPos, Blocks.CAVE_AIR.defaultBlockState(), new CompoundTag());
             };
