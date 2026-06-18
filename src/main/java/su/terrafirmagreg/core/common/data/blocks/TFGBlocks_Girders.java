@@ -255,7 +255,7 @@ public class TFGBlocks_Girders {
                 .texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_east", TFGCore.id("block/girder/beam/bracket_east")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_west", TFGCore.id("block/girder/beam/bracket_west")).texture("0", texLoc).texture("particle", texLoc);
-        provider.models().withExistingParent(context.getName() + "/bracked_north", TFGCore.id("block/girder/beam/bracket_north")).texture("0", texLoc).texture("particle", texLoc);
+        provider.models().withExistingParent(context.getName() + "/bracket_north", TFGCore.id("block/girder/beam/bracket_north")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_south", TFGCore.id("block/girder/beam/bracket_south")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_middle", TFGCore.id("block/girder/beam/segment_middle")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_top", TFGCore.id("block/girder/beam/segment_top")).texture("0", texLoc).texture("particle", texLoc);
@@ -304,7 +304,7 @@ public class TFGBlocks_Girders {
 
         provider.models().withExistingParent(context.getName() + "/bracket_east", TFGCore.id("block/girder/truss/bracket_east")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_west", TFGCore.id("block/girder/truss/bracket_west")).texture("0", texLoc).texture("particle", texLoc);
-        provider.models().withExistingParent(context.getName() + "/bracked_north", TFGCore.id("block/girder/truss/bracket_north")).texture("0", texLoc).texture("particle", texLoc);
+        provider.models().withExistingParent(context.getName() + "/bracket_north", TFGCore.id("block/girder/truss/bracket_north")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_south", TFGCore.id("block/girder/truss/bracket_south")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_middle", TFGCore.id("block/girder/truss/segment_middle")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_top", TFGCore.id("block/girder/truss/segment_top")).texture("0", texLoc).texture("particle", texLoc);

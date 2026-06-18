@@ -158,7 +158,7 @@ public final class ServerConfig {
         enableHotPlanetMiningRestrictions = builder
                 .comment("Enables restrictions on automatic mining machines on hot planets.")
                 .define("enableHotPlanetMiningRestrictions", true);
-                         
+
         builder.pop().push("chameleon_spray_can");
         CHAMELEON_SPRAY_CAN_CAPACITY = builder
                 .comment("\nThe maximum Prismatic Paint capacity of the Chameleon Spray Can (in mB). Default: 8000")
