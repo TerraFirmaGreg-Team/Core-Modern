@@ -101,7 +101,7 @@ public class TFGEmiPlugin implements EmiPlugin {
                 2, 0.75, 32, 60, 0, 3, 3, false, false, false, 0,
                 new String[] { "minecraft:blackstone", "minecraft:deepslate", "tfc:rock/raw/basalt", "beneath:crackrack" },
                 new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("garnet_sand", 100) },
-                "tfg:nether/is_lava_floes", new String[] { "biome.tfg.nether/lava_floes" },
+                "tfg:nether/is_ash_forest", new String[] { "biome.tfg.nether/ash_forest" },
                 null, null, 50, null,
                 null));
 
