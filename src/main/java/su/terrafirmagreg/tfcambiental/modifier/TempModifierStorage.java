@@ -1,10 +1,12 @@
 package su.terrafirmagreg.tfcambiental.modifier;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 public class TempModifierStorage implements Iterable<TempModifier> {
-    private List<TempModifier> list = new LinkedList<>();
+    private final List<TempModifier> list = new ArrayList<>();
 
     public void add(TempModifier value) {
         if (value == null) {
@@ -14,7 +16,11 @@ public class TempModifierStorage implements Iterable<TempModifier> {
     }
 
     public void add(Optional<TempModifier> tempModifier) {
-        tempModifier.ifPresent(mod -> list.add(mod));
+        tempModifier.ifPresent(list::add);
+    }
+
+    public void clear() {
+        list.clear();
     }
 
     public float getTargetTemperature() {
@@ -39,10 +45,6 @@ public class TempModifierStorage implements Iterable<TempModifier> {
             wetness += mod.getWetness();
         }
         return wetness;
-    }
-
-    public void forEach(Consumer<? super TempModifier> func) {
-        list.forEach(func);
     }
 
     @Override

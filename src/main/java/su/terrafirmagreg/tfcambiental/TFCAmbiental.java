@@ -64,7 +64,7 @@ public class TFCAmbiental {
     public static final ResourceKey<DamageType> HOT = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(TFCAmbiental.MOD_ID, "heatstroke"));
     public static final ResourceKey<DamageType> FREEZE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(TFCAmbiental.MOD_ID, "frostbite"));
 
-    public static final String VERSION = Integer.toString(1);
+    public static final String VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(Helpers.identifier("tfcambiental"), () -> VERSION, VERSION::equals, VERSION::equals);
 
     public TFCAmbiental() {
@@ -126,6 +126,11 @@ public class TFCAmbiental {
         if (event.getItemStack().getItem() instanceof ClothesItem clothesItem) {
             if (clothesItem.getMaterial() instanceof TemperatureAlteringMaterial tempMaterial) {
                 TempModifier modifier = tempMaterial.getTempModifier(event.getItemStack());
+                warmth = (modifier.getChange());
+                insulation = (modifier.getPotency() / 0.1f);
+            }
+            if (clothesItem.getMaterial() instanceof com.lumintorious.tfcambiental.item.material.TemperatureAlteringMaterial tempMaterial) {
+                TempModifier modifier = tempMaterial.getTempModifier(event.getItemStack()); // for tfc textile
                 warmth = (modifier.getChange());
                 insulation = (modifier.getPotency() / 0.1f);
             }

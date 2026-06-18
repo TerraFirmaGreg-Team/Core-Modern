@@ -1,5 +1,6 @@
 package su.terrafirmagreg.tfcambiental.api;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,6 +28,32 @@ import su.terrafirmagreg.tfcambiental.modifier.TempModifierStorage;
 
 @FunctionalInterface
 public interface EnvironmentalTemperatureProvider {
+    static final List<EnvironmentalTemperatureProvider> PROVIDERS = List.of(
+            EnvironmentalTemperatureProvider::handleGeneralTemperature,
+            EnvironmentalTemperatureProvider::handleWater,
+            EnvironmentalTemperatureProvider::handleSprinting,
+            EnvironmentalTemperatureProvider::handleTimeOfDay,
+            EnvironmentalTemperatureProvider::handleShade,
+            EnvironmentalTemperatureProvider::handleCozy,
+            EnvironmentalTemperatureProvider::handleRain,
+            EnvironmentalTemperatureProvider::handleWind,
+            EnvironmentalTemperatureProvider::handleUnderground,
+            EnvironmentalTemperatureProvider::handleWetness,
+            EnvironmentalTemperatureProvider::handleThirst,
+            EnvironmentalTemperatureProvider::handleFood,
+            EnvironmentalTemperatureProvider::handleDiet,
+            EnvironmentalTemperatureProvider::handleFire);
+
+    static final List<EnvironmentalTemperatureProvider> NETHER_PROVIDERS = List.of(
+            EnvironmentalTemperatureProvider::handleGeneralTemperature,
+            EnvironmentalTemperatureProvider::handleWater,
+            EnvironmentalTemperatureProvider::handleSprinting,
+            EnvironmentalTemperatureProvider::handleWetness,
+            EnvironmentalTemperatureProvider::handleThirst,
+            EnvironmentalTemperatureProvider::handleFood,
+            EnvironmentalTemperatureProvider::handleDiet,
+            EnvironmentalTemperatureProvider::handleFire);
+
     Optional<TempModifier> getModifier(Player player);
 
     static boolean calculateEnclosure(Player player, int radius) {
@@ -51,13 +78,11 @@ public interface EnvironmentalTemperatureProvider {
     }
 
     static float getEnvironmentTemperatureWithTimeOfDay(Player player) {
-        return getEnvironmentTemperature(player) + handleTimeOfDay(player).get().getChange();
+        return getEnvironmentTemperature(player) + handleTimeOfDay(player).map(TempModifier::getChange).orElse(0f);
     }
 
     static float getEnvironmentTemperature(Player player) {
-        float actual = Climate.getTemperature(player.level(), player.getOnPos());
-        float diff = actual - 15;
-        return 20 + (diff + 0.5f * Math.signum(diff));
+        return Climate.getTemperature(player.level(), player.getOnPos());
     }
 
     static float getEnvironmentHumidity(Player player) {
@@ -76,7 +101,7 @@ public interface EnvironmentalTemperatureProvider {
 
     static Optional<TempModifier> handleFire(Player player) {
         if (player.isOnFire()) {
-            TempModifier.defined(4f, 4f, -1f);
+            return TempModifier.defined(4f, 4f, -1f);
         }
         return TempModifier.none();
     }
@@ -126,13 +151,14 @@ public interface EnvironmentalTemperatureProvider {
     static Optional<TempModifier> handleWind(Player player) {
         return player.getCapability(TemperatureCapability.CAPABILITY).map(temperatureCapability -> {
             var wind = Climate.getWindVector(player.level(), player.blockPosition());
-            // Can lower the player down to 3 under ambient temperature and makes cooling faster
             float temperature = temperatureCapability.getTemperature();
             float targetTemperature = temperatureCapability.getTargetTemperature();
-            float potency = temperature < targetTemperature ? 0.1f * temperatureCapability.getWetness() * wind.length() : 0f;
-            float change = temperature > EnvironmentalTemperatureProvider.getEnvironmentTemperature(player) - 3f ? -0.01f : 0f;
+            float potency = temperature < targetTemperature ? 0.1f * temperatureCapability.getWetness() * wind.length()
+                    : 0f;
+            float change = temperature > EnvironmentalTemperatureProvider.getEnvironmentTemperature(player) - 3f
+                    ? -0.01f
+                    : 0f;
             return TempModifier.defined(change * wind.length(), potency);
-
         }).orElse(TempModifier.none());
     }
 
@@ -171,7 +197,8 @@ public interface EnvironmentalTemperatureProvider {
                 final boolean[] isInside = { false };
                 player.getCapability(TemperatureCapability.CAPABILITY).ifPresent(temperatureCapability -> {
                     if (player.tickCount % TFCAmbientalConfig.COMMON.indoorCheckTickModifier.get() == 0) {
-                        temperatureCapability.setInside(EnvironmentalTemperatureProvider.calculateEnclosure(player, 30));
+                        temperatureCapability
+                                .setInside(EnvironmentalTemperatureProvider.calculateEnclosure(player, 30));
                     }
                     isInside[0] = temperatureCapability.isInside();
                 });
@@ -186,7 +213,8 @@ public interface EnvironmentalTemperatureProvider {
 
     static Optional<TempModifier> handleThirst(Player player) {
         if (player.getFoodData() instanceof TFCFoodData stats) {
-            if (getEnvironmentTemperatureWithTimeOfDay(player) > TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue() + 3) {
+            if (getEnvironmentTemperatureWithTimeOfDay(
+                    player) > TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue() + 3) {
                 if (stats.getThirst() > 80f) {
                     return TempModifier.defined(-2.5f, 0f);
                 } else if (stats.getThirst() < 5f) {
@@ -198,7 +226,8 @@ public interface EnvironmentalTemperatureProvider {
     }
 
     static Optional<TempModifier> handleFood(Player player) {
-        if (player.getFoodData().getFoodLevel() > 14 && getEnvironmentTemperatureWithTimeOfDay(player) < TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue() - 3) {
+        if (player.getFoodData().getFoodLevel() > 14 && getEnvironmentTemperatureWithTimeOfDay(
+                player) < TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue() - 3) {
             return TempModifier.defined(2.5f, 0f);
         }
         return TempModifier.none();
@@ -206,12 +235,14 @@ public interface EnvironmentalTemperatureProvider {
 
     static Optional<TempModifier> handleDiet(Player player) {
         if (player.getFoodData() instanceof TFCFoodData stats) {
-            if (getEnvironmentTemperatureWithTimeOfDay(player) < TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue()) {
+            if (getEnvironmentTemperatureWithTimeOfDay(player) < TFCAmbientalConfig.COMMON.coolThreshold.get()
+                    .floatValue()) {
                 float grainLevel = stats.getNutrition().getNutrient(Nutrient.GRAIN);
                 float meatLevel = stats.getNutrition().getNutrient(Nutrient.PROTEIN);
                 return TempModifier.defined(4f * grainLevel * meatLevel, 0f);
             }
-            if (getEnvironmentTemperatureWithTimeOfDay(player) > TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue()) {
+            if (getEnvironmentTemperatureWithTimeOfDay(player) > TFCAmbientalConfig.COMMON.hotThreshold.get()
+                    .floatValue()) {
                 float fruitLevel = stats.getNutrition().getNutrient(Nutrient.FRUIT);
                 float veggieLevel = stats.getNutrition().getNutrient(Nutrient.VEGETABLES);
                 return TempModifier.defined(-4f * fruitLevel * veggieLevel, 0f);
@@ -225,18 +256,28 @@ public interface EnvironmentalTemperatureProvider {
             // TODO Wool clothing halves the effect of wetness
             var mod = -0.01f;
             var potency = 0.2f;
-            // If you're wet in a cold environment, the temperature drop is significantly higher
             if (temperatureCapability.getWetness() > 1.5f && !player.isInWater()) {
                 var envTemperature = getEnvironmentTemperature(player);
                 potency = envTemperature < temperatureCapability.getTemperature() ? 5.5f : potency;
             }
-            return TempModifier.defined(mod * temperatureCapability.getWetness(), potency, !player.isInWater() ? -0.03f : 0);
+            return TempModifier.defined(mod * temperatureCapability.getWetness(), potency,
+                    !player.isInWater() ? -0.03f : 0);
         }).orElse(TempModifier.none());
     }
 
     static void evaluateAll(Player player, TempModifierStorage storage) {
-        for (var fn : AmbientalRegistry.ENVIRONMENT) {
-            storage.add(fn.getModifier(player));
+        evaluateAll(player, storage, false);
+    }
+
+    static void evaluateAll(Player player, TempModifierStorage storage, boolean nether) {
+        if (nether) {
+            for (EnvironmentalTemperatureProvider provider : NETHER_PROVIDERS) {
+                storage.add(provider.getModifier(player));
+            }
+        } else {
+            for (EnvironmentalTemperatureProvider provider : PROVIDERS) {
+                storage.add(provider.getModifier(player));
+            }
         }
     }
 }

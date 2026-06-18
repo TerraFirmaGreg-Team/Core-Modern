@@ -1,5 +1,6 @@
 package su.terrafirmagreg.tfcambiental.api;
 
+import java.util.List;
 import java.util.Optional;
 
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
@@ -13,11 +14,15 @@ import su.terrafirmagreg.tfcambiental.modifier.TempModifierStorage;
 
 @FunctionalInterface
 public interface ItemTemperatureProvider {
+    List<ItemTemperatureProvider> PROVIDERS = List.of(
+            ItemTemperatureProvider::handleTemperatureCapability,
+            ItemTemperatureProvider::handleHotIngots);
+
     Optional<TempModifier> getModifier(Player player, ItemStack stack);
 
     static void evaluateAll(Player player, TempModifierStorage modifiers) {
         for (ItemStack stack : player.getInventory().items) {
-            for (ItemTemperatureProvider provider : AmbientalRegistry.ITEMS) {
+            for (ItemTemperatureProvider provider : PROVIDERS) {
                 modifiers.add(provider.getModifier(player, stack));
             }
         }

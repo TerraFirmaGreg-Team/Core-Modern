@@ -35,7 +35,7 @@ public class TemperatureChangeEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         TemperatureCapability tempCap = livingEntity.getCapability(TemperatureCapability.CAPABILITY)
-                .orElse(TemperatureCapability.DEFAULT);
+                .orElse(new TemperatureCapability());
 
         float currentTemp = tempCap.getTemperature();
         float change = deltaTemp * (amplifier + 1);

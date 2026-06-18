@@ -37,7 +37,7 @@ public class TFCAmbientalGuiRenderer {
             if (player.isCreative() || !player.isAlive() || player.isSpectator()) {
                 return;
             }
-            TemperatureCapability tempSystem = player.getCapability(TemperatureCapability.CAPABILITY, null).orElse(TemperatureCapability.DEFAULT);
+            TemperatureCapability tempSystem = player.getCapability(TemperatureCapability.CAPABILITY, null).orElseGet(TemperatureCapability::new);
             int width = mc.getWindow().getGuiScaledWidth();
             int height = mc.getWindow().getGuiScaledHeight();
             float redCol, greenCol, blueCol;
@@ -130,7 +130,7 @@ public class TFCAmbientalGuiRenderer {
 
     private static void drawTemperatureVignettes(int width, int height, Player player) {
         ResourceLocation vignetteLocation = null;
-        TemperatureCapability tempSystem = player.getCapability(TemperatureCapability.CAPABILITY, null).orElse(TemperatureCapability.DEFAULT);
+        TemperatureCapability tempSystem = player.getCapability(TemperatureCapability.CAPABILITY, null).orElseGet(TemperatureCapability::new);
         float temperature = tempSystem.getTemperature();
 
         float BURN_THRESHOLD = TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue();

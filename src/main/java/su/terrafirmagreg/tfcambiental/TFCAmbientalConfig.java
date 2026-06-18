@@ -9,7 +9,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
 public class TFCAmbientalConfig {
-    public static boolean LOADED = false;
     public static CommonImpl COMMON;
     public static ClientImpl CLIENT;
     public static ServerImpl SERVER;
@@ -123,7 +122,6 @@ public class TFCAmbientalConfig {
                     .comment("The durability value of Wool material clothing.")
                     .defineInRange("durabilityWoolClothes", 3000, 0, Integer.MAX_VALUE);
         }
-
     }
 
     public static class ClientImpl {

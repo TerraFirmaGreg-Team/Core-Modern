@@ -1,5 +1,8 @@
 package com.lumintorious.tfcambiental.item.material;
 
-public interface TemperatureAlteringMaterial
-    extends su.terrafirmagreg.tfcambiental.item.material.TemperatureAlteringMaterial {
+import net.minecraft.world.item.ItemStack;
+import com.lumintorious.tfcambiental.modifier.TempModifier;
+
+public interface TemperatureAlteringMaterial {
+    TempModifier getTempModifier(ItemStack stack);
 }
