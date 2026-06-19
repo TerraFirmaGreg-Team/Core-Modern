@@ -39,12 +39,12 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
 
     @Override
     public boolean place(FeaturePlaceContext<MineshaftOreConfig> context) {
-        System.out.println("start ore place");
+        //System.out.println("start ore place");
 
         if (configMap.isEmpty()) {
-            System.out.println("maps are empty");
+            //System.out.println("maps are empty");
             var registry = context.level().getLevel().registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
-            System.out.println("got registry");
+            //System.out.println("got registry");
 
             registry.forEach(configuredFeature -> {
                 var feature = configuredFeature.feature();
@@ -76,7 +76,7 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
             });
         }
 
-        System.out.println("check veins");
+        //System.out.println("check veins");
 
         Map<String, VeinData> potentialVeins = new HashMap<>();
         int offset = 0;
@@ -89,11 +89,11 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
             offset += 30;
         }
 
-        System.out.println(potentialVeins.keySet());
+        //System.out.println(potentialVeins.keySet());
 
         VeinData selectedVein = pickFromWeightedVeins(potentialVeins, context.random());
 
-        System.out.println("Selected vein: " + selectedVein.name);
+        //System.out.println("Selected vein: " + selectedVein.name);
 
         placeMetaball(context, selectedVein);
         return true;
@@ -211,9 +211,9 @@ public class MineshaftOreFeature extends Feature<MineshaftOreConfig> {
         IWeighted<BlockState> oreBlock = veinData.wightedOres;
 
         BoundingBox box = getBoundingBox(origin, size, config.vertical_range().sample(random));
-        System.out.println(box);
+        //System.out.println(box);
         Metaballs2D metaball = getMetaball(random, size);
-        System.out.println(metaball);
+        //System.out.println(metaball);
 
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         Block targetBlock = veinData.rockType.raw();

@@ -73,26 +73,26 @@ public class MineshaftHelpers {
 
             ChunkDataProvider dataProv = ChunkDataProvider.get(levelAccessor.getLevel().getChunkSource().getGenerator());
             ChunkData data = dataProv.get(levelAccessor.getChunk(chunkPos.x, chunkPos.z));
-            System.out.println(chunkPos);
+            //System.out.println(chunkPos);
 
-            System.out.println(data.status());
+            //System.out.println(data.status());
 
             BlockPos testPos = chunkPos.getMiddleBlockPosition(blockPos.getY());
             var temp = data.getAverageTemp(testPos);
             var rain = data.getRainfall(testPos);
 
-            System.out.println(temp);
-            System.out.println(rain);
+            //System.out.println(temp);
+            //System.out.println(rain);
 
             int tempQuart = (int) Math.floor((temp + 20) / 15);
             int rainQuart = (int) Math.floor(rain / 125);
 
-            System.out.println(tempQuart);
-            System.out.println(rainQuart);
+            //System.out.println(tempQuart);
+            //System.out.println(rainQuart);
             RegistryWood woodType = WOOD_CLIMATE_ARRAY[tempQuart][rainQuart];
 
             WOOD_CHUNK_CACHE.put(chunkPos, woodType);
-            System.out.println("added " + woodType + " at " + chunkPos);
+            //System.out.println("added " + woodType + " at " + chunkPos);
             return woodType;
         }
 
