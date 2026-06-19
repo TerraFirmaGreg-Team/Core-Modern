@@ -18,6 +18,8 @@
     "tfg:raw_oil_tar",
     "tfg:light_oil_tar",
     "tfg:heavy_oil_tar",
+    "tfg:spider_web",
+    "tfg:spider_sac",
     "tfg:coarse_dirt/silty_loam",
     "tfg:coarse_dirt/sandy_loam",
     "tfg:coarse_dirt/silt",
