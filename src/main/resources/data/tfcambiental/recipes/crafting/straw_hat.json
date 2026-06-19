@@ -1,6 +1,0 @@
-{
-    "result": {"item": "tfcambiental:straw_hat"},
-    "pattern": ["XX"],
-    "type": "minecraft:crafting_shaped",
-    "key": {"X": {"item": "tfc:straw"}}
-}
