@@ -15,9 +15,11 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import earth.terrarium.adastra.common.entities.vehicles.Rocket;
+import earth.terrarium.adastra.common.handlers.LaunchingDimensionHandler;
 import earth.terrarium.adastra.common.registry.ModEntityTypes;
 import earth.terrarium.adastra.common.tags.ModFluidTags;
 
@@ -35,10 +37,16 @@ public abstract class RocketMixin extends Entity {
     private final Rocket tfg$self = (Rocket) (Object) this;
 
     @Unique
-    private static final long TFG$COUNTDOWN_MS = 5_000L;
+    private static final long TFG$COUNTDOWN_MS_DEFAULT = 3_000L;
+
+    @Unique
+    private static final long TFG$COUNTDOWN_MS_FIRST = 10_000L;
 
     @Unique
     private long tfg$launchStartMs = -1L;
+
+    @Unique
+    private long tfg$countdownMs = TFG$COUNTDOWN_MS_DEFAULT;
 
     @Shadow
     public abstract int launchTicks();
@@ -135,6 +143,9 @@ public abstract class RocketMixin extends Entity {
 
     @Inject(method = "initiateLaunchSequence", at = @At("RETURN"))
     private void tfg$recordLaunchStart(CallbackInfo ci) {
+        Player pilot = (Player) tfg$self.getControllingPassenger();
+        tfg$countdownMs = (pilot != null && LaunchingDimensionHandler.getAllSpawnLocations((net.minecraft.server.level.ServerPlayer) pilot).isEmpty()) ? TFG$COUNTDOWN_MS_FIRST
+                : TFG$COUNTDOWN_MS_DEFAULT;
         tfg$launchStartMs = System.currentTimeMillis();
     }
 
@@ -145,7 +156,7 @@ public abstract class RocketMixin extends Entity {
             entityData.set((EntityDataAccessor<Integer>) key, (Integer) value);
             return;
         }
-        entityData.set((EntityDataAccessor<Integer>) key, (int) ((TFG$COUNTDOWN_MS - (System.currentTimeMillis() - tfg$launchStartMs)) / 50L));
+        entityData.set((EntityDataAccessor<Integer>) key, (int) ((tfg$countdownMs - (System.currentTimeMillis() - tfg$launchStartMs)) / 50L));
     }
 
 }
