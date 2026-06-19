@@ -246,6 +246,11 @@ public class MineSupportProcessor extends StructureProcessor {
             }
         }
 
+		// Remove placeholder bamboo block
+		if (originalBlockState.getBlock() == Blocks.BAMBOO_BLOCK) {
+			return new StructureTemplate.StructureBlockInfo(blockPos, Blocks.CAVE_AIR.defaultBlockState(), new CompoundTag());
+		}
+
         //Fallback if block doesn't need to be changed
         return currentBlockInfo;
     }

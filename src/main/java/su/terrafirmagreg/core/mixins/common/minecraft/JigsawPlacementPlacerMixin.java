@@ -27,7 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 @Debug(export = true)
 public abstract class JigsawPlacementPlacerMixin {
 
-	// TODO: part of gamestar's unfinished mineshaft code? not sure what this is for -Py
+    // TODO: part of gamestar's unfinished mineshaft code? not sure what this is for -Py
 
     @Final
     @Shadow

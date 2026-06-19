@@ -1,0 +1,5 @@
+{
+    "values": ["tfc:erosion"],
+    "replace": false,
+    "__comment__": "Erosion has been moved here to better handle structures that need to be placed early, like the mineshaft"
+}

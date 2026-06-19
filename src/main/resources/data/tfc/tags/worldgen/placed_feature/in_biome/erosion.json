@@ -1,0 +1,5 @@
+{
+    "values": [],
+    "replace": false,
+    "__comment__": "Erosion is moved to the underground_structures step, so structures like the mineshaft can happen before."
+}
