@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "tfg:block/machine/iv_wireless_charger",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/iv_wireless_charger"
+    },
+    "facing=south": {
+      "model": "tfg:block/machine/iv_wireless_charger",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tfg:block/machine/iv_wireless_charger",
+      "y": 270
+    }
+  }
+}

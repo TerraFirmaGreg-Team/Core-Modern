@@ -41,6 +41,8 @@ dependencies {
     modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
 
     // Greate
+    modRuntimeOnly "curse.maven:copycats-968398:7634682"
+    modRuntimeOnly "curse.maven:create-repair-1477958:8034105"
     modImplementation ("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
@@ -168,4 +170,10 @@ dependencies {
 
     // Strut Your Stuff
     modImplementation "maven.modrinth:strut-your-stuff:1.1.0+mc1.20.1"
+
+    // Phoenix's Chromatic Codes
+    modImplementation("curse.maven:phoenixs-chromatic-colors-1483210:7980147")
+
+    // Create: Connected, May 25 2026
+    modImplementation "curse.maven:create-connected-947914:8143922"
 }

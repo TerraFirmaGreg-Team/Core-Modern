@@ -91,11 +91,18 @@ public class TFGEmiPlugin implements EmiPlugin {
                 null, null, null, null,
                 new String[] { "tfg.ore_vein.oilsands.emi.0", "tfg.ore_vein.oilsands.emi.1" }));
         emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_oilsands", "minecraft:the_nether",
-                1, 1, 50, 180, 0, 2, 3, false, false, false, 0,
+                1, 0.6, 50, 180, 0, 2, 3, false, true, false, 0,
                 new String[] { "tfc:sand/white", "tfc:sand/yellow", "tfc:sand/red", "tfc:sand/brown", "tfc:sand/pink", "tfc:sand/green", "tfc:sand/black" },
                 new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("oilsands", 100) },
                 "tfg:nether/has_oilsands", new String[] { "biome.tfg.nether/tar_pools" },
                 null, null, null, null,
+                null));
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_garnet_sands", "minecraft:the_nether",
+                2, 0.75, 32, 60, 0, 3, 3, false, false, false, 0,
+                new String[] { "minecraft:blackstone", "minecraft:deepslate", "tfc:rock/raw/basalt", "beneath:crackrack" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("garnet_sand", 100) },
+                "tfg:nether/is_ash_forest", new String[] { "biome.tfg.nether/ash_forest" },
+                null, null, 50, null,
                 null));
 
         //Blaze Burner

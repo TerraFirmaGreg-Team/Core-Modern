@@ -89,6 +89,10 @@ public final class TFGTags {
 
         public static final TagKey<Item> DYNAMIC_COLOR = createItemTag("dynamic_color");
 
+        // Used in an interface mixin, which can't have local fields, so they live here instead
+        public static final TagKey<Item> RICH_RAW_MATERIALS = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "rich_raw_materials"));
+        public static final TagKey<Item> POOR_RAW_MATERIALS = createItemTag(ResourceLocation.fromNamespaceAndPath("forge", "poor_raw_materials"));
+
         private static TagKey<Item> createItemTag(String path) {
             return createItemTag(TFGCore.id(path));
         }
@@ -118,6 +122,7 @@ public final class TFGTags {
         public static final TagKey<Block> AnemonePlantableOn = createBlockTag("anemone_plantable_on");
         public static final TagKey<Block> IsAnemone = createBlockTag("is_anemone");
         public static final TagKey<Block> NOT_SLOWED_WITH_SNOWSHOES = createBlockTag("not_slowed_with_snowshoes");
+        public static final TagKey<Block> TRACK_REPLACEABLE = createBlockTag("track_replaceable");
 
         public static final TagKey<Block> GIRDER = createBlockTag("girder");
         public static final TagKey<Block> PAVING_GIRDER = createBlockTag("paving_girder");
@@ -143,6 +148,8 @@ public final class TFGTags {
         private static TagKey<Fluid> createFluidTag(ResourceLocation resLoc) {
             return TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), resLoc);
         }
+
+        public static final TagKey<Fluid> OreProcGas = createFluidTag("ore_proc_gas");
     }
 
     public static final class Entities {

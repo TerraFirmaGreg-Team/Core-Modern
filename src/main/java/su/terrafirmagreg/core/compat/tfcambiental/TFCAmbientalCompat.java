@@ -247,7 +247,7 @@ public final class TFCAmbientalCompat {
             return Optional.of(new TempModifier("copper_diving_suit", -1F, 0.1F));
         }
         if (BLUE_STEEL_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier("blue_steel_diving_suit", -3F, HEATPROOF));
+            return Optional.of(new TempModifier("blue_steel_diving_suit", -3F, 0.9F));
         }
         if (ADVANCED_ARMOR.contains(item)) {
             return Optional.of(new TempModifier("advanced_armor", 0F, FULLY_INSULATED));

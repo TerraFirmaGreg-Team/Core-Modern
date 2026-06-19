@@ -14,8 +14,11 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.client.model.machine.MachineRenderState;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
@@ -116,7 +119,10 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         if (isRemote())
             return;
         if (getLevel() instanceof ServerLevel serverLevel) {
-            serverLevel.getServer().tell(new TickTask(0, this::updateSubscription));
+            serverLevel.getServer().tell(new TickTask(0, () -> {
+                setActive(currentlyWorking);
+                updateSubscription();
+            }));
         }
 
         energySubscription = energyContainer.addChangedListener(this::updateSubscription);
@@ -174,6 +180,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             if (!currentlyWorking) {
                 inventory.changeTraitForAll(true);
                 currentlyWorking = true;
+                setActive(true);
 
                 // Initial maintenance when transitioning to working state.
                 inventory.maintainNow();
@@ -184,6 +191,7 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             if (currentlyWorking) {
                 inventory.changeTraitForAll(false);
                 currentlyWorking = false;
+                setActive(false);
                 markDirty();
             }
             if (tickSubscription != null) {
@@ -756,6 +764,17 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
                 internalEdit = false;
             }
             return drops;
+        }
+    }
+
+    private void setActive(boolean active) {
+        MachineRenderState renderState = getRenderState();
+        if (renderState == null)
+            return;
+        if (renderState.hasProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS)) {
+            setRenderState(renderState.setValue(
+                    GTMachineModelProperties.RECIPE_LOGIC_STATUS,
+                    active ? RecipeLogic.Status.WORKING : RecipeLogic.Status.IDLE));
         }
     }
 
