@@ -176,4 +176,7 @@ dependencies {
 
     // Create: Connected, May 25 2026
     modImplementation "curse.maven:create-connected-947914:8143922"
+
+    // Additional Placements, [1.20.1 Forge] Additional Placements 3.0.1.jar, Apr 10, 2026
+    modCompileOnly "curse.maven:additional-placements-674852:7905535"
 }
