@@ -16,10 +16,6 @@ public class TFCAmbientalItems {
             "house_tester",
             () -> new HouseTester(new Item.Properties().stacksTo(1)));
 
-    public static final RegistryObject<Item> SNOWSHOES = ITEMS.register(
-            "snowshoes",
-            () -> new Snowshoes(new Item.Properties().stacksTo(1).durability(27000)));
-
     public static final RegistryObject<Item> LEATHER_APRON = ITEMS.register(
             "leather_apron",
             () -> new ClothesItem(ClothesMaterial.LEATHER_APRON, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1).durability(1)));

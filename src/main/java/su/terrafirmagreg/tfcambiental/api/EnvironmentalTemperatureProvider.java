@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
@@ -41,7 +40,6 @@ public interface EnvironmentalTemperatureProvider {
             EnvironmentalTemperatureProvider::handleWetness,
             EnvironmentalTemperatureProvider::handleThirst,
             EnvironmentalTemperatureProvider::handleFood,
-            EnvironmentalTemperatureProvider::handleDiet,
             EnvironmentalTemperatureProvider::handleFire);
 
     static final List<EnvironmentalTemperatureProvider> NETHER_PROVIDERS = List.of(
@@ -51,7 +49,6 @@ public interface EnvironmentalTemperatureProvider {
             EnvironmentalTemperatureProvider::handleWetness,
             EnvironmentalTemperatureProvider::handleThirst,
             EnvironmentalTemperatureProvider::handleFood,
-            EnvironmentalTemperatureProvider::handleDiet,
             EnvironmentalTemperatureProvider::handleFire);
 
     Optional<TempModifier> getModifier(Player player);
@@ -189,6 +186,9 @@ public interface EnvironmentalTemperatureProvider {
     }
 
     static Optional<TempModifier> handleCozy(Player player) {
+        if (player.isUnderWater()) {
+            return TempModifier.none();
+        }
         if (TFCAmbientalConfig.COMMON.indoorCheckTickModifier.get() > 0) {
             float temp = getEnvironmentTemperatureWithTimeOfDay(player);
             float avg = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
@@ -229,24 +229,6 @@ public interface EnvironmentalTemperatureProvider {
         if (player.getFoodData().getFoodLevel() > 14 && getEnvironmentTemperatureWithTimeOfDay(
                 player) < TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue() - 3) {
             return TempModifier.defined(2.5f, 0f);
-        }
-        return TempModifier.none();
-    }
-
-    static Optional<TempModifier> handleDiet(Player player) {
-        if (player.getFoodData() instanceof TFCFoodData stats) {
-            if (getEnvironmentTemperatureWithTimeOfDay(player) < TFCAmbientalConfig.COMMON.coolThreshold.get()
-                    .floatValue()) {
-                float grainLevel = stats.getNutrition().getNutrient(Nutrient.GRAIN);
-                float meatLevel = stats.getNutrition().getNutrient(Nutrient.PROTEIN);
-                return TempModifier.defined(4f * grainLevel * meatLevel, 0f);
-            }
-            if (getEnvironmentTemperatureWithTimeOfDay(player) > TFCAmbientalConfig.COMMON.hotThreshold.get()
-                    .floatValue()) {
-                float fruitLevel = stats.getNutrition().getNutrient(Nutrient.FRUIT);
-                float veggieLevel = stats.getNutrition().getNutrient(Nutrient.VEGETABLES);
-                return TempModifier.defined(-4f * fruitLevel * veggieLevel, 0f);
-            }
         }
         return TempModifier.none();
     }

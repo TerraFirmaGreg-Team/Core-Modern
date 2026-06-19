@@ -6,7 +6,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import su.terrafirmagreg.tfcambiental.curios.ClothesCurioRenderer;
-import su.terrafirmagreg.tfcambiental.curios.SnowshoesCurioRenderer;
 import su.terrafirmagreg.tfcambiental.item.TFCAmbientalItems;
 
 public class ClientEventHandler {
@@ -15,8 +14,6 @@ public class ClientEventHandler {
     }
 
     private static void setup(FMLClientSetupEvent event) {
-        CuriosRendererRegistry.register(TFCAmbientalItems.SNOWSHOES.get(), SnowshoesCurioRenderer::new);
-
         CuriosRendererRegistry.register(TFCAmbientalItems.STRAW_HAT.get(), ClothesCurioRenderer::new);
         CuriosRendererRegistry.register(TFCAmbientalItems.LEATHER_APRON.get(), ClothesCurioRenderer::new);
 

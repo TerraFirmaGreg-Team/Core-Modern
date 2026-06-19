@@ -24,7 +24,7 @@ public class TempModifierStorage implements Iterable<TempModifier> {
     }
 
     public float getTargetTemperature() {
-        float change = 1f;
+        float change = 0f;
         for (var mod : list) {
             change += mod.getChange();
         }

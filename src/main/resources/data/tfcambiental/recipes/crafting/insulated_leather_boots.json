@@ -1,0 +1,13 @@
+{
+    "result": {"item": "tfcambiental:insulated_leather_boots"},
+    "pattern": [
+        "SSS",
+        "SXS",
+        "SSS"
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "S": {"tag": "forge:string"},
+        "X": {"item": "minecraft:leather_boots"}
+    }
+}

@@ -31,7 +31,7 @@ public class ForgeEventHandler {
             event.player.getCapability(TemperatureCapability.CAPABILITY).ifPresent(TemperatureCapability::update);
         } else {
             // Drip when wet
-            if (level.getRandom().nextInt() <= TFCAmbientalConfig.CLIENT.drippiness.get() && !event.player.isUnderWater()) {
+            if (level.getRandom().nextInt(100) <= TFCAmbientalConfig.CLIENT.drippiness.get() && !event.player.isUnderWater()) {
                 event.player.getCapability(TemperatureCapability.CAPABILITY).ifPresent(temperatureCapability -> {
                     if (temperatureCapability.getWetness() > 0.5f && level.getRandom().nextDouble() < (0.005D * temperatureCapability.getWetness())) {
                         var pos = event.player.position();

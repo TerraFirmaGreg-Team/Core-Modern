@@ -66,7 +66,8 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
         float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, getTargetTemperature() - this.temperature));
         float newTemp = this.temperature + change;
         float average = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
-        if ((this.temperature < average && newTemp > this.temperature) || (this.temperature > average && newTemp < this.temperature)) {
+        if ((this.temperature < average && newTemp > this.temperature)
+                || (this.temperature > average && newTemp < this.temperature)) {
             speed *= GOOD_MULTIPLIER * TFCAmbientalConfig.COMMON.goodTemperatureChangeSpeed.get().floatValue();
         } else {
             speed *= BAD_MULTIPLIER * TFCAmbientalConfig.COMMON.badTemperatureChangeSpeed.get().floatValue();
@@ -76,7 +77,8 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
 
     public float getWetnessChange() {
         float average = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
-        float speed = (getTemperature() > average ? 0.001f : 0.0005f) * TFCAmbientalConfig.COMMON.wetnessChangeSpeed.get().floatValue();
+        float speed = (getTemperature() > average ? 0.001f : 0.0005f)
+                * TFCAmbientalConfig.COMMON.wetnessChangeSpeed.get().floatValue();
         if (getTargetWetness() > this.wetness) {
             speed *= 16;
         }
@@ -236,14 +238,17 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
                 if (this.damageTick > 40) {
                     this.damageTick = 0;
                     if (this.getTemperature() > TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue()) {
-                        player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.HOT)), 4f);
+                        player.hurt(new DamageSource(player.level().registryAccess()
+                                .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.HOT)), 4f);
                     } else if (this.getTemperature() < TFCAmbientalConfig.COMMON.freezeThreshold.get().floatValue()) {
-                        player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.FREEZE)), 4f);
+                        player.hurt(new DamageSource(player.level().registryAccess()
+                                .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.FREEZE)), 4f);
                     }
                     if (player.getFoodData() instanceof TFCFoodData stats) {
                         if (this.getTemperature() > TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue()) {
                             stats.addThirst(-8);
-                        } else if (this.getTemperature() < TFCAmbientalConfig.COMMON.freezeThreshold.get().floatValue()) {
+                        } else if (this.getTemperature() < TFCAmbientalConfig.COMMON.freezeThreshold.get()
+                                .floatValue()) {
                             stats.setFoodLevel(stats.getFoodLevel() - 1);
                         }
                     }
@@ -263,4 +268,5 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
             TFCAmbiental.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
         }
     }
+
 }

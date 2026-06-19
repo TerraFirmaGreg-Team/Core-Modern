@@ -1,6 +1,8 @@
 package su.terrafirmagreg.tfcambiental.api;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,9 +41,12 @@ import net.minecraftforge.registries.RegistryObject;
 
 import top.theillusivec4.curios.api.CuriosApi;
 
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
+import su.terrafirmagreg.tfcambiental.api.BlockTemperatureProvider.TempModifierSpec;
 import su.terrafirmagreg.tfcambiental.item.TFCAmbientalItems;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifierStorage;
@@ -63,6 +68,8 @@ public interface BlockTemperatureProvider {
         BlockPos pos2 = new BlockPos(onPos.getX() + 9, onPos.getY() + 5, onPos.getZ() + 9);
         Iterable<BlockPos> allPositions = BlockPos.betweenClosed(pos1, pos2);
 
+        TempModifierStorage potentialStorage = new TempModifierStorage();
+
         for (BlockPos pos : allPositions) {
             if (!player.level().isLoaded(pos)) {
                 continue;
@@ -83,7 +90,7 @@ public interface BlockTemperatureProvider {
             }
 
             for (BlockTemperatureProvider provider : PROVIDERS) {
-                addScaled(storage, provider.getModifier(player, pos, state), distanceMultiplier);
+                addScaled(potentialStorage, provider.getModifier(player, pos, state), distanceMultiplier);
             }
 
             BlockEntity blockEntity = player.level().getBlockEntity(pos);
@@ -96,6 +103,15 @@ public interface BlockTemperatureProvider {
                 addScaled(storage, handleLitBlock(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleIHeatBlock(player, blockEntity), distanceMultiplier);
             }
+        }
+
+        List<TempModifier> mods = new ArrayList<>();
+        for (TempModifier mod : potentialStorage) {
+            mods.add(mod);
+        }
+        mods.sort(Comparator.comparingDouble((TempModifier m) -> Math.abs(m.getChange())).reversed());
+        for (int i = 0; i < Math.min(5, mods.size()); i++) {
+            storage.add(mods.get(i));
         }
     }
 
@@ -113,9 +129,7 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleColdStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.COLD_STUFF) && player.level().getBrightness(net.minecraft.world.level.LightLayer.SKY, pos) == 15
-                ? Optional.of(new TempModifier(-0.5f, 0.2f))
-                : TempModifier.none();
+        return state.is(TFCAmbiental.COLD_STUFF) ? Optional.of(new TempModifier(-0.5f, 0.2f)) : TempModifier.none();
     }
 
     static Optional<TempModifier> handleSnow(Player player, BlockPos pos, BlockState state) {
@@ -198,7 +212,8 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleLitBlock(Player player, BlockEntity entity) {
-        if (entity.getBlockState().hasProperty(BlockStateProperties.LIT) && entity.getBlockState().getValue(BlockStateProperties.LIT)) {
+        if (entity.getBlockState().hasProperty(BlockStateProperties.LIT)
+                && entity.getBlockState().getValue(BlockStateProperties.LIT)) {
             float change = 3f;
             if (hasProtection(player)) {
                 change = change * 0.3f;
@@ -209,7 +224,8 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleIHeatBlock(Player player, BlockEntity entity) {
-        return entity.getCapability(HeatCapability.BLOCK_CAPABILITY).map(cap -> new TempModifier(cap.getTemperature() / 140f, 0));
+        return entity.getCapability(HeatCapability.BLOCK_CAPABILITY)
+                .map(cap -> new TempModifier(cap.getTemperature() / 140f, 0));
     }
 
     record TempModifierSpec(float change, float potency) {
@@ -221,7 +237,10 @@ public interface BlockTemperatureProvider {
     static final Map<Block, TempModifierSpec> SIMPLE_BLOCKS = Stream.concat(
             Stream.of(
                     Map.entry(Blocks.PACKED_ICE, new TempModifierSpec(-6.0F, 1.0F)),
-                    Map.entry(Blocks.BLUE_ICE, new TempModifierSpec(-8.0F, 1.0F))),
+                    Map.entry(Blocks.BLUE_ICE, new TempModifierSpec(-8.0F, 1.0F)),
+                    Map.entry(TFCBlocks.SEA_ICE.get(), new TempModifierSpec(-6.0F, 1.0F)),
+                    Map.entry(TFGBlocks.DRY_ICE.get(), new TempModifierSpec(-6.0F, 1.0F)),
+                    Map.entry(TFGBlocks_Mars.MARS_ICE.get(), new TempModifierSpec(-6.0F, 1.0F))),
             TFCBlocks.MAGMA_BLOCKS.values().stream()
                     .map(RegistryObject::get)
                     .map(block -> Map.entry(block, new TempModifierSpec(5.0F, 1.0F))))
