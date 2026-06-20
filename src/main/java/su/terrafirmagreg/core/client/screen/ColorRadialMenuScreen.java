@@ -151,7 +151,7 @@ public class ColorRadialMenuScreen extends Screen {
     }
 
     private Item getDyeItem(DyeColor color) {
-        ResourceLocation id = new ResourceLocation("minecraft", color.getSerializedName() + "_dye");
+        ResourceLocation id = ResourceLocation.withDefaultNamespace(color.getSerializedName() + "_dye");
         return BuiltInRegistries.ITEM.get(id);
     }
 
