@@ -62,8 +62,8 @@ public abstract class SpectreMixin extends Monster {
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(16);
     }
 
-	@Override
-	public boolean fireImmune() {
-		return true;
-	}
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
 }
