@@ -47,12 +47,14 @@ public class MineSpiderProcessor extends StructureProcessor {
         if (originalBlockState.isAir()) {
             RandomSource random = settings.getRandom(blockPos);
 
-            if (random.nextBoolean() && random.nextBoolean()) {
-                return new StructureTemplate.StructureBlockInfo(blockPos, TFGBlocks_Earth.SPIDER_WEB.get().defaultBlockState(), new CompoundTag());
-            }
-
-            return currentBlockInfo;
-        }
+			return switch (random.nextIntBetweenInclusive(0, 8)) {
+				case 0 ->
+					new StructureTemplate.StructureBlockInfo(blockPos, TFGBlocks_Earth.SPIDER_SAC.get().defaultBlockState(), new CompoundTag());
+				case 1, 2 ->
+					new StructureTemplate.StructureBlockInfo(blockPos, TFGBlocks_Earth.SPIDER_WEB.get().defaultBlockState(), new CompoundTag());
+				default -> currentBlockInfo;
+			};
+		}
 
         //        if (isCobwebBlock(originalBlockState)) {
         //            RandomSource random = settings.getRandom(blockPos);
