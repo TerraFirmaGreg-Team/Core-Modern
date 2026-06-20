@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.block.PalmFruitClusterBlock;
+import su.terrafirmagreg.core.common.block.CoconutClusterBlock;
 import su.terrafirmagreg.core.common.block.PalmHeadBlock;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 
@@ -32,11 +32,11 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, PalmHeadBlockEntity palmHead) {
         if (level.getGameTime() % 400 == 0 && state.hasProperty(PalmHeadBlock.NATURAL) && state.getValue(PalmHeadBlock.NATURAL)) {
-            palmHead.tryProduceFruit(level, pos, state);
+            palmHead.tryProduceFruit(level, pos);
         }
     }
 
-    protected void tryProduceFruit(Level level, BlockPos pos, BlockState state) {
+    protected void tryProduceFruit(Level level, BlockPos pos) {
         if (isProductionMonth()) {
             List<Direction> directions = new ArrayList<>(List.of(Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new)));
             Collections.shuffle(directions);
@@ -45,14 +45,14 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
                 if (level.isEmptyBlock(fruitPos)) {
                     Block fruitBlock = getFruitBlock();
                     BlockState fruitState = fruitBlock.defaultBlockState();
-                    if (fruitState.hasProperty(PalmFruitClusterBlock.FACING)) {
-                        fruitState = fruitState.setValue(PalmFruitClusterBlock.FACING, direction.getOpposite());
+                    if (fruitState.hasProperty(CoconutClusterBlock.FACING)) {
+                        fruitState = fruitState.setValue(CoconutClusterBlock.FACING, direction.getOpposite());
                     }
-                    if (fruitState.hasProperty(PalmFruitClusterBlock.ATTACHED)) {
-                        fruitState = fruitState.setValue(PalmFruitClusterBlock.ATTACHED, true);
+                    if (fruitState.hasProperty(CoconutClusterBlock.ATTACHED)) {
+                        fruitState = fruitState.setValue(CoconutClusterBlock.ATTACHED, true);
                     }
-                    if (fruitState.hasProperty(PalmFruitClusterBlock.NATURAL)) {
-                        fruitState = fruitState.setValue(PalmFruitClusterBlock.NATURAL, true);
+                    if (fruitState.hasProperty(CoconutClusterBlock.NATURAL)) {
+                        fruitState = fruitState.setValue(CoconutClusterBlock.NATURAL, true);
                     }
                     level.setBlockAndUpdate(fruitPos, fruitState);
                     break;

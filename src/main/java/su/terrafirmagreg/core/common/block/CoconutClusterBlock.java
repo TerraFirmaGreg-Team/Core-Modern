@@ -1,12 +1,21 @@
 package su.terrafirmagreg.core.common.block;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -17,16 +26,22 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
+
+import su.terrafirmagreg.core.common.data.PalmTrees;
 
 @SuppressWarnings("deprecation")
-public class PalmFruitClusterBlock extends HorizontalDirectionalBlock {
+public class CoconutClusterBlock extends HorizontalDirectionalBlock {
 
     public static final IntegerProperty AGE = BlockStateProperties.AGE_7;
     public static final BooleanProperty ATTACHED = BooleanProperty.create("attached");
     public static final BooleanProperty NATURAL = BooleanProperty.create("natural");
 
-    public PalmFruitClusterBlock(Properties properties) {
+    private final PalmTrees tree;
+
+    public CoconutClusterBlock(Properties properties, PalmTrees tree) {
         super(properties);
+        this.tree = tree;
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(AGE, 0)
@@ -56,10 +71,6 @@ public class PalmFruitClusterBlock extends HorizontalDirectionalBlock {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        BlockState below = level.getBlockState(pos.below());
-        if (!below.isFaceSturdy(level, pos.below(), Direction.UP)) {
-            return false;
-        }
         return isValidAttachment(level, pos, state.getValue(FACING));
     }
 
@@ -75,16 +86,63 @@ public class PalmFruitClusterBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        int age = state.getValue(AGE);
+
+        int count = switch (age) {
+            case 5 -> 3;
+            case 6 -> 2;
+            default -> 0;
+        };
+
+        if (count != 0) {
+            if (!level.isClientSide) {
+                level.removeBlock(pos, false);
+                popResource(level, pos, new ItemStack(tree.getDroppedFruitBlock().get(), count));
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        return super.use(state, level, pos, player, hand, hit);
+
+    }
+
+    @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (state.getValue(ATTACHED)) {
             if (random.nextFloat() < 0.25f) {
                 int age = state.getValue(AGE);
-                if (age < 6) {
+                if (age < 7) {
                     level.setBlock(pos, state.setValue(AGE, age + 1), 2);
+                    if (age >= 4) {
+                        spawnFallingCoconut(level, pos);
+                    }
                 } else {
-                    level.removeBlock(pos, false);
+                    spawnFallingCoconut(level, pos);
                 }
             }
+        }
+    }
+
+    private void spawnFallingCoconut(ServerLevel level, BlockPos pos) {
+        List<BlockPos> validPositions = new ArrayList<>();
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                BlockPos target = pos.offset(x, -1, z);
+                if (level.isEmptyBlock(target)) {
+                    validPositions.add(target);
+                }
+            }
+        }
+
+        if (!validPositions.isEmpty()) {
+            BlockPos spawnPos = validPositions.get(level.getRandom().nextInt(validPositions.size()));
+            FallingBlockEntity entity = FallingBlockEntity.fall(level, spawnPos, tree.getDroppedFruitBlock().get().defaultBlockState());
+            entity.setHurtsEntities(2.0f, 2);
+            level.removeBlock(pos, false);
+        } else {
+            popResource(level, pos, new ItemStack(tree.getDroppedFruitBlock().get()));
+            level.removeBlock(pos, false);
         }
     }
 
@@ -98,7 +156,7 @@ public class PalmFruitClusterBlock extends HorizontalDirectionalBlock {
         if (neighbor.getBlock() instanceof PalmHeadBlock) {
             return neighbor.hasProperty(PalmHeadBlock.NATURAL) && neighbor.getValue(PalmHeadBlock.NATURAL);
         }
-        if (neighbor.getBlock() instanceof PalmFruitClusterBlock) {
+        if (neighbor.getBlock() instanceof CoconutClusterBlock) {
             return neighbor.hasProperty(NATURAL) && neighbor.getValue(NATURAL);
         }
         return false;

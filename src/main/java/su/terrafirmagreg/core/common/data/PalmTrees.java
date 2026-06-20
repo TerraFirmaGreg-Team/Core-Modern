@@ -1,7 +1,8 @@
 package su.terrafirmagreg.core.common.data;
 
 import java.util.Locale;
-import java.util.function.Supplier;
+
+import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.dries007.tfc.util.calendar.Month;
 import net.minecraft.util.StringRepresentable;
@@ -31,7 +32,11 @@ public enum PalmTrees implements StringRepresentable {
         return serializedName;
     }
 
-    public Supplier<? extends Block> getFruitBlock() {
+    public BlockEntry<? extends Block> getFruitBlock() {
         return TFGBlocks_PalmTrees.PALM_CLUSTERS.get(this);
+    }
+
+    public BlockEntry<? extends Block> getDroppedFruitBlock() {
+        return TFGBlocks_PalmTrees.PALM_FRUITS.get(this);
     }
 }

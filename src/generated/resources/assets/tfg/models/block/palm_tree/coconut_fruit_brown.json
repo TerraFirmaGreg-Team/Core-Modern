@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/palm_tree/square_palm_fruit",
+  "textures": {
+    "0": "tfg:block/palm_tree/coconut_fruit_brown"
+  }
+}

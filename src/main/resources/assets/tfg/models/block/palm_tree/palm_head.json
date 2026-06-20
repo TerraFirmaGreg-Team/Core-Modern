@@ -1,0 +1,1180 @@
+{
+    "textures": {
+        "side": "#side",
+        "top": "#top",
+        "particle": "#side",
+        "fuzz": "#fuzz"
+    },
+    "elements": [
+        {
+            "name": "head",
+            "from": [
+                0,
+                0,
+                0
+            ],
+            "to": [
+                16,
+                16,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#side"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#side"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#side"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#side"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#top"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#top"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    -2.4,
+                    10.2,
+                    0
+                ],
+                "angle": -22.5,
+                "axis": "z"
+            },
+            "name": "fuzz1",
+            "from": [
+                -2.4,
+                5.46,
+                0
+            ],
+            "to": [
+                -2.4,
+                16.46,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    -4.2,
+                    -0.2,
+                    0
+                ],
+                "angle": -22.5,
+                "axis": "z"
+            },
+            "name": "fuzz2",
+            "from": [
+                -4.2,
+                -0.2,
+                0
+            ],
+            "to": [
+                -4.2,
+                10.8,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    -4.2,
+                    -6.2,
+                    0
+                ],
+                "angle": -22.5,
+                "axis": "z"
+            },
+            "name": "fuzz3",
+            "from": [
+                -4.2,
+                -6.2,
+                0
+            ],
+            "to": [
+                -4.2,
+                4.8,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    5.9,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "name": "fuzz1",
+            "from": [
+                19.27133,
+                1.16,
+                0
+            ],
+            "to": [
+                19.27133,
+                12.16,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    4.8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "name": "fuzz2",
+            "from": [
+                17.35791,
+                -4.48814,
+                0
+            ],
+            "to": [
+                17.35791,
+                6.51186,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    3.8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "name": "fuzz3",
+            "from": [
+                15.4445,
+                -10.10753,
+                0
+            ],
+            "to": [
+                15.4445,
+                0.89247,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    5.9,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "name": "fuzz1",
+            "from": [
+                0,
+                1.16,
+                19.27133
+            ],
+            "to": [
+                16,
+                12.16,
+                19.27133
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    -0.2,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "name": "fuzz2",
+            "from": [
+                0,
+                -4.86874,
+                19.27133
+            ],
+            "to": [
+                16,
+                6.13126,
+                19.27133
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    -6.2,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "name": "fuzz3",
+            "from": [
+                0,
+                -10.86874,
+                19.27133
+            ],
+            "to": [
+                16,
+                0.13126,
+                19.27133
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    5.9,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "name": "fuzz1",
+            "from": [
+                0,
+                1.16,
+                -3.27133
+            ],
+            "to": [
+                16,
+                12.16,
+                -3.27133
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    -0.2,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "name": "fuzz2",
+            "from": [
+                0,
+                -4.86874,
+                -3.27133
+            ],
+            "to": [
+                16,
+                6.13126,
+                -3.27133
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    -6.2,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "name": "fuzz3",
+            "from": [
+                0,
+                -10.86874,
+                -3.27133
+            ],
+            "to": [
+                16,
+                0.13126,
+                -3.27133
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        0,
+                        2,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "south": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        11
+                    ],
+                    "texture": "#fuzz"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#fuzz",
+                    "rotation": 270
+                }
+            }
+        }
+    ],
+    "display": {
+        "firstperson_righthand": {
+            "rotation": [
+                0,
+                45,
+                0
+            ],
+            "scale": [
+                0.4,
+                0.4,
+                0.4
+            ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [
+                75,
+                45,
+                0
+            ],
+            "translation": [
+                0,
+                2.5,
+                0
+            ],
+            "scale": [
+                0.375,
+                0.375,
+                0.375
+            ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [
+                0,
+                -135,
+                0
+            ],
+            "scale": [
+                0.4,
+                0.4,
+                0.4
+            ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [
+                75,
+                45,
+                0
+            ],
+            "translation": [
+                0,
+                2.5,
+                0
+            ],
+            "scale": [
+                0.375,
+                0.375,
+                0.375
+            ]
+        },
+        "ground": {
+            "translation": [
+                0,
+                3,
+                0
+            ],
+            "scale": [
+                0.25,
+                0.25,
+                0.25
+            ]
+        },
+        "gui": {
+            "rotation": [
+                30,
+                -135,
+                0
+            ],
+            "scale": [
+                0.5,
+                0.5,
+                0.5
+            ]
+        },
+        "fixed": {"scale": [
+            0.5,
+            0.5,
+            0.5
+        ]}
+    },
+    "groups": [
+        0,
+        {
+            "color": 0,
+            "children": [
+                1,
+                2,
+                3
+            ],
+            "origin": [
+                -4.2,
+                5.8,
+                0
+            ],
+            "scope": 0,
+            "name": "fuzzSide1"
+        },
+        {
+            "color": 0,
+            "children": [
+                4,
+                5,
+                6
+            ],
+            "origin": [
+                -4.2,
+                5.8,
+                0
+            ],
+            "scope": 0,
+            "name": "fuzzSide2"
+        },
+        {
+            "color": 0,
+            "children": [
+                7,
+                8,
+                9
+            ],
+            "origin": [
+                -4.2,
+                5.8,
+                0
+            ],
+            "scope": 0,
+            "name": "fuzzSide3"
+        },
+        {
+            "color": 0,
+            "children": [
+                10,
+                11,
+                12
+            ],
+            "origin": [
+                -4.2,
+                5.8,
+                0
+            ],
+            "scope": 0,
+            "name": "fuzzSide4"
+        }
+    ],
+    "render_type": "minecraft:cutout"
+}

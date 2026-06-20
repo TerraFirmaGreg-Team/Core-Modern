@@ -161,6 +161,7 @@
         "common.minecraft.ChunkSerializerMixin",
         "common.minecraft.EnchantmentHelperNutrientMixin",
         "common.minecraft.EntitySnowshoesSpeedMixin",
+        "common.minecraft.FallingBlockEntityMixin",
         "common.minecraft.HeightmapMixin",
         "common.minecraft.HugeFungusFeatureInvoker",
         "common.minecraft.HugeFungusFeatureMixin",

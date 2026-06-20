@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tfg:coconut_tree_cluster"
+          "name": "tfg:palm_tree/coconut_fruit_brown"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "tfg:blocks/coconut_tree_cluster"
+  "random_sequence": "tfg:blocks/palm_tree/coconut_fruit_brown"
 }
