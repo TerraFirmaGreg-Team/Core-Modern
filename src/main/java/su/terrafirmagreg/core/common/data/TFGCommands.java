@@ -7,6 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraft.commands.CommandSourceStack;
 
+import su.terrafirmagreg.core.common.command.AmbientalDump;
 import su.terrafirmagreg.core.common.command.DebugRecipeDump;
 import su.terrafirmagreg.core.common.command.DebugWorldgenVersions;
 import su.terrafirmagreg.core.common.command.ModifyNutrients;
@@ -23,6 +24,7 @@ public class TFGCommands {
         LiteralArgumentBuilder<CommandSourceStack> tfg = literal("tfg").then(debug);
         ModifyNutrients.register(tfg);
         TFCDataDump.register(tfg);
+        AmbientalDump.register(tfg);
         dispatcher.register(tfg);
 
         //DustAndWindCommand.register(dispatcher);
