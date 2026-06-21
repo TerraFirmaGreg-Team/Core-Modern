@@ -35,7 +35,7 @@ dependencies {
     modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
     modImplementation ("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
-    modImplementation ("maven.modrinth:createfluidlogistic:jIcz91lT") { transitive = false }
+    modImplementation ("maven.modrinth:createfluidlogistic:NmPeIsfP") { transitive = false }
 
     // Create: Vintage Improvements
     modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
@@ -155,7 +155,7 @@ dependencies {
     // Framed Blocks, FramedBlocks-9.4.3.jar, Dec 28, 2025
     modCompileOnly "curse.maven:framedblocks-441647:7386520"
 
-    // GT modern utils, gtmutils-2.8.0.jar, Feb 12, 2026
+    // GT modern utils, gtmutils-2.8.0.jar, Jun 21 2026
     modImplementation "curse.maven:gregtech-modern-utilities-1235020:8197530"
 
     // Crafting Station Improved
@@ -167,8 +167,8 @@ dependencies {
     // Phoenix's Chromatic Codes
     modImplementation("curse.maven:phoenixs-chromatic-colors-1483210:8241943")
 
-    // Create: Connected, May 25 2026
-    modImplementation "curse.maven:create-connected-947914:8143922"
+    // Create: Connected, 21 Jun 2026
+    modImplementation "curse.maven:create-connected-947914:8290615"
 
     // Curios, Apr 13 2025
     modImplementation "maven.modrinth:curios:5.14.1+1.20.1"
