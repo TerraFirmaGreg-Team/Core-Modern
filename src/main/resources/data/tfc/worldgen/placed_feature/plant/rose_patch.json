@@ -2,7 +2,7 @@
     "feature": "tfc:plant/rose_patch",
     "placement": [
         {
-            "chance": 10,
+            "chance": 20,
             "type": "minecraft:rarity_filter"
         },
         {"type": "minecraft:in_square"},
