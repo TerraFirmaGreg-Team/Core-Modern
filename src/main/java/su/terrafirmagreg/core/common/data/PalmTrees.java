@@ -32,7 +32,7 @@ public enum PalmTrees implements StringRepresentable {
         return serializedName;
     }
 
-    public BlockEntry<? extends Block> getFruitBlock() {
+    public BlockEntry<? extends Block> getFruitClusterBlock() {
         return TFGBlocks_PalmTrees.PALM_CLUSTERS.get(this);
     }
 

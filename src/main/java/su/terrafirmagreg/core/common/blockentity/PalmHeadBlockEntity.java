@@ -84,6 +84,6 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
     }
 
     protected @NotNull Block getFruitBlock() {
-        return tree.getFruitBlock().get();
+        return tree.getFruitClusterBlock().get();
     }
 }

@@ -67,7 +67,8 @@ public class TFGBlocks_PalmTrees {
                         .instabreak()
                         .strength(0.5f)
                         .dynamicShape()
-                        .sound(SoundType.BAMBOO))
+                        .sound(SoundType.BAMBOO)
+                        .noOcclusion())
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                         prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/square_palm_fruit")
                                 .texture("0", TFGCore.id("block/palm_tree/coconut_fruit_brown"))))
@@ -82,7 +83,6 @@ public class TFGBlocks_PalmTrees {
                         .strength(0.5f)
                         .sound(SoundType.BAMBOO)
                         .pushReaction(PushReaction.DESTROY)
-                        .noCollission()
                         .noOcclusion())
                 .blockstate((ctx, prov) -> {
                     var builder = prov.getVariantBuilder(ctx.getEntry());
