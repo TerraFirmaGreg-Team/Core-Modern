@@ -10,6 +10,8 @@ import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
+import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -32,8 +34,17 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, PalmHeadBlockEntity palmHead) {
         if (level.getGameTime() % 400 == 0 && state.hasProperty(PalmHeadBlock.NATURAL) && state.getValue(PalmHeadBlock.NATURAL)) {
-            palmHead.tryProduceFruit(level, pos);
+            if (palmHead.isCorrectClimate(level, pos)) {
+                palmHead.tryProduceFruit(level, pos);
+            }
         }
+    }
+
+    protected boolean isCorrectClimate(Level level, BlockPos pos) {
+        ClimateRange range = tree.getClimateRange().get();
+        int hydration = (int) (Climate.getRainfall(level, pos) / 5);
+        float temperature = Climate.getAverageTemperature(level, pos);
+        return range.checkBoth(hydration, temperature, false);
     }
 
     protected void tryProduceFruit(Level level, BlockPos pos) {

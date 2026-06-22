@@ -1,12 +1,19 @@
 package su.terrafirmagreg.core.common.block;
 
+import java.util.List;
+
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
+import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -26,8 +33,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import su.terrafirmagreg.core.common.data.PalmTrees;
+
 @SuppressWarnings("deprecation")
-public class CoconutBlock extends DecayingBlock {
+public class CoconutBlock extends DecayingBlock implements HoeOverlayBlock {
 
     public static final VoxelShape DEFAULT_SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 5.5, 11.0);
 
@@ -49,7 +58,8 @@ public class CoconutBlock extends DecayingBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        if (!player.getItemInHand(player.getUsedItemHand()).isEmpty()) return InteractionResult.FAIL;
+        if (!player.getItemInHand(player.getUsedItemHand()).isEmpty())
+            return InteractionResult.FAIL;
 
         if (!level.isClientSide) {
             level.removeBlock(pos, false);
@@ -61,6 +71,14 @@ public class CoconutBlock extends DecayingBlock {
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, List<Component> text, boolean isDebug) {
+        final ClimateRange range = PalmTrees.COCONUT.getClimateRange().get();
+        final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
+        text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
+        text.add(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
     }
 
     @Override

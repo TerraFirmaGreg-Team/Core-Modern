@@ -89,6 +89,11 @@ public class TFGBlockEntities {
             .register();
 
     public static final Map<PalmTrees, BlockEntityEntry<PalmHeadBlockEntity>> PALM_HEADS = new EnumMap<>(PalmTrees.class);
+    @SuppressWarnings("unchecked")
+    public static final BlockEntityEntry<PalmClusterBlockEntity> PALM_CLUSTERS = TFGCore.REGISTRATE
+            .blockEntity("palm_tree/cluster", PalmClusterBlockEntity::new)
+            .validBlocks(TFGBlocks_PalmTrees.PALM_CLUSTERS.values().toArray(NonNullSupplier[]::new))
+            .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
 

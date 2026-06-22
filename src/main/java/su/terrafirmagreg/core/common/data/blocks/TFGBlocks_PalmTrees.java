@@ -39,6 +39,7 @@ public class TFGBlocks_PalmTrees {
     public static final Map<PalmTrees, BlockEntry<CoconutBlock>> PALM_FRUITS = new EnumMap<>(PalmTrees.class);
 
     public static void init() {
+        PalmTrees.init();
     }
 
     public static final BlockEntry<CoconutBlock> GREEN_COCONUT = TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_green", p -> new CoconutBlock(ExtendedProperties.of(p)
@@ -69,6 +70,7 @@ public class TFGBlocks_PalmTrees {
             PALM_HEADS.put(tree, TFGCore.REGISTRATE.block("palm_tree/" + name + "_tree_head",
                     p -> new PalmHeadBlock(p, tree))
                     .properties(p -> p.mapColor(MapColor.WOOD)
+                            .randomTicks()
                             .strength(2.0f)
                             .sound(SoundType.WOOD))
                     .blockstate((ctx, prov) -> {
@@ -108,6 +110,7 @@ public class TFGBlocks_PalmTrees {
 
         PALM_CLUSTERS.put(PalmTrees.COCONUT, TFGCore.REGISTRATE.block("palm_tree/coconut_tree_cluster", p -> new CoconutClusterBlock(p, PalmTrees.COCONUT))
                 .properties(p -> p.mapColor(MapColor.PLANT)
+                        .randomTicks()
                         .strength(0.5f)
                         .sound(SoundType.BAMBOO)
                         .pushReaction(PushReaction.DESTROY)

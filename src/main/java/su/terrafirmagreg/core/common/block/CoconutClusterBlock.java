@@ -5,11 +5,17 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.blocks.plant.fruit.IBushBlock;
+import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -28,7 +34,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -39,10 +47,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.data.PalmTrees;
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
 @SuppressWarnings("deprecation")
-public class CoconutClusterBlock extends HorizontalDirectionalBlock {
+public class CoconutClusterBlock extends HorizontalDirectionalBlock implements EntityBlock, IBushBlock, HoeOverlayBlock {
 
     public static final IntegerProperty AGE = BlockStateProperties.AGE_7;
     public static final BooleanProperty ATTACHED = BooleanProperty.create("attached");
@@ -53,11 +62,13 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
     private record CoconutDrop(int count, Block type, boolean spawnFallingCoconut, boolean finalAge) {
     }
 
+    private final PalmTrees tree;
     private final Block brownCoconut;
     private final Block greenCoconut;
 
     public CoconutClusterBlock(Properties properties, PalmTrees tree) {
         super(properties);
+        this.tree = tree;
         this.brownCoconut = tree.getDroppedFruitBlock().get();
         this.greenCoconut = TFGBlocks_PalmTrees.GREEN_COCONUT.get();
         this.registerDefaultState(this.stateDefinition.any()
@@ -172,7 +183,8 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         CoconutDrop drop = getDropForAge(state.getValue(AGE));
-        if (!player.getItemInHand(player.getUsedItemHand()).isEmpty()) return InteractionResult.FAIL;
+        if (!player.getItemInHand(player.getUsedItemHand()).isEmpty())
+            return InteractionResult.FAIL;
 
         if (drop.count != 0) {
             if (!level.isClientSide) {
@@ -182,7 +194,8 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 0.5f, 2.0f);
 
                 if (level instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
+                    serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1,
+                            0.5);
                 }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -193,27 +206,56 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
+    public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, List<Component> text, boolean isDebug) {
+        final ClimateRange range = tree.getClimateRange().get();
+        final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
+        text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
+        text.add(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
+    }
+
+    @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        IBushBlock.randomTick(this, state, level, pos, random);
+    }
+
+    @Override
+    public void onUpdate(Level level, BlockPos pos, BlockState state) {
         if (!state.getValue(ATTACHED)) {
             return;
         }
 
-        int age = state.getValue(AGE);
-        CoconutDrop drop = getDropForAge(age);
+        ClimateRange range = tree.getClimateRange().get();
+        int hydration = (int) (Climate.getRainfall(level, pos) / 5);
+        float temperature = Climate.getAverageTemperature(level, pos);
 
-        if (drop.finalAge) {
-            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-            spawnFallingCoconut(level, pos, drop.type);
-        } else if (random.nextFloat() < 0.25f) {
-            age++;
-            state = state.setValue(AGE, age);
-            level.setBlock(pos, state, 2);
+        if (range.checkBoth(hydration, temperature, false)) {
+            int age = state.getValue(AGE);
+            CoconutDrop drop = getDropForAge(age);
 
-            CoconutDrop newDrop = getDropForAge(age);
-            if (newDrop.spawnFallingCoconut && !newDrop.finalAge) {
-                spawnFallingCoconut(level, pos, newDrop.type);
+            if (drop.finalAge) {
+                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                if (level instanceof ServerLevel serverLevel) {
+                    spawnFallingCoconut(serverLevel, pos, drop.type);
+                }
+            } else {
+                age++;
+                state = state.setValue(AGE, age);
+                level.setBlock(pos, state, 2);
+
+                CoconutDrop newDrop = getDropForAge(age);
+                if (newDrop.spawnFallingCoconut && !newDrop.finalAge) {
+                    if (level instanceof ServerLevel serverLevel) {
+                        spawnFallingCoconut(serverLevel, pos, newDrop.type);
+                    }
+                }
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return TFGBlockEntities.PALM_CLUSTERS.get().create(pos, state);
     }
 
     private void spawnFallingCoconut(ServerLevel level, BlockPos pos, Block block) {

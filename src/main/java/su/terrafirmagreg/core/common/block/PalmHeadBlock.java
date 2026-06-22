@@ -1,9 +1,16 @@
 package su.terrafirmagreg.core.common.block;
 
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -22,7 +29,7 @@ import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
 @SuppressWarnings("deprecation")
-public class PalmHeadBlock extends Block implements EntityBlock {
+public class PalmHeadBlock extends Block implements EntityBlock, HoeOverlayBlock {
 
     public static final BooleanProperty NATURAL = BooleanProperty.create("natural");
 
@@ -51,6 +58,14 @@ public class PalmHeadBlock extends Block implements EntityBlock {
             return Blocks.AIR.defaultBlockState();
         }
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    }
+
+    @Override
+    public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, List<Component> text, boolean isDebug) {
+        final ClimateRange range = tree.getClimateRange().get();
+        final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
+        text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
+        text.add(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
     }
 
     @Nullable
