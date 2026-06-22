@@ -63,7 +63,7 @@ public abstract class IngotPileBlockModelMixin
             try {
                 material = ChemicalHelper.getMaterialStack(stack);
             } catch (ArrayIndexOutOfBoundsException | ConcurrentModificationException ex) {
-                TFGCore.LOGGER.error("Encountered exception when attempting to get material from item stack: {}: {}", stack, ex);
+                TFGCore.LOGGER.error("Encountered exception when attempting to get material from item stack: " + stack, ex);
                 return RenderHelpers.missingTexture();
             }
 

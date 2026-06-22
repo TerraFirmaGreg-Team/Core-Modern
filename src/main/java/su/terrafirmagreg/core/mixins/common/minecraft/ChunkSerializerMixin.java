@@ -55,7 +55,9 @@ public class ChunkSerializerMixin {
             } catch (Exception e) {
                 TFGCore.LOGGER.error("Error migrating fluid gauge containing fluid {} at position ({} {} {}). Removing filter instead", fluidID, compoundtag.getInt("x"), compoundtag.getInt("y"),
                         compoundtag.getInt("z"));
+                TFGCore.LOGGER.error("", e);
                 cornerTag.getCompound("Filter").remove("id"); //remove filter as fallback
+                continue;
             }
             TFGCore.LOGGER.info("Successfully migrated fluid gauge containing fluid {} at position ({} {} {})", fluidID, compoundtag.getInt("x"), compoundtag.getInt("y"),
                     compoundtag.getInt("z"));
