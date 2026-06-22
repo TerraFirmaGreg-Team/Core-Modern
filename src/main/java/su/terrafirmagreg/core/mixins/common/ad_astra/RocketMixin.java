@@ -109,7 +109,7 @@ public abstract class RocketMixin extends Entity {
 
     @Override
     protected boolean canAddPassenger(Entity pPassenger) {
-        System.out.println(tfg$self.getPassengers().size());
+        // System.out.println(tfg$self.getPassengers().size());
         if (this.getType() == TFGEntities.TIER_1_DOUBLE_ROCKET.get() || this.getType() == TFGEntities.TIER_2_DOUBLE_ROCKET.get() || this.getType() == TFGEntities.TIER_3_DOUBLE_ROCKET.get()
                 || this.getType() == TFGEntities.TIER_4_DOUBLE_ROCKET.get()) {
             return tfg$self.getPassengers().size() < 2;

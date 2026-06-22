@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfcambiental:burlap_cowl"},
+    "pattern": [
+        "XXX",
+        "X X",
+        "   "
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:burlap_cloth"}}
+}

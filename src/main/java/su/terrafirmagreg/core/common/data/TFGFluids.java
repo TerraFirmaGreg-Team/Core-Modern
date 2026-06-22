@@ -151,7 +151,10 @@ public class TFGFluids {
                     .temperature(293)
                     .canPushEntity(true)
                     .descriptionId("fluid.tfg.prismatic_paint"),
-            new FluidTypeClientProperties(ALPHA_MASK | 0x00FFFF, WATER_STILL, WATER_FLOW, null, null),
+            new FluidTypeClientProperties(ALPHA_MASK | 0xFFFFFF,
+                    ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/fluids/prismatic_dye_still"),
+                    ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/fluids/prismatic_dye_flow"),
+                    null, null),
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
 

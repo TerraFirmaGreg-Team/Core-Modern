@@ -118,3 +118,32 @@ side = "BOTH"
 #versionRange = "1.1.14+1.20.1+forge"
 #ordering = "NONE"
 #side = "BOTH"
+
+
+[[mods]]
+modId="tfcambiental"
+version="${mod_version}"
+displayName="TFG Ambiental"
+authors="${mod_authors}"
+description='''A TerraFirmaGreg addon that implements a temperature system.'''
+
+[[dependencies.tfcambiental]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.tfcambiental]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.tfcambiental]]
+modId="curios"
+mandatory=true
+versionRange="[5.14.1,)"
+ordering="AFTER"
+side="BOTH"

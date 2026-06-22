@@ -1,0 +1,22 @@
+{
+    "feature": "tfc:plant/rose_patch",
+    "placement": [
+        {
+            "chance": 20,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 17.6,
+            "max_rainfall": 300,
+            "type": "tfc:climate",
+            "min_rainfall": 150,
+            "min_temperature": -7.4
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
+}
