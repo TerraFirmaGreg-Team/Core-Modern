@@ -56,7 +56,7 @@ public abstract class StorageHelperMixin {
         return key instanceof AEItemKey itemKey
                 && itemKey.getItem() instanceof BlockItem
                 && !itemKey.getItem().builtInRegistryHolder().is(TFGTags.Items.CannotLaunchInRailgun)
-                        ? 0.5
-                        : 4.0;
+                        ? 1.0
+                        : 8.0;
     }
 }
