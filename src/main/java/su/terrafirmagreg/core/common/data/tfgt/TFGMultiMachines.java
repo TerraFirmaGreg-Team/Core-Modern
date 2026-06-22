@@ -1268,7 +1268,7 @@ public class TFGMultiMachines {
                     .where('S', controller(blocks(definition.get())))
                     .where("A", Predicates.any())
                     .where("B", Predicates.blocks(GTBlocks.STEEL_HULL.get()))
-                    .where("C", Predicates.blockTag(BlockTags.STONE_BRICKS))
+					.where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
                     .where("D", Predicates.blockTag(Tags.Blocks.FENCES)
                             .or(Predicates.blockTag(Tags.Blocks.FENCE_GATES))
 							.or(Predicates.blockTag(BlockTags.WALLS)))
