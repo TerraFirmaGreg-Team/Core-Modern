@@ -53,7 +53,8 @@ public abstract class FallingBlockEntityMixin extends Entity {
                 BlockState state = this.getBlockState();
 
                 if (state.is(TFGTags.Blocks.FALLING_CONCUSSIVE)) {
-                    List<Entity> list = this.level().getEntities(this, this.getBoundingBox(), entity -> entity instanceof LivingEntity && entity.isAlive() && !entity.isInvulnerable() && !entity.isSpectator());
+                    List<Entity> list = this.level().getEntities(this, this.getBoundingBox(),
+                            entity -> entity instanceof LivingEntity && entity.isAlive() && !entity.isInvulnerable() && !entity.isSpectator());
                     boolean hit = false;
 
                     for (Entity entity : list) {
@@ -69,22 +70,18 @@ public abstract class FallingBlockEntityMixin extends Entity {
                             if (helmet.isEmpty() || armorValue < 1) {
                                 player.addEffect(new MobEffectInstance(TFCEffects.PINNED.get(), 60, 0, false, false));
                                 player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 1, false, false));
-                                hit = true;
                             }
-                        }
-
-                        if (!(entity instanceof Player)) {
-                            hit = true;
                         }
 
                         this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 2.0f, 0.1f);
                         if (this.level() instanceof ServerLevel serverLevel) {
-                            serverLevel.sendParticles(ParticleTypes.CRIT, entity.getX(), entity.getY() + 2, entity.getZ(), 20, 0.1, 0.1, 0.1, 0.5);
+                            serverLevel.sendParticles(ParticleTypes.CRIT, entity.getX() + 0.5, entity.getY() + 2, entity.getZ() + 0.5, 20, 0.1, 0.1, 0.1, 0.5);
                         }
+                        hit = true;
                     }
 
                     if (hit) {
-                        this.tfg$coconutEffectCooldown = 20;
+                        this.tfg$coconutEffectCooldown = 80;
                     }
                 }
             }

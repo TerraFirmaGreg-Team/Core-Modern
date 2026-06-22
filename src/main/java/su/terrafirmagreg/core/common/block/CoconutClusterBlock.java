@@ -3,16 +3,16 @@ package su.terrafirmagreg.core.common.block;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -50,7 +50,7 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
 
     private static final VoxelShape[] SHAPES = Helpers.computeHorizontalShapes(dir -> Helpers.rotateShape(dir, 1, 1, 0, 15, 15, 12));
 
-    private record CoconutDrop(int count, Block type, boolean remove) {
+    private record CoconutDrop(int count, Block type, boolean spawnFallingCoconut, boolean finalAge) {
     }
 
     private final Block brownCoconut;
@@ -69,7 +69,8 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
 
     private CoconutDrop getDropForAge(int age) {
         Block type;
-        boolean remove = false;
+        boolean spawnFallingCoconut = false;
+        boolean finalAge = false;
         int count = switch (age) {
             case 1, 2, 3 -> {
                 type = greenCoconut;
@@ -81,15 +82,18 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
             }
             case 5 -> {
                 type = brownCoconut;
+                spawnFallingCoconut = true;
                 yield 2;
             }
             case 6 -> {
                 type = brownCoconut;
+                spawnFallingCoconut = true;
                 yield 1;
             }
             case 7 -> {
-                type = Blocks.AIR;
-                remove = true;
+                type = brownCoconut;
+                spawnFallingCoconut = true;
+                finalAge = true;
                 yield 0;
             }
             default -> {
@@ -97,7 +101,7 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
                 yield 0;
             }
         };
-        return new CoconutDrop(count, type, remove);
+        return new CoconutDrop(count, type, spawnFallingCoconut, finalAge);
     }
 
     @Override
@@ -168,6 +172,7 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         CoconutDrop drop = getDropForAge(state.getValue(AGE));
+        if (!player.getItemInHand(player.getUsedItemHand()).isEmpty()) return InteractionResult.FAIL;
 
         if (drop.count != 0) {
             if (!level.isClientSide) {
@@ -177,7 +182,7 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 0.5f, 2.0f);
 
                 if (level instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX(), pos.getY(), pos.getZ(), 10, 0.1, 0.1, 0.1, 0.5);
+                    serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
                 }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -196,21 +201,18 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
         int age = state.getValue(AGE);
         CoconutDrop drop = getDropForAge(age);
 
-        if (age < 7) {
-            if (random.nextFloat() < 0.25f) {
-                age++;
-                state = state.setValue(AGE, age);
-                level.setBlock(pos, state, 2);
-
-                spawnFallingCoconut(level, pos, drop.type);
-
-                drop = getDropForAge(age);
-            }
-        }
-
-        if (drop.remove()) {
+        if (drop.finalAge) {
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             spawnFallingCoconut(level, pos, drop.type);
+        } else if (random.nextFloat() < 0.25f) {
+            age++;
+            state = state.setValue(AGE, age);
+            level.setBlock(pos, state, 2);
+
+            CoconutDrop newDrop = getDropForAge(age);
+            if (newDrop.spawnFallingCoconut && !newDrop.finalAge) {
+                spawnFallingCoconut(level, pos, newDrop.type);
+            }
         }
     }
 

@@ -5,6 +5,11 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -44,8 +49,16 @@ public class CoconutBlock extends DecayingBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
+        if (!player.getItemInHand(player.getUsedItemHand()).isEmpty()) return InteractionResult.FAIL;
+
         if (!level.isClientSide) {
             level.removeBlock(pos, false);
+
+            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 0.5f, 2.0f);
+
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
+            }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
