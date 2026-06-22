@@ -33,9 +33,15 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, PalmHeadBlockEntity palmHead) {
-        if (level.getGameTime() % 400 == 0 && state.hasProperty(PalmHeadBlock.NATURAL) && state.getValue(PalmHeadBlock.NATURAL)) {
-            if (palmHead.isCorrectClimate(level, pos)) {
-                palmHead.tryProduceFruit(level, pos);
+        if (state.hasProperty(PalmHeadBlock.NATURAL) && state.getValue(PalmHeadBlock.NATURAL)) {
+            if (palmHead.getLastUpdateTick() == Integer.MIN_VALUE) {
+                palmHead.resetCounter();
+            }
+            while (palmHead.getTicksSinceUpdate() >= ICalendar.TICKS_IN_DAY) {
+                palmHead.reduceCounter(ICalendar.TICKS_IN_DAY);
+                if (palmHead.isCorrectClimate(level, pos)) {
+                    palmHead.tryProduceFruit(level, pos);
+                }
             }
         }
     }
