@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfcambiental:leather_apron"},
+    "pattern": [
+        "XXXXX",
+        " XXX ",
+        " XXX ",
+        " XXX ",
+        "  X  "
+    ],
+    "knapping_type": "tfc:leather",
+    "type": "tfc:knapping"
+}

@@ -29,6 +29,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems_Asphalt;
 
 public class TFGFluids {
 
@@ -110,7 +112,7 @@ public class TFGFluids {
     public static final FluidRegistryObject<ForgeFlowingFluid> ASPHALT_MIX = register(
             "asphalt_mix",
             properties -> properties
-                    .bucket(TFGItemsAsphalt.ASPHALT_MIX_BUCKET),
+                    .bucket(TFGItems_Asphalt.ASPHALT_MIX_BUCKET),
             FluidType.Properties.create()
                     .adjacentPathType(BlockPathTypes.LAVA)
                     .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
@@ -127,6 +129,32 @@ public class TFGFluids {
                     .canPushEntity(false)
                     .descriptionId("fluid.tfg.asphalt_mix"),
             new FluidTypeClientProperties(ALPHA_MASK | 0x141418, WATER_STILL, WATER_FLOW, null, null),
+            MixingFluid.Source::new,
+            MixingFluid.Flowing::new);
+
+    public static final FluidRegistryObject<ForgeFlowingFluid> PRISMATIC_PAINT = register(
+            "prismatic_paint",
+            properties -> properties
+                    .bucket(TFGItems.PRISMATIC_PAINT_BUCKET),
+            FluidType.Properties.create()
+                    .adjacentPathType(BlockPathTypes.WATER)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+                    .density(1200)
+                    .viscosity(2000)
+                    .canConvertToSource(false)
+                    .canExtinguish(true)
+                    .canHydrate(false)
+                    .supportsBoating(false)
+                    .canDrown(true)
+                    .canSwim(true)
+                    .temperature(293)
+                    .canPushEntity(true)
+                    .descriptionId("fluid.tfg.prismatic_paint"),
+            new FluidTypeClientProperties(ALPHA_MASK | 0xFFFFFF,
+                    ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/fluids/prismatic_dye_still"),
+                    ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "block/fluids/prismatic_dye_flow"),
+                    null, null),
             MixingFluid.Source::new,
             MixingFluid.Flowing::new);
 
@@ -203,6 +231,15 @@ public class TFGFluids {
                         return Blocks.OBSIDIAN.defaultBlockState();
                     else
                         return Blocks.CALCITE.defaultBlockState();
+                }));
+
+        FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
+                SPRING_WATER.getSource().getFluidType(),
+                fluidState -> {
+                    if (fluidState.isSource())
+                        return Blocks.OBSIDIAN.defaultBlockState();
+                    else
+                        return TFCBlocks.ROCK_BLOCKS.get(Rock.ANDESITE).get(Rock.BlockType.RAW).get().defaultBlockState();
                 }));
     }
 

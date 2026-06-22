@@ -4,7 +4,7 @@ import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.common.capabilities.food.NutritionData;
 
 /**
- * Extension interface for NutritionData to access negative nutrients.
+ * Extension interface for NutritionData to access extended nutrients.
  */
 public interface INutritionDataExtension {
 
@@ -13,13 +13,13 @@ public interface INutritionDataExtension {
      * @param nutrient must be a negative nutrient.
      * @return the nutrient value.
      */
-    float tfg$getNegativeNutrient(Nutrient nutrient);
+    float tfg$getExtendedNutrient(Nutrient nutrient);
 
     /**
      * Get all negative nutrient values.
      * @return array of negative nutrient values.
      */
-    float[] tfg$getNegativeNutrients();
+    float[] tfg$getExtendedNutrients();
 
     /**
      * Helper to cast NutritionData to this interface.

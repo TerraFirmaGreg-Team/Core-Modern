@@ -1,0 +1,98 @@
+{
+    "format_version": "1.21.6",
+    "elements": [{
+        "rotation": {
+            "origin": [
+                8,
+                -1.5,
+                8
+            ],
+            "angle": 0,
+            "axis": "y"
+        },
+        "from": [
+            3,
+            -5,
+            3
+        ],
+        "to": [
+            13,
+            1,
+            13
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "south": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "north": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "west": {
+                "uv": [
+                    13,
+                    8,
+                    16,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 270
+            },
+            "up": {
+                "uv": [
+                    8,
+                    8,
+                    13,
+                    13
+                ],
+                "texture": "#0",
+                "rotation": 180
+            },
+            "down": {
+                "uv": [
+                    8,
+                    8,
+                    13,
+                    13
+                ],
+                "texture": "#0"
+            }
+        }
+    }],
+    "groups": [{
+        "color": 0,
+        "backdrop": false,
+        "children": [0],
+        "origin": [
+            0,
+            0,
+            0
+        ],
+        "name": "Brace",
+        "stepParentName": ""
+    }],
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT License)"
+}

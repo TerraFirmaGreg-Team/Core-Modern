@@ -1,7 +1,7 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import static su.terrafirmagreg.core.common.data.TFGItems.*;
 import static su.terrafirmagreg.core.common.data.blocks.TFGBlocks.dropBetween;
+import static su.terrafirmagreg.core.common.data.items.TFGItems.*;
 
 import java.util.Locale;
 import java.util.Map;
@@ -49,8 +49,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
-import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGPlant;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 
 @SuppressWarnings("unused")
 public class TFGBlocks_Earth {
@@ -261,6 +261,34 @@ public class TFGBlocks_Earth {
     public static BlockEntry<OilSlickBlock> LIGHT_OIL_SLICK = createOilSlick("light_oil");
     public static BlockEntry<OilSlickBlock> HEAVY_OIL_SLICK = createOilSlick("heavy_oil");
 
+    public static final BlockEntry<WebBlock> SPIDER_WEB = TFGCore.REGISTRATE.block("spider_web", WebBlock::new)
+            .properties(p -> p
+                    .mapColor(MapColor.NONE)
+                    .strength(0.05F)
+                    .sound(SoundType.WOOL)
+                    .forceSolidOn()
+                    .noCollission()
+                    .requiresCorrectToolForDrops())
+            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.get(), provider.models().cross(ctx.getName(), provider.blockTexture(ctx.getEntry())).renderType("minecraft:cutout")))
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_HOE, BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_AXE, BlockTags.NEEDS_STONE_TOOL)
+            .loot((lootTables, block) -> TFGBlocks.dropBetween(SILK_FIBERS, 1, 3).accept(lootTables, block))
+            .item(BlockItem::new).build()
+            .register();
+
+    public static final BlockEntry<SpiderSacBlock> SPIDER_SAC = TFGCore.REGISTRATE.block("spider_sac", SpiderSacBlock::new)
+            .properties(p -> p
+                    .mapColor(MapColor.NONE)
+                    .strength(0.1F)
+                    .sound(SoundType.WOOL)
+                    .forceSolidOn()
+                    .noCollission()
+                    .requiresCorrectToolForDrops())
+            .blockstate((ctx, provider) -> provider.directionalBlock(ctx.get(), provider.models().getExistingFile(TFGCore.id("block/spider_sac"))))
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_HOE, BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_AXE, BlockTags.NEEDS_STONE_TOOL)
+            .loot((lootTables, block) -> TFGBlocks.dropBetween(SILK_FIBERS, 1, 2).accept(lootTables, block))
+            .item(BlockItem::new).build()
+            .register();
+
     // These are done separately to avoid cyclic references
     static {
         COARSE_SILTY_LOAM_DIRT = createCoarse("coarse_dirt/silty_loam",
@@ -302,8 +330,8 @@ public class TFGBlocks_Earth {
         ALFISOL_FARMLAND = createFarmland("farmland/alfisol", ALFISOL_DIRT);
         ALFISOL_GRASS = createGrass("grass/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
         ALFISOL_ROOTED = createRooted("rooted_dirt/alfisol", ALFISOL_DIRT, ALFISOL_MUD);
-        ALFISOL_CLAY = createClay("clay/alfisol", ALFISOL_GRASS, ALFISOL_PATH, ALFISOL_FARMLAND, ALFISOL_ROOTED, ALFISOL_MUD);
         ALFISOL_CLAY_GRASS = createClayGrass("clay_grass/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
+        ALFISOL_CLAY = createClay("clay/alfisol", ALFISOL_CLAY_GRASS, ALFISOL_PATH, ALFISOL_FARMLAND, ALFISOL_ROOTED, ALFISOL_MUD);
         ALFISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/alfisol", ALFISOL_MUD_BRICK);
         ALFISOL_COARSE = createCoarse("coarse_dirt/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
         ALFISOL_DUFF = createDuff("duff/alfisol", ALFISOL_DIRT, ALFISOL_PATH, ALFISOL_FARMLAND);
@@ -313,8 +341,8 @@ public class TFGBlocks_Earth {
         MOLLISOL_FARMLAND = createFarmland("farmland/mollisol", MOLLISOL_DIRT);
         MOLLISOL_GRASS = createGrass("grass/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
         MOLLISOL_ROOTED = createRooted("rooted_dirt/mollisol", MOLLISOL_DIRT, MOLLISOL_MUD);
-        MOLLISOL_CLAY = createClay("clay/mollisol", MOLLISOL_GRASS, MOLLISOL_PATH, MOLLISOL_FARMLAND, MOLLISOL_ROOTED, MOLLISOL_MUD);
         MOLLISOL_CLAY_GRASS = createClayGrass("clay_grass/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
+        MOLLISOL_CLAY = createClay("clay/mollisol", MOLLISOL_CLAY_GRASS, MOLLISOL_PATH, MOLLISOL_FARMLAND, MOLLISOL_ROOTED, MOLLISOL_MUD);
         MOLLISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/mollisol", MOLLISOL_MUD_BRICK);
         MOLLISOL_COARSE = createCoarse("coarse_dirt/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
         MOLLISOL_DUFF = createDuff("duff/mollisol", MOLLISOL_DIRT, MOLLISOL_PATH, MOLLISOL_FARMLAND);
@@ -324,8 +352,8 @@ public class TFGBlocks_Earth {
         OXISOL_FARMLAND = createFarmland("farmland/oxisol", OXISOL_DIRT);
         OXISOL_GRASS = createGrass("grass/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
         OXISOL_ROOTED = createRooted("rooted_dirt/oxisol", OXISOL_DIRT, OXISOL_MUD);
-        OXISOL_CLAY = createClay("clay/oxisol", OXISOL_GRASS, OXISOL_PATH, OXISOL_FARMLAND, OXISOL_ROOTED, OXISOL_MUD);
         OXISOL_CLAY_GRASS = createClayGrass("clay_grass/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
+        OXISOL_CLAY = createClay("clay/oxisol", OXISOL_CLAY_GRASS, OXISOL_PATH, OXISOL_FARMLAND, OXISOL_ROOTED, OXISOL_MUD);
         OXISOL_DRYING_BRICKS = createDryingBricks("drying_bricks/oxisol", OXISOL_MUD_BRICK);
         OXISOL_COARSE = createCoarse("coarse_dirt/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
         OXISOL_DUFF = createDuff("duff/oxisol", OXISOL_DIRT, OXISOL_PATH, OXISOL_FARMLAND);
@@ -335,8 +363,8 @@ public class TFGBlocks_Earth {
         PODZOL_FARMLAND = createFarmland("farmland/podzol", PODZOL_DIRT);
         PODZOL_GRASS = createGrass("grass/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
         PODZOL_ROOTED = createRooted("rooted_dirt/podzol", PODZOL_DIRT, PODZOL_MUD);
-        PODZOL_CLAY = createClay("clay/podzol", PODZOL_GRASS, PODZOL_PATH, PODZOL_FARMLAND, PODZOL_ROOTED, PODZOL_MUD);
         PODZOL_CLAY_GRASS = createClayGrass("clay_grass/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
+        PODZOL_CLAY = createClay("clay/podzol", PODZOL_CLAY_GRASS, PODZOL_PATH, PODZOL_FARMLAND, PODZOL_ROOTED, PODZOL_MUD);
         PODZOL_DRYING_BRICKS = createDryingBricks("drying_bricks/podzol", PODZOL_MUD_BRICK);
         PODZOL_COARSE = createCoarse("coarse_dirt/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);
         PODZOL_DUFF = createDuff("duff/podzol", PODZOL_DIRT, PODZOL_PATH, PODZOL_FARMLAND);

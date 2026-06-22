@@ -20,7 +20,7 @@ import earth.terrarium.adastra.common.registry.ModEntityTypes;
 import earth.terrarium.adastra.common.tags.ModFluidTags;
 
 import su.terrafirmagreg.core.common.data.TFGEntities;
-import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.entity.rocket.RocketHelper;
 
 @Mixin(value = Rocket.class, remap = false)
@@ -101,16 +101,15 @@ public abstract class RocketMixin extends Entity {
     @Redirect(method = "burnEntitiesUnderRocket", at = @At(value = "INVOKE", target = "net/minecraft/world/entity/LivingEntity.equals (Ljava/lang/Object;)Z"))
     private boolean tfg$dontBurnPassengers(LivingEntity instance, Object o) {
         List<Entity> passengers = tfg$self.getPassengers();
-
-        for (var entity : passengers) {
-            return instance.equals(entity);
-        }
+        for (var entity : passengers)
+            if (instance.equals(entity))
+                return true;
         return false;
     }
 
     @Override
     protected boolean canAddPassenger(Entity pPassenger) {
-        System.out.println(tfg$self.getPassengers().size());
+        // System.out.println(tfg$self.getPassengers().size());
         if (this.getType() == TFGEntities.TIER_1_DOUBLE_ROCKET.get() || this.getType() == TFGEntities.TIER_2_DOUBLE_ROCKET.get() || this.getType() == TFGEntities.TIER_3_DOUBLE_ROCKET.get()
                 || this.getType() == TFGEntities.TIER_4_DOUBLE_ROCKET.get()) {
             return tfg$self.getPassengers().size() < 2;

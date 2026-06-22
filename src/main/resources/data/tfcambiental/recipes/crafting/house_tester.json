@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfcambiental:house_tester"},
+    "pattern": [
+        "LX",
+        "XL"
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "forge:dusts/redstone"},
+        "L": {"tag": "tfc:lumber"}
+    }
+}

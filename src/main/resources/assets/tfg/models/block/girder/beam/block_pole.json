@@ -1,0 +1,83 @@
+{
+    "format_version": "1.21.11",
+    "elements": [{
+        "from": [
+            4,
+            0,
+            4
+        ],
+        "to": [
+            12,
+            16,
+            12
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    16
+                ],
+                "texture": "#2"
+            },
+            "south": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    16
+                ],
+                "texture": "#2"
+            },
+            "north": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    16
+                ],
+                "texture": "#2"
+            },
+            "west": {
+                "uv": [
+                    0,
+                    0,
+                    8,
+                    16
+                ],
+                "texture": "#2"
+            },
+            "up": {
+                "uv": [
+                    8,
+                    0,
+                    16,
+                    8
+                ],
+                "texture": "#2"
+            },
+            "down": {
+                "uv": [
+                    8,
+                    0,
+                    16,
+                    8
+                ],
+                "texture": "#2"
+            }
+        }
+    }],
+    "groups": [{
+        "color": 0,
+        "children": [0],
+        "origin": [
+            0,
+            0,
+            0
+        ],
+        "scope": 0,
+        "name": "Beam Pole"
+    }],
+    "credit": "Create: Bits n' Bobs by Aztech-Modding (MIT)"
+}

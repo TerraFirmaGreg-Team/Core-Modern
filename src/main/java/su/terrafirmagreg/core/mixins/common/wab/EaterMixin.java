@@ -12,7 +12,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.wanmine.wab.entity.Eater;
-import net.wanmine.wab.entity.goals.eater.SleepingCheckGoal;
+import net.wanmine.wab.entity.goals.common.SleepingCheckGoal;
 
 /**
  * Makes the eater always hostile to players

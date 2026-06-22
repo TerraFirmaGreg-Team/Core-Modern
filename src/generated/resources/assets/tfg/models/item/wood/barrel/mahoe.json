@@ -1,3 +1,11 @@
 {
-  "parent": "tfg:block/wood/barrel/mahoe"
+  "parent": "tfg:block/wood/barrel/mahoe",
+  "overrides": [
+    {
+      "model": "tfg:block/wood/barrel_sealed/mahoe",
+      "predicate": {
+        "tfc:sealed": 1.0
+      }
+    }
+  ]
 }

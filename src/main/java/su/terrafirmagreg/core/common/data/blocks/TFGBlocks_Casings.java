@@ -157,6 +157,9 @@ public class TFGBlocks_Casings {
     public static final BlockEntry<Block> STAINLESS_EVAPORATION_CASING = createCasingBlock("casings/machine_casing_stainless_evaporation",
             GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_stainless_evaporation")));
 
+    public static final BlockEntry<Block> PRESSURE_CASING = createCasingBlock("casings/machine_casing_pressure",
+            GTModels.cubeAllModel(TFGCore.id("block/casings/machine_casing_pressure")));
+
     public static final BlockEntry<Block> BLUE_SOLAR_PANEL_CASING = createCasingBlock("casings/machine_casing_blue_solar_panel",
             (ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
                     GTCEu.id("block/casings/steam/steel/side"),

@@ -13,6 +13,7 @@ import com.simibubi.create.AllTags;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -54,7 +55,7 @@ public class TFGEmiPlugin implements EmiPlugin {
             EmiStack.of(GTBlocks.FIREBOX_STEEL.asItem()));
 
     public static final EmiRecipeCategory ITEM_REPAIR = new EmiRecipeCategory(TFGCore.id("item_repair"),
-            EmiStack.of(net.minecraft.world.item.Items.CRAFTING_TABLE));
+            EmiStack.of(Items.ANVIL));
 
     public static final EmiRecipeCategory FLUID_VEIN_INFO = new EmiRecipeCategory(TFGCore.id("fluid_vein_info"),
             EmiStack.of(GTItems.PROSPECTOR_HV));
@@ -68,17 +69,10 @@ public class TFGEmiPlugin implements EmiPlugin {
         emiRegistry.addWorkstation(ORE_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_HV));
         emiRegistry.addWorkstation(ORE_VEIN_INFO, EmiStack.of(GTItems.PROSPECTOR_LuV));
         Arrays.stream(ExportedOreVeinInfo.RECIPES)
-                .filter(r -> !r.getId().getPath().equals("/nether_anthracite_emi"))
+                //.filter(r -> !r.getId().getPath().equals("/nether_anthracite_emi"))
                 .forEach(emiRegistry::addRecipe);
 
         // These aren't normal ores so add them separately
-        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_anthracite", "minecraft:the_nether",
-                35, 0.8, 48, 127, 13, 4, 0, false, false, false, 1,
-                new String[] { "minecraft:deepslate" },
-                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("cursecoal", 100) },
-                null, null,
-                null, null, null, null,
-                null));
         emiRegistry.addRecipe(new OreVeinInfoRecipe("rose_quartz", "minecraft:overworld",
                 80, 1, 60, 80, 10, 0, 0, false, false, false, 1,
                 new String[] { "minecraft:blue_ice", "minecraft:snow_block" },
@@ -96,6 +90,20 @@ public class TFGEmiPlugin implements EmiPlugin {
                 null, null,
                 null, null, null, null,
                 new String[] { "tfg.ore_vein.oilsands.emi.0", "tfg.ore_vein.oilsands.emi.1" }));
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_oilsands", "minecraft:the_nether",
+                1, 0.6, 50, 180, 0, 2, 3, false, true, false, 0,
+                new String[] { "tfc:sand/white", "tfc:sand/yellow", "tfc:sand/red", "tfc:sand/brown", "tfc:sand/pink", "tfc:sand/green", "tfc:sand/black" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("oilsands", 100) },
+                "tfg:nether/has_oilsands", new String[] { "biome.tfg.nether/tar_pools" },
+                null, null, null, null,
+                null));
+        emiRegistry.addRecipe(new OreVeinInfoRecipe("nether_garnet_sands", "minecraft:the_nether",
+                2, 0.75, 32, 60, 0, 3, 3, false, false, false, 0,
+                new String[] { "minecraft:blackstone", "minecraft:deepslate", "tfc:rock/raw/basalt", "beneath:crackrack" },
+                new OreVeinInfoRecipe.WeightedBlock[] { new OreVeinInfoRecipe.WeightedBlock("garnet_sand", 100) },
+                "tfg:nether/is_ash_forest", new String[] { "biome.tfg.nether/ash_forest" },
+                null, null, 50, null,
+                null));
 
         //Blaze Burner
         emiRegistry.addCategory(BLAZE_BURNER);

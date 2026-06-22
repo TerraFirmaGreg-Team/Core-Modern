@@ -54,12 +54,18 @@ public final class NutritionDataExtension {
         float[] extended = getOrCreateExtendedNutrients(data);
         int index = nutrient.ordinal() - TFGNutrients.ORIGINAL_COUNT;
         if (index >= 0 && index < extended.length) {
-            extended[index] = Math.min(1f, Math.max(0f, value));
+            if (TFGNutrients.isTransient(nutrient)) {
+                extended[index] = Math.max(0f, value);
+            } else {
+                extended[index] = Math.min(1f, Math.max(0f, value));
+            }
         }
     }
 
     /**
      * Add extended nutrient values from food data.
+     * Transient nutrients accumulate their raw food value so that
+     * the effect handler receives the exact amount declared in the food recipe.
      */
     public static void addExtendedNutrients(NutritionData data, FoodData foodData, float weight) {
         float[] extended = getOrCreateExtendedNutrients(data);
@@ -70,7 +76,11 @@ public final class NutritionDataExtension {
                 if (index >= 0 && index < extended.length) {
                     float foodNutrient = FoodDataExtension.getExtendedNutrient(foodData, nutrient);
                     if (foodNutrient > 0) {
-                        extended[index] = Math.min(1f, extended[index] + foodNutrient * weight);
+                        if (TFGNutrients.isTransient(nutrient)) {
+                            extended[index] += foodNutrient;
+                        } else {
+                            extended[index] = Math.min(1f, extended[index] + foodNutrient * weight);
+                        }
                     }
                 }
             }
@@ -105,26 +115,25 @@ public final class NutritionDataExtension {
      */
     public static void writeToNbt(NutritionData data, CompoundTag nbt) {
         float[] extended = EXTENDED_NUTRIENTS.get(data);
-        if (extended == null) {
-            return;
-        }
+        if (extended != null) {
+            CompoundTag extendedNbt = new CompoundTag();
+            Nutrient[] values = Nutrient.VALUES;
+            boolean hasAny = false;
 
-        CompoundTag extendedNbt = new CompoundTag();
-        Nutrient[] values = Nutrient.VALUES;
-        boolean hasAny = false;
+            for (int i = TFGNutrients.ORIGINAL_COUNT; i < values.length; i++) {
+                Nutrient nutrient = values[i];
+                int index = i - TFGNutrients.ORIGINAL_COUNT;
+                if (index < extended.length && extended[index] > 0) {
+                    extendedNbt.putFloat(nutrient.getSerializedName(), extended[index]);
+                    hasAny = true;
+                }
+            }
 
-        for (int i = TFGNutrients.ORIGINAL_COUNT; i < values.length; i++) {
-            Nutrient nutrient = values[i];
-            int index = i - TFGNutrients.ORIGINAL_COUNT;
-            if (index < extended.length && extended[index] > 0) {
-                extendedNbt.putFloat(nutrient.getSerializedName(), extended[index]);
-                hasAny = true;
+            if (hasAny) {
+                nbt.put("tfg_extended_nutrients", extendedNbt);
             }
         }
 
-        if (hasAny) {
-            nbt.put("tfg_extended_nutrients", extendedNbt);
-        }
     }
 
     /**

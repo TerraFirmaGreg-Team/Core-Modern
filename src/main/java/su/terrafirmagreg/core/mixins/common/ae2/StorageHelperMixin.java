@@ -7,10 +7,14 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 
 import appeng.api.networking.energy.IEnergySource;
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
 import appeng.api.storage.StorageHelper;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.compat.ae2.WirelessCardAccessor;
 import su.terrafirmagreg.core.compat.kjs.events.TFGAE2PowerConsumption;
 
@@ -22,12 +26,12 @@ public abstract class StorageHelperMixin {
      * Interplanetary Wireless Card is actively being used (out of normal range).
      */
     @ModifyArg(method = "poweredInsert(Lappeng/api/networking/energy/IEnergySource;Lappeng/api/storage/MEStorage;Lappeng/api/stacks/AEKey;JLappeng/api/networking/security/IActionSource;Lappeng/api/config/Actionable;)J", at = @At(value = "INVOKE", target = "Lappeng/api/networking/energy/IEnergySource;extractAEPower(DLappeng/api/config/Actionable;Lappeng/api/config/PowerMultiplier;)D", ordinal = 1))
-    private static double tfg$poweredInsert(double original, @Local(argsOnly = true) IEnergySource energySource) {
+    private static double tfg$poweredInsert(double original, @Local(argsOnly = true) IEnergySource energySource, @Local(argsOnly = true) AEKey input) {
         if (energySource instanceof WirelessCardAccessor accessor && accessor.tfg$isUsingWirelessCard()) {
             if (energySource instanceof appeng.helpers.WirelessTerminalMenuHost menuHost) {
                 @SuppressWarnings("resource")
                 ResourceLocation dimension = menuHost.getPlayer().level().dimension().location();
-                return original * TFGAE2PowerConsumption.powerConsumption.getOrDefault(dimension, 200000D);
+                return original * TFGAE2PowerConsumption.powerConsumption.getOrDefault(dimension, 200000D) * getEnergyMultiplier(input);
             }
         }
         return original;
@@ -37,14 +41,22 @@ public abstract class StorageHelperMixin {
      * See {@link #tfg$poweredInsert(double, IEnergySource)}
      */
     @ModifyArg(method = "poweredExtraction(Lappeng/api/networking/energy/IEnergySource;Lappeng/api/storage/MEStorage;Lappeng/api/stacks/AEKey;JLappeng/api/networking/security/IActionSource;Lappeng/api/config/Actionable;)J", at = @At(value = "INVOKE", target = "Lappeng/api/networking/energy/IEnergySource;extractAEPower(DLappeng/api/config/Actionable;Lappeng/api/config/PowerMultiplier;)D", ordinal = 1))
-    private static double tfg$poweredExtraction(double original, @Local(argsOnly = true) IEnergySource energySource) {
+    private static double tfg$poweredExtraction(double original, @Local(argsOnly = true) IEnergySource energySource, @Local(argsOnly = true) AEKey input) {
         if (energySource instanceof WirelessCardAccessor accessor && accessor.tfg$isUsingWirelessCard()) {
             if (energySource instanceof appeng.helpers.WirelessTerminalMenuHost menuHost) {
                 @SuppressWarnings("resource")
                 ResourceLocation dimension = menuHost.getPlayer().level().dimension().location();
-                return original * TFGAE2PowerConsumption.powerConsumption.getOrDefault(dimension, 200000D);
+                return original * TFGAE2PowerConsumption.powerConsumption.getOrDefault(dimension, 200000D) * getEnergyMultiplier(input);
             }
         }
         return original;
+    }
+
+    private static double getEnergyMultiplier(AEKey key) {
+        return key instanceof AEItemKey itemKey
+                && itemKey.getItem() instanceof BlockItem
+                && !itemKey.getItem().builtInRegistryHolder().is(TFGTags.Items.CannotLaunchInRailgun)
+                        ? 1.0
+                        : 8.0;
     }
 }

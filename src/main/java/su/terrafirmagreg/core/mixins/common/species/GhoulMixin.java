@@ -31,9 +31,9 @@ public class GhoulMixin extends Monster {
         cir.setReturnValue(accessor.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(entityType, accessor, spawnType, pos, random));
     }
 
-    // Change the bloodlust effect to only last 30 seconds and not forever
+    // Change the bloodlust effect to only last 2 mins and not forever
     @ModifyArg(method = "doHurtTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffectInstance;<init>(Lnet/minecraft/world/effect/MobEffect;IIZZ)V"), index = 1, remap = true)
     private int tfg$doHurtTarget(int duration) {
-        return 20 * 30;
+        return 20 * 120;
     }
 }

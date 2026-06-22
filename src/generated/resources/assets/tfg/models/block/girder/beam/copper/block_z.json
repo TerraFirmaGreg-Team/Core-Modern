@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/beam/block_z",
+  "textures": {
+    "0": "tfg:block/girder/beam/copper",
+    "particle": "tfg:block/girder/beam/copper"
+  }
+}

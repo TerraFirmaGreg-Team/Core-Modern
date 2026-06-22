@@ -1,3 +1,11 @@
 {
-  "parent": "tfg:block/wood/barrel/ginkgo"
+  "parent": "tfg:block/wood/barrel/ginkgo",
+  "overrides": [
+    {
+      "model": "tfg:block/wood/barrel_sealed/ginkgo",
+      "predicate": {
+        "tfc:sealed": 1.0
+      }
+    }
+  ]
 }
