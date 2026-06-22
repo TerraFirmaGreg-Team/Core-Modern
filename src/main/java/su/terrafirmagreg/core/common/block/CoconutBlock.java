@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.block;
 
+import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
 import net.minecraft.core.BlockPos;
@@ -33,11 +34,18 @@ public class CoconutBlock extends DecayingBlock {
     }
 
     @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        super.onPlace(state, level, pos, oldState, isMoving);
+        if (level.getBlockEntity(pos) instanceof DecayingBlockEntity decaying && decaying.getStack().isEmpty()) {
+            decaying.setStack(new ItemStack(this));
+        }
+    }
+
+    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
         if (!level.isClientSide) {
             level.removeBlock(pos, false);
-            popResource(level, pos, new ItemStack(this, 1));
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }

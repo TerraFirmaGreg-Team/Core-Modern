@@ -8,6 +8,65 @@
           "type": "minecraft:item",
           "conditions": [
             {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "block": "tfg:palm_tree/coconut_tree_cluster",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "1"
+                  }
+                },
+                {
+                  "block": "tfg:palm_tree/coconut_tree_cluster",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "2"
+                  }
+                },
+                {
+                  "block": "tfg:palm_tree/coconut_tree_cluster",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "3"
+                  }
+                }
+              ]
+            }
+          ],
+          "functions": [
+            {
+              "add": false,
+              "count": 3.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "tfg:palm_tree/coconut_fruit_green"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "tfg:palm_tree/coconut_tree_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": "4"
+              }
+            }
+          ],
+          "functions": [
+            {
+              "add": false,
+              "count": 3.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "tfg:palm_tree/coconut_fruit_brown"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
               "block": "tfg:palm_tree/coconut_tree_cluster",
               "condition": "minecraft:block_state_property",
               "properties": {

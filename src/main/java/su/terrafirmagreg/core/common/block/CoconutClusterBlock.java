@@ -3,6 +3,10 @@ package su.terrafirmagreg.core.common.block;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.util.Helpers;
@@ -35,6 +39,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.data.PalmTrees;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
 @SuppressWarnings("deprecation")
 public class CoconutClusterBlock extends HorizontalDirectionalBlock {
@@ -49,10 +54,12 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
     }
 
     private final Block brownCoconut;
+    private final Block greenCoconut;
 
     public CoconutClusterBlock(Properties properties, PalmTrees tree) {
         super(properties);
         this.brownCoconut = tree.getDroppedFruitBlock().get();
+        this.greenCoconut = TFGBlocks_PalmTrees.GREEN_COCONUT.get();
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(AGE, 0)
@@ -64,6 +71,10 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
         Block type;
         boolean remove = false;
         int count = switch (age) {
+            case 1, 2, 3 -> {
+                type = greenCoconut;
+                yield 3;
+            }
             case 4 -> {
                 type = brownCoconut;
                 yield 3;
@@ -130,8 +141,16 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
             for (int i = 0; i < drop.count; i++) {
                 spawnFallingCoconut((ServerLevel) level, pos, drop.type);
             }
-            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 
+            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 2.0f, 0.1f);
+
+            if (level instanceof ServerLevel serverLevel) {
+                if (drop.count == 0) {
+                    serverLevel.sendParticles(ParticleTypes.SMOKE, pos.getX(), pos.getY(), pos.getZ(), 5, 0.1, 0.1, 0.1, 0.5);
+                }
+                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX(), pos.getY(), pos.getZ(), 10, 0.1, 0.1, 0.1, 0.5);
+            }
         }
     }
 
@@ -154,6 +173,12 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock {
             if (!level.isClientSide) {
                 level.removeBlock(pos, false);
                 popResource(level, pos, new ItemStack(drop.type, drop.count));
+
+                level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 0.5f, 2.0f);
+
+                if (level instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX(), pos.getY(), pos.getZ(), 10, 0.1, 0.1, 0.1, 0.5);
+                }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }

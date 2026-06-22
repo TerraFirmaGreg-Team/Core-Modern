@@ -7,6 +7,8 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
+import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
@@ -27,6 +30,7 @@ import su.terrafirmagreg.core.common.block.CoconutBlock;
 import su.terrafirmagreg.core.common.block.CoconutClusterBlock;
 import su.terrafirmagreg.core.common.block.PalmHeadBlock;
 import su.terrafirmagreg.core.common.data.PalmTrees;
+import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFGBlocks_PalmTrees {
 
@@ -36,6 +40,27 @@ public class TFGBlocks_PalmTrees {
 
     public static void init() {
     }
+
+    public static final BlockEntry<CoconutBlock> GREEN_COCONUT = TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_green", p -> new CoconutBlock(ExtendedProperties.of(p)
+            .blockEntity(TFCBlockEntities.DECAYING)
+            .serverTicks(DecayingBlockEntity::serverTick), CoconutBlock.DEFAULT_SHAPE))
+            .properties(p -> p.mapColor(MapColor.DIRT)
+                    .offsetType(BlockBehaviour.OffsetType.XZ)
+                    .pushReaction(PushReaction.DESTROY)
+                    .instabreak()
+                    .strength(0.5f)
+                    .dynamicShape()
+                    .sound(SoundType.BAMBOO)
+                    .noOcclusion())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                    prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/square_palm_fruit")
+                            .texture("0", TFGCore.id("block/palm_tree/coconut_fruit_green"))))
+            .tag(TFGTags.Blocks.FALLING_CONCUSSIVE)
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .item(BlockItem::new)
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .build()
+            .register();
 
     static {
         for (PalmTrees tree : PalmTrees.values()) {
@@ -60,7 +85,9 @@ public class TFGBlocks_PalmTrees {
                     .register());
         }
 
-        PALM_FRUITS.put(PalmTrees.COCONUT, TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_brown", p -> new CoconutBlock(ExtendedProperties.of(p), CoconutBlock.DEFAULT_SHAPE))
+        PALM_FRUITS.put(PalmTrees.COCONUT, TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_brown", p -> new CoconutBlock(ExtendedProperties.of(p)
+                .blockEntity(TFCBlockEntities.DECAYING)
+                .serverTicks(DecayingBlockEntity::serverTick), CoconutBlock.DEFAULT_SHAPE))
                 .properties(p -> p.mapColor(MapColor.DIRT)
                         .offsetType(BlockBehaviour.OffsetType.XZ)
                         .pushReaction(PushReaction.DESTROY)
@@ -72,6 +99,7 @@ public class TFGBlocks_PalmTrees {
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                         prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/square_palm_fruit")
                                 .texture("0", TFGCore.id("block/palm_tree/coconut_fruit_brown"))))
+                .tag(TFGTags.Blocks.FALLING_CONCUSSIVE)
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .item(BlockItem::new)
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
@@ -103,20 +131,27 @@ public class TFGBlocks_PalmTrees {
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(PalmTrees.COCONUT.getDroppedFruitBlock())
-                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                                        .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(CoconutClusterBlock.AGE, 4)))
+                        // Java is so beautiful sometimes T.T
+                        .add(LootItem.lootTableItem(TFGBlocks_PalmTrees.GREEN_COCONUT.get())
+                                .when(AnyOfCondition.anyOf(
+                                        LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CoconutClusterBlock.AGE, 1)),
+                                        LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CoconutClusterBlock.AGE, 2)),
+                                        LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CoconutClusterBlock.AGE, 3))))
                                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(3.0F))))
                         .add(LootItem.lootTableItem(PalmTrees.COCONUT.getDroppedFruitBlock())
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                                        .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(CoconutClusterBlock.AGE, 5)))
+                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CoconutClusterBlock.AGE, 4)))
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(3.0F))))
+                        .add(LootItem.lootTableItem(PalmTrees.COCONUT.getDroppedFruitBlock())
+                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CoconutClusterBlock.AGE, 5)))
                                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F))))
                         .add(LootItem.lootTableItem(PalmTrees.COCONUT.getDroppedFruitBlock())
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                                        .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(CoconutClusterBlock.AGE, 6)))))))
+                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CoconutClusterBlock.AGE, 6)))))))
                 .item(BlockItem::new)
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/palm_tree/coconut_tree_cluster_7")))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())

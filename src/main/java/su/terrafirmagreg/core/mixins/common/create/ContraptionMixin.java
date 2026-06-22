@@ -23,12 +23,12 @@ public class ContraptionMixin {
 
     @Inject(method = "onEntityCreated", at = @At("TAIL"), remap = false)
     private void tfg$onEntityCreated(AbstractContraptionEntity entity, CallbackInfo ci) {
-		var level = entity.level();
+        var level = entity.level();
         var server = level.getServer();
         if (server == null)
             return;
 
-		var dim = level.dimension();
+        var dim = level.dimension();
         if (server.isSingleplayer()) {
             if (dim == Level.NETHER && TFGConfig.SERVER.enableBeneathMiningRestrictions.get()) {
 
