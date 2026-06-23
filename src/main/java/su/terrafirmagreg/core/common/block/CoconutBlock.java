@@ -1,12 +1,18 @@
 package su.terrafirmagreg.core.common.block;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
+import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
+import net.dries007.tfc.common.blocks.rock.IFallableBlock;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.core.BlockPos;
@@ -19,6 +25,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -36,14 +43,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 
 @SuppressWarnings("deprecation")
-public class CoconutBlock extends DecayingBlock implements HoeOverlayBlock {
+public class CoconutBlock extends DecayingBlock implements HoeOverlayBlock, IFallableBlock {
 
     public static final VoxelShape DEFAULT_SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 5.5, 11.0);
 
     private final VoxelShape shape;
 
-    public CoconutBlock(ExtendedProperties properties, VoxelShape shape) {
-        super(properties, () -> Blocks.AIR);
+    public CoconutBlock(ExtendedProperties properties, Supplier<? extends Block> rotted, VoxelShape shape) {
+        super(properties, rotted);
         this.shape = shape;
     }
 
@@ -79,6 +86,15 @@ public class CoconutBlock extends DecayingBlock implements HoeOverlayBlock {
         final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
         text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
         text.add(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
+
+        var calendar = Calendars.get(level);
+        Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
+        Lifecycle lifecycle = PalmTrees.COCONUT.getStages()[month.ordinal()];
+        text.add(Component.translatable("tooltip.tfg.palm_head." + lifecycle.getSerializedName()));
+    }
+
+    @Override
+    public void onceFinishedFalling(Level level, BlockPos pos, FallingBlockEntity entity) {
     }
 
     @Override

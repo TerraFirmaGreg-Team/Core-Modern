@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-import net.dries007.tfc.util.calendar.Month;
+import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
@@ -17,18 +17,18 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
 public enum PalmTrees implements StringRepresentable {
-    COCONUT(Month.OCTOBER, Month.DECEMBER);
+    COCONUT(new Lifecycle[] {
+            Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING,
+            Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING
+    });
 
     private final String serializedName;
     @Getter
-    private final Month startMonth;
-    @Getter
-    private final Month endMonth;
+    private final Lifecycle[] stages;
 
-    PalmTrees(Month startMonth, Month endMonth) {
+    PalmTrees(Lifecycle[] stages) {
         this.serializedName = name().toLowerCase(Locale.ROOT);
-        this.startMonth = startMonth;
-        this.endMonth = endMonth;
+        this.stages = stages;
     }
 
     @Override

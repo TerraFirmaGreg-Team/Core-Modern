@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.core.BlockPos;
@@ -66,6 +70,11 @@ public class PalmHeadBlock extends Block implements EntityBlock, HoeOverlayBlock
         final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
         text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
         text.add(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
+
+        var calendar = Calendars.get(level);
+        Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
+        Lifecycle lifecycle = tree.getStages()[month.ordinal()];
+        text.add(Component.translatable("tfg.tooltip.lifecycle." + lifecycle.getSerializedName()));
     }
 
     @Nullable

@@ -14,13 +14,6 @@
                   "block": "tfg:palm_tree/coconut_tree_cluster",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "age": "1"
-                  }
-                },
-                {
-                  "block": "tfg:palm_tree/coconut_tree_cluster",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {
                     "age": "2"
                   }
                 },

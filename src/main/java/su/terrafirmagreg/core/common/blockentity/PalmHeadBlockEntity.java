@@ -7,6 +7,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
+import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
@@ -82,22 +83,8 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
         assert level != null;
         var calendar = Calendars.get(level);
         Month current = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
-        Month start = getStartMonth();
-        Month end = getEndMonth();
 
-        if (start.ordinal() <= end.ordinal()) {
-            return current.ordinal() >= start.ordinal() && current.ordinal() <= end.ordinal();
-        } else {
-            return current.ordinal() >= start.ordinal() || current.ordinal() <= end.ordinal();
-        }
-    }
-
-    protected @NotNull Month getStartMonth() {
-        return tree.getStartMonth();
-    }
-
-    protected @NotNull Month getEndMonth() {
-        return tree.getEndMonth();
+        return tree.getStages()[current.ordinal()] == Lifecycle.FRUITING;
     }
 
     protected @NotNull Block getFruitBlock() {

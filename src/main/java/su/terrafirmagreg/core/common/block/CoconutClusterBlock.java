@@ -6,11 +6,17 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.blocks.plant.fruit.IBushBlock;
+import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.common.entities.misc.TFCFallingBlockEntity;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -22,7 +28,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.Snowball;
@@ -86,7 +91,7 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
         boolean spawnFallingCoconut = false;
         boolean finalAge = false;
         int count = switch (age) {
-            case 1, 2, 3 -> {
+            case 2, 3 -> {
                 type = greenCoconut;
                 yield 3;
             }
@@ -214,6 +219,18 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
         final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
         text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
         text.add(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
+
+        var calendar = Calendars.get(level);
+        Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
+        Lifecycle lifecycle = tree.getStages()[month.ordinal()];
+        text.add(Component.translatable("tfg.tooltip.lifecycle." + lifecycle.getSerializedName()));
+
+        CoconutDrop drop = getDropForAge(state.getValue(AGE));
+        if (drop.count != 0) {
+            text.add(Component.translatable("tfg.tooltip.palm_tree.coconut.cluster_harvest",
+                    Component.translatable(String.format("%s", drop.type.getName().getString())).withStyle(ChatFormatting.ITALIC, ChatFormatting.WHITE),
+                    Component.literal(String.format("%d", drop.count)).withStyle(ChatFormatting.WHITE)));
+        }
     }
 
     @Override
@@ -242,13 +259,16 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
                 }
             } else {
                 age++;
-                state = state.setValue(AGE, age);
-                level.setBlock(pos, state, 2);
+                CoconutDrop nextDrop = getDropForAge(age);
+                if (nextDrop.finalAge) {
+                    level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                } else {
+                    level.setBlock(pos, state.setValue(AGE, age), 2);
+                }
 
-                CoconutDrop newDrop = getDropForAge(age);
-                if (newDrop.spawnFallingCoconut && !newDrop.finalAge) {
+                if (nextDrop.spawnFallingCoconut) {
                     if (level instanceof ServerLevel serverLevel) {
-                        spawnFallingCoconut(serverLevel, pos, newDrop.type);
+                        spawnFallingCoconut(serverLevel, pos, nextDrop.type);
                     }
                 }
             }
@@ -284,10 +304,10 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
 
         if (!validPositions.isEmpty()) {
             BlockPos spawnPos = validPositions.get(level.getRandom().nextInt(validPositions.size()));
-            FallingBlockEntity entity = FallingBlockEntity.fall(level, spawnPos, block.defaultBlockState());
+            TFCFallingBlockEntity entity = new TFCFallingBlockEntity(level, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, block.defaultBlockState());
             entity.setHurtsEntities(2.0f, 2);
-        } else {
-            popResource(level, pos, new ItemStack(block));
+            entity.dropItem = false;
+            level.addFreshEntity(entity);
         }
     }
 
