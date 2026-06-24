@@ -179,8 +179,6 @@ public final class ServerConfig {
                 .comment("\nThe fluid consumption multiplier applied when chain-painting/bulk-painting blocks (e.g. 0.85 equals a 15% discount). Set to 1.0 to disable discounts.")
                 .defineInRange("chameleonSprayCanBulkMultiplier", 1.0, 0.0, 10.0);
 
-                .defineInRange("snowMaxAccumulationOnUpdate", 256, 1, Integer.MAX_VALUE);
-
         builder.pop().push("atmosphere_system");
 
         atmosphereMaxHorizontalDimension = builder
