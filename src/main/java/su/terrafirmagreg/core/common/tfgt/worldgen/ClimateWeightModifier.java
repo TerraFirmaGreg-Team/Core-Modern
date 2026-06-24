@@ -3,6 +3,8 @@ package su.terrafirmagreg.core.common.tfgt.worldgen;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.Nullable;
+
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataProvider;
 import net.minecraft.core.BlockPos;
@@ -51,20 +53,28 @@ public class ClimateWeightModifier {
     }
 
     /// @throws NullPointerException If there's an existing fluid drilling rig in an old worldgen chunk
-    public ChunkData getChunkData(ServerLevel level, BlockPos pos) {
+    public @Nullable ChunkData getChunkData(ServerLevel level, BlockPos pos) {
         ChunkAccess currentChunk = CHUNK_ACCESS_CACHE.get(new ChunkPos(pos));
-        return ChunkDataProvider.get(level.getChunkSource().getGenerator()).get(currentChunk);
+        if (currentChunk != null) {
+            return ChunkDataProvider.get(level.getChunkSource().getGenerator()).get(currentChunk);
+        } else {
+            return null;
+        }
     }
 
     public int applyAsInt(ServerLevel level, BlockPos pos) {
+
         try {
             ChunkData chunkData = getChunkData(level, pos);
+            if (chunkData == null)
+                return 0;
+
             float value = mode == Mode.TEMPERATURE
                     ? chunkData.getAverageTemp(pos)
                     : chunkData.getRainfall(pos);
             return value >= min && value <= max ? addedWeight : 0;
         } catch (NullPointerException | IllegalStateException ex) {
-            TFGCore.LOGGER.error(ex.toString());
+            TFGCore.LOGGER.error("Exception in ClimateWeightModifier.applyAsInt", ex);
             return 0;
         }
     }
@@ -87,6 +97,9 @@ public class ClimateWeightModifier {
             public int applyAsInt(ServerLevel level, BlockPos pos) {
                 try {
                     ChunkData chunkData = getChunkData(level, pos);
+                    if (chunkData == null)
+                        return 0;
+
                     float temp = chunkData.getAverageTemp(pos);
                     float rain = chunkData.getRainfall(pos);
 
@@ -95,7 +108,7 @@ public class ClimateWeightModifier {
                                     ? addedWeight
                                     : 0;
                 } catch (NullPointerException | IllegalStateException ex) {
-                    TFGCore.LOGGER.error(ex.toString());
+                    TFGCore.LOGGER.error("Exception in ClimateWeightModifier.combined", ex);
                     return 0;
                 }
             }
@@ -126,6 +139,9 @@ public class ClimateWeightModifier {
             public int applyAsInt(ServerLevel level, BlockPos pos) {
                 try {
                     ChunkData chunkData = getChunkData(level, pos);
+                    if (chunkData == null)
+                        return 0;
+
                     float temp = chunkData.getAverageTemp(pos);
                     float rain = chunkData.getRainfall(pos);
                     var biome = level.getBiome(pos).unwrapKey().orElse(null);
@@ -136,7 +152,7 @@ public class ClimateWeightModifier {
                                     ? addedWeight
                                     : 0;
                 } catch (NullPointerException | IllegalStateException ex) {
-                    TFGCore.LOGGER.error(ex.toString());
+                    TFGCore.LOGGER.error("Exception in ClimateWeightModifier.combinedWithBiome", ex);
                     return 0;
                 }
             }
