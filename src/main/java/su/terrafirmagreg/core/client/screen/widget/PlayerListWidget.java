@@ -75,15 +75,14 @@ public class PlayerListWidget extends GenericScrollableListWidget<PlayerListWidg
         this.hoveredName = null;
     }
 
-    @Override
-    protected void afterRenderList(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderTooltip(GuiGraphics graphics) {
         if (this.hoveredName != null) {
             graphics.renderTooltip(this.minecraft.font, this.hoveredName, this.tooltipX, this.tooltipY);
         }
     }
 
-    public void addPlayer(Component name, UUID uuid, RadarGraphWidget.Dataset dataset1, RadarGraphWidget.Dataset dataset2, boolean visible) {
-        this.addEntry(new PlayerEntry(name, uuid, dataset1, dataset2, visible));
+    public void addPlayer(Component name, UUID uuid, RadarGraphWidget.Dataset dataset1, RadarGraphWidget.Dataset dataset2, boolean visible, boolean online) {
+        this.addEntry(new PlayerEntry(name, uuid, dataset1, dataset2, visible, online));
     }
 
     public void clearPlayers() {
@@ -113,25 +112,31 @@ public class PlayerListWidget extends GenericScrollableListWidget<PlayerListWidg
         private final Checkbox checkbox;
         private final RadarGraphWidget.Dataset dataset1;
         private final RadarGraphWidget.Dataset dataset2;
+        private final boolean online;
         private GameProfile profile;
         private boolean profileResolved = false;
         private boolean resolving = false;
 
-        public PlayerEntry(Component name, UUID uuid, RadarGraphWidget.Dataset dataset1, RadarGraphWidget.Dataset dataset2, boolean visible) {
+        public PlayerEntry(Component name, UUID uuid, RadarGraphWidget.Dataset dataset1, RadarGraphWidget.Dataset dataset2, boolean visible, boolean online) {
             this.name = name;
             this.uuid = uuid;
             this.dataset1 = dataset1;
             this.dataset2 = dataset2;
+            this.online = online;
             this.profile = new GameProfile(uuid, name.getString());
             this.checkbox = new Checkbox(0, 0, 20, 20, Component.empty(), visible) {
                 @Override
                 public void onPress() {
+                    if (!online) {
+                        return;
+                    }
                     super.onPress();
                     boolean selected = this.selected();
                     dataset1.setVisible(selected);
                     dataset2.setVisible(selected);
                 }
             };
+            this.checkbox.active = online;
             dataset1.setVisible(visible);
             dataset2.setVisible(visible);
         }
@@ -202,9 +207,11 @@ public class PlayerListWidget extends GenericScrollableListWidget<PlayerListWidg
                 float green = ((color >> 8) & 0xFF) / 255f;
                 float blue = (color & 0xFF) / 255f;
 
+                float darken = online ? 1.0f : 0.5f;
+
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
-                graphics.setColor(red, green, blue, Math.max(0.35f, alpha));
+                graphics.setColor(red * darken, green * darken, blue * darken, Math.max(0.35f, alpha));
                 graphics.blit(playerHeadBackground, backgroundX, backgroundY, 0, 0, playerHeadBackgroundWidth, playerHeadBackgroundHeight, playerHeadBackgroundWidth, playerHeadBackgroundHeight);
                 graphics.setColor(1f, 1f, 1f, 1f);
                 RenderSystem.disableBlend();
@@ -217,16 +224,12 @@ public class PlayerListWidget extends GenericScrollableListWidget<PlayerListWidg
                 final int frameH = checkboxTextureHeight;
                 final int drawW = checkbox.getWidth();
                 final int drawH = checkbox.getHeight();
-                final int u = checkbox.selected() ? frameW : 0;
+                final int u = (!checkbox.active || checkbox.selected()) ? frameW : 0;
 
                 graphics.blit(checkboxTexture, checkbox.getX(), checkbox.getY(), drawW, drawH, (float) u, 0.0f, frameW, frameH, checkboxTextureWidth, checkboxTextureHeight);
 
                 if (checkbox.active && checkbox.isMouseOver(mouseX, mouseY)) {
                     graphics.fill(checkbox.getX(), checkbox.getY(), checkbox.getX() + checkbox.getWidth(), checkbox.getY() + checkbox.getHeight(), 0x40FFFFFF);
-                }
-
-                if (!checkbox.active) {
-                    graphics.fill(checkbox.getX(), checkbox.getY(), checkbox.getX() + checkbox.getWidth(), checkbox.getY() + checkbox.getHeight(), 0x80000000);
                 }
             } else {
                 checkbox.render(graphics, mouseX, mouseY, partialTick);
@@ -259,13 +262,18 @@ public class PlayerListWidget extends GenericScrollableListWidget<PlayerListWidg
             }
 
             // Render player head.
+            if (!online) {
+                graphics.setColor(0.5f, 0.5f, 0.5f, 1.0f);
+            }
             graphics.blit(skinLocation, headX, headY, 16, 16, 8.0f, 8.0f, 8, 8, 64, 64); // Inner layer
             graphics.blit(skinLocation, headX, headY, 16, 16, 40.0f, 8.0f, 8, 8, 64, 64); // Outer layer
+            graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
             if (mouseX >= headX && mouseX <= headX + 16 && mouseY >= headY && mouseY <= headY + 16) {
                 // Check if head is visible within the list's vertical bounds
                 if (headY >= y0 && headY + 16 <= y1) {
-                    PlayerListWidget.this.hoveredName = this.name;
+                    PlayerListWidget.this.hoveredName = online ? this.name
+                            : Component.empty().append(this.name).append(Component.literal(" - ")).append(Component.translatable("tfg.tooltip.widget.player_list.offline"));
                     PlayerListWidget.this.tooltipX = mouseX;
                     PlayerListWidget.this.tooltipY = mouseY;
                 }

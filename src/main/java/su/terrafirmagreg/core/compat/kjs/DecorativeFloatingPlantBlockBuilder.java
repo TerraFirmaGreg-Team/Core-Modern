@@ -26,10 +26,9 @@ public class DecorativeFloatingPlantBlockBuilder extends DecorativePlantBlockBui
     @Override
     public DecorativeFloatingPlantBlock createObject() {
         if (enableXZOffset) {
-            return new DecorativeFloatingPlantBlock(createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ),
-                    getShape());
+            return new DecorativeFloatingPlantBlock(createExtendedProperties().offsetType(BlockBehaviour.OffsetType.XZ), getShape(), effect);
         } else {
-            return new DecorativeFloatingPlantBlock(createExtendedProperties(), getShape());
+            return new DecorativeFloatingPlantBlock(createExtendedProperties(), getShape(), effect);
         }
     }
 }

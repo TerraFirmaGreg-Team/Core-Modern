@@ -1,0 +1,15 @@
+{
+  "values": [
+    "tfg:girder/beam/tin_alloy",
+    "tfg:girder/beam/brass",
+    "tfg:girder/beam/wrought_iron",
+    "tfg:girder/beam/copper",
+    "tfg:girder/beam/zinc",
+    "tfg:girder/truss/tin_alloy",
+    "tfg:girder/truss/brass",
+    "tfg:girder/truss/wrought_iron",
+    "tfg:girder/truss/copper",
+    "tfg:girder/truss/steel",
+    "tfg:girder/truss/zinc"
+  ]
+}

@@ -39,10 +39,11 @@ public class TuyaSurfaceBuilder implements SurfaceBuilder {
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
         var ctx = (ISurfaceBuilderContext) context;
-        var biome = (IBiomeExtension) ctx.tfg$getTuyaBiome();
-        if (biome.tfg$hasTuyas()) {
+        var tuyaBiome = ctx.tfg$getTuyaBiome();
+        // Null when the surface context wasn't tfg$init-ed (eg classic-TFC pipeline)
+        if (tuyaBiome != null && ((IBiomeExtension) tuyaBiome).tfg$hasTuyas()) {
             final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.tuya(seed);
-            final float easing = sampler.calculateEasing(context.pos(), ctx.tfg$getTuyaBiome());
+            final float easing = sampler.calculateEasing(context.pos(), tuyaBiome);
             if (1 - easing < 0.16f) {
                 buildVolcanicSurface(context, startY, endY, (int) heightNoise.noise(context.pos().getX(), context.pos().getZ()));
                 return;

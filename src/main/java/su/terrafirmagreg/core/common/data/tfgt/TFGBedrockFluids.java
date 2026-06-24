@@ -29,6 +29,7 @@ public class TFGBedrockFluids {
     // By the way, if you see a vein have zero weight, it's controlled by the biome/climate instead
 
     private static final Set<ResourceKey<Level>> overworld = Set.of(Level.OVERWORLD);
+    private static final Set<ResourceKey<Level>> nether = Set.of(Level.NETHER);
 
     // =========================================================
     // WATER
@@ -394,6 +395,28 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(0));
 
+    // Beneath Gas Weak
+    public static BedrockFluidDefinition BENEATH_GAS_WEAK = create(TFGCore.id("beneath_gas_weak"), vein -> vein
+            .dimensions(nether)
+            .fluid(GTMaterials.NaturalGas::getFluid)
+            .weight(50)
+            .minimumYield(50)
+            .maximumYield(150)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(0));
+
+    // Beneath Gas Strong
+    public static BedrockFluidDefinition BENEATH_GAS_STRONG = create(TFGCore.id("beneath_gas_strong"), vein -> vein
+            .dimensions(nether)
+            .fluid(GTMaterials.NaturalGas::getFluid)
+            .weight(30)
+            .minimumYield(150)
+            .maximumYield(250)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(10));
+
     // =========================================================
     // LAVA
     // =========================================================
@@ -421,6 +444,54 @@ public class TFGBedrockFluids {
             .depletionChance(100)
             .depletedYield(0)
             .biomes(10, TFGTags.Biomes.EarthIsMountain));
+
+    // Beneath
+    public static BedrockFluidDefinition LAVA_BENEATH = create(TFGCore.id("lava_beneath"), vein -> vein
+            .dimensions(nether)
+            .fluid(Fluids.LAVA::getSource)
+            .weight(50)
+            .minimumYield(50)
+            .maximumYield(150)
+            .depletionAmount(1)
+            .depletionChance(100)
+            .depletedYield(0));
+
+    // =========================================================
+    // MISC
+    // =========================================================
+
+    // Beneath Glowstone
+    public static BedrockFluidDefinition BENEATH_GLOWSTONE = create(TFGCore.id("beneath_glowstone"), vein -> vein
+            .dimensions(nether)
+            .fluid(GTMaterials.Glowstone::getFluid)
+            .weight(1)
+            .minimumYield(2)
+            .maximumYield(5)
+            .depletionAmount(800)
+            .depletionChance(100)
+            .depletedYield(0));
+
+    // Beneath Gold
+    public static BedrockFluidDefinition BENEATH_GOLD = create(TFGCore.id("beneath_gold"), vein -> vein
+            .dimensions(nether)
+            .fluid(GTMaterials.Gold::getFluid)
+            .weight(1)
+            .minimumYield(2)
+            .maximumYield(5)
+            .depletionAmount(2000)
+            .depletionChance(100)
+            .depletedYield(0));
+
+    // Beneath Steam
+    public static BedrockFluidDefinition BENEATH_STEAM = create(TFGCore.id("beneath_steam"), vein -> vein
+            .dimensions(nether)
+            .fluid(GTMaterials.Steam::getFluid)
+            .weight(5)
+            .minimumYield(125)
+            .maximumYield(225)
+            .depletionAmount(1000)
+            .depletionChance(100)
+            .depletedYield(0));
 
     // =========================================================
     // OLD GEN

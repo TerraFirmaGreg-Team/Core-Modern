@@ -67,15 +67,17 @@ public class TFCSurfer extends Surfer implements BrainBreeder {
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, SpawnGroupData groupData, CompoundTag tag) {
         float r = random.nextFloat();
         if (r > 0.9)
-            this.setVariant(Variant.BRAIN);
+            this.setVariant(LEGACY_VARIANTS.get(1));
         else if (r > 0.8)
-            this.setVariant(Variant.BUBBLE);
+            this.setVariant(LEGACY_VARIANTS.get(2));
         else if (r > 0.7)
-            this.setVariant(Variant.TUBE);
+            this.setVariant(LEGACY_VARIANTS.get(3));
         else if (r > 0.6)
-            this.setVariant(Variant.FIRE);
+            this.setVariant(LEGACY_VARIANTS.get(4));
         else if (r > 0.5)
-            this.setVariant(Variant.HORN);
+            this.setVariant(LEGACY_VARIANTS.get(5));
+        else if (r > 0.48)
+            this.setVariant(LEGACY_VARIANTS.get(6)); // 2% Silver chance
 
         setIsMale(random.nextBoolean());
         return super.finalizeSpawn(level, difficulty, spawnType, groupData, tag);

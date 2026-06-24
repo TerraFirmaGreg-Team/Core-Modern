@@ -35,11 +35,14 @@ dependencies {
     modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
     modImplementation ("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
+    modImplementation ("maven.modrinth:createfluidlogistic:NmPeIsfP") { transitive = false }
 
     // Create: Vintage Improvements
     modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
 
     // Greate
+    modRuntimeOnly "curse.maven:copycats-968398:7634682"
+    modRuntimeOnly "curse.maven:create-repair-1477958:8034105"
     modImplementation ("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
@@ -53,17 +56,13 @@ dependencies {
     // TFC
     modImplementation ("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
     modImplementation ("maven.modrinth:terrafirmacraft:${tfc_version}") { transitive = false }
-    modImplementation ("curse.maven:kubejs-tfc-841001:6996502") { transitive = false }
+    modImplementation ("curse.maven:kubejs-tfc-841001:8283526") { transitive = false }
 
     // FirmaLife
     modImplementation "maven.modrinth:firmalife:${firmalife_version}"
 
     // Beneath
     modImplementation ("maven.modrinth:beneath:${beneath_version}") { transitive = false }
-
-    // TFC-Ambiental
-    modImplementation "maven.modrinth:curios:5.12.1+1.20.1"
-    modImplementation "maven.modrinth:tfc-ambiental-second-edition:1.20.1-3.3.0"
 
     // FirmaCiv
     modImplementation ("maven.modrinth:alekiships:${alekiships_version}") { transitive = false }
@@ -87,16 +86,16 @@ dependencies {
     modImplementation "cc.tweaked:cc-tweaked-1.20.1-forge:${cc_tweaked_version}"
 
     // FTB
-    modImplementation ("curse.maven:ftb-teams-forge-404468:6130786") { transitive = false }
-    modImplementation ("curse.maven:ftb-library-forge-404465:6164053") { transitive = false }
-    modImplementation ("curse.maven:ftb-chunks-forge-314906:6431735") { transitive = false }
-    modCompileOnly ("curse.maven:ftb-quests-forge-289412:6431737") { transitive = false }
+    modImplementation ("curse.maven:ftb-teams-forge-404468:7499810") { transitive = false }
+    modImplementation ("curse.maven:ftb-library-forge-404465:8226927") { transitive = false }
+    modImplementation ("curse.maven:ftb-chunks-forge-314906:8216874") { transitive = false }
+    modCompileOnly ("curse.maven:ftb-quests-forge-289412:8078538") { transitive = false }
 
     // Jade
     modImplementation "maven.modrinth:jade:11.13.2+forge"
 
     // TFC Roads and Roofs, rnr-0.2.2-1.20.1.jar, Dec 16, 2025
-    modImplementation "curse.maven:roads-and-roofs-tfc-1048212:7339318"
+    modImplementation "curse.maven:roads-and-roofs-tfc-1048212:8099778"
 
     // Ad Astra
     modImplementation ("curse.maven:ad-astra-635042:6262032") { transitive = false }
@@ -119,7 +118,7 @@ dependencies {
     modCompileOnly "maven.modrinth:hang-glider:${hangglider_version}"
 
     // Wan's ancient beasts
-    modImplementation "curse.maven:wans-ancient-beasts-1108604:7552366"
+    modImplementation "curse.maven:wans-ancient-beasts-1108604:8217197"
     modImplementation "curse.maven:geckolib-388172:7553267"
 
     // Immersive Aircraft
@@ -144,9 +143,6 @@ dependencies {
     // TFCGenViewer (optional in dev; modpack always includes it) — mixins for TFG + new overworld gen
     modImplementation "maven.modrinth:tfcgenviewer:1.5.1"
 
-    // TFC Improved Badlands
-    modCompileOnly "curse.maven:tfc-improved-badlands-969207:5126426"
-
     // TFC Water Flasks, waterflasks-3.0.10.jar, Oct 2, 2025
     modCompileOnly "curse.maven:water-flasks-354353:7056478"
 
@@ -159,9 +155,24 @@ dependencies {
     // Framed Blocks, FramedBlocks-9.4.3.jar, Dec 28, 2025
     modCompileOnly "curse.maven:framedblocks-441647:7386520"
 
-    // GT modern utils, gtmutils-2.8.0.jar, Feb 12, 2026
-    modImplementation "curse.maven:gregtech-modern-utilities-1235020:7612516"
+    // GT modern utils, gtmutils-2.8.0.jar, Jun 21 2026
+    modImplementation "curse.maven:gregtech-modern-utilities-1235020:8197530"
 
     // Crafting Station Improved
     modImplementation "curse.maven:crafting-station-improved-1310299:7463065"
+
+    // Strut Your Stuff
+    modImplementation "maven.modrinth:strut-your-stuff:1.1.0+mc1.20.1"
+
+    // Phoenix's Chromatic Codes
+    modImplementation("curse.maven:phoenixs-chromatic-colors-1483210:8241943")
+
+    // Create: Connected, 21 Jun 2026
+    modImplementation "curse.maven:create-connected-947914:8290615"
+
+    // Curios, Apr 13 2025
+    modImplementation "maven.modrinth:curios:5.14.1+1.20.1"
+
+    // Additional Placements, [1.20.1 Forge] Additional Placements 3.0.1.jar, Apr 10, 2026
+    modCompileOnly "curse.maven:additional-placements-674852:7905535"
 }

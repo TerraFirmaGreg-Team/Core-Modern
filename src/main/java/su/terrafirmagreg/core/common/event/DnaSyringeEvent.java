@@ -23,8 +23,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
@@ -87,7 +87,7 @@ public class DnaSyringeEvent {
                     }
                 }
             } catch (Exception e) {
-                TFGCore.LOGGER.warn("Could not extract fish item data from Starcatcher fish entity: {}", e.getMessage());
+                TFGCore.LOGGER.warn("Could not extract fish item data from Starcatcher fish entity", e);
             }
         }
 

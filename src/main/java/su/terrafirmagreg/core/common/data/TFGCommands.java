@@ -22,7 +22,11 @@ public class TFGCommands {
         DebugRecipeDump.register(debug);
         DebugWorldgenVersions.register(debug);
 
-        dispatcher.register(literal("tfg").then(debug));
+        LiteralArgumentBuilder<CommandSourceStack> tfg = literal("tfg").then(debug);
+        ModifyNutrients.register(tfg);
+        TFCDataDump.register(tfg);
+        AmbientalDump.register(tfg);
+        dispatcher.register(tfg);
 
         //DustAndWindCommand.register(dispatcher);
     }

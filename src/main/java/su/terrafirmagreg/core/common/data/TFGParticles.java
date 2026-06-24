@@ -29,6 +29,15 @@ public class TFGParticles {
     public static final RegistryObject<SimpleParticleType> COOLING_STEAM = PARTICLES.register("cooling_steam",
             () -> new SimpleParticleType(true));
 
+    public static final RegistryObject<SimpleParticleType> GEOTHERMAL_STEAM = PARTICLES.register("geothermal_steam",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> GEYSER_POOF = PARTICLES.register("geyser_poof",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> NOXIOUS_GAS = PARTICLES.register("noxious_gas",
+            () -> new SimpleParticleType(true));
+
     public static final RegistryObject<SimpleParticleType> VOLCANO_SMOKE = PARTICLES.register("volcano_smoke",
             () -> new SimpleParticleType(true));
 

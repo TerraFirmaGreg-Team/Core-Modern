@@ -9,10 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.dries007.tfc.TerraFirmaCraft;
-import net.minecraft.client.gui.screens.MenuScreens;
+import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -32,10 +35,8 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.screen.*;
 import su.terrafirmagreg.core.common.CommonProxy;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
+import su.terrafirmagreg.core.common.data.blocks.*;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.particle.*;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.world.dimension_effects.BeneathEffects;
@@ -50,6 +51,7 @@ public class ClientProxy extends CommonProxy {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(ForgeClientEventListener::registerColorHandlerBlocks);
         bus.addListener(ForgeClientEventListener::registerColorHandlerItems);
+        bus.addListener(ForgeClientEventListener::registerRenderers);
     }
 
     @SubscribeEvent
@@ -64,10 +66,15 @@ public class ClientProxy extends CommonProxy {
         event.registerSpriteSet(TFGParticles.DARK_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xbe6621))); // avg color of red sand
         event.registerSpriteSet(TFGParticles.MEDIUM_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xc48456))); // avg color of ad astra mars sand
         event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
+        // environmental
+        event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
         // Decompression event
         event.registerSpriteSet(TFGParticles.DECOMPRESSION.get(), DecompressionParticle.Provider::new);
-        // Other
+        // for machines
         event.registerSpriteSet(TFGParticles.COOLING_STEAM.get(), CoolingSteamProvider::new);
+        event.registerSpriteSet(TFGParticles.GEOTHERMAL_STEAM.get(), GeothermalSteamProvider::new);
+        event.registerSpriteSet(TFGParticles.GEYSER_POOF.get(), GeyserPoofProvider::new);
+        event.registerSpriteSet(TFGParticles.NOXIOUS_GAS.get(), NoxiousGasProvider::new);
         event.registerSpriteSet(TFGParticles.FISH_SCHOOL.get(), FishSchoolProvider::new);
         event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
     }
@@ -76,9 +83,7 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void clientSetup(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
-            MenuScreens.register(TFGContainers.LARGE_NEST_BOX.get(), LargeNestBoxScreen::new);
-            MenuScreens.register(TFGContainers.ARTISAN_TABLE.get(), ArtisanTableScreen::new);
-
+            // Fluid rendering
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MARS_WATER.getSource(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.MUDDY_WATER.getFlowing(), RenderType.translucent());
@@ -87,10 +92,14 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.SULFUR_FUMES.getSource(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getFlowing(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGFluids.GEYSER_SLURRY.getSource(), RenderType.translucent());
+
+            // Translucent blocks
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Mars.MARS_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Mars.MARS_ICICLE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks.DRY_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Casings.REFLECTOR_BLOCK.get(), RenderType.translucent());
+
+            // TFC's special connected texture dirts
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SANDY_LOAM_DUFF.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILTY_LOAM_DUFF.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.SILT_DUFF.get(), RenderType.cutoutMipped());
@@ -107,6 +116,8 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_GRASS.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_CLAY_GRASS.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_Earth.PODZOL_DUFF.get(), RenderType.cutoutMipped());
+
+            // Plant transparency
             TFGBlocks_Earth.PLANTS.forEach((plant, block) -> ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutoutMipped()));
 
             // Fruit Trees.
@@ -115,6 +126,22 @@ public class ClientProxy extends CommonProxy {
                 ItemBlockRenderTypes.setRenderLayer(TFGFruitTree.FRUIT_TREE_POTTED_SAPLINGS.get(tree).get(), RenderType.cutout());
                 ItemBlockRenderTypes.setRenderLayer(TFGFruitTree.FRUIT_TREE_LEAVES.get(tree).get(), RenderType.cutoutMipped());
                 ItemBlockRenderTypes.setRenderLayer(TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree).get(), RenderType.cutout());
+            }
+
+            // Wood
+            TFGBlocks_Wood.WOODS.values().forEach(map -> {
+                // Changes the item model when a barrel is sealed
+                if (map.containsKey(Wood.BlockType.BARREL)) {
+                    ItemProperties.register(
+                            map.get(Wood.BlockType.BARREL).get().asItem(),
+                            Helpers.identifier("sealed"),
+                            (stack, level, entity, unused) -> stack.hasTag() ? 1.0f : 0f);
+                }
+            });
+            for (TFGWood wood : TFGWood.VALUES) {
+                if (wood.generateWood) {
+                    Sheets.addWoodType(wood.getVanillaWoodType());
+                }
             }
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
@@ -133,6 +160,11 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void registerSpecialModels(ModelEvent.RegisterAdditional event) {
+        TFGBlocks_Struts.STRUTS.forEach(blockEntry -> {
+            ResourceLocation loc = blockEntry.getId().withPrefix("block/");
+            event.register(loc);
+        });
+
         event.register(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "block/metal/smooth_pattern"));
     }
 

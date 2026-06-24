@@ -1,15 +1,23 @@
 package su.terrafirmagreg.core.client;
 
+import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
+
 import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ComputeFovModifierEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,8 +25,10 @@ import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.perf.SupportCache;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
@@ -35,6 +45,32 @@ public class ForgeClientEventListener {
         if (event.getLevel() instanceof Level level) {
             ChunkPos pos = event.getChunk().getPos();
             SupportCache.forLevel(level).evictChunk(pos.x, pos.z);
+        }
+    }
+
+    /**
+     * Prevents FOV change for custom speed modifiers.
+     */
+    @SubscribeEvent
+    public static void onComputeFovModifier(ComputeFovModifierEvent event) {
+        Player player = event.getPlayer();
+        AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speedAttr != null) {
+            AttributeModifier grainModifier = speedAttr.getModifier(NutrientEffectsHandler.GRAIN_SPEED_MODIFIER_UUID);
+            if (grainModifier != null) {
+                float walkingSpeed = player.getAbilities().getWalkingSpeed();
+                if (walkingSpeed > 0) {
+                    double speedWithGrain = speedAttr.getValue();
+                    double speedWithoutGrain = speedWithGrain / (1.0 + grainModifier.getAmount());
+
+                    float fWith = (float) ((speedWithGrain / walkingSpeed + 1.0) / 2.0);
+                    float fWithout = (float) ((speedWithoutGrain / walkingSpeed + 1.0) / 2.0);
+
+                    if (fWith > 0) {
+                        event.setNewFovModifier(event.getFovModifier() * (fWithout / fWith));
+                    }
+                }
+            }
         }
     }
 
@@ -74,5 +110,9 @@ public class ForgeClientEventListener {
                 TFGBlocks_Earth.PLANTS.get(TFGPlant.RED_OAT_GRASS).get());
 
         AsphaltRoadColorHandlers.registerItems(event);
+    }
+
+    public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+        StrutsFlywheelCompatLoader.registerStrutVisual(TFGBlockEntities.STRUT.get());
     }
 }

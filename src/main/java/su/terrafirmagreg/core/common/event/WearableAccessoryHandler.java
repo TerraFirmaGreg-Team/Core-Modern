@@ -17,8 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGItems;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.item.wearable.FlippersItem;
 import su.terrafirmagreg.core.common.item.wearable.SnorkelItem;
 import su.terrafirmagreg.core.common.item.wearable.SnowshoesItem;

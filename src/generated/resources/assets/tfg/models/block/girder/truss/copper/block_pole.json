@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/girder/truss/block_pole",
+  "textures": {
+    "3": "tfg:block/girder/truss/copper",
+    "particle": "tfg:block/girder/truss/copper"
+  }
+}

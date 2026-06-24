@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
+import com.eerussianguy.beneath.common.items.BeneathItems;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.items.FLItems;
 import com.eerussianguy.firmalife.common.util.FLMetal;
@@ -116,6 +117,11 @@ public final class TFGMaterialHandler {
         var lignite = TFGHelpers.getMaterial("lignite");
         if (lignite != null) {
             gem.setIgnored(lignite, () -> TFCItems.ORES.get(Ore.LIGNITE).get());
+        }
+
+        var anthracite = TFGHelpers.getMaterial("anthracite");
+        if (anthracite != null) {
+            gem.setIgnored(anthracite, BeneathItems.CURSECOAL::get);
         }
 
         // Create materials

@@ -39,10 +39,11 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder {
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY) {
         var ctx = (ISurfaceBuilderContext) context;
-        var biome = (IBiomeExtension) ctx.tfg$getTuffRingBiome();
-        if (biome.tfg$hasTuffRings()) {
+        var tuffRingBiome = ctx.tfg$getTuffRingBiome();
+        // Null when the surface context wasn't tfg$init-ed (eg classic-TFC pipeline)
+        if (tuffRingBiome != null && ((IBiomeExtension) tuffRingBiome).tfg$hasTuffRings()) {
             final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.tuffRing(seed);
-            final float easing = sampler.calculateEasing(context.pos(), ctx.tfg$getTuffRingBiome());
+            final float easing = sampler.calculateEasing(context.pos(), tuffRingBiome);
             if (easing > 0.6f) {
                 if (startY < context.getSeaLevel() + 3) {
                     buildTuffSurface(context, startY, endY, complexStates.VOLCANIC_SHORE_SAND, complexStates.VOLCANIC_SHORE_SAND,

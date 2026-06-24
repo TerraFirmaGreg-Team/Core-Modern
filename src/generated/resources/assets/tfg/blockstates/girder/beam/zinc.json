@@ -1,0 +1,78 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tfg:block/girder/beam/zinc/block_pole"
+      },
+      "when": {
+        "x": "false",
+        "z": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/beam/zinc/block_x"
+      },
+      "when": {
+        "x": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/beam/zinc/block_z"
+      },
+      "when": {
+        "z": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/beam/zinc/block_top"
+      },
+      "when": {
+        "top": "true",
+        "x": "true",
+        "z": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/beam/zinc/block_bottom"
+      },
+      "when": {
+        "bottom": "true",
+        "x": "true",
+        "z": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/beam/zinc/block_top"
+      },
+      "when": {
+        "top": "true",
+        "x": "false",
+        "z": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/beam/zinc/block_bottom"
+      },
+      "when": {
+        "bottom": "true",
+        "x": "false",
+        "z": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "tfg:block/girder/beam/zinc/block_cross"
+      },
+      "when": {
+        "x": "true",
+        "z": "true"
+      }
+    }
+  ]
+}

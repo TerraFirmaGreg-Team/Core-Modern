@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import earth.terrarium.adastra.api.planets.Planet;
@@ -37,6 +38,10 @@ public final class ServerConfig {
     public final RenderingPropickConfig blueSteelPropickConfig;
     public final RenderingPropickConfig redSteelPropickConfig;
 
+    public final ForgeConfigSpec.IntValue CHAMELEON_SPRAY_CAN_CAPACITY;
+    public final ForgeConfigSpec.IntValue CHAMELEON_SPRAY_CAN_COST_PER_OPERATION;
+    public final ForgeConfigSpec.DoubleValue CHAMELEON_SPRAY_CAN_BULK_MULTIPLIER;
+
     public final ForgeConfigSpec.IntValue HARVEST_BASKET_RANGE;
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
@@ -47,6 +52,12 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue sandDecumulateChance;
     public final ForgeConfigSpec.BooleanValue enableSnowCorrection;
     public final ForgeConfigSpec.IntValue snowMaxAccumulationOnUpdate;
+    public final ForgeConfigSpec.BooleanValue enableTFGFoodDebuffs;
+    public final ForgeConfigSpec.BooleanValue enableTFGFoodBuffs;
+
+    public final ForgeConfigSpec.BooleanValue enableBeneathMiningRestrictions;
+    public final ForgeConfigSpec.IntValue disabledBeneathMiningYLevel;
+    public final ForgeConfigSpec.BooleanValue enableHotPlanetMiningRestrictions;
 
     // Atmosphere system config
     public final ForgeConfigSpec.IntValue atmosphereMaxHorizontalDimension;
@@ -134,6 +145,40 @@ public final class ServerConfig {
                 .define("enableSnowCorrection", true);
         snowMaxAccumulationOnUpdate = builder
                 .comment("The maximum amount of snow update to apply for each correction tick")
+                .defineInRange("snowMaxAccumulationOnUpdate", FMLEnvironment.dist.isClient() ? 256 : 0, 0, Integer.MAX_VALUE);
+
+        builder.pop().push("tfg_food_effects");
+        enableTFGFoodDebuffs = builder
+                .comment("Enables TFG food debuff effects. Allows receiving harmful effects from contaminants like Toxins, or transient nutrients like Freezing.")
+                .define("enableTFGFoodDebuffs", true);
+        enableTFGFoodBuffs = builder
+                .comment("Enables TFG food buff effects. Allows receiving helpful effects from nutrients like Fruits, or transient nutrients like Fulfilling.")
+                .define("enableTFGFoodBuffs", true);
+
+        builder.pop().push("mining_restrictions");
+        enableBeneathMiningRestrictions = builder
+                .comment("Enables restrictions on automatic mining machines in the Beneath.")
+                .define("enableBeneathMiningRestrictions", true);
+        disabledBeneathMiningYLevel = builder
+                .comment("Below this Y level, single block gregtech miners and create contraptions cannot mine ores.")
+                .defineInRange("disabledBeneathMiningYLevel", 80, 1, Integer.MAX_VALUE);
+        enableHotPlanetMiningRestrictions = builder
+                .comment("Enables restrictions on automatic mining machines on hot planets.")
+                .define("enableHotPlanetMiningRestrictions", true);
+
+        builder.pop().push("chameleon_spray_can");
+        CHAMELEON_SPRAY_CAN_CAPACITY = builder
+                .comment("\nThe maximum Prismatic Paint capacity of the Chameleon Spray Can (in mB). Default: 8000")
+                .defineInRange("chameleonSprayCanCapacity", 2000, 1, Integer.MAX_VALUE);
+
+        CHAMELEON_SPRAY_CAN_COST_PER_OPERATION = builder
+                .comment("\nThe amount of Prismatic Paint consumed per block/entity recolored (in mB). Default: 1")
+                .defineInRange("chameleonSprayCanCostPerOperation", 1, 0, Integer.MAX_VALUE);
+
+        CHAMELEON_SPRAY_CAN_BULK_MULTIPLIER = builder
+                .comment("\nThe fluid consumption multiplier applied when chain-painting/bulk-painting blocks (e.g. 0.85 equals a 15% discount). Set to 1.0 to disable discounts.")
+                .defineInRange("chameleonSprayCanBulkMultiplier", 1.0, 0.0, 10.0);
+
                 .defineInRange("snowMaxAccumulationOnUpdate", 256, 1, Integer.MAX_VALUE);
 
         builder.pop().push("atmosphere_system");

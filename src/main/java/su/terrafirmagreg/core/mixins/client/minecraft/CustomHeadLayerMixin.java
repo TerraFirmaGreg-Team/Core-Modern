@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 
-import su.terrafirmagreg.core.common.data.TFGItems;
+import su.terrafirmagreg.core.common.data.items.TFGItems;
 
 /**
  * Vanilla head-item layer draws the snorkel as a flat sprite; we use {@link su.terrafirmagreg.core.client.wearable.TFGWearableEquipmentLayer} instead.

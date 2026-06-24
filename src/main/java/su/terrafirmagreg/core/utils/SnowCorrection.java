@@ -61,10 +61,16 @@ public class SnowCorrection {
     private static final int MAX_UPDATES_PER_TICK = TFGConfig.SERVER.snowMaxAccumulationOnUpdate.get();
 
     public static void onTickChunk(ServerLevel level, ChunkAccess chunk) {
+        if (MAX_UPDATES_PER_TICK <= 0) {
+            return;
+        }
+        if (!(chunk instanceof LevelChunk levelChunk)) {
+            return;
+        }
+
         final WorldTracker tracker = WorldTracker.get(level);
         final ClimateModel model = tracker.getClimateModel();
         final ChunkPos chunkPos = chunk.getPos();
-        final LevelChunk levelChunk = level.getChunk(chunkPos.x, chunkPos.z);
         final ChunkData data = ChunkData.get(levelChunk);
         final long currentTick = Calendars.SERVER.getTicks();
         final long currentCalendarTick = Calendars.SERVER.getCalendarTicks();

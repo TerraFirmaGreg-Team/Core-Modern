@@ -64,12 +64,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import earth.terrarium.adastra.common.registry.ModBlocks;
@@ -521,7 +523,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGTRecipeTypes.GROWTH_CHAMBER_RECIPES)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks_Casings.BIOCULTURE_CASING)
             .tooltips(Component.translatable("tfg.tooltip.machine.parallel"),
                     Component.translatable("tfg.tooltip.growth_chamber"))
@@ -684,7 +686,7 @@ public class TFGMultiMachines {
             .allowFlip(false)
             .allowExtendedFacing(false)
             .recipeType(TFGTRecipeTypes.HYDROPONICS_FACILITY_RECIPES)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks_Casings.EGH_CASING)
             .model(GTMachineModels.createWorkableCasingMachineModel(
                             TFGCore.id( "block/casings/machine_casing_egh"),
@@ -731,7 +733,7 @@ public class TFGMultiMachines {
             .allowFlip(false)
             .allowExtendedFacing(false)
             .recipeType(TFGTRecipeTypes.PISCICULTURE_FISHERY_RECIPES)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE, GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks_Casings.MACHINE_CASING_ALUMINIUM_PLATED_STEEL)
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .workableCasingModel(
@@ -1266,18 +1268,54 @@ public class TFGMultiMachines {
                     .where('S', controller(blocks(definition.get())))
                     .where("A", Predicates.any())
                     .where("B", Predicates.blocks(GTBlocks.STEEL_HULL.get()))
-                    .where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK,
-                            ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
-                    .where("D", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "fences/wooden")))
-                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "fence_gates")))))
+					.where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", "stone_bricks"))))
+                    .where("D", Predicates.blockTag(Tags.Blocks.FENCES)
+                            .or(Predicates.blockTag(Tags.Blocks.FENCE_GATES))
+							.or(Predicates.blockTag(BlockTags.WALLS)))
                     .where("E", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                    .where("F", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "dirt")))
-                            .or(Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("tfc", "grass")))))
+                    .where("F", Predicates.blockTag(BlockTags.DIRT)
+                            .or(Predicates.blockTag(TFCTags.Blocks.GRASS)))
                     .where("G", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, false, false)))
+                    .where("H", Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .build())
+            .register();
+
+    public static final MultiblockMachineDefinition ORE_PROCESSING_BENEATH = REGISTRATE
+            .multiblock("ore_processing_beneath", OreProcessingBeneathMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.ORE_PROCESSING_GAS)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, OreProcessingBeneathMachine::recipeModifier)
+            .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.ore_proc_beneath_1"),
+                    Component.translatable("tfg.tooltip.machine.ore_proc_beneath_2"),
+                    Component.translatable("tfg.tooltip.machine.two_energy_hatches"))
+            .workableCasingModel(
+                    GTCEu.id("block/casings/gcym/industrial_steam_casing"),
+                    GTCEu.id("block/machines/electromagnetic_separator"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAAAA", "BCCCB", "BCCCB", "BCCCB", "BCCCB", "BACAB", "AAAAA")
+                    .aisle("ADDDA", "C#F#C", "C#F#C", "C#F#C", "C#F#C", "A#F#A", "AAAAA")
+                    .aisle("ADDDA", "CFGFC", "CFGFC", "CFGFC", "CFGFC", "AFGFA", "AAHAA")
+                    .aisle("AAAAA", "BAFAB", "B#F#B", "B#F#B", "B#F#B", "B#F#B", "AAAAA")
+                    .aisle(" AAA ", " AXA ", "     ", "     ", "     ", "     ", " AAA ")
+                    .where("X", Predicates.controller(Predicates.blocks(definition.get())))
+                    .where("A", Predicates.blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(6)
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(2).setPreviewCount(2))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
                             .or(Predicates.autoAbilities(true, false, false))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
-                    .where("H", Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .where("B", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where("C", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
+                    .where("D", Predicates.blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
+                    .where("#", Predicates.air())
+                    .where(" ", Predicates.any())
+                    .where("F", Predicates.frames(GTMaterials.Bronze))
+                    .where("G", Predicates.blocks(GTBlocks.FIREBOX_BRONZE.get()))
+                    .where("H", Predicates.abilities(PartAbility.MUFFLER).setExactLimit(1))
                     .build())
             .register();
 

@@ -1,3 +1,11 @@
 {
-  "parent": "tfg:block/wood/barrel/beech"
+  "parent": "tfg:block/wood/barrel/beech",
+  "overrides": [
+    {
+      "model": "tfg:block/wood/barrel_sealed/beech",
+      "predicate": {
+        "tfc:sealed": 1.0
+      }
+    }
+  ]
 }

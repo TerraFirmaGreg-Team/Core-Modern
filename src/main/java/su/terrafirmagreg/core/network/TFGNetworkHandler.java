@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.network;
 
+import java.util.Optional;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -10,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -65,10 +68,10 @@ public class TFGNetworkHandler {
                 FuelSyncPacket::handle);
         INSTANCE.registerMessage(
                 id(),
-                NegativeNutrientsPacket.class,
-                NegativeNutrientsPacket::encode,
-                NegativeNutrientsPacket::decode,
-                NegativeNutrientsPacket::handle);
+                ExtendedNutrientsPacket.class,
+                ExtendedNutrientsPacket::encode,
+                ExtendedNutrientsPacket::decode,
+                ExtendedNutrientsPacket::handle);
         INSTANCE.registerMessage(
                 id(),
                 RequestTeamNutritionPacket.class,
@@ -81,6 +84,20 @@ public class TFGNetworkHandler {
                 SyncTeamNutritionPacket::encode,
                 SyncTeamNutritionPacket::decode,
                 SyncTeamNutritionPacket::handle);
+        INSTANCE.registerMessage(
+                id(),
+                SelectColorPacket.class,
+                SelectColorPacket::encode,
+                SelectColorPacket::decode,
+                SelectColorPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(
+                id(),
+                SelectChromaticCodePacket.class,
+                SelectChromaticCodePacket::encode,
+                SelectChromaticCodePacket::decode,
+                SelectChromaticCodePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(
                 id(),
                 EnvironmentQueryPacket.class,

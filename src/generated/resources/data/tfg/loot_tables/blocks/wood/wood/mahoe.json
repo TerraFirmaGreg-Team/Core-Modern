@@ -10,10 +10,52 @@
       ],
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "tfg:wood/wood/mahoe"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "tag": "tfc:hammers"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "add": false,
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "max": 4.0,
+                    "min": 1.0
+                  },
+                  "function": "minecraft:set_count"
+                }
+              ],
+              "name": "minecraft:stick"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "tfg:wood/wood/mahoe",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "branch_direction": "none"
+                  }
+                }
+              ],
+              "name": "tfg:wood/wood/mahoe"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "tfg:wood/log/mahoe"
+            }
+          ]
         }
       ],
+      "name": "loot_pool",
       "rolls": 1.0
     }
   ],
