@@ -7,6 +7,7 @@ import java.util.Set;
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.pathfinder.FlyNodeEvaluator;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathFinder;
 
+import su.terrafirmagreg.core.common.environment.DimEnvManager;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
 import su.terrafirmagreg.tfcambiental.capability.TemperatureCapability;
@@ -247,12 +250,20 @@ public interface EnvironmentalTemperatureProvider {
         }).orElse(TempModifier.none());
     }
 
+    static Optional<Float> getSpaceHeaterTemperature(Player player) {
+        DimEnvManager manager = EnvironmentSystem.getManager((ServerLevel) player.level());
+        return manager.getTargetTemperature(player.blockPosition());
+    }
+
     static void evaluateAll(Player player, TempModifierStorage storage) {
         evaluateAll(player, storage, false);
     }
 
     static void evaluateAll(Player player, TempModifierStorage storage, boolean nether) {
-        if (nether) {
+        Optional<Float> spaceHeaterTemperature = getSpaceHeaterTemperature(player);
+        if (spaceHeaterTemperature.isPresent()) {
+            storage.add(new TempModifier(spaceHeaterTemperature.get(), 10f));
+        } else if (nether) {
             for (EnvironmentalTemperatureProvider provider : NETHER_PROVIDERS) {
                 storage.add(provider.getModifier(player));
             }
