@@ -103,6 +103,26 @@ public final class EnvironmentSystem {
     }
 
     /**
+     * Get a position's target temperature from a machine bubble (server-side only).
+     *
+     * @param level The level to check in
+     * @param pos The position to check
+     * @return true if the position has safe temperature
+     */
+    public static Optional<Float> getTargetTemperature(Level level, BlockPos pos) {
+        if (!(level instanceof ServerLevel)) {
+            return Optional.empty();
+        }
+
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager == null) {
+            return Optional.empty();
+        }
+
+        return manager.getTargetTemperature(pos);
+    }
+
+    /**
      * Checks if a position has safe pressure (server-side only).
      * True if inside a sealed, active pressure room shielding from dangerous ambient pressure
      * (e.g. Europa ocean floor).

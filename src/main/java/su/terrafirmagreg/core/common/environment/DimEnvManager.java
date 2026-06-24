@@ -447,6 +447,30 @@ public class DimEnvManager extends SavedData {
         return false;
     }
 
+    /**
+     * Get a position's target temperature from a machine bubble.
+     */
+    public Optional<Float> getTargetTemperature(BlockPos pos) {
+        if (temperatureIndex.isEmpty())
+            return Optional.empty();
+
+        ProfilerFiller profiler = level.getProfiler();
+        profiler.push("tfg.environment.getTemperature");
+        ChunkPos chunkPos = new ChunkPos(pos);
+        Set<TemperatureProvider> providerSet = temperatureIndex.get(chunkPos);
+        if (providerSet != null) {
+            for (TemperatureProvider provider : providerSet) {
+                Optional<Float> targetTemperature = provider.getTargetTemperature(pos);
+                if (targetTemperature.isPresent()) {
+                    profiler.pop();
+                    return targetTemperature;
+                }
+            }
+        }
+        profiler.pop();
+        return Optional.empty();
+    }
+
     // ==================== Event Handling ====================
 
     /**

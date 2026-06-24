@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.common.environment;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -45,6 +46,24 @@ public class TemperatureProvider {
 
         // Machine is either working or unloaded (assumed working)
         return machinePos.distSqr(pos) <= radiusSq;
+    }
+
+    /**
+     * Checks the target temperature this provider supplies to the given position.
+     * Works even when the machine is unloaded — assumes working when unloaded.
+     */
+    public Optional<Float> getTargetTemperature(BlockPos pos) {
+        if (attachedMachine != null && !attachedMachine.isWorking()) {
+            return Optional.empty();
+        }
+
+        // Machine is either working or unloaded (assumed working)
+        double distance = machinePos.distSqr(pos);
+        if (distance <= radiusSq) {
+            return Optional.of(10 * (2 - (float) distance / radiusSq));
+        } else {
+            return Optional.empty();
+        }
     }
 
     public boolean isMachineLoaded() {
