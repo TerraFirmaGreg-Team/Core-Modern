@@ -50,12 +50,43 @@ public class CustomSpawnHelper {
         });
     }
 
+    /** When set (e.g. after TFCGenViewer preview Save), spawn uses world {@link net.dries007.tfc.world.settings.Settings} center/radius without climate retries. */
+    public static final String VIEWER_SPAWN_ID = "tfcgenviewer";
+
     public static CustomSpawnCondition getFromConfig() {
-        return CUSTOM_SPAWN_CONDITIONS.get(TFGConfig.COMMON.NEW_WORLD_SPAWN.get());
+        return CUSTOM_SPAWN_CONDITIONS.getOrDefault(TFGConfig.COMMON.NEW_WORLD_SPAWN.get(), DEFAULT_SPAWN);
     }
 
     public static void resetConfigValue() {
         TFGConfig.COMMON.NEW_WORLD_SPAWN.set(DEFAULT_SPAWN.id);
+    }
+
+    private static boolean isNewWorldSpawnViewerPreset() {
+        return VIEWER_SPAWN_ID.equals(TFGConfig.COMMON.NEW_WORLD_SPAWN.get());
+    }
+
+    /**
+     * Value for the create-world {@link net.minecraft.client.gui.components.CycleButton}: {@link #VIEWER_SPAWN} is not in
+     * {@link #CREATE_WORLD_SPAWN_CYCLE_VALUES}, so when config is viewer-only we use {@link #DEFAULT_SPAWN} as internal placeholder.
+     */
+    public static CustomSpawnCondition createWorldSpawnCycleButtonValue() {
+        return isNewWorldSpawnViewerPreset() ? DEFAULT_SPAWN : getFromConfig();
+    }
+
+    /** Text for the create-world spawn cycle button (keys under {@code tfg.gui.spawn_condition}); no client-only types. */
+    public static Component createWorldSpawnCycleLabel(CustomSpawnCondition s) {
+        if (isNewWorldSpawnViewerPreset() && DEFAULT_SPAWN.equals(s)) {
+            return Component.translatable("tfg.gui.spawn_condition.tfcgenviewer");
+        }
+        return Component.translatable("tfg.gui.spawn_condition." + s.id()).append(" ").append(s.difficulty());
+    }
+
+    /** Tooltip body for that button; wrap with {@link net.minecraft.client.gui.components.Tooltip#create} on the client. */
+    public static Component createWorldSpawnTooltipText(CustomSpawnCondition condition) {
+        if (isNewWorldSpawnViewerPreset()) {
+            return Component.translatable("tfg.gui.spawn_condition.tooltip.tfcgenviewer");
+        }
+        return Component.translatable("tfg.gui.spawn_condition.tooltip." + condition.id());
     }
 
     /// Outputs a list with
@@ -202,6 +233,16 @@ public class CustomSpawnHelper {
             Level.OVERWORLD,
             SPAWN_DIFFICULTIES.get("normal"));
 
+    public static final CustomSpawnCondition VIEWER_SPAWN = new CustomSpawnCondition(
+            VIEWER_SPAWN_ID,
+            0,
+            0,
+            1,
+            new float[] { -20f, 20f },
+            new float[] { 0f, 400f },
+            Level.OVERWORLD,
+            Component.empty());
+
     /**
      * Registers a new CustomSpawnCondition in the CUSTOM_SPAWN_CONDITIONS map.
      * @param condition The CustomSpawnCondition to register.
@@ -212,6 +253,7 @@ public class CustomSpawnHelper {
 
     static {
         initNewType(DEFAULT_SPAWN);
+        initNewType(VIEWER_SPAWN);
         initNewType(TEMPERATE_SPAWN);
         initNewType(TROPICAL_SPAWN);
         initNewType(TUNDRA_SPAWN);
@@ -219,6 +261,22 @@ public class CustomSpawnHelper {
         initNewType(DESERT_SPAWN);
         initNewType(BENEATH_SPAWN);
     }
+
+    /**
+     * Presets offered on the create-world spawn {@link net.minecraft.client.gui.components.CycleButton}.
+     * {@link #VIEWER_SPAWN} is excluded: it is applied only when saving spawn in TFCGenViewer.
+     * <p>
+     * When adding a new preset: register with {@link #initNewType} in the static block and append the same
+     * constant here in the desired cycle order (never add {@link #VIEWER_SPAWN}).
+     */
+    public static final List<CustomSpawnCondition> CREATE_WORLD_SPAWN_CYCLE_VALUES = List.of(
+            DEFAULT_SPAWN,
+            TEMPERATE_SPAWN,
+            TROPICAL_SPAWN,
+            TUNDRA_SPAWN,
+            POLAR_SPAWN,
+            DESERT_SPAWN,
+            BENEATH_SPAWN);
 
     /// Holds spawn conditions for a particular custom world spawn
     /// @param id string used for mapping
