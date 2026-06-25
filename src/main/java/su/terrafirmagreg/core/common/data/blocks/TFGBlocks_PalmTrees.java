@@ -94,6 +94,8 @@ public class TFGBlocks_PalmTrees {
                     prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/square_palm_fruit")
                             .texture("0", TFGCore.id("block/palm_tree/coconut_fruit_green"))))
             .tag(TFGTags.Blocks.FALLING_CONCUSSIVE, TFCTags.Blocks.TOUGHNESS_1)
+            //Not loot table since drops come from the decaying property.
+            .loot((provider, block) -> provider.add(block, LootTable.lootTable()))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .item(BlockItem::new)
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
@@ -142,6 +144,8 @@ public class TFGBlocks_PalmTrees {
                         prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/square_palm_fruit")
                                 .texture("0", TFGCore.id("block/palm_tree/coconut_fruit_brown"))))
                 .tag(TFGTags.Blocks.FALLING_CONCUSSIVE, TFCTags.Blocks.TOUGHNESS_1)
+                //Not loot table since drops come from the decaying property.
+                .loot((provider, block) -> provider.add(block, LootTable.lootTable()))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .item(BlockItem::new)
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())

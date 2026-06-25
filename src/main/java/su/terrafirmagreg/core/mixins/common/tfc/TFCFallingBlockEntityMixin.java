@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.gregtechceu.gtceu.common.data.GTSoundEntries;
+
 import net.dries007.tfc.common.TFCEffects;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.misc.TFCFallingBlockEntity;
@@ -109,6 +111,10 @@ public class TFCFallingBlockEntityMixin {
                             if (helmet.isEmpty() || armorValue < 1) {
                                 player.addEffect(new MobEffectInstance(TFCEffects.PINNED.get(), 60, 0, false, false));
                                 player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 1, false, false));
+
+                                if (player.getRandom().nextFloat() < 0.01f) {
+                                    entity.level().playSound(null, e.getX(), e.getY(), e.getZ(), GTSoundEntries.METAL_PIPE.getMainEvent(), SoundSource.AMBIENT, 1.0f, 1.0f);
+                                }
                             }
                         }
 

@@ -96,9 +96,9 @@ public class CoconutBlock extends DecayingBlock implements IFallableBlock, IFlui
         if (!player.getItemInHand(player.getUsedItemHand()).isEmpty())
             return InteractionResult.FAIL;
 
-        // Using removeBlock instead of getDrops to keep decay timer.
+        // Using destroyBlock instead of removeBlock to ensure the loot table (and decay) is handled correctly.
         if (level instanceof ServerLevel serverLevel) {
-            level.removeBlock(pos, false);
+            level.destroyBlock(pos, true, player);
 
             level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 0.5f, 2.0f);
 
@@ -133,6 +133,10 @@ public class CoconutBlock extends DecayingBlock implements IFallableBlock, IFlui
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         FluidHelpers.tickFluid(level, currentPos, state);
-        return state.canSurvive(level, currentPos) ? super.updateShape(state, facing, facingState, level, currentPos, facingPos) : state.getFluidState().createLegacyBlock();
+        if (!state.canSurvive(level, currentPos)) {
+            level.destroyBlock(currentPos, true);
+            return state.getFluidState().createLegacyBlock();
+        }
+        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
     }
 }
