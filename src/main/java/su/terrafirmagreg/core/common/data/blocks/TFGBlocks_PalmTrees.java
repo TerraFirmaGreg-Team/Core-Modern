@@ -11,21 +11,26 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
+import net.dries007.tfc.common.blocks.GroundcoverBlock;
+import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.CoconutBlock;
@@ -44,14 +49,44 @@ public class TFGBlocks_PalmTrees {
         PalmTrees.init();
     }
 
+    // Palm Husk
+    public static final BlockEntry<GroundcoverBlock> PALM_HUSK = TFGCore.REGISTRATE.block("groundcover/palm_husk", p -> GroundcoverBlock.twig(ExtendedProperties.of(p)))
+            .properties(p -> p.mapColor(MapColor.DIRT)
+                    .pushReaction(PushReaction.DESTROY)
+                    .instabreak()
+                    .strength(0.05F, 0.0F)
+                    .sound(SoundType.SPORE_BLOSSOM)
+                    .offsetType(BlockBehaviour.OffsetType.XZ)
+                    .dynamicShape()
+                    .noCollission()
+                    .noOcclusion())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                    prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/palm_husk")
+                            .texture("0", TFGCore.id("block/palm_tree/palm_husk"))))
+            .tag(TFCTags.Blocks.TOUGHNESS_1)
+            .loot((provider, block) -> provider.add(block, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .setRolls(UniformGenerator.between(1.0F, 1.0F))
+                            .add(AlternativesEntry.alternatives(
+                                    LootItem.lootTableItem(block)
+                                            .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFCTags.Items.KNIVES))),
+                                    LootItem.lootTableItem(TFCItems.STRAW.get())
+                                            .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))))))))
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .item(BlockItem::new)
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .build()
+            .register();
+
+    // Green Coconut
     public static final BlockEntry<CoconutBlock> GREEN_COCONUT = TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_green", p -> new CoconutBlock(ExtendedProperties.of(p)
             .blockEntity(TFCBlockEntities.DECAYING)
-            .serverTicks(DecayingBlockEntity::serverTick), TFGBlocks_PalmTrees.PALM_FRUITS.get(PalmTrees.COCONUT), CoconutBlock.DEFAULT_SHAPE))
+            .serverTicks(DecayingBlockEntity::serverTick), PALM_HUSK, CoconutBlock.DEFAULT_SHAPE))
             .properties(p -> p.mapColor(MapColor.DIRT)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
                     .pushReaction(PushReaction.DESTROY)
                     .instabreak()
-                    .strength(0.5f)
+                    .strength(0.05F, 0.0F)
                     .dynamicShape()
                     .sound(SoundType.BAMBOO)
                     .noOcclusion())
@@ -65,10 +100,12 @@ public class TFGBlocks_PalmTrees {
             .build()
             .register();
 
+    // Loop to register heads, clusters, and fruits for each PalmTrees entry.
     static {
         for (PalmTrees tree : PalmTrees.values()) {
             String name = tree.getSerializedName();
 
+            // Palm Heads
             PALM_HEADS.put(tree, TFGCore.REGISTRATE.block("palm_tree/" + name + "_tree_head",
                     p -> new PalmHeadBlock(p, tree))
                     .properties(p -> p.mapColor(MapColor.WOOD)
@@ -89,14 +126,15 @@ public class TFGBlocks_PalmTrees {
                     .register());
         }
 
+        // Brown Coconut
         PALM_FRUITS.put(PalmTrees.COCONUT, TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_brown", p -> new CoconutBlock(ExtendedProperties.of(p)
                 .blockEntity(TFCBlockEntities.DECAYING)
-                .serverTicks(DecayingBlockEntity::serverTick), () -> Blocks.AIR, CoconutBlock.DEFAULT_SHAPE))
+                .serverTicks(DecayingBlockEntity::serverTick), PALM_HUSK, CoconutBlock.DEFAULT_SHAPE))
                 .properties(p -> p.mapColor(MapColor.DIRT)
                         .offsetType(BlockBehaviour.OffsetType.XZ)
                         .pushReaction(PushReaction.DESTROY)
                         .instabreak()
-                        .strength(0.5f)
+                        .strength(0.05F, 0.0F)
                         .dynamicShape()
                         .sound(SoundType.BAMBOO)
                         .noOcclusion())
@@ -110,10 +148,11 @@ public class TFGBlocks_PalmTrees {
                 .build()
                 .register());
 
+        // Coconut Cluster
         PALM_CLUSTERS.put(PalmTrees.COCONUT, TFGCore.REGISTRATE.block("palm_tree/coconut_tree_cluster", p -> new CoconutClusterBlock(p, PalmTrees.COCONUT))
                 .properties(p -> p.mapColor(MapColor.PLANT)
                         .randomTicks()
-                        .strength(0.5f)
+                        .strength(0.5f, 0.0F)
                         .sound(SoundType.BAMBOO)
                         .pushReaction(PushReaction.DESTROY)
                         .noOcclusion())
@@ -136,7 +175,6 @@ public class TFGBlocks_PalmTrees {
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1.0F))
-                        // Java is so beautiful sometimes T.T
                         .add(LootItem.lootTableItem(TFGBlocks_PalmTrees.GREEN_COCONUT.get())
                                 .when(AnyOfCondition.anyOf(
                                         LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)

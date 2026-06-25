@@ -1,25 +1,19 @@
 package su.terrafirmagreg.core.common.block;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
-import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
 import net.dries007.tfc.common.blocks.rock.IFallableBlock;
-import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
-import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
-import net.dries007.tfc.util.calendar.Calendars;
-import net.dries007.tfc.util.calendar.ICalendar;
-import net.dries007.tfc.util.calendar.Month;
-import net.dries007.tfc.util.climate.Climate;
-import net.dries007.tfc.util.climate.ClimateRange;
+import net.dries007.tfc.common.fluids.FluidHelpers;
+import net.dries007.tfc.common.fluids.FluidProperty;
+import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -33,25 +27,59 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import su.terrafirmagreg.core.common.data.PalmTrees;
-
 @SuppressWarnings("deprecation")
-public class CoconutBlock extends DecayingBlock implements HoeOverlayBlock, IFallableBlock {
+public class CoconutBlock extends DecayingBlock implements IFallableBlock, IFluidLoggable {
 
+    public static final FluidProperty FLUID = TFCBlockStateProperties.WATER;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 5.5, 11.0);
 
     private final VoxelShape shape;
 
     public CoconutBlock(ExtendedProperties properties, Supplier<? extends Block> rotted, VoxelShape shape) {
-        super(properties, rotted);
+        super(properties.flammable(60, 30), rotted);
         this.shape = shape;
+
+        registerDefaultState(getStateDefinition().any().setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
+    }
+
+    @Override
+    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+        if (fluid instanceof FlowingFluid && !getFluidProperty().canContain(fluid)) {
+            return true;
+        }
+        return IFluidLoggable.super.canPlaceLiquid(level, pos, state, fluid);
+    }
+
+    @Override
+    public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidStateIn) {
+        if (fluidStateIn.getType() instanceof FlowingFluid && !getFluidProperty().canContain(fluidStateIn.getType())) {
+            level.destroyBlock(pos, true);
+            level.setBlock(pos, fluidStateIn.createLegacyBlock(), 2);
+            return true;
+        }
+        return IFluidLoggable.super.placeLiquid(level, pos, state, fluidStateIn);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public FluidState getFluidState(BlockState state) {
+        return IFluidLoggable.super.getFluidLoggedState(state);
+    }
+
+    @Override
+    public FluidProperty getFluidProperty() {
+        return FLUID;
     }
 
     @Override
@@ -68,29 +96,16 @@ public class CoconutBlock extends DecayingBlock implements HoeOverlayBlock, IFal
         if (!player.getItemInHand(player.getUsedItemHand()).isEmpty())
             return InteractionResult.FAIL;
 
-        if (!level.isClientSide) {
+        // Using removeBlock instead of getDrops to keep decay timer.
+        if (level instanceof ServerLevel serverLevel) {
             level.removeBlock(pos, false);
 
             level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 0.5f, 2.0f);
 
-            if (level instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
-            }
+            serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
+
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
-    }
-
-    @Override
-    public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, List<Component> text, boolean isDebug) {
-        final ClimateRange range = PalmTrees.COCONUT.getClimateRange().get();
-        final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
-        text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
-        text.add(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
-
-        var calendar = Calendars.get(level);
-        Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
-        Lifecycle lifecycle = PalmTrees.COCONUT.getStages()[month.ordinal()];
-        text.add(Component.translatable("tooltip.tfg.palm_head." + lifecycle.getSerializedName()));
     }
 
     @Override
@@ -110,10 +125,14 @@ public class CoconutBlock extends DecayingBlock implements HoeOverlayBlock, IFal
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        if (!state.canSurvive(level, pos)) {
-            return Blocks.AIR.defaultBlockState();
-        }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(getFluidProperty());
+    }
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+        FluidHelpers.tickFluid(level, currentPos, state);
+        return state.canSurvive(level, currentPos) ? super.updateShape(state, facing, facingState, level, currentPos, facingPos) : state.getFluidState().createLegacyBlock();
     }
 }

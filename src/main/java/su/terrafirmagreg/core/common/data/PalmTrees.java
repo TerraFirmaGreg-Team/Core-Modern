@@ -16,6 +16,12 @@ import lombok.Getter;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
+/**
+ * Enum of palm trees.
+ * Palm trees only accept {@link Lifecycle}'s of FRUITING and DORMANT.
+ * FRUITING will determine which months will produce fruit clusters from their "head" blocks.
+ * This enum will automatically register Heads, Fruits, and Clusters
+ */
 public enum PalmTrees implements StringRepresentable {
     COCONUT(new Lifecycle[] {
             Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING,
@@ -26,6 +32,10 @@ public enum PalmTrees implements StringRepresentable {
     @Getter
     private final Lifecycle[] stages;
 
+    /**
+     * Creates a new palm tree.
+     * @param stages Lifecycle stages.
+     */
     PalmTrees(Lifecycle[] stages) {
         this.serializedName = name().toLowerCase(Locale.ROOT);
         this.stages = stages;

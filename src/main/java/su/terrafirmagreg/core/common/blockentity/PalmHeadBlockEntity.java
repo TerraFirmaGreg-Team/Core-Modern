@@ -24,15 +24,33 @@ import su.terrafirmagreg.core.common.block.CoconutClusterBlock;
 import su.terrafirmagreg.core.common.block.PalmHeadBlock;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 
+/**
+ * Generic block entity for palm tree heads.
+ */
 public class PalmHeadBlockEntity extends TickCounterBlockEntity {
 
     private final PalmTrees tree;
 
+    /**
+     * Creates a new PalmHeadBlockEntity.
+     * @param type Block entity type.
+     * @param pos Position.
+     * @param state Blockstate.
+     * @param tree The type of palm tree.
+     */
     public PalmHeadBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, PalmTrees tree) {
         super(type, pos, state);
         this.tree = tree;
     }
 
+    /**
+     * Server tick method for PalmHeadBlockEntity.
+     * If the palm head is natural, it will try to produce a cluster once a day.
+     * @param level Level.
+     * @param pos Position.
+     * @param state Blockstate.
+     * @param palmHead PalmHeadBlockEntity instance.
+     */
     public static void serverTick(Level level, BlockPos pos, BlockState state, PalmHeadBlockEntity palmHead) {
         if (state.hasProperty(PalmHeadBlock.NATURAL) && state.getValue(PalmHeadBlock.NATURAL)) {
             if (palmHead.getLastUpdateTick() == Integer.MIN_VALUE) {
@@ -47,6 +65,12 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
         }
     }
 
+    /**
+     * Checks if the climate is correct for the palm tree.
+     * @param level Level.
+     * @param pos Position.
+     * @return True if the climate is correct.
+     */
     protected boolean isCorrectClimate(Level level, BlockPos pos) {
         ClimateRange range = tree.getClimateRange().get();
         int hydration = (int) (Climate.getRainfall(level, pos) / 5);
@@ -54,8 +78,13 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
         return range.checkBoth(hydration, temperature, false);
     }
 
+    /**
+     * Tries to produce a fruit cluster on the palm head.
+     * @param level Level.
+     * @param pos Position.
+     */
     protected void tryProduceFruit(Level level, BlockPos pos) {
-        if (isProductionMonth()) {
+        if (isFruitingMonth()) {
             List<Direction> directions = new ArrayList<>(List.of(Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new)));
             Collections.shuffle(directions);
             for (Direction direction : directions) {
@@ -79,7 +108,11 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
         }
     }
 
-    protected boolean isProductionMonth() {
+    /**
+     * Checks if the current month is a fruiting month for the palm tree.
+     * @return True if the current month is a fruiting month.
+     */
+    protected boolean isFruitingMonth() {
         assert level != null;
         var calendar = Calendars.get(level);
         Month current = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
@@ -87,6 +120,10 @@ public class PalmHeadBlockEntity extends TickCounterBlockEntity {
         return tree.getStages()[current.ordinal()] == Lifecycle.FRUITING;
     }
 
+    /**
+     * Gets the fruit cluster block for the palm tree.
+     * @return The fruit cluster block.
+     */
     protected @NotNull Block getFruitBlock() {
         return tree.getFruitClusterBlock().get();
     }

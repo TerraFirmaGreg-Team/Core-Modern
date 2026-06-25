@@ -66,6 +66,9 @@ public class PalmHeadBlock extends Block implements EntityBlock, HoeOverlayBlock
 
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, List<Component> text, boolean isDebug) {
+        if (!state.getValue(NATURAL))
+            return;
+
         final ClimateRange range = tree.getClimateRange().get();
         final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
         text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));

@@ -52,12 +52,17 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import su.terrafirmagreg.core.common.blockentity.PalmClusterBlockEntity;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
+/**
+ * Represents the coconut cluster block.
+ * Special variation of cluster blocks that gives both green and brown coconuts.
+ */
 @SuppressWarnings("deprecation")
 public class CoconutClusterBlock extends HorizontalDirectionalBlock implements EntityBlock, IBushBlock, HoeOverlayBlock {
 
@@ -74,6 +79,11 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
     private final Block brownCoconut;
     private final Block greenCoconut;
 
+    /**
+     * Constructs a new coconut cluster block.
+     * @param properties Block properties.
+     * @param tree Palm tree type.
+     */
     public CoconutClusterBlock(Properties properties, PalmTrees tree) {
         super(properties);
         this.tree = tree;
@@ -86,11 +96,20 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
                 .setValue(NATURAL, false));
     }
 
+    /**
+     * Helper method to get the drop type, count and whether to spawn a falling coconut.
+     * @param age Age of the cluster.
+     * @return Drop type, count, whether to spawn a falling coconut, and whether the cluster is in its final age.
+     */
     private CoconutDrop getDropForAge(int age) {
         Block type;
         boolean spawnFallingCoconut = false;
         boolean finalAge = false;
         int count = switch (age) {
+            case 0, 1 -> {
+                type = greenCoconut;
+                yield 0;
+            }
             case 2, 3 -> {
                 type = greenCoconut;
                 yield 3;
@@ -153,6 +172,9 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
         return isValidAttachment(level, pos, state.getValue(FACING));
     }
 
+    /**
+     * Allows clusters to break when hit by projectiles except snowballs.
+     */
     @Override
     public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
 
@@ -169,10 +191,10 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
             level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 2.0f, 0.1f);
 
             if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
                 if (drop.count == 0) {
-                    serverLevel.sendParticles(ParticleTypes.SMOKE, pos.getX(), pos.getY(), pos.getZ(), 5, 0.1, 0.1, 0.1, 0.5);
+                    serverLevel.sendParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, 0.1, 0.1, 0.1, 0.2);
                 }
-                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX(), pos.getY(), pos.getZ(), 10, 0.1, 0.1, 0.1, 0.5);
             }
         }
     }
@@ -191,20 +213,17 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         CoconutDrop drop = getDropForAge(state.getValue(AGE));
-        if (!player.getItemInHand(player.getUsedItemHand()).isEmpty())
-            return InteractionResult.FAIL;
 
         if (drop.count != 0) {
-            if (!level.isClientSide) {
+            if (level instanceof ServerLevel serverLevel) {
                 level.removeBlock(pos, false);
-                popResource(level, pos, new ItemStack(drop.type, drop.count));
+                final BlockEntity entity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
+                getDrops(state, serverLevel, pos, entity, null, ItemStack.EMPTY).forEach(stack -> ItemHandlerHelper.giveItemToPlayer(player, stack));
 
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BAMBOO_HIT, SoundSource.AMBIENT, 0.5f, 2.0f);
 
-                if (level instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1,
-                            0.5);
-                }
+                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, drop.type.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
+
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -215,6 +234,9 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
 
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, List<Component> text, boolean isDebug) {
+        if (!state.getValue(NATURAL))
+            return;
+
         final ClimateRange range = tree.getClimateRange().get();
         final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
         text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
@@ -238,6 +260,9 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
         IBushBlock.randomTick(this, state, level, pos, random);
     }
 
+    /**
+     * Handles the growth and summoning of falling coconuts.
+     */
     @Override
     public void onUpdate(Level level, BlockPos pos, BlockState state) {
         if (!state.getValue(ATTACHED)) {
@@ -291,6 +316,11 @@ public class CoconutClusterBlock extends HorizontalDirectionalBlock implements E
         return TFGBlockEntities.PALM_CLUSTERS.get().create(pos, state);
     }
 
+    /**
+     * Event handler for spawning falling coconuts.
+     * Checks a 3x3 area below the cluster to spawn a falling coconut.
+     * If no valid positions are found, an item is dropped at the cluster pos.
+     */
     private void spawnFallingCoconut(ServerLevel level, BlockPos pos, Block block) {
         List<BlockPos> validPositions = new ArrayList<>();
         for (int x = -1; x <= 1; x++) {

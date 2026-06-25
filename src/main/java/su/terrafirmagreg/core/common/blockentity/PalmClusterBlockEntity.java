@@ -9,6 +9,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.block.CoconutClusterBlock;
 
+/**
+ * Generic palm cluster block entity.
+ * Extends TickCounterBlockEntity to handle ticking and day tracking.
+ */
 public class PalmClusterBlockEntity extends TickCounterBlockEntity {
 
     public PalmClusterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
