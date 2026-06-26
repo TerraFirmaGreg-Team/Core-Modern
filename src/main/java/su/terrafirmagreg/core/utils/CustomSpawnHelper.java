@@ -7,6 +7,8 @@ import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.BiomeSourceExtension;
+import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.QuartPos;
@@ -18,6 +20,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.ITeleporter;
 
 import earth.terrarium.adastra.api.planets.Planet;
@@ -50,12 +54,43 @@ public class CustomSpawnHelper {
         });
     }
 
+    /** When set (e.g. after TFCGenViewer preview Save), spawn uses world {@link net.dries007.tfc.world.settings.Settings} center/radius without climate retries. */
+    public static final String VIEWER_SPAWN_ID = "tfcgenviewer";
+
     public static CustomSpawnCondition getFromConfig() {
-        return CUSTOM_SPAWN_CONDITIONS.get(TFGConfig.COMMON.NEW_WORLD_SPAWN.get());
+        return CUSTOM_SPAWN_CONDITIONS.getOrDefault(TFGConfig.COMMON.NEW_WORLD_SPAWN.get(), DEFAULT_SPAWN);
     }
 
     public static void resetConfigValue() {
         TFGConfig.COMMON.NEW_WORLD_SPAWN.set(DEFAULT_SPAWN.id);
+    }
+
+    private static boolean isNewWorldSpawnViewerPreset() {
+        return VIEWER_SPAWN_ID.equals(TFGConfig.COMMON.NEW_WORLD_SPAWN.get());
+    }
+
+    /**
+     * Value for the create-world {@link net.minecraft.client.gui.components.CycleButton}: {@link #VIEWER_SPAWN} is not in
+     * {@link #CREATE_WORLD_SPAWN_CYCLE_VALUES}, so when config is viewer-only we use {@link #DEFAULT_SPAWN} as internal placeholder.
+     */
+    public static CustomSpawnCondition createWorldSpawnCycleButtonValue() {
+        return isNewWorldSpawnViewerPreset() ? DEFAULT_SPAWN : getFromConfig();
+    }
+
+    /** Text for the create-world spawn cycle button (keys under {@code tfg.gui.spawn_condition}); no client-only types. */
+    public static Component createWorldSpawnCycleLabel(CustomSpawnCondition s) {
+        if (isNewWorldSpawnViewerPreset() && DEFAULT_SPAWN.equals(s)) {
+            return Component.translatable("tfg.gui.spawn_condition.tfcgenviewer");
+        }
+        return Component.translatable("tfg.gui.spawn_condition." + s.id()).append(" ").append(s.difficulty());
+    }
+
+    /** Tooltip body for that button; wrap with {@link net.minecraft.client.gui.components.Tooltip#create} on the client. */
+    public static Component createWorldSpawnTooltipText(CustomSpawnCondition condition) {
+        if (isNewWorldSpawnViewerPreset()) {
+            return Component.translatable("tfg.gui.spawn_condition.tooltip.tfcgenviewer");
+        }
+        return Component.translatable("tfg.gui.spawn_condition.tooltip." + condition.id());
     }
 
     /// Outputs a list with
@@ -203,6 +238,20 @@ public class CustomSpawnHelper {
             SPAWN_DIFFICULTIES.get("normal"));
 
     /**
+     * Applied when TFCGenViewer Save runs with Spawn Overlay ON. Climate ranges are unused — viewer spawn skips
+     * {@link su.terrafirmagreg.core.mixins.common.tfc.ForgeEventHandlerMixin#onCreateWorldSpawn} climate matching.
+     */
+    public static final CustomSpawnCondition VIEWER_SPAWN = new CustomSpawnCondition(
+            VIEWER_SPAWN_ID,
+            0,
+            0,
+            1,
+            new float[] { -20f, 20f },
+            new float[] { 0f, 500f },
+            Level.OVERWORLD,
+            Component.empty());
+
+    /**
      * Registers a new CustomSpawnCondition in the CUSTOM_SPAWN_CONDITIONS map.
      * @param condition The CustomSpawnCondition to register.
      */
@@ -212,12 +261,61 @@ public class CustomSpawnHelper {
 
     static {
         initNewType(DEFAULT_SPAWN);
+        initNewType(VIEWER_SPAWN);
         initNewType(TEMPERATE_SPAWN);
         initNewType(TROPICAL_SPAWN);
         initNewType(TUNDRA_SPAWN);
         initNewType(POLAR_SPAWN);
         initNewType(DESERT_SPAWN);
         initNewType(BENEATH_SPAWN);
+    }
+
+    /**
+     * Presets offered on the create-world spawn {@link net.minecraft.client.gui.components.CycleButton}.
+     * {@link #VIEWER_SPAWN} is excluded: it is applied only when saving spawn in TFCGenViewer.
+     * <p>
+     * Ordered by difficulty: normal → easy → hard → extreme (see {@link #SPAWN_DIFFICULTIES} on each preset).
+     * When adding a new preset: register with {@link #initNewType} in the static block and append here
+     * (never add {@link #VIEWER_SPAWN}).
+     */
+    public static final List<CustomSpawnCondition> CREATE_WORLD_SPAWN_CYCLE_VALUES = List.of(
+            DEFAULT_SPAWN,
+            TEMPERATE_SPAWN,
+            TROPICAL_SPAWN,
+            TUNDRA_SPAWN,
+            DESERT_SPAWN,
+            POLAR_SPAWN,
+            BENEATH_SPAWN);
+
+    /**
+     * Client-only create-world spawn {@link net.minecraft.client.gui.components.CycleButton} wiring.
+     * Label/tooltip text stays on {@link CustomSpawnHelper}; this holds the widget ref for TFCGenViewer Save sync.
+     */
+    @OnlyIn(Dist.CLIENT)
+    public static final class CreateWorldSpawnCycle {
+
+        private static CycleButton<CustomSpawnCondition> cycleRef;
+
+        private CreateWorldSpawnCycle() {
+        }
+
+        public static void register(CycleButton<CustomSpawnCondition> button) {
+            cycleRef = button;
+        }
+
+        /** Sync widget from {@link TFGConfig}; safe to call from {@link net.minecraft.client.Minecraft#execute}. */
+        public static void syncFromConfig() {
+            var button = cycleRef;
+            if (button != null) {
+                CustomSpawnCondition condition = getFromConfig();
+                button.setValue(createWorldSpawnCycleButtonValue());
+                button.setTooltip(createTooltip(condition));
+            }
+        }
+
+        public static Tooltip createTooltip(CustomSpawnCondition condition) {
+            return Tooltip.create(createWorldSpawnTooltipText(condition));
+        }
     }
 
     /// Holds spawn conditions for a particular custom world spawn
