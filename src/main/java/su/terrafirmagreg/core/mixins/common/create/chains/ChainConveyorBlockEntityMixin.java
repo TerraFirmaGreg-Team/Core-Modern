@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.mixins.common.create.chains;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -33,6 +34,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.compat.create.ChainGTMaterialInterface;
 
+import javax.annotation.Nullable;
+
 @Mixin(value = ChainConveyorBlockEntity.class, remap = false)
 public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity
         implements TransformableBlockEntity, ChainGTMaterialInterface {
@@ -50,11 +53,14 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity
     @Unique
     public void addConnectionMaterial(BlockPos connection, Material chainMat) {
         BlockPos localTarget = connection.subtract(worldPosition);
-        tfg$connectionMaterialStats.put(localTarget, chainMat);
+		if (chainMat != MaterialStack.EMPTY.material()) {
+			tfg$connectionMaterialStats.put(localTarget, chainMat);
+		}
     }
 
     @Override
     @Unique
+	@Nullable
     public Material getConnectionMaterial(BlockPos connection) {
         return tfg$connectionMaterialStats.get(connection);
     }
