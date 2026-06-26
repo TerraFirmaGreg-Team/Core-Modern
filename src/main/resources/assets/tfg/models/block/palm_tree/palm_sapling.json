@@ -1,0 +1,5 @@
+{
+    "parent": "minecraft:block/cross",
+    "textures": {"cross": "#cross"},
+    "render_type": "minecraft:cutout"
+}

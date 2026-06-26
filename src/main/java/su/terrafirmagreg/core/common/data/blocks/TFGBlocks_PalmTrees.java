@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -41,6 +42,7 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.palmtree.CoconutClusterBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmFruitBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmHeadBlock;
+import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTrunkBlock;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.TFGTags;
@@ -50,6 +52,8 @@ public class TFGBlocks_PalmTrees {
     public static final Map<PalmTrees, BlockEntry<PalmHeadBlock>> PALM_HEADS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<CoconutClusterBlock>> PALM_CLUSTERS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<PalmFruitBlock>> PALM_FRUITS = new EnumMap<>(PalmTrees.class);
+    public static final Map<PalmTrees, BlockEntry<PalmTreeSaplingBlock>> PALM_SAPLINGS = new EnumMap<>(PalmTrees.class);
+    public static final Map<PalmTrees, BlockEntry<FlowerPotBlock>> POTTED_SAPLINGS = new EnumMap<>(PalmTrees.class);
 
     public static void init() {
         PalmTrees.init();
@@ -57,7 +61,7 @@ public class TFGBlocks_PalmTrees {
 
     public static final BlockEntry<PalmTrunkBlock> PALM_TRUNK = TFGCore.REGISTRATE.block("palm_tree/trunk", PalmTrunkBlock::new)
             .properties(p -> p.mapColor(MapColor.WOOD)
-                    .strength(2.0f)
+                    .strength(8.0f)
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.WOOD))
             .blockstate((ctx, prov) -> {
@@ -167,6 +171,29 @@ public class TFGBlocks_PalmTrees {
                     .item(BlockItem::new)
                     .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                     .build()
+                    .register());
+
+            // Palm Saplings
+            PALM_SAPLINGS.put(tree, TFGCore.REGISTRATE.block("palm_tree/" + name + "_sapling", p -> (PalmTreeSaplingBlock) tree.createSapling())
+                    .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                            prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/palm_sapling")
+                                    .texture("cross", TFGCore.id("block/palm_tree/" + name + "_sapling"))))
+                    .tag(BlockTags.SAPLINGS, TFCTags.Blocks.FRUIT_TREE_SAPLING)
+                    .item(BlockItem::new)
+                    .model((ctx, prov) -> prov.basicItem(TFGCore.id("palm_tree/" + name + "_sapling")))
+                    .tag(ItemTags.SAPLINGS)
+                    .build()
+                    .register());
+
+            // Potted Saplings
+            POTTED_SAPLINGS.put(tree, TFGCore.REGISTRATE.block("palm_tree/potted_" + name + "_sapling", p -> (FlowerPotBlock) tree.createPottedSapling())
+                    .blockstate((ctx, prov) -> {
+                        ResourceLocation saplingTex = TFGCore.id("block/palm_tree/" + name + "_sapling");
+                        prov.simpleBlock(ctx.getEntry(), prov.models().withExistingParent(ctx.getName(), "minecraft:block/flower_pot_cross")
+                                .texture("plant", saplingTex)
+                                .texture("dirt", ResourceLocation.fromNamespaceAndPath("tfc", "block/dirt/loam")));
+                    })
+                    .tag(BlockTags.FLOWER_POTS)
                     .register());
         }
 

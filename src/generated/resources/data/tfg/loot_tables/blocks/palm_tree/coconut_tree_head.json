@@ -3,15 +3,18 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tfg:palm_tree/coconut_tree_head"
+          "conditions": [
+            {
+              "condition": "minecraft:match_tool",
+              "predicate": {
+                "tag": "minecraft:axes"
+              }
+            }
+          ],
+          "name": "tfc:wood/log/palm"
         }
       ],
       "rolls": 1.0

@@ -117,6 +117,8 @@ public class TFGBlockEntities {
                 addValidBEBlock(TFCBlockEntities.DECAYING, TFGBlocks_PalmTrees.PALM_FRUITS.get(tree));
             }
 
+            addValidBEBlock(TFCBlockEntities.TICK_COUNTER, TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree));
+
             if (tree == PalmTrees.COCONUT) {
                 addValidBEBlock(TFCBlockEntities.DECAYING, TFGBlocks_PalmTrees.GREEN_COCONUT);
             }
