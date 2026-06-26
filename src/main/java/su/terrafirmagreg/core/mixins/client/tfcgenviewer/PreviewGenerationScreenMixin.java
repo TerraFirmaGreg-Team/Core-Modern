@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.world.level.levelgen.WorldOptions;
 
-import su.terrafirmagreg.core.client.TfgCreateWorldSpawnCycleBridge;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
@@ -62,7 +61,7 @@ public class PreviewGenerationScreenMixin {
             } else if (CustomSpawnHelper.VIEWER_SPAWN_ID.equals(TFGConfig.COMMON.NEW_WORLD_SPAWN.get())) {
                 TFGConfig.COMMON.NEW_WORLD_SPAWN.set(CustomSpawnHelper.DEFAULT_SPAWN.id());
             }
-            Minecraft.getInstance().execute(TfgCreateWorldSpawnCycleBridge::syncFromConfig);
+            Minecraft.getInstance().execute(CustomSpawnHelper.CreateWorldSpawnCycle::syncFromConfig);
         }
     }
 

@@ -7,6 +7,8 @@ import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.BiomeSourceExtension;
+import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.QuartPos;
@@ -18,6 +20,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.ITeleporter;
 
 import earth.terrarium.adastra.api.planets.Planet;
@@ -233,13 +237,17 @@ public class CustomSpawnHelper {
             Level.OVERWORLD,
             SPAWN_DIFFICULTIES.get("normal"));
 
+    /**
+     * Applied when TFCGenViewer Save runs with Spawn Overlay ON. Climate ranges are unused — viewer spawn skips
+     * {@link su.terrafirmagreg.core.mixins.common.tfc.ForgeEventHandlerMixin#onCreateWorldSpawn} climate matching.
+     */
     public static final CustomSpawnCondition VIEWER_SPAWN = new CustomSpawnCondition(
             VIEWER_SPAWN_ID,
             0,
             0,
             1,
             new float[] { -20f, 20f },
-            new float[] { 0f, 400f },
+            new float[] { 0f, 500f },
             Level.OVERWORLD,
             Component.empty());
 
@@ -266,17 +274,49 @@ public class CustomSpawnHelper {
      * Presets offered on the create-world spawn {@link net.minecraft.client.gui.components.CycleButton}.
      * {@link #VIEWER_SPAWN} is excluded: it is applied only when saving spawn in TFCGenViewer.
      * <p>
-     * When adding a new preset: register with {@link #initNewType} in the static block and append the same
-     * constant here in the desired cycle order (never add {@link #VIEWER_SPAWN}).
+     * Ordered by difficulty: normal → easy → hard → extreme (see {@link #SPAWN_DIFFICULTIES} on each preset).
+     * When adding a new preset: register with {@link #initNewType} in the static block and append here
+     * (never add {@link #VIEWER_SPAWN}).
      */
     public static final List<CustomSpawnCondition> CREATE_WORLD_SPAWN_CYCLE_VALUES = List.of(
             DEFAULT_SPAWN,
             TEMPERATE_SPAWN,
             TROPICAL_SPAWN,
             TUNDRA_SPAWN,
-            POLAR_SPAWN,
             DESERT_SPAWN,
+            POLAR_SPAWN,
             BENEATH_SPAWN);
+
+    /**
+     * Client-only create-world spawn {@link net.minecraft.client.gui.components.CycleButton} wiring.
+     * Label/tooltip text stays on {@link CustomSpawnHelper}; this holds the widget ref for TFCGenViewer Save sync.
+     */
+    @OnlyIn(Dist.CLIENT)
+    public static final class CreateWorldSpawnCycle {
+
+        private static CycleButton<CustomSpawnCondition> cycleRef;
+
+        private CreateWorldSpawnCycle() {
+        }
+
+        public static void register(CycleButton<CustomSpawnCondition> button) {
+            cycleRef = button;
+        }
+
+        /** Sync widget from {@link TFGConfig}; safe to call from {@link net.minecraft.client.Minecraft#execute}. */
+        public static void syncFromConfig() {
+            var button = cycleRef;
+            if (button != null) {
+                CustomSpawnCondition condition = getFromConfig();
+                button.setValue(createWorldSpawnCycleButtonValue());
+                button.setTooltip(createTooltip(condition));
+            }
+        }
+
+        public static Tooltip createTooltip(CustomSpawnCondition condition) {
+            return Tooltip.create(createWorldSpawnTooltipText(condition));
+        }
+    }
 
     /// Holds spawn conditions for a particular custom world spawn
     /// @param id string used for mapping
