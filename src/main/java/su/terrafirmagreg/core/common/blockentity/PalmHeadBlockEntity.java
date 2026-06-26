@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.block.CoconutClusterBlock;
-import su.terrafirmagreg.core.common.block.PalmHeadBlock;
+import su.terrafirmagreg.core.common.block.palmtree.CoconutClusterBlock;
+import su.terrafirmagreg.core.common.block.palmtree.PalmHeadBlock;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 
 /**

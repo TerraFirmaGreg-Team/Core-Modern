@@ -33,9 +33,9 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.CoconutBlock;
-import su.terrafirmagreg.core.common.block.CoconutClusterBlock;
-import su.terrafirmagreg.core.common.block.PalmHeadBlock;
+import su.terrafirmagreg.core.common.block.palmtree.PalmFruitBlock;
+import su.terrafirmagreg.core.common.block.palmtree.CoconutClusterBlock;
+import su.terrafirmagreg.core.common.block.palmtree.PalmHeadBlock;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -43,7 +43,7 @@ public class TFGBlocks_PalmTrees {
 
     public static final Map<PalmTrees, BlockEntry<PalmHeadBlock>> PALM_HEADS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<CoconutClusterBlock>> PALM_CLUSTERS = new EnumMap<>(PalmTrees.class);
-    public static final Map<PalmTrees, BlockEntry<CoconutBlock>> PALM_FRUITS = new EnumMap<>(PalmTrees.class);
+    public static final Map<PalmTrees, BlockEntry<PalmFruitBlock>> PALM_FRUITS = new EnumMap<>(PalmTrees.class);
 
     public static void init() {
         PalmTrees.init();
@@ -79,9 +79,9 @@ public class TFGBlocks_PalmTrees {
             .register();
 
     // Green Coconut
-    public static final BlockEntry<CoconutBlock> GREEN_COCONUT = TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_green", p -> new CoconutBlock(ExtendedProperties.of(p)
+    public static final BlockEntry<PalmFruitBlock> GREEN_COCONUT = TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_green", p -> new PalmFruitBlock(ExtendedProperties.of(p)
             .blockEntity(TFCBlockEntities.DECAYING)
-            .serverTicks(DecayingBlockEntity::serverTick), PALM_HUSK, CoconutBlock.DEFAULT_SHAPE))
+            .serverTicks(DecayingBlockEntity::serverTick), PALM_HUSK, PalmFruitBlock.DEFAULT_SHAPE))
             .properties(p -> p.mapColor(MapColor.DIRT)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
                     .pushReaction(PushReaction.DESTROY)
@@ -129,9 +129,9 @@ public class TFGBlocks_PalmTrees {
         }
 
         // Brown Coconut
-        PALM_FRUITS.put(PalmTrees.COCONUT, TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_brown", p -> new CoconutBlock(ExtendedProperties.of(p)
+        PALM_FRUITS.put(PalmTrees.COCONUT, TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_brown", p -> new PalmFruitBlock(ExtendedProperties.of(p)
                 .blockEntity(TFCBlockEntities.DECAYING)
-                .serverTicks(DecayingBlockEntity::serverTick), PALM_HUSK, CoconutBlock.DEFAULT_SHAPE))
+                .serverTicks(DecayingBlockEntity::serverTick), PALM_HUSK, PalmFruitBlock.DEFAULT_SHAPE))
                 .properties(p -> p.mapColor(MapColor.DIRT)
                         .offsetType(BlockBehaviour.OffsetType.XZ)
                         .pushReaction(PushReaction.DESTROY)

@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.block.CoconutClusterBlock;
+import su.terrafirmagreg.core.common.block.palmtree.CoconutClusterBlock;
 
 /**
  * Generic palm cluster block entity.

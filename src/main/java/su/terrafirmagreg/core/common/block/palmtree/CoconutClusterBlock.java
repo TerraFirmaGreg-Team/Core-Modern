@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.block;
+package su.terrafirmagreg.core.common.block.palmtree;
 
 import java.util.ArrayList;
 import java.util.List;

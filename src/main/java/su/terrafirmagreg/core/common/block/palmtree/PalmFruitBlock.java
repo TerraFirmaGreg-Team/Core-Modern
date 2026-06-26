@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.block;
+package su.terrafirmagreg.core.common.block.palmtree;
 
 import java.util.function.Supplier;
 
@@ -39,14 +39,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 @SuppressWarnings("deprecation")
-public class CoconutBlock extends DecayingBlock implements IFallableBlock, IFluidLoggable {
+public class PalmFruitBlock extends DecayingBlock implements IFallableBlock, IFluidLoggable {
 
     public static final FluidProperty FLUID = TFCBlockStateProperties.WATER;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 5.5, 11.0);
 
     private final VoxelShape shape;
 
-    public CoconutBlock(ExtendedProperties properties, Supplier<? extends Block> rotted, VoxelShape shape) {
+    public PalmFruitBlock(ExtendedProperties properties, Supplier<? extends Block> rotted, VoxelShape shape) {
         super(properties.flammable(60, 30), rotted);
         this.shape = shape;
 
