@@ -12,10 +12,15 @@ import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.GroundcoverBlock;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -33,9 +38,10 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.block.palmtree.PalmFruitBlock;
 import su.terrafirmagreg.core.common.block.palmtree.CoconutClusterBlock;
+import su.terrafirmagreg.core.common.block.palmtree.PalmFruitBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmHeadBlock;
+import su.terrafirmagreg.core.common.block.palmtree.PalmTrunkBlock;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -48,6 +54,36 @@ public class TFGBlocks_PalmTrees {
     public static void init() {
         PalmTrees.init();
     }
+
+    public static final BlockEntry<PalmTrunkBlock> PALM_TRUNK = TFGCore.REGISTRATE.block("palm_tree/trunk", PalmTrunkBlock::new)
+            .properties(p -> p.mapColor(MapColor.WOOD)
+                    .strength(2.0f)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.WOOD))
+            .blockstate((ctx, prov) -> {
+                var builder = prov.getVariantBuilder(ctx.getEntry());
+                for (int size = 0; size <= 2; size++) {
+                    var model = prov.models().withExistingParent("palm_tree/trunk_" + size, TFGCore.id("block/palm_tree/palm_trunk_" + size))
+                            .texture("0", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/log/palm"))
+                            .texture("1", TFGCore.id("block/palm_tree/trunk_top_" + size));
+                    builder.partialState()
+                            .with(PalmTrunkBlock.SIZE, size)
+                            .modelForState()
+                            .modelFile(model)
+                            .addModel();
+                }
+            })
+            .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, BlockTags.MINEABLE_WITH_AXE)
+            .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1.0F))
+                    .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LOG).get())
+                            .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.AXES)))))))
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/palm_tree/trunk_2")))
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .build()
+            .register();
 
     // Palm Husk
     public static final BlockEntry<GroundcoverBlock> PALM_HUSK = TFGCore.REGISTRATE.block("groundcover/palm_husk", p -> GroundcoverBlock.twig(ExtendedProperties.of(p)))
@@ -113,6 +149,7 @@ public class TFGBlocks_PalmTrees {
                     .properties(p -> p.mapColor(MapColor.WOOD)
                             .randomTicks()
                             .strength(2.0f)
+                            .requiresCorrectToolForDrops()
                             .sound(SoundType.WOOD))
                     .blockstate((ctx, prov) -> {
                         var model = prov.models().withExistingParent("palm_tree/" + name + "_tree_head", TFGCore.id("block/palm_tree/palm_head"))
@@ -121,6 +158,11 @@ public class TFGBlocks_PalmTrees {
                                 .texture("top", TFGCore.id("block/palm_tree/" + name + "_head_top"));
                         prov.simpleBlock(ctx.getEntry(), model);
                     })
+                    .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1.0F))
+                            .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LOG).get())
+                                    .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.AXES)))))))
+                    .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, BlockTags.MINEABLE_WITH_AXE)
                     .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                     .item(BlockItem::new)
                     .setData(ProviderType.LANG, NonNullBiConsumer.noop())

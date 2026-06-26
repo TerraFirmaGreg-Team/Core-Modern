@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import su.terrafirmagreg.core.common.blockentity.PalmHeadBlockEntity;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
 @SuppressWarnings("deprecation")
 public class PalmHeadBlock extends Block implements EntityBlock, HoeOverlayBlock {
@@ -53,7 +54,7 @@ public class PalmHeadBlock extends Block implements EntityBlock, HoeOverlayBlock
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockState below = level.getBlockState(pos.below());
-        return below.isFaceSturdy(level, pos.below(), Direction.UP);
+        return below.isFaceSturdy(level, pos.below(), Direction.UP) || below.is(TFGBlocks_PalmTrees.PALM_TRUNK.get());
     }
 
     @Override
