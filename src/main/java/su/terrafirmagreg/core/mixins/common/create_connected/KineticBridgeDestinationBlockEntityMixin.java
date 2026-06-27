@@ -21,6 +21,6 @@ public abstract class KineticBridgeDestinationBlockEntityMixin extends Generatin
 
     @Override
     public float getMaxCapacityFromBlock(Block block) {
-        return getGeneratedSpeed() * calculateAddedStressCapacity();
+        return Math.abs(getGeneratedSpeed()) * calculateAddedStressCapacity();
     }
 }
