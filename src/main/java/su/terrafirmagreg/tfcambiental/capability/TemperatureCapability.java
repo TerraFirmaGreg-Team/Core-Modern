@@ -233,13 +233,13 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
             float burnThreshold = TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue();
             float freezeThreshold = TFCAmbientalConfig.COMMON.freezeThreshold.get().floatValue();
             float average = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
-            if ((this.temperature - burnThreshold) / (burnThreshold - average) > player.getRandom().nextFloat() * 40f) {
+            if (this.temperature > burnThreshold && 1 + (this.temperature - burnThreshold) / (burnThreshold - average) > player.getRandom().nextFloat() * 40f) {
                 player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.HOT)),
                         1 + (this.temperature - burnThreshold) / (burnThreshold - average) / 20);
                 if (player.getFoodData() instanceof TFCFoodData stats) {
                     stats.addThirst(-2);
                 }
-            } else if ((this.temperature - freezeThreshold) / (freezeThreshold - average) > player.getRandom().nextFloat() * 40f) {
+            } else if (this.temperature < freezeThreshold && 1 + (this.temperature - freezeThreshold) / (freezeThreshold - average) > player.getRandom().nextFloat() * 40f) {
                 player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.FREEZE)),
                         1 + (this.temperature - freezeThreshold) / (freezeThreshold - average) / 20);
                 if (player.getFoodData() instanceof TFCFoodData stats) {
