@@ -40,16 +40,20 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.palmtree.CoconutClusterBlock;
+import su.terrafirmagreg.core.common.block.palmtree.GrowingPalmHeadBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmFruitBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmHeadBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTrunkBlock;
+import su.terrafirmagreg.core.common.blockentity.PalmHeadBlockEntity;
 import su.terrafirmagreg.core.common.data.PalmTrees;
+import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFGBlocks_PalmTrees {
 
     public static final Map<PalmTrees, BlockEntry<PalmHeadBlock>> PALM_HEADS = new EnumMap<>(PalmTrees.class);
+    public static final Map<PalmTrees, BlockEntry<GrowingPalmHeadBlock>> GROWING_PALM_HEADS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<CoconutClusterBlock>> PALM_CLUSTERS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<PalmFruitBlock>> PALM_FRUITS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<PalmTreeSaplingBlock>> PALM_SAPLINGS = new EnumMap<>(PalmTrees.class);
@@ -77,7 +81,7 @@ public class TFGBlocks_PalmTrees {
                             .addModel();
                 }
             })
-            .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, BlockTags.MINEABLE_WITH_AXE)
+            .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE)
             .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
                     .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LOG).get())
@@ -149,7 +153,9 @@ public class TFGBlocks_PalmTrees {
 
             // Palm Heads
             PALM_HEADS.put(tree, TFGCore.REGISTRATE.block("palm_tree/" + name + "_tree_head",
-                    p -> new PalmHeadBlock(p, tree))
+                    p -> new PalmHeadBlock(ExtendedProperties.of(p)
+                            .blockEntity(TFGBlockEntities.PALM_HEADS.get(tree))
+                            .serverTicks(PalmHeadBlockEntity::serverTick), tree))
                     .properties(p -> p.mapColor(MapColor.WOOD)
                             .randomTicks()
                             .strength(2.0f)
@@ -164,9 +170,33 @@ public class TFGBlocks_PalmTrees {
                     })
                     .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                             .setRolls(ConstantValue.exactly(1.0F))
-                            .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LOG).get())
+                            .add(LootItem.lootTableItem(TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree).get())
+                                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
                                     .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.AXES)))))))
-                    .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, BlockTags.MINEABLE_WITH_AXE)
+                    .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE)
+                    .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+                    .item(BlockItem::new)
+                    .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+                    .build()
+                    .register());
+
+            // Growing Palm Heads
+            GROWING_PALM_HEADS.put(tree, TFGCore.REGISTRATE.block("palm_tree/" + name + "_growing_tree_head",
+                    p -> new GrowingPalmHeadBlock(ExtendedProperties.of(p).blockEntity(TFCBlockEntities.TICK_COUNTER), tree, tree.getClimateRange(), tree.getStages()))
+                    .properties(p -> p.mapColor(MapColor.WOOD)
+                            .randomTicks()
+                            .strength(2.0f)
+                            .requiresCorrectToolForDrops()
+                            .sound(SoundType.WOOD))
+                    .blockstate((ctx, prov) -> {
+                        var model = prov.models().withExistingParent("palm_tree/" + name + "_growing_tree_head", TFGCore.id("block/palm_tree/" + name + "_tree_head"));
+                        prov.simpleBlock(ctx.getEntry(), model);
+                    })
+                    .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE)
+                    .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1.0F))
+                            .add(LootItem.lootTableItem(TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree).get())
+                                    .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.AXES)))))))
                     .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                     .item(BlockItem::new)
                     .setData(ProviderType.LANG, NonNullBiConsumer.noop())

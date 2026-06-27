@@ -72,7 +72,7 @@ public enum PalmTrees implements StringRepresentable {
     public Block createSapling() {
         return new PalmTreeSaplingBlock(
                 ExtendedProperties.of(MapColor.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).blockEntity(TFCBlockEntities.TICK_COUNTER).flammableLikeLeaves(),
-                TFGBlocks_PalmTrees.PALM_HEADS.get(this), this::daysToGrow, this.getClimateRange(), stages);
+                TFGBlocks_PalmTrees.GROWING_PALM_HEADS.get(this), this::daysToGrow, this.getClimateRange(), stages);
     }
 
     public Block createPottedSapling() {

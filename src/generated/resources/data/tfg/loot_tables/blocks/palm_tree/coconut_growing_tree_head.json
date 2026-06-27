@@ -14,22 +14,11 @@
               }
             }
           ],
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 2.0,
-                "min": 1.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
           "name": "tfg:palm_tree/coconut_sapling"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "tfg:blocks/palm_tree/coconut_tree_head"
+  "random_sequence": "tfg:blocks/palm_tree/coconut_growing_tree_head"
 }

@@ -44,10 +44,6 @@ public class PalmTreeSaplingBlock extends BushBlock implements IForgeBlockExtens
     protected final Supplier<Integer> treeGrowthDays;
     private final Lifecycle[] stages;
 
-    public PalmTreeSaplingBlock(ExtendedProperties properties, Supplier<? extends Block> block, int treeGrowthDays, Supplier<ClimateRange> climateRange, Lifecycle[] stages) {
-        this(properties, block, () -> treeGrowthDays, climateRange, stages);
-    }
-
     public PalmTreeSaplingBlock(ExtendedProperties properties, Supplier<? extends Block> block, Supplier<Integer> treeGrowthDays, Supplier<ClimateRange> climateRange, Lifecycle[] stages) {
         super(properties.properties());
         this.properties = properties;
@@ -67,8 +63,8 @@ public class PalmTreeSaplingBlock extends BushBlock implements IForgeBlockExtens
 
         var calendar = Calendars.get(level);
         Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
-        if (!stages[month.ordinal()].active()) {
-            text.add(Component.translatable("tfc.tooltip.fruit_tree.sapling_wrong_month"));
+        if (stages[month.ordinal()] != Lifecycle.DORMANT) {
+            text.add(Component.translatable("tfg.tooltip.lifecycle.growing"));
         } else {
             text.add(Component.translatable("tfc.tooltip.fruit_tree.growing"));
         }
@@ -98,7 +94,7 @@ public class PalmTreeSaplingBlock extends BushBlock implements IForgeBlockExtens
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         var calendar = Calendars.get(level);
         Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
-        if (stages[month.ordinal()].active()) {
+        if (stages[month.ordinal()] != Lifecycle.DORMANT) {
             if (level.getBlockEntity(pos) instanceof TickCounterBlockEntity counter) {
                 if (counter.getTicksSinceUpdate() > ICalendar.TICKS_IN_DAY * getTreeGrowthDays() * TFCConfig.SERVER.globalFruitSaplingGrowthModifier.get()) {
                     final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
