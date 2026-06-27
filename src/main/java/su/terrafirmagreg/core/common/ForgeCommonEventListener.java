@@ -90,6 +90,7 @@ public final class ForgeCommonEventListener {
 
                 if (playerData.contains(TFGCore.MOD_ID, CompoundTag.TAG_COMPOUND)) {
                     tfgPlayerData = playerData.getCompound(TFGCore.MOD_ID);
+                    TFGCore.LOGGER.info("hasJoinedBefore: {}", tfgPlayerData.getBoolean("hasJoinedBefore"));
                 } else {
                     tfgPlayerData = new CompoundTag();
                     playerData.put(TFGCore.MOD_ID, tfgPlayerData);
@@ -175,7 +176,11 @@ public final class ForgeCommonEventListener {
 
             var targetLevel = server.getLevel(spawnPos.dimension());
             if (targetLevel == serverLevel) {
-
+                if (!spawnPos.equals(CustomSpawnHelper.BENEATH_PLACEHOLDER)
+                        && !spawnPos.equals(CustomSpawnHelper.MARS_PLACEHOLDER)) {
+                    TFGCore.LOGGER.info("Found exists spawn point: {}", spawnPos);
+                    return;
+                }
                 RandomSource random = new XoroshiroRandomSource(targetLevel.getSeed());
 
                 BlockPos validSpawn = null;
