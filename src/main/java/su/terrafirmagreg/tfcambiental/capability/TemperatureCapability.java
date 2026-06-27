@@ -53,7 +53,6 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
 
     public static final float BAD_MULTIPLIER = 0.001f;
     public static final float GOOD_MULTIPLIER = 0.002f;
-    public static final float CHANGE_CAP = 7.5f;
     public static final float WET_CHANGE_CAP = 2.0f;
     public static final float HIGH_CHANGE = 0.20f;
 
@@ -63,7 +62,7 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
 
     public float getTemperatureChange() {
         float speed = getPotency() * 0.025f * TFCAmbientalConfig.COMMON.temperatureChangeSpeed.get().floatValue();
-        float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, getTargetTemperature() - this.temperature));
+        float change = getTargetTemperature() - this.temperature;
         float newTemp = this.temperature + change;
         float average = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
         if ((this.temperature < average && newTemp > this.temperature)
@@ -113,10 +112,11 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
 
         if ((this.target > this.temperature && this.temperature > TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue())
                 || (this.target < this.temperature && this.temperature < TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue())) {
-            this.potency = 1f;
+            this.potency /= 4.0f;
         }
 
         this.potency = Math.max(1f, this.potency);
+        this.target = Math.max(this.target, -273.15f);
 
         if (fullyInsulated) {
             this.target = Mth.clamp(this.target, 5f, 25f);
@@ -230,31 +230,28 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
                 }
             }
 
+            float burnThreshold = TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue();
+            float freezeThreshold = TFCAmbientalConfig.COMMON.freezeThreshold.get().floatValue();
+            float average = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
+            if ((this.temperature - burnThreshold) / (burnThreshold - average) > player.getRandom().nextFloat() * 40f) {
+                player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.HOT)),
+                        1 + (this.temperature - burnThreshold) / (burnThreshold - average) / 20);
+                if (player.getFoodData() instanceof TFCFoodData stats) {
+                    stats.addThirst(-2);
+                }
+            } else if ((this.temperature - freezeThreshold) / (freezeThreshold - average) > player.getRandom().nextFloat() * 40f) {
+                player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.FREEZE)),
+                        1 + (this.temperature - freezeThreshold) / (freezeThreshold - average) / 20);
+                if (player.getFoodData() instanceof TFCFoodData stats) {
+                    stats.setFoodLevel(stats.getFoodLevel() - 1);
+                }
+            }
+
             if (tick <= 20) {
                 tick++;
                 return;
             } else {
                 tick = 0;
-                if (this.damageTick > 40) {
-                    this.damageTick = 0;
-                    if (this.getTemperature() > TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue()) {
-                        player.hurt(new DamageSource(player.level().registryAccess()
-                                .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.HOT)), 4f);
-                    } else if (this.getTemperature() < TFCAmbientalConfig.COMMON.freezeThreshold.get().floatValue()) {
-                        player.hurt(new DamageSource(player.level().registryAccess()
-                                .registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.FREEZE)), 4f);
-                    }
-                    if (player.getFoodData() instanceof TFCFoodData stats) {
-                        if (this.getTemperature() > TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue()) {
-                            stats.addThirst(-8);
-                        } else if (this.getTemperature() < TFCAmbientalConfig.COMMON.freezeThreshold.get()
-                                .floatValue()) {
-                            stats.setFoodLevel(stats.getFoodLevel() - 1);
-                        }
-                    }
-                } else {
-                    this.damageTick++;
-                }
             }
             this.evaluateModifiers();
             sync();
