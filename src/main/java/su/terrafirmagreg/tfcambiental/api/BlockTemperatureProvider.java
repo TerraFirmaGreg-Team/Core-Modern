@@ -14,8 +14,13 @@ import java.util.stream.Stream;
 import com.eerussianguy.firmalife.common.blocks.OvenBottomBlock;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
+import com.gregtechceu.gtceu.common.data.machines.GCYMMachines;
+import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 
 import net.dries007.tfc.common.blockentities.BloomeryBlockEntity;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
@@ -102,6 +107,7 @@ public interface BlockTemperatureProvider {
                 addScaled(storage, handleBloomery(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleLitBlock(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleIHeatBlock(player, blockEntity), distanceMultiplier);
+                storage.add(handleMultiblockInside(player, blockEntity));
             }
         }
 
@@ -357,5 +363,29 @@ public interface BlockTemperatureProvider {
         }
 
         return Optional.empty();
+    }
+
+    static Optional<TempModifier> handleMultiblockInside(Player player, BlockEntity blockEntity) {
+        if (blockEntity instanceof IMachineBlockEntity machineBE &&
+                machineBE.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine &&
+                machine.isFormed()
+                && machine.getMultiblockState().isPosInCache(player.blockPosition())
+                && machine.getRecipeLogic().isWorking()) {
+
+            float temp;
+
+            if (machine.getDefinition() == GCYMMachines.MEGA_VACUUM_FREEZER) {
+                temp = -273.0f;
+            } else if (machine.getDefinition() == GTMultiMachines.VACUUM_FREEZER) {
+                temp = -150.0f;
+            } else if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {
+                temp = coilMachine.getCoilType().getCoilTemperature();
+            } else {
+                return TempModifier.none();
+            }
+
+            return Optional.of(new TempModifier(temp, 100f));
+        }
+        return TempModifier.none();
     }
 }

@@ -101,7 +101,7 @@ public class AmbientalDump {
     private static @Nonnull MutableComponent formatTempModifierStorage(String text, TempModifierStorage storage) {
         MutableComponent line = Component.literal(text).append("\n");
         for (TempModifier mod : storage) {
-            line.append(formatTempModifier("-", Optional.of(mod))).append("\n");
+            line.append(formatTempModifier("-", Optional.of(mod)));
         }
         return line;
     }
