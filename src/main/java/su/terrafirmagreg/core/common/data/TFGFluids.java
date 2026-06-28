@@ -234,7 +234,7 @@ public class TFGFluids {
                 }));
 
         FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
-                SPRING_WATER.getSource().getFluidType(),
+                SALT_WATER.getSource().getFluidType(),
                 fluidState -> {
                     if (fluidState.isSource())
                         return Blocks.OBSIDIAN.defaultBlockState();
