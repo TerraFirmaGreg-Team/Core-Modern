@@ -11,11 +11,9 @@ import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
-import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
-import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -45,7 +43,6 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
 public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension, HoeOverlayBlock {
 
-    public static final IntegerProperty AGE = BlockStateProperties.AGE_4;
     public static final IntegerProperty STAGE = TFCBlockStateProperties.STAGE_3;
     public static final BooleanProperty NATURAL = TFCBlockStateProperties.NATURAL;
 
@@ -153,8 +150,7 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
         this.climateRange = climateRange;
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(STAGE, 0)
-                .setValue(NATURAL, false)
-                .setValue(AGE, 0));
+                .setValue(NATURAL, false));
     }
 
     @Override
@@ -164,7 +160,7 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(STAGE, NATURAL, AGE);
+        builder.add(STAGE, NATURAL);
     }
 
     @Override
@@ -231,7 +227,7 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
                 placeTrunk(level, pos.above(1), 2);
 
                 BlockPos newHeadPos = pos.above(2);
-                level.setBlock(newHeadPos, state.setValue(STAGE, 1).setValue(AGE, 1), 3);
+                level.setBlock(newHeadPos, state.setValue(STAGE, 1), 3);
                 placeLeaves(level, newHeadPos, 1);
 
                 TickCounterBlockEntity.reset(level, newHeadPos);
@@ -248,18 +244,18 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
 
                 clearLeaves(level, pos, 1);
                 BlockPos newHeadPos = pos.above(3);
-                level.setBlock(newHeadPos, state.setValue(STAGE, 2).setValue(AGE, 2), 3);
+                level.setBlock(newHeadPos, state.setValue(STAGE, 2), 3);
                 placeLeaves(level, newHeadPos, 2);
 
                 TickCounterBlockEntity.reset(level, newHeadPos);
             }
         } else if (stage == 2) {
-            if (canGrowUp(level, pos, 4)) {
-                // 4 trunks at size 2
-                placeTrunk(level, pos.above(3), 2);
-                placeTrunk(level, pos.above(2), 2);
-                placeTrunk(level, pos.above(1), 2);
-                placeTrunk(level, pos, 2);
+            int numSize2 = random.nextIntBetweenInclusive(3, 6);
+            if (canGrowUp(level, pos, numSize2)) {
+                // Random trunks between 3 and 6 at size 2
+                for (int i = 0; i < numSize2; i++) {
+                    placeTrunk(level, pos.above(i), 2);
+                }
                 // 3 trunks at size 1
                 placeTrunk(level, pos.below(1), 1);
                 placeTrunk(level, pos.below(2), 1);
@@ -269,7 +265,7 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
                 placeTrunk(level, pos.below(5), 0);
 
                 clearLeaves(level, pos, 2);
-                BlockPos finalHeadPos = pos.above(4);
+                BlockPos finalHeadPos = pos.above(numSize2);
                 BlockState finalHead = TFGBlocks_PalmTrees.PALM_HEADS.get(tree).get().defaultBlockState().setValue(PalmHeadBlock.NATURAL, natural);
                 level.setBlock(finalHeadPos, finalHead, 3);
                 placeLeaves(level, finalHeadPos, 3);
@@ -329,7 +325,7 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
         }
 
         public void place(Level level, BlockPos headPos) {
-            BlockState leaves = TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LEAVES).get().defaultBlockState()
+            BlockState leaves = TFGBlocks_PalmTrees.FRUIT_PALM_LEAVES.get().defaultBlockState()
                     .setValue(BlockStateProperties.PERSISTENT, false);
 
             for (BlockPos relativePos : leafPositions) {

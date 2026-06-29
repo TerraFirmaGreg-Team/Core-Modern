@@ -7,21 +7,28 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
+import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.GroundcoverBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.wood.TFCLeavesBlock;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -34,9 +41,12 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.palmtree.CoconutClusterBlock;
@@ -49,8 +59,14 @@ import su.terrafirmagreg.core.common.blockentity.PalmHeadBlockEntity;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGTags;
+import su.terrafirmagreg.core.utils.ModelUtils;
 
 public class TFGBlocks_PalmTrees {
+
+    private static final TagKey<Item> TFC_ITEM_SHARP_TOOLS = TagKey.create(ForgeRegistries.Keys.ITEMS,
+            ResourceLocation.fromNamespaceAndPath("tfc", "sharp_tools"));
+    private static final TagKey<Block> TFC_BLOCK_SHARP_MINEABLE = TagKey.create(ForgeRegistries.Keys.BLOCKS,
+            ResourceLocation.fromNamespaceAndPath("tfc", "mineable_with_sharp_tool"));
 
     public static final Map<PalmTrees, BlockEntry<PalmHeadBlock>> PALM_HEADS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<GrowingPalmHeadBlock>> GROWING_PALM_HEADS = new EnumMap<>(PalmTrees.class);
@@ -66,7 +82,6 @@ public class TFGBlocks_PalmTrees {
     public static final BlockEntry<PalmTrunkBlock> PALM_TRUNK = TFGCore.REGISTRATE.block("palm_tree/trunk", PalmTrunkBlock::new)
             .properties(p -> p.mapColor(MapColor.WOOD)
                     .strength(8.0f)
-                    .requiresCorrectToolForDrops()
                     .sound(SoundType.WOOD))
             .blockstate((ctx, prov) -> {
                 var builder = prov.getVariantBuilder(ctx.getEntry());
@@ -84,8 +99,7 @@ public class TFGBlocks_PalmTrees {
             .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE)
             .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
-                    .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LOG).get())
-                            .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.AXES)))))))
+                    .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LOG).get())))))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .item(BlockItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/palm_tree/trunk_2")))
@@ -104,10 +118,15 @@ public class TFGBlocks_PalmTrees {
                     .dynamicShape()
                     .noCollission()
                     .noOcclusion())
-            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
-                    prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/palm_husk")
-                            .texture("0", TFGCore.id("block/palm_tree/palm_husk"))))
-            .tag(TFCTags.Blocks.TOUGHNESS_1)
+            .blockstate((ctx, prov) -> {
+                for (int i = 0; i <= 2; i++) {
+                    var model = prov.models().withExistingParent(ctx.getName() + "_" + i, TFGCore.id("block/palm_tree/palm_husk_" + i))
+                            .texture("0", TFGCore.id("block/palm_tree/palm_husk"));
+                    ModelUtils.blockVariantsRotated(prov.getVariantBuilder(ctx.getEntry()), model);
+                }
+            })
+            .tag(TFCTags.Blocks.TOUGHNESS_1, TFCTags.Blocks.LIT_BY_DROPPED_TORCH, TFC_BLOCK_SHARP_MINEABLE, BlockTags.MINEABLE_WITH_HOE, TFCTags.Blocks.SINGLE_BLOCK_REPLACEABLE,
+                    BlockTags.REPLACEABLE_BY_TREES)
             .loot((provider, block) -> provider.add(block, LootTable.lootTable()
                     .withPool(LootPool.lootPool()
                             .setRolls(UniformGenerator.between(1.0F, 1.0F))
@@ -118,6 +137,8 @@ public class TFGBlocks_PalmTrees {
                                             .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))))))))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/" + ctx.getName() + "_0")))
+            .tag(TFCTags.Items.COMPOST_BROWNS_LOW, TFCTags.Items.FIREPIT_FUEL, TFCTags.Items.FIREPIT_KINDLING)
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .build()
             .register();
@@ -146,6 +167,51 @@ public class TFGBlocks_PalmTrees {
             .build()
             .register();
 
+    // Fruit Palm Leaves
+    // Copying the regular Palm Leaves, but it's different to prevent sapling drops.
+    public static final BlockEntry<TFCLeavesBlock> FRUIT_PALM_LEAVES = TFGCore.REGISTRATE.block("palm_tree/fruit_palm_leaves", p -> {
+        var wood = Wood.PALM;
+        return new TFCLeavesBlock(ExtendedProperties.of(p)
+                .mapColor(MapColor.PLANT)
+                .strength(0.5F)
+                .sound(SoundType.GRASS)
+                .defaultInstrument()
+                .randomTicks()
+                .noOcclusion()
+                .isViewBlocking(TFCBlocks::never)
+                .flammableLikeLeaves(),
+                wood.autumnIndex(), wood.getBlock(Wood.BlockType.FALLEN_LEAVES), wood.getBlock(Wood.BlockType.TWIG));
+    })
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/leaves/palm"))))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .color(() -> () -> (state, level, pos, tintIndex) -> TFCColors.getFoliageColor(pos, tintIndex))
+            .tag(BlockTags.LEAVES)
+            .loot((prov, block) -> prov.add(block, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1.0F))
+                            .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LEAVES).get())
+                                    .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS)))))
+                    .withPool(LootPool.lootPool()
+                            .name("loot_pool")
+                            .setRolls(ConstantValue.exactly(1.0F))
+                            .add(AlternativesEntry.alternatives(
+                                    LootItem.lootTableItem(Items.STICK)
+                                            .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFC_ITEM_SHARP_TOOLS)))
+                                            .when(LootItemRandomChanceCondition.randomChance(0.2F))
+                                            .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))),
+                                    LootItem.lootTableItem(Items.STICK)
+                                            .when(LootItemRandomChanceCondition.randomChance(0.05F))
+                                            .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))))))
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .item(BlockItem::new)
+            .color(() -> () -> (stack, tintIndex) -> TFCColors.getFoliageColor(null, tintIndex))
+            .model((ctx, prov) -> prov.withExistingParent("palm_tree/fruit_palm_leaves",
+                    ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/leaves/palm")))
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .build()
+            .register();
+
     // Loop to register heads, clusters, and fruits for each PalmTrees entry.
     static {
         for (PalmTrees tree : PalmTrees.values()) {
@@ -162,7 +228,7 @@ public class TFGBlocks_PalmTrees {
                             .requiresCorrectToolForDrops()
                             .sound(SoundType.WOOD))
                     .blockstate((ctx, prov) -> {
-                        var model = prov.models().withExistingParent("palm_tree/" + name + "_tree_head", TFGCore.id("block/palm_tree/palm_head"))
+                        var model = prov.models().withExistingParent(ctx.getName(), TFGCore.id("block/palm_tree/palm_head"))
                                 .texture("fuzz", TFGCore.id("block/palm_tree/" + name + "_head_fuzz"))
                                 .texture("side", TFGCore.id("block/palm_tree/" + name + "_head_side"))
                                 .texture("top", TFGCore.id("block/palm_tree/" + name + "_head_top"));
@@ -189,7 +255,7 @@ public class TFGBlocks_PalmTrees {
                             .requiresCorrectToolForDrops()
                             .sound(SoundType.WOOD))
                     .blockstate((ctx, prov) -> {
-                        var model = prov.models().withExistingParent("palm_tree/" + name + "_growing_tree_head", TFGCore.id("block/palm_tree/" + name + "_tree_head"));
+                        var model = prov.models().withExistingParent(ctx.getName(), TFGCore.id("block/palm_tree/" + name + "_tree_head"));
                         prov.simpleBlock(ctx.getEntry(), model);
                     })
                     .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE)
@@ -262,7 +328,7 @@ public class TFGBlocks_PalmTrees {
                 .blockstate((ctx, prov) -> {
                     var builder = prov.getVariantBuilder(ctx.getEntry());
                     for (int age = 0; age <= 7; age++) {
-                        var model = prov.models().withExistingParent("palm_tree/coconut_tree_cluster_" + age, TFGCore.id("block/palm_tree/square_palm_cluster_" + age))
+                        var model = prov.models().withExistingParent(ctx.getName() + "_" + age, TFGCore.id("block/palm_tree/square_palm_cluster_" + age))
                                 .texture("0", TFGCore.id("block/palm_tree/coconut_cluster_" + age));
                         for (Direction dir : Direction.Plane.HORIZONTAL) {
                             builder.partialState()
