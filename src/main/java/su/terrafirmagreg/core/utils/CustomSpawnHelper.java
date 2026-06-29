@@ -12,9 +12,11 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.QuartPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -26,12 +28,99 @@ import net.minecraftforge.common.util.ITeleporter;
 
 import earth.terrarium.adastra.api.planets.Planet;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 
 public class CustomSpawnHelper {
 
     public static final GlobalPos BENEATH_PLACEHOLDER = GlobalPos.of(ServerLevel.NETHER, BlockPos.ZERO);
     public static final GlobalPos MARS_PLACEHOLDER = GlobalPos.of(Planet.MARS, BlockPos.ZERO);
+
+    private static final Set<UUID> PENDING_FIRST_JOIN_TELEPORTS = new HashSet<>();
+
+    public static boolean isUnresolvedPlaceholder(GlobalPos pos) {
+        return pos.equals(BENEATH_PLACEHOLDER) || pos.equals(MARS_PLACEHOLDER);
+    }
+
+    public static void queueFirstJoinTeleport(UUID playerId) {
+        PENDING_FIRST_JOIN_TELEPORTS.add(playerId);
+    }
+
+    public static void removeFirstJoinTeleport(UUID playerId) {
+        PENDING_FIRST_JOIN_TELEPORTS.remove(playerId);
+    }
+
+    public static boolean respawnedAtPersonalSpawn(ServerPlayer player) {
+        return player.getRespawnPosition() != null
+                && player.getRespawnDimension().equals(player.level().dimension());
+    }
+
+    public static void processPendingFirstJoinTeleports(MinecraftServer server, GlobalPos worldSpawn) {
+        if (isUnresolvedPlaceholder(worldSpawn)) {
+            return;
+        }
+
+        ServerLevel targetLevel = server.getLevel(worldSpawn.dimension());
+        if (targetLevel == null) {
+            return;
+        }
+
+        for (UUID playerId : Set.copyOf(PENDING_FIRST_JOIN_TELEPORTS)) {
+            ServerPlayer player = server.getPlayerList().getPlayer(playerId);
+            PENDING_FIRST_JOIN_TELEPORTS.remove(playerId);
+            if (player != null) {
+                tryFirstJoinTeleport(player, worldSpawn);
+            }
+        }
+    }
+
+    /**
+     * Teleports a player to the world's custom spawn on their first join.
+     *
+     * @return {@code true} if the player was teleported
+     */
+    public static boolean tryFirstJoinTeleport(ServerPlayer player, GlobalPos spawnPos) {
+        if (spawnPos.dimension().equals(ServerLevel.OVERWORLD)) {
+            return false;
+        }
+
+        if (isUnresolvedPlaceholder(spawnPos)) {
+            queueFirstJoinTeleport(player.getUUID());
+            TFGCore.LOGGER.debug("Deferring first-join teleport for {} until custom spawn is resolved",
+                    player.getGameProfile().getName());
+            return false;
+        }
+
+        var tfgData = getTfgPlayerData(player);
+        if (tfgData.getBoolean("hasJoinedBefore")) {
+            return false;
+        }
+
+        if (player.level().dimension().equals(spawnPos.dimension())) {
+            tfgData.putBoolean("hasJoinedBefore", true);
+            return false;
+        }
+
+        MinecraftServer server = Objects.requireNonNull(player.getServer());
+        ServerLevel targetLevel = server.getLevel(spawnPos.dimension());
+        if (targetLevel == null) {
+            queueFirstJoinTeleport(player.getUUID());
+            return false;
+        }
+
+        respawnTeleporter(player, targetLevel, spawnPos);
+        tfgData.putBoolean("hasJoinedBefore", true);
+        TFGCore.LOGGER.info("First-join teleport for {} to {}", player.getGameProfile().getName(), spawnPos);
+        return true;
+    }
+
+    private static CompoundTag getTfgPlayerData(ServerPlayer player) {
+        CompoundTag playerData = player.getPersistentData();
+        if (!playerData.contains(TFGCore.MOD_ID, CompoundTag.TAG_COMPOUND)) {
+            playerData.put(TFGCore.MOD_ID, new CompoundTag());
+        }
+        return playerData.getCompound(TFGCore.MOD_ID);
+    }
 
     public static void respawnTeleporter(ServerPlayer player, ServerLevel targetLevel, GlobalPos worldSpawn) {
         //System.out.println("attempting to spawn player at: " + worldSpawn);
