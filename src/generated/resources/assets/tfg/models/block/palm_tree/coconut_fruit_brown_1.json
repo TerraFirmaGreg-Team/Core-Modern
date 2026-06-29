@@ -1,5 +1,5 @@
 {
-  "parent": "tfg:block/palm_tree/square_palm_fruit",
+  "parent": "tfg:block/palm_tree/square_palm_fruit_1",
   "textures": {
     "0": "tfg:block/palm_tree/coconut_fruit_brown"
   }

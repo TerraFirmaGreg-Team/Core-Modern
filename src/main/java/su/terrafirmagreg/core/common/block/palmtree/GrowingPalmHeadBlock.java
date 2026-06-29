@@ -27,6 +27,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -37,14 +38,21 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
+@SuppressWarnings("deprecation")
 public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension, HoeOverlayBlock {
 
     public static final IntegerProperty STAGE = TFCBlockStateProperties.STAGE_3;
     public static final BooleanProperty NATURAL = TFCBlockStateProperties.NATURAL;
+
+    public static final VoxelShape SHAPE0 = box(5, 0, 5, 11, 16, 11);
+    public static final VoxelShape SHAPE1 = box(2, 0, 2, 14, 16, 14);
+    public static final VoxelShape SHAPE2 = box(1, 0, 1, 15, 16, 15);
 
     private static final Map<Integer, LeafPattern> LEAF_PATTERNS = Map.of(
             1, new LeafPattern(
@@ -202,6 +210,15 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
         return below.isFaceSturdy(level, pos.below(), Direction.UP)
                 || below.is(TFGBlocks_PalmTrees.PALM_TRUNK.get())
                 || below.is(TFGBlocks_PalmTrees.PALM_HEADS.get(tree).get());
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(STAGE)) {
+            case 0 -> SHAPE0;
+            case 1 -> SHAPE1;
+            default -> SHAPE2;
+        };
     }
 
     @Override

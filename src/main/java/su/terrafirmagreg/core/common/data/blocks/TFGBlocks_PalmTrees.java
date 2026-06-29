@@ -79,6 +79,7 @@ public class TFGBlocks_PalmTrees {
         PalmTrees.init();
     }
 
+    // Palm Trunk
     public static final BlockEntry<PalmTrunkBlock> PALM_TRUNK = TFGCore.REGISTRATE.block("palm_tree/trunk", PalmTrunkBlock::new)
             .properties(p -> p.mapColor(MapColor.WOOD)
                     .strength(8.0f)
@@ -86,7 +87,7 @@ public class TFGBlocks_PalmTrees {
             .blockstate((ctx, prov) -> {
                 var builder = prov.getVariantBuilder(ctx.getEntry());
                 for (int size = 0; size <= 2; size++) {
-                    var model = prov.models().withExistingParent("palm_tree/trunk_" + size, TFGCore.id("block/palm_tree/palm_trunk_" + size))
+                    var model = prov.models().withExistingParent(ctx.getName() + "_" + size, TFGCore.id("block/palm_tree/palm_trunk_" + size))
                             .texture("0", ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/log/palm"))
                             .texture("1", TFGCore.id("block/palm_tree/trunk_top_" + size));
                     builder.partialState()
@@ -155,14 +156,20 @@ public class TFGBlocks_PalmTrees {
                     .dynamicShape()
                     .sound(SoundType.BAMBOO)
                     .noOcclusion())
-            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
-                    prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/square_palm_fruit")
-                            .texture("0", TFGCore.id("block/palm_tree/coconut_fruit_green"))))
+            .blockstate((ctx, prov) -> {
+                for (int i = 0; i <= 2; i++) {
+                    var model = prov.models().withExistingParent(ctx.getName() + "_" + i, "tfg:block/palm_tree/square_palm_fruit_" + i)
+                            .texture("0", TFGCore.id("block/" + ctx.getName()));
+                    ModelUtils.blockVariantsRotated(prov.getVariantBuilder(ctx.getEntry()), model);
+                }
+            })
             .tag(TFGTags.Blocks.FALLING_CONCUSSIVE, TFCTags.Blocks.TOUGHNESS_1)
             //Not loot table since drops come from the decaying property.
             .loot((provider, block) -> provider.add(block, LootTable.lootTable()))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    ResourceLocation.fromNamespaceAndPath("tfg", "block/" + ctx.getName() + "_0")))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .build()
             .register();
@@ -205,8 +212,9 @@ public class TFGBlocks_PalmTrees {
                                             .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))))))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .item(BlockItem::new)
+            .tag(ItemTags.LEAVES)
             .color(() -> () -> (stack, tintIndex) -> TFCColors.getFoliageColor(null, tintIndex))
-            .model((ctx, prov) -> prov.withExistingParent("palm_tree/fruit_palm_leaves",
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
                     ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/leaves/palm")))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .build()
@@ -255,8 +263,15 @@ public class TFGBlocks_PalmTrees {
                             .requiresCorrectToolForDrops()
                             .sound(SoundType.WOOD))
                     .blockstate((ctx, prov) -> {
-                        var model = prov.models().withExistingParent(ctx.getName(), TFGCore.id("block/palm_tree/" + name + "_tree_head"));
-                        prov.simpleBlock(ctx.getEntry(), model);
+                        var builder = prov.getVariantBuilder(ctx.getEntry());
+                        for (int stage = 0; stage <= 3; stage++) {
+                            var model = prov.models().getExistingFile(TFGCore.id("block/palm_tree/growing_palm_head_" + stage));
+                            builder.partialState()
+                                    .with(GrowingPalmHeadBlock.STAGE, stage)
+                                    .modelForState()
+                                    .modelFile(model)
+                                    .addModel();
+                        }
                     })
                     .tag(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN, TFCTags.Blocks.LOGS_THAT_LOG, BlockTags.MINEABLE_WITH_AXE)
                     .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
@@ -265,6 +280,8 @@ public class TFGBlocks_PalmTrees {
                                     .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.AXES)))))))
                     .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                     .item(BlockItem::new)
+                    .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                            ResourceLocation.fromNamespaceAndPath("tfg", "block/palm_tree/growing_palm_head_0")))
                     .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                     .build()
                     .register());
@@ -305,14 +322,20 @@ public class TFGBlocks_PalmTrees {
                         .dynamicShape()
                         .sound(SoundType.BAMBOO)
                         .noOcclusion())
-                .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
-                        prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/square_palm_fruit")
-                                .texture("0", TFGCore.id("block/palm_tree/coconut_fruit_brown"))))
+                .blockstate((ctx, prov) -> {
+                    for (int i = 0; i <= 2; i++) {
+                        var model = prov.models().withExistingParent(ctx.getName() + "_" + i, "tfg:block/palm_tree/square_palm_fruit_" + i)
+                                .texture("0", TFGCore.id("block/" + ctx.getName()));
+                        ModelUtils.blockVariantsRotated(prov.getVariantBuilder(ctx.getEntry()), model);
+                    }
+                })
                 .tag(TFGTags.Blocks.FALLING_CONCUSSIVE, TFCTags.Blocks.TOUGHNESS_1)
                 //Not loot table since drops come from the decaying property.
                 .loot((provider, block) -> provider.add(block, LootTable.lootTable()))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .item(BlockItem::new)
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                        ResourceLocation.fromNamespaceAndPath("tfg", "block/" + ctx.getName() + "_0")))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .build()
                 .register());
