@@ -1,5 +1,5 @@
 {
-  "parent": "tfg:block/palm_tree/palm_sapling",
+  "parent": "tfg:block/palm_tree/coconut_sapling",
   "textures": {
     "cross": "tfg:block/palm_tree/coconut_sapling"
   }

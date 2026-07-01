@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blocks.*;
 import net.dries007.tfc.common.blocks.plant.Plant;
@@ -23,6 +22,7 @@ import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -122,7 +122,7 @@ public class PalmTreeSaplingBlock extends BushBlock implements IForgeBlockExtens
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockPos downPos = pos.below();
         BlockState downState = level.getBlockState(downPos);
-        return super.canSurvive(state, level, pos) || Helpers.isBlock(downState, TFCTags.Blocks.BUSH_PLANTABLE_ON);
+        return super.canSurvive(state, level, pos) || Helpers.isBlock(downState, BlockTags.BAMBOO_PLANTABLE_ON);
     }
 
     @Override

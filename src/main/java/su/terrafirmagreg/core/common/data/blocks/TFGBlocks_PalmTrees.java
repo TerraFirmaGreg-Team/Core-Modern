@@ -168,8 +168,7 @@ public class TFGBlocks_PalmTrees {
             .loot((provider, block) -> provider.add(block, LootTable.lootTable()))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .item(BlockItem::new)
-            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
-                    ResourceLocation.fromNamespaceAndPath("tfg", "block/" + ctx.getName() + "_0")))
+            .model((ctx, prov) -> prov.basicItem(TFGCore.id(ctx.getName())))
             .setData(ProviderType.LANG, NonNullBiConsumer.noop())
             .build()
             .register();
@@ -289,11 +288,11 @@ public class TFGBlocks_PalmTrees {
             // Palm Saplings
             PALM_SAPLINGS.put(tree, TFGCore.REGISTRATE.block("palm_tree/" + name + "_sapling", p -> (PalmTreeSaplingBlock) tree.createSapling())
                     .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
-                            prov.models().withExistingParent(ctx.getName(), "tfg:block/palm_tree/palm_sapling")
-                                    .texture("cross", TFGCore.id("block/palm_tree/" + name + "_sapling"))))
+                            prov.models().withExistingParent(ctx.getName(), "tfg:block/" + ctx.getName())
+                                    .texture("cross", TFGCore.id("block/" + ctx.getName()))))
                     .tag(BlockTags.SAPLINGS, TFCTags.Blocks.FRUIT_TREE_SAPLING)
                     .item(BlockItem::new)
-                    .model((ctx, prov) -> prov.basicItem(TFGCore.id("palm_tree/" + name + "_sapling")))
+                    .model((ctx, prov) -> prov.basicItem(TFGCore.id(ctx.getName())))
                     .tag(ItemTags.SAPLINGS)
                     .build()
                     .register());
@@ -334,8 +333,7 @@ public class TFGBlocks_PalmTrees {
                 .loot((provider, block) -> provider.add(block, LootTable.lootTable()))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .item(BlockItem::new)
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
-                        ResourceLocation.fromNamespaceAndPath("tfg", "block/" + ctx.getName() + "_0")))
+                .model((ctx, prov) -> prov.basicItem(TFGCore.id(ctx.getName())))
                 .setData(ProviderType.LANG, NonNullBiConsumer.noop())
                 .build()
                 .register());
