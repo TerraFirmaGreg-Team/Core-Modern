@@ -1,5 +1,7 @@
 {
   "values": [
-    "tfg:palm_tree/potted_coconut_sapling"
+    "tfg:palm_tree/potted_coconut_sapling",
+    "tfg:fruit_trees/potted_lavacado_sapling",
+    "tfg:fruit_trees/potted_magmango_sapling"
   ]
 }

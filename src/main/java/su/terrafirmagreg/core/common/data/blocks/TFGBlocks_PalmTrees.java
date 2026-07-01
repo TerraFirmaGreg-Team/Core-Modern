@@ -29,6 +29,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -305,6 +306,13 @@ public class TFGBlocks_PalmTrees {
                                 .texture("plant", saplingTex)
                                 .texture("dirt", ResourceLocation.fromNamespaceAndPath("tfc", "block/dirt/loam")));
                     })
+                    .loot((prov, block) -> prov.add(block, LootTable.lootTable()
+                            .withPool(LootPool.lootPool()
+                                    .setRolls(ConstantValue.exactly(1.0F))
+                                    .add(LootItem.lootTableItem(PALM_SAPLINGS.get(tree))))
+                            .withPool(LootPool.lootPool()
+                                    .setRolls(ConstantValue.exactly(1.0F))
+                                    .add(LootItem.lootTableItem(Blocks.FLOWER_POT)))))
                     .tag(BlockTags.FLOWER_POTS)
                     .register());
         }
