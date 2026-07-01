@@ -16,13 +16,16 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.entity.projectile.ILeashedJavelin;
 
@@ -36,6 +39,10 @@ public abstract class ThrownJavelinRendererMixin extends EntityRenderer<ThrownJa
     protected ThrownJavelinRendererMixin(EntityRendererProvider.Context context) {
         super(context);
     }
+
+    @Unique
+    private static final TagKey<Item> tfg$ROPE = TagKey.create(ForgeRegistries.Keys.ITEMS,
+            ResourceLocation.fromNamespaceAndPath("forge", "rope"));
 
     /**
      * Renders the "rope" of the javelin using the leash renderer.
@@ -75,17 +82,28 @@ public abstract class ThrownJavelinRendererMixin extends EntityRenderer<ThrownJa
             float playerPitch = Mth.lerp(pitch, player.xRotO, player.getXRot()) * ((float) Math.PI / 180F);
 
             // Determine which hand is holding the rope item.
-            InteractionHand leadHand = player.getOffhandItem().is(Items.LEAD) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+            InteractionHand leadHand = player.getOffhandItem().is(tfg$ROPE) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
             HumanoidArm arm = (leadHand == InteractionHand.MAIN_HAND) ? player.getMainArm() : player.getMainArm().getOpposite();
             float sideMultiplier = (arm == HumanoidArm.RIGHT) ? 1.0F : -1.0F;
 
-            double d2 = Math.cos(yaw) * (double) player.getBbWidth() * 0.4D * sideMultiplier;
-            double d3 = Math.sin(yaw) * (double) player.getBbWidth() * 0.4D * sideMultiplier;
-            double d4 = Math.sin(playerPitch) * (double) player.getBbWidth() * 0.4D;
+            // Base left-right offset.
+            double sideOffset = (double) player.getBbWidth() * 0.6F * sideMultiplier;
 
-            double x = Mth.lerp(pitch, player.xo, player.getX()) + d2;
-            double y = Mth.lerp(pitch, player.yo, player.getY()) + (double) player.getEyeHeight() * 0.7D + d4;
-            double z = Mth.lerp(pitch, player.zo, player.getZ()) + d3;
+            // Base front-back offset.
+            double forwardOffset = (double) player.getBbWidth() * 0.40F;
+
+            double rightX = Math.cos(yaw) * sideOffset;
+            double rightZ = Math.sin(yaw) * sideOffset;
+            double forwardX = -Math.sin(yaw) * forwardOffset;
+            double forwardZ = Math.cos(yaw) * forwardOffset;
+
+            // Vertical pitch offset.
+            double d4 = Math.sin(playerPitch) * (double) player.getBbWidth() * 0.4F;
+
+            // Combine player position, right offset, and forward offset.
+            double x = Mth.lerp(pitch, player.xo, player.getX()) + rightX + forwardX;
+            double y = Mth.lerp(pitch, player.yo, player.getY()) + (double) player.getEyeHeight() + d4;
+            double z = Mth.lerp(pitch, player.zo, player.getZ()) + rightZ + forwardZ;
             leasherPos = new Vec3(x, y, z);
         } else {
             leasherPos = leasher.getRopeHoldPosition(pitch);
