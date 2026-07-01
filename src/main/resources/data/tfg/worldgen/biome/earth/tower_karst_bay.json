@@ -165,6 +165,18 @@
                 "maxCount": 1
             },
             {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:panther",
+                "maxCount": 1
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:cougar",
+                "maxCount": 1
+            },
+            {
                 "weight": 3,
                 "minCount": 1,
                 "type": "tfc:rabbit",
@@ -279,7 +291,7 @@
                 "maxCount": 3
             },
             {
-                "weight": 1,
+                "weight": 2,
                 "minCount": 1,
                 "type": "tfc:ocelot",
                 "maxCount": 3
@@ -309,7 +321,7 @@
                 "maxCount": 4
             },
             {
-                "weight": 1,
+                "weight": 2,
                 "minCount": 1,
                 "type": "tfg:jerboa",
                 "maxCount": 3

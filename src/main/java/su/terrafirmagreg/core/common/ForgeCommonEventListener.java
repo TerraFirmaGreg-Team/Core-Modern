@@ -9,7 +9,6 @@ import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -83,28 +82,7 @@ public final class ForgeCommonEventListener {
             //Checks if the player is in a custom dimension spawn,
             // and puts them at that pos when they first join
             GlobalPos spawnPos = CustomSpawnSaveHandler.getSpawnPos(Objects.requireNonNull(player.getServer()).overworld());
-
-            if (!spawnPos.dimension().equals(ServerLevel.OVERWORLD)) {
-                CompoundTag playerData = player.getPersistentData();
-                CompoundTag tfgPlayerData;
-
-                if (playerData.contains(TFGCore.MOD_ID, CompoundTag.TAG_COMPOUND)) {
-                    tfgPlayerData = playerData.getCompound(TFGCore.MOD_ID);
-                    TFGCore.LOGGER.info("hasJoinedBefore: {}", tfgPlayerData.getBoolean("hasJoinedBefore"));
-                } else {
-                    tfgPlayerData = new CompoundTag();
-                    playerData.put(TFGCore.MOD_ID, tfgPlayerData);
-                }
-
-                if (!tfgPlayerData.getBoolean("hasJoinedBefore")) {
-                    tfgPlayerData.putBoolean("hasJoinedBefore", true);
-                    playerData.put(TFGCore.MOD_ID, tfgPlayerData);
-
-                    CustomSpawnHelper.respawnTeleporter(player, player.getServer().getLevel(spawnPos.dimension()), spawnPos);
-
-                }
-
-            }
+            CustomSpawnHelper.tryFirstJoinTeleport(player, spawnPos);
         }
     }
 
@@ -138,6 +116,9 @@ public final class ForgeCommonEventListener {
     @SubscribeEvent
     public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         NutrientEffectsHandler.removeFromPlayer(event.getEntity());
+        if (event.getEntity() instanceof ServerPlayer player) {
+            CustomSpawnHelper.removeFirstJoinTeleport(player.getUUID());
+        }
     }
 
     @SubscribeEvent
@@ -146,8 +127,15 @@ public final class ForgeCommonEventListener {
             MinecraftServer server = player.getServer();
             GlobalPos worldSpawn = CustomSpawnSaveHandler.getSpawnPos(Objects.requireNonNull(server).overworld());
 
-            if ((worldSpawn.dimension().equals(ServerLevel.OVERWORLD) || player.getRespawnPosition() != null))
+            if (worldSpawn.dimension().equals(ServerLevel.OVERWORLD)) {
                 return;
+            }
+            if (CustomSpawnHelper.respawnedAtPersonalSpawn(player)) {
+                return;
+            }
+            if (player.level().dimension().equals(worldSpawn.dimension())) {
+                return;
+            }
             CustomSpawnHelper.respawnTeleporter(player, server.getLevel(worldSpawn.dimension()), worldSpawn);
         }
     }
@@ -176,9 +164,15 @@ public final class ForgeCommonEventListener {
 
             var targetLevel = server.getLevel(spawnPos.dimension());
             if (targetLevel == serverLevel) {
-                if (!spawnPos.equals(CustomSpawnHelper.BENEATH_PLACEHOLDER)
-                        && !spawnPos.equals(CustomSpawnHelper.MARS_PLACEHOLDER)) {
+                if (!CustomSpawnHelper.isUnresolvedPlaceholder(spawnPos)) {
                     TFGCore.LOGGER.info("Found exists spawn point: {}", spawnPos);
+                    CustomSpawnHelper.processPendingFirstJoinTeleports(server, spawnPos);
+                    return;
+                }
+                if (!spawnPos.dimension().equals(ServerLevel.NETHER)) {
+                    TFGCore.LOGGER.warn(
+                            "Custom spawn in {} is still unresolved; nether biome search does not apply",
+                            spawnPos.dimension().location());
                     return;
                 }
                 RandomSource random = new XoroshiroRandomSource(targetLevel.getSeed());
@@ -246,7 +240,9 @@ public final class ForgeCommonEventListener {
                 }
 
                 TFGCore.LOGGER.info("Found valid spawn point: {}", validSpawn);
-                CustomSpawnSaveHandler.setSpawnPos(server.overworld(), GlobalPos.of(spawnPos.dimension(), validSpawn));
+                GlobalPos resolvedSpawn = GlobalPos.of(spawnPos.dimension(), validSpawn);
+                CustomSpawnSaveHandler.setSpawnPos(server.overworld(), resolvedSpawn);
+                CustomSpawnHelper.processPendingFirstJoinTeleports(server, resolvedSpawn);
             }
         }
     }
