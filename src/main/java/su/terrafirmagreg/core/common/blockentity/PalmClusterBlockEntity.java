@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.block.palmtree.CoconutClusterBlock;
+import su.terrafirmagreg.core.common.block.palmtree.PalmClusterBlock;
 
 /**
  * Generic palm cluster block entity.
@@ -20,15 +20,15 @@ public class PalmClusterBlockEntity extends TickCounterBlockEntity {
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, PalmClusterBlockEntity cluster) {
-        if (state.getBlock() instanceof CoconutClusterBlock coconutCluster && state.getValue(CoconutClusterBlock.NATURAL)) {
+        if (state.getBlock() instanceof PalmClusterBlock clusterBlock && state.getValue(PalmClusterBlock.NATURAL)) {
             if (cluster.getLastUpdateTick() == Integer.MIN_VALUE) {
                 cluster.resetCounter();
             }
             while (cluster.getTicksSinceUpdate() >= ICalendar.TICKS_IN_DAY) {
                 cluster.reduceCounter(ICalendar.TICKS_IN_DAY);
-                coconutCluster.onUpdate(level, pos, state);
+                clusterBlock.onUpdate(level, pos, state);
                 state = level.getBlockState(pos);
-                if (!(state.getBlock() instanceof CoconutClusterBlock)) {
+                if (!(state.getBlock() instanceof PalmClusterBlock)) {
                     break;
                 }
             }

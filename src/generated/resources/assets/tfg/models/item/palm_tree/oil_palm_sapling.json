@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tfg:item/palm_tree/oil_palm_sapling"
+  }
+}

@@ -3,7 +3,10 @@ package su.terrafirmagreg.core.common.data;
 import java.util.Locale;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -11,16 +14,19 @@ import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.block.palmtree.PalmClusterBlock;
 import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
@@ -31,27 +37,59 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
  * This enum will automatically register Heads, Fruits, and Clusters
  */
 public enum PalmTrees implements StringRepresentable {
-    COCONUT(10, new Lifecycle[] {
+    COCONUT(10, 3, 6, 8, "square", true, true, new Lifecycle[] {
             Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING,
             Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING
+    }),
+    OIL_PALM(7, 1, 2, 4, "bundle", false, false, new Lifecycle[] {
+            Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING,
+            Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING
     });
 
     private final String serializedName;
     @Getter
     private final int defaultGrowthDays;
     @Getter
+    private final int minGrowthSize;
+    @Getter
+    private final int maxGrowthSize;
+    @Getter
+    private final int clusterAges;
+    @Getter
+    private final String clusterModelShape;
+    @Getter
+    private final boolean specialCluster;
+    @Getter
+    private final boolean specialFruit;
+    @Getter
     private final Lifecycle[] stages;
+
+    @Getter
+    private final IntegerProperty clusterAgeProperty;
 
     /**
      * Creates a new palm tree.
      *
      * @param defaultGrowthDays Default number of days required for growth.
-     * @param stages             Lifecycle stages.
+     * @param minGrowthSize Sets the minimum number of stage 2 trunk blocks for the final growth tree size. (5 blocks will always be placed below)
+     * @param maxGrowthSize Sets the maximum number of stage 2 trunk blocks for the final growth tree size. (5 blocks will always be placed below)
+     * @param clusterAges Sets the number of age states for the cluster block.
+     * @param clusterModelShape Sets the model shape for the cluster block. Available options: "square", "bundle"
+     * @param specialCluster If false, the cluster block will be automatically generated with {@link PalmClusterBlock}. If true, a dedicated class should be made.
+     * @param specialFruit If false, the fruit will be automatically generated as an item. If true, a dedicated class should be made.
+     * @param stages Lifecycle stages. Only valid stages are {@link Lifecycle#FRUITING} and {@link Lifecycle#DORMANT}.
      */
-    PalmTrees(int defaultGrowthDays, Lifecycle[] stages) {
+    PalmTrees(int defaultGrowthDays, int minGrowthSize, int maxGrowthSize, Integer clusterAges, String clusterModelShape, boolean specialCluster, boolean specialFruit, Lifecycle[] stages) {
         this.serializedName = name().toLowerCase(Locale.ROOT);
         this.defaultGrowthDays = defaultGrowthDays;
+        this.minGrowthSize = minGrowthSize;
+        this.maxGrowthSize = maxGrowthSize;
+        this.specialCluster = specialCluster;
+        this.specialFruit = specialFruit;
+        this.clusterAges = clusterAges;
+        this.clusterModelShape = clusterModelShape;
         this.stages = stages;
+        this.clusterAgeProperty = IntegerProperty.create("age", 0, clusterAges - 1);
     }
 
     @Override
@@ -95,7 +133,10 @@ public enum PalmTrees implements StringRepresentable {
         return TFGBlocks_PalmTrees.PALM_CLUSTERS.get(this);
     }
 
-    public BlockEntry<? extends Block> getDroppedFruitBlock() {
-        return TFGBlocks_PalmTrees.PALM_FRUITS.get(this);
+    public @Nullable ItemEntry<? extends Item> getDroppedFruit() {
+        if (!this.isSpecialFruit()) {
+            return TFGBlocks_PalmTrees.PALM_FRUITS.get(this);
+        }
+        return null;
     }
 }

@@ -267,9 +267,9 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
                 TickCounterBlockEntity.reset(level, newHeadPos);
             }
         } else if (stage == 2) {
-            int numSize2 = random.nextIntBetweenInclusive(3, 6);
+            int numSize2 = random.nextIntBetweenInclusive(tree.getMinGrowthSize(), tree.getMaxGrowthSize());
             if (canGrowUp(level, pos, numSize2)) {
-                // Random trunks between 3 and 6 at size 2
+                // Random trunks between min and max tree size at size 2
                 for (int i = 0; i < numSize2; i++) {
                     placeTrunk(level, pos.above(i), 2);
                 }

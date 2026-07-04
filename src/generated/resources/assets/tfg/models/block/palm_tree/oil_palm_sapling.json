@@ -1,6 +1,6 @@
 {
   "parent": "tfg:block/palm_tree/palm_sapling",
   "textures": {
-    "cross": "tfg:block/palm_tree/coconut_sapling"
+    "cross": "tfg:block/palm_tree/oil_palm_sapling"
   }
 }

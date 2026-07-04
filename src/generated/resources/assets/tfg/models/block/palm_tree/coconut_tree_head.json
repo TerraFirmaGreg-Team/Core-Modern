@@ -1,5 +1,5 @@
 {
-  "parent": "tfg:block/palm_tree/palm_head",
+  "parent": "tfg:block/palm_tree/palm_head_coconut",
   "textures": {
     "fuzz": "tfg:block/palm_tree/coconut_head_fuzz",
     "side": "tfg:block/palm_tree/coconut_head_side",

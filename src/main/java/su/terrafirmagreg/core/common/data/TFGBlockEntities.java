@@ -113,14 +113,11 @@ public class TFGBlockEntities {
                     .validBlock(() -> TFGBlocks_PalmTrees.PALM_HEADS.get(tree).get())
                     .register());
 
-            if (TFGBlocks_PalmTrees.PALM_FRUITS.containsKey(tree)) {
-                addValidBEBlock(TFCBlockEntities.DECAYING, TFGBlocks_PalmTrees.PALM_FRUITS.get(tree));
-            }
-
             addValidBEBlock(TFCBlockEntities.TICK_COUNTER, TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree));
             addValidBEBlock(TFCBlockEntities.TICK_COUNTER, TFGBlocks_PalmTrees.GROWING_PALM_HEADS.get(tree));
 
             if (tree == PalmTrees.COCONUT) {
+                addValidBEBlock(TFCBlockEntities.DECAYING, TFGBlocks_PalmTrees.BROWN_COCONUT);
                 addValidBEBlock(TFCBlockEntities.DECAYING, TFGBlocks_PalmTrees.GREEN_COCONUT);
             }
         }
