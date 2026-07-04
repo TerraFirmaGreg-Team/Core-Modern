@@ -89,6 +89,15 @@ public final class TFGBlocks {
             .item(BlockItem::new).build()
             .register();
 
+    public static final BlockEntry<CarpetBlock> PALE_MOSS_CARPET = TFGCore.REGISTRATE.block("pale_moss_carpet", CarpetBlock::new)
+            .initialProperties(() -> Blocks.MOSS_CARPET)
+            .properties(p -> p.mapColor(MapColor.GLOW_LICHEN)
+                    .strength(0.1f))
+            .tag(BlockTags.MINEABLE_WITH_HOE)
+            .item(BlockItem::new).build()
+            .loot(RegistrateBlockLootTables::dropSelf)
+            .register();
+
     ////#region Martian sand piles and layer blocks, in order of color
 
     // Still in the pile folder because these are for the existing pre-0.11 layer blocks in peoples' worlds
