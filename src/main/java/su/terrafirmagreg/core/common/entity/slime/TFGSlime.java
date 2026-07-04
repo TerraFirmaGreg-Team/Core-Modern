@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -62,7 +63,7 @@ public class TFGSlime extends TamableMammal {
     static boolean eatsRottenFood = false;
     static int produceTicks = 23500;
     static double produceFamiliarity = 0.15;
-    static int childCount = 1;
+    static int childCount = 2;
     static long gestationDays = 64;
 
     public TFGSlime(EntityType<? extends TFCAnimal> animal, Level level) {
@@ -204,8 +205,6 @@ public class TFGSlime extends TamableMammal {
 
             return InteractionResult.SUCCESS;
         } else if (this.isFood(held) && this.isHungry()) {
-            this.eatFood(held, hand, player);
-
             if (this.isReadyForAnimalProduct()) {
                 AnimalProductEvent event = new AnimalProductEvent(this.level(), this.blockPosition(), player, this, this.getProduct().getDefaultInstance(), held, 1);
                 if (!MinecraftForge.EVENT_BUS.post(event)) {
@@ -213,13 +212,14 @@ public class TFGSlime extends TamableMammal {
                         return InteractionResult.PASS;
                     }
 
+                    this.playSound(this.eatingSound(held), 1.0F, 1.0F);
+                    held.shrink(1);
                     this.setProductsCooldown();
-                    this.playSound(SoundEvents.ITEM_PICKUP);
                     this.addUses(event.getUses());
                     Helpers.spawnItem(event.getLevel(), event.getPos(), event.getProduct());
-
-                    return InteractionResult.SUCCESS;
                 }
+            } else {
+                this.eatFood(held, hand, player);
             }
 
             return InteractionResult.SUCCESS;
@@ -281,6 +281,16 @@ public class TFGSlime extends TamableMammal {
     // endregion
 
     // region Breeding Stuff
+    @Override
+    public boolean canMate(Animal otherAnimal) {
+        if (otherAnimal.getClass() != this.getClass()) {
+            return false;
+        } else {
+            TFCAnimal other = (TFCAnimal) otherAnimal;
+            return this.isReadyToMate() && other.isReadyToMate();
+        }
+    }
+
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
         if (other != this && other instanceof TFGSlime mate && !isFertilized() && !mate.isFertilized() && getUUID().compareTo(mate.getUUID()) < 0) {
