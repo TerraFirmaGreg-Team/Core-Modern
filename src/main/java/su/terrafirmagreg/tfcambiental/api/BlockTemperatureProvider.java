@@ -369,7 +369,7 @@ public interface BlockTemperatureProvider {
         if (blockEntity instanceof IMachineBlockEntity machineBE &&
                 machineBE.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine &&
                 machine.isFormed()
-                && machine.getMultiblockState().isPosInCache(player.blockPosition())
+                && isPosInCacheSafe(machine, player.blockPosition())
                 && machine.getRecipeLogic().isWorking()) {
 
             float temp;
@@ -387,5 +387,19 @@ public interface BlockTemperatureProvider {
             return Optional.of(new TempModifier(temp, 100f));
         }
         return TempModifier.none();
+    }
+
+    private static boolean isPosInCacheSafe(WorkableElectricMultiblockMachine machine, BlockPos pos) {
+        var lock = machine.getPatternLock();
+        if (!lock.tryLock()) {
+            return false;
+        }
+        try {
+            return machine.getMultiblockState().isPosInCache(pos);
+        } catch (NullPointerException ignored) {
+            return false;
+        } finally {
+            lock.unlock();
+        }
     }
 }
