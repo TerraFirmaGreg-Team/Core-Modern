@@ -65,7 +65,7 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
     public static final BooleanProperty ATTACHED = BooleanProperty.create("attached");
     public static final BooleanProperty NATURAL = BooleanProperty.create("natural");
 
-    private static final ThreadLocal<IntegerProperty> PROPERTY_TO_REGISTER = new ThreadLocal<>();
+    private static final ThreadLocal<@Nullable IntegerProperty> PROPERTY_TO_REGISTER = new ThreadLocal<>();
 
     private static final VoxelShape[] SHAPES = Helpers.computeHorizontalShapes(dir -> Helpers.rotateShape(dir, 1, 1, 0, 15, 15, 12));
 
