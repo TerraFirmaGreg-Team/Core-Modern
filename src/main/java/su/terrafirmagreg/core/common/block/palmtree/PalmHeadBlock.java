@@ -15,6 +15,7 @@ import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -92,6 +93,7 @@ public class PalmHeadBlock extends Block implements EntityBlockExtension, HoeOve
         Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
         Lifecycle lifecycle = tree.getStages()[month.ordinal()];
         text.add(Component.translatable("tfg.tooltip.lifecycle." + lifecycle.getSerializedName()));
+        text.add(Component.translatable("tfg.tooltip.palm_tree.head_harvest").withStyle(ChatFormatting.GRAY));
     }
 
     @Nullable

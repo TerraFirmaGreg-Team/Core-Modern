@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
-import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
@@ -51,6 +50,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.PalmColorProvider;
 import su.terrafirmagreg.core.common.block.palmtree.*;
 import su.terrafirmagreg.core.common.blockentity.PalmHeadBlockEntity;
 import su.terrafirmagreg.core.common.data.PalmTrees;
@@ -71,7 +71,10 @@ public class TFGBlocks_PalmTrees {
     public static final Map<PalmTrees, BlockEntry<PalmTreeSaplingBlock>> PALM_SAPLINGS = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, BlockEntry<FlowerPotBlock>> POTTED_SAPLINGS = new EnumMap<>(PalmTrees.class);
 
+    public static final Map<PalmTrees, BlockEntry<TFCLeavesBlock>> PALM_LEAVES = new EnumMap<>(PalmTrees.class);
     public static final Map<PalmTrees, ItemEntry<Item>> PALM_FRUITS = new EnumMap<>(PalmTrees.class);
+
+    private static final Wood PALM_REGISTER = Wood.PALM;
 
     public static void init() {
         PalmTrees.init();
@@ -138,57 +141,13 @@ public class TFGBlocks_PalmTrees {
             .build()
             .register();
 
-    // Fruit Palm Leaves
-    // Copying the regular Palm Leaves, but it's different to prevent sapling drops.
-    public static final BlockEntry<TFCLeavesBlock> FRUIT_PALM_LEAVES = TFGCore.REGISTRATE.block("palm_tree/fruit_palm_leaves", p -> {
-        var wood = Wood.PALM;
-        return new TFCLeavesBlock(ExtendedProperties.of(p)
-                .mapColor(MapColor.PLANT)
-                .strength(0.5F)
-                .sound(SoundType.GRASS)
-                .defaultInstrument()
-                .randomTicks()
-                .noOcclusion()
-                .isViewBlocking(TFCBlocks::never)
-                .flammableLikeLeaves(),
-                wood.autumnIndex(), wood.getBlock(Wood.BlockType.FALLEN_LEAVES), wood.getBlock(Wood.BlockType.TWIG));
-    })
-            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
-                    prov.models().getExistingFile(ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/leaves/palm"))))
-            .addLayer(() -> RenderType::cutoutMipped)
-            .color(() -> () -> (state, level, pos, tintIndex) -> TFCColors.getFoliageColor(pos, tintIndex))
-            .tag(BlockTags.LEAVES)
-            .loot((prov, block) -> prov.add(block, LootTable.lootTable()
-                    .withPool(LootPool.lootPool()
-                            .setRolls(ConstantValue.exactly(1.0F))
-                            .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LEAVES).get())
-                                    .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS)))))
-                    .withPool(LootPool.lootPool()
-                            .name("loot_pool")
-                            .setRolls(ConstantValue.exactly(1.0F))
-                            .add(AlternativesEntry.alternatives(
-                                    LootItem.lootTableItem(Items.STICK)
-                                            .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFC_ITEM_SHARP_TOOLS)))
-                                            .when(LootItemRandomChanceCondition.randomChance(0.2F))
-                                            .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))),
-                                    LootItem.lootTableItem(Items.STICK)
-                                            .when(LootItemRandomChanceCondition.randomChance(0.05F))
-                                            .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))))))
-            .item(BlockItem::new)
-            .tag(ItemTags.LEAVES)
-            .color(() -> () -> (stack, tintIndex) -> TFCColors.getFoliageColor(null, tintIndex))
-            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
-                    ResourceLocation.fromNamespaceAndPath("tfc", "block/wood/leaves/palm")))
-            .build()
-            .register();
-
     // Green & Brown Coconuts
     public static final Map<String, BlockEntry<PalmFruitBlock>> COCONUTS = Stream.of("green", "brown")
             .collect(Collectors.toMap(
                     color -> color,
                     color -> TFGCore.REGISTRATE.block("palm_tree/coconut_fruit_" + color, p -> new PalmFruitBlock(ExtendedProperties.of(p)
                             .blockEntity(TFCBlockEntities.DECAYING)
-                            .serverTicks(DecayingBlockEntity::serverTick), PALM_HUSK, PalmFruitBlock.DEFAULT_SHAPE))
+                            .serverTicks(DecayingBlockEntity::serverTick), PALM_HUSK))
                             .properties(p -> p.mapColor(color.equals("green") ? MapColor.PLANT : MapColor.DIRT)
                                     .offsetType(BlockBehaviour.OffsetType.XZ)
                                     .pushReaction(PushReaction.DESTROY)
@@ -334,6 +293,47 @@ public class TFGBlocks_PalmTrees {
                     .item(BlockItem::new)
                     .model((ctx, prov) -> prov.basicItem(TFGCore.id(ctx.getName())))
                     .tag(ItemTags.SAPLINGS)
+                    .build()
+                    .register());
+
+            // Palm Leaves
+            PALM_LEAVES.put(tree, TFGCore.REGISTRATE.block("palm_tree/" + name + "_leaves", p -> new TFCLeavesBlock(ExtendedProperties.of(p)
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.5F)
+                    .sound(SoundType.GRASS)
+                    .defaultInstrument()
+                    .randomTicks()
+                    .noOcclusion()
+                    .isViewBlocking(TFCBlocks::never)
+                    .flammableLikeLeaves(),
+                    tree.getFoliageColorIndex(), PALM_REGISTER.getBlock(Wood.BlockType.FALLEN_LEAVES), PALM_REGISTER.getBlock(Wood.BlockType.TWIG)))
+                    .blockstate((ctx, prov) -> prov.simpleBlock(
+                            ctx.getEntry(), prov.models().withExistingParent(ctx.getName(), "tfc:block/wood/leaves/palm")
+                                    .texture("side", TFGCore.id("block/" + ctx.getName() + "_side"))
+                                    .texture("end", TFGCore.id("block/" + ctx.getName() + "_top"))))
+                    .addLayer(() -> RenderType::cutoutMipped)
+                    .color(() -> () -> (state, level, pos, tintIndex) -> PalmColorProvider.getPalmFoliageColor(tree, pos, tintIndex))
+                    .tag(BlockTags.LEAVES)
+                    .loot((prov, block) -> prov.add(block, LootTable.lootTable()
+                            .withPool(LootPool.lootPool()
+                                    .setRolls(ConstantValue.exactly(1.0F))
+                                    .add(LootItem.lootTableItem(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.LEAVES).get())
+                                            .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS)))))
+                            .withPool(LootPool.lootPool()
+                                    .name("loot_pool")
+                                    .setRolls(ConstantValue.exactly(1.0F))
+                                    .add(AlternativesEntry.alternatives(
+                                            LootItem.lootTableItem(Items.STICK)
+                                                    .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(TFC_ITEM_SHARP_TOOLS)))
+                                                    .when(LootItemRandomChanceCondition.randomChance(0.2F))
+                                                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))),
+                                            LootItem.lootTableItem(Items.STICK)
+                                                    .when(LootItemRandomChanceCondition.randomChance(0.05F))
+                                                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))))))
+                    .item(BlockItem::new)
+                    .tag(ItemTags.LEAVES)
+                    .color(() -> () -> (stack, tintIndex) -> PalmColorProvider.getPalmFoliageColor(tree, null, tintIndex))
+                    .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/" + ctx.getName())))
                     .build()
                     .register());
 

@@ -17,7 +17,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -29,6 +31,7 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 public class PalmTrunkBlock extends Block implements IFluidLoggable {
 
     public static final IntegerProperty SIZE = IntegerProperty.create("size", 0, 2);
+    public static final Property<Boolean> BASE = BooleanProperty.create("base");
     public static final FluidProperty FLUID = TFCBlockStateProperties.WATER;
 
     public static final VoxelShape SHAPE0 = box(2, 0, 2, 14, 16, 14);
@@ -37,14 +40,19 @@ public class PalmTrunkBlock extends Block implements IFluidLoggable {
 
     public PalmTrunkBlock(Properties p) {
         super(p);
-        this.registerDefaultState(this.stateDefinition.any().setValue(SIZE, 0).setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SIZE, 0).setValue(BASE, false).setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
     }
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockState below = level.getBlockState(pos.below());
-        return below.isFaceSturdy(level, pos.below(), Direction.UP)
-                || below.is(TFGBlocks_PalmTrees.PALM_TRUNK.get());
+        boolean persist = state.getValue(BASE);
+
+        if (persist) {
+            return true;
+        } else {
+            return below.isFaceSturdy(level, pos.below(), Direction.UP) || below.is(TFGBlocks_PalmTrees.PALM_TRUNK.get());
+        }
     }
 
     @Override
@@ -90,6 +98,6 @@ public class PalmTrunkBlock extends Block implements IFluidLoggable {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(SIZE, getFluidProperty());
+        builder.add(SIZE, BASE, getFluidProperty());
     }
 }

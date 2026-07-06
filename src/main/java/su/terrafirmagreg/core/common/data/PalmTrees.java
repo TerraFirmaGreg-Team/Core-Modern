@@ -37,18 +37,24 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
  * This enum will automatically register Heads, Fruits, and Clusters
  */
 public enum PalmTrees implements StringRepresentable {
-    COCONUT(10, 3, 6, 0, 0, 8, "square", true, true, new Lifecycle[] {
+    COCONUT(10, 150, 3, 6, 0, 0, 8, "square", true, true, new Lifecycle[] {
             Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING,
             Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING
     }),
-    OIL_PALM(7, 0, 2, 3, 6, 4, "double_bundle", false, false, new Lifecycle[] {
+    OIL_PALM(7, 200, 0, 2, 3, 6, 4, "double_bundle", false, false, new Lifecycle[] {
             Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING,
             Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING
+    }),
+    DATE(9, 255, 2, 5, 4, 8, 4, "double_bundle", false, false, new Lifecycle[] {
+            Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT,
+            Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING
     });
 
     private final String serializedName;
     @Getter
     private final int defaultGrowthDays;
+    @Getter
+    private final int foliageColorIndex;
     @Getter
     private final int minGrowthSize;
     @Getter
@@ -75,6 +81,7 @@ public enum PalmTrees implements StringRepresentable {
      * Creates a new palm tree.
      *
      * @param defaultGrowthDays Default number of days required for growth.
+     * @param foliageColorIndex Sets the color of the leaves based on TFC foliage index (foliage.png). Range from 0 to 255
      * @param minGrowthSize Sets the minimum number of stage 2 trunk blocks for the final growth tree size. (5 blocks will always be placed below)
      * @param maxGrowthSize Sets the maximum number of stage 2 trunk blocks for the final growth tree size. (5 blocks will always be placed below)
      * @param minDrops Sets the minimum number of fruit drops when mature.
@@ -85,10 +92,12 @@ public enum PalmTrees implements StringRepresentable {
      * @param specialFruit If false, the fruit will be automatically generated as an item. If true, a dedicated class should be made.
      * @param stages Lifecycle stages. Only valid stages are {@link Lifecycle#FRUITING} and {@link Lifecycle#DORMANT}.
      */
-    PalmTrees(int defaultGrowthDays, int minGrowthSize, int maxGrowthSize, int minDrops, int maxDrops, Integer clusterAges, String clusterModelShape, boolean specialCluster, boolean specialFruit,
+    PalmTrees(int defaultGrowthDays, int foliageColorIndex, int minGrowthSize, int maxGrowthSize, int minDrops, int maxDrops, Integer clusterAges, String clusterModelShape, boolean specialCluster,
+            boolean specialFruit,
             Lifecycle[] stages) {
         this.serializedName = name().toLowerCase(Locale.ROOT);
         this.defaultGrowthDays = defaultGrowthDays;
+        this.foliageColorIndex = foliageColorIndex;
         this.minGrowthSize = minGrowthSize;
         this.maxGrowthSize = maxGrowthSize;
         this.minDrops = minDrops;

@@ -1,6 +1,8 @@
 {
   "values": [
-    "tfg:palm_tree/fruit_palm_leaves",
+    "tfg:palm_tree/coconut_leaves",
+    "tfg:palm_tree/oil_palm_leaves",
+    "tfg:palm_tree/date_leaves",
     "tfg:fruit_trees/lavacado_leaves",
     "tfg:fruit_trees/magmango_leaves"
   ]

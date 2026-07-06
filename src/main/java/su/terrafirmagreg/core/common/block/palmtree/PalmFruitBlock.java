@@ -44,11 +44,8 @@ public class PalmFruitBlock extends DecayingBlock implements IFallableBlock, IFl
     public static final FluidProperty FLUID = TFCBlockStateProperties.WATER;
     public static final VoxelShape DEFAULT_SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 5.5, 11.0);
 
-    private final VoxelShape shape;
-
-    public PalmFruitBlock(ExtendedProperties properties, Supplier<? extends Block> rotted, VoxelShape shape) {
+    public PalmFruitBlock(ExtendedProperties properties, Supplier<? extends Block> rotted) {
         super(properties.flammable(60, 30), rotted);
-        this.shape = shape;
 
         registerDefaultState(getStateDefinition().any().setValue(getFluidProperty(), getFluidProperty().keyFor(Fluids.EMPTY)));
     }
@@ -96,7 +93,7 @@ public class PalmFruitBlock extends DecayingBlock implements IFallableBlock, IFl
         if (!player.getItemInHand(player.getUsedItemHand()).isEmpty())
             return InteractionResult.FAIL;
 
-        // Using destroyBlock instead of removeBlock to ensure the loot table (and decay) is handled correctly.
+        // Using destroyBlock instead of removeBlock to ensure the loot table and decay is handled correctly.
         if (level instanceof ServerLevel serverLevel) {
             level.destroyBlock(pos, true, player);
 
@@ -114,8 +111,11 @@ public class PalmFruitBlock extends DecayingBlock implements IFallableBlock, IFl
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        // For whatever reason the x, z values are being ignored when running in the modpack but not in dev.
+        // So the shape ends up being 16 x 5 x 16. I'm not sure why. Likely some random mod doing it, and I don't really care enough to investigate.
+        // It only affects the hitbox for clicking. Not for pushing against entities.
         Vec3 vec3 = state.getOffset(level, pos);
-        return shape.move(vec3.x, vec3.y, vec3.z);
+        return DEFAULT_SHAPE.move(vec3.x, vec3.y, vec3.z);
     }
 
     @Override

@@ -240,8 +240,8 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
         if (stage == 0) {
             // 2 trunks at size 2
             if (canGrowUp(level, pos, 2)) {
-                placeTrunk(level, pos, 2);
-                placeTrunk(level, pos.above(1), 2);
+                placeTrunk(level, pos, 2, false);
+                placeTrunk(level, pos.above(1), 2, true);
 
                 BlockPos newHeadPos = pos.above(2);
                 level.setBlock(newHeadPos, state.setValue(STAGE, 1), 3);
@@ -252,12 +252,12 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
         } else if (stage == 1) {
             if (canGrowUp(level, pos, 3)) {
                 // 2 trunks at size 2
-                placeTrunk(level, pos.above(2), 2);
-                placeTrunk(level, pos.above(1), 2);
+                placeTrunk(level, pos.above(2), 2, false);
+                placeTrunk(level, pos.above(1), 2, false);
                 // 3 trunks at size 1
-                placeTrunk(level, pos, 1);
-                placeTrunk(level, pos.below(1), 1);
-                placeTrunk(level, pos.below(2), 1);
+                placeTrunk(level, pos, 1, false);
+                placeTrunk(level, pos.below(1), 1, false);
+                placeTrunk(level, pos.below(2), 1, true);
 
                 clearLeaves(level, pos, 1);
                 BlockPos newHeadPos = pos.above(3);
@@ -271,15 +271,15 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
             if (canGrowUp(level, pos, numSize2)) {
                 // Random trunks between min and max tree size at size 2
                 for (int i = 0; i < numSize2; i++) {
-                    placeTrunk(level, pos.above(i), 2);
+                    placeTrunk(level, pos.above(i), 2, false);
                 }
                 // 3 trunks at size 1
-                placeTrunk(level, pos.below(1), 1);
-                placeTrunk(level, pos.below(2), 1);
-                placeTrunk(level, pos.below(3), 1);
+                placeTrunk(level, pos.below(1), 1, false);
+                placeTrunk(level, pos.below(2), 1, false);
+                placeTrunk(level, pos.below(3), 1, false);
                 // 2 trunks at size 0
-                placeTrunk(level, pos.below(4), 0);
-                placeTrunk(level, pos.below(5), 0);
+                placeTrunk(level, pos.below(4), 0, false);
+                placeTrunk(level, pos.below(5), 0, true);
 
                 clearLeaves(level, pos, 2);
                 BlockPos finalHeadPos = pos.above(numSize2);
@@ -292,7 +292,7 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
 
     private void placeLeaves(Level level, BlockPos headPos, int stage) {
         if (LEAF_PATTERNS.containsKey(stage)) {
-            LEAF_PATTERNS.get(stage).place(level, headPos);
+            LEAF_PATTERNS.get(stage).place(level, headPos, tree);
         }
     }
 
@@ -341,8 +341,8 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
             return result;
         }
 
-        public void place(Level level, BlockPos headPos) {
-            BlockState leaves = TFGBlocks_PalmTrees.FRUIT_PALM_LEAVES.get().defaultBlockState()
+        public void place(Level level, BlockPos headPos, PalmTrees tree) {
+            BlockState leaves = TFGBlocks_PalmTrees.PALM_LEAVES.get(tree).get().defaultBlockState()
                     .setValue(BlockStateProperties.PERSISTENT, false);
 
             for (BlockPos relativePos : leafPositions) {
@@ -379,9 +379,9 @@ public class GrowingPalmHeadBlock extends Block implements EntityBlockExtension,
         return pos.getY() + height < level.getMaxBuildHeight();
     }
 
-    private void placeTrunk(Level level, BlockPos pos, int size) {
+    private void placeTrunk(Level level, BlockPos pos, int size, boolean persist) {
         Block trunkBlock = TFGBlocks_PalmTrees.PALM_TRUNK.get();
-        BlockState state = trunkBlock.defaultBlockState().setValue(PalmTrunkBlock.SIZE, size);
+        BlockState state = trunkBlock.defaultBlockState().setValue(PalmTrunkBlock.SIZE, size).setValue(PalmTrunkBlock.BASE, persist);
         IFluidLoggable fluidLoggable = (IFluidLoggable) trunkBlock;
         state = state.setValue(fluidLoggable.getFluidProperty(), fluidLoggable.getFluidProperty().keyForOrEmpty(level.getFluidState(pos).getType()));
         level.setBlock(pos, state, 3);

@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/wood/leaves/palm",
+  "textures": {
+    "end": "tfg:block/palm_tree/oil_palm_leaves_top",
+    "side": "tfg:block/palm_tree/oil_palm_leaves_side"
+  }
+}

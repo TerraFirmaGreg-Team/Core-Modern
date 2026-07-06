@@ -130,9 +130,9 @@ public class ClientProxy extends CommonProxy {
                 ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_HEADS.get(tree).get(), RenderType.cutout());
                 ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.GROWING_PALM_HEADS.get(tree).get(), RenderType.cutout());
                 ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.POTTED_SAPLINGS.get(tree).get(), RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_LEAVES.get(tree).get(), RenderType.cutoutMipped());
             }
             ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_HUSK.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.FRUIT_PALM_LEAVES.get(), RenderType.cutout());
 
             // Wood
             TFGBlocks_Wood.WOODS.values().forEach(map -> {

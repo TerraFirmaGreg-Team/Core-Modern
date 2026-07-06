@@ -198,8 +198,7 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
             if (tree.getMinDrops() != tree.getMaxDrops()) {
                 text.add(Component.translatable("tfg.tooltip.palm_tree.cluster_harvest",
                         Component.translatable(tree.getDroppedFruit().get().getDescriptionId()).withStyle(ChatFormatting.ITALIC, ChatFormatting.WHITE),
-                        Component.literal(tree.getMinDrops() + "-" + tree.getMaxDrops()).withStyle(ChatFormatting.WHITE)
-                ));
+                        Component.literal(tree.getMinDrops() + "-" + tree.getMaxDrops()).withStyle(ChatFormatting.WHITE)));
             } else {
                 text.add(Component.translatable("tfg.tooltip.palm_tree.cluster_harvest",
                         Component.translatable(tree.getDroppedFruit().get().getDescriptionId()).withStyle(ChatFormatting.ITALIC, ChatFormatting.WHITE),
