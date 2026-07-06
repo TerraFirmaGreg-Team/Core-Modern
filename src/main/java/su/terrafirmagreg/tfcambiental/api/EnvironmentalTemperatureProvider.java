@@ -1,23 +1,20 @@
 package su.terrafirmagreg.tfcambiental.api;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.level.pathfinder.FlyNodeEvaluator;
-import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathFinder;
 
 import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
@@ -54,24 +51,34 @@ public interface EnvironmentalTemperatureProvider {
     Optional<TempModifier> getModifier(Player player);
 
     static boolean calculateEnclosure(Player player, int radius) {
-        PathNavigationRegion region = new PathNavigationRegion(
-                player.level(),
-                player.getOnPos().above().offset(-radius, -radius, -radius),
-                player.getOnPos().above().offset(radius, 400, radius));
-        Bee guineaBee = new Bee(EntityType.BEE, player.level());
-        guineaBee.setPos(player.getPosition(0));
-        guineaBee.setBaby(true);
-        guineaBee.setPathfindingMalus(BlockPathTypes.TRAPDOOR, -1.0F);
-        FlyNodeEvaluator evaluator = new FlyNodeEvaluator();
-        PathFinder finder = new PathFinder(evaluator, 500);
-        Path path = finder.findPath(
-                region,
-                guineaBee,
-                Set.of(player.getOnPos().above().atY(258)),
-                500,
-                0,
-                12);
-        return path == null || path.getNodeCount() < 255 - player.getOnPos().above().getY();
+        Level level = player.level();
+        BlockPos start = player.getOnPos().above();
+        PriorityQueue<BlockPos> queue = new PriorityQueue<>((BlockPos a, BlockPos b) -> Integer.compare(b.getY(), a.getY()));
+        Set<BlockPos> visited = new HashSet<>();
+        queue.add(start);
+        visited.add(start);
+        while (!queue.isEmpty()) {
+            if (visited.size() > 20000) {
+                return true;
+            }
+            BlockPos pos = queue.poll();
+            if (pos.getY() > 256) {
+                return false;
+            }
+            for (Direction dir : Direction.values()) {
+                BlockPos next = pos.relative(dir);
+                if (!level.isLoaded(next) || visited.contains(next))
+                    continue;
+                if (Math.abs(next.getX() - start.getX()) > radius || Math.abs(next.getZ() - start.getZ()) > radius)
+                    continue;
+                BlockState state = level.getBlockState(next);
+                if (state.isAir()) {
+                    visited.add(next);
+                    queue.add(next);
+                }
+            }
+        }
+        return true;
     }
 
     static float getEnvironmentTemperatureWithTimeOfDay(Player player) {

@@ -21,7 +21,12 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.machines.GCYMMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
+import com.simibubi.create.content.kinetics.fan.AirCurrent;
+import com.simibubi.create.content.kinetics.fan.EncasedFanBlockEntity;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 
+import net.createmod.catnip.math.VecHelper;
 import net.dries007.tfc.common.blockentities.BloomeryBlockEntity;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.blockentities.FirepitBlockEntity;
@@ -108,6 +113,7 @@ public interface BlockTemperatureProvider {
                 addScaled(storage, handleLitBlock(player, blockEntity), distanceMultiplier);
                 addScaled(storage, handleIHeatBlock(player, blockEntity), distanceMultiplier);
                 storage.add(handleMultiblockInside(player, blockEntity));
+                storage.add(handleEncasedFan(player, blockEntity));
             }
         }
 
@@ -242,81 +248,76 @@ public interface BlockTemperatureProvider {
 
     static final Map<Block, TempModifierSpec> SIMPLE_BLOCKS = Stream.concat(
             Stream.of(
-                    Map.entry(Blocks.PACKED_ICE, new TempModifierSpec(-6.0F, 1.0F)),
-                    Map.entry(Blocks.BLUE_ICE, new TempModifierSpec(-8.0F, 1.0F)),
-                    Map.entry(TFCBlocks.SEA_ICE.get(), new TempModifierSpec(-6.0F, 1.0F)),
-                    Map.entry(TFGBlocks.DRY_ICE.get(), new TempModifierSpec(-6.0F, 1.0F)),
-                    Map.entry(TFGBlocks_Mars.MARS_ICE.get(), new TempModifierSpec(-6.0F, 1.0F))),
+                    Map.entry(Blocks.PACKED_ICE, new TempModifierSpec(-1.0F, 1.0F)),
+                    Map.entry(Blocks.BLUE_ICE, new TempModifierSpec(-4.0F, 1.0F)),
+                    Map.entry(TFCBlocks.SEA_ICE.get(), new TempModifierSpec(-2.0F, 1.0F)),
+                    Map.entry(TFGBlocks.DRY_ICE.get(), new TempModifierSpec(-2.0F, 1.0F)),
+                    Map.entry(TFGBlocks_Mars.MARS_ICE.get(), new TempModifierSpec(-3.0F, 1.0F))),
             TFCBlocks.MAGMA_BLOCKS.values().stream()
                     .map(RegistryObject::get)
-                    .map(block -> Map.entry(block, new TempModifierSpec(5.0F, 1.0F))))
+                    .map(block -> Map.entry(block, new TempModifierSpec(3.0F, 1.0F))))
             .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
     static final Map<Block, TempModifierSpec> ACTIVE_BLOCKS = Map.ofEntries(
-            Map.entry(GTBlocks.FIREBOX_BRONZE.get(), new TempModifierSpec(6.0F, 3.0F)),
-            Map.entry(GTBlocks.FIREBOX_STEEL.get(), new TempModifierSpec(8.0F, 3.0F)),
-            Map.entry(GTBlocks.FIREBOX_TITANIUM.get(), new TempModifierSpec(10.0F, 3.0F)),
-            Map.entry(GTBlocks.FIREBOX_TUNGSTENSTEEL.get(), new TempModifierSpec(12.0F, 3.0F)),
+            Map.entry(GTBlocks.FIREBOX_BRONZE.get(), new TempModifierSpec(3.0F, 1.0F)),
+            Map.entry(GTBlocks.FIREBOX_STEEL.get(), new TempModifierSpec(4.0F, 2.0F)),
+            Map.entry(GTBlocks.FIREBOX_TITANIUM.get(), new TempModifierSpec(5.0F, 3.0F)),
+            Map.entry(GTBlocks.FIREBOX_TUNGSTENSTEEL.get(), new TempModifierSpec(6.0F, 3.0F)),
 
-            Map.entry(GTBlocks.COIL_CUPRONICKEL.get(), new TempModifierSpec(18.0F, 3.0F)),
-            Map.entry(GTBlocks.COIL_KANTHAL.get(), new TempModifierSpec(28.0F, 3.0F)),
-            Map.entry(GTBlocks.COIL_NICHROME.get(), new TempModifierSpec(38.0F, 3.0F)),
-            Map.entry(GTBlocks.COIL_RTMALLOY.get(), new TempModifierSpec(48.0F, 3.0F)),
-            Map.entry(GTBlocks.COIL_HSSG.get(), new TempModifierSpec(58.0F, 3.0F)),
-            Map.entry(GTBlocks.COIL_NAQUADAH.get(), new TempModifierSpec(78.0F, 3.0F)),
-            Map.entry(GTBlocks.COIL_TRINIUM.get(), new TempModifierSpec(88.0F, 3.0F)),
-            Map.entry(GTBlocks.COIL_TRITANIUM.get(), new TempModifierSpec(98.0F, 3.0F)));
+            Map.entry(GTBlocks.COIL_CUPRONICKEL.get(), new TempModifierSpec(5.0F, 1.0F)),
+            Map.entry(GTBlocks.COIL_KANTHAL.get(), new TempModifierSpec(10.0F, 1.0F)),
+            Map.entry(GTBlocks.COIL_NICHROME.get(), new TempModifierSpec(20.0F, 2.0F)),
+            Map.entry(GTBlocks.COIL_RTMALLOY.get(), new TempModifierSpec(25.0F, 2.0F)),
+            Map.entry(GTBlocks.COIL_HSSG.get(), new TempModifierSpec(30.0F, 3.0F)),
+            Map.entry(GTBlocks.COIL_NAQUADAH.get(), new TempModifierSpec(40.0F, 3.0F)),
+            Map.entry(GTBlocks.COIL_TRINIUM.get(), new TempModifierSpec(45.0F, 3.0F)),
+            Map.entry(GTBlocks.COIL_TRITANIUM.get(), new TempModifierSpec(50.0F, 3.0F)));
 
     static final Map<Block, TempModifierSpec> CAPABILITY_BLOCKS = Stream.of(
             Stream.of(
                     Map.entry(
                             GTMachines.STEAM_SOLID_BOILER.right().getBlock(),
-                            new TempModifierSpec(5.0F, 2.0F)),
+                            new TempModifierSpec(5.0F, 1.0F)),
                     Map.entry(
                             GTMachines.STEAM_LIQUID_BOILER.right().getBlock(),
-                            new TempModifierSpec(5.0F, 2.0F)),
+                            new TempModifierSpec(5.0F, 1.0F)),
                     Map.entry(
                             GTMachines.STEAM_FURNACE.right().getBlock(),
-                            new TempModifierSpec(8.0F, 2.0F)),
+                            new TempModifierSpec(8.0F, 1.0F)),
                     Map.entry(
                             GTMachines.STEAM_ALLOY_SMELTER.right().getBlock(),
-                            new TempModifierSpec(6.0F, 2.0F))),
+                            new TempModifierSpec(6.0F, 1.0F))),
 
             Arrays.stream(GTMachines.ELECTRIC_FURNACE)
                     .filter(Objects::nonNull)
                     .map(m -> Map.entry(
                             m.getBlock(),
-                            new TempModifierSpec(10.0F, 3.0F))),
-
+                            new TempModifierSpec(5.0F, 2.0F))),
             Arrays.stream(GTMachines.ARC_FURNACE)
                     .filter(Objects::nonNull)
                     .map(m -> Map.entry(
                             m.getBlock(),
-                            new TempModifierSpec(12.0F, 3.0F))),
-
+                            new TempModifierSpec(6.0F, 2.0F))),
             Arrays.stream(GTMachines.ALLOY_SMELTER)
                     .filter(Objects::nonNull)
                     .map(m -> Map.entry(
                             m.getBlock(),
-                            new TempModifierSpec(9.0F, 3.0F))),
-
+                            new TempModifierSpec(5.0F, 2.0F))),
             Arrays.stream(GTMachines.FLUID_HEATER)
                     .filter(Objects::nonNull)
                     .map(m -> Map.entry(
                             m.getBlock(),
-                            new TempModifierSpec(11.0F, 3.0F))),
-
+                            new TempModifierSpec(6.0F, 2.0F))),
             Arrays.stream(TFGMachines.FOOD_OVEN)
                     .filter(Objects::nonNull)
                     .map(m -> Map.entry(
                             m.getBlock(),
-                            new TempModifierSpec(7.0F, 2.0F))),
-
+                            new TempModifierSpec(3.0F, 2.0F))),
             Arrays.stream(TFGMachines.FOOD_REFRIGERATOR)
                     .filter(Objects::nonNull)
                     .map(m -> Map.entry(
                             m.getBlock(),
-                            new TempModifierSpec(5.0F, 1.0F))))
+                            new TempModifierSpec(2.0F, 1.0F))))
             .flatMap(Function.identity())
             .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
@@ -401,5 +402,25 @@ public interface BlockTemperatureProvider {
         } finally {
             lock.unlock();
         }
+    }
+
+    static Optional<TempModifier> handleEncasedFan(Player player, BlockEntity blockEntity) {
+        if (blockEntity instanceof EncasedFanBlockEntity fanBE) {
+            AirCurrent airCurrent = fanBE.getAirCurrent();
+            if (airCurrent != null && airCurrent.maxDistance > 0 && airCurrent.bounds.intersects(player.getBoundingBox())) {
+                double distance = VecHelper.alignedDistanceToFace(player.position(), fanBE.getBlockPos(), airCurrent.direction);
+                FanProcessingType type = airCurrent.getTypeAt((float) distance);
+                if (type instanceof AllFanProcessingTypes.BlastingType) {
+                    return Optional.of(new TempModifier(4.0F, 1.0F));
+                } else if (type instanceof AllFanProcessingTypes.SmokingType) {
+                    return Optional.of(new TempModifier(2.0F, 1.0F));
+                } else if (type instanceof AllFanProcessingTypes.SplashingType) {
+                    return Optional.of(new TempModifier(-2.0F, 1.0F, 2.0F));
+                } else {
+                    return Optional.of(new TempModifier(-2.0F, 1.0F));
+                }
+            }
+        }
+        return TempModifier.none();
     }
 }
