@@ -34,8 +34,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.common.block.palmtree.PalmFruitBlock;
+import su.terrafirmagreg.core.common.block.palmtree.PalmHuskBlock;
 import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
 /**
  * Ensure blocks tagged with TFCTags.Blocks.SUPPORTS_LANDSLIDE are not considered "fall-through".
@@ -73,7 +73,7 @@ public class TFCFallingBlockEntityMixin {
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;destroyBlock(Lnet/minecraft/core/BlockPos;Z)Z"))
     private boolean onCrushBlock(Level instance, BlockPos pos, boolean drop) {
         BlockState state = instance.getBlockState(pos);
-        if (state.getBlock() instanceof PalmFruitBlock || state.is(TFGBlocks_PalmTrees.PALM_HUSK.get())) {
+        if (state.getBlock() instanceof PalmFruitBlock || state.getBlock() instanceof PalmHuskBlock) {
             instance.removeBlockEntity(pos);
             return instance.destroyBlock(pos, false);
         }
@@ -132,7 +132,7 @@ public class TFCFallingBlockEntityMixin {
             }
         }
 
-        if (entity.time == 0 && entity.getBlockState().getBlock() instanceof PalmFruitBlock) {
+        if (entity.time == 0 && (entity.getBlockState().getBlock() instanceof PalmFruitBlock || entity.getBlockState().getBlock() instanceof PalmHuskBlock)) {
             entity.time = 1;
             ci.cancel();
         }

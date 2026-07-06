@@ -8,11 +8,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.ITooltip;
+import snownee.jade.api.*;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.theme.IThemeHelper;
+
 import su.terrafirmagreg.core.TFGCore;
 
 /**
@@ -33,7 +32,7 @@ public class DynamicAgeProvider implements IBlockComponentProvider {
         int currentAge = -1;
         int maxAge = -1;
 
-        // Scan for the blockstate integer property named "age".
+        // Check for the blockstate integer property named "age".
         IntegerProperty ageProperty = null;
         for (Property<?> property : state.getProperties()) {
             if (property instanceof IntegerProperty intProp && property.getName().equals("age")) {
@@ -46,14 +45,16 @@ public class DynamicAgeProvider implements IBlockComponentProvider {
             currentAge = state.getValue(ageProperty);
             maxAge = ageProperty.getPossibleValues().stream().max(Integer::compareTo).orElse(0);
         }
-        // CropBlock fallback.
+        // CropBlocks.
         else if (block instanceof CropBlock cropBlock) {
             currentAge = cropBlock.getAge(state);
             maxAge = cropBlock.getMaxAge();
         }
 
-        // Tooltip rendering.
         if (currentAge != -1 && maxAge > 0) {
+
+            tooltip.remove(Identifiers.MC_CROP_PROGRESS);
+
             float growthValue = ((float) currentAge / maxAge) * 100.0F;
 
             if (growthValue < 100.0F) {
@@ -69,5 +70,10 @@ public class DynamicAgeProvider implements IBlockComponentProvider {
     @Override
     public ResourceLocation getUid() {
         return GROWTH_ID;
+    }
+
+    @Override
+    public int getDefaultPriority() {
+        return TooltipPosition.BODY + 10;
     }
 }

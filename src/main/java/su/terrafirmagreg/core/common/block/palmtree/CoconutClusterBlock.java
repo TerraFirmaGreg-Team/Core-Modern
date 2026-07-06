@@ -1,15 +1,22 @@
 package su.terrafirmagreg.core.common.block.palmtree;
 
-import java.util.ArrayList;
+import static com.lowdragmc.lowdraglib.LDLib.random;
+
 import java.util.List;
 import java.util.function.Supplier;
 
-import net.dries007.tfc.common.entities.misc.TFCFallingBlockEntity;
+import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
+import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -111,7 +118,7 @@ public class CoconutClusterBlock extends PalmClusterBlock {
             CoconutDrop drop = getDropForAge(state.getValue(this.clusterAge));
 
             for (int i = 0; i < drop.count; i++) {
-                spawnFallingCoconut((ServerLevel) level, pos, drop.type);
+                spawnFallingPalmBlock((ServerLevel) level, pos, drop.type, 2);
             }
 
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
@@ -160,56 +167,58 @@ public class CoconutClusterBlock extends PalmClusterBlock {
         ClimateRange range = tree.getClimateRange().get();
         int hydration = (int) (Climate.getRainfall(level, pos) / 5);
         float temperature = Climate.getAverageTemperature(level, pos);
+        var calendar = Calendars.get(level);
+        Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
+        final boolean dormant = tree.getStages()[month.ordinal()] == Lifecycle.DORMANT;
 
-        if (range.checkBoth(hydration, temperature, false)) {
+        if (range.checkBoth(hydration, temperature, false) && level instanceof ServerLevel serverLevel) {
             int age = state.getValue(this.clusterAge);
             CoconutDrop drop = getDropForAge(age);
 
+            if (age < 4 && dormant && random.nextFloat() < 0.25f) {
+                serverLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                spawnFallingPalmBlock(serverLevel, pos, TFGBlocks_PalmTrees.PALM_HUSK.get(), 1);
+            }
+
             if (drop.finalAge) {
-                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                if (level instanceof ServerLevel serverLevel) {
-                    spawnFallingCoconut(serverLevel, pos, drop.type);
-                }
+                serverLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                spawnFallingPalmBlock(serverLevel, pos, drop.type, 2);
             } else {
                 age++;
                 CoconutDrop nextDrop = getDropForAge(age);
                 if (nextDrop.finalAge) {
-                    level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                    serverLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                 } else {
-                    level.setBlock(pos, state.setValue(this.clusterAge, age), 2);
+                    serverLevel.setBlock(pos, state.setValue(this.clusterAge, age), 2);
                 }
 
                 if (nextDrop.spawnFallingCoconut) {
-                    if (level instanceof ServerLevel serverLevel) {
-                        spawnFallingCoconut(serverLevel, pos, nextDrop.type);
-                    }
+                    spawnFallingPalmBlock(serverLevel, pos, nextDrop.type, 2);
                 }
             }
         }
     }
 
-    /**
-     * Event handler for spawning falling coconuts.
-     * Checks a 3x3 area below the cluster to spawn a falling coconut.
-     * If no valid positions are found, an item is dropped at the cluster pos.
-     */
-    private void spawnFallingCoconut(ServerLevel level, BlockPos pos, Block block) {
-        List<BlockPos> validPositions = new ArrayList<>();
-        for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++) {
-                BlockPos target = pos.offset(x, -1, z);
-                if (level.isEmptyBlock(target)) {
-                    validPositions.add(target);
-                }
-            }
-        }
+    @Override
+    public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, List<Component> text, boolean isDebug) {
+        if (!state.getValue(NATURAL))
+            return;
 
-        if (!validPositions.isEmpty()) {
-            BlockPos spawnPos = validPositions.get(level.getRandom().nextInt(validPositions.size()));
-            TFCFallingBlockEntity entity = new TFCFallingBlockEntity(level, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, block.defaultBlockState());
-            entity.setHurtsEntities(2.0f, 2);
-            entity.dropItem = false;
-            level.addFreshEntity(entity);
+        final ClimateRange range = tree.getClimateRange().get();
+        final int hydration = (int) (Climate.getRainfall(level, pos) / 5);
+        text.add(FarmlandBlock.getHydrationTooltip(level, pos, range, false, hydration));
+        text.add(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
+
+        var calendar = Calendars.get(level);
+        Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
+        Lifecycle lifecycle = tree.getStages()[month.ordinal()];
+        text.add(Component.translatable("tfg.tooltip.lifecycle." + lifecycle.getSerializedName()));
+
+        CoconutDrop drop = getDropForAge(state.getValue(this.clusterAge));
+        if (drop.count != 0) {
+            text.add(Component.translatable("tfg.tooltip.palm_tree.cluster_harvest",
+                    Component.translatable(String.format("%s", drop.type.getName().getString())).withStyle(ChatFormatting.ITALIC, ChatFormatting.WHITE),
+                    Component.literal(String.format("%d", drop.count)).withStyle(ChatFormatting.WHITE)));
         }
     }
 

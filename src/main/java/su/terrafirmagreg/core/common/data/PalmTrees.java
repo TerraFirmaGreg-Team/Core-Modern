@@ -37,11 +37,11 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
  * This enum will automatically register Heads, Fruits, and Clusters
  */
 public enum PalmTrees implements StringRepresentable {
-    COCONUT(10, 3, 6, 8, "square", true, true, new Lifecycle[] {
+    COCONUT(10, 3, 6, 0, 0, 8, "square", true, true, new Lifecycle[] {
             Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING,
             Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING
     }),
-    OIL_PALM(7, 1, 2, 4, "bundle", false, false, new Lifecycle[] {
+    OIL_PALM(7, 0, 2, 3, 6, 4, "double_bundle", false, false, new Lifecycle[] {
             Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING,
             Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING
     });
@@ -53,6 +53,10 @@ public enum PalmTrees implements StringRepresentable {
     private final int minGrowthSize;
     @Getter
     private final int maxGrowthSize;
+    @Getter
+    private final int minDrops;
+    @Getter
+    private final int maxDrops;
     @Getter
     private final int clusterAges;
     @Getter
@@ -73,17 +77,22 @@ public enum PalmTrees implements StringRepresentable {
      * @param defaultGrowthDays Default number of days required for growth.
      * @param minGrowthSize Sets the minimum number of stage 2 trunk blocks for the final growth tree size. (5 blocks will always be placed below)
      * @param maxGrowthSize Sets the maximum number of stage 2 trunk blocks for the final growth tree size. (5 blocks will always be placed below)
+     * @param minDrops Sets the minimum number of fruit drops when mature.
+     * @param maxDrops Sets the maximum number of fruit drops when mature.
      * @param clusterAges Sets the number of age states for the cluster block.
-     * @param clusterModelShape Sets the model shape for the cluster block. Available options: "square", "bundle"
+     * @param clusterModelShape Sets the model shape for the cluster block. Available options: "square", "double_bundle"
      * @param specialCluster If false, the cluster block will be automatically generated with {@link PalmClusterBlock}. If true, a dedicated class should be made.
      * @param specialFruit If false, the fruit will be automatically generated as an item. If true, a dedicated class should be made.
      * @param stages Lifecycle stages. Only valid stages are {@link Lifecycle#FRUITING} and {@link Lifecycle#DORMANT}.
      */
-    PalmTrees(int defaultGrowthDays, int minGrowthSize, int maxGrowthSize, Integer clusterAges, String clusterModelShape, boolean specialCluster, boolean specialFruit, Lifecycle[] stages) {
+    PalmTrees(int defaultGrowthDays, int minGrowthSize, int maxGrowthSize, int minDrops, int maxDrops, Integer clusterAges, String clusterModelShape, boolean specialCluster, boolean specialFruit,
+            Lifecycle[] stages) {
         this.serializedName = name().toLowerCase(Locale.ROOT);
         this.defaultGrowthDays = defaultGrowthDays;
         this.minGrowthSize = minGrowthSize;
         this.maxGrowthSize = maxGrowthSize;
+        this.minDrops = minDrops;
+        this.maxDrops = maxDrops;
         this.specialCluster = specialCluster;
         this.specialFruit = specialFruit;
         this.clusterAges = clusterAges;

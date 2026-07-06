@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.block.palmtree;
 
+import static com.lowdragmc.lowdraglib.LDLib.random;
+
 import java.util.*;
 
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +10,7 @@ import net.dries007.tfc.common.blocks.plant.fruit.IBushBlock;
 import net.dries007.tfc.common.blocks.plant.fruit.Lifecycle;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.common.entities.misc.TFCFallingBlockEntity;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
@@ -29,7 +32,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.Snowball;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -55,6 +57,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import su.terrafirmagreg.core.common.blockentity.PalmClusterBlockEntity;
 import su.terrafirmagreg.core.common.data.PalmTrees;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_PalmTrees;
 
 /**
  * Represents a default palm cluster block.
@@ -98,24 +101,6 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
         return properties;
     }
 
-    /**
-     * Gets all drops per each age of the cluster.
-     * @param level The level.
-     * @param pos The position.
-     * @return A map of age to list of drops.
-     */
-    public Map<Integer, List<ItemStack>> getAllDropsPerAge(ServerLevel level, BlockPos pos) {
-        Map<Integer, List<ItemStack>> dropsPerAgeMap = new HashMap<>();
-
-        for (int age : this.clusterAge.getPossibleValues()) {
-            BlockState simulatedState = this.defaultBlockState().setValue(this.clusterAge, age);
-            List<ItemStack> dropsForThisAge = getDrops(simulatedState, level, pos, null, null, ItemStack.EMPTY);
-            dropsPerAgeMap.put(age, dropsForThisAge);
-        }
-
-        return dropsPerAgeMap;
-    }
-
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPES[state.getValue(FACING).get2DDataValue()];
@@ -156,9 +141,9 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
         BlockPos pos = hit.getBlockPos();
 
         if (level instanceof ServerLevel serverLevel && !(projectile instanceof Snowball)) {
-            level.destroyBlock(pos, false);
+            level.destroyBlock(pos, true);
 
-            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.SLIME_BLOCK_BREAK, SoundSource.AMBIENT, 0.5f, 2.0f);
+            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.CORAL_BLOCK_BREAK, SoundSource.AMBIENT, 0.5f, 2.0f);
 
             serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
 
@@ -184,7 +169,7 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
             final BlockEntity entity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
             getDrops(state, serverLevel, pos, entity, null, ItemStack.EMPTY).forEach(stack -> ItemHandlerHelper.giveItemToPlayer(player, stack));
 
-            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.SLIME_BLOCK_BREAK, SoundSource.AMBIENT, 0.5f, 2.0f);
+            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.CORAL_BLOCK_BREAK, SoundSource.AMBIENT, 0.5f, 2.0f);
 
             serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
 
@@ -208,31 +193,17 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
         Lifecycle lifecycle = tree.getStages()[month.ordinal()];
         text.add(Component.translatable("tfg.tooltip.lifecycle." + lifecycle.getSerializedName()));
 
-        if (level instanceof ServerLevel serverLevel) {
-            Map<Integer, List<ItemStack>> allDrops = getAllDropsPerAge(serverLevel, pos);
-            Map<Item, Integer> mergedDrops = new HashMap<>();
-
-            for (List<ItemStack> ageDrops : allDrops.values()) {
-                Map<Item, Integer> ageMerged = new HashMap<>();
-                for (ItemStack stack : ageDrops) {
-                    if (!stack.isEmpty()) {
-                        ageMerged.merge(stack.getItem(), stack.getCount(), Integer::sum);
-                    }
-                }
-                for (Map.Entry<Item, Integer> entry : ageMerged.entrySet()) {
-                    mergedDrops.merge(entry.getKey(), entry.getValue(), Math::max);
-                }
-            }
-
-            for (Map.Entry<Item, Integer> entry : mergedDrops.entrySet()) {
-                Item dropItem = entry.getKey();
-                int dropCount = entry.getValue();
-
-                if (dropCount > 0) {
-                    text.add(Component.translatable("tfg.tooltip.palm_tree.cluster_harvest",
-                            Component.empty().append(dropItem.getName(new ItemStack(dropItem))).withStyle(ChatFormatting.ITALIC, ChatFormatting.WHITE),
-                            Component.literal(String.valueOf(dropCount)).withStyle(ChatFormatting.WHITE)));
-                }
+        // Drops display.
+        if (state.getValue(this.clusterAge) == (tree.getClusterAges() - 1) && tree.getDroppedFruit() != null) {
+            if (tree.getMinDrops() != tree.getMaxDrops()) {
+                text.add(Component.translatable("tfg.tooltip.palm_tree.cluster_harvest",
+                        Component.translatable(tree.getDroppedFruit().get().getDescriptionId()).withStyle(ChatFormatting.ITALIC, ChatFormatting.WHITE),
+                        Component.literal(tree.getMinDrops() + "-" + tree.getMaxDrops()).withStyle(ChatFormatting.WHITE)
+                ));
+            } else {
+                text.add(Component.translatable("tfg.tooltip.palm_tree.cluster_harvest",
+                        Component.translatable(tree.getDroppedFruit().get().getDescriptionId()).withStyle(ChatFormatting.ITALIC, ChatFormatting.WHITE),
+                        Component.literal(String.valueOf(tree.getMaxDrops())).withStyle(ChatFormatting.WHITE)));
             }
         }
     }
@@ -259,16 +230,17 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
         Month month = ICalendar.getMonthOfYear(calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
         final boolean dormant = tree.getStages()[month.ordinal()] == Lifecycle.DORMANT;
 
-        if (range.checkBoth(hydration, temperature, false)) {
+        if (range.checkBoth(hydration, temperature, false) && level instanceof ServerLevel serverLevel) {
             int age = state.getValue(this.clusterAge);
             age++;
 
-            if (dormant) {
-                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            if (dormant && random.nextFloat() < 0.25f) {
+                serverLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                spawnFallingPalmBlock(serverLevel, pos, TFGBlocks_PalmTrees.PALM_HUSK.get(), 1);
             }
 
-            if (age < (tree.getClusterAges() - 1)) {
-                level.setBlock(pos, state.setValue(this.clusterAge, age), 2);
+            if (age < (tree.getClusterAges())) {
+                serverLevel.setBlock(pos, state.setValue(this.clusterAge, age), 2);
             }
         }
     }
@@ -303,5 +275,30 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
             return neighbor.hasProperty(NATURAL) && neighbor.getValue(NATURAL);
         }
         return false;
+    }
+
+    /**
+     * Event handler for spawning falling coconuts.
+     * Checks a 3x3 area below the cluster to spawn a falling coconut.
+     * If no valid positions are found, an item is dropped at the cluster pos.
+     */
+    public void spawnFallingPalmBlock(ServerLevel level, BlockPos pos, Block block, float damage) {
+        List<BlockPos> validPositions = new ArrayList<>();
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                BlockPos target = pos.offset(x, -1, z);
+                if (level.isEmptyBlock(target)) {
+                    validPositions.add(target);
+                }
+            }
+        }
+
+        if (!validPositions.isEmpty()) {
+            BlockPos spawnPos = validPositions.get(level.getRandom().nextInt(validPositions.size()));
+            TFCFallingBlockEntity entity = new TFCFallingBlockEntity(level, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, block.defaultBlockState());
+            entity.setHurtsEntities(damage, (int) damage);
+            entity.dropItem = false;
+            level.addFreshEntity(entity);
+        }
     }
 }
