@@ -1,0 +1,8 @@
+{
+  "parent": "tfg:block/palm_tree/palm_head_acai",
+  "textures": {
+    "fuzz": "tfg:block/palm_tree/acai_head_fuzz",
+    "side": "tfg:block/palm_tree/acai_head_side",
+    "top": "tfg:block/palm_tree/acai_head_top"
+  }
+}

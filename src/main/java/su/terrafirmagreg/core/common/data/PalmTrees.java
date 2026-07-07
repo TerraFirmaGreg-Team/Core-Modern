@@ -48,6 +48,10 @@ public enum PalmTrees implements StringRepresentable {
     DATE(9, 255, 2, 5, 4, 8, 4, "double_bundle", false, false, new Lifecycle[] {
             Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT,
             Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING
+    }),
+    ACAI(10, 255, 1, 4, 4, 8, 5, "string", false, false, new Lifecycle[] {
+            Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.FRUITING, Lifecycle.DORMANT, Lifecycle.DORMANT,
+            Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT, Lifecycle.DORMANT
     });
 
     private final String serializedName;

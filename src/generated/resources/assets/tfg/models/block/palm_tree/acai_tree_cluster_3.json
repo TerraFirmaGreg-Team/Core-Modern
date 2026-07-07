@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/palm_tree/string_palm_cluster_3",
+  "textures": {
+    "0": "tfg:block/palm_tree/acai_cluster_3"
+  }
+}
