@@ -55,6 +55,9 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
     public static final float WET_CHANGE_CAP = 2.0f;
     public static final float HIGH_CHANGE = 0.20f;
 
+    public static final int TEMP_DAMAGE_MAX_COOLDOWN = 200;
+    public static final int TEMP_DAMAGE_INVULNERABILITY = 10;
+
     public TemperatureCapability() {
         this.temperature = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
     }
@@ -112,11 +115,9 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
         if ((this.target > this.temperature && this.temperature > TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue())
                 || (this.target < this.temperature && this.temperature < TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue())) {
             this.potency /= 8.0f;
-            this.potency = Math.max(0.5f, this.potency);
-        } else {
-            this.potency = Math.max(1f, this.potency);
         }
 
+        this.potency = Math.max(1f, this.potency);
         this.target = Math.max(this.target, -273.15f);
 
         if (fullyInsulated) {
@@ -234,12 +235,21 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
             float burnThreshold = TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue();
             float freezeThreshold = TFCAmbientalConfig.COMMON.freezeThreshold.get().floatValue();
             float average = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
-            if (this.temperature > burnThreshold && 1 + (this.temperature - burnThreshold) / (burnThreshold - average) > player.getRandom().nextFloat() * 120f) {
-                player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.HOT)),
-                        1 + (this.temperature - burnThreshold) / (burnThreshold - average) / 20);
-            } else if (this.temperature < freezeThreshold && 1 + (this.temperature - freezeThreshold) / (freezeThreshold - average) > player.getRandom().nextFloat() * 120f) {
-                player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.FREEZE)),
-                        1 + (this.temperature - freezeThreshold) / (freezeThreshold - average) / 20);
+
+            if (this.temperature > burnThreshold || this.temperature < freezeThreshold) {
+                float range = this.temperature > burnThreshold ? Math.abs(burnThreshold - average) : Math.abs(freezeThreshold - average); // 15C by default
+                float severity = Math.abs(this.temperature - (this.temperature > burnThreshold ? burnThreshold : freezeThreshold)) / range;
+                float hurtPeriod = Mth.lerp(severity, TEMP_DAMAGE_MAX_COOLDOWN, TEMP_DAMAGE_INVULNERABILITY);
+                if (this.damageTick >= hurtPeriod) {
+                    this.damageTick = 0;
+                    DamageSource source = new DamageSource(
+                            player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(this.temperature > burnThreshold ? TFCAmbiental.HOT : TFCAmbiental.FREEZE));
+                    player.hurt(source, Mth.clamp(severity, 1f, 5f));
+                } else {
+                    this.damageTick++;
+                }
+            } else {
+                this.damageTick = 0;
             }
 
             if (tick <= 20) {
