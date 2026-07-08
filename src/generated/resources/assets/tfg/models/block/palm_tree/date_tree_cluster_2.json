@@ -1,5 +1,5 @@
 {
-  "parent": "tfg:block/palm_tree/double_bundle_palm_cluster_2",
+  "parent": "tfg:block/palm_tree/bundle_palm_cluster_2",
   "textures": {
     "0": "tfg:block/palm_tree/date_cluster_2"
   }

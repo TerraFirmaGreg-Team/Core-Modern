@@ -1,0 +1,166 @@
+{
+    "parent": "minecraft:block/block",
+    "textures": {
+        "0": "#0",
+        "particle": "#0"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    5,
+                    12.6
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "fruit",
+            "from": [
+                8,
+                4,
+                9.6
+            ],
+            "to": [
+                11,
+                8,
+                12.6
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        10,
+                        0,
+                        13,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        13,
+                        0,
+                        10,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        13,
+                        0,
+                        10,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        10,
+                        0,
+                        13,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        13,
+                        0,
+                        16,
+                        3
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        16,
+                        6,
+                        13,
+                        3
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    11,
+                    16
+                ],
+                "angle": 0,
+                "axis": "z"
+            },
+            "name": "branch",
+            "from": [
+                8,
+                6,
+                8
+            ],
+            "to": [
+                8,
+                15,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        8,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        8,
+                        0,
+                        0,
+                        9
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        3
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        3,
+                        0,
+                        0
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ],
+    "render_type": "minecraft:cutout"
+}
