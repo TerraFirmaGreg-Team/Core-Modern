@@ -216,6 +216,37 @@ public class ChameleonSprayCanItem extends Item {
                     public boolean isFluidValid(int tank, @NotNull FluidStack fluidStack) {
                         return fluidStack.getFluid() == TFGFluids.PRISMATIC_PAINT.getSource();
                     }
+
+                    @Override
+                    public int fill(FluidStack resource, FluidAction action) {
+                        if (resource.getFluid() != TFGFluids.PRISMATIC_PAINT.getSource()) {
+                            return 0;
+                        }
+                        return super.fill(resource, action);
+                    }
+                };
+            });
+
+            @Override
+            public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+                if (cap == ForgeCapabilities.FLUID_HANDLER_ITEM) {
+                    return holder.cast();
+                }
+                return LazyOptional.empty();
+            }
+        };
+    }
+
+    @Override
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+        return new ICapabilityProvider() {
+            private final LazyOptional<FluidHandlerItemStack> holder = LazyOptional.of(() -> {
+                int capacity = TFGConfig.SERVER.CHAMELEON_SPRAY_CAN_CAPACITY.get();
+                return new FluidHandlerItemStack(stack, capacity) {
+                    @Override
+                    public boolean isFluidValid(int tank, @NotNull FluidStack fluidStack) {
+                        return fluidStack.getFluid() == TFGFluids.PRISMATIC_PAINT.getSource();
+                    }
                 };
             });
 
