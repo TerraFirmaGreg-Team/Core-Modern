@@ -89,6 +89,10 @@ public interface EnvironmentalTemperatureProvider {
         return Climate.getTemperature(player.level(), player.getOnPos());
     }
 
+    static float getEnvironmentPotency(Player player) {
+        return player.level().dimension() == Level.NETHER ? 2.0f : 1.0f;
+    }
+
     static float getEnvironmentHumidity(Player player) {
         return Climate.getRainfall(player.level(), player.getOnPos()) / 3000;
     }
@@ -111,7 +115,7 @@ public interface EnvironmentalTemperatureProvider {
     }
 
     static Optional<TempModifier> handleGeneralTemperature(Player player) {
-        return Optional.of(new TempModifier(getEnvironmentTemperature(player), getEnvironmentHumidity(player)));
+        return Optional.of(new TempModifier(getEnvironmentTemperature(player), getEnvironmentPotency(player), getEnvironmentHumidity(player)));
     }
 
     static Optional<TempModifier> handleTimeOfDay(Player player) {
