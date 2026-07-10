@@ -170,7 +170,7 @@ public class TFGBlocks_PalmTrees {
                                     ModelUtils.blockVariantsRotated(prov.getVariantBuilder(ctx.getEntry()), model);
                                 }
                             })
-                            .tag(TFGTags.Blocks.FALLING_CONCUSSIVE, TFCTags.Blocks.TOUGHNESS_1)
+                            .tag(TFGTags.Blocks.FALLING_CONCUSSIVE, TFCTags.Blocks.TOUGHNESS_1, TFGTags.Blocks.HarvesterHarvestable)
                             .loot((provider, block) -> provider.add(block, LootTable.lootTable()))
                             .item(BlockItem::new)
                             .model((ctx, prov) -> prov.basicItem(TFGCore.id(ctx.getName())))
@@ -204,7 +204,7 @@ public class TFGBlocks_PalmTrees {
                     }
                 }
             })
-            .tag(HIDDEN_BLOCK)
+            .tag(HIDDEN_BLOCK, TFGTags.Blocks.HarvesterHarvestable)
             .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
                     .add(LootItem.lootTableItem(TFGBlocks_PalmTrees.GREEN_COCONUT)
@@ -403,7 +403,7 @@ public class TFGBlocks_PalmTrees {
                                 }
                             }
                         })
-                        .tag(HIDDEN_BLOCK)
+                        .tag(HIDDEN_BLOCK, TFGTags.Blocks.HarvesterHarvestable)
                         .loot((prov, block) -> prov.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1.0F))
                                 .add(LootItem.lootTableItem(TFGBlocks_PalmTrees.PALM_FRUITS.get(tree))

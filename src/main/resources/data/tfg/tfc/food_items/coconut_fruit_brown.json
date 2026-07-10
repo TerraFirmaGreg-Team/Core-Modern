@@ -1,8 +1,0 @@
-{
-    "ingredient": {"item": "tfg:palm_tree/coconut_fruit_brown"},
-    "decay_modifier": 2.8,
-    "category": "other",
-    "dairy": 1.5,
-    "water": 2,
-    "hunger": 4
-}

@@ -164,7 +164,7 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        if (level instanceof ServerLevel serverLevel) {
+        if (level instanceof ServerLevel serverLevel && state.getValue(this.clusterAge) == (tree.getClusterAges() - 1)) {
             level.removeBlock(pos, false);
             final BlockEntity entity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
             getDrops(state, serverLevel, pos, entity, null, ItemStack.EMPTY).forEach(stack -> ItemHandlerHelper.giveItemToPlayer(player, stack));
@@ -173,8 +173,10 @@ public class PalmClusterBlock extends HorizontalDirectionalBlock implements Enti
 
             serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.5);
 
-        }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.sidedSuccess(level.isClientSide);
+
+        } else
+            return InteractionResult.FAIL;
 
     }
 
