@@ -10,6 +10,7 @@ import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -50,7 +51,7 @@ public interface EnvironmentalTemperatureProvider {
 
     Optional<TempModifier> getModifier(Player player);
 
-    static boolean calculateEnclosure(Player player, int radius) {
+    static int calculateEnclosure(Player player, int radius) {
         Level level = player.level();
         BlockPos start = player.getOnPos().above();
         PriorityQueue<BlockPos> queue = new PriorityQueue<>((BlockPos a, BlockPos b) -> Integer.compare(b.getY(), a.getY()));
@@ -58,12 +59,12 @@ public interface EnvironmentalTemperatureProvider {
         queue.add(start);
         visited.add(start);
         while (!queue.isEmpty()) {
-            if (visited.size() > 20000) {
-                return true;
+            if (visited.size() >= 10000) {
+                break;
             }
             BlockPos pos = queue.poll();
             if (pos.getY() > 256) {
-                return false;
+                return 0;
             }
             for (Direction dir : Direction.values()) {
                 BlockPos next = pos.relative(dir);
@@ -78,7 +79,7 @@ public interface EnvironmentalTemperatureProvider {
                 }
             }
         }
-        return true;
+        return visited.size();
     }
 
     static float getEnvironmentTemperatureWithTimeOfDay(Player player) {
@@ -205,17 +206,17 @@ public interface EnvironmentalTemperatureProvider {
             float avg = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
 
             if (temp < avg - 1) {
-                final boolean[] isInside = { false };
+                final int[] enclosureSize = { 0 };
                 player.getCapability(TemperatureCapability.CAPABILITY).ifPresent(temperatureCapability -> {
                     if (player.tickCount % TFCAmbientalConfig.COMMON.indoorCheckTickModifier.get() == 0) {
                         temperatureCapability
-                                .setInside(EnvironmentalTemperatureProvider.calculateEnclosure(player, 30));
+                                .setEnclosureSize(EnvironmentalTemperatureProvider.calculateEnclosure(player, 30));
                     }
-                    isInside[0] = temperatureCapability.isInside();
+                    enclosureSize[0] = temperatureCapability.getEnclosureSize();
                 });
 
-                if (isInside[0]) {
-                    return TempModifier.defined(Math.abs(avg - 1 - temp) * 0.6f, 0f);
+                if (enclosureSize[0] > 0) {
+                    return TempModifier.defined(Mth.abs(avg - 1 - temp) * Mth.lerp(enclosureSize[0] / 10000f, 0.8f, 0.2f), 0f);
                 }
             }
         }

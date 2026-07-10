@@ -48,7 +48,7 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
     private float target = 15;
     private float targetWetness = 0;
     private float potency = 0;
-    private boolean isInside = false;
+    private int enclosureSize = 0;
 
     public static final float BAD_MULTIPLIER = 0.0005f;
     public static final float GOOD_MULTIPLIER = 0.002f;
@@ -162,11 +162,15 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
     }
 
     public boolean isInside() {
-        return isInside;
+        return enclosureSize > 0;
     }
 
-    public void setInside(boolean inside) {
-        isInside = inside;
+    public int getEnclosureSize() {
+        return enclosureSize;
+    }
+
+    public void setEnclosureSize(int enclosure) {
+        enclosureSize = enclosure;
     }
 
     @NotNull
