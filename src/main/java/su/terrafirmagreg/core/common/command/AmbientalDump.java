@@ -87,7 +87,7 @@ public class AmbientalDump {
                     .withStyle(mod.getChange() > 0f ? ChatFormatting.RED : ChatFormatting.AQUA));
             line.append("°C");
         }
-        if (mod.getPotency() != 1f) {
+        if (mod.getPotency() != 0f) {
             line.append(" potency=");
             line.append(Component.literal("%.1f".formatted(mod.getPotency())).withStyle(ChatFormatting.GOLD));
         }
