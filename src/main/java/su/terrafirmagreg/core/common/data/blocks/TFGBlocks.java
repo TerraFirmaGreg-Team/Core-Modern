@@ -56,6 +56,7 @@ public final class TFGBlocks {
         TFGBlocks_Asphalt.init();
         TFGBlocks_Girders.init();
         TFGBlocks_Struts.init();
+        TFGBlocks_PalmTrees.init();
     }
 
     ////// Decoration blocks

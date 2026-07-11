@@ -11,6 +11,8 @@ import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -22,7 +24,7 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
@@ -116,7 +118,18 @@ public class CommonProxy {
 
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();
+            registerFlowerPots();
         });
+    }
+
+    private void registerFlowerPots() {
+        FlowerPotBlock emptyPot = (FlowerPotBlock) Blocks.FLOWER_POT;
+        for (TFGFruitTree.FruitTreeType tree : TFGFruitTree.FruitTreeType.values()) {
+            emptyPot.addPlant(TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree).getId(), TFGFruitTree.FRUIT_TREE_POTTED_SAPLINGS.get(tree));
+        }
+        for (PalmTrees tree : PalmTrees.values()) {
+            emptyPot.addPlant(TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree).getId(), TFGBlocks_PalmTrees.POTTED_SAPLINGS.get(tree));
+        }
     }
 
     private void addUpgrades(ItemLike item) {

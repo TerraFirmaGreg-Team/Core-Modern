@@ -1,5 +1,22 @@
 {
   "values": [
-    "tfg:casings/test_casing"
+    "tfg:casings/test_casing",
+    "tfg:palm_tree/trunk",
+    "tfg:palm_tree/coconut_tree_cluster",
+    "tfg:palm_tree/coconut_tree_head",
+    "tfg:palm_tree/coconut_growing_tree_head",
+    "tfg:palm_tree/coconut_leaves",
+    "tfg:palm_tree/oil_palm_tree_head",
+    "tfg:palm_tree/oil_palm_growing_tree_head",
+    "tfg:palm_tree/oil_palm_leaves",
+    "tfg:palm_tree/oil_palm_tree_cluster",
+    "tfg:palm_tree/date_tree_head",
+    "tfg:palm_tree/date_growing_tree_head",
+    "tfg:palm_tree/date_leaves",
+    "tfg:palm_tree/date_tree_cluster",
+    "tfg:palm_tree/acai_tree_head",
+    "tfg:palm_tree/acai_growing_tree_head",
+    "tfg:palm_tree/acai_leaves",
+    "tfg:palm_tree/acai_tree_cluster"
   ]
 }

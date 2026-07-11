@@ -129,6 +129,8 @@ public final class TFGTags {
         public static final TagKey<Block> TRUSS = createBlockTag("truss");
         public static final TagKey<Block> STRUT = createBlockTag("strut");
 
+        public static final TagKey<Block> FALLING_CONCUSSIVE = createBlockTag("falling_concussive");
+
         private static TagKey<Block> createBlockTag(String path) {
             return createBlockTag(TFGCore.id(path));
         }
