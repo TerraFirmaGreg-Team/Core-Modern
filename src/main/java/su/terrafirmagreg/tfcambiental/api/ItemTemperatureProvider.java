@@ -29,9 +29,13 @@ public interface ItemTemperatureProvider {
     }
 
     static Optional<TempModifier> handleTemperatureCapability(Player player, ItemStack stack) {
-        return stack.getCapability(HeatCapability.CAPABILITY).map(cap -> {
+        return stack.getCapability(HeatCapability.CAPABILITY).resolve().flatMap(cap -> {
             float temp = cap.getTemperature() / 800;
-            return new TempModifier(temp, 0.1f * stack.getCount());
+            if (temp > 0) {
+                return Optional.of(new TempModifier(temp, 0.1f * stack.getCount()));
+            } else {
+                return TempModifier.none();
+            }
         });
     }
 

@@ -24,7 +24,7 @@ public class HouseTester extends Item {
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (!pLevel.isClientSide()) {
             boolean alt = pLevel.random.nextFloat() < 0.005;
-            if (EnvironmentalTemperatureProvider.calculateEnclosure(pPlayer, 30)) {
+            if (EnvironmentalTemperatureProvider.calculateEnclosure(pPlayer) > 0) {
                 pPlayer.sendSystemMessage(Component.translatable("tfcambiental.message.is_inside" + (alt ? "_alt" : "")));
             } else {
                 pPlayer.sendSystemMessage(Component.translatable("tfcambiental.message.is_outside" + (alt ? "_alt" : "")));

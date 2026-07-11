@@ -3,7 +3,6 @@ package su.terrafirmagreg.tfcambiental.capability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -49,12 +48,15 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
     private float target = 15;
     private float targetWetness = 0;
     private float potency = 0;
-    private boolean isInside = false;
+    private int enclosureSize = 0;
 
-    public static final float BAD_MULTIPLIER = 0.001f;
+    public static final float BAD_MULTIPLIER = 0.0005f;
     public static final float GOOD_MULTIPLIER = 0.002f;
     public static final float WET_CHANGE_CAP = 2.0f;
     public static final float HIGH_CHANGE = 0.20f;
+
+    public static final int TEMP_DAMAGE_MAX_COOLDOWN = 200;
+    public static final int TEMP_DAMAGE_INVULNERABILITY = 10;
 
     public TemperatureCapability() {
         this.temperature = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
@@ -112,7 +114,7 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
 
         if ((this.target > this.temperature && this.temperature > TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue())
                 || (this.target < this.temperature && this.temperature < TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue())) {
-            this.potency /= 4.0f;
+            this.potency /= 8.0f;
         }
 
         this.potency = Math.max(1f, this.potency);
@@ -160,11 +162,15 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
     }
 
     public boolean isInside() {
-        return isInside;
+        return enclosureSize > 0;
     }
 
-    public void setInside(boolean inside) {
-        isInside = inside;
+    public int getEnclosureSize() {
+        return enclosureSize;
+    }
+
+    public void setEnclosureSize(int enclosure) {
+        enclosureSize = enclosure;
     }
 
     @NotNull
@@ -233,18 +239,21 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
             float burnThreshold = TFCAmbientalConfig.COMMON.burnThreshold.get().floatValue();
             float freezeThreshold = TFCAmbientalConfig.COMMON.freezeThreshold.get().floatValue();
             float average = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
-            if (this.temperature > burnThreshold && 1 + (this.temperature - burnThreshold) / (burnThreshold - average) > player.getRandom().nextFloat() * 40f) {
-                player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.HOT)),
-                        1 + (this.temperature - burnThreshold) / (burnThreshold - average) / 20);
-                if (player.getFoodData() instanceof TFCFoodData stats) {
-                    stats.addThirst(-2);
+
+            if (this.temperature > burnThreshold || this.temperature < freezeThreshold) {
+                float range = this.temperature > burnThreshold ? Math.abs(burnThreshold - average) : Math.abs(freezeThreshold - average); // 15C by default
+                float severity = Math.abs(this.temperature - (this.temperature > burnThreshold ? burnThreshold : freezeThreshold)) / range;
+                float hurtPeriod = Mth.lerp(severity, TEMP_DAMAGE_MAX_COOLDOWN, TEMP_DAMAGE_INVULNERABILITY);
+                if (this.damageTick >= hurtPeriod) {
+                    this.damageTick = 0;
+                    DamageSource source = new DamageSource(
+                            player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(this.temperature > burnThreshold ? TFCAmbiental.HOT : TFCAmbiental.FREEZE));
+                    player.hurt(source, Mth.clamp(severity, 1f, 5f));
+                } else {
+                    this.damageTick++;
                 }
-            } else if (this.temperature < freezeThreshold && 1 + (this.temperature - freezeThreshold) / (freezeThreshold - average) > player.getRandom().nextFloat() * 40f) {
-                player.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TFCAmbiental.FREEZE)),
-                        1 + (this.temperature - freezeThreshold) / (freezeThreshold - average) / 20);
-                if (player.getFoodData() instanceof TFCFoodData stats) {
-                    stats.setFoodLevel(stats.getFoodLevel() - 1);
-                }
+            } else {
+                this.damageTick = 0;
             }
 
             if (tick <= 20) {
