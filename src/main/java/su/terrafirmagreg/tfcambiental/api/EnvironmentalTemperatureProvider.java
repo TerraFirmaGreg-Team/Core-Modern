@@ -1,10 +1,7 @@
 package su.terrafirmagreg.tfcambiental.api;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.PriorityQueue;
-import java.util.Set;
 
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.util.climate.Climate;
@@ -16,6 +13,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+
+import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
@@ -51,34 +51,34 @@ public interface EnvironmentalTemperatureProvider {
 
     Optional<TempModifier> getModifier(Player player);
 
-    static int calculateEnclosure(Player player, int radius) {
+    static int calculateEnclosure(Player player) {
         Level level = player.level();
-        BlockPos start = player.getOnPos().above();
-        PriorityQueue<BlockPos> queue = new PriorityQueue<>((BlockPos a, BlockPos b) -> Integer.compare(b.getY(), a.getY()));
-        Set<BlockPos> visited = new HashSet<>();
-        queue.add(start);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
+        LongOpenHashSet visited = new LongOpenHashSet();
+
+        long start = player.getOnPos().above().asLong();
+        queue.enqueue(start);
         visited.add(start);
+
         while (!queue.isEmpty()) {
-            if (visited.size() >= 10000) {
-                break;
-            }
-            BlockPos pos = queue.poll();
-            if (pos.getY() > 256) {
-                return 0;
-            }
+            long packed = queue.dequeueLong();
+            pos.set(BlockPos.getX(packed), BlockPos.getY(packed), BlockPos.getZ(packed));
             for (Direction dir : Direction.values()) {
-                BlockPos next = pos.relative(dir);
-                if (!level.isLoaded(next) || visited.contains(next))
-                    continue;
-                if (Math.abs(next.getX() - start.getX()) > radius || Math.abs(next.getZ() - start.getZ()) > radius)
-                    continue;
-                BlockState state = level.getBlockState(next);
-                if (state.isAir()) {
-                    visited.add(next);
-                    queue.add(next);
+                pos.move(dir);
+                if (level.isLoaded(pos) && level.getBlockState(pos).isAir()) {
+                    long next = pos.asLong();
+                    if (visited.add(next)) {
+                        if (visited.size() > 1000) {
+                            return 0;
+                        }
+                        queue.enqueue(next);
+                    }
                 }
+                pos.move(dir.getOpposite());
             }
         }
+
         return visited.size();
     }
 
@@ -210,13 +210,13 @@ public interface EnvironmentalTemperatureProvider {
                 player.getCapability(TemperatureCapability.CAPABILITY).ifPresent(temperatureCapability -> {
                     if (player.tickCount % TFCAmbientalConfig.COMMON.indoorCheckTickModifier.get() == 0) {
                         temperatureCapability
-                                .setEnclosureSize(EnvironmentalTemperatureProvider.calculateEnclosure(player, 30));
+                                .setEnclosureSize(EnvironmentalTemperatureProvider.calculateEnclosure(player));
                     }
                     enclosureSize[0] = temperatureCapability.getEnclosureSize();
                 });
 
                 if (enclosureSize[0] > 0) {
-                    return TempModifier.defined(Mth.abs(avg - 1 - temp) * Mth.lerp(enclosureSize[0] / 10000f, 0.8f, 0.2f), 0f);
+                    return TempModifier.defined(Mth.abs(avg - 1 - temp) * Mth.lerp(enclosureSize[0] / 1000f, 0.8f, 0.2f), 0f);
                 }
             }
         }
