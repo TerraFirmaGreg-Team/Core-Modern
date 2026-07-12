@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:match_tool",
+              "predicate": {
+                "tag": "minecraft:axes"
+              }
+            }
+          ],
+          "name": "tfg:palm_tree/coconut_sapling"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tfg:blocks/palm_tree/coconut_growing_tree_head"
+}

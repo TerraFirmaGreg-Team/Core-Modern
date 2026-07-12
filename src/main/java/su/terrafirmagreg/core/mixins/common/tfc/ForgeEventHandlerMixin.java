@@ -137,27 +137,48 @@ public class ForgeEventHandlerMixin {
 
             var condition = CustomSpawnHelper.getFromConfig();
 
-            boolean climateMatch = false;
-            int seedTicker = 0;
-
             var settingsMultiplier = CustomSpawnHelper.findSettingsMultipliers(extension);
 
-            while (!climateMatch) {
+            final var worldSettings = extension.settings();
+            // Viewer + "default": honor spawn center from world Settings (create-world UI / TFCGenViewer Save).
+            // Other TFG presets: use each preset's search center so switching the cycle button after preview
+            // does not keep searching around the viewer-chosen coordinates.
+            final boolean centerFromWorldSettings = CustomSpawnHelper.VIEWER_SPAWN_ID.equals(condition.id())
+                    || CustomSpawnHelper.DEFAULT_SPAWN.id().equals(condition.id());
+            final int spawnCenterBlockX = centerFromWorldSettings
+                    ? (int) (worldSettings.spawnCenterX() * settingsMultiplier.get(1))
+                    : (int) (condition.spawnCenterX() * settingsMultiplier.get(1));
+            final int spawnCenterBlockZ = centerFromWorldSettings
+                    ? (int) (worldSettings.spawnCenterZ() * settingsMultiplier.get(0))
+                    : (int) (condition.spawnCenterZ() * settingsMultiplier.get(0));
 
-                chunkPos = new ChunkPos(
-                        CustomSpawnHelper.findSpawnBiome((int) (condition.spawnCenterX() * settingsMultiplier.get(1)), (int) (condition.spawnCenterZ() * settingsMultiplier.get(0)),
-                                extension.settings().spawnDistance() * condition.spawnRadiusMultiplier(),
-                                random, extension));
-                Region.Point regionPoint = regionGen.getOrCreateRegionPoint(Units.blockToGrid(chunkPos.getMinBlockX()), Units.blockToGrid(chunkPos.getMinBlockZ()));
+            final int spawnRadiusBlocks = worldSettings.spawnDistance() * condition.spawnRadiusMultiplier();
 
-                //System.out.println("Testing chunkPos " + chunkPos.getWorldPosition());
-                //System.out.println(regionPoint.temperature);
-                //System.out.println(regionPoint.rainfall);
-                if (CustomSpawnHelper.testWithinRanges(regionPoint.temperature, regionPoint.rainfall, condition)) {
-                    climateMatch = true;
-                } else {
-                    ++seedTicker;
-                    random = new XoroshiroRandomSource(level.getSeed() + seedTicker);
+            if (CustomSpawnHelper.VIEWER_SPAWN_ID.equals(condition.id())) {
+                // Preview Save sets this preset: honor Settings center/radius without tightening climate (avoids infinite loop).
+                chunkPos = new ChunkPos(CustomSpawnHelper.findSpawnBiome(spawnCenterBlockX, spawnCenterBlockZ, spawnRadiusBlocks, random, extension));
+            } else {
+                boolean climateMatch = false;
+                int seedTicker = 0;
+                final int maxClimateAttempts = 512;
+                while (!climateMatch) {
+                    chunkPos = new ChunkPos(
+                            CustomSpawnHelper.findSpawnBiome(spawnCenterBlockX, spawnCenterBlockZ, spawnRadiusBlocks, random, extension));
+                    Region.Point regionPoint = regionGen.getOrCreateRegionPoint(Units.blockToGrid(chunkPos.getMinBlockX()), Units.blockToGrid(chunkPos.getMinBlockZ()));
+
+                    //System.out.println("Testing chunkPos " + chunkPos.getWorldPosition());
+                    //System.out.println(regionPoint.temperature);
+                    //System.out.println(regionPoint.rainfall);
+                    if (CustomSpawnHelper.testWithinRanges(regionPoint.temperature, regionPoint.rainfall, condition)) {
+                        climateMatch = true;
+                    } else {
+                        ++seedTicker;
+                        random = new XoroshiroRandomSource(level.getSeed() + seedTicker);
+                        if (seedTicker >= maxClimateAttempts) {
+                            //LOGGER.warn("TFG: spawn preset \"{}\" did not match climate near chosen center after {} attempts; using last candidate.", condition.id(), maxClimateAttempts);
+                            climateMatch = true;
+                        }
+                    }
                 }
             }
 

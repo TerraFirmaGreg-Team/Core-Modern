@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "tfg:block/palm_tree/growing_palm_head_0"
+    },
+    "stage=1": {
+      "model": "tfg:block/palm_tree/growing_palm_head_1"
+    },
+    "stage=2": {
+      "model": "tfg:block/palm_tree/growing_palm_head_2"
+    },
+    "stage=3": {
+      "model": "tfg:block/palm_tree/growing_palm_head_3"
+    }
+  }
+}

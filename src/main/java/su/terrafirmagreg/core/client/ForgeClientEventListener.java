@@ -5,6 +5,7 @@ import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
 import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -53,6 +54,10 @@ public class ForgeClientEventListener {
      */
     @SubscribeEvent
     public static void onComputeFovModifier(ComputeFovModifierEvent event) {
+        if (Minecraft.getInstance().options.fovEffectScale().get() <= 0) {
+            return;
+        }
+
         Player player = event.getPlayer();
         AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttr != null) {
@@ -67,7 +72,7 @@ public class ForgeClientEventListener {
                     float fWithout = (float) ((speedWithoutGrain / walkingSpeed + 1.0) / 2.0);
 
                     if (fWith > 0) {
-                        event.setNewFovModifier(event.getFovModifier() * (fWithout / fWith));
+                        event.setNewFovModifier(event.getNewFovModifier() * (fWithout / fWith));
                     }
                 }
             }

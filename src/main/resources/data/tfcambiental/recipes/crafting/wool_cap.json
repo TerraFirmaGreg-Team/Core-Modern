@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfcambiental:wool_hat"},
+    "pattern": [
+        "XXX",
+        "X X",
+        "   "
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wool_cloth"}}
+}

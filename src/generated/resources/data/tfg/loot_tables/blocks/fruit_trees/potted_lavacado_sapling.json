@@ -1,4 +1,26 @@
 {
   "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tfg:fruit_trees/lavacado_sapling"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:flower_pot"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
   "random_sequence": "tfg:blocks/fruit_trees/potted_lavacado_sapling"
 }

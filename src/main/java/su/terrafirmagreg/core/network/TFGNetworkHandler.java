@@ -93,6 +93,13 @@ public class TFGNetworkHandler {
                 SelectChromaticCodePacket::decode,
                 SelectChromaticCodePacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(
+                id(),
+                JavelinRecallPacket.class,
+                JavelinRecallPacket::encode,
+                JavelinRecallPacket::decode,
+                JavelinRecallPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {

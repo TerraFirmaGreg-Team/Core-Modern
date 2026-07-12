@@ -13,6 +13,7 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.minecraft.world.level.block.Block;
 
@@ -87,19 +88,48 @@ public class TFGBlockEntities {
             .renderer(() -> StrutBlockEntityRenderer::new)
             .register();
 
-    private static final Map<Supplier<?>, Set<Block>> beModification = new Object2ObjectOpenHashMap<>();
+    public static final Map<PalmTrees, BlockEntityEntry<PalmHeadBlockEntity>> PALM_HEADS = new EnumMap<>(PalmTrees.class);
+    @SuppressWarnings("unchecked")
+    public static final BlockEntityEntry<PalmClusterBlockEntity> PALM_CLUSTERS = TFGCore.REGISTRATE
+            .blockEntity("palm_tree/cluster", PalmClusterBlockEntity::new)
+            .validBlocks(TFGBlocks_PalmTrees.PALM_CLUSTERS.values().toArray(NonNullSupplier[]::new))
+            .register();
+
+    private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
 
     public static void addValidBEBlock(Supplier<?> type, Block block) {
+        addValidBEBlock(type, () -> block);
+    }
+
+    public static void addValidBEBlock(Supplier<?> type, Supplier<? extends Block> block) {
         beModification.computeIfAbsent(type, t -> new HashSet<>());
         beModification.get(type).add(block);
+    }
+
+    static {
+        for (PalmTrees tree : PalmTrees.values()) {
+            PALM_HEADS.put(tree, TFGCore.REGISTRATE
+                    .<PalmHeadBlockEntity>blockEntity(tree.getSerializedName() + "_palm_head", (type, pos, state) -> new PalmHeadBlockEntity(type, pos, state, tree))
+                    .validBlock(() -> TFGBlocks_PalmTrees.PALM_HEADS.get(tree).get())
+                    .register());
+
+            addValidBEBlock(TFCBlockEntities.TICK_COUNTER, TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree));
+            addValidBEBlock(TFCBlockEntities.TICK_COUNTER, TFGBlocks_PalmTrees.GROWING_PALM_HEADS.get(tree));
+
+            if (tree == PalmTrees.COCONUT) {
+                addValidBEBlock(TFCBlockEntities.DECAYING, TFGBlocks_PalmTrees.BROWN_COCONUT);
+                addValidBEBlock(TFCBlockEntities.DECAYING, TFGBlocks_PalmTrees.GREEN_COCONUT);
+            }
+        }
     }
 
     public static void finaliseBEModification() {
         for (var key : beModification.keySet()) {
             var beType = (BlockEntityTypeAccessor) key.get();
-            Set<Block> blocks = new HashSet<>();
-            blocks.addAll(beType.tfg$getValidBlocks());
-            blocks.addAll(beModification.get(key));
+            Set<Block> blocks = new HashSet<>(beType.tfg$getValidBlocks());
+            for (var blockSupplier : beModification.get(key)) {
+                blocks.add(blockSupplier.get());
+            }
             beType.tfg$setValidBlocks(blocks);
         }
     }

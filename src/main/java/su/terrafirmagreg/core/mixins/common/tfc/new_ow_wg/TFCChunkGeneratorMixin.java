@@ -1,8 +1,6 @@
 package su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.SEA_LEVEL_Y;
-import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_TFC_1_21_BACKPORT;
-import static su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData.OVERWORLD_VERSION;
 
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -70,6 +68,7 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
 import su.terrafirmagreg.core.common.tfgt.worldgen.TFGBedrockFluidDefinition;
 import su.terrafirmagreg.core.world.new_ow_wg.Seed;
 import su.terrafirmagreg.core.world.new_ow_wg.TFGLayers;
+import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 import su.terrafirmagreg.core.world.new_ow_wg.chunk.TFGChunkHeightFiller;
 import su.terrafirmagreg.core.world.new_ow_wg.chunk.TFGChunkNoiseFiller;
@@ -121,7 +120,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     // overwriting the AreaFactory
     @Redirect(method = "initRandomState", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/world/layer/TFCLayers;createRegionBiomeLayer(Lnet/dries007/tfc/world/region/RegionGenerator;J)Lnet/dries007/tfc/world/layer/framework/AreaFactory;"), remap = false)
     private AreaFactory tfg$modifyCreateRegionBiomeLayer(RegionGenerator generator, long layerSeed, @Local(argsOnly = true) ServerLevel level) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
+        if (TfgClientPreviewState.useTfgOverworldPipeline()) {
             tfg$tideHeightNoise = TFGBiomeNoise.shoreTideLevelNoise(Seed.of(Seed.worldSeed));
             tfg$noiseSampler = new NoiseSampler(Seed.worldSeed, level.registryAccess().lookupOrThrow(Registries.NOISE), level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION));
             return TFGLayers.createRegionBiomeLayer(generator, layerSeed);
@@ -133,7 +132,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     // overwriting the getFromLayerId
     @ModifyArg(method = "initRandomState", index = 1, at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/world/layer/framework/ConcurrentArea;<init>(Lnet/dries007/tfc/world/layer/framework/AreaFactory;Ljava/util/function/IntFunction;)V"), remap = false)
     private IntFunction<BiomeExtension> tfg$modifyGetFromLayerId(IntFunction<BiomeExtension> mappingFunction) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
+        if (TfgClientPreviewState.useTfgOverworldPipeline()) {
             return TFGLayers::getFromLayerId;
         } else {
             return TFCLayers::getFromLayerId;
@@ -142,14 +141,14 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
 
     @Inject(method = "initRandomState", at = @At("TAIL"), remap = false)
     private void tfg$initSurfaceManager(ChunkMap chunkMap, ServerLevel level, CallbackInfo ci) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
+        if (TfgClientPreviewState.useTfgOverworldPipeline()) {
             tfg$surfaceManager = new TFGSurfaceManager(Seed.worldSeed);
         }
     }
 
     @Inject(method = "getBaseHeight", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState state, CallbackInfoReturnable<Integer> cir) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
+        if (TfgClientPreviewState.useTfgOverworldPipeline()) {
             final ChunkPos pos = new ChunkPos(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
             cir.setReturnValue((int) tfg$createHeightFillerForChunk(pos).sampleHeight(x, z));
         }
@@ -158,7 +157,7 @@ public abstract class TFCChunkGeneratorMixin implements ChunkGeneratorExtension 
     @Inject(method = "fillFromNoise", at = @At("HEAD"), remap = true, cancellable = true)
     private void tfg$fillFromNoise(Executor mainExecutor, Blender oldTerrainBlender, RandomState rawState, StructureManager structureFeatureManager, ChunkAccess chunk,
             CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
-        if (OVERWORLD_VERSION == OVERWORLD_TFC_1_21_BACKPORT) {
+        if (TfgClientPreviewState.useTfgOverworldPipeline()) {
             // Initialization
             final ChunkNoiseSamplingSettings settings = createNoiseSamplingSettingsForChunk(chunk);
             final LevelAccessor actualLevel = (LevelAccessor) ((ChunkAccessAccessor) chunk).accessor$getLevelHeightAccessor();

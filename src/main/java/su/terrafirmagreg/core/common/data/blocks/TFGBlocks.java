@@ -56,6 +56,7 @@ public final class TFGBlocks {
         TFGBlocks_Asphalt.init();
         TFGBlocks_Girders.init();
         TFGBlocks_Struts.init();
+        TFGBlocks_PalmTrees.init();
     }
 
     ////// Decoration blocks
@@ -87,6 +88,16 @@ public final class TFGBlocks {
             .exBlockstate(GTModels.cubeAllModel(TFGCore.id("block/volcanic_ash")))
             .loot((ctx, p) -> ctx.add(p, LootTable.lootTable()))
             .item(BlockItem::new).build()
+            .register();
+
+    public static final BlockEntry<CarpetBlock> PALE_MOSS_CARPET = TFGCore.REGISTRATE.block("pale_moss_carpet", CarpetBlock::new)
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().carpet(ctx.getName(), TFGCore.id("block/pale_moss_block"))))
+            .initialProperties(() -> Blocks.MOSS_CARPET)
+            .properties(p -> p.mapColor(MapColor.GLOW_LICHEN)
+                    .strength(0.1f))
+            .tag(BlockTags.MINEABLE_WITH_HOE)
+            .item(BlockItem::new).model(ModelUtils.blockItemModel(TFGCore.id("block/pale_moss_carpet"))).build()
+            .loot(RegistrateBlockLootTables::dropSelf)
             .register();
 
     ////#region Martian sand piles and layer blocks, in order of color

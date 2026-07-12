@@ -9,6 +9,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.createmod.catnip.placement.PlacementHelpers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -48,7 +49,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderBeamBlockStateEntry(ctx, prov, TFGCore.id("block/girder/beam/tin_alloy"), TFGCore.id("block/girder/pole/tin_alloy"), TFGCore.id("block/girder/pole_side/tin_alloy"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/beam/item")).texture("0", TFGCore.id("block/girder/beam/tin_alloy"));
@@ -63,7 +64,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderBeamBlockStateEntry(ctx, prov, TFGCore.id("block/girder/beam/brass"), TFGCore.id("block/girder/pole/brass"), TFGCore.id("block/girder/pole_side/brass"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/beam/item")).texture("0", TFGCore.id("block/girder/beam/brass"));
@@ -79,7 +80,7 @@ public class TFGBlocks_Girders {
                 buildGirderBeamBlockStateEntry(ctx, prov, TFGCore.id("block/girder/beam/wrought_iron"), TFGCore.id("block/girder/pole/wrought_iron"),
                         TFGCore.id("block/girder/pole_side/wrought_iron"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/beam/item")).texture("0", TFGCore.id("block/girder/beam/wrought_iron"));
@@ -94,7 +95,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderBeamBlockStateEntry(ctx, prov, TFGCore.id("block/girder/beam/copper"), TFGCore.id("block/girder/pole/copper"), TFGCore.id("block/girder/pole_side/copper"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/beam/item")).texture("0", TFGCore.id("block/girder/beam/copper"));
@@ -109,7 +110,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderBeamBlockStateEntry(ctx, prov, TFGCore.id("block/girder/beam/zinc"), TFGCore.id("block/girder/pole/zinc"), TFGCore.id("block/girder/pole_side/zinc"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedBeamModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/beam/item")).texture("0", TFGCore.id("block/girder/beam/zinc"));
@@ -124,7 +125,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/tin_alloy"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/tin_alloy"));
@@ -139,7 +140,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/brass"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/brass"));
@@ -154,7 +155,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/wrought_iron"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/wrought_iron"));
@@ -169,7 +170,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/copper"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/copper"));
@@ -184,7 +185,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/steel"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/steel"));
@@ -199,7 +200,7 @@ public class TFGBlocks_Girders {
             .blockstate((ctx, prov) -> {
                 buildGirderTrussBlockStateEntry(ctx, prov, TFGCore.id("block/girder/truss/zinc"));
             })
-            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS)
+            .tag(TFGTags.Blocks.GIRDER, TFGTags.Blocks.PAVING_GIRDER, TFGTags.Blocks.TRUSS, BlockTags.MINEABLE_WITH_PICKAXE)
             .onRegister(CreateRegistrate.blockModel(() -> TFGGirderConnectedTrussModel::new))
             .item().model((ctx, prov) -> {
                 prov.withExistingParent(ctx.getName(), TFGCore.id("block/girder/truss/item")).texture("0", TFGCore.id("block/girder/truss/zinc"));
@@ -255,7 +256,7 @@ public class TFGBlocks_Girders {
                 .texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_east", TFGCore.id("block/girder/beam/bracket_east")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_west", TFGCore.id("block/girder/beam/bracket_west")).texture("0", texLoc).texture("particle", texLoc);
-        provider.models().withExistingParent(context.getName() + "/bracked_north", TFGCore.id("block/girder/beam/bracket_north")).texture("0", texLoc).texture("particle", texLoc);
+        provider.models().withExistingParent(context.getName() + "/bracket_north", TFGCore.id("block/girder/beam/bracket_north")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_south", TFGCore.id("block/girder/beam/bracket_south")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_middle", TFGCore.id("block/girder/beam/segment_middle")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_top", TFGCore.id("block/girder/beam/segment_top")).texture("0", texLoc).texture("particle", texLoc);
@@ -304,7 +305,7 @@ public class TFGBlocks_Girders {
 
         provider.models().withExistingParent(context.getName() + "/bracket_east", TFGCore.id("block/girder/truss/bracket_east")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_west", TFGCore.id("block/girder/truss/bracket_west")).texture("0", texLoc).texture("particle", texLoc);
-        provider.models().withExistingParent(context.getName() + "/bracked_north", TFGCore.id("block/girder/truss/bracket_north")).texture("0", texLoc).texture("particle", texLoc);
+        provider.models().withExistingParent(context.getName() + "/bracket_north", TFGCore.id("block/girder/truss/bracket_north")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/bracket_south", TFGCore.id("block/girder/truss/bracket_south")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_middle", TFGCore.id("block/girder/truss/segment_middle")).texture("0", texLoc).texture("particle", texLoc);
         provider.models().withExistingParent(context.getName() + "/segment_top", TFGCore.id("block/girder/truss/segment_top")).texture("0", texLoc).texture("particle", texLoc);

@@ -36,6 +36,8 @@ public class GTBedrockFluidsMixin {
         toReRegister.remove(GTCEu.id("raw_oil_deposit"));
         toReRegister.remove(GTCEu.id("salt_water_deposit"));
         toReRegister.remove(GTCEu.id("natural_gas_deposit"));
+        toReRegister.remove(GTCEu.id("lava_deposit"));
+        toReRegister.remove(GTCEu.id("nether_natural_gas_deposit"));
     }
 
 }

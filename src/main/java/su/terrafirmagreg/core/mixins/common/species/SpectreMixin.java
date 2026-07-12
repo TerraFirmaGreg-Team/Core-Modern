@@ -59,6 +59,11 @@ public abstract class SpectreMixin extends Monster {
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(16);
         }
 
-        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(16);
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(20);
+    }
+
+    @Override
+    public boolean fireImmune() {
+        return true;
     }
 }

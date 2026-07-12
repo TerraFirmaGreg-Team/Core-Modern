@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 
@@ -24,18 +23,35 @@ public class ContraptionMixin {
 
     @Inject(method = "onEntityCreated", at = @At("TAIL"), remap = false)
     private void tfg$onEntityCreated(AbstractContraptionEntity entity, CallbackInfo ci) {
-        var player = Minecraft.getInstance().player;
-        if (player != null && player.position().distanceTo(entity.position()) < 20) {
+        var level = entity.level();
+        var server = level.getServer();
+        if (server == null)
+            return;
 
-            var dim = entity.level().dimension();
+        var dim = level.dimension();
+        if (server.isSingleplayer()) {
             if (dim == Level.NETHER && TFGConfig.SERVER.enableBeneathMiningRestrictions.get()) {
 
                 final int y = TFGConfig.SERVER.disabledBeneathMiningYLevel.get();
-                player.sendSystemMessage(Component.translatable("tfg.clientmessage.nether_contraption_created", y));
+                server.sendSystemMessage(Component.translatable("tfg.clientmessage.nether_contraption_created", y));
 
             } else if ((dim == Planet.VENUS || dim == Planet.MERCURY) && TFGConfig.SERVER.enableHotPlanetMiningRestrictions.get()) {
 
-                player.sendSystemMessage(Component.translatable("tfg.clientmessage.hot_planet_contraption_created"));
+                server.sendSystemMessage(Component.translatable("tfg.clientmessage.hot_planet_contraption_created"));
+            }
+        } else {
+            for (var player : server.getPlayerList().getPlayers()) {
+                if (player.position().distanceTo(entity.position()) < 20) {
+                    if (dim == Level.NETHER && TFGConfig.SERVER.enableBeneathMiningRestrictions.get()) {
+
+                        final int y = TFGConfig.SERVER.disabledBeneathMiningYLevel.get();
+                        player.sendSystemMessage(Component.translatable("tfg.clientmessage.nether_contraption_created", y));
+
+                    } else if ((dim == Planet.VENUS || dim == Planet.MERCURY) && TFGConfig.SERVER.enableHotPlanetMiningRestrictions.get()) {
+
+                        player.sendSystemMessage(Component.translatable("tfg.clientmessage.hot_planet_contraption_created"));
+                    }
+                }
             }
         }
     }

@@ -255,7 +255,20 @@ public final class TFGFruitTree {
                 p -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, sapling,
                         Block.Properties.copy(Blocks.POTTED_ACACIA_SAPLING)))
                 .setData(ProviderType.BLOCKSTATE, pottedSaplingBlockstate(tree))
-                .loot((prov, block) -> prov.add(block, LootTable.lootTable()))
+                .blockstate((ctx, prov) -> {
+                    ResourceLocation saplingTex = TFGCore.id("block/fruit_tree/" + name + "_sapling");
+                    prov.simpleBlock(ctx.getEntry(), prov.models().withExistingParent(ctx.getName(), "minecraft:block/flower_pot_cross")
+                            .texture("plant", saplingTex)
+                            .texture("dirt", ResourceLocation.fromNamespaceAndPath("tfc", "block/dirt/loam")));
+                })
+                .loot((prov, block) -> prov.add(block, LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .add(LootItem.lootTableItem(sapling)))
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .add(LootItem.lootTableItem(Blocks.FLOWER_POT)))))
+                .tag(BlockTags.FLOWER_POTS)
                 .register();
 
         FRUIT_TREE_SAPLINGS.put(tree, sapling);

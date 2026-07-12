@@ -1,0 +1,425 @@
+{
+    "parent": "minecraft:block/block",
+    "textures": {
+        "0": "#0",
+        "particle": "#0"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    11,
+                    16
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "name": "main_branch",
+            "from": [
+                8,
+                -1,
+                10
+            ],
+            "to": [
+                8,
+                15,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        6,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        6,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        3
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        3,
+                        0,
+                        0
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    10,
+                    12
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "name": "center_branch",
+            "from": [
+                8,
+                -6,
+                12
+            ],
+            "to": [
+                8,
+                10,
+                15
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        6,
+                        0,
+                        3,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        3,
+                        0,
+                        6,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        3
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        3,
+                        0,
+                        0
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    5.8,
+                    -4,
+                    13
+                ],
+                "angle": 0,
+                "axis": "y"
+            },
+            "name": "branches1",
+            "from": [
+                3.8,
+                -4,
+                13
+            ],
+            "to": [
+                12.8,
+                10,
+                13
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        7,
+                        2,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        16,
+                        2,
+                        7,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        3
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        3,
+                        0,
+                        0
+                    ],
+                    "texture": "#0",
+                    "rotation": 270
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8.7,
+                    11,
+                    13.7
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "branches2",
+            "from": [
+                8.7,
+                -3,
+                8.2
+            ],
+            "to": [
+                8.7,
+                11,
+                17.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        2,
+                        7,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        7,
+                        2,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        3
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        3,
+                        0,
+                        0
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    7.2,
+                    13,
+                    13.8
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "name": "branches3",
+            "from": [
+                7.2,
+                -1,
+                8.3
+            ],
+            "to": [
+                7.2,
+                13,
+                17.3
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        2,
+                        7,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        4
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        7,
+                        2,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        3
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        3,
+                        0,
+                        0
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                }
+            }
+        }
+    ],
+    "groups": [{
+        "color": 0,
+        "children": [
+            0,
+            1,
+            2,
+            3,
+            4
+        ],
+        "origin": [
+            8,
+            11,
+            16
+        ],
+        "scope": 0,
+        "name": "branches"
+    }],
+    "render_type": "minecraft:cutout"
+}

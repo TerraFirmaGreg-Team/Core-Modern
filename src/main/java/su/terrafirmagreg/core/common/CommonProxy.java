@@ -11,6 +11,8 @@ import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -22,7 +24,7 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
@@ -34,7 +36,6 @@ import su.terrafirmagreg.core.compat.ad_astra.AdAstraCompat;
 import su.terrafirmagreg.core.compat.ae2.AE2Compat;
 import su.terrafirmagreg.core.compat.create.CustomArmInteractionPointTypes;
 import su.terrafirmagreg.core.compat.grappling_hook.GrapplehookCompat;
-import su.terrafirmagreg.core.compat.tfcambiental.TFCAmbientalCompat;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 import su.terrafirmagreg.core.utils.TFGHelpers;
@@ -73,6 +74,7 @@ public class CommonProxy {
         TFGEvents.register();
         TFGSounds.SOUNDS.register(bus);
         TFGCarvers.CARVERS.register(bus);
+        TFGStructureProcessors.STRUCTURE_PROCESSORS.register(bus);
         TFGLootConditions.LOOT_CONDITIONS.register(bus);
 
         TFGBrain.MEMORY_TYPES.register(bus);
@@ -106,8 +108,6 @@ public class CommonProxy {
     @SubscribeEvent
     public void onCommonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            if (TFGConfig.COMMON.ENABLE_TFC_AMBIENTAL_COMPAT.get() && TFGModsResolver.TFC_AMBIENTAL.isLoaded())
-                TFCAmbientalCompat.register();
             if (TFGModsResolver.GRAPPLEMOD.isLoaded())
                 GrapplehookCompat.init();
             addUpgrades(AEItems.WIRELESS_TERMINAL);
@@ -118,7 +118,18 @@ public class CommonProxy {
 
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();
+            registerFlowerPots();
         });
+    }
+
+    private void registerFlowerPots() {
+        FlowerPotBlock emptyPot = (FlowerPotBlock) Blocks.FLOWER_POT;
+        for (TFGFruitTree.FruitTreeType tree : TFGFruitTree.FruitTreeType.values()) {
+            emptyPot.addPlant(TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree).getId(), TFGFruitTree.FRUIT_TREE_POTTED_SAPLINGS.get(tree));
+        }
+        for (PalmTrees tree : PalmTrees.values()) {
+            emptyPot.addPlant(TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree).getId(), TFGBlocks_PalmTrees.POTTED_SAPLINGS.get(tree));
+        }
     }
 
     private void addUpgrades(ItemLike item) {

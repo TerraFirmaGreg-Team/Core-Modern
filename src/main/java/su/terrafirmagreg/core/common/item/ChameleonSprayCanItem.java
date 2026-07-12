@@ -216,6 +216,14 @@ public class ChameleonSprayCanItem extends Item {
                     public boolean isFluidValid(int tank, @NotNull FluidStack fluidStack) {
                         return fluidStack.getFluid() == TFGFluids.PRISMATIC_PAINT.getSource();
                     }
+
+                    @Override
+                    public int fill(FluidStack resource, FluidAction action) {
+                        if (resource.getFluid() != TFGFluids.PRISMATIC_PAINT.getSource()) {
+                            return 0;
+                        }
+                        return super.fill(resource, action);
+                    }
                 };
             });
 

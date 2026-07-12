@@ -161,7 +161,7 @@ public abstract class EntityTooltipsMixin {
     @Unique
     private static final EntityTooltip TFG_SURFER = (level, entity, tooltip) -> {
         if (entity instanceof TFCSurfer surfer) {
-            tooltip.accept(Component.translatable((TFGCore.MOD_ID + ".tooltip.surfer_variant." + surfer.getVariant().getSerializedName()).toLowerCase(Locale.ROOT)));
+            tooltip.accept(Component.translatable((TFGCore.MOD_ID + ".tooltip.surfer_variant." + surfer.getVariant().getPath()).toLowerCase(Locale.ROOT)));
 
             tooltip.accept(Helpers.translateEnum(surfer.isMale() ? TFCAnimalProperties.Gender.MALE : TFCAnimalProperties.Gender.FEMALE));
 

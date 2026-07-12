@@ -3,6 +3,8 @@ package su.terrafirmagreg.core.mixins.common.create.chains;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -13,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.simibubi.create.api.contraption.transformable.TransformableBlockEntity;
@@ -50,11 +53,14 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity
     @Unique
     public void addConnectionMaterial(BlockPos connection, Material chainMat) {
         BlockPos localTarget = connection.subtract(worldPosition);
-        tfg$connectionMaterialStats.put(localTarget, chainMat);
+        if (chainMat != MaterialStack.EMPTY.material()) {
+            tfg$connectionMaterialStats.put(localTarget, chainMat);
+        }
     }
 
     @Override
     @Unique
+    @Nullable
     public Material getConnectionMaterial(BlockPos connection) {
         return tfg$connectionMaterialStats.get(connection);
     }

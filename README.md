@@ -32,7 +32,7 @@
 
 ## Development
 
-Interested in contributing? For detailed setup instructions, coding standards, and guidelines, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md).
+Interested in contributing? For detailed setup instructions, coding standards, and guidelines, please refer to the core mod [CONTRIBUTING.md](https://github.com/TerraFirmaGreg-Team/Core-Modern/blob/dev/.github/CONTRIBUTING.md) and the modpack [CONTRIBUTING.md](https://github.com/TerraFirmaGreg-Team/Modpack-Modern/blob/dev/.github/CONTRIBUTING.md).
 
 ---
 

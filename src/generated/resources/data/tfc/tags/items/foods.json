@@ -1,6 +1,9 @@
 {
   "values": [
     "tfg:food/fly_agaric",
+    "tfg:food/oil_palm",
+    "tfg:food/date",
+    "tfg:food/acai",
     "tfg:food/lavacado",
     "tfg:food/magmango"
   ]

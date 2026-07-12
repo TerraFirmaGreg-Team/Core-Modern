@@ -222,6 +222,11 @@ public class TFGItems {
     public static ItemEntry<Item> OXISOL_MUD_BRICK = TFGCore.REGISTRATE.item("mud_brick/oxisol", Item::new).defaultModel().register();
     public static ItemEntry<Item> PODZOL_MUD_BRICK = TFGCore.REGISTRATE.item("mud_brick/podzol", Item::new).defaultModel().register();
 
+    public static final ItemEntry<Item> SILK_FIBERS = TFGCore.REGISTRATE.item("silk_fibers", Item::new)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent components) {
         return item -> item.attachComponents(components);
     }

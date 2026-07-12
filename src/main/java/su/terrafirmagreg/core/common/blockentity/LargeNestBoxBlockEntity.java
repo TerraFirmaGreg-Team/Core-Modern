@@ -47,25 +47,29 @@ public class LargeNestBoxBlockEntity
                 return;
             Entity sitter = Seat.getSittingEntity(level, pos);
             if (sitter instanceof TFGWoolEggProducingAnimal animal) {
-                if (animal.isReadyForAnimalProduct() && Helpers.isFull(nest.inventory)) {
-                    final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos().set(pos);
 
-                    final Direction backward = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
-                    final Direction left = backward.getClockWise();
+                final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos().set(pos);
 
-                    switch (state.getValue(LargeNestBoxBlock.NEST_PART)) {
-                        case 0:
-                            break;
-                        case 1:
-                            cursor.move(backward);
-                            break;
-                        case 2:
-                            cursor.move(left);
-                            break;
-                        case 3:
-                            cursor.move(backward).move(left);
-                            break;
-                    }
+                final Direction backward = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
+                final Direction left = backward.getClockWise();
+
+                switch (state.getValue(LargeNestBoxBlock.NEST_PART)) {
+                    case 0:
+                        break;
+                    case 1:
+                        cursor.move(backward);
+                        break;
+                    case 2:
+                        cursor.move(left);
+                        break;
+                    case 3:
+                        cursor.move(backward).move(left);
+                        break;
+                }
+
+                if (animal.isReadyForAnimalProduct()
+                        && level.getBlockEntity(cursor) instanceof LargeNestBoxBlockEntity origin
+                        && !Helpers.isFull(origin.inventory)) {
 
                     if (animal.getRandom().nextInt(7) == 0) {
                         Helpers.playSound(level, pos, SoundEvents.CHICKEN_EGG);
@@ -73,7 +77,7 @@ public class LargeNestBoxBlockEntity
                             animal.setFertilized(false);
                             animal.setProductsCooldown();
                             animal.stopRiding();
-                            nest.markForSync();
+                            origin.markForSync();
                         }
                     }
                 } else {

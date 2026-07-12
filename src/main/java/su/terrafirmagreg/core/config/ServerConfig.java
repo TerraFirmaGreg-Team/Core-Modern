@@ -54,6 +54,7 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue snowMaxAccumulationOnUpdate;
     public final ForgeConfigSpec.BooleanValue enableTFGFoodDebuffs;
     public final ForgeConfigSpec.BooleanValue enableTFGFoodBuffs;
+    public final ForgeConfigSpec.IntValue javelinLeashMaxDistance;
 
     public final ForgeConfigSpec.BooleanValue enableBeneathMiningRestrictions;
     public final ForgeConfigSpec.IntValue disabledBeneathMiningYLevel;
@@ -148,6 +149,10 @@ public final class ServerConfig {
                 .comment("Enables TFG food buff effects. Allows receiving helpful effects from nutrients like Fruits, or transient nutrients like Fulfilling.")
                 .define("enableTFGFoodBuffs", true);
 
+        javelinLeashMaxDistance = builder
+                .comment("The maximum distance a javelin can travel from the player when leashed before it stops (in blocks). Default: 16")
+                .defineInRange("javelinLeashMaxDistance", 16, 1, 64);
+
         builder.pop().push("mining_restrictions");
         enableBeneathMiningRestrictions = builder
                 .comment("Enables restrictions on automatic mining machines in the Beneath.")
@@ -158,7 +163,7 @@ public final class ServerConfig {
         enableHotPlanetMiningRestrictions = builder
                 .comment("Enables restrictions on automatic mining machines on hot planets.")
                 .define("enableHotPlanetMiningRestrictions", true);
-                         
+
         builder.pop().push("chameleon_spray_can");
         CHAMELEON_SPRAY_CAN_CAPACITY = builder
                 .comment("\nThe maximum Prismatic Paint capacity of the Chameleon Spray Can (in mB). Default: 8000")

@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - name: "[📦] Checkout"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -121,11 +121,11 @@ jobs:
 
   build:
     name: "[📦] Build Project"
-    needs: [info]
+    needs: [ info ]
     runs-on: ubuntu-latest
     steps:
       - name: "[📦] Checkout"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: "[🔄] Replace"
         shell: bash
@@ -138,7 +138,7 @@ jobs:
           sed -i "s/^mod_version[[:space:]]*=.*/mod_version = ${VERSION}/g" gradle.properties
 
       - name: "[📁] Setup Java"
-        uses: actions/setup-java@v5.2.0
+        uses: actions/setup-java@v5.4.0
         with:
           distribution: 'temurin'
           java-version: ${{ needs.info.outputs.java_version }}
@@ -147,7 +147,7 @@ jobs:
       - name: "[📁] Prepare artifact"
         run: |
           chmod +x gradlew
-          ./gradlew build -x spotlessCheck
+          ./gradlew build -x spotlessCheck -x spotlessApply -x spotlessJava -x spotlessJson
           ls -la build/libs/
 
       - name: "[🚀] Upload Artifact"
@@ -158,91 +158,91 @@ jobs:
           if-no-files-found: error
 
   release:
-      name: "[🚀] Release"
-      needs: [info, build]
-      runs-on: ubuntu-latest
-      if: ${{ needs.info.outputs.make_release == 'true' }}
+    name: "[🚀] Release"
+    needs: [ info, build ]
+    runs-on: ubuntu-latest
+    if: ${{ needs.info.outputs.make_release == 'true' }}
 
-      steps:
-        - name: "[📦] Debug make_release"
-          run: |
-            echo "make_release = '${{ needs.info.outputs.make_release }}'"
-            echo "Comparison result: ${{ needs.info.outputs.make_release == 'true' }}"
-        
-        - name: "[📦] Download artifact"
-          uses: actions/download-artifact@v8
+    steps:
+      - name: "[📦] Debug make_release"
+        run: |
+          echo "make_release = '${{ needs.info.outputs.make_release }}'"
+          echo "Comparison result: ${{ needs.info.outputs.make_release == 'true' }}"
 
-        - name: "[🔒] Verify"
-          shell: bash
-          run: |
-            echo "=== Token Verification ==="
+      - name: "[📦] Download artifact"
+        uses: actions/download-artifact@v8
 
-            if [ -z "${{ secrets.MODRINTH_TOKEN }}" ]; then
-              echo "::error::MODRINTH_TOKEN not found"
-              exit 1
-            fi
-            echo "✅ MODRINTH_TOKEN: OK"
+      - name: "[🔒] Verify"
+        shell: bash
+        run: |
+          echo "=== Token Verification ==="
+          
+          if [ -z "${{ secrets.MODRINTH_TOKEN }}" ]; then
+            echo "::error::MODRINTH_TOKEN not found"
+            exit 1
+          fi
+          echo "✅ MODRINTH_TOKEN: OK"
+          
+          if [ -z "${{ secrets.CURSEFORGE_TOKEN }}" ]; then
+            echo "::error::CURSEFORGE_TOKEN not found"
+            exit 1
+          fi
+          echo "✅ CURSEFORGE_TOKEN: OK"
+          
+          echo ""
+          echo "=== ID Verification ==="
+          
+          if [ -z "${{ vars.MODRINTH_ID }}" ]; then
+            echo "::error::MODRINTH_ID not found"
+            exit 1
+          fi
+          echo "✅ MODRINTH_ID: OK"
+          
+          if [ -z "${{ vars.CURSEFORGE_ID }}" ]; then
+            echo "::error::CURSEFORGE_ID not found"
+            exit 1
+          fi
+          echo "✅ CURSEFORGE_ID: OK"
+          
+          echo ""
+          echo "=== Artifact Verification ==="
+          
+          if [ ! -f "${{ needs.info.outputs.full_name }}.jar" ]; then
+            echo "::error::Artifact not found"
+            ls -la
+            exit 1
+          fi
+          
+          echo "✅ Artifact: OK"
+          echo ""
 
-            if [ -z "${{ secrets.CURSEFORGE_TOKEN }}" ]; then
-              echo "::error::CURSEFORGE_TOKEN not found"
-              exit 1
-            fi
-            echo "✅ CURSEFORGE_TOKEN: OK"
+      - name: "[🚀] Release"
+        uses: Xikaro/game-publish@3.3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-            echo ""
-            echo "=== ID Verification ==="
+          curseforge-id: ${{ vars.CURSEFORGE_ID }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-            if [ -z "${{ vars.MODRINTH_ID }}" ]; then
-              echo "::error::MODRINTH_ID not found"
-              exit 1
-            fi
-            echo "✅ MODRINTH_ID: OK"
+          github-name: ${{ needs.info.outputs.version }}
+          github-tag: ${{ needs.info.outputs.version }}
+          github-generate-changelog: true
+          github-draft: false
+          github-prerelease: ${{ needs.info.outputs.version_type != 'release' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-            if [ -z "${{ vars.CURSEFORGE_ID }}" ]; then
-              echo "::error::CURSEFORGE_ID not found"
-              exit 1
-            fi
-            echo "✅ CURSEFORGE_ID: OK"
+          files: ${{ needs.info.outputs.full_name }}.jar
 
-            echo ""
-            echo "=== Artifact Verification ==="
+          name: ${{ needs.info.outputs.full_name }}
+          version: ${{ needs.info.outputs.version }}
+          version-type: ${{ needs.info.outputs.version_type }}
 
-            if [ ! -f "${{ needs.info.outputs.full_name }}.jar" ]; then
-              echo "::error::Artifact not found"
-              ls -la
-              exit 1
-            fi
-
-            echo "✅ Artifact: OK"
-            echo ""
-
-        - name: "[🚀] Release"
-          uses: Xikaro/game-publish@3.3.3
-          with:
-            modrinth-id: ${{ vars.MODRINTH_ID }}
-            modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
-            curseforge-id: ${{ vars.CURSEFORGE_ID }}
-            curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-
-            github-name: ${{ needs.info.outputs.version }}
-            github-tag: ${{ needs.info.outputs.version }}
-            github-generate-changelog: true
-            github-draft: false
-            github-prerelease: ${{ needs.info.outputs.version_type != 'release' }}
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-
-            files: ${{ needs.info.outputs.full_name }}.jar
-
-            name: ${{ needs.info.outputs.full_name }}
-            version: ${{ needs.info.outputs.version }}
-            version-type: ${{ needs.info.outputs.version_type }}
-
-            # changelog: ${{ needs.info.outputs.changelog }}
-            loaders: ${{ needs.info.outputs.loaders }}
-            game-versions: ${{ needs.info.outputs.game_versions }}
-            game-version-filter: none
-            java: ${{ needs.info.outputs.java_version }}
-            retry-attempts: 2
-            retry-delay: 10000
-            fail-mode: fail
+          # changelog: ${{ needs.info.outputs.changelog }}
+          loaders: ${{ needs.info.outputs.loaders }}
+          game-versions: ${{ needs.info.outputs.game_versions }}
+          game-version-filter: none
+          java: ${{ needs.info.outputs.java_version }}
+          retry-attempts: 2
+          retry-delay: 10000
+          fail-mode: fail

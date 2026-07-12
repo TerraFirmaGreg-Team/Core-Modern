@@ -87,7 +87,7 @@ public class DnaSyringeEvent {
                     }
                 }
             } catch (Exception e) {
-                TFGCore.LOGGER.warn("Could not extract fish item data from Starcatcher fish entity: {}", e.getMessage());
+                TFGCore.LOGGER.warn("Could not extract fish item data from Starcatcher fish entity", e);
             }
         }
 
