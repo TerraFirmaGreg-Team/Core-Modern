@@ -289,6 +289,7 @@ public class TFGBlocks_Wood {
                 .addLayer(() -> RenderType::cutout)
                 .tag(BlockTags.DOORS)
                 .tag(BlockTags.MINEABLE_WITH_AXE)
+                .loot((table, block) -> table.add(block, table.createDoorTable(block)))
                 .item()
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                         TFGCore.id("item/wood/door/" + wood.serializedName)))
