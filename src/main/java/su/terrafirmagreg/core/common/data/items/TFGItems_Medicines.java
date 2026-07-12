@@ -130,7 +130,7 @@ public class TFGItems_Medicines {
     public static final ItemEntry<ComponentItem> REGENERATION_PILL = TFGCore.REGISTRATE.item("regeneration_pill", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
                     .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, shortBuff, 0), 1)
-                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 3 * 60 * 20, 0), 1).build()))
+                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 60 * 20, 0), 1).build()))
             .onRegister(attach(new AntidoteBehavior(5, GTMedicalConditions.CHEMICAL_BURNS)))
             .register();
     public static final ItemEntry<ComponentItem> REGENERATION_TABLET = TFGCore.REGISTRATE.item("regeneration_tablet", ComponentItem::create)
