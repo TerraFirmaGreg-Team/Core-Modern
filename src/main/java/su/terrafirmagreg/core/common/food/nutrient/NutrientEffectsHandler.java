@@ -242,7 +242,7 @@ public final class NutrientEffectsHandler {
 
             switch (nutrient.getSerializedName()) {
                 case "deadly" -> {
-                    if (!player.getAbilities().invulnerable && ENABLE_FOOD_DEBUFFS) {
+                    if (!player.getAbilities().invulnerable && ENABLE_FOOD_DEBUFFS && !player.hasEffect(TFGEffects.FINAL_MOMENTS.get())) {
                         player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), Math.max((int) (9600 / (value)), 600), 0, true, true));
                     }
                 }
@@ -557,7 +557,7 @@ public final class NutrientEffectsHandler {
             }
         }
 
-        if (toxins > 0.99f && !player.getAbilities().invulnerable) {
+        if (toxins > 0.99f && !player.getAbilities().invulnerable && !player.hasEffect(TFGEffects.FINAL_MOMENTS.get())) {
             NutritionDataExtension.setExtendedNutrient(nutritionData, toxinsNutrient, 0.90f);
             player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), 18000, 0, false, true));
         }
