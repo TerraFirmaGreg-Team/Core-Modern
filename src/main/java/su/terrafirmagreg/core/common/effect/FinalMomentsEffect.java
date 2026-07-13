@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 
 /**
@@ -18,14 +17,17 @@ public class FinalMomentsEffect extends MobEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(@NotNull LivingEntity entity, @NotNull AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(entity, attributeMap, amplifier);
+    public void applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
         if (!entity.level().isClientSide && entity.isAlive() && !entity.isInvulnerable()) {
-            if (entity instanceof Player player) {
-                if (player.getAbilities().invulnerable)
-                    return;
+            if (entity instanceof Player player && player.getAbilities().invulnerable) {
+                return;
             }
-            entity.kill();
+            entity.hurt(entity.damageSources().magic(), Float.MAX_VALUE);
         }
+    }
+
+    @Override
+    public boolean isDurationEffectTick(int duration, int amplifier) {
+        return duration == 1;
     }
 }

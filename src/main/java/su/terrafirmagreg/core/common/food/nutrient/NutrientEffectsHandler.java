@@ -557,9 +557,11 @@ public final class NutrientEffectsHandler {
             }
         }
 
-        if (toxins > 0.99f && !player.getAbilities().invulnerable && !player.hasEffect(TFGEffects.FINAL_MOMENTS.get())) {
+        if (toxins > 0.99f && !player.getAbilities().invulnerable) {
             NutritionDataExtension.setExtendedNutrient(nutritionData, toxinsNutrient, 0.90f);
-            player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), 18000, 0, false, true));
+            if (!player.hasEffect(TFGEffects.FINAL_MOMENTS.get())) {
+                player.addEffect(new MobEffectInstance(TFGEffects.FINAL_MOMENTS.get(), 18000, 0, false, true));
+            }
         }
     }
 
