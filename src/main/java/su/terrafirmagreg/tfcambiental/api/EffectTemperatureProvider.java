@@ -45,6 +45,6 @@ public interface EffectTemperatureProvider {
     static Optional<TempModifier> getModifier(TemperatureChangeEffect effect, int amplifier) {
         float delta = effect.getTemperatureDelta() * (amplifier + 1);
         float heatingMulti = effect.isHeating() ? 1 : -1;
-        return TempModifier.defined(heatingMulti * delta, 0);
+        return TempModifier.defined(heatingMulti * delta, delta);
     }
 }

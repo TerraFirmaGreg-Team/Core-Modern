@@ -1,8 +1,9 @@
 package su.terrafirmagreg.core.common.effect;
 
-import lombok.Getter;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+
+import lombok.Getter;
 
 @Getter
 public class TemperatureChangeEffect extends MobEffect {
