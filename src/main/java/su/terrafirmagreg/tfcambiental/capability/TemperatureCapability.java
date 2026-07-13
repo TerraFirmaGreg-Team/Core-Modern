@@ -25,6 +25,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
 import su.terrafirmagreg.tfcambiental.api.BlockTemperatureProvider;
+import su.terrafirmagreg.tfcambiental.api.EffectTemperatureProvider;
 import su.terrafirmagreg.tfcambiental.api.EntityTemperatureProvider;
 import su.terrafirmagreg.tfcambiental.api.EnvironmentalTemperatureProvider;
 import su.terrafirmagreg.tfcambiental.api.EquipmentTemperatureProvider;
@@ -101,6 +102,7 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
 
         EnvironmentalTemperatureProvider.evaluateAll(this.player, this.modifiers, nether);
         EquipmentTemperatureProvider.evaluateAll(this.player, this.modifiers);
+        EffectTemperatureProvider.evaluateAll(this.player, this.modifiers, this.temperature);
 
         if (!fullyInsulated) {
             ItemTemperatureProvider.evaluateAll(this.player, this.modifiers);
