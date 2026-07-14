@@ -82,6 +82,7 @@
         "common.create_connected.KineticBridgeDestinationBlockEntityMixin",
         "common.createliquidfuel.LiquidBurnerFuelJsonLoaderMixin",
         "common.emi.ItemEmiStackMixin",
+        "common.fallingtrees.EventHandlerMixin",
         "common.fallingtrees.StandardTreeMixin",
         "common.firmaciv.BlockEventHandlerMixin",
         "common.firmalife.ClimateStationOxygenatedMixin",
