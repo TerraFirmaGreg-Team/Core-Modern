@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.common.tfgt.machine.electric;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
@@ -18,7 +19,10 @@ import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.client.model.machine.MachineRenderState;
+import com.gregtechceu.gtceu.config.ConfigHolder;
+import com.gregtechceu.gtceu.data.lang.LangHandler;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
@@ -76,6 +80,9 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
     private final int inventorySize;
     protected ISubscription energySubscription;
     protected TickableSubscription tickSubscription;
+    @Persisted
+    protected final CustomItemStackHandler chargerInventory;
+    protected TickableSubscription batterySubs;
 
     /**
      * Is actively refrigerating boolean.
@@ -103,7 +110,17 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         inventorySize = INVENTORY_SIZE(tier);
 
         inventory = new RefrigeratedStorage(this, inventorySize);
+        chargerInventory = createChargerItemHandler();
         currentlyWorking = false;
+    }
+
+    protected CustomItemStackHandler createChargerItemHandler(Object... args) {
+        var handler = new CustomItemStackHandler(1);
+        handler.setFilter(stack -> GTCapabilityHelper.getElectricItem(stack) != null
+                || (ConfigHolder.INSTANCE.compat.energy.nativeEUToFE
+                        && GTCapabilityHelper.getForgeEnergyItem(stack) != null));
+        handler.setOnContentsChanged(this::updateBatterySubscription);
+        return handler;
     }
 
     @Override
@@ -122,10 +139,14 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             serverLevel.getServer().tell(new TickTask(0, () -> {
                 setActive(currentlyWorking);
                 updateSubscription();
+                updateBatterySubscription();
             }));
         }
 
-        energySubscription = energyContainer.addChangedListener(this::updateSubscription);
+        energySubscription = energyContainer.addChangedListener(() -> {
+            updateSubscription();
+            updateBatterySubscription();
+        });
     }
 
     @Override
@@ -139,6 +160,10 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         if (tickSubscription != null) {
             tickSubscription.unsubscribe();
             tickSubscription = null;
+        }
+        if (batterySubs != null) {
+            batterySubs.unsubscribe();
+            batterySubs = null;
         }
     }
 
@@ -211,6 +236,22 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
             consumeEnergy(false);
 
         updateSubscription();
+    }
+
+    protected void updateBatterySubscription() {
+        if (isRemote())
+            return;
+        if (energyContainer.dischargeOrRechargeEnergyContainers(chargerInventory, 0, true)) {
+            batterySubs = subscribeServerTick(batterySubs, this::chargeBattery);
+        } else if (batterySubs != null) {
+            batterySubs.unsubscribe();
+            batterySubs = null;
+        }
+    }
+
+    protected void chargeBattery() {
+        energyContainer.dischargeOrRechargeEnergyContainers(chargerInventory, 0, false);
+        updateBatterySubscription();
     }
 
     private long getEnergyAmount() {
@@ -304,10 +345,11 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
         var energyBar = editableUI.createDefault();
 
         int energyBarX = 3, toggleY = 2, toggleH = 18;
-        int energyBarY = toggleY + toggleH + 4;
+        int chargerY = toggleY + toggleH + 4;
+        int energyBarY = chargerY + 19;
 
         int gridHeight = template.getSize().height;
-        int energyBarHeight = Math.max(0, gridHeight - 20);
+        int energyBarHeight = Math.max(0, gridHeight - 20 - 19);
         energyBar.setSize(energyBar.getSize().width, energyBarHeight);
 
         int groupWidth = Math.max(energyBar.getSize().width + template.getSize().width + 4 + 8, 172);
@@ -324,6 +366,12 @@ public class FoodRefrigeratorMachine extends TieredEnergyMachine
 
         group.addWidget(energyBar);
         group.addWidget(template);
+
+        var chargerSlot = new SlotWidget(chargerInventory, 0, energyBarX, chargerY, true, true);
+        chargerSlot.setBackgroundTexture(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.CHARGER_OVERLAY));
+        chargerSlot.setHoverTooltips(LangHandler.getMultiLang("gtceu.gui.charger_slot.tooltip",
+                GTValues.VNF[tier], GTValues.VNF[tier]).toArray(Component[]::new));
+        group.addWidget(chargerSlot);
 
         {
             IGuiTexture overlayOn = new ResourceTexture("tfg:textures/gui/widgets/unify_dates_on.png");
