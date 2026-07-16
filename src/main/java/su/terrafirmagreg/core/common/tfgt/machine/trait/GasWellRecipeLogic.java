@@ -106,7 +106,12 @@ public class GasWellRecipeLogic {
             int produced = getFluidToProduce(entry);
             if (produced <= 0)
                 return;
-            outputFluid(new FluidStack(veinFluid, produced));
+
+            var toOutput = new FluidStack(veinFluid, produced);
+            if (!canOutputFluid(toOutput))
+                return; // If the output is full don't deplete the vein but keep consumming explosives and input fluid
+
+            outputFluid(toOutput);
             savedData.depleteVein(chunkX, chunkZ, 5, true);
         }
     }
@@ -153,6 +158,13 @@ public class GasWellRecipeLogic {
         }
 
         return false;
+    }
+
+    private boolean canOutputFluid(FluidStack fluid) {
+        var outputTank = machine.getOutputFluidTank();
+        if (outputTank == null)
+            return false;
+        return outputTank.fillInternal(fluid, IFluidHandler.FluidAction.SIMULATE) >= fluid.getAmount();
     }
 
     private void outputFluid(FluidStack fluid) {
