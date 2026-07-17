@@ -19,7 +19,9 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
@@ -47,6 +49,9 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     private static final double MAX_RATIO = 0.85; // Over this amount the machine won't start
     private static final double OPTIMAL_RATIO = 0.50; // The percentage of fluid in the hatch so it's optimal
     private static final double SIGMA = 0.15; // Lower will make the curve harder
+
+    private static final int MAX_PARALLELS = 8; // Amount of parallel
+    private static final double PARALLEL_EU_DISCOUNT = 0.75;
 
     @Persisted
     @DescSynced
@@ -154,6 +159,29 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     }
 
     // Recipe Modifier - So we can interact with the chancedOutput
+
+    public static @NotNull ModifierFunction parallelModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (!(machine instanceof OreProcessingBeneathMachine processor)) {
+            return RecipeModifier.nullWrongType(OreProcessingBeneathMachine.class, machine);
+        }
+
+        int maxParallel = MAX_PARALLELS;
+        long recipeEUt = recipe.getInputEUt().getTotalEU();
+        if (recipeEUt > 0) {
+            long maxByEnergy = (long) (processor.getOverclockVoltage() / (recipeEUt * PARALLEL_EU_DISCOUNT));
+            maxParallel = (int) Math.min(MAX_PARALLELS, Math.max(1, maxByEnergy));
+        }
+
+        int parallels = ParallelLogic.getParallelAmount(machine, recipe, maxParallel);
+        if (parallels == 1)
+            return ModifierFunction.IDENTITY;
+
+        return ModifierFunction.builder()
+                .modifyAllContents(ContentModifier.multiplier(parallels))
+                .eutMultiplier(parallels * PARALLEL_EU_DISCOUNT)
+                .parallels(parallels)
+                .build();
+    }
 
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof OreProcessingBeneathMachine processor)) {

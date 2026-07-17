@@ -25,6 +25,7 @@ public class GasWellRecipeLogic {
 
     private int timer = 0;
     private boolean hasConsumedExplosive = false;
+    private boolean outputBlocked = false;
     private BedrockFluidVeinSavedData cachedSavedData = null;
 
     public GasWellRecipeLogic(GasWellMachine machine) {
@@ -38,6 +39,7 @@ public class GasWellRecipeLogic {
     public void reset() {
         timer = 0;
         hasConsumedExplosive = false;
+        outputBlocked = false;
     }
 
     public void resetFull() {
@@ -108,7 +110,8 @@ public class GasWellRecipeLogic {
                 return;
 
             var toOutput = new FluidStack(veinFluid, produced);
-            if (!canOutputFluid(toOutput))
+            outputBlocked = !canOutputFluid(toOutput);
+            if (outputBlocked)
                 return; // If the output is full don't deplete the vein but keep consumming explosives and input fluid
 
             outputFluid(toOutput);
