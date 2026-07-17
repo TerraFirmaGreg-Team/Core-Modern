@@ -28,30 +28,4 @@ public class BreedBehaviorMixin {
     private long tfg$allowEarlierSpawn(long spawnChildAtTime) {
         return spawnChildAtTime - 10;
     }
-
-    // spotless:off
-    @Redirect(
-            method = "checkExtraStartConditions(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/animal/Animal;)Z",
-            at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/common/entities/BrainBreeder;isMale()Z"))
-    // spotless:on
-    private boolean tfg$slimeCanStartBreeding(BrainBreeder breeder) {
-        if (breeder instanceof TFGSlime) {
-            return true;
-        }
-
-        return breeder.isMale();
-    }
-
-    // spotless:off
-    @Redirect(
-            method = "hasValidBreedPartner(Lnet/minecraft/world/entity/animal/Animal;)Z",
-            at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/common/entities/BrainBreeder;isMale()Z"))
-    // spotless:on
-    private boolean tfg$slimeIsValidPartner(BrainBreeder breeder) {
-        if (breeder instanceof TFGSlime) {
-            return false;
-        }
-
-        return breeder.isMale();
-    }
 }
