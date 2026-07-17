@@ -44,10 +44,11 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 
-import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
-import su.terrafirmagreg.core.common.data.TFGSounds;
 import team.terrafirmagreg.jellies.common.data.JelliesEntities;
 import team.terrafirmagreg.jellies.common.entity.JellieBase;
+
+import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
+import su.terrafirmagreg.core.common.data.TFGSounds;
 
 public class TFGSlime extends TamableMammal {
     public static final EntityDataAccessor<SlimeVariant> DATA_VARIANT;
