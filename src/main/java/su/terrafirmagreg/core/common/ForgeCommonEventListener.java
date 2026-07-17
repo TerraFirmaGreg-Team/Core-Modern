@@ -49,6 +49,7 @@ import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
 import su.terrafirmagreg.core.world.BedrockFluidSpoutLoader;
+import team.terrafirmagreg.jellies.common.data.JelliesItems;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class ForgeCommonEventListener {
@@ -295,6 +296,13 @@ public final class ForgeCommonEventListener {
             mapping.remap(TFCItems.ORES.get(Ore.BITUMINOUS_COAL).get());
         if (mapping.getKey().equals(GTCEu.id("poor_raw_coal")))
             mapping.remap(TFCItems.ORES.get(Ore.LIGNITE).get());
+
+        if (mapping.getKey().equals(TFGCore.id("slime/slime_ball/glowberry")))
+            mapping.remap(JelliesItems.GLOWBERRY_SLIME_BALL.get());
+        if (mapping.getKey().equals(TFGCore.id("slime/slime_ball/latex")))
+            mapping.remap(JelliesItems.LATEX_SLIME_BALL.get());
+        if (mapping.getKey().equals(TFGCore.id("slime/slime_ball/plant")))
+            mapping.remap(JelliesItems.PLANT_SLIME_BALL.get());
     }
 
     private static void remapBlockEntities(MissingMappingsEvent.Mapping<BlockEntityType<?>> mapping) {
