@@ -46,7 +46,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
 import su.terrafirmagreg.core.common.data.TFGSounds;
-import su.terrafirmagreg.core.common.data.TFGTags;
+import team.terrafirmagreg.jellies.common.data.JelliesEntities;
+import team.terrafirmagreg.jellies.common.entity.JellieBase;
 
 public class TFGSlime extends TamableMammal {
     public static final EntityDataAccessor<SlimeVariant> DATA_VARIANT;
@@ -67,8 +68,47 @@ public class TFGSlime extends TamableMammal {
     static long gestationDays = 64;
 
     public TFGSlime(EntityType<? extends TFCAnimal> animal, Level level) {
-        super(animal, level, TFGSounds.SLIME, TFCConfig.SERVER.catConfig);
+        super(animal, level, TFGSounds.FOX, TFCConfig.SERVER.catConfig);
     }
+
+    // region MIGRATION CODE
+    @Override
+    public void tick() {
+        if (!this.level().isClientSide) {
+            EntityType<? extends JellieBase> entity = switch (this.getVariant().getSerializedName()) {
+                case "plant" -> JelliesEntities.PLANT_JELLIE.get();
+                case "glowberry" -> JelliesEntities.GLOWBERRY_JELLIE.get();
+                case "ice" -> JelliesEntities.ICE_JELLIE.get();
+                case "lava" -> JelliesEntities.LAVA_JELLIE.get();
+                case "latex" -> JelliesEntities.LATEX_JELLIE.get();
+                default -> JelliesEntities.SPRING_JELLIE.get();
+            };
+
+            final JellieBase jellie = this.convertTo(entity, false);
+            if (jellie != null && this.level() instanceof ServerLevelAccessor server) {
+                jellie.finalizeSpawn(server, this.level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.CONVERSION, null, null);
+                if (this.getOwnerUUID() != null) {
+                    jellie.setOwnerUUID(this.getOwnerUUID());
+                    jellie.getEntityData().set(DATA_OWNER, this.entityData.get(DATA_OWNER));
+                    jellie.getEntityData().set(DATA_PET_FLAGS, this.entityData.get(DATA_PET_FLAGS));
+                }
+
+                jellie.setGender(this.getGender());
+                jellie.setBirthDay(this.getBirthDay());
+                jellie.setFamiliarity(this.getFamiliarity());
+                jellie.setUses(this.getUses());
+                jellie.setOldDay(this.getOldDay());
+                jellie.setGeneticSize(this.getGeneticSize());
+                jellie.setLastFed(this.getLastFed());
+                jellie.setProducedTick(this.getProducedTick());
+                jellie.setAge(this.getAge());
+                jellie.setHealth(this.getHealth());
+            }
+        }
+
+        super.tick();
+    }
+    // endregion
 
     // region Config Bypass
     @Override
@@ -152,7 +192,7 @@ public class TFGSlime extends TamableMammal {
     }
 
     public static boolean spawnRules(EntityType<? extends TFGSlime> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand) {
-        return level.getBiome(pos).is(TFGTags.Biomes.SlimeHabitat) && checkMobSpawnRules(type, level, spawn, pos, rand);
+        return false;
     }
     // endregion
 
@@ -344,7 +384,7 @@ public class TFGSlime extends TamableMammal {
     // region Other / Unsorted
     @Override
     public TagKey<Item> getFoodTag() {
-        return TFGTags.Items.SLIME_FOOD;
+        return TFCTags.Items.FOODS;
     }
 
     @Override
