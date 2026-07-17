@@ -19,11 +19,6 @@ public final class TFGEntityDataSerializers {
     public static final RegistryObject<EntityDataSerializer<TFCSniffer.State>> SNIFFER_STATE = register("sniffer_state",
             () -> EntityDataSerializer.simpleEnum(TFCSniffer.State.class));
 
-    public static final RegistryObject<EntityDataSerializer<SlimeVariant>> SLIME_VARIANT = register("slime_variant",
-            () -> EntityDataSerializer.simple(
-                    (buf, variant) -> buf.writeUtf(variant.getSerializedName()),
-                    buf -> SlimeVariant.getByName(buf.readUtf())));
-
     private static <T extends EntityDataSerializer<?>> RegistryObject<T> register(String name,
             Supplier<T> dataSerializer) {
         return ENTITY_DATA_SERIALIZERS.register(name, dataSerializer);
