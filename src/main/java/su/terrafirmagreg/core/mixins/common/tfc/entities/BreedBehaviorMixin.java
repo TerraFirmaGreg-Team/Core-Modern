@@ -3,14 +3,10 @@ package su.terrafirmagreg.core.mixins.common.tfc.entities;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
-import net.dries007.tfc.common.entities.BrainBreeder;
 import net.dries007.tfc.common.entities.ai.livestock.BreedBehavior;
-
-import su.terrafirmagreg.core.common.entity.slime.TFGSlime;
 
 @Mixin(value = BreedBehavior.class, remap = false)
 public class BreedBehaviorMixin {

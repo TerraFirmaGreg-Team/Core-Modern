@@ -6,10 +6,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
-import su.terrafirmagreg.core.common.entity.slime.TFGSlime;
+import team.terrafirmagreg.jellies.common.entity.JellieBase;
+
 import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
-import team.terrafirmagreg.jellies.common.entity.JellieBase;
 
 @FunctionalInterface
 public interface EntityTemperatureProvider {

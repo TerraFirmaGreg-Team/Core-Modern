@@ -41,8 +41,9 @@ import net.wanmine.wab.entity.Charger;
 import net.wanmine.wab.entity.Snatcher;
 import net.wanmine.wab.entity.Soarer;
 
+import team.terrafirmagreg.jellies.common.data.JelliesTags;
+
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.entity.animals.tfcbison.TFCBison;
 import su.terrafirmagreg.core.common.entity.animals.tfcjerboa.TFCJerboa;
 import su.terrafirmagreg.core.common.entity.animals.tfclemming.TFCLemming;
@@ -55,13 +56,11 @@ import su.terrafirmagreg.core.common.entity.fox.FoxData;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.glacianram.TFCGlacianRam;
 import su.terrafirmagreg.core.common.entity.moonrabbit.MoonRabbit;
-import su.terrafirmagreg.core.common.entity.slime.TFGSlime;
 import su.terrafirmagreg.core.common.entity.snatcher.SnatcherData;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 import su.terrafirmagreg.core.common.entity.soarer.SoarerData;
 import su.terrafirmagreg.core.common.entity.surfer.TFCSurfer;
 import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptor;
-import team.terrafirmagreg.jellies.common.data.JelliesTags;
 
 @Mixin(value = EntityTooltips.class, remap = false)
 public abstract class EntityTooltipsMixin {
