@@ -18,10 +18,10 @@ public class TFGEffects {
 
     // Beneficial
     public static final RegistryObject<MobEffect> COOLING = register("cooling",
-            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xAEBDD, 5f, false));
+            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xAEBDD, 5f, false, 10f));
 
     public static final RegistryObject<MobEffect> WARMING = register("warming",
-            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xEDA02D, 25f, true));
+            () -> new TemperatureChangeEffect(MobEffectCategory.BENEFICIAL, 0xEDA02D, 25f, true, 10f));
 
     public static final RegistryObject<MobEffect> QUENCHED = register("quenched",
             () -> new MobEffect(MobEffectCategory.BENEFICIAL, 0x3ED5E0) {
@@ -29,10 +29,10 @@ public class TFGEffects {
 
     // Harmful
     public static final RegistryObject<MobEffect> FREEZING = register("freezing",
-            () -> new TemperatureChangeEffect(MobEffectCategory.HARMFUL, 0xA8D9FF, -20f, false));
+            () -> new TemperatureChangeEffect(MobEffectCategory.HARMFUL, 0xA8D9FF, -20f, false, 50f));
 
     public static final RegistryObject<MobEffect> BLAZING = register("blazing",
-            () -> new TemperatureChangeEffect(MobEffectCategory.HARMFUL, 0xF27552, 60f, true));
+            () -> new TemperatureChangeEffect(MobEffectCategory.HARMFUL, 0xF27552, 60f, true, 50f));
 
     public static final RegistryObject<MobEffect> INSTANT_RADIATION = register("instant_radiation",
             () -> new InstantDamageEffect(MobEffectCategory.HARMFUL, 0x94fc03));
