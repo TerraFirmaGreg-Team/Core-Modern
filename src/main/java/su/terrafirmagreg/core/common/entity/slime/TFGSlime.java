@@ -93,6 +93,9 @@ public class TFGSlime extends TamableMammal {
                     jellie.getEntityData().set(DATA_OWNER, this.entityData.get(DATA_OWNER));
                     jellie.getEntityData().set(DATA_PET_FLAGS, this.entityData.get(DATA_PET_FLAGS));
                 }
+                if (this.getCustomName() != null) {
+                    jellie.setCustomName(this.getCustomName());
+                }
 
                 jellie.setGender(this.getGender());
                 jellie.setBirthDay(this.getBirthDay());
