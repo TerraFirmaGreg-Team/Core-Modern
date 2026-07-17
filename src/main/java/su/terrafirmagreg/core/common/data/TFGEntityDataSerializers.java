@@ -8,6 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.common.entity.slime.SlimeVariant;
 import su.terrafirmagreg.core.common.entity.sniffer.TFCSniffer;
 
 public final class TFGEntityDataSerializers {
