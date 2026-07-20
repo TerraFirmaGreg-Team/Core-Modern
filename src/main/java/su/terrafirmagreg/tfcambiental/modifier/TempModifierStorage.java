@@ -31,6 +31,28 @@ public class TempModifierStorage implements Iterable<TempModifier> {
         return change;
     }
 
+    public float getTargetTemperature(float currentTemperature, float minSafeTemp, float maxSafeTemp) {
+        float badChange = 0f;
+        float goodChange = 0f;
+        for (var mod : list) {
+            if (mod.isGood()) {
+                goodChange += mod.getChange();
+            } else {
+                badChange += mod.getChange();
+            }
+        }
+
+        float temperature = currentTemperature + badChange;
+
+        if (goodChange > 0f) {
+            goodChange = Math.min(goodChange, maxSafeTemp - temperature);
+        } else if (goodChange < 0f) {
+            goodChange = Math.max(goodChange, minSafeTemp - temperature);
+        }
+
+        return badChange + goodChange;
+    }
+
     public float getTotalPotency() {
         float potency = 1f;
         for (var mod : list) {

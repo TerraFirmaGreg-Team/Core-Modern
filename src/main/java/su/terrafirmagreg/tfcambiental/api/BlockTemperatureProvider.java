@@ -137,11 +137,11 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleHotStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.HOT_STUFF) ? Optional.of(new TempModifier(3f, 0.2f, -15f)) : TempModifier.none();
+        return state.is(TFCAmbiental.HOT_STUFF) ? Optional.of(new TempModifier(3f, 0.2f, -15f, true)) : TempModifier.none();
     }
 
     static Optional<TempModifier> handleColdStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.COLD_STUFF) ? Optional.of(new TempModifier(-0.5f, 0.2f)) : TempModifier.none();
+        return state.is(TFCAmbiental.COLD_STUFF) ? Optional.of(new TempModifier(-0.5f, 0.2f, true)) : TempModifier.none();
     }
 
     static Optional<TempModifier> handleSnow(Player player, BlockPos pos, BlockState state) {
@@ -151,7 +151,7 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleWarmStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.WARM_STUFF) ? Optional.of(new TempModifier(1f, 0f, -5f)) : TempModifier.none();
+        return state.is(TFCAmbiental.WARM_STUFF) ? Optional.of(new TempModifier(1f, 0f, -5f, true)) : TempModifier.none();
     }
 
     private static boolean hasProtection(Player player) {
@@ -242,7 +242,7 @@ public interface BlockTemperatureProvider {
 
     record TempModifierSpec(float change, float potency) {
         Optional<TempModifier> create() {
-            return Optional.of(new TempModifier(change, potency));
+            return Optional.of(new TempModifier(change, potency, false));
         }
     }
 
@@ -352,7 +352,7 @@ public interface BlockTemperatureProvider {
         }
 
         if (block instanceof IceBlock) {
-            return Optional.of(new TempModifier(-4.0F, 1.0F));
+            return Optional.of(new TempModifier(-4.0F, 1.0F, true));
         }
 
         if (block instanceof SeaIceBlock) {
@@ -411,13 +411,13 @@ public interface BlockTemperatureProvider {
                 double distance = VecHelper.alignedDistanceToFace(player.position(), fanBE.getBlockPos(), airCurrent.direction);
                 FanProcessingType type = airCurrent.getTypeAt((float) distance);
                 if (type instanceof AllFanProcessingTypes.BlastingType) {
-                    return Optional.of(new TempModifier(4.0F, 1.0F));
+                    return Optional.of(new TempModifier(4.0F, 1.0F, true));
                 } else if (type instanceof AllFanProcessingTypes.SmokingType) {
-                    return Optional.of(new TempModifier(2.0F, 1.0F));
+                    return Optional.of(new TempModifier(2.0F, 1.0F, true));
                 } else if (type instanceof AllFanProcessingTypes.SplashingType) {
-                    return Optional.of(new TempModifier(-2.0F, 1.0F, 2.0F));
+                    return Optional.of(new TempModifier(-2.0F, 1.0F, 2.0F, true));
                 } else {
-                    return Optional.of(new TempModifier(-2.0F, 1.0F));
+                    return Optional.of(new TempModifier(-2.0F, 1.0F, true));
                 }
             }
         }
