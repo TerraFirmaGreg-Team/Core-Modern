@@ -20,6 +20,7 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.client.model.machine.MachineRenderState;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -158,6 +159,14 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, tooltip))));
             }
 
+            if (logic.isActive() && logic.isOutputBlocked()) {
+                Component tooltip = Component.translatable("tfg.machine.gas_well.output_full.tooltip")
+                        .withStyle(ChatFormatting.GRAY);
+                textList.add(Component.translatable("tfg.machine.gas_well.output_full")
+                        .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, tooltip))));
+            }
+
             Component waterInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK + " mB/t")
                     .withStyle(ChatFormatting.BLUE);
             Component steamInfo = Component.literal(GasWellRecipeLogic.FLUID_CONSUMPTION_PER_TICK * 2 + " mB/t")
@@ -182,10 +191,16 @@ public class GasWellMachine extends MultiblockControllerMachine implements IDisp
                 if (entry != null && entry.getDefinition() != null) {
                     var veinFluid = entry.getDefinition().getStoredFluid().get();
                     if (veinFluid != null) {
+                        var naturalGas = GTMaterials.NaturalGas.getFluid();
+                        boolean isPumpable = naturalGas != null && veinFluid.isSame(naturalGas);
+
+                        Component fluidTooltip = Component.translatable("tfg.machine.gas_well.fluid.tooltip")
+                                .withStyle(ChatFormatting.GRAY);
                         Component fluidInfo = veinFluid.getFluidType().getDescription().copy()
-                                .withStyle(ChatFormatting.GREEN);
+                                .withStyle(isPumpable ? ChatFormatting.GREEN : ChatFormatting.RED);
                         textList.add(Component.translatable("gtceu.multiblock.fluid_rig.drilled_fluid", fluidInfo)
-                                .withStyle(ChatFormatting.GRAY));
+                                .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY)
+                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, fluidTooltip))));
 
                         int produced = Math.max(
                                 entry.getDefinition().getDepletedYield(),

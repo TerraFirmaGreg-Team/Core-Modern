@@ -1286,7 +1286,10 @@ public class TFGMultiMachines {
             .multiblock("ore_processing_beneath", OreProcessingBeneathMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.ORE_PROCESSING_GAS)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, OreProcessingBeneathMachine::recipeModifier)
+            .recipeModifiers(
+                    OreProcessingBeneathMachine::parallelModifier,
+                    GTRecipeModifiers.OC_NON_PERFECT,
+                    OreProcessingBeneathMachine::recipeModifier)
             .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
             .tooltips(
                     Component.translatable("tfg.tooltip.machine.ore_proc_beneath_1"),
