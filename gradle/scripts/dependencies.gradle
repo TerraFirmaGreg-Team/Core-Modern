@@ -175,4 +175,7 @@ dependencies {
 
     // Additional Placements, [1.20.1 Forge] Additional Placements 3.0.1.jar, Apr 10, 2026
     modCompileOnly "curse.maven:additional-placements-674852:7905535"
+
+    // Jellies
+    modCompileOnly "maven.modrinth:jellies:0.1.0"
 }
