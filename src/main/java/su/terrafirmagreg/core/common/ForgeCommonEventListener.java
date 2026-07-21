@@ -36,6 +36,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.MissingMappingsEvent;
 
+import team.terrafirmagreg.jellies.common.data.JelliesItems;
+
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.capability.LargeEggHandler;
@@ -49,7 +51,6 @@ import su.terrafirmagreg.core.network.packet.FuelSyncPacket;
 import su.terrafirmagreg.core.utils.CustomSpawnHelper;
 import su.terrafirmagreg.core.utils.CustomSpawnSaveHandler;
 import su.terrafirmagreg.core.world.BedrockFluidSpoutLoader;
-import team.terrafirmagreg.jellies.common.data.JelliesItems;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID)
 public final class ForgeCommonEventListener {
