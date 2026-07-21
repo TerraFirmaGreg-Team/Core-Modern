@@ -20,7 +20,10 @@ public abstract class FarmlandBlockMixin {
      * tell players "hey this plant needs oxygen" and they should be able to figure out the rest
      */
     @ModifyVariable(method = "getTemperatureTooltip(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/dries007/tfc/util/climate/ClimateRange;FZLjava/lang/String;)Lnet/minecraft/network/chat/Component;", at = @At("HEAD"), argsOnly = true)
-    private static float tfg$modifyTemperatureForFarmlandTooltip(float temperature, Level level, BlockPos pos, ClimateRange validRange) {
+    private static float tfg$modifyTemperatureForFarmlandTooltip(float temperature, Level level, BlockPos pos, ClimateRange validRange, float tempArg, boolean allowWiggle, String translationKey) {
+        if ("tfc.tooltip.climate_average_temperature".equals(translationKey)) {
+            return ClientClimateHelpers.getAverageTemperatureForTooltip(level, pos);
+        }
         return ClientClimateHelpers.getTemperatureForTooltip(level, pos);
     }
 }
