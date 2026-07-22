@@ -138,6 +138,6 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
 
     @Override
     public TempModifier getTempModifier(ItemStack stack) {
-        return new TempModifier(this.change, this.potency, true);
+        return new TempModifier(this.change, this.potency);
     }
 }

@@ -24,7 +24,7 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             () -> Ingredient.of(new ItemStack(TFCTextileItems.COTTON_CLOTH.get(), 1)),
             () -> 3000,
             0,
-            4f,
+            8f,
             -0.15f);
 
     // Linen materials
@@ -34,7 +34,7 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             () -> Ingredient.of(new ItemStack(TFCTextileItems.LINEN_CLOTH.get(), 1)),
             () -> 3000,
             1,
-            -0.5f,
+            -1f,
             -0.25f);
 
     // Raw hide materials
@@ -44,7 +44,7 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             () -> Ingredient.of(new ItemStack(TFCTextileItems.PRIMITIVE_INSULATION.get(), 1)),
             () -> 1500,
             0,
-            2f,
+            4f,
             -0.10f);
 
     // Crocodile materials
@@ -54,7 +54,7 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             () -> Ingredient.of(new ItemStack(TFCTextileItems.CROCODILE_LEATHER.get(), 1)),
             () -> 4000,
             2,
-            5f,
+            8f,
             -0.20f);
 
     // Caribou materials
@@ -244,6 +244,6 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
 
     @Override
     public TempModifier getTempModifier(ItemStack stack) {
-        return new TempModifier(this.change, this.potency, true);
+        return new TempModifier(this.change, this.potency);
     }
 }

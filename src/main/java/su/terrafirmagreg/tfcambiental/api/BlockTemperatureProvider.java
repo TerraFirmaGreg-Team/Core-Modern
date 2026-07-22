@@ -356,7 +356,7 @@ public interface BlockTemperatureProvider {
         }
 
         if (block instanceof SeaIceBlock) {
-            return Optional.of(new TempModifier(-6.0F, 1.0F));
+            return Optional.of(new TempModifier(-3.0F, 1.0F));
         }
 
         if (block instanceof OvenBottomBlock && state.getValue(OvenBottomBlock.LIT)) {

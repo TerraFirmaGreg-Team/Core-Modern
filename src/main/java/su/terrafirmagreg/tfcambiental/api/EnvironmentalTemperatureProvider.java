@@ -116,7 +116,7 @@ public interface EnvironmentalTemperatureProvider {
     }
 
     static Optional<TempModifier> handleGeneralTemperature(Player player) {
-        return Optional.of(new TempModifier(getEnvironmentTemperature(player), getEnvironmentPotency(player), getEnvironmentHumidity(player), true));
+        return Optional.of(new TempModifier(getEnvironmentTemperature(player), getEnvironmentPotency(player), getEnvironmentHumidity(player)));
     }
 
     static Optional<TempModifier> handleTimeOfDay(Player player) {
