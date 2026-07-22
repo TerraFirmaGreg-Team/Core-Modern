@@ -165,7 +165,7 @@ dependencies {
     modImplementation "maven.modrinth:strut-your-stuff:1.1.0+mc1.20.1"
 
     // Phoenix's Chromatic Codes
-    modImplementation("curse.maven:phoenixs-chromatic-colors-1483210:8241943")
+    modImplementation "curse.maven:phoenixs-chromatic-colors-1483210:8241943"
 
     // Create: Connected, 21 Jun 2026
     modImplementation "curse.maven:create-connected-947914:8290615"
@@ -178,4 +178,7 @@ dependencies {
 
     // Jellies
     modCompileOnly "maven.modrinth:jellies:0.1.0"
+
+    // Create: Steam Powered, 22 jul 2026
+    modImplementation("maven.modrinth:create-steam-powered:1.20.1-3.1.0")
 }
