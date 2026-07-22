@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc_textile:raw_shirt"},
+    "pattern": [
+        "X   X",
+        "XXXXX",
+        "XXXXX",
+        "XXXXX",
+        "XXXXX"
+    ],
+    "knapping_type": "tfc_textile:raw_hide",
+    "type": "tfc:knapping"
+}

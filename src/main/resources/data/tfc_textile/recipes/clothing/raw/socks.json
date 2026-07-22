@@ -1,0 +1,12 @@
+{
+    "result": {"item": "tfc_textile:raw_socks"},
+    "pattern": [
+        "XX   ",
+        "XX   ",
+        "XX   ",
+        "XXXX ",
+        "XXXXX"
+    ],
+    "knapping_type": "tfc_textile:raw_hide",
+    "type": "tfc:knapping"
+}

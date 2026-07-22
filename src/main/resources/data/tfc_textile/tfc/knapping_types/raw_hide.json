@@ -1,0 +1,11 @@
+{
+    "input": {
+        "ingredient": {"item": "tfc_textile:primitive_insulation"},
+        "count": 1
+    },
+    "consume_after_complete": false,
+    "use_disabled_texture": false,
+    "jei_icon_item": {"item": "tfc_textile:primitive_insulation"},
+    "click_sound": "tfc:item.knapping.leather",
+    "spawns_particles": false
+}

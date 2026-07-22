@@ -61,9 +61,6 @@ public interface EquipmentTemperatureProvider {
             if (clothesItem.getMaterial() instanceof TemperatureAlteringMaterial tempMaterial) {
                 return Optional.of(tempMaterial.getTempModifier(stack));
             }
-            if (clothesItem.getMaterial() instanceof com.lumintorious.tfcambiental.item.material.TemperatureAlteringMaterial tempMaterial) {
-                return Optional.of(tempMaterial.getTempModifier(stack)); // for tfc textile
-            }
         }
         return TempModifier.none();
     }
