@@ -1,0 +1,11 @@
+{
+  "geologic_vulcanizer": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:geologic_vulcanizer"
+      }
+    ],
+    "subtitle": "tfg.subtitle.geologic_vulcanizer"
+  }
+}

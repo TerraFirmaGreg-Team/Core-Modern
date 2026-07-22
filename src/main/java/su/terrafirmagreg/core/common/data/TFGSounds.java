@@ -3,6 +3,8 @@ package su.terrafirmagreg.core.common.data;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.gregtechceu.gtceu.api.sound.SoundEntry;
+
 import net.dries007.tfc.client.TFCSounds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -21,6 +23,11 @@ public final class TFGSounds {
     public static final TFCSounds.EntitySound BISON = createTfcEntitySounds("bison", true, false);
     public static final TFCSounds.EntitySound FOX = new TFCSounds.EntitySound(() -> SoundEvents.FOX_AMBIENT, () -> SoundEvents.FOX_DEATH, () -> SoundEvents.FOX_HURT, () -> SoundEvents.CHICKEN_STEP,
             Optional.of((Supplier) () -> SoundEvents.FOX_BITE), Optional.of((Supplier) () -> SoundEvents.FOX_SLEEP));
+
+    public static final SoundEntry GEOLOGIC_VULCANIZER = TFGCore.REGISTRATE.sound(TFGCore.id("geologic_vulcanizer")).build();
+
+    public static void init() {
+    }
 
     private static RegistryObject<SoundEvent> createSound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(
