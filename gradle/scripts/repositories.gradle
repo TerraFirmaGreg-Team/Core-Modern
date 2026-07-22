@@ -9,8 +9,8 @@ repositories {
         }
     }
     maven {
-        name "TerraformersMC"
-        url "https://maven.terraformersmc.com/"
+        name "GnomeCraft"
+        url "https://maven.gnomecraft.net/repository/maven-public"
     }
     maven { // Mixin²
         url "https://maven.bawnorton.com/releases"
@@ -49,7 +49,9 @@ repositories {
         name "Shedaniel maven"
         url "https://maven.shedaniel.me"
     }
-    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven { // Create, Ponder, Flywheel
+        url = "https://maven.createmod.net"
+    }
     maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
@@ -73,10 +75,6 @@ repositories {
         content {
             includeGroup("com.lowdragmc.ldlib")
         }
-    }
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
     }
     maven { // Configuration
         name = 'Repsy Maven'
