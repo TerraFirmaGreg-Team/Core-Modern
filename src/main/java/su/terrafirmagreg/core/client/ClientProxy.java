@@ -149,6 +149,9 @@ public class ClientProxy extends CommonProxy {
                     Sheets.addWoodType(wood.getVanillaWoodType());
                 }
             }
+
+            // Create visuals
+            TFGBlockEntities.registerAllVisuals();
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }
@@ -162,6 +165,7 @@ public class ClientProxy extends CommonProxy {
 
     public void initializeDynamicRenders() {
         DynamicRenderManager.register(TFGCore.id("boule"), BouleRender.TYPE);
+        TFGBlockPartials.clientInit();
     }
 
     @SubscribeEvent

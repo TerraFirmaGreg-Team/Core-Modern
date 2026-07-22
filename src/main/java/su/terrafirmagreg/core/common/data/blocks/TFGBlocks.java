@@ -7,6 +7,10 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.simibubi.create.foundation.data.ModelGen;
+import com.simibubi.create.foundation.data.SharedProperties;
+import com.simibubi.create.foundation.data.TagGen;
+import com.teammoeg.steampowered.oldcreatestuff.OldFlywheelGenerator;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -26,6 +30,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -39,6 +44,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.*;
+import su.terrafirmagreg.core.common.block.create.TitaniumSteamEngineBlock;
+import su.terrafirmagreg.core.common.block.create.TitaniumSteamFlywheelBlock;
 import su.terrafirmagreg.core.common.data.TFGFluids;
 import su.terrafirmagreg.core.utils.ModelUtils;
 
@@ -272,6 +279,22 @@ public final class TFGBlocks {
             .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new).setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop()).build()
+            .register();
+
+    public static final BlockEntry<TitaniumSteamFlywheelBlock> TITANIUM_FLYWHEEL = TFGCore.REGISTRATE.block("titanium_flywheel", TitaniumSteamFlywheelBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties(BlockBehaviour.Properties::noOcclusion)
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate(new OldFlywheelGenerator()::generate)
+            .item()
+            .transform(ModelGen.customItemModel())
+            .register();
+
+    public static final BlockEntry<TitaniumSteamEngineBlock> TITANIUM_STEAM_ENGINE = TFGCore.REGISTRATE.block("titanium_steam_engine", TitaniumSteamEngineBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .transform(TagGen.pickaxeOnly())
+            .item()
+            .transform(ModelGen.customItemModel())
             .register();
 
     public static <T extends Block> NonNullBiConsumer<RegistrateBlockLootTables, T> dropBetween(Supplier<Item> item, int min, int max) {
