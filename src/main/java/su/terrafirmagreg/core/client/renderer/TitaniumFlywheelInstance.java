@@ -6,7 +6,7 @@ import com.teammoeg.steampowered.oldcreatestuff.OldFlywheelBlockEntity;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 
-import su.terrafirmagreg.core.client.TFGBlockPartials;
+import su.terrafirmagreg.core.common.data.TFGPartialModels;
 
 public class TitaniumFlywheelInstance extends AbstractSPFlywheelInstance {
 
@@ -16,26 +16,26 @@ public class TitaniumFlywheelInstance extends AbstractSPFlywheelInstance {
 
     @Override
     protected PartialModel getWheelModel() {
-        return TFGBlockPartials.TITANIUM_FLYWHEEL;
+        return TFGPartialModels.TITANIUM_FLYWHEEL;
     }
 
     @Override
     protected PartialModel getUpperSlidingModel() {
-        return TFGBlockPartials.TITANIUM_FLYWHEEL_UPPER_SLIDING;
+        return TFGPartialModels.TITANIUM_FLYWHEEL_UPPER_SLIDING;
     }
 
     @Override
     protected PartialModel getLowerSlidingModel() {
-        return TFGBlockPartials.TITANIUM_FLYWHEEL_LOWER_SLIDING;
+        return TFGPartialModels.TITANIUM_FLYWHEEL_LOWER_SLIDING;
     }
 
     @Override
     protected PartialModel getUpperRotatingModel() {
-        return TFGBlockPartials.TITANIUM_FLYWHEEL_UPPER_ROTATING;
+        return TFGPartialModels.TITANIUM_FLYWHEEL_UPPER_ROTATING;
     }
 
     @Override
     protected PartialModel getLowerRotatingModel() {
-        return TFGBlockPartials.TITANIUM_FLYWHEEL_LOWER_ROTATING;
+        return TFGPartialModels.TITANIUM_FLYWHEEL_LOWER_ROTATING;
     }
 }

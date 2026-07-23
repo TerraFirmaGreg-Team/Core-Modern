@@ -20,7 +20,7 @@ public class TitaniumSteamEngineTileEntity extends SteamEngineTileEntity {
         return TFGBlocks.TITANIUM_FLYWHEEL.get();
     }
 
-	// Can't be bothered making a bunch of new configs for these when they're nothing special
+    // Can't be bothered making a bunch of new configs for these when they're nothing special
 
     @Override
     public float getGeneratingCapacity() {
