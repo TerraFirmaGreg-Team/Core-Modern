@@ -79,10 +79,10 @@ public interface EquipmentTemperatureProvider {
         Item item = stack.getItem();
 
         if (COPPER_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier(-8F, 0.1F, true));
+            return Optional.of(new TempModifier(-4F, 0.1F, true));
         }
         if (BLUE_STEEL_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier(-16F, 0.9F, true));
+            return Optional.of(new TempModifier(-8F, 0.9F, true));
         }
         if (ADVANCED_ARMOR.contains(item)) {
             return Optional.of(new TempModifier(0F, 0F, true));

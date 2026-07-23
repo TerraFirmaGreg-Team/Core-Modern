@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import net.minecraft.util.Mth;
+
 public class TempModifierStorage implements Iterable<TempModifier> {
     private final List<TempModifier> list = new ArrayList<>();
 
@@ -31,26 +33,27 @@ public class TempModifierStorage implements Iterable<TempModifier> {
         return change;
     }
 
-    public float getTargetTemperature(float currentTemperature, float minSafeTemp, float maxSafeTemp) {
-        float badChange = 0f;
+    public float getTargetTemperature(float minSafeTemp, float maxSafeTemp) {
+        float badTemperature = 0f;
         float goodChange = 0f;
         for (var mod : list) {
             if (mod.isGood()) {
                 goodChange += mod.getChange();
             } else {
-                badChange += mod.getChange();
+                badTemperature += mod.getChange();
             }
         }
-
-        float temperature = currentTemperature + badChange;
-
-        if (goodChange > 0f) {
-            goodChange = Math.min(goodChange, maxSafeTemp - temperature);
-        } else if (goodChange < 0f) {
-            goodChange = Math.max(goodChange, minSafeTemp - temperature);
+        float temperature = badTemperature + goodChange;
+        if (badTemperature >= minSafeTemp && badTemperature <= maxSafeTemp) {
+            return Mth.clamp(temperature, minSafeTemp, maxSafeTemp);
         }
-
-        return badChange + goodChange;
+        if (badTemperature > maxSafeTemp && temperature < minSafeTemp) {
+            return minSafeTemp;
+        }
+        if (badTemperature < minSafeTemp && temperature > maxSafeTemp) {
+            return maxSafeTemp;
+        }
+        return temperature;
     }
 
     public float getTotalPotency() {

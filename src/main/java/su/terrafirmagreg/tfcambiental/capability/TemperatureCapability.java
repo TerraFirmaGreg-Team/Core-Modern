@@ -114,7 +114,7 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
 
         float minSafeTemp = TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue();
         float maxSafeTemp = TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue();
-        this.target = this.modifiers.getTargetTemperature(this.temperature, minSafeTemp, maxSafeTemp);
+        this.target = this.modifiers.getTargetTemperature(minSafeTemp, maxSafeTemp);
 
         this.targetWetness = this.modifiers.getTargetWetness();
 
