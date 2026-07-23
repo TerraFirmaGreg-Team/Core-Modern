@@ -177,5 +177,5 @@ dependencies {
     modCompileOnly "curse.maven:additional-placements-674852:7905535"
 
     // Jellies
-    modImplementation "maven.modrinth:jellies:0.1.0"
+    modCompileOnly "maven.modrinth:jellies:0.1.0"
 }
