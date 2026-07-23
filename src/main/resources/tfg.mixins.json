@@ -90,6 +90,7 @@
         "common.firmalife.LargePlanterBlockEntityOxygenMixin",
         "common.firmalife.MixinFoodShelfBlockEntity",
         "common.firmalife.MixinGreenhousePortBlock",
+        "common.firmalife.PlantableMixin",
         "common.firmalife.StovetopPotBlockEntityMixin",
         "common.firmalife.VatRecipeMatchesMixin",
         "common.flywheel.AnimatedBlazeBurnerMixin",
