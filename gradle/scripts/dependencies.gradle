@@ -177,8 +177,8 @@ dependencies {
     modCompileOnly "curse.maven:additional-placements-674852:7905535"
 
     // Jellies
-    modCompileOnly "maven.modrinth:jellies:0.1.0"
+    modImplementation "maven.modrinth:jellies:0.1.0"
 
     // Create: Steam Powered, 22 jul 2026
-    modImplementation("maven.modrinth:create-steam-powered:1.20.1-3.1.0")
+    modImplementation "maven.modrinth:create-steam-powered:1.20.1-3.1.0"
 }
