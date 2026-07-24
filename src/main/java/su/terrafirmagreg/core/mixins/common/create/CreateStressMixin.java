@@ -15,7 +15,9 @@ import net.minecraft.world.level.block.Block;
 public abstract class CreateStressMixin {
     @Inject(method = "getImpact", at = @At("HEAD"), cancellable = true)
     private static void onGetImpact(Block block, CallbackInfoReturnable<Double> cir) {
-        if (block instanceof QuernBlock) cir.setReturnValue(1.0);
-        if (block instanceof BellowsBlock) cir.setReturnValue(0.5);
+        if (block instanceof QuernBlock)
+            cir.setReturnValue(0.25);
+        if (block instanceof BellowsBlock)
+            cir.setReturnValue(0.5);
     }
 }

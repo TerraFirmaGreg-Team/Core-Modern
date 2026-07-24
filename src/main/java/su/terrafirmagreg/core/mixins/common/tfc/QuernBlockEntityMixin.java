@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.mixins.common.tfc;
 
+import java.util.List;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -7,17 +9,22 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.dries007.tfc.common.blockentities.QuernBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(value = QuernBlockEntity.class, remap = false)
-public abstract class QuernBlockEntityMixin extends TFCBlockEntity {
+public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IHaveGoggleInformation {
 
     public QuernBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -62,5 +69,54 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity {
         if (quern.getRotationSpeed() > 0 && !quern.isGrinding() && level.getGameTime() % 10 == 0) {
             quern.startGrinding();
         }
+    }
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        QuernBlockEntity quern = (QuernBlockEntity) (Object) this;
+        if (!quern.hasHandstone()) {
+            return false;
+        }
+
+        float stressAtBase = (float) BlockStressValues.getImpact(getBlockState().getBlock());
+        if (stressAtBase == 0) {
+            return false;
+        }
+
+        CreateLang.translate("gui.goggles.kinetic_stats")
+                .forGoggles(tooltip);
+
+        CreateLang.translate("tooltip.stressImpact")
+                .style(ChatFormatting.GRAY)
+                .forGoggles(tooltip);
+
+        float speed = 0;
+        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe) {
+            speed = Math.abs(kbe.getSpeed());
+        }
+
+        float stressTotal = stressAtBase * speed;
+
+        CreateLang.number(stressTotal)
+                .translate("generic.unit.stress")
+                .style(ChatFormatting.AQUA)
+                .space()
+                .add(CreateLang.translate("gui.goggles.at_current_speed")
+                        .style(ChatFormatting.DARK_GRAY))
+                .forGoggles(tooltip, 1);
+
+        CreateLang.translate("create.tooltip.speedRequirement")
+                .style(ChatFormatting.GRAY)
+                .space()
+                .add(CreateLang.text("<")
+                        .style(ChatFormatting.RED))
+                .space()
+                .add(CreateLang.number(32f)
+                        .style(ChatFormatting.RED))
+                .add(CreateLang.translate("generic.unit.rpm")
+                        .style(ChatFormatting.RED))
+                .forGoggles(tooltip, 1);
+
+        return true;
     }
 }
