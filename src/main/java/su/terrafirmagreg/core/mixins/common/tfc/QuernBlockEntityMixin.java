@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.mixins.common.tfc;
 
 import java.util.List;
 
+import net.createmod.catnip.lang.Lang;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,27 +38,37 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     private void onGetRotationSpeed(CallbackInfoReturnable<Float> cir) {
         if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe) {
             float speed = Math.abs(kbe.getSpeed());
-            if (speed > 0) {
-                // Speed limit.
-                speed = Math.min(speed, 32f);
-                // Convert RPM to TFC rad/tick.
-                cir.setReturnValue(speed * (float) Math.PI / 600f);
+            float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
+            float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
+
+            if (impact * theoreticalSpeed > 8.0001f || kbe.isOverStressed()) {
+                cir.setReturnValue(0f);
+                return;
             }
+
+            // Speed limit.
+            speed = Math.min(speed, 32f);
+            // Convert RPM to TFC rad/tick.
+            cir.setReturnValue(speed * (float) Math.PI / 600f);
         }
     }
 
     @Inject(method = "isConnectedToNetwork", at = @At("HEAD"), cancellable = true)
     private void onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
         QuernBlockEntity quern = (QuernBlockEntity) (Object) this;
-        if (quern.getRotationSpeed() > 0 && quern.hasHandstone()) {
+        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity && quern.hasHandstone()) {
             cir.setReturnValue(true);
         }
     }
 
     @Inject(method = "getRotationAngle", at = @At("HEAD"), cancellable = true)
     private void onGetRotationAngle(float partialTick, CallbackInfoReturnable<Float> cir) {
-        if (getRotationSpeed() > 0 && level != null) {
+        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity) {
             float speed = getRotationSpeed();
+            if (speed <= 0) {
+                cir.setReturnValue(0f);
+                return;
+            }
             float degreesPerTick = speed * (180f / (float) Math.PI);
             float angle = (level.getGameTime() + partialTick) * degreesPerTick;
             cir.setReturnValue(angle % 360);
@@ -83,6 +94,19 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
             return false;
         }
 
+        float theoreticalSpeed = 0;
+        boolean overstressed = false;
+        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe) {
+            theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
+            overstressed = kbe.isOverStressed() || (stressAtBase * theoreticalSpeed > 8.0001f);
+        }
+
+        if (overstressed) {
+            CreateLang.translate("gui.stressometer.overstressed")
+                    .style(ChatFormatting.GOLD)
+                    .forGoggles(tooltip);
+        }
+
         CreateLang.translate("gui.goggles.kinetic_stats")
                 .forGoggles(tooltip);
 
@@ -90,12 +114,7 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
 
-        float speed = 0;
-        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe) {
-            speed = Math.abs(kbe.getSpeed());
-        }
-
-        float stressTotal = stressAtBase * speed;
+        float stressTotal = stressAtBase * theoreticalSpeed;
 
         CreateLang.number(stressTotal)
                 .translate("generic.unit.stress")
@@ -105,8 +124,15 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
                         .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);
 
-        CreateLang.translate("create.tooltip.speedRequirement")
+        Lang.builder("greate").translate("tooltip.max_capacity")
                 .style(ChatFormatting.GRAY)
+                .space()
+                .add(CreateLang.text("§48.0 §7(§8ULS§7)"))
+                .forGoggles(tooltip);
+
+        CreateLang.translate("schedule.instruction.throttle")
+                .style(ChatFormatting.GRAY)
+                .text(":")
                 .space()
                 .add(CreateLang.text("<")
                         .style(ChatFormatting.RED))

@@ -2,6 +2,7 @@ package su.terrafirmagreg.core.mixins.common.tfc;
 
 import java.util.List;
 
+import net.createmod.catnip.lang.Lang;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,21 +39,19 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
                 float speed = Math.abs(kbe.getSpeed());
-                if (speed > 0) {
-                    // Speed limit.
-                    speed = Math.min(speed, 16f);
-                    // Convert RPM to TFC rad/tick.
-                    float tfcSpeed = speed * (float) Math.PI / 600f;
+                float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
+                float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
+
+                if (impact * theoreticalSpeed > 8.0001f || kbe.isOverStressed()) {
                     cir.setReturnValue(new Rotation() {
                         @Override
                         public float angle(float partialTick) {
-                            assert level != null;
-                            return (level.getGameTime() + partialTick) * tfcSpeed;
+                            return 0;
                         }
 
                         @Override
                         public float speed() {
-                            return tfcSpeed;
+                            return 0;
                         }
 
                         @Override
@@ -60,7 +59,30 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                             return Direction.UP;
                         }
                     });
+                    return;
                 }
+
+                // Speed limit.
+                speed = Math.min(speed, 16f);
+                // Convert RPM to TFC rad/tick.
+                float tfcSpeed = speed * (float) Math.PI / 600f;
+                cir.setReturnValue(new Rotation() {
+                    @Override
+                    public float angle(float partialTick) {
+                        assert level != null;
+                        return (level.getGameTime() + partialTick) * tfcSpeed;
+                    }
+
+                    @Override
+                    public float speed() {
+                        return tfcSpeed;
+                    }
+
+                    @Override
+                    public @NotNull Direction direction() {
+                        return Direction.UP;
+                    }
+                });
             }
         }
     }
@@ -71,14 +93,20 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
                 float speed = Math.abs(kbe.getSpeed());
-                if (speed > 0) {
-                    // Speed limit.
-                    speed = Math.min(speed, 16f);
-                    // Convert RPM to TFC rad/tick.
-                    float tfcSpeed = speed * (float) Math.PI / 600f;
-                    float angle = (level.getGameTime() + partialTick) * tfcSpeed;
-                    cir.setReturnValue(0.125f + 0.25f * (1.0f + Mth.sin(angle)));
+                float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
+                float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
+
+                if (impact * theoreticalSpeed > 8.0001f || kbe.isOverStressed()) {
+                    cir.setReturnValue(0.125f);
+                    return;
                 }
+
+                // Speed limit.
+                speed = Math.min(speed, 16f);
+                // Convert RPM to TFC rad/tick.
+                float tfcSpeed = speed * (float) Math.PI / 600f;
+                float angle = (level.getGameTime() + partialTick) * tfcSpeed;
+                cir.setReturnValue(0.125f + 0.25f * (1.0f + Mth.sin(angle)));
             }
         }
     }
@@ -90,6 +118,20 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
             return false;
         }
 
+        Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
+        float theoreticalSpeed = 0;
+        boolean overstressed = false;
+        if (level != null && level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
+            theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
+            overstressed = kbe.isOverStressed() || (stressAtBase * theoreticalSpeed > 8.0001f);
+        }
+
+        if (overstressed) {
+            CreateLang.translate("gui.stressometer.overstressed")
+                    .style(ChatFormatting.GOLD)
+                    .forGoggles(tooltip);
+        }
+
         CreateLang.translate("gui.goggles.kinetic_stats")
                 .forGoggles(tooltip);
 
@@ -97,13 +139,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
 
-        float speed = 0;
-        Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
-        if (level != null && level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
-            speed = Math.abs(kbe.getSpeed());
-        }
-
-        float stressTotal = stressAtBase * speed;
+        float stressTotal = stressAtBase * theoreticalSpeed;
 
         CreateLang.number(stressTotal)
                 .translate("generic.unit.stress")
@@ -113,8 +149,15 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                         .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);
 
-        CreateLang.translate("create.tooltip.speedRequirement")
+        Lang.builder("greate").translate("tooltip.max_capacity")
                 .style(ChatFormatting.GRAY)
+                .space()
+                .add(CreateLang.text("§48.0 §7(§8ULS§7)"))
+                .forGoggles(tooltip);
+
+        CreateLang.translate("schedule.instruction.throttle")
+                .style(ChatFormatting.GRAY)
+                .text(":")
                 .space()
                 .add(CreateLang.text("<")
                         .style(ChatFormatting.RED))
@@ -123,7 +166,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                         .style(ChatFormatting.RED))
                 .add(CreateLang.translate("generic.unit.rpm")
                         .style(ChatFormatting.RED))
-                .forGoggles(tooltip, 1);
+                .forGoggles(tooltip);
 
         return true;
     }

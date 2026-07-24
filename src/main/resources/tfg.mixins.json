@@ -1,6 +1,6 @@
 {
     "mixins": [
-        "QuernBlockMixin",
+        "common.tfc.QuernBlockMixin",
         "client.create.ChainConveyorRendererMixin",
         "client.gtceu.GTForgeClientEventListenerMixin",
         "client.minecraft.AbstractContainerScreenMixin",
