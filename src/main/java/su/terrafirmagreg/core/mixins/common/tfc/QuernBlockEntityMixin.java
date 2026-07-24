@@ -96,6 +96,7 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
                 if (level.getBlockEntity(worldPosition.relative(direction)) instanceof KineticBlockEntity kbe) {
                     kbe.updateSpeed = true;
                     kbe.networkDirty = true;
+                    kbe.setChanged();
                 }
             }
         }
