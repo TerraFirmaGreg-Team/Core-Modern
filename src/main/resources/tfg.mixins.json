@@ -54,6 +54,8 @@
         "common.create.ContraptionMixin",
         "common.create.CreatePonderPluginMixin",
         "common.create.CreateStressMixin",
+        "common.create.KineticBlockEntityStressMixin",
+        "common.create.KineticStatsMixin",
         "common.create.DepotBehaviorMixin",
         "common.create.MovementBehaviourMixin",
         "common.create.OpenEndedPipeMixin",
