@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.mixins.common.tfc;
 
 import java.util.List;
 
-import net.createmod.catnip.lang.Lang;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,6 +13,7 @@ import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.lang.Lang;
 import net.dries007.tfc.common.blockentities.BellowsBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.dries007.tfc.common.blocks.devices.BellowsBlock;

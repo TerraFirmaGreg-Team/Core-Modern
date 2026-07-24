@@ -2,9 +2,9 @@ package su.terrafirmagreg.core.mixins.common.tfc;
 
 import java.util.List;
 
-import net.createmod.catnip.lang.Lang;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -15,10 +15,12 @@ import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.lang.Lang;
 import net.dries007.tfc.common.blockentities.QuernBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -79,6 +81,23 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     private static void onServerTick(Level level, BlockPos pos, BlockState state, QuernBlockEntity quern, CallbackInfo ci) {
         if (quern.getRotationSpeed() > 0 && !quern.isGrinding() && level.getGameTime() % 10 == 0) {
             quern.startGrinding();
+        }
+    }
+
+    @Inject(method = "updateHandstone", at = @At("TAIL"))
+    private void onUpdateHandstone(CallbackInfo ci) {
+        tfg$notifyCreateNeighbors();
+    }
+
+    @Unique
+    private void tfg$notifyCreateNeighbors() {
+        if (level != null && !level.isClientSide) {
+            for (Direction direction : Direction.values()) {
+                if (level.getBlockEntity(worldPosition.relative(direction)) instanceof KineticBlockEntity kbe) {
+                    kbe.updateSpeed = true;
+                    kbe.networkDirty = true;
+                }
+            }
         }
     }
 

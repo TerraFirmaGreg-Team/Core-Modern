@@ -29,7 +29,7 @@ public class QuernBlockEntityRendererMixin {
 
     @Inject(method = "render*", at = @At("TAIL"))
     private void tfg$renderAxle(QuernBlockEntity quern, float partialTicks, PoseStack stack, MultiBufferSource bufferSource, int packedLight, int packedOverlay, CallbackInfo ci) {
-        if (quern.getRotationSpeed() > 0 && quern.hasHandstone()) {
+        if (quern.isConnectedToNetwork() && quern.hasHandstone()) {
             Block axle = ForgeRegistries.BLOCKS.getValue(TFGBlocks_Girders.BRASS_BEAM.getId());
             if (axle != null) {
                 BlockState state = axle.defaultBlockState();
