@@ -33,7 +33,7 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             () -> Ingredient.of(new ItemStack(TFCTextileItems.LINEN_CLOTH.get(), 1)),
             () -> 3000,
             1,
-            -1f,
+            -2f,
             -0.25f);
 
     // Raw hide materials

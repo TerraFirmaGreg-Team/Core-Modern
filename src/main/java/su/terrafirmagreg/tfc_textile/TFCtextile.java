@@ -68,10 +68,10 @@ public class TFCtextile {
             event.accept(TFCTextileItems.CROCODILE_PANTS);
             event.accept(TFCTextileItems.CROCODILE_BOOTS);
 
-            //event.accept(TFCTextileItems.LINEN_HAT);
-            //event.accept(TFCTextileItems.LINEN_SHIRT);
-            //event.accept(TFCTextileItems.LINEN_PANTS);
-            //event.accept(TFCTextileItems.LINEN_SOCKS);
+            event.accept(TFCTextileItems.LINEN_HAT);
+            event.accept(TFCTextileItems.LINEN_SHIRT);
+            event.accept(TFCTextileItems.LINEN_PANTS);
+            event.accept(TFCTextileItems.LINEN_SOCKS);
 
             event.accept(TFCTextileItems.RAW_HAT);
             event.accept(TFCTextileItems.RAW_SHIRT);

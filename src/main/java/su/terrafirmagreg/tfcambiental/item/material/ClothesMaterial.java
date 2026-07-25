@@ -68,7 +68,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             () -> Ingredient.of(new ItemStack(TFCItems.WOOL_CLOTH.get(), 1)),
             () -> TFCAmbientalConfig.SERVER.durabilityWoolClothes.get(),
             0,
-            8f,
+            6f,
             -0.15f);
 
     private final String name;
