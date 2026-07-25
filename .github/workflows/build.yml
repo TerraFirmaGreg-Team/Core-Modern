@@ -217,7 +217,7 @@ jobs:
           echo ""
 
       - name: "[🚀] Release"
-        uses: Xikaro/game-publish@3.3.3
+        uses: Xikaro/game-publish@3.4.0
         with:
           modrinth-id: ${{ vars.MODRINTH_ID }}
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -242,6 +242,7 @@ jobs:
           loaders: ${{ needs.info.outputs.loaders }}
           game-versions: ${{ needs.info.outputs.game_versions }}
           game-version-filter: none
+          environment: client | server
           java: ${{ needs.info.outputs.java_version }}
           retry-attempts: 2
           retry-delay: 10000
