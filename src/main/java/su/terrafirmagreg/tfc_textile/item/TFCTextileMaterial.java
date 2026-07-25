@@ -53,7 +53,7 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             () -> Ingredient.of(new ItemStack(TFCTextileItems.CROCODILE_LEATHER.get(), 1)),
             () -> 4000,
             2,
-            8f,
+            -5f,
             -0.20f);
 
     // Caribou materials
