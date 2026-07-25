@@ -260,7 +260,7 @@ public interface BlockTemperatureProvider {
                     Map.entry(Blocks.TORCH, new TempModifierSpec(1.0F, 0.0F, true))),
             TFCBlocks.MAGMA_BLOCKS.values().stream()
                     .map(RegistryObject::get)
-                    .map(block -> Map.entry(block, new TempModifierSpec(3.0F, 1.0F, true))))
+                    .map(block -> Map.entry(block, new TempModifierSpec(4.0F, 1.0F, true))))
             .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
     static final Map<Block, TempModifierSpec> ACTIVE_BLOCKS = Map.ofEntries(
