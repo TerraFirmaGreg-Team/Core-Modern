@@ -61,9 +61,6 @@ public interface EquipmentTemperatureProvider {
             if (clothesItem.getMaterial() instanceof TemperatureAlteringMaterial tempMaterial) {
                 return Optional.of(tempMaterial.getTempModifier(stack));
             }
-            if (clothesItem.getMaterial() instanceof com.lumintorious.tfcambiental.item.material.TemperatureAlteringMaterial tempMaterial) {
-                return Optional.of(tempMaterial.getTempModifier(stack)); // for tfc textile
-            }
         }
         return TempModifier.none();
     }
@@ -72,11 +69,7 @@ public interface EquipmentTemperatureProvider {
         float average = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
         if (stack.is(TFCAmbiental.SUNBLOCKING_APPAREL)) {
             if (player.level().getBrightness(LightLayer.SKY, player.getOnPos().above()) > 14) {
-                float envTemp = EnvironmentalTemperatureProvider.getEnvironmentTemperatureWithTimeOfDay(player);
-                if (envTemp > average) {
-                    return TempModifier.defined(Math.min(6f, envTemp - average), 0f);
-                }
-                return TempModifier.defined(-0.1f, 0f);
+                return TempModifier.defined(-4f, 0f, true);
             }
         }
         return TempModifier.none();
@@ -86,20 +79,20 @@ public interface EquipmentTemperatureProvider {
         Item item = stack.getItem();
 
         if (COPPER_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier(-1F, 0.1F));
+            return Optional.of(new TempModifier(-4F, 0.1F, true));
         }
         if (BLUE_STEEL_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier(-3F, 0.9F));
+            return Optional.of(new TempModifier(-8F, 0.9F, true));
         }
         if (ADVANCED_ARMOR.contains(item)) {
-            return Optional.of(new TempModifier(0F, FULLY_INSULATED));
+            return Optional.of(new TempModifier(0F, 0F, true));
         }
         ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(item);
         if (itemId != null && "blue_steel_toe_hiking_boots".equals(itemId.getPath())) {
-            return Optional.of(new TempModifier(-2f, 0.2F));
+            return Optional.of(new TempModifier(-2f, 0.2F, true));
         }
         if (itemId != null && "red_steel_toe_hiking_boots".equals(itemId.getPath())) {
-            return Optional.of(new TempModifier(2f, 0.2F));
+            return Optional.of(new TempModifier(2f, 0.2F, true));
         }
 
         return Optional.empty();
@@ -170,5 +163,4 @@ public interface EquipmentTemperatureProvider {
             ModItems.JET_SUIT_PANTS.get(),
             ModItems.JET_SUIT_BOOTS.get());
 
-    float FULLY_INSULATED = -0.5f;
 }

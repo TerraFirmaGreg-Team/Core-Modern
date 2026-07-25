@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc_textile:caribou_shirt"},
+    "pattern": [
+        "A A",
+        "ACA",
+        "ABA"
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"tag": "forge:string"},
+        "B": {"item": "tfc_textile:caribou_fur"},
+        "C": {"item": "minecraft:leather_chestplate"}
+    }
+}

@@ -1,9 +1,19 @@
 {
     "values": [
-        "tfcambiental:wool_sweater",
-        "tfcambiental:silk_shirt",
-        "tfcambiental:burlap_shirt",
-        "tfcambiental:insulated_leather_tunic"
+        "tfc_textile:cotton_shirt",
+        "tfc_textile:crocodile_shirt",
+        "tfc_textile:linen_shirt",
+        "tfc_textile:raw_shirt",
+        "tfc_textile:caribou_shirt",
+        "tfc_textile:polar_bear_shirt",
+        "tfc_textile:black_bear_shirt",
+        "tfc_textile:grizzly_bear_shirt",
+        "tfc_textile:tiger_shirt",
+        "tfc_textile:cougar_shirt",
+        "tfc_textile:panther_shirt",
+        "tfc_textile:sabertooth_shirt",
+        "tfc_textile:direwolf_shirt",
+        "tfc_textile:lion_shirt"
     ],
     "replace": false
 }

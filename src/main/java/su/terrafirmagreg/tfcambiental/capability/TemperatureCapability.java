@@ -111,7 +111,11 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
         }
 
         this.potency = this.modifiers.getTotalPotency();
-        this.target = this.modifiers.getTargetTemperature();
+
+        float minSafeTemp = TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue();
+        float maxSafeTemp = TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue();
+        this.target = this.modifiers.getTargetTemperature(minSafeTemp, maxSafeTemp);
+
         this.targetWetness = this.modifiers.getTargetWetness();
 
         if ((this.target > this.temperature && this.temperature > TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue())
