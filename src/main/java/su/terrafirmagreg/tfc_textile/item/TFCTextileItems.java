@@ -305,28 +305,6 @@ public class TFCTextileItems {
             "lion_boots",
             () -> new ClothesItem(TFCTextileMaterial.LION, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(1)));
 
-    /*public static final RegistryObject<Item> SILK_COWL = ITEMS.register(
-            "silk_cowl",
-            () -> new ClothesItem(TFCTextileMaterial.SILK, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1).durability(1))
-    );
-    public static final RegistryObject<Item> SILK_SHIRT = ITEMS.register(
-            "silk_shirt",
-            () -> new ClothesItem(TFCTextileMaterial.SILK, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1).durability(1))
-    );
-    public static final RegistryObject<Item> SILK_PANTS = ITEMS.register(
-            "silk_pants",
-            () -> new ClothesItem(TFCTextileMaterial.SILK, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1).durability(1))
-    );
-    public static final RegistryObject<Item> SILK_SHOES = ITEMS.register(
-            "silk_shoes",
-            () -> new ClothesItem(TFCTextileMaterial.SILK, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(1))
-    );
-    
-    public static final RegistryObject<Item> BURLAP_COWL = ITEMS.register(
-            "burlap_cowl",
-            () -> new ClothesItem(TFCTextileMaterial.BURLAP, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1).durability(1))
-    );*/
-
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

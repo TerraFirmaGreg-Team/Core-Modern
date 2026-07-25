@@ -19,7 +19,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import su.terrafirmagreg.tfc_textile.event.ClientEvent;
 import su.terrafirmagreg.tfc_textile.item.TFCTextileItems;
-import su.terrafirmagreg.tfc_textile.loot.ModLootModifiers;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TFCtextile.MODID)
@@ -35,7 +34,6 @@ public class TFCtextile {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         TFCTextileItems.register(modEventBus);
-        ModLootModifiers.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
