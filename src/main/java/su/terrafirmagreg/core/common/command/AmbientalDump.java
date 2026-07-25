@@ -95,6 +95,9 @@ public class AmbientalDump {
             line.append(" wetness=");
             line.append(Component.literal("%.1f".formatted(mod.getWetness())).withStyle(ChatFormatting.BLUE));
         }
+        if (mod.isGood()) {
+            line.append(Component.literal(" good").withStyle(ChatFormatting.GREEN));
+        }
         return line.append("\n");
     }
 

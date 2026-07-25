@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc_textile:tiger_pants"},
+    "pattern": [
+        "ABA",
+        "ACA",
+        "A A"
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"tag": "forge:string"},
+        "B": {"item": "tfc_textile:tiger_fur"},
+        "C": {"item": "minecraft:leather_leggings"}
+    }
+}

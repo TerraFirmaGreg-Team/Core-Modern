@@ -129,11 +129,6 @@ public class TFCAmbiental {
                 warmth = (modifier.getChange());
                 insulation = (modifier.getPotency() / 0.1f);
             }
-            if (clothesItem.getMaterial() instanceof com.lumintorious.tfcambiental.item.material.TemperatureAlteringMaterial tempMaterial) {
-                TempModifier modifier = tempMaterial.getTempModifier(event.getItemStack()); // for tfc textile
-                warmth = (modifier.getChange());
-                insulation = (modifier.getPotency() / 0.1f);
-            }
             if (clothesItem.getType().equals(ArmorItem.Type.HELMET)) {
                 event.getToolTip().add(Component.translatable("tfcambiental.tooltip.sun_protection").withStyle(ChatFormatting.GRAY));
             }

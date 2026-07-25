@@ -1,0 +1,4 @@
+{
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc_textile:item/grizzly_bear_hat"}
+}

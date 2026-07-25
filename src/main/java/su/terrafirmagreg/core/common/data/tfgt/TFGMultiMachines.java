@@ -1294,6 +1294,7 @@ public class TFGMultiMachines {
             .tooltips(
                     Component.translatable("tfg.tooltip.machine.ore_proc_beneath_1"),
                     Component.translatable("tfg.tooltip.machine.ore_proc_beneath_2"),
+					Component.translatable("tfg.tooltip.machine.ore_proc_beneath_3"),
                     Component.translatable("tfg.tooltip.machine.two_energy_hatches"))
             .workableCasingModel(
                     GTCEu.id("block/casings/gcym/industrial_steam_casing"),

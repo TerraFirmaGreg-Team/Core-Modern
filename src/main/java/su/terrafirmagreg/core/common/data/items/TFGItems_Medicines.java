@@ -110,11 +110,11 @@ public class TFGItems_Medicines {
             .register();
 
     public static final ItemEntry<ComponentItem> HASTE_PILL = TFGCore.REGISTRATE.item("haste_pill", ComponentItem::create)
-            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, shortBuff, 0), 1).build()))
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, shortBuff, 1), 1).build()))
             .onRegister(attach(new AntidoteBehavior(5, GTMedicalConditions.WEAK_POISON)))
             .register();
     public static final ItemEntry<ComponentItem> HASTE_TABLET = TFGCore.REGISTRATE.item("haste_tablet", ComponentItem::create)
-            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, longBuff, 0), 1).build()))
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, longBuff, 2), 1).build()))
             .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.WEAK_POISON)))
             .register();
 
@@ -130,22 +130,22 @@ public class TFGItems_Medicines {
     public static final ItemEntry<ComponentItem> REGENERATION_PILL = TFGCore.REGISTRATE.item("regeneration_pill", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
                     .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, shortBuff, 0), 1)
-                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 60 * 20, 0), 1).build()))
+                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 60 * 20 * 2, 0), 1).build()))
             .onRegister(attach(new AntidoteBehavior(5, GTMedicalConditions.CHEMICAL_BURNS)))
             .register();
     public static final ItemEntry<ComponentItem> REGENERATION_TABLET = TFGCore.REGISTRATE.item("regeneration_tablet", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
                     .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, longBuff, 0), 1)
-                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 60 * 20, 0), 1).build()))
+                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 60 * 20 * 4, 0), 1).build()))
             .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.CHEMICAL_BURNS)))
             .register();
 
     public static final ItemEntry<ComponentItem> SPEED_PILL = TFGCore.REGISTRATE.item("speed_pill", ComponentItem::create)
-            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, shortBuff, 0), 1).build()))
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, shortBuff, 1), 1).build()))
             .onRegister(attach(new AntidoteBehavior(5, GTMedicalConditions.IRRITANT)))
             .register();
     public static final ItemEntry<ComponentItem> SPEED_TABLET = TFGCore.REGISTRATE.item("speed_tablet", ComponentItem::create)
-            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, longBuff, 0), 1).build()))
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, shortBuff, 2), 1).build()))
             .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.IRRITANT)))
             .register();
 
@@ -207,7 +207,7 @@ public class TFGItems_Medicines {
             .register();
 
     public static final ItemEntry<ComponentItem> RESISTANCE_SALVO = TFGCore.REGISTRATE.item("resistance_salvo", ComponentItem::create)
-            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, shortBuff, 0), 1).build()))
+            .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, shortBuff, 2), 1).build()))
             .onRegister(attach(new AntidoteBehavior(40, GTMedicalConditions.IRRITANT)))
             .register();
 

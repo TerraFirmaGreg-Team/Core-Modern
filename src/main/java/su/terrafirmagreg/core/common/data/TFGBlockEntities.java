@@ -9,6 +9,7 @@ import com.cake.struts.content.block.StrutBlockEntity;
 import com.cake.struts.content.block.StrutBlockEntityRenderer;
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.greenhouse.Greenhouse;
+import com.teammoeg.steampowered.content.flywheel.SteamFlywheelTileEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
@@ -17,9 +18,12 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.minecraft.world.level.block.Block;
 
+import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelInstance;
+import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelRenderer;
 import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
 import su.terrafirmagreg.core.common.blockentity.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
@@ -95,6 +99,17 @@ public class TFGBlockEntities {
             .validBlocks(TFGBlocks_PalmTrees.PALM_CLUSTERS.values().toArray(NonNullSupplier[]::new))
             .register();
 
+    public static final BlockEntityEntry<SteamFlywheelTileEntity> TITANIUM_STEAM_FLYWHEEL = TFGCore.REGISTRATE
+            .blockEntity("titanium_steam_flywheel", SteamFlywheelTileEntity::new)
+            .validBlocks(TFGBlocks.TITANIUM_FLYWHEEL)
+            .renderer(() -> TitaniumFlywheelRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<TitaniumSteamEngineTileEntity> TITANIUM_STEAM_ENGINE = TFGCore.REGISTRATE
+            .blockEntity("titanium_steam_engine", TitaniumSteamEngineTileEntity::new)
+            .validBlocks(TFGBlocks.TITANIUM_STEAM_ENGINE)
+            .register();
+
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
 
     public static void addValidBEBlock(Supplier<?> type, Block block) {
@@ -132,5 +147,12 @@ public class TFGBlockEntities {
             }
             beType.tfg$setValidBlocks(blocks);
         }
+    }
+
+    public static void registerAllVisuals() {
+        SimpleBlockEntityVisualizer.builder(TITANIUM_STEAM_FLYWHEEL.get())
+                .factory(TitaniumFlywheelInstance::new)
+                .skipVanillaRender(p -> true)
+                .apply();
     }
 }

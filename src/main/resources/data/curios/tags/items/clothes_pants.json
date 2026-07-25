@@ -1,10 +1,19 @@
 {
     "values": [
-        "tfcambiental:wool_pants",
-        "tfcambiental:silk_pants",
-        "tfcambiental:burlap_pants",
-        "tfcambiental:insulated_leather_pants",
-        "tfcambiental:leather_apron"
+        "tfc_textile:cotton_pants",
+        "tfc_textile:crocodile_pants",
+        "tfc_textile:linen_pants",
+        "tfc_textile:raw_pants",
+        "tfc_textile:caribou_pants",
+        "tfc_textile:polar_bear_pants",
+        "tfc_textile:black_bear_pants",
+        "tfc_textile:grizzly_bear_pants",
+        "tfc_textile:tiger_pants",
+        "tfc_textile:cougar_pants",
+        "tfc_textile:panther_pants",
+        "tfc_textile:sabertooth_pants",
+        "tfc_textile:direwolf_pants",
+        "tfc_textile:lion_pants"
     ],
     "replace": false
 }
