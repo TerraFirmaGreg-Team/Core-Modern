@@ -1,0 +1,89 @@
+{
+    "textures": {
+        "1": "tfg:block/titanium_linkage",
+        "particle": "tfg:block/titanium_flywheel"
+    },
+    "elements": [{
+        "rotation": {
+            "origin": [
+                8,
+                8,
+                28
+            ],
+            "angle": 0,
+            "axis": "x"
+        },
+        "from": [
+            5,
+            5,
+            18.5
+        ],
+        "to": [
+            11,
+            11,
+            31.5
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    1,
+                    6.5,
+                    4,
+                    13
+                ],
+                "texture": "#1",
+                "rotation": 90
+            },
+            "north": {
+                "uv": [
+                    4,
+                    3.5,
+                    7,
+                    6.5
+                ],
+                "texture": "#1",
+                "rotation": 180
+            },
+            "west": {
+                "uv": [
+                    1,
+                    6.5,
+                    4,
+                    13
+                ],
+                "texture": "#1",
+                "rotation": 270
+            },
+            "up": {
+                "uv": [
+                    4,
+                    6.5,
+                    7,
+                    13
+                ],
+                "texture": "#1"
+            },
+            "down": {
+                "uv": [
+                    4,
+                    6.5,
+                    7,
+                    13
+                ],
+                "texture": "#1",
+                "rotation": 180
+            }
+        }
+    }],
+    "groups": [{
+        "color": 0,
+        "children": [0],
+        "origin": [
+            -8,
+            8,
+            8
+        ],
+        "name": "transmission"
+    }],
+    "credit": "Made with Blockbench"
+}
