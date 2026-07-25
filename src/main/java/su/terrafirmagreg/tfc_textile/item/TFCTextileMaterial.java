@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
@@ -156,26 +155,6 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             1,
             8f,
             -0.20f);
-
-    // Silk materials (for future use)
-    public static final TFCTextileMaterial SILK = new TFCTextileMaterial(
-            "tfc_textile:silk_cloth",
-            SoundEvents.WOOL_PLACE,
-            () -> Ingredient.of(new ItemStack(TFCItems.SILK_CLOTH.get(), 1)),
-            () -> 2000,
-            1,
-            -4f,
-            -0.1f);
-
-    // Burlap materials (for future use)
-    public static final TFCTextileMaterial BURLAP = new TFCTextileMaterial(
-            "tfc_textile:burlap_cloth",
-            SoundEvents.WOOL_PLACE,
-            () -> Ingredient.of(new ItemStack(TFCItems.BURLAP_CLOTH.get(), 1)),
-            () -> 1500,
-            1,
-            -4f,
-            -0.25f);
 
     private final String name;
     private final SoundEvent equipSound;
