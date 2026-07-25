@@ -25,6 +25,12 @@ public class TFGPartialModels {
     private static volatile Map<Block, PartialModel[]> SEGMENT_MODELS_BY_BLOCK;
     private static volatile Map<Block, EnumMap<Direction, PartialModel>> BRACKET_MODELS_BY_BLOCK;
 
+    public static final PartialModel TITANIUM_FLYWHEEL = block("steampowered", "titanium_flywheel/wheel");
+    public static final PartialModel TITANIUM_FLYWHEEL_UPPER_ROTATING = block("steampowered", "titanium_flywheel/upper_rotating_connector");
+    public static final PartialModel TITANIUM_FLYWHEEL_LOWER_ROTATING = block("steampowered", "titanium_flywheel/lower_rotating_connector");
+    public static final PartialModel TITANIUM_FLYWHEEL_UPPER_SLIDING = block("steampowered", "titanium_flywheel/upper_sliding_connector");
+    public static final PartialModel TITANIUM_FLYWHEEL_LOWER_SLIDING = block("steampowered", "titanium_flywheel/lower_sliding_connector");
+
     public static void init() {
     }
 
@@ -160,5 +166,9 @@ public class TFGPartialModels {
 
     private static PartialModel block(String path) {
         return PartialModel.of(TFGCore.id("block/" + path));
+    }
+
+    private static PartialModel block(String namespace, String path) {
+        return PartialModel.of(ResourceLocation.fromNamespaceAndPath(namespace, "block/" + path));
     }
 }
