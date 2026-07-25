@@ -24,7 +24,7 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             () -> Ingredient.of(new ItemStack(TFCTextileItems.COTTON_CLOTH.get(), 1)),
             () -> 3000,
             0,
-            8f,
+            6f,
             -0.15f);
 
     // Linen materials
