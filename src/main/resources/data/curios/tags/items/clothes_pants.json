@@ -13,7 +13,11 @@
         "tfc_textile:panther_pants",
         "tfc_textile:sabertooth_pants",
         "tfc_textile:direwolf_pants",
-        "tfc_textile:lion_pants"
+        "tfc_textile:lion_pants",
+        "tfcambiental:wool_pants",
+        "tfcambiental:silk_pants",
+        "tfcambiental:burlap_pants",
+        "tfcambiental:insulated_leather_pants"
     ],
     "replace": false
 }

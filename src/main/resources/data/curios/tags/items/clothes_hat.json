@@ -13,7 +13,12 @@
         "tfc_textile:panther_hat",
         "tfc_textile:sabertooth_hat",
         "tfc_textile:direwolf_hat",
-        "tfc_textile:lion_hat"
+        "tfc_textile:lion_hat",
+        "tfcambiental:straw_hat",
+        "tfcambiental:wool_hat",
+        "tfcambiental:silk_cowl",
+        "tfcambiental:burlap_cowl",
+        "tfcambiental:insulated_leather_hat"
     ],
     "replace": false
 }

@@ -13,7 +13,12 @@
         "tfc_textile:panther_shirt",
         "tfc_textile:sabertooth_shirt",
         "tfc_textile:direwolf_shirt",
-        "tfc_textile:lion_shirt"
+        "tfc_textile:lion_shirt",
+        "tfcambiental:leather_apron",
+        "tfcambiental:wool_sweater",
+        "tfcambiental:silk_shirt",
+        "tfcambiental:burlap_shirt",
+        "tfcambiental:insulated_leather_tunic"
     ],
     "replace": false
 }
