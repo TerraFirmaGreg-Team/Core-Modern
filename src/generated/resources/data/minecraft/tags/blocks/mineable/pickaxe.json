@@ -1,6 +1,8 @@
 {
   "values": [
     "tfg:quartz_crucible",
+    "tfg:titanium_flywheel",
+    "tfg:titanium_steam_engine",
     "tfg:halite",
     "tfg:carbonate_hornfels",
     "tfg:pelitic_hornfels",
