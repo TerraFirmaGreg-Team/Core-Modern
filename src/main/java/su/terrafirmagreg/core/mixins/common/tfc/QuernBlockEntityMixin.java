@@ -26,6 +26,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.mixins.common.create.RotationPropagatorAccessor;
+import su.terrafirmagreg.core.utils.CreateKineticsHelper;
+
+/**
+ * Mixin for {@link QuernBlockEntity} to function with Create rotation.
+ */
 @Mixin(value = QuernBlockEntity.class, remap = false)
 public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IHaveGoggleInformation {
 
@@ -39,17 +46,15 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     @Inject(method = "getRotationSpeed", at = @At("HEAD"), cancellable = true)
     private void onGetRotationSpeed(CallbackInfoReturnable<Float> cir) {
         if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe) {
-            float speed = Math.abs(kbe.getSpeed());
-            float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
+            float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, Direction.DOWN));
             float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
 
-            if (impact * theoreticalSpeed > 8.0001f || kbe.isOverStressed()) {
+            if (impact * faceSpeed > (TFGConfig.SERVER.QUERN_STRESS_LIMIT.get() + .0001f) || kbe.isOverStressed()) {
                 cir.setReturnValue(0f);
                 return;
             }
 
-            // Speed limit.
-            speed = Math.min(speed, 32f);
+            float speed = Math.min(faceSpeed, TFGConfig.SERVER.QUERN_RPM_LIMIT.get());
             // Convert RPM to TFC rad/tick.
             cir.setReturnValue(speed * (float) Math.PI / 600f);
         }
@@ -58,8 +63,10 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     @Inject(method = "isConnectedToNetwork", at = @At("HEAD"), cancellable = true)
     private void onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
         QuernBlockEntity quern = (QuernBlockEntity) (Object) this;
-        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity && quern.hasHandstone()) {
-            cir.setReturnValue(true);
+        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe && quern.hasHandstone()) {
+            if (RotationPropagatorAccessor.callGetAxisModifier(kbe, Direction.DOWN) != 0) {
+                cir.setReturnValue(true);
+            }
         }
     }
 
@@ -114,11 +121,11 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
             return false;
         }
 
-        float theoreticalSpeed = 0;
+        float faceSpeed = 0;
         boolean overstressed = false;
         if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe) {
-            theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
-            overstressed = kbe.isOverStressed() || (stressAtBase * theoreticalSpeed > 8.0001f);
+            faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, Direction.DOWN));
+            overstressed = kbe.isOverStressed() || (stressAtBase * faceSpeed > (TFGConfig.SERVER.QUERN_STRESS_LIMIT.get() + .0001f));
         }
 
         if (overstressed) {
@@ -134,7 +141,7 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
 
-        float stressTotal = stressAtBase * theoreticalSpeed;
+        float stressTotal = stressAtBase * faceSpeed;
 
         CreateLang.number(stressTotal)
                 .translate("generic.unit.stress")
@@ -147,7 +154,11 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
         Lang.builder("greate").translate("tooltip.max_capacity")
                 .style(ChatFormatting.GRAY)
                 .space()
-                .add(CreateLang.text("§48.0 §7(§8ULS§7)"))
+                .add(CreateLang.number(TFGConfig.SERVER.QUERN_STRESS_LIMIT.get())
+                        .style(ChatFormatting.RED))
+                .space()
+                // This will always say ULS even if the config changes but whatever lol.
+                .add(CreateLang.text("§7(§8ULS§7)"))
                 .forGoggles(tooltip);
 
         CreateLang.translate("schedule.instruction.throttle")
@@ -157,7 +168,7 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
                 .add(CreateLang.text("<")
                         .style(ChatFormatting.RED))
                 .space()
-                .add(CreateLang.number(32f)
+                .add(CreateLang.number(TFGConfig.SERVER.QUERN_RPM_LIMIT.get())
                         .style(ChatFormatting.RED))
                 .add(CreateLang.translate("generic.unit.rpm")
                         .style(ChatFormatting.RED))

@@ -19,6 +19,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
 
+/**
+ * Mixin into {@link QuernBlockEntityRenderer} to add render handling for Create rotation support.
+ */
 @Mixin(value = QuernBlockEntityRenderer.class, remap = false)
 public class QuernBlockEntityRendererMixin {
 

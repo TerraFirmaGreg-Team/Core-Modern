@@ -23,23 +23,27 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
+import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.utils.CreateKineticsHelper;
 
+/**
+ * Mixin into {@link CompostTumblerBlockEntityRenderer} to add render handling for Create rotation support.
+ */
 @Mixin(value = CompostTumblerBlockEntityRenderer.class, remap = false)
 public class CompostTumblerBlockEntityRendererMixin {
 
-    @ModifyVariable(method = "render", at = @At("STORE"), name = "angle", remap = false)
+    @ModifyVariable(method = "render*", at = @At("STORE"), name = "angle", remap = false)
     private float tfg$modifyAngle(float angle, CompostTumblerBlockEntity composter, float partialTicks) {
         if (composter.getLevel() != null) {
             Direction back = composter.getBlockState().getValue(CompostTumblerBlock.FACING).getOpposite();
             if (composter.getLevel().getBlockEntity(composter.getBlockPos().relative(back)) instanceof KineticBlockEntity kbe) {
                 float stressAtBase = (float) BlockStressValues.getImpact(composter.getBlockState().getBlock());
-                float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
-                boolean overstressed = kbe.isOverStressed() || (stressAtBase * theoreticalSpeed > 8.0001f);
-                float speed = Math.abs(kbe.getSpeed());
-                if (speed == 0 || overstressed) {
+                float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
+                boolean overstressed = kbe.isOverStressed() || (stressAtBase * faceSpeed > (TFGConfig.SERVER.COMPOSTER_STRESS_LIMIT.get() + .0001f));
+                if (faceSpeed == 0 || overstressed) {
                     return 0;
                 }
-                speed = Math.min(speed, 32f);
+                float speed = Math.min(faceSpeed, TFGConfig.SERVER.COMPOSTER_RPM_LIMIT.get());
                 float tfcSpeed = speed * (float) Math.PI / 600f;
                 return (composter.getLevel().getGameTime() + partialTicks) * tfcSpeed;
             }
@@ -47,17 +51,19 @@ public class CompostTumblerBlockEntityRendererMixin {
         return angle;
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"))
+    @Inject(method = "render*", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"))
     private void tfg$renderAxle(CompostTumblerBlockEntity composter, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay, CallbackInfo ci) {
         if (composter.getLevel() != null) {
             Direction back = composter.getBlockState().getValue(CompostTumblerBlock.FACING).getOpposite();
             if (composter.getLevel().getBlockEntity(composter.getBlockPos().relative(back)) instanceof KineticBlockEntity kbe) {
                 Block axle = ForgeRegistries.BLOCKS.getValue(TFGBlocks_Girders.BRASS_BEAM.getId());
                 float stressAtBase = (float) BlockStressValues.getImpact(composter.getBlockState().getBlock());
-                float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
-                boolean overstressed = kbe.isOverStressed() || (stressAtBase * theoreticalSpeed > 8.0001f);
-                float speed = Math.abs(kbe.getSpeed());
-                if (axle != null && speed > 0 && !overstressed) {
+                float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
+                boolean overstressed = kbe.isOverStressed() || (stressAtBase * faceSpeed > (TFGConfig.SERVER.COMPOSTER_STRESS_LIMIT.get() + .0001f));
+
+                // Unlike other renders, we need to disable the axle render when the speed is 0 because
+                // the tumbler opens up and the axle would be visible inside.
+                if (axle != null && faceSpeed > 0 && !overstressed) {
                     BlockState state = axle.defaultBlockState();
 
                     poseStack.pushPose();

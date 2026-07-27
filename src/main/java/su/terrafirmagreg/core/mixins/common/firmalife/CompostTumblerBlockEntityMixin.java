@@ -23,6 +23,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.utils.CreateKineticsHelper;
+
+/**
+ * Mixin into {@link CompostTumblerBlockEntity} to add render handling for Create rotation support.
+ */
 @Mixin(value = CompostTumblerBlockEntity.class, remap = false)
 public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity implements IHaveGoggleInformation {
 
@@ -36,9 +42,9 @@ public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity impl
             Direction back = getBlockState().getValue(CompostTumblerBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
                 float stressAtBase = (float) BlockStressValues.getImpact(getBlockState().getBlock());
-                float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
-                boolean overstressed = kbe.isOverStressed() || (stressAtBase * theoreticalSpeed > 8.0001f);
-                if (Math.abs(kbe.getSpeed()) > 0 && !overstressed) {
+                float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
+                boolean overstressed = kbe.isOverStressed() || (stressAtBase * faceSpeed > (TFGConfig.SERVER.COMPOSTER_STRESS_LIMIT.get() + .0001f));
+                if (faceSpeed > 0 && !overstressed) {
                     cir.setReturnValue(true);
                 } else {
                     cir.setReturnValue(false);
@@ -55,11 +61,11 @@ public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity impl
         }
 
         Direction back = getBlockState().getValue(CompostTumblerBlock.FACING).getOpposite();
-        float theoreticalSpeed = 0;
+        float faceSpeed = 0;
         boolean overstressed = false;
         if (level != null && level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
-            theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
-            overstressed = kbe.isOverStressed() || (stressAtBase * theoreticalSpeed > 8.0001f);
+            faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
+            overstressed = kbe.isOverStressed() || (stressAtBase * faceSpeed > (TFGConfig.SERVER.COMPOSTER_STRESS_LIMIT.get() + .0001f));
         }
 
         if (overstressed) {
@@ -75,7 +81,7 @@ public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity impl
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
 
-        float stressTotal = stressAtBase * theoreticalSpeed;
+        float stressTotal = stressAtBase * faceSpeed;
 
         CreateLang.number(stressTotal)
                 .translate("generic.unit.stress")
@@ -88,7 +94,11 @@ public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity impl
         Lang.builder("greate").translate("tooltip.max_capacity")
                 .style(ChatFormatting.GRAY)
                 .space()
-                .add(CreateLang.text("§48.0 §7(§8ULS§7)"))
+                .add(CreateLang.number(TFGConfig.SERVER.QUERN_STRESS_LIMIT.get())
+                        .style(ChatFormatting.RED))
+                .space()
+                // This will always say ULS even if the config changes but whatever lol.
+                .add(CreateLang.text("§7(§8ULS§7)"))
                 .forGoggles(tooltip);
 
         CreateLang.translate("schedule.instruction.throttle")
@@ -98,7 +108,7 @@ public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity impl
                 .add(CreateLang.text("<")
                         .style(ChatFormatting.RED))
                 .space()
-                .add(CreateLang.number(32f)
+                .add(CreateLang.number(TFGConfig.SERVER.COMPOSTER_RPM_LIMIT.get())
                         .style(ChatFormatting.RED))
                 .add(CreateLang.translate("generic.unit.rpm")
                         .style(ChatFormatting.RED))

@@ -20,6 +20,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**
+ * Mixin into {@link KineticBlockEntity} to add Create network handling for {@link IRotate} blocks.
+ */
 @Mixin(value = KineticBlockEntity.class, remap = false)
 public abstract class KineticBlockEntityStressMixin {
 
@@ -39,7 +42,8 @@ public abstract class KineticBlockEntityStressMixin {
             BlockState neighborState = level.getBlockState(neighborPos);
             Block neighborBlock = neighborState.getBlock();
             if (neighborBlock instanceof IRotate rotate && !(neighborBlock instanceof KineticBlock)) {
-                if (rotate.hasShaftTowards(level, neighborPos, neighborState, d.getOpposite())) {
+                if (rotate.hasShaftTowards(level, neighborPos, neighborState, d.getOpposite())
+                        && RotationPropagatorAccessor.callGetAxisModifier(kbe, d) != 0) {
                     double impact = BlockStressValues.getImpact(neighborBlock);
                     if (impact > 0) {
                         if (neighborBlock instanceof QuernBlock) {

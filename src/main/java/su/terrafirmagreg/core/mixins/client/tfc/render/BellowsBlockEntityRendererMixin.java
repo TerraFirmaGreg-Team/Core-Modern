@@ -20,6 +20,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
 
+/**
+ * Mixin into {@link BellowsBlockEntityRenderer} to add render handling for Create rotation support.
+ * Also fixes the infamous stretching bug.
+ */
 @Mixin(value = BellowsBlockEntityRenderer.class, remap = false)
 public class BellowsBlockEntityRendererMixin {
 

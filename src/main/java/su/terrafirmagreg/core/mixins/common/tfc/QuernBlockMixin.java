@@ -15,6 +15,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**
+ * Mixin for {@link QuernBlock} to function with Create rotation.
+ */
 @SuppressWarnings("deprecation")
 @Mixin(value = QuernBlock.class, remap = false)
 public abstract class QuernBlockMixin extends Block implements IRotate {

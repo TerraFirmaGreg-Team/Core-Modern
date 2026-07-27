@@ -15,6 +15,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**
+ * Mixin into {@link CompostTumblerBlock} to add Create rotation support.
+ */
 @SuppressWarnings("deprecation")
 @Mixin(value = CompostTumblerBlock.class, remap = false)
 public abstract class CompostTumblerBlockMixin extends Block implements IRotate {

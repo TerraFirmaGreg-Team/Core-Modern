@@ -13,6 +13,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
+/**
+ * Mixin into {@link KineticStats} to add support for {@link IRotate} blocks.
+ */
 @Mixin(value = KineticStats.class, remap = false)
 public abstract class KineticStatsMixin {
 

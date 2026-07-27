@@ -61,6 +61,7 @@
         "common.create.OpenEndedPipeMixin",
         "common.create.ProcessingRecipeMixin",
         "common.create.RecipeGridHandlerMixin",
+        "common.create.RotationPropagatorAccessor",
         "common.create.StockKeeperRequestScreenMixin",
         "common.create.StrutBakeModelMixin",
         "common.create.SuperGlueHandlerMixin",

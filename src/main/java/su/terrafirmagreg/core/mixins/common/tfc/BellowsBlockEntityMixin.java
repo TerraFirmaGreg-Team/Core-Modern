@@ -26,6 +26,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.mixins.common.create.RotationPropagatorAccessor;
+import su.terrafirmagreg.core.utils.CreateKineticsHelper;
+
+/**
+ * Mixin for {@link BellowsBlockEntity} to function with Create rotation.
+ */
 @Mixin(value = BellowsBlockEntity.class, remap = false)
 public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements IHaveGoggleInformation {
 
@@ -37,8 +44,10 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
     private void onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
-            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity) {
-                cir.setReturnValue(true);
+            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
+                if (RotationPropagatorAccessor.callGetAxisModifier(kbe, back.getOpposite()) != 0) {
+                    cir.setReturnValue(true);
+                }
             }
         }
     }
@@ -48,11 +57,10 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
-                float speed = Math.abs(kbe.getSpeed());
-                float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
+                float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
                 float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
 
-                if (impact * theoreticalSpeed > 8.0001f || kbe.isOverStressed()) {
+                if (impact * faceSpeed > (TFGConfig.SERVER.BELLOWS_STRESS_LIMIT.get() + 0.0001f) || kbe.isOverStressed()) {
                     cir.setReturnValue(new Rotation() {
                         @Override
                         public float angle(float partialTick) {
@@ -72,8 +80,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                     return;
                 }
 
-                // Speed limit.
-                speed = Math.min(speed, 16f);
+                float speed = Math.min(faceSpeed, TFGConfig.SERVER.BELLOWS_RPM_LIMIT.get());
                 // Convert RPM to TFC rad/tick.
                 float tfcSpeed = speed * (float) Math.PI / 600f;
                 cir.setReturnValue(new Rotation() {
@@ -102,17 +109,15 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
-                float speed = Math.abs(kbe.getSpeed());
-                float theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
+                float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
                 float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
 
-                if (impact * theoreticalSpeed > 8.0001f || kbe.isOverStressed()) {
+                if (impact * faceSpeed > (TFGConfig.SERVER.BELLOWS_STRESS_LIMIT.get() + 0.0001f) || kbe.isOverStressed()) {
                     cir.setReturnValue(0.125f);
                     return;
                 }
 
-                // Speed limit.
-                speed = Math.min(speed, 16f);
+                float speed = Math.min(faceSpeed, TFGConfig.SERVER.BELLOWS_RPM_LIMIT.get());
                 // Convert RPM to TFC rad/tick.
                 float tfcSpeed = speed * (float) Math.PI / 600f;
                 float angle = (level.getGameTime() + partialTick) * tfcSpeed;
@@ -129,11 +134,11 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
         }
 
         Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
-        float theoreticalSpeed = 0;
+        float faceSpeed = 0;
         boolean overstressed = false;
         if (level != null && level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
-            theoreticalSpeed = Math.abs(kbe.getTheoreticalSpeed());
-            overstressed = kbe.isOverStressed() || (stressAtBase * theoreticalSpeed > 8.0001f);
+            faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
+            overstressed = kbe.isOverStressed() || (stressAtBase * faceSpeed > (TFGConfig.SERVER.BELLOWS_STRESS_LIMIT.get() + 0.0001f));
         }
 
         if (overstressed) {
@@ -149,7 +154,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
 
-        float stressTotal = stressAtBase * theoreticalSpeed;
+        float stressTotal = stressAtBase * faceSpeed;
 
         CreateLang.number(stressTotal)
                 .translate("generic.unit.stress")
@@ -162,7 +167,11 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
         Lang.builder("greate").translate("tooltip.max_capacity")
                 .style(ChatFormatting.GRAY)
                 .space()
-                .add(CreateLang.text("§48.0 §7(§8ULS§7)"))
+                .add(CreateLang.number(TFGConfig.SERVER.BELLOWS_STRESS_LIMIT.get())
+                        .style(ChatFormatting.RED))
+                .space()
+                // This will always say ULS even if the config changes but whatever lol.
+                .add(CreateLang.text("§7(§8ULS§7)"))
                 .forGoggles(tooltip);
 
         CreateLang.translate("schedule.instruction.throttle")
@@ -172,7 +181,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                 .add(CreateLang.text("<")
                         .style(ChatFormatting.RED))
                 .space()
-                .add(CreateLang.number(16f)
+                .add(CreateLang.number(TFGConfig.SERVER.BELLOWS_RPM_LIMIT.get())
                         .style(ChatFormatting.RED))
                 .add(CreateLang.translate("generic.unit.rpm")
                         .style(ChatFormatting.RED))
