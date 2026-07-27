@@ -52,9 +52,11 @@ public abstract class BellowsBlockMixin extends Block implements IRotate {
         if (!level.isClientSide) {
             for (Direction direction : Direction.values()) {
                 if (level.getBlockEntity(pos.relative(direction)) instanceof KineticBlockEntity kbe) {
-                    kbe.updateSpeed = true;
-                    kbe.networkDirty = true;
-                    kbe.setChanged();
+                    if (kbe.hasNetwork()) {
+                        kbe.getOrCreateNetwork().updateStressFor(kbe, kbe.calculateStressApplied());
+                    } else {
+                        kbe.updateSpeed = true;
+                    }
                 }
             }
         }

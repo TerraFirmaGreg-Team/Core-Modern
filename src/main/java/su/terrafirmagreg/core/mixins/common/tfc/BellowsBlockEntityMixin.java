@@ -33,6 +33,16 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
         super(type, pos, state);
     }
 
+    @Inject(method = "isConnectedToNetwork", at = @At("HEAD"), cancellable = true)
+    private void onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
+        if (level != null) {
+            Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
+            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity) {
+                cir.setReturnValue(true);
+            }
+        }
+    }
+
     @Inject(method = "getCrankRotation", at = @At("HEAD"), cancellable = true)
     private void onGetCrankRotation(CallbackInfoReturnable<Rotation> cir) {
         if (level != null) {

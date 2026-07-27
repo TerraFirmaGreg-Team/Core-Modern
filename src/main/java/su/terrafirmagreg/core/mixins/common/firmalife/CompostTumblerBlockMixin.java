@@ -1,13 +1,13 @@
-package su.terrafirmagreg.core.mixins.common.tfc;
+package su.terrafirmagreg.core.mixins.common.firmalife;
 
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
+import com.eerussianguy.firmalife.common.blocks.CompostTumblerBlock;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
-import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -16,21 +16,21 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 @SuppressWarnings("deprecation")
-@Mixin(value = QuernBlock.class, remap = false)
-public abstract class QuernBlockMixin extends Block implements IRotate {
+@Mixin(value = CompostTumblerBlock.class, remap = false)
+public abstract class CompostTumblerBlockMixin extends Block implements IRotate {
 
-    public QuernBlockMixin(Properties properties) {
+    public CompostTumblerBlockMixin(Properties properties) {
         super(properties);
     }
 
     @Override
     public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-        return face == Direction.UP;
+        return face == state.getValue(CompostTumblerBlock.FACING).getOpposite();
     }
 
     @Override
     public Direction.Axis getRotationAxis(BlockState state) {
-        return Direction.Axis.Y;
+        return state.getValue(CompostTumblerBlock.FACING).getAxis();
     }
 
     @Override
