@@ -41,7 +41,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
     }
 
     @Inject(method = "isConnectedToNetwork", at = @At("HEAD"), cancellable = true)
-    private void onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
+    private void tfg$onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
@@ -53,7 +53,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
     }
 
     @Inject(method = "getCrankRotation", at = @At("HEAD"), cancellable = true)
-    private void onGetCrankRotation(CallbackInfoReturnable<Rotation> cir) {
+    private void tfg$onGetCrankRotation(CallbackInfoReturnable<Rotation> cir) {
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
@@ -105,7 +105,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
     }
 
     @Inject(method = "getExtensionLength", at = @At("HEAD"), cancellable = true)
-    private void onGetExtensionLength(float partialTick, CallbackInfoReturnable<Float> cir) {
+    private void tfg$onGetExtensionLength(float partialTick, CallbackInfoReturnable<Float> cir) {
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {

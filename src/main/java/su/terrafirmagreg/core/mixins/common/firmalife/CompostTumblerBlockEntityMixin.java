@@ -37,7 +37,7 @@ public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity impl
     }
 
     @Inject(method = "isRotating", at = @At("HEAD"), cancellable = true)
-    private void onIsRotating(CallbackInfoReturnable<Boolean> cir) {
+    private void tfg$onIsRotating(CallbackInfoReturnable<Boolean> cir) {
         if (level != null) {
             Direction back = getBlockState().getValue(CompostTumblerBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {

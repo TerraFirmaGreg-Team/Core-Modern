@@ -44,7 +44,7 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     public abstract float getRotationSpeed();
 
     @Inject(method = "getRotationSpeed", at = @At("HEAD"), cancellable = true)
-    private void onGetRotationSpeed(CallbackInfoReturnable<Float> cir) {
+    private void tfg$onGetRotationSpeed(CallbackInfoReturnable<Float> cir) {
         if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe) {
             float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, Direction.DOWN));
             float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
@@ -61,7 +61,7 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     }
 
     @Inject(method = "isConnectedToNetwork", at = @At("HEAD"), cancellable = true)
-    private void onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
+    private void tfg$onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
         QuernBlockEntity quern = (QuernBlockEntity) (Object) this;
         if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe && quern.hasHandstone()) {
             if (RotationPropagatorAccessor.callGetAxisModifier(kbe, Direction.DOWN) != 0) {
@@ -71,7 +71,7 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     }
 
     @Inject(method = "getRotationAngle", at = @At("HEAD"), cancellable = true)
-    private void onGetRotationAngle(float partialTick, CallbackInfoReturnable<Float> cir) {
+    private void tfg$onGetRotationAngle(float partialTick, CallbackInfoReturnable<Float> cir) {
         if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity) {
             float speed = getRotationSpeed();
             if (speed <= 0) {
@@ -85,14 +85,14 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     }
 
     @Inject(method = "serverTick", at = @At("TAIL"))
-    private static void onServerTick(Level level, BlockPos pos, BlockState state, QuernBlockEntity quern, CallbackInfo ci) {
+    private static void tfg$onServerTick(Level level, BlockPos pos, BlockState state, QuernBlockEntity quern, CallbackInfo ci) {
         if (quern.getRotationSpeed() > 0 && !quern.isGrinding() && level.getGameTime() % 10 == 0) {
             quern.startGrinding();
         }
     }
 
     @Inject(method = "updateHandstone", at = @At("TAIL"))
-    private void onUpdateHandstone(CallbackInfo ci) {
+    private void tfg$onUpdateHandstone(CallbackInfo ci) {
         tfg$notifyCreateNeighbors();
     }
 

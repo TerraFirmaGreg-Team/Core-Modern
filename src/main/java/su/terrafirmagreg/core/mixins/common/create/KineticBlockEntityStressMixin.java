@@ -30,7 +30,7 @@ public abstract class KineticBlockEntityStressMixin {
     protected float lastStressApplied;
 
     @Inject(method = "calculateStressApplied", at = @At("RETURN"), cancellable = true)
-    private void onCalculateStressApplied(CallbackInfoReturnable<Float> cir) {
+    private void tfg$onCalculateStressApplied(CallbackInfoReturnable<Float> cir) {
         KineticBlockEntity kbe = (KineticBlockEntity) (Object) this;
         Level level = kbe.getLevel();
         if (level == null)

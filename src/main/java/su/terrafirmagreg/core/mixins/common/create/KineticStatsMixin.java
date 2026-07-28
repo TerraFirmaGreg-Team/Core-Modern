@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Block;
 public abstract class KineticStatsMixin {
 
     @Inject(method = "create", at = @At("HEAD"), cancellable = true)
-    private static void onCreate(Item item, CallbackInfoReturnable<KineticStats> cir) {
+    private static void tfg$onCreate(Item item, CallbackInfoReturnable<KineticStats> cir) {
         if (item instanceof BlockItem blockItem) {
             Block block = blockItem.getBlock();
             if (block instanceof IRotate && !(block instanceof KineticBlock)) {

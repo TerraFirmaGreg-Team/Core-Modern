@@ -21,7 +21,7 @@ import su.terrafirmagreg.core.config.TFGConfig;
 @Mixin(value = BlockStressValues.class, remap = false)
 public abstract class CreateStressMixin {
     @Inject(method = "getImpact", at = @At("HEAD"), cancellable = true)
-    private static void onGetImpact(Block block, CallbackInfoReturnable<Double> cir) {
+    private static void tfg$onGetImpact(Block block, CallbackInfoReturnable<Double> cir) {
         if (block instanceof QuernBlock)
             cir.setReturnValue(TFGConfig.SERVER.QUERN_STRESS_IMPACT.get());
         if (block instanceof CompostTumblerBlock)
