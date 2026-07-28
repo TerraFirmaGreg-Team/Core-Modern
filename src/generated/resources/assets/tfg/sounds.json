@@ -1,4 +1,49 @@
 {
+  "bison_ambient": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "tfc:entity.deer.ambient"
+      }
+    ],
+    "subtitle": "tfg.subtitle.bison_ambient"
+  },
+  "bison_attack": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "tfc:entity.moose.attack"
+      }
+    ],
+    "subtitle": "tfg.subtitle.bison_attack"
+  },
+  "bison_death": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "tfc:entity.deer.death"
+      }
+    ],
+    "subtitle": "tfg.subtitle.bison_death"
+  },
+  "bison_hurt": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "tfc:entity.deer.hurt"
+      }
+    ],
+    "subtitle": "tfg.subtitle.bison_hurt"
+  },
+  "bison_walk": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:entity.wolf.step"
+      }
+    ],
+    "subtitle": "tfg.subtitle.bison_walk"
+  },
   "geologic_vulcanizer": {
     "sounds": [
       {
@@ -20,5 +65,69 @@
       }
     ],
     "subtitle": "tfg.subtitle.seal_ambient"
+  },
+  "seal_attack": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:seal_attack"
+      },
+      {
+        "type": "file",
+        "name": "tfg:seal_attack_1"
+      },
+      {
+        "type": "file",
+        "name": "tfg:seal_attack_2"
+      }
+    ],
+    "subtitle": "tfg.subtitle.seal_attack"
+  },
+  "seal_death": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:seal_death"
+      },
+      {
+        "type": "file",
+        "name": "tfg:seal_death_1"
+      }
+    ],
+    "subtitle": "tfg.subtitle.seal_death"
+  },
+  "seal_hurt": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:seal_hurt"
+      },
+      {
+        "type": "file",
+        "name": "tfg:seal_hurt_1"
+      }
+    ],
+    "subtitle": "tfg.subtitle.seal_hurt"
+  },
+  "seal_walk": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tfg:seal_walk"
+      },
+      {
+        "type": "file",
+        "name": "tfg:seal_walk_1"
+      },
+      {
+        "type": "file",
+        "name": "tfg:seal_walk_2"
+      },
+      {
+        "type": "file",
+        "name": "tfg:seal_walk_3"
+      }
+    ],
+    "subtitle": "tfg.subtitle.seal_walk"
   }
 }
