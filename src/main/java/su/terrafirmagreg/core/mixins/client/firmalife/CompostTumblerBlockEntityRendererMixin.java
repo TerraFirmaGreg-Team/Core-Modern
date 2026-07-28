@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.mixins.client.firmalife;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -29,6 +30,7 @@ import su.terrafirmagreg.core.utils.CreateKineticsHelper;
 /**
  * Mixin into {@link CompostTumblerBlockEntityRenderer} to add render handling for Create rotation support.
  */
+@Pseudo
 @Mixin(value = CompostTumblerBlockEntityRenderer.class, remap = false)
 public class CompostTumblerBlockEntityRendererMixin {
 
@@ -51,7 +53,7 @@ public class CompostTumblerBlockEntityRendererMixin {
         return angle;
     }
 
-    @Inject(method = "render*", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"))
+    @Inject(method = "render*", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", remap = true))
     private void tfg$renderAxle(CompostTumblerBlockEntity composter, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay, CallbackInfo ci) {
         if (composter.getLevel() != null) {
             Direction back = composter.getBlockState().getValue(CompostTumblerBlock.FACING).getOpposite();

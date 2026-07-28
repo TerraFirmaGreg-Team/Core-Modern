@@ -1,6 +1,7 @@
 package su.terrafirmagreg.core.mixins.client.tfc.render;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -22,6 +23,7 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
 /**
  * Mixin into {@link QuernBlockEntityRenderer} to add render handling for Create rotation support.
  */
+@Pseudo
 @Mixin(value = QuernBlockEntityRenderer.class, remap = false)
 public class QuernBlockEntityRendererMixin {
 
@@ -36,12 +38,14 @@ public class QuernBlockEntityRendererMixin {
             Block axle = ForgeRegistries.BLOCKS.getValue(TFGBlocks_Girders.BRASS_BEAM.getId());
             if (axle != null) {
                 BlockState state = axle.defaultBlockState();
+                stack.pushPose();
                 CachedBuffers.block(state)
                         .translate(0.1f, 0.6f, 0.1f)
                         .scale(0.8f, 0.5f, 0.8f)
                         .light(packedLight)
                         .overlay(packedOverlay)
                         .renderInto(stack, bufferSource.getBuffer(RenderType.cutout()));
+                stack.popPose();
             }
         }
     }
