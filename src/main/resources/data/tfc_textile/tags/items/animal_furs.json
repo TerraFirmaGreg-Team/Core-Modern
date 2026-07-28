@@ -1,0 +1,15 @@
+{
+    "values": [
+        "tfc_textile:caribou_fur",
+        "tfc_textile:polar_bear_fur",
+        "tfc_textile:black_bear_fur",
+        "tfc_textile:grizzly_bear_fur",
+        "tfc_textile:tiger_fur",
+        "tfc_textile:cougar_fur",
+        "tfc_textile:panther_fur",
+        "tfc_textile:sabertooth_fur",
+        "tfc_textile:direwolf_fur",
+        "tfc_textile:lion_fur"
+    ],
+    "replace": false
+}

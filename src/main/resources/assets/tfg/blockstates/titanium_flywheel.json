@@ -1,0 +1,41 @@
+{"variants": {
+    "connection=left,facing=west": {
+        "y": 180,
+        "model": "tfg:block/titanium_flywheel/casing_left"
+    },
+    "connection=none,facing=east": {"model": "tfg:block/titanium_flywheel/casing_none"},
+    "connection=none,facing=north": {
+        "y": 270,
+        "model": "tfg:block/titanium_flywheel/casing_none"
+    },
+    "connection=none,facing=south": {
+        "y": 90,
+        "model": "tfg:block/titanium_flywheel/casing_none"
+    },
+    "connection=right,facing=east": {"model": "tfg:block/titanium_flywheel/casing_right"},
+    "connection=left,facing=south": {
+        "y": 90,
+        "model": "tfg:block/titanium_flywheel/casing_left"
+    },
+    "connection=left,facing=north": {
+        "y": 270,
+        "model": "tfg:block/titanium_flywheel/casing_left"
+    },
+    "connection=right,facing=west": {
+        "y": 180,
+        "model": "tfg:block/titanium_flywheel/casing_right"
+    },
+    "connection=right,facing=north": {
+        "y": 270,
+        "model": "tfg:block/titanium_flywheel/casing_right"
+    },
+    "connection=none,facing=west": {
+        "y": 180,
+        "model": "tfg:block/titanium_flywheel/casing_none"
+    },
+    "connection=left,facing=east": {"model": "tfg:block/titanium_flywheel/casing_left"},
+    "connection=right,facing=south": {
+        "y": 90,
+        "model": "tfg:block/titanium_flywheel/casing_right"
+    }
+}}

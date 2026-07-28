@@ -137,11 +137,11 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleHotStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.HOT_STUFF) ? Optional.of(new TempModifier(3f, 0.2f, -15f)) : TempModifier.none();
+        return state.is(TFCAmbiental.HOT_STUFF) ? Optional.of(new TempModifier(3f, 0.2f, -15f, true)) : TempModifier.none();
     }
 
     static Optional<TempModifier> handleColdStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.COLD_STUFF) ? Optional.of(new TempModifier(-0.5f, 0.2f)) : TempModifier.none();
+        return state.is(TFCAmbiental.COLD_STUFF) ? Optional.of(new TempModifier(-0.5f, 0.2f, true)) : TempModifier.none();
     }
 
     static Optional<TempModifier> handleSnow(Player player, BlockPos pos, BlockState state) {
@@ -151,7 +151,7 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleWarmStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.WARM_STUFF) ? Optional.of(new TempModifier(1f, 0f, -5f)) : TempModifier.none();
+        return state.is(TFCAmbiental.WARM_STUFF) ? Optional.of(new TempModifier(1f, 0f, -5f, true)) : TempModifier.none();
     }
 
     private static boolean hasProtection(Player player) {
@@ -240,22 +240,27 @@ public interface BlockTemperatureProvider {
                 .map(cap -> new TempModifier(cap.getTemperature() / 140f, 0));
     }
 
-    record TempModifierSpec(float change, float potency) {
+    record TempModifierSpec(float change, float potency, boolean good) {
+        TempModifierSpec(float change, float potency) {
+            this(change, potency, false);
+        }
+
         Optional<TempModifier> create() {
-            return Optional.of(new TempModifier(change, potency));
+            return Optional.of(new TempModifier(change, potency, good));
         }
     }
 
     static final Map<Block, TempModifierSpec> SIMPLE_BLOCKS = Stream.concat(
             Stream.of(
-                    Map.entry(Blocks.PACKED_ICE, new TempModifierSpec(-1.0F, 1.0F)),
-                    Map.entry(Blocks.BLUE_ICE, new TempModifierSpec(-4.0F, 1.0F)),
-                    Map.entry(TFCBlocks.SEA_ICE.get(), new TempModifierSpec(-2.0F, 1.0F)),
-                    Map.entry(TFGBlocks.DRY_ICE.get(), new TempModifierSpec(-2.0F, 1.0F)),
-                    Map.entry(TFGBlocks_Mars.MARS_ICE.get(), new TempModifierSpec(-3.0F, 1.0F))),
+                    Map.entry(Blocks.PACKED_ICE, new TempModifierSpec(-2.0F, 1.0F, true)),
+                    Map.entry(Blocks.BLUE_ICE, new TempModifierSpec(-6.0F, 1.0F, true)),
+                    Map.entry(TFCBlocks.SEA_ICE.get(), new TempModifierSpec(-2.0F, 1.0F, true)),
+                    Map.entry(TFGBlocks.DRY_ICE.get(), new TempModifierSpec(-2.0F, 1.0F, true)),
+                    Map.entry(TFGBlocks_Mars.MARS_ICE.get(), new TempModifierSpec(-3.0F, 1.0F, true)),
+                    Map.entry(Blocks.TORCH, new TempModifierSpec(1.0F, 0.0F, true))),
             TFCBlocks.MAGMA_BLOCKS.values().stream()
                     .map(RegistryObject::get)
-                    .map(block -> Map.entry(block, new TempModifierSpec(3.0F, 1.0F))))
+                    .map(block -> Map.entry(block, new TempModifierSpec(4.0F, 1.0F, true))))
             .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
     static final Map<Block, TempModifierSpec> ACTIVE_BLOCKS = Map.ofEntries(
@@ -352,11 +357,11 @@ public interface BlockTemperatureProvider {
         }
 
         if (block instanceof IceBlock) {
-            return Optional.of(new TempModifier(-4.0F, 1.0F));
+            return Optional.of(new TempModifier(-4.0F, 1.0F, true));
         }
 
         if (block instanceof SeaIceBlock) {
-            return Optional.of(new TempModifier(-6.0F, 1.0F));
+            return Optional.of(new TempModifier(-3.0F, 1.0F, true));
         }
 
         if (block instanceof OvenBottomBlock && state.getValue(OvenBottomBlock.LIT)) {
@@ -411,13 +416,13 @@ public interface BlockTemperatureProvider {
                 double distance = VecHelper.alignedDistanceToFace(player.position(), fanBE.getBlockPos(), airCurrent.direction);
                 FanProcessingType type = airCurrent.getTypeAt((float) distance);
                 if (type instanceof AllFanProcessingTypes.BlastingType) {
-                    return Optional.of(new TempModifier(4.0F, 1.0F));
+                    return Optional.of(new TempModifier(4.0F, 1.0F, true));
                 } else if (type instanceof AllFanProcessingTypes.SmokingType) {
-                    return Optional.of(new TempModifier(2.0F, 1.0F));
+                    return Optional.of(new TempModifier(2.0F, 1.0F, true));
                 } else if (type instanceof AllFanProcessingTypes.SplashingType) {
-                    return Optional.of(new TempModifier(-2.0F, 1.0F, 2.0F));
+                    return Optional.of(new TempModifier(-2.0F, 1.0F, 2.0F, true));
                 } else {
-                    return Optional.of(new TempModifier(-2.0F, 1.0F));
+                    return Optional.of(new TempModifier(-2.0F, 1.0F, true));
                 }
             }
         }

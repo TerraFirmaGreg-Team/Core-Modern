@@ -23,7 +23,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             () -> Ingredient.of(new ItemStack(TFCItems.BURLAP_CLOTH.get(), 1)),
             () -> TFCAmbientalConfig.SERVER.durabilityBurlapClothes.get(),
             1,
-            -0.5f,
+            -4f,
             -0.25f);
 
     public static final ClothesMaterial INSULATED_LEATHER = new ClothesMaterial(
@@ -32,7 +32,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             () -> Ingredient.of(new ItemStack(TFCItems.WOOL_CLOTH.get(), 1)),
             () -> TFCAmbientalConfig.SERVER.durabilityInsulatedLeatherClothes.get(),
             1,
-            2f,
+            6f,
             -0.15f);
 
     public static final ClothesMaterial LEATHER_APRON = new ClothesMaterial(
@@ -42,7 +42,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             () -> TFCAmbientalConfig.SERVER.durabilityLeatherApronClothes.get(),
             0,
             0f,
-            -0.35f);
+            -2f);
 
     public static final ClothesMaterial SILK = new ClothesMaterial(
             "tfcambiental:silk_cloth",
@@ -50,7 +50,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             () -> Ingredient.of(new ItemStack(TFCItems.SILK_CLOTH.get(), 1)),
             () -> TFCAmbientalConfig.SERVER.durabilitySilkClothes.get(),
             1,
-            -1f,
+            -4f,
             -0.1f);
 
     public static final ClothesMaterial STRAW = new ClothesMaterial(
@@ -60,7 +60,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             () -> TFCAmbientalConfig.SERVER.durabilityStrawClothes.get(),
             1,
             0f,
-            -0.1f);
+            -0.4f);
 
     public static final ClothesMaterial WOOL = new ClothesMaterial(
             "tfcambiental:wool_cloth",
@@ -68,7 +68,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             () -> Ingredient.of(new ItemStack(TFCItems.WOOL_CLOTH.get(), 1)),
             () -> TFCAmbientalConfig.SERVER.durabilityWoolClothes.get(),
             0,
-            4f,
+            6f,
             -0.15f);
 
     private final String name;

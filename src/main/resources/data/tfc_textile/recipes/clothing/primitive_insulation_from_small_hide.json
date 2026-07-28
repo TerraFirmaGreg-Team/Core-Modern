@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfc_textile:primitive_insulation"},
+    "ingredients": [
+        {"item": "tfc:small_raw_hide"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"}
+    ],
+    "type": "minecraft:crafting_shapeless"
+}

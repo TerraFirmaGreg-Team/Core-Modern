@@ -1,0 +1,14 @@
+{
+    "result": {"item": "tfc_textile:crocodile_pants"},
+    "pattern": [
+        "ABA",
+        "ACA",
+        "A A"
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"tag": "forge:string"},
+        "B": {"item": "tfc_textile:crocodile_leather"},
+        "C": {"item": "tfcambiental:burlap_pants"}
+    }
+}

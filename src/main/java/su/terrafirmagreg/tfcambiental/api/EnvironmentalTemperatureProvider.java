@@ -160,14 +160,8 @@ public interface EnvironmentalTemperatureProvider {
     static Optional<TempModifier> handleWind(Player player) {
         return player.getCapability(TemperatureCapability.CAPABILITY).map(temperatureCapability -> {
             var wind = Climate.getWindVector(player.level(), player.blockPosition());
-            float temperature = temperatureCapability.getTemperature();
-            float targetTemperature = temperatureCapability.getTargetTemperature();
-            float potency = temperature < targetTemperature ? 0.1f * temperatureCapability.getWetness() * wind.length()
-                    : 0f;
-            float change = temperature > EnvironmentalTemperatureProvider.getEnvironmentTemperature(player) - 3f
-                    ? -0.01f
-                    : 0f;
-            return TempModifier.defined(change * wind.length(), potency);
+            float potency = 0.1f * temperatureCapability.getWetness() * wind.length();
+            return TempModifier.defined(-0.01f * wind.length(), potency);
         }).orElse(TempModifier.none());
     }
 
@@ -191,7 +185,7 @@ public interface EnvironmentalTemperatureProvider {
             float temp = getEnvironmentTemperatureWithTimeOfDay(player);
             float avg = TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue();
             if (temp > avg) {
-                return TempModifier.defined(-Math.abs(avg - temp) * 0.6f, 0f);
+                return TempModifier.defined(-Math.abs(avg - temp) * 0.6f, 0f, true);
             }
         }
         return TempModifier.none();
@@ -216,7 +210,7 @@ public interface EnvironmentalTemperatureProvider {
                 });
 
                 if (enclosureSize[0] > 0) {
-                    return TempModifier.defined(Mth.abs(avg - 1 - temp) * Mth.lerp(enclosureSize[0] / 1000f, 0.8f, 0.2f), 0f);
+                    return TempModifier.defined(Mth.abs(avg - 1 - temp) * Mth.lerp(enclosureSize[0] / 1000f, 0.8f, 0.2f), 0f, true);
                 }
             }
         }
@@ -225,24 +219,17 @@ public interface EnvironmentalTemperatureProvider {
 
     static Optional<TempModifier> handleThirst(Player player) {
         if (player.getFoodData() instanceof TFCFoodData stats) {
-            if (getEnvironmentTemperatureWithTimeOfDay(
-                    player) > TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue() + 3) {
-                if (stats.getThirst() > 80f) {
-                    return TempModifier.defined(-2.5f, 0f);
-                } else if (stats.getThirst() < 5f) {
-                    return TempModifier.defined(2.5f, 0f);
-                }
+            if (stats.getThirst() > 80f) {
+                return TempModifier.defined(-2.5f, 0f, true);
+            } else if (stats.getThirst() < 5f) {
+                return TempModifier.defined(2.5f, 0f);
             }
         }
         return TempModifier.none();
     }
 
     static Optional<TempModifier> handleFood(Player player) {
-        if (player.getFoodData().getFoodLevel() > 14 && getEnvironmentTemperatureWithTimeOfDay(
-                player) < TFCAmbientalConfig.COMMON.averageTemperature.get().floatValue() - 3) {
-            return TempModifier.defined(2.5f, 0f);
-        }
-        return TempModifier.none();
+        return TempModifier.defined(2.5f, 0f, true);
     }
 
     static Optional<TempModifier> handleWetness(Player player) {

@@ -149,6 +149,9 @@ public class ClientProxy extends CommonProxy {
                     Sheets.addWoodType(wood.getVanillaWoodType());
                 }
             }
+
+            // Create visuals
+            TFGBlockEntities.registerAllVisuals();
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }
