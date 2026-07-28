@@ -212,9 +212,9 @@ public final class ServerConfig {
                 .comment("\nStress limit of the compost tumbler. Default: 8, min: 1, max: intMax")
                 .defineInRange("composterStressLimit", 8, 1, Integer.MAX_VALUE);
         COMPOSTER_RPM_LIMIT = builder
-                .comment("\nRPM limit of the compost tumbler. Values over 32 may lead to broken animations! RPM does not have any affect on the compost tumbler functionality. Default: 32, min: 1, max: intMax")
+                .comment(
+                        "\nRPM limit of the compost tumbler. Values over 32 may lead to broken animations! RPM does not have any affect on the compost tumbler functionality. Default: 32, min: 1, max: intMax")
                 .defineInRange("composterRpmLimit", 32, 1, Integer.MAX_VALUE);
-
 
         builder.pop();
     }

@@ -11,6 +11,7 @@ import com.simibubi.create.api.stress.BlockStressValues;
 import net.dries007.tfc.common.blocks.devices.BellowsBlock;
 import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.minecraft.world.level.block.Block;
+
 import su.terrafirmagreg.core.config.TFGConfig;
 
 /**

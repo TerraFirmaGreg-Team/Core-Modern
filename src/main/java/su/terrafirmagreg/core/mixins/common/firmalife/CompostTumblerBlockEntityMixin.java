@@ -94,11 +94,10 @@ public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity impl
         Lang.builder("greate").translate("tooltip.max_capacity")
                 .style(ChatFormatting.GRAY)
                 .space()
-                .add(CreateLang.number(TFGConfig.SERVER.QUERN_STRESS_LIMIT.get())
+                .add(CreateLang.number(TFGConfig.SERVER.COMPOSTER_STRESS_LIMIT.get())
                         .style(ChatFormatting.RED))
-                .space()
-                // This will always say ULS even if the config changes but whatever lol.
-                .add(CreateLang.text("§7(§8ULS§7)"))
+                .add(CreateLang.text("SU")
+                        .style(ChatFormatting.RED))
                 .forGoggles(tooltip);
 
         CreateLang.translate("schedule.instruction.throttle")
