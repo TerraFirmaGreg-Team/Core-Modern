@@ -31,7 +31,7 @@ public class BellowsBlockEntityRendererMixin {
 
     @ModifyVariable(method = "drawMiddle", at = @At(value = "STORE"), name = "change", remap = false)
     private float tfg$fixBellowsStretching(float change) {
-        return Math.min(change, 0.5f);
+        return Math.min(change, 0.375f);
     }
 
     @Inject(method = "render*", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", remap = true))

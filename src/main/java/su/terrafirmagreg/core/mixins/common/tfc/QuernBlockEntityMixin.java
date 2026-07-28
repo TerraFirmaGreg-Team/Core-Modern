@@ -79,8 +79,8 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
                 return;
             }
             float degreesPerTick = speed * (180f / (float) Math.PI);
-            float angle = (level.getGameTime() + partialTick) * degreesPerTick;
-            cir.setReturnValue(angle % 360);
+            double angleVal = (level.getGameTime() + partialTick) * (double) degreesPerTick;
+            cir.setReturnValue((float) (angleVal % 360));
         }
     }
 

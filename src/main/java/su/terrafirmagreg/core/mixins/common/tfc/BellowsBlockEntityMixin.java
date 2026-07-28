@@ -22,7 +22,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -87,7 +86,8 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                     @Override
                     public float angle(float partialTick) {
                         assert level != null;
-                        return (level.getGameTime() + partialTick) * tfcSpeed;
+                        double angle = (level.getGameTime() + partialTick) * (double) tfcSpeed;
+                        return (float) (angle % (Math.PI * 2));
                     }
 
                     @Override
@@ -120,8 +120,8 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
                 float speed = Math.min(faceSpeed, TFGConfig.SERVER.BELLOWS_RPM_LIMIT.get());
                 // Convert RPM to TFC rad/tick.
                 float tfcSpeed = speed * (float) Math.PI / 600f;
-                float angle = (level.getGameTime() + partialTick) * tfcSpeed;
-                cir.setReturnValue(0.125f + 0.25f * (1.0f + Mth.sin(angle)));
+                double angle = (level.getGameTime() + partialTick) * (double) tfcSpeed;
+                cir.setReturnValue(0.125f + 0.25f * (1.0f + (float) Math.sin(angle % (Math.PI * 2))));
             }
         }
     }

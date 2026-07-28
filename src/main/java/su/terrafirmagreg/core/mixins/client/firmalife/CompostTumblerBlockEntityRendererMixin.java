@@ -47,7 +47,8 @@ public class CompostTumblerBlockEntityRendererMixin {
                 }
                 float speed = Math.min(faceSpeed, TFGConfig.SERVER.COMPOSTER_RPM_LIMIT.get());
                 float tfcSpeed = speed * (float) Math.PI / 600f;
-                return (composter.getLevel().getGameTime() + partialTicks) * tfcSpeed;
+                double angleVal = (composter.getLevel().getGameTime() + partialTicks) * (double) tfcSpeed;
+                return (float) (angleVal % (Math.PI * 2));
             }
         }
         return angle;
