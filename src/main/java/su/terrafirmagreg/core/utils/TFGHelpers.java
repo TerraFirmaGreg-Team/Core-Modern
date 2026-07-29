@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.utils;
 
 import java.util.*;
 
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.mixins.common.tfc.IIngotPileBlockEntityEntryAccessor;
 
 @SuppressWarnings("unused")
@@ -92,5 +95,39 @@ public final class TFGHelpers {
     public static void registerCobbleBlock(String tagPrefix, ResourceLocation cobbleBlock) {
         GTBlocks.registerCobbleBlock(TagPrefix.get(tagPrefix),
                 () -> Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(cobbleBlock)).defaultBlockState());
+    }
+
+    /**
+     * Returns the glassworking duration for the given player.
+     * If the player has the Water Breathing effect, the duration is halved.
+     * @param player The glassworker.
+     * @return The glassworking duration in ticks.
+     */
+    public static int getGlassworkingDuration(Player player) {
+        int duration = TFGConfig.SERVER.GLASSBLOWING_DURATION.get();
+        boolean bigLungs = player.getEffect(MobEffects.WATER_BREATHING) != null;
+
+        if (bigLungs) {
+            return Math.max(1, duration / 2);
+        } else {
+            return duration;
+        }
+    }
+
+    /**
+     * Returns the glassworking cooldown for the given player.
+     * If the player has the Water Breathing effect, the duration is halved.
+     * @param player The glassworker.
+     * @return The glassworking cooldown in ticks.
+     */
+    public static int getGlassworkingCooldown(Player player) {
+        int duration = TFGConfig.SERVER.GLASSBLOWING_COOLDOWN.get();
+        boolean bigLungs = player.getEffect(MobEffects.WATER_BREATHING) != null;
+
+        if (bigLungs) {
+            return Math.max(1, duration / 2);
+        } else {
+            return duration;
+        }
     }
 }

@@ -41,6 +41,9 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue CHAMELEON_SPRAY_CAN_COST_PER_OPERATION;
     public final ForgeConfigSpec.DoubleValue CHAMELEON_SPRAY_CAN_BULK_MULTIPLIER;
 
+    public final ForgeConfigSpec.IntValue GLASSBLOWING_COOLDOWN;
+    public final ForgeConfigSpec.IntValue GLASSBLOWING_DURATION;
+
     public final ForgeConfigSpec.IntValue HARVEST_BASKET_RANGE;
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> SYRINGE_BLACKLIST;
@@ -175,6 +178,14 @@ public final class ServerConfig {
         CHAMELEON_SPRAY_CAN_BULK_MULTIPLIER = builder
                 .comment("\nThe fluid consumption multiplier applied when chain-painting/bulk-painting blocks (e.g. 0.85 equals a 15% discount). Set to 1.0 to disable discounts.")
                 .defineInRange("chameleonSprayCanBulkMultiplier", 1.0, 0.0, 10.0);
+
+        builder.pop().push("glassblowing");
+        GLASSBLOWING_COOLDOWN = builder
+                .comment("\nBase glassblowing cooldown in ticks. Default: 20, min: 2, max: maxInt")
+                .defineInRange("baseGlassblowingCooldown", 20, 2, Integer.MAX_VALUE);
+        GLASSBLOWING_DURATION = builder
+                .comment("\nBase glassblowing duration in ticks. Default: 40, min: 2, max: maxInt")
+                .defineInRange("baseGlassblowingCooldown", 40, 2, Integer.MAX_VALUE);
 
         builder.pop();
     }
