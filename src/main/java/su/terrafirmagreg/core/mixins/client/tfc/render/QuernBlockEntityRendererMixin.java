@@ -4,7 +4,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -26,11 +25,6 @@ import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
 @Pseudo
 @Mixin(value = QuernBlockEntityRenderer.class, remap = false)
 public class QuernBlockEntityRendererMixin {
-
-    @ModifyVariable(method = "render*", at = @At(value = "STORE"), name = "rotationAngle", remap = false)
-    private float tfg$convertToRadians(float rotationAngle) {
-        return rotationAngle * ((float) Math.PI / 180f);
-    }
 
     @Inject(method = "render*", at = @At("TAIL"))
     private void tfg$renderAxle(QuernBlockEntity quern, float partialTicks, PoseStack stack, MultiBufferSource bufferSource, int packedLight, int packedOverlay, CallbackInfo ci) {
