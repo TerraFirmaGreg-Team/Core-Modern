@@ -1,5 +1,5 @@
 /*
- * File originating from TerraFirmaCraft
+ * File originating from [TerraFirmaCraft](https://github.com/TerraFirmaCraft/TerraFirmaCraft)
  * Licensed under the EUPL, Version 1.2.
  * You may get a copy of the License at:
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
@@ -33,13 +33,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import su.terrafirmagreg.core.utils.TFGHelpers;
 
+/**
+ * GlassblowingOverlay class backported from TFC 1.21, which displays glassblowing progress and information on the HUD.
+ */
 public class GlassblowingOverlay {
 
     private static final TagKey<Item> TFC_GLASS_BLOWPIPES = TagKey.create(ForgeRegistries.Keys.ITEMS,
             ResourceLocation.fromNamespaceAndPath("tfc", "glass_blowpipes"));
 
+    // Change from the original: Rendering as a ForgeGui because it's better :p
     public static final IGuiOverlay OVERLAY = (gui, graphics, partialTick, width, height) -> {
         final Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.options.hideGui) {
@@ -54,6 +59,7 @@ public class GlassblowingOverlay {
         }
     };
 
+    // Change from the original: getTargetedFace calculated here since it's a method from 1.21
     public static Direction getTargetedFace() {
         final Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && mc.hitResult instanceof BlockHitResult block) {
@@ -62,6 +68,7 @@ public class GlassblowingOverlay {
         return null;
     }
 
+    // Change from the original: getTranslationId calculated here since it's a method from 1.21
     public static String getTranslationId(GlassOperation operation) {
         return "tfc.enum.glassoperation." + operation.name().toLowerCase(Locale.ROOT);
     }
@@ -89,7 +96,7 @@ public class GlassblowingOverlay {
             }
 
             if (player.getCooldowns().isOnCooldown(held.getItem())) {
-                Component line = Component.translatable("tfg.tooltip.complete");
+                Component line = Component.translatable("tfg.tooltip.glassworking.complete").withStyle(ChatFormatting.GOLD);
                 drawCenteredText(minecraft, graphics, line, x, y);
                 return true;
             }
@@ -113,7 +120,7 @@ public class GlassblowingOverlay {
             if (op != null) {
                 StringBuilder progress = new StringBuilder();
                 if (player.isUsingItem()) {
-                    int tally = (TFGHelpers.getGlassworkingDuration(player) - player.getUseItemRemainingTicks()) / 8 + 1;
+                    int tally = (TFGHelpers.getGlassworkingStat(player, false) - player.getUseItemRemainingTicks()) / 8 + 1;
                     progress.append("|".repeat(tally));
                 }
 

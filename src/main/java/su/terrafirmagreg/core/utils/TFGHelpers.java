@@ -2,9 +2,8 @@ package su.terrafirmagreg.core.utils;
 
 import java.util.*;
 
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -18,7 +17,9 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -98,34 +99,27 @@ public final class TFGHelpers {
     }
 
     /**
-     * Returns the glassworking duration for the given player.
-     * If the player has the Water Breathing effect, the duration is halved.
-     * @param player The glassworker.
-     * @return The glassworking duration in ticks.
+     * Returns server glassworking stats for an optional player or base duration and cooldown.
+     * If the player has the Water Breathing effect, the duration is divided by (2 + the effect amplifier).
+     * @param player The glassworker. Null for base durations.
+     * @param isCooldown true for cooldown, false for duration.
+     * @return The glassworking duration or cooldown in ticks.
      */
-    public static int getGlassworkingDuration(Player player) {
-        int duration = TFGConfig.SERVER.GLASSBLOWING_DURATION.get();
-        boolean bigLungs = player.getEffect(MobEffects.WATER_BREATHING) != null;
-
-        if (bigLungs) {
-            return Math.max(1, duration / 2);
+    public static int getGlassworkingStat(@Nullable Player player, Boolean isCooldown) {
+        int duration;
+        if (isCooldown) {
+            duration = TFGConfig.SERVER.GLASSBLOWING_COOLDOWN.get();
         } else {
+            duration = TFGConfig.SERVER.GLASSBLOWING_DURATION.get();
+        }
+        if (player == null) {
             return duration;
         }
-    }
-
-    /**
-     * Returns the glassworking cooldown for the given player.
-     * If the player has the Water Breathing effect, the duration is halved.
-     * @param player The glassworker.
-     * @return The glassworking cooldown in ticks.
-     */
-    public static int getGlassworkingCooldown(Player player) {
-        int duration = TFGConfig.SERVER.GLASSBLOWING_COOLDOWN.get();
         boolean bigLungs = player.getEffect(MobEffects.WATER_BREATHING) != null;
 
         if (bigLungs) {
-            return Math.max(1, duration / 2);
+            int amplifier = Objects.requireNonNull(player.getEffect(MobEffects.WATER_BREATHING)).getAmplifier();
+            return Math.max(1, duration / (2 + amplifier));
         } else {
             return duration;
         }
