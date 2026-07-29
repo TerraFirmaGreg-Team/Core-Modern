@@ -12,6 +12,8 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.lang.Lang;
 import net.dries007.tfc.common.blocks.devices.BellowsBlock;
 import net.dries007.tfc.common.blocks.devices.QuernBlock;
+import net.dries007.tfc.common.blocks.plant.fruit.FruitTreeSaplingBlock;
+import net.dries007.tfc.common.blocks.wood.TFCSaplingBlock;
 import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
@@ -33,7 +35,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
+import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.TFGFluids;
@@ -112,6 +116,26 @@ public class TFGItemTooltipHelpers {
                 ).withStyle(ChatFormatting.YELLOW));
                 return;
             }
+        }
+
+        // Add Growth Time tooltip to saplings.
+        int daysToGrow = -1;
+
+        if (block instanceof TFCSaplingBlock b) {
+            daysToGrow = b.getDaysToGrow();
+        } else if (block instanceof FruitTreeSaplingBlock b) {
+            daysToGrow = b.getTreeGrowthDays();
+        } else if (block instanceof PalmTreeSaplingBlock b) {
+            daysToGrow = b.getTreeGrowthDays();
+        }
+
+        if (daysToGrow >= 0) {
+            ChatFormatting dynamicColor = SaplingGrowthCache.getGrowthColor(block);
+
+            tooltip.add(Component.translatable("tfg.tooltip.growth_time").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(": ")
+                            .append(Component.translatable("tfc.tooltip.time_delta_days", daysToGrow)
+                                    .withStyle(ChatFormatting.ITALIC, dynamicColor))));
         }
     }
 
