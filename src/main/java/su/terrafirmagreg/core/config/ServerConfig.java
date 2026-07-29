@@ -40,10 +40,10 @@ public final class ServerConfig {
     public final ForgeConfigSpec.IntValue CHAMELEON_SPRAY_CAN_CAPACITY;
     public final ForgeConfigSpec.IntValue CHAMELEON_SPRAY_CAN_COST_PER_OPERATION;
     public final ForgeConfigSpec.DoubleValue CHAMELEON_SPRAY_CAN_BULK_MULTIPLIER;
-  
+
     public final ForgeConfigSpec.IntValue GLASSBLOWING_COOLDOWN;
     public final ForgeConfigSpec.IntValue GLASSBLOWING_DURATION;
-  
+
     public final ForgeConfigSpec.DoubleValue QUERN_STRESS_IMPACT;
     public final ForgeConfigSpec.IntValue QUERN_STRESS_LIMIT;
     public final ForgeConfigSpec.IntValue QUERN_RPM_LIMIT;
@@ -196,7 +196,7 @@ public final class ServerConfig {
         GLASSBLOWING_DURATION = builder
                 .comment("\nBase glassblowing duration in ticks. Default: 40, min: 2, max: maxInt")
                 .defineInRange("baseGlassblowingCooldown", 40, 2, Integer.MAX_VALUE);
-                         
+
         builder.pop().push("tfc_create_compatibility");
         QUERN_STRESS_IMPACT = builder
                 .comment("\nStress impact multiplier for the quern. Default: 0.25, min: 0, max: 64")
