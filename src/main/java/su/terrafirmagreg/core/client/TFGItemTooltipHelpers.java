@@ -6,6 +6,12 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.eerussianguy.firmalife.common.blocks.CompostTumblerBlock;
+import com.simibubi.create.foundation.utility.CreateLang;
+
+import net.createmod.catnip.lang.Lang;
+import net.dries007.tfc.common.blocks.devices.BellowsBlock;
+import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
@@ -16,6 +22,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,6 +41,7 @@ import su.terrafirmagreg.core.common.event.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.OreProspectorEvent;
 import su.terrafirmagreg.core.common.event.WeakOreProspectorEventHelper;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
@@ -47,6 +55,15 @@ public class TFGItemTooltipHelpers {
     public static void onTooltip(@NotNull ItemTooltipEvent event) {
         var tooltip = event.getToolTip();
         var stack = event.getItemStack();
+
+        Block block = Block.byItem(stack.getItem());
+        if (block instanceof QuernBlock) {
+            addMachineTooltip(tooltip, TFGConfig.SERVER.QUERN_STRESS_LIMIT.get(), TFGConfig.SERVER.QUERN_RPM_LIMIT.get());
+        } else if (block instanceof BellowsBlock) {
+            addMachineTooltip(tooltip, TFGConfig.SERVER.BELLOWS_STRESS_LIMIT.get(), TFGConfig.SERVER.BELLOWS_RPM_LIMIT.get());
+        } else if (block instanceof CompostTumblerBlock) {
+            addMachineTooltip(tooltip, TFGConfig.SERVER.COMPOSTER_STRESS_LIMIT.get(), TFGConfig.SERVER.COMPOSTER_RPM_LIMIT.get());
+        }
 
         // Check Weak helpers
         for (WeakOreProspectorEventHelper helper : OreProspectorEvent.getWeakOreProspectorListHelper()) {
@@ -160,5 +177,29 @@ public class TFGItemTooltipHelpers {
 
     private static String formatDuration(MobEffectInstance effect) {
         return StringUtil.formatTickDuration(Mth.floor(effect.getDuration()));
+    }
+
+    private static void addMachineTooltip(List<Component> tooltip, int stressLimit, int rpmLimit) {
+        Lang.builder("greate").translate("tooltip.max_capacity")
+                .style(ChatFormatting.GRAY)
+                .space()
+                .add(CreateLang.number(stressLimit)
+                        .style(ChatFormatting.RED))
+                .add(CreateLang.text("SU")
+                        .style(ChatFormatting.RED))
+                .forGoggles(tooltip);
+
+        CreateLang.translate("schedule.instruction.throttle")
+                .style(ChatFormatting.GRAY)
+                .text(":")
+                .space()
+                .add(CreateLang.text("<")
+                        .style(ChatFormatting.RED))
+                .space()
+                .add(CreateLang.number(rpmLimit)
+                        .style(ChatFormatting.RED))
+                .add(CreateLang.translate("generic.unit.rpm")
+                        .style(ChatFormatting.RED))
+                .forGoggles(tooltip);
     }
 }
