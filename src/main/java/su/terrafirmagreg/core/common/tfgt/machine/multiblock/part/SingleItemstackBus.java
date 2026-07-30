@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
@@ -23,21 +21,8 @@ public class SingleItemstackBus extends ItemBusPartMachine {
      * @param holder the holder
      */
     public SingleItemstackBus(BlockEntityCreationInfo info) {
-        super(info, 0, IO.IN);
-    }
-
-    @Override
-    public int getInventorySize() {
-        return 1;
-    }
-
-    @Override
-    protected @NotNull NotifiableItemStackHandler createInventory(Object @NotNull... args) {
-        return new ObjectHolderHandler(this);
-    }
-
-    @Override
-    public void attachConfigurators(@NotNull ConfiguratorPanel configuratorPanel) {
+        super(info, 0, IO.IN, new ObjectHolderHandler());
+        circuitSlot.setEnabled(false);
     }
 
     // Inner handler that enforces a stacksize of 1 in 1 item slot.
@@ -45,11 +30,9 @@ public class SingleItemstackBus extends ItemBusPartMachine {
 
         /**
          * Instantiates a new Object holder handler.
-         *
-         * @param metaTileEntity the meta tile entity
          */
-        public ObjectHolderHandler(MetaMachine metaTileEntity) {
-            super(metaTileEntity, 1, IO.IN, IO.BOTH, size -> new CustomItemStackHandler(size) {
+        public ObjectHolderHandler() {
+            super(1, IO.IN, IO.BOTH, size -> new CustomItemStackHandler(size) {
                 @Override
                 public int getSlotLimit(int slot) {
                     return 1;

@@ -1,8 +1,9 @@
 package su.terrafirmagreg.core.mixins.client.gtceu;
 
-import com.gregtechceu.gtceu.client.ClientEventListener;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+
+import com.gregtechceu.gtceu.client.ClientEventListener;
 
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

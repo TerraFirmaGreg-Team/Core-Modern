@@ -5,6 +5,12 @@ import java.util.*;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.PanelSyncManager;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
@@ -24,7 +30,6 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -49,11 +54,11 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     private static final double PARALLEL_EU_DISCOUNT = 0.75;
 
     @SaveField
-    @DescSynced
+    @SyncToClient
     private double gasModifier = 1.0;
 
     @SaveField
-    @DescSynced
+    @SyncToClient
     private int gasLevelPercent = 0;
 
     private final ConditionalSubscriptionHandler gasUpdateSubscription;
@@ -64,18 +69,22 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     }
 
     @Override
-    public void formStructure(@NotNull String substructureName) {
+    public void formStructure(String substructureName) {
         super.formStructure(substructureName);
         gasModifier = 1.0;
         gasLevelPercent = 0;
+        syncDataHolder.markClientSyncFieldDirty("gasModifier");
+        syncDataHolder.markClientSyncFieldDirty("gasLevelPercent");
         gasUpdateSubscription.updateSubscription();
     }
 
     @Override
-    public void invalidateStructure(@NotNull String substructureName) {
+    public void invalidateStructure(String substructureName) {
         super.invalidateStructure(substructureName);
         gasModifier = 1.0;
         gasLevelPercent = 0;
+        syncDataHolder.markClientSyncFieldDirty("gasModifier");
+        syncDataHolder.markClientSyncFieldDirty("gasLevelPercent");
         gasUpdateSubscription.updateSubscription();
     }
 
@@ -89,11 +98,16 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
         if (tankInfo == null || tankInfo[1] == 0) {
             gasLevelPercent = 0;
             gasModifier = 0.0;
+            syncDataHolder.markClientSyncFieldDirty("gasModifier");
+            syncDataHolder.markClientSyncFieldDirty("gasLevelPercent");
             return;
         }
         double ratio = (double) tankInfo[0] / tankInfo[1];
         gasLevelPercent = (int) (ratio * 100);
         gasModifier = calculateGaussianModifier(ratio);
+
+        syncDataHolder.markClientSyncFieldDirty("gasModifier");
+        syncDataHolder.markClientSyncFieldDirty("gasLevelPercent");
     }
 
     @Nullable
@@ -188,8 +202,8 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
                 for (Content content : entry.getValue()) {
                     if (content.isChanced()) {
                         // Byproduct only if chance isn't guarantee
-                        int newChance = (int) (content.chance * modifier);
-                        newContents.add(new Content(content.getContent(), newChance, content.maxChance, content.tierChanceBoost));
+                        int newChance = (int) (content.chance() * modifier);
+                        newContents.add(new Content(content.content(), newChance, content.maxChance()));
                     } else {
                         // If Guarantee keep the number
                         newContents.add(content);
@@ -215,17 +229,20 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
 
     // GUI
 
+
     @Override
-    public void addDisplayText(@NotNull List<Component> textList) {
-        super.addDisplayText(textList);
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
 
         if (!isFormed())
-            return;
+            return widgets;
+
+
 
         if (gasLevelPercent == 0 && gasModifier == 0.0) {
-            textList.add(Component.translatable("tfg.machine.ore_processing_beneath.no_gas")
-                    .withStyle(ChatFormatting.RED));
-            return;
+            widgets.add(Text.lang("tfg.machine.ore_processing_beneath.no_gas")
+                    .withStyle(ChatFormatting.RED).asWidget());
+            return widgets;
         }
 
         double ratio = gasLevelPercent / 100.0;
@@ -240,9 +257,11 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
             levelColor = ChatFormatting.YELLOW;
         }
 
-        textList.add(Component.translatable("tfg.machine.ore_processing_beneath.gas_level",
-                gasLevelPercent).withStyle(levelColor));
-        textList.add(Component.translatable("tfg.machine.ore_processing_beneath.output_modifier",
-                modifierPercent).withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW));
+        widgets.add(Text.lang("tfg.machine.ore_processing_beneath.gas_level",
+                gasLevelPercent).withStyle(levelColor).asWidget());
+        widgets.add(Text.lang("tfg.machine.ore_processing_beneath.output_modifier",
+                modifierPercent).withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW).asWidget());
+
+        return widgets;
     }
 }
