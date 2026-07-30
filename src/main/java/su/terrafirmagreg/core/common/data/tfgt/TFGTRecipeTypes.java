@@ -34,6 +34,8 @@ import net.minecraft.world.level.material.Fluid;
 
 import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
 
+import su.terrafirmagreg.core.common.data.TFGSounds;
+
 @SuppressWarnings("deprecation")
 public class TFGTRecipeTypes {
 
@@ -294,7 +296,7 @@ public class TFGTRecipeTypes {
             .setEUIO(IO.IN)
             .setMaxIOSize(1, 9, 2, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
-            .setSound(GTSoundEntries.COMBUSTION)
+            .setSound(TFGSounds.GEOLOGIC_VULCANIZER)
             .addDataInfo(data -> LocalizationUtils.format("tfg.gui.ore_processing_gas.optimal_ratio.1"))
             .addDataInfo(data -> LocalizationUtils.format("tfg.gui.ore_processing_gas.optimal_ratio.2"));
 }
