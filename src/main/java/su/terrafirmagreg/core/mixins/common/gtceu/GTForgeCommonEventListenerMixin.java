@@ -3,8 +3,6 @@ package su.terrafirmagreg.core.mixins.common.gtceu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-import com.gregtechceu.gtceu.forge.ForgeCommonEventListener;
-
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 

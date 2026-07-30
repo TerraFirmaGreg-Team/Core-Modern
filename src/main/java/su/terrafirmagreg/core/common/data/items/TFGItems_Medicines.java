@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.common.data.GTMedicalConditions;
 import com.gregtechceu.gtceu.common.data.materials.GTFoods;
-import com.gregtechceu.gtceu.common.item.AntidoteBehavior;
+import com.gregtechceu.gtceu.common.item.behavior.AntidoteBehavior;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.dries007.tfc.common.TFCEffects;

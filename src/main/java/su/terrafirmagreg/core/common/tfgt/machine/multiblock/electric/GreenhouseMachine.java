@@ -7,11 +7,11 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.*;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -26,8 +26,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
 
-    public GreenhouseMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public GreenhouseMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     @Override

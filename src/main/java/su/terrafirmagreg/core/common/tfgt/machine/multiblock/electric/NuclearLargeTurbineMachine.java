@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -46,8 +46,8 @@ public class NuclearLargeTurbineMachine extends WorkableElectricMultiblockMachin
     @Getter
     private final int tier;
 
-    public NuclearLargeTurbineMachine(IMachineBlockEntity holder, int tier) {
-        super(holder);
+    public NuclearLargeTurbineMachine(BlockEntityCreationInfo info, int tier) {
+        super(info);
         this.tier = tier;
         this.BASE_EU_OUTPUT = GTValues.V[IV];
     }

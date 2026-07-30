@@ -7,25 +7,24 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -41,10 +40,6 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 @MethodsReturnNonnullByDefault
 public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachine {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            OreProcessingBeneathMachine.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
     private static final double MIN_RATIO = 0.15; // Under this amount the machine won't start
     private static final double MAX_RATIO = 0.85; // Over this amount the machine won't start
     private static final double OPTIMAL_RATIO = 0.50; // The percentage of fluid in the hatch so it's optimal
@@ -53,37 +48,32 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     private static final int MAX_PARALLELS = 8; // Amount of parallel
     private static final double PARALLEL_EU_DISCOUNT = 0.75;
 
-    @Persisted
+    @SaveField
     @DescSynced
     private double gasModifier = 1.0;
 
-    @Persisted
+    @SaveField
     @DescSynced
     private int gasLevelPercent = 0;
 
     private final ConditionalSubscriptionHandler gasUpdateSubscription;
 
-    public OreProcessingBeneathMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public OreProcessingBeneathMachine(BlockEntityCreationInfo info) {
+        super(info);
         this.gasUpdateSubscription = new ConditionalSubscriptionHandler(this, this::tickGasInfo, this::isFormed);
     }
 
     @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
         gasModifier = 1.0;
         gasLevelPercent = 0;
         gasUpdateSubscription.updateSubscription();
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(@NotNull String substructureName) {
+        super.invalidateStructure(substructureName);
         gasModifier = 1.0;
         gasLevelPercent = 0;
         gasUpdateSubscription.updateSubscription();

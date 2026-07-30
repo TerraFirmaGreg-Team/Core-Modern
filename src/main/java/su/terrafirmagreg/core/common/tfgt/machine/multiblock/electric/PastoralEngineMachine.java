@@ -3,12 +3,9 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
 import net.dries007.tfc.common.entities.livestock.DairyAnimal;
 import net.dries007.tfc.common.entities.livestock.ProducingMammal;
@@ -34,22 +31,13 @@ import su.terrafirmagreg.core.common.tfgt.recipe.condition.AnimalPresentConditio
 
 public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            PastoralEngineMachine.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
-    @Persisted
+    @SaveField
     private int harvestCounter = 0;
 
     private static final int HARVESTS_PER_USE = 2; // Number of time it harvests before it ages the animal
 
-    public PastoralEngineMachine(IMachineBlockEntity holder) {
-        super(holder);
-    }
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
+    public PastoralEngineMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     @Override

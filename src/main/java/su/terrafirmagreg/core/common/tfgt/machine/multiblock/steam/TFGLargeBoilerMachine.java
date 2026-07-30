@@ -9,27 +9,26 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.*;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IExplosionMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.util.ClickData;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.dries007.tfc.common.fluids.SimpleFluid;
 import net.dries007.tfc.common.fluids.TFCFluids;
@@ -53,15 +52,6 @@ import lombok.Getter;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements IDisplayUIMachine, IExplosionMachine {
-
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            TFGLargeBoilerMachine.class,
-            WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
-
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     public record BoosterFluid(
             Supplier<Fluid> fluid,
@@ -155,7 +145,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
 
     @Getter
     public final int maxTemperature, heatSpeed;
-    @Persisted
+    @SaveField
     @Getter
     private int currentTemperature, throttle;
     @Nullable
@@ -163,11 +153,11 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     private int steamGenerated;
 
     // Track last water type used — for GUI display
-    @Persisted
+    @SaveField
     @DescSynced
     @Nullable
     private String lastWaterTagKey = null; // null = standard water (water_boiler tag)
-    @Persisted
+    @SaveField
     @DescSynced
     private float lastWaterMultiplier = 1.0f;
 
@@ -180,8 +170,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     private BoosterFluid cachedBooster = null;
     private long boosterCacheTimer = -1L;
 
-    public TFGLargeBoilerMachine(IMachineBlockEntity holder, int maxTemperature, int heatSpeed, Object... args) {
-        super(holder, args);
+    public TFGLargeBoilerMachine(BlockEntityCreationInfo info, int maxTemperature, int heatSpeed) {
+        super(info);
         this.maxTemperature = maxTemperature;
         this.heatSpeed = heatSpeed;
         this.throttle = 100;
@@ -203,8 +193,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
         boosterCacheTimer = -1L; // invalidate cache
         if (getLevel() instanceof ServerLevel serverLevel) {
             serverLevel.getServer().tell(new TickTask(0, this::updateSteamSubscription));
@@ -212,8 +202,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(@NotNull String substructureName) {
+        super.invalidateStructure(substructureName);
         boosterCacheTimer = -1L; // invalidate cache
         cachedBooster = null;
         if (getLevel() instanceof ServerLevel serverLevel) {
@@ -539,7 +529,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
 
     public static class TFGLargeBoilerRecipeLogic extends RecipeLogic {
 
-        @Persisted
+        @SaveField
         @DescSynced
         @Getter
         int currentThrottle;

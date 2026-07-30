@@ -8,16 +8,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
@@ -29,7 +28,6 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTMath;
 import com.gregtechceu.gtceu.utils.GTUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -47,9 +45,6 @@ import su.terrafirmagreg.core.utils.TFGHelpers;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements ITieredMachine {
-
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            SMRGenerator2.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     // TODO: CosmicCore Lubricants for efficiency bonus
 
@@ -85,8 +80,8 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
     }
 
-    public SMRGenerator2(IMachineBlockEntity holder, int tier) {
-        super(holder);
+    public SMRGenerator2(BlockEntityCreationInfo info, int tier) {
+        super(info);
         this.tier = tier;
     }
 
@@ -510,8 +505,5 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
                 () -> null));
     }
     */
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
+
 }

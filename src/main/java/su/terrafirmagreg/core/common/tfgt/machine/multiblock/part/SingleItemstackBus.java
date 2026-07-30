@@ -2,11 +2,11 @@ package su.terrafirmagreg.core.common.tfgt.machine.multiblock.part;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 
@@ -22,8 +22,8 @@ public class SingleItemstackBus extends ItemBusPartMachine {
      *
      * @param holder the holder
      */
-    public SingleItemstackBus(IMachineBlockEntity holder) {
-        super(holder, 0, IO.IN);
+    public SingleItemstackBus(BlockEntityCreationInfo info) {
+        super(info, 0, IO.IN);
     }
 
     @Override

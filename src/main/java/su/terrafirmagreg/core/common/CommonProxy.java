@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.common;
 import static appeng.api.upgrades.Upgrades.add;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
-import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -92,11 +91,6 @@ public class CommonProxy {
 
         AdAstraCompat.RegisterEvents();
         AE2Compat.registerEvents();
-    }
-
-    @SubscribeEvent
-    public void onRegisterMaterialRegistry(final MaterialRegistryEvent event) {
-        TFGCore.MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(TFGCore.MOD_ID);
     }
 
     @SubscribeEvent

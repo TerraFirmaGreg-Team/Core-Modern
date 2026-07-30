@@ -8,21 +8,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
-import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
+import com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,14 +37,11 @@ import su.terrafirmagreg.core.common.data.TFGParticles;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.InterplanetaryLogisticsNetwork.*;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.NetworkSenderConfigEntry;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBusMachine;
 import su.terrafirmagreg.core.network.TFGNetworkHandler;
 
 public class InterplanetaryItemLauncherMachine extends WorkableElectricMultiblockMachine
-        implements ILogisticsNetworkSender, IMachineLife, IFancyUIMachine, IDisplayUIMachine {
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            InterplanetaryItemLauncherMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
+        implements ILogisticsNetworkSender, IFancyUIMachine, IDisplayUIMachine {
 
     protected TickableSubscription tickSubscription;
 
@@ -55,19 +50,14 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     private final List<RailgunItemBusMachine> itemInputs = new ArrayList<>();
     private final long[] lastActiveTime = new long[33];
 
-    private RailgunAmmoLoaderMachine ammoLoaderPart;
+    private ItemBusPartMachine ammoLoaderPart;
 
-    public InterplanetaryItemLauncherMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public InterplanetaryItemLauncherMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     public InterplanetaryItemLauncherMachine getMachine() {
         return this;
-    }
-
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
     }
 
     @Override
@@ -105,8 +95,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
         // Collect multiblock parts
         List<IEnergyContainer> energyHatches = new ArrayList<>();
         itemInputs.clear();
@@ -116,7 +106,7 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
                 energyHatches.add(energyHatch.energyContainer);
             }
 
-            if (part instanceof RailgunAmmoLoaderMachine ammo) {
+            if (part instanceof ItemBusPartMachine ammo) {
                 ammoLoaderPart = ammo;
             }
 
@@ -134,8 +124,8 @@ public class InterplanetaryItemLauncherMachine extends WorkableElectricMultibloc
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(@NotNull String substructureName) {
+        super.invalidateStructure(substructureName);
         energyInputs = null;
         ammoLoaderPart = null;
         itemInputs.clear();

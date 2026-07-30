@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
 import net.dries007.tfc.common.capabilities.food.FoodCapability;

@@ -2,7 +2,7 @@
     "mixins": [
         "common.tfc.QuernBlockMixin",
         "client.create.ChainConveyorRendererMixin",
-        "client.gtceu.GTForgeClientEventListenerMixin",
+      "client.gtceu.GTClientEventListenerMixin",
         "client.minecraft.AbstractContainerScreenMixin",
         "client.minecraft.IBlockModelGeneratorsInvoker",
         "client.minecraft.MenuScreensMixin",

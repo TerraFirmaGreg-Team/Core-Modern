@@ -6,8 +6,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;

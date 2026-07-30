@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.gregtechceu.gtceu.api.machine.steam.SteamBoilerMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 import com.lowdragmc.lowdraglib.side.fluid.FluidStack;
 
 import net.minecraft.tags.FluidTags;

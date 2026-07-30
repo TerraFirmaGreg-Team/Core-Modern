@@ -8,19 +8,18 @@ import java.util.UUID;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.client.model.machine.MachineRenderState;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -41,10 +40,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 public class WirelessChargerMachine extends TieredEnergyMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            WirelessChargerMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
-
-    @Persisted
+    @SaveField
     private ChargeMode mode = ChargeMode.SUPER_CHARGED;
 
     private final int longRange;
@@ -58,16 +54,11 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
     private int activeLingerTicks = 0;
     private boolean visuallyActive = false;
 
-    public WirelessChargerMachine(IMachineBlockEntity holder, int tier, Object... args) {
-        super(holder, tier, args);
+    public WirelessChargerMachine(BlockEntityCreationInfo info, int tier) {
+        super(info, tier);
         this.longRange = longRangeFor(tier);
         this.shortRange = shortRangeFor(tier);
         this.chargeAmount = GTValues.V[tier];
-    }
-
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
     }
 
     @Override
