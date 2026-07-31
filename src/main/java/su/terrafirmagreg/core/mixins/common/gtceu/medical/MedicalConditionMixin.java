@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import com.gregtechceu.gtceu.api.data.medicalcondition.MedicalCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 
-@SuppressWarnings("StringEquality")
 @Mixin(value = MedicalCondition.class, remap = false)
 public class MedicalConditionMixin {
 

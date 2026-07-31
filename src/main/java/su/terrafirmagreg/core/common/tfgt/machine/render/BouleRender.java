@@ -3,12 +3,11 @@ package su.terrafirmagreg.core.common.tfgt.machine.render;
 import java.util.Arrays;
 import java.util.Collections;
 
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.client.renderer.block.FluidBlockRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;

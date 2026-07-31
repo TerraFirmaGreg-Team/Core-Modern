@@ -26,10 +26,6 @@ import su.terrafirmagreg.core.config.TFGConfig;
 @Mixin(value = MinerLogic.class, remap = false)
 public abstract class MinerLogicMixin {
 
-    @Final
-    @Shadow
-    protected IMiner miner;
-
     // True for large miners that are not on silk touch mode, false for single block ones
     @Shadow
     protected abstract boolean hasPostProcessing();
@@ -37,9 +33,12 @@ public abstract class MinerLogicMixin {
     @Shadow
     private int minBuildHeight;
 
+    @Shadow
+    public abstract IMiner getRLMachine();
+
     @Inject(method = "getBlocksToMine", at = @At("HEAD"), remap = false)
     private void tfg$getBlocksToMine(CallbackInfoReturnable<LinkedList<BlockPos>> cir) {
-        var level = miner.self().getLevel();
+        var level = getRLMachine().getLevel();
         assert level != null;
 
         // True for large miners that are not on silk touch mode

@@ -5,12 +5,6 @@ import java.util.*;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import brachy.modularui.api.drawable.Text;
-import brachy.modularui.api.widget.IWidget;
-import brachy.modularui.value.sync.PanelSyncManager;
-import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
@@ -30,11 +24,16 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
+
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.PanelSyncManager;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -229,15 +228,12 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
 
     // GUI
 
-
     @Override
     public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
         List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
 
         if (!isFormed())
             return widgets;
-
-
 
         if (gasLevelPercent == 0 && gasModifier == 0.0) {
             widgets.add(Text.lang("tfg.machine.ore_processing_beneath.no_gas")

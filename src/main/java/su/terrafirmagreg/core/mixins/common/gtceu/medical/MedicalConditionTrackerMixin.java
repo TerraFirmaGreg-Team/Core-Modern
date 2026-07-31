@@ -3,6 +3,7 @@ package su.terrafirmagreg.core.mixins.common.gtceu.medical;
 import java.util.Map;
 import java.util.Set;
 
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,7 +37,7 @@ public abstract class MedicalConditionTrackerMixin {
     public abstract Player getPlayer();
 
     @Shadow
-    public abstract Object2FloatMap<MedicalCondition> getMedicalConditions();
+    public abstract Reference2FloatOpenHashMap<MedicalCondition> getMedicalConditions();
 
     @Shadow
     @Final
@@ -51,8 +52,6 @@ public abstract class MedicalConditionTrackerMixin {
             Map.entry(GTMedicalConditions.CARCINOGEN, TFGEffects.CARCINOGEN_WARNING.get()),
             Map.entry(GTMedicalConditions.ASBESTOSIS, TFGEffects.ASBESTOSIS_WARNING.get()),
             Map.entry(GTMedicalConditions.ARSENICOSIS, TFGEffects.ARSENICOSIS_WARNING.get()),
-            Map.entry(GTMedicalConditions.SILICOSIS, TFGEffects.SILICOSIS_WARNING.get()),
-            Map.entry(GTMedicalConditions.BERYLLIOSIS, TFGEffects.BERYLLIOSIS_WARNING.get()),
             Map.entry(GTMedicalConditions.METHANOL_POISONING, TFGEffects.METHANOL_POISONING_WARNING.get()),
             Map.entry(GTMedicalConditions.CARBON_MONOXIDE_POISONING, TFGEffects.CARBON_MONOXIDE_POISONING_WARNING.get()),
             Map.entry(TFGMedicalConditions.RADIOACTIVE, TFGEffects.RADIOACTIVE_WARNING.get()));

@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.mixins.common.gtceu;
 
 import java.util.function.Predicate;
 
-import net.minecraftforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -11,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.steam.SteamBoilerMachine;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 
 import net.minecraft.tags.FluidTags;
+import net.minecraftforge.fluids.FluidStack;
 
 @Mixin(value = SteamBoilerMachine.class, remap = false)
 public abstract class SteamBoilerMachineMixin {

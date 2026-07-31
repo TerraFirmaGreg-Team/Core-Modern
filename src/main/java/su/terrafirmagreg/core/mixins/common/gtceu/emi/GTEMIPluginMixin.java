@@ -1,9 +1,9 @@
 package su.terrafirmagreg.core.mixins.common.gtceu.emi;
 
+import com.gregtechceu.gtceu.integration.recipeviewer.emi.GTEMIPlugin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import com.gregtechceu.gtceu.integration.emi.GTEMIPlugin;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 
 import dev.emi.emi.api.EmiRegistry;
