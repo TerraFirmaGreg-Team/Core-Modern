@@ -68,6 +68,13 @@
         }
     },
     "spawners": {
+        "ambient": [{
+                "type": "jellies:rock",
+                "maxCount": 4,
+                "minCount": 3,
+                "weight": 100
+            }
+        ],
         "water_creature": [{
             "weight": 1,
             "minCount": 1,

@@ -68,6 +68,13 @@
         }
     },
     "spawners": {
+        "ambient": [{
+            "type": "jellies:herbal",
+            "maxCount": 2,
+            "minCount": 1,
+            "weight": 100
+        }
+        ],
         "creature": [
             {
                 "weight": 20,
