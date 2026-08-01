@@ -88,7 +88,7 @@ public class TFGTRecipeTypes {
             .setEUIO(IO.IN)
             .setMaxIOSize(3, 1, 3, 1)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_COMPRESS)
-                    .setItemSlotOverlay(IO.IN, 0, GTGuiTextures.INT_CIRCUIT_OVERLAY))
+                    .setItemSlotOverlay(IO.IN, 2, GTGuiTextures.INT_CIRCUIT_OVERLAY))
             .setSound(GTSoundEntries.COMPRESSOR);
 
     public static final GTRecipeType NUCLEAR_TURBINE = GTRecipeTypes
@@ -123,8 +123,7 @@ public class TFGTRecipeTypes {
             .setMaxSize(IO.OUT, HeatRecipeCapability.CAP, 1)
             .UI(builder -> builder
                     .setProgressBar(GTGuiTextures.PROGRESS_CRACKING)
-                    .setItemSlotOverlay(IO.IN, 0, GTGuiTextures.ATOMIC_OVERLAY_1)
-                    .setItemSlotOverlay(IO.IN, 0, GTGuiTextures.ATOMIC_OVERLAY_1)
+                    .setItemSlotsOverlay(IO.IN, 0, 5, GTGuiTextures.ATOMIC_OVERLAY_1)
                     .addRecipeUIModifier(RecipeUIModifier.textLine(Text.lang("tfg.nuclear.skip"))))
             .setSound(GTSoundEntries.BATH);
 
@@ -141,7 +140,7 @@ public class TFGTRecipeTypes {
             .setEUIO(IO.IN)
             .setMaxIOSize(6, 3, 1, 2)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
-                    .setItemSlotOverlay(IO.IN, 0, GTGuiTextures.ATOMIC_OVERLAY_1)
+                    .setItemSlotsOverlay(IO.IN, 0, 5, GTGuiTextures.ATOMIC_OVERLAY_1)
                     .addRecipeUIModifier((recipe, widget) -> {
                         String heatText1 = recipe.data.getString("avgHeat1");
                         String heatText2 = recipe.data.getString("avgHeat2");
@@ -167,7 +166,7 @@ public class TFGTRecipeTypes {
             .register("steam_bloomery", GTRecipeTypes.STEAM)
             .setMaxIOSize(2, 1, 0, 0)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
-                    .setItemSlotOverlay(IO.IN, 0, GTGuiTextures.FURNACE_OVERLAY_1))
+                    .setItemSlotsOverlay(IO.IN, 0, 1, GTGuiTextures.FURNACE_OVERLAY_1))
             .setSound(GTSoundEntries.FIRE);
 
     public static final GTRecipeType PRECISION_FABRICATOR_RECIPES = GTRecipeTypes
