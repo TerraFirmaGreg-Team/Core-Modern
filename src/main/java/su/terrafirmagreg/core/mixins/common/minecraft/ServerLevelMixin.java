@@ -17,6 +17,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import earth.terrarium.adastra.api.planets.Planet;
 
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.utils.CalendarSleepHelper;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
 import su.terrafirmagreg.core.utils.SnowCorrection;
 
@@ -39,5 +40,14 @@ public abstract class ServerLevelMixin {
             final ServerLevel level = (ServerLevel) (Object) this;
             SnowCorrection.onTickChunk(level, chunk);
         }
+    }
+
+    /**
+     * Backport of TFC 4 {@code ServerLevelMixin#onWakeUpAllPlayers}: advance the TFC calendar when sleeping
+     * outside the Overworld (Nether/Beneath, planets, etc.).
+     */
+    @Inject(method = "wakeUpAllPlayers", at = @At("TAIL"))
+    private void tfg$onWakeUpAllPlayers(CallbackInfo ci) {
+        CalendarSleepHelper.onPlayersFinishedSleeping((ServerLevel) (Object) this);
     }
 }
