@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.datagen;
 
+import com.gregtechceu.gtceu.api.registry.registrate.SoundEntryBuilder;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -18,6 +20,7 @@ public class DataGen {
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
+        generator.addProvider(event.includeClient(), new SoundEntryBuilder.SoundEntryProvider(packOutput, TFGCore.MOD_ID));
         generator.addProvider(event.includeClient(), new TFGSoundProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new TFGItemModelProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new TFGBlockModelProvider(packOutput, existingFileHelper));
