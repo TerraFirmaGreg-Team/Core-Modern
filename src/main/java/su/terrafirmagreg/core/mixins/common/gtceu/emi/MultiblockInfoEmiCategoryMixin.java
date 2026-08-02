@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.mixins.common.gtceu.emi;
 
 import java.util.List;
 
-import com.gregtechceu.gtceu.integration.recipeviewer.emi.MultiblockInfoEmiCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
+import com.gregtechceu.gtceu.integration.recipeviewer.emi.MultiblockInfoEmiCategory;
 
 import net.minecraft.resources.ResourceLocation;
 

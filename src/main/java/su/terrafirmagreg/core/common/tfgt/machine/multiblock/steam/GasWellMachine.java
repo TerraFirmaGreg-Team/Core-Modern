@@ -4,10 +4,6 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import brachy.modularui.api.drawable.Text;
-import brachy.modularui.api.widget.IWidget;
-import brachy.modularui.value.sync.PanelSyncManager;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +14,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
@@ -33,6 +30,9 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.PanelSyncManager;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellRecipeLogic;
@@ -149,7 +149,8 @@ public class GasWellMachine extends MultiblockControllerMachine {
     public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
         List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
 
-        if (!isFormed()) return widgets;
+        if (!isFormed())
+            return widgets;
 
         if (logic.isActive()) {
             widgets.add(Text.lang("tfg.machine.gas_well.active")
@@ -226,8 +227,6 @@ public class GasWellMachine extends MultiblockControllerMachine {
                         .withStyle(ChatFormatting.GRAY).asWidget());
             }
         }
-
-
 
         return widgets;
 

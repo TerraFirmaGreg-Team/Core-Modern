@@ -5,12 +5,16 @@ import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 
 import lombok.Getter;
 import lombok.Setter;
 
 public class NetworkSenderConfigEntry {
+
+    GlobalPos
+
     @Getter
     private final InterplanetaryLogisticsNetwork.DimensionalBlockPos senderPartID;
     @Getter

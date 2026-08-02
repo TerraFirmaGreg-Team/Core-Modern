@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.mixins.common.gtceu.medical;
 import java.util.Map;
 import java.util.Set;
 
-import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +23,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 
 import su.terrafirmagreg.core.common.data.TFGEffects;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMedicalConditions;

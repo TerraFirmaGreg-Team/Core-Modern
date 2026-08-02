@@ -157,7 +157,7 @@ public class TFGMultiMachines {
             .pattern(def -> {
                 MetaMachineBlock[] inputBuses = Arrays.stream(TFGMachines.RAILGUN_ITEM_LOADER_OUT)
                         .map(MachineDefinition::get).toArray(MetaMachineBlock[]::new);
-                return MultiblockPatternBuilder.start()
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                         .slice("B     B", "BB   BB", " B   B ", "  CCC  ", "       ")
                         .slice("       ", "B     B", "BBbbbBB", " CEFEC ", "  GGG  ")
                         .slice("       ", "       ", " b   b ", "CF   FC", " G   G ")
@@ -199,7 +199,7 @@ public class TFGMultiMachines {
                             new Vector3f(-1f, 1.4f, -4f), new Vector3f(1f, 1.4f, -4f),
                             new Vector3f(-1f, 1.4f, -5f), new Vector3f(1f, 1.4f, -5f)
                     )))))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("AAAAA", "BBBBB", "BBBBB", "BBBBB", "BBBBB")
                     .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
                     .slice("AFFFA", "BG GB", "B   B", "BH HB", "BBBBB")
@@ -234,7 +234,7 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_bioculture"),
                     TFGCore.id("block/machines/bioreactor"))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("#A#A#BCB#", "#BBB#DDD#", "#EEE#DDD#", "#EEE#FFF#", "#EEE#EEE#", "#EEE#EEE#", "#EEE#BCB#", "#BBB#####")
                     .slice("AGGGABBBB", "BBBBDHHHD", "E   DHHHD", "E   BBBBF", "E   EI IE", "E   EI IE", "E   BBBBB", "BBBBB####")
                     .slice("#GGGABBBC", "BBBBDHHHD", "E J DHHHD", "E J BBBBF", "E J E K E", "E   E   E", "E   BBBBC", "BBBBB####")
@@ -269,7 +269,7 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"),
                     GTCEu.id("block/multiblock/generator/large_steam_turbine"))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("A   A", "A   A", "CCCCC", "CDCDC", "CDCDC", "CCCCC", "BBBBB", "     ", "     ", "     ", "     ")
                     .slice("     ", "     ", "CCCCC", "DEFED", "DEFED", "CAAAC", "BAAAB", " AAA ", "  A  ", "  A  ", "  A  ")
                     .slice("     ", "     ", "CCGCC", "CFHFC", "CFHFC", "CAFAC", "BAFAB", " A A ", " A A ", " A A ", " A A ")
@@ -348,7 +348,7 @@ public class TFGMultiMachines {
             .recipeModifier(GTRecipeModifiers.OC_PERFECT_SUBTICK)
             .appearanceBlock(TFGBlocks_Casings.OSTRUM_CARBON_CASING)
             .workableCasingModel(TFGCore.id("block/casings/machine_casing_ostrum_carbon"), GTCEu.id("block/multiblock/gcym/large_mixer"))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("********A  A  A********", "********A  A  A********", "********BBBBBBB********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
                     .slice("******A         A******", "******A         A******", "******BBEEEEEEEBB******", "******DDD     DDD******", "*******DDDD DDDD*******", "********DDDDDDD********", "**********DDD**********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
                     .slice("****A             A****", "****A             A****", "****BBEEEEEEEEEEEBB****", "*****D           D*****", "*****DD         DD*****", "******DD       DD******", "*******DDD   DDD*******", "********DDDDDDD********", "*********DDDDD*********", "***********D***********", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************", "***********************")
@@ -492,7 +492,7 @@ public class TFGMultiMachines {
             .recipeModifier(SMRGenerator2::recipeModifier, true)
             .appearanceBlock(TFGBlocks_Casings.DESH_PTFE_CASING)
             .workableCasingModel(TFGCore.id( "block/casings/machine_casing_desh_ptfe"), TFGCore.id("block/machines/smr"))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("AAA", "ABA", "ABA", "AAA")
                     .slice("AEA", "BDB", "BDB", "AEA")
                     .slice("AAA", "AXA", "ABA", "AAA")
@@ -521,7 +521,7 @@ public class TFGMultiMachines {
                      components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
                             .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
                                     .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
-            .pattern((definition) -> MultiblockPatternBuilder.start()
+            .pattern((definition) -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("XXX", "XXX", "XXX")
                     .slice("XXX", "XCX", "XXX")
                     .slice("XXX", "XSX", "XXX")
@@ -556,7 +556,7 @@ public class TFGMultiMachines {
                             new Vector3f(-1, 6, -5), new Vector3f(-1,6,-6),new Vector3f(-1,6,-7),new Vector3f(-1,6,-8),new Vector3f(-1,6,-9),new Vector3f(-1,6,-10),
                             new Vector3f(1, 6, -5), new Vector3f(1,6,-6),new Vector3f(1,6,-7),new Vector3f(1,6,-8),new Vector3f(1,6,-9),new Vector3f(1,6,-10)
                     )))))
-            .pattern((definition) -> MultiblockPatternBuilder.start()
+            .pattern((definition) -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("AGGGA", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", "BBGBB", " BBB ")
                     .sliceRepeatable(1, 2, "AHIHA", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "BDADB", " BBB ")
                     .sliceRepeatable(1, 2, "EHIHE", "B A B", "B A B", "BHIHB", "B A B", "B A B", "BHIHB", "B A B", "BDADB", " BBB ")
@@ -593,7 +593,7 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id( "block/casings/machine_casing_aluminium_plated_steel"),
                     TFGCore.id("block/machines/pisciculture_fishery"))
-            .pattern((definition) -> MultiblockPatternBuilder.start()
+            .pattern((definition) -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("    AAAAA    ", "    BBBBB    ", "    BBBBB    ", "    CCCCC    ")
                     .slice("   ACCECCA   ", "   CFFFFFC   ", "   CFFFFFC   ", "   CFFFFFC   ")
                     .slice("  ACGCECGCA  ", "  BFFFFFFFB  ", "  BFFFFFFFB  ", "  CFFFFFFFC  ")
@@ -633,7 +633,7 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     TFGCore.id( "block/machines/steam_bloomery"))
-            .pattern((definition) -> MultiblockPatternBuilder.start()
+            .pattern((definition) -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice(" F ", " C ", " E ", " E ", " E ")
                     .slice("FCF", "C#C", "E#E", "E#E", "E#E")
                     .slice(" F ", "CXC", " E ", " E ", " E ")
@@ -663,7 +663,7 @@ public class TFGMultiMachines {
                         .build();
             }, true)
             .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice(" FFF ", "BBBBB", " BBB ")
                     .slice("FXXXF", "B#P#B", "BBBBB")
                     .slice("FXXXF", "BPGPB", "BBBBB")
@@ -701,7 +701,7 @@ public class TFGMultiMachines {
             .recipeType(GTRecipeTypes.ALLOY_SMELTER_RECIPES)
             .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("FFF", "XXX", "   ")
                     .slice("FFF", "X#X", "XXX")
                     .slice("FFF", "XSX", "   ")
@@ -729,7 +729,7 @@ public class TFGMultiMachines {
             .recipeType(GTRecipeTypes.COMPRESSOR_RECIPES)
             .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("XXX", "FXF", "   ")
                     .slice("XXX", "A#A", "FAF")
                     .slice("XXX", "FSF", "   ")
@@ -755,7 +755,7 @@ public class TFGMultiMachines {
             .recipeType(GTRecipeTypes.FORGE_HAMMER_RECIPES)
             .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("XXX", "G G", "G G", "XXX")
                     .slice("XAX", " A ", " A ", "XAX")
                     .slice("XSX", "G G", "G G", "XXX")
@@ -779,7 +779,7 @@ public class TFGMultiMachines {
             .appearanceBlock(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING)
             .recipeType(TFGTRecipeTypes.HEAT_EXCHANGER)
             .recipeModifiers(GTRecipeModifiers.OC_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("       ","BBBBBBB","BCCCCCB","BBBBBBB","       ")
                     .slice("AAAAAAA","A#####A","LDDDDDL","A#####A","AAAAAAA")
                     .slice("AFFFFFA","L#####L","LEEEEEL","L#####L","AFFFFFA")
@@ -821,7 +821,7 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     TFGCore.id( "block/casings/machine_casing_mars"),
                     TFGCore.id("block/machines/bioreactor"))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("##BBB##", "##CCC##", "##CDC##", "##CDC##", "##CDC##", "##CCC##", "##BBB##")
                     .slice("#BBBBB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BAAAB#", "#BBBBB#")
                     .slice("BBFFFBB", "CAFFFAC", "CAFAFAC", "CAFAFAC", "CAFAFAC", "CAFFFAC", "BBFFFBB")
@@ -853,7 +853,7 @@ public class TFGMultiMachines {
             .recipeType(TFGTRecipeTypes.PRECISION_FABRICATOR_RECIPES)
             .recipeModifiers(GTRecipeModifiers::ebfOverclock, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(TFGBlocks_Casings.STERLING_SILVER_CASING)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("ACABB", "ACABA", "AAAAA", "     ")
                     .slice("CDCBB", "C#C#B", "AFFFB", " AAAB")
                     .slice("AXABB", "AEABA", "AAAAA", "     ")
@@ -907,7 +907,7 @@ public class TFGMultiMachines {
                 if (ConfigHolder.INSTANCE.machines.enableMaintenance) {
                     fireboxPred = fireboxPred.or(abilities(PartAbility.MAINTENANCE).setExactLimit(1));
                 }
-                return MultiblockPatternBuilder.start()
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                         .slice("XXX", "CCC", "CCC", "CCC")
                         .slice("XXX", "CPC", "CPC", "CCC")
                         .slice("XXX", "CSC", "CCC", "CCC")
@@ -954,7 +954,7 @@ public class TFGMultiMachines {
                 if (ConfigHolder.INSTANCE.machines.enableMaintenance) {
                     fireboxPred = fireboxPred.or(abilities(PartAbility.MAINTENANCE).setExactLimit(1));
                 }
-                return MultiblockPatternBuilder.start()
+                return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                         .slice("XXX", "CCC", "CCC", "CCC")
                         .slice("XXX", "CPC", "CPC", "CCC")
                         .slice("XXX", "CSC", "CCC", "CCC")
@@ -986,7 +986,7 @@ public class TFGMultiMachines {
             .generator(true)
             .recipeModifier(LargeSteamTurbine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STEEL_TURBINE)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("CCCC", "CHHC", "CCCC")
                     .slice("CHHC", "RGGR", "CHHC")
                     .slice("CCCC", "CSHC", "CCCC")
@@ -1037,7 +1037,7 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.machine.gas_well_1"),
                     Component.translatable("tfg.tooltip.machine.gas_well_2",
                             GasWellRecipeLogic.EXPLOSIVE_CONSUMPTION_INTERVAL))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("AAA", "FXF")
                     .slice("AAA", "XBX")
                     .slice("AAA", "FSF")
@@ -1068,7 +1068,7 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
                     TFGCore.id("block/machines/pisciculture_fishery"))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("BBBBBBBBB", "DDDDDDDDD", "AAAAAAAAA", "AAAAAAAAA")
                     .slice("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
                     .slice("BFFFFFFFB", "DAAAAAAAD", "AAAAAAAAA", "AAAAAAAAA")
@@ -1111,7 +1111,7 @@ public class TFGMultiMachines {
             .workableCasingModel(
                     GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTCEu.id("block/machines/electromagnetic_separator"))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.RIGHT, RelativeDirection.UP)
                     .slice("AAAAA", "BCCCB", "BCCCB", "BCCCB", "BCCCB", "BACAB", "AAAAA")
                     .slice("ADDDA", "C#F#C", "C#F#C", "C#F#C", "C#F#C", "A#F#A", "AAAAA")
                     .slice("ADDDA", "CFGFC", "CFGFC", "CFGFC", "CFGFC", "AFGFA", "AAHAA")
