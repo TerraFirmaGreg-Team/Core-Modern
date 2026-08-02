@@ -63,10 +63,10 @@ public class BeneathForgeEventsMixin {
                 } else {
                     entity.setItemSlot(slot, ToolHelper.get(GTToolType.SWORD, GTMaterials.DamascusSteel));
                 }
-				brute.setDropChance(slot, 0.03f);
+                brute.setDropChance(slot, 0.03f);
             } else {
                 entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
-				brute.setDropChance(slot, 0.01f);
+                brute.setDropChance(slot, 0.01f);
             }
         } else if (entity instanceof WitherSkeleton ws) {
             if (slot == EquipmentSlot.MAINHAND) {
