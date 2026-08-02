@@ -249,6 +249,7 @@
         "common.tfc.BellowsBlockMixin",
         "common.tfc.BlastFurnaceBlockEntityMixin",
         "common.tfc.BloomeryBlockEntityMixin",
+        "common.tfc.CalendarEventHandlerMixin",
         "common.tfc.CharcoalForgeBlockMixin",
         "common.tfc.ChunkDataMixin",
         "common.tfc.CrucibleBlockMixin",
