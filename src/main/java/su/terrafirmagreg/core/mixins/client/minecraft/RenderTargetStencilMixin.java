@@ -16,7 +16,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 public abstract class RenderTargetStencilMixin {
 
     @Shadow
-    public boolean stencilEnabled;
+    private boolean stencilEnabled;
 
     @Inject(method = "createBuffers", at = @At("HEAD"))
     private void tfg$forceStencil(int width, int height, boolean clearError, CallbackInfo ci) {
