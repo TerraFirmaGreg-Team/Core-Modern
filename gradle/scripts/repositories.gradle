@@ -9,8 +9,8 @@ repositories {
         }
     }
     maven {
-        name "GnomeCraft"
-        url "https://maven.gnomecraft.net/repository/maven-public"
+        name = "Sleeping Town"
+        url = "https://repo.sleeping.town/"
     }
     maven { // Mixin²
         url "https://maven.bawnorton.com/releases"
