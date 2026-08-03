@@ -319,7 +319,7 @@ package su.terrafirmagreg.core.compat.emi;
 				230, 0.28, 10, 70, 15, 7, 0, 
 				false, false, false, 70, 
 				new String[] {"tfc:rock/raw/granite","tfc:rock/raw/diorite","tfc:rock/raw/rhyolite","tfc:rock/raw/basalt","minecraft:tuff",},
-				new OreVeinInfoRecipe.WeightedBlock[] {new OreVeinInfoRecipe.WeightedBlock("red_garnet", 9), new OreVeinInfoRecipe.WeightedBlock("almandine", 14), new OreVeinInfoRecipe.WeightedBlock("amethyst", 38), new OreVeinInfoRecipe.WeightedBlock("opal", 38), },
+				new OreVeinInfoRecipe.WeightedBlock[] {new OreVeinInfoRecipe.WeightedBlock("amethyst", 38), new OreVeinInfoRecipe.WeightedBlock("opal", 38), new OreVeinInfoRecipe.WeightedBlock("red_garnet", 9), new OreVeinInfoRecipe.WeightedBlock("almandine", 14), },
 				null, null,
 				null, null, null, null,
 				null),
