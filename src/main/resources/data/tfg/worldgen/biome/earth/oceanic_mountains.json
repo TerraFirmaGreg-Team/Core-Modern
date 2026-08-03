@@ -34,26 +34,6 @@
         "energy_budget": 0.12
     }},
     "spawners": {
-        "ambient": [
-            {
-                "type": "jellies:herbal",
-                "maxCount": 4,
-                "minCount": 3,
-                "weight": 100
-            },
-            {
-                "type": "jellies:phosphorum",
-                "maxCount": 4,
-                "minCount": 3,
-                "weight": 100
-            },
-            {
-                "type": "jellies:rock",
-                "maxCount": 4,
-                "minCount": 3,
-                "weight": 100
-            }
-        ],
         "water_creature": [
             {
                 "weight": 1,
@@ -80,6 +60,26 @@
             "type": "tfc:octopoteuthis",
             "maxCount": 2
         }],
+        "ambient": [
+            {
+                "weight": 100,
+                "minCount": 3,
+                "type": "jellies:herbal",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 3,
+                "type": "jellies:phosphorum",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 3,
+                "type": "jellies:rock",
+                "maxCount": 4
+            }
+        ],
         "creature": [
             {
                 "weight": 20,

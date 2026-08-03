@@ -68,18 +68,17 @@
         }
     },
     "spawners": {
-        "ambient": [{
-                "type": "jellies:rock",
-                "maxCount": 4,
-                "minCount": 3,
-                "weight": 100
-            }
-        ],
         "water_creature": [{
             "weight": 1,
             "minCount": 1,
             "type": "tfc:manatee",
             "maxCount": 2
+        }],
+        "ambient": [{
+            "weight": 100,
+            "minCount": 3,
+            "type": "jellies:rock",
+            "maxCount": 4
         }],
         "water_ambient": [
             {
