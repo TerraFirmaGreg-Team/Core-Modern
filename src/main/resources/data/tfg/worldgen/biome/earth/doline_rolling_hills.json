@@ -69,6 +69,26 @@
         }
     },
     "spawners": {
+        "ambient": [
+            {
+                "type": "jellies:herbal",
+                "maxCount": 4,
+                "minCount": 3,
+                "weight": 100
+            },
+            {
+                "type": "jellies:phosphorum",
+                "maxCount": 4,
+                "minCount": 3,
+                "weight": 100
+            },
+            {
+                "type": "jellies:rock",
+                "maxCount": 4,
+                "minCount": 3,
+                "weight": 100
+            }
+        ],
         "creature": [
             {
                 "weight": 20,

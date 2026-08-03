@@ -34,6 +34,13 @@
         "energy_budget": 0.12
     }},
     "spawners": {
+        "ambient": [{
+            "type": "jellies:phosphorum",
+            "maxCount": 2,
+            "minCount": 1,
+            "weight": 100
+        }
+        ],
         "water_creature": [
             {
                 "weight": 1,
