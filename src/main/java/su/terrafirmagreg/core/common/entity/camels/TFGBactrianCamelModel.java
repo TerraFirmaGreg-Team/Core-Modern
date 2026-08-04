@@ -2,21 +2,27 @@ package su.terrafirmagreg.core.common.entity.camels;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+
+import net.dries007.tfc.client.model.entity.HierarchicalAnimatedModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
-public class TFGBactrianCamelModel extends HierarchicalModel<TFGBactrianCamel> {
-    public static LayerDefinition createBodyLayer()
-    {
+import su.terrafirmagreg.core.TFGCore;
+
+public class TFGBactrianCamelModel extends HierarchicalAnimatedModel<TFGBactrianCamel> {
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(TFGCore.id("bactrian_camel"), "main");
+
+    public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition base = partdefinition.addOrReplaceChild("base", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition body = base.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 25).addBox(-8.0F, -12.0F, -23.5F, 15.0F, 12.0F, 27.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, -20.0F, 9.5F));
+        PartDefinition body = base.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 25).addBox(-8.0F, -12.0F, -23.5F, 15.0F, 12.0F, 27.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.5F, -20.0F, 9.5F));
 
         PartDefinition wool_body = body.addOrReplaceChild("wool_body", CubeListBuilder.create().texOffs(1, 89).addBox(-8.0F, -12.0F, -23.5F, 15.0F, 12.0F, 27.0F, new CubeDeformation(0.1F))
                 .texOffs(20, -11).addBox(7.0F, 0.0F, -15.5F, 0.0F, 3.0F, 14.0F, new CubeDeformation(0.0F))
@@ -26,7 +32,8 @@ public class TFGBactrianCamelModel extends HierarchicalModel<TFGBactrianCamel> {
 
         PartDefinition tail = body.addOrReplaceChild("tail", CubeListBuilder.create(), PartPose.offset(-0.5F, -9.0F, 3.5F));
 
-        PartDefinition tail_r1 = tail.addOrReplaceChild("tail_r1", CubeListBuilder.create().texOffs(21, 34).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 14.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 3.1416F, 0.0F));
+        PartDefinition tail_r1 = tail.addOrReplaceChild("tail_r1", CubeListBuilder.create().texOffs(21, 34).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 14.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 3.1416F, 0.0F));
 
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(64, 92).addBox(-4.0F, -18.0F, -17.0F, 7.0F, 3.0F, 9.0F, new CubeDeformation(0.04F))
                 .texOffs(58, 25).addBox(-4.0F, -4.0F, -15.0F, 7.0F, 8.0F, 19.0F, new CubeDeformation(0.01F))
@@ -39,9 +46,11 @@ public class TFGBactrianCamelModel extends HierarchicalModel<TFGBactrianCamel> {
                 .texOffs(67, 64).addBox(-4.0F, -2.0F, -14.0F, 7.0F, 14.0F, 11.0F, new CubeDeformation(-0.3F))
                 .texOffs(104, 70).addBox(-4.0F, -4.0F, -18.0F, 7.0F, 14.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition left_ear = head.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(50, 19).addBox(0.0F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, -14.0F, -9.5F));
+        PartDefinition left_ear = head.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(50, 19).addBox(0.0F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(2.5F, -14.0F, -9.5F));
 
-        PartDefinition right_ear = head.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(79, 20).addBox(-3.0F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.5F, -14.0F, -9.5F));
+        PartDefinition right_ear = head.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(79, 20).addBox(-3.0F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(-3.5F, -14.0F, -9.5F));
 
         PartDefinition hump = body.addOrReplaceChild("hump", CubeListBuilder.create().texOffs(92, 113).addBox(-5.0F, -6.0F, -12.0F, 9.0F, 6.0F, 9.0F, new CubeDeformation(0.0F))
                 .texOffs(23, 74).addBox(-5.0F, -6.0F, 2.0F, 9.0F, 6.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -12.0F, -9.5F));
@@ -61,7 +70,6 @@ public class TFGBactrianCamelModel extends HierarchicalModel<TFGBactrianCamel> {
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
-    private final ModelPart root;
     private final ModelPart base;
     private final ModelPart body;
     private final ModelPart wool_body;
@@ -77,7 +85,7 @@ public class TFGBactrianCamelModel extends HierarchicalModel<TFGBactrianCamel> {
     private final ModelPart right_hind_leg;
 
     public TFGBactrianCamelModel(ModelPart root) {
-        this.root = root;
+        super(root);
         this.base = root.getChild("base");
         this.body = base.getChild("body");
         this.wool_body = body.getChild("wool_body");
@@ -102,8 +110,7 @@ public class TFGBactrianCamelModel extends HierarchicalModel<TFGBactrianCamel> {
     }
 
     @Override
-    public void setupAnim(TFGBactrianCamel animal, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
-    {
+    public void setupAnim(TFGBactrianCamel animal, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.applyHeadRotation(netHeadYaw, headPitch);
         wool_body.visible = animal.hasProduct();
@@ -117,10 +124,8 @@ public class TFGBactrianCamelModel extends HierarchicalModel<TFGBactrianCamel> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
-    {
-        if (this.young)
-        {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        if (this.young) {
             poseStack.pushPose();
             poseStack.scale(0.45F, 0.45F, 0.45F);
             poseStack.translate(0.0F, 1.834375F, 0.0F);
@@ -129,9 +134,5 @@ public class TFGBactrianCamelModel extends HierarchicalModel<TFGBactrianCamel> {
         } else {
             this.root().render(poseStack, buffer, packedLight, packedOverlay);
         }
-    }
-
-    public ModelPart root() {
-        return this.root;
     }
 }

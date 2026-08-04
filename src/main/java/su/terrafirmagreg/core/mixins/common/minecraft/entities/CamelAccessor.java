@@ -1,9 +1,9 @@
 package su.terrafirmagreg.core.mixins.common.minecraft.entities;
 
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.animal.camel.Camel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
+
+import net.minecraft.world.entity.animal.camel.Camel;
 
 @Mixin(value = Camel.class)
 public interface CamelAccessor {

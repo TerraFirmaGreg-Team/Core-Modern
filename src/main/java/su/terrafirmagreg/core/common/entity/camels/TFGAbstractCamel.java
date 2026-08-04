@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.common.entity.camels;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.Temptable;
 import net.dries007.tfc.common.entities.livestock.MammalProperties;
@@ -17,55 +19,46 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class TFGAbstractCamel extends Camel implements MammalProperties, Temptable {
-    protected TFGAbstractCamel(EntityType<? extends Camel> entityType, Level level)
-    {
+    protected TFGAbstractCamel(EntityType<? extends Camel> entityType, Level level) {
         super(entityType, level);
     }
 
     @Override
-    public @Nullable TFGAbstractCamel getBreedOffspring(ServerLevel level, AgeableMob other)
-    {
+    public @Nullable TFGAbstractCamel getBreedOffspring(ServerLevel level, AgeableMob other) {
         final AgeableMob mob = MammalProperties.super.getBreedOffspring(level, other);
         return mob instanceof TFGAbstractCamel camel ? camel : null;
     }
 
     @Override
-    public TagKey<Item> getFoodTag()
-    {
+    public TagKey<Item> getFoodTag() {
         // TODO: ADD PROPER TAG
         return TFCTags.Items.FOODS;
     }
 
-    public boolean vanillaParentingCheck(AbstractHorse camel)
-    {
+    public boolean vanillaParentingCheck(AbstractHorse camel) {
         return !camel.isVehicle() && !camel.isPassenger();
     }
 
     @Override
-    public boolean isFood(ItemStack stack)
-    {
+    public boolean isFood(ItemStack stack) {
         return MammalProperties.super.isFood(stack);
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand)
-    {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         InteractionResult result = MammalProperties.super.mobInteract(player, hand);
         return result == InteractionResult.PASS ? super.mobInteract(player, hand) : result;
     }
 
     @Override
-    public EntityType<?> getEntityTypeForBaby()
-    {
+    public EntityType<?> getEntityTypeForBaby() {
         return MammalProperties.super.getEntityTypeForBaby();
     }
 
     @Override
-    protected float getRiddenSpeed(Player player)
-    {
+    protected float getRiddenSpeed(Player player) {
         float sprintSpeedBonus = 0.12F; // Vanilla: 0.1F
         float f = player.isSprinting() && this.getJumpCooldown() == 0 ? sprintSpeedBonus : 0.0F;
         return (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) + f;
@@ -74,13 +67,11 @@ public abstract class TFGAbstractCamel extends Camel implements MammalProperties
     // Dromedary camels sprinting on dry blocks are a bit faster than an average horse (0.264 vs 0.225)
     // Bactrian camels sprinting on dry blocks are the same as the average horse (0.225 vs 0.225)
     @Override
-    protected float getBlockSpeedFactor()
-    {
+    protected float getBlockSpeedFactor() {
         // TODO: ADD PROPER TAG FOR FASTER BLOCKS
-        if ((Helpers.isBlock(level().getBlockState(blockPosition().below()), TFCTags.Blocks.FARMLAND)))
-        {
+        if ((Helpers.isBlock(level().getBlockState(blockPosition().below()), TFCTags.Blocks.FARMLAND))) {
             return 1.2F;
-        }
-        else return super.getBlockSpeedFactor();
+        } else
+            return super.getBlockSpeedFactor();
     }
 }
