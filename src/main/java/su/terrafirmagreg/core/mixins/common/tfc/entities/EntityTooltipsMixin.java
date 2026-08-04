@@ -51,6 +51,8 @@ import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSea
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
 import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
+import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamel;
+import su.terrafirmagreg.core.common.entity.camels.TFCDromedaryCamel;
 import su.terrafirmagreg.core.common.entity.charger.ChargerData;
 import su.terrafirmagreg.core.common.entity.fox.FoxData;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
@@ -77,6 +79,8 @@ public abstract class EntityTooltipsMixin {
         registry.register("chested_horse", ANIMAL, TFCChestedHorse.class);
         registry.register("rabbit", ANIMAL, TFCRabbit.class);
         registry.register("wild_animal", ANIMAL, WildAnimal.class);
+        registry.register("dromedary_camel", TFG_ANIMAL, TFCDromedaryCamel.class);
+        registry.register("bactrian_camel", TFG_ANIMAL, TFCBactrianCamel.class);
         registry.register("frog", FROG, TFCFrog.class);
         registry.register("squid", SQUID, TFCSquid.class);
         registry.register("fish", FISH, WaterAnimal.class);
@@ -298,6 +302,12 @@ public abstract class EntityTooltipsMixin {
         }
         if (entity instanceof TFCWraptor) {
             tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.wraptor"));
+        }
+        if (entity instanceof TFCDromedaryCamel) {
+            tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.dromedary_camel"));
+        }
+        if (entity instanceof TFCBactrianCamel) {
+            tooltip.accept(Component.translatable(TFGCore.MOD_ID + ".tooltip.attribution.bactrian_camel"));
         }
     };
 
