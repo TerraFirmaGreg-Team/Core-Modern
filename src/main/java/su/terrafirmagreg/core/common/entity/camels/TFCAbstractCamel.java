@@ -73,8 +73,6 @@ public abstract class TFCAbstractCamel extends Camel implements MammalProperties
         return (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) + f;
     }
 
-    // Dromedary camels sprinting on dry blocks are a bit faster than an average horse (0.264 vs 0.225)
-    // Bactrian camels sprinting on dry blocks are the same as the average horse (0.225 vs 0.225)
     @Override
     protected float getBlockSpeedFactor() {
         if ((Helpers.isBlock(level().getBlockState(blockPosition().below()), TFGTags.Blocks.CAMEL_FASTER_ON))) {

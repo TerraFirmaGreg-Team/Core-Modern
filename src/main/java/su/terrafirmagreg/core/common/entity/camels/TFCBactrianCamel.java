@@ -18,7 +18,6 @@ import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.config.animals.AnimalConfig;
 import net.dries007.tfc.config.animals.MammalConfig;
-import net.dries007.tfc.config.animals.ProducingMammalConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.events.AnimalProductEvent;
 import net.minecraft.core.BlockPos;
@@ -71,7 +70,6 @@ public class TFCBactrianCamel extends TFCAbstractCamel implements HorsePropertie
     private TFCAnimalProperties.Age lastAge;
     private final AnimalConfig config;
     private final MammalConfig mammalConfig;
-    private final ProducingMammalConfig producingMammalConfig;
 
     static double familiarityCap = 0.35;
     static int adulthoodDays = 80;
@@ -89,7 +87,6 @@ public class TFCBactrianCamel extends TFCAbstractCamel implements HorsePropertie
         this.lastFDecay = Calendars.get(level).getTotalDays();
         this.config = TFCConfig.SERVER.sheepConfig.inner().inner();
         this.mammalConfig = TFCConfig.SERVER.sheepConfig.inner();
-        this.producingMammalConfig = TFCConfig.SERVER.sheepConfig;
     }
 
     // region Config Bypass
@@ -345,6 +342,36 @@ public class TFCBactrianCamel extends TFCAbstractCamel implements HorsePropertie
     }
 
     @Override
+    public long getLastFamiliarityDecay() {
+        return this.lastFDecay;
+    }
+
+    @Override
+    public void setLastFamiliarityDecay(long days) {
+        this.lastFDecay = days;
+    }
+
+    @Override
+    public void setMated(long ticks) {
+        this.matingTime = ticks;
+    }
+
+    @Override
+    public long getMated() {
+        return this.matingTime;
+    }
+
+    @Override
+    public TFCAnimalProperties.Age getLastAge() {
+        return this.lastAge;
+    }
+
+    @Override
+    public void setLastAge(TFCAnimalProperties.Age lastAge) {
+        this.lastAge = lastAge;
+    }
+
+    @Override
     public CommonAnimalData animalData() {
         return ANIMAL_DATA;
     }
@@ -446,30 +473,6 @@ public class TFCBactrianCamel extends TFCAbstractCamel implements HorsePropertie
     protected void pushEntities() {
         if (!level().isClientSide)
             super.pushEntities();
-    }
-
-    public long getLastFamiliarityDecay() {
-        return this.lastFDecay;
-    }
-
-    public void setLastFamiliarityDecay(long days) {
-        this.lastFDecay = days;
-    }
-
-    public void setMated(long ticks) {
-        this.matingTime = ticks;
-    }
-
-    public long getMated() {
-        return this.matingTime;
-    }
-
-    public TFCAnimalProperties.Age getLastAge() {
-        return this.lastAge;
-    }
-
-    public void setLastAge(TFCAnimalProperties.Age lastAge) {
-        this.lastAge = lastAge;
     }
 
     static {

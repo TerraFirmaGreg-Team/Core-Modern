@@ -134,7 +134,7 @@ public class TFCDromedaryCamel extends TFCAbstractCamel implements HorseProperti
 
     @Override
     public void setInLove(@Nullable Player player) {
-    } // nobody could love a camel
+    }
 
     @Override
     public boolean canMate(Animal otherAnimal) {
@@ -245,6 +245,36 @@ public class TFCDromedaryCamel extends TFCAbstractCamel implements HorseProperti
     }
 
     @Override
+    public long getLastFamiliarityDecay() {
+        return this.lastFDecay;
+    }
+
+    @Override
+    public void setLastFamiliarityDecay(long days) {
+        this.lastFDecay = days;
+    }
+
+    @Override
+    public void setMated(long ticks) {
+        this.matingTime = ticks;
+    }
+
+    @Override
+    public long getMated() {
+        return this.matingTime;
+    }
+
+    @Override
+    public TFCAnimalProperties.Age getLastAge() {
+        return this.lastAge;
+    }
+
+    @Override
+    public void setLastAge(TFCAnimalProperties.Age lastAge) {
+        this.lastAge = lastAge;
+    }
+
+    @Override
     public CommonAnimalData animalData() {
         return ANIMAL_DATA;
     }
@@ -305,7 +335,6 @@ public class TFCDromedaryCamel extends TFCAbstractCamel implements HorseProperti
 
     @Override
     protected void customServerAiStep() {
-        // Don't want to call super.customServerAiStep() here because of CamelAi.updateActivity(this)
         ((Brain<TFCDromedaryCamel>) getBrain()).tick((ServerLevel) level(), this);
         TFCCamelAi.updateActivity(this);
     }
@@ -342,30 +371,6 @@ public class TFCDromedaryCamel extends TFCAbstractCamel implements HorseProperti
     protected void pushEntities() {
         if (!level().isClientSide)
             super.pushEntities();
-    }
-
-    public long getLastFamiliarityDecay() {
-        return this.lastFDecay;
-    }
-
-    public void setLastFamiliarityDecay(long days) {
-        this.lastFDecay = days;
-    }
-
-    public void setMated(long ticks) {
-        this.matingTime = ticks;
-    }
-
-    public long getMated() {
-        return this.matingTime;
-    }
-
-    public TFCAnimalProperties.Age getLastAge() {
-        return this.lastAge;
-    }
-
-    public void setLastAge(TFCAnimalProperties.Age lastAge) {
-        this.lastAge = lastAge;
     }
 
     static {
