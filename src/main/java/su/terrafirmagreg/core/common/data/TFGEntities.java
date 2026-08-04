@@ -2,6 +2,8 @@ package su.terrafirmagreg.core.common.data;
 
 import com.tterrag.registrate.util.entry.EntityEntry;
 
+import net.minecraft.client.model.CamelModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.world.entity.MobCategory;
@@ -36,6 +38,7 @@ import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFGWolfModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
+import su.terrafirmagreg.core.common.entity.camels.TFGBactrianCamelModel;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.fox.TFGFoxCollarLayer;
 import su.terrafirmagreg.core.common.entity.fox.TFGFoxModel;
@@ -197,5 +200,9 @@ public class TFGEntities {
         event.registerLayerDefinition(TFGSlimeModel.LAYER_LOCATION, TFGSlimeModel::createInnerBodyLayer);
         event.registerLayerDefinition(TFGSlimeOuterLayer.LAYER_LOCATION, TFGSlimeModel::createOuterBodyLayer);
         event.registerLayerDefinition(TFGSlimeFaceLayer.LAYER_LOCATION, TFGSlimeModel::createFaceLayer);
+        event.registerLayerDefinition(new ModelLayerLocation(
+                TFGCore.id("drodemary_camel"), "main"), CamelModel::createBodyLayer);
+        event.registerLayerDefinition(new ModelLayerLocation(
+                TFGCore.id("bactrian_camel"), "main"), TFGBactrianCamelModel::createBodyLayer);
     }
 }
