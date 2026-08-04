@@ -14,13 +14,13 @@ import net.dries007.tfc.common.entities.livestock.horse.HorseProperties;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.config.animals.AnimalConfig;
 import net.dries007.tfc.config.animals.MammalConfig;
+import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -40,7 +40,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 
@@ -72,6 +71,9 @@ public class TFCDromedaryCamel extends TFCAbstractCamel implements HorseProperti
 
     public TFCDromedaryCamel(EntityType<? extends Camel> type, Level level) {
         super(type, level);
+        this.lastAge = Age.CHILD;
+        this.matingTime = Calendars.get(level).getTicks();
+        this.lastFDecay = Calendars.get(level).getTotalDays();
         this.config = TFCConfig.SERVER.sheepConfig.inner().inner();
         this.mammalConfig = TFCConfig.SERVER.sheepConfig.inner();
     }
@@ -212,12 +214,9 @@ public class TFCDromedaryCamel extends TFCAbstractCamel implements HorseProperti
         if (spawnType != MobSpawnType.BREEDING) {
             initCommonAnimalData(level, difficulty, spawnType);
         }
+
         setPregnantTime(-1L);
         return spawnData;
-    }
-
-    public static boolean spawnRules(EntityType<? extends TFCDromedaryCamel> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand) {
-        return level.getBlockState(pos).isAir();
     }
 
     @Override

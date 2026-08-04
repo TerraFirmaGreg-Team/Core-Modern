@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data;
 
 import com.tterrag.registrate.util.entry.EntityEntry;
 
-import net.dries007.tfc.common.TFCTags;
 import net.minecraft.client.model.CamelModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;

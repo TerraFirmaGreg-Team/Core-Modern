@@ -31,7 +31,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -45,7 +44,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -86,6 +84,9 @@ public class TFCBactrianCamel extends TFCAbstractCamel implements HorsePropertie
 
     public TFCBactrianCamel(EntityType<? extends Camel> type, Level level) {
         super(type, level);
+        this.lastAge = Age.CHILD;
+        this.matingTime = Calendars.get(level).getTicks();
+        this.lastFDecay = Calendars.get(level).getTotalDays();
         this.config = TFCConfig.SERVER.sheepConfig.inner().inner();
         this.mammalConfig = TFCConfig.SERVER.sheepConfig.inner();
         this.producingMammalConfig = TFCConfig.SERVER.sheepConfig;
@@ -316,10 +317,6 @@ public class TFCBactrianCamel extends TFCAbstractCamel implements HorsePropertie
         }
         setPregnantTime(-1L);
         return spawnData;
-    }
-
-    public static boolean spawnRules(EntityType<? extends TFCBactrianCamel> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand) {
-        return level.getBlockState(pos).isAir();
     }
 
     @Override
