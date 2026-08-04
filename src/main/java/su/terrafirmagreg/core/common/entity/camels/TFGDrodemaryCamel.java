@@ -142,7 +142,7 @@ public class TFGDrodemaryCamel extends TFGAbstractCamel implements HorseProperti
                 }
 
                 final boolean canBeSaddled = !this.isBaby() && !this.isSaddled() && stack.is(Items.SADDLE);
-                if (/* TODO: this.isBodyArmorItem(stack) || */ canBeSaddled) {
+                if (this.isArmor(stack) || canBeSaddled) {
                     this.openCustomInventoryScreen(player);
                     return InteractionResult.sidedSuccess(this.level().isClientSide);
                 }

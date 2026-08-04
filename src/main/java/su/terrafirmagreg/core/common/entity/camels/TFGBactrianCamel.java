@@ -207,7 +207,7 @@ public class TFGBactrianCamel extends TFGAbstractCamel implements HorsePropertie
                 }
 
                 final boolean canBeSaddled = !this.isBaby() && !this.isSaddled() && stack.is(Items.SADDLE);
-                if (/* TODO: this.isBodyArmorItem(stack) || */ canBeSaddled) {
+                if (this.isArmor(stack) || canBeSaddled) {
                     this.openCustomInventoryScreen(player);
                     return InteractionResult.sidedSuccess(this.level().isClientSide);
                 }
@@ -233,19 +233,11 @@ public class TFGBactrianCamel extends TFGAbstractCamel implements HorsePropertie
         return this.getPassengers().size() <= 1;
     }
 
-    /*@Override
-    protected Vec3 getPassengerAttachmentPoint(Entity entity)
-    {
-        float f = 0.0F;
-        float f1 = (float) (this.isRemoved() ? 0.01F : ((CamelAccessor) this).invoke$getBodyAnchorAnimationYOffset(true, 0.0F, dimensions, partialTick));
-        return new Vec3(0.0, (double) f1, (double) (f * partialTick)).yRot(-this.getYRot() * (float) (Math.PI / 180.0));
-    }*/
-
     protected void positionRider(Entity passenger, Entity.MoveFunction callback) {
         int i = this.getPassengers().indexOf(passenger);
         if (i >= 0) {
             boolean flag = i == 0;
-            float f = 0.5F;
+            float f = 0F;
             float f1 = (float) (this.isRemoved() ? (double) 0.01F : ((CamelAccessor) this).invoke$getBodyAnchorAnimationYOffset(flag, 0.0F) + passenger.getMyRidingOffset());
             if (this.getPassengers().size() > 1) {
                 if (!flag) {
