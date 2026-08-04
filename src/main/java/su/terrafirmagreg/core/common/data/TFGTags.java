@@ -160,6 +160,7 @@ public final class TFGTags {
         public static final TagKey<EntityType<?>> NotRammedByRammers = createEntityTag("not_rammed_by_rammers");
         public static final TagKey<EntityType<?>> FishingNetScoopable = createEntityTag("fishing_net_scoopable");
         public static final TagKey<EntityType<?>> Genderless = createEntityTag("genderless");
+        public static final TagKey<EntityType<?>> RammingAnimals = createEntityTag("ramming_animals");
 
         private static TagKey<EntityType<?>> createEntityTag(String path) {
             return createEntityTag(TFGCore.id(path));

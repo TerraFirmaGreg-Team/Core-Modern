@@ -33,8 +33,8 @@ import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
-import su.terrafirmagreg.core.common.entity.camels.TFGBactrianCamelModel;
-import su.terrafirmagreg.core.common.entity.camels.TFGBactrianCamelRenderer;
+import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelModel;
+import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelRenderer;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.perf.SupportCache;
 
@@ -126,9 +126,9 @@ public class ForgeClientEventListener {
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
         StrutsFlywheelCompatLoader.registerStrutVisual(TFGBlockEntities.STRUT.get());
 
-        event.registerEntityRenderer(TFGEntities.TFG_DRODEMARY_CAMEL.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CamelModel::new, "drodemary_camel").shadow(0.7f)
+        event.registerEntityRenderer(TFGEntities.DROMEDARY_CAMEL.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CamelModel::new, "drodemary_camel").shadow(0.7f)
                 .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build());
-        event.registerEntityRenderer(TFGEntities.TFG_BACTRIAN_CAMEL.get(),
-                ctx -> new TFGBactrianCamelRenderer<>(ctx, new TFGBactrianCamelModel(ctx.bakeLayer(TFGBactrianCamelModel.LAYER_LOCATION)), 0.6f));
+        event.registerEntityRenderer(TFGEntities.BACTRIAN_CAMEL.get(),
+                ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f));
     }
 }

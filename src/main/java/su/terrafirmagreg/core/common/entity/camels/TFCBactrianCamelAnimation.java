@@ -5,7 +5,7 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-public class TFGBactrianCamelAnimation {
+public class TFCBactrianCamelAnimation {
     public static final AnimationDefinition CAMEL_WALK = AnimationDefinition.Builder.withLength(1.5F)
             .looping()
             .addAnimation(

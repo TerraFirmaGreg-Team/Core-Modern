@@ -51,7 +51,7 @@ import su.terrafirmagreg.core.common.entity.animals.tfcleopardseal.TFCLeopardSea
 import su.terrafirmagreg.core.common.entity.animals.tfcmongoose.TFCMongoose;
 import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFCWolfInterface;
 import su.terrafirmagreg.core.common.entity.axolotl.AxolotlData;
-import su.terrafirmagreg.core.common.entity.camels.TFGAbstractCamel;
+import su.terrafirmagreg.core.common.entity.camels.TFCAbstractCamel;
 import su.terrafirmagreg.core.common.entity.charger.ChargerData;
 import su.terrafirmagreg.core.common.entity.fox.FoxData;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
@@ -98,9 +98,9 @@ public abstract class EntityTooltipsMixin {
         registry.register("lemming", TFC_1_21, TFCLemming.class);
         registry.register("jerboa", TFC_1_21, TFCJerboa.class);
         registry.register("mongoose", TFC_1_21, TFCMongoose.class);
+        registry.register("camel", TFC_1_21, TFCAbstractCamel.class);
         registry.register("fox", TFC_FOX, TFCFox.class);
         registry.register("tamed_fox", TFG_FOX, TFGFox.class);
-        registry.register("camel", ANIMAL, TFGAbstractCamel.class);
     }
 
     @Unique

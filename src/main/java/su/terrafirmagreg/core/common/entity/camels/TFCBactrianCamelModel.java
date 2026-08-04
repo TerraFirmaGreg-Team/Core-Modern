@@ -12,7 +12,7 @@ import net.minecraft.util.Mth;
 
 import su.terrafirmagreg.core.TFGCore;
 
-public class TFGBactrianCamelModel extends HierarchicalAnimatedModel<TFGBactrianCamel> {
+public class TFCBactrianCamelModel extends HierarchicalAnimatedModel<TFCBactrianCamel> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(TFGCore.id("bactrian_camel"), "main");
 
     public static LayerDefinition createBodyLayer() {
@@ -84,7 +84,7 @@ public class TFGBactrianCamelModel extends HierarchicalAnimatedModel<TFGBactrian
     private final ModelPart left_hind_leg;
     private final ModelPart right_hind_leg;
 
-    public TFGBactrianCamelModel(ModelPart root) {
+    public TFCBactrianCamelModel(ModelPart root) {
         super(root);
         this.base = root.getChild("base");
         this.body = base.getChild("body");
@@ -110,17 +110,17 @@ public class TFGBactrianCamelModel extends HierarchicalAnimatedModel<TFGBactrian
     }
 
     @Override
-    public void setupAnim(TFGBactrianCamel animal, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(TFCBactrianCamel animal, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.applyHeadRotation(netHeadYaw, headPitch);
         wool_body.visible = animal.hasProduct();
         wool_shey.visible = animal.hasProduct();
-        this.animateWalk(TFGBactrianCamelAnimation.CAMEL_WALK, limbSwing, limbSwingAmount, 2.0F, 2.5F);
-        this.animate(animal.sitAnimationState, TFGBactrianCamelAnimation.CAMEL_SIT, ageInTicks, 1.0F);
-        this.animate(animal.sitPoseAnimationState, TFGBactrianCamelAnimation.CAMEL_SIT_POSE, ageInTicks, 1.0F);
-        this.animate(animal.sitUpAnimationState, TFGBactrianCamelAnimation.CAMEL_STANDUP, ageInTicks, 1.0F);
-        this.animate(animal.idleAnimationState, TFGBactrianCamelAnimation.CAMEL_IDLE, ageInTicks, 1.0F);
-        this.animate(animal.dashAnimationState, TFGBactrianCamelAnimation.CAMEL_DASH, ageInTicks, 1.0F);
+        this.animateWalk(TFCBactrianCamelAnimation.CAMEL_WALK, limbSwing, limbSwingAmount, 2.0F, 2.5F);
+        this.animate(animal.sitAnimationState, TFCBactrianCamelAnimation.CAMEL_SIT, ageInTicks, 1.0F);
+        this.animate(animal.sitPoseAnimationState, TFCBactrianCamelAnimation.CAMEL_SIT_POSE, ageInTicks, 1.0F);
+        this.animate(animal.sitUpAnimationState, TFCBactrianCamelAnimation.CAMEL_STANDUP, ageInTicks, 1.0F);
+        this.animate(animal.idleAnimationState, TFCBactrianCamelAnimation.CAMEL_IDLE, ageInTicks, 1.0F);
+        this.animate(animal.dashAnimationState, TFCBactrianCamelAnimation.CAMEL_DASH, ageInTicks, 1.0F);
     }
 
     @Override

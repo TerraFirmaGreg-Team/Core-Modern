@@ -20,15 +20,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public abstract class TFGAbstractCamel extends Camel implements MammalProperties, Temptable {
-    protected TFGAbstractCamel(EntityType<? extends Camel> entityType, Level level) {
+public abstract class TFCAbstractCamel extends Camel implements MammalProperties, Temptable {
+    protected TFCAbstractCamel(EntityType<? extends Camel> entityType, Level level) {
         super(entityType, level);
     }
 
     @Override
-    public @Nullable TFGAbstractCamel getBreedOffspring(ServerLevel level, AgeableMob other) {
+    public @Nullable TFCAbstractCamel getBreedOffspring(ServerLevel level, AgeableMob other) {
         final AgeableMob mob = MammalProperties.super.getBreedOffspring(level, other);
-        return mob instanceof TFGAbstractCamel camel ? camel : null;
+        return mob instanceof TFCAbstractCamel camel ? camel : null;
     }
 
     @Override

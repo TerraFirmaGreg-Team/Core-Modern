@@ -24,7 +24,9 @@ import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.animal.camel.CamelAi;
 import net.minecraft.world.entity.schedule.Activity;
 
-public class TFGCamelAi {
+import su.terrafirmagreg.core.common.entity.ai.prey.AvoidPredatorsAndRammersBehavior;
+
+public class TFCCamelAi {
     protected static final ImmutableList<SensorType<? extends Sensor<? super Camel>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS,
             SensorType.NEAREST_ADULT, SensorType.HURT_BY, TFCBrain.TEMPTATION_SENSOR.get());
@@ -46,11 +48,11 @@ public class TFGCamelAi {
             MemoryModuleType.IS_PANICKING,
             MemoryModuleType.GAZE_COOLDOWN_TICKS);
 
-    public static Brain.Provider<TFGAbstractCamel> brainProvider() {
+    public static Brain.Provider<TFCAbstractCamel> brainProvider() {
         return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
     }
 
-    public static Brain<?> makeBrain(Brain<? extends TFGAbstractCamel> brain) {
+    public static Brain<?> makeBrain(Brain<? extends TFCAbstractCamel> brain) {
         initCoreActivity(brain);
         initIdleActivity(brain);
         initRetreatActivity(brain);
@@ -62,7 +64,7 @@ public class TFGCamelAi {
         return brain;
     }
 
-    private static void initCoreActivity(Brain<? extends TFGAbstractCamel> brain) {
+    private static void initCoreActivity(Brain<? extends TFCAbstractCamel> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
                 new Swim(0.8F),
                 new LookAtTargetSink(45, 90),
@@ -71,10 +73,10 @@ public class TFGCamelAi {
                 new CountDownCooldownTicks(MemoryModuleType.GAZE_COOLDOWN_TICKS)));
     }
 
-    public static void initIdleActivity(Brain<? extends TFGAbstractCamel> brain) {
+    public static void initIdleActivity(Brain<? extends TFCAbstractCamel> brain) {
         brain.addActivity(Activity.IDLE, 0, ImmutableList.of(
                 SetEntityLookTargetSometimes.create(EntityType.PLAYER, 6.0F, UniformInt.of(30, 60)),
-                // TODO: AvoidPredatorAndRammersBehavior.create(true),
+                AvoidPredatorsAndRammersBehavior.create(true),
                 new BreedBehavior<>(2.0F),
                 new CamelAi.CamelPanic(4.0F),
                 new FollowTemptation(e -> e.isBaby() ? 2.5F : 3.5F),
@@ -83,7 +85,7 @@ public class TFGCamelAi {
                 createIdleMovementBehaviors()));
     }
 
-    public static RunOne<TFGAbstractCamel> createIdleMovementBehaviors() {
+    public static RunOne<TFCAbstractCamel> createIdleMovementBehaviors() {
         return new RunOne<>(
                 ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT),
                 ImmutableList.of(
@@ -93,7 +95,7 @@ public class TFGCamelAi {
                         Pair.of(new DoNothing(30, 60), 1)));
     }
 
-    public static void initRetreatActivity(Brain<? extends TFGAbstractCamel> brain) {
+    public static void initRetreatActivity(Brain<? extends TFCAbstractCamel> brain) {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.AVOID, 10, ImmutableList.of(
                 SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 3.2F, 15, false),
                 new RunOne<>(
@@ -107,7 +109,7 @@ public class TFGCamelAi {
                 MemoryModuleType.AVOID_TARGET);
     }
 
-    public static void updateActivity(TFGAbstractCamel camel) {
+    public static void updateActivity(TFCAbstractCamel camel) {
         camel.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.AVOID, Activity.IDLE));
     }
 }
