@@ -113,7 +113,6 @@ public class TFCDromedaryCamel extends TFCAbstractCamel implements HorseProperti
                 .add(Attributes.MAX_HEALTH, 32.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.1F)
                 .add(Attributes.JUMP_STRENGTH, 0.42F);
-        // TODO: 1.21.1 thing? .add(Attributes.STEP_HEIGHT, 1.5);
     }
 
     @Override
