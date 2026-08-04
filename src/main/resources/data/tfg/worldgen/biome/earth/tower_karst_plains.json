@@ -347,6 +347,18 @@
                 "minCount": 1,
                 "type": "tfg:jerboa",
                 "maxCount": 3
+            },
+            {
+                "type": "tfg:dromedary_camel",
+                "weight": 1,
+                "minCount": 1,
+                "maxCount": 3
+            },
+            {
+                "type": "tfg:bactrian_camel",
+                "weight": 1,
+                "minCount": 1,
+                "maxCount": 3
             }
         ],
         "monster": [
