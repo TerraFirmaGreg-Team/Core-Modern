@@ -8,7 +8,6 @@ import net.minecraft.world.phys.AABB;
 
 import team.terrafirmagreg.jellies.common.entity.JellieBase;
 
-import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.modifier.TempModifier;
 
 @FunctionalInterface
@@ -20,11 +19,7 @@ public interface EntityTemperatureProvider {
 
         for (Entity entity : player.level().getEntitiesOfClass(Entity.class,
                 new AABB(player.blockPosition()).inflate(5.0D, 2.0D, 5.0D))) {
-            if (entity.getType().is(TFCAmbiental.HOT_ENTITIES)) {
-                change += 1F;
-            } else if (entity.getType().is(TFCAmbiental.COLD_ENTITIES)) {
-                change -= 1F;
-            } else if (entity instanceof JellieBase jellie) {
+            if (entity instanceof JellieBase jellie) {
                 change += jellie.getAmbientalTemperature();
             }
         }
