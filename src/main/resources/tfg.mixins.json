@@ -104,6 +104,7 @@
         "common.flywheel.AnimatedBlazeBurnerMixin",
         "common.forge.CapabilityProviderMixin",
         "common.forge.ForgeConfigSpecMixin",
+        "common.fowlplay.CustomMobCategoryMixin",
         "common.grappling_hook.AirFrictionControllerMixin",
         "common.grappling_hook.GrappleControllerMixin",
         "common.grappling_hook.GrapplehookItemMixin",
