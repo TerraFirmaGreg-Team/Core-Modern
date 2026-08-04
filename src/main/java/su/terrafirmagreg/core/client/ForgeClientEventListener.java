@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.client;
 
 import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
 
-import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.client.TFCColors;
 import net.dries007.tfc.client.render.entity.SimpleMobRenderer;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -130,6 +129,6 @@ public class ForgeClientEventListener {
         event.registerEntityRenderer(TFGEntities.TFG_DRODEMARY_CAMEL.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CamelModel::new, "drodemary_camel").shadow(0.7f)
                 .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build());
         event.registerEntityRenderer(TFGEntities.TFG_BACTRIAN_CAMEL.get(),
-                ctx -> new TFGBactrianCamelRenderer<>(ctx, new TFGBactrianCamelModel(RenderHelpers.bakeSimple(ctx, "bactrian_camel")), 0.6f));
+                ctx -> new TFGBactrianCamelRenderer<>(ctx, new TFGBactrianCamelModel(ctx.bakeLayer(TFGBactrianCamelModel.LAYER_LOCATION)), 0.6f));
     }
 }

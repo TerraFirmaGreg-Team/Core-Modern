@@ -290,7 +290,7 @@ public class TFGBactrianCamel extends TFGAbstractCamel implements HorsePropertie
         return spawnData;
     }
 
-    public static boolean spawnRules(EntityType<? extends TFGDrodemaryCamel> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand) {
+    public static boolean spawnRules(EntityType<? extends TFGBactrianCamel> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand) {
         return level.getBlockState(pos).isAir();
     }
 

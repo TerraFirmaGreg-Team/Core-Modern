@@ -6,6 +6,7 @@ import net.minecraft.client.model.CamelModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -38,6 +39,7 @@ import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFGWolfModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
+import su.terrafirmagreg.core.common.entity.camels.TFGBactrianCamel;
 import su.terrafirmagreg.core.common.entity.camels.TFGBactrianCamelModel;
 import su.terrafirmagreg.core.common.entity.camels.TFGDrodemaryCamel;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
@@ -61,7 +63,7 @@ import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptorRenderer;
 @SuppressWarnings("unused")
 public class TFGEntities {
     public static final ModelLayerLocation TFG_DRODEMARY_CAMEL_LAYER_LOCATION = new ModelLayerLocation(
-            TFGCore.id("drodemary_camel"), "main");
+            ResourceLocation.fromNamespaceAndPath("tfc", "drodemary_camel"), "main");
 
     public static void init() {
     }
@@ -73,12 +75,12 @@ public class TFGEntities {
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFGDrodemaryCamel::spawnRules)
             .register();
 
-    /* public static final EntityEntry<TFGBactrianCamel> TFG_BACTRIAN_CAMEL = TFGCore.REGISTRATE.entity("bactrian_camel", TFGBactrianCamel::new, MobCategory.CREATURE)
+    public static final EntityEntry<TFGBactrianCamel> TFG_BACTRIAN_CAMEL = TFGCore.REGISTRATE.entity("bactrian_camel", TFGBactrianCamel::new, MobCategory.CREATURE)
             .properties(p -> p.sized(1.7F, 2.375F).clientTrackingRange(10))
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFGBactrianCamel::createAttributes)
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFGBactrianCamel::spawnRules)
-            .register(); */
+            .register();
 
     public static final EntityEntry<TFGSlime> TFG_SLIME = TFGCore.REGISTRATE.entity("slime", TFGSlime::new, MobCategory.AMBIENT)
             .properties(p -> p.sized(1F, 1F).clientTrackingRange(8))
