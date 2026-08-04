@@ -17,7 +17,8 @@
         "tfcambiental:wool_pants",
         "tfcambiental:silk_pants",
         "tfcambiental:burlap_pants",
-        "tfcambiental:insulated_leather_pants"
+        "tfcambiental:insulated_leather_pants",
+        "tfcambiental:leather_apron"
     ],
     "replace": false
 }
