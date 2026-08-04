@@ -79,8 +79,8 @@ public abstract class EntityTooltipsMixin {
         registry.register("chested_horse", ANIMAL, TFCChestedHorse.class);
         registry.register("rabbit", ANIMAL, TFCRabbit.class);
         registry.register("wild_animal", ANIMAL, WildAnimal.class);
-        registry.register("dromedary_camel", ANIMAL, TFCDromedaryCamel.class);
-        registry.register("bactrian_camel", ANIMAL, TFCBactrianCamel.class);
+        registry.register("dromedary_camel", TFG_ANIMAL, TFCDromedaryCamel.class);
+        registry.register("bactrian_camel", TFG_ANIMAL, TFCBactrianCamel.class);
         registry.register("frog", FROG, TFCFrog.class);
         registry.register("squid", SQUID, TFCSquid.class);
         registry.register("fish", FISH, WaterAnimal.class);
