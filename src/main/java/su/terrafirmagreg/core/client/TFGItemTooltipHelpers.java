@@ -14,6 +14,9 @@ import net.dries007.tfc.common.blocks.devices.BellowsBlock;
 import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.dries007.tfc.common.blocks.plant.fruit.FruitTreeSaplingBlock;
 import net.dries007.tfc.common.blocks.wood.TFCSaplingBlock;
+import net.dries007.tfc.common.capabilities.VesselLike;
+import net.dries007.tfc.common.recipes.HeatingRecipe;
+import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
 import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
@@ -23,6 +26,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
@@ -54,6 +58,7 @@ public class TFGItemTooltipHelpers {
     private static final TagKey<Fluid> TFC_AGED_ALCOHOLS = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfcagedalcohol", "aged_alcohols"));
     private static final TagKey<Fluid> TFG_COOLING_DRINK = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "cooling_drinks"));
     private static final TagKey<Fluid> TFG_WARMING_DRINK = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "warming_drinks"));
+    private static final TagKey<Item> TFC_FIRED_VESSELS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "fired_vessels"));
 
     @SubscribeEvent
     public static void onTooltip(@NotNull ItemTooltipEvent event) {
@@ -182,6 +187,29 @@ public class TFGItemTooltipHelpers {
                         event.getToolTip().add(1, Component.translatable("tfg.tooltip.warming_foods"));
                 }
             });
+
+            // add overflow warning to vessels if needed
+            if (stack.is(TFC_FIRED_VESSELS)) {
+                VesselLike vessel = VesselLike.get(stack);
+                if (vessel != null && vessel.mode() == VesselLike.Mode.INVENTORY) {
+                    int totalVolume = 0;
+                    for (int i = 0; i < 4; i++) {
+                        ItemStack vesselStack = vessel.getStackInSlot(i);
+                        if (!vesselStack.isEmpty()) {
+                            HeatingRecipe recipe = HeatingRecipe.getRecipe(vesselStack);
+                            if (recipe != null) {
+                                FluidStack fluidOutput = recipe.assembleFluid(new ItemStackInventory(vesselStack));
+                                if (!fluidOutput.isEmpty()) {
+                                    totalVolume += fluidOutput.getAmount() * vesselStack.getCount();
+                                }
+                            }
+                        }
+                    }
+                    if (totalVolume > 3024) {
+                        text.add(1, Component.translatable("tfg.tooltip.vessel_warning"));
+                    }
+                }
+            }
         }
     }
 
