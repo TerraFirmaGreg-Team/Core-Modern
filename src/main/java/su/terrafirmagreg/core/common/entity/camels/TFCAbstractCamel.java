@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.entity.camels;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.Temptable;
 import net.dries007.tfc.common.entities.livestock.MammalProperties;
 import net.dries007.tfc.util.Helpers;
@@ -20,6 +19,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import su.terrafirmagreg.core.common.data.TFGTags;
+
 public abstract class TFCAbstractCamel extends Camel implements MammalProperties, Temptable {
     protected TFCAbstractCamel(EntityType<? extends Camel> entityType, Level level) {
         super(entityType, level);
@@ -33,8 +34,7 @@ public abstract class TFCAbstractCamel extends Camel implements MammalProperties
 
     @Override
     public TagKey<Item> getFoodTag() {
-        // TODO: ADD PROPER TAG
-        return TFCTags.Items.FOODS;
+        return TFGTags.Items.CAMEL_FOOD;
     }
 
     public boolean vanillaParentingCheck(AbstractHorse camel) {
@@ -68,8 +68,7 @@ public abstract class TFCAbstractCamel extends Camel implements MammalProperties
     // Bactrian camels sprinting on dry blocks are the same as the average horse (0.225 vs 0.225)
     @Override
     protected float getBlockSpeedFactor() {
-        // TODO: ADD PROPER TAG FOR FASTER BLOCKS
-        if ((Helpers.isBlock(level().getBlockState(blockPosition().below()), TFCTags.Blocks.FARMLAND))) {
+        if ((Helpers.isBlock(level().getBlockState(blockPosition().below()), TFGTags.Blocks.CAMEL_FASTER_ON))) {
             return 1.2F;
         } else
             return super.getBlockSpeedFactor();

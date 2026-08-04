@@ -49,6 +49,7 @@ public final class TFGTags {
         public static final TagKey<Item> TreatedWoodGreenhouseCasings = createItemTag("treated_wood_greenhouse_casings");
 
         public static final TagKey<Item> SEAL_FOOD = createItemTag("seal_food");
+        public static final TagKey<Item> CAMEL_FOOD = createItemTag("camel_food");
 
         public static final TagKey<Item> PrecisionFabricatorDippedItems = createItemTag("precision_fabricator_dipped_items");
         public static final TagKey<Item> PrecisionFabricatorHolderRods = createItemTag("precision_fabricator_holder_rods");
@@ -121,6 +122,7 @@ public final class TFGTags {
         public static final TagKey<Block> IsAnemone = createBlockTag("is_anemone");
         public static final TagKey<Block> NOT_SLOWED_WITH_SNOWSHOES = createBlockTag("not_slowed_with_snowshoes");
         public static final TagKey<Block> TRACK_REPLACEABLE = createBlockTag("track_replaceable");
+        public static final TagKey<Block> CAMEL_FASTER_ON = createBlockTag("camel_faster_on");
 
         public static final TagKey<Block> GIRDER = createBlockTag("girder");
         public static final TagKey<Block> PAVING_GIRDER = createBlockTag("paving_girder");
