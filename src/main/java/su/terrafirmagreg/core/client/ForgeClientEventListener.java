@@ -126,7 +126,7 @@ public class ForgeClientEventListener {
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
         StrutsFlywheelCompatLoader.registerStrutVisual(TFGBlockEntities.STRUT.get());
 
-        event.registerEntityRenderer(TFGEntities.DROMEDARY_CAMEL.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CamelModel::new, "drodemary_camel").shadow(0.7f)
+        event.registerEntityRenderer(TFGEntities.DROMEDARY_CAMEL.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CamelModel::new, "dromedary_camel").shadow(0.7f)
                 .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build());
         event.registerEntityRenderer(TFGEntities.BACTRIAN_CAMEL.get(),
                 ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f));
