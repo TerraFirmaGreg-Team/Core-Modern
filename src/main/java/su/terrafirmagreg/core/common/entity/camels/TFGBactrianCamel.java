@@ -75,17 +75,64 @@ public class TFGBactrianCamel extends TFGAbstractCamel implements HorsePropertie
     private final AnimalConfig config;
     private final MammalConfig mammalConfig;
     private final ProducingMammalConfig producingMammalConfig;
-    protected final Supplier<Integer> produceTicks;
-    protected final Supplier<Double> produceFamiliarity;
+
+    static double familiarityCap = 0.35;
+    static int adulthoodDays = 80;
+    static int uses = 80;
+    static boolean eatsRottenFood = false;
+    static int produceTicks = 168000;
+    static double produceFamiliarity = 0.15;
+    static int childCount = 1;
+    static long gestationDays = 24;
 
     public TFGBactrianCamel(EntityType<? extends Camel> type, Level level) {
         super(type, level);
         this.config = TFCConfig.SERVER.sheepConfig.inner().inner();
         this.mammalConfig = TFCConfig.SERVER.sheepConfig.inner();
         this.producingMammalConfig = TFCConfig.SERVER.sheepConfig;
-        this.produceTicks = TFCConfig.SERVER.sheepConfig.produceTicks();
-        this.produceFamiliarity = TFCConfig.SERVER.sheepConfig.produceFamiliarity();
     }
+
+    // region Config Bypass
+    @Override
+    public float getAdultFamiliarityCap() {
+        return (float) familiarityCap;
+    }
+
+    @Override
+    public int getDaysToAdulthood() {
+        return adulthoodDays;
+    }
+
+    @Override
+    public int getUsesToElderly() {
+        return uses;
+    }
+
+    @Override
+    public boolean eatsRottenFood() {
+        return eatsRottenFood;
+    }
+
+    @Override
+    public boolean isReadyForAnimalProduct() {
+        return getFamiliarity() > produceFamiliarity && hasProduct();
+    }
+
+    @Override
+    public long getProductsCooldown() {
+        return Math.max(0, produceTicks + getProducedTick() - Calendars.get(level()).getTicks());
+    }
+
+    @Override
+    public int getChildCount() {
+        return childCount;
+    }
+
+    @Override
+    public long getGestationDays() {
+        return gestationDays;
+    }
+    // endregion
 
     @Override
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
@@ -103,18 +150,8 @@ public class TFGBactrianCamel extends TFGAbstractCamel implements HorsePropertie
     }
 
     @Override
-    public boolean isReadyForAnimalProduct() {
-        return (getFamiliarity() > produceFamiliarity.get() && hasProduct()) && getAgeType() == Age.ADULT;
-    }
-
-    @Override
     public void setProductsCooldown() {
         setProducedTick(Calendars.get(level()).getTicks());
-    }
-
-    @Override
-    public long getProductsCooldown() {
-        return Math.max(0, produceTicks.get() + getProducedTick() - Calendars.get(level()).getTicks());
     }
 
     public long getProducedTick() {
@@ -269,7 +306,7 @@ public class TFGBactrianCamel extends TFGAbstractCamel implements HorsePropertie
 
     @Override
     public boolean isTamed() {
-        return getFamiliarity() > produceFamiliarity.get();
+        return getFamiliarity() > produceFamiliarity;
     }
 
     @Override

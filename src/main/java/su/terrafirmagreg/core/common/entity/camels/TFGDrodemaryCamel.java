@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.entity.camels;
 
+import net.dries007.tfc.util.calendar.Calendars;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Dynamic;
@@ -63,11 +64,48 @@ public class TFGDrodemaryCamel extends TFGAbstractCamel implements HorseProperti
     private final AnimalConfig config;
     private final MammalConfig mammalConfig;
 
+    static double familiarityCap = 0.35;
+    static int adulthoodDays = 80;
+    static int uses = 60;
+    static boolean eatsRottenFood = false;
+    static int childCount = 1;
+    static long gestationDays = 19;
+
     public TFGDrodemaryCamel(EntityType<? extends Camel> type, Level level) {
         super(type, level);
-        this.config = TFCConfig.SERVER.catConfig.inner();
-        this.mammalConfig = TFCConfig.SERVER.catConfig;
+        this.config = TFCConfig.SERVER.sheepConfig.inner().inner();
+        this.mammalConfig = TFCConfig.SERVER.sheepConfig.inner();
     }
+
+    // region Config Bypass
+    @Override
+    public float getAdultFamiliarityCap() {
+        return (float) familiarityCap;
+    }
+
+    @Override
+    public int getDaysToAdulthood() {
+        return adulthoodDays;
+    }
+
+    @Override
+    public int getUsesToElderly() {
+        return uses;
+    }
+
+    @Override
+    public boolean eatsRottenFood() {
+        return eatsRottenFood;
+    }
+
+    @Override
+    public int getChildCount() {
+        return childCount;
+    }
+
+    @Override
+    public long getGestationDays() { return gestationDays; }
+    // endregion
 
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseHorseAttributes()
