@@ -80,6 +80,7 @@ public abstract class EntityTooltipsMixin {
         registry.register("chested_horse", ANIMAL, TFCChestedHorse.class);
         registry.register("rabbit", ANIMAL, TFCRabbit.class);
         registry.register("wild_animal", ANIMAL, WildAnimal.class);
+        registry.register("camel", ANIMAL, TFCAbstractCamel.class);
         registry.register("frog", FROG, TFCFrog.class);
         registry.register("squid", SQUID, TFCSquid.class);
         registry.register("fish", FISH, WaterAnimal.class);
@@ -100,7 +101,6 @@ public abstract class EntityTooltipsMixin {
         registry.register("lemming", TFC_1_21, TFCLemming.class);
         registry.register("jerboa", TFC_1_21, TFCJerboa.class);
         registry.register("mongoose", TFC_1_21, TFCMongoose.class);
-        registry.register("camel", TFC_1_21, TFCAbstractCamel.class);
         registry.register("fox", TFC_FOX, TFCFox.class);
         registry.register("tamed_fox", TFG_FOX, TFGFox.class);
     }
