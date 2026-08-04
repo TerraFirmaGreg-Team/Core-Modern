@@ -65,9 +65,22 @@
         "endermanoverhaul:flower_fields_enderman": {
             "charge": 0.7,
             "energy_budget": 0.2
+        },
+        "tfg:jerboa": {
+          "charge": 0.7,
+          "energy_budget": 0.2
         }
     },
-    "spawners": {"monster": [
+    "spawners": {
+      "creature": [
+        {
+          "weight": 2,
+          "minCount": 1,
+          "type": "tfg:jerboa",
+          "maxCount": 3
+        }
+      ],
+      "monster": [
         {
             "weight": 100,
             "minCount": 4,
