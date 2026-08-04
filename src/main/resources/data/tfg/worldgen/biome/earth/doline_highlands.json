@@ -71,10 +71,10 @@
     "spawners": {
         "ambient": [
             {
-                "weight": 100,
-                "minCount": 3,
+                "weight": 2,
+                "minCount": 1,
                 "type": "jellies:herbal",
-                "maxCount": 4
+                "maxCount": 2
             },
             {
                 "weight": 100,
