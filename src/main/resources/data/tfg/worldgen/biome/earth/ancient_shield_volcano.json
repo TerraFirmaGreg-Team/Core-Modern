@@ -70,20 +70,98 @@
     "spawners": {
         "ambient": [
             {
-                "weight": 2,
+                "weight": 50,
                 "minCount": 1,
-                "type": "jellies:herbal",
+                "type": "minecraft:bat",
                 "maxCount": 2
             },
             {
-                "weight": 2,
+                "weight": 20,
                 "minCount": 1,
-                "type": "jellies:phosphorum",
-                "maxCount": 2
+                "type": "fowlplay:blue_jay",
+                "maxCount": 1
             },
             {
-                "weight": 2,
+                "weight": 20,
+                "minCount": 1,
+                "type": "fowlplay:cardinal",
+                "maxCount": 1
+            },
+            {
+                "weight": 30,
+                "minCount": 1,
+                "type": "fowlplay:chickadee",
+                "maxCount": 1
+            },
+            {
+                "weight": 20,
+                "minCount": 1,
+                "type": "fowlplay:crow",
+                "maxCount": 3
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "fowlplay:goose",
+                "maxCount": 4
+            },
+            {
+                "weight": 30,
+                "minCount": 2,
+                "type": "fowlplay:gull",
+                "maxCount": 5
+            },
+            {
+                "weight": 5,
+                "minCount": 1,
+                "type": "fowlplay:hawk",
+                "maxCount": 1
+            },
+            {
+                "weight": 20,
                 "minCount": 3,
+                "type": "fowlplay:penguin",
+                "maxCount": 5
+            },
+            {
+                "weight": 30,
+                "minCount": 2,
+                "type": "fowlplay:pigeon",
+                "maxCount": 5
+            },
+            {
+                "weight": 20,
+                "minCount": 1,
+                "type": "fowlplay:raven",
+                "maxCount": 2
+            },
+            {
+                "weight": 30,
+                "minCount": 1,
+                "type": "fowlplay:robin",
+                "maxCount": 2
+            },
+            {
+                "weight": 30,
+                "minCount": 2,
+                "type": "fowlplay:sparrow",
+                "maxCount": 4
+            },
+            {
+                "weight": 15,
+                "minCount": 2,
+                "type": "jellies:herbal",
+                "maxCount": 4
+            },
+            {
+                "weight": 15,
+                "minCount": 2,
+                "type": "jellies:phosphorum",
+                "maxCount": 4
+            },
+            {
+                "weight": 15,
+                "minCount": 2,
                 "type": "jellies:rock",
                 "maxCount": 4
             }

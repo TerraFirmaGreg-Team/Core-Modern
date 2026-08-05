@@ -62,20 +62,20 @@
         }],
         "ambient": [
             {
-                "weight": 2,
+                "weight": 50,
                 "minCount": 1,
-                "type": "jellies:herbal",
+                "type": "minecraft:bat",
                 "maxCount": 2
             },
             {
-                "weight": 2,
-                "minCount": 1,
-                "type": "jellies:phosphorum",
-                "maxCount": 2
+                "weight": 30,
+                "minCount": 2,
+                "type": "fowlplay:gull",
+                "maxCount": 5
             },
             {
-                "weight": 2,
-                "minCount": 3,
+                "weight": 15,
+                "minCount": 2,
                 "type": "jellies:rock",
                 "maxCount": 4
             }
