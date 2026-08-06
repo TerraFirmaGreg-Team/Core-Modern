@@ -198,6 +198,7 @@
         "common.minecraft.entities.AxolotlMixin",
         "common.minecraft.entities.BatMixin",
         "common.minecraft.entities.BlazeMixin",
+        "common.minecraft.entities.CamelAccessor",
         "common.minecraft.entities.DrownedMixin",
         "common.minecraft.entities.HuskMixin",
         "common.minecraft.entities.MobMixin",

@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,6 +33,17 @@ public abstract class RocketMixin extends Entity {
 
     @Unique
     private final Rocket tfg$self = (Rocket) (Object) this;
+
+    @Unique
+    private long tfg$launchStartMs = -1L;
+
+    @Final
+    @Shadow
+    public static EntityDataAccessor<Integer> LAUNCH_TICKS;
+
+    @Final
+    @Shadow
+    public static int COUNTDOWN_LENGTH;
 
     @Mutable
     @Final
@@ -118,4 +131,19 @@ public abstract class RocketMixin extends Entity {
         return super.canAddPassenger(pPassenger);
     }
 
+    @Inject(method = "initiateLaunchSequence", at = @At("RETURN"))
+    private void tfg$recordLaunchStart(CallbackInfo ci) {
+        tfg$launchStartMs = System.currentTimeMillis();
+    }
+
+    @Redirect(method = "tick", remap = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/network/syncher/SynchedEntityData;set(Lnet/minecraft/network/syncher/EntityDataAccessor;Ljava/lang/Object;)V", ordinal = 0))
+    @SuppressWarnings("unchecked")
+    private void tfg$setRealTimeTicks(SynchedEntityData entityData, EntityDataAccessor<?> key, Object value) {
+        if (tfg$launchStartMs < 0L) {
+            entityData.set((EntityDataAccessor<Integer>) key, (Integer) value);
+            return;
+        }
+        // 1 tick = 50ms
+        entityData.set((EntityDataAccessor<Integer>) key, (int) ((COUNTDOWN_LENGTH * 50L - (System.currentTimeMillis() - tfg$launchStartMs)) / 50L));
+    }
 }

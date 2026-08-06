@@ -38,6 +38,7 @@ import net.dries007.tfc.common.blocks.rock.AqueductBlock;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.level.block.Block;
@@ -47,14 +48,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import top.theillusivec4.curios.api.CuriosApi;
 
+import su.terrafirmagreg.core.common.block.ParticleEmitterDecorationBlock;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Mars;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
-import su.terrafirmagreg.tfcambiental.TFCAmbiental;
 import su.terrafirmagreg.tfcambiental.TFCAmbientalConfig;
 import su.terrafirmagreg.tfcambiental.api.BlockTemperatureProvider.TempModifierSpec;
 import su.terrafirmagreg.tfcambiental.item.TFCAmbientalItems;
@@ -64,10 +66,7 @@ import su.terrafirmagreg.tfcambiental.modifier.TempModifierStorage;
 @FunctionalInterface
 public interface BlockTemperatureProvider {
     List<BlockTemperatureProvider> PROVIDERS = List.of(
-            BlockTemperatureProvider::handleHotStuff,
-            BlockTemperatureProvider::handleColdStuff,
             BlockTemperatureProvider::handleSnow,
-            BlockTemperatureProvider::handleWarmStuff,
             BlockTemperatureProvider::getBlockTempModifier);
 
     Optional<TempModifier> getModifier(Player player, BlockPos pos, BlockState state);
@@ -136,22 +135,10 @@ public interface BlockTemperatureProvider {
         });
     }
 
-    static Optional<TempModifier> handleHotStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.HOT_STUFF) ? Optional.of(new TempModifier(3f, 0.2f, -15f, true)) : TempModifier.none();
-    }
-
-    static Optional<TempModifier> handleColdStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.COLD_STUFF) ? Optional.of(new TempModifier(-0.5f, 0.2f, true)) : TempModifier.none();
-    }
-
     static Optional<TempModifier> handleSnow(Player player, BlockPos pos, BlockState state) {
         return state.is(Blocks.SNOW) && EquipmentTemperatureProvider.getEquipmentByType(player, ArmorItem.Type.BOOTS).isEmpty()
                 ? Optional.of(new TempModifier(-0.5f, 0.5f))
                 : TempModifier.none();
-    }
-
-    static Optional<TempModifier> handleWarmStuff(Player player, BlockPos pos, BlockState state) {
-        return state.is(TFCAmbiental.WARM_STUFF) ? Optional.of(new TempModifier(1f, 0f, -5f, true)) : TempModifier.none();
     }
 
     private static boolean hasProtection(Player player) {
@@ -237,7 +224,7 @@ public interface BlockTemperatureProvider {
 
     static Optional<TempModifier> handleIHeatBlock(Player player, BlockEntity entity) {
         return entity.getCapability(HeatCapability.BLOCK_CAPABILITY)
-                .map(cap -> new TempModifier(cap.getTemperature() / 140f, 0));
+                .map(cap -> new TempModifier(Mth.clamp(cap.getTemperature(), 0f, 1600f) / 140f, 0));
     }
 
     record TempModifierSpec(float change, float potency, boolean good) {
@@ -251,16 +238,24 @@ public interface BlockTemperatureProvider {
     }
 
     static final Map<Block, TempModifierSpec> SIMPLE_BLOCKS = Stream.concat(
-            Stream.of(
-                    Map.entry(Blocks.PACKED_ICE, new TempModifierSpec(-2.0F, 1.0F, true)),
-                    Map.entry(Blocks.BLUE_ICE, new TempModifierSpec(-6.0F, 1.0F, true)),
-                    Map.entry(TFCBlocks.SEA_ICE.get(), new TempModifierSpec(-2.0F, 1.0F, true)),
-                    Map.entry(TFGBlocks.DRY_ICE.get(), new TempModifierSpec(-2.0F, 1.0F, true)),
-                    Map.entry(TFGBlocks_Mars.MARS_ICE.get(), new TempModifierSpec(-3.0F, 1.0F, true)),
-                    Map.entry(Blocks.TORCH, new TempModifierSpec(1.0F, 0.0F, true))),
-            TFCBlocks.MAGMA_BLOCKS.values().stream()
-                    .map(RegistryObject::get)
-                    .map(block -> Map.entry(block, new TempModifierSpec(4.0F, 1.0F, true))))
+            Stream.concat(
+                    Stream.of(
+                            Map.entry(Blocks.ICE, new TempModifierSpec(-2.0F, 1.0F, true)),
+                            Map.entry(Blocks.PACKED_ICE, new TempModifierSpec(-4.0F, 1.0F, true)),
+                            Map.entry(Blocks.BLUE_ICE, new TempModifierSpec(-6.0F, 1.0F, true)),
+                            Map.entry(TFCBlocks.SEA_ICE.get(), new TempModifierSpec(-2.0F, 1.0F, true)),
+                            Map.entry(TFGBlocks.DRY_ICE.get(), new TempModifierSpec(-2.0F, 1.0F, true)),
+                            Map.entry(TFGBlocks_Mars.MARS_ICE.get(), new TempModifierSpec(-3.0F, 1.0F, true)),
+                            Map.entry(Blocks.LAVA, new TempModifierSpec(5.0F, 1.0F)),
+                            Map.entry(Blocks.FIRE, new TempModifierSpec(3.0F, 0.0F)),
+                            Map.entry(Blocks.CAMPFIRE, new TempModifierSpec(3.0F, 0.0F)),
+                            Map.entry(Blocks.TORCH, new TempModifierSpec(1.0F, 0.0F, true))),
+                    TFCBlocks.MAGMA_BLOCKS.values().stream()
+                            .map(RegistryObject::get)
+                            .map(block -> Map.entry(block, new TempModifierSpec(4.0F, 1.0F, true)))),
+            ForgeRegistries.BLOCKS.getValues().stream()
+                    .filter(b -> b instanceof ParticleEmitterDecorationBlock)
+                    .map(block -> Map.entry(block, new TempModifierSpec(1.0F, 1.0F, true))))
             .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
     static final Map<Block, TempModifierSpec> ACTIVE_BLOCKS = Map.ofEntries(
