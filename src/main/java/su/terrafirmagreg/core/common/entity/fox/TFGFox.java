@@ -28,6 +28,7 @@ public class TFGFox extends TamableMammal {
 
     float crouchAmount;
     float previousCrouchAmount;
+    static double familiarityCap = 1;
 
     static {
         DATA_VARIANT = SynchedEntityData.defineId(TFGFox.class, EntityDataSerializers.INT);
@@ -43,6 +44,11 @@ public class TFGFox extends TamableMammal {
 
     public TFGFox(EntityType<? extends TFCAnimal> animal, Level level) {
         super(animal, level, TFGSounds.FOX, TFCConfig.SERVER.catConfig);
+    }
+
+    @Override
+    public float getAdultFamiliarityCap() {
+        return (float) familiarityCap;
     }
 
     @Override
