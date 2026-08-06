@@ -68,20 +68,12 @@
         }
     },
     "spawners": {
-        "ambient": [
-            {
-                "weight": 100,
-                "minCount": 3,
-                "type": "jellies:herbal",
-                "maxCount": 4
-            },
-            {
-                "weight": 100,
-                "minCount": 3,
-                "type": "jellies:phosphorum",
-                "maxCount": 4
-            }
-        ],
+        "ambient": [{
+            "weight": 100,
+            "minCount": 1,
+            "type": "minecraft:bat",
+            "maxCount": 2
+        }],
         "monster": [
             {
                 "weight": 100,
