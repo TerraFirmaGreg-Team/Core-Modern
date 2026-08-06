@@ -62,7 +62,7 @@
         }],
         "ambient": [
             {
-                "weight": 50,
+                "weight": 100,
                 "minCount": 1,
                 "type": "minecraft:bat",
                 "maxCount": 2
@@ -74,7 +74,7 @@
                 "maxCount": 5
             },
             {
-                "weight": 15,
+                "weight": 30,
                 "minCount": 2,
                 "type": "jellies:rock",
                 "maxCount": 4

@@ -82,7 +82,7 @@
                 "maxCount": 4
             },
             {
-                "weight": 15,
+                "weight": 30,
                 "minCount": 2,
                 "type": "jellies:rock",
                 "maxCount": 4
