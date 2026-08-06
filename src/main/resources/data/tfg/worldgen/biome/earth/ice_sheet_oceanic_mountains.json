@@ -74,7 +74,7 @@
                 "maxCount": 5
             },
             {
-                "weight": 30,
+                "weight": 100,
                 "minCount": 2,
                 "type": "jellies:rock",
                 "maxCount": 4
