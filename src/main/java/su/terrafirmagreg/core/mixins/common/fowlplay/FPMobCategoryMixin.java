@@ -7,10 +7,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.world.entity.MobCategory;
 
-import aqario.fowlplay.common.entity.forge.CustomMobCategoryImpl;
+import aqario.fowlplay.common.entity.FPMobCategory;
 
-@Mixin(value = CustomMobCategoryImpl.class, remap = false)
-public class CustomMobCategoryMixin {
+@Mixin(value = FPMobCategory.class, remap = false)
+public class FPMobCategoryMixin {
+
+	// Redirects birds to use the ambient mob category instead of two new ones that fowlplay adds
 
     @Inject(method = "ambientBirds", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$ambientBirds(CallbackInfoReturnable<MobCategory> cir) {

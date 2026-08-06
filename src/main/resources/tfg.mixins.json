@@ -105,7 +105,7 @@
         "common.forge.CapabilityProviderMixin",
         "common.forge.ForgeConfigSpecMixin",
         "common.fowlplay.BirdEntityMixin",
-        "common.fowlplay.CustomMobCategoryMixin",
+        "common.fowlplay.FPMobCategoryMixin",
         "common.fowlplay.PenguinEntityMixin",
         "common.fowlplay.SpawnPredicatesMixin",
         "common.grappling_hook.AirFrictionControllerMixin",
