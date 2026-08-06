@@ -30,6 +30,10 @@
     },
     "downfall": 0.5,
     "spawn_costs": {
+        "tfg:bactrian_camel": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
         "minecraft:skeleton": {
             "charge": 0.7,
             "energy_budget": 0.2
@@ -58,6 +62,10 @@
             "charge": 0.7,
             "energy_budget": 0.2
         },
+        "tfg:dromedary_camel": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
         "minecraft:slime": {
             "charge": 0.7,
             "energy_budget": 0.2
@@ -77,6 +85,18 @@
           "weight": 2,
           "minCount": 1,
           "type": "tfg:jerboa",
+          "maxCount": 3
+        },
+        {
+          "weight": 2,
+          "minCount": 1,
+          "type": "tfg:dromedary_camel",
+          "maxCount": 3
+        },
+        {
+          "weight": 2,
+          "minCount": 1,
+          "type": "tfg:bactrian_camel",
           "maxCount": 3
         }
       ],

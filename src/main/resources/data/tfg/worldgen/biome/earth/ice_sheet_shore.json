@@ -326,10 +326,22 @@
                 "maxCount": 4
             },
             {
-                "weight": 1,
+                "weight": 3,
                 "minCount": 2,
                 "type": "tfg:leopard_seal",
                 "maxCount": 4
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:dromedary_camel",
+                "maxCount": 3
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:bactrian_camel",
+                "maxCount": 3
             }
         ],
         "water_ambient": [
