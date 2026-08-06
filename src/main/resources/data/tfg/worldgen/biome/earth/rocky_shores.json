@@ -60,6 +60,20 @@
             "type": "tfc:octopoteuthis",
             "maxCount": 2
         }],
+        "ambient": [
+            {
+                "weight": 100,
+                "minCount": 1,
+                "type": "minecraft:bat",
+                "maxCount": 2
+            },
+            {
+                "weight": 100,
+                "minCount": 5,
+                "type": "fowlplay:gull",
+                "maxCount": 8
+            }
+        ],
         "creature": [
             {
                 "weight": 1,
@@ -71,6 +85,12 @@
                 "weight": 10,
                 "minCount": 2,
                 "type": "tfc:penguin",
+                "maxCount": 5
+            },
+            {
+                "weight": 10,
+                "minCount": 2,
+                "type": "fowlplay:penguin",
                 "maxCount": 5
             },
             {

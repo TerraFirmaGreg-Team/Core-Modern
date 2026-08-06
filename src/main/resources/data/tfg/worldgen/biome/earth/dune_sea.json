@@ -42,6 +42,10 @@
             "charge": 0.7,
             "energy_budget": 0.2
         },
+        "tfg:jerboa": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
         "minecraft:spider": {
             "charge": 0.7,
             "energy_budget": 0.2
@@ -73,10 +77,6 @@
         "endermanoverhaul:flower_fields_enderman": {
             "charge": 0.7,
             "energy_budget": 0.2
-        },
-        "tfg:jerboa": {
-          "charge": 0.7,
-          "energy_budget": 0.2
         }
     },
     "spawners": {
