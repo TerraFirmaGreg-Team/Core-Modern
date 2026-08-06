@@ -9,7 +9,7 @@ import net.minecraft.world.entity.MobCategory;
 
 import aqario.fowlplay.common.entity.forge.CustomMobCategoryImpl;
 
-@Mixin(value = CustomMobCategoryImpl.class, priority = 1500, remap = false)
+@Mixin(value = CustomMobCategoryImpl.class, remap = false)
 public class CustomMobCategoryMixin {
 
     @Inject(method = "ambientBirds", at = @At("HEAD"), remap = false, cancellable = true)
