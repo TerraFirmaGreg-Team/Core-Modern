@@ -11,19 +11,6 @@ import aqario.fowlplay.common.entity.bird.penguin.PenguinEntity;
 
 @Mixin(value = PenguinEntity.class, remap = false)
 public class PenguinEntityMixin {
-    //    @Inject(method = "canSpawnPenguins", at = @At("HEAD"), remap = false, cancellable = true)
-    //    private static void tfg$canSpawnPenguins(EntityType<? extends BirdEntity> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random,
-    //            CallbackInfoReturnable<Boolean> cir) {
-    //
-    //        var level = world.getServer().getLevel(Level.OVERWORLD);
-    //        float rainfall = Climate.getRainfall(level, pos);
-    //        float temp = Climate.getAverageTemperature(level, pos);
-    //
-    //        if (rainfall < 75 || temp > -14) {
-    //            cir.cancel();
-    //        }
-    //    }
-
     /**
      * @author Pyritie
      * @reason Prevent vanilla-like breeding
