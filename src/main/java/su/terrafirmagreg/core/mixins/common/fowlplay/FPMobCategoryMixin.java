@@ -12,7 +12,7 @@ import aqario.fowlplay.common.entity.FPMobCategory;
 @Mixin(value = FPMobCategory.class, remap = false)
 public class FPMobCategoryMixin {
 
-	// Redirects birds to use the ambient mob category instead of two new ones that fowlplay adds
+    // Redirects birds to use the ambient mob category instead of two new ones that fowlplay adds
 
     @Inject(method = "ambientBirds", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$ambientBirds(CallbackInfoReturnable<MobCategory> cir) {

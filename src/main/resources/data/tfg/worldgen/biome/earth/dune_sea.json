@@ -81,24 +81,24 @@
     },
     "spawners": {
         "creature": [
-          {
-            "weight": 2,
-            "minCount": 1,
-            "type": "tfg:jerboa",
-            "maxCount": 3
-          },
-          {
-            "weight": 2,
-            "minCount": 1,
-            "type": "tfg:dromedary_camel",
-            "maxCount": 3
-          },
-          {
-            "weight": 2,
-            "minCount": 1,
-            "type": "tfg:bactrian_camel",
-            "maxCount": 3
-          }
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfg:jerboa",
+                "maxCount": 3
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfg:dromedary_camel",
+                "maxCount": 3
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfg:bactrian_camel",
+                "maxCount": 3
+            }
         ],
         "monster": [
             {

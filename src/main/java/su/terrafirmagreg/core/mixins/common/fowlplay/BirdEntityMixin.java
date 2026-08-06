@@ -11,7 +11,7 @@ import aqario.fowlplay.common.entity.bird.penguin.PenguinEntity;
 @Mixin(value = BirdEntity.class, remap = false)
 public class BirdEntityMixin {
 
-	// Redirects birds to use the ambient mob category instead of two new ones that fowlplay adds
+    // Redirects birds to use the ambient mob category instead of two new ones that fowlplay adds
 
     @Inject(method = "shouldBeAmbient", at = @At("HEAD"), remap = false, cancellable = true)
     private void tfg$shouldBeAmbient(CallbackInfoReturnable<Boolean> cir) {
