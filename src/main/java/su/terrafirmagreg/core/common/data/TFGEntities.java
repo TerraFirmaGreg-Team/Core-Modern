@@ -2,7 +2,6 @@ package su.terrafirmagreg.core.common.data;
 
 import com.tterrag.registrate.util.entry.EntityEntry;
 
-import net.dries007.tfc.client.render.entity.SimpleMobRenderer;
 import net.minecraft.client.model.CamelModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -42,7 +41,6 @@ import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamel;
 import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelModel;
-import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelRenderer;
 import su.terrafirmagreg.core.common.entity.camels.TFCDromedaryCamel;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.fox.TFGFoxCollarLayer;
@@ -71,8 +69,6 @@ public class TFGEntities {
             .properties(p -> p.sized(1.7F, 2.375F).clientTrackingRange(10))
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFCDromedaryCamel::createAttributes)
-            .renderer(() -> ctx -> new SimpleMobRenderer.Builder<>(ctx, CamelModel::new, "dromedary_camel").shadow(0.7f)
-                    .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build())
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCDromedaryCamel::spawnRules)
             .register();
 
@@ -80,7 +76,6 @@ public class TFGEntities {
             .properties(p -> p.sized(1.7F, 2.375F).clientTrackingRange(10))
             .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
             .attributes(TFCBactrianCamel::createAttributes)
-            .renderer(() -> ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f))
             .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCBactrianCamel::spawnRules)
             .register();
 
