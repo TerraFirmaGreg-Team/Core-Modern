@@ -3,11 +3,14 @@ package su.terrafirmagreg.core.client;
 import com.cake.struts.compat.flywheel.StrutsFlywheelCompatLoader;
 
 import net.dries007.tfc.client.TFCColors;
+import net.dries007.tfc.client.render.entity.SimpleMobRenderer;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.model.CamelModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,8 +30,11 @@ import net.minecraftforge.fml.common.Mod;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.asphalt.AsphaltRoadColorHandlers;
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
+import su.terrafirmagreg.core.common.data.TFGEntities;
 import su.terrafirmagreg.core.common.data.TFGPlant;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Earth;
+import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelModel;
+import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelRenderer;
 import su.terrafirmagreg.core.common.food.nutrient.NutrientEffectsHandler;
 import su.terrafirmagreg.core.common.perf.SupportCache;
 
@@ -119,5 +125,10 @@ public class ForgeClientEventListener {
 
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
         StrutsFlywheelCompatLoader.registerStrutVisual(TFGBlockEntities.STRUT.get());
+
+        event.registerEntityRenderer(TFGEntities.DROMEDARY_CAMEL.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CamelModel::new, "dromedary_camel").shadow(0.7f)
+                .texture((e) -> ResourceLocation.withDefaultNamespace("textures/entity/camel/camel.png")).build());
+        event.registerEntityRenderer(TFGEntities.BACTRIAN_CAMEL.get(),
+                ctx -> new TFCBactrianCamelRenderer<>(ctx, new TFCBactrianCamelModel(ctx.bakeLayer(TFCBactrianCamelModel.LAYER_LOCATION)), 0.6f));
     }
 }
