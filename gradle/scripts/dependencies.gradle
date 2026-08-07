@@ -184,5 +184,6 @@ dependencies {
 
     // FowlPlay, 4 aug 2026
     modImplementation "maven.modrinth:smartbrainlib:1.15"
+    modImplementation "maven.modrinth:yacl:3.6.6+1.20.1-forge"
     modImplementation "maven.modrinth:fowlplay:1.2.3+1.20.1-forge"
 }
