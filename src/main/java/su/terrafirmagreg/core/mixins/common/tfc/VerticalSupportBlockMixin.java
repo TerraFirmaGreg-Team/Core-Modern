@@ -1,17 +1,15 @@
 package su.terrafirmagreg.core.mixins.common.tfc;
 
-import net.dries007.tfc.common.blocks.ExtendedProperties;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.wood.VerticalSupportBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(value = VerticalSupportBlock.class, remap = false)
 public abstract class VerticalSupportBlockMixin extends Block {
@@ -56,9 +54,9 @@ public abstract class VerticalSupportBlockMixin extends Block {
         return newState;
     }
 
-	// Make support blocks not suffocate (helps with mobs)
-	@ModifyVariable(method = "<init>", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-	private static ExtendedProperties tfg$init(ExtendedProperties value) {
-		return value.isSuffocating((s, b, p) -> false);
-	}
+    // Make support blocks not suffocate (helps with mobs)
+    @ModifyVariable(method = "<init>", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    private static ExtendedProperties tfg$init(ExtendedProperties value) {
+        return value.isSuffocating((s, b, p) -> false);
+    }
 }
