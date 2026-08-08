@@ -843,9 +843,10 @@ public class TFGBiomes {
         return TFG_EXTENSIONS.get(ResourceKey.create(Registries.BIOME, id));
     }
 
+    @Nullable
     public static BiomeExtension findExtension(CommonLevelAccessor level, Biome biome) {
         final RegistryAccess registryAccess = level.registryAccess();
         final Registry<Biome> registry = registryAccess.registryOrThrow(Registries.BIOME);
-        return registry.getResourceKey(biome).map(TFG_EXTENSIONS::get).orElse(TFCBiomes.OCEAN);
+        return registry.getResourceKey(biome).map(TFG_EXTENSIONS::get).orElse(null);
     }
 }
