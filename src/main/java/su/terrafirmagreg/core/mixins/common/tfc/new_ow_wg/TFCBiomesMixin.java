@@ -15,11 +15,14 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.dries007.tfc.world.biome.BiomeBridge;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.TFCBiomes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.CommonLevelAccessor;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.world.new_ow_wg.TfgClientPreviewState;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.TFGBiomes;
 
@@ -48,9 +51,32 @@ public class TFCBiomesMixin {
     @Inject(method = "findExtension", at = @At("HEAD"), remap = false, cancellable = true)
     private static void tfg$findExtension(CommonLevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
         if (TfgClientPreviewState.useTfgOverworldPipeline()) {
-            final BiomeExtension ext = TFGBiomes.findExtension(level, biome);
-            if (ext != null)
-                cir.setReturnValue(ext);
+            BiomeExtension ext = TFGBiomes.findExtension(level, biome);
+
+            // TODO: Can probably remove this null check once we deprecate old worldgen
+            if (ext == null) {
+                TFGCore.LOGGER.error("Failed to find biome extension for biome: {}", level.registryAccess().registryOrThrow(Registries.BIOME).getId(biome));
+                TFGCore.LOGGER.error("This is usually caused by a mismatch of worldgen versions.");
+                ext = TFCBiomes.OCEAN;
+            }
+
+            cir.setReturnValue(ext);
+        }
+    }
+
+    // TODO: Can probably remove this once we deprecate old worldgen
+    @Inject(method = "getExtensionOrThrow", at = @At("HEAD"), remap = false, cancellable = true)
+    private static void tfg$getExtensionOrThrow(LevelAccessor level, Biome biome, CallbackInfoReturnable<BiomeExtension> cir) {
+        if (TfgClientPreviewState.useTfgOverworldPipeline()) {
+            BiomeExtension ext = TFGBiomes.findExtension(level, biome);
+
+            if (ext == null) {
+                TFGCore.LOGGER.error("Failed to find biome extension for biome: {}", level.registryAccess().registryOrThrow(Registries.BIOME).getId(biome));
+                TFGCore.LOGGER.error("This is usually caused by a mismatch of worldgen versions.");
+                ext = TFCBiomes.OCEAN;
+            }
+
+            cir.setReturnValue(ext);
         }
     }
 
