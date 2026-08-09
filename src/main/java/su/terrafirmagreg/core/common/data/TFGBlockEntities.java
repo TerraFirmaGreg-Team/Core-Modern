@@ -19,12 +19,15 @@ import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.minecraft.world.level.block.Block;
 
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
+import electrolyte.greate.content.kinetics.base.TieredSingleAxisRotatingVisual;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelInstance;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelRenderer;
 import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
+import su.terrafirmagreg.core.common.block.create.DieselEngineBlockEntity;
+import su.terrafirmagreg.core.common.block.create.DieselEngineRenderer;
 import su.terrafirmagreg.core.common.blockentity.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
@@ -44,9 +47,6 @@ public class TFGBlockEntities {
                     FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.WEATHERED_TREATED_WOOD).get(Greenhouse.BlockType.PORT)::get,
                     FLBlocks.GREENHOUSE_BLOCKS.get(Greenhouse.TREATED_WOOD).get(Greenhouse.BlockType.PORT)::get)
             .register();
-
-    // private static final Block[] LARGE_NEST_TYPES = {TFGBlocks.LARGE_NEST_BOX.get(),
-    // TFGBlocks.LARGE_NEST_BOX_WARPED.get()};
 
     public static final BlockEntityEntry<LargeNestBoxBlockEntity> LARGE_NEST_BOX = TFGCore.REGISTRATE.blockEntity("large_nest_box", LargeNestBoxBlockEntity::new)
             .validBlocks(TFGBlocks_Mars.LARGE_NEST_BOX, TFGBlocks_Mars.LARGE_NEST_BOX_WARPED)
@@ -99,15 +99,22 @@ public class TFGBlockEntities {
             .validBlocks(TFGBlocks_PalmTrees.PALM_CLUSTERS.values().toArray(NonNullSupplier[]::new))
             .register();
 
+    // Create machines
     public static final BlockEntityEntry<SteamFlywheelTileEntity> TITANIUM_STEAM_FLYWHEEL = TFGCore.REGISTRATE
             .blockEntity("titanium_steam_flywheel", SteamFlywheelTileEntity::new)
-            .validBlocks(TFGBlocks.TITANIUM_FLYWHEEL)
+            .validBlocks(TFGBlocks_Create.TITANIUM_FLYWHEEL)
             .renderer(() -> TitaniumFlywheelRenderer::new)
             .register();
 
     public static final BlockEntityEntry<TitaniumSteamEngineTileEntity> TITANIUM_STEAM_ENGINE = TFGCore.REGISTRATE
             .blockEntity("titanium_steam_engine", TitaniumSteamEngineTileEntity::new)
-            .validBlocks(TFGBlocks.TITANIUM_STEAM_ENGINE)
+            .validBlocks(TFGBlocks_Create.TITANIUM_STEAM_ENGINE)
+            .register();
+
+    public static final BlockEntityEntry<DieselEngineBlockEntity> DIESEL_ENGINE = TFGCore.REGISTRATE
+            .blockEntity("generators/diesel_engine", DieselEngineBlockEntity::new)
+            .renderer(() -> DieselEngineRenderer::new)
+            .validBlocks(TFGBlocks_Create.DIESEL_ENGINE)
             .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
@@ -152,6 +159,11 @@ public class TFGBlockEntities {
     public static void registerAllVisuals() {
         SimpleBlockEntityVisualizer.builder(TITANIUM_STEAM_FLYWHEEL.get())
                 .factory(TitaniumFlywheelInstance::new)
+                .skipVanillaRender(p -> true)
+                .apply();
+
+        SimpleBlockEntityVisualizer.builder(DIESEL_ENGINE.get())
+                .factory(TieredSingleAxisRotatingVisual::poweredShaft)
                 .skipVanillaRender(p -> true)
                 .apply();
     }

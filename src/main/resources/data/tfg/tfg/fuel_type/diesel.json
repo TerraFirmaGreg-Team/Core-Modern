@@ -1,0 +1,8 @@
+{
+    "burner_multiplier": 0.6,
+    "sound_pitch": 0.9,
+    "strength": 1,
+    "burn_rate": 0.05,
+    "fluid": "gtceu:diesel",
+    "speed": 0.8
+}

@@ -1,8 +1,6 @@
 {
   "values": [
     "tfg:quartz_crucible",
-    "tfg:titanium_flywheel",
-    "tfg:titanium_steam_engine",
     "tfg:halite",
     "tfg:carbonate_hornfels",
     "tfg:pelitic_hornfels",
@@ -55,6 +53,9 @@
     "tfg:strut/truss/copper",
     "tfg:strut/truss/tin_alloy",
     "tfg:strut/truss/zinc",
-    "tfg:strut/truss/wrought_iron"
+    "tfg:strut/truss/wrought_iron",
+    "tfg:titanium_flywheel",
+    "tfg:titanium_steam_engine",
+    "tfg:generators/diesel_engine"
   ]
 }
