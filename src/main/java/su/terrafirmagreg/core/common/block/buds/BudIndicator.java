@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.buds;
+package su.terrafirmagreg.core.common.block.buds;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
