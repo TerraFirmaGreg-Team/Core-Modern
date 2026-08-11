@@ -14,7 +14,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 
 import electrolyte.greate.infrastructure.config.GStress;
-import electrolyte.greate.registry.GreateMaterials;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.block.create.CombustionEngineBlock;

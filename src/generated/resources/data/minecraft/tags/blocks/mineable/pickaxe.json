@@ -56,7 +56,6 @@
     "tfg:strut/truss/wrought_iron",
     "tfg:titanium_flywheel",
     "tfg:titanium_steam_engine",
-    "tfg:generators/basic_combustion_engine",
     "tfg:generators/steel_combustion_engine",
     "tfg:generators/aluminium_combustion_engine",
     "tfg:generators/stainless_steel_combustion_engine",
