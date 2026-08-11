@@ -114,8 +114,7 @@ public class TFGBlockEntities {
     public static final BlockEntityEntry<CombustionEngineBlockEntity> COMBUSTION_ENGINE = TFGCore.REGISTRATE
             .blockEntity("generators/combustion_engine", CombustionEngineBlockEntity::new)
             .renderer(() -> CombustionEngineRenderer::new)
-            .validBlocks(TFGBlocks_Create.BASIC_COMBUSTION_ENGINE,
-                    TFGBlocks_Create.STEEL_COMBUSTION_ENGINE,
+            .validBlocks(TFGBlocks_Create.STEEL_COMBUSTION_ENGINE,
                     TFGBlocks_Create.ALUMINIUM_COMBUSTION_ENGINE,
                     TFGBlocks_Create.STAINLESS_STEEL_COMBUSTION_ENGINE,
                     TFGBlocks_Create.TITANIUM_COMBUSTION_ENGINE)

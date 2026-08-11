@@ -41,8 +41,7 @@ public class TFGBlocks_Create {
             .transform(ModelGen.customItemModel())
             .register();
 
-    public static BlockEntry<CombustionEngineBlock> BASIC_COMBUSTION_ENGINE = combustionEngine(0, "basic", GreateMaterials.AndesiteAlloy),
-            STEEL_COMBUSTION_ENGINE = combustionEngine(1, "steel", GTMaterials.Steel),
+    public static BlockEntry<CombustionEngineBlock> STEEL_COMBUSTION_ENGINE = combustionEngine(1, "steel", GTMaterials.Steel),
             ALUMINIUM_COMBUSTION_ENGINE = combustionEngine(2, "aluminium", GTMaterials.Aluminium),
             STAINLESS_STEEL_COMBUSTION_ENGINE = combustionEngine(3, "stainless_steel", GTMaterials.StainlessSteel),
             TITANIUM_COMBUSTION_ENGINE = combustionEngine(4, "titanium", GTMaterials.Titanium);
