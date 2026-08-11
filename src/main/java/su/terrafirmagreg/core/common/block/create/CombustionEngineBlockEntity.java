@@ -19,6 +19,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollVa
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -30,30 +31,32 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.DistExecutor;
 
+import electrolyte.greate.GreateValues;
+import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.common.data.TFGRegistries;
 import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 
-public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
+public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity implements ITieredKineticBlockEntity {
     public static final int DEFAULT_SPEED = 32;
     public ScrollValueBehaviour targetSpeed;
 
-    private Integer maxRPM = AllConfigs.server().kinetics.maxRotationSpeed.get();
+    private final int tier;
 
     @Getter
     float remainingTicks = 0;
     SmartFluidTankBehaviour tank;
-    private float lastCapacity;
     private float lastSpeed;
 
-    public DieselEngineBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
+    public CombustionEngineBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
+        tier = ((CombustionEngineBlock) state.getBlock()).getTier();
+        lastCapacityProvided = GreateValues.getMaxCapacityFromMaterial(((CombustionEngineBlock) state.getBlock()).getMaterial());
     }
 
     @Override
@@ -62,10 +65,10 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
             return super.getCapability(cap, side);
         if (side == null || side == Direction.DOWN)
             return tank.getCapability().cast();
-        if (getBlockState().getValue(DieselEngineBlock.FACING) == Direction.DOWN) {
+        if (getBlockState().getValue(CombustionEngineBlock.FACING) == Direction.DOWN) {
             if (side.getAxis() == Direction.Axis.X)
                 return tank.getCapability().cast();
-        } else if (getBlockState().getValue(DieselEngineBlock.FACING) == Direction.UP) {
+        } else if (getBlockState().getValue(CombustionEngineBlock.FACING) == Direction.UP) {
             if (side.getAxis() == Direction.Axis.Z)
                 return tank.getCapability().cast();
         }
@@ -98,34 +101,33 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
         Integer max = AllConfigs.server().kinetics.maxRotationSpeed.get();
 
         targetSpeed = new KineticScrollValueBehaviour(CreateLang.translateDirect("kinetics.speed_controller.rotation_speed"),
-                this, new DieselEngineValueBox());
+                this, new CombustionEngineValueBox());
         targetSpeed.between(-max, max);
         targetSpeed.value = DEFAULT_SPEED;
         targetSpeed.withCallback(i -> this.updateTargetRotation());
 
-        tank = SmartFluidTankBehaviour.single(this, 1000);
+        tank = SmartFluidTankBehaviour.single(this, 2000 * (((CombustionEngineBlock) getBlockState().getBlock()).getTier() + 1));
 
         behaviours.add(targetSpeed);
         behaviours.add(tank);
     }
 
     private void updateTargetRotation() {
-        if (level == null)
-            return;
-
-        if (hasNetwork())
-            getOrCreateNetwork().remove(this);
+        if (hasNetwork()) {
+            var network = getOrCreateNetwork();
+            if (network != null)
+                network.remove(this);
+        }
 
         RotationPropagator.handleRemoved(level, worldPosition, this);
         removeSource();
+        reActivateSource = true;
         attachKinetics();
     }
 
     @Override
     public float calculateAddedStressCapacity() {
-        float capacity = getFuelCapacity() * (1 / getFuelSpeed()) * getFuelSpeed();
-        lastCapacityProvided = capacity;
-        return capacity;
+        return lastCapacityProvided;
     }
 
     @Override
@@ -133,27 +135,37 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
         if (!enabled())
             return 0;
 
-        return convertToDirection(Math.max(maxRPM, targetSpeed.value * getFuelSpeed()), getBlockState().getValue(DieselEngineBlock.FACING));
+        return convertToDirection(targetSpeed.value, getBlockState().getValue(CombustionEngineBlock.FACING));
     }
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (getGeneratedSpeed() == 0)
-            return false;
-        super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-        containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
-        return true;
+        CreateLang.translate("gui.goggles.generator_stats")
+                .forGoggles(tooltip);
+        CreateLang.translate("tooltip.capacityProvided")
+                .style(ChatFormatting.GRAY)
+                .forGoggles(tooltip);
+        CreateLang.number(lastCapacityProvided)
+                .translate("generic.unit.stress")
+                .style(ChatFormatting.AQUA)
+                .space()
+                .add(CreateLang.translate("gui.goggles.at_current_speed")
+                        .style(ChatFormatting.DARK_GRAY))
+                .forGoggles(tooltip, 1);
+
+        ITieredKineticBlockEntity.super.addToGoggleTooltip(tooltip, isPlayerSneaking, GreateValues.TM[tier], capacity, stress);
+        return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        float fuelCapacity = getFuelCapacity() * (1 / getFuelSpeed()) * getFuelSpeed();
-        if (!level.isClientSide && (lastSpeed != getGeneratedSpeed() || lastCapacity != fuelCapacity)) {
-            reActivateSource = true;
-            lastSpeed = getGeneratedSpeed();
-            lastCapacity = fuelCapacity;
+        if (!level.isClientSide) {
+            if (lastSpeed != getGeneratedSpeed()) {
+                reActivateSource = true;
+                lastSpeed = getGeneratedSpeed();
+            }
         }
 
         if (enabled()) {
@@ -181,15 +193,14 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
 
         if (enabled()) {
             if (soundInstance != null) {
-                if (!soundInstance.isStopped())
-                    return;
-
-                soundInstance.release();
-                soundInstance = null;
+                if (soundInstance.isStopped() || Math.abs(targetSpeed.value / 256f) + 0.5f != soundInstance.getPitch()) {
+                    soundInstance.release();
+                    soundInstance = null;
+                }
             } else {
                 soundInstance = GTSoundEntries.COMBUSTION.playAutoReleasedSound(
                         () -> enabled() && level.isLoaded(getBlockPos()),
-                        getBlockPos(), true, 0, 1, getFuelSoundPitch());
+                        getBlockPos(), true, 0, 1, Math.abs(targetSpeed.value / 256f) + 0.5f);
             }
         } else {
             if (soundInstance != null) {
@@ -199,40 +210,21 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
         }
     }
 
-    // IEngine
     public boolean enabled() {
-        if (validFS())
-            return !self().getBlockState().getValue(DieselEngineBlock.POWERED);
+        if (validFluidStack())
+            return !self().getBlockState().getValue(CombustionEngineBlock.POWERED);
         return false;
     }
 
-    public boolean validFS() {
-        if (fs().isEmpty())
+    public boolean validFluidStack() {
+        if (getTank().getFluid().isEmpty())
             return false;
-        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), fs().getFluid()) != FuelType.EMPTY;
-    }
-
-    public FluidStack fs() {
-        return getTank().getFluid();
-    }
-
-    public float getFuelSpeed() {
-        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), fs().getFluid()).speed();
-    }
-
-    public float getFuelCapacity() {
-        float speed = getFuelSpeed();
-        if (speed == 0)
-            return speed;
-        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), fs().getFluid()).strength() / speed;
+        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), getTank().getFluid().getFluid()) != FuelType.EMPTY;
     }
 
     public float getFuelBurnRate() {
-        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), fs().getFluid()).burn();
-    }
-
-    public float getFuelSoundPitch() {
-        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), fs().getFluid()).soundPitch();
+        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), getTank().getFluid().getFluid()).burnRate()
+                * Math.abs(targetSpeed.value / 256f) * (tier == 0 ? 1 : tier * 4);
     }
 
     public SmartBlockEntity self() {
@@ -241,5 +233,10 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
 
     public FluidTank getTank() {
         return tank.getPrimaryHandler();
+    }
+
+    @Override
+    public boolean renderNormally() {
+        return false;
     }
 }

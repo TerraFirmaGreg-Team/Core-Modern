@@ -46,23 +46,22 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
+import electrolyte.greate.GreateValues;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredBlock;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredShaftBlock;
 import electrolyte.greate.registry.GreateTagPrefixes;
 
 import su.terrafirmagreg.core.common.data.TFGBlockEntities;
 
-public class DieselEngineBlock extends DirectionalKineticBlock implements IBE<DieselEngineBlockEntity>, ITieredBlock, ITieredShaftBlock {
+public class CombustionEngineBlock extends DirectionalKineticBlock implements IBE<CombustionEngineBlockEntity>, ITieredBlock, ITieredShaftBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     private int tier;
     private Supplier<Block> shaftType;
-    private Material material;
 
-    public DieselEngineBlock(Properties properties, Material material) {
+    public CombustionEngineBlock(Properties properties, Material material) {
         super(properties);
-        this.material = material;
         this.shaftType = () -> ChemicalHelper.getBlock(GreateTagPrefixes.shaft, material);
         registerDefaultState(super.defaultBlockState().setValue(POWERED, false));
     }
@@ -93,13 +92,15 @@ public class DieselEngineBlock extends DirectionalKineticBlock implements IBE<Di
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (state.hasBlockEntity())
             withBlockEntityDo(worldIn, pos, be -> {
-                if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING))) instanceof DieselEngineBlockEntity nbe && nbe.getBlockState().getValue(FACING) == state.getValue(FACING))
+                if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING))) instanceof CombustionEngineBlockEntity nbe && nbe.getBlockState().getValue(FACING) == state.getValue(FACING))
                     be.targetSpeed.setValue(nbe.targetSpeed.getValue());
-                if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING).getOpposite())) instanceof DieselEngineBlockEntity nbe && nbe.getBlockState().getValue(FACING) == state.getValue(FACING))
+                if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING).getOpposite())) instanceof CombustionEngineBlockEntity nbe
+                        && nbe.getBlockState().getValue(FACING) == state.getValue(FACING))
                     be.targetSpeed.setValue(nbe.targetSpeed.getValue());
-                if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING))) instanceof DieselEngineBlockEntity nbe && nbe.getBlockState().getValue(FACING) == state.getValue(FACING).getOpposite())
+                if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING))) instanceof CombustionEngineBlockEntity nbe
+                        && nbe.getBlockState().getValue(FACING) == state.getValue(FACING).getOpposite())
                     be.targetSpeed.setValue(nbe.targetSpeed.getValue() == 1 ? 0 : 1);
-                if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING).getOpposite())) instanceof DieselEngineBlockEntity nbe
+                if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING).getOpposite())) instanceof CombustionEngineBlockEntity nbe
                         && nbe.getBlockState().getValue(FACING) == state.getValue(FACING).getOpposite())
                     be.targetSpeed.setValue(nbe.targetSpeed.getValue() == 1 ? 0 : 1);
             });
@@ -108,13 +109,13 @@ public class DieselEngineBlock extends DirectionalKineticBlock implements IBE<Di
     }
 
     @Override
-    public Class<DieselEngineBlockEntity> getBlockEntityClass() {
-        return DieselEngineBlockEntity.class;
+    public Class<CombustionEngineBlockEntity> getBlockEntityClass() {
+        return CombustionEngineBlockEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends DieselEngineBlockEntity> getBlockEntityType() {
-        return TFGBlockEntities.DIESEL_ENGINE.get();
+    public BlockEntityType<? extends CombustionEngineBlockEntity> getBlockEntityType() {
+        return TFGBlockEntities.COMBUSTION_ENGINE.get();
     }
 
     @Override
@@ -186,7 +187,7 @@ public class DieselEngineBlock extends DirectionalKineticBlock implements IBE<Di
 
     @Override
     public Material getMaterial() {
-        return material;
+        return GreateValues.TM[tier];
     }
 
     @Override

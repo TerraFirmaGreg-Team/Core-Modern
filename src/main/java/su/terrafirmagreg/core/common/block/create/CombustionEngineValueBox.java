@@ -14,7 +14,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class DieselEngineValueBox extends ValueBoxTransform.Sided {
+public class CombustionEngineValueBox extends ValueBoxTransform.Sided {
 
     @Override
     protected Vec3 getSouthLocation() {
@@ -23,18 +23,18 @@ public class DieselEngineValueBox extends ValueBoxTransform.Sided {
 
     @Override
     protected boolean isSideActive(BlockState state, Direction side) {
-        if (state.getValue(DieselEngineBlock.FACING) == Direction.UP)
+        if (state.getValue(CombustionEngineBlock.FACING) == Direction.UP)
             return side == Direction.WEST;
-        if (state.getValue(DieselEngineBlock.FACING) == Direction.DOWN)
+        if (state.getValue(CombustionEngineBlock.FACING) == Direction.DOWN)
             return side == Direction.NORTH;
         return side == Direction.UP;
     }
 
     @Override
     public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
-        if (state.getValue(DieselEngineBlock.FACING) == Direction.UP)
+        if (state.getValue(CombustionEngineBlock.FACING) == Direction.UP)
             return VecHelper.voxelSpace(3, 8, 8);
-        if (state.getValue(DieselEngineBlock.FACING) == Direction.DOWN)
+        if (state.getValue(CombustionEngineBlock.FACING) == Direction.DOWN)
             return VecHelper.voxelSpace(8, 8, 3);
         return VecHelper.voxelSpace(8, 13, 8);
     }

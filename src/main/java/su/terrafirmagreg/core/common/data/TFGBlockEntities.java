@@ -26,8 +26,8 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelInstance;
 import su.terrafirmagreg.core.client.renderer.TitaniumFlywheelRenderer;
 import su.terrafirmagreg.core.common.block.asphalt.blockentity.AsphaltPouringSpreadBlockEntity;
-import su.terrafirmagreg.core.common.block.create.DieselEngineBlockEntity;
-import su.terrafirmagreg.core.common.block.create.DieselEngineRenderer;
+import su.terrafirmagreg.core.common.block.create.CombustionEngineBlockEntity;
+import su.terrafirmagreg.core.common.block.create.CombustionEngineRenderer;
 import su.terrafirmagreg.core.common.blockentity.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
 import su.terrafirmagreg.core.mixins.common.minecraft.BlockEntityTypeAccessor;
@@ -111,10 +111,14 @@ public class TFGBlockEntities {
             .validBlocks(TFGBlocks_Create.TITANIUM_STEAM_ENGINE)
             .register();
 
-    public static final BlockEntityEntry<DieselEngineBlockEntity> DIESEL_ENGINE = TFGCore.REGISTRATE
-            .blockEntity("generators/diesel_engine", DieselEngineBlockEntity::new)
-            .renderer(() -> DieselEngineRenderer::new)
-            .validBlocks(TFGBlocks_Create.DIESEL_ENGINE)
+    public static final BlockEntityEntry<CombustionEngineBlockEntity> COMBUSTION_ENGINE = TFGCore.REGISTRATE
+            .blockEntity("generators/combustion_engine", CombustionEngineBlockEntity::new)
+            .renderer(() -> CombustionEngineRenderer::new)
+            .validBlocks(TFGBlocks_Create.BASIC_COMBUSTION_ENGINE,
+                    TFGBlocks_Create.STEEL_COMBUSTION_ENGINE,
+                    TFGBlocks_Create.ALUMINIUM_COMBUSTION_ENGINE,
+                    TFGBlocks_Create.STAINLESS_STEEL_COMBUSTION_ENGINE,
+                    TFGBlocks_Create.TITANIUM_COMBUSTION_ENGINE)
             .register();
 
     private static final Map<Supplier<?>, Set<Supplier<? extends Block>>> beModification = new Object2ObjectOpenHashMap<>();
@@ -162,9 +166,9 @@ public class TFGBlockEntities {
                 .skipVanillaRender(p -> true)
                 .apply();
 
-        SimpleBlockEntityVisualizer.builder(DIESEL_ENGINE.get())
+        SimpleBlockEntityVisualizer.builder(COMBUSTION_ENGINE.get())
                 .factory(TieredSingleAxisRotatingVisual::poweredShaft)
-                .skipVanillaRender(p -> true)
+                .skipVanillaRender(CombustionEngineBlockEntity::renderNormally)
                 .apply();
     }
 }

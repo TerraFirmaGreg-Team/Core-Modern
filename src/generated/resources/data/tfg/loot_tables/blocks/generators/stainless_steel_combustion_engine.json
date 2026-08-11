@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tfg:generators/diesel_engine"
+          "name": "tfg:generators/stainless_steel_combustion_engine"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "tfg:blocks/generators/diesel_engine"
+  "random_sequence": "tfg:blocks/generators/stainless_steel_combustion_engine"
 }
