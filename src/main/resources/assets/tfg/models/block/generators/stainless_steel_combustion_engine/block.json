@@ -1,7 +1,7 @@
 {
     "textures": {
-        "2": "tfg:block/generators/diesel_engine",
-        "particle": "tfg:block/generators/diesel_engine"
+        "2": "tfg:block/generators/stainless_steel_combustion_engine",
+        "particle": "tfg:block/generators/stainless_steel_combustion_engine"
     },
     "texture_size": [
         32,

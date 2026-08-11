@@ -1,9 +1,9 @@
 {
     "textures": {
-        "2": "tfg:block/generators/diesel_engine",
-        "4": "create:block/axis",
-        "5": "create:block/axis_top",
-        "particle": "tfg:block/generators/diesel_engine"
+        "2": "tfg:block/generators/steel_combustion_engine",
+        "4": "greate:block/steel/axis",
+        "5": "greate:block/steel/axis_top",
+        "particle": "tfg:block/generators/steel_combustion_engine"
     },
     "texture_size": [
         32,

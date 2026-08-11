@@ -1,8 +1,8 @@
 {
     "textures": {
-        "1": "create:block/pipes",
-        "2": "tfg:block/generators/diesel_engine",
-        "particle": "tfg:block/generators/diesel_engine"
+        "1": "greate:block/steel/pipes",
+        "2": "tfg:block/generators/steel_combustion_engine",
+        "particle": "tfg:block/generators/steel_combustion_engine"
     },
     "texture_size": [
         32,

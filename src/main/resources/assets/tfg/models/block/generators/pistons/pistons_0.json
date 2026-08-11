@@ -1,5 +1,5 @@
 {
-    "textures": {"particle": "tfg:block/generators/diesel_engine"},
+    "textures": {"particle": "tfg:block/generators/steel_combustion_engine"},
     "texture_size": [
         32,
         32

@@ -35,6 +35,11 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.DistExecutor;
 
+import earth.terrarium.adastra.api.planets.Planet;
+import earth.terrarium.adastra.api.planets.PlanetApi;
+import earth.terrarium.adastra.api.systems.OxygenApi;
+import earth.terrarium.adastra.api.systems.PlanetData;
+import earth.terrarium.adastra.client.utils.ClientData;
 import electrolyte.greate.GreateValues;
 import electrolyte.greate.content.kinetics.simpleRelays.ITieredKineticBlockEntity;
 import lombok.Getter;
@@ -49,9 +54,11 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
     private final int tier;
 
     @Getter
-    float remainingTicks = 0;
-    SmartFluidTankBehaviour tank;
+    private float remainingTicks = 0;
+    private SmartFluidTankBehaviour tank;
     private float lastSpeed;
+    private boolean oxygenated;
+    private float lastOxygenationCheckTicks = 0;
 
     public CombustionEngineBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -106,7 +113,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         targetSpeed.value = DEFAULT_SPEED;
         targetSpeed.withCallback(i -> this.updateTargetRotation());
 
-        tank = SmartFluidTankBehaviour.single(this, 2000 * (((CombustionEngineBlock) getBlockState().getBlock()).getTier() + 1));
+        tank = SmartFluidTankBehaviour.single(this, 2000 * (((CombustionEngineBlock) getBlockState().getBlock()).getTier() * 2));
 
         behaviours.add(targetSpeed);
         behaviours.add(tank);
@@ -132,7 +139,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
 
     @Override
     public float getGeneratedSpeed() {
-        if (!enabled())
+        if (!enabled() || !oxygenated)
             return 0;
 
         return convertToDirection(targetSpeed.value, getBlockState().getValue(CombustionEngineBlock.FACING));
@@ -166,9 +173,15 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
                 reActivateSource = true;
                 lastSpeed = getGeneratedSpeed();
             }
+
+            if (lastOxygenationCheckTicks < 2) {
+                oxygenated = OxygenApi.API.hasOxygen(level, getBlockPos());
+                lastOxygenationCheckTicks = 100;
+            }
+            lastOxygenationCheckTicks--;
         }
 
-        if (enabled()) {
+        if (enabled() && oxygenated) {
             if (remainingTicks < 2) {
                 remainingTicks += 1 / getFuelBurnRate();
                 tank.getPrimaryHandler().drain(1, IFluidHandler.FluidAction.EXECUTE);
@@ -191,7 +204,16 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         if (level == null)
             return;
 
-        if (enabled()) {
+		// The client can't access a block's oxygenation state, only the player
+        boolean oxygenated = true;
+        Planet planet = PlanetApi.API.getPlanet(level);
+        if (planet != null && !planet.oxygen()) {
+            PlanetData localData = ClientData.getLocalData();
+            if (localData != null)
+                oxygenated = localData.oxygen();
+        }
+
+        if (enabled() && oxygenated) {
             if (soundInstance != null) {
                 if (soundInstance.isStopped() || Math.abs(targetSpeed.value / 256f) + 0.5f != soundInstance.getPitch()) {
                     soundInstance.release();
@@ -211,9 +233,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
     }
 
     public boolean enabled() {
-        if (validFluidStack())
-            return !self().getBlockState().getValue(CombustionEngineBlock.POWERED);
-        return false;
+        return validFluidStack() && !self().getBlockState().getValue(CombustionEngineBlock.POWERED);
     }
 
     public boolean validFluidStack() {
@@ -222,9 +242,10 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), getTank().getFluid().getFluid()) != FuelType.EMPTY;
     }
 
+    // Minimum burn of 1mB every 10 sec
     public float getFuelBurnRate() {
-        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), getTank().getFluid().getFluid()).burnRate()
-                * Math.abs(targetSpeed.value / 256f) * (tier == 0 ? 1 : tier * 4);
+        return Math.max(0.005f, FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), getTank().getFluid().getFluid()).burnRate()
+                * Math.abs(targetSpeed.value / 256f) * (tier == 1 ? 1 : tier * 4));
     }
 
     public SmartBlockEntity self() {
