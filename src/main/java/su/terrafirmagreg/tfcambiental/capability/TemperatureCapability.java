@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -219,26 +220,30 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
         if (!this.player.level().isClientSide()) {
             this.setTemperature(this.getTemperature() + this.getTemperatureChange());
             this.setWetness(this.getWetness() + this.getWetnessChange());
-            float envTemp = EnvironmentalTemperatureProvider.getEnvironmentTemperatureWithTimeOfDay(player);
-            float cold = TFCAmbientalConfig.COMMON.coolThreshold.get().floatValue();
-            float hot = TFCAmbientalConfig.COMMON.hotThreshold.get().floatValue();
 
-            if (envTemp > hot || envTemp < cold) {
-                if (this.durabilityTick <= 600) {
-                    this.durabilityTick++;
-                } else {
-                    this.durabilityTick = 0;
-                    CuriosApi.getCuriosHelper().getEquippedCurios(player).ifPresent(c -> {
-                        for (int i = 0; i < c.getSlots(); i++) {
-                            ItemStack stack = c.getStackInSlot(i);
-                            if (stack.getItem() instanceof ClothesItem) {
-                                stack.setDamageValue(stack.getDamageValue() + 1);
-                                if (stack.getDamageValue() > stack.getMaxDamage()) {
-                                    stack.setCount(0);
-                                }
+            if (this.durabilityTick <= 600) {
+                this.durabilityTick++;
+            } else {
+                this.durabilityTick = 0;
+                CuriosApi.getCuriosHelper().getEquippedCurios(player).ifPresent(c -> {
+                    for (int i = 0; i < c.getSlots(); i++) {
+                        ItemStack stack = c.getStackInSlot(i);
+                        if (stack.getItem() instanceof ClothesItem) {
+                            stack.setDamageValue(stack.getDamageValue() + 1);
+                            if (stack.getDamageValue() > stack.getMaxDamage()) {
+                                stack.setCount(0);
                             }
                         }
-                    });
+                    }
+                });
+                for (EquipmentSlot slot : new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET }) {
+                    ItemStack stack = player.getItemBySlot(slot);
+                    if (stack.getItem() instanceof ClothesItem) {
+                        stack.setDamageValue(stack.getDamageValue() + 1);
+                        if (stack.getDamageValue() > stack.getMaxDamage()) {
+                            player.setItemSlot(slot, ItemStack.EMPTY);
+                        }
+                    }
                 }
             }
 
