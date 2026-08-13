@@ -30,11 +30,10 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
     public static final float T4_INSULATION = -2.0f;
 
     // clothes lose 1 durability every 30s
-    public static final int T0_DURABILITY = 1 * 60 * 2;
-    public static final int T1_DURABILITY = 4 * 60 * 2;
-    public static final int T2_DURABILITY = 6 * 60 * 2;
-    public static final int T3_DURABILITY = 8 * 60 * 2;
-    public static final int T4_DURABILITY = 10 * 60 * 2;
+    public static final int T1_DURABILITY = 3 * 60 * 2;
+    public static final int T2_DURABILITY = 12 * 60 * 2;
+    public static final int T3_DURABILITY = 18 * 60 * 2;
+    public static final int T4_DURABILITY = 30 * 60 * 2;
 
     public static final ClothesMaterial STRAW = new ClothesMaterial(
             "tfcambiental:straw",
