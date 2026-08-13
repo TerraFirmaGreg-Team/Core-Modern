@@ -305,6 +305,36 @@ public class TFCTextileItems {
             "lion_boots",
             () -> new ClothesItem(TFCTextileMaterial.LION, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(1)));
 
+    // Red Elk
+
+    public static final RegistryObject<Item> RED_ELK_HAT = ITEMS.register(
+            "red_elk_hat",
+            () -> new ClothesItem(TFCTextileMaterial.RED_ELK, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1).durability(1)));
+    public static final RegistryObject<Item> RED_ELK_SHIRT = ITEMS.register(
+            "red_elk_shirt",
+            () -> new ClothesItem(TFCTextileMaterial.RED_ELK, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1).durability(1)));
+    public static final RegistryObject<Item> RED_ELK_PANTS = ITEMS.register(
+            "red_elk_pants",
+            () -> new ClothesItem(TFCTextileMaterial.RED_ELK, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1).durability(1)));
+    public static final RegistryObject<Item> RED_ELK_SOCKS = ITEMS.register(
+            "red_elk_boots",
+            () -> new ClothesItem(TFCTextileMaterial.RED_ELK, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(1)));
+
+    // Phantom Silk
+
+    public static final RegistryObject<Item> PHANTOM_SILK_HAT = ITEMS.register(
+            "phantom_silk_hat",
+            () -> new ClothesItem(TFCTextileMaterial.PHANTOM_SILK, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1).durability(1)));
+    public static final RegistryObject<Item> PHANTOM_SILK_SHIRT = ITEMS.register(
+            "phantom_silk_shirt",
+            () -> new ClothesItem(TFCTextileMaterial.PHANTOM_SILK, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1).durability(1)));
+    public static final RegistryObject<Item> PHANTOM_SILK_PANTS = ITEMS.register(
+            "phantom_silk_pants",
+            () -> new ClothesItem(TFCTextileMaterial.PHANTOM_SILK, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1).durability(1)));
+    public static final RegistryObject<Item> PHANTOM_SILK_SOCKS = ITEMS.register(
+            "phantom_silk_boots",
+            () -> new ClothesItem(TFCTextileMaterial.PHANTOM_SILK, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(1)));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
