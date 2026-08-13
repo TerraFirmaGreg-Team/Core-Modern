@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -239,6 +240,15 @@ public class TemperatureCapability implements ICapabilitySerializable<CompoundTa
                             }
                         }
                     });
+                    for (EquipmentSlot slot : new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET }) {
+                        ItemStack stack = player.getItemBySlot(slot);
+                        if (stack.getItem() instanceof ClothesItem) {
+                            stack.setDamageValue(stack.getDamageValue() + 1);
+                            if (stack.getDamageValue() > stack.getMaxDamage()) {
+                                player.setItemSlot(slot, ItemStack.EMPTY);
+                            }
+                        }
+                    }
                 }
             }
 

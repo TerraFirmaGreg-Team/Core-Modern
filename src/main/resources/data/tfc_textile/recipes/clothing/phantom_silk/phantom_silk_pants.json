@@ -1,0 +1,10 @@
+{
+    "result": {"item": "tfc_textile:phantom_silk_pants"},
+    "pattern": [
+        "XXX",
+        "X X",
+        "X X"
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfg:phantom_silk"}}
+}

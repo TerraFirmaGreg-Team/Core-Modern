@@ -1,4 +1,4 @@
-package su.terrafirmagreg.core.common.buds;
+package su.terrafirmagreg.core.common.block.buds;
 
 import java.util.HashSet;
 import java.util.Set;
