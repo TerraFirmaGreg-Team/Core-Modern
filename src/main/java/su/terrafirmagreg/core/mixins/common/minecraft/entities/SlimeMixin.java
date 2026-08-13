@@ -1,7 +1,9 @@
 package su.terrafirmagreg.core.mixins.common.minecraft.entities;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -18,12 +20,9 @@ public abstract class SlimeMixin extends Mob {
         super(type, level);
     }
 
-    /**
-     * @author Pyritie
-     * @reason Give slimes normal mob spawning behaviour, none of this slime chunk nonsense
-     */
-    @Overwrite
-    public static boolean checkSlimeSpawnRules(EntityType<Slime> type, LevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        return checkMobSpawnRules(type, accessor, spawnType, pos, random);
+    // Give slimes normal mob spawning behaviour, none of this slime chunk nonsense
+    @Inject(method = "checkSlimeSpawnRules", at = @At("HEAD"), remap = true, cancellable = true)
+    private static void tfg$checkSlimeSpawnRules(EntityType<Slime> type, LevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource random, CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(checkMobSpawnRules(type, accessor, spawnType, pos, random));
     }
 }

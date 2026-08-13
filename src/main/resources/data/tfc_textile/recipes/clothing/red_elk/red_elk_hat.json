@@ -1,0 +1,13 @@
+{
+    "result": {"item": "tfc_textile:red_elk_hat"},
+    "pattern": [
+        "ABA",
+        "ACA"
+    ],
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"tag": "forge:string"},
+        "B": {"item": "beneath:cursed_hide"},
+        "C": {"item": "minecraft:leather_helmet"}
+    }
+}

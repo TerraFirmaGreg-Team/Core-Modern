@@ -90,6 +90,16 @@ public class ClientEvent {
         CuriosRendererRegistry.register(TFCTextileItems.LION_SHIRT.get(), ClothesCurioRenderer::new);
         CuriosRendererRegistry.register(TFCTextileItems.LION_SOCKS.get(), ClothesCurioRenderer::new);
         CuriosRendererRegistry.register(TFCTextileItems.LION_HAT.get(), ClothesCurioRenderer::new);
+
+        CuriosRendererRegistry.register(TFCTextileItems.PHANTOM_SILK_PANTS.get(), ClothesCurioRenderer::new);
+        CuriosRendererRegistry.register(TFCTextileItems.PHANTOM_SILK_SHIRT.get(), ClothesCurioRenderer::new);
+        CuriosRendererRegistry.register(TFCTextileItems.PHANTOM_SILK_SOCKS.get(), ClothesCurioRenderer::new);
+        CuriosRendererRegistry.register(TFCTextileItems.PHANTOM_SILK_HAT.get(), ClothesCurioRenderer::new);
+
+        CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_PANTS.get(), ClothesCurioRenderer::new);
+        CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_SHIRT.get(), ClothesCurioRenderer::new);
+        CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_SOCKS.get(), ClothesCurioRenderer::new);
+        CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_HAT.get(), ClothesCurioRenderer::new);
     }
 
 }

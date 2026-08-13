@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.gregtechceu.gtceu.common.data.GTItems;
-import com.simibubi.create.AllItems;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LightLayer;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -78,15 +76,6 @@ public interface EquipmentTemperatureProvider {
     static Optional<TempModifier> getEquipmentTempModifier(Player player, ItemStack stack) {
         Item item = stack.getItem();
 
-        if (COPPER_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier(-4F, 0.1F, true));
-        }
-        if (BLUE_STEEL_DIVING_SUIT.contains(item)) {
-            return Optional.of(new TempModifier(-8F, 0.9F, true));
-        }
-        if (ADVANCED_ARMOR.contains(item)) {
-            return Optional.of(new TempModifier(0F, 0F, true));
-        }
         ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(item);
         if (itemId != null && "blue_steel_toe_hiking_boots".equals(itemId.getPath())) {
             return Optional.of(new TempModifier(-2f, 0.2F, true));
@@ -124,18 +113,6 @@ public interface EquipmentTemperatureProvider {
             return ItemStack.EMPTY;
         }).orElse(ItemStack.EMPTY);
     }
-
-    static final java.util.Set<Item> COPPER_DIVING_SUIT = java.util.Set.of(
-            AllItems.COPPER_DIVING_HELMET.get(),
-            AllItems.COPPER_DIVING_BOOTS.get(),
-            AllItems.COPPER_BACKTANK.get());
-
-    static final java.util.Set<Item> BLUE_STEEL_DIVING_SUIT = java.util.Set.of(
-            AllItems.NETHERITE_DIVING_HELMET.get(),
-            AllItems.NETHERITE_DIVING_BOOTS.get(),
-            AllItems.NETHERITE_BACKTANK.get(),
-            Items.NETHERITE_LEGGINGS,
-            Items.NETHERITE_BOOTS);
 
     static final java.util.Set<Item> ADVANCED_ARMOR = java.util.Set.of(
             GTItems.NANO_HELMET.get(),
