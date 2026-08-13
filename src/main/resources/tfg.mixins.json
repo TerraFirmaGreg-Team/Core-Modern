@@ -249,6 +249,7 @@
         "common.steampowered.SteamFlywheelTileEntityMixin",
         "common.steampowered.SteelSteamFlywheelBlockMixin",
         "common.strutyourstuff.StrutBlockEntityRendererMixin",
+        "common.tfc.AlloyRecipeCategoryMixin",
         "common.tfc.AqueductMixin",
         "common.tfc.BellowsBlockEntityMixin",
         "common.tfc.BellowsBlockMixin",
