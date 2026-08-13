@@ -150,7 +150,7 @@ public final class TFCTextileMaterial implements ArmorMaterial, TemperatureAlter
             "tfc_textile:red_elk",
             SoundEvents.WOOL_PLACE,
             BeneathItems.CURSED_HIDE,
-            ClothesMaterial.T3_DURABILITY,
+            ClothesMaterial.T1_DURABILITY,
             2,
             ClothesMaterial.T3_COOLING,
             ClothesMaterial.T3_INSULATION);

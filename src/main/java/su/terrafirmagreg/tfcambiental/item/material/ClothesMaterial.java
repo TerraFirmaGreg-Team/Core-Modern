@@ -76,7 +76,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             "tfcambiental:silk_cloth",
             SoundEvents.WOOL_PLACE,
             TFCItems.SILK_CLOTH,
-            T2_DURABILITY,
+            T4_DURABILITY,
             1,
             T1_COOLING,
             T2_INSULATION);
