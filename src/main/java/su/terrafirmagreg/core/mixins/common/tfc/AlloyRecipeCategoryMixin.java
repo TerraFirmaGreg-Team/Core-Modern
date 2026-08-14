@@ -14,10 +14,10 @@ import net.dries007.tfc.compat.jei.category.AlloyRecipeCategory;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-@Mixin(AlloyRecipeCategory.class)
+@Mixin(value = AlloyRecipeCategory.class, remap = false)
 public abstract class AlloyRecipeCategoryMixin {
-    @Redirect(method = "setRecipe", at = @At(value = "NEW", target = "net/minecraftforge/fluids/FluidStack", ordinal = 0, remap = false), remap = false)
-    private FluidStack modifyInputFluidStack(Fluid fluid, int amount, @Local(argsOnly = true) AlloyRecipe recipe) {
+    @Redirect(method = "setRecipe", at = @At(value = "NEW", target = "net/minecraftforge/fluids/FluidStack", ordinal = 0))
+    private FluidStack tfg$modifyInputFluidStack(Fluid fluid, int amount, @Local(argsOnly = true) AlloyRecipe recipe) {
         Material resultMaterial = ChemicalHelper.getMaterial(recipe.getResult().getFluid());
         Material inputMaterial = ChemicalHelper.getMaterial(fluid);
 
@@ -31,8 +31,8 @@ public abstract class AlloyRecipeCategoryMixin {
         return new FluidStack(fluid, amount);
     }
 
-    @Redirect(method = "setRecipe", at = @At(value = "NEW", target = "net/minecraftforge/fluids/FluidStack", ordinal = 1, remap = false), remap = false)
-    private FluidStack modifyOutputFluidStack(Fluid fluid, int amount, @Local(argsOnly = true) AlloyRecipe recipe) {
+    @Redirect(method = "setRecipe", at = @At(value = "NEW", target = "net/minecraftforge/fluids/FluidStack", ordinal = 1))
+    private FluidStack tfg$modifyOutputFluidStack(Fluid fluid, int amount, @Local(argsOnly = true) AlloyRecipe recipe) {
         Material resultMaterial = ChemicalHelper.getMaterial(recipe.getResult().getFluid());
         int totalAmount = 0;
 
