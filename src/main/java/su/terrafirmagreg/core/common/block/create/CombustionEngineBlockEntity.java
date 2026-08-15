@@ -63,7 +63,6 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
     public CombustionEngineBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         tier = ((CombustionEngineBlock) state.getBlock()).getTier();
-        lastCapacityProvided = GreateValues.getMaxCapacityFromMaterial(((CombustionEngineBlock) state.getBlock()).getMaterial());
     }
 
     @Override
@@ -74,7 +73,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
             return tank.getCapability().cast();
         if (getBlockState().getValue(CombustionEngineBlock.FACING) == Direction.DOWN) {
             if (side.getAxis() == Direction.Axis.X)
-                return tank.getCapability().cast();
+		return tank.getCapability().cast();
         } else if (getBlockState().getValue(CombustionEngineBlock.FACING) == Direction.UP) {
             if (side.getAxis() == Direction.Axis.Z)
                 return tank.getCapability().cast();
@@ -134,7 +133,9 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
 
     @Override
     public float calculateAddedStressCapacity() {
-        return lastCapacityProvided;
+        float capacity = GreateValues.getMaxCapacityFromMaterial(((CombustionEngineBlock) getBlockState().getBlock()).getMaterial());
+        lastCapacityProvided = capacity;
+        return capacity;
     }
 
     @Override
