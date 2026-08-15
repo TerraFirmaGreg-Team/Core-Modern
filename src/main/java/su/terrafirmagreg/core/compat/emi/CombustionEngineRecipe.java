@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.compat.emi;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -23,17 +24,16 @@ import su.terrafirmagreg.core.common.block.create.CombustionEngineBlockEntity;
 import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 
 public class CombustionEngineRecipe implements EmiRecipe {
-    private final FuelType fuelType;
     private final Fluid fluid;
-    private final float burnPerSec32;
-    private final float burnPerSec256;
+    private final String burnPerSec32;
+    private final String burnPerSec256;
 
     public CombustionEngineRecipe(FuelType fuel) {
-        this.fuelType = fuel;
-        this.fluid = fuelType.fluid().get(0).get();
+        this.fluid = fuel.fluid().get(0).get();
 
-        burnPerSec32 = fuelType.getFuelBurnRate(CombustionEngineBlockEntity.DEFAULT_SPEED, GTValues.LV) * 20f;
-        burnPerSec256 = fuelType.getFuelBurnRate(256, GTValues.LV) * 20f;
+        var formatter = new DecimalFormat("0.###");
+        burnPerSec32 = formatter.format(1.0 / (fuel.getFuelBurnRate(CombustionEngineBlockEntity.DEFAULT_SPEED, GTValues.LV) * 20.0));
+        burnPerSec256 = formatter.format(1.0 / (fuel.getFuelBurnRate(256, GTValues.LV) * 20.0));
     }
 
     @Override
@@ -77,7 +77,9 @@ public class CombustionEngineRecipe implements EmiRecipe {
         SlotWidget widget = new SlotWidget(EmiStack.of(fluid), 2, offsetY);
         widgets.add(widget);
 
-        widgets.addText(Component.literal("1mB"), widget.getBounds().right() + 2, widget.getBounds().bottom() - 12, 16777215, true);
+        widgets.addText(
+                Component.translatable("tfg.emi.combustion_engine_amount"),
+                widget.getBounds().right() + 2, widget.getBounds().bottom() - 12, 16777215, true);
 
         return widget.getBounds().bottom() + 2;
     }
@@ -86,12 +88,12 @@ public class CombustionEngineRecipe implements EmiRecipe {
         int lineHeight = Minecraft.getInstance().font.lineHeight;
 
         widgets.addText(
-                Component.translatable("tfg.emi.combustion_engine_burn_time", 1f / burnPerSec32, CombustionEngineBlockEntity.DEFAULT_SPEED),
+                Component.translatable("tfg.emi.combustion_engine_burn_time", burnPerSec32, CombustionEngineBlockEntity.DEFAULT_SPEED),
                 2, offsetY, 16777215, true);
         offsetY += lineHeight;
 
         widgets.addText(
-                Component.translatable("tfg.emi.combustion_engine_burn_time", 1f / burnPerSec256, 256),
+                Component.translatable("tfg.emi.combustion_engine_burn_time", burnPerSec256, 256),
                 2, offsetY, 16777215, true);
         return offsetY + lineHeight;
     }

@@ -54,7 +54,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
     private final int tier;
 
     @Getter
-    private float remainingTicks = 0;
+    private double remainingTicks = 0;
     private SmartFluidTankBehaviour tank;
     private float lastSpeed;
     private boolean oxygenated;
@@ -85,13 +85,13 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
     @Override
     protected void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
-        tag.putFloat("RemainingTicks", remainingTicks);
+        tag.putDouble("RemainingTicks", remainingTicks);
     }
 
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
-        remainingTicks = tag.getFloat("RemainingTicks");
+        remainingTicks = tag.getDouble("RemainingTicks");
     }
 
     @Override
@@ -183,7 +183,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
 
         if (enabled() && oxygenated) {
             if (remainingTicks < 2) {
-                remainingTicks += 1 / getFuelBurnRate();
+                remainingTicks += 1.0 / getFuelBurnRate();
                 tank.getPrimaryHandler().drain(1, IFluidHandler.FluidAction.EXECUTE);
             }
 
@@ -247,7 +247,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
     }
 
     // Minimum burn of 1mB every 10 sec
-    public float getFuelBurnRate() {
+    public double getFuelBurnRate() {
         return getFuelType().getFuelBurnRate(targetSpeed.value, tier);
     }
 
