@@ -77,7 +77,7 @@ public class CombustionEngineRecipe implements EmiRecipe {
         SlotWidget widget = new SlotWidget(EmiStack.of(fluid), 2, offsetY);
         widgets.add(widget);
 
-        widgets.addText(Component.literal("1mB"), widget.getBounds().right() + 2, widget.getBounds().bottom() - 4, 16777215, true);
+        widgets.addText(Component.literal("1mB"), widget.getBounds().right() + 2, widget.getBounds().bottom() - 12, 16777215, true);
 
         return widget.getBounds().bottom() + 2;
     }
