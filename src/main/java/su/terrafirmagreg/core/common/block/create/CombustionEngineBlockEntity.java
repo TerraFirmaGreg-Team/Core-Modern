@@ -73,7 +73,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
             return tank.getCapability().cast();
         if (getBlockState().getValue(CombustionEngineBlock.FACING) == Direction.DOWN) {
             if (side.getAxis() == Direction.Axis.X)
-		return tank.getCapability().cast();
+                return tank.getCapability().cast();
         } else if (getBlockState().getValue(CombustionEngineBlock.FACING) == Direction.UP) {
             if (side.getAxis() == Direction.Axis.Z)
                 return tank.getCapability().cast();
