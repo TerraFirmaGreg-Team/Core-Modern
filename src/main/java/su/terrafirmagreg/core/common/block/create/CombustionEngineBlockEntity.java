@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.gregtechceu.gtceu.api.sound.AutoReleasedSound;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
-import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.motor.KineticScrollValueBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -106,11 +105,11 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         Integer max = AllConfigs.server().kinetics.maxRotationSpeed.get();
 
-        targetSpeed = new KineticScrollValueBehaviour(CreateLang.translateDirect("kinetics.speed_controller.rotation_speed"),
+        targetSpeed = new KineticScrollValueBehaviour(CreateLang.translateDirect("kinetics.creative_motor.rotation_speed"),
                 this, new CombustionEngineValueBox());
         targetSpeed.between(-max, max);
         targetSpeed.value = DEFAULT_SPEED;
-        targetSpeed.withCallback(i -> this.updateTargetRotation());
+        targetSpeed.withCallback(i -> this.updateGeneratedRotation());
 
         tank = SmartFluidTankBehaviour.single(this, 2000 * (((CombustionEngineBlock) getBlockState().getBlock()).getTier() * 2));
 
@@ -118,17 +117,11 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         behaviours.add(tank);
     }
 
-    private void updateTargetRotation() {
-        if (hasNetwork()) {
-            var network = getOrCreateNetwork();
-            if (network != null)
-                network.remove(this);
-        }
-
-        RotationPropagator.handleRemoved(level, worldPosition, this);
-        removeSource();
-        reActivateSource = true;
-        attachKinetics();
+    @Override
+    public void initialize() {
+        super.initialize();
+        if (!hasSource() || getGeneratedSpeed() > getTheoreticalSpeed())
+            updateGeneratedRotation();
     }
 
     @Override
@@ -143,7 +136,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         if (!enabled() || !oxygenated)
             return 0;
 
-        return convertToDirection(targetSpeed.value, getBlockState().getValue(CombustionEngineBlock.FACING));
+        return convertToDirection(targetSpeed.getValue(), getBlockState().getValue(CombustionEngineBlock.FACING));
     }
 
     @Override
