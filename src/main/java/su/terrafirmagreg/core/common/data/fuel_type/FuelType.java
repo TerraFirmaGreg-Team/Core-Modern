@@ -21,7 +21,7 @@ public record FuelType(HolderSet<Fluid> fluid, float burnRate) {
             Codec.FLOAT.fieldOf("burn_rate").forGetter(FuelType::burnRate)).apply(i, FuelType::new));
 
     // Since the client doesn't have the tags when it joins a server and receives fuel types, this different codec is needed to not cause an error when joining a server.
-    // this codec sends all the fluids, instead of sometimes sending just the tag.
+    // This codec sends all the fluids, instead of sometimes sending just the tag.
     public static final Codec<FuelType> NCODEC = RecordCodecBuilder.create(i -> i.group(
             RegistryCodecs.homogeneousList(Registries.FLUID).fieldOf("fluid").forGetter(type -> HolderSet.direct(type.fluid.stream().toList())),
             Codec.FLOAT.fieldOf("burn_rate").forGetter(FuelType::burnRate)).apply(i, FuelType::new));
@@ -35,5 +35,9 @@ public record FuelType(HolderSet<Fluid> fluid, float burnRate) {
                 .filter(r -> r.get().fluid().contains(fluid.builtInRegistryHolder()))
                 .findFirst();
         return type.isEmpty() ? EMPTY : type.get().get();
+    }
+
+    public float getFuelBurnRate(int targetRpm, int tier) {
+        return Math.max(0.005f, burnRate * Math.abs(targetRpm / 256f) * (tier == 1 ? 1 : tier * 4));
     }
 }

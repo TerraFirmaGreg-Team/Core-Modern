@@ -204,7 +204,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         if (level == null)
             return;
 
-		// The client can't access a block's oxygenation state, only the player
+        // The client can't access a block's oxygenation state, only the player
         boolean oxygenated = true;
         Planet planet = PlanetApi.API.getPlanet(level);
         if (planet != null && !planet.oxygen()) {
@@ -236,16 +236,19 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         return validFluidStack() && !self().getBlockState().getValue(CombustionEngineBlock.POWERED);
     }
 
+    private FuelType getFuelType() {
+        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), getTank().getFluid().getFluid());
+    }
+
     public boolean validFluidStack() {
         if (getTank().getFluid().isEmpty())
             return false;
-        return FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), getTank().getFluid().getFluid()) != FuelType.EMPTY;
+        return getFuelType() != FuelType.EMPTY;
     }
 
     // Minimum burn of 1mB every 10 sec
     public float getFuelBurnRate() {
-        return Math.max(0.005f, FuelType.getTypeFor(self().getLevel().registryAccess().lookupOrThrow(TFGRegistries.FUEL_TYPE), getTank().getFluid().getFluid()).burnRate()
-                * Math.abs(targetSpeed.value / 256f) * (tier == 1 ? 1 : tier * 4));
+        return getFuelType().getFuelBurnRate(targetSpeed.value, tier);
     }
 
     public SmartBlockEntity self() {
