@@ -13,7 +13,9 @@ import net.irisshaders.iris.gl.uniform.UniformHolder;
 import net.irisshaders.iris.gl.uniform.UniformUpdateFrequency;
 import net.irisshaders.iris.uniforms.IrisExclusiveUniforms;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -53,7 +55,10 @@ public class IrisModernExclusiveUniformsMixin {
 
         var level = player.clientLevel;
         var climate = Climate.model(level);
-        var wind = climate.getWindVector(level, player.getOnPos(), Calendars.CLIENT.getTicks());
+        var pos = player.getOnPos();
+
+        var y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ());
+        var wind = climate.getWindVector(level, new BlockPos(pos.getX(), y, pos.getZ()), Calendars.CLIENT.getTicks());
         return new Vector2f(wind.x, wind.y);
     }
 
