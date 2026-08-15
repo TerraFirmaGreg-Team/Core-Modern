@@ -34,13 +34,13 @@ public class IrisModernExclusiveUniformsMixin {
     @Inject(method = "addIrisExclusiveUniforms(Lnet/irisshaders/iris/gl/uniform/UniformHolder;)V", at = @At("TAIL"), remap = false)
     private static void tfg$addIrisExclusiveUniforms(UniformHolder uniforms, CallbackInfo ci) {
         // SpaceEagle17 suggests always using per frame, and just caching in-between
-        uniforms.uniform2f(UniformUpdateFrequency.PER_TICK, "windDirection", IrisModernExclusiveUniformsMixin::tfg$windDirection);
-        uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "precipitation", IrisModernExclusiveUniformsMixin::tfg$precipitation);
-        uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "currentTemperature", IrisModernExclusiveUniformsMixin::tfg$currentTemperature);
-        uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "averageTemperature", IrisModernExclusiveUniformsMixin::tfg$averageTemperature);
-        uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "worldSize", IrisModernExclusiveUniformsMixin::tfg$temperatureScale);
-        uniforms.uniform1i(UniformUpdateFrequency.PER_TICK, "yearDays", IrisModernExclusiveUniformsMixin::tfg$yearDays);
-        uniforms.uniform1i(UniformUpdateFrequency.PER_TICK, "currentDay", IrisModernExclusiveUniformsMixin::tfg$currentDay);
+        uniforms.uniform2f(UniformUpdateFrequency.PER_TICK, "tfcWindDirection", IrisModernExclusiveUniformsMixin::tfg$windDirection);
+        uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "tfcPrecipitation", IrisModernExclusiveUniformsMixin::tfg$precipitation);
+        uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "tfcCurrentTemperature", IrisModernExclusiveUniformsMixin::tfg$currentTemperature);
+        uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "tfcAverageTemperature", IrisModernExclusiveUniformsMixin::tfg$averageTemperature);
+        uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "tfcWorldSize", IrisModernExclusiveUniformsMixin::tfg$temperatureScale);
+        uniforms.uniform1i(UniformUpdateFrequency.PER_TICK, "tfcYearDays", IrisModernExclusiveUniformsMixin::tfg$yearDays);
+        uniforms.uniform1i(UniformUpdateFrequency.PER_TICK, "tfcCurrentDay", IrisModernExclusiveUniformsMixin::tfg$currentDay);
     }
 
     @Unique
