@@ -35,14 +35,14 @@ dependencies {
     modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
     modImplementation ("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
-    modImplementation ("maven.modrinth:createfluidlogistic:NmPeIsfP") { transitive = false }
+    modImplementation ("maven.modrinth:createfluidlogistic:sP8O7ZIO") { transitive = false }
 
     // Create: Vintage Improvements
     modImplementation ("curse.maven:vintage-improvements-ssw-edition-1255448:7783979") { transitive = false }
 
     // Greate
     modRuntimeOnly "curse.maven:copycats-968398:7634682"
-    modRuntimeOnly "curse.maven:create-repair-1477958:8034105"
+    modRuntimeOnly "curse.maven:create-repair-1477958:8382254"
     modImplementation ("maven.modrinth:greate:${greate_version}") { transitive = false }
 
     // GTM
@@ -94,8 +94,8 @@ dependencies {
     // Jade
     modImplementation "maven.modrinth:jade:11.13.2+forge"
 
-    // TFC Roads and Roofs, rnr-0.2.2-1.20.1.jar, Dec 16, 2025
-    modImplementation "curse.maven:roads-and-roofs-tfc-1048212:8099778"
+    // TFC Roads and Roofs, rnr-0.2.5-1.20.1.jar, Aug 16 2026
+    modImplementation "curse.maven:roads-and-roofs-tfc-1048212:8573489"
 
     // Ad Astra
     modImplementation ("curse.maven:ad-astra-635042:6262032") { transitive = false }
@@ -137,8 +137,8 @@ dependencies {
     modCompileOnly "curse.maven:pandas-falling-trees-880630:5653236"
     modCompileOnly "curse.maven:pandalib-975460:5653131"
 
-    // ArborFirmaCraft, afc-1.0.20-1.20.1.jar, Nov 8, 2025
-    modImplementation "curse.maven:arborfirmacraft-877545:7200580"
+    // ArborFirmaCraft, afc-1.0.23-1.20.1.jar, Aug 16 2026
+    modImplementation "curse.maven:arborfirmacraft-877545:8543086"
 
     // TFCGenViewer (optional in dev; modpack always includes it) — mixins for TFG + new overworld gen
     modImplementation "maven.modrinth:tfcgenviewer:1.5.1"
@@ -162,7 +162,7 @@ dependencies {
     modImplementation "curse.maven:crafting-station-improved-1310299:7463065"
 
     // Strut Your Stuff
-    modImplementation "maven.modrinth:strut-your-stuff:1.1.0+mc1.20.1"
+    modImplementation "maven.modrinth:strut-your-stuff:1.1.1+mc1.20.1"
 
     // Phoenix's Chromatic Codes
     modImplementation "curse.maven:phoenixs-chromatic-colors-1483210:8241943"
