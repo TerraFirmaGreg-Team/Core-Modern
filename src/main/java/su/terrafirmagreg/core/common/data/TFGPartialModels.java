@@ -19,22 +19,33 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import su.terrafirmagreg.core.TFGCore;
 
 public class TFGPartialModels {
+    // Girders, Struts, and Trusses
     private static final Map<String, PartialModel[]> SEGMENT_MODELS = new HashMap<>();
     private static final Map<String, EnumMap<Direction, PartialModel>> BRACKET_MODELS = new HashMap<>();
 
     private static volatile Map<Block, PartialModel[]> SEGMENT_MODELS_BY_BLOCK;
     private static volatile Map<Block, EnumMap<Direction, PartialModel>> BRACKET_MODELS_BY_BLOCK;
 
+    // Steam engines
     public static final PartialModel TITANIUM_FLYWHEEL = block("steampowered", "titanium_flywheel/wheel");
     public static final PartialModel TITANIUM_FLYWHEEL_UPPER_ROTATING = block("steampowered", "titanium_flywheel/upper_rotating_connector");
     public static final PartialModel TITANIUM_FLYWHEEL_LOWER_ROTATING = block("steampowered", "titanium_flywheel/lower_rotating_connector");
     public static final PartialModel TITANIUM_FLYWHEEL_UPPER_SLIDING = block("steampowered", "titanium_flywheel/upper_sliding_connector");
     public static final PartialModel TITANIUM_FLYWHEEL_LOWER_SLIDING = block("steampowered", "titanium_flywheel/lower_sliding_connector");
 
-    public static void init() {
-    }
+    // Combustion generators
+    public static final PartialModel ENGINE_PISTONS_0 = block("generators/pistons/pistons_0");
+    public static final PartialModel ENGINE_PISTONS_1 = block("generators/pistons/pistons_1");
+    public static final PartialModel ENGINE_PISTONS_2 = block("generators/pistons/pistons_2");
+    public static final PartialModel ENGINE_PISTONS_3 = block("generators/pistons/pistons_3");
+    public static final PartialModel ENGINE_PISTONS_4 = block("generators/pistons/pistons_4");
+    public static final PartialModel ENGINE_PISTONS_VERTICAL_0 = block("generators/pistons/vertical_0");
+    public static final PartialModel ENGINE_PISTONS_VERTICAL_1 = block("generators/pistons/vertical_1");
+    public static final PartialModel ENGINE_PISTONS_VERTICAL_2 = block("generators/pistons/vertical_2");
+    public static final PartialModel ENGINE_PISTONS_VERTICAL_3 = block("generators/pistons/vertical_3");
+    public static final PartialModel ENGINE_PISTONS_VERTICAL_4 = block("generators/pistons/vertical_4");
 
-    public static void register() {
+    public static void init() {
     }
 
     private static final String[] GIRDER_VARIANTS = {

@@ -18,6 +18,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DataPackRegistryEvent;
 
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
@@ -26,6 +27,7 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
 import su.terrafirmagreg.core.common.data.blocks.*;
+import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
@@ -121,6 +123,14 @@ public class CommonProxy {
             TFGFluids.registerFluidInteractions();
             registerFlowerPots();
         });
+    }
+
+    @SubscribeEvent
+    public void registerDataPackRegistries(DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(
+                TFGRegistries.FUEL_TYPE,
+                FuelType.CODEC,
+                FuelType.NCODEC);
     }
 
     private void registerFlowerPots() {

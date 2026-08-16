@@ -247,6 +247,8 @@
         "common.species.TrooperMixin",
         "common.steampowered.BronzeSteamFlywheelBlockMixin",
         "common.steampowered.CastIronSteamFlywheelBlockMixin",
+        "common.steampowered.SteamEngineBlockMixin",
+        "common.steampowered.SteamEngineTileEntityMixin",
         "common.steampowered.SteamFlywheelTileEntityMixin",
         "common.steampowered.SteelSteamFlywheelBlockMixin",
         "common.strutyourstuff.StrutBlockEntityRendererMixin",

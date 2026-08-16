@@ -12,7 +12,7 @@ import su.terrafirmagreg.core.TFGCore;
 
 @SuppressWarnings({ "unchecked" })
 public final class TFGSounds {
-    // region TFC Entity Sounds
+    // TFC Entity Sounds
     public static final SoundEntry SEAL_AMBIENT = TFGCore.REGISTRATE.sound(TFGCore.id("seal_ambient")).addVariant(TFGCore.id("seal_ambient_1")).build();
     public static final SoundEntry SEAL_DEATH = TFGCore.REGISTRATE.sound(TFGCore.id("seal_death")).addVariant(TFGCore.id("seal_death_1")).build();
     public static final SoundEntry SEAL_HURT = TFGCore.REGISTRATE.sound(TFGCore.id("seal_hurt")).addVariant(TFGCore.id("seal_hurt_1")).build();
@@ -32,11 +32,9 @@ public final class TFGSounds {
             Optional.of(BISON_ATTACK::getMainEvent), Optional.empty());
     public static final TFCSounds.EntitySound FOX = new TFCSounds.EntitySound(() -> SoundEvents.FOX_AMBIENT, () -> SoundEvents.FOX_DEATH, () -> SoundEvents.FOX_HURT, () -> SoundEvents.CHICKEN_STEP,
             Optional.of((Supplier) () -> SoundEvents.FOX_BITE), Optional.of((Supplier) () -> SoundEvents.FOX_SLEEP));
-    // endregion
 
-    // region GT Machine Sounds
+    // GT Machine Sounds
     public static final SoundEntry GEOLOGIC_VULCANIZER = TFGCore.REGISTRATE.sound(TFGCore.id("geologic_vulcanizer")).build();
-    // endregion
 
     public static void init() {
     }

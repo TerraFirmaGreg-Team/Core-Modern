@@ -11,6 +11,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Items;
@@ -29,7 +30,9 @@ import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.TFGRecipeTypes;
+import su.terrafirmagreg.core.common.data.TFGRegistries;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Create;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
 import su.terrafirmagreg.core.common.recipe.ArtisanRecipe;
 import su.terrafirmagreg.core.common.recipe.repair.ItemRepairRecipe;
@@ -44,6 +47,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory BLAZE_BURNER = new EmiRecipeCategory(TFGCore.id("blaze_burner"),
             EmiStack.of(AllBlocks.BLAZE_BURNER.asItem()));
+
+    public static final EmiRecipeCategory COMBUSTION_ENGINE = new EmiRecipeCategory(TFGCore.id("combustion_engine"),
+            EmiStack.of(TFGBlocks_Create.STEEL_COMBUSTION_ENGINE.asItem()));
 
     public static final EmiRecipeCategory BLOCK_INTERACTION = new EmiRecipeCategory(TFGCore.id("block_interaction"),
             EmiStack.of(TFCItems.MORTAR.get()));
@@ -111,12 +117,22 @@ public class TFGEmiPlugin implements EmiPlugin {
         for (var liquid_fuel : BurnerStomachHandler.LIQUID_BURNER_FUEL_MAP.entrySet()) {
             emiRegistry.addRecipe(new LiquidBlazeBurnerRecipe(liquid_fuel));
         }
-
         for (var normal_fuel : ForgeRegistries.ITEMS.tags().getTag(AllTags.AllItemTags.BLAZE_BURNER_FUEL_REGULAR.tag).stream().toList()) {
             emiRegistry.addRecipe(new SolidBlazeBurnerRecipe(normal_fuel, false));
         }
         for (var super_fuel : ForgeRegistries.ITEMS.tags().getTag(AllTags.AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag).stream().toList()) {
             emiRegistry.addRecipe(new SolidBlazeBurnerRecipe(super_fuel, true));
+        }
+
+        // Combustion Engine
+        emiRegistry.addCategory(COMBUSTION_ENGINE);
+        emiRegistry.addWorkstation(COMBUSTION_ENGINE, EmiStack.of(TFGBlocks_Create.STEEL_COMBUSTION_ENGINE.asItem()));
+        emiRegistry.addWorkstation(COMBUSTION_ENGINE, EmiStack.of(TFGBlocks_Create.ALUMINIUM_COMBUSTION_ENGINE.asItem()));
+        emiRegistry.addWorkstation(COMBUSTION_ENGINE, EmiStack.of(TFGBlocks_Create.STAINLESS_STEEL_COMBUSTION_ENGINE.asItem()));
+        emiRegistry.addWorkstation(COMBUSTION_ENGINE, EmiStack.of(TFGBlocks_Create.TITANIUM_COMBUSTION_ENGINE.asItem()));
+
+        for (var fuel : Minecraft.getInstance().level.registryAccess().registryOrThrow(TFGRegistries.FUEL_TYPE)) {
+            emiRegistry.addRecipe(new CombustionEngineRecipe(fuel));
         }
 
         //Block Interactions
