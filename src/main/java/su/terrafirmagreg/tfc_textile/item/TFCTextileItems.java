@@ -17,83 +17,47 @@ public class TFCTextileItems {
 
     public static final RegistryObject<Item> COTTON_CLOTH = ITEMS.register(
             "cotton_cloth",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
-
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> COTTON_STRING = ITEMS.register(
             "cotton_string",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
-
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> CROCODILE_LEATHER = ITEMS.register(
             "crocodile_leather",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
-
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> PRIMITIVE_INSULATION = ITEMS.register(
             "primitive_insulation",
-            () -> new Item(new Item.Properties().stacksTo(32))
+            () -> new Item(new Item.Properties().stacksTo(32)));
 
-    );
-
-    public static final RegistryObject<Item> LINEN_CLOTH = ITEMS.register(
-            "linen_cloth",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
     public static final RegistryObject<Item> CARIBOU_FUR = ITEMS.register(
             "caribou_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> POLAR_BEAR_FUR = ITEMS.register(
             "polar_bear_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> BLACK_BEAR_FUR = ITEMS.register(
             "black_bear_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> GRIZZLY_BEAR_FUR = ITEMS.register(
             "grizzly_bear_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> PANTHER_FUR = ITEMS.register(
             "panther_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> SABERTOOTH_FUR = ITEMS.register(
             "sabertooth_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> TIGER_FUR = ITEMS.register(
             "tiger_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> COUGAR_FUR = ITEMS.register(
             "cougar_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> DIREWOLF_FUR = ITEMS.register(
             "direwolf_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> LION_FUR = ITEMS.register(
             "lion_fur",
-            () -> new Item(new Item.Properties().stacksTo(32))
-
-    );
+            () -> new Item(new Item.Properties().stacksTo(32)));
 
     //cotton clothes
 

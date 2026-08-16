@@ -55,11 +55,10 @@ public class TFCtextile {
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
-            //I really don't know java, this probably should have been done better.
-            //event.accept(TFCTextileItems.COTTON_HAT);
-            //event.accept(TFCTextileItems.COTTON_SHIRT);
-            //event.accept(TFCTextileItems.COTTON_PANTS);
-            //event.accept(TFCTextileItems.COTTON_SOCKS);
+            event.accept(TFCTextileItems.COTTON_HAT);
+            event.accept(TFCTextileItems.COTTON_SHIRT);
+            event.accept(TFCTextileItems.COTTON_PANTS);
+            event.accept(TFCTextileItems.COTTON_SOCKS);
 
             event.accept(TFCTextileItems.CROCODILE_HAT);
             event.accept(TFCTextileItems.CROCODILE_SHIRT);
@@ -131,12 +130,20 @@ public class TFCtextile {
             event.accept(TFCTextileItems.LION_SOCKS);
             event.accept(TFCTextileItems.LION_HAT);
 
+            event.accept(TFCTextileItems.PHANTOM_SILK_HAT);
+            event.accept(TFCTextileItems.PHANTOM_SILK_SHIRT);
+            event.accept(TFCTextileItems.PHANTOM_SILK_PANTS);
+            event.accept(TFCTextileItems.PHANTOM_SILK_SOCKS);
+
+            event.accept(TFCTextileItems.RED_ELK_HAT);
+            event.accept(TFCTextileItems.RED_ELK_SHIRT);
+            event.accept(TFCTextileItems.RED_ELK_PANTS);
+            event.accept(TFCTextileItems.RED_ELK_SOCKS);
         }
-        ;
+
         if (event.getTab() == TFCCreativeTabs.MISC.tab().get()) {
             event.accept(TFCTextileItems.PRIMITIVE_INSULATION);
-            //event.accept(TFCTextileItems.COTTON_CLOTH);
-            //event.accept(TFCTextileItems.LINEN_CLOTH);
+            event.accept(TFCTextileItems.COTTON_CLOTH);
             event.accept(TFCTextileItems.CARIBOU_FUR);
             event.accept(TFCTextileItems.COUGAR_FUR);
             event.accept(TFCTextileItems.BLACK_BEAR_FUR);
