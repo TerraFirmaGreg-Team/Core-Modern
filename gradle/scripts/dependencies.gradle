@@ -77,7 +77,7 @@ dependencies {
 
     // AE2
     modImplementation "curse.maven:guideme-1173950:7013686"
-    modImplementation jarJar("appeng:appliedenergistics2-forge:$ae2_version")
+    modImplementation "curse.maven:ae2-uelm-1624366:8516890"
     modImplementation "curse.maven:applied-energistics-2-wireless-terminals-459929:7014805"
 
     // ComputerCraft
