@@ -138,7 +138,7 @@ public class TFCtextile {
             event.accept(TFCTextileItems.RED_ELK_HAT);
             event.accept(TFCTextileItems.RED_ELK_SHIRT);
             event.accept(TFCTextileItems.RED_ELK_PANTS);
-            event.accept(TFCTextileItems.RED_ELK_SOCKS);
+            event.accept(TFCTextileItems.RED_ELK_BOOTS);
         }
 
         if (event.getTab() == TFCCreativeTabs.MISC.tab().get()) {

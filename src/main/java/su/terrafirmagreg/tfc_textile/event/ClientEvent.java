@@ -98,7 +98,7 @@ public class ClientEvent {
 
         CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_PANTS.get(), ClothesCurioRenderer::new);
         CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_SHIRT.get(), ClothesCurioRenderer::new);
-        CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_SOCKS.get(), ClothesCurioRenderer::new);
+        CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_BOOTS.get(), ClothesCurioRenderer::new);
         CuriosRendererRegistry.register(TFCTextileItems.RED_ELK_HAT.get(), ClothesCurioRenderer::new);
     }
 

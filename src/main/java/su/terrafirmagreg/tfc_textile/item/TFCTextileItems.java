@@ -280,7 +280,7 @@ public class TFCTextileItems {
     public static final RegistryObject<Item> RED_ELK_PANTS = ITEMS.register(
             "red_elk_pants",
             () -> new ClothesItem(TFCTextileMaterial.RED_ELK, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1).durability(1)));
-    public static final RegistryObject<Item> RED_ELK_SOCKS = ITEMS.register(
+    public static final RegistryObject<Item> RED_ELK_BOOTS = ITEMS.register(
             "red_elk_boots",
             () -> new ClothesItem(TFCTextileMaterial.RED_ELK, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(1)));
 
@@ -296,7 +296,7 @@ public class TFCTextileItems {
             "phantom_silk_pants",
             () -> new ClothesItem(TFCTextileMaterial.PHANTOM_SILK, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1).durability(1)));
     public static final RegistryObject<Item> PHANTOM_SILK_SOCKS = ITEMS.register(
-            "phantom_silk_boots",
+            "phantom_silk_socks",
             () -> new ClothesItem(TFCTextileMaterial.PHANTOM_SILK, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(1)));
 
     public static void register(IEventBus eventBus) {

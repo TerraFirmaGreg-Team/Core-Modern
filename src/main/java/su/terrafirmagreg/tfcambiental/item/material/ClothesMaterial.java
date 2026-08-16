@@ -66,10 +66,10 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             "tfcambiental:burlap_cloth",
             SoundEvents.WOOL_PLACE,
             TFCItems.BURLAP_CLOTH,
-            T1_DURABILITY,
+            T2_DURABILITY,
             1,
             T1_COOLING,
-            T1_INSULATION);
+            T2_INSULATION);
 
     public static final ClothesMaterial SILK = new ClothesMaterial(
             "tfcambiental:silk_cloth",
