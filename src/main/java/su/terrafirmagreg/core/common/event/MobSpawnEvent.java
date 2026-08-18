@@ -1,7 +1,6 @@
 package su.terrafirmagreg.core.common.event;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -31,13 +30,7 @@ public class MobSpawnEvent {
 
         // We only care about "natural" spawns
         if (spawn == MobSpawnType.NATURAL || spawn == MobSpawnType.CHUNK_GENERATION || spawn == MobSpawnType.REINFORCEMENT) {
-            // Reuse TFC's configs
-            if (TFCConfig.SERVER.enableVanillaMonsters.get()) {
-                if (!Helpers.isBlock(level.getBlockState(entity.blockPosition().below()), TFCTags.Blocks.MONSTER_SPAWNS_ON)) {
-                    event.setSpawnCancelled(true);
-                    event.setCanceled(true);
-                }
-            } else {
+            if (!Helpers.isBlock(level.getBlockState(entity.blockPosition().below()), TFCTags.Blocks.MONSTER_SPAWNS_ON)) {
                 event.setSpawnCancelled(true);
                 event.setCanceled(true);
             }
