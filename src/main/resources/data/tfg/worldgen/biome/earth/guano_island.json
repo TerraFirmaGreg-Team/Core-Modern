@@ -64,12 +64,6 @@
             {
                 "weight": 100,
                 "minCount": 1,
-                "type": "jellies:phosphorum",
-                "maxCount": 2
-            },
-            {
-                "weight": 100,
-                "minCount": 1,
                 "type": "minecraft:bat",
                 "maxCount": 2
             },
@@ -80,6 +74,12 @@
                 "maxCount": 5
             }
         ],
+        "axolotls": [{
+            "weight": 100,
+            "minCount": 1,
+            "type": "jellies:phosphorum",
+            "maxCount": 2
+        }],
         "creature": [
             {
                 "weight": 1,
