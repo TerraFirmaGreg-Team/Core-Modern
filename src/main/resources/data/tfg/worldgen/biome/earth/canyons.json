@@ -134,7 +134,9 @@
                 "minCount": 2,
                 "type": "fowlplay:sparrow",
                 "maxCount": 4
-            },
+            }
+        ],
+        "axolotls": [
             {
                 "weight": 30,
                 "minCount": 2,
