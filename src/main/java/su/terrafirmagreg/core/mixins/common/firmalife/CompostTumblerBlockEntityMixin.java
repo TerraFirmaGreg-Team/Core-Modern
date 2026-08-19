@@ -40,7 +40,7 @@ public abstract class CompostTumblerBlockEntityMixin extends TFCBlockEntity impl
     private void tfg$onIsRotating(CallbackInfoReturnable<Boolean> cir) {
         if (level != null) {
             Direction back = getBlockState().getValue(CompostTumblerBlock.FACING).getOpposite();
-            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
+            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe && CreateKineticsHelper.isConnected(kbe, back.getOpposite())) {
                 float stressAtBase = (float) BlockStressValues.getImpact(getBlockState().getBlock());
                 float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
                 boolean overstressed = kbe.isOverStressed() || (stressAtBase * faceSpeed > (TFGConfig.SERVER.COMPOSTER_STRESS_LIMIT.get() + .0001f));

@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.config.TFGConfig;
-import su.terrafirmagreg.core.mixins.common.create.RotationPropagatorAccessor;
 import su.terrafirmagreg.core.utils.CreateKineticsHelper;
 
 /**
@@ -45,7 +44,7 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
 
     @Inject(method = "getRotationSpeed", at = @At("HEAD"), cancellable = true)
     private void tfg$onGetRotationSpeed(CallbackInfoReturnable<Float> cir) {
-        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe) {
+        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe && CreateKineticsHelper.isConnected(kbe, Direction.DOWN)) {
             float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, Direction.DOWN));
             float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
 
@@ -64,15 +63,13 @@ public abstract class QuernBlockEntityMixin extends TFCBlockEntity implements IH
     private void tfg$onIsConnectedToNetwork(CallbackInfoReturnable<Boolean> cir) {
         QuernBlockEntity quern = (QuernBlockEntity) (Object) this;
         if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe && quern.hasHandstone()) {
-            if (RotationPropagatorAccessor.callGetAxisModifier(kbe, Direction.DOWN) != 0) {
-                cir.setReturnValue(true);
-            }
+            cir.setReturnValue(CreateKineticsHelper.isConnected(kbe, Direction.DOWN));
         }
     }
 
     @Inject(method = "getRotationAngle", at = @At("HEAD"), cancellable = true)
     private void tfg$onGetRotationAngle(float partialTick, CallbackInfoReturnable<Float> cir) {
-        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity) {
+        if (level != null && level.getBlockEntity(worldPosition.above()) instanceof KineticBlockEntity kbe && CreateKineticsHelper.isConnected(kbe, Direction.DOWN)) {
             float speed = getRotationSpeed();
             if (speed <= 0) {
                 cir.setReturnValue(0f);
