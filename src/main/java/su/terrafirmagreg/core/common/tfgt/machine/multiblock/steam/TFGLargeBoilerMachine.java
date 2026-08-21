@@ -170,6 +170,12 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     @Persisted
     @DescSynced
     private float lastWaterMultiplier = 1.0f;
+    @Persisted
+    @DescSynced
+    private int lastWaterDrained = 0;
+
+    @Persisted
+    private boolean hasNoWater = false;
 
     // Precomputed once in constructor (depends only on final maxTemperature)
     private final List<BoosterFluid> compatibleBoosters;
@@ -319,6 +325,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                 steamGenerated = 0;
                 lastWaterTagKey = null;
                 lastWaterMultiplier = 1.0f;
+                lastWaterDrained = 0;
+                hasNoWater = false;
             } else if (maxDrain > 0) {
                 DrainResult drainResult = tryDrainWater(maxDrain);
                 int drained = drainResult.drained();
@@ -327,6 +335,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                 // Update GUI water display state
                 lastWaterTagKey = drainResult.tagKey();
                 lastWaterMultiplier = waterMultiplier;
+                lastWaterDrained = drained;
 
                 // Steam on baseDrainExact and not maxDrain
                 steamGenerated = (int) Math.round(
@@ -345,7 +354,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                             break;
                     }
                 }
-                if (drained < maxDrain) {
+                boolean hasDrainedWater = drained > 0;
+                if (hasNoWater && hasDrainedWater) {
                     doExplosion(2f);
                     var center = getPos().below().relative(getFrontFacing().getOpposite());
                     if (GTValues.RNG.nextInt(100) > 80) {
@@ -358,6 +368,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                             }
                         }
                     }
+                } else {
+                    hasNoWater = !hasDrainedWater;
                 }
             }
         }
@@ -466,8 +478,10 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     public void addDisplayText(List<Component> textList) {
         IDisplayUIMachine.super.addDisplayText(textList);
         if (isFormed()) {
-            textList.add(Component.translatable("gtceu.multiblock.large_boiler.temperature",
-                    currentTemperature + 274, getEffectiveMaxTemperature() + 274));
+            textList.add(Component.translatable("tfg.multiblock.large_boiler.temperature",
+                    currentTemperature, getEffectiveMaxTemperature()).withStyle(
+                            Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                    Component.translatable("tfg.multiblock.large_boiler.temperature.tooltip")))));
             textList.add(Component.translatable("gtceu.multiblock.large_boiler.steam_output",
                     steamGenerated / TICKS_PER_STEAM_GENERATION));
 
@@ -488,9 +502,16 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                         Component.translatable("fluid.tag.tfg." + tagPath).withStyle(ChatFormatting.AQUA),
                         Component.literal("x" + lastWaterMultiplier).withStyle(ChatFormatting.AQUA)));
             } else {
-                textList.add(Component.translatable("tfg.multiblock.large_boiler.water_normal")
-                        .withStyle(ChatFormatting.GRAY));
+                textList.add(Component.translatable("tfg.multiblock.large_boiler.water_normal",
+                        Component.translatable("tfg.multiblock.large_boiler.standard").withStyle(ChatFormatting.GRAY)));
             }
+
+            textList.add(Component.translatable("tfg.multiblock.large_boiler.water_consumption",
+                    Component.literal(String.valueOf(lastWaterDrained / TICKS_PER_STEAM_GENERATION))
+                            .withStyle(ChatFormatting.AQUA))
+                    .withStyle(Style.EMPTY
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                    Component.translatable("tfg.multiblock.large_boiler.water_consumption.tooltip")))));
 
             int efficiencyPercent = (int) Math.round(100 - ((1.0 - getRecipeLogic().getTemperatureMultiplier()) * 100));
             textList.add(Component.translatable("tfg.multiblock.large_boiler.fuel_efficiency",
