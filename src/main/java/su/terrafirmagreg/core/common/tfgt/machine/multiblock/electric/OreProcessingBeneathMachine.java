@@ -194,8 +194,6 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
         };
     }
 
-    // Recipe Modifier - So we can interact with the chancedOutput
-
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof OreProcessingBeneathMachine processor)) {
             return RecipeModifier.nullWrongType(OreProcessingBeneathMachine.class, machine);
@@ -289,7 +287,6 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
 
                             Component amountText;
                             if (content.isChanced()) {
-                                // Average consumption: amount × chance × parallels
                                 double avg = stack.getAmount()
                                         * ((double) content.chance / content.maxChance)
                                         * lastRecipe.parallels;
