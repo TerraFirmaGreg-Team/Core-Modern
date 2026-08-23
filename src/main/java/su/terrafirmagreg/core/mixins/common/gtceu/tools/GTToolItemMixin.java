@@ -18,9 +18,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-@Mixin(GTToolItem.class)
+@Mixin(value = GTToolItem.class, remap = false)
 public class GTToolItemMixin {
-    @Inject(method = "useOn", at = @At("HEAD"), cancellable = true, remap = false)
+    @Inject(method = "useOn", at = @At("HEAD"), cancellable = true, remap = true)
     private void tfg$allowGtWrenchesOnCreateBlocks(UseOnContext ctx, CallbackInfoReturnable<InteractionResult> cir) {
         Level level = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
