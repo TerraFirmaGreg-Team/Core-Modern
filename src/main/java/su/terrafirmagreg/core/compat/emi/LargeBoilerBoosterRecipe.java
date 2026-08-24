@@ -91,7 +91,7 @@ public class LargeBoilerBoosterRecipe implements EmiRecipe {
         // Bonus Temp
         holder.addText(
                 Component.translatable("tfg.emi.large_boiler_booster.temperature_bonus",
-                        "+" + TEMPERATURE_BONUS + "°C"),
+                        "+" + TEMPERATURE_BONUS + "PU"),
                 2, offsetY, 0xFF5555, true);
         offsetY += lineHeight;
 
@@ -99,7 +99,7 @@ public class LargeBoilerBoosterRecipe implements EmiRecipe {
         if (MIN_BOILER_TEMPERATURE > 0) {
             holder.addText(
                     Component.translatable("tfg.emi.large_boiler_booster.min_boiler",
-                            (MIN_BOILER_TEMPERATURE + 274) + "K"),
+                            (MIN_BOILER_TEMPERATURE) + "PU"),
                     2, offsetY, 0xFFAA00, true);
             offsetY += lineHeight;
         }
