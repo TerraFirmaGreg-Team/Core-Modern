@@ -299,4 +299,11 @@ public class TFGTRecipeTypes {
             .setSound(TFGSounds.GEOLOGIC_VULCANIZER)
             .addDataInfo(data -> LocalizationUtils.format("tfg.gui.ore_processing_gas.optimal_ratio.1"))
             .addDataInfo(data -> LocalizationUtils.format("tfg.gui.ore_processing_gas.optimal_ratio.2"));
+
+    public static final GTRecipeType ME_ASSEMBLER = GTRecipeTypes
+            .register("me_assembler", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(9, 1, 4, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ASSEMBLER, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.ASSEMBLER);
 }
