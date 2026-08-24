@@ -294,6 +294,10 @@ public class TFGBlocks_Casings {
     public static final BlockEntry<Block> STERLING_SILVER_CASING = createCasingBlock("casings/sterling_silver_casing",
             GTModels.cubeAllModel(TFGCore.id("block/casings/sterling_silver_casing")));
 
+    public static final BlockEntry<ActiveBlock> AE2_CASING = createActiveCasingBlock("casings/machine_casing_ae2",
+            ModelUtils.createActiveCasingModel(TFGCore.id("block/casings/machine_casing_ae2")),
+            SoundType.METAL, 6, 5, MapColor.COLOR_BLACK, false);
+
     public static BlockEntry<ActiveBlock> createActiveCasingBlock(String name, NonNullBiConsumer<DataGenContext<Block, ActiveBlock>, RegistrateBlockstateProvider> modelProvider,
             SoundType sound, float strength, float explosionResist, MapColor mapColor, boolean onlyDropWithTool) {
         return TFGCore.REGISTRATE.block(name, ActiveBlock::new)
@@ -304,7 +308,7 @@ public class TFGBlocks_Casings {
                         p.requiresCorrectToolForDrops();
                     return p;
                 })
-                .addLayer(() -> RenderType::solid)
+                .addLayer(() -> RenderType::cutout)
                 .blockstate(modelProvider)
                 .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH, TFGTags.Blocks.Casings)
                 .item(BlockItem::new).tag(TFGTags.Items.Casings)
