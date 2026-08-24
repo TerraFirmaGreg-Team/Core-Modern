@@ -12,7 +12,7 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
-@Mixin(WrenchEventHandler.class)
+@Mixin(value = WrenchEventHandler.class, remap = false)
 public class WrenchEventHandlerMixin {
     @Inject(method = "useOwnWrenchLogicForCreateBlocks", at = @At("HEAD"), cancellable = true, remap = false)
     private static void tfg$allowWrenchTagForCreateBlocks(PlayerInteractEvent.RightClickBlock event, CallbackInfo ci) {
