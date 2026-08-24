@@ -1361,6 +1361,7 @@ public class TFGMultiMachines {
                                 .or(Predicates.autoAbilities(true, false, false))
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(4))
                                 .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                                .or(Predicates.abilities(PartAbility.DATA_ACCESS).setMaxGlobalLimited(1))
                                 .or(energyPredicate))
                         .where('Z', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
                                 .or(energyPredicate))
