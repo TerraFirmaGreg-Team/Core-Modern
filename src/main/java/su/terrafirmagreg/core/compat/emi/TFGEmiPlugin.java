@@ -232,29 +232,17 @@ public class TFGEmiPlugin implements EmiPlugin {
         int image_height = 20;
         int image_width = 20;
 
-        holder.addDrawable(offsetX, offsetY, image_width, image_height * 2, (graphics, mouseX, mouseY, delta) -> {
+        // Background Lamp.
+        holder.addTexture(LAMP_BG, offsetX, offsetY, image_width, image_height, 0, 0, image_width, image_height, image_width, image_height);
 
-            //Draw Background Lamp.
-            graphics.blit(LAMP_BG, 0, 0, 0, 0, image_width, image_height, image_width, image_height);
+        if (rate <= 0) {
+            // Negative rate shows the full foreground image permanently.
+            holder.addTexture(LAMP_FG, offsetX, offsetY, image_width, image_height, 0, 0, image_width, image_height, image_width, image_height);
+        } else {
+            // Animated Foreground Lamp.
+            holder.addAnimatedTexture(LAMP_FG, offsetX, offsetY, image_width, image_height, 0, 0, image_width, image_height, image_width, image_height, rate, false, true, false);
+        }
 
-            int animatedHeight;
-
-            if (rate <= 0) {
-                // Negative rate shows the full foreground image permanently.
-                animatedHeight = image_height;
-            } else {
-                long time = System.currentTimeMillis() % rate;
-                animatedHeight = (int) (image_height * (time / (float) rate));
-            }
-
-            if (animatedHeight > 0) {
-                // Starting Y Pos.
-                int drawY = image_height - animatedHeight;
-
-                // Active Foreground Portion.
-                graphics.blit(LAMP_FG, 0, drawY, 0, drawY, image_width, animatedHeight, image_width, image_height);
-            }
-        });
         return offsetX + image_width + 2;
     }
 

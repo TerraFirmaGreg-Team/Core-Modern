@@ -79,7 +79,7 @@ public class LampFuelEmiRecipe implements EmiRecipe {
         int secondsPerMb = fuel.getBurnRate() / 20;
         Object burnTime = secondsPerMb <= 0 ? "∞" : secondsPerMb;
 
-        widgetHolder.addText(Component.translatable("tfg.emi.lamp_fuel.burn_time", burnTime), x, y * 2, ChatFormatting.WHITE.getColor(), true);
+        widgetHolder.addText(Component.translatable("tfg.emi.lamp_fuel.burn_rate", burnTime), x, y * 2, ChatFormatting.WHITE.getColor(), true);
 
     }
 }
