@@ -46,6 +46,7 @@ import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
+import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
 import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
@@ -82,6 +83,7 @@ import fi.dea.mc.deafission.common.data.FisssionGtPartAbilities;
 import fi.dea.mc.deafission.common.data.machine.hb.HbMachine;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
@@ -1325,90 +1327,85 @@ public class TFGMultiMachines {
             .register();
 
     public static final MultiblockMachineDefinition ME_ASSEMBLER = REGISTRATE
-            .multiblock("me_assembler", WorkableElectricMultiblockMachine::new)
+            .multiblock("me_assembler", MEAssemblerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.ME_ASSEMBLER)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT)
-            .appearanceBlock(TFGBlocks_Casings.PRESSURE_CASING_DARK)
+            .alwaysTryModifyRecipe(true)
+            .recipeModifiers(MEAssemblerMachine::buddingOverclock ,GTRecipeModifiers.BATCH_MODE)
+            .appearanceBlock(TFGBlocks_Casings.PTFE_BLACK_CASING)
             .tooltips(
                     Component.translatable("tfg.tooltip.machine.me_assembler_1"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_2"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_3"),
-                    Component.translatable("tfg.tooltip.machine.two_energy_hatches"))
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
             .workableCasingModel(
-                    TFGCore.id("block/casings/machine_casing_pressure_dark"),
+                    TFGCore.id("block/casings/machine_casing_ptfe_black"),
                     GTCEu.id("block/machines/electromagnetic_separator"))
             .pattern(definition -> {
                 TraceabilityPredicate energyPredicate = abilities(PartAbility.INPUT_ENERGY)
                         .setMinGlobalLimited(1)
-                        .setMaxGlobalLimited(2)
+                        .setMaxGlobalLimited(1)
                         .setPreviewCount(1);
                 return FactoryBlockPattern.start()
-                        .aisle("AAAAA     ", "ATTTA     ", "ATTTA     ", "AATAA     ", " AAA      ")
-                        .aisle("AACAAAAAAA", "I###AB   B", "I#E#AB   B", "AA#AAB   B", " AGAAAAAAA")
-                        .aisle("AACAAAZZZA", "I###A FDD ", "I#E#G D   ", "AA#AA D   ", " AGAEAZZZA")
-                        .aisle("AACAAAZZZA", "I###A DB  ", "I#E#G  E  ", "AA#AA  B  ", " AGAEAZZZA")
-                        .aisle("AACAAAZZZA", "I###A D   ", "I#E#G     ", "AA#AA     ", " AGAEAZZZA")
-                        .aisle("AACAAAAAAA", "I###AB   B", "I#E#AB   B", "AA#AAB   B", " AGAAAAAAA")
-                        .aisle("AAAAA     ", "ATXTA     ", "ATTTA     ", "AATAA     ", " AAA      ")
+                        .aisle("  TTTTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
+                        .aisle("AAACCCAAA", "ICGFDDGCI", "ICGD  GCI", "ICGD  GCI", "AAACCCAAA")
+                        .aisle("ACCCCCCCA", "ICGDB GCI", "ICG Q GCI", "ICG B GCI", "ACCCCCCCA")
+                        .aisle("AAACCCAAA", "ICGD  GCI", "ICG   GCI", "ICG   GCI", "AAACCCAAA")
+                        .aisle("  TTTTT  ", "TTT X TTT", "TCT   TCT", "TTT   TTT", "  TTTTT  ")
                         .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                         .where('A', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get()))
                         .where('B', Predicates.frames(GTMaterials.StainlessSteel))
-                        .where('C', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get()))
-                        .where('I', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
+                        .where('C', Predicates.blocks(TFGBlocks_Casings.AE2_CASING.get()))
+                        .where('I', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())
                                 .or(Predicates.abilities(PartAbility.IMPORT_ITEMS)))
-                        .where('T', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
+                        .where('T', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())
                                 .or(Predicates.autoAbilities(true, false, false))
-                                .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(4))
+                                .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(3))
                                 .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
-                                .or(Predicates.abilities(PartAbility.DATA_ACCESS).setMaxGlobalLimited(1))
                                 .or(energyPredicate))
-                        .where('Z', Predicates.blocks(TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
-                                .or(energyPredicate))
+                        .where('G', Predicates.blocks(AEBlocks.QUARTZ_VIBRANT_GLASS.block()))
+                        .where('H', dataHatchPredicate(
+                                Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())))
+                        .where('Q', TFGPredicates.buddingBlocks())
                         .where('D', Predicates.air()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
-                        .where('E', Predicates.blocks(AEBlocks.FLUIX_BLOCK.block()))
                         .where('F', Predicates.air()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
-                        .where('G', Predicates.blocks(AEBlocks.QUARTZ_VIBRANT_GLASS.block()))
                         .where(' ', Predicates.any())
-                        .where("#", Predicates.air())
                         .build();
             })
             .shapeInfos(definition -> {
                 List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
                 var builder = MultiblockShapeInfo.builder()
-                        .aisle("     AAAAA", "     ATXTA", "     ATtTA", "     AAmAA", "      AAA ")
-                        .aisle("AAAAAAACAA", "B   BA###I", "B   BA#E#I", "B   BAA#AA", "AAAAAAAGA ")
-                        .aisle("AZZZAAACAA", "   D A###I", "     G#E#I", "     AA#AA", "AZZZAEAGA ")
-                        .aisle("AZZZAAACAA", "  BD A###I", "  E  G#E#I", "  B  AA#AA", "AZZZAEAGA ")
-                        .aisle("AZZZAAACAA", " DDF A###I", "   D G#E#I", "   D AA#AA", "AZZZAEAGA ")
-                        .aisle("AAAAAAACAA", "B   BA###I", "B   BA#E#I", "B   BAA#AA", "AAAAAAAGA ")
-                        .aisle("     AAAAA", "     AiTiA", "     AfTfA", "     AATAA", "      AAA ")
+                        .aisle("  TTnTT  ", "TTT X TTT", "TCT   TCT", "TTT   TTT", "  TTmTT  ")
+                        .aisle("AAACCCAAA", "ICGD  GCA", "ICG   GCA", "ICG  DGCA", "AAACCCAAA")
+                        .aisle("ACCCCCCCA", "ICGDB GCA", "ICG q GCA", "ICG BDGCA", "ACCCCCCCA")
+                        .aisle("AAACCCAAA", "ICGFDDGCA", "ICG  DGCA", "ICGDDFGCA", "AAACCCAAA")
+                        .aisle("  TTpTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TToTT  ")
                         .where('X', definition, Direction.NORTH)
                         .where('A', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
                         .where('B', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
-                        .where('C', TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
-                        .where('I', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.EAST)
-                        .where('T', TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
-                        .where('Z', TFGBlocks_Casings.PRESSURE_CASING_DARK.get())
-                        .where('E', AEBlocks.FLUIX_BLOCK.block())
+                        .where('C', TFGBlocks_Casings.AE2_CASING.get())
                         .where('G', AEBlocks.QUARTZ_VIBRANT_GLASS.block())
-                        .where(' ', Blocks.AIR)
-                        .where('t', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
-                        .where('f', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('i', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
-                        .where('m', GTMachines.MAINTENANCE_HATCH, Direction.NORTH)
-                        .where('#', Blocks.AIR);
+                        .where('H', GTResearchMachines.BASIC_DATA_ACCESS_HATCH, Direction.SOUTH)
+                        .where('I', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.WEST)
+                        .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                        .where('m', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
+                        .where('n', GTMachines.MAINTENANCE_HATCH, Direction.NORTH)
+                        .where('o', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.SOUTH)
+                        .where('p', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
+                        .where(' ', Blocks.AIR);
 
                 var emptyCopy = builder.shallowCopy()
                         .where('D', Blocks.AIR)
-                        .where('F', Blocks.AIR);
+                        .where('F', Blocks.AIR)
+                        .where('q', AEBlocks.QUARTZ_BLOCK.block());
                 shapeInfos.add(emptyCopy.build());
 
                 var spatialCopy = builder.shallowCopy()
                         .where('D', AEBlocks.SPATIAL_PYLON.block())
-                        .where('F', AEBlocks.SPATIAL_IO_PORT.block());
+                        .where('F', AEBlocks.SPATIAL_IO_PORT.block())
+                        .where('q', AEBlocks.FLAWLESS_BUDDING_QUARTZ.block());
                 shapeInfos.add(spatialCopy.build());
 
                 return shapeInfos;

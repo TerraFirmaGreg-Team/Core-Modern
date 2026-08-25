@@ -14,15 +14,18 @@ import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
+import com.gregtechceu.gtceu.api.recipe.ResearchData;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.recipe.condition.AdjacentFluidCondition;
+import com.gregtechceu.gtceu.common.recipe.condition.ResearchCondition;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidEntryList;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
 import com.gregtechceu.gtceu.integration.xei.handlers.item.CycleItemStackHandler;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.ResearchManager;
+import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
@@ -304,9 +307,33 @@ public class TFGTRecipeTypes {
     public static final GTRecipeType ME_ASSEMBLER = GTRecipeTypes
             .register("me_assembler", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
-            .setMaxIOSize(9, 1, 4, 0)
+            .setMaxIOSize(9, 1, 3, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ASSEMBLER, FillDirection.LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.ASSEMBLER)
             .setHasResearchSlot(true)
-            .onRecipeBuild(ResearchManager::createDefaultResearchRecipe);
+            .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                List<ItemStack> sticks = new ArrayList<>();
+                for (RecipeCondition<?> condition : recipe.conditions) {
+                    if (condition instanceof ResearchCondition research) {
+                        for (ResearchData.ResearchEntry entry : research.getData()) {
+                            sticks.add(entry.getDataItem());
+                        }
+                    }
+                }
+                if (sticks.isEmpty())
+                    return;
+
+                int maxWidth = (widgetGroup.getSize().width - 40) / 2;
+                int outX = maxWidth + 40 + (maxWidth - 26) / 2 + 4;
+                int outY = (widgetGroup.getSize().height - 26) / 2 + 4;
+
+                widgetGroup.addWidget(new SlotWidget(
+                        new CycleItemStackHandler(List.of(sticks)),
+                        0,
+                        outX,
+                        outY + 5,
+                        false, false)
+                        .setBackground(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.DATA_ORB_OVERLAY)));
+            });
 }
