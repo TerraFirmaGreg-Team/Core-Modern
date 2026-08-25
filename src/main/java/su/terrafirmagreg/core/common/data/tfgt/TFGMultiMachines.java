@@ -1337,10 +1337,11 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.machine.me_assembler_1"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_2"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_3"),
-                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"),
+                    Component.translatable("tfg.tooltip.machine.subtick"))
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_ptfe_black"),
-                    GTCEu.id("block/machines/electromagnetic_separator"))
+                    GTCEu.id("block/machines/laser_engraver"))
             .pattern(definition -> {
                 TraceabilityPredicate energyPredicate = abilities(PartAbility.INPUT_ENERGY)
                         .setMinGlobalLimited(1)
@@ -1362,6 +1363,7 @@ public class TFGMultiMachines {
                                 .or(Predicates.autoAbilities(true, false, false))
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(3))
                                 .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                                .or(Predicates.abilities(TFGPartAbility.ME_REDSTONE_PORT).setMaxGlobalLimited(1))
                                 .or(energyPredicate))
                         .where('G', Predicates.blocks(AEBlocks.QUARTZ_VIBRANT_GLASS.block()))
                         .where('H', dataHatchPredicate(

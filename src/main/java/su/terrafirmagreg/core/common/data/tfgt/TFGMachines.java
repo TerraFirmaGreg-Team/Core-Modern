@@ -51,10 +51,7 @@ import net.minecraftforge.fluids.FluidType;
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryLogisticsMonitorMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.electric.*;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunAmmoLoaderMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBusMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SMRFluidImportHatchPartMachine;
-import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SingleItemstackBus;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.*;
 
 public class TFGMachines {
 
@@ -389,5 +386,16 @@ public class TFGMachines {
                 tiers);
 
     }
+
+    public static final MachineDefinition ME_ASSEMBLER_REDSTONE_PORT = REGISTRATE
+            .machine("me_assembler_redstone_port", MEAssemblerRedstonePort::new)
+            .rotationState(RotationState.ALL)
+            .abilities(TFGPartAbility.ME_REDSTONE_PORT)
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_ptfe_black"),
+                    TFGCore.id("block/machines/redstone_port"))
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .tooltips(Component.translatable("tfg.machine.me_assembler_redstone_port.tooltip"))
+            .register();
 
 }

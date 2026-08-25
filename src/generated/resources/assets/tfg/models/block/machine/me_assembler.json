@@ -3,18 +3,16 @@
   "loader": "gtceu:machine",
   "machine": "tfg:me_assembler",
   "texture_overrides": {
-    "all": "tfg:block/casings/machine_casing_pressure_dark"
+    "all": "tfg:block/casings/machine_casing_ptfe_black"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_pressure_dark",
-          "overlay_front": "gtceu:block/machines/electromagnetic_separator/overlay_front",
-          "overlay_front_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_front_emissive",
-          "overlay_top": "gtceu:block/machines/electromagnetic_separator/overlay_top",
-          "overlay_top_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_top_emissive"
+          "all": "tfg:block/casings/machine_casing_ptfe_black",
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
       }
     },
@@ -22,11 +20,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_pressure_dark",
-          "overlay_front": "gtceu:block/machines/electromagnetic_separator/overlay_front",
-          "overlay_front_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_front_emissive",
-          "overlay_top": "gtceu:block/machines/electromagnetic_separator/overlay_top",
-          "overlay_top_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_top_emissive"
+          "all": "tfg:block/casings/machine_casing_ptfe_black",
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
       }
     },
@@ -34,11 +30,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_pressure_dark",
-          "overlay_front": "gtceu:block/machines/electromagnetic_separator/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_front_active_emissive",
-          "overlay_top": "gtceu:block/machines/electromagnetic_separator/overlay_top_active",
-          "overlay_top_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_top_active_emissive"
+          "all": "tfg:block/casings/machine_casing_ptfe_black",
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
       }
     },
@@ -46,11 +40,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_pressure_dark",
-          "overlay_front": "gtceu:block/machines/electromagnetic_separator/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_front_active_emissive",
-          "overlay_top": "gtceu:block/machines/electromagnetic_separator/overlay_top_active",
-          "overlay_top_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_top_active_emissive"
+          "all": "tfg:block/casings/machine_casing_ptfe_black",
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
       }
     },
@@ -58,11 +50,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_pressure_dark",
-          "overlay_front": "gtceu:block/machines/electromagnetic_separator/overlay_front",
-          "overlay_front_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_front_emissive",
-          "overlay_top": "gtceu:block/machines/electromagnetic_separator/overlay_top",
-          "overlay_top_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_top_emissive"
+          "all": "tfg:block/casings/machine_casing_ptfe_black",
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
       }
     },
@@ -70,11 +60,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_pressure_dark",
-          "overlay_front": "gtceu:block/machines/electromagnetic_separator/overlay_front",
-          "overlay_front_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_front_emissive",
-          "overlay_top": "gtceu:block/machines/electromagnetic_separator/overlay_top",
-          "overlay_top_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_top_emissive"
+          "all": "tfg:block/casings/machine_casing_ptfe_black",
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
       }
     },
@@ -82,11 +70,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_pressure_dark",
-          "overlay_front": "gtceu:block/machines/electromagnetic_separator/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_front_active_emissive",
-          "overlay_top": "gtceu:block/machines/electromagnetic_separator/overlay_top_active",
-          "overlay_top_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_top_active_emissive"
+          "all": "tfg:block/casings/machine_casing_ptfe_black",
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
       }
     },
@@ -94,11 +80,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_pressure_dark",
-          "overlay_front": "gtceu:block/machines/electromagnetic_separator/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_front_active_emissive",
-          "overlay_top": "gtceu:block/machines/electromagnetic_separator/overlay_top_active",
-          "overlay_top_emissive": "gtceu:block/machines/electromagnetic_separator/overlay_top_active_emissive"
+          "all": "tfg:block/casings/machine_casing_ptfe_black",
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
       }
     }

@@ -1,5 +1,6 @@
 package su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -7,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.block.Block;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.api.pattern.TFGPredicates;
+import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.MEAssemblerRedstonePort;
 
 public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
 
@@ -47,6 +50,8 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
     @Nullable
     private BlockPos buddingPos = null;
 
+    private final List<MEAssemblerRedstonePort> redstonePorts = new ArrayList<>();
+
     public MEAssemblerMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
@@ -56,12 +61,33 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
         super.onStructureFormed();
         this.buddingTier = 0;
         this.buddingPos = null;
+        redstonePorts.clear();
         var ctx = getMultiblockState().getMatchContext();
         if (ctx.get("BuddingTier") instanceof Integer tier) {
             this.buddingTier = tier;
         }
         if (ctx.get("BuddingPos") instanceof BlockPos pos) {
             this.buddingPos = pos.immutable();
+        }
+        for (IMultiPart part : getParts()) {
+            if (part instanceof MEAssemblerRedstonePort port) {
+                redstonePorts.add(port);
+            }
+        }
+        updateRedstone();
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        for (var port : redstonePorts)
+            port.trySetSignal(0);
+        redstonePorts.clear();
+    }
+
+    private void updateRedstone() {
+        for (var port : redstonePorts) {
+            port.trySetSignal(buddingTier);
         }
     }
 
