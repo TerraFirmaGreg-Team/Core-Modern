@@ -10,7 +10,10 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.util.LampFuel;
+import net.dries007.tfc.util.Metal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
@@ -65,6 +68,9 @@ public class TFGEmiPlugin implements EmiPlugin {
 
     public static final EmiRecipeCategory FLUID_VEIN_INFO = new EmiRecipeCategory(TFGCore.id("fluid_vein_info"),
             EmiStack.of(GTItems.PROSPECTOR_HV));
+
+    public static final EmiRecipeCategory LAMP_FUEL = new EmiRecipeCategory(TFGCore.id("lamp_fuel"),
+            EmiStack.of(TFCBlocks.METALS.get(Metal.Default.BLUE_STEEL).get(Metal.BlockType.LAMP).get()));
 
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -175,6 +181,18 @@ public class TFGEmiPlugin implements EmiPlugin {
             // return onLegacyWorldgen() ? legacyVein : !legacyVein;
             return onLegacyWorldgen() == legacyVein;
         }).forEach(fluidDef -> emiRegistry.addRecipe(new FluidVeinRecipe(fluidDef)));
+
+        // Lamp Fuel
+        emiRegistry.addCategory(LAMP_FUEL);
+        for (LampFuel fuel : LampFuel.MANAGER.getValues()) {
+            emiRegistry.addRecipe(new LampFuelEmiRecipe(fuel));
+        }
+        for (var metalEntry : TFCBlocks.METALS.values()) {
+            var lamp = metalEntry.get(Metal.BlockType.LAMP);
+            if (lamp != null) {
+                emiRegistry.addWorkstation(LAMP_FUEL, EmiStack.of(lamp.get()));
+            }
+        }
     }
 
     private static final Set<ResourceLocation> LEGACY_FLUID_VEINS = Set.of(
@@ -187,6 +205,11 @@ public class TFGEmiPlugin implements EmiPlugin {
     private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
             "textures/gui/emi/arrow.png");
 
+    private static final ResourceLocation LAMP_BG = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
+            "textures/gui/emi/lamp_progress_bg.png");
+    private static final ResourceLocation LAMP_FG = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
+            "textures/gui/emi/lamp_progress_fg.png");
+
     public static int createArrowWidget(WidgetHolder holder, int offsetY, int offsetX, int length) {
         int image_height = 18;
         int image_width = 40;
@@ -195,6 +218,44 @@ public class TFGEmiPlugin implements EmiPlugin {
         TextureWidget widget = new TextureWidget(ARROW, offsetX, offsetY, length, image_height, u_start, 0, length, image_height - 1, image_width, image_height);
         holder.add(widget);
         return offsetX + 2 + length;
+    }
+
+    /**
+     * Creates a lamp progress bar widget.
+     * @param holder WidgetHolder
+     * @param offsetY The Y offset.
+     * @param offsetX The X offset.
+     * @param rate The animation rate. (8000 is a decent looking base speed).
+     * @return The new X offset.
+     */
+    public static int createLampWidget(WidgetHolder holder, int offsetY, int offsetX, int rate) {
+        int image_height = 20;
+        int image_width = 20;
+
+        holder.addDrawable(offsetX, offsetY, image_width, image_height * 2, (graphics, mouseX, mouseY, delta) -> {
+
+            //Draw Background Lamp.
+            graphics.blit(LAMP_BG, 0, 0, 0, 0, image_width, image_height, image_width, image_height);
+
+            int animatedHeight;
+
+            if (rate <= 0) {
+                // Negative rate shows the full foreground image permanently.
+                animatedHeight = image_height;
+            } else {
+                long time = System.currentTimeMillis() % rate;
+                animatedHeight = (int) (image_height * (time / (float) rate));
+            }
+
+            if (animatedHeight > 0) {
+                // Starting Y Pos.
+                int drawY = image_height - animatedHeight;
+
+                // Active Foreground Portion.
+                graphics.blit(LAMP_FG, 0, drawY, 0, drawY, image_width, animatedHeight, image_width, image_height);
+            }
+        });
+        return offsetX + image_width + 2;
     }
 
     public static void createItemWidget(WidgetHolder holder, int offsetY, int offsetX, EmiIngredient stack) {
