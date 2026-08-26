@@ -57,7 +57,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             "tfcambiental:leather_apron",
             SoundEvents.LEASH_KNOT_BREAK,
             TFCItems.WOOL_CLOTH,
-            T1_DURABILITY,
+            T2_DURABILITY,
             0,
             NO_WARMING,
             T4_INSULATION);
