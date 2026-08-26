@@ -26,6 +26,11 @@ public class TFGPredicates {
         return buddingTiers;
     }
 
+    public static int getTierForBlock(Block block) {
+        Integer tier = getBuddingTiers().get(block);
+        return tier != null ? tier : -1;
+    }
+
     public static Block getBuddingBlockForTier(int tier) {
         for (var entry : getBuddingTiers().entrySet()) {
             if (entry.getValue() == tier)

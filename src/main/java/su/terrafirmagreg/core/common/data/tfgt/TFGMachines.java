@@ -390,6 +390,7 @@ public class TFGMachines {
     public static final MachineDefinition ME_ASSEMBLER_REDSTONE_PORT = REGISTRATE
             .machine("me_assembler_redstone_port", MEAssemblerRedstonePort::new)
             .rotationState(RotationState.ALL)
+            .tier(GTValues.HV)
             .abilities(TFGPartAbility.ME_REDSTONE_PORT)
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_ptfe_black"),

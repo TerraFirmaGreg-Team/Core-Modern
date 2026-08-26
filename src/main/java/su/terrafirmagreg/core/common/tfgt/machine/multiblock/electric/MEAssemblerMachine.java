@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
@@ -37,7 +38,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
     private static final double CHANCE_INCREMENT = 0.005;
     private static final double MAX_CHANCE = 1;
 
-    private static final double[] BUDDING_SPEED_BONUS = { 0.0, 0.5, 2.0, 4.0, 8.0 };
+    private static final double[] BUDDING_SPEED_BONUS = { 0.0, 1.0, 4.0, 8.0, 16.0 };
 
     @Persisted
     @DescSynced
@@ -54,6 +55,13 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
 
     public MEAssemblerMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
+    }
+
+    private void refreshBuddingTier() {
+        if (buddingPos == null || getLevel() == null || getLevel().isClientSide)
+            return;
+        buddingTier = TFGPredicates.getTierForBlock(getLevel().getBlockState(buddingPos).getBlock());
+        updateRedstone();
     }
 
     @Override
@@ -78,6 +86,20 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
+    public boolean beforeWorking(@Nullable GTRecipe recipe) {
+        if (!super.beforeWorking(recipe))
+            return false;
+        refreshBuddingTier();
+        if (buddingTier < 0) {
+            RecipeLogic.putFailureReason(this, recipe,
+                    Component.translatable("tfg.machine.budding_missing")
+                            .withStyle(ChatFormatting.RED));
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
         for (var port : redstonePorts)
@@ -86,8 +108,9 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
     }
 
     private void updateRedstone() {
+        int signal = buddingTier < 0 ? 0 : buddingTier + 1;
         for (var port : redstonePorts) {
-            port.trySetSignal(buddingTier);
+            port.trySetSignal(signal);
         }
     }
 
@@ -116,6 +139,10 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
         if (getLevel().getRandom().nextDouble() >= chance)
             return;
 
+        int actual = TFGPredicates.getTierForBlock(getLevel().getBlockState(buddingPos).getBlock());
+        if (actual != buddingTier)
+            return;
+
         Block next = TFGPredicates.getBuddingBlockForTier(buddingTier - 1);
         getLevel().setBlockAndUpdate(buddingPos, next.defaultBlockState());
         recipesSinceDegrade = 0;
@@ -127,6 +154,12 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
 
         if (!isFormed())
             return;
+
+        if (buddingTier < 0) {
+            textList.add(Component.translatable("tfg.machine.budding_missing")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
 
         ChatFormatting color = switch (buddingTier) {
             case 0 -> ChatFormatting.GRAY;

@@ -34,10 +34,12 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
 import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
 
+import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 
 @SuppressWarnings("deprecation")
@@ -312,7 +314,12 @@ public class TFGTRecipeTypes {
             .setSound(GTSoundEntries.ASSEMBLER)
             .setHasResearchSlot(true)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
+            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.me_assembler.budding_hint"))
             .setUiBuilder((recipe, widgetGroup) -> {
+                int maxWidth = (widgetGroup.getSize().width - 40) / 2;
+                int outX = maxWidth + 40 + (maxWidth - 26) / 2 + 4;
+                int outY = (widgetGroup.getSize().height - 26) / 2 + 4;
+
                 List<ItemStack> sticks = new ArrayList<>();
                 for (RecipeCondition<?> condition : recipe.conditions) {
                     if (condition instanceof ResearchCondition research) {
@@ -321,19 +328,53 @@ public class TFGTRecipeTypes {
                         }
                     }
                 }
-                if (sticks.isEmpty())
-                    return;
+                if (!sticks.isEmpty()) {
+                    widgetGroup.addWidget(new SlotWidget(
+                            new CycleItemStackHandler(List.of(sticks)), 0,
+                            outX, outY + 5, false, false)
+                            .setBackground(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.DATA_ORB_OVERLAY)));
+                }
 
-                int maxWidth = (widgetGroup.getSize().width - 40) / 2;
-                int outX = maxWidth + 40 + (maxWidth - 26) / 2 + 4;
-                int outY = (widgetGroup.getSize().height - 26) / 2 + 4;
-
+                List<ItemStack> buddings = new ArrayList<>();
+                for (int t = 1; t <= 4; t++) {
+                    buddings.add(new ItemStack(TFGPredicates.getBuddingBlockForTier(t)));
+                }
                 widgetGroup.addWidget(new SlotWidget(
-                        new CycleItemStackHandler(List.of(sticks)),
-                        0,
-                        outX,
-                        outY + 5,
-                        false, false)
-                        .setBackground(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.DATA_ORB_OVERLAY)));
+                        new CycleItemStackHandler(List.of(buddings)), 0,
+                        outX, outY + 40, false, false)
+                        .setBackground(GuiTextures.SLOT));
+            });
+
+    public static final GTRecipeType BUDDING_CHARGE_RECIPES = GTRecipeTypes
+            .register("budding_charger", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 0, 1, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.COMPRESSOR)
+            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.budding_charge",
+                    data.getInt("budding_charge")))
+            .setUiBuilder((recipe, widgetGroup) -> {
+                if (!recipe.data.contains("budding_max_tier"))
+                    return;
+                int tier = recipe.data.getInt("budding_max_tier");
+                Block block = TFGPredicates.getBuddingBlockForTier(tier);
+
+                List<List<ItemStack>> items = new ArrayList<>();
+                items.add(List.of(new ItemStack(block)));
+
+                widgetGroup.addWidget(new SlotWidget(new CycleItemStackHandler(items), 0,
+                        widgetGroup.getSize().width - 50,
+                        widgetGroup.getSize().height - 32,
+                        false, false));
+            })
+            .addDataInfo(data -> {
+                if (!data.contains("budding_max_tier"))
+                    return "";
+                return LocalizationUtils.format("tfg.recipe.budding_max_tier_label");
+            })
+            .addDataInfo(data -> {
+                if (!data.contains("budding_max_tier"))
+                    return "";
+                return LocalizationUtils.format("tfg.budding_tier." + data.getInt("budding_max_tier"));
             });
 }

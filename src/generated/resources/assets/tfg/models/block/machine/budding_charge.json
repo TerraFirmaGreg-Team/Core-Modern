@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/block",
   "loader": "gtceu:machine",
-  "machine": "tfg:me_assembler_redstone_port",
+  "machine": "tfg:budding_charge",
   "texture_overrides": {
     "all": "tfg:block/casings/machine_casing_ptfe_black"
   },
@@ -11,7 +11,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "tfg:block/machines/redstone_port/overlay_front"
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
       }
     },
@@ -20,7 +21,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "tfg:block/machines/redstone_port/overlay_front"
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
       }
     },
@@ -29,7 +31,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "tfg:block/machines/redstone_port/overlay_front"
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
       }
     },
@@ -38,7 +41,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "tfg:block/machines/redstone_port/overlay_front"
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
       }
     },
@@ -47,7 +51,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "tfg:block/machines/redstone_port/overlay_front"
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
       }
     },
@@ -56,7 +61,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "tfg:block/machines/redstone_port/overlay_front"
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
       }
     },
@@ -65,7 +71,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "tfg:block/machines/redstone_port/overlay_front"
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
       }
     },
@@ -74,7 +81,8 @@
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
           "all": "tfg:block/casings/machine_casing_ptfe_black",
-          "overlay_front": "tfg:block/machines/redstone_port/overlay_front"
+          "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
       }
     }

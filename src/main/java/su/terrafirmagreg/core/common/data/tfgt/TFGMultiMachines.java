@@ -1369,9 +1369,9 @@ public class TFGMultiMachines {
                         .where('H', dataHatchPredicate(
                                 Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())))
                         .where('Q', TFGPredicates.buddingBlocks())
-                        .where('D', Predicates.air()
+                        .where('D', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
-                        .where('F', Predicates.air()
+                        .where('F', Predicates.any()
                                 .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
                         .where(' ', Predicates.any())
                         .build();
@@ -1379,7 +1379,7 @@ public class TFGMultiMachines {
             .shapeInfos(definition -> {
                 List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
                 var builder = MultiblockShapeInfo.builder()
-                        .aisle("  TTnTT  ", "TTT X TTT", "TCT   TCT", "TTT   TTT", "  TTmTT  ")
+                        .aisle("  TTnTT  ", "TTr X TTT", "TCT   TCT", "TTT   TTT", "  TTmTT  ")
                         .aisle("AAACCCAAA", "ICGD  GCA", "ICG   GCA", "ICG  DGCA", "AAACCCAAA")
                         .aisle("ACCCCCCCA", "ICGDB GCA", "ICG q GCA", "ICG BDGCA", "ACCCCCCCA")
                         .aisle("AAACCCAAA", "ICGFDDGCA", "ICG  DGCA", "ICGDDFGCA", "AAACCCAAA")
@@ -1394,6 +1394,7 @@ public class TFGMultiMachines {
                         .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
                         .where('m', GTMachines.ITEM_EXPORT_BUS[GTValues.HV], Direction.NORTH)
                         .where('n', GTMachines.MAINTENANCE_HATCH, Direction.NORTH)
+                        .where('r', TFGMachines.ME_ASSEMBLER_REDSTONE_PORT, Direction.NORTH)
                         .where('o', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.SOUTH)
                         .where('p', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
                         .where(' ', Blocks.AIR);
@@ -1408,6 +1409,79 @@ public class TFGMultiMachines {
                         .where('D', AEBlocks.SPATIAL_PYLON.block())
                         .where('F', AEBlocks.SPATIAL_IO_PORT.block())
                         .where('q', AEBlocks.FLAWLESS_BUDDING_QUARTZ.block());
+                shapeInfos.add(spatialCopy.build());
+
+                return shapeInfos;
+            })
+            .register();
+
+    public static final MultiblockMachineDefinition BUDDING_CHARGER = REGISTRATE
+            .multiblock("budding_charge", BuddingChargerMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.BUDDING_CHARGE_RECIPES)
+            .alwaysTryModifyRecipe(true)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK ,GTRecipeModifiers.BATCH_MODE)
+            .appearanceBlock(TFGBlocks_Casings.PTFE_BLACK_CASING)
+            .tooltips(
+                    Component.translatable("tfg.tooltip.machine.budding_charge_1"),
+                    Component.translatable("tfg.tooltip.machine.budding_charge_2"),
+                    Component.translatable("tfg.tooltip.machine.budding_charge_3"),
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_ptfe_black"),
+                    GTCEu.id("block/machines/laser_engraver"))
+            .pattern(definition -> {
+                return FactoryBlockPattern.start()
+                        .aisle("TTTTT", "     ", "     ", "     ")
+                        .aisle("TCCCT", " FDD ", " D   ", " D   ")
+                        .aisle("TCCCT", " DB  ", "  Q  ", "     ")
+                        .aisle("TCCCT", " D   ", "     ", "     ")
+                        .aisle("TTXTT", "     ", "     ", "     ")
+                        .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                        .where('B', Predicates.frames(GTMaterials.StainlessSteel))
+                        .where('C', Predicates.blocks(TFGBlocks_Casings.AE2_CASING.get()))
+                        .where('T', Predicates.blocks(TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                                .or(Predicates.autoAbilities(true, false, false))
+                                .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(2))
+                                .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2))
+                                .or(Predicates.abilities(TFGPartAbility.ME_REDSTONE_PORT).setMaxGlobalLimited(1))
+                                .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                        .where('Q', TFGPredicates.buddingBlocks())
+                        .where('D', Predicates.any()
+                                .or(Predicates.blocks(AEBlocks.SPATIAL_PYLON.block())))
+                        .where('F', Predicates.any()
+                                .or(Predicates.blocks(AEBlocks.SPATIAL_IO_PORT.block())))
+                        .where(' ', Predicates.any())
+                        .build();
+            })
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
+                var builder = MultiblockShapeInfo.builder()
+                        .aisle("mTXTv", "     ", "     ", "     ")
+                        .aisle("TCCCT", " D   ", "     ", "     ")
+                        .aisle("oCCCr", " DB  ", "  Q  ", "     ")
+                        .aisle("TCCCT", " FDD ", " D   ", " D   ")
+                        .aisle("TTiTT", "     ", "     ", "     ")
+                        .where('X', definition, Direction.NORTH)
+                        .where('B', ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel))
+                        .where('C', TFGBlocks_Casings.AE2_CASING.get())
+                        .where('T', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
+                        .where('Q', AEBlocks.FLAWED_BUDDING_QUARTZ.block())
+                        .where('r', TFGMachines.ME_ASSEMBLER_REDSTONE_PORT, Direction.EAST)
+                        .where('m', GTMachines.ITEM_IMPORT_BUS[GTValues.HV], Direction.NORTH)
+                        .where('v', GTMachines.FLUID_IMPORT_HATCH[GTValues.HV], Direction.NORTH)
+                        .where('i', GTMachines.ENERGY_INPUT_HATCH[GTValues.HV], Direction.SOUTH)
+                        .where('o', GTMachines.MAINTENANCE_HATCH, Direction.WEST)
+                        .where(' ', Blocks.AIR);
+
+                var emptyCopy = builder.shallowCopy()
+                        .where('D', Blocks.AIR)
+                        .where('F', Blocks.AIR);
+                shapeInfos.add(emptyCopy.build());
+
+                var spatialCopy = builder.shallowCopy()
+                        .where('D', AEBlocks.SPATIAL_PYLON.block())
+                        .where('F', AEBlocks.SPATIAL_IO_PORT.block());
                 shapeInfos.add(spatialCopy.build());
 
                 return shapeInfos;
