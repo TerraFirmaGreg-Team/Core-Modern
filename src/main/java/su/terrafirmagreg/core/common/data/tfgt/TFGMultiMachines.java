@@ -1429,7 +1429,7 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_ptfe_black"),
-                    GTCEu.id("block/machines/laser_engraver"))
+                    TFGCore.id("block/machines/wireless_charger"))
             .pattern(definition -> {
                 return FactoryBlockPattern.start()
                         .aisle("TTTTT", "     ", "     ", "     ")
