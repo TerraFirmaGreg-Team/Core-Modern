@@ -26,7 +26,7 @@ public abstract class TeleportHandlerMixin {
 
     @WrapOperation(method = "onLivingTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
     private static boolean tfg$expandAirPocket(ServerLevel level, BlockPos pos, BlockState blockState, Operation<Boolean> original, @Local LivingEntity entity) {
-		tfg$clearRock(level, pos);
+        tfg$clearRock(level, pos);
 
         // Expand the hole outwards into a 3x3
         tfg$clearRock(level, pos.north());
@@ -53,11 +53,10 @@ public abstract class TeleportHandlerMixin {
         BlockState state = level.getBlockState(pos);
         if (state.is(TFCTags.Blocks.CAN_COLLAPSE)) {
             level.setBlockAndUpdate(pos, m_air);
+        } else if (state.is(TFCTags.Blocks.CAN_LANDSLIDE)) {
+            level.setBlockAndUpdate(pos, m_air);
+            // If there's gravel or something, keep removing more of it above
+            tfg$clearRock(level, pos.above());
         }
-		else if (state.is(TFCTags.Blocks.CAN_LANDSLIDE)) {
-			level.setBlockAndUpdate(pos, m_air);
-			// If there's gravel or something, keep removing more of it above
-			tfg$clearRock(level, pos.above());
-		}
     }
 }
