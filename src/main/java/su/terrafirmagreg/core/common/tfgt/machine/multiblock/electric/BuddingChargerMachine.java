@@ -6,6 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -46,10 +47,26 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
     @Nullable
     private BlockPos buddingPos = null;
 
+    @Persisted
+    private String lastChargeRecipe = "";
+
     private final List<MEAssemblerRedstonePort> redstonePorts = new ArrayList<>();
+
+    private final ConditionalSubscriptionHandler buddingCheckSubscription;
 
     public BuddingChargerMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
+        this.buddingCheckSubscription = new ConditionalSubscriptionHandler(
+                this, this::tickBuddingCheck, this::isFormed);
+    }
+
+    private void tickBuddingCheck() {
+        if (getOffsetTimer() % 20 != 0)
+            return;
+        refreshBuddingTier();
+        if (buddingTier >= 0 && buddingTier < MAX_TIER) {
+            getRecipeLogic().updateTickSubscription();
+        }
     }
 
     @Override
@@ -76,6 +93,7 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
             }
         }
         updateRedstone();
+        buddingCheckSubscription.updateSubscription();
     }
 
     @Override
@@ -84,6 +102,7 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
         for (var port : redstonePorts)
             port.trySetSignal(0);
         redstonePorts.clear();
+        buddingCheckSubscription.updateSubscription();
     }
 
     private void updateRedstone() {
@@ -135,7 +154,7 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
     }
 
     private void tryChargeBudding() {
-        if (buddingPos == null || buddingTier >= MAX_TIER)
+        if (buddingPos == null || buddingTier < 0 || buddingTier >= MAX_TIER)
             return;
         if (getLevel() == null || getLevel().isClientSide)
             return;
@@ -150,20 +169,30 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
         if (buddingTier >= maxTier)
             return;
 
+        String recipeId = last.id.toString();
+        if (!recipeId.equals(lastChargeRecipe)) {
+            chargeProgress = 0;
+            lastChargeRecipe = recipeId;
+        }
+
         int charge = Math.max(1, last.data.getInt("budding_charge")) * last.getTotalRuns();
         chargeProgress += charge;
 
-        if (chargeProgress < CHARGE_PER_TIER)
+        int tiersGained = 0;
+        while (chargeProgress >= CHARGE_PER_TIER && (buddingTier + tiersGained) < maxTier) {
+            chargeProgress -= CHARGE_PER_TIER;
+            tiersGained++;
+        }
+
+        if (tiersGained == 0)
             return;
 
         int actual = TFGPredicates.getTierForBlock(getLevel().getBlockState(buddingPos).getBlock());
         if (actual != buddingTier)
             return;
 
-        chargeProgress = 0;
-        Block next = TFGPredicates.getBuddingBlockForTier(buddingTier + 1);
+        Block next = TFGPredicates.getBuddingBlockForTier(buddingTier + tiersGained);
         getLevel().setBlockAndUpdate(buddingPos, next.defaultBlockState());
-        getRecipeLogic().markLastRecipeDirty();
     }
 
     @Override

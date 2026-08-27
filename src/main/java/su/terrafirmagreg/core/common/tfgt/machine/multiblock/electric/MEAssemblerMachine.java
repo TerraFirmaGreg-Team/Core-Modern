@@ -6,6 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -13,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
@@ -34,9 +36,8 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             MEAssemblerMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    private static final double BASE_CHANCE = 0.01;
-    private static final double CHANCE_INCREMENT = 0.005;
-    private static final double MAX_CHANCE = 1;
+    private static final int HEALTH_MIN = 100;
+    private static final int HEALTH_MAX = 500;
 
     private static final double[] BUDDING_SPEED_BONUS = { 0.0, 1.0, 4.0, 8.0, 16.0 };
 
@@ -46,15 +47,26 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
     private int buddingTier = 0;
 
     @Persisted
-    private int recipesSinceDegrade = 0;
+    @DescSynced
+    @Getter
+    private int buddingHealth = 0;
 
     @Nullable
     private BlockPos buddingPos = null;
 
     private final List<MEAssemblerRedstonePort> redstonePorts = new ArrayList<>();
+    private final ConditionalSubscriptionHandler buddingCheckSubscription;
 
     public MEAssemblerMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
+        this.buddingCheckSubscription = new ConditionalSubscriptionHandler(
+                this, this::tickBuddingCheck, this::isFormed);
+    }
+
+    private void tickBuddingCheck() {
+        if (getOffsetTimer() % 20 != 0)
+            return;
+        refreshBuddingTier();
     }
 
     private void refreshBuddingTier() {
@@ -83,6 +95,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
             }
         }
         updateRedstone();
+        buddingCheckSubscription.updateSubscription();
     }
 
     @Override
@@ -96,6 +109,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
                             .withStyle(ChatFormatting.RED));
             return false;
         }
+        tryDegradeBudding(recipe);
         return true;
     }
 
@@ -105,6 +119,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
         for (var port : redstonePorts)
             port.trySetSignal(0);
         redstonePorts.clear();
+        buddingCheckSubscription.updateSubscription();
     }
 
     private void updateRedstone() {
@@ -119,33 +134,45 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
         return MANAGED_FIELD_HOLDER;
     }
 
-    @Override
-    public void afterWorking() {
-        super.afterWorking();
-        tryDegradeBudding();
+    private void rollHealth() {
+        buddingHealth = HEALTH_MIN + getLevel().getRandom().nextInt(HEALTH_MAX - HEALTH_MIN + 1);
     }
 
-    private void tryDegradeBudding() {
+    private void tryDegradeBudding(@Nullable GTRecipe recipe) {
         if (buddingTier <= 0 || buddingPos == null)
             return;
         if (getLevel() == null || getLevel().isClientSide)
             return;
 
-        var last = getRecipeLogic().getLastRecipe();
-        int executions = last != null ? last.getTotalRuns() : 1;
-        recipesSinceDegrade += executions;
+        if (buddingHealth <= 0)
+            rollHealth();
 
-        double chance = Math.min(BASE_CHANCE + recipesSinceDegrade * CHANCE_INCREMENT, MAX_CHANCE);
-        if (getLevel().getRandom().nextDouble() >= chance)
+        int executions = 1;
+        if (recipe != null) {
+            long work = RecipeHelper.getRealEUt(recipe).getTotalEU()
+                    * recipe.duration * recipe.getTotalRuns();
+            executions = Math.max(1, (int) (work / 10_000_000));
+        }
+
+        buddingHealth -= executions;
+
+        int tiersLost = 0;
+        while (buddingHealth <= 0 && (buddingTier - tiersLost) > 0) {
+            tiersLost++;
+            int overflow = -buddingHealth;
+            rollHealth();
+            buddingHealth -= overflow;
+        }
+
+        if (tiersLost == 0)
             return;
 
         int actual = TFGPredicates.getTierForBlock(getLevel().getBlockState(buddingPos).getBlock());
         if (actual != buddingTier)
             return;
 
-        Block next = TFGPredicates.getBuddingBlockForTier(buddingTier - 1);
+        Block next = TFGPredicates.getBuddingBlockForTier(buddingTier - tiersLost);
         getLevel().setBlockAndUpdate(buddingPos, next.defaultBlockState());
-        recipesSinceDegrade = 0;
     }
 
     @Override
@@ -166,7 +193,18 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
             case 1, 2 -> ChatFormatting.YELLOW;
             default -> ChatFormatting.GREEN;
         };
-
+        /* Debug Tool for Balance - Also Informations that could be shared but could lead to exploit
+        var last = getRecipeLogic().getLastRecipe();
+        if (last != null) {
+            long work = RecipeHelper.getRealEUt(last).getTotalEU() * last.duration * last.getTotalRuns();
+            textList.add(Component.literal("work: " + work
+                    + " # runs: " + last.getTotalRuns()
+                    + " # dur: " + last.duration
+                    + " # eut: " + RecipeHelper.getRealEUt(last).getTotalEU()
+                    + " # units: " + Math.max(1, (int) (work / 10_000_000))
+                    + " # hp: " + buddingHealth));
+        }
+        */
         int speedBonus = (int) (BUDDING_SPEED_BONUS[buddingTier] * 100);
 
         textList.add(Component.translatable("tfg.machine.me_assembler.budding_tier",
