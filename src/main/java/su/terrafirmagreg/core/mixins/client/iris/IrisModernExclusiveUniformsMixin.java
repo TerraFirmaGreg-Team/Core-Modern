@@ -43,6 +43,8 @@ public class IrisModernExclusiveUniformsMixin {
         uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "tfcWorldSize", IrisModernExclusiveUniformsMixin::tfg$temperatureScale);
         uniforms.uniform1i(UniformUpdateFrequency.PER_TICK, "tfcYearDays", IrisModernExclusiveUniformsMixin::tfg$yearDays);
         uniforms.uniform1i(UniformUpdateFrequency.PER_TICK, "tfcCurrentDay", IrisModernExclusiveUniformsMixin::tfg$currentDay);
+		uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "tfcFogginess", IrisModernExclusiveUniformsMixin::tfg$fogginess);
+		uniforms.uniform1f(UniformUpdateFrequency.PER_TICK, "tfcWaterFogginess", IrisModernExclusiveUniformsMixin::tfg$waterFogginess);
     }
 
     @Unique
@@ -132,4 +134,26 @@ public class IrisModernExclusiveUniformsMixin {
     private static int tfg$currentDay() {
         return Math.toIntExact(Calendars.CLIENT.getTotalCalendarDays() % tfg$yearDays());
     }
+
+	@Unique
+	private static float tfg$fogginess() {
+		var player = Minecraft.getInstance().player;
+		if (player == null)
+			return 0f;
+
+		var level = player.clientLevel;
+		var climate = Climate.model(level);
+		return climate.getFogginess(level, player.getOnPos(), Calendars.get(level).getTicks());
+	}
+
+	@Unique
+	private static float tfg$waterFogginess() {
+		var player = Minecraft.getInstance().player;
+		if (player == null)
+			return 0f;
+
+		var level = player.clientLevel;
+		var climate = Climate.model(level);
+		return climate.getWaterFogginess(level, player.getOnPos(), Calendars.get(level).getTicks());
+	}
 }
