@@ -26,14 +26,12 @@ import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 public class CombustionEngineRecipe implements EmiRecipe {
     private final Fluid fluid;
     private final String burnPerSec32;
-    private final String burnPerSec256;
 
     public CombustionEngineRecipe(FuelType fuel) {
         this.fluid = fuel.fluid().get(0).get();
 
         var formatter = new DecimalFormat("0.###");
         burnPerSec32 = formatter.format(1.0 / (fuel.getFuelBurnRate(CombustionEngineBlockEntity.DEFAULT_SPEED, GTValues.LV) * 20.0));
-        burnPerSec256 = formatter.format(1.0 / (fuel.getFuelBurnRate(256, GTValues.LV) * 20.0));
     }
 
     @Override
@@ -63,7 +61,7 @@ public class CombustionEngineRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return 47;
+        return 38;
     }
 
     @Override
@@ -89,11 +87,6 @@ public class CombustionEngineRecipe implements EmiRecipe {
 
         widgets.addText(
                 Component.translatable("tfg.emi.combustion_engine_burn_time", burnPerSec32, CombustionEngineBlockEntity.DEFAULT_SPEED),
-                2, offsetY, 16777215, true);
-        offsetY += lineHeight;
-
-        widgets.addText(
-                Component.translatable("tfg.emi.combustion_engine_burn_time", burnPerSec256, 256),
                 2, offsetY, 16777215, true);
         return offsetY + lineHeight;
     }
