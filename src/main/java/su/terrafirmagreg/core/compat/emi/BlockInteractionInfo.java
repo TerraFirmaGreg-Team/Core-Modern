@@ -163,6 +163,11 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe("stone_bottom_insulation_2", FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.BRICK).get().asItem(),
                     FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.STONE).get().asItem(),
                     FLItems.OVEN_INSULATION.get()),
+
+            // Misc.
+            new BlockInteractionRecipe("fire_brick_insulation", TFCBlocks.FIRE_BRICKS.get().asItem(),
+                    ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfcbetterbf", "insulated_fire_bricks")).asItem(),
+                    ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath("tfcbetterbf", "insulation")))
     };
 
 }
