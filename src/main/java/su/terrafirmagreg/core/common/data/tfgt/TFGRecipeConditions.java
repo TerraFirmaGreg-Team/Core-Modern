@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.mojang.serialization.Codec;
 
+import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.tfgt.recipe.condition.*;
 
 /**
@@ -38,6 +39,6 @@ public class TFGRecipeConditions {
             String name,
             RecipeConditionType.ConditionFactory<T> factory,
             Codec<T> codec) {
-        return GTRegistries.RECIPE_CONDITIONS.register(name, new RecipeConditionType<>(factory, codec));
+        return GTRegistries.RECIPE_CONDITIONS.register(TFGCore.id(name), new RecipeConditionType<>(factory, codec));
     }
 }

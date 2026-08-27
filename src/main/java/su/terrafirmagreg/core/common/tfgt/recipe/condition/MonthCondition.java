@@ -102,7 +102,7 @@ public class MonthCondition extends RecipeCondition<MonthCondition> {
      */
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
-        var machine = recipeLogic.machine.self();
+        var machine = recipeLogic.getMachine();
         var level = machine.getLevel();
         if (!(level instanceof ServerLevel serverLevel))
             return false;

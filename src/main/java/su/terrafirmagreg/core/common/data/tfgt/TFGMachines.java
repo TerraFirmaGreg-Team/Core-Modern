@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
+import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
@@ -73,7 +74,7 @@ public class TFGMachines {
             32000, "Black Bronze Drum");
 
     public static final MachineDefinition[] FOOD_PROCESSOR = GTMachineUtils.registerTieredMachines(REGISTRATE, "food_processor",
-            SimpleFoodProcessingMachine::new, (tier, builder) -> builder
+            TFGMachineInstanceFactories.SIMPLE_FOOD_PROCESSOR, (tier, builder) -> builder
                     .langValue("%s Food Processor %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(TFGTRecipeTypes.FOOD_PROCESSOR_RECIPES)
@@ -86,7 +87,7 @@ public class TFGMachines {
             GTMachineUtils.ELECTRIC_TIERS);
 
     public static final MachineDefinition[] FOOD_OVEN = GTMachineUtils.registerTieredMachines(REGISTRATE, "food_oven",
-            SimpleFoodProcessingMachine::new, (tier, builder) -> builder
+            TFGMachineInstanceFactories.SIMPLE_FOOD_PROCESSOR, (tier, builder) -> builder
                     .langValue("%s Electric Oven %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(TFGTRecipeTypes.FOOD_OVEN_RECIPES)
@@ -134,7 +135,7 @@ public class TFGMachines {
             GTValues.tiersBetween(GTValues.HV, GTValues.UHV));
 
     public static final MachineDefinition[] AQUEOUS_ACCUMULATOR = GTMachineUtils.registerTieredMachines(REGISTRATE, "aqueous_accumulator",
-            AqueousAccumulatorMachine::new, (tier, builder) -> builder
+            TFGMachineInstanceFactories.AQUEOUS_ACCUMULATOR, (tier, builder) -> builder
                     .langValue("%s Aqueous Accumulator %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(TFGTRecipeTypes.AQUEOUS_ACCUMULATOR_RECIPES)
@@ -148,7 +149,7 @@ public class TFGMachines {
             GTMachineUtils.ELECTRIC_TIERS);
 
     public static final MachineDefinition[] GAS_PRESSURIZER = GTMachineUtils.registerTieredMachines(REGISTRATE, "gas_pressurizer",
-            GasPressurizerMachine::new, (tier, builder) -> builder
+            SimpleTieredMachine::new, (tier, builder) -> builder
                     .langValue("%s Gas Pressurizer %s".formatted(GTValues.VLVH[tier], GTValues.VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(TFGTRecipeTypes.GAS_PRESSURIZER_RECIPES)

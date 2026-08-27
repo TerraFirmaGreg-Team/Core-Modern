@@ -110,7 +110,7 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe,
             @NotNull RecipeLogic recipeLogic) {
-        var machine = recipeLogic.machine.self();
+        var machine = recipeLogic.getMachine();
         var level = machine.getLevel();
         if (!(level instanceof ServerLevel))
             return false;
@@ -197,6 +197,6 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
         if (machine instanceof PastoralEngineMachine pastoral) {
             return pastoral.getFormedBoundingBox();
         }
-        return new AABB(machine.getPos()).inflate(2.5);
+        return new AABB(machine.getBlockPos()).inflate(2.5);
     }
 }

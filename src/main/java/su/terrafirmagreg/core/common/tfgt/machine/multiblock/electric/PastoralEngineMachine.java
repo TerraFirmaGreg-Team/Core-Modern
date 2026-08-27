@@ -142,10 +142,10 @@ public class PastoralEngineMachine extends WorkableElectricMultiblockMachine {
 
     public AABB getFormedBoundingBox() {
         if (!isFormed()) {
-            return new AABB(getPos()).inflate(2.5);
+            return new AABB(getBlockPos()).inflate(2.5);
         }
 
-        BlockPos pos = getPos();
+        BlockPos pos = getBlockPos();
         Direction front = getFrontFacing();
         Direction right = front.getClockWise(); // north to east
 

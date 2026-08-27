@@ -1,19 +1,14 @@
 package su.terrafirmagreg.core.common.tfgt.interdim_logistics;
 
-import com.gregtechceu.gtceu.api.gui.widget.EnumSelectorWidget;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
-import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 
-import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 
+import brachy.modularui.drawable.UITexture;
 import lombok.Getter;
 import lombok.Setter;
 
 public class NetworkSenderConfigEntry {
-
-    GlobalPos
 
     @Getter
     private final InterplanetaryLogisticsNetwork.DimensionalBlockPos senderPartID;
@@ -39,7 +34,7 @@ public class NetworkSenderConfigEntry {
         senderPartID = sender;
     }
 
-    public enum TriggerMode implements EnumSelectorWidget.SelectableEnum {
+    public enum TriggerMode {
         ITEM("Item", "transfer_any"),
         REDSTONE_SIGNAL("Redstone signal", "transfer_any"),
         INACTIVITY("Inactivity (seconds)", "transfer_any");
@@ -47,11 +42,11 @@ public class NetworkSenderConfigEntry {
         @Getter
         public final String tooltip;
         @Getter
-        public final IGuiTexture icon;
+        public final UITexture icon;
 
         TriggerMode(String tooltip, String textureName) {
             this.tooltip = tooltip;
-            this.icon = new ResourceTexture("gtceu:textures/gui/icon/transfer_mode/" + textureName + ".png");
+            this.icon = UITexture.fullImage("gtceu:textures/gui/icon/transfer_mode/" + textureName + ".png");
         }
     }
 

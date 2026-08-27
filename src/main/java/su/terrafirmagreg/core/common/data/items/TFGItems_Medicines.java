@@ -49,14 +49,14 @@ public class TFGItems_Medicines {
                     .effect(() -> new MobEffectInstance(MobEffects.JUMP, 30 * 20, 1), 1)
                     .effect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 60 * 20, 1), 1)
                     .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 60 * 20, 1), 1).build()))
-            .onRegister(attach(new AntidoteBehavior(10, GTMedicalConditions.SILICOSIS, GTMedicalConditions.ARSENICOSIS, GTMedicalConditions.ASBESTOSIS)))
+            .onRegister(attach(new AntidoteBehavior(10, GTMedicalConditions.ARSENICOSIS, GTMedicalConditions.ASBESTOSIS)))
             .register();
     public static final ItemEntry<ComponentItem> MINING_POWDER = TFGCore.REGISTRATE.item("mining_powder", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast()
                     .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 3 * 60 * 20, 0), 1)
                     .effect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 3 * 60 * 20, 0), 1)
                     .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 3 * 60 * 20, 2), 1).build()))
-            .onRegister(attach(new AntidoteBehavior(10, GTMedicalConditions.SILICOSIS, GTMedicalConditions.ARSENICOSIS, GTMedicalConditions.ASBESTOSIS)))
+            .onRegister(attach(new AntidoteBehavior(10, GTMedicalConditions.ARSENICOSIS, GTMedicalConditions.ASBESTOSIS)))
             .register();
 
     // Pills & Tablets
@@ -84,20 +84,20 @@ public class TFGItems_Medicines {
 
     public static final ItemEntry<ComponentItem> POISON_PILL = TFGCore.REGISTRATE.item("poison_pill", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.POISON, 15 * 20, 0), 1).build()))
-            .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.ARSENICOSIS, GTMedicalConditions.BERYLLIOSIS)))
+            .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.ARSENICOSIS)))
             .register();
     public static final ItemEntry<ComponentItem> POISON_TABLET = TFGCore.REGISTRATE.item("poison_tablet", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.POISON, 8 * 20, 0), 1).build()))
-            .onRegister(attach(new AntidoteBehavior(80, GTMedicalConditions.ARSENICOSIS, GTMedicalConditions.BERYLLIOSIS)))
+            .onRegister(attach(new AntidoteBehavior(80, GTMedicalConditions.ARSENICOSIS)))
             .register();
 
     public static final ItemEntry<ComponentItem> SLOWNESS_PILL = TFGCore.REGISTRATE.item("slowness_pill", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 3 * 60 * 20, 0), 1).build()))
-            .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.ASBESTOSIS, GTMedicalConditions.SILICOSIS)))
+            .onRegister(attach(new AntidoteBehavior(20, GTMedicalConditions.ASBESTOSIS)))
             .register();
     public static final ItemEntry<ComponentItem> SLOWNESS_TABLET = TFGCore.REGISTRATE.item("slowness_tablet", ComponentItem::create)
             .properties(p -> p.food(new FoodProperties.Builder().alwaysEat().fast().effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60 * 20, 0), 1).build()))
-            .onRegister(attach(new AntidoteBehavior(80, GTMedicalConditions.ASBESTOSIS, GTMedicalConditions.SILICOSIS)))
+            .onRegister(attach(new AntidoteBehavior(80, GTMedicalConditions.ASBESTOSIS)))
             .register();
 
     public static final ItemEntry<ComponentItem> WEAKNESS_PILL = TFGCore.REGISTRATE.item("weakness_pill", ComponentItem::create)
@@ -173,9 +173,7 @@ public class TFGItems_Medicines {
                     GTMedicalConditions.POISON,
                     GTMedicalConditions.WEAK_POISON,
                     GTMedicalConditions.ARSENICOSIS,
-                    GTMedicalConditions.ASBESTOSIS,
-                    GTMedicalConditions.BERYLLIOSIS,
-                    GTMedicalConditions.SILICOSIS)))
+                    GTMedicalConditions.ASBESTOSIS)))
             .register();
 
     // Salvos
@@ -242,8 +240,6 @@ public class TFGItems_Medicines {
                     GTMedicalConditions.CARBON_MONOXIDE_POISONING,
                     GTMedicalConditions.ASBESTOSIS,
                     GTMedicalConditions.ARSENICOSIS,
-                    GTMedicalConditions.SILICOSIS,
-                    GTMedicalConditions.BERYLLIOSIS,
                     GTMedicalConditions.CARCINOGEN,
                     TFGMedicalConditions.RADIOACTIVE)))
             .register();

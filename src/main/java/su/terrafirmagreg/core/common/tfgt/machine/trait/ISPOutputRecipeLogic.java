@@ -5,7 +5,6 @@ import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.capability.recipe.*;
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
@@ -131,8 +130,8 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
     }
 
-    public ISPOutputRecipeLogic(IRecipeLogicMachine machine) {
-        super(machine);
+    public ISPOutputRecipeLogic() {
+        super();
     }
 
     private IRecipeCapabilityHolder getCapHolder() {

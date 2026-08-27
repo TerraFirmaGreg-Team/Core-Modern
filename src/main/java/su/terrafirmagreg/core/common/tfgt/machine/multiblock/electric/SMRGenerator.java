@@ -81,12 +81,13 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
     public SMRGenerator(BlockEntityCreationInfo info, int tier) {
         super(info);
         this.tier = tier;
+        recipeLogic.setRegressWhenWaiting(false);
     }
 
     private boolean isIntakesObstructed() {
         var dir = this.getFrontFacing();
         boolean mutableXZ = dir.getAxis() == Direction.Axis.Z;
-        var centerPos = this.getPos().relative(dir);
+        var centerPos = this.getBlockPos().relative(dir);
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 if (x == 0 && y == 0)
@@ -193,10 +194,4 @@ public class SMRGenerator extends WorkableElectricMultiblockMachine implements I
 
         return value;
     }
-
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
-    }
-
 }

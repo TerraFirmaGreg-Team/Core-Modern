@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -43,7 +45,7 @@ public class OreProspectorEvent {
 
             // Allow containers to be opened (chests, barrels, etc.)
             boolean isContainer = blockEntity instanceof MenuProvider;
-            boolean isMachine = blockEntity instanceof IMachineBlockEntity;
+            boolean isMachine = blockEntity instanceof MetaMachine;
 
             // Allow interactable entities (item frames, armor stands, tool racks, etc.)
             boolean hasEntityTarget = event.getEntity() != null

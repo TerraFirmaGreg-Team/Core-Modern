@@ -11,24 +11,19 @@ import org.jetbrains.annotations.Nullable;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.*;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.IExplosionMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.common.machine.multiblock.steam.LargeBoilerMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
-import com.lowdragmc.lowdraglib.gui.util.ClickData;
-import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
+import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.dries007.tfc.common.fluids.SimpleFluid;
 import net.dries007.tfc.common.fluids.TFCFluids;
@@ -37,9 +32,8 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
@@ -47,11 +41,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.Fluid;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.utils.serialization.network.IByteBufAdapter;
+import brachy.modularui.value.sync.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements IDisplayUIMachine, IExplosionMachine {
+public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
 
     public record BoosterFluid(
             Supplier<Fluid> fluid,
@@ -147,18 +146,19 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     public final int maxTemperature, heatSpeed;
     @SaveField
     @Getter
+    @Setter
     private int currentTemperature, throttle;
     @Nullable
     protected TickableSubscription temperatureSubs;
+    @Getter
+    @Setter
     private int steamGenerated;
 
     // Track last water type used — for GUI display
     @SaveField
-    @DescSynced
     @Nullable
     private String lastWaterTagKey = null; // null = standard water (water_boiler tag)
     @SaveField
-    @DescSynced
     private float lastWaterMultiplier = 1.0f;
 
     // Precomputed once in constructor (depends only on final maxTemperature)
@@ -171,7 +171,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     private long boosterCacheTimer = -1L;
 
     public TFGLargeBoilerMachine(BlockEntityCreationInfo info, int maxTemperature, int heatSpeed) {
-        super(info);
+        super(info, new TFGLargeBoilerRecipeLogic());
         this.maxTemperature = maxTemperature;
         this.heatSpeed = heatSpeed;
         this.throttle = 100;
@@ -180,11 +180,6 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                 .sorted(Comparator.comparingInt(BoosterFluid::temperatureBonus).reversed())
                 .toList();
         this.bestBonusPossible = compatibleBoosters.isEmpty() ? 0 : compatibleBoosters.get(0).temperatureBonus();
-    }
-
-    @Override
-    protected RecipeLogic createRecipeLogic(Object... args) {
-        return new TFGLargeBoilerRecipeLogic(this);
     }
 
     @Override
@@ -269,7 +264,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     }
 
     protected void updateCurrentTemperature() {
-        int effectiveMaxTemp = getEffectiveMaxTemperature();
+        int effectiveMaxTemp = getEffectiveMaxTemperature(getBestAvailableBooster());
 
         if (recipeLogic.isWorking()) {
             if (getOffsetTimer() % 10 == 0) {
@@ -336,15 +331,15 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
                     }
                 }
                 if (drained < maxDrain) {
-                    doExplosion(2f);
-                    var center = getPos().below().relative(getFrontFacing().getOpposite());
+                    GTUtil.doExplosion(getLevel(), getBlockPos(), 2f);
+                    var center = getBlockPos().below().relative(getFrontFacing().getOpposite());
                     if (GTValues.RNG.nextInt(100) > 80) {
-                        doExplosion(center, 2f);
+                        GTUtil.doExplosion(getLevel(), center, 2f);
                     }
                     for (Direction x : Direction.Plane.HORIZONTAL) {
                         for (Direction y : Direction.Plane.HORIZONTAL) {
                             if (GTValues.RNG.nextInt(100) > 80) {
-                                doExplosion(center.relative(x).relative(y), 2f);
+                                GTUtil.doExplosion(getLevel(), center.relative(x).relative(y), 2f);
                             }
                         }
                     }
@@ -421,8 +416,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         return 0;
     }
 
-    public int getEffectiveMaxTemperature() {
-        BoosterFluid best = getBestAvailableBooster();
+    public int getEffectiveMaxTemperature(@Nullable BoosterFluid best) {
         return maxTemperature + (best != null ? best.temperatureBonus() : 0);
     }
 
@@ -433,14 +427,14 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     @Override
     public boolean onWorking() {
         boolean value = super.onWorking();
-        if (currentTemperature < getEffectiveMaxTemperature()) {
+        if (currentTemperature < getEffectiveMaxTemperature(getBestAvailableBooster())) {
             currentTemperature = Math.max(1, currentTemperature);
             updateSteamSubscription();
         }
         return value;
     }
 
-    public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+    public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
         return ModifierFunction.IDENTITY;
     }
 
@@ -453,117 +447,120 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
     }
 
     @Override
-    public void addDisplayText(List<Component> textList) {
-        IDisplayUIMachine.super.addDisplayText(textList);
-        if (isFormed()) {
-            textList.add(Component.translatable("gtceu.multiblock.large_boiler.temperature",
-                    currentTemperature + 274, getEffectiveMaxTemperature() + 274));
-            textList.add(Component.translatable("gtceu.multiblock.large_boiler.steam_output",
-                    steamGenerated / TICKS_PER_STEAM_GENERATION));
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        var widgets = super.getWidgetsForDisplay(syncManager);
 
-            BoosterFluid activeBooster = getBestAvailableBooster();
-            if (activeBooster != null) {
-                textList.add(Component.translatable("tfg.multiblock.large_boiler.booster_active",
-                        Component.translatable(activeBooster.translationKey()).withStyle(ChatFormatting.GREEN),
-                        Component.literal("+" + activeBooster.temperatureBonus()).withStyle(ChatFormatting.GREEN)));
-            } else {
-                textList.add(Component.translatable("tfg.multiblock.large_boiler.booster_none")
-                        .withStyle(ChatFormatting.GRAY));
-            }
+        IntSyncValue throttleSync = new IntSyncValue(this::getThrottle, this::setThrottle).allowC2S();
+        IntSyncValue currentTempSync = new IntSyncValue(this::getCurrentTemperature);
+        IntSyncValue steamGeneratedSync = new IntSyncValue(this::getSteamGenerated);
+        StringSyncValue waterInUseSync = new StringSyncValue(() -> lastWaterTagKey);
+        FloatSyncValue lastWaterMultiplierSync = new FloatSyncValue(() -> lastWaterMultiplier);
+        GenericSyncValue<BoosterFluid> boosterFluidSync = GenericSyncValue.builder(BoosterFluid.class)
+                .getter(this::getBestAvailableBooster)
+                .adapter(new IByteBufAdapter<>() {
+                    @Override
+                    public BoosterFluid deserialize(FriendlyByteBuf buffer) {
+                        return BOOSTERS.get(buffer.readInt());
+                    }
 
-            // Water type currently in use
-            if (lastWaterTagKey != null) {
-                String tagPath = ResourceLocation.parse(lastWaterTagKey).getPath();
-                textList.add(Component.translatable("tfg.multiblock.large_boiler.water_boosted",
-                        Component.translatable("fluid.tag.tfg." + tagPath).withStyle(ChatFormatting.AQUA),
-                        Component.literal("x" + lastWaterMultiplier).withStyle(ChatFormatting.AQUA)));
-            } else {
-                textList.add(Component.translatable("tfg.multiblock.large_boiler.water_normal")
-                        .withStyle(ChatFormatting.GRAY));
-            }
+                    @Override
+                    public void serialize(FriendlyByteBuf buffer, BoosterFluid u) {
+                        buffer.writeInt(BOOSTERS.indexOf(u));
+                    }
 
-            int efficiencyPercent = (int) Math.round(100 - ((1.0 - getRecipeLogic().getTemperatureMultiplier()) * 100));
-            textList.add(Component.translatable("tfg.multiblock.large_boiler.fuel_efficiency",
-                    ChatFormatting.YELLOW.toString() + efficiencyPercent + "%"));
+                    @Override
+                    public boolean areEqual(TFGLargeBoilerMachine.BoosterFluid t1, TFGLargeBoilerMachine.BoosterFluid t2) {
+                        return t1 == t2;
+                    }
+                })
+                .build();
 
-            if (getRecipeTypes().length > 1) {
-                var modeText = Component.translatable("tfg.multiblock.large_boiler.mode")
-                        .append(Component.translatable("tfg.recipe_type." + getRecipeType().registryName.getPath()).withStyle(ChatFormatting.AQUA))
-                        .append(" ")
-                        .append(ComponentPanelWidget.withButton(Component.literal("[SWITCH]"), "switch_mode"));
-                textList.add(modeText);
-            }
+        syncManager.syncValue("throttle", throttleSync);
+        syncManager.syncValue("currentTemp", currentTempSync);
+        syncManager.syncValue("steamGenerated", steamGeneratedSync);
+        syncManager.syncValue("waterInUse", waterInUseSync);
+        syncManager.syncValue("lastWaterMultiplier", lastWaterMultiplierSync);
+        syncManager.syncValue("boosterFluid", boosterFluidSync);
 
-            var throttleText = Component.translatable("gtceu.multiblock.large_boiler.throttle",
-                    ChatFormatting.AQUA.toString() + getThrottle() + "%")
-                    .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            Component.translatable("gtceu.multiblock.large_boiler.throttle.tooltip"))));
-            textList.add(throttleText);
+        if (!isFormed())
+            return widgets;
 
-            var buttonText = Component.translatable("gtceu.multiblock.large_boiler.throttle_modify");
-            buttonText.append(" ");
-            buttonText.append(ComponentPanelWidget.withButton(Component.literal("[-]"), "sub"));
-            buttonText.append(" ");
-            buttonText.append(ComponentPanelWidget.withButton(Component.literal("[+]"), "add"));
-            textList.add(buttonText);
+        widgets.add(Text.dynamic(() -> Component.translatable("gtceu.multiblock.large_boiler.temperature",
+                currentTemperature + 274, getEffectiveMaxTemperature(boosterFluidSync.getValue()) + 274)).asWidget());
+        widgets.add(Text.dynamic(() -> Component.translatable("gtceu.multiblock.large_boiler.steam_output",
+                steamGeneratedSync.getValue() / TICKS_PER_STEAM_GENERATION)).asWidget());
+
+        if (boosterFluidSync.getValue() == null) {
+            widgets.add(Text.lang("tfg.multiblock.large_boiler.booster_none")
+                    .withStyle(ChatFormatting.GRAY).asWidget());
+        } else {
+            widgets.add(Text.lang("tfg.multiblock.large_boiler.booster_active",
+                    Component.translatable(boosterFluidSync.getValue().translationKey()).withStyle(ChatFormatting.GREEN),
+                    Component.literal("+" + boosterFluidSync.getValue().temperatureBonus()).withStyle(ChatFormatting.GREEN)).asWidget());
         }
+
+        if (waterInUseSync.getStringValue() != null) {
+            String tagPath = ResourceLocation.parse(waterInUseSync.getStringValue()).getPath();
+            widgets.add(Text.lang("tfg.multiblock.large_boiler.water_boosted",
+                    Component.translatable("fluid.tag.tfg." + tagPath).withStyle(ChatFormatting.AQUA),
+                    Component.literal("x" + lastWaterMultiplierSync.getStringValue()).withStyle(ChatFormatting.AQUA)).asWidget());
+        } else {
+            widgets.add(Text.lang("tfg.multiblock.large_boiler.water_normal")
+                    .withStyle(ChatFormatting.GRAY).asWidget());
+        }
+
+        int efficiencyPercent = (int) Math.round(100 - ((1.0 - getTemperatureMultiplier(currentTempSync.getIntValue())) * 100));
+        widgets.add(Text.lang("tfg.multiblock.large_boiler.fuel_efficiency",
+                ChatFormatting.YELLOW.toString() + efficiencyPercent + "%").asWidget());
+
+        widgets.add(Text.lang("gtceu.multiblock.large_boiler.throttle", ChatFormatting.AQUA.toString() + getThrottle() + "%").asWidget()
+                .tooltip(t -> t.add(Text.lang("gtceu.multiblock.large_boiler.throttle.tooltip"))));
+
+        widgets.add(LargeBoilerMachine.createIntInputWithButtons(throttleSync));
+
+        return widgets;
     }
 
-    public void handleDisplayClick(String componentData, ClickData clickData) {
-        if (!clickData.isRemote) {
-            if (componentData.equals("add") || componentData.equals("sub")) {
-                int result = componentData.equals("add") ? 5 : -5;
-                this.throttle = Mth.clamp(throttle + result, 25, 100);
-                ((TFGLargeBoilerRecipeLogic) this.getRecipeLogic()).modifyFuelBurnTime(this.throttle);
+    private static double getTemperatureMultiplier(int currentTemperature) {
+        final int THRESHOLD = 480;
+        final double MAX_REDUCTION = 0.6; // x2.5 max (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
 
-            } else if (componentData.equals("switch_mode")) {
-                this.cycleRecipeType();
-            }
-        }
-    }
+        if (currentTemperature <= THRESHOLD)
+            return 1.0;
 
-    @Override
-    public IGuiTexture getScreenTexture() {
-        return GuiTextures.DISPLAY_STEAM.get(maxTemperature > 800);
+        double t = (currentTemperature - THRESHOLD) / 1000.0;
+        // logarithm : start fast then slow down until it reaches its cap
+        double reduction = MAX_REDUCTION * (1.0 - Math.exp(-0.8 * t)); // Math.exp(-x * t) with (x) 2 faster towards cap and 0.5 slower towards cap
+        return 1.0 - reduction;
     }
 
     public static class TFGLargeBoilerRecipeLogic extends RecipeLogic {
 
         @SaveField
-        @DescSynced
+        @SyncToClient
         @Getter
         int currentThrottle;
 
-        public TFGLargeBoilerRecipeLogic(IRecipeLogicMachine machine) {
-            super(machine);
+        public TFGLargeBoilerRecipeLogic() {
+            super();
             currentThrottle = 100;
+        }
+
+        @Override
+        public TFGLargeBoilerMachine getMachine() {
+            return (TFGLargeBoilerMachine) super.getMachine();
         }
 
         public void setCurrentThrottle(int currentThrottle) {
             this.currentThrottle = currentThrottle;
         }
 
-        public double getTemperatureMultiplier() {
-            TFGLargeBoilerMachine boiler = (TFGLargeBoilerMachine) machine;
-            int current = boiler.getCurrentTemperature();
-            final int THRESHOLD = 480;
-            final double MAX_REDUCTION = 0.6; // x2.5 max (0.5 = ×2 max, 0.6 = ×2.5 max, 0.33 = ×1.5 max)
-
-            if (current <= THRESHOLD)
-                return 1.0;
-
-            double t = (current - THRESHOLD) / 1000.0;
-            // logarithm : start fast then slow down until it reaches its cap
-            double reduction = MAX_REDUCTION * (1.0 - Math.exp(-0.8 * t)); // Math.exp(-x * t) with (x) 2 faster towards cap and 0.5 slower towards cap
-            return 1.0 - reduction;
-        }
-
         @Override
         public void setupRecipe(GTRecipe recipe) {
             super.setupRecipe(recipe);
             if (lastRecipe != null) {
-                setCurrentThrottle(((TFGLargeBoilerMachine) machine).getThrottle());
-                double tempMultiplier = getTemperatureMultiplier();
+                setCurrentThrottle(getMachine().getThrottle());
+                double tempMultiplier = getTemperatureMultiplier(getMachine().getCurrentTemperature());
                 duration = (int) Math.round(lastRecipe.duration / (currentThrottle / 100.0) * tempMultiplier);
             }
         }
@@ -571,7 +568,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
         public void modifyFuelBurnTime(int newThrottle) {
             if (lastRecipe != null) {
                 double newThrottleMultiplier = (double) currentThrottle / newThrottle;
-                double tempMultiplier = getTemperatureMultiplier();
+                double tempMultiplier = getTemperatureMultiplier(getMachine().getCurrentTemperature());
                 duration = (int) Math.round(lastRecipe.duration / (newThrottle / 100.0) * tempMultiplier);
                 progress = (int) Math.round(newThrottleMultiplier * progress);
             }
@@ -582,7 +579,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine implements 
 
         public void refreshDurationForTemperature() {
             if (lastRecipe != null) {
-                double tempMultiplier = getTemperatureMultiplier();
+                double tempMultiplier = getTemperatureMultiplier(getMachine().getCurrentTemperature());
                 int targetDuration = (int) Math.round(lastRecipe.duration / (currentThrottle / 100.0) * tempMultiplier);
                 if (Math.abs(duration - targetDuration) > 2) {
                     double progressRatio = (double) progress / Math.max(1, duration);
