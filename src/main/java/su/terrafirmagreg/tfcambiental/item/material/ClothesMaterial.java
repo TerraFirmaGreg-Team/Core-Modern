@@ -48,7 +48,7 @@ public final class ClothesMaterial implements ArmorMaterial, TemperatureAltering
             "tfcambiental:insulated_leather",
             SoundEvents.WOOL_PLACE,
             TFCItems.WOOL_CLOTH,
-            T1_DURABILITY,
+            T2_DURABILITY,
             1,
             T1_WARMING,
             T3_INSULATION);
