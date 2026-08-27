@@ -1337,6 +1337,7 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.machine.me_assembler_1"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_2"),
                     Component.translatable("tfg.tooltip.machine.me_assembler_3"),
+                    Component.translatable("tfg.tooltip.machine.me_assembler_4"),
                     Component.translatable("tfg.tooltip.machine.one_energy_hatch"),
                     Component.translatable("tfg.tooltip.machine.subtick"))
             .workableCasingModel(
@@ -1426,7 +1427,8 @@ public class TFGMultiMachines {
                     Component.translatable("tfg.tooltip.machine.budding_charge_1"),
                     Component.translatable("tfg.tooltip.machine.budding_charge_2"),
                     Component.translatable("tfg.tooltip.machine.budding_charge_3"),
-                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"))
+                    Component.translatable("tfg.tooltip.machine.one_energy_hatch"),
+                    Component.translatable("tfg.tooltip.machine.subtick"))
             .workableCasingModel(
                     TFGCore.id("block/casings/machine_casing_ptfe_black"),
                     TFGCore.id("block/machines/wireless_charger"))

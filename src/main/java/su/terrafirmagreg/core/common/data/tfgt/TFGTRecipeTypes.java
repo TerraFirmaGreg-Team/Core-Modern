@@ -331,7 +331,7 @@ public class TFGTRecipeTypes {
                 if (!sticks.isEmpty()) {
                     widgetGroup.addWidget(new SlotWidget(
                             new CycleItemStackHandler(List.of(sticks)), 0,
-                            outX, outY + 5, false, false)
+                            outX, outY + 1, false, false)
                             .setBackground(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.DATA_ORB_OVERLAY)));
                 }
 
@@ -341,7 +341,7 @@ public class TFGTRecipeTypes {
                 }
                 widgetGroup.addWidget(new SlotWidget(
                         new CycleItemStackHandler(List.of(buddings)), 0,
-                        outX, outY + 40, false, false)
+                        outX, outY + 30, false, false)
                         .setBackground(GuiTextures.SLOT));
             });
 

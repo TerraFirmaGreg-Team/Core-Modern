@@ -396,7 +396,6 @@ public class TFGMachines {
                     TFGCore.id("block/casings/machine_casing_ptfe_black"),
                     TFGCore.id("block/machines/redstone_port"))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-            .tooltips(Component.translatable("tfg.machine.me_assembler_redstone_port.tooltip"))
             .register();
 
 }
