@@ -149,8 +149,11 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
 
         int executions = 1;
         if (recipe != null) {
-            long work = RecipeHelper.getRealEUt(recipe).getTotalEU() * recipe.duration;
-            executions = Math.max(1, (int) (work / 1_000_000));
+            long work = RecipeHelper.getRealEUt(recipe).getTotalEU()
+                    * recipe.duration
+                    * Math.max(1, recipe.subtickParallels)
+                    * Math.max(1, recipe.parallels);
+            executions = Math.max(1, (int) (work / 100_000));
         }
 
         buddingHealth -= executions;
@@ -192,18 +195,27 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
             case 1, 2 -> ChatFormatting.YELLOW;
             default -> ChatFormatting.GREEN;
         };
-        /* Debug Tool for Balance - Also Informations that could be shared but could lead to exploit
+        // Debug Tool for Balance - Also Informations that could be shared but could lead to exploit
+        /*
         var last = getRecipeLogic().getLastRecipe();
         if (last != null) {
-            long work = RecipeHelper.getRealEUt(last).getTotalEU() * last.duration * last.getTotalRuns();
+
+            long work = RecipeHelper.getRealEUt(last).getTotalEU()
+                    * last.duration
+                    * Math.max(1, last.subtickParallels)
+                    * Math.max(1, last.parallels);
             textList.add(Component.literal("work: " + work
                     + " # runs: " + last.getTotalRuns()
                     + " # dur: " + last.duration
                     + " # eut: " + RecipeHelper.getRealEUt(last).getTotalEU()
-                    + " # units: " + Math.max(1, (int) (work / 10_000_000))
+                    + " # batch: " + last.batchParallels
+                    + " # sub: " + last.subtickParallels
+                    + " # par: " + last.parallels
+                    + " # units: " + Math.max(1, (int) (work / 100_000))
                     + " # hp: " + buddingHealth));
         }
-        */
+         */
+
         int speedBonus = (int) (BUDDING_SPEED_BONUS[buddingTier] * 100);
 
         textList.add(Component.translatable("tfg.machine.me_assembler.budding_tier",
