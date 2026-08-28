@@ -149,9 +149,8 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
 
         int executions = 1;
         if (recipe != null) {
-            long work = RecipeHelper.getRealEUt(recipe).getTotalEU()
-                    * recipe.duration * recipe.getTotalRuns();
-            executions = Math.max(1, (int) (work / 10_000_000));
+            long work = RecipeHelper.getRealEUt(recipe).getTotalEU() * recipe.duration;
+            executions = Math.max(1, (int) (work / 1_000_000));
         }
 
         buddingHealth -= executions;
