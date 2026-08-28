@@ -61,6 +61,20 @@
             "type": "tfc:octopoteuthis",
             "maxCount": 2
         }],
+        "ambient": [
+            {
+                "weight": 100,
+                "minCount": 1,
+                "type": "minecraft:bat",
+                "maxCount": 2
+            },
+            {
+                "weight": 100,
+                "minCount": 5,
+                "type": "fowlplay:gull",
+                "maxCount": 8
+            }
+        ],
         "creature": [
             {
                 "weight": 20,
@@ -321,9 +335,21 @@
                 "maxCount": 4
             },
             {
-                "weight": 2,
+                "weight": 3,
                 "minCount": 1,
                 "type": "tfg:jerboa",
+                "maxCount": 3
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:dromedary_camel",
+                "maxCount": 3
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:bactrian_camel",
                 "maxCount": 3
             }
         ],

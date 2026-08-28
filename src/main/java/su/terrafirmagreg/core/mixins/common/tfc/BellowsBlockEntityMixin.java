@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import su.terrafirmagreg.core.config.TFGConfig;
-import su.terrafirmagreg.core.mixins.common.create.RotationPropagatorAccessor;
 import su.terrafirmagreg.core.utils.CreateKineticsHelper;
 
 /**
@@ -44,9 +43,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
             if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
-                if (RotationPropagatorAccessor.callGetAxisModifier(kbe, back.getOpposite()) != 0) {
-                    cir.setReturnValue(true);
-                }
+                cir.setReturnValue(CreateKineticsHelper.isConnected(kbe, back.getOpposite()));
             }
         }
     }
@@ -55,7 +52,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
     private void tfg$onGetCrankRotation(CallbackInfoReturnable<Rotation> cir) {
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
-            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
+            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe && CreateKineticsHelper.isConnected(kbe, back.getOpposite())) {
                 float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
                 float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
 
@@ -108,7 +105,7 @@ public abstract class BellowsBlockEntityMixin extends TFCBlockEntity implements 
     private void tfg$onGetExtensionLength(float partialTick, CallbackInfoReturnable<Float> cir) {
         if (level != null) {
             Direction back = getBlockState().getValue(BellowsBlock.FACING).getOpposite();
-            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe) {
+            if (level.getBlockEntity(worldPosition.relative(back)) instanceof KineticBlockEntity kbe && CreateKineticsHelper.isConnected(kbe, back.getOpposite())) {
                 float faceSpeed = Math.abs(CreateKineticsHelper.getActualSpeed(kbe, back.getOpposite()));
                 float impact = (float) BlockStressValues.getImpact(getBlockState().getBlock());
 

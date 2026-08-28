@@ -1,0 +1,9 @@
+{
+  "values": [
+    "tfg:grass_path/alfisol",
+    "tfg:grass_path/mollisol",
+    "tfg:grass_path/oxisol",
+    "tfg:grass_path/podzol",
+    "tfg:grass/mars_path"
+  ]
+}

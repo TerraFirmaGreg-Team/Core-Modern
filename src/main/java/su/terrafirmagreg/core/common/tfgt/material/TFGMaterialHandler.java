@@ -348,6 +348,12 @@ public final class TFGMaterialHandler {
         powder.setIgnored(Sapphire, () -> TFCItems.GEM_DUST.get(Gem.SAPPHIRE).get());
         powder.setIgnored(Topaz, () -> TFCItems.GEM_DUST.get(Gem.TOPAZ).get());
 
+        var weakSteel = TFGHelpers.getMaterial("weak_steel");
+        if (weakSteel != null) {
+            ingot.setIgnored(weakSteel, TFCItems.METAL_ITEMS.get(Metal.Default.WEAK_STEEL).get(Metal.ItemType.INGOT));
+            weakSteel.getProperty(PropertyKey.FLUID).getStorage().store(FluidStorageKeys.LIQUID,
+                    () -> TFCFluids.METALS.get(Metal.Default.WEAK_STEEL).getSource(), null);
+        }
         var weakRedSteel = TFGHelpers.getMaterial("weak_red_steel");
         if (weakRedSteel != null) {
             ingot.setIgnored(weakRedSteel, TFCItems.METAL_ITEMS.get(Metal.Default.WEAK_RED_STEEL).get(Metal.ItemType.INGOT));

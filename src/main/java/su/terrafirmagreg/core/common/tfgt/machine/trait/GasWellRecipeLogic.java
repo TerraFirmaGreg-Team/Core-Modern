@@ -115,7 +115,7 @@ public class GasWellRecipeLogic {
                 return; // If the output is full don't deplete the vein but keep consumming explosives and input fluid
 
             outputFluid(toOutput);
-            savedData.depleteVein(chunkX, chunkZ, 5, true);
+            savedData.depleteVein(chunkX, chunkZ, 0, false);
         }
     }
 

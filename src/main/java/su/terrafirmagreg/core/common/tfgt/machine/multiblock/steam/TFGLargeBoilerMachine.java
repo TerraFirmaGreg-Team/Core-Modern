@@ -160,6 +160,12 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
     private String lastWaterTagKey = null; // null = standard water (water_boiler tag)
     @SaveField
     private float lastWaterMultiplier = 1.0f;
+    @SaveField
+    @SyncToClient
+    private int lastWaterDrained = 0;
+
+    @SaveField
+    private boolean hasNoWater = false;
 
     // Precomputed once in constructor (depends only on final maxTemperature)
     private final List<BoosterFluid> compatibleBoosters;
@@ -304,6 +310,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
                 steamGenerated = 0;
                 lastWaterTagKey = null;
                 lastWaterMultiplier = 1.0f;
+                lastWaterDrained = 0;
+                hasNoWater = false;
             } else if (maxDrain > 0) {
                 DrainResult drainResult = tryDrainWater(maxDrain);
                 int drained = drainResult.drained();
@@ -312,6 +320,7 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
                 // Update GUI water display state
                 lastWaterTagKey = drainResult.tagKey();
                 lastWaterMultiplier = waterMultiplier;
+                lastWaterDrained = drained;
 
                 // Steam on baseDrainExact and not maxDrain
                 steamGenerated = (int) Math.round(
@@ -330,7 +339,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
                             break;
                     }
                 }
-                if (drained < maxDrain) {
+                boolean hasDrainedWater = drained > 0;
+                if (hasNoWater && hasDrainedWater) {
                     GTUtil.doExplosion(getLevel(), getBlockPos(), 2f);
                     var center = getBlockPos().below().relative(getFrontFacing().getOpposite());
                     if (GTValues.RNG.nextInt(100) > 80) {
@@ -343,6 +353,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
                             }
                         }
                     }
+                } else {
+                    hasNoWater = !hasDrainedWater;
                 }
             }
         }
@@ -486,7 +498,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
             return widgets;
 
         widgets.add(Text.dynamic(() -> Component.translatable("gtceu.multiblock.large_boiler.temperature",
-                currentTemperature + 274, getEffectiveMaxTemperature(boosterFluidSync.getValue()) + 274)).asWidget());
+                currentTemperature + 274, getEffectiveMaxTemperature(boosterFluidSync.getValue()) + 274)).asWidget()
+                .tooltip(t -> t.add(Text.lang("gtceu.multiblock.large_boiler.throttle.tooltip"))));
         widgets.add(Text.dynamic(() -> Component.translatable("gtceu.multiblock.large_boiler.steam_output",
                 steamGeneratedSync.getValue() / TICKS_PER_STEAM_GENERATION)).asWidget());
 
@@ -505,8 +518,8 @@ public class TFGLargeBoilerMachine extends WorkableMultiblockMachine {
                     Component.translatable("fluid.tag.tfg." + tagPath).withStyle(ChatFormatting.AQUA),
                     Component.literal("x" + lastWaterMultiplierSync.getStringValue()).withStyle(ChatFormatting.AQUA)).asWidget());
         } else {
-            widgets.add(Text.lang("tfg.multiblock.large_boiler.water_normal")
-                    .withStyle(ChatFormatting.GRAY).asWidget());
+            widgets.add(Text.lang("tfg.multiblock.large_boiler.water_normal",
+                    Component.translatable("tfg.multiblock.large_boiler.standard").withStyle(ChatFormatting.GRAY)).asWidget());
         }
 
         int efficiencyPercent = (int) Math.round(100 - ((1.0 - getTemperatureMultiplier(currentTempSync.getIntValue())) * 100));

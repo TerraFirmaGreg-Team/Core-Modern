@@ -67,43 +67,51 @@
             "energy_budget": 0.2
         }
     },
-    "spawners": {"monster": [
-        {
+    "spawners": {
+        "ambient": [{
             "weight": 100,
-            "minCount": 4,
-            "type": "minecraft:spider",
-            "maxCount": 4
-        },
-        {
-            "weight": 100,
-            "minCount": 4,
-            "type": "minecraft:skeleton",
-            "maxCount": 4
-        },
-        {
-            "weight": 100,
-            "minCount": 4,
-            "type": "minecraft:creeper",
-            "maxCount": 4
-        },
-        {
-            "weight": 50,
             "minCount": 1,
-            "type": "endermanoverhaul:flower_fields_enderman",
-            "maxCount": 1
-        },
-        {
-            "weight": 10,
-            "minCount": 1,
-            "type": "minecraft:enderman",
-            "maxCount": 1
-        },
-        {
-            "weight": 100,
-            "minCount": 4,
-            "type": "minecraft:husk",
-            "maxCount": 4
-        }
-    ]},
+            "type": "minecraft:bat",
+            "maxCount": 2
+        }],
+        "monster": [
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:spider",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:skeleton",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:creeper",
+                "maxCount": 4
+            },
+            {
+                "weight": 50,
+                "minCount": 1,
+                "type": "endermanoverhaul:flower_fields_enderman",
+                "maxCount": 1
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "minecraft:enderman",
+                "maxCount": 1
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:husk",
+                "maxCount": 4
+            }
+        ]
+    },
     "creature_spawn_probability": 0.1
 }

@@ -30,11 +30,19 @@
     },
     "downfall": 0.5,
     "spawn_costs": {
+        "tfg:bactrian_camel": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
         "minecraft:skeleton": {
             "charge": 0.7,
             "energy_budget": 0.2
         },
         "minecraft:enderman": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
+        "tfg:jerboa": {
             "charge": 0.7,
             "energy_budget": 0.2
         },
@@ -58,6 +66,10 @@
             "charge": 0.7,
             "energy_budget": 0.2
         },
+        "tfg:dromedary_camel": {
+            "charge": 0.7,
+            "energy_budget": 0.2
+        },
         "minecraft:slime": {
             "charge": 0.7,
             "energy_budget": 0.2
@@ -67,43 +79,65 @@
             "energy_budget": 0.2
         }
     },
-    "spawners": {"monster": [
-        {
-            "weight": 100,
-            "minCount": 4,
-            "type": "minecraft:spider",
-            "maxCount": 4
-        },
-        {
-            "weight": 100,
-            "minCount": 4,
-            "type": "minecraft:skeleton",
-            "maxCount": 4
-        },
-        {
-            "weight": 100,
-            "minCount": 4,
-            "type": "minecraft:creeper",
-            "maxCount": 4
-        },
-        {
-            "weight": 50,
-            "minCount": 1,
-            "type": "endermanoverhaul:flower_fields_enderman",
-            "maxCount": 1
-        },
-        {
-            "weight": 10,
-            "minCount": 1,
-            "type": "minecraft:enderman",
-            "maxCount": 1
-        },
-        {
-            "weight": 100,
-            "minCount": 4,
-            "type": "minecraft:husk",
-            "maxCount": 4
-        }
-    ]},
+    "spawners": {
+        "creature": [
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfg:jerboa",
+                "maxCount": 3
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfg:dromedary_camel",
+                "maxCount": 3
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfg:bactrian_camel",
+                "maxCount": 3
+            }
+        ],
+        "monster": [
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:spider",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:skeleton",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:creeper",
+                "maxCount": 4
+            },
+            {
+                "weight": 50,
+                "minCount": 1,
+                "type": "endermanoverhaul:flower_fields_enderman",
+                "maxCount": 1
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "minecraft:enderman",
+                "maxCount": 1
+            },
+            {
+                "weight": 100,
+                "minCount": 4,
+                "type": "minecraft:husk",
+                "maxCount": 4
+            }
+        ]
+    },
     "creature_spawn_probability": 0.1
 }

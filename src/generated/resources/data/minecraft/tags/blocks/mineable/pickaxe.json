@@ -1,8 +1,7 @@
 {
   "values": [
+    "tfg:artisan_table",
     "tfg:quartz_crucible",
-    "tfg:titanium_flywheel",
-    "tfg:titanium_steam_engine",
     "tfg:halite",
     "tfg:carbonate_hornfels",
     "tfg:pelitic_hornfels",
@@ -55,6 +54,12 @@
     "tfg:strut/truss/copper",
     "tfg:strut/truss/tin_alloy",
     "tfg:strut/truss/zinc",
-    "tfg:strut/truss/wrought_iron"
+    "tfg:strut/truss/wrought_iron",
+    "tfg:titanium_flywheel",
+    "tfg:titanium_steam_engine",
+    "tfg:generators/steel_combustion_engine",
+    "tfg:generators/aluminium_combustion_engine",
+    "tfg:generators/stainless_steel_combustion_engine",
+    "tfg:generators/titanium_combustion_engine"
   ]
 }

@@ -14,7 +14,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.dries007.tfc.common.entities.livestock.DairyAnimal;
-import net.dries007.tfc.common.entities.livestock.ProducingAnimal;
 import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.dries007.tfc.common.entities.livestock.WoolyAnimal;
 import net.minecraft.network.chat.Component;
@@ -121,11 +120,13 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
             if (entity instanceof TFGWoolEggProducingAnimal animal) {
                 if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
                     return false;
-                if (animalType.equals("producing") && !animal.hasWool())
+                if (animalType.equals("dairy")) {
+                    // In case we have a machine in the future that wants eggs
+                    if (!animal.isReadyForAnimalProduct())
+                        return false;
+                } else if (!animal.hasWool()) {
                     return false;
-                // In case we have a machine in the future that wants eggs
-                if (animalType.equals("dairy") && !animal.isReadyForAnimalProduct())
-                    return false;
+                }
             } else if (entity instanceof TFCAnimalProperties animal) {
                 if (animal.getAgeType() == TFCAnimalProperties.Age.OLD)
                     return false;
@@ -144,7 +145,7 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
             // Else per category use TFC Class
             return switch (animalType) {
                 case "dairy" -> entity instanceof DairyAnimal;
-                case "producing" -> entity instanceof ProducingAnimal || entity instanceof WoolyAnimal;
+                case "producing" -> entity instanceof WoolyAnimal;
                 default -> true;
             };
         }).isEmpty();
@@ -166,11 +167,13 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
             return false;
 
         if (animal instanceof TFGWoolEggProducingAnimal woolAnimal) {
-            if (animalType.equals("producing") && !woolAnimal.hasWool())
+            if (animalType.equals("dairy")) {
+                // In case we have a machine in the future that wants eggs
+                if (!woolAnimal.isReadyForAnimalProduct())
+                    return false;
+            } else if (!woolAnimal.hasWool()) {
                 return false;
-            // In case we have a machine in the future that wants eggs 
-            if (animalType.equals("dairy") && !woolAnimal.isReadyForAnimalProduct())
-                return false;
+            }
         } else {
             if (!animal.isReadyForAnimalProduct())
                 return false;
@@ -185,8 +188,7 @@ public class AnimalPresentCondition extends RecipeCondition<AnimalPresentConditi
         // Else Filter per category
         return switch (animalType) {
             case "dairy" -> entity instanceof DairyAnimal;
-            case "producing" -> entity instanceof ProducingAnimal
-                    || entity instanceof WoolyAnimal;
+            case "producing" -> entity instanceof WoolyAnimal;
             default -> true;
         };
     }

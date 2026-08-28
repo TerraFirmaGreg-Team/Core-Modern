@@ -268,21 +268,21 @@ public class CustomSpawnHelper {
 
     public static final CustomSpawnCondition TUNDRA_SPAWN = new CustomSpawnCondition(
             "tundra",
-            0,
+            3000,
             -10000,
             1,
             new float[] { -16f, -10f },
-            new float[] { 150f, 300f },
+            new float[] { 250f, 400f },
             Level.OVERWORLD,
             SPAWN_DIFFICULTIES.get("hard"));
 
     public static final CustomSpawnCondition POLAR_SPAWN = new CustomSpawnCondition(
             "polar",
-            -2000,
+            -5000,
             -10000,
             1,
             new float[] { -20f, -16f },
-            new float[] { 100f, 250f },
+            new float[] { 50f, 200f },
             Level.OVERWORLD,
             SPAWN_DIFFICULTIES.get("extreme"));
 

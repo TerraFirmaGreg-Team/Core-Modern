@@ -79,7 +79,7 @@ public class LiquidBlazeBurnerRecipe implements EmiRecipe {
         SlotWidget widget = new SlotWidget(EmiStack.of(FLUID, TICK_CONSUME), offsetX, offsetY);
         holder.add(widget);
 
-        holder.addText(Component.literal(TICK_CONSUME + "mB"), widget.getBounds().right() + 2, widget.getBounds().bottom() - Minecraft.getInstance().font.lineHeight, 16777215, true);
+        holder.addText(Component.literal(TICK_CONSUME + "mB"), widget.getBounds().right() + 2, widget.getBounds().bottom() - 12, 16777215, true);
 
         return widget.getBounds().bottom() + 2;
     }

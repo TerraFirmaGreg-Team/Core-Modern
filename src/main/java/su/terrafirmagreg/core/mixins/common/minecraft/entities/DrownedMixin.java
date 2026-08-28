@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.eerussianguy.firmalife.common.items.FLItems;
 
@@ -68,20 +69,22 @@ public abstract class DrownedMixin extends Zombie {
         return spawnGroup;
     }
 
-    /**
-     * @author Pyritie
-     * @reason Make them spawn like normal zombies
-     */
-    @Overwrite
-    public static boolean checkDrownedSpawnRules(EntityType<Husk> entity, ServerLevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        if (accessor.getFluidState(pos.below()).is(FluidTags.WATER))
-            return false;
+    // Make them spawn like normal zombies
+    @Inject(method = "checkDrownedSpawnRules", at = @At("HEAD"), remap = true, cancellable = true)
+    private static void tfg$checkDrownedSpawnRules(EntityType<Husk> entity, ServerLevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource random,
+            CallbackInfoReturnable<Boolean> cir) {
+        if (accessor.getFluidState(pos.below()).is(FluidTags.WATER)) {
+            cir.setReturnValue(false);
+            return;
+        }
 
         // Stop them spawning in oceans
-        if (accessor.getLevel().getHeight(Heightmap.Types.OCEAN_FLOOR, pos.getX(), pos.getZ()) <= pos.getY())
-            return false;
+        if (accessor.getLevel().getHeight(Heightmap.Types.OCEAN_FLOOR, pos.getX(), pos.getZ()) <= pos.getY()) {
+            cir.setReturnValue(false);
+            return;
+        }
 
-        return checkMonsterSpawnRules(entity, accessor, spawnType, pos, random);
+        cir.setReturnValue(checkMonsterSpawnRules(entity, accessor, spawnType, pos, random));
     }
 
     /**

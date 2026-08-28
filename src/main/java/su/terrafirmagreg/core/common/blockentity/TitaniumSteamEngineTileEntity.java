@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Create;
 
 public class TitaniumSteamEngineTileEntity extends SteamEngineTileEntity {
     public TitaniumSteamEngineTileEntity(BlockEntityType<? extends SteamEngineTileEntity> type, BlockPos pos, BlockState state) {
@@ -17,7 +17,7 @@ public class TitaniumSteamEngineTileEntity extends SteamEngineTileEntity {
 
     @Override
     public Block getFlywheel() {
-        return TFGBlocks.TITANIUM_FLYWHEEL.get();
+        return TFGBlocks_Create.TITANIUM_FLYWHEEL.get();
     }
 
     // Can't be bothered making a bunch of new configs for these when they're nothing special

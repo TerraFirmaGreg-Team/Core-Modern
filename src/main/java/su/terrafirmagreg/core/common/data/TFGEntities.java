@@ -2,8 +2,11 @@ package su.terrafirmagreg.core.common.data;
 
 import com.tterrag.registrate.util.entry.EntityEntry;
 
+import net.minecraft.client.model.CamelModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -36,6 +39,9 @@ import su.terrafirmagreg.core.common.entity.animals.tfcwolf.TFGWolfModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlow;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowModel;
 import su.terrafirmagreg.core.common.entity.astikorcarts.RNRPlowRenderer;
+import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamel;
+import su.terrafirmagreg.core.common.entity.camels.TFCBactrianCamelModel;
+import su.terrafirmagreg.core.common.entity.camels.TFCDromedaryCamel;
 import su.terrafirmagreg.core.common.entity.fox.TFGFox;
 import su.terrafirmagreg.core.common.entity.fox.TFGFoxCollarLayer;
 import su.terrafirmagreg.core.common.entity.fox.TFGFoxModel;
@@ -56,9 +62,22 @@ import su.terrafirmagreg.core.common.entity.wraptor.TFCWraptorRenderer;
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @SuppressWarnings("unused")
 public class TFGEntities {
-
     public static void init() {
     }
+
+    public static final EntityEntry<TFCDromedaryCamel> DROMEDARY_CAMEL = TFGCore.REGISTRATE.entity("dromedary_camel", TFCDromedaryCamel::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(1.7F, 2.375F).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCDromedaryCamel::createAttributes)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCDromedaryCamel::spawnRules)
+            .register();
+
+    public static final EntityEntry<TFCBactrianCamel> BACTRIAN_CAMEL = TFGCore.REGISTRATE.entity("bactrian_camel", TFCBactrianCamel::new, MobCategory.CREATURE)
+            .properties(p -> p.sized(1.7F, 2.375F).clientTrackingRange(10))
+            .loot((prov, ctx) -> prov.add(ctx, new LootTable.Builder()))
+            .attributes(TFCBactrianCamel::createAttributes)
+            .spawnPlacement(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TFCBactrianCamel::spawnRules)
+            .register();
 
     public static final EntityEntry<TFGSlime> TFG_SLIME = TFGCore.REGISTRATE.entity("slime", TFGSlime::new, MobCategory.AMBIENT)
             .properties(p -> p.sized(1F, 1F).clientTrackingRange(8))
@@ -197,5 +216,7 @@ public class TFGEntities {
         event.registerLayerDefinition(TFGSlimeModel.LAYER_LOCATION, TFGSlimeModel::createInnerBodyLayer);
         event.registerLayerDefinition(TFGSlimeOuterLayer.LAYER_LOCATION, TFGSlimeModel::createOuterBodyLayer);
         event.registerLayerDefinition(TFGSlimeFaceLayer.LAYER_LOCATION, TFGSlimeModel::createFaceLayer);
+        event.registerLayerDefinition(new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("tfc", "dromedary_camel"), "main"), CamelModel::createBodyLayer);
+        event.registerLayerDefinition(TFCBactrianCamelModel.LAYER_LOCATION, TFCBactrianCamelModel::createBodyLayer);
     }
 }

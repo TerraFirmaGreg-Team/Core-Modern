@@ -926,7 +926,7 @@ public class TFGMultiMachines {
                             () -> DynamicRenderHelper.makeBoilerPartRender(
                                     BoilerFireboxType.BRONZE_FIREBOX, GTBlocks.CASING_BRONZE_BRICKS))))
             .tooltips(
-                    Component.translatable("gtceu.multiblock.large_boiler.max_temperature", 754, 480),
+                    Component.translatable("tfg.multiblock.large_boiler.max_temperature", 480, 480),
                     Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 480 / 1 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))
@@ -973,7 +973,7 @@ public class TFGMultiMachines {
                             () -> DynamicRenderHelper.makeBoilerPartRender(
                                     BoilerFireboxType.STEEL_FIREBOX, GTBlocks.CASING_STEEL_SOLID))))
             .tooltips(
-                    Component.translatable("gtceu.multiblock.large_boiler.max_temperature", 1554, 1280),
+                    Component.translatable("tfg.multiblock.large_boiler.max_temperature", 1280, 1280),
                     Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 1280 / 1 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))

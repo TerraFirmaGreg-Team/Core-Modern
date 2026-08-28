@@ -1,6 +1,6 @@
 {
   "values": [
-    "tfg:titanium_flywheel",
+    "tfg:artisan_table",
     "tfg:spider_web",
     "tfg:spider_sac",
     "tfg:casings/greenhouse/treated_wood_greenhouse_casing_0",
@@ -340,6 +340,7 @@
     "tfg:palm_tree/date_growing_tree_head",
     "tfg:palm_tree/acai_tree_head",
     "tfg:palm_tree/acai_growing_tree_head",
+    "tfg:titanium_flywheel",
     "tfg:fruit_trees/lavacado_growing_branch",
     "tfg:fruit_trees/lavacado_branch",
     "tfg:fruit_trees/magmango_growing_branch",

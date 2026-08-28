@@ -68,6 +68,94 @@
         }
     },
     "spawners": {
+        "ambient": [
+            {
+                "weight": 100,
+                "minCount": 1,
+                "type": "minecraft:bat",
+                "maxCount": 2
+            },
+            {
+                "weight": 40,
+                "minCount": 1,
+                "type": "fowlplay:blue_jay",
+                "maxCount": 1
+            },
+            {
+                "weight": 40,
+                "minCount": 1,
+                "type": "fowlplay:cardinal",
+                "maxCount": 1
+            },
+            {
+                "weight": 60,
+                "minCount": 1,
+                "type": "fowlplay:chickadee",
+                "maxCount": 1
+            },
+            {
+                "weight": 40,
+                "minCount": 1,
+                "type": "fowlplay:crow",
+                "maxCount": 3
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "fowlplay:goose",
+                "maxCount": 2
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "fowlplay:gull",
+                "maxCount": 1
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "fowlplay:hawk",
+                "maxCount": 1
+            },
+            {
+                "weight": 60,
+                "minCount": 2,
+                "type": "fowlplay:pigeon",
+                "maxCount": 5
+            },
+            {
+                "weight": 40,
+                "minCount": 1,
+                "type": "fowlplay:raven",
+                "maxCount": 2
+            },
+            {
+                "weight": 60,
+                "minCount": 1,
+                "type": "fowlplay:robin",
+                "maxCount": 2
+            },
+            {
+                "weight": 60,
+                "minCount": 2,
+                "type": "fowlplay:sparrow",
+                "maxCount": 4
+            }
+        ],
+        "axolotls": [
+            {
+                "weight": 30,
+                "minCount": 2,
+                "type": "jellies:herbal",
+                "maxCount": 4
+            },
+            {
+                "weight": 30,
+                "minCount": 2,
+                "type": "jellies:phosphorum",
+                "maxCount": 4
+            }
+        ],
         "water_ambient": [
             {
                 "weight": 10,
@@ -366,9 +454,21 @@
                 "maxCount": 4
             },
             {
-                "weight": 2,
+                "weight": 3,
                 "minCount": 1,
                 "type": "tfg:jerboa",
+                "maxCount": 3
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:dromedary_camel",
+                "maxCount": 3
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:bactrian_camel",
                 "maxCount": 3
             }
         ],

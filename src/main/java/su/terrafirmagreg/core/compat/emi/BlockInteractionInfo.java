@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import com.eerussianguy.firmalife.common.blocks.FLBlocks;
 import com.eerussianguy.firmalife.common.blocks.OvenType;
+import com.eerussianguy.firmalife.common.items.FLItems;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.*;
@@ -18,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -124,6 +126,48 @@ public class BlockInteractionInfo {
             new BlockInteractionRecipe("oven_bottom", FLBlocks.OVEN_BOTTOM.get().asItem(), FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.BRICK).get().asItem(), igniters),
             new BlockInteractionRecipe("oven_chimney", FLBlocks.OVEN_CHIMNEY.get().asItem(), FLBlocks.CURED_OVEN_CHIMNEY.get(OvenType.BRICK).get().asItem(), igniters),
             new BlockInteractionRecipe("oven_hopper", FLBlocks.OVEN_HOPPER.get().asItem(), FLBlocks.CURED_OVEN_HOPPER.get(OvenType.BRICK).get().asItem(), igniters),
+            new BlockInteractionRecipe("oven_bottom_insulation", FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.BRICK).get().asItem(), FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.BRICK).get().asItem(),
+                    FLItems.OVEN_INSULATION.get()),
+
+            new BlockInteractionRecipe("rustic_bricks", Blocks.BRICKS.asItem(), FLBlocks.RUSTIC_BRICKS.get().asItem(), FLItems.FINISHES.get(OvenType.RUSTIC).get()),
+            new BlockInteractionRecipe("rustic_top", FLBlocks.OVEN_TOP.get().asItem(), FLBlocks.CURED_OVEN_TOP.get(OvenType.RUSTIC).get().asItem(), FLItems.FINISHES.get(OvenType.RUSTIC).get()),
+            new BlockInteractionRecipe("rustic_bottom", FLBlocks.OVEN_BOTTOM.get().asItem(), FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.RUSTIC).get().asItem(),
+                    FLItems.FINISHES.get(OvenType.RUSTIC).get()),
+            new BlockInteractionRecipe("rustic_chimney", FLBlocks.OVEN_CHIMNEY.get().asItem(), FLBlocks.CURED_OVEN_CHIMNEY.get(OvenType.RUSTIC).get().asItem(),
+                    FLItems.FINISHES.get(OvenType.RUSTIC).get()),
+            new BlockInteractionRecipe("rustic_hopper", FLBlocks.OVEN_HOPPER.get().asItem(), FLBlocks.CURED_OVEN_HOPPER.get(OvenType.RUSTIC).get().asItem(),
+                    FLItems.FINISHES.get(OvenType.RUSTIC).get()),
+            new BlockInteractionRecipe("rustic_bottom_insulation", FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.RUSTIC).get().asItem(), FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.RUSTIC).get().asItem(),
+                    FLItems.OVEN_INSULATION.get()),
+            new BlockInteractionRecipe("rustic_bottom_insulation_2", FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.BRICK).get().asItem(),
+                    FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.RUSTIC).get().asItem(),
+                    FLItems.OVEN_INSULATION.get()),
+
+            new BlockInteractionRecipe("tile_bricks", Blocks.BRICKS.asItem(), FLBlocks.TILES.get().asItem(), FLItems.FINISHES.get(OvenType.TILE).get()),
+            new BlockInteractionRecipe("tile_top", FLBlocks.OVEN_TOP.get().asItem(), FLBlocks.CURED_OVEN_TOP.get(OvenType.TILE).get().asItem(), FLItems.FINISHES.get(OvenType.TILE).get()),
+            new BlockInteractionRecipe("tile_bottom", FLBlocks.OVEN_BOTTOM.get().asItem(), FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.TILE).get().asItem(), FLItems.FINISHES.get(OvenType.TILE).get()),
+            new BlockInteractionRecipe("tile_chimney", FLBlocks.OVEN_CHIMNEY.get().asItem(), FLBlocks.CURED_OVEN_CHIMNEY.get(OvenType.TILE).get().asItem(), FLItems.FINISHES.get(OvenType.TILE).get()),
+            new BlockInteractionRecipe("tile_hopper", FLBlocks.OVEN_HOPPER.get().asItem(), FLBlocks.CURED_OVEN_HOPPER.get(OvenType.TILE).get().asItem(), FLItems.FINISHES.get(OvenType.TILE).get()),
+            new BlockInteractionRecipe("tile_bottom_insulation", FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.TILE).get().asItem(), FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.TILE).get().asItem(),
+                    FLItems.OVEN_INSULATION.get()),
+            new BlockInteractionRecipe("tile_bottom_insulation_2", FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.BRICK).get().asItem(), FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.TILE).get().asItem(),
+                    FLItems.OVEN_INSULATION.get()),
+
+            new BlockInteractionRecipe("stone_top", FLBlocks.OVEN_TOP.get().asItem(), FLBlocks.CURED_OVEN_TOP.get(OvenType.STONE).get().asItem(), FLItems.FINISHES.get(OvenType.STONE).get()),
+            new BlockInteractionRecipe("stone_bottom", FLBlocks.OVEN_BOTTOM.get().asItem(), FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.STONE).get().asItem(), FLItems.FINISHES.get(OvenType.STONE).get()),
+            new BlockInteractionRecipe("stone_chimney", FLBlocks.OVEN_CHIMNEY.get().asItem(), FLBlocks.CURED_OVEN_CHIMNEY.get(OvenType.STONE).get().asItem(),
+                    FLItems.FINISHES.get(OvenType.STONE).get()),
+            new BlockInteractionRecipe("stone_hopper", FLBlocks.OVEN_HOPPER.get().asItem(), FLBlocks.CURED_OVEN_HOPPER.get(OvenType.STONE).get().asItem(), FLItems.FINISHES.get(OvenType.STONE).get()),
+            new BlockInteractionRecipe("stone_bottom_insulation", FLBlocks.CURED_OVEN_BOTTOM.get(OvenType.STONE).get().asItem(), FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.STONE).get().asItem(),
+                    FLItems.OVEN_INSULATION.get()),
+            new BlockInteractionRecipe("stone_bottom_insulation_2", FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.BRICK).get().asItem(),
+                    FLBlocks.INSULATED_OVEN_BOTTOM.get(OvenType.STONE).get().asItem(),
+                    FLItems.OVEN_INSULATION.get()),
+
+            // Misc.
+            new BlockInteractionRecipe("fire_brick_insulation", TFCBlocks.FIRE_BRICKS.get().asItem(),
+                    ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("tfcbetterbf", "insulated_fire_bricks")).asItem(),
+                    ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath("tfcbetterbf", "insulation")))
     };
 
 }
