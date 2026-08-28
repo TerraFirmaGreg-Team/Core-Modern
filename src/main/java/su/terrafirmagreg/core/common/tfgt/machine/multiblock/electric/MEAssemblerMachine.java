@@ -199,7 +199,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
         /*
         var last = getRecipeLogic().getLastRecipe();
         if (last != null) {
-
+        
             long work = RecipeHelper.getRealEUt(last).getTotalEU()
                     * last.duration
                     * Math.max(1, last.subtickParallels)
