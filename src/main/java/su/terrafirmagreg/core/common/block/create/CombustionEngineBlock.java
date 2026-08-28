@@ -93,16 +93,16 @@ public class CombustionEngineBlock extends DirectionalKineticBlock implements IB
         if (state.hasBlockEntity())
             withBlockEntityDo(worldIn, pos, be -> {
                 if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING))) instanceof CombustionEngineBlockEntity nbe && nbe.getBlockState().getValue(FACING) == state.getValue(FACING))
-                    be.targetSpeed.setValue(nbe.targetSpeed.getValue());
+                    be.targetDirection.setValue(nbe.targetDirection.getValue());
                 if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING).getOpposite())) instanceof CombustionEngineBlockEntity nbe
                         && nbe.getBlockState().getValue(FACING) == state.getValue(FACING))
-                    be.targetSpeed.setValue(nbe.targetSpeed.getValue());
+                    be.targetDirection.setValue(nbe.targetDirection.getValue());
                 if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING))) instanceof CombustionEngineBlockEntity nbe
                         && nbe.getBlockState().getValue(FACING) == state.getValue(FACING).getOpposite())
-                    be.targetSpeed.setValue(nbe.targetSpeed.getValue() == 1 ? 0 : 1);
+                    be.targetDirection.setValue(nbe.targetDirection.getValue() == 1 ? 0 : 1);
                 if (worldIn.getBlockEntity(pos.relative(state.getValue(FACING).getOpposite())) instanceof CombustionEngineBlockEntity nbe
                         && nbe.getBlockState().getValue(FACING) == state.getValue(FACING).getOpposite())
-                    be.targetSpeed.setValue(nbe.targetSpeed.getValue() == 1 ? 0 : 1);
+                    be.targetDirection.setValue(nbe.targetDirection.getValue() == 1 ? 0 : 1);
             });
 
         super.onPlace(state, worldIn, pos, oldState, isMoving);

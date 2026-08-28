@@ -362,7 +362,6 @@
     "injectors": {"defaultRequire": 1},
     "compatibilityLevel": "JAVA_17",
     "client": [
-        "client.afc.TapBlockEntityProviderMixin",
         "client.carryon.ClientEventsMixin",
         "client.firmalife.CompostTumblerBlockEntityRendererMixin",
         "client.firmalife.FLBeehiveBlockMixin",

@@ -9,14 +9,13 @@ import java.util.List;
 
 import com.gregtechceu.gtceu.api.sound.AutoReleasedSound;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
+import com.simibubi.create.content.contraptions.bearing.WindmillBearingBlockEntity;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
-import com.simibubi.create.content.kinetics.motor.KineticScrollValueBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
-import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -48,7 +47,7 @@ import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 
 public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity implements ITieredKineticBlockEntity {
     public static final int DEFAULT_SPEED = 32;
-    public ScrollValueBehaviour targetSpeed;
+    ScrollOptionBehaviour<WindmillBearingBlockEntity.RotationDirection> targetDirection;
 
     private final int tier;
 
@@ -103,17 +102,13 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        Integer max = AllConfigs.server().kinetics.maxRotationSpeed.get();
-
-        targetSpeed = new KineticScrollValueBehaviour(CreateLang.translateDirect("kinetics.creative_motor.rotation_speed"),
-                this, new CombustionEngineValueBox());
-        targetSpeed.between(-max, max);
-        targetSpeed.value = DEFAULT_SPEED;
-        targetSpeed.withCallback(i -> this.updateGeneratedRotation());
+        targetDirection = new ScrollOptionBehaviour<>(WindmillBearingBlockEntity.RotationDirection.class,
+                CreateLang.translateDirect("contraptions.windmill.rotation_direction"), this, new CombustionEngineValueBox());
+        targetDirection.withCallback(i -> this.updateGeneratedRotation());
 
         tank = SmartFluidTankBehaviour.single(this, 2000 * (((CombustionEngineBlock) getBlockState().getBlock()).getTier() * 2));
 
-        behaviours.add(targetSpeed);
+        behaviours.add(targetDirection);
         behaviours.add(tank);
     }
 
@@ -122,6 +117,9 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         super.initialize();
         if (!hasSource() || getGeneratedSpeed() > getTheoreticalSpeed())
             updateGeneratedRotation();
+
+        // Prevent a crash when loading a world that had the engines with the output speed control
+        targetDirection.setValue(Math.max(-1, Math.min(1, targetDirection.getValue())));
     }
 
     @Override
@@ -136,7 +134,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
         if (!enabled() || !oxygenated)
             return 0;
 
-        return convertToDirection(targetSpeed.getValue(), getBlockState().getValue(CombustionEngineBlock.FACING));
+        return convertToDirection(targetDirection.getValue() == 1 ? -32 : 32, getBlockState().getValue(CombustionEngineBlock.FACING));
     }
 
     @Override
@@ -209,14 +207,14 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
 
         if (enabled() && oxygenated) {
             if (soundInstance != null) {
-                if (soundInstance.isStopped() || Math.abs(targetSpeed.value / 256f) + 0.5f != soundInstance.getPitch()) {
+                if (soundInstance.isStopped()) {
                     soundInstance.release();
                     soundInstance = null;
                 }
             } else {
                 soundInstance = GTSoundEntries.COMBUSTION.playAutoReleasedSound(
                         () -> enabled() && level.isLoaded(getBlockPos()),
-                        getBlockPos(), true, 0, 1, Math.abs(targetSpeed.value / 256f) + 0.5f);
+                        getBlockPos(), true, 0, 1, 1f);
             }
         } else {
             if (soundInstance != null) {
@@ -242,7 +240,7 @@ public class CombustionEngineBlockEntity extends GeneratingKineticBlockEntity im
 
     // Minimum burn of 1mB every 10 sec
     public double getFuelBurnRate() {
-        return getFuelType().getFuelBurnRate(targetSpeed.value, tier);
+        return getFuelType().getFuelBurnRate(targetDirection.value * 32, tier);
     }
 
     public SmartBlockEntity self() {

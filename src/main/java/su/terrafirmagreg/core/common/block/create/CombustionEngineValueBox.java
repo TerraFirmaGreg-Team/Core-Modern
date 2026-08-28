@@ -38,9 +38,4 @@ public class CombustionEngineValueBox extends ValueBoxTransform.Sided {
             return VecHelper.voxelSpace(8, 8, 3);
         return VecHelper.voxelSpace(8, 13, 8);
     }
-
-    @Override
-    public float getScale() {
-        return 0.5f;
-    }
 }
