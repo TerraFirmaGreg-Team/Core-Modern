@@ -7,22 +7,24 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.capability.recipe.*;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -30,6 +32,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraftforge.fluids.FluidStack;
+
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.PanelSyncManager;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
 
@@ -40,10 +46,6 @@ import su.terrafirmagreg.core.common.data.TFGTags;
 @MethodsReturnNonnullByDefault
 public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachine {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            OreProcessingBeneathMachine.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
     private static final double MIN_RATIO = 0.15; // Under this amount the machine won't start
     private static final double MAX_RATIO = 0.85; // Over this amount the machine won't start
     private static final double OPTIMAL_RATIO = 0.50; // The percentage of fluid in the hatch so it's optimal
@@ -52,39 +54,38 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     private static final int MAX_PARALLELS = 8; // Amount of parallel
     private static final double PARALLEL_EU_DISCOUNT = 0.75;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private double gasModifier = 1.0;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int gasLevelPercent = 0;
 
     private final ConditionalSubscriptionHandler gasUpdateSubscription;
 
-    public OreProcessingBeneathMachine(IMachineBlockEntity holder, Object... args) {
-        super(holder, args);
+    public OreProcessingBeneathMachine(BlockEntityCreationInfo info) {
+        super(info);
         this.gasUpdateSubscription = new ConditionalSubscriptionHandler(this, this::tickGasInfo, this::isFormed);
     }
 
     @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(String substructureName) {
+        super.formStructure(substructureName);
         gasModifier = 1.0;
         gasLevelPercent = 0;
+        syncDataHolder.markClientSyncFieldDirty("gasModifier");
+        syncDataHolder.markClientSyncFieldDirty("gasLevelPercent");
         gasUpdateSubscription.updateSubscription();
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         gasModifier = 1.0;
         gasLevelPercent = 0;
+        syncDataHolder.markClientSyncFieldDirty("gasModifier");
+        syncDataHolder.markClientSyncFieldDirty("gasLevelPercent");
         gasUpdateSubscription.updateSubscription();
     }
 
@@ -98,11 +99,16 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
         if (tankInfo == null || tankInfo[1] == 0) {
             gasLevelPercent = 0;
             gasModifier = 0.0;
+            syncDataHolder.markClientSyncFieldDirty("gasModifier");
+            syncDataHolder.markClientSyncFieldDirty("gasLevelPercent");
             return;
         }
         double ratio = (double) tankInfo[0] / tankInfo[1];
         gasLevelPercent = (int) (ratio * 100);
         gasModifier = calculateGaussianModifier(ratio);
+
+        syncDataHolder.markClientSyncFieldDirty("gasModifier");
+        syncDataHolder.markClientSyncFieldDirty("gasLevelPercent");
     }
 
     @Nullable
@@ -209,8 +215,8 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
                 for (Content content : entry.getValue()) {
                     if (content.isChanced()) {
                         // Byproduct only if chance isn't guarantee
-                        int newChance = (int) (content.chance * modifier);
-                        newContents.add(new Content(content.getContent(), newChance, content.maxChance, content.tierChanceBoost));
+                        int newChance = (int) (content.chance() * modifier);
+                        newContents.add(new Content(content.content(), newChance, content.maxChance()));
                     } else {
                         // If Guarantee keep the number
                         newContents.add(content);
@@ -237,20 +243,20 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     // GUI
 
     @Override
-    public void addDisplayText(@NotNull List<Component> textList) {
-        super.addDisplayText(textList);
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
 
         if (!isFormed())
-            return;
-
-        List<Component> customLines = new ArrayList<>();
+            return widgets;
 
         if (gasLevelPercent == 0 && gasModifier == 0.0) {
-            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.no_gas")
-                    .withStyle(ChatFormatting.RED));
-        } else {
-            double ratio = gasLevelPercent / 100.0;
-            int modifierPercent = (int) (gasModifier * 100);
+            widgets.add(Text.lang("tfg.machine.ore_processing_beneath.no_gas")
+                    .withStyle(ChatFormatting.RED).asWidget());
+            return widgets;
+        }
+
+        double ratio = gasLevelPercent / 100.0;
+        int modifierPercent = (int) (gasModifier * 100);
 
             ChatFormatting levelColor;
             if (ratio < MIN_RATIO || ratio > MAX_RATIO) {
@@ -260,6 +266,13 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
             } else {
                 levelColor = ChatFormatting.YELLOW;
             }
+
+        widgets.add(Text.lang("tfg.machine.ore_processing_beneath.gas_level",
+                gasLevelPercent).withStyle(levelColor).asWidget());
+        widgets.add(Text.lang("tfg.machine.ore_processing_beneath.output_modifier",
+                modifierPercent).withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW).asWidget());
+
+        return widgets;
 
             customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.gas_level",
                     Component.literal(gasLevelPercent + "%").withStyle(levelColor)));

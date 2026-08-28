@@ -2,7 +2,7 @@ package su.terrafirmagreg.core.common.tfgt.recipe.condition;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
@@ -73,12 +73,12 @@ public class OxygenatedCondition extends RecipeCondition<OxygenatedCondition> {
      */
     @Override
     public boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
-        var machine = recipeLogic.machine.self();
+        var machine = recipeLogic.getMachine();
         var level = machine.getLevel();
         if (!(level instanceof ServerLevel serverLevel))
             return false;
 
-        BlockPos pos = machine.getPos();
+        BlockPos pos = machine.getBlockPos();
         boolean hasAdjOxygen = hasOxygenOnAnySide(serverLevel, pos);
         boolean passes = isOxygenated == hasAdjOxygen;
         return isReverse != passes;

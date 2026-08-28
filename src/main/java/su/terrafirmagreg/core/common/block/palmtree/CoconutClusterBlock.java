@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.common.block.palmtree;
 
-import static com.lowdragmc.lowdraglib.LDLib.random;
-
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -175,7 +173,7 @@ public class CoconutClusterBlock extends PalmClusterBlock {
             int age = state.getValue(this.clusterAge);
             CoconutDrop drop = getDropForAge(age);
 
-            if (age < 4 && dormant && random.nextFloat() < 0.25f) {
+            if (age < 4 && dormant && serverLevel.random.nextFloat() < 0.25f) {
                 serverLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                 spawnFallingPalmBlock(serverLevel, pos, TFGBlocks_PalmTrees.PALM_HUSK.get(), 1);
             }

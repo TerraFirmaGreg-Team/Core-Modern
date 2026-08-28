@@ -8,28 +8,25 @@ import java.util.UUID;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.client.model.machine.MachineRenderState;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
+import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
@@ -41,10 +38,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 public class WirelessChargerMachine extends TieredEnergyMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            WirelessChargerMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
-
-    @Persisted
+    @SaveField
     private ChargeMode mode = ChargeMode.SUPER_CHARGED;
 
     private final int longRange;
@@ -58,28 +52,22 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
     private int activeLingerTicks = 0;
     private boolean visuallyActive = false;
 
-    public WirelessChargerMachine(IMachineBlockEntity holder, int tier, Object... args) {
-        super(holder, tier, args);
-        this.longRange = longRangeFor(tier);
-        this.shortRange = shortRangeFor(tier);
-        this.chargeAmount = GTValues.V[tier];
-    }
+    public WirelessChargerMachine(BlockEntityCreationInfo info, int tier) {
+        super(info, tier, new NotifiableEnergyContainer(GTValues.V[tier] * 64L, GTValues.V[tier], 4L, 0L, 0L) {
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Override
-    protected NotifiableEnergyContainer createEnergyContainer(Object... args) {
-        long voltage = GTValues.V[getTier()];
-        return new NotifiableEnergyContainer(this, voltage * 64L, voltage, 4L, 0L, 0L) {
+            @Override
+            public WirelessChargerMachine getMachine() {
+                return (WirelessChargerMachine) super.getMachine();
+            }
 
             @Override
             public long getInputAmperage() {
-                return mode == ChargeMode.SUPER_CHARGED ? 4L : 1L;
+                return getMachine().mode == ChargeMode.SUPER_CHARGED ? 4L : 1L;
             }
-        };
+        });
+        this.longRange = longRangeFor(tier);
+        this.shortRange = shortRangeFor(tier);
+        this.chargeAmount = GTValues.V[tier];
     }
 
     @Override
@@ -181,7 +169,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
         if (player.level() != getLevel())
             return false;
         double radius = currentRange();
-        return player.distanceToSqr(Vec3.atCenterOf(getPos())) <= radius * radius;
+        return player.distanceToSqr(Vec3.atCenterOf(getBlockPos())) <= radius * radius;
     }
 
     private void chargePlayer(Player player, long maxChargeValue) {
@@ -276,17 +264,16 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
     }
 
     @Override
-    protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand, Direction gridSide,
-            BlockHitResult hitResult) {
+    protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         if (!getLevel().isClientSide) {
             mode = mode == ChargeMode.SUPER_CHARGED ? ChargeMode.MIXED : ChargeMode.SUPER_CHARGED;
-            playerIn.displayClientMessage(Component.translatable(
+            context.getPlayer().displayClientMessage(Component.translatable(
                     "tfg.wireless_charger.mode." + mode.ordinal(),
                     FormattingUtil.formatNumbers(currentRange())), false);
             // Clear so players within range know that the mode changed
             previousPlayersInRange.clear();
         }
-        return super.onScrewdriverClick(playerIn, hand, gridSide, hitResult);
+        return super.onScrewdriverClick(context);
     }
 
     public enum ChargeMode {

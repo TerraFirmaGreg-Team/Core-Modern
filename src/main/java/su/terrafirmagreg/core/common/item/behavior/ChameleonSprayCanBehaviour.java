@@ -313,7 +313,7 @@ public class ChameleonSprayCanBehaviour implements IInteractionItem, IAddInforma
             return false;
         } else if (first instanceof IPipeNode pipe) {
             var collected = BreadthFirstBlockSearch.conditionalSearch(IPipeNode.class, pipe,
-                    first.getLevel(), IPipeNode::getPipePos,
+                    first.getLevel(), IPipeNode::getBlockPos,
                     gtPipePredicate, limit, limit * 6);
 
             int successfullyPainted = 0;

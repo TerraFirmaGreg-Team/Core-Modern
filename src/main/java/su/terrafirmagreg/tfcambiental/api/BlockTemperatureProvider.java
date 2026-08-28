@@ -13,9 +13,9 @@ import java.util.stream.Stream;
 
 import com.eerussianguy.firmalife.common.blocks.OvenBottomBlock;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
-import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
@@ -336,8 +336,7 @@ public interface BlockTemperatureProvider {
 
         spec = CAPABILITY_BLOCKS.get(block);
         if (spec != null) {
-            var cap = GTCapabilityHelper.getRecipeLogic(player.level(), blockPos, null);
-            if (cap != null && cap.isActive()) {
+            if (player.level().getBlockEntity(blockPos) instanceof IRecipeLogicMachine rlMachine && rlMachine.isActive()) {
                 return spec.create();
             }
         }
@@ -367,10 +366,9 @@ public interface BlockTemperatureProvider {
     }
 
     static Optional<TempModifier> handleMultiblockInside(Player player, BlockEntity blockEntity) {
-        if (blockEntity instanceof IMachineBlockEntity machineBE &&
-                machineBE.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine &&
+        if (blockEntity instanceof WorkableElectricMultiblockMachine machine &&
                 machine.isFormed()
-                && isPosInCacheSafe(machine, player.blockPosition())
+                && machine.getPatternState(MultiblockControllerMachine.DEFAULT_STRUCTURE).getCache().containsKey(player.blockPosition().asLong())
                 && machine.getRecipeLogic().isWorking()) {
 
             float temp;
@@ -388,20 +386,6 @@ public interface BlockTemperatureProvider {
             return Optional.of(new TempModifier(temp, 100f));
         }
         return TempModifier.none();
-    }
-
-    private static boolean isPosInCacheSafe(WorkableElectricMultiblockMachine machine, BlockPos pos) {
-        var lock = machine.getPatternLock();
-        if (!lock.tryLock()) {
-            return false;
-        }
-        try {
-            return machine.getMultiblockState().isPosInCache(pos);
-        } catch (NullPointerException ignored) {
-            return false;
-        } finally {
-            lock.unlock();
-        }
     }
 
     static Optional<TempModifier> handleEncasedFan(Player player, BlockEntity blockEntity) {

@@ -47,7 +47,7 @@ dependencies {
 
     // GTM
     modImplementation ("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtm_version}") { transitive = false }
-    modImplementation ("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
+    modCompileOnly ("brachy.modularui:modularui-mc1.20.1:${mui_version}")
 
     // KJS
     modImplementation "maven.modrinth:rhino:2001.2.2-build.18+forge"

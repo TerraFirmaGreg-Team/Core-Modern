@@ -260,8 +260,8 @@ public final class ForgeCommonEventListener {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlock());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlock());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlock());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getBlock());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
@@ -278,8 +278,8 @@ public final class ForgeCommonEventListener {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getItem());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getItem());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getItem());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getItem());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))
@@ -310,8 +310,8 @@ public final class ForgeCommonEventListener {
 
         if (mapping.getKey().equals(GTCEu.id("heat_exchanger")))
             mapping.remap(TFGMultiMachines.HEAT_EXCHANGER.getBlockEntityType());
-        if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
-            mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlockEntityType());
+        //if (mapping.getKey().equals(GTCEu.id("ostrum_linear_accelerator")))
+        //    mapping.remap(TFGMultiMachines.OSTRUM_LINEAR_ACCELERATOR.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("steam_bloomery")))
             mapping.remap(TFGMultiMachines.STEAM_BLOOMERY.getBlockEntityType());
         if (mapping.getKey().equals(GTCEu.id("bronze_large_boiler")))

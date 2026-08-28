@@ -5,13 +5,13 @@ import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.ItemMaterialData;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
 import net.minecraft.ChatFormatting;
@@ -36,9 +36,9 @@ public final class TFGHelpers {
     public static boolean isMaterialRegistrationFinished;
 
     public static Material getMaterial(@NotNull String materialName) {
-        var material = GTCEuAPI.materialManager.getMaterial(materialName);
+        var material = GTRegistries.MATERIALS.get(materialName);
         if (material == null) {
-            material = GTCEuAPI.materialManager.getMaterial(TFGCore.MOD_ID + ":" + materialName);
+            material = GTRegistries.MATERIALS.get(TFGCore.MOD_ID + ":" + materialName);
         }
 
         return material;

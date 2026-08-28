@@ -8,16 +8,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.TieredWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
@@ -28,8 +25,6 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTMath;
 import com.gregtechceu.gtceu.utils.GTUtil;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -38,35 +33,30 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.fluids.FluidStack;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
+import brachy.modularui.value.sync.PanelSyncManager;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import lombok.Getter;
 
 import su.terrafirmagreg.core.utils.TFGHelpers;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements ITieredMachine {
-
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            SMRGenerator2.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
+public class SMRGenerator2 extends TieredWorkableElectricMultiblockMachine {
 
     // TODO: CosmicCore Lubricants for efficiency bonus
 
     private long lubricantAmountForDisplay = 0;
-    @DescSynced
     private GTRecipe lastUsedRecipe = null;
 
     private FluidStack currentLubricant;
     private FluidStack currentBooster;
-    @Getter
-    private final int tier;
     // Probably a bad idea, most likely a better way to do this
-    @DescSynced
     private static final Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
-    @DescSynced
     private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
     private int runningTimer = 0;
+
     static {
         var ozone = TFGHelpers.getMaterial("ozone");
         var cyclohex_diperoxide = TFGHelpers.getMaterial("cyclohex_diperoxide");
@@ -85,15 +75,15 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             lubricantTiers.put(TFGHelpers.getMaterial("polyalkylene_lubricant").getFluid(1), 4);
     }
 
-    public SMRGenerator2(IMachineBlockEntity holder, int tier) {
-        super(holder);
-        this.tier = tier;
+    public SMRGenerator2(BlockEntityCreationInfo info, int tier) {
+        super(info, tier);
+        recipeLogic.setRegressWhenWaiting(false);
     }
 
     private boolean isIntakesObstructed() {
         var dir = this.getFrontFacing();
         boolean mutableXZ = dir.getAxis() == Direction.Axis.Z;
-        var centerPos = this.getPos().relative(dir);
+        var centerPos = this.getBlockPos().relative(dir);
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 if (x == 0 && y == 0)
@@ -146,7 +136,7 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
 
     @Override
     public long getOverclockVoltage() {
-        return GTValues.V[tier];
+        return GTValues.V[getTier()];
     }
 
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
@@ -280,14 +270,8 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
     }
 
     @Override
-    public boolean regressWhenWaiting() {
-        return false;
-    }
-
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        MultiblockDisplayText.Builder builder = MultiblockDisplayText.builder(textList, isFormed())
-                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive());
+    public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
+        var widgets = super.getWidgetsForDisplay(syncManager);
 
         long rawVoltage = getOverclockVoltage();
         int baseTier = GTUtil.getFloorTierByVoltage(rawVoltage);
@@ -315,59 +299,54 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         final long displayVoltageFinal = displayVoltage;
         final Component voltageNameFinal = Component.literal(GTValues.VNF[displayTier]);
 
-        if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()) {
-            builder.addCustom(t -> t.add(recipeLogic.getFancyTooltip().get(0)));
-            return;
+        if (recipeLogic.isSuspend()) {
+            return widgets;
         }
 
-        builder.addCustom(t -> {
-            var combined = Component.empty();
+        var combined = Component.empty();
 
-            Component prefix = Component.translatable("tfg.gui.max_energy_per_tick_amps.prefix")
-                    .withStyle(ChatFormatting.WHITE);
+        Component prefix = Component.translatable("tfg.gui.max_energy_per_tick_amps.prefix")
+                .withStyle(ChatFormatting.WHITE);
 
-            Component middle = Component.literal(
-                    FormattingUtil.formatNumbers(displayVoltageFinal * amperageFinal)
-                            + " (" + amperageFinal + "A ")
-                    .withStyle(ChatFormatting.GRAY);
+        Component middle = Component.literal(
+                FormattingUtil.formatNumbers(displayVoltageFinal * amperageFinal)
+                        + " (" + amperageFinal + "A ")
+                .withStyle(ChatFormatting.GRAY);
 
-            Component suffix = Component.literal(")").withStyle(ChatFormatting.GRAY);
+        Component suffix = Component.literal(")").withStyle(ChatFormatting.GRAY);
 
-            combined.append(prefix)
-                    .append(Component.literal(" "))
-                    .append(middle)
-                    .append(voltageNameFinal)
-                    .append(suffix);
+        combined.append(prefix)
+                .append(Component.literal(" "))
+                .append(middle)
+                .append(voltageNameFinal)
+                .append(suffix);
 
-            t.add(combined);
-        });
+        widgets.add(Text.of(combined).asWidget());
 
         // EU Generation if active with EU in green
 
         if (isActive() && isWorkingEnabled()) {
             long euOutput = recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
 
-            builder.addCustom(t -> {
-                MutableComponent text = Component.literal("Energy Output: ").withStyle(ChatFormatting.WHITE);
-                Component euValue = Component.literal(FormattingUtil.formatNumbers(euOutput)).withStyle(ChatFormatting.GREEN);
-                Component unit = Component.literal(" EU/t").withStyle(ChatFormatting.WHITE);
-                text.append(euValue).append(unit);
-                t.add(text);
-            });
+            MutableComponent text = Component.literal("Energy Output: ").withStyle(ChatFormatting.WHITE);
+            Component euValue = Component.literal(FormattingUtil.formatNumbers(euOutput)).withStyle(ChatFormatting.GREEN);
+            Component unit = Component.literal(" EU/t").withStyle(ChatFormatting.WHITE);
+            text.append(euValue).append(unit);
 
+            widgets.add(Text.of(text).asWidget());
         }
 
         // Consumes working
 
         GTRecipe recipe = lastUsedRecipe; // <-- utilise la dernière recette mémorisée
         if (recipe == null)
-            return;
+            return widgets;
 
         FluidStack requiredFluid = RecipeHelper.getInputFluids(recipe).isEmpty()
                 ? FluidStack.EMPTY
                 : RecipeHelper.getInputFluids(recipe).get(0);
         if (requiredFluid.isEmpty())
-            return;
+            return widgets;
 
         long EUt = recipe.getOutputEUt().voltage();
         long maxVoltage = getMaxVoltage();
@@ -381,20 +360,17 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         float durationMultiplier = tier / 2.0f;
         long totalFluid = Math.round(requiredFluid.getAmount() * actualParallel * 1F);
 
-        builder.addCustom(t -> t.add(
-                Component.translatable("tfg.gui.consumes")
-                        .append(Component.literal(FormattingUtil.formatNumbers(totalFluid) + " mB ").withStyle(ChatFormatting.RED))
-                        .append(Component.translatable("tfg.gui.per_cycle").withStyle(ChatFormatting.GRAY))));
+        widgets.add(Text.of(Component.translatable("tfg.gui.consumes")
+                .append(Component.literal(FormattingUtil.formatNumbers(totalFluid) + " mB ").withStyle(ChatFormatting.RED))
+                .append(Component.translatable("tfg.gui.per_cycle").withStyle(ChatFormatting.GRAY))).asWidget());
 
         // How many ticks in a cycle
 
         int duration = recipe.duration;
-        builder.addCustom(t -> {
-            double seconds = duration / 20.0;
-            t.add(Component.translatable("tfg.gui.cycle_duration")
-                    .append(Component.literal(duration + " ticks").withStyle(ChatFormatting.AQUA))
-                    .append(Component.literal(" (≈" + String.format("%.2f", seconds) + " s)").withStyle(ChatFormatting.GREEN)));
-        });
+
+        widgets.add(Text.of(Component.translatable("tfg.gui.cycle_duration")
+                .append(Component.literal(duration + " ticks").withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(" (≈" + String.format("%.2f", duration / 20.0) + " s)").withStyle(ChatFormatting.GREEN))).asWidget());
 
         // Booster
 
@@ -433,16 +409,14 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             String timeFormatted = String.format("%dh %02dm", hours, minutes);
 
             // Ligne 1 : nom du booster
-            builder.addCustom(tl -> tl.add(
-                    Component.translatable("tfg.gui.smr_generator.booster_used",
-                            Component.translatable(currentBooster.getTranslationKey()))
-                            .withStyle(ChatFormatting.AQUA)));
+            widgets.add(Text.lang("tfg.gui.smr_generator.booster_used",
+                    Component.translatable(currentBooster.getTranslationKey()))
+                    .withStyle(ChatFormatting.AQUA).asWidget());
 
             // Ligne 2 : détails du booster
-            builder.addCustom(tl -> tl.add(
-                    Component.literal("[Boost: x" + tierBooster
-                            + ", Lasts: " + timeFormatted + "]")
-                            .withStyle(ChatFormatting.AQUA)));
+            widgets.add(Text.str("[Boost: x" + tierBooster
+                    + ", Lasts: " + timeFormatted + "]")
+                    .withStyle(ChatFormatting.AQUA).asWidget());
 
         }
 
@@ -465,20 +439,19 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
             String timeFormatted = String.format("%dh %02dm", hours, minutes);
 
             // Ligne 1 : nom du lubricant
-            builder.addCustom(tl -> tl.add(
-                    Component.translatable("tfg.gui.smr_generator.lubricant_used",
-                            Component.translatable(currentLubricant.getTranslationKey()))
-                            .withStyle(ChatFormatting.YELLOW)));
+            widgets.add(Text.lang("tfg.gui.smr_generator.lubricant_used",
+                    Component.translatable(currentLubricant.getTranslationKey()))
+                    .withStyle(ChatFormatting.YELLOW).asWidget());
 
             // Ligne 2 : détails du lubricant
-            builder.addCustom(tl -> tl.add(
-                    Component.literal("[Boost: x" + (tierLubricant / 2)
+            widgets.add(
+                    Text.str("[Boost: x" + (tierLubricant / 2)
                             + ", Lasts: " + timeFormatted + "]")
-                            .withStyle(ChatFormatting.YELLOW)));
+                            .withStyle(ChatFormatting.YELLOW).asWidget());
 
         }
 
-        builder.addWorkingStatusLine();
+        return widgets;
     }
 
     @Nullable
@@ -498,20 +471,4 @@ public class SMRGenerator2 extends WorkableElectricMultiblockMachine implements 
         return ChatFormatting.RED + FormattingUtil.formatNumbers(neededAmount) + "mB";
     }
 
-    /* Useless for now
-    @Override
-    public void attachTooltips(TooltipsPanel tooltipsPanel) {
-        super.attachTooltips(tooltipsPanel);
-        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
-                () -> GuiTextures.INDICATOR_NO_STEAM.get(false),
-                () -> List.of(Component.translatable("gtceu.multiblock.large_combustion_engine.obstructed")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
-                this::isIntakesObstructed,
-                () -> null));
-    }
-    */
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 }

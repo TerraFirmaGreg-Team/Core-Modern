@@ -4,9 +4,6 @@ import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
-
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -201,11 +198,8 @@ public final class CalendarRefrigeratingSanitizer {
     }
 
     private static boolean isActiveFridge(@NotNull BlockEntity be) {
-        if (be instanceof IMachineBlockEntity mbe) {
-            MetaMachine mm = mbe.getMetaMachine();
-            if (mm instanceof FoodRefrigeratorMachine fridge) {
-                return fridge.isActivelyRefrigerating();
-            }
+        if (be instanceof FoodRefrigeratorMachine fridge) {
+            return fridge.isActivelyRefrigerating();
         }
         return false;
     }
