@@ -55,7 +55,6 @@ dependencies {
 
     // TFC
     modImplementation ("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
-    modImplementation ("maven.modrinth:terrafirmacraft:${tfc_version}") { transitive = false }
     modImplementation ("curse.maven:kubejs-tfc-841001:8283526") { transitive = false }
 
     // FirmaLife
