@@ -2,16 +2,13 @@ package su.terrafirmagreg.tfcambiental.api;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
