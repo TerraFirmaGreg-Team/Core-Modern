@@ -1,0 +1,600 @@
+{
+    "textures": {
+        "0": "#0",
+        "particle": "#0"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    4,
+                    0,
+                    7
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "chunk0",
+            "from": [
+                4,
+                0,
+                7
+            ],
+            "to": [
+                8,
+                2,
+                9
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        4,
+                        10,
+                        6,
+                        12
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        10,
+                        4,
+                        12
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        10,
+                        4,
+                        12
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        4,
+                        10,
+                        6,
+                        12
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        4,
+                        12,
+                        0,
+                        10
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        4,
+                        10,
+                        0,
+                        12
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    6,
+                    0.8,
+                    6
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "name": "fiber0",
+            "from": [
+                5,
+                0.8,
+                4
+            ],
+            "to": [
+                14,
+                0.8,
+                11
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        7,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        9,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        9,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        7,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        9,
+                        7,
+                        0,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        9,
+                        0,
+                        0,
+                        7
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    5,
+                    0,
+                    12
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "chunk1",
+            "from": [
+                7,
+                0,
+                12
+            ],
+            "to": [
+                9,
+                1,
+                14
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        6,
+                        10,
+                        8,
+                        11
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        6,
+                        10,
+                        8,
+                        11
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        6,
+                        10,
+                        8,
+                        11
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        6,
+                        10,
+                        8,
+                        11
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        6,
+                        12,
+                        4,
+                        10
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        6,
+                        10,
+                        4,
+                        12
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    5,
+                    0.8,
+                    3
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "name": "fiber1",
+            "from": [
+                3,
+                0.8,
+                3
+            ],
+            "to": [
+                9,
+                0.8,
+                9
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        9,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        7,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        7,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        9,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        2,
+                        6,
+                        8,
+                        0
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        9,
+                        0,
+                        0,
+                        7
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    10,
+                    0,
+                    5
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "name": "chunk2",
+            "from": [
+                7,
+                0,
+                5
+            ],
+            "to": [
+                10,
+                3,
+                9
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        7,
+                        4,
+                        10
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        4,
+                        7,
+                        7,
+                        10
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        4,
+                        7,
+                        7,
+                        10
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        7,
+                        4,
+                        10
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        4,
+                        10,
+                        0,
+                        7
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                },
+                "down": {
+                    "uv": [
+                        4,
+                        7,
+                        0,
+                        10
+                    ],
+                    "texture": "#0",
+                    "rotation": 90
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    4,
+                    0.3,
+                    10
+                ],
+                "angle": -22.5,
+                "axis": "y"
+            },
+            "name": "fiber2",
+            "from": [
+                5,
+                0.3,
+                6
+            ],
+            "to": [
+                10,
+                0.3,
+                12
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        7,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        9,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        9,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        7,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [
+                        8,
+                        6,
+                        3,
+                        0
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        9,
+                        0,
+                        0,
+                        7
+                    ],
+                    "texture": "#0",
+                    "rotation": 180
+                }
+            }
+        }
+    ],
+    "display": {
+        "head": {
+            "translation": [
+                0,
+                18,
+                0
+            ],
+            "scale": [
+                1.4,
+                1.4,
+                1.4
+            ]
+        },
+        "firstperson_righthand": {
+            "rotation": [
+                0,
+                45,
+                0
+            ],
+            "translation": [
+                0,
+                4.75,
+                0
+            ],
+            "scale": [
+                0.6,
+                0.6,
+                0.6
+            ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [
+                75,
+                45,
+                0
+            ],
+            "translation": [
+                0,
+                2.5,
+                3.5
+            ],
+            "scale": [
+                0.75,
+                0.75,
+                0.75
+            ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [
+                0,
+                45,
+                0
+            ],
+            "translation": [
+                0,
+                4.75,
+                0
+            ],
+            "scale": [
+                0.6,
+                0.6,
+                0.6
+            ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [
+                75,
+                45,
+                0
+            ],
+            "translation": [
+                0,
+                2.5,
+                3.5
+            ],
+            "scale": [
+                0.75,
+                0.75,
+                0.75
+            ]
+        },
+        "ground": {
+            "translation": [
+                0,
+                2.5,
+                0
+            ],
+            "scale": [
+                0.5,
+                0.5,
+                0.5
+            ]
+        },
+        "gui": {
+            "rotation": [
+                30,
+                -135,
+                0
+            ],
+            "translation": [
+                0,
+                4.75,
+                0
+            ]
+        },
+        "fixed": {
+            "translation": [
+                0,
+                2.75,
+                0
+            ],
+            "scale": [
+                0.75,
+                0.75,
+                0.75
+            ]
+        }
+    },
+    "render_type": "minecraft:cutout"
+}

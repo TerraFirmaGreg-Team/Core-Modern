@@ -1,5 +1,6 @@
 {
   "values": [
+    "tfg:artisan_table",
     "tfg:spider_web",
     "tfg:spider_sac",
     "tfg:casings/greenhouse/treated_wood_greenhouse_casing_0",
@@ -330,6 +331,16 @@
     "tfg:wood/crafting_station/warped",
     "tfg:wood/crafting_station/warped_slab",
     "tfg:wood/rope_ladder/warped",
+    "tfg:palm_tree/trunk",
+    "tfg:palm_tree/coconut_tree_head",
+    "tfg:palm_tree/coconut_growing_tree_head",
+    "tfg:palm_tree/oil_palm_tree_head",
+    "tfg:palm_tree/oil_palm_growing_tree_head",
+    "tfg:palm_tree/date_tree_head",
+    "tfg:palm_tree/date_growing_tree_head",
+    "tfg:palm_tree/acai_tree_head",
+    "tfg:palm_tree/acai_growing_tree_head",
+    "tfg:titanium_flywheel",
     "tfg:fruit_trees/lavacado_growing_branch",
     "tfg:fruit_trees/lavacado_branch",
     "tfg:fruit_trees/magmango_growing_branch",

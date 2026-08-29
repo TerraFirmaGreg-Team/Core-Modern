@@ -16,10 +16,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -54,12 +52,7 @@ public class TFCAmbiental {
 
     public static final TagKey<Item> SUNBLOCKING_APPAREL = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "sunblocking_apparel"));
     public static final TagKey<Item> HOT_INGOTS = TagKey.create(Registries.ITEM, new ResourceLocation("forge:hot_ingots"));
-    public static final TagKey<Block> WARM_STUFF = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "warm_stuff"));
-    public static final TagKey<Block> HOT_STUFF = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "hot_stuff"));
-    public static final TagKey<Block> COLD_STUFF = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "cold_stuff"));
     public static final TagKey<Fluid> SPRING_WATER = TagKey.create(Registries.FLUID, Helpers.identifier("spring_water"));
-    public static final TagKey<EntityType<?>> HOT_ENTITIES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(MOD_ID, "hot_entities"));
-    public static final TagKey<EntityType<?>> COLD_ENTITIES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(MOD_ID, "cold_entities"));
 
     public static final ResourceKey<DamageType> HOT = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(TFCAmbiental.MOD_ID, "heatstroke"));
     public static final ResourceKey<DamageType> FREEZE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(TFCAmbiental.MOD_ID, "frostbite"));
@@ -126,11 +119,6 @@ public class TFCAmbiental {
         if (event.getItemStack().getItem() instanceof ClothesItem clothesItem) {
             if (clothesItem.getMaterial() instanceof TemperatureAlteringMaterial tempMaterial) {
                 TempModifier modifier = tempMaterial.getTempModifier(event.getItemStack());
-                warmth = (modifier.getChange());
-                insulation = (modifier.getPotency() / 0.1f);
-            }
-            if (clothesItem.getMaterial() instanceof com.lumintorious.tfcambiental.item.material.TemperatureAlteringMaterial tempMaterial) {
-                TempModifier modifier = tempMaterial.getTempModifier(event.getItemStack()); // for tfc textile
                 warmth = (modifier.getChange());
                 insulation = (modifier.getPotency() / 0.1f);
             }

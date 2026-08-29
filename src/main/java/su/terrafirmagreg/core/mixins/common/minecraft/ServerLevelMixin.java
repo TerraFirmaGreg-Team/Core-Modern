@@ -17,6 +17,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import earth.terrarium.adastra.api.planets.Planet;
 
 import su.terrafirmagreg.core.config.TFGConfig;
+import su.terrafirmagreg.core.utils.CalendarSleepHelper;
 import su.terrafirmagreg.core.utils.MarsEnvironmentalHelpers;
 import su.terrafirmagreg.core.utils.SnowCorrection;
 
@@ -45,5 +46,14 @@ public abstract class ServerLevelMixin {
         // it doesn't own (vanilla has already popped everything inside tickChunk by TAIL).
         // Push a sacrificial section so Ad Astra's popPush consumes it instead of corrupting the stack.
         level.getProfiler().push("adastra$tickChunk_compat");
+    }
+
+    /**
+     * Backport of TFC 4 {@code ServerLevelMixin#onWakeUpAllPlayers}: advance the TFC calendar when sleeping
+     * outside the Overworld (Nether/Beneath, planets, etc.).
+     */
+    @Inject(method = "wakeUpAllPlayers", at = @At("TAIL"))
+    private void tfg$onWakeUpAllPlayers(CallbackInfo ci) {
+        CalendarSleepHelper.onPlayersFinishedSleeping((ServerLevel) (Object) this);
     }
 }

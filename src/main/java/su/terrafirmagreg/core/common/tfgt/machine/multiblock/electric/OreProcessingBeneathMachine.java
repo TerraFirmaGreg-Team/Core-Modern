@@ -7,10 +7,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
-import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.*;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -19,7 +16,9 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
@@ -28,6 +27,8 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import net.minecraftforge.fluids.FluidStack;
 
 import su.terrafirmagreg.core.common.data.TFGTags;
@@ -47,6 +48,9 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
     private static final double MAX_RATIO = 0.85; // Over this amount the machine won't start
     private static final double OPTIMAL_RATIO = 0.50; // The percentage of fluid in the hatch so it's optimal
     private static final double SIGMA = 0.15; // Lower will make the curve harder
+
+    private static final int MAX_PARALLELS = 8; // Amount of parallel
+    private static final double PARALLEL_EU_DISCOUNT = 0.75;
 
     @Persisted
     @DescSynced
@@ -153,7 +157,42 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
         return true;
     }
 
-    // Recipe Modifier - So we can interact with the chancedOutput
+    public static @NotNull ModifierFunction parallelModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (!(machine instanceof OreProcessingBeneathMachine processor)) {
+            return RecipeModifier.nullWrongType(OreProcessingBeneathMachine.class, machine);
+        }
+
+        int maxParallel = MAX_PARALLELS;
+        long recipeEUt = recipe.getInputEUt().getTotalEU();
+        if (recipeEUt > 0) {
+            long maxByEnergy = (long) (processor.getOverclockVoltage() / (recipeEUt * PARALLEL_EU_DISCOUNT));
+            maxParallel = (int) Math.min(MAX_PARALLELS, Math.max(1, maxByEnergy));
+        }
+
+        int parallels = ParallelLogic.getParallelAmount(machine, recipe, maxParallel);
+        if (parallels == 1)
+            return ModifierFunction.IDENTITY;
+
+        ModifierFunction base = ModifierFunction.builder()
+                .modifyAllContents(ContentModifier.multiplier(parallels))
+                .eutMultiplier(parallels * PARALLEL_EU_DISCOUNT)
+                .parallels(parallels)
+                .build();
+
+        // Just change the fluid to not scale only with parallel
+        double fluidCorrection = Math.sqrt(parallels) / parallels;
+        ContentModifier fluidFix = ContentModifier.multiplier(fluidCorrection);
+
+        return r -> {
+            GTRecipe modified = base.apply(r);
+            if (modified != null && modified.tickInputs.containsKey(FluidRecipeCapability.CAP)) {
+                var fixedFluids = fluidFix.applyContents(
+                        Map.of(FluidRecipeCapability.CAP, modified.tickInputs.get(FluidRecipeCapability.CAP)));
+                modified.tickInputs.put(FluidRecipeCapability.CAP, fixedFluids.get(FluidRecipeCapability.CAP));
+            }
+            return modified;
+        };
+    }
 
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof OreProcessingBeneathMachine processor)) {
@@ -204,27 +243,70 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
         if (!isFormed())
             return;
 
+        List<Component> customLines = new ArrayList<>();
+
         if (gasLevelPercent == 0 && gasModifier == 0.0) {
-            textList.add(Component.translatable("tfg.machine.ore_processing_beneath.no_gas")
+            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.no_gas")
                     .withStyle(ChatFormatting.RED));
-            return;
-        }
-
-        double ratio = gasLevelPercent / 100.0;
-        int modifierPercent = (int) (gasModifier * 100);
-
-        ChatFormatting levelColor;
-        if (ratio < MIN_RATIO || ratio > MAX_RATIO) {
-            levelColor = ChatFormatting.RED;
-        } else if (Math.abs(ratio - OPTIMAL_RATIO) < 0.10) {
-            levelColor = ChatFormatting.GREEN;
         } else {
-            levelColor = ChatFormatting.YELLOW;
+            double ratio = gasLevelPercent / 100.0;
+            int modifierPercent = (int) (gasModifier * 100);
+
+            ChatFormatting levelColor;
+            if (ratio < MIN_RATIO || ratio > MAX_RATIO) {
+                levelColor = ChatFormatting.RED;
+            } else if (Math.abs(ratio - OPTIMAL_RATIO) < 0.10) {
+                levelColor = ChatFormatting.GREEN;
+            } else {
+                levelColor = ChatFormatting.YELLOW;
+            }
+
+            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.gas_level",
+                    Component.literal(gasLevelPercent + "%").withStyle(levelColor)));
+
+            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.output_modifier",
+                    Component.literal(modifierPercent + "%")
+                            .withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW))
+                    .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            Component.translatable("tfg.machine.ore_processing_beneath.output_modifier.tooltip")))));
+
+            var lastRecipe = getRecipeLogic().getLastRecipe();
+            if (getRecipeLogic().isWorking() && lastRecipe != null && lastRecipe.parallels > 1) {
+                customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.parallel_info",
+                        Component.literal(lastRecipe.parallels + "/" + MAX_PARALLELS).withStyle(ChatFormatting.AQUA))
+                        .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                Component.translatable("tfg.machine.ore_processing_beneath.parallel_info.tooltip",
+                                        MAX_PARALLELS)))));
+
+                var tickFluids = lastRecipe.tickInputs.get(FluidRecipeCapability.CAP);
+                if (tickFluids != null) {
+                    for (Content content : tickFluids) {
+                        var ingredient = FluidRecipeCapability.CAP.of(content.content);
+                        if (ingredient.getStacks().length > 0) {
+                            FluidStack stack = ingredient.getStacks()[0];
+
+                            Component amountText;
+                            if (content.isChanced()) {
+                                double avg = stack.getAmount()
+                                        * ((double) content.chance / content.maxChance)
+                                        * lastRecipe.parallels;
+                                amountText = Component.literal("≈ " + String.format("%.1f", avg) + " mB/t")
+                                        .withStyle(ChatFormatting.AQUA);
+                            } else {
+                                amountText = Component.literal(stack.getAmount() + " mB/t")
+                                        .withStyle(ChatFormatting.AQUA);
+                            }
+
+                            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption",
+                                    stack.getDisplayName(), amountText)
+                                    .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                            Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption.tooltip")))));
+                        }
+                    }
+                }
+            }
         }
 
-        textList.add(Component.translatable("tfg.machine.ore_processing_beneath.gas_level",
-                gasLevelPercent).withStyle(levelColor));
-        textList.add(Component.translatable("tfg.machine.ore_processing_beneath.output_modifier",
-                modifierPercent).withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW));
+        textList.addAll(Math.min(5, textList.size()), customLines);
     }
 }

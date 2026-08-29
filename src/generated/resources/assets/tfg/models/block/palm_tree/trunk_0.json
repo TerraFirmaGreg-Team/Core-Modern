@@ -1,0 +1,7 @@
+{
+  "parent": "tfg:block/palm_tree/palm_trunk_0",
+  "textures": {
+    "0": "tfc:block/wood/log/palm",
+    "1": "tfg:block/palm_tree/trunk_top_0"
+  }
+}

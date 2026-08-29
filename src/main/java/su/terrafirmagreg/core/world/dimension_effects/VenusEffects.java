@@ -1,5 +1,7 @@
 package su.terrafirmagreg.core.world.dimension_effects;
 
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.renderer.DimensionSpecialEffects;
@@ -23,5 +25,10 @@ public class VenusEffects extends DimensionSpecialEffects {
     @Override
     public boolean isFoggyAt(int x, int y) {
         return true;
+    }
+
+    @Nullable
+    public float[] getSunriseColor(float timeOfDay, float partialTicks) {
+        return null;
     }
 }

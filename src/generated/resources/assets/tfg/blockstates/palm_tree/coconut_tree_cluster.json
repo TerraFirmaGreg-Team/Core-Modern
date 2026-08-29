@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "age=0,facing=east": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_0",
+      "y": 270
+    },
+    "age=0,facing=north": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_0",
+      "y": 180
+    },
+    "age=0,facing=south": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_0"
+    },
+    "age=0,facing=west": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_0",
+      "y": 90
+    },
+    "age=1,facing=east": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_1",
+      "y": 270
+    },
+    "age=1,facing=north": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_1",
+      "y": 180
+    },
+    "age=1,facing=south": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_1"
+    },
+    "age=1,facing=west": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_1",
+      "y": 90
+    },
+    "age=2,facing=east": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_2",
+      "y": 270
+    },
+    "age=2,facing=north": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_2",
+      "y": 180
+    },
+    "age=2,facing=south": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_2"
+    },
+    "age=2,facing=west": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_2",
+      "y": 90
+    },
+    "age=3,facing=east": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_3",
+      "y": 270
+    },
+    "age=3,facing=north": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_3",
+      "y": 180
+    },
+    "age=3,facing=south": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_3"
+    },
+    "age=3,facing=west": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_3",
+      "y": 90
+    },
+    "age=4,facing=east": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_4",
+      "y": 270
+    },
+    "age=4,facing=north": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_4",
+      "y": 180
+    },
+    "age=4,facing=south": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_4"
+    },
+    "age=4,facing=west": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_4",
+      "y": 90
+    },
+    "age=5,facing=east": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_5",
+      "y": 270
+    },
+    "age=5,facing=north": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_5",
+      "y": 180
+    },
+    "age=5,facing=south": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_5"
+    },
+    "age=5,facing=west": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_5",
+      "y": 90
+    },
+    "age=6,facing=east": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_6",
+      "y": 270
+    },
+    "age=6,facing=north": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_6",
+      "y": 180
+    },
+    "age=6,facing=south": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_6"
+    },
+    "age=6,facing=west": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_6",
+      "y": 90
+    },
+    "age=7,facing=east": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_7",
+      "y": 270
+    },
+    "age=7,facing=north": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_7",
+      "y": 180
+    },
+    "age=7,facing=south": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_7"
+    },
+    "age=7,facing=west": {
+      "model": "tfg:block/palm_tree/coconut_tree_cluster_7",
+      "y": 90
+    }
+  }
+}

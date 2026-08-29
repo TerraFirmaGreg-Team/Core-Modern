@@ -1115,7 +1115,7 @@ public class TFGMultiMachines {
                             () -> DynamicRenderHelper.makeBoilerPartRender(
                                     BoilerFireboxType.BRONZE_FIREBOX, GTBlocks.CASING_BRONZE_BRICKS))))
             .tooltips(
-                    Component.translatable("gtceu.multiblock.large_boiler.max_temperature", 754, 480),
+                    Component.translatable("tfg.multiblock.large_boiler.max_temperature", 480, 480),
                     Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 480 / 1 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))
@@ -1162,7 +1162,7 @@ public class TFGMultiMachines {
                             () -> DynamicRenderHelper.makeBoilerPartRender(
                                     BoilerFireboxType.STEEL_FIREBOX, GTBlocks.CASING_STEEL_SOLID))))
             .tooltips(
-                    Component.translatable("gtceu.multiblock.large_boiler.max_temperature", 1554, 1280),
+                    Component.translatable("tfg.multiblock.large_boiler.max_temperature", 1280, 1280),
                     Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 1280 / 1 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))
@@ -1286,11 +1286,15 @@ public class TFGMultiMachines {
             .multiblock("ore_processing_beneath", OreProcessingBeneathMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.ORE_PROCESSING_GAS)
-            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, OreProcessingBeneathMachine::recipeModifier)
+            .recipeModifiers(
+                    OreProcessingBeneathMachine::parallelModifier,
+                    GTRecipeModifiers.OC_NON_PERFECT,
+                    OreProcessingBeneathMachine::recipeModifier)
             .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
             .tooltips(
                     Component.translatable("tfg.tooltip.machine.ore_proc_beneath_1"),
                     Component.translatable("tfg.tooltip.machine.ore_proc_beneath_2"),
+					Component.translatable("tfg.tooltip.machine.ore_proc_beneath_3"),
                     Component.translatable("tfg.tooltip.machine.two_energy_hatches"))
             .workableCasingModel(
                     GTCEu.id("block/casings/gcym/industrial_steam_casing"),

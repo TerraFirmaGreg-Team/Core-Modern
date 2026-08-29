@@ -8,6 +8,7 @@ public class TempModifier implements Comparable<TempModifier> {
     private float change;
     private float potency;
     private float wetness;
+    private boolean good;
 
     public float getChange() {
         return change;
@@ -33,6 +34,14 @@ public class TempModifier implements Comparable<TempModifier> {
         this.wetness = wetness;
     }
 
+    public boolean isGood() {
+        return good;
+    }
+
+    public void setGood(boolean good) {
+        this.good = good;
+    }
+
     public TempModifier(float change, float potency) {
         this(change, potency, 0f);
     }
@@ -41,14 +50,34 @@ public class TempModifier implements Comparable<TempModifier> {
         this.change = change;
         this.potency = potency;
         this.wetness = wetness;
+        this.good = false;
+    }
+
+    public TempModifier(float change, float potency, boolean good) {
+        this(change, potency, 0f, good);
+    }
+
+    public TempModifier(float change, float potency, float wetness, boolean good) {
+        this.change = change;
+        this.potency = potency;
+        this.wetness = wetness;
+        this.good = good;
     }
 
     public static Optional<TempModifier> defined(float change, float potency) {
-        return Optional.of(new TempModifier(change, potency, 0));
+        return Optional.of(new TempModifier(change, potency, false));
     }
 
     public static Optional<TempModifier> defined(float change, float potency, float wetness) {
-        return Optional.of(new TempModifier(change, potency, wetness));
+        return Optional.of(new TempModifier(change, potency, wetness, false));
+    }
+
+    public static Optional<TempModifier> defined(float change, float potency, boolean good) {
+        return Optional.of(new TempModifier(change, potency, good));
+    }
+
+    public static Optional<TempModifier> defined(float change, float potency, float wetness, boolean good) {
+        return Optional.of(new TempModifier(change, potency, wetness, good));
     }
 
     public static Optional<TempModifier> none() {

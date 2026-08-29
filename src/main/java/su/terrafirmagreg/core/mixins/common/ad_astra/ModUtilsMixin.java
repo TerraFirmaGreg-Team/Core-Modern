@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
@@ -54,7 +55,11 @@ public class ModUtilsMixin {
 
                     lander.setPos(pos);
                     targetLevel.addFreshEntity(lander);
-                    teleportedPlayer.startRiding(lander);
+                    targetLevel.getServer().tell(new TickTask(targetLevel.getServer().getTickCount() + 10, () -> {
+                        if (teleportedPlayer.isAlive() && lander.isAlive() && teleportedPlayer.getVehicle() == null) {
+                            teleportedPlayer.startRiding(lander, true);
+                        }
+                    }));
 
                     if (player != pilotPlayer)
                         continue;

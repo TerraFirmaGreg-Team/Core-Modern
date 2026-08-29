@@ -1,5 +1,6 @@
 {
   "values": [
+    "tfg:pale_moss_carpet",
     "tfg:plant/red_oat_grass",
     "tfg:plant/anemone_green",
     "tfg:plant/anemone_purple",
@@ -40,6 +41,7 @@
     "tfg:plant/pale_hanging_moss_plant",
     "tfg:plant/pale_hanging_moss",
     "tfg:spider_web",
-    "tfg:spider_sac"
+    "tfg:spider_sac",
+    "tfg:groundcover/palm_husk"
   ]
 }

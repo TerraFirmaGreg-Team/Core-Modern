@@ -56,15 +56,17 @@ public class BeneathForgeEventsMixin {
             } else {
                 entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
             }
-        } else if (entity instanceof PiglinBrute) {
+        } else if (entity instanceof PiglinBrute brute) {
             if (slot == EquipmentSlot.MAINHAND) {
                 if (entity.getRandom().nextFloat() < 0.5f) {
                     entity.setItemSlot(slot, ToolHelper.get(GTToolType.AXE, GTMaterials.DamascusSteel));
                 } else {
                     entity.setItemSlot(slot, ToolHelper.get(GTToolType.SWORD, GTMaterials.DamascusSteel));
                 }
+                brute.setDropChance(slot, 0.03f);
             } else {
                 entity.setItemSlot(slot, new ItemStack(Helpers.getRandomElement(ForgeRegistries.ITEMS, TFCTags.Items.mobEquipmentSlotTag(slot), (entity).getRandom()).orElse(Items.AIR)));
+                brute.setDropChance(slot, 0.01f);
             }
         } else if (entity instanceof WitherSkeleton ws) {
             if (slot == EquipmentSlot.MAINHAND) {

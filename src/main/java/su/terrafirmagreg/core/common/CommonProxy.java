@@ -8,13 +8,17 @@ import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
+import com.gregtechceu.gtceu.api.sound.SoundEntry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DataPackRegistryEvent;
 
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
@@ -22,7 +26,8 @@ import de.mari_023.ae2wtlib.AE2wtlib;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.*;
-import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.*;
+import su.terrafirmagreg.core.common.data.fuel_type.FuelType;
 import su.terrafirmagreg.core.common.data.items.TFGItems;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMachines;
 import su.terrafirmagreg.core.common.data.tfgt.TFGMultiMachines;
@@ -71,7 +76,6 @@ public class CommonProxy {
         TFGRecipeTypes.RECIPE_TYPES.register(bus);
         TFGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
         TFGEvents.register();
-        TFGSounds.SOUNDS.register(bus);
         TFGCarvers.CARVERS.register(bus);
         TFGStructureProcessors.STRUCTURE_PROCESSORS.register(bus);
         TFGLootConditions.LOOT_CONDITIONS.register(bus);
@@ -84,6 +88,7 @@ public class CommonProxy {
 
         TFGFoodTraits.init();
 
+        bus.addGenericListener(SoundEntry.class, this::registerSounds);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         bus.addGenericListener(RecipeConditionType.class, this::registerRecipeConditions);
@@ -118,7 +123,26 @@ public class CommonProxy {
 
             TFGBlockEntities.finaliseBEModification();
             TFGFluids.registerFluidInteractions();
+            registerFlowerPots();
         });
+    }
+
+    @SubscribeEvent
+    public void registerDataPackRegistries(DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(
+                TFGRegistries.FUEL_TYPE,
+                FuelType.CODEC,
+                FuelType.NCODEC);
+    }
+
+    private void registerFlowerPots() {
+        FlowerPotBlock emptyPot = (FlowerPotBlock) Blocks.FLOWER_POT;
+        for (TFGFruitTree.FruitTreeType tree : TFGFruitTree.FruitTreeType.values()) {
+            emptyPot.addPlant(TFGFruitTree.FRUIT_TREE_SAPLINGS.get(tree).getId(), TFGFruitTree.FRUIT_TREE_POTTED_SAPLINGS.get(tree));
+        }
+        for (PalmTrees tree : PalmTrees.values()) {
+            emptyPot.addPlant(TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree).getId(), TFGBlocks_PalmTrees.POTTED_SAPLINGS.get(tree));
+        }
     }
 
     private void addUpgrades(ItemLike item) {
@@ -136,5 +160,9 @@ public class CommonProxy {
 
     public void registerRecipeConditions(GTCEuAPI.RegisterEvent<ResourceLocation, RecipeConditionType<?>> event) {
         TFGRecipeConditions.init();
+    }
+
+    public void registerSounds(GTCEuAPI.RegisterEvent<ResourceLocation, SoundEntry> event) {
+        TFGSounds.init();
     }
 }

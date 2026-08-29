@@ -100,6 +100,13 @@ public class TFGNetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(
                 id(),
+                JavelinRecallPacket.class,
+                JavelinRecallPacket::encode,
+                JavelinRecallPacket::decode,
+                JavelinRecallPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(
+                id(),
                 EnvironmentQueryPacket.class,
                 EnvironmentQueryPacket::encode,
                 EnvironmentQueryPacket::decode,

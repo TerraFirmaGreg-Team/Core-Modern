@@ -67,6 +67,7 @@ public class TFGBlocks_Earth {
     public static TagKey<Item> TFCClayItemTag = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "clay"));
 
     public static TagKey<Block> TFCDirtBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "dirt"));
+    public static TagKey<Block> TFCPathsBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "paths"));
     public static TagKey<Block> TFCMudBricksBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "mud_bricks"));
     public static TagKey<Block> TFCClayBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "clay"));
     public static TagKey<Block> TFCClayGrassBlockTag = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, "clay_grass"));
@@ -414,7 +415,7 @@ public class TFGBlocks_Earth {
                 .properties(p -> p.mapColor(MapColor.DIRT).strength(1.5f).sound(SoundType.GRAVEL))
                 .loot((ctx, prov) -> ctx.dropOther(prov, dirt.get()))
                 .setData(ProviderType.BLOCKSTATE, NonNullBiConsumer.noop())
-                .tag(TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL)
+                .tag(TFCTags.Blocks.CAN_CARVE, TFCTags.Blocks.CAN_LANDSLIDE, BlockTags.MINEABLE_WITH_SHOVEL, TFCPathsBlockTag)
                 .item(BlockItem::new)
                 .tag(TFCPathItemTag)
                 .build()

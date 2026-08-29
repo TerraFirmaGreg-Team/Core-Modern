@@ -75,6 +75,20 @@
             "type": "tfc:manatee",
             "maxCount": 2
         }],
+        "ambient": [
+            {
+                "weight": 100,
+                "minCount": 1,
+                "type": "minecraft:bat",
+                "maxCount": 2
+            },
+            {
+                "weight": 100,
+                "minCount": 3,
+                "type": "fowlplay:goose",
+                "maxCount": 5
+            }
+        ],
         "water_ambient": [
             {
                 "weight": 10,
@@ -217,6 +231,18 @@
                 "maxCount": 1
             },
             {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:panther",
+                "maxCount": 1
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:cougar",
+                "maxCount": 1
+            },
+            {
                 "weight": 3,
                 "minCount": 1,
                 "type": "tfc:rabbit",
@@ -331,7 +357,7 @@
                 "maxCount": 3
             },
             {
-                "weight": 1,
+                "weight": 2,
                 "minCount": 1,
                 "type": "tfc:ocelot",
                 "maxCount": 3
@@ -361,9 +387,21 @@
                 "maxCount": 4
             },
             {
-                "weight": 1,
+                "weight": 3,
                 "minCount": 1,
                 "type": "tfg:jerboa",
+                "maxCount": 3
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:dromedary_camel",
+                "maxCount": 3
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:bactrian_camel",
                 "maxCount": 3
             }
         ],

@@ -18,14 +18,16 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 
 import su.terrafirmagreg.core.TFGCore;
 
 public class BlockInteractionRecipe implements EmiRecipe {
 
-    private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID,
-            "textures/gui/emi/arrow.png");
+    private static final ResourceLocation HAND_HOLD = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/emi/hand_hold.png");
+    private static final ResourceLocation HAND_POINT_BG = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/emi/hand_point_bg.png");
+    private static final ResourceLocation HAND_POINT_FG = ResourceLocation.fromNamespaceAndPath(TFGCore.MOD_ID, "textures/gui/emi/hand_point_fg.png");
 
     private final List<EmiIngredient> INPUTS = new ArrayList<>();
     private final List<EmiStack> OUTPUTS = new ArrayList<>();
@@ -92,22 +94,29 @@ public class BlockInteractionRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return 28;
+        return 36;
     }
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
-        int itemOffsetY = 5;
-        int itemOffsetX = 25;
+        int itemOffsetY = 2;
+        int itemOffsetX = 2;
+        int handSizeX = 40;
+        int handSizeY = 32;
 
-        TFGEmiPlugin.createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(INPUTS));
+        widgetHolder.addTexture(HAND_HOLD, itemOffsetX, itemOffsetY, handSizeX, handSizeY, 0, 0, handSizeX, handSizeY, 40, 32);
+        itemOffsetX += 21;
+        TFGEmiPlugin.createItemWidget(widgetHolder, itemOffsetY + 7, itemOffsetX, EmiIngredient.of(TOOL));
         itemOffsetX += 20;
 
-        TFGEmiPlugin.createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(TOOL));
-        itemOffsetX += 20;
+        TFGEmiPlugin.createItemWidget(widgetHolder, itemOffsetY + 7, itemOffsetX, EmiIngredient.of(INPUTS));
+        itemOffsetX += 28;
 
-        itemOffsetX = TFGEmiPlugin.createArrowWidget(widgetHolder, itemOffsetY, itemOffsetX, 30);
-        TFGEmiPlugin.createItemWidget(widgetHolder, itemOffsetY, itemOffsetX, EmiIngredient.of(OUTPUTS));
+        widgetHolder.addTexture(HAND_POINT_BG, itemOffsetX, itemOffsetY, handSizeX, handSizeY, 0, 0, handSizeX, handSizeY, 40, 32);
+        widgetHolder.addAnimatedTexture(HAND_POINT_FG, itemOffsetX, itemOffsetY, handSizeX, handSizeY, 0, 0, handSizeX, handSizeY, 40, 32, 5000, true, false, false);
+
+        itemOffsetX += handSizeX + 5;
+        widgetHolder.add(new SlotWidget(EmiIngredient.of(OUTPUTS), itemOffsetX, itemOffsetY + 7).recipeContext(this));
     }
 
     @Override

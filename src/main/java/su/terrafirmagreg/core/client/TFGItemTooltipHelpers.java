@@ -6,6 +6,17 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.eerussianguy.firmalife.common.blocks.CompostTumblerBlock;
+import com.simibubi.create.foundation.utility.CreateLang;
+
+import net.createmod.catnip.lang.Lang;
+import net.dries007.tfc.common.blocks.devices.BellowsBlock;
+import net.dries007.tfc.common.blocks.devices.QuernBlock;
+import net.dries007.tfc.common.blocks.plant.fruit.FruitTreeSaplingBlock;
+import net.dries007.tfc.common.blocks.wood.TFCSaplingBlock;
+import net.dries007.tfc.common.capabilities.VesselLike;
+import net.dries007.tfc.common.recipes.HeatingRecipe;
+import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
 import net.dries007.tfc.util.Drinkable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
@@ -15,7 +26,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,7 +39,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 
 import su.terrafirmagreg.core.TFGCore;
+import su.terrafirmagreg.core.client.util.SaplingGrowthCache;
 import su.terrafirmagreg.core.common.block.asphalt.AsphaltRoadHelper;
+import su.terrafirmagreg.core.common.block.palmtree.PalmTreeSaplingBlock;
 import su.terrafirmagreg.core.common.capability.ILargeEgg;
 import su.terrafirmagreg.core.common.capability.LargeEggCapability;
 import su.terrafirmagreg.core.common.data.TFGFluids;
@@ -34,6 +49,7 @@ import su.terrafirmagreg.core.common.event.AdvancedOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.NormalOreProspectorEventHelper;
 import su.terrafirmagreg.core.common.event.OreProspectorEvent;
 import su.terrafirmagreg.core.common.event.WeakOreProspectorEventHelper;
+import su.terrafirmagreg.core.config.TFGConfig;
 
 @Mod.EventBusSubscriber(modid = TFGCore.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
@@ -42,11 +58,21 @@ public class TFGItemTooltipHelpers {
     private static final TagKey<Fluid> TFC_AGED_ALCOHOLS = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfcagedalcohol", "aged_alcohols"));
     private static final TagKey<Fluid> TFG_COOLING_DRINK = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "cooling_drinks"));
     private static final TagKey<Fluid> TFG_WARMING_DRINK = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("tfg", "warming_drinks"));
+    private static final TagKey<Item> TFC_FIRED_VESSELS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("tfc", "fired_vessels"));
 
     @SubscribeEvent
     public static void onTooltip(@NotNull ItemTooltipEvent event) {
         var tooltip = event.getToolTip();
         var stack = event.getItemStack();
+
+        Block block = Block.byItem(stack.getItem());
+        if (block instanceof QuernBlock) {
+            addMachineTooltip(tooltip, TFGConfig.SERVER.QUERN_STRESS_LIMIT.get(), TFGConfig.SERVER.QUERN_RPM_LIMIT.get());
+        } else if (block instanceof BellowsBlock) {
+            addMachineTooltip(tooltip, TFGConfig.SERVER.BELLOWS_STRESS_LIMIT.get(), TFGConfig.SERVER.BELLOWS_RPM_LIMIT.get());
+        } else if (block instanceof CompostTumblerBlock) {
+            addMachineTooltip(tooltip, TFGConfig.SERVER.COMPOSTER_STRESS_LIMIT.get(), TFGConfig.SERVER.COMPOSTER_RPM_LIMIT.get());
+        }
 
         // Check Weak helpers
         for (WeakOreProspectorEventHelper helper : OreProspectorEvent.getWeakOreProspectorListHelper()) {
@@ -96,6 +122,26 @@ public class TFGItemTooltipHelpers {
                 return;
             }
         }
+
+        // Add Growth Time tooltip to saplings.
+        int daysToGrow = -1;
+
+        if (block instanceof TFCSaplingBlock b) {
+            daysToGrow = b.getDaysToGrow();
+        } else if (block instanceof FruitTreeSaplingBlock b) {
+            daysToGrow = b.getTreeGrowthDays();
+        } else if (block instanceof PalmTreeSaplingBlock b) {
+            daysToGrow = b.getTreeGrowthDays();
+        }
+
+        if (daysToGrow >= 0) {
+            ChatFormatting dynamicColor = SaplingGrowthCache.getGrowthColor(block);
+
+            tooltip.add(Component.translatable("tfg.tooltip.growth_time").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(": ")
+                            .append(Component.translatable("tfc.tooltip.time_delta_days", daysToGrow)
+                                    .withStyle(ChatFormatting.ITALIC, dynamicColor))));
+        }
     }
 
     @SuppressWarnings({ "deprecation", "ConstantConditions" })
@@ -141,6 +187,29 @@ public class TFGItemTooltipHelpers {
                         event.getToolTip().add(1, Component.translatable("tfg.tooltip.warming_foods"));
                 }
             });
+
+            // add overflow warning to vessels if needed
+            if (stack.is(TFC_FIRED_VESSELS)) {
+                VesselLike vessel = VesselLike.get(stack);
+                if (vessel != null && vessel.mode() == VesselLike.Mode.INVENTORY) {
+                    int totalVolume = 0;
+                    for (int i = 0; i < 4; i++) {
+                        ItemStack vesselStack = vessel.getStackInSlot(i);
+                        if (!vesselStack.isEmpty()) {
+                            HeatingRecipe recipe = HeatingRecipe.getRecipe(vesselStack);
+                            if (recipe != null) {
+                                FluidStack fluidOutput = recipe.assembleFluid(new ItemStackInventory(vesselStack));
+                                if (!fluidOutput.isEmpty()) {
+                                    totalVolume += fluidOutput.getAmount() * vesselStack.getCount();
+                                }
+                            }
+                        }
+                    }
+                    if (totalVolume > 3024) {
+                        text.add(1, Component.translatable("tfg.tooltip.vessel_warning"));
+                    }
+                }
+            }
         }
     }
 
@@ -160,5 +229,29 @@ public class TFGItemTooltipHelpers {
 
     private static String formatDuration(MobEffectInstance effect) {
         return StringUtil.formatTickDuration(Mth.floor(effect.getDuration()));
+    }
+
+    private static void addMachineTooltip(List<Component> tooltip, int stressLimit, int rpmLimit) {
+        Lang.builder("greate").translate("tooltip.max_capacity")
+                .style(ChatFormatting.GRAY)
+                .space()
+                .add(CreateLang.number(stressLimit)
+                        .style(ChatFormatting.RED))
+                .add(CreateLang.text("SU")
+                        .style(ChatFormatting.RED))
+                .forGoggles(tooltip);
+
+        CreateLang.translate("schedule.instruction.throttle")
+                .style(ChatFormatting.GRAY)
+                .text(":")
+                .space()
+                .add(CreateLang.text("<")
+                        .style(ChatFormatting.RED))
+                .space()
+                .add(CreateLang.number(rpmLimit)
+                        .style(ChatFormatting.RED))
+                .add(CreateLang.translate("generic.unit.rpm")
+                        .style(ChatFormatting.RED))
+                .forGoggles(tooltip);
     }
 }

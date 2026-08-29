@@ -1,0 +1,269 @@
+{
+    "textures": {
+        "1": "tfg:block/titanium_linkage",
+        "particle": "tfg:block/titanium_flywheel"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    15.5,
+                    5
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "from": [
+                6,
+                11.5,
+                2
+            ],
+            "to": [
+                10,
+                19.5,
+                8
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        10.5,
+                        14,
+                        14.5,
+                        11
+                    ],
+                    "texture": "#1",
+                    "rotation": 270
+                },
+                "south": {
+                    "uv": [
+                        10.5,
+                        14,
+                        14.5,
+                        16
+                    ],
+                    "texture": "#1",
+                    "rotation": 90
+                },
+                "north": {
+                    "uv": [
+                        10.5,
+                        9,
+                        14.5,
+                        11
+                    ],
+                    "texture": "#1",
+                    "rotation": 270
+                },
+                "west": {
+                    "uv": [
+                        10.5,
+                        14,
+                        14.5,
+                        11
+                    ],
+                    "texture": "#1",
+                    "rotation": 90
+                },
+                "up": {
+                    "uv": [
+                        8.5,
+                        14,
+                        10.5,
+                        11
+                    ],
+                    "texture": "#1",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        8.5,
+                        14,
+                        10.5,
+                        11
+                    ],
+                    "texture": "#1"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    15.5,
+                    5
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "from": [
+                6,
+                13.5,
+                8
+            ],
+            "to": [
+                10,
+                17.5,
+                17.9
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        1.5,
+                        0.5,
+                        3.5,
+                        6
+                    ],
+                    "texture": "#1",
+                    "rotation": 270
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "texture": "#1"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "texture": "#1",
+                    "rotation": 180
+                },
+                "west": {
+                    "uv": [
+                        1.5,
+                        0.5,
+                        3.5,
+                        6
+                    ],
+                    "texture": "#1",
+                    "rotation": 90
+                },
+                "up": {
+                    "uv": [
+                        1.5,
+                        0.5,
+                        3.5,
+                        6
+                    ],
+                    "texture": "#1",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        1.5,
+                        0.5,
+                        3.5,
+                        6
+                    ],
+                    "texture": "#1"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    5.75,
+                    3
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "from": [
+                6,
+                11.5,
+                14
+            ],
+            "to": [
+                10,
+                19.5,
+                20
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        10.5,
+                        14,
+                        14.5,
+                        11
+                    ],
+                    "texture": "#1",
+                    "rotation": 270
+                },
+                "south": {
+                    "uv": [
+                        10.5,
+                        14,
+                        14.5,
+                        16
+                    ],
+                    "texture": "#1",
+                    "rotation": 90
+                },
+                "north": {
+                    "uv": [
+                        10.5,
+                        9,
+                        14.5,
+                        11
+                    ],
+                    "texture": "#1",
+                    "rotation": 270
+                },
+                "west": {
+                    "uv": [
+                        10.5,
+                        14,
+                        14.5,
+                        11
+                    ],
+                    "texture": "#1",
+                    "rotation": 90
+                },
+                "up": {
+                    "uv": [
+                        8.5,
+                        14,
+                        10.5,
+                        11
+                    ],
+                    "texture": "#1",
+                    "rotation": 180
+                },
+                "down": {
+                    "uv": [
+                        8.5,
+                        14,
+                        10.5,
+                        11
+                    ],
+                    "texture": "#1"
+                }
+            }
+        }
+    ],
+    "groups": [
+        {
+            "color": 0,
+            "children": [],
+            "origin": [
+                -8,
+                8,
+                8
+            ],
+            "name": "transmission"
+        },
+        0,
+        1,
+        2
+    ],
+    "credit": "Made with Blockbench"
+}

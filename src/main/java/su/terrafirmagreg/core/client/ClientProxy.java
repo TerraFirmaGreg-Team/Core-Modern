@@ -128,6 +128,17 @@ public class ClientProxy extends CommonProxy {
                 ItemBlockRenderTypes.setRenderLayer(TFGFruitTree.FRUIT_TREE_GROWING_BRANCHES.get(tree).get(), RenderType.cutout());
             }
 
+            // Palm Trees.
+            for (PalmTrees tree : PalmTrees.values()) {
+                ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_SAPLINGS.get(tree).get(), RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_CLUSTERS.get(tree).get(), RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_HEADS.get(tree).get(), RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.GROWING_PALM_HEADS.get(tree).get(), RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.POTTED_SAPLINGS.get(tree).get(), RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_LEAVES.get(tree).get(), RenderType.cutoutMipped());
+            }
+            ItemBlockRenderTypes.setRenderLayer(TFGBlocks_PalmTrees.PALM_HUSK.get(), RenderType.cutout());
+
             // Wood
             TFGBlocks_Wood.WOODS.values().forEach(map -> {
                 // Changes the item model when a barrel is sealed
@@ -143,6 +154,9 @@ public class ClientProxy extends CommonProxy {
                     Sheets.addWoodType(wood.getVanillaWoodType());
                 }
             }
+
+            // Create visuals
+            TFGBlockEntities.registerAllVisuals();
         });
         onRegisterItemRenderers(ITEM_RENDERERS::put);
     }

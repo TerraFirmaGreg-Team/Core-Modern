@@ -20,17 +20,15 @@ import dev.ftb.mods.ftbquests.MethodsReturnNonnullByDefault;
 import lombok.Getter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.TFGTags;
-import su.terrafirmagreg.core.common.data.items.TFGItems_Slimes;
 
 @MethodsReturnNonnullByDefault
 public enum SlimeVariant implements StringRepresentable {
-    PLANT(TFGCore.id("textures/entity/slime/plant.png"), Level.NETHER, TFGTags.Biomes.PlantSlimeHabitat, TFGItems_Slimes.PLANT_SLIME_BALL.asItem()),
-    GLOWBERRY(TFGCore.id("textures/entity/slime/glowberry.png"), Level.NETHER, TFGTags.Biomes.GlowberrySlimeHabitat, TFGItems_Slimes.GLOWBERRY_SLIME_BALL.asItem()),
-    SPRING(TFGCore.id("textures/entity/slime/spring.png"), Level.NETHER, TFGTags.Biomes.SpringSlimeHabitat, null),
-    ICE(TFGCore.id("textures/entity/slime/ice.png"), Level.NETHER, TFGTags.Biomes.IceSlimeHabitat, null),
-    LAVA(TFGCore.id("textures/entity/slime/lava.png"), Level.NETHER, TFGTags.Biomes.LavaSlimeHabitat, null),
-    LATEX(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, null, TFGItems_Slimes.LATEX_SLIME_BALL.asItem());
+    PLANT(TFGCore.id("textures/entity/slime/plant.png"), Level.NETHER, null, null),
+    GLOWBERRY(TFGCore.id("textures/entity/slime/glowberry.png"), Level.NETHER, null, null),
+    SPRING(TFGCore.id("textures/entity/slime/spring.png"), Level.NETHER, null, null),
+    ICE(TFGCore.id("textures/entity/slime/ice.png"), Level.NETHER, null, null),
+    LAVA(TFGCore.id("textures/entity/slime/lava.png"), Level.NETHER, null, null),
+    LATEX(TFGCore.id("textures/entity/slime/latex.png"), Level.NETHER, null, null);
 
     private static final Map<String, SlimeVariant> variantNameMap = new HashMap<>();
 

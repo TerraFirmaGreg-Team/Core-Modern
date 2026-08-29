@@ -24,8 +24,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
-import su.terrafirmagreg.core.common.buds.BudIndicator;
-import su.terrafirmagreg.core.common.buds.BudIndicatorItem;
+import su.terrafirmagreg.core.common.block.buds.BudIndicator;
+import su.terrafirmagreg.core.common.block.buds.BudIndicatorItem;
 import su.terrafirmagreg.core.common.data.tfgt.TFGTagPrefix;
 
 public class TFGBlocks_Buds {

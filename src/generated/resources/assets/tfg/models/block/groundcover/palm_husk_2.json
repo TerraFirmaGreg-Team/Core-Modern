@@ -1,0 +1,6 @@
+{
+  "parent": "tfg:block/palm_tree/palm_husk_2",
+  "textures": {
+    "0": "tfg:block/palm_tree/palm_husk"
+  }
+}

@@ -124,7 +124,7 @@ side = "BOTH"
 modId="tfcambiental"
 version="${mod_version}"
 displayName="TFG Ambiental"
-authors="${mod_authors}"
+authors="Lumintorious, ${mod_authors}"
 description='''A TerraFirmaGreg addon that implements a temperature system.'''
 
 [[dependencies.tfcambiental]]
@@ -147,3 +147,10 @@ mandatory=true
 versionRange="[5.14.1,)"
 ordering="AFTER"
 side="BOTH"
+
+[[mods]]
+modId="tfc_textile"
+version="${mod_version}"
+displayName="TFG Textile"
+authors="Atoba Azul, ${mod_authors}"
+description='''A TerraFirmaGreg addon that implements clothes.'''

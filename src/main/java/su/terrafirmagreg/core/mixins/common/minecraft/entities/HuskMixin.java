@@ -1,7 +1,9 @@
 package su.terrafirmagreg.core.mixins.common.minecraft.entities;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -19,13 +21,10 @@ public abstract class HuskMixin extends Zombie {
         super(type, level);
     }
 
-    /**
-     * @author Pyritie
-     * @reason So husks don't have to see the sky in order to spawn
-     */
-    @Overwrite
-    public static boolean checkHuskSpawnRules(EntityType<Husk> entity, ServerLevelAccessor accessor, MobSpawnType spawnType,
-            BlockPos pos, RandomSource random) {
-        return checkMonsterSpawnRules(entity, accessor, spawnType, pos, random);
+    // So husks don't have to see the sky in order to spawn
+    @Inject(method = "checkHuskSpawnRules", at = @At("HEAD"), remap = true, cancellable = true)
+    private static void tfg$checkHuskSpawnRules(EntityType<Husk> entity, ServerLevelAccessor accessor, MobSpawnType spawnType,
+            BlockPos pos, RandomSource random, CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(checkMonsterSpawnRules(entity, accessor, spawnType, pos, random));
     }
 }

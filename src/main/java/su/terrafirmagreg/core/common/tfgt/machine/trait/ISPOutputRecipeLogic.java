@@ -213,10 +213,11 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
 
         for (IRecipeHandler<?> inputHandler : inputHandlers) {
             if (inputHandler instanceof NotifiableItemStackHandler stackHandler) {
-                var iter = inputsToConsume.iterator();
+                var iter = inputsToConsume.listIterator();
                 while (iter.hasNext()) {
                     var sized = iter.next();
                     var amount = sized.getAmount();
+                    boolean consumed = false;
 
                     for (int index = 0; index < stackHandler.getSlots(); index++) {
                         ItemStack iStack = stackHandler.getStackInSlot(index);
@@ -229,9 +230,13 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
                             } else {
                                 iter.remove();
                                 extracted.add(result);
+                                consumed = true;
                                 break;
                             }
                         }
+                    }
+                    if (!consumed && amount < sized.getAmount()) {
+                        iter.set(SizedIngredient.create(sized.getInner(), amount));
                     }
                 }
             } else {
@@ -271,20 +276,28 @@ public class ISPOutputRecipeLogic extends RecipeLogic {
         RecipeHelpers.setCraftingInput(new SimulatedCraftingContainer(ctx));
         ItemStack ispResult = currentRecipe.outputISP.getStack(ctx.get(0));
 
-        List<ItemStack> allOutputs = new ArrayList<>(currentRecipe.secondaryOutputs);
-        allOutputs.add(0, ispResult);
+        List<ItemStack> allOutputs = new ArrayList<>();
+        allOutputs.add(ispResult);
+        if (currentRecipe.secondaryOutputs != null) {
+            for (ItemStack stack : currentRecipe.secondaryOutputs) {
+                allOutputs.add(stack.copy());
+            }
+        }
         // Food stacking with similar creation dates is handled by ItemHandlerHelperMixin
         for (IRecipeHandler<?> outputHandler : outputHandlers) {
             if (outputHandler instanceof NotifiableItemStackHandler stackHandler) {
                 for (int index = 0; index < stackHandler.getSlots(); index++) {
-                    var iter = allOutputs.iterator();
+                    var iter = allOutputs.listIterator();
                     while (iter.hasNext()) {
                         var itemStack = iter.next();
                         if (!stackHandler.isItemValid(index, itemStack))
                             continue;
-                        itemStack = stackHandler.insertItemInternal(index, itemStack, simulate);
-                        if (itemStack.isEmpty())
+                        var result = stackHandler.insertItemInternal(index, itemStack, simulate);
+                        if (result.isEmpty()) {
                             iter.remove();
+                        } else if (result != itemStack) {
+                            iter.set(result);
+                        }
                     }
                     if (allOutputs.isEmpty())
                         return true;

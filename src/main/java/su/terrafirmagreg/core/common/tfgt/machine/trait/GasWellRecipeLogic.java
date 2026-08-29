@@ -25,6 +25,7 @@ public class GasWellRecipeLogic {
 
     private int timer = 0;
     private boolean hasConsumedExplosive = false;
+    private boolean outputBlocked = false;
     private BedrockFluidVeinSavedData cachedSavedData = null;
 
     public GasWellRecipeLogic(GasWellMachine machine) {
@@ -38,6 +39,7 @@ public class GasWellRecipeLogic {
     public void reset() {
         timer = 0;
         hasConsumedExplosive = false;
+        outputBlocked = false;
     }
 
     public void resetFull() {
@@ -106,8 +108,14 @@ public class GasWellRecipeLogic {
             int produced = getFluidToProduce(entry);
             if (produced <= 0)
                 return;
-            outputFluid(new FluidStack(veinFluid, produced));
-            savedData.depleteVein(chunkX, chunkZ, 5, true);
+
+            var toOutput = new FluidStack(veinFluid, produced);
+            outputBlocked = !canOutputFluid(toOutput);
+            if (outputBlocked)
+                return; // If the output is full don't deplete the vein but keep consumming explosives and input fluid
+
+            outputFluid(toOutput);
+            savedData.depleteVein(chunkX, chunkZ, 0, false);
         }
     }
 
@@ -153,6 +161,13 @@ public class GasWellRecipeLogic {
         }
 
         return false;
+    }
+
+    private boolean canOutputFluid(FluidStack fluid) {
+        var outputTank = machine.getOutputFluidTank();
+        if (outputTank == null)
+            return false;
+        return outputTank.fillInternal(fluid, IFluidHandler.FluidAction.SIMULATE) >= fluid.getAmount();
     }
 
     private void outputFluid(FluidStack fluid) {

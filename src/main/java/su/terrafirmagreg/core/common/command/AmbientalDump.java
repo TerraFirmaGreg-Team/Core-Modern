@@ -87,7 +87,7 @@ public class AmbientalDump {
                     .withStyle(mod.getChange() > 0f ? ChatFormatting.RED : ChatFormatting.AQUA));
             line.append("°C");
         }
-        if (mod.getPotency() != 1f) {
+        if (mod.getPotency() != 0f) {
             line.append(" potency=");
             line.append(Component.literal("%.1f".formatted(mod.getPotency())).withStyle(ChatFormatting.GOLD));
         }
@@ -95,13 +95,16 @@ public class AmbientalDump {
             line.append(" wetness=");
             line.append(Component.literal("%.1f".formatted(mod.getWetness())).withStyle(ChatFormatting.BLUE));
         }
+        if (mod.isGood()) {
+            line.append(Component.literal(" good").withStyle(ChatFormatting.GREEN));
+        }
         return line.append("\n");
     }
 
     private static @Nonnull MutableComponent formatTempModifierStorage(String text, TempModifierStorage storage) {
         MutableComponent line = Component.literal(text).append("\n");
         for (TempModifier mod : storage) {
-            line.append(formatTempModifier("-", Optional.of(mod))).append("\n");
+            line.append(formatTempModifier("-", Optional.of(mod)));
         }
         return line;
     }

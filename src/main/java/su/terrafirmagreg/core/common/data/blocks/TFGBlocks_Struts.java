@@ -6,6 +6,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -69,7 +70,7 @@ public class TFGBlocks_Struts {
                 .onRegister(block -> {
                     TFGBlockEntities.addValidBEBlock(TFGBlockEntities.STRUT, block);
                 })
-                .tag(TFGTags.Blocks.STRUT)
+                .tag(TFGTags.Blocks.STRUT, BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(StrutBlockItem::new)
                 .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), TFGCore.id("block/strut/" + type + "_item"))
                         .texture("0", texLoc)

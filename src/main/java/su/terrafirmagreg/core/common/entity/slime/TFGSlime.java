@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -43,9 +44,11 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 
+import team.terrafirmagreg.jellies.common.data.JelliesEntities;
+import team.terrafirmagreg.jellies.common.entity.JellieBase;
+
 import su.terrafirmagreg.core.common.data.TFGEntityDataSerializers;
 import su.terrafirmagreg.core.common.data.TFGSounds;
-import su.terrafirmagreg.core.common.data.TFGTags;
 
 public class TFGSlime extends TamableMammal {
     public static final EntityDataAccessor<SlimeVariant> DATA_VARIANT;
@@ -62,12 +65,54 @@ public class TFGSlime extends TamableMammal {
     static boolean eatsRottenFood = false;
     static int produceTicks = 23500;
     static double produceFamiliarity = 0.15;
-    static int childCount = 1;
+    static int childCount = 2;
     static long gestationDays = 64;
 
     public TFGSlime(EntityType<? extends TFCAnimal> animal, Level level) {
-        super(animal, level, TFGSounds.SLIME, TFCConfig.SERVER.catConfig);
+        super(animal, level, TFGSounds.FOX, TFCConfig.SERVER.catConfig);
     }
+
+    // region MIGRATION CODE
+    @Override
+    public void tick() {
+        if (!this.level().isClientSide) {
+            EntityType<? extends JellieBase> entity = switch (this.getVariant().getSerializedName()) {
+                case "plant" -> JelliesEntities.PLANT_JELLIE.get();
+                case "glowberry" -> JelliesEntities.GLOWBERRY_JELLIE.get();
+                case "ice" -> JelliesEntities.ICE_JELLIE.get();
+                case "lava" -> JelliesEntities.LAVA_JELLIE.get();
+                case "latex" -> JelliesEntities.LATEX_JELLIE.get();
+                default -> JelliesEntities.SPRING_JELLIE.get();
+            };
+
+            final JellieBase jellie = this.convertTo(entity, false);
+            if (jellie != null && this.level() instanceof ServerLevelAccessor server) {
+                jellie.finalizeSpawn(server, this.level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.CONVERSION, null, null);
+                if (this.getOwnerUUID() != null) {
+                    jellie.setOwnerUUID(this.getOwnerUUID());
+                    jellie.getEntityData().set(DATA_OWNER, this.entityData.get(DATA_OWNER));
+                    jellie.getEntityData().set(DATA_PET_FLAGS, this.entityData.get(DATA_PET_FLAGS));
+                }
+                if (this.getCustomName() != null) {
+                    jellie.setCustomName(this.getCustomName());
+                }
+
+                jellie.setGender(this.getGender());
+                jellie.setBirthDay(this.getBirthDay());
+                jellie.setFamiliarity(this.getFamiliarity());
+                jellie.setUses(this.getUses());
+                jellie.setOldDay(this.getOldDay());
+                jellie.setGeneticSize(this.getGeneticSize());
+                jellie.setLastFed(this.getLastFed());
+                jellie.setProducedTick(this.getProducedTick());
+                jellie.setAge(this.getAge());
+                jellie.setHealth(this.getHealth());
+            }
+        }
+
+        super.tick();
+    }
+    // endregion
 
     // region Config Bypass
     @Override
@@ -151,7 +196,7 @@ public class TFGSlime extends TamableMammal {
     }
 
     public static boolean spawnRules(EntityType<? extends TFGSlime> type, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource rand) {
-        return level.getBiome(pos).is(TFGTags.Biomes.SlimeHabitat) && checkMobSpawnRules(type, level, spawn, pos, rand);
+        return false;
     }
     // endregion
 
@@ -204,8 +249,6 @@ public class TFGSlime extends TamableMammal {
 
             return InteractionResult.SUCCESS;
         } else if (this.isFood(held) && this.isHungry()) {
-            this.eatFood(held, hand, player);
-
             if (this.isReadyForAnimalProduct()) {
                 AnimalProductEvent event = new AnimalProductEvent(this.level(), this.blockPosition(), player, this, this.getProduct().getDefaultInstance(), held, 1);
                 if (!MinecraftForge.EVENT_BUS.post(event)) {
@@ -213,13 +256,14 @@ public class TFGSlime extends TamableMammal {
                         return InteractionResult.PASS;
                     }
 
+                    this.playSound(this.eatingSound(held), 1.0F, 1.0F);
+                    held.shrink(1);
                     this.setProductsCooldown();
-                    this.playSound(SoundEvents.ITEM_PICKUP);
                     this.addUses(event.getUses());
                     Helpers.spawnItem(event.getLevel(), event.getPos(), event.getProduct());
-
-                    return InteractionResult.SUCCESS;
                 }
+            } else {
+                this.eatFood(held, hand, player);
             }
 
             return InteractionResult.SUCCESS;
@@ -282,6 +326,16 @@ public class TFGSlime extends TamableMammal {
 
     // region Breeding Stuff
     @Override
+    public boolean canMate(Animal otherAnimal) {
+        if (otherAnimal.getClass() != this.getClass()) {
+            return false;
+        } else {
+            TFCAnimal other = (TFCAnimal) otherAnimal;
+            return this.isReadyToMate() && other.isReadyToMate();
+        }
+    }
+
+    @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
         if (other != this && other instanceof TFGSlime mate && !isFertilized() && !mate.isFertilized() && getUUID().compareTo(mate.getUUID()) < 0) {
             this.onFertilized(mate);
@@ -334,7 +388,7 @@ public class TFGSlime extends TamableMammal {
     // region Other / Unsorted
     @Override
     public TagKey<Item> getFoodTag() {
-        return TFGTags.Items.SLIME_FOOD;
+        return TFCTags.Items.FOODS;
     }
 
     @Override

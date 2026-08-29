@@ -1,0 +1,15 @@
+{"variants": {
+    "facing=south": {
+        "y": 180,
+        "model": "tfg:block/titanium_steam_engine/block"
+    },
+    "facing=east": {
+        "y": 90,
+        "model": "tfg:block/titanium_steam_engine/block"
+    },
+    "facing=north": {"model": "tfg:block/titanium_steam_engine/block"},
+    "facing=west": {
+        "y": 270,
+        "model": "tfg:block/titanium_steam_engine/block"
+    }
+}}

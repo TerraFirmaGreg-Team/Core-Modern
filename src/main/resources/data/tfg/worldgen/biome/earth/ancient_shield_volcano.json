@@ -68,6 +68,100 @@
         }
     },
     "spawners": {
+        "ambient": [
+            {
+                "weight": 100,
+                "minCount": 1,
+                "type": "minecraft:bat",
+                "maxCount": 2
+            },
+            {
+                "weight": 40,
+                "minCount": 1,
+                "type": "fowlplay:blue_jay",
+                "maxCount": 1
+            },
+            {
+                "weight": 40,
+                "minCount": 1,
+                "type": "fowlplay:cardinal",
+                "maxCount": 1
+            },
+            {
+                "weight": 60,
+                "minCount": 1,
+                "type": "fowlplay:chickadee",
+                "maxCount": 1
+            },
+            {
+                "weight": 40,
+                "minCount": 1,
+                "type": "fowlplay:crow",
+                "maxCount": 3
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "fowlplay:goose",
+                "maxCount": 4
+            },
+            {
+                "weight": 30,
+                "minCount": 2,
+                "type": "fowlplay:gull",
+                "maxCount": 5
+            },
+            {
+                "weight": 10,
+                "minCount": 1,
+                "type": "fowlplay:hawk",
+                "maxCount": 1
+            },
+            {
+                "weight": 60,
+                "minCount": 2,
+                "type": "fowlplay:pigeon",
+                "maxCount": 5
+            },
+            {
+                "weight": 40,
+                "minCount": 1,
+                "type": "fowlplay:raven",
+                "maxCount": 2
+            },
+            {
+                "weight": 60,
+                "minCount": 1,
+                "type": "fowlplay:robin",
+                "maxCount": 2
+            },
+            {
+                "weight": 60,
+                "minCount": 2,
+                "type": "fowlplay:sparrow",
+                "maxCount": 4
+            }
+        ],
+        "axolotls": [
+            {
+                "weight": 30,
+                "minCount": 2,
+                "type": "jellies:herbal",
+                "maxCount": 4
+            },
+            {
+                "weight": 30,
+                "minCount": 2,
+                "type": "jellies:phosphorum",
+                "maxCount": 4
+            },
+            {
+                "weight": 100,
+                "minCount": 2,
+                "type": "jellies:rock",
+                "maxCount": 4
+            }
+        ],
         "creature": [
             {
                 "weight": 20,
@@ -169,6 +263,18 @@
                 "weight": 2,
                 "minCount": 1,
                 "type": "tfc:tiger",
+                "maxCount": 1
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:panther",
+                "maxCount": 1
+            },
+            {
+                "weight": 2,
+                "minCount": 1,
+                "type": "tfc:cougar",
                 "maxCount": 1
             },
             {
@@ -286,7 +392,7 @@
                 "maxCount": 3
             },
             {
-                "weight": 1,
+                "weight": 2,
                 "minCount": 1,
                 "type": "tfc:ocelot",
                 "maxCount": 3
@@ -316,10 +422,22 @@
                 "maxCount": 4
             },
             {
-                "weight": 2,
+                "weight": 3,
                 "minCount": 2,
                 "type": "tfg:jerboa",
                 "maxCount": 4
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:dromedary_camel",
+                "maxCount": 3
+            },
+            {
+                "weight": 3,
+                "minCount": 1,
+                "type": "tfg:bactrian_camel",
+                "maxCount": 3
             }
         ],
         "monster": [

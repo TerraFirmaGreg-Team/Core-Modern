@@ -34,4 +34,21 @@ public class ClientClimateHelpers {
 
         return Climate.getTemperature(level, pos);
     }
+
+    public static float getAverageTemperatureForTooltip(Level level, BlockPos pos) {
+        if (level instanceof ServerLevel) {
+            return Climate.getAverageTemperature(level, pos);
+        }
+
+        Planet planet = PlanetApi.API.getPlanet(level);
+        if (planet != null && !planet.oxygen()) {
+            // Airless planet, use player's oxygen status instead of block's because block's is unknown clientside.
+            PlanetData localData = ClientData.getLocalData();
+            if (localData != null && localData.oxygen()) {
+                return localData.temperature();
+            }
+        }
+
+        return Climate.getAverageTemperature(level, pos);
+    }
 }
