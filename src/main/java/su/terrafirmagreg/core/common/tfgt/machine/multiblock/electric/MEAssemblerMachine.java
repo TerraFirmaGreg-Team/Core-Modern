@@ -99,6 +99,12 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
+    public void onLoad() {
+        super.onLoad();
+        buddingCheckSubscription.initialize(getLevel());
+    }
+
+    @Override
     public boolean beforeWorking(@Nullable GTRecipe recipe) {
         if (!super.beforeWorking(recipe))
             return false;

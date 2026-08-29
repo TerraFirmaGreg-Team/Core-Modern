@@ -60,6 +60,8 @@ public class BuddingChargerMachine extends WorkableElectricMultiblockMachine {
                 this, this::tickBuddingCheck, this::isFormed);
     }
 
+    // Have to updateTick so it checks which Budding Certus is present but won't allow the recipe to sleep
+    // so don't add too many recipes to this recipe type
     private void tickBuddingCheck() {
         if (getOffsetTimer() % 20 != 0)
             return;
