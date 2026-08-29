@@ -9,6 +9,8 @@
     "tfg:casings/machine_casing_ostrum_carbon",
     "tfg:casings/machine_casing_stainless_evaporation",
     "tfg:casings/machine_casing_pressure",
+    "tfg:casings/machine_casing_pressure_dark",
+    "tfg:casings/machine_casing_ptfe_black",
     "tfg:casings/machine_casing_blue_solar_panel",
     "tfg:casings/machine_casing_green_solar_panel",
     "tfg:casings/machine_casing_red_solar_panel",

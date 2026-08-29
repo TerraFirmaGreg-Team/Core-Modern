@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "tfg:block/machine/me_assembler_redstone_port",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "tfg:block/machine/me_assembler_redstone_port",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "tfg:block/machine/me_assembler_redstone_port"
+    },
+    "facing=south": {
+      "model": "tfg:block/machine/me_assembler_redstone_port",
+      "y": 180
+    },
+    "facing=up": {
+      "gtceu:z": 180,
+      "model": "tfg:block/machine/me_assembler_redstone_port",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "tfg:block/machine/me_assembler_redstone_port",
+      "y": 270
+    }
+  }
+}

@@ -14,14 +14,18 @@ import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
+import com.gregtechceu.gtceu.api.recipe.ResearchData;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.recipe.condition.AdjacentFluidCondition;
+import com.gregtechceu.gtceu.common.recipe.condition.ResearchCondition;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidEntryList;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidHolderSetList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
 import com.gregtechceu.gtceu.integration.xei.handlers.item.CycleItemStackHandler;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.utils.ResearchManager;
+import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
@@ -30,10 +34,12 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
 import fi.dea.mc.deafission.common.data.recipe.HeatRecipeCapability;
 
+import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.data.TFGSounds;
 
 @SuppressWarnings("deprecation")
@@ -315,4 +321,76 @@ public class TFGTRecipeTypes {
             .setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.DOWN_TO_UP)
             .setSound(GTSoundEntries.COOLING);
+
+    public static final GTRecipeType ME_ASSEMBLER = GTRecipeTypes
+            .register("me_assembler", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(9, 1, 3, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ASSEMBLER, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.ASSEMBLER)
+            .setHasResearchSlot(true)
+            .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
+            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.me_assembler.budding_hint"))
+            .setUiBuilder((recipe, widgetGroup) -> {
+                int maxWidth = (widgetGroup.getSize().width - 40) / 2;
+                int outX = maxWidth + 40 + (maxWidth - 26) / 2 + 4;
+                int outY = (widgetGroup.getSize().height - 26) / 2 + 4;
+
+                List<ItemStack> sticks = new ArrayList<>();
+                for (RecipeCondition<?> condition : recipe.conditions) {
+                    if (condition instanceof ResearchCondition research) {
+                        for (ResearchData.ResearchEntry entry : research.getData()) {
+                            sticks.add(entry.getDataItem());
+                        }
+                    }
+                }
+                if (!sticks.isEmpty()) {
+                    widgetGroup.addWidget(new SlotWidget(
+                            new CycleItemStackHandler(List.of(sticks)), 0,
+                            outX, outY + 1, false, false)
+                            .setBackground(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.DATA_ORB_OVERLAY)));
+                }
+
+                List<ItemStack> buddings = new ArrayList<>();
+                for (int t = 1; t <= 4; t++) {
+                    buddings.add(new ItemStack(TFGPredicates.getBuddingBlockForTier(t)));
+                }
+                widgetGroup.addWidget(new SlotWidget(
+                        new CycleItemStackHandler(List.of(buddings)), 0,
+                        outX, outY + 30, false, false)
+                        .setBackground(GuiTextures.SLOT));
+            });
+
+    public static final GTRecipeType BUDDING_CHARGE_RECIPES = GTRecipeTypes
+            .register("budding_charger", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(1, 0, 1, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.COMPRESSOR)
+            .addDataInfo(data -> LocalizationUtils.format("tfg.recipe.budding_charge",
+                    data.getInt("budding_charge")))
+            .setUiBuilder((recipe, widgetGroup) -> {
+                if (!recipe.data.contains("budding_max_tier"))
+                    return;
+                int tier = recipe.data.getInt("budding_max_tier");
+                Block block = TFGPredicates.getBuddingBlockForTier(tier);
+
+                List<List<ItemStack>> items = new ArrayList<>();
+                items.add(List.of(new ItemStack(block)));
+
+                widgetGroup.addWidget(new SlotWidget(new CycleItemStackHandler(items), 0,
+                        widgetGroup.getSize().width - 50,
+                        widgetGroup.getSize().height - 32,
+                        false, false));
+            })
+            .addDataInfo(data -> {
+                if (!data.contains("budding_max_tier"))
+                    return "";
+                return LocalizationUtils.format("tfg.recipe.budding_max_tier_label");
+            })
+            .addDataInfo(data -> {
+                if (!data.contains("budding_max_tier"))
+                    return "";
+                return LocalizationUtils.format("tfg.budding_tier." + data.getInt("budding_max_tier"));
+            });
 }
