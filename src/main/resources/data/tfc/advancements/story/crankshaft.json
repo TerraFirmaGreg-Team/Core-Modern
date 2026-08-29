@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/brass_mechanisms",
-  "criteria": {
-    "crankshaft": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:crankshaft"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:crankshaft"
+    "parent": "tfc:story/brass_mechanisms",
+    "requirements": [["crankshaft"]],
+    "criteria": {"crankshaft": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:crankshaft"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:crankshaft"},
+        "description": {"translate": "tfc.advancements.story.crankshaft.description"},
+        "title": {"translate": "tfc.advancements.story.crankshaft.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.crankshaft.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.crankshaft.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "crankshaft"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

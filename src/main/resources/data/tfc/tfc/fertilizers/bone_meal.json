@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "minecraft:bone_meal"
-  },
-  "phosphorus": 0.1
+    "ingredient": {"item": "minecraft:bone_meal"},
+    "__comment__": "This file was automatically created by mcresources",
+    "phosphorus": 0.1
 }

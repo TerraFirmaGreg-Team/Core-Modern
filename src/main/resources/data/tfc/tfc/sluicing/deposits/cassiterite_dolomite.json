@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:deposit/cassiterite/dolomite"
-  },
-  "loot_table": "tfc:panning/deposits/cassiterite_dolomite"
+    "ingredient": {"item": "tfc:deposit/cassiterite/dolomite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/cassiterite_dolomite"
 }

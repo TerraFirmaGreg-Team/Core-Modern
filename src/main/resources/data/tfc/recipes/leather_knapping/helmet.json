@@ -1,15 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:knapping",
-  "knapping_type": "tfc:leather",
-  "pattern": [
-    "XXXXX",
-    "X   X",
-    "X   X",
-    "     ",
-    "     "
-  ],
-  "result": {
-    "item": "minecraft:leather_helmet"
-  }
+    "result": {"item": "minecraft:leather_helmet"},
+    "pattern": [
+        "XXXXX",
+        "X   X",
+        "X   X",
+        "     ",
+        "     "
+    ],
+    "knapping_type": "tfc:leather",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
 }

@@ -1,22 +1,20 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:humus_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 5
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": 8,
-      "max_temperature": 20,
-      "min_rainfall": 180,
-      "max_rainfall": 420,
-      "min_forest": "normal",
-      "fuzzy": true
-    }
-  ]
+    "feature": "tfc:humus_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 20,
+            "max_rainfall": 420,
+            "type": "tfc:climate",
+            "min_rainfall": 180,
+            "min_forest": "normal",
+            "min_temperature": 8,
+            "fuzzy": true
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/grass_top",
-  "textures": {
-    "texture": "tfc:block/peat"
-  }
+    "parent": "tfc:block/grass_top",
+    "textures": {"texture": "tfc:block/peat"},
+    "__comment__": "This file was automatically created by mcresources"
 }

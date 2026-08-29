@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/sluice_upper",
-  "textures": {
-    "texture": "tfc:block/wood/sheet/acacia"
-  }
+    "parent": "tfc:block/sluice_upper",
+    "textures": {"texture": "tfc:block/wood/sheet/acacia"},
+    "__comment__": "This file was automatically created by mcresources"
 }

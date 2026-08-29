@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/alabaster/bricks/gray",
-    "top": "tfc:block/alabaster/bricks/gray",
-    "side": "tfc:block/alabaster/bricks/gray"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/alabaster/bricks/gray",
+        "top": "tfc:block/alabaster/bricks/gray",
+        "bottom": "tfc:block/alabaster/bricks/gray"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

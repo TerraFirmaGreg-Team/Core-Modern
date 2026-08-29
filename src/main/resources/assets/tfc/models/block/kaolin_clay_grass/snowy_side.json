@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/grass_snowy_side",
-  "textures": {
-    "texture": "tfc:block/kaolin_clay_grass"
-  }
+    "parent": "tfc:block/grass_snowy_side",
+    "textures": {"texture": "tfc:block/kaolin_clay_grass"},
+    "__comment__": "This file was automatically created by mcresources"
 }

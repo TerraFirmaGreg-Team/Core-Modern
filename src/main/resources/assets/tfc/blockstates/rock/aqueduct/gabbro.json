@@ -1,42 +1,22 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/gabbro/base"
-      }
-    },
-    {
-      "when": {
-        "north": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/gabbro/north"
-      }
-    },
-    {
-      "when": {
-        "east": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/gabbro/east"
-      }
-    },
-    {
-      "when": {
-        "south": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/gabbro/south"
-      }
-    },
-    {
-      "when": {
-        "west": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/gabbro/west"
-      }
-    }
-  ]
+    "multipart": [
+        {"apply": {"model": "tfc:block/rock/aqueduct/gabbro/base"}},
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/gabbro/north"},
+            "when": {"north": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/gabbro/east"},
+            "when": {"east": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/gabbro/south"},
+            "when": {"south": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/gabbro/west"},
+            "when": {"west": "false"}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

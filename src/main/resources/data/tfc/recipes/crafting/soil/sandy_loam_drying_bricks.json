@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:mud/sandy_loam"
+    "result": {
+        "item": "tfc:drying_bricks/sandy_loam",
+        "count": 4
     },
-    {
-      "item": "tfc:straw"
-    }
-  ],
-  "result": {
-    "item": "tfc:drying_bricks/sandy_loam",
-    "count": 4
-  }
+    "ingredients": [
+        {"item": "tfc:mud/sandy_loam"},
+        {"item": "tfc:straw"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:welding",
-  "first_input": {
-    "item": "tfc:metal/unfinished_boots/bronze"
-  },
-  "second_input": {
-    "item": "tfc:metal/sheet/bronze"
-  },
-  "tier": 1,
-  "result": {
-    "item": "tfc:metal/boots/bronze"
-  }
+    "result": {"item": "tfc:metal/boots/bronze"},
+    "first_input": {"item": "tfc:metal/unfinished_boots/bronze"},
+    "tier": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "second_input": {"item": "tfc:metal/sheet/bronze"}
 }

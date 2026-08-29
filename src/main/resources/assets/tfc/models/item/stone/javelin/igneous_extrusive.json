@@ -1,33 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "loader": "forge:separate_transforms",
-  "textures": {
-    "particle": "tfc:item/stone/javelin"
-  },
-  "gui_light": "front",
-  "overrides": [
-    {
-      "predicate": {
-        "tfc:throwing": 1
-      },
-      "model": "tfc:item/stone/javelin/igneous_extrusive_throwing"
-    }
-  ],
-  "base": {
-    "parent": "tfc:item/stone/javelin/igneous_extrusive_in_hand"
-  },
-  "perspectives": {
-    "none": {
-      "parent": "tfc:item/stone/javelin/igneous_extrusive_gui"
+    "gui_light": "front",
+    "textures": {"particle": "tfc:item/stone/javelin"},
+    "perspectives": {
+        "fixed": {"parent": "tfc:item/stone/javelin/igneous_extrusive_gui"},
+        "ground": {"parent": "tfc:item/stone/javelin/igneous_extrusive_gui"},
+        "gui": {"parent": "tfc:item/stone/javelin/igneous_extrusive_gui"},
+        "none": {"parent": "tfc:item/stone/javelin/igneous_extrusive_gui"}
     },
-    "fixed": {
-      "parent": "tfc:item/stone/javelin/igneous_extrusive_gui"
-    },
-    "ground": {
-      "parent": "tfc:item/stone/javelin/igneous_extrusive_gui"
-    },
-    "gui": {
-      "parent": "tfc:item/stone/javelin/igneous_extrusive_gui"
-    }
-  }
+    "loader": "forge:separate_transforms",
+    "overrides": [{
+        "predicate": {"tfc:throwing": 1},
+        "model": "tfc:item/stone/javelin/igneous_extrusive_throwing"
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "base": {"parent": "tfc:item/stone/javelin/igneous_extrusive_in_hand"}
 }

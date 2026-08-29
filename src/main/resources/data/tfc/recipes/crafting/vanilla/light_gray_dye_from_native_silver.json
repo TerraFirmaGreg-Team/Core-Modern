@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:powder/native_silver"
-    }
-  ],
-  "result": {
-    "item": "minecraft:light_gray_dye"
-  }
+    "result": {"item": "minecraft:light_gray_dye"},
+    "ingredients": [{"item": "tfc:powder/native_silver"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

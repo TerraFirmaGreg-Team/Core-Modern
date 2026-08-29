@@ -1,15 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:glassworking",
-  "operations": [
-    "sapphire",
-    "copper",
-    "table_pour"
-  ],
-  "batch": {
-    "tag": "tfc:glass_batches_tier_3"
-  },
-  "result": {
-    "item": "tfc:cyan_poured_glass"
-  }
+    "result": {"item": "tfc:cyan_poured_glass"},
+    "operations": [
+        "sapphire",
+        "copper",
+        "table_pour"
+    ],
+    "batch": {"tag": "tfc:glass_batches_tier_3"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
 }

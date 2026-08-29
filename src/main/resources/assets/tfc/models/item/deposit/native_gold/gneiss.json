@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/deposit/native_gold/gneiss"
+    "parent": "tfc:block/deposit/native_gold/gneiss",
+    "__comment__": "This file was automatically created by mcresources"
 }

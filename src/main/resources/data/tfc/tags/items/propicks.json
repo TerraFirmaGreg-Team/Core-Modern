@@ -1,15 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/propick/bismuth_bronze",
-    "tfc:metal/propick/black_bronze",
-    "tfc:metal/propick/bronze",
-    "tfc:metal/propick/copper",
-    "tfc:metal/propick/wrought_iron",
-    "tfc:metal/propick/steel",
-    "tfc:metal/propick/black_steel",
-    "tfc:metal/propick/blue_steel",
-    "tfc:metal/propick/red_steel"
-  ]
+    "values": [
+        "tfc:metal/propick/bismuth_bronze",
+        "tfc:metal/propick/black_bronze",
+        "tfc:metal/propick/bronze",
+        "tfc:metal/propick/copper",
+        "tfc:metal/propick/wrought_iron",
+        "tfc:metal/propick/steel",
+        "tfc:metal/propick/black_steel",
+        "tfc:metal/propick/blue_steel",
+        "tfc:metal/propick/red_steel"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

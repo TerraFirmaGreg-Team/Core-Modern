@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab_top",
-  "textures": {
-    "bottom": "tfc:block/rock/mossy_cobble/slate",
-    "top": "tfc:block/rock/mossy_cobble/slate",
-    "side": "tfc:block/rock/mossy_cobble/slate"
-  }
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/rock/mossy_cobble/slate",
+        "top": "tfc:block/rock/mossy_cobble/slate",
+        "bottom": "tfc:block/rock/mossy_cobble/slate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

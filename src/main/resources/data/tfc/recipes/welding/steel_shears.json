@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:welding",
-  "first_input": {
-    "item": "tfc:metal/knife_blade/steel"
-  },
-  "second_input": {
-    "item": "tfc:metal/knife_blade/steel"
-  },
-  "tier": 3,
-  "result": {
-    "item": "tfc:metal/shears/steel"
-  },
-  "combine_forging_bonus": true
+    "result": {"item": "tfc:metal/shears/steel"},
+    "first_input": {"item": "tfc:metal/knife_blade/steel"},
+    "tier": 3,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "combine_forging_bonus": true,
+    "second_input": {"item": "tfc:metal/knife_blade/steel"}
 }

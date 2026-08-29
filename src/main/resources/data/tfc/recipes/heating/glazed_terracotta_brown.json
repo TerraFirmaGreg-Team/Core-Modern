@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "minecraft:brown_terracotta"
-  },
-  "result_item": {
-    "item": "minecraft:brown_glazed_terracotta"
-  },
-  "temperature": 1399
+    "result_item": {"item": "minecraft:brown_glazed_terracotta"},
+    "ingredient": {"item": "minecraft:brown_terracotta"},
+    "temperature": 1399,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

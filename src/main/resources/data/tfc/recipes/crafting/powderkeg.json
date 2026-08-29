@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XZX",
-    "XYX",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "tag": "tfc:lumber"
-    },
-    "Y": {
-      "item": "minecraft:red_dye"
-    },
-    "Z": {
-      "tag": "forge:string"
+    "result": {"item": "tfc:powderkeg"},
+    "pattern": [
+        "XZX",
+        "XYX",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "tfc:lumber"},
+        "Y": {"item": "minecraft:red_dye"},
+        "Z": {"tag": "forge:string"}
     }
-  },
-  "result": {
-    "item": "tfc:powderkeg"
-  }
 }

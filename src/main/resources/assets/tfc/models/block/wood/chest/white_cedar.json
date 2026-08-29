@@ -1,6 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "textures": {
-    "particle": "tfc:block/wood/planks/white_cedar"
-  }
+    "textures": {"particle": "tfc:block/wood/planks/white_cedar"},
+    "__comment__": "This file was automatically created by mcresources"
 }

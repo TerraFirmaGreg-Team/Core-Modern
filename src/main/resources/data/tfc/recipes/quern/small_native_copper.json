@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/small_native_copper"
-  },
-  "result": {
-    "item": "tfc:powder/native_copper",
-    "count": 2
-  }
+    "result": {
+        "item": "tfc:powder/native_copper",
+        "count": 2
+    },
+    "ingredient": {"item": "tfc:ore/small_native_copper"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

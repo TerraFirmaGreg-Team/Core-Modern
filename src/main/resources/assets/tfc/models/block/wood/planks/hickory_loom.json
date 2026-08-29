@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/loom",
-  "textures": {
-    "texture": "tfc:block/wood/planks/hickory",
-    "particle": "tfc:block/wood/planks/hickory"
-  }
+    "parent": "tfc:block/loom",
+    "textures": {
+        "texture": "tfc:block/wood/planks/hickory",
+        "particle": "tfc:block/wood/planks/hickory"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

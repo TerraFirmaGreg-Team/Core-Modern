@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:horse",
-    "tfc:mule",
-    "tfc:donkey"
-  ]
+    "values": [
+        "tfc:horse",
+        "tfc:mule",
+        "tfc:donkey"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

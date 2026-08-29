@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "SRS",
-    "SWS",
-    "SRS"
-  ],
-  "key": {
-    "S": {
-      "tag": "forge:rods/wrought_iron"
+    "result": {
+        "item": "minecraft:activator_rail",
+        "count": 4
     },
-    "W": {
-      "item": "minecraft:redstone_torch"
-    },
-    "R": {
-      "tag": "forge:rods/wooden"
+    "pattern": [
+        "SRS",
+        "SWS",
+        "SRS"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:rods/wooden"},
+        "S": {"tag": "forge:rods/wrought_iron"},
+        "W": {"item": "minecraft:redstone_torch"}
     }
-  },
-  "result": {
-    "item": "minecraft:activator_rail",
-    "count": 4
-  }
 }

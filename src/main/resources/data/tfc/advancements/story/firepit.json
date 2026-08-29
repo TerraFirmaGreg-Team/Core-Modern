@@ -1,33 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/firestarter",
-  "criteria": {
-    "special_condition": {
-      "trigger": "tfc:firepit_created",
-      "conditions": {
-        "block": "tfc:firepit"
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:firepit"
+    "parent": "tfc:story/firestarter",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {
+        "trigger": "tfc:firepit_created",
+        "conditions": {"block": "tfc:firepit"}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:firepit"},
+        "description": {"translate": "tfc.advancements.story.firepit.description"},
+        "title": {"translate": "tfc.advancements.story.firepit.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.firepit.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.firepit.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "special_condition"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

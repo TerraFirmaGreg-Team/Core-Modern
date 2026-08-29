@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/rock/mossy_cobble/basalt_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/mossy_cobble/basalt_slab"},
+        "type=double": {"model": "tfc:block/rock/mossy_cobble/basalt"},
+        "type=top": {"model": "tfc:block/rock/mossy_cobble/basalt_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/rock/mossy_cobble/basalt_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/rock/mossy_cobble/basalt"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

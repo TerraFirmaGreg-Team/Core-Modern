@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "tfc:rock/mossy_cobble/gneiss",
-  "result": "tfc:rock/mossy_cobble/gneiss"
+    "result": "tfc:rock/mossy_cobble/gneiss",
+    "ingredient": "tfc:rock/mossy_cobble/gneiss",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

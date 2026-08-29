@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/block/bismuth"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/bismuth",
-    "amount": 100
-  },
-  "temperature": 270
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/bismuth"
+    },
+    "ingredient": {"item": "tfc:metal/block/bismuth"},
+    "temperature": 270,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

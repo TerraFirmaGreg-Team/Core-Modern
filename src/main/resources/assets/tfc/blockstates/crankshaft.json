@@ -1,23 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east,part=base": {
-      "model": "tfc:block/crankshaft",
-      "y": 90
+    "variants": {
+        "facing=west,part=base": {
+            "y": 270,
+            "model": "tfc:block/crankshaft"
+        },
+        "facing=east,part=base": {
+            "y": 90,
+            "model": "tfc:block/crankshaft"
+        },
+        "facing=north,part=base": {"model": "tfc:block/crankshaft"},
+        "part=shaft": {"model": "tfc:block/empty"},
+        "facing=south,part=base": {
+            "y": 180,
+            "model": "tfc:block/crankshaft"
+        }
     },
-    "facing=north,part=base": {
-      "model": "tfc:block/crankshaft"
-    },
-    "facing=south,part=base": {
-      "model": "tfc:block/crankshaft",
-      "y": 180
-    },
-    "facing=west,part=base": {
-      "model": "tfc:block/crankshaft",
-      "y": 270
-    },
-    "part=shaft": {
-      "model": "tfc:block/empty"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

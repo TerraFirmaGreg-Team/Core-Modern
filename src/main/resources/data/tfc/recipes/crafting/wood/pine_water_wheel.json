@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "LPL",
-    "PAP",
-    "LPL"
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/lumber/pine"
-    },
-    "P": {
-      "item": "tfc:wood/planks/pine"
-    },
-    "A": {
-      "item": "tfc:wood/axle/pine"
+    "result": {"item": "tfc:wood/water_wheel/pine"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/pine"},
+        "A": {"item": "tfc:wood/axle/pine"},
+        "L": {"item": "tfc:wood/lumber/pine"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/water_wheel/pine"
-  }
 }

@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/button/gneiss_inventory"
+    "parent": "tfc:block/rock/button/gneiss_inventory",
+    "__comment__": "This file was automatically created by mcresources"
 }

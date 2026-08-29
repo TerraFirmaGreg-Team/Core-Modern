@@ -1,16 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:vines",
-  "config": {
-    "state": {
-      "Name": "tfc:plant/jungle_vines",
-      "Properties": {
-        "up": "false",
-        "north": "false",
-        "east": "false",
-        "south": "false",
-        "west": "false"
-      }
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:vines",
+    "config": {"state": {
+        "Properties": {
+            "east": "false",
+            "south": "false",
+            "north": "false",
+            "west": "false",
+            "up": "false"
+        },
+        "Name": "tfc:plant/jungle_vines"
+    }}
 }

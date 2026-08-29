@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "item": "minecraft:white_banner"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "tfc:black_dye",
-    "amount": 25
-  },
-  "output_item": {
-    "item": "minecraft:black_banner"
-  },
-  "duration": 1000
+    "input_fluid": {
+        "amount": 25,
+        "ingredient": "tfc:black_dye"
+    },
+    "duration": 1000,
+    "output_item": {"item": "minecraft:black_banner"},
+    "input_item": {"ingredient": {"item": "minecraft:white_banner"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

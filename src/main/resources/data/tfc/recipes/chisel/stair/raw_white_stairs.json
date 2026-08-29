@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:raw_sandstone/white",
-  "result": "tfc:raw_sandstone/white_stairs",
-  "mode": "stair"
+    "result": "tfc:raw_sandstone/white_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:raw_sandstone/white",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

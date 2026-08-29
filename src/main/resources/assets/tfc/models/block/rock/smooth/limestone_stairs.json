@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/smooth/limestone",
-    "top": "tfc:block/rock/smooth/limestone",
-    "side": "tfc:block/rock/smooth/limestone"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/smooth/limestone",
+        "top": "tfc:block/rock/smooth/limestone",
+        "bottom": "tfc:block/rock/smooth/limestone"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

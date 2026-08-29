@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/chalk",
-  "result": "tfc:rock/smooth/chalk",
-  "mode": "smooth"
+    "result": "tfc:rock/smooth/chalk",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/raw/chalk",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

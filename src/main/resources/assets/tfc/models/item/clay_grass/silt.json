@@ -1,6 +1,4 @@
 {
-  "parent": "tfc:item/grass_inv",
-  "textures": {
-    "block": "tfc:block/clay/silt"
-  }
+    "parent": "tfc:item/grass_inv",
+    "textures": {"block": "tfc:block/clay/silt"}
 }

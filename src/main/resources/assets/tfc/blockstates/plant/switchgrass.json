@@ -1,70 +1,54 @@
-{
-  "multipart": [
+{"multipart": [
     {
-      "when": {
-        "part": "lower",
-        "age": "0"
-      },
-      "apply": {
-        "model": "tfc:block/plant/switchgrass_shortest_0"
-      }
+        "apply": {"model": "tfc:block/plant/switchgrass_shortest_0"},
+        "when": {
+            "part": "lower",
+            "age": "0"
+        }
     },
-	{
-      "when": {
-        "part": "lower",
-        "age": "0",
-        "stage": "1"
-      },
-      "apply": {
-        "model": "tfc:block/plant/switchgrass_shortest_0b"
-      }
+    {
+        "apply": {"model": "tfc:block/plant/switchgrass_shortest_0b"},
+        "when": {
+            "stage": "1",
+            "part": "lower",
+            "age": "0"
+        }
     },
-	{
-      "when": {
-        "part": "lower",
-        "age": "1"
-      },
-      "apply": {
-        "model": "tfc:block/plant/switchgrass_shorter_0"
-      }
+    {
+        "apply": {"model": "tfc:block/plant/switchgrass_shorter_0"},
+        "when": {
+            "part": "lower",
+            "age": "1"
+        }
     },
-	{
-      "when": {
-        "part": "lower",
-        "age": "1",
-        "stage": "1"
-      },
-      "apply": {
-        "model": "tfc:block/plant/switchgrass_shorter_0b"
-      }
+    {
+        "apply": {"model": "tfc:block/plant/switchgrass_shorter_0b"},
+        "when": {
+            "stage": "1",
+            "part": "lower",
+            "age": "1"
+        }
     },
-	{
-      "when": {
-        "part": "lower",
-        "age": "2"
-      },
-      "apply": {
-        "model": "tfc:block/plant/switchgrass_double_short_0"
-      }
+    {
+        "apply": {"model": "tfc:block/plant/switchgrass_double_short_0"},
+        "when": {
+            "part": "lower",
+            "age": "2"
+        }
     },
-	{
-      "when": {
-        "part": "lower",
-        "age": "3"
-      },
-      "apply": {
-        "model": "tfc:block/plant/switchgrass_double_0"
-      }
+    {
+        "apply": {"model": "tfc:block/plant/switchgrass_double_0"},
+        "when": {
+            "part": "lower",
+            "age": "3"
+        }
     },
-	{
-      "when": {
-        "part": "lower",
-        "age": "3",
-        "stage": "1"
-      },
-      "apply": {
-        "model": "tfc:block/plant/switchgrass_double_0b"
-      }
+    {
+        "apply": {"model": "tfc:block/plant/switchgrass_double_0b"},
+        "when": {
+            "stage": "1",
+            "part": "lower",
+            "age": "3"
+        }
     }
-  ]
-}
+]}

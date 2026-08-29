@@ -1,17 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:pumice_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 3
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:volcano",
-      "distance": 0.8
-    }
-  ]
+    "feature": "tfc:pumice_patch",
+    "placement": [
+        {
+            "chance": 3,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "distance": 0.8,
+            "type": "tfc:volcano"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

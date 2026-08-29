@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/limestone",
-  "result": "tfc:rock/raw/limestone_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/raw/limestone_slab"
-  }
+    "result": "tfc:rock/raw/limestone_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/raw/limestone_slab"},
+    "ingredient": "tfc:rock/raw/limestone",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

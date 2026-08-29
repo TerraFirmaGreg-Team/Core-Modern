@@ -1,57 +1,45 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:fishing",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "name": "tfc:ore/small_cassiterite",
-              "conditions": [
+    "pools": [{
+        "entries": [{
+            "children": [
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.5
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:rock/loose/dacite",
-              "conditions": [
+                    "name": "tfc:ore/small_cassiterite",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.5
+                    }]
+                },
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.5
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:groundcover/pumice",
-              "conditions": [
+                    "name": "tfc:rock/loose/dacite",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.5
+                    }]
+                },
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.25
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:ore/pyrite",
-              "conditions": [
+                    "name": "tfc:groundcover/pumice",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.25
+                    }]
+                },
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.0533
+                    "name": "tfc:ore/pyrite",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.0533
+                    }]
                 }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+            ],
+            "type": "minecraft:alternatives"
+        }],
+        "name": "loot_pool",
+        "rolls": 1
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:fishing"
 }

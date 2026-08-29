@@ -1,13 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:cobble_boulder_small_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 36
-    },
-    {
-      "type": "minecraft:in_square"
-    }
-  ]
+    "feature": "tfc:cobble_boulder_small_patch",
+    "placement": [
+        {
+            "chance": 36,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

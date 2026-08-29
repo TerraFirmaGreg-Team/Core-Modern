@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/copper_age",
-  "criteria": {
-    "chisels": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:chisels"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:metal/chisel/copper"
+    "parent": "tfc:story/copper_age",
+    "requirements": [["chisels"]],
+    "criteria": {"chisels": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:chisels"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/chisel/copper"},
+        "description": {"translate": "tfc.advancements.story.chisel.description"},
+        "title": {"translate": "tfc.advancements.story.chisel.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.chisel.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.chisel.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "chisels"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

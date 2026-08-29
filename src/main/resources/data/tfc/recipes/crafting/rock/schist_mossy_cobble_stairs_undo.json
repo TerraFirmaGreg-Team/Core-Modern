@@ -1,13 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:rock/mossy_cobble/schist_stairs"
-    }
-  ],
-  "result": {
-    "item": "tfc:rock/mossy_loose/schist",
-    "count": 3
-  }
+    "result": {
+        "item": "tfc:rock/mossy_loose/schist",
+        "count": 3
+    },
+    "ingredients": [{"item": "tfc:rock/mossy_cobble/schist_stairs"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

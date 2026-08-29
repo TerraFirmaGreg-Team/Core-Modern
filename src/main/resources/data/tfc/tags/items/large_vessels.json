@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:unfired_large_vessels",
-    "#tfc:fired_large_vessels"
-  ]
+    "values": [
+        "#tfc:unfired_large_vessels",
+        "#tfc:fired_large_vessels"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

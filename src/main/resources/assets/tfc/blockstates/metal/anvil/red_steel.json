@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=north": {
-      "model": "tfc:block/metal/anvil/red_steel",
-      "y": 90
+    "variants": {
+        "facing=east": {
+            "y": 180,
+            "model": "tfc:block/metal/anvil/red_steel"
+        },
+        "facing=south": {
+            "y": 270,
+            "model": "tfc:block/metal/anvil/red_steel"
+        },
+        "facing=north": {
+            "y": 90,
+            "model": "tfc:block/metal/anvil/red_steel"
+        },
+        "facing=west": {"model": "tfc:block/metal/anvil/red_steel"}
     },
-    "facing=east": {
-      "model": "tfc:block/metal/anvil/red_steel",
-      "y": 180
-    },
-    "facing=south": {
-      "model": "tfc:block/metal/anvil/red_steel",
-      "y": 270
-    },
-    "facing=west": {
-      "model": "tfc:block/metal/anvil/red_steel"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

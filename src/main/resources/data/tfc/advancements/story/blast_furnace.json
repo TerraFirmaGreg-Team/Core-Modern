@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/iron_age",
-  "criteria": {
-    "blast_furnace": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:blast_furnace"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:blast_furnace"
+    "parent": "tfc:story/iron_age",
+    "requirements": [["blast_furnace"]],
+    "criteria": {"blast_furnace": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:blast_furnace"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:blast_furnace"},
+        "description": {"translate": "tfc.advancements.story.blast_furnace.description"},
+        "title": {"translate": "tfc.advancements.story.blast_furnace.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.blast_furnace.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.blast_furnace.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "blast_furnace"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

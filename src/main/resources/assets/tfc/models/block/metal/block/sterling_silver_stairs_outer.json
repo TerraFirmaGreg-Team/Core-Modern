@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "tfc:block/metal/block/sterling_silver",
-    "top": "tfc:block/metal/block/sterling_silver",
-    "side": "tfc:block/metal/block/sterling_silver"
-  }
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/metal/block/sterling_silver",
+        "top": "tfc:block/metal/block/sterling_silver",
+        "bottom": "tfc:block/metal/block/sterling_silver"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

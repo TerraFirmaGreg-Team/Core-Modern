@@ -1,18 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:damage_inputs_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "item": "minecraft:sticky_piston"
-      },
-      {
-        "tag": "tfc:knives"
-      }
-    ],
-    "result": {
-      "item": "minecraft:piston"
-    }
-  }
+    "recipe": {
+        "result": {"item": "minecraft:piston"},
+        "ingredients": [
+            {"item": "minecraft:sticky_piston"},
+            {"tag": "tfc:knives"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
 }

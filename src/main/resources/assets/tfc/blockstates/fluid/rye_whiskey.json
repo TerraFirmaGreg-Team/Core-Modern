@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/fluid/rye_whiskey"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/fluid/rye_whiskey"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

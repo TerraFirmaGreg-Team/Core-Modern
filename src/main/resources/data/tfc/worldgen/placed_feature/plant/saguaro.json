@@ -1,33 +1,31 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/saguaro",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:replaceable"
-      }
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "would_survive",
-        "state": {
-          "Name": "tfc:plant/saguaro",
-          "Properties": {
-            "north": "false",
-            "up": "false",
-            "south": "false",
-            "east": "false",
-            "west": "false",
-            "down": "false"
-          }
+    "feature": "tfc:plant/saguaro",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {
+                        "east": "false",
+                        "south": "false",
+                        "north": "false",
+                        "west": "false",
+                        "up": "false",
+                        "down": "false"
+                    },
+                    "Name": "tfc:plant/saguaro"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
         }
-      }
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

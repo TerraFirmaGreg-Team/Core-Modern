@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/plant/peach_leaves"
+    "parent": "tfc:block/plant/peach_leaves",
+    "__comment__": "This file was automatically created by mcresources"
 }

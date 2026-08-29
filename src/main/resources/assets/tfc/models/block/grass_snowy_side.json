@@ -1,46 +1,42 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/block",
-  "textures": {
-    "overlay": "tfc:block/grass_snowy_side",
-    "particle": "#texture"
-  },
-  "elements": [
-    {
-      "from": [
-        0,
-        0,
-        0
-      ],
-      "to": [
-        16,
-        16,
-        0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#texture",
-          "cullface": "north"
-        }
-      }
+    "parent": "block/block",
+    "textures": {
+        "overlay": "tfc:block/grass_snowy_side",
+        "particle": "#texture"
     },
-    {
-      "from": [
-        0,
-        0,
-        0
-      ],
-      "to": [
-        16,
-        16,
-        0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#overlay",
-          "cullface": "north"
+    "elements": [
+        {
+            "from": [
+                0,
+                0,
+                0
+            ],
+            "to": [
+                16,
+                16,
+                0
+            ],
+            "faces": {"north": {
+                "cullface": "north",
+                "texture": "#texture"
+            }}
+        },
+        {
+            "from": [
+                0,
+                0,
+                0
+            ],
+            "to": [
+                16,
+                16,
+                0
+            ],
+            "faces": {"north": {
+                "cullface": "north",
+                "texture": "#overlay"
+            }}
         }
-      }
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

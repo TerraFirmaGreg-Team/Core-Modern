@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/ore/borax"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/ore/borax"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/smooth/phyllite",
-  "result": "tfc:rock/smooth/phyllite_stairs",
-  "mode": "stair"
+    "result": "tfc:rock/smooth/phyllite_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/smooth/phyllite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/purple_candle"
+    "parent": "item/purple_candle",
+    "__comment__": "This file was automatically created by mcresources"
 }

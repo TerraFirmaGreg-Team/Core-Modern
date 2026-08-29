@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/smooth/dacite"
-  },
-  "result": "tfc:rock/smooth/dacite_wall",
-  "count": 1
+    "result": "tfc:rock/smooth/dacite_wall",
+    "ingredient": {"item": "tfc:rock/smooth/dacite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

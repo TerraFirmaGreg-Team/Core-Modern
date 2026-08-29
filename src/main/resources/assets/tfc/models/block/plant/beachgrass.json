@@ -1,7 +1,7 @@
 {
-  "parent": "block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/beachgrass/tall",
-    "particle": "tfc:block/plant/beachgrass/tall"
-  }
+    "parent": "block/cross",
+    "textures": {
+        "cross": "tfc:block/plant/beachgrass/tall",
+        "particle": "tfc:block/plant/beachgrass/tall"
+    }
 }

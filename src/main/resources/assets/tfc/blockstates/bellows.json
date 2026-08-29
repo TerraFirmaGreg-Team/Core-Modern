@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "tfc:block/bellows",
-      "y": 270
+    "variants": {
+        "facing=east": {
+            "y": 270,
+            "model": "tfc:block/bellows"
+        },
+        "facing=south": {"model": "tfc:block/bellows"},
+        "facing=north": {
+            "y": 180,
+            "model": "tfc:block/bellows"
+        },
+        "facing=west": {
+            "y": 90,
+            "model": "tfc:block/bellows"
+        }
     },
-    "facing=north": {
-      "model": "tfc:block/bellows",
-      "y": 180
-    },
-    "facing=south": {
-      "model": "tfc:block/bellows"
-    },
-    "facing=west": {
-      "model": "tfc:block/bellows",
-      "y": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

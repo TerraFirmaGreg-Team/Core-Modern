@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:blank_disc"
-    },
-    {
-      "tag": "tfc:rock_knapping"
-    }
-  ],
-  "result": {
-    "item": "minecraft:music_disc_11"
-  }
+    "result": {"item": "minecraft:music_disc_11"},
+    "ingredients": [
+        {"item": "tfc:blank_disc"},
+        {"tag": "tfc:rock_knapping"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/steel_age",
-  "criteria": {
-    "flint_and_steel": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:flint_and_steel"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "minecraft:flint_and_steel"
+    "parent": "tfc:story/steel_age",
+    "requirements": [["flint_and_steel"]],
+    "criteria": {"flint_and_steel": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["minecraft:flint_and_steel"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "minecraft:flint_and_steel"},
+        "description": {"translate": "tfc.advancements.story.flint_and_steel.description"},
+        "title": {"translate": "tfc.advancements.story.flint_and_steel.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.flint_and_steel.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.flint_and_steel.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "flint_and_steel"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

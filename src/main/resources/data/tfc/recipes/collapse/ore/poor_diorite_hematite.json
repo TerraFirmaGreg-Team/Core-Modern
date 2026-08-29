@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_hematite/diorite",
-  "result": "tfc:ore/poor_hematite/diorite"
+    "result": "tfc:ore/poor_hematite/diorite",
+    "ingredient": "tfc:ore/normal_hematite/diorite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

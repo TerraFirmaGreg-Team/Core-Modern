@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/poor_magnetite/shale"
+    "parent": "tfc:block/ore/poor_magnetite/shale",
+    "__comment__": "This file was automatically created by mcresources"
 }

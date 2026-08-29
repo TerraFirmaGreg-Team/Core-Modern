@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/quartzite",
-  "result": "tfc:rock/raw/quartzite_stairs",
-  "mode": "stair"
+    "result": "tfc:rock/raw/quartzite_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/raw/quartzite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

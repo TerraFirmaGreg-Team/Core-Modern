@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/root",
-  "criteria": {
-    "pan/empty": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:pan/empty"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:pan/empty"
+    "parent": "tfc:world/root",
+    "requirements": [["pan/empty"]],
+    "criteria": {"pan/empty": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:pan/empty"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:pan/empty"},
+        "description": {"translate": "tfc.advancements.world.pan.description"},
+        "title": {"translate": "tfc.advancements.world.pan.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.pan.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.pan.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "pan/empty"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

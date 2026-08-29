@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cracked_bricks/conglomerate"
-  },
-  "result": "tfc:rock/cracked_bricks/conglomerate_slab",
-  "count": 2
+    "result": "tfc:rock/cracked_bricks/conglomerate_slab",
+    "ingredient": {"item": "tfc:rock/cracked_bricks/conglomerate"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

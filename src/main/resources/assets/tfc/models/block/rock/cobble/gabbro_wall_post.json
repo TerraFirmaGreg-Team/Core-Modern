@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/template_wall_post",
-  "textures": {
-    "wall": "tfc:block/rock/cobble/gabbro"
-  }
+    "parent": "block/template_wall_post",
+    "textures": {"wall": "tfc:block/rock/cobble/gabbro"},
+    "__comment__": "This file was automatically created by mcresources"
 }

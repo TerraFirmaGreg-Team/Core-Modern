@@ -1,6 +1,4 @@
 {
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "tfc:block/molten"
-  }
+    "parent": "block/cube_all",
+    "textures": {"all": "tfc:block/molten"}
 }

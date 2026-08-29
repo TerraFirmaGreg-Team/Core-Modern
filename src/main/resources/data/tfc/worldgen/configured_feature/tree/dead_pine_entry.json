@@ -1,40 +1,34 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:forest_entry",
-  "config": {
-    "climate": {
-      "min_temperature": -8.4,
-      "max_temperature": 9.8,
-      "min_rainfall": 185,
-      "max_rainfall": 320
-    },
-    "groundcover": [
-      {
-        "block": "tfc:wood/twig/pine"
-      },
-      {
-        "block": "tfc:wood/fallen_leaves/pine"
-      },
-      {
-        "block": "tfc:groundcover/pinecone"
-      }
-    ],
-    "normal_tree": "tfc:tree/pine",
-    "dead_tree": "tfc:tree/pine_dead",
-    "krummholz": "tfc:tree/pine_krummholz",
-    "old_growth_chance": 1,
-    "fallen_log": "tfc:wood/log/pine",
-    "fallen_leaves": "tfc:wood/fallen_leaves/pine",
-    "bush_log": {
-      "Name": "tfc:wood/wood/pine",
-      "Properties": {
-        "branch_direction": "down",
-        "axis": "y"
-      }
-    },
-    "bush_leaves": "tfc:wood/leaves/pine",
-    "old_growth_tree": "tfc:tree/pine_large",
-    "dead_chance": 1,
-    "fallen_tree_chance": 8
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:forest_entry",
+    "config": {
+        "bush_log": {
+            "Properties": {
+                "axis": "y",
+                "branch_direction": "down"
+            },
+            "Name": "tfc:wood/wood/pine"
+        },
+        "fallen_leaves": "tfc:wood/fallen_leaves/pine",
+        "old_growth_tree": "tfc:tree/pine_large",
+        "krummholz": "tfc:tree/pine_krummholz",
+        "climate": {
+            "max_temperature": 9.8,
+            "max_rainfall": 320,
+            "min_rainfall": 185,
+            "min_temperature": -8.4
+        },
+        "old_growth_chance": 1,
+        "fallen_log": "tfc:wood/log/pine",
+        "dead_chance": 1,
+        "groundcover": [
+            {"block": "tfc:wood/twig/pine"},
+            {"block": "tfc:wood/fallen_leaves/pine"},
+            {"block": "tfc:groundcover/pinecone"}
+        ],
+        "normal_tree": "tfc:tree/pine",
+        "dead_tree": "tfc:tree/pine_dead",
+        "bush_leaves": "tfc:wood/leaves/pine",
+        "fallen_tree_chance": 8
+    }
 }

@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/sheet",
-  "criteria": {
-    "blowpipes": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:blowpipes"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:ceramic_blowpipe"
+    "parent": "tfc:story/sheet",
+    "requirements": [["blowpipes"]],
+    "criteria": {"blowpipes": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:blowpipes"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:ceramic_blowpipe"},
+        "description": {"translate": "tfc.advancements.story.blowpipe.description"},
+        "title": {"translate": "tfc.advancements.story.blowpipe.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.blowpipe.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.blowpipe.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "blowpipes"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

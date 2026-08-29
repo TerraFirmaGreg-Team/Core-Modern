@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/clutch/rosewood"
+    "parent": "tfc:block/wood/clutch/rosewood",
+    "__comment__": "This file was automatically created by mcresources"
 }

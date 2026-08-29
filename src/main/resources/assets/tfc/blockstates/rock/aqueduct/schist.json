@@ -1,42 +1,22 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/schist/base"
-      }
-    },
-    {
-      "when": {
-        "north": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/schist/north"
-      }
-    },
-    {
-      "when": {
-        "east": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/schist/east"
-      }
-    },
-    {
-      "when": {
-        "south": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/schist/south"
-      }
-    },
-    {
-      "when": {
-        "west": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/schist/west"
-      }
-    }
-  ]
+    "multipart": [
+        {"apply": {"model": "tfc:block/rock/aqueduct/schist/base"}},
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/schist/north"},
+            "when": {"north": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/schist/east"},
+            "when": {"east": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/schist/south"},
+            "when": {"south": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/schist/west"},
+            "when": {"west": "false"}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

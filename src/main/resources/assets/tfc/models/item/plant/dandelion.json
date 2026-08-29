@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/plant/dandelion/dandelion_2"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/plant/dandelion/dandelion_2"}
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "tfc:block/rock/chiseled/conglomerate"
-  }
+    "parent": "block/cube_all",
+    "textures": {"all": "tfc:block/rock/chiseled/conglomerate"},
+    "__comment__": "This file was automatically created by mcresources"
 }

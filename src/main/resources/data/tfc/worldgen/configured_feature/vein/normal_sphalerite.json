@@ -1,82 +1,72 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:cluster_vein",
-  "config": {
-    "rarity": 45,
-    "density": 0.6,
-    "min_y": -80,
-    "max_y": 20,
-    "size": 40,
-    "random_name": "normal_sphalerite",
-    "blocks": [
-      {
-        "replace": [
-          "tfc:rock/raw/granite"
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:cluster_vein",
+    "config": {
+        "indicator": {
+            "depth": 35,
+            "underground_rarity": 1,
+            "blocks": [{"block": "tfc:ore/small_sphalerite"}],
+            "underground_count": 5,
+            "rarity": 0
+        },
+        "max_y": 20,
+        "density": 0.6,
+        "size": 40,
+        "blocks": [
+            {
+                "with": [
+                    {
+                        "weight": 15,
+                        "block": "tfc:ore/poor_sphalerite/granite"
+                    },
+                    {
+                        "weight": 25,
+                        "block": "tfc:ore/normal_sphalerite/granite"
+                    },
+                    {
+                        "weight": 60,
+                        "block": "tfc:ore/rich_sphalerite/granite"
+                    }
+                ],
+                "replace": ["tfc:rock/raw/granite"]
+            },
+            {
+                "with": [
+                    {
+                        "weight": 15,
+                        "block": "tfc:ore/poor_sphalerite/diorite"
+                    },
+                    {
+                        "weight": 25,
+                        "block": "tfc:ore/normal_sphalerite/diorite"
+                    },
+                    {
+                        "weight": 60,
+                        "block": "tfc:ore/rich_sphalerite/diorite"
+                    }
+                ],
+                "replace": ["tfc:rock/raw/diorite"]
+            },
+            {
+                "with": [
+                    {
+                        "weight": 15,
+                        "block": "tfc:ore/poor_sphalerite/gabbro"
+                    },
+                    {
+                        "weight": 25,
+                        "block": "tfc:ore/normal_sphalerite/gabbro"
+                    },
+                    {
+                        "weight": 60,
+                        "block": "tfc:ore/rich_sphalerite/gabbro"
+                    }
+                ],
+                "replace": ["tfc:rock/raw/gabbro"]
+            }
         ],
-        "with": [
-          {
-            "weight": 15,
-            "block": "tfc:ore/poor_sphalerite/granite"
-          },
-          {
-            "weight": 25,
-            "block": "tfc:ore/normal_sphalerite/granite"
-          },
-          {
-            "weight": 60,
-            "block": "tfc:ore/rich_sphalerite/granite"
-          }
-        ]
-      },
-      {
-        "replace": [
-          "tfc:rock/raw/diorite"
-        ],
-        "with": [
-          {
-            "weight": 15,
-            "block": "tfc:ore/poor_sphalerite/diorite"
-          },
-          {
-            "weight": 25,
-            "block": "tfc:ore/normal_sphalerite/diorite"
-          },
-          {
-            "weight": 60,
-            "block": "tfc:ore/rich_sphalerite/diorite"
-          }
-        ]
-      },
-      {
-        "replace": [
-          "tfc:rock/raw/gabbro"
-        ],
-        "with": [
-          {
-            "weight": 15,
-            "block": "tfc:ore/poor_sphalerite/gabbro"
-          },
-          {
-            "weight": 25,
-            "block": "tfc:ore/normal_sphalerite/gabbro"
-          },
-          {
-            "weight": 60,
-            "block": "tfc:ore/rich_sphalerite/gabbro"
-          }
-        ]
-      }
-    ],
-    "indicator": {
-      "rarity": 0,
-      "depth": 35,
-      "underground_rarity": 1,
-      "underground_count": 5,
-      "blocks": [
-        {
-          "block": "tfc:ore/small_sphalerite"
-        }
-      ]
+        "min_y": -80,
+        "random_name": "normal_sphalerite",
+        "rarity": 45
     }
-  }
 }

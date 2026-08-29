@@ -1,29 +1,93 @@
 {
-	"credit": "Made with Blockbench",
-	"textures": {
-		"0": "tfc:block/plant/hibiscus/hibiscus_2",
-		"particle": "tfc:block/plant/hibiscus/hibiscus_2"
-	},
-	"elements": [
-		{
-			"name": "cross1",
-			"from": [8, 0, -8],
-			"to": [8, 32, 24],
-			"rotation": {"angle": -45, "axis": "y", "origin": [8, 0, 8]},
-			"faces": {
-				"east": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#0"}
-			}
-		},
-		{
-			"name": "cross2",
-			"from": [-8, 0, 8],
-			"to": [24, 32, 8],
-			"rotation": {"angle": -45, "axis": "y", "origin": [8, 0, 8]},
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#0"}
-			}
-		}
-	]
+    "textures": {
+        "0": "tfc:block/plant/hibiscus/hibiscus_2",
+        "particle": "tfc:block/plant/hibiscus/hibiscus_2"
+    },
+    "elements": [
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "name": "cross1",
+            "from": [
+                8,
+                0,
+                -8
+            ],
+            "to": [
+                8,
+                32,
+                24
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "name": "cross2",
+            "from": [
+                -8,
+                0,
+                8
+            ],
+            "to": [
+                24,
+                32,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ],
+    "credit": "Made with Blockbench"
 }

@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "S S",
-    "SWS",
-    "SRS"
-  ],
-  "key": {
-    "S": {
-      "tag": "forge:rods/wrought_iron"
+    "result": {
+        "item": "minecraft:detector_rail",
+        "count": 4
     },
-    "W": {
-      "tag": "minecraft:stone_pressure_plates"
-    },
-    "R": {
-      "tag": "forge:dusts/redstone"
+    "pattern": [
+        "S S",
+        "SWS",
+        "SRS"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"tag": "forge:rods/wrought_iron"},
+        "W": {"tag": "minecraft:stone_pressure_plates"}
     }
-  },
-  "result": {
-    "item": "minecraft:detector_rail",
-    "count": 4
-  }
 }

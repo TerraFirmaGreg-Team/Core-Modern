@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/poor_limonite"
-  },
-  "result": {
-    "item": "tfc:powder/limonite",
-    "count": 3
-  }
+    "result": {
+        "item": "tfc:powder/limonite",
+        "count": 3
+    },
+    "ingredient": {"item": "tfc:ore/poor_limonite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

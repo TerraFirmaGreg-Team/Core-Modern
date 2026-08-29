@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/aspen"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/aspen_button"
-  }
+    "result": {"item": "tfc:wood/planks/aspen_button"},
+    "ingredients": [{"item": "tfc:wood/planks/aspen"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/alabaster/raw/green"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/alabaster/raw/green"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

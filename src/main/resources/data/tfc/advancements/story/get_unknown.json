@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/pit_kiln",
-  "criteria": {
-    "metal/ingot/unknown": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:metal/ingot/unknown"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:metal/ingot/unknown"
+    "parent": "tfc:story/pit_kiln",
+    "requirements": [["metal/ingot/unknown"]],
+    "criteria": {"metal/ingot/unknown": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:metal/ingot/unknown"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": true,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/ingot/unknown"},
+        "description": {"translate": "tfc.advancements.story.get_unknown.description"},
+        "title": {"translate": "tfc.advancements.story.get_unknown.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.get_unknown.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.get_unknown.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": true,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "metal/ingot/unknown"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

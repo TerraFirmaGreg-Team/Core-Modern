@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:plateau",
-    "tfc:highlands",
-    "tfc:old_mountains"
-  ]
+    "values": [
+        "tfc:plateau",
+        "tfc:highlands",
+        "tfc:old_mountains"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

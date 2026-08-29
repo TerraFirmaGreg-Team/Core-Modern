@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wild_crop/crop",
-  "textures": {
-    "crop": "tfc:block/crop/rye_wild"
-  }
+    "parent": "tfc:block/wild_crop/crop",
+    "textures": {"crop": "tfc:block/crop/rye_wild"},
+    "__comment__": "This file was automatically created by mcresources"
 }

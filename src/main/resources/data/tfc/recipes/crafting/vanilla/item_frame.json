@@ -1,21 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "XYX",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "tag": "tfc:lumber"
+    "result": {
+        "item": "minecraft:item_frame",
+        "count": 4
     },
-    "Y": {
-      "tag": "forge:leather"
+    "pattern": [
+        "XXX",
+        "XYX",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "tfc:lumber"},
+        "Y": {"tag": "forge:leather"}
     }
-  },
-  "result": {
-    "item": "minecraft:item_frame",
-    "count": 4
-  }
 }

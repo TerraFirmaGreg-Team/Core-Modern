@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/template_orientable_trapdoor_open",
-  "textures": {
-    "texture": "tfc:block/wood/planks/acacia_trapdoor"
-  }
+    "parent": "block/template_orientable_trapdoor_open",
+    "textures": {"texture": "tfc:block/wood/planks/acacia_trapdoor"},
+    "__comment__": "This file was automatically created by mcresources"
 }

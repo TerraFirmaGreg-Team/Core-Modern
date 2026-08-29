@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/smooth/quartzite",
-    "top": "tfc:block/rock/smooth/quartzite",
-    "side": "tfc:block/rock/smooth/quartzite"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/smooth/quartzite",
+        "top": "tfc:block/rock/smooth/quartzite",
+        "bottom": "tfc:block/rock/smooth/quartzite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

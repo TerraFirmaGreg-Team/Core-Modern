@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/template_orientable_trapdoor_open",
-  "textures": {
-    "texture": "tfc:block/metal/trapdoor/blue_steel"
-  }
+    "parent": "block/template_orientable_trapdoor_open",
+    "textures": {"texture": "tfc:block/metal/trapdoor/blue_steel"},
+    "__comment__": "This file was automatically created by mcresources"
 }

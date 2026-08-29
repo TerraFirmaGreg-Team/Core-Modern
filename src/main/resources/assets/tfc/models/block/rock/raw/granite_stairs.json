@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/raw/granite",
-    "top": "tfc:block/rock/raw/granite",
-    "side": "tfc:block/rock/raw/granite"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/raw/granite",
+        "top": "tfc:block/rock/raw/granite",
+        "bottom": "tfc:block/rock/raw/granite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

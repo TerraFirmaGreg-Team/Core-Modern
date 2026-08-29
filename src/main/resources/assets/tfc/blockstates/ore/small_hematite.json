@@ -1,22 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": [
-      {
-        "model": "tfc:block/groundcover/hematite",
-        "y": 90
-      },
-      {
-        "model": "tfc:block/groundcover/hematite"
-      },
-      {
-        "model": "tfc:block/groundcover/hematite",
-        "y": 180
-      },
-      {
-        "model": "tfc:block/groundcover/hematite",
-        "y": 270
-      }
-    ]
-  }
+    "variants": {"": [
+        {
+            "y": 90,
+            "model": "tfc:block/groundcover/hematite"
+        },
+        {"model": "tfc:block/groundcover/hematite"},
+        {
+            "y": 180,
+            "model": "tfc:block/groundcover/hematite"
+        },
+        {
+            "y": 270,
+            "model": "tfc:block/groundcover/hematite"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
 }

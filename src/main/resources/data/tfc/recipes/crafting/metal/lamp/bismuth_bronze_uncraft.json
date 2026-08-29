@@ -1,20 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:extra_products_shapeless_crafting",
-  "extra_products": [
-    {
-      "item": "tfc:lamp_glass"
-    }
-  ],
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "item": "tfc:metal/lamp/bismuth_bronze"
-      }
-    ],
-    "result": {
-      "item": "tfc:metal/unfinished_lamp/bismuth_bronze"
-    }
-  }
+    "extra_products": [{"item": "tfc:lamp_glass"}],
+    "recipe": {
+        "result": {"item": "tfc:metal/unfinished_lamp/bismuth_bronze"},
+        "ingredients": [{"item": "tfc:metal/lamp/bismuth_bronze"}],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:extra_products_shapeless_crafting"
 }

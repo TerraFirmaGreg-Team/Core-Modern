@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/rock/cracked_bricks/dacite_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/cracked_bricks/dacite_slab"},
+        "type=double": {"model": "tfc:block/rock/cracked_bricks/dacite"},
+        "type=top": {"model": "tfc:block/rock/cracked_bricks/dacite_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/rock/cracked_bricks/dacite_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/rock/cracked_bricks/dacite"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

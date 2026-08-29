@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/deposit/native_copper/granite"
+    "parent": "tfc:block/deposit/native_copper/granite",
+    "__comment__": "This file was automatically created by mcresources"
 }

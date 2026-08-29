@@ -1,36 +1,32 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:forest_entry",
-  "config": {
-    "climate": {
-      "min_temperature": 4.3,
-      "max_temperature": 11.6,
-      "min_rainfall": 320,
-      "max_rainfall": 500
-    },
-    "groundcover": [
-      {
-        "block": "tfc:wood/twig/sequoia"
-      },
-      {
-        "block": "tfc:wood/fallen_leaves/sequoia"
-      }
-    ],
-    "normal_tree": "tfc:tree/sequoia",
-    "dead_tree": "tfc:tree/sequoia_dead",
-    "old_growth_chance": 3,
-    "fallen_log": "tfc:wood/log/sequoia",
-    "fallen_leaves": "tfc:wood/fallen_leaves/sequoia",
-    "bush_log": {
-      "Name": "tfc:wood/wood/sequoia",
-      "Properties": {
-        "branch_direction": "down",
-        "axis": "y"
-      }
-    },
-    "bush_leaves": "tfc:wood/leaves/sequoia",
-    "old_growth_tree": "tfc:tree/sequoia_large",
-    "dead_chance": 1,
-    "fallen_tree_chance": 8
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:forest_entry",
+    "config": {
+        "bush_log": {
+            "Properties": {
+                "axis": "y",
+                "branch_direction": "down"
+            },
+            "Name": "tfc:wood/wood/sequoia"
+        },
+        "fallen_leaves": "tfc:wood/fallen_leaves/sequoia",
+        "old_growth_tree": "tfc:tree/sequoia_large",
+        "dead_chance": 1,
+        "groundcover": [
+            {"block": "tfc:wood/twig/sequoia"},
+            {"block": "tfc:wood/fallen_leaves/sequoia"}
+        ],
+        "normal_tree": "tfc:tree/sequoia",
+        "climate": {
+            "max_temperature": 11.6,
+            "max_rainfall": 500,
+            "min_rainfall": 320,
+            "min_temperature": 4.3
+        },
+        "old_growth_chance": 3,
+        "fallen_log": "tfc:wood/log/sequoia",
+        "dead_tree": "tfc:tree/sequoia_dead",
+        "bush_leaves": "tfc:wood/leaves/sequoia",
+        "fallen_tree_chance": 8
+    }
 }

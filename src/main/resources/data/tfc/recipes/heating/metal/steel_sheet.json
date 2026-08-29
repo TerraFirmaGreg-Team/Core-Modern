@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/sheet/steel"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/steel",
-    "amount": 200
-  },
-  "temperature": 1540
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/steel"
+    },
+    "ingredient": {"item": "tfc:metal/sheet/steel"},
+    "temperature": 1540,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

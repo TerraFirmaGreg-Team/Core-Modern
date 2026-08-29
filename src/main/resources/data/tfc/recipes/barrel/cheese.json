@@ -1,18 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_fluid": {
-    "ingredient": "tfc:curdled_milk",
-    "amount": 625
-  },
-  "output_item": {
-    "stack": {
-      "item": "tfc:food/cheese",
-      "count": 2
+    "input_fluid": {
+        "amount": 625,
+        "ingredient": "tfc:curdled_milk"
     },
-    "modifiers": [
-      "tfc:reset_food"
-    ]
-  },
-  "duration": 8000
+    "duration": 8000,
+    "output_item": {
+        "stack": {
+            "item": "tfc:food/cheese",
+            "count": 2
+        },
+        "modifiers": ["tfc:reset_food"]
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

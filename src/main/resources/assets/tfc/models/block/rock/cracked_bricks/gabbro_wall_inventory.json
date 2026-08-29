@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/wall_inventory",
-  "textures": {
-    "wall": "tfc:block/rock/cracked_bricks/gabbro"
-  }
+    "parent": "block/wall_inventory",
+    "textures": {"wall": "tfc:block/rock/cracked_bricks/gabbro"},
+    "__comment__": "This file was automatically created by mcresources"
 }

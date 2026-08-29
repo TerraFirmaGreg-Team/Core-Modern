@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "YYY",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "tag": "tfc:lumber"
-    },
-    "Y": {
-      "tag": "forge:leather"
+    "result": {"item": "tfc:bellows"},
+    "pattern": [
+        "XXX",
+        "YYY",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "tfc:lumber"},
+        "Y": {"tag": "forge:leather"}
     }
-  },
-  "result": {
-    "item": "tfc:bellows"
-  }
 }

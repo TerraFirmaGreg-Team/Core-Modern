@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "mature=true": {
-      "model": "tfc:block/dead_crop/beet"
+    "variants": {
+        "mature=true": {"model": "tfc:block/dead_crop/beet"},
+        "mature=false": {"model": "tfc:block/dead_crop/beet_young"}
     },
-    "mature=false": {
-      "model": "tfc:block/dead_crop/beet_young"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

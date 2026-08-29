@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/spike/quartzite_base",
-  "textures": {
-    "layer0": "tfc:block/rock/raw/quartzite"
-  }
+    "parent": "tfc:block/rock/spike/quartzite_base",
+    "textures": {"layer0": "tfc:block/rock/raw/quartzite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

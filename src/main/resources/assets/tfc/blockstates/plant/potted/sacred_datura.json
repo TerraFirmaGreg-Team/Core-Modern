@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/sacred_datura"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/sacred_datura"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

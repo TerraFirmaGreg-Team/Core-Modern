@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab_top",
-  "textures": {
-    "bottom": "tfc:block/wood/planks/willow",
-    "top": "tfc:block/wood/planks/willow",
-    "side": "tfc:block/wood/planks/willow"
-  }
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/wood/planks/willow",
+        "top": "tfc:block/wood/planks/willow",
+        "bottom": "tfc:block/wood/planks/willow"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

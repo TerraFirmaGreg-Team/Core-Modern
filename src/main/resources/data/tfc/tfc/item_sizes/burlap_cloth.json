@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:burlap_cloth"
-  },
-  "size": "small",
-  "weight": "very_light"
+    "ingredient": {"item": "tfc:burlap_cloth"},
+    "size": "small",
+    "weight": "very_light",
+    "__comment__": "This file was automatically created by mcresources"
 }

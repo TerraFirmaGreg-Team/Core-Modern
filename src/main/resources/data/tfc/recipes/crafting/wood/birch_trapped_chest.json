@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/chest/birch"
+    "result": {
+        "item": "tfc:wood/trapped_chest/birch",
+        "count": 1
     },
-    {
-      "item": "minecraft:tripwire_hook"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/trapped_chest/birch",
-    "count": 1
-  }
+    "ingredients": [
+        {"item": "tfc:wood/chest/birch"},
+        {"item": "minecraft:tripwire_hook"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

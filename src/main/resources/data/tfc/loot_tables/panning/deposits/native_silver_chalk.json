@@ -1,57 +1,45 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:fishing",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "name": "tfc:ore/small_native_silver",
-              "conditions": [
+    "pools": [{
+        "entries": [{
+            "children": [
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.5
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:rock/loose/chalk",
-              "conditions": [
+                    "name": "tfc:ore/small_native_silver",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.5
+                    }]
+                },
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.5
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:rock/loose/chalk",
-              "conditions": [
+                    "name": "tfc:rock/loose/chalk",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.5
+                    }]
+                },
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.25
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:ore/sapphire",
-              "conditions": [
+                    "name": "tfc:rock/loose/chalk",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.25
+                    }]
+                },
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.0533
+                    "name": "tfc:ore/sapphire",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.0533
+                    }]
                 }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+            ],
+            "type": "minecraft:alternatives"
+        }],
+        "name": "loot_pool",
+        "rolls": 1
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:fishing"
 }

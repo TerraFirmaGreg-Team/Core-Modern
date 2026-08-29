@@ -1,15 +1,16 @@
-{
-"multipart":
-	[
-		{
-		"when": {"stage":"0", "part":"upper"},
-		"apply":[
-			{"model":"tfc:block/plant/sea_lavender_0"}
-		]},
-		{
-		"when": {"stage":"1", "part":"upper"},
-		"apply":[
-			{"model":"tfc:block/plant/sea_lavender_1"}
-		]}
-	]
-}
+{"multipart": [
+    {
+        "apply": [{"model": "tfc:block/plant/sea_lavender_0"}],
+        "when": {
+            "stage": "0",
+            "part": "upper"
+        }
+    },
+    {
+        "apply": [{"model": "tfc:block/plant/sea_lavender_1"}],
+        "when": {
+            "stage": "1",
+            "part": "upper"
+        }
+    }
+]}

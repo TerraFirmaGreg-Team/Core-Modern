@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/axle/kapok"
-    },
-    {
-      "tag": "forge:ingots/steel"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/bladed_axle/kapok"
-  }
+    "result": {"item": "tfc:wood/bladed_axle/kapok"},
+    "ingredients": [
+        {"item": "tfc:wood/axle/kapok"},
+        {"tag": "forge:ingots/steel"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

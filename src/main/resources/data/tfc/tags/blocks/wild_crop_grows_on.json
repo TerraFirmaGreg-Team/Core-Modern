@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:bush_plantable_on"
-  ]
+    "values": ["#tfc:bush_plantable_on"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "minecraft:falling_block",
-    "minecraft:falling_anvil"
-  ]
+    "values": [
+        "minecraft:falling_block",
+        "minecraft:falling_anvil"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

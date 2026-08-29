@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/lignite/chert"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/lignite/chert"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

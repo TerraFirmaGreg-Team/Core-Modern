@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "tfc:block/wood/stripped_log/willow",
-    "side": "tfc:block/wood/stripped_log/willow"
-  }
+    "parent": "block/cube_column",
+    "textures": {
+        "side": "tfc:block/wood/stripped_log/willow",
+        "end": "tfc:block/wood/stripped_log/willow"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

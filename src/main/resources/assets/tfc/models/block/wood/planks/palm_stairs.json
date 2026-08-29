@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/wood/planks/palm",
-    "top": "tfc:block/wood/planks/palm",
-    "side": "tfc:block/wood/planks/palm"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/wood/planks/palm",
+        "top": "tfc:block/wood/planks/palm",
+        "bottom": "tfc:block/wood/planks/palm"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

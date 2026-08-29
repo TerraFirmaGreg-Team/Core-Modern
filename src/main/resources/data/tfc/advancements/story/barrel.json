@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/saw",
-  "criteria": {
-    "barrels": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:barrels"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:wood/barrel/acacia"
+    "parent": "tfc:story/saw",
+    "requirements": [["barrels"]],
+    "criteria": {"barrels": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:barrels"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:wood/barrel/acacia"},
+        "description": {"translate": "tfc.advancements.story.barrel.description"},
+        "title": {"translate": "tfc.advancements.story.barrel.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.barrel.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.barrel.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "barrels"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

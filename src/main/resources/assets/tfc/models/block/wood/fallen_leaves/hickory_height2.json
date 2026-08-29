@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/groundcover/fallen_leaves_height2",
-  "textures": {
-    "all": "tfc:block/wood/leaves/hickory"
-  }
+    "parent": "tfc:block/groundcover/fallen_leaves_height2",
+    "textures": {"all": "tfc:block/wood/leaves/hickory"},
+    "__comment__": "This file was automatically created by mcresources"
 }

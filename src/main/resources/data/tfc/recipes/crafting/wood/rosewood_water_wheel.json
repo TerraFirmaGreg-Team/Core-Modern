@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "LPL",
-    "PAP",
-    "LPL"
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/lumber/rosewood"
-    },
-    "P": {
-      "item": "tfc:wood/planks/rosewood"
-    },
-    "A": {
-      "item": "tfc:wood/axle/rosewood"
+    "result": {"item": "tfc:wood/water_wheel/rosewood"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/rosewood"},
+        "A": {"item": "tfc:wood/axle/rosewood"},
+        "L": {"item": "tfc:wood/lumber/rosewood"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/water_wheel/rosewood"
-  }
 }

@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/alabaster/polished/pink",
-    "top": "tfc:block/alabaster/polished/pink",
-    "side": "tfc:block/alabaster/polished/pink"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/alabaster/polished/pink",
+        "top": "tfc:block/alabaster/polished/pink",
+        "bottom": "tfc:block/alabaster/polished/pink"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

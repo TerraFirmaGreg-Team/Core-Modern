@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/anvil/bismuth_bronze",
-    "tfc:metal/anvil/black_bronze",
-    "tfc:metal/anvil/bronze"
-  ]
+    "values": [
+        "tfc:metal/anvil/bismuth_bronze",
+        "tfc:metal/anvil/black_bronze",
+        "tfc:metal/anvil/bronze"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

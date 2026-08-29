@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "minecraft:diorite",
-  "result": "minecraft:diorite"
+    "result": "minecraft:diorite",
+    "ingredient": "minecraft:diorite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

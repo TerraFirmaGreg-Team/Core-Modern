@@ -1,16 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:knapping",
-  "knapping_type": "tfc:clay",
-  "outside_slot_required": true,
-  "pattern": [
-    "  XXX",
-    "   XX",
-    "X   X",
-    "X    ",
-    "XXX  "
-  ],
-  "result": {
-    "item": "tfc:ceramic/unfired_saw_blade_mold"
-  }
+    "result": {"item": "tfc:ceramic/unfired_saw_blade_mold"},
+    "outside_slot_required": true,
+    "pattern": [
+        "  XXX",
+        "   XX",
+        "X   X",
+        "X    ",
+        "XXX  "
+    ],
+    "knapping_type": "tfc:clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
 }

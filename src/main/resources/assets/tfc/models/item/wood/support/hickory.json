@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/support/hickory_inventory"
+    "parent": "tfc:block/wood/support/hickory_inventory",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/plant/maiden_pink/petals"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/plant/maiden_pink/petals"}
 }

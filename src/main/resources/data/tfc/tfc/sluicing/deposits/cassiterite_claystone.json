@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:deposit/cassiterite/claystone"
-  },
-  "loot_table": "tfc:panning/deposits/cassiterite_claystone"
+    "ingredient": {"item": "tfc:deposit/cassiterite/claystone"},
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/cassiterite_claystone"
 }

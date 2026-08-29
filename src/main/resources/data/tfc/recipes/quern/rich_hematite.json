@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/rich_hematite"
-  },
-  "result": {
-    "item": "tfc:powder/hematite",
-    "count": 7
-  }
+    "result": {
+        "item": "tfc:powder/hematite",
+        "count": 7
+    },
+    "ingredient": {"item": "tfc:ore/rich_hematite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

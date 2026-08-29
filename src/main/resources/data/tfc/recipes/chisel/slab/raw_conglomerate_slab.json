@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/conglomerate",
-  "result": "tfc:rock/raw/conglomerate_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/raw/conglomerate_slab"
-  }
+    "result": "tfc:rock/raw/conglomerate_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/raw/conglomerate_slab"},
+    "ingredient": "tfc:rock/raw/conglomerate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

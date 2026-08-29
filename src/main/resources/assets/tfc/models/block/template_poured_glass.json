@@ -1,20 +1,77 @@
 {
-  "credit": "Made with Blockbench",
-  "textures": {
-    "particle": "#all"
-  },
-  "elements": [
-    {
-      "from": [0, 0, 0],
-      "to": [16, 1, 16],
-      "faces": {
-        "north": {"uv": [0, 0, 16, 1], "texture": "#all", "cullface": "north"},
-        "east": {"uv": [0, 0, 16, 1], "texture": "#all", "cullface": "east"},
-        "south": {"uv": [0, 0, 16, 1], "texture": "#all", "cullface": "south"},
-        "west": {"uv": [0, 0, 16, 1], "texture": "#all", "cullface": "west"},
-        "up": {"uv": [0, 0, 16, 16], "texture": "#all"},
-        "down": {"uv": [0, 0, 16, 16], "texture": "#all", "cullface": "down"}
-      }
-    }
-  ]
+    "textures": {"particle": "#all"},
+    "elements": [{
+        "from": [
+            0,
+            0,
+            0
+        ],
+        "to": [
+            16,
+            1,
+            16
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    1
+                ],
+                "cullface": "east",
+                "texture": "#all"
+            },
+            "south": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    1
+                ],
+                "cullface": "south",
+                "texture": "#all"
+            },
+            "north": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    1
+                ],
+                "cullface": "north",
+                "texture": "#all"
+            },
+            "west": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    1
+                ],
+                "cullface": "west",
+                "texture": "#all"
+            },
+            "up": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    16
+                ],
+                "texture": "#all"
+            },
+            "down": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    16
+                ],
+                "cullface": "down",
+                "texture": "#all"
+            }
+        }
+    }],
+    "credit": "Made with Blockbench"
 }

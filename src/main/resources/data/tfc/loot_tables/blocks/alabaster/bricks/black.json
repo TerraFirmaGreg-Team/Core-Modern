@@ -1,21 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "tfc:alabaster/bricks/black"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+    "pools": [{
+        "entries": [{
+            "name": "tfc:alabaster/bricks/black",
+            "type": "minecraft:item"
+        }],
+        "name": "loot_pool",
+        "rolls": 1,
+        "conditions": [{"condition": "minecraft:survives_explosion"}]
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
 }

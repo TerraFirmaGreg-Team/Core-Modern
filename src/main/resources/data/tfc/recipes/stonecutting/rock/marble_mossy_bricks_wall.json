@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/mossy_bricks/marble"
-  },
-  "result": "tfc:rock/mossy_bricks/marble_wall",
-  "count": 1
+    "result": "tfc:rock/mossy_bricks/marble_wall",
+    "ingredient": {"item": "tfc:rock/mossy_bricks/marble"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

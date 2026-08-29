@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/plant/desert_flame/desert_flame_0"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/plant/desert_flame/desert_flame_0"}
 }

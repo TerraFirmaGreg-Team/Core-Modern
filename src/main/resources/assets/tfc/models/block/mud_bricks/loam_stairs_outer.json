@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "tfc:block/mud_bricks/loam",
-    "top": "tfc:block/mud_bricks/loam",
-    "side": "tfc:block/mud_bricks/loam"
-  }
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/mud_bricks/loam",
+        "top": "tfc:block/mud_bricks/loam",
+        "bottom": "tfc:block/mud_bricks/loam"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

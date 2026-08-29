@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:ceramic/unfired_pan"
-  },
-  "result_item": {
-    "item": "tfc:pan/empty"
-  },
-  "temperature": 1399
+    "result_item": {"item": "tfc:pan/empty"},
+    "ingredient": {"item": "tfc:ceramic/unfired_pan"},
+    "temperature": 1399,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:submerged_tall_plant",
-  "config": {
-    "block": "tfc:plant/badderlocks"
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:submerged_tall_plant",
+    "config": {"block": "tfc:plant/badderlocks"}
 }

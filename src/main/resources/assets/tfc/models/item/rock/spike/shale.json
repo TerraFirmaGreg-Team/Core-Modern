@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/spike/shale_base",
-  "textures": {
-    "layer0": "tfc:block/rock/raw/shale"
-  }
+    "parent": "tfc:block/rock/spike/shale_base",
+    "textures": {"layer0": "tfc:block/rock/raw/shale"},
+    "__comment__": "This file was automatically created by mcresources"
 }

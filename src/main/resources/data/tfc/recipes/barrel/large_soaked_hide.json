@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "item": "tfc:large_raw_hide"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "tfc:limewater",
-    "amount": 500
-  },
-  "output_item": {
-    "item": "tfc:large_soaked_hide"
-  },
-  "duration": 8000
+    "input_fluid": {
+        "amount": 500,
+        "ingredient": "tfc:limewater"
+    },
+    "duration": 8000,
+    "output_item": {"item": "tfc:large_soaked_hide"},
+    "input_item": {"ingredient": {"item": "tfc:large_raw_hide"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

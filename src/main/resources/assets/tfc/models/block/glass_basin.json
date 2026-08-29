@@ -1,6 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "textures": {
-    "particle": "tfc:block/glass/1"
-  }
+    "textures": {"particle": "tfc:block/glass/1"},
+    "__comment__": "This file was automatically created by mcresources"
 }

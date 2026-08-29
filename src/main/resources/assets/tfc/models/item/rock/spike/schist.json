@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/spike/schist_base",
-  "textures": {
-    "layer0": "tfc:block/rock/raw/schist"
-  }
+    "parent": "tfc:block/rock/spike/schist_base",
+    "textures": {"layer0": "tfc:block/rock/raw/schist"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wild_crop/carrot"
+    "parent": "tfc:block/wild_crop/carrot",
+    "__comment__": "This file was automatically created by mcresources"
 }

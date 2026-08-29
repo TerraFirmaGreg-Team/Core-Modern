@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/lapis_lazuli/rhyolite"
+    "parent": "tfc:block/ore/lapis_lazuli/rhyolite",
+    "__comment__": "This file was automatically created by mcresources"
 }

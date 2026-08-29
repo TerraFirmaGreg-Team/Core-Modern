@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/mossy_bricks/rhyolite",
-  "result": "tfc:rock/mossy_bricks/rhyolite_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/mossy_bricks/rhyolite_slab"
-  }
+    "result": "tfc:rock/mossy_bricks/rhyolite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/mossy_bricks/rhyolite_slab"},
+    "ingredient": "tfc:rock/mossy_bricks/rhyolite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

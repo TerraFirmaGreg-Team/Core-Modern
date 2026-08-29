@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/chest",
-  "textures": {
-    "particle": "tfc:block/wood/planks/aspen"
-  }
+    "parent": "item/chest",
+    "textures": {"particle": "tfc:block/wood/planks/aspen"},
+    "__comment__": "This file was automatically created by mcresources"
 }

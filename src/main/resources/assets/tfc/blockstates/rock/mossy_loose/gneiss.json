@@ -1,56 +1,50 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "count=1": [
-      {
-        "model": "tfc:block/rock/loose/gneiss_1_mossy",
-        "y": 90
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_1_mossy"
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_1_mossy",
-        "y": 180
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_1_mossy",
-        "y": 270
-      }
-    ],
-    "count=2": [
-      {
-        "model": "tfc:block/rock/loose/gneiss_2_mossy",
-        "y": 90
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_2_mossy"
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_2_mossy",
-        "y": 180
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_2_mossy",
-        "y": 270
-      }
-    ],
-    "count=3": [
-      {
-        "model": "tfc:block/rock/loose/gneiss_3_mossy",
-        "y": 90
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_3_mossy"
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_3_mossy",
-        "y": 180
-      },
-      {
-        "model": "tfc:block/rock/loose/gneiss_3_mossy",
-        "y": 270
-      }
-    ]
-  }
+    "variants": {
+        "count=3": [
+            {
+                "y": 90,
+                "model": "tfc:block/rock/loose/gneiss_3_mossy"
+            },
+            {"model": "tfc:block/rock/loose/gneiss_3_mossy"},
+            {
+                "y": 180,
+                "model": "tfc:block/rock/loose/gneiss_3_mossy"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/rock/loose/gneiss_3_mossy"
+            }
+        ],
+        "count=2": [
+            {
+                "y": 90,
+                "model": "tfc:block/rock/loose/gneiss_2_mossy"
+            },
+            {"model": "tfc:block/rock/loose/gneiss_2_mossy"},
+            {
+                "y": 180,
+                "model": "tfc:block/rock/loose/gneiss_2_mossy"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/rock/loose/gneiss_2_mossy"
+            }
+        ],
+        "count=1": [
+            {
+                "y": 90,
+                "model": "tfc:block/rock/loose/gneiss_1_mossy"
+            },
+            {"model": "tfc:block/rock/loose/gneiss_1_mossy"},
+            {
+                "y": 180,
+                "model": "tfc:block/rock/loose/gneiss_1_mossy"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/rock/loose/gneiss_1_mossy"
+            }
+        ]
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

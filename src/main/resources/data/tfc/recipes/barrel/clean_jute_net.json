@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "item": "tfc:dirty_jute_net"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "minecraft:water",
-    "amount": 125
-  },
-  "output_item": {
-    "item": "tfc:jute_net"
-  },
-  "duration": 1000
+    "input_fluid": {
+        "amount": 125,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 1000,
+    "output_item": {"item": "tfc:jute_net"},
+    "input_item": {"ingredient": {"item": "tfc:dirty_jute_net"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

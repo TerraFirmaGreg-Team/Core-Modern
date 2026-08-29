@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "powered=false": {
-      "model": "tfc:block/rock/pressure_plate/basalt"
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/basalt_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/basalt"}
     },
-    "powered=true": {
-      "model": "tfc:block/rock/pressure_plate/basalt_down"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

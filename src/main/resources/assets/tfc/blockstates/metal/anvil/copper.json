@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=north": {
-      "model": "tfc:block/metal/anvil/copper",
-      "y": 90
+    "variants": {
+        "facing=east": {
+            "y": 180,
+            "model": "tfc:block/metal/anvil/copper"
+        },
+        "facing=south": {
+            "y": 270,
+            "model": "tfc:block/metal/anvil/copper"
+        },
+        "facing=north": {
+            "y": 90,
+            "model": "tfc:block/metal/anvil/copper"
+        },
+        "facing=west": {"model": "tfc:block/metal/anvil/copper"}
     },
-    "facing=east": {
-      "model": "tfc:block/metal/anvil/copper",
-      "y": 180
-    },
-    "facing=south": {
-      "model": "tfc:block/metal/anvil/copper",
-      "y": 270
-    },
-    "facing=west": {
-      "model": "tfc:block/metal/anvil/copper"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

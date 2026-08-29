@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/blowpipe",
-  "criteria": {
-    "foods/preserves": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:foods/preserves"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:jar/blueberry"
+    "parent": "tfc:story/blowpipe",
+    "requirements": [["foods/preserves"]],
+    "criteria": {"foods/preserves": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:foods/preserves"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:jar/blueberry"},
+        "description": {"translate": "tfc.advancements.story.preserves.description"},
+        "title": {"translate": "tfc.advancements.story.preserves.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.preserves.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.preserves.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "foods/preserves"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

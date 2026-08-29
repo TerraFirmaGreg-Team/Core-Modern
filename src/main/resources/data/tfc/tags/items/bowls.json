@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:ceramic/bowl",
-    "minecraft:bowl"
-  ]
+    "values": [
+        "tfc:ceramic/bowl",
+        "minecraft:bowl"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

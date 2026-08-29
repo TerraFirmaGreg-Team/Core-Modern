@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/firestarter",
-  "criteria": {
-    "clay_ball": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:clay_ball"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "minecraft:clay_ball"
+    "parent": "tfc:story/firestarter",
+    "requirements": [["clay_ball"]],
+    "criteria": {"clay_ball": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["minecraft:clay_ball"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "minecraft:clay_ball"},
+        "description": {"translate": "tfc.advancements.story.find_clay.description"},
+        "title": {"translate": "tfc.advancements.story.find_clay.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.find_clay.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.find_clay.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "clay_ball"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

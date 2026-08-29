@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "mature=true": {
-      "model": "tfc:block/wild_crop/squash"
+    "variants": {
+        "mature=true": {"model": "tfc:block/wild_crop/squash"},
+        "mature=false": {"model": "tfc:block/dead_crop/squash"}
     },
-    "mature=false": {
-      "model": "tfc:block/dead_crop/squash"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

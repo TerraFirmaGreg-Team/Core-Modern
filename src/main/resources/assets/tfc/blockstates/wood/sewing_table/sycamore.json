@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "tfc:block/wood/sewing_table/sycamore",
-      "y": 90
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/wood/sewing_table/sycamore"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/wood/sewing_table/sycamore"
+        },
+        "facing=north": {"model": "tfc:block/wood/sewing_table/sycamore"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/wood/sewing_table/sycamore"
+        }
     },
-    "facing=north": {
-      "model": "tfc:block/wood/sewing_table/sycamore"
-    },
-    "facing=south": {
-      "model": "tfc:block/wood/sewing_table/sycamore",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "tfc:block/wood/sewing_table/sycamore",
-      "y": 270
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

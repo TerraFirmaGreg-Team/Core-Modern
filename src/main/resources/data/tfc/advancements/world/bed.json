@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/spindle",
-  "criteria": {
-    "beds": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "minecraft:beds"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "minecraft:red_bed"
+    "parent": "tfc:world/spindle",
+    "requirements": [["beds"]],
+    "criteria": {"beds": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "minecraft:beds"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "minecraft:red_bed"},
+        "description": {"translate": "tfc.advancements.world.bed.description"},
+        "title": {"translate": "tfc.advancements.world.bed.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.bed.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.bed.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "beds"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

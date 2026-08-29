@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:food/onion"
-  },
-  "hunger": 4,
-  "saturation": 0.5,
-  "decay_modifier": 0.5,
-  "vegetables": 1
+    "saturation": 0.5,
+    "ingredient": {"item": "tfc:food/onion"},
+    "decay_modifier": 0.5,
+    "__comment__": "This file was automatically created by mcresources",
+    "vegetables": 1,
+    "hunger": 4
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:item/handheld_flipped",
-  "textures": {
-    "layer0": "tfc:item/metal/knife/wrought_iron"
-  }
+    "parent": "tfc:item/handheld_flipped",
+    "textures": {"layer0": "tfc:item/metal/knife/wrought_iron"},
+    "__comment__": "This file was automatically created by mcresources"
 }

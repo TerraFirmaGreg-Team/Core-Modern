@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X",
-    "Y",
-    "Z"
-  ],
-  "key": {
-    "Y": {
-      "tag": "forge:sheets/copper"
-    },
-    "X": {
-      "item": "tfc:lens"
-    },
-    "Z": {
-      "item": "tfc:brass_mechanisms"
+    "result": {"item": "minecraft:spyglass"},
+    "pattern": [
+        "X",
+        "Y",
+        "Z"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:lens"},
+        "Y": {"tag": "forge:sheets/copper"},
+        "Z": {"item": "tfc:brass_mechanisms"}
     }
-  },
-  "result": {
-    "item": "minecraft:spyglass"
-  }
 }

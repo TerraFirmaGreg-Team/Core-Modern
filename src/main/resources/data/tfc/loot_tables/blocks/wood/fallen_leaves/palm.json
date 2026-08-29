@@ -1,246 +1,150 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+    "pools": [
         {
-          "type": "minecraft:item",
-          "name": "tfc:wood/fallen_leaves/palm",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:wood/fallen_leaves/palm",
-              "properties": {
-                "layers": "1"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 1
-            }
-          ]
-        }
-      ],
-      "conditions": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": 1
+                }],
+                "name": "tfc:wood/fallen_leaves/palm",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:wood/fallen_leaves/palm",
+                    "properties": {"layers": "1"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": 2
+                }],
+                "name": "tfc:wood/fallen_leaves/palm",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:wood/fallen_leaves/palm",
+                    "properties": {"layers": "2"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "type": "minecraft:item",
-          "name": "tfc:wood/fallen_leaves/palm",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:wood/fallen_leaves/palm",
-              "properties": {
-                "layers": "2"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 2
-            }
-          ]
-        }
-      ],
-      "conditions": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": 3
+                }],
+                "name": "tfc:wood/fallen_leaves/palm",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:wood/fallen_leaves/palm",
+                    "properties": {"layers": "3"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": 4
+                }],
+                "name": "tfc:wood/fallen_leaves/palm",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:wood/fallen_leaves/palm",
+                    "properties": {"layers": "4"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "type": "minecraft:item",
-          "name": "tfc:wood/fallen_leaves/palm",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:wood/fallen_leaves/palm",
-              "properties": {
-                "layers": "3"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 3
-            }
-          ]
-        }
-      ],
-      "conditions": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": 5
+                }],
+                "name": "tfc:wood/fallen_leaves/palm",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:wood/fallen_leaves/palm",
+                    "properties": {"layers": "5"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": 6
+                }],
+                "name": "tfc:wood/fallen_leaves/palm",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:wood/fallen_leaves/palm",
+                    "properties": {"layers": "6"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "type": "minecraft:item",
-          "name": "tfc:wood/fallen_leaves/palm",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:wood/fallen_leaves/palm",
-              "properties": {
-                "layers": "4"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 4
-            }
-          ]
-        }
-      ],
-      "conditions": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": 7
+                }],
+                "name": "tfc:wood/fallen_leaves/palm",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:wood/fallen_leaves/palm",
+                    "properties": {"layers": "7"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "condition": "minecraft:survives_explosion"
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": 8
+                }],
+                "name": "tfc:wood/fallen_leaves/palm",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:wood/fallen_leaves/palm",
+                    "properties": {"layers": "8"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
         }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "tfc:wood/fallen_leaves/palm",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:wood/fallen_leaves/palm",
-              "properties": {
-                "layers": "5"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 5
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "tfc:wood/fallen_leaves/palm",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:wood/fallen_leaves/palm",
-              "properties": {
-                "layers": "6"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 6
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "tfc:wood/fallen_leaves/palm",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:wood/fallen_leaves/palm",
-              "properties": {
-                "layers": "7"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 7
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "tfc:wood/fallen_leaves/palm",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:wood/fallen_leaves/palm",
-              "properties": {
-                "layers": "8"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 8
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
 }

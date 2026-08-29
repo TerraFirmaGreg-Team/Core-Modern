@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cobble/gabbro"
-  },
-  "result": "tfc:rock/cobble/gabbro_stairs",
-  "count": 1
+    "result": "tfc:rock/cobble/gabbro_stairs",
+    "ingredient": {"item": "tfc:rock/cobble/gabbro"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

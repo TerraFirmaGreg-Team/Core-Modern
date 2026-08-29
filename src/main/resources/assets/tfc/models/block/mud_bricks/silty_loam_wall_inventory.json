@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/wall_inventory",
-  "textures": {
-    "wall": "tfc:block/mud_bricks/silty_loam"
-  }
+    "parent": "block/wall_inventory",
+    "textures": {"wall": "tfc:block/mud_bricks/silty_loam"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/dead_bush"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/dead_bush"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,1117 +1,1117 @@
 {
-  "textures": {
-    "particle": "tfc:block/plant/barrel_cactus/side",
-    "side": "tfc:block/plant/barrel_cactus/side",
-    "top": "tfc:block/plant/barrel_cactus/top",
-    "spike": "tfc:block/plant/barrel_cactus/spikes_single"
-  },
-  "elements": [
-    {
-      "name": "Base",
-      "from": [
-        2.0,
-        0.0,
-        2.0
-      ],
-      "to": [
-        14.0,
-        3.0,
-        14.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#side",
-          "uv": [
-            2.0,
-            3.0,
-            14.0,
-            6.0
-          ]
-        },
-        "east": {
-          "texture": "#side",
-          "uv": [
-            2.0,
-            6.0,
-            14.0,
-            9.0
-          ]
-        },
-        "south": {
-          "texture": "#side",
-          "uv": [
-            2.0,
-            7.0,
-            14.0,
-            10.0
-          ]
-        },
-        "west": {
-          "texture": "#side",
-          "uv": [
-            2.0,
-            0.0,
-            14.0,
-            3.0
-          ]
-        },
-        "up": {
-          "texture": "#top",
-          "uv": [
-            2.0,
-            2.0,
-            14.0,
-            14.0
-          ]
-        },
-        "down": {
-          "texture": "#top",
-          "uv": [
-            2.0,
-            2.0,
-            14.0,
-            14.0
-          ]
-        }
-      }
+    "textures": {
+        "side": "tfc:block/plant/barrel_cactus/side",
+        "top": "tfc:block/plant/barrel_cactus/top",
+        "particle": "tfc:block/plant/barrel_cactus/side",
+        "spike": "tfc:block/plant/barrel_cactus/spikes_single"
     },
-    {
-      "name": "Middle",
-      "from": [
-        0.0,
-        3.0,
-        0.0
-      ],
-      "to": [
-        16.0,
-        13.0,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#side",
-          "uv": [
-            0.0,
-            0.0,
-            16.0,
-            10.0
-          ]
+    "elements": [
+        {
+            "name": "Base",
+            "from": [
+                2,
+                0,
+                2
+            ],
+            "to": [
+                14,
+                3,
+                14
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        6,
+                        14,
+                        9
+                    ],
+                    "texture": "#side"
+                },
+                "south": {
+                    "uv": [
+                        2,
+                        7,
+                        14,
+                        10
+                    ],
+                    "texture": "#side"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        3,
+                        14,
+                        6
+                    ],
+                    "texture": "#side"
+                },
+                "west": {
+                    "uv": [
+                        2,
+                        0,
+                        14,
+                        3
+                    ],
+                    "texture": "#side"
+                },
+                "up": {
+                    "uv": [
+                        2,
+                        2,
+                        14,
+                        14
+                    ],
+                    "texture": "#top"
+                },
+                "down": {
+                    "uv": [
+                        2,
+                        2,
+                        14,
+                        14
+                    ],
+                    "texture": "#top"
+                }
+            }
         },
-        "east": {
-          "texture": "#side",
-          "uv": [
-            0.0,
-            2.0,
-            16.0,
-            12.0
-          ]
+        {
+            "name": "Middle",
+            "from": [
+                0,
+                3,
+                0
+            ],
+            "to": [
+                16,
+                13,
+                16
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        2,
+                        16,
+                        12
+                    ],
+                    "texture": "#side"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        3,
+                        16,
+                        13
+                    ],
+                    "texture": "#side"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        10
+                    ],
+                    "texture": "#side"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        6,
+                        16,
+                        16
+                    ],
+                    "texture": "#side"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#top"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#top"
+                }
+            }
         },
-        "south": {
-          "texture": "#side",
-          "uv": [
-            0.0,
-            3.0,
-            16.0,
-            13.0
-          ]
+        {
+            "name": "Top",
+            "from": [
+                2,
+                13,
+                2
+            ],
+            "to": [
+                14,
+                16,
+                14
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        6,
+                        14,
+                        9
+                    ],
+                    "texture": "#side"
+                },
+                "south": {
+                    "uv": [
+                        2,
+                        9,
+                        14,
+                        12
+                    ],
+                    "texture": "#side"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        2,
+                        14,
+                        5
+                    ],
+                    "texture": "#side"
+                },
+                "west": {
+                    "uv": [
+                        2,
+                        3,
+                        14,
+                        6
+                    ],
+                    "texture": "#side"
+                },
+                "up": {
+                    "uv": [
+                        2,
+                        2,
+                        14,
+                        14
+                    ],
+                    "texture": "#top"
+                },
+                "down": {
+                    "uv": [
+                        2,
+                        2,
+                        14,
+                        14
+                    ],
+                    "texture": "#top"
+                }
+            }
         },
-        "west": {
-          "texture": "#side",
-          "uv": [
-            0.0,
-            6.0,
-            16.0,
-            16.0
-          ]
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "SpikesTopSW-NE1",
+            "from": [
+                -0.5,
+                16,
+                8
+            ],
+            "to": [
+                15.5,
+                18,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        2,
+                        0,
+                        0
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        2
+                    ],
+                    "texture": "#spike"
+                }
+            }
         },
-        "up": {
-          "texture": "#top",
-          "uv": [
-            0.0,
-            0.0,
-            16.0,
-            16.0
-          ]
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "name": "SpikesTopSW-NE2",
+            "from": [
+                1.5,
+                16,
+                8
+            ],
+            "to": [
+                13.5,
+                18,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        14,
+                        2,
+                        2,
+                        0
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        0,
+                        14,
+                        2
+                    ],
+                    "texture": "#spike"
+                }
+            }
         },
-        "down": {
-          "texture": "#top",
-          "uv": [
-            0.0,
-            0.0,
-            16.0,
-            16.0
-          ]
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "y"
+            },
+            "name": "SpikesTopSW-NE3",
+            "from": [
+                1.5,
+                16,
+                8
+            ],
+            "to": [
+                13.5,
+                18,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        14,
+                        2,
+                        2,
+                        0
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        2,
+                        0,
+                        14,
+                        2
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "SpikesTopSW-NE4",
+            "from": [
+                -0.5,
+                16,
+                8
+            ],
+            "to": [
+                15.5,
+                18,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        16,
+                        2,
+                        0,
+                        0
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        2
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "SpikesTopNW-SE1",
+            "from": [
+                8,
+                16,
+                -0.5
+            ],
+            "to": [
+                8,
+                18,
+                15.5
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        2
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        16,
+                        2,
+                        0,
+                        0
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "name": "SpikesTopNW-SE2",
+            "from": [
+                8,
+                16,
+                1.5
+            ],
+            "to": [
+                8,
+                18,
+                13.5
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        0,
+                        14,
+                        2
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        14,
+                        2,
+                        2,
+                        0
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "y"
+            },
+            "name": "SpikesTopNW-SE3",
+            "from": [
+                8,
+                16,
+                1.5
+            ],
+            "to": [
+                8,
+                18,
+                13.5
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        2,
+                        0,
+                        14,
+                        2
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        14,
+                        2,
+                        2,
+                        0
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "SpikesTopNW-SE4",
+            "from": [
+                8,
+                16,
+                -0.5
+            ],
+            "to": [
+                8,
+                18,
+                15.5
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        2
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        16,
+                        2,
+                        0,
+                        0
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesN1",
+            "from": [
+                4,
+                0.5,
+                -2
+            ],
+            "to": [
+                4,
+                14.5,
+                3
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesN2",
+            "from": [
+                8,
+                1,
+                -2
+            ],
+            "to": [
+                8,
+                15,
+                3
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesN3",
+            "from": [
+                12,
+                0.5,
+                -2
+            ],
+            "to": [
+                12,
+                14.5,
+                3
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesE1",
+            "from": [
+                13,
+                0.5,
+                4
+            ],
+            "to": [
+                18,
+                14.5,
+                4
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesE2",
+            "from": [
+                13,
+                1,
+                8
+            ],
+            "to": [
+                18,
+                15,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesE3",
+            "from": [
+                13,
+                0.5,
+                12
+            ],
+            "to": [
+                18,
+                14.5,
+                12
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesS1",
+            "from": [
+                4,
+                0.5,
+                13
+            ],
+            "to": [
+                4,
+                14.5,
+                18
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesS2",
+            "from": [
+                8,
+                1,
+                13
+            ],
+            "to": [
+                8,
+                15,
+                18
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesS3",
+            "from": [
+                12,
+                0.5,
+                13
+            ],
+            "to": [
+                12,
+                14.5,
+                18
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesW1",
+            "from": [
+                -2,
+                0.5,
+                4
+            ],
+            "to": [
+                3,
+                14.5,
+                4
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesW2",
+            "from": [
+                -2,
+                1,
+                8
+            ],
+            "to": [
+                3,
+                15,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "name": "SpikesW3",
+            "from": [
+                -2,
+                0.5,
+                12
+            ],
+            "to": [
+                3,
+                14.5,
+                12
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "SpikesNW",
+            "from": [
+                8,
+                1,
+                -5
+            ],
+            "to": [
+                8,
+                15,
+                0
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "SpikesSW",
+            "from": [
+                -5,
+                1,
+                8
+            ],
+            "to": [
+                0,
+                15,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "SpikesSE",
+            "from": [
+                8,
+                1,
+                16
+            ],
+            "to": [
+                8,
+                15,
+                21
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "west": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "SpikesNE",
+            "from": [
+                16,
+                1,
+                8
+            ],
+            "to": [
+                21,
+                15,
+                8
+            ],
+            "faces": {
+                "south": {
+                    "uv": [
+                        11,
+                        3,
+                        16,
+                        16
+                    ],
+                    "texture": "#spike"
+                },
+                "north": {
+                    "uv": [
+                        0,
+                        3,
+                        5,
+                        16
+                    ],
+                    "texture": "#spike"
+                }
+            }
         }
-      }
-    },
-    {
-      "name": "Top",
-      "from": [
-        2.0,
-        13.0,
-        2.0
-      ],
-      "to": [
-        14.0,
-        16.0,
-        14.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#side",
-          "uv": [
-            2.0,
-            2.0,
-            14.0,
-            5.0
-          ]
-        },
-        "east": {
-          "texture": "#side",
-          "uv": [
-            2.0,
-            6.0,
-            14.0,
-            9.0
-          ]
-        },
-        "south": {
-          "texture": "#side",
-          "uv": [
-            2.0,
-            9.0,
-            14.0,
-            12.0
-          ]
-        },
-        "west": {
-          "texture": "#side",
-          "uv": [
-            2.0,
-            3.0,
-            14.0,
-            6.0
-          ]
-        },
-        "up": {
-          "texture": "#top",
-          "uv": [
-            2.0,
-            2.0,
-            14.0,
-            14.0
-          ]
-        },
-        "down": {
-          "texture": "#top",
-          "uv": [
-            2.0,
-            2.0,
-            14.0,
-            14.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesTopSW-NE1",
-      "from": [
-        -0.5,
-        16.0,
-        8.0
-      ],
-      "to": [
-        15.5,
-        18.0,
-        8.0
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 45
-      },
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            0.0,
-            16.0,
-            2.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            16.0,
-            2.0,
-            0.0,
-            0.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesTopSW-NE2",
-      "from": [
-        1.5,
-        16.0,
-        8.0
-      ],
-      "to": [
-        13.5,
-        18.0,
-        8.0
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 22.5
-      },
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            2.0,
-            0.0,
-            14.0,
-            2.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            14.0,
-            2.0,
-            2.0,
-            0.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesTopSW-NE3",
-      "from": [
-        1.5,
-        16.0,
-        8.0
-      ],
-      "to": [
-        13.5,
-        18.0,
-        8.0
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": -22.5
-      },
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            2.0,
-            0.0,
-            14.0,
-            2.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            14.0,
-            2.0,
-            2.0,
-            0.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesTopSW-NE4",
-      "from": [
-        -0.5,
-        16.0,
-        8.0
-      ],
-      "to": [
-        15.5,
-        18.0,
-        8.0
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 45.0
-      },
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            0.0,
-            16.0,
-            2.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            16.0,
-            2.0,
-            0.0,
-            0.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesTopNW-SE1",
-      "from": [
-        8.0,
-        16.0,
-        -0.5
-      ],
-      "to": [
-        8.0,
-        18.0,
-        15.5
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 45
-      },
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            0.0,
-            16.0,
-            2.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            16.0,
-            2.0,
-            0.0,
-            0.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesTopNW-SE2",
-      "from": [
-        8.0,
-        16.0,
-        1.5
-      ],
-      "to": [
-        8.0,
-        18.0,
-        13.5
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 22.5
-      },
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            2.0,
-            0.0,
-            14.0,
-            2.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            14.0,
-            2.0,
-            2.0,
-            0.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesTopNW-SE3",
-      "from": [
-        8.0,
-        16.0,
-        1.5
-      ],
-      "to": [
-        8.0,
-        18.0,
-        13.5
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": -22.5
-      },
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            2.0,
-            0.0,
-            14.0,
-            2.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            14.0,
-            2.0,
-            2.0,
-            0.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesTopNW-SE4",
-      "from": [
-        8.0,
-        16.0,
-        -0.5
-      ],
-      "to": [
-        8.0,
-        18.0,
-        15.5
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 45.0
-      },
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            0.0,
-            16.0,
-            2.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            16.0,
-            2.0,
-            0.0,
-            0.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesN1",
-      "from": [
-        4.0,
-        0.5,
-        -2.0
-      ],
-      "to": [
-        4.0,
-        14.5,
-        3.0
-      ],
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesN2",
-      "from": [
-        8.0,
-        1.0,
-        -2.0
-      ],
-      "to": [
-        8.0,
-        15.0,
-        3.0
-      ],
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesN3",
-      "from": [
-        12.0,
-        0.5,
-        -2.0
-      ],
-      "to": [
-        12.0,
-        14.5,
-        3.0
-      ],
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesE1",
-      "from": [
-        13.0,
-        0.5,
-        4.0
-      ],
-      "to": [
-        18.0,
-        14.5,
-        4.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesE2",
-      "from": [
-        13.0,
-        1.0,
-        8.0
-      ],
-      "to": [
-        18.0,
-        15.0,
-        8.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesE3",
-      "from": [
-        13.0,
-        0.5,
-        12.0
-      ],
-      "to": [
-        18.0,
-        14.5,
-        12.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesS1",
-      "from": [
-        4.0,
-        0.5,
-        13.0
-      ],
-      "to": [
-        4.0,
-        14.5,
-        18.0
-      ],
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesS2",
-      "from": [
-        8.0,
-        1.0,
-        13.0
-      ],
-      "to": [
-        8.0,
-        15.0,
-        18.0
-      ],
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesS3",
-      "from": [
-        12.0,
-        0.5,
-        13.0
-      ],
-      "to": [
-        12.0,
-        14.5,
-        18.0
-      ],
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesW1",
-      "from": [
-        -2.0,
-        0.5,
-        4.0
-      ],
-      "to": [
-        3.0,
-        14.5,
-        4.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesW2",
-      "from": [
-        -2.0,
-        1.0,
-        8.0
-      ],
-      "to": [
-        3.0,
-        15.0,
-        8.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesW3",
-      "from": [
-        -2.0,
-        0.5,
-        12.0
-      ],
-      "to": [
-        3.0,
-        14.5,
-        12.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesNW",
-      "from": [
-        8.0,
-        1.0,
-        -5.0
-      ],
-      "to": [
-        8.0,
-        15.0,
-        0.0
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 45.0
-      },
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesSW",
-      "from": [
-        -5.0,
-        1.0,
-        8.0
-      ],
-      "to": [
-        0.0,
-        15.0,
-        8.0
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 45.0
-      },
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesSE",
-      "from": [
-        8.0,
-        1.0,
-        16.0
-      ],
-      "to": [
-        8.0,
-        15.0,
-        21.0
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 45.0
-      },
-      "faces": {
-        "east": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        },
-        "west": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpikesNE",
-      "from": [
-        16.0,
-        1.0,
-        8.0
-      ],
-      "to": [
-        21.0,
-        15.0,
-        8.0
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
-        ],
-        "axis": "y",
-        "angle": 45.0
-      },
-      "faces": {
-        "north": {
-          "texture": "#spike",
-          "uv": [
-            0.0,
-            3.0,
-            5.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#spike",
-          "uv": [
-            11.0,
-            3.0,
-            16.0,
-            16.0
-          ]
-        }
-      }
-    }
-  ]
+    ]
 }

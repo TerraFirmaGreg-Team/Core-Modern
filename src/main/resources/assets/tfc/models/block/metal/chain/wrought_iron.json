@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:block/chain",
-  "textures": {
-    "all": "tfc:block/metal/chain/wrought_iron",
-    "particle": "tfc:block/metal/chain/wrought_iron"
-  }
+    "parent": "minecraft:block/chain",
+    "textures": {
+        "all": "tfc:block/metal/chain/wrought_iron",
+        "particle": "tfc:block/metal/chain/wrought_iron"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

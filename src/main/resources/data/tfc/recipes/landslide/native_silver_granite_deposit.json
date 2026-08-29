@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "tfc:deposit/native_silver/granite",
-  "result": "tfc:deposit/native_silver/granite"
+    "result": "tfc:deposit/native_silver/granite",
+    "ingredient": "tfc:deposit/native_silver/granite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

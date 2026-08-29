@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/rich_native_copper/quartzite"
+    "parent": "tfc:block/ore/rich_native_copper/quartzite",
+    "__comment__": "This file was automatically created by mcresources"
 }

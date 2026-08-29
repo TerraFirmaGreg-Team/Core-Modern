@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/metal/block/nickel",
-    "top": "tfc:block/metal/block/nickel",
-    "side": "tfc:block/metal/block/nickel"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/metal/block/nickel",
+        "top": "tfc:block/metal/block/nickel",
+        "bottom": "tfc:block/metal/block/nickel"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

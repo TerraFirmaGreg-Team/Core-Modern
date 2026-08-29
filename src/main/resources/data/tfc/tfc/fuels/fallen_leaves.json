@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "tfc:fallen_leaves"
-  },
-  "duration": 600,
-  "temperature": 100,
-  "purity": 0.25
+    "duration": 600,
+    "ingredient": {"tag": "tfc:fallen_leaves"},
+    "purity": 0.25,
+    "temperature": 100,
+    "__comment__": "This file was automatically created by mcresources"
 }

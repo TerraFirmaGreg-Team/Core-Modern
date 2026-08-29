@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/support/horizontal",
-  "textures": {
-    "texture": "tfc:block/wood/sheet/sycamore",
-    "particle": "tfc:block/wood/sheet/sycamore"
-  }
+    "parent": "tfc:block/wood/support/horizontal",
+    "textures": {
+        "texture": "tfc:block/wood/sheet/sycamore",
+        "particle": "tfc:block/wood/sheet/sycamore"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

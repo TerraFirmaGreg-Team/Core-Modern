@@ -1,17 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "lifecycle=flowering": {
-      "model": "tfc:block/plant/orange_flowering_leaves"
+    "variants": {
+        "lifecycle=flowering": {"model": "tfc:block/plant/orange_flowering_leaves"},
+        "lifecycle=fruiting": {"model": "tfc:block/plant/orange_fruiting_leaves"},
+        "lifecycle=healthy": {"model": "tfc:block/plant/orange_leaves"},
+        "lifecycle=dormant": {"model": "tfc:block/plant/orange_dry_leaves"}
     },
-    "lifecycle=fruiting": {
-      "model": "tfc:block/plant/orange_fruiting_leaves"
-    },
-    "lifecycle=dormant": {
-      "model": "tfc:block/plant/orange_dry_leaves"
-    },
-    "lifecycle=healthy": {
-      "model": "tfc:block/plant/orange_leaves"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

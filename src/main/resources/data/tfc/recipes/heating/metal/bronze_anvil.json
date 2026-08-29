@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/anvil/bronze"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/bronze",
-    "amount": 1400
-  },
-  "temperature": 950
+    "result_fluid": {
+        "amount": 1400,
+        "fluid": "tfc:metal/bronze"
+    },
+    "ingredient": {"item": "tfc:metal/anvil/bronze"},
+    "temperature": 950,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

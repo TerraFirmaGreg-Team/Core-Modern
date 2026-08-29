@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:bloomery"
-  },
-  "size": "large",
-  "weight": "very_heavy"
+    "ingredient": {"item": "tfc:bloomery"},
+    "size": "large",
+    "weight": "very_heavy",
+    "__comment__": "This file was automatically created by mcresources"
 }

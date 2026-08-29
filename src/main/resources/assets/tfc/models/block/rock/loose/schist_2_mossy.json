@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/loose_metamorphic_2",
-  "textures": {
-    "texture": "tfc:block/rock/mossy_cobble/schist"
-  }
+    "parent": "tfc:block/rock/loose_metamorphic_2",
+    "textures": {"texture": "tfc:block/rock/mossy_cobble/schist"},
+    "__comment__": "This file was automatically created by mcresources"
 }

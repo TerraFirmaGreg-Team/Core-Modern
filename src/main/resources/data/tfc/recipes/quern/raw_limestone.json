@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:rock/raw/limestone"
-  },
-  "result": {
-    "item": "tfc:ore/gypsum",
-    "count": 1
-  }
+    "result": {
+        "item": "tfc:ore/gypsum",
+        "count": 1
+    },
+    "ingredient": {"item": "tfc:rock/raw/limestone"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/winged_kelp"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/winged_kelp"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,25 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:mega_calcite",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 20
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:height_range",
-      "height": {
-        "type": "biased_to_bottom",
-        "min_inclusive": {
-          "absolute": -56
+    "feature": "tfc:mega_calcite",
+    "placement": [
+        {
+            "chance": 20,
+            "type": "minecraft:rarity_filter"
         },
-        "max_inclusive": {
-          "absolute": 30
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": -56},
+                "max_inclusive": {"absolute": 30},
+                "type": "biased_to_bottom"
+            }
         }
-      }
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

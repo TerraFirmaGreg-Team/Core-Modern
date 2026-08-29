@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/cracked_bricks/slate",
-  "result": "tfc:rock/cracked_bricks/slate_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/cracked_bricks/slate_slab"
-  }
+    "result": "tfc:rock/cracked_bricks/slate_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/cracked_bricks/slate_slab"},
+    "ingredient": "tfc:rock/cracked_bricks/slate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

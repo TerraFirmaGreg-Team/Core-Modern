@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/template_fence_gate_open",
-  "textures": {
-    "texture": "tfc:block/wood/planks/aspen"
-  }
+    "parent": "block/template_fence_gate_open",
+    "textures": {"texture": "tfc:block/wood/planks/aspen"},
+    "__comment__": "This file was automatically created by mcresources"
 }

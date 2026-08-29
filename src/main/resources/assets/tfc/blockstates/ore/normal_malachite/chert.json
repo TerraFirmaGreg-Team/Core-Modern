@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/normal_malachite/chert"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/normal_malachite/chert"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

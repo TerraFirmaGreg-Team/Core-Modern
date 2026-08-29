@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "forge:sheets/silver"
-  },
-  "heat_capacity": 4.167,
-  "forging_temperature": 577,
-  "welding_temperature": 769
+    "welding_temperature": 769,
+    "ingredient": {"tag": "forge:sheets/silver"},
+    "heat_capacity": 4.167,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 577
 }

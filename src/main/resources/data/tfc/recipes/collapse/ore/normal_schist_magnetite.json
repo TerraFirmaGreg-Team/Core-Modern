@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/rich_magnetite/schist",
-  "result": "tfc:ore/normal_magnetite/schist"
+    "result": "tfc:ore/normal_magnetite/schist",
+    "ingredient": "tfc:ore/rich_magnetite/schist",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

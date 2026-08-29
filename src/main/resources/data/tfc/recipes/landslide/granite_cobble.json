@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "tfc:rock/cobble/granite",
-  "result": "tfc:rock/cobble/granite"
+    "result": "tfc:rock/cobble/granite",
+    "ingredient": "tfc:rock/cobble/granite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

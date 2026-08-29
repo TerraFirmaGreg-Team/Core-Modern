@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/aqueduct/west",
-  "textures": {
-    "texture": "tfc:block/rock/bricks/limestone",
-    "particle": "tfc:block/rock/bricks/limestone"
-  }
+    "parent": "tfc:block/aqueduct/west",
+    "textures": {
+        "texture": "tfc:block/rock/bricks/limestone",
+        "particle": "tfc:block/rock/bricks/limestone"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

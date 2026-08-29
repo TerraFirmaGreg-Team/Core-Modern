@@ -1,21 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:mossy_boulder",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 22
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR_WG"
-    },
-    {
-      "type": "tfc:flat_enough",
-      "flatness": 0.4
-    }
-  ]
+    "feature": "tfc:mossy_boulder",
+    "placement": [
+        {
+            "chance": 22,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "flatness": 0.4,
+            "type": "tfc:flat_enough"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

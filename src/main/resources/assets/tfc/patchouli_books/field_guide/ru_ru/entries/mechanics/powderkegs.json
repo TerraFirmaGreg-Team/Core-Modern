@@ -1,50 +1,44 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "name": "Пороховые бочки",
-  "category": "tfc:mechanics",
-  "icon": "tfc:powderkeg",
-  "pages": [
-    {
-      "type": "patchouli:text",
-      "text": "$(thing)Пороховые бочки$() — это устройство, используемое для создания взрывов. Они имеют инвентарь из 12 слотов, в которые можно поместить только $(thing)порох$(). Сила взрыва пропорциональна количеству содержащегося пороха."
-    },
-    {
-      "type": "patchouli:multiblock",
-      "multiblock": {
-        "pattern": [
-          [
-            "X"
-          ],
-          [
-            "0"
-          ]
-        ],
-        "mapping": {
-          "X": "tfc:powderkeg[sealed=true]"
+    "pages": [
+        {
+            "text": "$(thing)Пороховые бочки$() \u2014 это устройство, используемое для создания взрывов. Они имеют инвентарь из 12 слотов, в которые можно поместить только $(thing)порох$(). Сила взрыва пропорциональна количеству содержащегося пороха.",
+            "type": "patchouli:text"
+        },
+        {
+            "multiblock": {
+                "mapping": {"X": "tfc:powderkeg[sealed=true]"},
+                "pattern": [
+                    ["X"],
+                    ["0"]
+                ]
+            },
+            "name": "Пороховая бочка",
+            "text": "Подобно $(l:mechanics/barrels)Бочке$(), пороховая бочка \u2014 это устройство, которое можно запечатать и открыть с помощью $(item)$(k:key.use)$(). Зажечь можно только запечатанные пороховые бочки.",
+            "type": "patchouli:multiblock",
+            "enable_visualize": false
+        },
+        {
+            "text": "Взрывы от пороховых бочек заставят другие пороховые бочки загореться и взорваться. Все блоки, разрушенные взрывом, выпадут в виде предметов, но не обязательно в том же месте, где находился блок.",
+            "type": "patchouli:text"
+        },
+        {
+            "recipe": "tfc:crafting/powderkeg",
+            "text": "Пороховые бочки можно изготовить, добавив $(l:mechanics/dye)Красный краситель$() и верёвку к форме крафта бочки.",
+            "type": "patchouli:crafting"
+        },
+        {
+            "recipe2": "tfc:crafting/gunpowder_graphite",
+            "recipe": "tfc:crafting/gunpowder",
+            "type": "patchouli:crafting"
+        },
+        {
+            "text": "Порох можно изготовить двумя способами: первый рецепт из $(l:the_world/ores_and_minerals#saltpeter)селитры$(), $(l:the_world/ores_and_minerals#saltpeter)серы$() и $(l:mechanics/charcoal_pit)древесного угля$() в порошке. Порошок делается с помощью $(l:mechanics/quern)Жернова$(). Если у вас есть доступ к $(l:the_world/ores_and_minerals#graphite)графиту$(), то можно использовать более продуктивный рецепт.",
+            "type": "patchouli:text"
         }
-      },
-      "name": "Пороховая бочка",
-      "text": "Подобно $(l:mechanics/barrels)Бочке$(), пороховая бочка — это устройство, которое можно запечатать и открыть с помощью $(item)$(k:key.use)$(). Зажечь можно только запечатанные пороховые бочки.",
-      "enable_visualize": false
-    },
-    {
-      "type": "patchouli:text",
-      "text": "Взрывы от пороховых бочек заставят другие пороховые бочки загореться и взорваться. Все блоки, разрушенные взрывом, выпадут в виде предметов, но не обязательно в том же месте, где находился блок."
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tfc:crafting/powderkeg",
-      "text": "Пороховые бочки можно изготовить, добавив $(l:mechanics/dye)Красный краситель$() и верёвку к форме крафта бочки."
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tfc:crafting/gunpowder",
-      "recipe2": "tfc:crafting/gunpowder_graphite"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "Порох можно изготовить двумя способами: первый рецепт из $(l:the_world/ores_and_minerals#saltpeter)селитры$(), $(l:the_world/ores_and_minerals#saltpeter)серы$() и $(l:mechanics/charcoal_pit)древесного угля$() в порошке. Порошок делается с помощью $(l:mechanics/quern)Жернова$(). Если у вас есть доступ к $(l:the_world/ores_and_minerals#graphite)графиту$(), то можно использовать более продуктивный рецепт."
-    }
-  ],
-  "read_by_default": true
+    ],
+    "read_by_default": true,
+    "name": "Пороховые бочки",
+    "icon": "tfc:powderkeg",
+    "__comment__": "This file was automatically created by mcresources",
+    "category": "tfc:mechanics"
 }

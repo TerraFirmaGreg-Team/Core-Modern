@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "part=base": {
-      "model": "tfc:block/rock/spike/diorite_base"
+    "variants": {
+        "part=middle": {"model": "tfc:block/rock/spike/diorite_middle"},
+        "part=tip": {"model": "tfc:block/rock/spike/diorite_tip"},
+        "part=base": {"model": "tfc:block/rock/spike/diorite_base"}
     },
-    "part=middle": {
-      "model": "tfc:block/rock/spike/diorite_middle"
-    },
-    "part=tip": {
-      "model": "tfc:block/rock/spike/diorite_tip"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

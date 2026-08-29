@@ -1,13 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:rock/cobble/slate"
-    }
-  ],
-  "result": {
-    "item": "tfc:rock/loose/slate",
-    "count": 4
-  }
+    "result": {
+        "item": "tfc:rock/loose/slate",
+        "count": 4
+    },
+    "ingredients": [{"item": "tfc:rock/cobble/slate"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

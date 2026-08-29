@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "LPL",
-    "PAP",
-    "LPL"
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/lumber/maple"
-    },
-    "P": {
-      "item": "tfc:wood/planks/maple"
-    },
-    "A": {
-      "item": "tfc:wood/axle/maple"
+    "result": {"item": "tfc:wood/water_wheel/maple"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/maple"},
+        "A": {"item": "tfc:wood/axle/maple"},
+        "L": {"item": "tfc:wood/lumber/maple"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/water_wheel/maple"
-  }
 }

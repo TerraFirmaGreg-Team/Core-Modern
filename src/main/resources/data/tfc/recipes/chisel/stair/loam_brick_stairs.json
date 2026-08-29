@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:mud_bricks/loam",
-  "result": "tfc:mud_bricks/loam_stairs",
-  "mode": "stair"
+    "result": "tfc:mud_bricks/loam_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:mud_bricks/loam",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

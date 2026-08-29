@@ -1,111 +1,83 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "when": {
-        "north": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/oak"
-      }
-    },
-    {
-      "when": {
-        "north": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/oak"
-      }
-    },
-    {
-      "when": {
-        "south": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/oak",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "south": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/oak",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "east": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/oak",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "east": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/oak",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "west": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/oak",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "west": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/oak",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "down": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/oak",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "down": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/oak",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "up": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/oak",
-        "x": 270
-      }
-    },
-    {
-      "when": {
-        "up": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/oak",
-        "x": 270
-      }
-    }
-  ]
+    "multipart": [
+        {
+            "apply": {"model": "tfc:block/wood/gear_box_port/oak"},
+            "when": {"north": true}
+        },
+        {
+            "apply": {"model": "tfc:block/wood/gear_box_face/oak"},
+            "when": {"north": false}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/gear_box_port/oak"
+            },
+            "when": {"south": true}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/gear_box_face/oak"
+            },
+            "when": {"south": false}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/gear_box_port/oak"
+            },
+            "when": {"east": true}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/gear_box_face/oak"
+            },
+            "when": {"east": false}
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/gear_box_port/oak"
+            },
+            "when": {"west": true}
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/gear_box_face/oak"
+            },
+            "when": {"west": false}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/wood/gear_box_port/oak"
+            },
+            "when": {"down": true}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/wood/gear_box_face/oak"
+            },
+            "when": {"down": false}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/wood/gear_box_port/oak"
+            },
+            "when": {"up": true}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/wood/gear_box_face/oak"
+            },
+            "when": {"up": false}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

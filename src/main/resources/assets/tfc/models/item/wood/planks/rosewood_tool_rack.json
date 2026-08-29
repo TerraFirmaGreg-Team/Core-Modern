@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/planks/rosewood_tool_rack"
+    "parent": "tfc:block/wood/planks/rosewood_tool_rack",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,37 +1,37 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east,upper=true": {
-      "model": "tfc:block/wood/sluice/chestnut_upper",
-      "y": 90
+    "variants": {
+        "facing=south,upper=false": {
+            "y": 180,
+            "model": "tfc:block/wood/sluice/chestnut_lower"
+        },
+        "facing=east,upper=true": {
+            "y": 90,
+            "model": "tfc:block/wood/sluice/chestnut_upper"
+        },
+        "facing=east,upper=false": {
+            "y": 90,
+            "model": "tfc:block/wood/sluice/chestnut_lower"
+        },
+        "facing=south,upper=true": {
+            "y": 180,
+            "model": "tfc:block/wood/sluice/chestnut_upper"
+        },
+        "facing=west,upper=false": {
+            "y": 270,
+            "model": "tfc:block/wood/sluice/chestnut_lower"
+        },
+        "facing=north,upper=true": {
+            "y": 0,
+            "model": "tfc:block/wood/sluice/chestnut_upper"
+        },
+        "facing=north,upper=false": {
+            "y": 0,
+            "model": "tfc:block/wood/sluice/chestnut_lower"
+        },
+        "facing=west,upper=true": {
+            "y": 270,
+            "model": "tfc:block/wood/sluice/chestnut_upper"
+        }
     },
-    "facing=north,upper=true": {
-      "model": "tfc:block/wood/sluice/chestnut_upper",
-      "y": 0
-    },
-    "facing=south,upper=true": {
-      "model": "tfc:block/wood/sluice/chestnut_upper",
-      "y": 180
-    },
-    "facing=west,upper=true": {
-      "model": "tfc:block/wood/sluice/chestnut_upper",
-      "y": 270
-    },
-    "facing=east,upper=false": {
-      "model": "tfc:block/wood/sluice/chestnut_lower",
-      "y": 90
-    },
-    "facing=north,upper=false": {
-      "model": "tfc:block/wood/sluice/chestnut_lower",
-      "y": 0
-    },
-    "facing=south,upper=false": {
-      "model": "tfc:block/wood/sluice/chestnut_lower",
-      "y": 180
-    },
-    "facing=west,upper=false": {
-      "model": "tfc:block/wood/sluice/chestnut_lower",
-      "y": 270
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

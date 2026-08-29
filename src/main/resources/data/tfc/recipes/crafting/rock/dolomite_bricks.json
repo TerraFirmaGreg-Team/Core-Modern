@@ -1,21 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XMX",
-    "MXM",
-    "XMX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:brick/dolomite"
+    "result": {
+        "item": "tfc:rock/bricks/dolomite",
+        "count": 4
     },
-    "M": {
-      "tag": "tfc:mortar"
+    "pattern": [
+        "XMX",
+        "MXM",
+        "XMX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:brick/dolomite"},
+        "M": {"tag": "tfc:mortar"}
     }
-  },
-  "result": {
-    "item": "tfc:rock/bricks/dolomite",
-    "count": 4
-  }
 }

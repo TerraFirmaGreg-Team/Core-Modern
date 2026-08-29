@@ -1,17 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_instant",
-  "input_item": {
-    "ingredient": {
-      "item": "tfc:powder/lime"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "minecraft:water",
-    "amount": 500
-  },
-  "output_fluid": {
-    "fluid": "tfc:limewater",
-    "amount": 500
-  }
+    "input_fluid": {
+        "amount": 500,
+        "ingredient": "minecraft:water"
+    },
+    "output_fluid": {
+        "amount": 500,
+        "fluid": "tfc:limewater"
+    },
+    "input_item": {"ingredient": {"item": "tfc:powder/lime"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_instant"
 }

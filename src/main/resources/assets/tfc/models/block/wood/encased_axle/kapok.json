@@ -1,11 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore_column",
-  "textures": {
-    "side": "tfc:block/wood/stripped_log/kapok",
-    "end": "tfc:block/wood/planks/kapok",
-    "overlay": "tfc:block/axle_casing",
-    "overlay_end": "tfc:block/axle_casing_front",
-    "particle": "tfc:block/wood/stripped_log/kapok"
-  }
+    "parent": "tfc:block/ore_column",
+    "textures": {
+        "side": "tfc:block/wood/stripped_log/kapok",
+        "overlay": "tfc:block/axle_casing",
+        "end": "tfc:block/wood/planks/kapok",
+        "overlay_end": "tfc:block/axle_casing_front",
+        "particle": "tfc:block/wood/stripped_log/kapok"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

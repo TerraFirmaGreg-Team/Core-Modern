@@ -1,45 +1,31 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "apply": {
-        "model": "tfc:block/wood/support/oak_horizontal"
-      }
-    },
-    {
-      "when": {
-        "north": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/support/oak_connection",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "east": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/support/oak_connection"
-      }
-    },
-    {
-      "when": {
-        "south": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/support/oak_connection",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "west": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/support/oak_connection",
-        "y": 180
-      }
-    }
-  ]
+    "multipart": [
+        {"apply": {"model": "tfc:block/wood/support/oak_horizontal"}},
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/support/oak_connection"
+            },
+            "when": {"north": true}
+        },
+        {
+            "apply": {"model": "tfc:block/wood/support/oak_connection"},
+            "when": {"east": true}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/support/oak_connection"
+            },
+            "when": {"south": true}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/support/oak_connection"
+            },
+            "when": {"west": true}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

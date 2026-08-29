@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "minecraft:charcoal"
-  },
-  "result": {
-    "item": "tfc:powder/charcoal",
-    "count": 4
-  }
+    "result": {
+        "item": "tfc:powder/charcoal",
+        "count": 4
+    },
+    "ingredient": {"item": "minecraft:charcoal"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

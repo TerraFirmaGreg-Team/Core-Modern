@@ -42,36 +42,6 @@ authors="${mod_authors}" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''${mod_description}'''
 
-[[mods]]
-modId = "tfc"
-version = "${file.jarVersion}"
-displayName = "TerraFirmaCraft"
-credits = "By AlcatrazEscapee, Disastermoo, Dries007, Bunsan, Claycorp, DavidTriphon, EERussianguy, Gaelmare, and many others. Based on the original work by Bioxx, Dunk, and Kitty. Music by Mike \"Menoch\" Pelaez"
-authors = "AlcatrazEscapee"
-description = '''TerraFirmaCraft - The Next Generation'''
-
-# Dependencies
-[[dependencies.tfc]]
-modId = "patchouli"
-mandatory = true
-versionRange = "[1.20.1-81-FORGE,)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.tfc]]
-modId="forge"
-mandatory=true
-versionRange="${forge_version_range}"
-ordering="NONE"
-side="BOTH"
-
-[[dependencies.tfc]]
-modId="minecraft"
-mandatory=true
-versionRange="${minecraft_version}"
-ordering="NONE"
-side="BOTH"
-
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies."${mod_id}"]] #optional
    # the modid of the dependency
@@ -150,6 +120,36 @@ side = "BOTH"
 #ordering = "NONE"
 #side = "BOTH"
 
+
+[[mods]]
+modId = "tfc"
+version = "${mod_version}"
+displayName = "TerraFirmaCraft"
+credits = "By AlcatrazEscapee, Disastermoo, Dries007, Bunsan, Claycorp, DavidTriphon, EERussianguy, Gaelmare, and many others. Based on the original work by Bioxx, Dunk, and Kitty. Music by Mike \"Menoch\" Pelaez"
+authors = "AlcatrazEscapee"
+description = '''TerraFirmaCraft - The Next Generation'''
+
+# Dependencies
+[[dependencies.tfc]]
+modId = "patchouli"
+mandatory = true
+versionRange = "[1.20.1-81-FORGE,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tfc]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.tfc]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version}"
+ordering="NONE"
+side="BOTH"
 
 [[mods]]
 modId="tfcambiental"

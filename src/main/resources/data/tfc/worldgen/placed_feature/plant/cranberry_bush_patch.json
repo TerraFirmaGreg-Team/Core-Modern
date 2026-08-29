@@ -1,22 +1,20 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/cranberry_bush_patch",
-  "placement": [
-    {
-      "type": "tfc:climate",
-      "min_temperature": -5,
-      "max_temperature": 17,
-      "min_rainfall": 250,
-      "max_rainfall": 500,
-      "min_forest": "edge",
-      "max_forest": "old_growth"
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 30
-    }
-  ]
+    "feature": "tfc:plant/cranberry_bush_patch",
+    "placement": [
+        {
+            "max_temperature": 17,
+            "max_rainfall": 500,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 250,
+            "min_forest": "edge",
+            "min_temperature": -5
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "chance": 30,
+            "type": "minecraft:rarity_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

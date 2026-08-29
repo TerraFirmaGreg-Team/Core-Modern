@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/sycamore"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/sycamore_button"
-  }
+    "result": {"item": "tfc:wood/planks/sycamore_button"},
+    "ingredients": [{"item": "tfc:wood/planks/sycamore"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

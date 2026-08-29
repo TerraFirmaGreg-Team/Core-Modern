@@ -1,42 +1,32 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "type": "tfc:lacks_trait",
-        "trait": "tfc:pickled",
-        "ingredient": {
-          "type": "tfc:has_trait",
-          "trait": "tfc:brined",
-          "ingredient": [
-            {
-              "tag": "tfc:foods/fruits"
-            },
-            {
-              "tag": "tfc:foods/vegetables"
-            },
-            {
-              "tag": "tfc:foods/meats"
-            }
-          ]
+    "input_fluid": {
+        "amount": 125,
+        "ingredient": "tfc:vinegar"
+    },
+    "duration": 4000,
+    "output_item": {"modifiers": [
+        "tfc:copy_input",
+        {
+            "trait": "tfc:pickled",
+            "type": "tfc:add_trait"
         }
-      }
-    }
-  },
-  "input_fluid": {
-    "ingredient": "tfc:vinegar",
-    "amount": 125
-  },
-  "output_item": {
-    "modifiers": [
-      "tfc:copy_input",
-      {
-        "type": "tfc:add_trait",
-        "trait": "tfc:pickled"
-      }
-    ]
-  },
-  "duration": 4000
+    ]},
+    "input_item": {"ingredient": {
+        "ingredient": {
+            "ingredient": {
+                "ingredient": [
+                    {"tag": "tfc:foods/fruits"},
+                    {"tag": "tfc:foods/vegetables"},
+                    {"tag": "tfc:foods/meats"}
+                ],
+                "trait": "tfc:brined",
+                "type": "tfc:has_trait"
+            },
+            "trait": "tfc:pickled",
+            "type": "tfc:lacks_trait"
+        },
+        "type": "tfc:not_rotten"
+    }},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

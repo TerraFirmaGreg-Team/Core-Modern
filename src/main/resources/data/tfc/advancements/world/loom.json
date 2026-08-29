@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/root",
-  "criteria": {
-    "looms": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:looms"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:wood/planks/pine_loom"
+    "parent": "tfc:world/root",
+    "requirements": [["looms"]],
+    "criteria": {"looms": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:looms"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:wood/planks/pine_loom"},
+        "description": {"translate": "tfc.advancements.world.loom.description"},
+        "title": {"translate": "tfc.advancements.world.loom.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.loom.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.loom.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "looms"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

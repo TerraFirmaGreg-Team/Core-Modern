@@ -1,14 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:glassworking",
-  "operations": [
-    "copper",
-    "basin_pour"
-  ],
-  "batch": {
-    "item": "tfc:silica_glass_batch"
-  },
-  "result": {
-    "item": "minecraft:blue_stained_glass"
-  }
+    "result": {"item": "minecraft:blue_stained_glass"},
+    "operations": [
+        "copper",
+        "basin_pour"
+    ],
+    "batch": {"item": "tfc:silica_glass_batch"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
 }

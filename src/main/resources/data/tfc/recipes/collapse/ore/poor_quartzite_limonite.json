@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_limonite/quartzite",
-  "result": "tfc:ore/poor_limonite/quartzite"
+    "result": "tfc:ore/poor_limonite/quartzite",
+    "ingredient": "tfc:ore/normal_limonite/quartzite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/double_sheet/sterling_silver"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/sterling_silver",
-    "amount": 400
-  },
-  "temperature": 950
+    "result_fluid": {
+        "amount": 400,
+        "fluid": "tfc:metal/sterling_silver"
+    },
+    "ingredient": {"item": "tfc:metal/double_sheet/sterling_silver"},
+    "temperature": 950,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

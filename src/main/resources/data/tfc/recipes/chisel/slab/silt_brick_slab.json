@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:mud_bricks/silt",
-  "result": "tfc:mud_bricks/silt_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:mud_bricks/silt_slab"
-  }
+    "result": "tfc:mud_bricks/silt_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:mud_bricks/silt_slab"},
+    "ingredient": "tfc:mud_bricks/silt",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

@@ -1,15 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "type": "tfc:not_rotten",
+    "result_item": {
+        "item": "tfc:powder/soda_ash",
+        "count": 3
+    },
     "ingredient": {
-      "item": "tfc:food/dried_kelp"
-    }
-  },
-  "result_item": {
-    "item": "tfc:powder/soda_ash",
-    "count": 3
-  },
-  "temperature": 500
+        "ingredient": {"item": "tfc:food/dried_kelp"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 500,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

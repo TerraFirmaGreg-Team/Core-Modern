@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:powder/sylvite"
-    }
-  ],
-  "result": {
-    "item": "minecraft:orange_dye"
-  }
+    "result": {"item": "minecraft:orange_dye"},
+    "ingredients": [{"item": "tfc:powder/sylvite"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

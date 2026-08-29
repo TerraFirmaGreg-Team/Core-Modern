@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/maiden_pink"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/maiden_pink"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

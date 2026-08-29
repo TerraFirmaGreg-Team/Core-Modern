@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "mature=true": {
-      "model": "tfc:block/dead_crop/melon"
+    "variants": {
+        "mature=true": {"model": "tfc:block/dead_crop/melon"},
+        "mature=false": {"model": "tfc:block/dead_crop/melon_young"}
     },
-    "mature=false": {
-      "model": "tfc:block/dead_crop/melon_young"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

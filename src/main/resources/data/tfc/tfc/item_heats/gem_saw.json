@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:gem_saw"
-  },
-  "heat_capacity": 1.429,
-  "forging_temperature": 558,
-  "welding_temperature": 744
+    "welding_temperature": 744,
+    "ingredient": {"item": "tfc:gem_saw"},
+    "heat_capacity": 1.429,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 558
 }

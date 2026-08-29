@@ -1,17 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:iceberg_packed",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 14
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:climate",
-      "max_temperature": -23
-    }
-  ]
+    "feature": "tfc:iceberg_packed",
+    "placement": [
+        {
+            "chance": 14,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": -23,
+            "type": "tfc:climate"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

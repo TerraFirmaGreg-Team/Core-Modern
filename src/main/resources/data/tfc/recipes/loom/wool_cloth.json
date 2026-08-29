@@ -1,15 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:loom",
-  "ingredient": {
+    "result": {"item": "tfc:wool_cloth"},
+    "in_progress_texture": "minecraft:block/white_wool",
     "ingredient": {
-      "item": "tfc:wool_yarn"
+        "ingredient": {"item": "tfc:wool_yarn"},
+        "count": 16
     },
-    "count": 16
-  },
-  "result": {
-    "item": "tfc:wool_cloth"
-  },
-  "steps_required": 16,
-  "in_progress_texture": "minecraft:block/white_wool"
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:loom",
+    "steps_required": 16
 }

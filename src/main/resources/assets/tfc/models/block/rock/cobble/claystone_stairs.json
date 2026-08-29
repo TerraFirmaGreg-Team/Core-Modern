@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/cobble/claystone",
-    "top": "tfc:block/rock/cobble/claystone",
-    "side": "tfc:block/rock/cobble/claystone"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/cobble/claystone",
+        "top": "tfc:block/rock/cobble/claystone",
+        "bottom": "tfc:block/rock/cobble/claystone"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

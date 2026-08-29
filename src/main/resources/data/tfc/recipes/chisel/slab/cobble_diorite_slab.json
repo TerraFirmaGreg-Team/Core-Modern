@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/cobble/diorite",
-  "result": "tfc:rock/cobble/diorite_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/cobble/diorite_slab"
-  }
+    "result": "tfc:rock/cobble/diorite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/cobble/diorite_slab"},
+    "ingredient": "tfc:rock/cobble/diorite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

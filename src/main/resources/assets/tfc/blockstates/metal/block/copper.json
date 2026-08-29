@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/metal/block/copper"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/metal/block/copper"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,45 +1,27 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:disc_vein",
-  "config": {
-    "rarity": 40,
-    "density": 0.2,
-    "min_y": 40,
-    "max_y": 100,
-    "size": 23,
-    "height": 3,
-    "random_name": "borax",
-    "blocks": [
-      {
-        "replace": [
-          "tfc:rock/raw/claystone"
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:disc_vein",
+    "config": {
+        "max_y": 100,
+        "density": 0.2,
+        "size": 23,
+        "blocks": [
+            {
+                "with": [{"block": "tfc:ore/borax/claystone"}],
+                "replace": ["tfc:rock/raw/claystone"]
+            },
+            {
+                "with": [{"block": "tfc:ore/borax/limestone"}],
+                "replace": ["tfc:rock/raw/limestone"]
+            },
+            {
+                "with": [{"block": "tfc:ore/borax/shale"}],
+                "replace": ["tfc:rock/raw/shale"]
+            }
         ],
-        "with": [
-          {
-            "block": "tfc:ore/borax/claystone"
-          }
-        ]
-      },
-      {
-        "replace": [
-          "tfc:rock/raw/limestone"
-        ],
-        "with": [
-          {
-            "block": "tfc:ore/borax/limestone"
-          }
-        ]
-      },
-      {
-        "replace": [
-          "tfc:rock/raw/shale"
-        ],
-        "with": [
-          {
-            "block": "tfc:ore/borax/shale"
-          }
-        ]
-      }
-    ]
-  }
+        "min_y": 40,
+        "random_name": "borax",
+        "rarity": 40,
+        "height": 3
+    }
 }

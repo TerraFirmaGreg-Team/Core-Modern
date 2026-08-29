@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/double_sheet/steel"
-  ]
+    "values": ["tfc:metal/double_sheet/steel"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

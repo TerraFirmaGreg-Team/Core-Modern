@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/bladed_axle",
-  "textures": {
-    "wood": "tfc:block/wood/sheet/pine"
-  }
+    "parent": "tfc:block/bladed_axle",
+    "textures": {"wood": "tfc:block/wood/sheet/pine"},
+    "__comment__": "This file was automatically created by mcresources"
 }

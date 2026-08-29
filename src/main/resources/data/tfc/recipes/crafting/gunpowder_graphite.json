@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:powder/saltpeter"
+    "result": {
+        "item": "minecraft:gunpowder",
+        "count": 12
     },
-    {
-      "item": "tfc:powder/saltpeter"
-    },
-    {
-      "item": "tfc:powder/saltpeter"
-    },
-    {
-      "item": "tfc:powder/saltpeter"
-    },
-    {
-      "item": "tfc:powder/sulfur"
-    },
-    {
-      "item": "tfc:powder/sulfur"
-    },
-    {
-      "item": "tfc:powder/charcoal"
-    },
-    {
-      "item": "tfc:powder/charcoal"
-    },
-    {
-      "item": "tfc:powder/graphite"
-    }
-  ],
-  "result": {
-    "item": "minecraft:gunpowder",
-    "count": 12
-  }
+    "ingredients": [
+        {"item": "tfc:powder/saltpeter"},
+        {"item": "tfc:powder/saltpeter"},
+        {"item": "tfc:powder/saltpeter"},
+        {"item": "tfc:powder/saltpeter"},
+        {"item": "tfc:powder/sulfur"},
+        {"item": "tfc:powder/sulfur"},
+        {"item": "tfc:powder/charcoal"},
+        {"item": "tfc:powder/charcoal"},
+        {"item": "tfc:powder/graphite"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

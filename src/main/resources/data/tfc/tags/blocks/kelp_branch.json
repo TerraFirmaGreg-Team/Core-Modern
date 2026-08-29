@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:plant/giant_kelp_plant"
-  ]
+    "values": ["tfc:plant/giant_kelp_plant"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

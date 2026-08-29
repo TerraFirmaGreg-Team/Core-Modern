@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "mature=true": {
-      "model": "tfc:block/wild_crop/barley"
+    "variants": {
+        "mature=true": {"model": "tfc:block/wild_crop/barley"},
+        "mature=false": {"model": "tfc:block/dead_crop/barley"}
     },
-    "mature=false": {
-      "model": "tfc:block/dead_crop/barley"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_cassiterite/claystone",
-  "result": "tfc:ore/poor_cassiterite/claystone"
+    "result": "tfc:ore/poor_cassiterite/claystone",
+    "ingredient": "tfc:ore/normal_cassiterite/claystone",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

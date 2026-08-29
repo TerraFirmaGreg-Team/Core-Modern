@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/trip_hammer"
+    "parent": "tfc:block/trip_hammer",
+    "__comment__": "This file was automatically created by mcresources"
 }

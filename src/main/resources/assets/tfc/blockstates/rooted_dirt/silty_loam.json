@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/rooted_dirt/silty_loam"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/rooted_dirt/silty_loam"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

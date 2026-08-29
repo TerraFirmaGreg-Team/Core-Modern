@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "tfc:block/rooted_dirt/silty_loam"
-  }
+    "parent": "block/cube_all",
+    "textures": {"all": "tfc:block/rooted_dirt/silty_loam"},
+    "__comment__": "This file was automatically created by mcresources"
 }

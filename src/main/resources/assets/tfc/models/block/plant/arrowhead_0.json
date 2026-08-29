@@ -1,505 +1,472 @@
 {
-    "credit":"Made with Blockbench",
-	"ambientocclusion"
-	:
-	false
-	,
-    "textures":{
-        "4":"tfc:block/plant/arrowhead/arrowhead_stem",
-        "5":"tfc:block/plant/arrowhead/arrowhead_leaf_0",
-        "particle":"tfc:block/plant/arrowhead/arrowhead_leaf_0"
+    "textures": {
+        "4": "tfc:block/plant/arrowhead/arrowhead_stem",
+        "5": "tfc:block/plant/arrowhead/arrowhead_leaf_0",
+        "particle": "tfc:block/plant/arrowhead/arrowhead_leaf_0"
     },
-    "elements":[
+    "ambientocclusion": false,
+    "elements": [
         {
-            "name":"tinted",
-            "from":[
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "name": "tinted",
+            "shade": false,
+            "from": [
                 8,
                 -16,
                 -8
             ],
-            "to":[
+            "to": [
                 8,
                 16,
                 24
             ],
-            "rotation":{
-                "angle":45,
-                "axis":"y",
-                "origin":[
-                    8,
-                    8,
-                    8
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "east":{
-                    "uv":[
+            "faces": {
+                "east": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "texture":"#4",
-                    "tintindex":0
+                    "texture": "#4",
+                    "tintindex": 0
                 },
-                "west":{
-                    "uv":[
+                "west": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "texture":"#4",
-                    "tintindex":0
+                    "texture": "#4",
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"tinted",
-            "from":[
+            "rotation": {
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "name": "tinted",
+            "shade": false,
+            "from": [
                 8,
                 -16,
                 -8
             ],
-            "to":[
+            "to": [
                 8,
                 16,
                 24
             ],
-            "rotation":{
-                "angle":-45,
-                "axis":"y",
-                "origin":[
-                    8,
-                    8,
-                    8
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "east":{
-                    "uv":[
+            "faces": {
+                "east": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "texture":"#4",
-                    "tintindex":0
+                    "texture": "#4",
+                    "tintindex": 0
                 },
-                "west":{
-                    "uv":[
+                "west": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "texture":"#4",
-                    "tintindex":0
+                    "texture": "#4",
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"leaf-EU",
-            "from":[
+            "rotation": {
+                "origin": [
+                    7,
+                    24,
+                    18
+                ],
+                "angle": -22.5,
+                "axis": "z"
+            },
+            "name": "leaf-EU",
+            "shade": false,
+            "from": [
                 14.5,
                 9,
                 3
             ],
-            "to":[
+            "to": [
                 14.5,
                 25,
                 19
             ],
-            "rotation":{
-                "angle":-22.5,
-                "axis":"z",
-                "origin":[
-                    7,
-                    24,
-                    18
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "east":{
-                    "uv":[
+            "faces": {
+                "east": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 },
-                "west":{
-                    "uv":[
+                "west": {
+                    "uv": [
                         0,
                         16,
                         16,
                         0
                     ],
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"leaf-WU",
-            "from":[
+            "rotation": {
+                "origin": [
+                    -5,
+                    19,
+                    12
+                ],
+                "angle": 22.5,
+                "axis": "z"
+            },
+            "name": "leaf-WU",
+            "shade": false,
+            "from": [
                 2.5,
                 4,
                 -3
             ],
-            "to":[
+            "to": [
                 2.5,
                 20,
                 13
             ],
-            "rotation":{
-                "angle":22.5,
-                "axis":"z",
-                "origin":[
-                    -5,
-                    19,
-                    12
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "east":{
-                    "uv":[
+            "faces": {
+                "east": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 },
-                "west":{
-                    "uv":[
+                "west": {
+                    "uv": [
                         0,
                         16,
                         16,
                         0
                     ],
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"leaf-WL",
-            "from":[
+            "rotation": {
+                "origin": [
+                    -9,
+                    9,
+                    21
+                ],
+                "angle": 45,
+                "axis": "z"
+            },
+            "name": "leaf-WL",
+            "shade": false,
+            "from": [
                 -1.5,
                 -6,
                 6
             ],
-            "to":[
+            "to": [
                 -1.5,
                 10,
                 22
             ],
-            "rotation":{
-                "angle":45,
-                "axis":"z",
-                "origin":[
-                    -9,
-                    9,
-                    21
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "east":{
-                    "uv":[
+            "faces": {
+                "east": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 },
-                "west":{
-                    "uv":[
+                "west": {
+                    "uv": [
                         0,
                         16,
                         16,
                         0
                     ],
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"leaf-EL",
-            "from":[
+            "rotation": {
+                "origin": [
+                    14,
+                    19,
+                    10
+                ],
+                "angle": -45,
+                "axis": "z"
+            },
+            "name": "leaf-EL",
+            "shade": false,
+            "from": [
                 21.5,
                 4,
                 -5
             ],
-            "to":[
+            "to": [
                 21.5,
                 20,
                 11
             ],
-            "rotation":{
-                "angle":-45,
-                "axis":"z",
-                "origin":[
-                    14,
-                    19,
-                    10
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "east":{
-                    "uv":[
+            "faces": {
+                "east": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 },
-                "west":{
-                    "uv":[
+                "west": {
+                    "uv": [
                         0,
                         16,
                         16,
                         0
                     ],
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"leaf-NL",
-            "from":[
+            "rotation": {
+                "origin": [
+                    2,
+                    3,
+                    -4
+                ],
+                "angle": 45,
+                "axis": "x"
+            },
+            "name": "leaf-NL",
+            "shade": false,
+            "from": [
                 -6,
                 11,
                 -12
             ],
-            "to":[
+            "to": [
                 10,
                 11,
                 4
             ],
-            "rotation":{
-                "angle":45,
-                "axis":"x",
-                "origin":[
-                    2,
-                    3,
-                    -4
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "up":{
-                    "uv":[
+            "faces": {
+                "up": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 },
-                "down":{
-                    "uv":[
+                "down": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"leaf-NU",
-            "from":[
+            "rotation": {
+                "origin": [
+                    11,
+                    12,
+                    -3
+                ],
+                "angle": -22.5,
+                "axis": "x"
+            },
+            "name": "leaf-NU",
+            "shade": false,
+            "from": [
                 3,
                 4,
                 5
             ],
-            "to":[
+            "to": [
                 19,
                 20,
                 5
             ],
-            "rotation":{
-                "angle":-22.5,
-                "axis":"x",
-                "origin":[
-                    11,
-                    12,
-                    -3
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "north":{
-                    "uv":[
+            "faces": {
+                "south": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 },
-                "south":{
-                    "uv":[
+                "north": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"leaf-SL",
-            "from":[
+            "rotation": {
+                "origin": [
+                    14,
+                    15,
+                    9
+                ],
+                "angle": 45,
+                "axis": "x"
+            },
+            "name": "leaf-SL",
+            "shade": false,
+            "from": [
                 6,
                 7,
                 17
             ],
-            "to":[
+            "to": [
                 22,
                 23,
                 17
             ],
-            "rotation":{
-                "angle":45,
-                "axis":"x",
-                "origin":[
-                    14,
-                    15,
-                    9
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "north":{
-                    "uv":[
+            "faces": {
+                "south": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 },
-                "south":{
-                    "uv":[
+                "north": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 }
             }
         },
         {
-            "name":"leaf-SU",
-            "from":[
+            "rotation": {
+                "origin": [
+                    5,
+                    18,
+                    4
+                ],
+                "angle": 22.5,
+                "axis": "x"
+            },
+            "name": "leaf-SU",
+            "shade": false,
+            "from": [
                 -3,
                 10,
                 12
             ],
-            "to":[
+            "to": [
                 13,
                 26,
                 12
             ],
-            "rotation":{
-                "angle":22.5,
-                "axis":"x",
-                "origin":[
-                    5,
-                    18,
-                    4
-                ]
-            },
-			"shade"
-			:
-			false
-			,
-            "faces":{
-                "north":{
-                    "uv":[
+            "faces": {
+                "south": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 },
-                "south":{
-                    "uv":[
+                "north": {
+                    "uv": [
                         0,
                         0,
                         16,
                         16
                     ],
-                    "rotation":180,
-                    "texture":"#5",
-                    "tintindex":0
+                    "texture": "#5",
+                    "rotation": 180,
+                    "tintindex": 0
                 }
             }
         }
-    ]
+    ],
+    "credit": "Made with Blockbench"
 }

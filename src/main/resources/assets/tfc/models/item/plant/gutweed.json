@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/plant/gutweed/gutweed"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/plant/gutweed/gutweed"}
 }

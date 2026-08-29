@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/palm"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/palm_button"
-  }
+    "result": {"item": "tfc:wood/planks/palm_button"},
+    "ingredients": [{"item": "tfc:wood/planks/palm"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

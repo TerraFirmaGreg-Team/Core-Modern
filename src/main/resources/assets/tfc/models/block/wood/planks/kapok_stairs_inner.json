@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/wood/planks/kapok",
-    "top": "tfc:block/wood/planks/kapok",
-    "side": "tfc:block/wood/planks/kapok"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/wood/planks/kapok",
+        "top": "tfc:block/wood/planks/kapok",
+        "bottom": "tfc:block/wood/planks/kapok"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

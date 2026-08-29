@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:windmill_blade",
-    "#tfc:colored_windmill_blades"
-  ]
+    "values": [
+        "tfc:windmill_blade",
+        "#tfc:colored_windmill_blades"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

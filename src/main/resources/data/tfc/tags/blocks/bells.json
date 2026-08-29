@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:brass_bell",
-    "tfc:bronze_bell"
-  ]
+    "values": [
+        "tfc:brass_bell",
+        "tfc:bronze_bell"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

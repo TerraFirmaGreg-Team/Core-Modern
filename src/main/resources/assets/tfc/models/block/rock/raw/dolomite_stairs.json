@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/raw/dolomite",
-    "top": "tfc:block/rock/raw/dolomite",
-    "side": "tfc:block/rock/raw/dolomite"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/raw/dolomite",
+        "top": "tfc:block/rock/raw/dolomite",
+        "bottom": "tfc:block/rock/raw/dolomite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

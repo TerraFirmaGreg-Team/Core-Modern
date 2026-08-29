@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:fallen_leaves"
-  ]
+    "values": ["#tfc:fallen_leaves"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

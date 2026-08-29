@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "tag": "forge:string"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "tfc:tallow",
-    "amount": 40
-  },
-  "output_item": {
-    "item": "tfc:candle"
-  },
-  "duration": 4000
+    "input_fluid": {
+        "amount": 40,
+        "ingredient": "tfc:tallow"
+    },
+    "duration": 4000,
+    "output_item": {"item": "tfc:candle"},
+    "input_item": {"ingredient": {"tag": "forge:string"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab",
-  "textures": {
-    "bottom": "tfc:block/wood/planks/douglas_fir",
-    "top": "tfc:block/wood/planks/douglas_fir",
-    "side": "tfc:block/wood/planks/douglas_fir"
-  }
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/wood/planks/douglas_fir",
+        "top": "tfc:block/wood/planks/douglas_fir",
+        "bottom": "tfc:block/wood/planks/douglas_fir"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

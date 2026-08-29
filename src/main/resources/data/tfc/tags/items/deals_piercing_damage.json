@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:javelins",
-    "#tfc:knives"
-  ]
+    "values": [
+        "#tfc:javelins",
+        "#tfc:knives"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

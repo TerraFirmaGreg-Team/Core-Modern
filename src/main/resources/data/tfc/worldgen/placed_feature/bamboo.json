@@ -1,33 +1,31 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:bamboo",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 3
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": 18,
-      "max_temperature": 28,
-      "min_rainfall": 350,
-      "max_rainfall": 500,
-      "min_forest": "edge",
-      "max_forest": "edge",
-      "fuzzy": true
-    },
-    {
-      "type": "minecraft:noise_based_count",
-      "noise_to_count_ratio": 160,
-      "noise_factor": 80.0,
-      "noise_offset": 0.3
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    }
-  ]
+    "feature": "tfc:bamboo",
+    "placement": [
+        {
+            "chance": 3,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "max_temperature": 28,
+            "max_rainfall": 500,
+            "max_forest": "edge",
+            "type": "tfc:climate",
+            "min_rainfall": 350,
+            "min_forest": "edge",
+            "min_temperature": 18,
+            "fuzzy": true
+        },
+        {
+            "noise_offset": 0.3,
+            "noise_factor": 80,
+            "noise_to_count_ratio": 160,
+            "type": "minecraft:noise_based_count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

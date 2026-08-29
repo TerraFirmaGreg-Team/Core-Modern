@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/plant/butterfly_milkweed"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/plant/butterfly_milkweed"}
 }

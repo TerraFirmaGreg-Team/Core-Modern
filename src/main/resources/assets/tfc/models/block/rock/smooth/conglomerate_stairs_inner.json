@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/smooth/conglomerate",
-    "top": "tfc:block/rock/smooth/conglomerate",
-    "side": "tfc:block/rock/smooth/conglomerate"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/smooth/conglomerate",
+        "top": "tfc:block/rock/smooth/conglomerate",
+        "bottom": "tfc:block/rock/smooth/conglomerate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

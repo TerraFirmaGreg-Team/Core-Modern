@@ -1,15 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:casting",
-  "mold": {
-    "item": "tfc:ceramic/saw_blade_mold"
-  },
-  "fluid": {
-    "ingredient": "tfc:metal/copper",
-    "amount": 100
-  },
-  "result": {
-    "item": "tfc:metal/saw_blade/copper"
-  },
-  "break_chance": 1
+    "result": {"item": "tfc:metal/saw_blade/copper"},
+    "break_chance": 1,
+    "mold": {"item": "tfc:ceramic/saw_blade_mold"},
+    "fluid": {
+        "amount": 100,
+        "ingredient": "tfc:metal/copper"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:casting"
 }

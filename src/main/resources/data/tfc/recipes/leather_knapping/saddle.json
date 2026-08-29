@@ -1,15 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:knapping",
-  "knapping_type": "tfc:leather",
-  "pattern": [
-    "  X  ",
-    "XXXXX",
-    "XXXXX",
-    "XXXXX",
-    "  X  "
-  ],
-  "result": {
-    "item": "minecraft:saddle"
-  }
+    "result": {"item": "minecraft:saddle"},
+    "pattern": [
+        "  X  ",
+        "XXXXX",
+        "XXXXX",
+        "XXXXX",
+        "  X  "
+    ],
+    "knapping_type": "tfc:leather",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
 }

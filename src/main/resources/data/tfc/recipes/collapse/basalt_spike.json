@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:rock/spike/basalt",
-  "copy_input": true
+    "copy_input": true,
+    "ingredient": "tfc:rock/spike/basalt",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

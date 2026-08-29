@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "tfc:block/wood/planks/blackwood_loom",
-      "y": 270
+    "variants": {
+        "facing=east": {
+            "y": 270,
+            "model": "tfc:block/wood/planks/blackwood_loom"
+        },
+        "facing=south": {"model": "tfc:block/wood/planks/blackwood_loom"},
+        "facing=north": {
+            "y": 180,
+            "model": "tfc:block/wood/planks/blackwood_loom"
+        },
+        "facing=west": {
+            "y": 90,
+            "model": "tfc:block/wood/planks/blackwood_loom"
+        }
     },
-    "facing=north": {
-      "model": "tfc:block/wood/planks/blackwood_loom",
-      "y": 180
-    },
-    "facing=south": {
-      "model": "tfc:block/wood/planks/blackwood_loom"
-    },
-    "facing=west": {
-      "model": "tfc:block/wood/planks/blackwood_loom",
-      "y": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

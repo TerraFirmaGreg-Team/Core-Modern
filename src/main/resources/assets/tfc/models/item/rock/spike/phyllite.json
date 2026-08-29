@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/spike/phyllite_base",
-  "textures": {
-    "layer0": "tfc:block/rock/raw/phyllite"
-  }
+    "parent": "tfc:block/rock/spike/phyllite_base",
+    "textures": {"layer0": "tfc:block/rock/raw/phyllite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/raw/limestone"
-  },
-  "result": "tfc:rock/raw/limestone_stairs",
-  "count": 1
+    "result": "tfc:rock/raw/limestone_stairs",
+    "ingredient": {"item": "tfc:rock/raw/limestone"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

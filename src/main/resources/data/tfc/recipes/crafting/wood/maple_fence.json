@@ -1,20 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XYX",
-    "XYX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/planks/maple"
+    "result": {
+        "item": "tfc:wood/planks/maple_fence",
+        "count": 8
     },
-    "Y": {
-      "item": "tfc:wood/lumber/maple"
+    "pattern": [
+        "XYX",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/maple"},
+        "Y": {"item": "tfc:wood/lumber/maple"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/planks/maple_fence",
-    "count": 8
-  }
 }

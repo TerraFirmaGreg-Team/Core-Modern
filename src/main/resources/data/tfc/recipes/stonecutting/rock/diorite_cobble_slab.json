@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cobble/diorite"
-  },
-  "result": "tfc:rock/cobble/diorite_slab",
-  "count": 2
+    "result": "tfc:rock/cobble/diorite_slab",
+    "ingredient": {"item": "tfc:rock/cobble/diorite"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

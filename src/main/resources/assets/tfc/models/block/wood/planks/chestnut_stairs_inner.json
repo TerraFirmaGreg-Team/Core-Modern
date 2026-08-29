@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/wood/planks/chestnut",
-    "top": "tfc:block/wood/planks/chestnut",
-    "side": "tfc:block/wood/planks/chestnut"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/wood/planks/chestnut",
+        "top": "tfc:block/wood/planks/chestnut",
+        "bottom": "tfc:block/wood/planks/chestnut"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

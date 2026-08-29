@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "tfc:block/metal/block/wrought_iron"
-  }
+    "parent": "block/cube_all",
+    "textures": {"all": "tfc:block/metal/block/wrought_iron"},
+    "__comment__": "This file was automatically created by mcresources"
 }

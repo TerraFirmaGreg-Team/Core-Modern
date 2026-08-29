@@ -1,21 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:damage_inputs_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "tag": "tfc:chisels"
-      },
-      {
-        "item": "tfc:brick/gabbro"
-      },
-      {
-        "item": "tfc:brick/gabbro"
-      }
-    ],
-    "result": {
-      "item": "tfc:rock/pressure_plate/gabbro"
-    }
-  }
+    "recipe": {
+        "result": {"item": "tfc:rock/pressure_plate/gabbro"},
+        "ingredients": [
+            {"tag": "tfc:chisels"},
+            {"item": "tfc:brick/gabbro"},
+            {"item": "tfc:brick/gabbro"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
 }

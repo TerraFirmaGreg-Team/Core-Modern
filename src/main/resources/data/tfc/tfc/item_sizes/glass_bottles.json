@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "tfc:glass_bottles"
-  },
-  "size": "large",
-  "weight": "heavy"
+    "ingredient": {"tag": "tfc:glass_bottles"},
+    "size": "large",
+    "weight": "heavy",
+    "__comment__": "This file was automatically created by mcresources"
 }

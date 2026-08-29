@@ -1,22 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:damage_inputs_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "tag": "tfc:hammers"
-      },
-      {
-        "item": "tfc:groundcover/pumice"
-      },
-      {
-        "item": "tfc:small_scraped_hide"
-      }
-    ],
-    "result": {
-      "item": "tfc:treated_hide",
-      "count": 1
-    }
-  }
+    "recipe": {
+        "result": {
+            "item": "tfc:treated_hide",
+            "count": 1
+        },
+        "ingredients": [
+            {"tag": "tfc:hammers"},
+            {"item": "tfc:groundcover/pumice"},
+            {"item": "tfc:small_scraped_hide"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
 }

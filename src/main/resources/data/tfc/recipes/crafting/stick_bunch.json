@@ -1,36 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:rods/wooden"
-    },
-    {
-      "tag": "forge:rods/wooden"
-    },
-    {
-      "tag": "forge:rods/wooden"
-    },
-    {
-      "tag": "forge:rods/wooden"
-    },
-    {
-      "tag": "forge:rods/wooden"
-    },
-    {
-      "tag": "forge:rods/wooden"
-    },
-    {
-      "tag": "forge:rods/wooden"
-    },
-    {
-      "tag": "forge:rods/wooden"
-    },
-    {
-      "tag": "forge:rods/wooden"
-    }
-  ],
-  "result": {
-    "item": "tfc:stick_bunch"
-  }
+    "result": {"item": "tfc:stick_bunch"},
+    "ingredients": [
+        {"tag": "forge:rods/wooden"},
+        {"tag": "forge:rods/wooden"},
+        {"tag": "forge:rods/wooden"},
+        {"tag": "forge:rods/wooden"},
+        {"tag": "forge:rods/wooden"},
+        {"tag": "forge:rods/wooden"},
+        {"tag": "forge:rods/wooden"},
+        {"tag": "forge:rods/wooden"},
+        {"tag": "forge:rods/wooden"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

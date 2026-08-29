@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "X X",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/lumber/maple"
-    }
-  },
-  "result": {
-    "item": "tfc:wood/chest/maple"
-  }
+    "result": {"item": "tfc:wood/chest/maple"},
+    "pattern": [
+        "XXX",
+        "X X",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/lumber/maple"}}
 }

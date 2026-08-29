@@ -1,23 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:advanced_shapeless_crafting",
-  "ingredients": [
-    {
-      "tag": "tfc:glass_batches"
+    "result": {
+        "stack": {"item": "tfc:blowpipe_with_glass"},
+        "modifiers": ["tfc:add_glass"]
     },
-    {
-      "item": "tfc:blowpipe"
-    }
-  ],
-  "result": {
-    "stack": {
-      "item": "tfc:blowpipe_with_glass"
-    },
-    "modifiers": [
-      "tfc:add_glass"
-    ]
-  },
-  "primary_ingredient": {
-    "tag": "tfc:glass_batches"
-  }
+    "ingredients": [
+        {"tag": "tfc:glass_batches"},
+        {"item": "tfc:blowpipe"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:advanced_shapeless_crafting",
+    "primary_ingredient": {"tag": "tfc:glass_batches"}
 }

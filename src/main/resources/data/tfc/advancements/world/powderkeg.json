@@ -1,33 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/root",
-  "criteria": {
-    "special_condition": {
-      "trigger": "tfc:lit",
-      "conditions": {
-        "block": "tfc:powderkeg"
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:powderkeg"
+    "parent": "tfc:world/root",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {
+        "trigger": "tfc:lit",
+        "conditions": {"block": "tfc:powderkeg"}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:powderkeg"},
+        "description": {"translate": "tfc.advancements.world.powderkeg.description"},
+        "title": {"translate": "tfc.advancements.world.powderkeg.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.powderkeg.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.powderkeg.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "special_condition"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

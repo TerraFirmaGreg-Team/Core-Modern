@@ -1,24 +1,20 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:tide_pool",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 5
-    },
-    {
-      "type": "minecraft:count",
-      "count": 10
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR_WG"
-    },
-    {
-      "type": "tfc:biome"
-    }
-  ]
+    "feature": "tfc:tide_pool",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "count": 10,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

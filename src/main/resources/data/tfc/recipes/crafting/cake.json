@@ -1,35 +1,25 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "AAA",
-    "BEB",
-    "CCC"
-  ],
-  "key": {
-    "A": {
-      "type": "tfc:fluid_item",
-      "fluid_ingredient": {
-        "ingredient": {
-          "tag": "tfc:milks"
+    "result": {"item": "tfc:cake"},
+    "pattern": [
+        "AAA",
+        "BEB",
+        "CCC"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {
+            "fluid_ingredient": {
+                "amount": 100,
+                "ingredient": {"tag": "tfc:milks"}
+            },
+            "type": "tfc:fluid_item"
         },
-        "amount": 100
-      }
-    },
-    "B": {
-      "item": "minecraft:sugar"
-    },
-    "E": {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "minecraft:egg"
-      }
-    },
-    "C": {
-      "tag": "tfc:foods/grains"
+        "B": {"item": "minecraft:sugar"},
+        "C": {"tag": "tfc:foods/grains"},
+        "E": {
+            "ingredient": {"item": "minecraft:egg"},
+            "type": "tfc:not_rotten"
+        }
     }
-  },
-  "result": {
-    "item": "tfc:cake"
-  }
 }

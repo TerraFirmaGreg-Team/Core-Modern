@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/cinnabar/andesite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/cinnabar/andesite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

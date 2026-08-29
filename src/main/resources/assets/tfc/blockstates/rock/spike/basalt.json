@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "part=base": {
-      "model": "tfc:block/rock/spike/basalt_base"
+    "variants": {
+        "part=middle": {"model": "tfc:block/rock/spike/basalt_middle"},
+        "part=tip": {"model": "tfc:block/rock/spike/basalt_tip"},
+        "part=base": {"model": "tfc:block/rock/spike/basalt_base"}
     },
-    "part=middle": {
-      "model": "tfc:block/rock/spike/basalt_middle"
-    },
-    "part=tip": {
-      "model": "tfc:block/rock/spike/basalt_tip"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

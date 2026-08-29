@@ -1,6 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "textures": {
-    "particle": "minecraft:block/glass"
-  }
+    "textures": {"particle": "minecraft:block/glass"},
+    "__comment__": "This file was automatically created by mcresources"
 }

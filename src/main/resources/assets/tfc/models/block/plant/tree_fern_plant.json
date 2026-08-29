@@ -1,87 +1,85 @@
 {
-  "ambientocclusion": false,
-  "textures": {
-    "trunk": "tfc:block/plant/tree_fern/tree_fern_trunk",
-    "particle": "tfc:block/plant/tree_fern/tree_fern_trunk"
-  },
-  "elements": [
-    {
-      "from": [
-        6,
-        0,
-        6
-      ],
-      "to": [
-        10,
-        16,
-        10
-      ],
-      "rotation": {
-        "origin": [
-          8.0,
-          8.0,
-          8.0
+    "textures": {
+        "particle": "tfc:block/plant/tree_fern/tree_fern_trunk",
+        "trunk": "tfc:block/plant/tree_fern/tree_fern_trunk"
+    },
+    "ambientocclusion": false,
+    "elements": [{
+        "rotation": {
+            "rescale": true,
+            "origin": [
+                8,
+                8,
+                8
+            ],
+            "angle": 0,
+            "axis": "y"
+        },
+        "from": [
+            6,
+            0,
+            6
         ],
-        "axis": "y",
-        "angle": 0.0,
-        "rescale": true
-      },
-      "faces": {
-        "north": {
-          "texture": "#trunk",
-          "uv": [
-            0,
-            0,
-            4,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#trunk",
-          "uv": [
-            0,
-            0,
-            4,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#trunk",
-          "uv": [
-            0,
-            0,
-            4,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#trunk",
-          "uv": [
-            0,
-            0,
-            4,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#trunk",
-          "uv": [
-            12,
-            0,
+        "to": [
+            10,
             16,
-            4
-          ]
-        },
-        "down": {
-          "texture": "#trunk",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
+            10
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    0,
+                    0,
+                    4,
+                    16
+                ],
+                "texture": "#trunk"
+            },
+            "south": {
+                "uv": [
+                    0,
+                    0,
+                    4,
+                    16
+                ],
+                "texture": "#trunk"
+            },
+            "north": {
+                "uv": [
+                    0,
+                    0,
+                    4,
+                    16
+                ],
+                "texture": "#trunk"
+            },
+            "west": {
+                "uv": [
+                    0,
+                    0,
+                    4,
+                    16
+                ],
+                "texture": "#trunk"
+            },
+            "up": {
+                "uv": [
+                    12,
+                    0,
+                    16,
+                    4
+                ],
+                "texture": "#trunk"
+            },
+            "down": {
+                "uv": [
+                    12,
+                    0,
+                    16,
+                    4
+                ],
+                "texture": "#trunk"
+            }
         }
-      }
-    }
-  ]
+    }]
 }

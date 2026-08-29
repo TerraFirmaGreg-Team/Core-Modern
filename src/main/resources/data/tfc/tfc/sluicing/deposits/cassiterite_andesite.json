@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:deposit/cassiterite/andesite"
-  },
-  "loot_table": "tfc:panning/deposits/cassiterite_andesite"
+    "ingredient": {"item": "tfc:deposit/cassiterite/andesite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/cassiterite_andesite"
 }

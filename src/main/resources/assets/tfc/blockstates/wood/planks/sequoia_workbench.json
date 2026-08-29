@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/wood/planks/sequoia_workbench"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/wood/planks/sequoia_workbench"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

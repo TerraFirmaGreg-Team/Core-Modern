@@ -1,42 +1,22 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/chert/base"
-      }
-    },
-    {
-      "when": {
-        "north": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/chert/north"
-      }
-    },
-    {
-      "when": {
-        "east": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/chert/east"
-      }
-    },
-    {
-      "when": {
-        "south": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/chert/south"
-      }
-    },
-    {
-      "when": {
-        "west": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/chert/west"
-      }
-    }
-  ]
+    "multipart": [
+        {"apply": {"model": "tfc:block/rock/aqueduct/chert/base"}},
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/chert/north"},
+            "when": {"north": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/chert/east"},
+            "when": {"east": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/chert/south"},
+            "when": {"south": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/chert/west"},
+            "when": {"west": "false"}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

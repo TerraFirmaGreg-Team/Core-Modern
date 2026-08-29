@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/poor_native_gold/gabbro"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/poor_native_gold/gabbro"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

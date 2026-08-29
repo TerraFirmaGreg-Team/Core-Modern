@@ -1,24 +1,20 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:hanging_roots",
-  "placement": [
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:air_or_empty_fluid"
-      }
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "would_survive",
-        "state": {
-          "Name": "minecraft:hanging_roots",
-          "Properties": {
-            "waterlogged": "false"
-          }
+    "feature": "tfc:hanging_roots",
+    "placement": [
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {"waterlogged": "false"},
+                    "Name": "minecraft:hanging_roots"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
         }
-      }
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

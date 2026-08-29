@@ -1,10 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore_column",
-  "textures": {
-    "side": "tfc:block/rock/raw/claystone",
-    "end": "tfc:block/rock/raw/claystone_top",
-    "overlay": "tfc:block/ore/graphite",
-    "overlay_end": "tfc:block/ore/graphite"
-  }
+    "parent": "tfc:block/ore_column",
+    "textures": {
+        "side": "tfc:block/rock/raw/claystone",
+        "overlay": "tfc:block/ore/graphite",
+        "end": "tfc:block/rock/raw/claystone_top",
+        "overlay_end": "tfc:block/ore/graphite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

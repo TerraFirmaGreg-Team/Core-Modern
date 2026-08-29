@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/amethyst"
-  },
-  "result": {
-    "item": "tfc:powder/amethyst",
-    "count": 4
-  }
+    "result": {
+        "item": "tfc:powder/amethyst",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/amethyst"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

@@ -1,15 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:simple_block",
-  "config": {
-    "to_place": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "tfc:groundcover/dead_grass",
-        "Properties": {
-          "fluid": "empty"
-        }
-      }
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:simple_block",
+    "config": {"to_place": {
+        "state": {
+            "Properties": {"fluid": "empty"},
+            "Name": "tfc:groundcover/dead_grass"
+        },
+        "type": "minecraft:simple_state_provider"
+    }}
 }

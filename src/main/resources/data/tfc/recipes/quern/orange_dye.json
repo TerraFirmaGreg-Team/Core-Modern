@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "tag": "tfc:makes_orange_dye"
-  },
-  "result": {
-    "item": "minecraft:orange_dye",
-    "count": 2
-  }
+    "result": {
+        "item": "minecraft:orange_dye",
+        "count": 2
+    },
+    "ingredient": {"tag": "tfc:makes_orange_dye"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab",
-  "textures": {
-    "bottom": "tfc:block/rock/cracked_bricks/schist",
-    "top": "tfc:block/rock/cracked_bricks/schist",
-    "side": "tfc:block/rock/cracked_bricks/schist"
-  }
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/rock/cracked_bricks/schist",
+        "top": "tfc:block/rock/cracked_bricks/schist",
+        "bottom": "tfc:block/rock/cracked_bricks/schist"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

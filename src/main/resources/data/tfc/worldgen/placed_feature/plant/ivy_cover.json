@@ -1,22 +1,20 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/ivy_cover",
-  "placement": [
-    {
-      "type": "tfc:climate",
-      "min_temperature": -6.4,
-      "max_temperature": -2.4,
-      "min_rainfall": 180,
-      "max_rainfall": 250,
-      "min_forest": "normal",
-      "fuzzy": true
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    }
-  ]
+    "feature": "tfc:plant/ivy_cover",
+    "placement": [
+        {
+            "max_temperature": -2.4,
+            "max_rainfall": 250,
+            "type": "tfc:climate",
+            "min_rainfall": 180,
+            "min_forest": "normal",
+            "min_temperature": -6.4,
+            "fuzzy": true
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

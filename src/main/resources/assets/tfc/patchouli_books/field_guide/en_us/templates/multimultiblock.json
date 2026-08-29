@@ -1,18 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "components": [
-    {
-      "type": "patchouli:custom",
-      "x": 0,
-      "y": 0,
-      "class": "net.dries007.tfc.compat.patchouli.component.MultiMultiBlockComponent",
-      "multiblocks": "#multiblocks"
-    },
-    {
-      "type": "patchouli:text",
-      "x": 0,
-      "y": 115,
-      "text": "#text"
-    }
-  ]
+    "components": [
+        {
+            "x": 0,
+            "multiblocks": "#multiblocks",
+            "y": 0,
+            "type": "patchouli:custom",
+            "class": "net.dries007.tfc.compat.patchouli.component.MultiMultiBlockComponent"
+        },
+        {
+            "x": 0,
+            "y": 115,
+            "text": "#text",
+            "type": "patchouli:text"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

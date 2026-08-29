@@ -1,120 +1,88 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "apply": {
-        "model": "tfc:block/pipe_center"
-      }
-    },
-    {
-      "when": {
-        "north": true
-      },
-      "apply": {
-        "model": "tfc:block/pipe_on",
-        "x": 270
-      }
-    },
-    {
-      "when": {
-        "north": false
-      },
-      "apply": {
-        "model": "tfc:block/pipe_off",
-        "x": 270
-      }
-    },
-    {
-      "when": {
-        "south": true
-      },
-      "apply": {
-        "model": "tfc:block/pipe_on",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "south": false
-      },
-      "apply": {
-        "model": "tfc:block/pipe_off",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "east": true
-      },
-      "apply": {
-        "model": "tfc:block/pipe_on",
-        "x": 90,
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "east": false
-      },
-      "apply": {
-        "model": "tfc:block/pipe_off",
-        "x": 90,
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "west": true
-      },
-      "apply": {
-        "model": "tfc:block/pipe_on",
-        "x": 90,
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "west": false
-      },
-      "apply": {
-        "model": "tfc:block/pipe_off",
-        "x": 90,
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "down": true
-      },
-      "apply": {
-        "model": "tfc:block/pipe_on"
-      }
-    },
-    {
-      "when": {
-        "down": false
-      },
-      "apply": {
-        "model": "tfc:block/pipe_off"
-      }
-    },
-    {
-      "when": {
-        "up": true
-      },
-      "apply": {
-        "model": "tfc:block/pipe_on",
-        "x": 180
-      }
-    },
-    {
-      "when": {
-        "up": false
-      },
-      "apply": {
-        "model": "tfc:block/pipe_off",
-        "x": 180
-      }
-    }
-  ]
+    "multipart": [
+        {"apply": {"model": "tfc:block/pipe_center"}},
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/pipe_on"
+            },
+            "when": {"north": true}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/pipe_off"
+            },
+            "when": {"north": false}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/pipe_on"
+            },
+            "when": {"south": true}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/pipe_off"
+            },
+            "when": {"south": false}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "y": 270,
+                "model": "tfc:block/pipe_on"
+            },
+            "when": {"east": true}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "y": 270,
+                "model": "tfc:block/pipe_off"
+            },
+            "when": {"east": false}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/pipe_on"
+            },
+            "when": {"west": true}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "y": 90,
+                "model": "tfc:block/pipe_off"
+            },
+            "when": {"west": false}
+        },
+        {
+            "apply": {"model": "tfc:block/pipe_on"},
+            "when": {"down": true}
+        },
+        {
+            "apply": {"model": "tfc:block/pipe_off"},
+            "when": {"down": false}
+        },
+        {
+            "apply": {
+                "x": 180,
+                "model": "tfc:block/pipe_on"
+            },
+            "when": {"up": true}
+        },
+        {
+            "apply": {
+                "x": 180,
+                "model": "tfc:block/pipe_off"
+            },
+            "when": {"up": false}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

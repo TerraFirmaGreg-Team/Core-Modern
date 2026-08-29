@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore",
-  "textures": {
-    "all": "tfc:block/rock/raw/diorite",
-    "overlay": "tfc:block/ore/opal"
-  }
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/rock/raw/diorite",
+        "overlay": "tfc:block/ore/opal"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

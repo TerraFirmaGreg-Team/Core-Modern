@@ -1,54 +1,30 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:cluster_vein",
-  "config": {
-    "rarity": 20,
-    "density": 0.4,
-    "min_y": -30,
-    "max_y": 60,
-    "size": 20,
-    "random_name": "graphite",
-    "blocks": [
-      {
-        "replace": [
-          "tfc:rock/raw/gneiss"
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:cluster_vein",
+    "config": {
+        "max_y": 60,
+        "density": 0.4,
+        "size": 20,
+        "blocks": [
+            {
+                "with": [{"block": "tfc:ore/graphite/gneiss"}],
+                "replace": ["tfc:rock/raw/gneiss"]
+            },
+            {
+                "with": [{"block": "tfc:ore/graphite/marble"}],
+                "replace": ["tfc:rock/raw/marble"]
+            },
+            {
+                "with": [{"block": "tfc:ore/graphite/quartzite"}],
+                "replace": ["tfc:rock/raw/quartzite"]
+            },
+            {
+                "with": [{"block": "tfc:ore/graphite/schist"}],
+                "replace": ["tfc:rock/raw/schist"]
+            }
         ],
-        "with": [
-          {
-            "block": "tfc:ore/graphite/gneiss"
-          }
-        ]
-      },
-      {
-        "replace": [
-          "tfc:rock/raw/marble"
-        ],
-        "with": [
-          {
-            "block": "tfc:ore/graphite/marble"
-          }
-        ]
-      },
-      {
-        "replace": [
-          "tfc:rock/raw/quartzite"
-        ],
-        "with": [
-          {
-            "block": "tfc:ore/graphite/quartzite"
-          }
-        ]
-      },
-      {
-        "replace": [
-          "tfc:rock/raw/schist"
-        ],
-        "with": [
-          {
-            "block": "tfc:ore/graphite/schist"
-          }
-        ]
-      }
-    ]
-  }
+        "min_y": -30,
+        "random_name": "graphite",
+        "rarity": 20
+    }
 }

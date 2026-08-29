@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:powder/saltpeter"
-  },
-  "nitrogen": 0.1,
-  "potassium": 0.4
+    "ingredient": {"item": "tfc:powder/saltpeter"},
+    "potassium": 0.4,
+    "nitrogen": 0.1,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "minecraft:clay"
-  },
-  "result_item": {
-    "item": "minecraft:terracotta"
-  },
-  "temperature": 1399
+    "result_item": {"item": "minecraft:terracotta"},
+    "ingredient": {"item": "minecraft:clay"},
+    "temperature": 1399,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

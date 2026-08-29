@@ -1,21 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "loader": "forge:separate_transforms",
-  "base": {
-    "parent": "tfc:item/blowpipe/0"
-  },
-  "perspectives": {
-    "none": {
-      "parent": "tfc:item/blowpipe/gui_cold"
+    "perspectives": {
+        "fixed": {"parent": "tfc:item/blowpipe/gui_cold"},
+        "ground": {"parent": "tfc:item/blowpipe/gui_cold"},
+        "gui": {"parent": "tfc:item/blowpipe/gui_cold"},
+        "none": {"parent": "tfc:item/blowpipe/gui_cold"}
     },
-    "fixed": {
-      "parent": "tfc:item/blowpipe/gui_cold"
-    },
-    "ground": {
-      "parent": "tfc:item/blowpipe/gui_cold"
-    },
-    "gui": {
-      "parent": "tfc:item/blowpipe/gui_cold"
-    }
-  }
+    "loader": "forge:separate_transforms",
+    "__comment__": "This file was automatically created by mcresources",
+    "base": {"parent": "tfc:item/blowpipe/0"}
 }

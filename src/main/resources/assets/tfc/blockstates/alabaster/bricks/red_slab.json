@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/alabaster/bricks/red_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/alabaster/bricks/red_slab"},
+        "type=double": {"model": "tfc:block/alabaster/bricks/red"},
+        "type=top": {"model": "tfc:block/alabaster/bricks/red_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/alabaster/bricks/red_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/alabaster/bricks/red"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

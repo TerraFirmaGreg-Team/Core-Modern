@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:stick_bunch"
-  },
-  "result_item": {
-    "item": "tfc:torch",
-    "count": 18
-  },
-  "temperature": 60
+    "result_item": {
+        "item": "tfc:torch",
+        "count": 18
+    },
+    "ingredient": {"item": "tfc:stick_bunch"},
+    "temperature": 60,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_hematite/conglomerate",
-  "result": "tfc:ore/poor_hematite/conglomerate"
+    "result": "tfc:ore/poor_hematite/conglomerate",
+    "ingredient": "tfc:ore/normal_hematite/conglomerate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

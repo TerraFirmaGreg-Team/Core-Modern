@@ -1,16 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X X",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/planks/sycamore"
-    }
-  },
-  "result": {
-    "item": "tfc:wood/boat/sycamore"
-  }
+    "result": {"item": "tfc:wood/boat/sycamore"},
+    "pattern": [
+        "X X",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/planks/sycamore"}}
 }

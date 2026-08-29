@@ -1,17 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "axis=x": {
-      "model": "tfc:block/wood/encased_axle/hickory",
-      "x": 90,
-      "y": 90
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/wood/encased_axle/hickory"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/encased_axle/hickory"
+        },
+        "axis=y": {"model": "tfc:block/wood/encased_axle/hickory"}
     },
-    "axis=y": {
-      "model": "tfc:block/wood/encased_axle/hickory"
-    },
-    "axis=z": {
-      "model": "tfc:block/wood/encased_axle/hickory",
-      "x": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

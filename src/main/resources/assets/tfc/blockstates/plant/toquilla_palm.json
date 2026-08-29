@@ -1,26 +1,18 @@
-{
-  "multipart": [
-    {
-      "when": {
-        "part": "lower"
-      },
-      "apply": [
+{"multipart": [{
+    "apply": [
+        {"model": "tfc:block/plant/toquilla_palm"},
         {
-          "model": "tfc:block/plant/toquilla_palm"
+            "y": 90,
+            "model": "tfc:block/plant/toquilla_palm"
         },
         {
-          "model": "tfc:block/plant/toquilla_palm",
-          "y": 90
+            "y": 180,
+            "model": "tfc:block/plant/toquilla_palm"
         },
         {
-          "model": "tfc:block/plant/toquilla_palm",
-          "y": 180
-        },
-        {
-          "model": "tfc:block/plant/toquilla_palm",
-          "y": 270
+            "y": 270,
+            "model": "tfc:block/plant/toquilla_palm"
         }
-      ]
-    }
-  ]
-}
+    ],
+    "when": {"part": "lower"}
+}]}

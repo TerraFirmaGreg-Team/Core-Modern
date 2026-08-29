@@ -1,32 +1,26 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:pot_jam",
-  "ingredients": [
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:food/lemon"
-      }
+    "duration": 500,
+    "result": {
+        "item": "tfc:jar/lemon",
+        "count": 2
     },
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:food/lemon"
-      }
+    "texture": "tfc:block/jar/lemon",
+    "temperature": 300,
+    "ingredients": [
+        {
+            "ingredient": {"item": "tfc:food/lemon"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "tfc:food/lemon"},
+            "type": "tfc:not_rotten"
+        },
+        {"tag": "tfc:sweetener"}
+    ],
+    "fluid_ingredient": {
+        "amount": 100,
+        "ingredient": "minecraft:water"
     },
-    {
-      "tag": "tfc:sweetener"
-    }
-  ],
-  "fluid_ingredient": {
-    "ingredient": "minecraft:water",
-    "amount": 100
-  },
-  "duration": 500,
-  "temperature": 300,
-  "result": {
-    "item": "tfc:jar/lemon",
-    "count": 2
-  },
-  "texture": "tfc:block/jar/lemon"
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:pot_jam"
 }

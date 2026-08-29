@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/sheet",
-  "criteria": {
-    "metal_plated_blocks": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:metal_plated_blocks"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:metal/block/copper"
+    "parent": "tfc:story/sheet",
+    "requirements": [["metal_plated_blocks"]],
+    "criteria": {"metal_plated_blocks": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:metal_plated_blocks"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/block/copper"},
+        "description": {"translate": "tfc.advancements.story.plated_block.description"},
+        "title": {"translate": "tfc.advancements.story.plated_block.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.plated_block.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.plated_block.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "metal_plated_blocks"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

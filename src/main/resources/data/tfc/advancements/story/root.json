@@ -1,29 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "criteria": {
-    "in_game_condition": {
-      "trigger": "minecraft:tick"
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:metal/hammer/wrought_iron"
+    "requirements": [["in_game_condition"]],
+    "criteria": {"in_game_condition": {"trigger": "minecraft:tick"}},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/hammer/wrought_iron"},
+        "description": {"translate": "tfc.advancements.story.root.description"},
+        "title": {"translate": "tfc.advancements.story.root.title"},
+        "announce_to_chat": false,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.root.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.root.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": false,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "in_game_condition"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

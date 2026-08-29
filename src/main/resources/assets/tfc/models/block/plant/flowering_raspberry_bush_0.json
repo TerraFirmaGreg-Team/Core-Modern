@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/plant/berry_bush_0",
-  "textures": {
-    "cane": "tfc:block/berry_bush/flowering_raspberry_cane",
-    "bush": "tfc:block/berry_bush/flowering_raspberry_bush"
-  }
+    "parent": "tfc:block/plant/berry_bush_0",
+    "textures": {
+        "bush": "tfc:block/berry_bush/flowering_raspberry_bush",
+        "cane": "tfc:block/berry_bush/flowering_raspberry_cane"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/cauldron/metal/high_carbon_blue_steel"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/cauldron/metal/high_carbon_blue_steel"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

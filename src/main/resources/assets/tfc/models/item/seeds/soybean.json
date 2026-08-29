@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/seeds/soybean"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/seeds/soybean"},
+    "__comment__": "This file was automatically created by mcresources"
 }

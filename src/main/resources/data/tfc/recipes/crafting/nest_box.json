@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "Y Y",
-    "XYX",
-    "XXX"
-  ],
-  "key": {
-    "Y": {
-      "item": "tfc:straw"
-    },
-    "X": {
-      "tag": "tfc:lumber"
+    "result": {"item": "tfc:nest_box"},
+    "pattern": [
+        "Y Y",
+        "XYX",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "tfc:lumber"},
+        "Y": {"item": "tfc:straw"}
     }
-  },
-  "result": {
-    "item": "tfc:nest_box"
-  }
 }

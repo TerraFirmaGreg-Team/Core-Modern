@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:loose_rock",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR_WG"
-    }
-  ]
+    "feature": "tfc:loose_rock",
+    "placement": [{
+        "heightmap": "OCEAN_FLOOR_WG",
+        "type": "minecraft:heightmap"
+    }],
+    "__comment__": "This file was automatically created by mcresources"
 }

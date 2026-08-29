@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:ingredients",
-    "minecraft:lava"
-  ]
+    "values": [
+        "#tfc:ingredients",
+        "minecraft:lava"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

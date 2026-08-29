@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/alabaster/polished/white_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/alabaster/polished/white_slab"},
+        "type=double": {"model": "tfc:block/alabaster/polished/white"},
+        "type=top": {"model": "tfc:block/alabaster/polished/white_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/alabaster/polished/white_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/alabaster/polished/white"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

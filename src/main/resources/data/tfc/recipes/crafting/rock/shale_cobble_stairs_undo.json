@@ -1,13 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:rock/cobble/shale_stairs"
-    }
-  ],
-  "result": {
-    "item": "tfc:rock/loose/shale",
-    "count": 3
-  }
+    "result": {
+        "item": "tfc:rock/loose/shale",
+        "count": 3
+    },
+    "ingredients": [{"item": "tfc:rock/cobble/shale_stairs"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

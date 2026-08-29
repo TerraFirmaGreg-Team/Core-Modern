@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/cobble/shale",
-  "result": "tfc:rock/cobble/shale_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/cobble/shale_slab"
-  }
+    "result": "tfc:rock/cobble/shale_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/cobble/shale_slab"},
+    "ingredient": "tfc:rock/cobble/shale",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/find_clay",
-  "criteria": {
-    "unfired_pottery": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:unfired_pottery"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:ceramic/unfired_vessel"
+    "parent": "tfc:story/find_clay",
+    "requirements": [["unfired_pottery"]],
+    "criteria": {"unfired_pottery": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:unfired_pottery"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:ceramic/unfired_vessel"},
+        "description": {"translate": "tfc.advancements.story.knap_clay.description"},
+        "title": {"translate": "tfc.advancements.story.knap_clay.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.knap_clay.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.knap_clay.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "unfired_pottery"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

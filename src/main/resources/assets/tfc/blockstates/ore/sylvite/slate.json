@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/sylvite/slate"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/sylvite/slate"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

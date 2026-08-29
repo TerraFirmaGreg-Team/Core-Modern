@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "name": "O mundo",
-  "description": "Tudo sobre o mundo natural ao seu redor.",
-  "icon": "tfc:grass/loam",
-  "sortnum": 0
+    "name": "O mundo",
+    "icon": "tfc:grass/loam",
+    "description": "Tudo sobre o mundo natural ao seu redor.",
+    "sortnum": 0,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#minecraft:bypasses_armor",
-    "#minecraft:bypasses_invulnerability"
-  ]
+    "values": [
+        "#minecraft:bypasses_armor",
+        "#minecraft:bypasses_invulnerability"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

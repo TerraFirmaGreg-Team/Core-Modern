@@ -1,36 +1,24 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+    "pools": [
         {
-          "type": "minecraft:item",
-          "name": "tfc:plant/lady_fern"
-        }
-      ],
-      "conditions": [
+            "entries": [{
+                "name": "tfc:plant/lady_fern",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "condition": "minecraft:survives_explosion"
+            "entries": [{
+                "name": "minecraft:flower_pot",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
         }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:flower_pot"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
 }

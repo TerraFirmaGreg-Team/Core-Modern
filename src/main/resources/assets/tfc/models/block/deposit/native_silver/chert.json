@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore",
-  "textures": {
-    "all": "tfc:block/rock/gravel/chert",
-    "overlay": "tfc:block/deposit/native_silver"
-  }
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/rock/gravel/chert",
+        "overlay": "tfc:block/deposit/native_silver"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

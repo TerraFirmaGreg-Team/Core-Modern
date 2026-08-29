@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/aqueduct/west",
-  "textures": {
-    "texture": "tfc:block/rock/bricks/rhyolite",
-    "particle": "tfc:block/rock/bricks/rhyolite"
-  }
+    "parent": "tfc:block/aqueduct/west",
+    "textures": {
+        "texture": "tfc:block/rock/bricks/rhyolite",
+        "particle": "tfc:block/rock/bricks/rhyolite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "tag": "tfc:foods/breads"
-  },
-  "temperature": 700
+    "ingredient": {"tag": "tfc:foods/breads"},
+    "temperature": 700,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

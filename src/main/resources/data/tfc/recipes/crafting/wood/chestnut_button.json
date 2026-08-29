@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/chestnut"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/chestnut_button"
-  }
+    "result": {"item": "tfc:wood/planks/chestnut_button"},
+    "ingredients": [{"item": "tfc:wood/planks/chestnut"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

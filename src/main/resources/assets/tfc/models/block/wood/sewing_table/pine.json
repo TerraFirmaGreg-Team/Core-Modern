@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/sewing_table",
-  "textures": {
-    "0": "tfc:block/wood/log/pine",
-    "1": "tfc:block/wood/planks/pine"
-  }
+    "parent": "tfc:block/sewing_table",
+    "textures": {
+        "0": "tfc:block/wood/log/pine",
+        "1": "tfc:block/wood/planks/pine"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

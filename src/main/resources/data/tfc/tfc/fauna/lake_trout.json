@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "climate": {
-    "max_temperature": 23,
-    "min_rainfall": 250
-  }
+    "climate": {
+        "max_temperature": 23,
+        "min_rainfall": 250
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

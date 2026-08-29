@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/high_carbon_red_steel",
-    "tfc:metal/flowing_high_carbon_red_steel"
-  ]
+    "values": [
+        "tfc:metal/high_carbon_red_steel",
+        "tfc:metal/flowing_high_carbon_red_steel"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

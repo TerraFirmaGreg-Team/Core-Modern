@@ -1,29 +1,25 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "axis=x,powered=false": {
-      "model": "tfc:block/wood/clutch/ash",
-      "x": 90,
-      "y": 90
+    "variants": {
+        "axis=y,powered=false": {"model": "tfc:block/wood/clutch/ash"},
+        "axis=z,powered=false": {
+            "x": 90,
+            "model": "tfc:block/wood/clutch/ash"
+        },
+        "axis=x,powered=false": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/clutch/ash"
+        },
+        "axis=x,powered=true": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/clutch/ash_powered"
+        },
+        "axis=y,powered=true": {"model": "tfc:block/wood/clutch/ash_powered"},
+        "axis=z,powered=true": {
+            "x": 90,
+            "model": "tfc:block/wood/clutch/ash_powered"
+        }
     },
-    "axis=x,powered=true": {
-      "model": "tfc:block/wood/clutch/ash_powered",
-      "x": 90,
-      "y": 90
-    },
-    "axis=y,powered=false": {
-      "model": "tfc:block/wood/clutch/ash"
-    },
-    "axis=y,powered=true": {
-      "model": "tfc:block/wood/clutch/ash_powered"
-    },
-    "axis=z,powered=false": {
-      "model": "tfc:block/wood/clutch/ash",
-      "x": 90
-    },
-    "axis=z,powered=true": {
-      "model": "tfc:block/wood/clutch/ash_powered",
-      "x": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,56 +1,42 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "name": "tfc:ceramic/large_vessel/light_gray",
-              "conditions": [
+    "pools": [{
+        "entries": [{
+            "children": [
                 {
-                  "condition": "minecraft:block_state_property",
-                  "block": "tfc:ceramic/large_vessel/light_gray",
-                  "properties": {
-                    "sealed": "true"
-                  }
-                }
-              ],
-              "functions": [
-                {
-                  "function": "minecraft:copy_name",
-                  "source": "block_entity"
+                    "functions": [
+                        {
+                            "function": "minecraft:copy_name",
+                            "source": "block_entity"
+                        },
+                        {
+                            "ops": [{
+                                "op": "replace",
+                                "source": "",
+                                "target": "BlockEntityTag"
+                            }],
+                            "function": "minecraft:copy_nbt",
+                            "source": "block_entity"
+                        }
+                    ],
+                    "name": "tfc:ceramic/large_vessel/light_gray",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:block_state_property",
+                        "block": "tfc:ceramic/large_vessel/light_gray",
+                        "properties": {"sealed": "true"}
+                    }]
                 },
                 {
-                  "function": "minecraft:copy_nbt",
-                  "source": "block_entity",
-                  "ops": [
-                    {
-                      "source": "",
-                      "target": "BlockEntityTag",
-                      "op": "replace"
-                    }
-                  ]
+                    "name": "tfc:ceramic/large_vessel/light_gray",
+                    "type": "minecraft:item"
                 }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:ceramic/large_vessel/light_gray"
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+            ],
+            "type": "minecraft:alternatives"
+        }],
+        "name": "loot_pool",
+        "rolls": 1,
+        "conditions": [{"condition": "minecraft:survives_explosion"}]
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
 }

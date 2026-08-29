@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/white_cedar"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/white_cedar_button"
-  }
+    "result": {"item": "tfc:wood/planks/white_cedar_button"},
+    "ingredients": [{"item": "tfc:wood/planks/white_cedar"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

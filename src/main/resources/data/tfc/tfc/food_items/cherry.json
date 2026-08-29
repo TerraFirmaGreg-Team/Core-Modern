@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:food/cherry"
-  },
-  "hunger": 4,
-  "saturation": 0.2,
-  "water": 5,
-  "decay_modifier": 4,
-  "fruit": 1
+    "saturation": 0.2,
+    "ingredient": {"item": "tfc:food/cherry"},
+    "decay_modifier": 4,
+    "fruit": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 5,
+    "hunger": 4
 }

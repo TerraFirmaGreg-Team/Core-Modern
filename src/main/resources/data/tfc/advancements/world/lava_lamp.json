@@ -1,30 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/root",
-  "criteria": {
-    "special_condition": {
-      "trigger": "tfc:lava_lamp"
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:metal/lamp/blue_steel"
+    "parent": "tfc:world/root",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {"trigger": "tfc:lava_lamp"}},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:metal/lamp/blue_steel"},
+        "description": {"translate": "tfc.advancements.world.lava_lamp.description"},
+        "title": {"translate": "tfc.advancements.world.lava_lamp.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.lava_lamp.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.lava_lamp.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "special_condition"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

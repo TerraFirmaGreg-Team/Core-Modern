@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/acacia"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/acacia_button"
-  }
+    "result": {"item": "tfc:wood/planks/acacia_button"},
+    "ingredients": [{"item": "tfc:wood/planks/acacia"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

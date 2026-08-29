@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/root",
-  "criteria": {
-    "seeds": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:seeds"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:seeds/tomato"
+    "parent": "tfc:world/root",
+    "requirements": [["seeds"]],
+    "criteria": {"seeds": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:seeds"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:seeds/tomato"},
+        "description": {"translate": "tfc.advancements.world.seeds.description"},
+        "title": {"translate": "tfc.advancements.world.seeds.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.seeds.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.seeds.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "seeds"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

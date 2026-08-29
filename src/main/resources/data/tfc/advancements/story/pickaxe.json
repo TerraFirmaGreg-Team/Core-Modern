@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/copper_age",
-  "criteria": {
-    "pickaxes": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:pickaxes"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:metal/pickaxe/copper"
+    "parent": "tfc:story/copper_age",
+    "requirements": [["pickaxes"]],
+    "criteria": {"pickaxes": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:pickaxes"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/pickaxe/copper"},
+        "description": {"translate": "tfc.advancements.story.pickaxe.description"},
+        "title": {"translate": "tfc.advancements.story.pickaxe.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.pickaxe.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.pickaxe.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "pickaxes"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

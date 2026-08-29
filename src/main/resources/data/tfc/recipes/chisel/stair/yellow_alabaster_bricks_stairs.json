@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:alabaster/bricks/yellow",
-  "result": "tfc:alabaster/bricks/yellow_stairs",
-  "mode": "stair"
+    "result": "tfc:alabaster/bricks/yellow_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:alabaster/bricks/yellow",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

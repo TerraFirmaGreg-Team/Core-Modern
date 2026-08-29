@@ -1,17 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:volcano_rivulet",
-  "placement": [
-    {
-      "type": "minecraft:count",
-      "count": 2
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:volcano",
-      "distance": 0.7
-    }
-  ]
+    "feature": "tfc:volcano_rivulet",
+    "placement": [
+        {
+            "count": 2,
+            "type": "minecraft:count"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "distance": 0.7,
+            "type": "tfc:volcano"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

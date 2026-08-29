@@ -1,21 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "S S",
-    "SWS",
-    "S S"
-  ],
-  "key": {
-    "W": {
-      "tag": "forge:rods/wooden"
+    "result": {
+        "item": "minecraft:rail",
+        "count": 32
     },
-    "S": {
-      "tag": "forge:rods/wrought_iron"
+    "pattern": [
+        "S S",
+        "SWS",
+        "S S"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "S": {"tag": "forge:rods/wrought_iron"},
+        "W": {"tag": "forge:rods/wooden"}
     }
-  },
-  "result": {
-    "item": "minecraft:rail",
-    "count": 32
-  }
 }

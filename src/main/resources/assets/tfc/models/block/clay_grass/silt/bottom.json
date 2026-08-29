@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/grass_bottom",
-  "textures": {
-    "texture": "tfc:block/clay/silt"
-  }
+    "parent": "tfc:block/grass_bottom",
+    "textures": {"texture": "tfc:block/clay/silt"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "forge:double_sheets/nickel"
-  },
-  "heat_capacity": 8.333,
-  "forging_temperature": 872,
-  "welding_temperature": 1162
+    "welding_temperature": 1162,
+    "ingredient": {"tag": "forge:double_sheets/nickel"},
+    "heat_capacity": 8.333,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 872
 }

@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "XYX",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "item": "minecraft:paper"
-    },
-    "Y": {
-      "tag": "forge:leather"
+    "result": {"item": "minecraft:map"},
+    "pattern": [
+        "XXX",
+        "XYX",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "minecraft:paper"},
+        "Y": {"tag": "forge:leather"}
     }
-  },
-  "result": {
-    "item": "minecraft:map"
-  }
 }

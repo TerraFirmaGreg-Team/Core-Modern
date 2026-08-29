@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/support/horizontal",
-  "textures": {
-    "texture": "tfc:block/wood/sheet/mangrove",
-    "particle": "tfc:block/wood/sheet/mangrove"
-  }
+    "parent": "tfc:block/wood/support/horizontal",
+    "textures": {
+        "texture": "tfc:block/wood/sheet/mangrove",
+        "particle": "tfc:block/wood/sheet/mangrove"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

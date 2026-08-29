@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:rotten_flesh_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 100
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": -30,
-      "max_temperature": 30,
-      "min_rainfall": 0,
-      "max_rainfall": 400
-    }
-  ]
+    "feature": "tfc:rotten_flesh_patch",
+    "placement": [
+        {
+            "chance": 100,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 30,
+            "max_rainfall": 400,
+            "type": "tfc:climate",
+            "min_rainfall": 0,
+            "min_temperature": -30
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

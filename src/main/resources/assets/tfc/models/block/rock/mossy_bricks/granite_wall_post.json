@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/template_wall_post",
-  "textures": {
-    "wall": "tfc:block/rock/mossy_bricks/granite"
-  }
+    "parent": "block/template_wall_post",
+    "textures": {"wall": "tfc:block/rock/mossy_bricks/granite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

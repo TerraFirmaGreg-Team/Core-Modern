@@ -1,35 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/root",
-  "criteria": {
-    "special_condition": {
-      "trigger": "tfc:fed_animal",
-      "conditions": {
-        "entity": {
-          "type": "#tfc:animals"
-        }
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:food/wheat_grain"
+    "parent": "tfc:world/root",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {
+        "trigger": "tfc:fed_animal",
+        "conditions": {"entity": {"type": "#tfc:animals"}}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:food/wheat_grain"},
+        "description": {"translate": "tfc.advancements.world.familiarity.description"},
+        "title": {"translate": "tfc.advancements.world.familiarity.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.familiarity.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.familiarity.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "special_condition"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

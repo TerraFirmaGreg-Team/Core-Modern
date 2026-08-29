@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:lamp_glass"
-    },
-    {
-      "item": "tfc:metal/unfinished_lamp/copper"
-    }
-  ],
-  "result": {
-    "item": "tfc:metal/lamp/copper"
-  }
+    "result": {"item": "tfc:metal/lamp/copper"},
+    "ingredients": [
+        {"item": "tfc:lamp_glass"},
+        {"item": "tfc:metal/unfinished_lamp/copper"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

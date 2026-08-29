@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:jar/orange"
-      }
-    }
-  ],
-  "result": {
-    "item": "tfc:jar/orange_unsealed"
-  }
+    "result": {"item": "tfc:jar/orange_unsealed"},
+    "ingredients": [{
+        "ingredient": {"item": "tfc:jar/orange"},
+        "type": "tfc:not_rotten"
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

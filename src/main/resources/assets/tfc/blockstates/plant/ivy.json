@@ -1,60 +1,44 @@
-{
-  "multipart": [
+{"multipart": [
     {
-      "when": {
-        "down": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/ivy"
-      }
+        "apply": {"model": "tfc:block/plant/ivy"},
+        "when": {"down": "true"}
     },
     {
-      "when": {
-        "east": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/ivy",
-        "x": 270,
-        "y": 90
-      }
+        "apply": {
+            "x": 270,
+            "y": 90,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"east": "true"}
     },
     {
-      "when": {
-        "north": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/ivy",
-        "x": 270
-      }
+        "apply": {
+            "x": 270,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"north": "true"}
     },
     {
-      "when": {
-        "south": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/ivy",
-        "x": 270,
-        "y": 180
-      }
+        "apply": {
+            "x": 270,
+            "y": 180,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"south": "true"}
     },
     {
-      "when": {
-        "up": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/ivy",
-        "x": 180
-      }
+        "apply": {
+            "x": 180,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"up": "true"}
     },
     {
-      "when": {
-        "west": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/ivy",
-        "x": 270,
-        "y": 270
-      }
+        "apply": {
+            "x": 270,
+            "y": 270,
+            "model": "tfc:block/plant/ivy"
+        },
+        "when": {"west": "true"}
     }
-  ]
-}
+]}

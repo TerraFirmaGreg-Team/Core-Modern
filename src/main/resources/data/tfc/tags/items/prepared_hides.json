@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:small_prepared_hide",
-    "tfc:medium_prepared_hide",
-    "tfc:large_prepared_hide"
-  ]
+    "values": [
+        "tfc:small_prepared_hide",
+        "tfc:medium_prepared_hide",
+        "tfc:large_prepared_hide"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

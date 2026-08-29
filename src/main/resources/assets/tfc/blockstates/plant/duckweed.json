@@ -1,22 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": [
-      {
-        "model": "tfc:block/plant/duckweed",
-        "y": 90
-      },
-      {
-        "model": "tfc:block/plant/duckweed"
-      },
-      {
-        "model": "tfc:block/plant/duckweed",
-        "y": 180
-      },
-      {
-        "model": "tfc:block/plant/duckweed",
-        "y": 270
-      }
-    ]
-  }
+    "variants": {"": [
+        {
+            "y": 90,
+            "model": "tfc:block/plant/duckweed"
+        },
+        {"model": "tfc:block/plant/duckweed"},
+        {
+            "y": 180,
+            "model": "tfc:block/plant/duckweed"
+        },
+        {
+            "y": 270,
+            "model": "tfc:block/plant/duckweed"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
 }

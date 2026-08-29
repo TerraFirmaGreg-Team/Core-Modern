@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/graphite/schist"
+    "parent": "tfc:block/ore/graphite/schist",
+    "__comment__": "This file was automatically created by mcresources"
 }

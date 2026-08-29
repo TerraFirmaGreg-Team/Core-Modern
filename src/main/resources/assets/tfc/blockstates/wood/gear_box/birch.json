@@ -1,111 +1,83 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "when": {
-        "north": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/birch"
-      }
-    },
-    {
-      "when": {
-        "north": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/birch"
-      }
-    },
-    {
-      "when": {
-        "south": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/birch",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "south": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/birch",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "east": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/birch",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "east": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/birch",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "west": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/birch",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "west": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/birch",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "down": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/birch",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "down": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/birch",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "up": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/birch",
-        "x": 270
-      }
-    },
-    {
-      "when": {
-        "up": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/birch",
-        "x": 270
-      }
-    }
-  ]
+    "multipart": [
+        {
+            "apply": {"model": "tfc:block/wood/gear_box_port/birch"},
+            "when": {"north": true}
+        },
+        {
+            "apply": {"model": "tfc:block/wood/gear_box_face/birch"},
+            "when": {"north": false}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/gear_box_port/birch"
+            },
+            "when": {"south": true}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/gear_box_face/birch"
+            },
+            "when": {"south": false}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/gear_box_port/birch"
+            },
+            "when": {"east": true}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/gear_box_face/birch"
+            },
+            "when": {"east": false}
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/gear_box_port/birch"
+            },
+            "when": {"west": true}
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/gear_box_face/birch"
+            },
+            "when": {"west": false}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/wood/gear_box_port/birch"
+            },
+            "when": {"down": true}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/wood/gear_box_face/birch"
+            },
+            "when": {"down": false}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/wood/gear_box_port/birch"
+            },
+            "when": {"up": true}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/wood/gear_box_face/birch"
+            },
+            "when": {"up": false}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

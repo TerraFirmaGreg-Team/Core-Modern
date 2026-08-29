@@ -1,6 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "textures": {
-    "particle": "tfc:block/wood/planks/blackwood"
-  }
+    "textures": {"particle": "tfc:block/wood/planks/blackwood"},
+    "__comment__": "This file was automatically created by mcresources"
 }

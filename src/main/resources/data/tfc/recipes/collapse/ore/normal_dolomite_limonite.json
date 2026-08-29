@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/rich_limonite/dolomite",
-  "result": "tfc:ore/normal_limonite/dolomite"
+    "result": "tfc:ore/normal_limonite/dolomite",
+    "ingredient": "tfc:ore/rich_limonite/dolomite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

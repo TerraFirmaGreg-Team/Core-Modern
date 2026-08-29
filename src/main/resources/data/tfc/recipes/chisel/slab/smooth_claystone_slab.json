@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/smooth/claystone",
-  "result": "tfc:rock/smooth/claystone_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/smooth/claystone_slab"
-  }
+    "result": "tfc:rock/smooth/claystone_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/smooth/claystone_slab"},
+    "ingredient": "tfc:rock/smooth/claystone",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

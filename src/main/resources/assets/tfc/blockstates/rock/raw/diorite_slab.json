@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/rock/raw/diorite_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/raw/diorite_slab"},
+        "type=double": {"model": "tfc:block/rock/raw/diorite"},
+        "type=top": {"model": "tfc:block/rock/raw/diorite_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/rock/raw/diorite_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/rock/raw/diorite"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

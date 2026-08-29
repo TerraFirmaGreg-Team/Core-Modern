@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:loose_rock",
-  "config": {
-    "type": "tfc:carving_mask",
-    "step": "air"
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:loose_rock",
+    "config": {
+        "step": "air",
+        "type": "tfc:carving_mask"
+    }
 }

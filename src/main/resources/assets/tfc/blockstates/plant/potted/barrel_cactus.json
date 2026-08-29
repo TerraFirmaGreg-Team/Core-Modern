@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/barrel_cactus"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/barrel_cactus"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

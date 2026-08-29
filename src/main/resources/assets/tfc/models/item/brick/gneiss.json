@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/brick/gneiss"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/brick/gneiss"},
+    "__comment__": "This file was automatically created by mcresources"
 }

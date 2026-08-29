@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:food/fruit_salad"
-  },
-  "type": "dynamic_bowl"
+    "ingredient": {"item": "tfc:food/fruit_salad"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "dynamic_bowl"
 }

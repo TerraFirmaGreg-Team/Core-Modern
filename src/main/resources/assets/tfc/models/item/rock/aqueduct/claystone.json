@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/aqueduct/claystone/base"
+    "parent": "tfc:block/rock/aqueduct/claystone/base",
+    "__comment__": "This file was automatically created by mcresources"
 }

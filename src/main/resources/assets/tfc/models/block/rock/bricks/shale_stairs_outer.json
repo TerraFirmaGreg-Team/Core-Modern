@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/bricks/shale",
-    "top": "tfc:block/rock/bricks/shale",
-    "side": "tfc:block/rock/bricks/shale"
-  }
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/rock/bricks/shale",
+        "top": "tfc:block/rock/bricks/shale",
+        "bottom": "tfc:block/rock/bricks/shale"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

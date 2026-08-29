@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "forge:sheets/bismuth"
-  },
-  "heat_capacity": 14.286,
-  "forging_temperature": 162,
-  "welding_temperature": 216
+    "welding_temperature": 216,
+    "ingredient": {"tag": "forge:sheets/bismuth"},
+    "heat_capacity": 14.286,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 162
 }

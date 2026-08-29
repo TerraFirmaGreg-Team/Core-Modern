@@ -1,22 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "loader": "forge:separate_transforms",
-  "gui_light": "front",
-  "base": {
-    "parent": "tfc:item/metal/javelin/steel_throwing_base"
-  },
-  "perspectives": {
-    "none": {
-      "parent": "tfc:item/metal/javelin/steel_gui"
+    "gui_light": "front",
+    "perspectives": {
+        "fixed": {"parent": "tfc:item/metal/javelin/steel_gui"},
+        "ground": {"parent": "tfc:item/metal/javelin/steel_gui"},
+        "gui": {"parent": "tfc:item/metal/javelin/steel_gui"},
+        "none": {"parent": "tfc:item/metal/javelin/steel_gui"}
     },
-    "fixed": {
-      "parent": "tfc:item/metal/javelin/steel_gui"
-    },
-    "ground": {
-      "parent": "tfc:item/metal/javelin/steel_gui"
-    },
-    "gui": {
-      "parent": "tfc:item/metal/javelin/steel_gui"
-    }
-  }
+    "loader": "forge:separate_transforms",
+    "__comment__": "This file was automatically created by mcresources",
+    "base": {"parent": "tfc:item/metal/javelin/steel_throwing_base"}
 }

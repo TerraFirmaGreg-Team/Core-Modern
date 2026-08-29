@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/wood/planks/mangrove_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/wood/planks/mangrove_slab"},
+        "type=double": {"model": "tfc:block/wood/planks/mangrove"},
+        "type=top": {"model": "tfc:block/wood/planks/mangrove_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/wood/planks/mangrove_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/wood/planks/mangrove"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:mud/loam"
+    "result": {
+        "item": "tfc:drying_bricks/loam",
+        "count": 4
     },
-    {
-      "item": "tfc:straw"
-    }
-  ],
-  "result": {
-    "item": "tfc:drying_bricks/loam",
-    "count": 4
-  }
+    "ingredients": [
+        {"item": "tfc:mud/loam"},
+        {"item": "tfc:straw"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

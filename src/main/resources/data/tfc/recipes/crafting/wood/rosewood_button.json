@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/rosewood"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/rosewood_button"
-  }
+    "result": {"item": "tfc:wood/planks/rosewood_button"},
+    "ingredients": [{"item": "tfc:wood/planks/rosewood"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

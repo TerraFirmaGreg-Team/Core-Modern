@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:welding",
-  "first_input": {
-    "item": "tfc:metal/knife_blade/wrought_iron"
-  },
-  "second_input": {
-    "item": "tfc:metal/knife_blade/wrought_iron"
-  },
-  "tier": 2,
-  "result": {
-    "item": "tfc:metal/shears/wrought_iron"
-  },
-  "combine_forging_bonus": true
+    "result": {"item": "tfc:metal/shears/wrought_iron"},
+    "first_input": {"item": "tfc:metal/knife_blade/wrought_iron"},
+    "tier": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "combine_forging_bonus": true,
+    "second_input": {"item": "tfc:metal/knife_blade/wrought_iron"}
 }

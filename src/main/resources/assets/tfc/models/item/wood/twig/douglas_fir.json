@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/handheld_rod",
-  "textures": {
-    "layer0": "tfc:item/wood/twig_douglas_fir"
-  }
+    "parent": "item/handheld_rod",
+    "textures": {"layer0": "tfc:item/wood/twig_douglas_fir"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:wood/planks/ash",
-  "result": "tfc:wood/planks/ash_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:wood/planks/ash_slab"
-  }
+    "result": "tfc:wood/planks/ash_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:wood/planks/ash_slab"},
+    "ingredient": "tfc:wood/planks/ash",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

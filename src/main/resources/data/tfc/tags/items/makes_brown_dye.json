@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:plant/field_horsetail",
-    "tfc:plant/sargassum"
-  ]
+    "values": [
+        "tfc:plant/field_horsetail",
+        "tfc:plant/sargassum"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

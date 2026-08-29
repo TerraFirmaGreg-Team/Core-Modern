@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " L ",
-    "WAW",
-    " L "
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/stripped_log/birch"
+    "result": {
+        "item": "tfc:wood/encased_axle/birch",
+        "count": 4
     },
-    "W": {
-      "item": "tfc:wood/lumber/birch"
-    },
-    "A": {
-      "item": "tfc:wood/axle/birch"
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/birch"},
+        "W": {"item": "tfc:wood/lumber/birch"},
+        "L": {"item": "tfc:wood/stripped_log/birch"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/encased_axle/birch",
-    "count": 4
-  }
 }

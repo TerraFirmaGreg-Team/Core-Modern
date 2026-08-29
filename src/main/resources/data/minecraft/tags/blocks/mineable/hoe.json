@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:mineable_with_sharp_tool"
-  ]
+    "values": ["#tfc:mineable_with_sharp_tool"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

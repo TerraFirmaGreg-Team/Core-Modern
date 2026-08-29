@@ -1,42 +1,22 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/claystone/base"
-      }
-    },
-    {
-      "when": {
-        "north": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/claystone/north"
-      }
-    },
-    {
-      "when": {
-        "east": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/claystone/east"
-      }
-    },
-    {
-      "when": {
-        "south": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/claystone/south"
-      }
-    },
-    {
-      "when": {
-        "west": "false"
-      },
-      "apply": {
-        "model": "tfc:block/rock/aqueduct/claystone/west"
-      }
-    }
-  ]
+    "multipart": [
+        {"apply": {"model": "tfc:block/rock/aqueduct/claystone/base"}},
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/claystone/north"},
+            "when": {"north": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/claystone/east"},
+            "when": {"east": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/claystone/south"},
+            "when": {"south": "false"}
+        },
+        {
+            "apply": {"model": "tfc:block/rock/aqueduct/claystone/west"},
+            "when": {"west": "false"}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

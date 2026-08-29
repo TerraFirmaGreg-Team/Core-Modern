@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "minecraft:black_dye"
-  ]
+    "values": ["minecraft:black_dye"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/rich_hematite/phyllite"
+    "parent": "tfc:block/ore/rich_hematite/phyllite",
+    "__comment__": "This file was automatically created by mcresources"
 }

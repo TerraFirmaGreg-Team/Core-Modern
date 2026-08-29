@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "item": "tfc:alabaster/raw"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "tfc:blue_dye",
-    "amount": 25
-  },
-  "output_item": {
-    "item": "tfc:alabaster/raw/blue"
-  },
-  "duration": 1000
+    "input_fluid": {
+        "amount": 25,
+        "ingredient": "tfc:blue_dye"
+    },
+    "duration": 1000,
+    "output_item": {"item": "tfc:alabaster/raw/blue"},
+    "input_item": {"ingredient": {"item": "tfc:alabaster/raw"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

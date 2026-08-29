@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/sewing_table/willow"
+    "parent": "tfc:block/wood/sewing_table/willow",
+    "__comment__": "This file was automatically created by mcresources"
 }

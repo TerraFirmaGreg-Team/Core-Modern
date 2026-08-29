@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/loose_sedimentary_3",
-  "textures": {
-    "texture": "tfc:block/rock/raw/claystone"
-  }
+    "parent": "tfc:block/rock/loose_sedimentary_3",
+    "textures": {"texture": "tfc:block/rock/raw/claystone"},
+    "__comment__": "This file was automatically created by mcresources"
 }

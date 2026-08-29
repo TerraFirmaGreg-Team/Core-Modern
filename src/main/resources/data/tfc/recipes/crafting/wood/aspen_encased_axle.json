@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " L ",
-    "WAW",
-    " L "
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/stripped_log/aspen"
+    "result": {
+        "item": "tfc:wood/encased_axle/aspen",
+        "count": 4
     },
-    "W": {
-      "item": "tfc:wood/lumber/aspen"
-    },
-    "A": {
-      "item": "tfc:wood/axle/aspen"
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/aspen"},
+        "W": {"item": "tfc:wood/lumber/aspen"},
+        "L": {"item": "tfc:wood/stripped_log/aspen"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/encased_axle/aspen",
-    "count": 4
-  }
 }

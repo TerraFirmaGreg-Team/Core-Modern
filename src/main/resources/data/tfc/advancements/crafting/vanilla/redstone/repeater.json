@@ -1,35 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_item": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:redstone_torch"
-            ]
-          }
-        ]
-      }
+    "parent": "minecraft:recipes/root",
+    "requirements": [[
+        "has_item",
+        "has_the_recipe"
+    ]],
+    "criteria": {
+        "has_item": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["minecraft:redstone_torch"]}]}
+        },
+        "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {"recipe": "tfc:crafting/vanilla/redstone/repeater"}
+        }
     },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "tfc:crafting/vanilla/redstone/repeater"
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_item",
-      "has_the_recipe"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "tfc:crafting/vanilla/redstone/repeater"
-    ]
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "rewards": {"recipes": ["tfc:crafting/vanilla/redstone/repeater"]}
 }

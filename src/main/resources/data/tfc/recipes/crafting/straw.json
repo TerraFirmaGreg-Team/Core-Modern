@@ -1,13 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:thatch"
-    }
-  ],
-  "result": {
-    "item": "tfc:straw",
-    "count": 4
-  }
+    "result": {
+        "item": "tfc:straw",
+        "count": 4
+    },
+    "ingredients": [{"item": "tfc:thatch"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

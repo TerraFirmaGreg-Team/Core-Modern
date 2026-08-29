@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cobble/chalk"
-  },
-  "result": "tfc:rock/cobble/chalk_slab",
-  "count": 2
+    "result": "tfc:rock/cobble/chalk_slab",
+    "ingredient": {"item": "tfc:rock/cobble/chalk"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

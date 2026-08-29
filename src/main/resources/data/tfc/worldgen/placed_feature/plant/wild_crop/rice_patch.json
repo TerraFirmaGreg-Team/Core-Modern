@@ -1,21 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/wild_crop/rice_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 80
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": 15,
-      "max_temperature": 30,
-      "min_rainfall": 100,
-      "max_rainfall": 500,
-      "min_forest": "normal"
-    }
-  ]
+    "feature": "tfc:plant/wild_crop/rice_patch",
+    "placement": [
+        {
+            "chance": 80,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 30,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_forest": "normal",
+            "min_temperature": 15
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,42 +1,22 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "apply": {
-        "model": "tfc:block/wattle/stained/cyan"
-      }
-    },
-    {
-      "when": {
-        "top": true
-      },
-      "apply": {
-        "model": "tfc:block/wattle/top"
-      }
-    },
-    {
-      "when": {
-        "bottom": true
-      },
-      "apply": {
-        "model": "tfc:block/wattle/bottom"
-      }
-    },
-    {
-      "when": {
-        "left": true
-      },
-      "apply": {
-        "model": "tfc:block/wattle/left"
-      }
-    },
-    {
-      "when": {
-        "right": true
-      },
-      "apply": {
-        "model": "tfc:block/wattle/right"
-      }
-    }
-  ]
+    "multipart": [
+        {"apply": {"model": "tfc:block/wattle/stained/cyan"}},
+        {
+            "apply": {"model": "tfc:block/wattle/top"},
+            "when": {"top": true}
+        },
+        {
+            "apply": {"model": "tfc:block/wattle/bottom"},
+            "when": {"bottom": true}
+        },
+        {
+            "apply": {"model": "tfc:block/wattle/left"},
+            "when": {"left": true}
+        },
+        {
+            "apply": {"model": "tfc:block/wattle/right"},
+            "when": {"right": true}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

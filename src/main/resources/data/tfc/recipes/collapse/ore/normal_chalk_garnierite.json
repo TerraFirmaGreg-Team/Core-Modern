@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/rich_garnierite/chalk",
-  "result": "tfc:ore/normal_garnierite/chalk"
+    "result": "tfc:ore/normal_garnierite/chalk",
+    "ingredient": "tfc:ore/rich_garnierite/chalk",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

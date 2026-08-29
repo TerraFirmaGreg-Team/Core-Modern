@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "LPL",
-    "PAP",
-    "LPL"
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/lumber/mangrove"
-    },
-    "P": {
-      "item": "tfc:wood/planks/mangrove"
-    },
-    "A": {
-      "item": "tfc:wood/axle/mangrove"
+    "result": {"item": "tfc:wood/water_wheel/mangrove"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/mangrove"},
+        "A": {"item": "tfc:wood/axle/mangrove"},
+        "L": {"item": "tfc:wood/lumber/mangrove"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/water_wheel/mangrove"
-  }
 }

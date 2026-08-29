@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:shovels"
-  ]
+    "values": ["#tfc:shovels"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

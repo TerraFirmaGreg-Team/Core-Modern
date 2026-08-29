@@ -1,69 +1,33 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/nugget",
-  "criteria": {
-    "hematite": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:ore/small_hematite"
-            ]
-          }
-        ]
-      }
-    },
-    "limonite": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:ore/small_limonite"
-            ]
-          }
-        ]
-      }
-    },
-    "magnetite": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:ore/small_magnetite"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:ore/small_hematite"
-    },
-    "title": {
-      "translate": "tfc.advancements.world.iron.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.iron.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "hematite"
+    "parent": "tfc:world/nugget",
+    "requirements": [
+        ["hematite"],
+        ["limonite"],
+        ["magnetite"]
     ],
-    [
-      "limonite"
-    ],
-    [
-      "magnetite"
-    ]
-  ]
+    "criteria": {
+        "magnetite": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/small_magnetite"]}]}
+        },
+        "limonite": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/small_limonite"]}]}
+        },
+        "hematite": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:ore/small_hematite"]}]}
+        }
+    },
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:ore/small_hematite"},
+        "description": {"translate": "tfc.advancements.world.iron.description"},
+        "title": {"translate": "tfc.advancements.world.iron.title"},
+        "announce_to_chat": true,
+        "frame": "task"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,22 +1,20 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/reindeer_lichen_cover",
-  "placement": [
-    {
-      "type": "tfc:climate",
-      "min_temperature": -22.4,
-      "max_temperature": -12.4,
-      "min_rainfall": 220,
-      "max_rainfall": 310,
-      "min_forest": "normal",
-      "fuzzy": true
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    }
-  ]
+    "feature": "tfc:plant/reindeer_lichen_cover",
+    "placement": [
+        {
+            "max_temperature": -12.4,
+            "max_rainfall": 310,
+            "type": "tfc:climate",
+            "min_rainfall": 220,
+            "min_forest": "normal",
+            "min_temperature": -22.4,
+            "fuzzy": true
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

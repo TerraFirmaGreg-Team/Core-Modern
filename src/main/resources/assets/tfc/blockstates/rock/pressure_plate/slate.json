@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "powered=false": {
-      "model": "tfc:block/rock/pressure_plate/slate"
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/slate_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/slate"}
     },
-    "powered=true": {
-      "model": "tfc:block/rock/pressure_plate/slate_down"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/pressure_plate_up",
-  "textures": {
-    "texture": "tfc:block/rock/raw/gabbro"
-  }
+    "parent": "block/pressure_plate_up",
+    "textures": {"texture": "tfc:block/rock/raw/gabbro"},
+    "__comment__": "This file was automatically created by mcresources"
 }

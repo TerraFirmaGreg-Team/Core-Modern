@@ -1,26 +1,24 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/blackberry_bush",
-  "placement": [
-    {
-      "type": "tfc:climate",
-      "min_temperature": 7,
-      "max_temperature": 24,
-      "min_rainfall": 200,
-      "max_rainfall": 500,
-      "min_forest": "none",
-      "max_forest": "edge"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 22
-    }
-  ]
+    "feature": "tfc:plant/blackberry_bush",
+    "placement": [
+        {
+            "max_temperature": 24,
+            "max_rainfall": 500,
+            "max_forest": "edge",
+            "type": "tfc:climate",
+            "min_rainfall": 200,
+            "min_forest": "none",
+            "min_temperature": 7
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "chance": 22,
+            "type": "minecraft:rarity_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

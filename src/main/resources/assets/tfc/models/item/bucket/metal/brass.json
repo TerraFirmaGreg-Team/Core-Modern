@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "loader": "forge:fluid_container",
-  "parent": "forge:item/bucket",
-  "fluid": "tfc:metal/brass"
+    "parent": "forge:item/bucket",
+    "loader": "forge:fluid_container",
+    "fluid": "tfc:metal/brass",
+    "__comment__": "This file was automatically created by mcresources"
 }

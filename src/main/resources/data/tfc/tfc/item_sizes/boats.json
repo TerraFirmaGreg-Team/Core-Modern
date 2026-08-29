@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "minecraft:boats"
-  },
-  "size": "very_large",
-  "weight": "heavy"
+    "ingredient": {"tag": "minecraft:boats"},
+    "size": "very_large",
+    "weight": "heavy",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,32 +1,30 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/giant_kelp",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR_WG"
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "matching_blocks",
-        "blocks": [
-          "tfc:fluid/salt_water"
-        ]
-      }
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:would_survive_with_fluid",
-        "state": {
-          "Name": "tfc:plant/giant_kelp_flower",
-          "Properties": {
-            "age": "0",
-            "fluid": "empty"
-          }
+    "feature": "tfc:plant/giant_kelp",
+    "placement": [
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {
+                "blocks": ["tfc:fluid/salt_water"],
+                "type": "matching_blocks"
+            },
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {
+                        "fluid": "empty",
+                        "age": "0"
+                    },
+                    "Name": "tfc:plant/giant_kelp_flower"
+                },
+                "type": "tfc:would_survive_with_fluid"
+            },
+            "type": "block_predicate_filter"
         }
-      }
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

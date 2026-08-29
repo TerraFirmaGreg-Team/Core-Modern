@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/mossy_cobble/andesite"
-  },
-  "result": "tfc:rock/mossy_cobble/andesite_wall",
-  "count": 1
+    "result": "tfc:rock/mossy_cobble/andesite_wall",
+    "ingredient": {"item": "tfc:rock/mossy_cobble/andesite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

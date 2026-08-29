@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/rock/mossy_cobble/quartzite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/rock/mossy_cobble/quartzite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

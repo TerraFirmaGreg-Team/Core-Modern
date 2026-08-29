@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:thrown_javelin"
-  ]
+    "values": ["tfc:thrown_javelin"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

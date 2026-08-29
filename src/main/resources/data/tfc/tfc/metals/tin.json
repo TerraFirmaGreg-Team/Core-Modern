@@ -1,16 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "tier": 1,
-  "fluid": "tfc:metal/tin",
-  "melt_temperature": 230,
-  "specific_heat_capacity": 0.02143,
-  "ingots": {
-    "tag": "forge:ingots/tin"
-  },
-  "double_ingots": {
-    "tag": "forge:double_ingots/tin"
-  },
-  "sheets": {
-    "tag": "forge:sheets/tin"
-  }
+    "melt_temperature": 230,
+    "sheets": {"tag": "forge:sheets/tin"},
+    "double_ingots": {"tag": "forge:double_ingots/tin"},
+    "tier": 1,
+    "ingots": {"tag": "forge:ingots/tin"},
+    "specific_heat_capacity": 0.02143,
+    "fluid": "tfc:metal/tin",
+    "__comment__": "This file was automatically created by mcresources"
 }

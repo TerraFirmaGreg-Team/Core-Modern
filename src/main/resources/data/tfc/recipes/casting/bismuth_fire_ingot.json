@@ -1,15 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:casting",
-  "mold": {
-    "item": "tfc:ceramic/fire_ingot_mold"
-  },
-  "fluid": {
-    "ingredient": "tfc:metal/bismuth",
-    "amount": 100
-  },
-  "result": {
-    "item": "tfc:metal/ingot/bismuth"
-  },
-  "break_chance": 0.01
+    "result": {"item": "tfc:metal/ingot/bismuth"},
+    "break_chance": 0.01,
+    "mold": {"item": "tfc:ceramic/fire_ingot_mold"},
+    "fluid": {
+        "amount": 100,
+        "ingredient": "tfc:metal/bismuth"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:casting"
 }

@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/scraped_hide",
-  "criteria": {
-    "leather": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:leather"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "minecraft:leather"
+    "parent": "tfc:story/scraped_hide",
+    "requirements": [["leather"]],
+    "criteria": {"leather": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["minecraft:leather"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "minecraft:leather"},
+        "description": {"translate": "tfc.advancements.story.leather.description"},
+        "title": {"translate": "tfc.advancements.story.leather.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.leather.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.leather.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "leather"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

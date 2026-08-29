@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "tag": "tfc:foods/cooked_meats"
-  },
-  "temperature": 900
+    "ingredient": {"tag": "tfc:foods/cooked_meats"},
+    "temperature": 900,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

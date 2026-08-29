@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:salt_water",
-    "tfc:flowing_salt_water"
-  ]
+    "values": [
+        "tfc:salt_water",
+        "tfc:flowing_salt_water"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

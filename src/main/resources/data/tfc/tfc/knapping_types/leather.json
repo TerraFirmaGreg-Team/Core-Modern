@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "input": {
-    "ingredient": {
-      "tag": "tfc:leather_knapping"
+    "input": {
+        "ingredient": {"tag": "tfc:leather_knapping"},
+        "count": 1
     },
-    "count": 1
-  },
-  "click_sound": "tfc:item.knapping.leather",
-  "consume_after_complete": false,
-  "use_disabled_texture": false,
-  "spawns_particles": false,
-  "jei_icon_item": {
-    "item": "minecraft:leather"
-  }
+    "consume_after_complete": false,
+    "use_disabled_texture": false,
+    "jei_icon_item": {"item": "minecraft:leather"},
+    "click_sound": "tfc:item.knapping.leather",
+    "__comment__": "This file was automatically created by mcresources",
+    "spawns_particles": false
 }

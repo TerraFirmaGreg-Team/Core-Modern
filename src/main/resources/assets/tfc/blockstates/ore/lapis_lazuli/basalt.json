@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/lapis_lazuli/basalt"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/lapis_lazuli/basalt"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

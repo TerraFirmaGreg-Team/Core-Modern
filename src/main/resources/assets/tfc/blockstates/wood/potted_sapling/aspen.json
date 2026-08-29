@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/wood/potted_sapling/aspen"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/wood/potted_sapling/aspen"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

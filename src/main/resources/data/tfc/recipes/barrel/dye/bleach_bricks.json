@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "tag": "tfc:colored_bricks_alabaster"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "tfc:lye",
-    "amount": 75
-  },
-  "output_item": {
-    "item": "tfc:alabaster/bricks"
-  },
-  "duration": 1000
+    "input_fluid": {
+        "amount": 75,
+        "ingredient": "tfc:lye"
+    },
+    "duration": 1000,
+    "output_item": {"item": "tfc:alabaster/bricks"},
+    "input_item": {"ingredient": {"tag": "tfc:colored_bricks_alabaster"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

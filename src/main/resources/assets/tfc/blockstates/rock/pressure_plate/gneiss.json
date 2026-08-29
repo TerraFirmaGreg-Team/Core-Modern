@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "powered=false": {
-      "model": "tfc:block/rock/pressure_plate/gneiss"
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/gneiss_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/gneiss"}
     },
-    "powered=true": {
-      "model": "tfc:block/rock/pressure_plate/gneiss_down"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/find_rock",
-  "criteria": {
-    "stone_tools": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:stone_tools"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:stone/axe/sedimentary"
+    "parent": "tfc:story/find_rock",
+    "requirements": [["stone_tools"]],
+    "criteria": {"stone_tools": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:stone_tools"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:stone/axe/sedimentary"},
+        "description": {"translate": "tfc.advancements.story.stone_age.description"},
+        "title": {"translate": "tfc.advancements.story.stone_age.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.stone_age.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.stone_age.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "stone_tools"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,6 +1,4 @@
 {
-  "parent": "minecraft:block/tinted_cross",
-  "textures": {
-    "cross": "tfc:block/plant/bluegrass/bluegrass_shortest"
-  }
+    "parent": "minecraft:block/tinted_cross",
+    "textures": {"cross": "tfc:block/plant/bluegrass/bluegrass_shortest"}
 }

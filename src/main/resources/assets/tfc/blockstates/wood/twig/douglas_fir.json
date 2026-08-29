@@ -1,22 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": [
-      {
-        "model": "tfc:block/wood/twig/douglas_fir",
-        "y": 90
-      },
-      {
-        "model": "tfc:block/wood/twig/douglas_fir"
-      },
-      {
-        "model": "tfc:block/wood/twig/douglas_fir",
-        "y": 180
-      },
-      {
-        "model": "tfc:block/wood/twig/douglas_fir",
-        "y": 270
-      }
-    ]
-  }
+    "variants": {"": [
+        {
+            "y": 90,
+            "model": "tfc:block/wood/twig/douglas_fir"
+        },
+        {"model": "tfc:block/wood/twig/douglas_fir"},
+        {
+            "y": 180,
+            "model": "tfc:block/wood/twig/douglas_fir"
+        },
+        {
+            "y": 270,
+            "model": "tfc:block/wood/twig/douglas_fir"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
 }

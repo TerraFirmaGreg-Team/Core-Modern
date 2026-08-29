@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "LPL",
-    "PAP",
-    "LPL"
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/lumber/willow"
-    },
-    "P": {
-      "item": "tfc:wood/planks/willow"
-    },
-    "A": {
-      "item": "tfc:wood/axle/willow"
+    "result": {"item": "tfc:wood/water_wheel/willow"},
+    "pattern": [
+        "LPL",
+        "PAP",
+        "LPL"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "P": {"item": "tfc:wood/planks/willow"},
+        "A": {"item": "tfc:wood/axle/willow"},
+        "L": {"item": "tfc:wood/lumber/willow"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/water_wheel/willow"
-  }
 }

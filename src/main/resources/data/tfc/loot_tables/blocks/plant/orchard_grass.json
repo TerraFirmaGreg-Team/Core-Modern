@@ -1,46 +1,30 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "name": "tfc:plant/orchard_grass",
-              "conditions": [
+    "pools": [{
+        "entries": [{
+            "children": [
                 {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "tag": "forge:shears"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:straw",
-              "conditions": [
+                    "name": "tfc:plant/orchard_grass",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "predicate": {"tag": "forge:shears"},
+                        "condition": "minecraft:match_tool"
+                    }]
+                },
                 {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "tag": "tfc:sharp_tools"
-                  }
+                    "name": "tfc:straw",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "predicate": {"tag": "tfc:sharp_tools"},
+                        "condition": "minecraft:match_tool"
+                    }]
                 }
-              ]
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+            ],
+            "type": "minecraft:alternatives"
+        }],
+        "name": "loot_pool",
+        "rolls": 1,
+        "conditions": [{"condition": "minecraft:survives_explosion"}]
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
 }

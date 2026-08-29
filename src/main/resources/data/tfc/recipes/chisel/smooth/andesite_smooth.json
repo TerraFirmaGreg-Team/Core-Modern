@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/andesite",
-  "result": "tfc:rock/smooth/andesite",
-  "mode": "smooth"
+    "result": "tfc:rock/smooth/andesite",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/raw/andesite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

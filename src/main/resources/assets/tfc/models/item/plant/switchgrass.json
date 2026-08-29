@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/plant/switchgrass/switchgrass_shorter_0"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/plant/switchgrass/switchgrass_shorter_0"}
 }

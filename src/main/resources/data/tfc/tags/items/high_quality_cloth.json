@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:silk_cloth",
-    "tfc:wool_cloth"
-  ]
+    "values": [
+        "tfc:silk_cloth",
+        "tfc:wool_cloth"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

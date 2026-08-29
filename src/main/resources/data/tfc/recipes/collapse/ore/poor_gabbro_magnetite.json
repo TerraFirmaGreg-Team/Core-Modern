@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_magnetite/gabbro",
-  "result": "tfc:ore/poor_magnetite/gabbro"
+    "result": "tfc:ore/poor_magnetite/gabbro",
+    "ingredient": "tfc:ore/normal_magnetite/gabbro",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

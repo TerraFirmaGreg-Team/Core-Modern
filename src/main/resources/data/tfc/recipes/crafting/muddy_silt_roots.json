@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:tree_roots"
-    },
-    {
-      "item": "tfc:mud/silt"
-    }
-  ],
-  "result": {
-    "item": "tfc:muddy_roots/silt"
-  }
+    "result": {"item": "tfc:muddy_roots/silt"},
+    "ingredients": [
+        {"item": "tfc:tree_roots"},
+        {"item": "tfc:mud/silt"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

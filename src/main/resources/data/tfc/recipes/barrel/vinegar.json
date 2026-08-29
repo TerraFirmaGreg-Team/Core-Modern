@@ -1,23 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "tag": "tfc:foods/fruits"
-      }
-    }
-  },
-  "input_fluid": {
-    "ingredient": {
-      "tag": "tfc:alcohols"
+    "input_fluid": {
+        "amount": 250,
+        "ingredient": {"tag": "tfc:alcohols"}
     },
-    "amount": 250
-  },
-  "output_fluid": {
-    "fluid": "tfc:vinegar",
-    "amount": 250
-  },
-  "duration": 8000
+    "duration": 8000,
+    "output_fluid": {
+        "amount": 250,
+        "fluid": "tfc:vinegar"
+    },
+    "input_item": {"ingredient": {
+        "ingredient": {"tag": "tfc:foods/fruits"},
+        "type": "tfc:not_rotten"
+    }},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

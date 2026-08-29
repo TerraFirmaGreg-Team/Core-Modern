@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/poor_native_silver"
-  },
-  "result": {
-    "item": "tfc:powder/native_silver",
-    "count": 3
-  }
+    "result": {
+        "item": "tfc:powder/native_silver",
+        "count": 3
+    },
+    "ingredient": {"item": "tfc:ore/poor_native_silver"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

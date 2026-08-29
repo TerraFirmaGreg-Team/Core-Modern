@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/mossy_bricks/schist",
-    "top": "tfc:block/rock/mossy_bricks/schist",
-    "side": "tfc:block/rock/mossy_bricks/schist"
-  }
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_bricks/schist",
+        "top": "tfc:block/rock/mossy_bricks/schist",
+        "bottom": "tfc:block/rock/mossy_bricks/schist"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

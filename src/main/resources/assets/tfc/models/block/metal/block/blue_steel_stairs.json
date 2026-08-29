@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/metal/block/blue_steel",
-    "top": "tfc:block/metal/block/blue_steel",
-    "side": "tfc:block/metal/block/blue_steel"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/metal/block/blue_steel",
+        "top": "tfc:block/metal/block/blue_steel",
+        "bottom": "tfc:block/metal/block/blue_steel"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

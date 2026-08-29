@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/metal/block/bismuth_bronze",
-    "top": "tfc:block/metal/block/bismuth_bronze",
-    "side": "tfc:block/metal/block/bismuth_bronze"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/metal/block/bismuth_bronze",
+        "top": "tfc:block/metal/block/bismuth_bronze",
+        "bottom": "tfc:block/metal/block/bismuth_bronze"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

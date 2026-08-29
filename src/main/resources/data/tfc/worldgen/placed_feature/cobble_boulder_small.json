@@ -1,14 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:cobble_boulder_small",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR_WG"
-    },
-    {
-      "type": "tfc:flat_enough",
-      "flatness": 0.2
-    }
-  ]
+    "feature": "tfc:cobble_boulder_small",
+    "placement": [
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "flatness": 0.2,
+            "type": "tfc:flat_enough"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,30 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/brass_plated_block",
-  "criteria": {
-    "special_condition": {
-      "trigger": "tfc:table_pour"
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "minecraft:glass_pane"
+    "parent": "tfc:story/brass_plated_block",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {"trigger": "tfc:table_pour"}},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "minecraft:glass_pane"},
+        "description": {"translate": "tfc.advancements.story.table_pour.description"},
+        "title": {"translate": "tfc.advancements.story.table_pour.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.table_pour.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.table_pour.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "special_condition"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

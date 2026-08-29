@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:alabaster/polished/green",
-  "result": "tfc:alabaster/polished/green_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:alabaster/polished/green_slab"
-  }
+    "result": "tfc:alabaster/polished/green_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:alabaster/polished/green_slab"},
+    "ingredient": "tfc:alabaster/polished/green",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

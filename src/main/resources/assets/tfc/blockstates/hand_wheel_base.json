@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "tfc:block/hand_wheel_base",
-      "y": 90
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/hand_wheel_base"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/hand_wheel_base"
+        },
+        "facing=north": {"model": "tfc:block/hand_wheel_base"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/hand_wheel_base"
+        }
     },
-    "facing=north": {
-      "model": "tfc:block/hand_wheel_base"
-    },
-    "facing=south": {
-      "model": "tfc:block/hand_wheel_base",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "tfc:block/hand_wheel_base",
-      "y": 270
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/mossy_cobble/marble",
-  "result": "tfc:rock/mossy_cobble/marble_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/mossy_cobble/marble_slab"
-  }
+    "result": "tfc:rock/mossy_cobble/marble_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/mossy_cobble/marble_slab"},
+    "ingredient": "tfc:rock/mossy_cobble/marble",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

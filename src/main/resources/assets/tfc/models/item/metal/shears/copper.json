@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "tfc:item/metal/shears/copper"
-  }
+    "parent": "item/handheld",
+    "textures": {"layer0": "tfc:item/metal/shears/copper"},
+    "__comment__": "This file was automatically created by mcresources"
 }

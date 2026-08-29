@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/trillium"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/trillium"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

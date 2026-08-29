@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X X",
-    "XYX",
-    "XYX"
-  ],
-  "key": {
-    "X": {
-      "tag": "tfc:lumber"
-    },
-    "Y": {
-      "tag": "minecraft:dirt"
+    "result": {"item": "tfc:composter"},
+    "pattern": [
+        "X X",
+        "XYX",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "tfc:lumber"},
+        "Y": {"tag": "minecraft:dirt"}
     }
-  },
-  "result": {
-    "item": "tfc:composter"
-  }
 }

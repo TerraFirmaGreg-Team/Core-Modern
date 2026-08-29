@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " L ",
-    "WAW",
-    " L "
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/stripped_log/sycamore"
+    "result": {
+        "item": "tfc:wood/encased_axle/sycamore",
+        "count": 4
     },
-    "W": {
-      "item": "tfc:wood/lumber/sycamore"
-    },
-    "A": {
-      "item": "tfc:wood/axle/sycamore"
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/sycamore"},
+        "W": {"item": "tfc:wood/lumber/sycamore"},
+        "L": {"item": "tfc:wood/stripped_log/sycamore"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/encased_axle/sycamore",
-    "count": 4
-  }
 }

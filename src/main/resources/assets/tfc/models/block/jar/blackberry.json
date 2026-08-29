@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/jar",
-  "textures": {
-    "1": "tfc:block/jar/blackberry"
-  }
+    "parent": "tfc:block/jar",
+    "textures": {"1": "tfc:block/jar/blackberry"},
+    "__comment__": "This file was automatically created by mcresources"
 }

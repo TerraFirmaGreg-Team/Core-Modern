@@ -1,12 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ceramic/purple_large_vessel_opened",
-  "overrides": [
-    {
-      "predicate": {
-        "tfc:sealed": 1.0
-      },
-      "model": "tfc:block/ceramic/purple_large_vessel_sealed"
-    }
-  ]
+    "parent": "tfc:block/ceramic/purple_large_vessel_opened",
+    "overrides": [{
+        "predicate": {"tfc:sealed": 1},
+        "model": "tfc:block/ceramic/purple_large_vessel_sealed"
+    }],
+    "__comment__": "This file was automatically created by mcresources"
 }

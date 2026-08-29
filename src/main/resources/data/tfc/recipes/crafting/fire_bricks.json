@@ -1,21 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XYX",
-    "YXY",
-    "XYX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:ceramic/fire_brick"
+    "result": {
+        "item": "tfc:fire_bricks",
+        "count": 2
     },
-    "Y": {
-      "tag": "tfc:mortar"
+    "pattern": [
+        "XYX",
+        "YXY",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:ceramic/fire_brick"},
+        "Y": {"tag": "tfc:mortar"}
     }
-  },
-  "result": {
-    "item": "tfc:fire_bricks",
-    "count": 2
-  }
 }

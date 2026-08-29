@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_garnierite/andesite",
-  "result": "tfc:ore/poor_garnierite/andesite"
+    "result": "tfc:ore/poor_garnierite/andesite",
+    "ingredient": "tfc:ore/normal_garnierite/andesite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

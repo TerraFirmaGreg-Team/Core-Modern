@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/farmland/loam"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/farmland/loam"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/gem/topaz"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/gem/topaz"},
+    "__comment__": "This file was automatically created by mcresources"
 }

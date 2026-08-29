@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/iron_bloom",
-  "criteria": {
-    "metal/ingot/wrought_iron": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:metal/ingot/wrought_iron"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:metal/ingot/wrought_iron"
+    "parent": "tfc:story/iron_bloom",
+    "requirements": [["metal/ingot/wrought_iron"]],
+    "criteria": {"metal/ingot/wrought_iron": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:metal/ingot/wrought_iron"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:metal/ingot/wrought_iron"},
+        "description": {"translate": "tfc.advancements.story.iron_age.description"},
+        "title": {"translate": "tfc.advancements.story.iron_age.title"},
+        "announce_to_chat": true,
+        "frame": "challenge"
     },
-    "title": {
-      "translate": "tfc.advancements.story.iron_age.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.iron_age.description"
-    },
-    "frame": "challenge",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "metal/ingot/wrought_iron"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

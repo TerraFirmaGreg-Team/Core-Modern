@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/amethyst/granite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/amethyst/granite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

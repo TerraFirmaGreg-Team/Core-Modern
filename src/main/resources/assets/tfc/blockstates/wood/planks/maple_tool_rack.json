@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "tfc:block/wood/planks/maple_tool_rack",
-      "y": 270
+    "variants": {
+        "facing=east": {
+            "y": 270,
+            "model": "tfc:block/wood/planks/maple_tool_rack"
+        },
+        "facing=south": {"model": "tfc:block/wood/planks/maple_tool_rack"},
+        "facing=north": {
+            "y": 180,
+            "model": "tfc:block/wood/planks/maple_tool_rack"
+        },
+        "facing=west": {
+            "y": 90,
+            "model": "tfc:block/wood/planks/maple_tool_rack"
+        }
     },
-    "facing=north": {
-      "model": "tfc:block/wood/planks/maple_tool_rack",
-      "y": 180
-    },
-    "facing=south": {
-      "model": "tfc:block/wood/planks/maple_tool_rack"
-    },
-    "facing=west": {
-      "model": "tfc:block/wood/planks/maple_tool_rack",
-      "y": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

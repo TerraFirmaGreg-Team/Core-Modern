@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore",
-  "textures": {
-    "all": "tfc:block/rock/raw/limestone",
-    "overlay": "tfc:block/ore/cinnabar"
-  }
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/rock/raw/limestone",
+        "overlay": "tfc:block/ore/cinnabar"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

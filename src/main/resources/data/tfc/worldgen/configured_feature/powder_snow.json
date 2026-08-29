@@ -1,9 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:powder_snow",
-  "config": {
-    "state": {
-      "Name": "minecraft:powder_snow"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:powder_snow",
+    "config": {"state": {"Name": "minecraft:powder_snow"}}
 }

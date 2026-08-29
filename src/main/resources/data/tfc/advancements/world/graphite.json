@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/nugget",
-  "criteria": {
-    "ore/graphite": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:ore/graphite"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:ore/graphite"
+    "parent": "tfc:world/nugget",
+    "requirements": [["ore/graphite"]],
+    "criteria": {"ore/graphite": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:ore/graphite"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:ore/graphite"},
+        "description": {"translate": "tfc.advancements.world.graphite.description"},
+        "title": {"translate": "tfc.advancements.world.graphite.title"},
+        "announce_to_chat": true,
+        "frame": "goal"
     },
-    "title": {
-      "translate": "tfc.advancements.world.graphite.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.graphite.description"
-    },
-    "frame": "goal",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "ore/graphite"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/sterling_silver",
-    "tfc:metal/flowing_sterling_silver"
-  ]
+    "values": [
+        "tfc:metal/sterling_silver",
+        "tfc:metal/flowing_sterling_silver"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

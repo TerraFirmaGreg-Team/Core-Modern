@@ -1,36 +1,18 @@
-{
-  "multipart": [
+{"multipart": [
     {
-      "when": {
-        "age": "0"
-      },
-      "apply": {
-        "model": "tfc:block/plant/beachgrass_shortest"
-      }
+        "apply": {"model": "tfc:block/plant/beachgrass_shortest"},
+        "when": {"age": "0"}
     },
     {
-      "when": {
-        "age": "1"
-      },
-      "apply": {
-        "model": "tfc:block/plant/beachgrass_shorter"
-      }
+        "apply": {"model": "tfc:block/plant/beachgrass_shorter"},
+        "when": {"age": "1"}
     },
     {
-      "when": {
-        "age": "2"
-      },
-      "apply": {
-        "model": "tfc:block/plant/beachgrass_short"
-      }
+        "apply": {"model": "tfc:block/plant/beachgrass_short"},
+        "when": {"age": "2"}
     },
     {
-      "when": {
-        "age": "3"
-      },
-      "apply": {
-        "model": "tfc:block/plant/beachgrass"
-      }
+        "apply": {"model": "tfc:block/plant/beachgrass"},
+        "when": {"age": "3"}
     }
-  ]
-}
+]}

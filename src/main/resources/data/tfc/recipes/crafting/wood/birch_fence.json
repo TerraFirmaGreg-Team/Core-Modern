@@ -1,20 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XYX",
-    "XYX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/planks/birch"
+    "result": {
+        "item": "tfc:wood/planks/birch_fence",
+        "count": 8
     },
-    "Y": {
-      "item": "tfc:wood/lumber/birch"
+    "pattern": [
+        "XYX",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/birch"},
+        "Y": {"item": "tfc:wood/lumber/birch"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/planks/birch_fence",
-    "count": 8
-  }
 }

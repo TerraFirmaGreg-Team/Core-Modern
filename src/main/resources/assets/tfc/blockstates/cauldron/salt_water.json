@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/cauldron/salt_water"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/cauldron/salt_water"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

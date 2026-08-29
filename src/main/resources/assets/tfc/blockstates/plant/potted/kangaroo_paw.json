@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/kangaroo_paw"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/kangaroo_paw"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,15 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:blast_furnace",
-  "fluid": {
-    "ingredient": "tfc:metal/cast_iron",
-    "amount": 1
-  },
-  "result": {
-    "fluid": "tfc:metal/pig_iron",
-    "amount": 1
-  },
-  "catalyst": {
-    "tag": "tfc:flux"
-  }
+    "result": {
+        "amount": 1,
+        "fluid": "tfc:metal/pig_iron"
+    },
+    "catalyst": {"tag": "tfc:flux"},
+    "fluid": {
+        "amount": 1,
+        "ingredient": "tfc:metal/cast_iron"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:blast_furnace"
 }

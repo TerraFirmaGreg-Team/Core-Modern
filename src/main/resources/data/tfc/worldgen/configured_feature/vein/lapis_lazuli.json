@@ -1,34 +1,22 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:cluster_vein",
-  "config": {
-    "rarity": 30,
-    "density": 0.12,
-    "min_y": -20,
-    "max_y": 80,
-    "size": 30,
-    "random_name": "lapis_lazuli",
-    "blocks": [
-      {
-        "replace": [
-          "tfc:rock/raw/limestone"
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:cluster_vein",
+    "config": {
+        "max_y": 80,
+        "density": 0.12,
+        "size": 30,
+        "blocks": [
+            {
+                "with": [{"block": "tfc:ore/lapis_lazuli/limestone"}],
+                "replace": ["tfc:rock/raw/limestone"]
+            },
+            {
+                "with": [{"block": "tfc:ore/lapis_lazuli/marble"}],
+                "replace": ["tfc:rock/raw/marble"]
+            }
         ],
-        "with": [
-          {
-            "block": "tfc:ore/lapis_lazuli/limestone"
-          }
-        ]
-      },
-      {
-        "replace": [
-          "tfc:rock/raw/marble"
-        ],
-        "with": [
-          {
-            "block": "tfc:ore/lapis_lazuli/marble"
-          }
-        ]
-      }
-    ]
-  }
+        "min_y": -20,
+        "random_name": "lapis_lazuli",
+        "rarity": 30
+    }
 }

@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:metal/block/tin_stairs"
-  },
-  "heat_capacity": 5.357,
-  "forging_temperature": 138,
-  "welding_temperature": 184
+    "welding_temperature": 184,
+    "ingredient": {"item": "tfc:metal/block/tin_stairs"},
+    "heat_capacity": 5.357,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 138
 }

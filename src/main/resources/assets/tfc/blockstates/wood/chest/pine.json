@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/wood/chest/pine"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/wood/chest/pine"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

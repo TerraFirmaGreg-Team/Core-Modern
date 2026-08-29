@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/normal_tetrahedrite/dacite"
+    "parent": "tfc:block/ore/normal_tetrahedrite/dacite",
+    "__comment__": "This file was automatically created by mcresources"
 }

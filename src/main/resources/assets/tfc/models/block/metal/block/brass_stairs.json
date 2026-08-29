@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/metal/block/brass",
-    "top": "tfc:block/metal/block/brass",
-    "side": "tfc:block/metal/block/brass"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/metal/block/brass",
+        "top": "tfc:block/metal/block/brass",
+        "bottom": "tfc:block/metal/block/brass"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

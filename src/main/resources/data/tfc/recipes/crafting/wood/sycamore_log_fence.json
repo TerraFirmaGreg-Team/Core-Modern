@@ -1,20 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XYX",
-    "XYX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/log/sycamore"
+    "result": {
+        "item": "tfc:wood/planks/sycamore_log_fence",
+        "count": 8
     },
-    "Y": {
-      "item": "tfc:wood/lumber/sycamore"
+    "pattern": [
+        "XYX",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/log/sycamore"},
+        "Y": {"item": "tfc:wood/lumber/sycamore"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/planks/sycamore_log_fence",
-    "count": 8
-  }
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/emerald/chalk"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/emerald/chalk"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

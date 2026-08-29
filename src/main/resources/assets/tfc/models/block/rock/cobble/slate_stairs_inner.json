@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/cobble/slate",
-    "top": "tfc:block/rock/cobble/slate",
-    "side": "tfc:block/rock/cobble/slate"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/cobble/slate",
+        "top": "tfc:block/rock/cobble/slate",
+        "bottom": "tfc:block/rock/cobble/slate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

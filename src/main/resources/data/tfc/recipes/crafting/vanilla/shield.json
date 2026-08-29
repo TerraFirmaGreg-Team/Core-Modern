@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XYX",
-    "XXX",
-    " Z "
-  ],
-  "key": {
-    "X": {
-      "tag": "tfc:lumber"
-    },
-    "Y": {
-      "item": "tfc:glue"
-    },
-    "Z": {
-      "tag": "forge:rods/wooden"
+    "result": {"item": "minecraft:shield"},
+    "pattern": [
+        "XYX",
+        "XXX",
+        " Z "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "tfc:lumber"},
+        "Y": {"item": "tfc:glue"},
+        "Z": {"tag": "forge:rods/wooden"}
     }
-  },
-  "result": {
-    "item": "minecraft:shield"
-  }
 }

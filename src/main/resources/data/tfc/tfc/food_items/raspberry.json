@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:food/raspberry"
-  },
-  "hunger": 4,
-  "saturation": 0.5,
-  "water": 5,
-  "decay_modifier": 4.9,
-  "fruit": 0.75
+    "saturation": 0.5,
+    "ingredient": {"item": "tfc:food/raspberry"},
+    "decay_modifier": 4.9,
+    "fruit": 0.75,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 5,
+    "hunger": 4
 }

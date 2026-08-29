@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    " X ",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "tag": "forge:double_ingots/bismuth_bronze"
-    }
-  },
-  "result": {
-    "item": "tfc:metal/anvil/bismuth_bronze"
-  }
+    "result": {"item": "tfc:metal/anvil/bismuth_bronze"},
+    "pattern": [
+        "XXX",
+        " X ",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "forge:double_ingots/bismuth_bronze"}}
 }

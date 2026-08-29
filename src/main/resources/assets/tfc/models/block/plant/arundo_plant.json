@@ -1,6 +1,4 @@
 {
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/arundo/body"
-  }
+    "parent": "minecraft:block/cross",
+    "textures": {"cross": "tfc:block/plant/arundo/body"}
 }

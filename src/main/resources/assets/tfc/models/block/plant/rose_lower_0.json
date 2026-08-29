@@ -1,6 +1,4 @@
 {
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/rose/rose_lower_0"
-  }
+    "parent": "minecraft:block/cross",
+    "textures": {"cross": "tfc:block/plant/rose/rose_lower_0"}
 }

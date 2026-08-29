@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:any_infinite_water",
-    "tfc:spring_water",
-    "tfc:flowing_spring_water"
-  ]
+    "values": [
+        "#tfc:any_infinite_water",
+        "tfc:spring_water",
+        "tfc:flowing_spring_water"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,20 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XYX",
-    "XYX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/log/spruce"
+    "result": {
+        "item": "tfc:wood/planks/spruce_log_fence",
+        "count": 8
     },
-    "Y": {
-      "item": "tfc:wood/lumber/spruce"
+    "pattern": [
+        "XYX",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/log/spruce"},
+        "Y": {"item": "tfc:wood/lumber/spruce"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/planks/spruce_log_fence",
-    "count": 8
-  }
 }

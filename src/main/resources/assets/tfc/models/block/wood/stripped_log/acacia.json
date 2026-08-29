@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "tfc:block/wood/stripped_log_top/acacia",
-    "side": "tfc:block/wood/stripped_log/acacia"
-  }
+    "parent": "block/cube_column",
+    "textures": {
+        "side": "tfc:block/wood/stripped_log/acacia",
+        "end": "tfc:block/wood/stripped_log_top/acacia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

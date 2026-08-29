@@ -1,35 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_item": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:fire_clay"
-            ]
-          }
-        ]
-      }
+    "parent": "minecraft:recipes/root",
+    "requirements": [[
+        "has_item",
+        "has_the_recipe"
+    ]],
+    "criteria": {
+        "has_item": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:fire_clay"]}]}
+        },
+        "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {"recipe": "tfc:crafting/fire_clay_block"}
+        }
     },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "tfc:crafting/fire_clay_block"
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_item",
-      "has_the_recipe"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "tfc:crafting/fire_clay_block"
-    ]
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "rewards": {"recipes": ["tfc:crafting/fire_clay_block"]}
 }

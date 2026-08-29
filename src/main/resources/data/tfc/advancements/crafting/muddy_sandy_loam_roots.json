@@ -1,35 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_item": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:mud/sandy_loam"
-            ]
-          }
-        ]
-      }
+    "parent": "minecraft:recipes/root",
+    "requirements": [[
+        "has_item",
+        "has_the_recipe"
+    ]],
+    "criteria": {
+        "has_item": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:mud/sandy_loam"]}]}
+        },
+        "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {"recipe": "tfc:crafting/muddy_sandy_loam_roots"}
+        }
     },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "tfc:crafting/muddy_sandy_loam_roots"
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_item",
-      "has_the_recipe"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "tfc:crafting/muddy_sandy_loam_roots"
-    ]
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "rewards": {"recipes": ["tfc:crafting/muddy_sandy_loam_roots"]}
 }

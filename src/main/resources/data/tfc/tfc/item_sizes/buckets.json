@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "tfc:buckets"
-  },
-  "size": "large",
-  "weight": "medium"
+    "ingredient": {"tag": "tfc:buckets"},
+    "size": "large",
+    "weight": "medium",
+    "__comment__": "This file was automatically created by mcresources"
 }

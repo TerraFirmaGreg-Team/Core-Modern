@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/double_sheet/brass"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/brass",
-    "amount": 400
-  },
-  "temperature": 930
+    "result_fluid": {
+        "amount": 400,
+        "fluid": "tfc:metal/brass"
+    },
+    "ingredient": {"item": "tfc:metal/double_sheet/brass"},
+    "temperature": 930,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

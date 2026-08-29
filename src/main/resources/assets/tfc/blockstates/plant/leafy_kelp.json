@@ -1,7 +1,1 @@
-{
-  "variants": {
-    "": {
-      "model": "minecraft:block/kelp"
-    }
-  }
-}
+{"variants": {"": {"model": "minecraft:block/kelp"}}}

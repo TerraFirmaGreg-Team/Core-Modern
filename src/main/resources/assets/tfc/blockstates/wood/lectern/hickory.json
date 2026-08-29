@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "tfc:block/wood/lectern/hickory",
-      "y": 90
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/wood/lectern/hickory"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/wood/lectern/hickory"
+        },
+        "facing=north": {"model": "tfc:block/wood/lectern/hickory"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/wood/lectern/hickory"
+        }
     },
-    "facing=north": {
-      "model": "tfc:block/wood/lectern/hickory"
-    },
-    "facing=south": {
-      "model": "tfc:block/wood/lectern/hickory",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "tfc:block/wood/lectern/hickory",
-      "y": 270
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

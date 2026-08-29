@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab",
-  "textures": {
-    "bottom": "tfc:block/sandstone/top/black",
-    "top": "tfc:block/sandstone/top/black",
-    "side": "tfc:block/sandstone/cut/black"
-  }
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/sandstone/cut/black",
+        "top": "tfc:block/sandstone/top/black",
+        "bottom": "tfc:block/sandstone/top/black"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

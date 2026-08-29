@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/rich_garnierite/schist"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/rich_garnierite/schist"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/deposit/native_silver/chalk"
+    "parent": "tfc:block/deposit/native_silver/chalk",
+    "__comment__": "This file was automatically created by mcresources"
 }

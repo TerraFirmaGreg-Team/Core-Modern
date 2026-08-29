@@ -1,21 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:damage_inputs_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "tag": "tfc:chisels"
-      },
-      {
-        "item": "tfc:brick/limestone"
-      },
-      {
-        "item": "tfc:brick/limestone"
-      }
-    ],
-    "result": {
-      "item": "tfc:rock/pressure_plate/limestone"
-    }
-  }
+    "recipe": {
+        "result": {"item": "tfc:rock/pressure_plate/limestone"},
+        "ingredients": [
+            {"tag": "tfc:chisels"},
+            {"item": "tfc:brick/limestone"},
+            {"item": "tfc:brick/limestone"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
 }

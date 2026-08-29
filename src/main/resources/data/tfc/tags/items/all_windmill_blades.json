@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:default_windmill_blades",
-    "#tfc:decorated_windmill_blades"
-  ]
+    "values": [
+        "#tfc:default_windmill_blades",
+        "#tfc:decorated_windmill_blades"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

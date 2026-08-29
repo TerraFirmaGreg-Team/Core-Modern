@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/cracked_bricks/dacite",
-  "result": "tfc:rock/cracked_bricks/dacite_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/cracked_bricks/dacite_slab"
-  }
+    "result": "tfc:rock/cracked_bricks/dacite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/cracked_bricks/dacite_slab"},
+    "ingredient": "tfc:rock/cracked_bricks/dacite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

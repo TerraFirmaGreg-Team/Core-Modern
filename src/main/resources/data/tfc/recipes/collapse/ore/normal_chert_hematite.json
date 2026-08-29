@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/rich_hematite/chert",
-  "result": "tfc:ore/normal_hematite/chert"
+    "result": "tfc:ore/normal_hematite/chert",
+    "ingredient": "tfc:ore/rich_hematite/chert",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

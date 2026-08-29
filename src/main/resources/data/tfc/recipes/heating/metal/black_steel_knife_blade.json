@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/knife_blade/black_steel"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/black_steel",
-    "amount": 100
-  },
-  "temperature": 1485
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/black_steel"
+    },
+    "ingredient": {"item": "tfc:metal/knife_blade/black_steel"},
+    "temperature": 1485,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

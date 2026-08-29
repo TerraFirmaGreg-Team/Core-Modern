@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/fluid/metal/tin"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/fluid/metal/tin"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

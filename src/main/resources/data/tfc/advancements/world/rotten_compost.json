@@ -1,30 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/compost",
-  "criteria": {
-    "special_condition": {
-      "trigger": "tfc:rotten_compost_kill"
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:rotten_compost"
+    "parent": "tfc:world/compost",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {"trigger": "tfc:rotten_compost_kill"}},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:rotten_compost"},
+        "description": {"translate": "tfc.advancements.world.rotten_compost.description"},
+        "title": {"translate": "tfc.advancements.world.rotten_compost.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.rotten_compost.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.rotten_compost.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "special_condition"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " L ",
-    "WAW",
-    " L "
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/stripped_log/maple"
+    "result": {
+        "item": "tfc:wood/encased_axle/maple",
+        "count": 4
     },
-    "W": {
-      "item": "tfc:wood/lumber/maple"
-    },
-    "A": {
-      "item": "tfc:wood/axle/maple"
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/maple"},
+        "W": {"item": "tfc:wood/lumber/maple"},
+        "L": {"item": "tfc:wood/stripped_log/maple"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/encased_axle/maple",
-    "count": 4
-  }
 }

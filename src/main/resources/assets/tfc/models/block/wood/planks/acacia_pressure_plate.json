@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/pressure_plate_up",
-  "textures": {
-    "texture": "tfc:block/wood/planks/acacia"
-  }
+    "parent": "block/pressure_plate_up",
+    "textures": {"texture": "tfc:block/wood/planks/acacia"},
+    "__comment__": "This file was automatically created by mcresources"
 }

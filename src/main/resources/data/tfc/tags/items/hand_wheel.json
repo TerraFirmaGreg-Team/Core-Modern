@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:hand_wheel"
-  ]
+    "values": ["tfc:hand_wheel"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

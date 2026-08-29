@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:block/chiseled_bookshelf_occupied_slot_bottom_right",
-  "textures": {
-    "texture": "tfc:block/wood/planks/ash_bookshelf_occupied"
-  }
+    "parent": "minecraft:block/chiseled_bookshelf_occupied_slot_bottom_right",
+    "textures": {"texture": "tfc:block/wood/planks/ash_bookshelf_occupied"},
+    "__comment__": "This file was automatically created by mcresources"
 }

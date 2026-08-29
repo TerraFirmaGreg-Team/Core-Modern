@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/food/crappie"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/food/crappie"},
+    "__comment__": "This file was automatically created by mcresources"
 }

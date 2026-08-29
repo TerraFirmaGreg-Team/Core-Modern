@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "tfc:deposit/native_copper/basalt",
-  "result": "tfc:deposit/native_copper/basalt"
+    "result": "tfc:deposit/native_copper/basalt",
+    "ingredient": "tfc:deposit/native_copper/basalt",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

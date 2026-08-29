@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "tfc:rock/gravel/andesite",
-  "result": "tfc:rock/gravel/andesite"
+    "result": "tfc:rock/gravel/andesite",
+    "ingredient": "tfc:rock/gravel/andesite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

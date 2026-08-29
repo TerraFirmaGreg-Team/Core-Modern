@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/sluice_lower",
-  "textures": {
-    "texture": "tfc:block/wood/sheet/mangrove"
-  }
+    "parent": "tfc:block/sluice_lower",
+    "textures": {"texture": "tfc:block/wood/sheet/mangrove"},
+    "__comment__": "This file was automatically created by mcresources"
 }

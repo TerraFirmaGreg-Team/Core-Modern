@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/button_inventory",
-  "textures": {
-    "texture": "tfc:block/wood/planks/birch"
-  }
+    "parent": "block/button_inventory",
+    "textures": {"texture": "tfc:block/wood/planks/birch"},
+    "__comment__": "This file was automatically created by mcresources"
 }

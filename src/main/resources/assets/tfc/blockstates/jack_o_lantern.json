@@ -1,21 +1,21 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "minecraft:block/jack_o_lantern",
-      "y": 90
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "minecraft:block/jack_o_lantern"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "minecraft:block/jack_o_lantern"
+        },
+        "facing=north": {
+            "y": 0,
+            "model": "minecraft:block/jack_o_lantern"
+        },
+        "facing=west": {
+            "y": 270,
+            "model": "minecraft:block/jack_o_lantern"
+        }
     },
-    "facing=north": {
-      "model": "minecraft:block/jack_o_lantern",
-      "y": 0
-    },
-    "facing=south": {
-      "model": "minecraft:block/jack_o_lantern",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "minecraft:block/jack_o_lantern",
-      "y": 270
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/mossy_bricks/conglomerate",
-  "result": "tfc:rock/mossy_bricks/conglomerate_stairs",
-  "mode": "stair"
+    "result": "tfc:rock/mossy_bricks/conglomerate_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/mossy_bricks/conglomerate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

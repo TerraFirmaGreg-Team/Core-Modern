@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/foxglove/0_upper"
-  }
+    "parent": "minecraft:block/cross",
+    "textures": {"cross": "tfc:block/plant/foxglove/0_upper"},
+    "__comment__": "This file was automatically created by mcresources"
 }

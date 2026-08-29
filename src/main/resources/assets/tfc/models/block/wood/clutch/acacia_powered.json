@@ -1,11 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore_column",
-  "textures": {
-    "side": "tfc:block/wood/stripped_log/acacia",
-    "end": "tfc:block/wood/planks/acacia",
-    "overlay": "tfc:block/axle_casing_powered",
-    "overlay_end": "tfc:block/axle_casing_front",
-    "particle": "tfc:block/wood/stripped_log/acacia"
-  }
+    "parent": "tfc:block/ore_column",
+    "textures": {
+        "side": "tfc:block/wood/stripped_log/acacia",
+        "overlay": "tfc:block/axle_casing_powered",
+        "end": "tfc:block/wood/planks/acacia",
+        "overlay_end": "tfc:block/axle_casing_front",
+        "particle": "tfc:block/wood/stripped_log/acacia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:smooth_sandstone/pink",
-  "result": "tfc:smooth_sandstone/pink_stairs",
-  "mode": "stair"
+    "result": "tfc:smooth_sandstone/pink_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:smooth_sandstone/pink",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

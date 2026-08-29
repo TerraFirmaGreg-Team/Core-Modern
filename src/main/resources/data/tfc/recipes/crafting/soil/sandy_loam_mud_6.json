@@ -1,35 +1,23 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "type": "tfc:fluid_item",
-      "fluid_ingredient": {
-        "ingredient": "minecraft:water",
-        "amount": 100
-      }
+    "result": {
+        "item": "tfc:mud/sandy_loam",
+        "count": 6
     },
-    {
-      "item": "tfc:dirt/sandy_loam"
-    },
-    {
-      "item": "tfc:dirt/sandy_loam"
-    },
-    {
-      "item": "tfc:dirt/sandy_loam"
-    },
-    {
-      "item": "tfc:dirt/sandy_loam"
-    },
-    {
-      "item": "tfc:dirt/sandy_loam"
-    },
-    {
-      "item": "tfc:dirt/sandy_loam"
-    }
-  ],
-  "result": {
-    "item": "tfc:mud/sandy_loam",
-    "count": 6
-  }
+    "ingredients": [
+        {
+            "fluid_ingredient": {
+                "amount": 100,
+                "ingredient": "minecraft:water"
+            },
+            "type": "tfc:fluid_item"
+        },
+        {"item": "tfc:dirt/sandy_loam"},
+        {"item": "tfc:dirt/sandy_loam"},
+        {"item": "tfc:dirt/sandy_loam"},
+        {"item": "tfc:dirt/sandy_loam"},
+        {"item": "tfc:dirt/sandy_loam"},
+        {"item": "tfc:dirt/sandy_loam"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

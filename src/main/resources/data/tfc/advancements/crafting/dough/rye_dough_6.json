@@ -1,35 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_item": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:food/rye_grain"
-            ]
-          }
-        ]
-      }
+    "parent": "minecraft:recipes/root",
+    "requirements": [[
+        "has_item",
+        "has_the_recipe"
+    ]],
+    "criteria": {
+        "has_item": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:food/rye_grain"]}]}
+        },
+        "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {"recipe": "tfc:crafting/dough/rye_dough_6"}
+        }
     },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "tfc:crafting/dough/rye_dough_6"
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_item",
-      "has_the_recipe"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "tfc:crafting/dough/rye_dough_6"
-    ]
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "rewards": {"recipes": ["tfc:crafting/dough/rye_dough_6"]}
 }

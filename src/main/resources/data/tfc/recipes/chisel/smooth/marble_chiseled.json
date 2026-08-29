@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/bricks/marble",
-  "result": "tfc:rock/chiseled/marble",
-  "mode": "smooth"
+    "result": "tfc:rock/chiseled/marble",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/bricks/marble",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

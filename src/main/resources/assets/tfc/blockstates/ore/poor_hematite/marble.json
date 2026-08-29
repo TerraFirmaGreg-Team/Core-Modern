@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/poor_hematite/marble"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/poor_hematite/marble"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

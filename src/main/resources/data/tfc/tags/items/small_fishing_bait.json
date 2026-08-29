@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:food/shellfish",
-    "#tfc:seeds"
-  ]
+    "values": [
+        "tfc:food/shellfish",
+        "#tfc:seeds"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

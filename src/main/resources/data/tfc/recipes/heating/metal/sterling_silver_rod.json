@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/rod/sterling_silver"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/sterling_silver",
-    "amount": 50
-  },
-  "temperature": 950
+    "result_fluid": {
+        "amount": 50,
+        "fluid": "tfc:metal/sterling_silver"
+    },
+    "ingredient": {"item": "tfc:metal/rod/sterling_silver"},
+    "temperature": 950,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

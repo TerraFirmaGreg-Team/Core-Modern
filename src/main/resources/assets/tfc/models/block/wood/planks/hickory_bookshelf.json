@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:block/chiseled_bookshelf",
-  "textures": {
-    "top": "tfc:block/wood/planks/bookshelf_top_hickory",
-    "side": "tfc:block/wood/planks/bookshelf_side_hickory"
-  }
+    "parent": "minecraft:block/chiseled_bookshelf",
+    "textures": {
+        "side": "tfc:block/wood/planks/bookshelf_side_hickory",
+        "top": "tfc:block/wood/planks/bookshelf_top_hickory"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

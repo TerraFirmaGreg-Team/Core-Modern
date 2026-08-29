@@ -1,16 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_instant",
-  "input_item": {
-    "ingredient": {
-      "tag": "tfc:foods/preserves"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "minecraft:water",
-    "amount": 100
-  },
-  "output_item": {
-    "item": "tfc:empty_jar"
-  }
+    "input_fluid": {
+        "amount": 100,
+        "ingredient": "minecraft:water"
+    },
+    "output_item": {"item": "tfc:empty_jar"},
+    "input_item": {"ingredient": {"tag": "tfc:foods/preserves"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_instant"
 }

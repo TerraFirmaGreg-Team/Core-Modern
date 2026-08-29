@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:welding",
-  "first_input": {
-    "tag": "forge:sheets/bismuth"
-  },
-  "second_input": {
-    "tag": "forge:sheets/bismuth"
-  },
-  "tier": 0,
-  "result": {
-    "item": "tfc:metal/double_sheet/bismuth"
-  }
+    "result": {"item": "tfc:metal/double_sheet/bismuth"},
+    "first_input": {"tag": "forge:sheets/bismuth"},
+    "tier": 0,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "second_input": {"tag": "forge:sheets/bismuth"}
 }

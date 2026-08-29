@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/brass_mechanisms",
-  "criteria": {
-    "gear_boxes": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:gear_boxes"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:wood/gear_box/pine"
+    "parent": "tfc:story/brass_mechanisms",
+    "requirements": [["gear_boxes"]],
+    "criteria": {"gear_boxes": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:gear_boxes"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:wood/gear_box/pine"},
+        "description": {"translate": "tfc.advancements.story.gear_box.description"},
+        "title": {"translate": "tfc.advancements.story.gear_box.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.gear_box.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.gear_box.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "gear_boxes"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

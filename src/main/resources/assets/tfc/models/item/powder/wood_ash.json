@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/powder/wood_ash"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/powder/wood_ash"},
+    "__comment__": "This file was automatically created by mcresources"
 }

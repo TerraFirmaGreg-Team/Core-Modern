@@ -1,18 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "type": "tfc:not_rotten",
-    "ingredient": {
-      "item": "tfc:food/wheat_grain"
-    }
-  },
-  "result": {
-    "stack": {
-      "item": "tfc:food/wheat_flour"
+    "result": {
+        "stack": {"item": "tfc:food/wheat_flour"},
+        "modifiers": ["tfc:copy_food"]
     },
-    "modifiers": [
-      "tfc:copy_food"
-    ]
-  }
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/wheat_grain"},
+        "type": "tfc:not_rotten"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

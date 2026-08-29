@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/pink_kaolin_clay"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/pink_kaolin_clay"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

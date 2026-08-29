@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:foods/meats",
-    "minecraft:bone"
-  ]
+    "values": [
+        "#tfc:foods/meats",
+        "minecraft:bone"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

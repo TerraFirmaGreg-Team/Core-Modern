@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "minecraft:block/purple_stained_glass"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "minecraft:block/purple_stained_glass"},
+    "__comment__": "This file was automatically created by mcresources"
 }

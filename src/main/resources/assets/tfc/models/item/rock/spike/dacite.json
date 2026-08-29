@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/spike/dacite_base",
-  "textures": {
-    "layer0": "tfc:block/rock/raw/dacite"
-  }
+    "parent": "tfc:block/rock/spike/dacite_base",
+    "textures": {"layer0": "tfc:block/rock/raw/dacite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

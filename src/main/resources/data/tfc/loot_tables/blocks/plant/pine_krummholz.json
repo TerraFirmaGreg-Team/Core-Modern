@@ -1,65 +1,49 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "name": "tfc:plant/pine_krummholz",
-              "conditions": [
+    "pools": [{
+        "entries": [{
+            "children": [
                 {
-                  "condition": "minecraft:block_state_property",
-                  "block": "tfc:plant/pine_krummholz",
-                  "properties": {
-                    "tip": "true"
-                  }
+                    "name": "tfc:plant/pine_krummholz",
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:block_state_property",
+                            "block": "tfc:plant/pine_krummholz",
+                            "properties": {"tip": "true"}
+                        },
+                        {
+                            "predicate": {"tag": "tfc:axes"},
+                            "condition": "minecraft:match_tool"
+                        }
+                    ]
                 },
                 {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "tag": "tfc:axes"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:wood/sapling/pine",
-              "conditions": [
+                    "name": "tfc:wood/sapling/pine",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "condition": "minecraft:random_chance",
+                        "chance": 0.02
+                    }]
+                },
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.02
+                    "functions": [{
+                        "function": "minecraft:set_count",
+                        "count": {
+                            "min": 1,
+                            "max": 3,
+                            "type": "minecraft:uniform"
+                        }
+                    }],
+                    "name": "minecraft:stick",
+                    "type": "minecraft:item"
                 }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "minecraft:stick",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "type": "minecraft:uniform",
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+            ],
+            "type": "minecraft:alternatives"
+        }],
+        "name": "loot_pool",
+        "rolls": 1,
+        "conditions": [{"condition": "minecraft:survives_explosion"}]
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
 }

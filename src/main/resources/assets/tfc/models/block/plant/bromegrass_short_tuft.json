@@ -1,6 +1,4 @@
 {
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/bromegrass/bromegrass_short_tuft"
-  }
+    "parent": "minecraft:block/cross",
+    "textures": {"cross": "tfc:block/plant/bromegrass/bromegrass_short_tuft"}
 }

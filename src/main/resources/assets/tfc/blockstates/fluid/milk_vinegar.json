@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/fluid/milk_vinegar"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/fluid/milk_vinegar"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

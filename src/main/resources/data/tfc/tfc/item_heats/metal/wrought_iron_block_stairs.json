@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:metal/block/wrought_iron_stairs"
-  },
-  "heat_capacity": 2.143,
-  "forging_temperature": 921,
-  "welding_temperature": 1228
+    "welding_temperature": 1228,
+    "ingredient": {"item": "tfc:metal/block/wrought_iron_stairs"},
+    "heat_capacity": 2.143,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 921
 }

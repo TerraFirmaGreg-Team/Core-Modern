@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:feature/ore_deposits",
-    "#tfc:feature/soil_discs"
-  ]
+    "values": [
+        "#tfc:feature/ore_deposits",
+        "#tfc:feature/soil_discs"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

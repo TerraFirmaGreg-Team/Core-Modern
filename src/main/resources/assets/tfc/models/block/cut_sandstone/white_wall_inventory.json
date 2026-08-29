@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/wall_inventory",
-  "textures": {
-    "wall": "tfc:block/sandstone/cut/white"
-  }
+    "parent": "block/wall_inventory",
+    "textures": {"wall": "tfc:block/sandstone/cut/white"},
+    "__comment__": "This file was automatically created by mcresources"
 }

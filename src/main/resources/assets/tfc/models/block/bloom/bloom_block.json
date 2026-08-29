@@ -1,6 +1,4 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "tfc:block/bloom"
-  }
+    "parent": "minecraft:block/cube_all",
+    "textures": {"all": "tfc:block/bloom"}
 }

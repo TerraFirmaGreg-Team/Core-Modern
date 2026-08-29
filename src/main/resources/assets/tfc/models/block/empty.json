@@ -1,5 +1,1 @@
-{
-	"textures": {
-	  "particle": "tfc:block/empty"
-	}
-}
+{"textures": {"particle": "tfc:block/empty"}}

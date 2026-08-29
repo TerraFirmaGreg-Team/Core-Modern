@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/anvil/andesite"
+    "parent": "tfc:block/rock/anvil/andesite",
+    "__comment__": "This file was automatically created by mcresources"
 }

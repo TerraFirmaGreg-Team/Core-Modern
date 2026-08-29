@@ -1,19 +1,79 @@
 {
     "textures": {
-        "particle": "tfc:block/charcoal_pile",
-        "texture": "tfc:block/charcoal_pile"
+        "texture": "tfc:block/charcoal_pile",
+        "particle": "tfc:block/charcoal_pile"
     },
-    "elements": [
-        {   "from": [ 0, 0, 0 ],
-            "to": [ 16, 6, 16 ],
-            "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#texture", "cullface": "down" },
-                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
-                "north": { "uv": [ 0, 10, 16, 16 ], "texture": "#texture", "cullface": "north" },
-                "south": { "uv": [ 0, 10, 16, 16 ], "texture": "#texture", "cullface": "south" },
-                "west":  { "uv": [ 0, 10, 16, 16 ], "texture": "#texture", "cullface": "west" },
-                "east":  { "uv": [ 0, 10, 16, 16 ], "texture": "#texture", "cullface": "east" }
+    "elements": [{
+        "from": [
+            0,
+            0,
+            0
+        ],
+        "to": [
+            16,
+            6,
+            16
+        ],
+        "faces": {
+            "east": {
+                "uv": [
+                    0,
+                    10,
+                    16,
+                    16
+                ],
+                "cullface": "east",
+                "texture": "#texture"
+            },
+            "south": {
+                "uv": [
+                    0,
+                    10,
+                    16,
+                    16
+                ],
+                "cullface": "south",
+                "texture": "#texture"
+            },
+            "north": {
+                "uv": [
+                    0,
+                    10,
+                    16,
+                    16
+                ],
+                "cullface": "north",
+                "texture": "#texture"
+            },
+            "west": {
+                "uv": [
+                    0,
+                    10,
+                    16,
+                    16
+                ],
+                "cullface": "west",
+                "texture": "#texture"
+            },
+            "up": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    16
+                ],
+                "texture": "#texture"
+            },
+            "down": {
+                "uv": [
+                    0,
+                    0,
+                    16,
+                    16
+                ],
+                "cullface": "down",
+                "texture": "#texture"
             }
         }
-    ]
+    }]
 }

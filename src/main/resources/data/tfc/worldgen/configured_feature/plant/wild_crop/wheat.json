@@ -1,12 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:simple_block",
-  "config": {
-    "to_place": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "tfc:wild_crop/wheat"
-      }
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:simple_block",
+    "config": {"to_place": {
+        "state": {"Name": "tfc:wild_crop/wheat"},
+        "type": "minecraft:simple_state_provider"
+    }}
 }

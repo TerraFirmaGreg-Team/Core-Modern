@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cobble/chert"
-  },
-  "result": "tfc:rock/cobble/chert_wall",
-  "count": 1
+    "result": "tfc:rock/cobble/chert_wall",
+    "ingredient": {"item": "tfc:rock/cobble/chert"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

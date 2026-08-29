@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "powered=false": {
-      "model": "tfc:block/rock/pressure_plate/granite"
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/granite_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/granite"}
     },
-    "powered=true": {
-      "model": "tfc:block/rock/pressure_plate/granite_down"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

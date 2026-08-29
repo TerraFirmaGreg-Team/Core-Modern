@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:welding",
-  "first_input": {
-    "tag": "forge:ingots/wrought_iron"
-  },
-  "second_input": {
-    "tag": "forge:ingots/wrought_iron"
-  },
-  "tier": 2,
-  "result": {
-    "item": "tfc:metal/double_ingot/wrought_iron"
-  }
+    "result": {"item": "tfc:metal/double_ingot/wrought_iron"},
+    "first_input": {"tag": "forge:ingots/wrought_iron"},
+    "tier": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "second_input": {"tag": "forge:ingots/wrought_iron"}
 }

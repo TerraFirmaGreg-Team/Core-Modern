@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/normal_cassiterite"
-  },
-  "result": {
-    "item": "tfc:powder/cassiterite",
-    "count": 5
-  }
+    "result": {
+        "item": "tfc:powder/cassiterite",
+        "count": 5
+    },
+    "ingredient": {"item": "tfc:ore/normal_cassiterite"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

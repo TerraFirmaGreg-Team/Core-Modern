@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:food/rice"
-  },
-  "hunger": 4,
-  "saturation": 0,
-  "decay_modifier": 2
+    "saturation": 0,
+    "ingredient": {"item": "tfc:food/rice"},
+    "decay_modifier": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 4
 }

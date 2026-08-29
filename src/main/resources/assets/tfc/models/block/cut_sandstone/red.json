@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "tfc:block/sandstone/top/red",
-    "side": "tfc:block/sandstone/cut/red"
-  }
+    "parent": "minecraft:block/cube_column",
+    "textures": {
+        "side": "tfc:block/sandstone/cut/red",
+        "end": "tfc:block/sandstone/top/red"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

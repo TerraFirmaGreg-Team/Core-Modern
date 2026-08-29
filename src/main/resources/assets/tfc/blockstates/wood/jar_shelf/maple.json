@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "tfc:block/wood/jar_shelf/maple",
-      "y": 90
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/wood/jar_shelf/maple"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/wood/jar_shelf/maple"
+        },
+        "facing=north": {"model": "tfc:block/wood/jar_shelf/maple"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/wood/jar_shelf/maple"
+        }
     },
-    "facing=north": {
-      "model": "tfc:block/wood/jar_shelf/maple"
-    },
-    "facing=south": {
-      "model": "tfc:block/wood/jar_shelf/maple",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "tfc:block/wood/jar_shelf/maple",
-      "y": 270
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

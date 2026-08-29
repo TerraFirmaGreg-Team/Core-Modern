@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_tetrahedrite/diorite",
-  "result": "tfc:ore/poor_tetrahedrite/diorite"
+    "result": "tfc:ore/poor_tetrahedrite/diorite",
+    "ingredient": "tfc:ore/normal_tetrahedrite/diorite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

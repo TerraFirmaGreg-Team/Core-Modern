@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "powered=false": {
-      "model": "tfc:block/rock/pressure_plate/dolomite"
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/dolomite_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/dolomite"}
     },
-    "powered=true": {
-      "model": "tfc:block/rock/pressure_plate/dolomite_down"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

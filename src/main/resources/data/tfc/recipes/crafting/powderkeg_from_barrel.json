@@ -1,21 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:no_remainder_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "tag": "tfc:barrels"
-      },
-      {
-        "item": "minecraft:red_dye"
-      },
-      {
-        "tag": "forge:string"
-      }
-    ],
-    "result": {
-      "item": "tfc:powderkeg"
-    }
-  }
+    "recipe": {
+        "result": {"item": "tfc:powderkeg"},
+        "ingredients": [
+            {"tag": "tfc:barrels"},
+            {"item": "minecraft:red_dye"},
+            {"tag": "forge:string"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:no_remainder_shapeless_crafting"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/anvil",
-  "textures": {
-    "texture": "tfc:block/rock/raw/diorite"
-  }
+    "parent": "tfc:block/rock/anvil",
+    "textures": {"texture": "tfc:block/rock/raw/diorite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

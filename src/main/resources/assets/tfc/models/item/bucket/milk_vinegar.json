@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "loader": "forge:fluid_container",
-  "parent": "forge:item/bucket",
-  "fluid": "tfc:milk_vinegar"
+    "parent": "forge:item/bucket",
+    "loader": "forge:fluid_container",
+    "fluid": "tfc:milk_vinegar",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "minecraft:block/horn_coral"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "minecraft:block/horn_coral"},
+    "__comment__": "This file was automatically created by mcresources"
 }

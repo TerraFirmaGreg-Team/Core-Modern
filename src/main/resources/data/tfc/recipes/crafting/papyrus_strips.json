@@ -1,19 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:damage_inputs_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "item": "tfc:papyrus"
-      },
-      {
-        "tag": "tfc:knives"
-      }
-    ],
-    "result": {
-      "item": "tfc:papyrus_strip",
-      "count": 4
-    }
-  }
+    "recipe": {
+        "result": {
+            "item": "tfc:papyrus_strip",
+            "count": 4
+        },
+        "ingredients": [
+            {"item": "tfc:papyrus"},
+            {"tag": "tfc:knives"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
 }

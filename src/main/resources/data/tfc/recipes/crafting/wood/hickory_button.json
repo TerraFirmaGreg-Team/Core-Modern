@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/hickory"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/hickory_button"
-  }
+    "result": {"item": "tfc:wood/planks/hickory_button"},
+    "ingredients": [{"item": "tfc:wood/planks/hickory"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

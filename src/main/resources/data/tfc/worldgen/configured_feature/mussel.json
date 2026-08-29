@@ -1,15 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:block_with_fluid",
-  "config": {
-    "to_place": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "tfc:groundcover/mussel",
-        "Properties": {
-          "fluid": "empty"
-        }
-      }
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:block_with_fluid",
+    "config": {"to_place": {
+        "state": {
+            "Properties": {"fluid": "empty"},
+            "Name": "tfc:groundcover/mussel"
+        },
+        "type": "minecraft:simple_state_provider"
+    }}
 }

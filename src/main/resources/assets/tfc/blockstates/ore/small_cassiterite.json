@@ -1,22 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": [
-      {
-        "model": "tfc:block/groundcover/cassiterite",
-        "y": 90
-      },
-      {
-        "model": "tfc:block/groundcover/cassiterite"
-      },
-      {
-        "model": "tfc:block/groundcover/cassiterite",
-        "y": 180
-      },
-      {
-        "model": "tfc:block/groundcover/cassiterite",
-        "y": 270
-      }
-    ]
-  }
+    "variants": {"": [
+        {
+            "y": 90,
+            "model": "tfc:block/groundcover/cassiterite"
+        },
+        {"model": "tfc:block/groundcover/cassiterite"},
+        {
+            "y": 180,
+            "model": "tfc:block/groundcover/cassiterite"
+        },
+        {
+            "y": 270,
+            "model": "tfc:block/groundcover/cassiterite"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
 }

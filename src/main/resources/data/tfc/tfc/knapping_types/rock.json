@@ -1,17 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "input": {
-    "ingredient": {
-      "tag": "tfc:rock_knapping"
+    "input": {
+        "ingredient": {"tag": "tfc:rock_knapping"},
+        "count": 2
     },
-    "count": 2
-  },
-  "amount_to_consume": 1,
-  "click_sound": "tfc:item.knapping.stone",
-  "consume_after_complete": false,
-  "use_disabled_texture": false,
-  "spawns_particles": true,
-  "jei_icon_item": {
-    "item": "tfc:rock/loose/granite"
-  }
+    "amount_to_consume": 1,
+    "consume_after_complete": false,
+    "use_disabled_texture": false,
+    "jei_icon_item": {"item": "tfc:rock/loose/granite"},
+    "click_sound": "tfc:item.knapping.stone",
+    "__comment__": "This file was automatically created by mcresources",
+    "spawns_particles": true
 }

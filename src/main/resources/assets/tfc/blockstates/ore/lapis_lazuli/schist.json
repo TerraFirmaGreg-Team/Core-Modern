@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/lapis_lazuli/schist"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/lapis_lazuli/schist"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:rods/brass"
-    },
-    {
-      "tag": "tfc:gem_powders"
-    }
-  ],
-  "result": {
-    "item": "tfc:gem_saw"
-  }
+    "result": {"item": "tfc:gem_saw"},
+    "ingredients": [
+        {"tag": "forge:rods/brass"},
+        {"tag": "tfc:gem_powders"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

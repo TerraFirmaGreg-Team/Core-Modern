@@ -1,21 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:food/wheat_flour"
-      }
-    }
-  },
-  "input_fluid": {
-    "ingredient": "minecraft:water",
-    "amount": 500
-  },
-  "output_fluid": {
-    "fluid": "tfc:whiskey",
-    "amount": 500
-  },
-  "duration": 72000
+    "input_fluid": {
+        "amount": 500,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 72000,
+    "output_fluid": {
+        "amount": 500,
+        "fluid": "tfc:whiskey"
+    },
+    "input_item": {"ingredient": {
+        "ingredient": {"item": "tfc:food/wheat_flour"},
+        "type": "tfc:not_rotten"
+    }},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "   ",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/lumber/maple"
-    }
-  },
-  "result": {
-    "item": "tfc:wood/planks/maple_tool_rack"
-  }
+    "result": {"item": "tfc:wood/planks/maple_tool_rack"},
+    "pattern": [
+        "XXX",
+        "   ",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/lumber/maple"}}
 }

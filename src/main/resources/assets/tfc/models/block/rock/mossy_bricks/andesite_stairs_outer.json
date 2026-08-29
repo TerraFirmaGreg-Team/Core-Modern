@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/mossy_bricks/andesite",
-    "top": "tfc:block/rock/mossy_bricks/andesite",
-    "side": "tfc:block/rock/mossy_bricks/andesite"
-  }
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_bricks/andesite",
+        "top": "tfc:block/rock/mossy_bricks/andesite",
+        "bottom": "tfc:block/rock/mossy_bricks/andesite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

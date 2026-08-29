@@ -1,36 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:straw"
-    },
-    {
-      "item": "tfc:straw"
-    },
-    {
-      "item": "tfc:straw"
-    },
-    {
-      "item": "tfc:straw"
-    },
-    {
-      "item": "tfc:straw"
-    },
-    {
-      "item": "tfc:straw"
-    },
-    {
-      "item": "tfc:straw"
-    },
-    {
-      "item": "tfc:straw"
-    },
-    {
-      "item": "tfc:straw"
-    }
-  ],
-  "result": {
-    "item": "minecraft:hay_block"
-  }
+    "result": {"item": "minecraft:hay_block"},
+    "ingredients": [
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"},
+        {"item": "tfc:straw"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

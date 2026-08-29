@@ -1,11 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/scribing_table",
-  "textures": {
-    "top": "tfc:block/wood/scribing_table/pine",
-    "leg": "tfc:block/wood/log/pine",
-    "side": "tfc:block/wood/planks/pine",
-    "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia",
-    "particle": "tfc:block/wood/planks/pine"
-  }
+    "parent": "tfc:block/scribing_table",
+    "textures": {
+        "side": "tfc:block/wood/planks/pine",
+        "top": "tfc:block/wood/scribing_table/pine",
+        "particle": "tfc:block/wood/planks/pine",
+        "leg": "tfc:block/wood/log/pine",
+        "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

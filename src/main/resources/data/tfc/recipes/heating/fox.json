@@ -1,19 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "type": "tfc:not_rotten",
-    "ingredient": {
-      "item": "tfc:food/fox"
-    }
-  },
-  "result_item": {
-    "stack": {
-      "item": "tfc:food/cooked_fox"
+    "result_item": {
+        "stack": {"item": "tfc:food/cooked_fox"},
+        "modifiers": ["tfc:copy_food"]
     },
-    "modifiers": [
-      "tfc:copy_food"
-    ]
-  },
-  "temperature": 200
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/fox"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

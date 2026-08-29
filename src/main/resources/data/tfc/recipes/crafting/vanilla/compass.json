@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X",
-    "Y",
-    "Z"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:lens"
-    },
-    "Y": {
-      "tag": "tfc:magnetic_rocks"
-    },
-    "Z": {
-      "tag": "tfc:bowls"
+    "result": {"item": "minecraft:compass"},
+    "pattern": [
+        "X",
+        "Y",
+        "Z"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:lens"},
+        "Y": {"tag": "tfc:magnetic_rocks"},
+        "Z": {"tag": "tfc:bowls"}
     }
-  },
-  "result": {
-    "item": "minecraft:compass"
-  }
 }

@@ -1,17 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XX",
-    "XX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/log/sycamore"
-    }
-  },
-  "result": {
-    "item": "tfc:wood/wood/sycamore",
-    "count": 3
-  }
+    "result": {
+        "item": "tfc:wood/wood/sycamore",
+        "count": 3
+    },
+    "pattern": [
+        "XX",
+        "XX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/log/sycamore"}}
 }

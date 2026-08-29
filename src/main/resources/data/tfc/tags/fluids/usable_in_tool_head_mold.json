@@ -1,10 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/copper",
-    "tfc:metal/bismuth_bronze",
-    "tfc:metal/black_bronze",
-    "tfc:metal/bronze"
-  ]
+    "values": [
+        "tfc:metal/copper",
+        "tfc:metal/bismuth_bronze",
+        "tfc:metal/black_bronze",
+        "tfc:metal/bronze"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

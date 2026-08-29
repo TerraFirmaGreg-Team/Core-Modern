@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/mossy_cobble/phyllite"
-  },
-  "result": "tfc:rock/mossy_cobble/phyllite_wall",
-  "count": 1
+    "result": "tfc:rock/mossy_cobble/phyllite_wall",
+    "ingredient": {"item": "tfc:rock/mossy_cobble/phyllite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

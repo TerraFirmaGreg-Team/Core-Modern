@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:food/olive"
-  },
-  "result": {
-    "item": "tfc:olive_paste",
-    "count": 2
-  }
+    "result": {
+        "item": "tfc:olive_paste",
+        "count": 2
+    },
+    "ingredient": {"item": "tfc:food/olive"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

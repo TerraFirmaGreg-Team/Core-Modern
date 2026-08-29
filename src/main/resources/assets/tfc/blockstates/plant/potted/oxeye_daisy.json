@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/oxeye_daisy"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/oxeye_daisy"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

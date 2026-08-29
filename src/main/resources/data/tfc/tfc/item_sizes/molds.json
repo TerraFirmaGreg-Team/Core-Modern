@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "tfc:molds"
-  },
-  "size": "normal",
-  "weight": "medium"
+    "ingredient": {"tag": "tfc:molds"},
+    "size": "normal",
+    "weight": "medium",
+    "__comment__": "This file was automatically created by mcresources"
 }

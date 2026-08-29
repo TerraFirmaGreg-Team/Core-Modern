@@ -1,16 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:knapping",
-  "knapping_type": "tfc:clay",
-  "outside_slot_required": true,
-  "pattern": [
-    "   XX",
-    "    X",
-    "     ",
-    "X   X",
-    "XX XX"
-  ],
-  "result": {
-    "item": "tfc:ceramic/unfired_javelin_head_mold"
-  }
+    "result": {"item": "tfc:ceramic/unfired_javelin_head_mold"},
+    "outside_slot_required": true,
+    "pattern": [
+        "   XX",
+        "    X",
+        "     ",
+        "X   X",
+        "XX XX"
+    ],
+    "knapping_type": "tfc:clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
 }

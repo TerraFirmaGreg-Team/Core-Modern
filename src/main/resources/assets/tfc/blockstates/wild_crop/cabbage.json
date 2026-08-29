@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "mature=true": {
-      "model": "tfc:block/wild_crop/cabbage"
+    "variants": {
+        "mature=true": {"model": "tfc:block/wild_crop/cabbage"},
+        "mature=false": {"model": "tfc:block/dead_crop/cabbage"}
     },
-    "mature=false": {
-      "model": "tfc:block/dead_crop/cabbage"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

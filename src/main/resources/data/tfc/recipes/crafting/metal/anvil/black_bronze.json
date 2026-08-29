@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    " X ",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "tag": "forge:double_ingots/black_bronze"
-    }
-  },
-  "result": {
-    "item": "tfc:metal/anvil/black_bronze"
-  }
+    "result": {"item": "tfc:metal/anvil/black_bronze"},
+    "pattern": [
+        "XXX",
+        " X ",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "forge:double_ingots/black_bronze"}}
 }

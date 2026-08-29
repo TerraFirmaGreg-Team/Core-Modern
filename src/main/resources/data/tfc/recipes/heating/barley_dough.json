@@ -1,19 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "type": "tfc:not_rotten",
-    "ingredient": {
-      "item": "tfc:food/barley_dough"
-    }
-  },
-  "result_item": {
-    "stack": {
-      "item": "tfc:food/barley_bread"
+    "result_item": {
+        "stack": {"item": "tfc:food/barley_bread"},
+        "modifiers": ["tfc:copy_food"]
     },
-    "modifiers": [
-      "tfc:copy_food"
-    ]
-  },
-  "temperature": 200
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/barley_dough"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

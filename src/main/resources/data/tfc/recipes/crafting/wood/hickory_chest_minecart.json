@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/chest/hickory"
-    },
-    {
-      "item": "minecraft:minecart"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/chest_minecart/hickory"
-  }
+    "result": {"item": "tfc:wood/chest_minecart/hickory"},
+    "ingredients": [
+        {"item": "tfc:wood/chest/hickory"},
+        {"item": "minecraft:minecart"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_garnierite/conglomerate",
-  "result": "tfc:ore/poor_garnierite/conglomerate"
+    "result": "tfc:ore/poor_garnierite/conglomerate",
+    "ingredient": "tfc:ore/normal_garnierite/conglomerate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

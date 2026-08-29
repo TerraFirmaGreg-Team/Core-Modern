@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/borax/claystone"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/borax/claystone"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

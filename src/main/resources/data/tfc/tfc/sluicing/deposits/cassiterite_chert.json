@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:deposit/cassiterite/chert"
-  },
-  "loot_table": "tfc:panning/deposits/cassiterite_chert"
+    "ingredient": {"item": "tfc:deposit/cassiterite/chert"},
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/cassiterite_chert"
 }

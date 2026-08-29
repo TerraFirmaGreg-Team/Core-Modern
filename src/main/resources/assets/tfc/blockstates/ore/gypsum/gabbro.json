@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/gypsum/gabbro"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/gypsum/gabbro"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

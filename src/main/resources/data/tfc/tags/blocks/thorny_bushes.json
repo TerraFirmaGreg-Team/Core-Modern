@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:plant/blackberry_bush",
-    "tfc:plant/raspberry_bush"
-  ]
+    "values": [
+        "tfc:plant/blackberry_bush",
+        "tfc:plant/raspberry_bush"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

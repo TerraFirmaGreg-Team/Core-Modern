@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/rod/gold"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/gold",
-    "amount": 50
-  },
-  "temperature": 1060
+    "result_fluid": {
+        "amount": 50,
+        "fluid": "tfc:metal/gold"
+    },
+    "ingredient": {"item": "tfc:metal/rod/gold"},
+    "temperature": 1060,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

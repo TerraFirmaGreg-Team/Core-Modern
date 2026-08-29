@@ -1,17 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:large_cave_spike",
-  "placement": [
-    {
-      "type": "tfc:carving_mask",
-      "step": "air",
-      "min_y": {
-        "above_bottom": 25
-      }
-    },
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 167
-    }
-  ]
+    "feature": "tfc:large_cave_spike",
+    "placement": [
+        {
+            "step": "air",
+            "type": "tfc:carving_mask",
+            "min_y": {"above_bottom": 25}
+        },
+        {
+            "chance": 167,
+            "type": "minecraft:rarity_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

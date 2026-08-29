@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/sandstone/bottom/pink",
-    "top": "tfc:block/sandstone/bottom/pink",
-    "side": "tfc:block/sandstone/bottom/pink"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/sandstone/bottom/pink",
+        "top": "tfc:block/sandstone/bottom/pink",
+        "bottom": "tfc:block/sandstone/bottom/pink"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

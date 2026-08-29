@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab",
-  "textures": {
-    "bottom": "tfc:block/alabaster/bricks/orange",
-    "top": "tfc:block/alabaster/bricks/orange",
-    "side": "tfc:block/alabaster/bricks/orange"
-  }
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/alabaster/bricks/orange",
+        "top": "tfc:block/alabaster/bricks/orange",
+        "bottom": "tfc:block/alabaster/bricks/orange"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

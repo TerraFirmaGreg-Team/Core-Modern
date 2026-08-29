@@ -1,16 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:knapping",
-  "knapping_type": "tfc:clay",
-  "outside_slot_required": false,
-  "pattern": [
-    " X X ",
-    " X X ",
-    " XXX ",
-    " XXX ",
-    " XXX "
-  ],
-  "result": {
-    "item": "tfc:ceramic/unfired_blowpipe"
-  }
+    "result": {"item": "tfc:ceramic/unfired_blowpipe"},
+    "outside_slot_required": false,
+    "pattern": [
+        " X X ",
+        " X X ",
+        " XXX ",
+        " XXX ",
+        " XXX "
+    ],
+    "knapping_type": "tfc:clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
 }

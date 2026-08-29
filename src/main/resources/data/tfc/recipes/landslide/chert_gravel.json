@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "tfc:rock/gravel/chert",
-  "result": "tfc:rock/gravel/chert"
+    "result": "tfc:rock/gravel/chert",
+    "ingredient": "tfc:rock/gravel/chert",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

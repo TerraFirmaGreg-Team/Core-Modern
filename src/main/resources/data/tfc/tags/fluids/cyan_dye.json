@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:cyan_dye",
-    "tfc:flowing_cyan_dye"
-  ]
+    "values": [
+        "tfc:cyan_dye",
+        "tfc:flowing_cyan_dye"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

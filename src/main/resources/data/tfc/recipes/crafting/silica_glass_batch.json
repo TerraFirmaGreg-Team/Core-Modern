@@ -1,28 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "tfc:silica_sand"
+    "result": {
+        "item": "tfc:silica_glass_batch",
+        "count": 4
     },
-    {
-      "tag": "tfc:silica_sand"
-    },
-    {
-      "tag": "tfc:silica_sand"
-    },
-    {
-      "tag": "tfc:silica_sand"
-    },
-    {
-      "tag": "tfc:glassworking_potash"
-    },
-    {
-      "item": "tfc:powder/lime"
-    }
-  ],
-  "result": {
-    "item": "tfc:silica_glass_batch",
-    "count": 4
-  }
+    "ingredients": [
+        {"tag": "tfc:silica_sand"},
+        {"tag": "tfc:silica_sand"},
+        {"tag": "tfc:silica_sand"},
+        {"tag": "tfc:silica_sand"},
+        {"tag": "tfc:glassworking_potash"},
+        {"item": "tfc:powder/lime"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

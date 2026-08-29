@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "tag": "tfc:makes_blue_dye"
-  },
-  "result": {
-    "item": "minecraft:blue_dye",
-    "count": 2
-  }
+    "result": {
+        "item": "minecraft:blue_dye",
+        "count": 2
+    },
+    "ingredient": {"tag": "tfc:makes_blue_dye"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

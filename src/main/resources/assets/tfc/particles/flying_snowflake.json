@@ -1,8 +1,6 @@
-{
-  "textures": [
+{"textures": [
     "tfc:snowflake1",
-	"tfc:snowflake2",
+    "tfc:snowflake2",
     "tfc:snowflake3",
     "tfc:snowflake4"
-  ]
-}
+]}

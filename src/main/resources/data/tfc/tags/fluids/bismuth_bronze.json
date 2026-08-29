@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/bismuth_bronze",
-    "tfc:metal/flowing_bismuth_bronze"
-  ]
+    "values": [
+        "tfc:metal/bismuth_bronze",
+        "tfc:metal/flowing_bismuth_bronze"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

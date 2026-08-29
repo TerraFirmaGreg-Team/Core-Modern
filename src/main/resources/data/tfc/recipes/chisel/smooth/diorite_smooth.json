@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/diorite",
-  "result": "tfc:rock/smooth/diorite",
-  "mode": "smooth"
+    "result": "tfc:rock/smooth/diorite",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/raw/diorite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

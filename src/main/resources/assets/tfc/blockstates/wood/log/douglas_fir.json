@@ -1,17 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "axis=y": {
-      "model": "tfc:block/wood/log/douglas_fir"
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/wood/log/douglas_fir"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/log/douglas_fir"
+        },
+        "axis=y": {"model": "tfc:block/wood/log/douglas_fir"}
     },
-    "axis=z": {
-      "model": "tfc:block/wood/log/douglas_fir",
-      "x": 90
-    },
-    "axis=x": {
-      "model": "tfc:block/wood/log/douglas_fir",
-      "x": 90,
-      "y": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

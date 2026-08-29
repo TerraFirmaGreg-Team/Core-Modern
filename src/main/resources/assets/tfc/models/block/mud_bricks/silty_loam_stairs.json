@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/mud_bricks/silty_loam",
-    "top": "tfc:block/mud_bricks/silty_loam",
-    "side": "tfc:block/mud_bricks/silty_loam"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/mud_bricks/silty_loam",
+        "top": "tfc:block/mud_bricks/silty_loam",
+        "bottom": "tfc:block/mud_bricks/silty_loam"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

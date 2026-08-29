@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:jar/plum"
-      }
-    }
-  ],
-  "result": {
-    "item": "tfc:jar/plum_unsealed"
-  }
+    "result": {"item": "tfc:jar/plum_unsealed"},
+    "ingredients": [{
+        "ingredient": {"item": "tfc:jar/plum"},
+        "type": "tfc:not_rotten"
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

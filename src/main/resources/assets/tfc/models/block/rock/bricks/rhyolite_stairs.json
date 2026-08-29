@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/bricks/rhyolite",
-    "top": "tfc:block/rock/bricks/rhyolite",
-    "side": "tfc:block/rock/bricks/rhyolite"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/bricks/rhyolite",
+        "top": "tfc:block/rock/bricks/rhyolite",
+        "bottom": "tfc:block/rock/bricks/rhyolite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:mud",
-    "#tfc:grass"
-  ]
+    "values": [
+        "#tfc:mud",
+        "#tfc:grass"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "forge:rods/black_steel"
-  },
-  "heat_capacity": 1.429,
-  "forging_temperature": 891,
-  "welding_temperature": 1188
+    "welding_temperature": 1188,
+    "ingredient": {"tag": "forge:rods/black_steel"},
+    "heat_capacity": 1.429,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 891
 }

@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/barrel_side_rack",
-  "textures": {
-    "particle": "tfc:block/wood/planks/acacia",
-    "planks": "tfc:block/wood/planks/acacia",
-    "sheet": "tfc:block/wood/sheet/acacia"
-  }
+    "parent": "tfc:block/barrel_side_rack",
+    "textures": {
+        "particle": "tfc:block/wood/planks/acacia",
+        "sheet": "tfc:block/wood/sheet/acacia",
+        "planks": "tfc:block/wood/planks/acacia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

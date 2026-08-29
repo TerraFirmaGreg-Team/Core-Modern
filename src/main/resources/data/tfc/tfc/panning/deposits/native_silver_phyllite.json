@@ -1,10 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": "tfc:deposit/native_silver/phyllite",
-  "model_stages": [
-    "tfc:item/pan/native_silver/phyllite_full",
-    "tfc:item/pan/native_silver/phyllite_half",
-    "tfc:item/pan/native_silver/result"
-  ],
-  "loot_table": "tfc:panning/deposits/native_silver_phyllite"
+    "model_stages": [
+        "tfc:item/pan/native_silver/phyllite_full",
+        "tfc:item/pan/native_silver/phyllite_half",
+        "tfc:item/pan/native_silver/result"
+    ],
+    "ingredient": "tfc:deposit/native_silver/phyllite",
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/native_silver_phyllite"
 }

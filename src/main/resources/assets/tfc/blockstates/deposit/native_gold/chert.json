@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/deposit/native_gold/chert"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/deposit/native_gold/chert"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

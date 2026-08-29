@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "name": "Começando",
-  "description": "Uma introdução a sobreviver no mundo de Terrafirmacraft. Como sobreviver à Idade da Pedra e obter sua primeira picareta.",
-  "icon": "tfc:stone/axe/sedimentary",
-  "sortnum": 1
+    "name": "Começando",
+    "icon": "tfc:stone/axe/sedimentary",
+    "description": "Uma introdução a sobreviver no mundo de Terrafirmacraft. Como sobreviver à Idade da Pedra e obter sua primeira picareta.",
+    "sortnum": 1,
+    "__comment__": "This file was automatically created by mcresources"
 }

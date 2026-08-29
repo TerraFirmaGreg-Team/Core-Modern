@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:item/pan/full",
-  "textures": {
-    "material": "tfc:block/rock/gravel/diorite"
-  }
+    "parent": "tfc:item/pan/full",
+    "textures": {"material": "tfc:block/rock/gravel/diorite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

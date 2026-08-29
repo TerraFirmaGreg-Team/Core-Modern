@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "tag": "tfc:colored_candles"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "tfc:lye",
-    "amount": 25
-  },
-  "output_item": {
-    "item": "tfc:candle"
-  },
-  "duration": 1000
+    "input_fluid": {
+        "amount": 25,
+        "ingredient": "tfc:lye"
+    },
+    "duration": 1000,
+    "output_item": {"item": "tfc:candle"},
+    "input_item": {"ingredient": {"tag": "tfc:colored_candles"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

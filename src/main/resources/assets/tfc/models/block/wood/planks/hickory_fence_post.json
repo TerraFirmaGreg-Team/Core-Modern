@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/fence_post",
-  "textures": {
-    "texture": "tfc:block/wood/planks/hickory"
-  }
+    "parent": "block/fence_post",
+    "textures": {"texture": "tfc:block/wood/planks/hickory"},
+    "__comment__": "This file was automatically created by mcresources"
 }

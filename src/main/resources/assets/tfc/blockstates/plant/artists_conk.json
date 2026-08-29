@@ -1,107 +1,87 @@
-{
-  "multipart": [
+{"multipart": [
     {
-      "when": {
-        "facing": "east"
-      },
-      "apply": [
-        {
-          "model": "tfc:block/plant/artists_conk_0",
-          "y": 270
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_1",
-          "y": 270
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_2",
-          "y": 270
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_3",
-          "y": 270
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_4",
-          "y": 270
-        }
-      ]
+        "apply": [
+            {
+                "y": 270,
+                "model": "tfc:block/plant/artists_conk_0"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/plant/artists_conk_1"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/plant/artists_conk_2"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/plant/artists_conk_3"
+            },
+            {
+                "y": 270,
+                "model": "tfc:block/plant/artists_conk_4"
+            }
+        ],
+        "when": {"facing": "east"}
     },
     {
-      "when": {
-        "facing": "south"
-      },
-      "apply": [
-        {
-          "model": "tfc:block/plant/artists_conk_0"
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_1"
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_2"
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_3"
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_4"
-        }
-      ]
+        "apply": [
+            {"model": "tfc:block/plant/artists_conk_0"},
+            {"model": "tfc:block/plant/artists_conk_1"},
+            {"model": "tfc:block/plant/artists_conk_2"},
+            {"model": "tfc:block/plant/artists_conk_3"},
+            {"model": "tfc:block/plant/artists_conk_4"}
+        ],
+        "when": {"facing": "south"}
     },
     {
-      "when": {
-        "facing": "west"
-      },
-      "apply": [
-        {
-          "model": "tfc:block/plant/artists_conk_0",
-          "y": 90
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_1",
-          "y": 90
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_2",
-          "y": 90
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_3",
-          "y": 90
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_4",
-          "y": 90
-        }
-      ]
+        "apply": [
+            {
+                "y": 90,
+                "model": "tfc:block/plant/artists_conk_0"
+            },
+            {
+                "y": 90,
+                "model": "tfc:block/plant/artists_conk_1"
+            },
+            {
+                "y": 90,
+                "model": "tfc:block/plant/artists_conk_2"
+            },
+            {
+                "y": 90,
+                "model": "tfc:block/plant/artists_conk_3"
+            },
+            {
+                "y": 90,
+                "model": "tfc:block/plant/artists_conk_4"
+            }
+        ],
+        "when": {"facing": "west"}
     },
     {
-      "when": {
-        "facing": "north"
-      },
-      "apply": [
-        {
-          "model": "tfc:block/plant/artists_conk_0",
-          "y": 180
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_1",
-          "y": 180
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_2",
-          "y": 180
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_3",
-          "y": 180
-        },
-        {
-          "model": "tfc:block/plant/artists_conk_4",
-          "y": 180
-        }
-      ]
+        "apply": [
+            {
+                "y": 180,
+                "model": "tfc:block/plant/artists_conk_0"
+            },
+            {
+                "y": 180,
+                "model": "tfc:block/plant/artists_conk_1"
+            },
+            {
+                "y": 180,
+                "model": "tfc:block/plant/artists_conk_2"
+            },
+            {
+                "y": 180,
+                "model": "tfc:block/plant/artists_conk_3"
+            },
+            {
+                "y": 180,
+                "model": "tfc:block/plant/artists_conk_4"
+            }
+        ],
+        "when": {"facing": "north"}
     }
-  ]
-}
+]}

@@ -1,69 +1,69 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "attachment=ceiling,facing=east": {
-      "model": "tfc:block/bell/bronze_ceiling",
-      "y": 90
+    "variants": {
+        "attachment=single_wall,facing=east": {
+            "y": 0,
+            "model": "tfc:block/bell/bronze_single_wall"
+        },
+        "attachment=double_wall,facing=west": {
+            "y": 270,
+            "model": "tfc:block/bell/bronze_double_wall"
+        },
+        "attachment=ceiling,facing=south": {
+            "y": 180,
+            "model": "tfc:block/bell/bronze_ceiling"
+        },
+        "attachment=ceiling,facing=east": {
+            "y": 90,
+            "model": "tfc:block/bell/bronze_ceiling"
+        },
+        "attachment=floor,facing=west": {
+            "y": 270,
+            "model": "tfc:block/bell/bronze_floor"
+        },
+        "attachment=double_wall,facing=north": {
+            "y": 0,
+            "model": "tfc:block/bell/bronze_double_wall"
+        },
+        "attachment=double_wall,facing=east": {
+            "y": 90,
+            "model": "tfc:block/bell/bronze_double_wall"
+        },
+        "attachment=single_wall,facing=south": {
+            "y": 90,
+            "model": "tfc:block/bell/bronze_single_wall"
+        },
+        "attachment=single_wall,facing=west": {
+            "y": 180,
+            "model": "tfc:block/bell/bronze_single_wall"
+        },
+        "attachment=floor,facing=south": {
+            "y": 180,
+            "model": "tfc:block/bell/bronze_floor"
+        },
+        "attachment=ceiling,facing=west": {
+            "y": 270,
+            "model": "tfc:block/bell/bronze_ceiling"
+        },
+        "attachment=floor,facing=east": {
+            "y": 90,
+            "model": "tfc:block/bell/bronze_floor"
+        },
+        "attachment=double_wall,facing=south": {
+            "y": 180,
+            "model": "tfc:block/bell/bronze_double_wall"
+        },
+        "attachment=single_wall,facing=north": {
+            "y": 270,
+            "model": "tfc:block/bell/bronze_single_wall"
+        },
+        "attachment=ceiling,facing=north": {
+            "y": 0,
+            "model": "tfc:block/bell/bronze_ceiling"
+        },
+        "attachment=floor,facing=north": {
+            "y": 0,
+            "model": "tfc:block/bell/bronze_floor"
+        }
     },
-    "attachment=ceiling,facing=north": {
-      "model": "tfc:block/bell/bronze_ceiling",
-      "y": 0
-    },
-    "attachment=ceiling,facing=south": {
-      "model": "tfc:block/bell/bronze_ceiling",
-      "y": 180
-    },
-    "attachment=ceiling,facing=west": {
-      "model": "tfc:block/bell/bronze_ceiling",
-      "y": 270
-    },
-    "attachment=double_wall,facing=east": {
-      "model": "tfc:block/bell/bronze_double_wall",
-      "y": 90
-    },
-    "attachment=double_wall,facing=north": {
-      "model": "tfc:block/bell/bronze_double_wall",
-      "y": 0
-    },
-    "attachment=double_wall,facing=south": {
-      "model": "tfc:block/bell/bronze_double_wall",
-      "y": 180
-    },
-    "attachment=double_wall,facing=west": {
-      "model": "tfc:block/bell/bronze_double_wall",
-      "y": 270
-    },
-    "attachment=floor,facing=east": {
-      "model": "tfc:block/bell/bronze_floor",
-      "y": 90
-    },
-    "attachment=floor,facing=north": {
-      "model": "tfc:block/bell/bronze_floor",
-      "y": 0
-    },
-    "attachment=floor,facing=south": {
-      "model": "tfc:block/bell/bronze_floor",
-      "y": 180
-    },
-    "attachment=floor,facing=west": {
-      "model": "tfc:block/bell/bronze_floor",
-      "y": 270
-    },
-    "attachment=single_wall,facing=east": {
-      "model": "tfc:block/bell/bronze_single_wall",
-      "y": 0
-    },
-    "attachment=single_wall,facing=north": {
-      "model": "tfc:block/bell/bronze_single_wall",
-      "y": 270
-    },
-    "attachment=single_wall,facing=south": {
-      "model": "tfc:block/bell/bronze_single_wall",
-      "y": 90
-    },
-    "attachment=single_wall,facing=west": {
-      "model": "tfc:block/bell/bronze_single_wall",
-      "y": 180
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

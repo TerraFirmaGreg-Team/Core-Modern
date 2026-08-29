@@ -1,24 +1,22 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/blue_orchid_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 5
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": 9.8,
-      "max_temperature": 38,
-      "min_rainfall": 250,
-      "max_rainfall": 390
-    }
-  ]
+    "feature": "tfc:plant/blue_orchid_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 38,
+            "max_rainfall": 390,
+            "type": "tfc:climate",
+            "min_rainfall": 250,
+            "min_temperature": 9.8
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

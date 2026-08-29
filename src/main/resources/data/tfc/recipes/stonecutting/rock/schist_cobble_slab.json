@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cobble/schist"
-  },
-  "result": "tfc:rock/cobble/schist_slab",
-  "count": 2
+    "result": "tfc:rock/cobble/schist_slab",
+    "ingredient": {"item": "tfc:rock/cobble/schist"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

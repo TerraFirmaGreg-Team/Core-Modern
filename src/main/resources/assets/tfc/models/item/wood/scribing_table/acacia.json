@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/scribing_table/acacia"
+    "parent": "tfc:block/wood/scribing_table/acacia",
+    "__comment__": "This file was automatically created by mcresources"
 }

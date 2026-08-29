@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:food/dried_kelp",
-    "tfc:food/dried_seaweed"
-  ]
+    "values": [
+        "tfc:food/dried_kelp",
+        "tfc:food/dried_seaweed"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

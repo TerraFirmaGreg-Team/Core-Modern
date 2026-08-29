@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:foods/vegetables",
-    "#tfc:foods/fruits",
-    "tfc:groundcover/seaweed"
-  ]
+    "values": [
+        "#tfc:foods/vegetables",
+        "#tfc:foods/fruits",
+        "tfc:groundcover/seaweed"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

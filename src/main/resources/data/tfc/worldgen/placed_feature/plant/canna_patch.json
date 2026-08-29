@@ -1,13 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/canna_patch",
-  "placement": [
-    {
-      "type": "tfc:climate",
-      "min_temperature": 11.6,
-      "max_temperature": 38,
-      "min_rainfall": 290,
-      "max_rainfall": 500
-    }
-  ]
+    "feature": "tfc:plant/canna_patch",
+    "placement": [{
+        "max_temperature": 38,
+        "max_rainfall": 500,
+        "type": "tfc:climate",
+        "min_rainfall": 290,
+        "min_temperature": 11.6
+    }],
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/toquilla_palm"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/toquilla_palm"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

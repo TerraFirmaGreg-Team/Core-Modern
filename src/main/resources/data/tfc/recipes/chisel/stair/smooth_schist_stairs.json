@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/smooth/schist",
-  "result": "tfc:rock/smooth/schist_stairs",
-  "mode": "stair"
+    "result": "tfc:rock/smooth/schist_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/smooth/schist",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

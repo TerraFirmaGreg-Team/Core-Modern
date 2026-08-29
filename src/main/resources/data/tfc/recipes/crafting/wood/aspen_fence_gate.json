@@ -1,20 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "YXY",
-    "YXY"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/planks/aspen"
+    "result": {
+        "item": "tfc:wood/planks/aspen_fence_gate",
+        "count": 2
     },
-    "Y": {
-      "item": "tfc:wood/lumber/aspen"
+    "pattern": [
+        "YXY",
+        "YXY"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/aspen"},
+        "Y": {"item": "tfc:wood/lumber/aspen"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/planks/aspen_fence_gate",
-    "count": 2
-  }
 }

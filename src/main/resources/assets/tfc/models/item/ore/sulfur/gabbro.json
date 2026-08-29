@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/sulfur/gabbro"
+    "parent": "tfc:block/ore/sulfur/gabbro",
+    "__comment__": "This file was automatically created by mcresources"
 }

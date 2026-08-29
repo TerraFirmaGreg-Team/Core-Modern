@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:gem/diamond"
-  },
-  "result": {
-    "item": "tfc:powder/diamond",
-    "count": 4
-  }
+    "result": {
+        "item": "tfc:powder/diamond",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:gem/diamond"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

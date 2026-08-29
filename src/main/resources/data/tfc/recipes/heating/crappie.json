@@ -1,19 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "type": "tfc:not_rotten",
-    "ingredient": {
-      "item": "tfc:food/crappie"
-    }
-  },
-  "result_item": {
-    "stack": {
-      "item": "tfc:food/cooked_crappie"
+    "result_item": {
+        "stack": {"item": "tfc:food/cooked_crappie"},
+        "modifiers": ["tfc:copy_food"]
     },
-    "modifiers": [
-      "tfc:copy_food"
-    ]
-  },
-  "temperature": 200
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/crappie"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

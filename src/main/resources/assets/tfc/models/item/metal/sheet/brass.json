@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/metal/sheet/brass"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/metal/sheet/brass"},
+    "__comment__": "This file was automatically created by mcresources"
 }

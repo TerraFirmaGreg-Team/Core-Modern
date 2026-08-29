@@ -1,36 +1,24 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:damage_inputs_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "type": "tfc:not_rotten",
-        "ingredient": {
-          "tag": "tfc:foods/dough"
-        }
-      },
-      {
-        "type": "tfc:not_rotten",
-        "ingredient": {
-          "item": "tfc:food/pumpkin_chunks"
-        }
-      },
-      {
-        "tag": "tfc:knives"
-      },
-      {
-        "type": "tfc:not_rotten",
-        "ingredient": {
-          "item": "minecraft:egg"
-        }
-      },
-      {
-        "item": "minecraft:sugar"
-      }
-    ],
-    "result": {
-      "item": "minecraft:pumpkin_pie"
-    }
-  }
+    "recipe": {
+        "result": {"item": "minecraft:pumpkin_pie"},
+        "ingredients": [
+            {
+                "ingredient": {"tag": "tfc:foods/dough"},
+                "type": "tfc:not_rotten"
+            },
+            {
+                "ingredient": {"item": "tfc:food/pumpkin_chunks"},
+                "type": "tfc:not_rotten"
+            },
+            {"tag": "tfc:knives"},
+            {
+                "ingredient": {"item": "minecraft:egg"},
+                "type": "tfc:not_rotten"
+            },
+            {"item": "minecraft:sugar"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
 }

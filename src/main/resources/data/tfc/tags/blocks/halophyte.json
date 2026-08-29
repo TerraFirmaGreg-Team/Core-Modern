@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:plant/sea_lavender",
-    "tfc:plant/cordgrass"
-  ]
+    "values": [
+        "tfc:plant/sea_lavender",
+        "tfc:plant/cordgrass"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

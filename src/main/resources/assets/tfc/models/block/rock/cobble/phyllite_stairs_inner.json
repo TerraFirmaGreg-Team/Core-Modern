@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/cobble/phyllite",
-    "top": "tfc:block/rock/cobble/phyllite",
-    "side": "tfc:block/rock/cobble/phyllite"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/cobble/phyllite",
+        "top": "tfc:block/rock/cobble/phyllite",
+        "bottom": "tfc:block/rock/cobble/phyllite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/mossy_bricks/claystone",
-  "result": "tfc:rock/mossy_bricks/claystone_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/mossy_bricks/claystone_slab"
-  }
+    "result": "tfc:rock/mossy_bricks/claystone_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/mossy_bricks/claystone_slab"},
+    "ingredient": "tfc:rock/mossy_bricks/claystone",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

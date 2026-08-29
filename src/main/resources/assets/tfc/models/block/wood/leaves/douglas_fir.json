@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/leaves",
-  "textures": {
-    "all": "tfc:block/wood/leaves/douglas_fir"
-  }
+    "parent": "block/leaves",
+    "textures": {"all": "tfc:block/wood/leaves/douglas_fir"},
+    "__comment__": "This file was automatically created by mcresources"
 }

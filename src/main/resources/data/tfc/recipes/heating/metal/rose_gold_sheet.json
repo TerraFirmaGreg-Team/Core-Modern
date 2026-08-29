@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/sheet/rose_gold"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/rose_gold",
-    "amount": 200
-  },
-  "temperature": 960
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/rose_gold"
+    },
+    "ingredient": {"item": "tfc:metal/sheet/rose_gold"},
+    "temperature": 960,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

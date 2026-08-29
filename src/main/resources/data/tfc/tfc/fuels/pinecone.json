@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:groundcover/pinecone"
-  },
-  "duration": 220,
-  "temperature": 150,
-  "purity": 0.15
+    "duration": 220,
+    "ingredient": {"item": "tfc:groundcover/pinecone"},
+    "purity": 0.15,
+    "temperature": 150,
+    "__comment__": "This file was automatically created by mcresources"
 }

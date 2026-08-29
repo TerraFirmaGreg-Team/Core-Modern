@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/wood/sapling/sequoia"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/wood/sapling/sequoia"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

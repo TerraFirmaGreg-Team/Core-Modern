@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/plant/jungle_vines/vine"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/plant/jungle_vines/vine"}
 }

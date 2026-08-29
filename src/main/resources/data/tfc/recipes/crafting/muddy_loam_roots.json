@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:tree_roots"
-    },
-    {
-      "item": "tfc:mud/loam"
-    }
-  ],
-  "result": {
-    "item": "tfc:muddy_roots/loam"
-  }
+    "result": {"item": "tfc:muddy_roots/loam"},
+    "ingredients": [
+        {"item": "tfc:tree_roots"},
+        {"item": "tfc:mud/loam"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

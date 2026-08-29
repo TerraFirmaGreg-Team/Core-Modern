@@ -1,99 +1,99 @@
 {
-  "ambientocclusion": false,
-  "textures": {
-    "cross": "tfc:block/plant/gutweed/gutweed",
-    "particle": "tfc:block/plant/gutweed/gutweed"
-  },
-  "elements": [
-    {
-      "from": [
-        8,
-        0,
-        0.2
-      ],
-      "to": [
-        8,
-        16,
-        15.8
-      ],
-      "rotation": {
-        "origin": [
-          8,
-          8,
-          8
-        ],
-        "axis": "y",
-        "angle": -22.5,
-        "rescale": true
-      },
-      "shade": false,
-      "faces": {
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#cross",
-          "tintindex": 0
-        },
-        "east": {
-          "uv": [
-            16,
-            0,
-            0,
-            16
-          ],
-          "texture": "#cross",
-          "tintindex": 0
-        }
-      }
+    "textures": {
+        "cross": "tfc:block/plant/gutweed/gutweed",
+        "particle": "tfc:block/plant/gutweed/gutweed"
     },
-    {
-      "from": [
-        8,
-        0,
-        0.2
-      ],
-      "to": [
-        8,
-        16,
-        15.8
-      ],
-      "rotation": {
-        "origin": [
-          8,
-          8,
-          8
-        ],
-        "axis": "y",
-        "angle": 22.5,
-        "rescale": true
-      },
-      "shade": false,
-      "faces": {
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#cross",
-          "tintindex": 0
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": -22.5,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                0.2
+            ],
+            "to": [
+                8,
+                16,
+                15.8
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                }
+            }
         },
-        "east": {
-          "uv": [
-            16,
-            0,
-            0,
-            16
-          ],
-          "texture": "#cross",
-          "tintindex": 0
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    8,
+                    8
+                ],
+                "angle": 22.5,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                0.2
+            ],
+            "to": [
+                8,
+                16,
+                15.8
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        16,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross",
+                    "tintindex": 0
+                }
+            }
         }
-      }
-    }
-  ]
+    ]
 }

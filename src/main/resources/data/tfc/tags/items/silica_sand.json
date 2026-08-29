@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:sand/white"
-  ]
+    "values": ["tfc:sand/white"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

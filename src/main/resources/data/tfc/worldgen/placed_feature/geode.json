@@ -1,28 +1,20 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:geode",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 500
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:height_range",
-      "height": {
-        "type": "uniform",
-        "min_inclusive": {
-          "absolute": -48
+    "feature": "tfc:geode",
+    "placement": [
+        {
+            "chance": 500,
+            "type": "minecraft:rarity_filter"
         },
-        "max_inclusive": {
-          "absolute": 32
-        }
-      }
-    },
-    {
-      "type": "tfc:biome"
-    }
-  ]
+        {"type": "minecraft:in_square"},
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "min_inclusive": {"absolute": -48},
+                "max_inclusive": {"absolute": 32},
+                "type": "uniform"
+            }
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

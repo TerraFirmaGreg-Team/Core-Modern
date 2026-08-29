@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "forge:ingots/zinc"
-  },
-  "heat_capacity": 4.762,
-  "forging_temperature": 252,
-  "welding_temperature": 336
+    "welding_temperature": 336,
+    "ingredient": {"tag": "forge:ingots/zinc"},
+    "heat_capacity": 4.762,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 252
 }

@@ -1,15 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/lumber/rosewood"
-    }
-  },
-  "result": {
-    "item": "tfc:wood/planks/rosewood_pressure_plate"
-  }
+    "result": {"item": "tfc:wood/planks/rosewood_pressure_plate"},
+    "pattern": ["XX"],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:wood/lumber/rosewood"}}
 }

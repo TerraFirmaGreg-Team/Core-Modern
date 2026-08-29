@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/button_inventory",
-  "textures": {
-    "texture": "tfc:block/rock/raw/marble"
-  }
+    "parent": "block/button_inventory",
+    "textures": {"texture": "tfc:block/rock/raw/marble"},
+    "__comment__": "This file was automatically created by mcresources"
 }

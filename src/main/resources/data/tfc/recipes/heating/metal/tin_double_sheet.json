@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/double_sheet/tin"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/tin",
-    "amount": 400
-  },
-  "temperature": 230
+    "result_fluid": {
+        "amount": 400,
+        "fluid": "tfc:metal/tin"
+    },
+    "ingredient": {"item": "tfc:metal/double_sheet/tin"},
+    "temperature": 230,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

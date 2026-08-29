@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/wood/sapling/spruce"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/wood/sapling/spruce"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

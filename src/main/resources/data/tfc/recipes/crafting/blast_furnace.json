@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "XCX",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:metal/sheet/wrought_iron"
-    },
-    "C": {
-      "item": "tfc:crucible"
+    "result": {"item": "tfc:blast_furnace"},
+    "pattern": [
+        "XXX",
+        "XCX",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "C": {"item": "tfc:crucible"},
+        "X": {"item": "tfc:metal/sheet/wrought_iron"}
     }
-  },
-  "result": {
-    "item": "tfc:blast_furnace"
-  }
 }

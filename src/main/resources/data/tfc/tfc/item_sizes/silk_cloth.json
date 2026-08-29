@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:silk_cloth"
-  },
-  "size": "small",
-  "weight": "light"
+    "ingredient": {"item": "tfc:silk_cloth"},
+    "size": "small",
+    "weight": "light",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:alabaster/bricks/white",
-  "result": "tfc:alabaster/bricks/white_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:alabaster/bricks/white_slab"
-  }
+    "result": "tfc:alabaster/bricks/white_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:alabaster/bricks/white_slab"},
+    "ingredient": "tfc:alabaster/bricks/white",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

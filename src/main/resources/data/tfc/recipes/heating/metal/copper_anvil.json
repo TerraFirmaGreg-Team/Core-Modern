@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/anvil/copper"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/copper",
-    "amount": 1400
-  },
-  "temperature": 1080
+    "result_fluid": {
+        "amount": 1400,
+        "fluid": "tfc:metal/copper"
+    },
+    "ingredient": {"item": "tfc:metal/anvil/copper"},
+    "temperature": 1080,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

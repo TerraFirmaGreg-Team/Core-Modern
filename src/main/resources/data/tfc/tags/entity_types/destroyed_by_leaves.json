@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "minecraft:snowball",
-    "minecraft:egg"
-  ]
+    "values": [
+        "minecraft:snowball",
+        "minecraft:egg"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

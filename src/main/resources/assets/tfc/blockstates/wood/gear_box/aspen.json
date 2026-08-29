@@ -1,111 +1,83 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "when": {
-        "north": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/aspen"
-      }
-    },
-    {
-      "when": {
-        "north": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/aspen"
-      }
-    },
-    {
-      "when": {
-        "south": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/aspen",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "south": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/aspen",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "east": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/aspen",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "east": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/aspen",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "west": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/aspen",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "west": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/aspen",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "down": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/aspen",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "down": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/aspen",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "up": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/aspen",
-        "x": 270
-      }
-    },
-    {
-      "when": {
-        "up": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/aspen",
-        "x": 270
-      }
-    }
-  ]
+    "multipart": [
+        {
+            "apply": {"model": "tfc:block/wood/gear_box_port/aspen"},
+            "when": {"north": true}
+        },
+        {
+            "apply": {"model": "tfc:block/wood/gear_box_face/aspen"},
+            "when": {"north": false}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/gear_box_port/aspen"
+            },
+            "when": {"south": true}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/gear_box_face/aspen"
+            },
+            "when": {"south": false}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/gear_box_port/aspen"
+            },
+            "when": {"east": true}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/gear_box_face/aspen"
+            },
+            "when": {"east": false}
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/gear_box_port/aspen"
+            },
+            "when": {"west": true}
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/gear_box_face/aspen"
+            },
+            "when": {"west": false}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/wood/gear_box_port/aspen"
+            },
+            "when": {"down": true}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/wood/gear_box_face/aspen"
+            },
+            "when": {"down": false}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/wood/gear_box_port/aspen"
+            },
+            "when": {"up": true}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/wood/gear_box_face/aspen"
+            },
+            "when": {"up": false}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

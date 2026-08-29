@@ -1,47 +1,35 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:extra_products_shapeless_crafting",
-  "extra_products": [
-    {
-      "item": "tfc:jacks"
-    }
-  ],
-  "recipe": {
-    "type": "tfc:no_remainder_shapeless_crafting",
+    "extra_products": [{"item": "tfc:jacks"}],
     "recipe": {
-      "type": "minecraft:crafting_shapeless",
-      "ingredients": [
-        {
-          "type": "tfc:fluid_item",
-          "ingredient": {
-            "tag": "tfc:glass_bottles"
-          },
-          "fluid_ingredient": {
-            "ingredient": "minecraft:water",
-            "amount": 100
-          }
+        "recipe": {
+            "result": {
+                "nbt": "{\"Potion\": \"minecraft:water\"}",
+                "item": "minecraft:lingering_potion"
+            },
+            "ingredients": [
+                {
+                    "ingredient": {"tag": "tfc:glass_bottles"},
+                    "fluid_ingredient": {
+                        "amount": 100,
+                        "ingredient": "minecraft:water"
+                    },
+                    "type": "tfc:fluid_item"
+                },
+                {
+                    "ingredient": {"item": "tfc:jacks"},
+                    "min_temp": 200,
+                    "type": "tfc:heatable"
+                },
+                {"item": "tfc:powder/flux"},
+                {
+                    "ingredient": {"item": "tfc:food/lemon"},
+                    "type": "tfc:not_rotten"
+                }
+            ],
+            "type": "minecraft:crafting_shapeless"
         },
-        {
-          "type": "tfc:heatable",
-          "min_temp": 200,
-          "ingredient": {
-            "item": "tfc:jacks"
-          }
-        },
-        {
-          "item": "tfc:powder/flux"
-        },
-        {
-          "type": "tfc:not_rotten",
-          "ingredient": {
-            "item": "tfc:food/lemon"
-          }
-        }
-      ],
-      "result": {
-        "item": "minecraft:lingering_potion",
-        "nbt": "{\"Potion\": \"minecraft:water\"}"
-      }
-    }
-  }
+        "type": "tfc:no_remainder_shapeless_crafting"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:extra_products_shapeless_crafting"
 }

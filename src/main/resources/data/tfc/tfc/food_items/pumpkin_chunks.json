@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:food/pumpkin_chunks"
-  },
-  "hunger": 4,
-  "saturation": 1,
-  "water": 5,
-  "decay_modifier": 1.5,
-  "fruit": 0.75
+    "saturation": 1,
+    "ingredient": {"item": "tfc:food/pumpkin_chunks"},
+    "decay_modifier": 1.5,
+    "fruit": 0.75,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 5,
+    "hunger": 4
 }

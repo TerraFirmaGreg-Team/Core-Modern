@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/silica_glass_batch"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/silica_glass_batch"},
+    "__comment__": "This file was automatically created by mcresources"
 }

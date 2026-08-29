@@ -1,16 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "tier": 1,
-  "fluid": "tfc:metal/rose_gold",
-  "melt_temperature": 960,
-  "specific_heat_capacity": 0.00857,
-  "ingots": {
-    "tag": "forge:ingots/rose_gold"
-  },
-  "double_ingots": {
-    "tag": "forge:double_ingots/rose_gold"
-  },
-  "sheets": {
-    "tag": "forge:sheets/rose_gold"
-  }
+    "melt_temperature": 960,
+    "sheets": {"tag": "forge:sheets/rose_gold"},
+    "double_ingots": {"tag": "forge:double_ingots/rose_gold"},
+    "tier": 1,
+    "ingots": {"tag": "forge:ingots/rose_gold"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/rose_gold",
+    "__comment__": "This file was automatically created by mcresources"
 }

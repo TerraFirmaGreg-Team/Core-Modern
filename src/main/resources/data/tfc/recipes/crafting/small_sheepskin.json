@@ -1,27 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:extra_products_shapeless_crafting",
-  "extra_products": [
-    {
-      "item": "tfc:small_raw_hide"
-    }
-  ],
-  "recipe": {
-    "type": "tfc:damage_inputs_shapeless_crafting",
+    "extra_products": [{"item": "tfc:small_raw_hide"}],
     "recipe": {
-      "type": "minecraft:crafting_shapeless",
-      "ingredients": [
-        {
-          "item": "tfc:small_sheepskin_hide"
+        "recipe": {
+            "result": {
+                "item": "tfc:wool",
+                "count": 1
+            },
+            "ingredients": [
+                {"item": "tfc:small_sheepskin_hide"},
+                {"tag": "tfc:knives"}
+            ],
+            "type": "minecraft:crafting_shapeless"
         },
-        {
-          "tag": "tfc:knives"
-        }
-      ],
-      "result": {
-        "item": "tfc:wool",
-        "count": 1
-      }
-    }
-  }
+        "type": "tfc:damage_inputs_shapeless_crafting"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:extra_products_shapeless_crafting"
 }

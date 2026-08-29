@@ -1,31 +1,27 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/leafy_kelp",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR_WG"
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 2
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": -22.4,
-      "max_temperature": 17.6,
-      "min_rainfall": 0,
-      "max_rainfall": 500,
-      "fuzzy": true
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:air_or_empty_fluid"
-      }
-    }
-  ]
+    "feature": "tfc:plant/leafy_kelp",
+    "placement": [
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "chance": 2,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "max_temperature": 17.6,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 0,
+            "min_temperature": -22.4,
+            "fuzzy": true
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "YYY",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/lumber/ash"
-    },
-    "Y": {
-      "tag": "forge:rods/wooden"
+    "result": {"item": "tfc:wood/planks/ash_bookshelf"},
+    "pattern": [
+        "XXX",
+        "YYY",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/lumber/ash"},
+        "Y": {"tag": "forge:rods/wooden"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/planks/ash_bookshelf"
-  }
 }

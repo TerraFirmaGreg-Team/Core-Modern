@@ -1,22 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": [
-      {
-        "model": "tfc:block/groundcover/salt_lick",
-        "y": 90
-      },
-      {
-        "model": "tfc:block/groundcover/salt_lick"
-      },
-      {
-        "model": "tfc:block/groundcover/salt_lick",
-        "y": 180
-      },
-      {
-        "model": "tfc:block/groundcover/salt_lick",
-        "y": 270
-      }
-    ]
-  }
+    "variants": {"": [
+        {
+            "y": 90,
+            "model": "tfc:block/groundcover/salt_lick"
+        },
+        {"model": "tfc:block/groundcover/salt_lick"},
+        {
+            "y": 180,
+            "model": "tfc:block/groundcover/salt_lick"
+        },
+        {
+            "y": 270,
+            "model": "tfc:block/groundcover/salt_lick"
+        }
+    ]},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/wood/sapling/aspen"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/wood/sapling/aspen"},
+    "__comment__": "This file was automatically created by mcresources"
 }

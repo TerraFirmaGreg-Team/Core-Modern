@@ -1,61 +1,47 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:entity",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+    "pools": [
         {
-          "type": "minecraft:item",
-          "name": "tfc:food/venison",
-          "conditions": [
-            {
-              "condition": "tfc:not_predated"
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 6,
-                "max": 10,
-                "type": "minecraft:uniform"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": {
+                        "min": 6,
+                        "max": 10,
+                        "type": "minecraft:uniform"
+                    }
+                }],
+                "name": "tfc:food/venison",
+                "type": "minecraft:item",
+                "conditions": [{"condition": "tfc:not_predated"}]
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        },
         {
-          "type": "minecraft:item",
-          "name": "tfc:medium_raw_hide"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+            "entries": [{
+                "name": "tfc:medium_raw_hide",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        },
         {
-          "type": "minecraft:item",
-          "name": "minecraft:bone",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1,
-                "max": 6,
-                "type": "minecraft:uniform"
-              }
-            }
-          ]
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": {
+                        "min": 1,
+                        "max": 6,
+                        "type": "minecraft:uniform"
+                    }
+                }],
+                "name": "minecraft:bone",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
         }
-      ]
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:entity"
 }

@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "FFF",
-    "FDF",
-    "FFF"
-  ],
-  "key": {
-    "F": {
-      "item": "minecraft:disc_fragment_5"
-    },
-    "D": {
-      "item": "tfc:blank_disc"
+    "result": {"item": "minecraft:music_disc_5"},
+    "pattern": [
+        "FFF",
+        "FDF",
+        "FFF"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "D": {"item": "tfc:blank_disc"},
+        "F": {"item": "minecraft:disc_fragment_5"}
     }
-  },
-  "result": {
-    "item": "minecraft:music_disc_5"
-  }
 }

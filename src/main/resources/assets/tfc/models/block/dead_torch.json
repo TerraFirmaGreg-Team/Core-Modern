@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:block/template_torch",
-  "textures": {
-    "torch": "tfc:block/torch_off"
-  }
+    "parent": "minecraft:block/template_torch",
+    "textures": {"torch": "tfc:block/torch_off"},
+    "__comment__": "This file was automatically created by mcresources"
 }

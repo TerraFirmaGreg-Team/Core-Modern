@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/smooth/quartzite"
-  },
-  "result": "tfc:rock/smooth/quartzite_wall",
-  "count": 1
+    "result": "tfc:rock/smooth/quartzite_wall",
+    "ingredient": {"item": "tfc:rock/smooth/quartzite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

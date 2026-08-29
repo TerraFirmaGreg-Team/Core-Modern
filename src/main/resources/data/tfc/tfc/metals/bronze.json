@@ -1,16 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "tier": 2,
-  "fluid": "tfc:metal/bronze",
-  "melt_temperature": 950,
-  "specific_heat_capacity": 0.00857,
-  "ingots": {
-    "tag": "forge:ingots/bronze"
-  },
-  "double_ingots": {
-    "tag": "forge:double_ingots/bronze"
-  },
-  "sheets": {
-    "tag": "forge:sheets/bronze"
-  }
+    "melt_temperature": 950,
+    "sheets": {"tag": "forge:sheets/bronze"},
+    "double_ingots": {"tag": "forge:double_ingots/bronze"},
+    "tier": 2,
+    "ingots": {"tag": "forge:ingots/bronze"},
+    "specific_heat_capacity": 0.00857,
+    "fluid": "tfc:metal/bronze",
+    "__comment__": "This file was automatically created by mcresources"
 }

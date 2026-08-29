@@ -1,25 +1,23 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:powder_snow",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 15
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "tfc:climate",
-      "max_temperature": -17
-    },
-    {
-      "type": "tfc:flat_enough",
-      "flatness": 0.6
-    }
-  ]
+    "feature": "tfc:powder_snow",
+    "placement": [
+        {
+            "chance": 15,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": -17,
+            "type": "tfc:climate"
+        },
+        {
+            "flatness": 0.6,
+            "type": "tfc:flat_enough"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

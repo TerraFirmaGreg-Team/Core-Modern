@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/stone_age",
-  "criteria": {
-    "straw": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:straw"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:straw"
+    "parent": "tfc:story/stone_age",
+    "requirements": [["straw"]],
+    "criteria": {"straw": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:straw"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:straw"},
+        "description": {"translate": "tfc.advancements.story.get_straw.description"},
+        "title": {"translate": "tfc.advancements.story.get_straw.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.get_straw.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.get_straw.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "straw"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

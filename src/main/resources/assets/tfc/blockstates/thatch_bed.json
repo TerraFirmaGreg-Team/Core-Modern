@@ -1,34 +1,28 @@
-{
-  "variants": {
-    "facing=east,part=foot": {
-      "model": "tfc:block/thatch_bed_foot",
-      "y": 90
-    },
-    "facing=north,part=foot": {
-      "model": "tfc:block/thatch_bed_foot"
-    },
-    "facing=south,part=foot": {
-      "model": "tfc:block/thatch_bed_foot",
-      "y": 180
-    },
-    "facing=west,part=foot": {
-      "model": "tfc:block/thatch_bed_foot",
-      "y": 270
-    },
+{"variants": {
     "facing=east,part=head": {
-      "model": "tfc:block/thatch_bed_head",
-      "y": 270
+        "y": 270,
+        "model": "tfc:block/thatch_bed_head"
+    },
+    "facing=east,part=foot": {
+        "y": 90,
+        "model": "tfc:block/thatch_bed_foot"
+    },
+    "facing=south,part=head": {"model": "tfc:block/thatch_bed_head"},
+    "facing=west,part=head": {
+        "y": 90,
+        "model": "tfc:block/thatch_bed_head"
     },
     "facing=north,part=head": {
-      "model": "tfc:block/thatch_bed_head",
-      "y": 180
+        "y": 180,
+        "model": "tfc:block/thatch_bed_head"
     },
-    "facing=south,part=head": {
-      "model": "tfc:block/thatch_bed_head"
+    "facing=north,part=foot": {"model": "tfc:block/thatch_bed_foot"},
+    "facing=west,part=foot": {
+        "y": 270,
+        "model": "tfc:block/thatch_bed_foot"
     },
-    "facing=west,part=head": {
-      "model": "tfc:block/thatch_bed_head",
-      "y": 90
+    "facing=south,part=foot": {
+        "y": 180,
+        "model": "tfc:block/thatch_bed_foot"
     }
-  }
-}
+}}

@@ -1,17 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:cave_column",
-  "placement": [
-    {
-      "type": "tfc:carving_mask",
-      "step": "air",
-      "min_y": {
-        "above_bottom": 25
-      }
-    },
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 667
-    }
-  ]
+    "feature": "tfc:cave_column",
+    "placement": [
+        {
+            "step": "air",
+            "type": "tfc:carving_mask",
+            "min_y": {"above_bottom": 25}
+        },
+        {
+            "chance": 667,
+            "type": "minecraft:rarity_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " T ",
-    "TRT",
-    "SSS"
-  ],
-  "key": {
-    "R": {
-      "tag": "forge:dusts/redstone"
-    },
-    "T": {
-      "item": "minecraft:redstone_torch"
-    },
-    "S": {
-      "tag": "forge:smooth_stone"
+    "result": {"item": "minecraft:comparator"},
+    "pattern": [
+        " T ",
+        "TRT",
+        "SSS"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:dusts/redstone"},
+        "S": {"tag": "forge:smooth_stone"},
+        "T": {"item": "minecraft:redstone_torch"}
     }
-  },
-  "result": {
-    "item": "minecraft:comparator"
-  }
 }

@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/rich_magnetite/limestone",
-  "result": "tfc:ore/normal_magnetite/limestone"
+    "result": "tfc:ore/normal_magnetite/limestone",
+    "ingredient": "tfc:ore/rich_magnetite/limestone",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

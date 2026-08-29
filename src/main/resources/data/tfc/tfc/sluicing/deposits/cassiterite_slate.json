@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:deposit/cassiterite/slate"
-  },
-  "loot_table": "tfc:panning/deposits/cassiterite_slate"
+    "ingredient": {"item": "tfc:deposit/cassiterite/slate"},
+    "__comment__": "This file was automatically created by mcresources",
+    "loot_table": "tfc:panning/deposits/cassiterite_slate"
 }

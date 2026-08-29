@@ -1,35 +1,29 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/hanging_vines_cave",
-  "placement": [
-    {
-      "type": "tfc:carving_mask",
-      "step": "air",
-      "min_y": {
-        "absolute": 30
-      },
-      "max_y": {
-        "absolute": 100
-      }
-    },
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 333
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": 13.6,
-      "max_temperature": 29.6,
-      "min_rainfall": 150,
-      "max_rainfall": 470,
-      "min_forest": "normal",
-      "fuzzy": true
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:air_or_empty_fluid"
-      }
-    }
-  ]
+    "feature": "tfc:plant/hanging_vines_cave",
+    "placement": [
+        {
+            "max_y": {"absolute": 100},
+            "step": "air",
+            "type": "tfc:carving_mask",
+            "min_y": {"absolute": 30}
+        },
+        {
+            "chance": 333,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "max_temperature": 29.6,
+            "max_rainfall": 470,
+            "type": "tfc:climate",
+            "min_rainfall": 150,
+            "min_forest": "normal",
+            "min_temperature": 13.6,
+            "fuzzy": true
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

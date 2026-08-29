@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "mature=true": {
-      "model": "tfc:block/dead_crop/oat"
+    "variants": {
+        "mature=true": {"model": "tfc:block/dead_crop/oat"},
+        "mature=false": {"model": "tfc:block/dead_crop/oat_young"}
     },
-    "mature=false": {
-      "model": "tfc:block/dead_crop/oat_young"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

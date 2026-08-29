@@ -1,17 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:alabaster/polished/purple"
-    }
-  },
-  "result": {
-    "item": "tfc:alabaster/polished/purple_wall",
-    "count": 6
-  }
+    "result": {
+        "item": "tfc:alabaster/polished/purple_wall",
+        "count": 6
+    },
+    "pattern": [
+        "XXX",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:alabaster/polished/purple"}}
 }

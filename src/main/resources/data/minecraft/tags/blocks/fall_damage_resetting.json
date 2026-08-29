@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:thatch",
-    "#tfc:berry_bushes"
-  ]
+    "values": [
+        "tfc:thatch",
+        "#tfc:berry_bushes"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

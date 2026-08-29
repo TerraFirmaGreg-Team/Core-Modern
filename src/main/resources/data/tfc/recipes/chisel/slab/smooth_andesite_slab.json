@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/smooth/andesite",
-  "result": "tfc:rock/smooth/andesite_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/smooth/andesite_slab"
-  }
+    "result": "tfc:rock/smooth/andesite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/smooth/andesite_slab"},
+    "ingredient": "tfc:rock/smooth/andesite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

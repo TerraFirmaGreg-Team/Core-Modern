@@ -1,28 +1,24 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/maiden_pink",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:air_or_empty_fluid"
-      }
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "would_survive",
-        "state": {
-          "Name": "tfc:plant/maiden_pink",
-          "Properties": {
-            "age": "1"
-          }
+    "feature": "tfc:plant/maiden_pink",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {"age": "1"},
+                    "Name": "tfc:plant/maiden_pink"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
         }
-      }
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

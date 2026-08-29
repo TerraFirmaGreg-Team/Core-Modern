@@ -1,33 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/forge",
-  "criteria": {
-    "special_condition": {
-      "trigger": "tfc:rock_anvil",
-      "conditions": {
-        "tag": "tfc:rock_anvils"
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:stone/hammer/sedimentary"
+    "parent": "tfc:story/forge",
+    "requirements": [["special_condition"]],
+    "criteria": {"special_condition": {
+        "trigger": "tfc:rock_anvil",
+        "conditions": {"tag": "tfc:rock_anvils"}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:stone/hammer/sedimentary"},
+        "description": {"translate": "tfc.advancements.story.stone_anvil.description"},
+        "title": {"translate": "tfc.advancements.story.stone_anvil.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.stone_anvil.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.stone_anvil.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "special_condition"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

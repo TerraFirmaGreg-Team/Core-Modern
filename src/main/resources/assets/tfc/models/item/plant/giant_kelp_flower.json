@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/plant/giant_kelp_flower"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/plant/giant_kelp_flower"}
 }

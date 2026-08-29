@@ -1,38 +1,92 @@
 {
-  "ambientocclusion": false,
-  "textures":         {
-	"particle": "#cross"
-  },
-  "elements":         [
-	{
-	  "from":     [ 8,  0, -7.2 ],
-	  "to":       [ 8, 32, 23.2 ],
-	  "rotation": {
-		"angle":   -45,
-		"axis":    "y",
-		"origin":  [ 8, 0, 8 ],
-		"rescale": true
-	  },
-	  "shade":    false,
-	  "faces":    {
-		"west": { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" },
-		"east": { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" }
-	  }
-	},
-	{
-	  "from":     [ 8,  0, -7.2 ],
-	  "to":       [ 8, 32, 23.2 ],
-	  "rotation": {
-		"angle":   45,
-		"axis":    "y",
-		"origin":  [ 8, 0, 8 ],
-		"rescale": true
-	  },
-	  "shade":    false,
-	  "faces":    {
-		"west": { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" },
-		"east": { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" }
-	  }
-	}
-  ]
+    "textures": {"particle": "#cross"},
+    "ambientocclusion": false,
+    "elements": [
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": -45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                -7.2
+            ],
+            "to": [
+                8,
+                32,
+                23.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        },
+        {
+            "rotation": {
+                "rescale": true,
+                "origin": [
+                    8,
+                    0,
+                    8
+                ],
+                "angle": 45,
+                "axis": "y"
+            },
+            "shade": false,
+            "from": [
+                8,
+                0,
+                -7.2
+            ],
+            "to": [
+                8,
+                32,
+                23.2
+            ],
+            "faces": {
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#cross"
+                }
+            }
+        }
+    ]
 }

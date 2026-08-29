@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/barrel_side_sealed",
-  "textures": {
-    "particle": "tfc:block/wood/planks/birch",
-    "planks": "tfc:block/wood/planks/birch",
-    "sheet": "tfc:block/wood/sheet/birch"
-  }
+    "parent": "tfc:block/barrel_side_sealed",
+    "textures": {
+        "particle": "tfc:block/wood/planks/birch",
+        "sheet": "tfc:block/wood/sheet/birch",
+        "planks": "tfc:block/wood/planks/birch"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:groundcover/guano"
-  },
-  "nitrogen": 0.8,
-  "potassium": 0.1,
-  "phosphorus": 0.5
+    "ingredient": {"item": "tfc:groundcover/guano"},
+    "potassium": 0.1,
+    "nitrogen": 0.8,
+    "__comment__": "This file was automatically created by mcresources",
+    "phosphorus": 0.5
 }

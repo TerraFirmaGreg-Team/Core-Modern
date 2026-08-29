@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:beer",
-    "tfc:flowing_beer"
-  ]
+    "values": [
+        "tfc:beer",
+        "tfc:flowing_beer"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,12 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/barrel/aspen",
-  "overrides": [
-    {
-      "predicate": {
-        "tfc:sealed": 1.0
-      },
-      "model": "tfc:block/wood/barrel_sealed/aspen"
-    }
-  ]
+    "parent": "tfc:block/wood/barrel/aspen",
+    "overrides": [{
+        "predicate": {"tfc:sealed": 1},
+        "model": "tfc:block/wood/barrel_sealed/aspen"
+    }],
+    "__comment__": "This file was automatically created by mcresources"
 }

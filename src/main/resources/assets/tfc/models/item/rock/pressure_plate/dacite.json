@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/pressure_plate/dacite"
+    "parent": "tfc:block/rock/pressure_plate/dacite",
+    "__comment__": "This file was automatically created by mcresources"
 }

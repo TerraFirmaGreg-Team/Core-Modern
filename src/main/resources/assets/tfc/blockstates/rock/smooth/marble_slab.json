@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/rock/smooth/marble_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/smooth/marble_slab"},
+        "type=double": {"model": "tfc:block/rock/smooth/marble"},
+        "type=top": {"model": "tfc:block/rock/smooth/marble_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/rock/smooth/marble_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/rock/smooth/marble"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,28 +1,24 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:sticks_forest",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:replaceable"
-      }
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "would_survive",
-        "state": {
-          "Name": "tfc:groundcover/stick",
-          "Properties": {
-            "fluid": "empty"
-          }
+    "feature": "tfc:sticks_forest",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {"fluid": "empty"},
+                    "Name": "tfc:groundcover/stick"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
         }
-      }
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

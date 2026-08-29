@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/plant/red_sealing_wax_palm/small_frond_0a"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/plant/red_sealing_wax_palm/small_frond_0a"}
 }

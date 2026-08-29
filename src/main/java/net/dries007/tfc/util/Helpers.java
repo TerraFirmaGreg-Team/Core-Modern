@@ -140,6 +140,7 @@ import net.dries007.tfc.mixin.accessor.RecipeManagerAccessor;
 
 import static net.dries007.tfc.TerraFirmaCraft.*;
 
+@SuppressWarnings({"removal", "deprecation"})
 public final class Helpers
 {
     public static final Direction[] DIRECTIONS = Direction.values();

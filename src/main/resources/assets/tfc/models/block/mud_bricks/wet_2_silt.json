@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/mud_bricks/2",
-  "textures": {
-    "mud": "tfc:block/mud/silt"
-  }
+    "parent": "tfc:block/mud_bricks/2",
+    "textures": {"mud": "tfc:block/mud/silt"},
+    "__comment__": "This file was automatically created by mcresources"
 }

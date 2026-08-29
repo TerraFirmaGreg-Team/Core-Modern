@@ -1,29 +1,27 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/goldenrod",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:replaceable"
-      }
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "would_survive",
-        "state": {
-          "Name": "tfc:plant/goldenrod",
-          "Properties": {
-            "age": "1",
-            "stage": "1"
-          }
+    "feature": "tfc:plant/goldenrod",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {
+                        "stage": "1",
+                        "age": "1"
+                    },
+                    "Name": "tfc:plant/goldenrod"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
         }
-      }
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

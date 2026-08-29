@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/crop",
-  "textures": {
-    "crop": "tfc:block/crop/squash_3"
-  }
+    "parent": "block/crop",
+    "textures": {"crop": "tfc:block/crop/squash_3"},
+    "__comment__": "This file was automatically created by mcresources"
 }

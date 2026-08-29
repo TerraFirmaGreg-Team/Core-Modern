@@ -1,99 +1,87 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "when": {
-        "mature": true
-      },
-      "apply": {
-        "model": "tfc:block/wild_crop/pumpkin"
-      }
-    },
-    {
-      "when": {
-        "mature": false
-      },
-      "apply": {
-        "model": "tfc:block/dead_crop/pumpkin"
-      }
-    },
-    {
-      "when": {
-        "east": true,
-        "mature": true
-      },
-      "apply": {
-        "model": "tfc:block/wild_crop/pumpkin_side",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "north": true,
-        "mature": true
-      },
-      "apply": {
-        "model": "tfc:block/wild_crop/pumpkin_side"
-      }
-    },
-    {
-      "when": {
-        "south": true,
-        "mature": true
-      },
-      "apply": {
-        "model": "tfc:block/wild_crop/pumpkin_side",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "west": true,
-        "mature": true
-      },
-      "apply": {
-        "model": "tfc:block/wild_crop/pumpkin_side",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "east": true,
-        "mature": false
-      },
-      "apply": {
-        "model": "tfc:block/dead_crop/pumpkin_side",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "north": true,
-        "mature": false
-      },
-      "apply": {
-        "model": "tfc:block/dead_crop/pumpkin_side"
-      }
-    },
-    {
-      "when": {
-        "south": true,
-        "mature": false
-      },
-      "apply": {
-        "model": "tfc:block/dead_crop/pumpkin_side",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "west": true,
-        "mature": false
-      },
-      "apply": {
-        "model": "tfc:block/dead_crop/pumpkin_side",
-        "y": 270
-      }
-    }
-  ]
+    "multipart": [
+        {
+            "apply": {"model": "tfc:block/wild_crop/pumpkin"},
+            "when": {"mature": true}
+        },
+        {
+            "apply": {"model": "tfc:block/dead_crop/pumpkin"},
+            "when": {"mature": false}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wild_crop/pumpkin_side"
+            },
+            "when": {
+                "east": true,
+                "mature": true
+            }
+        },
+        {
+            "apply": {"model": "tfc:block/wild_crop/pumpkin_side"},
+            "when": {
+                "mature": true,
+                "north": true
+            }
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wild_crop/pumpkin_side"
+            },
+            "when": {
+                "south": true,
+                "mature": true
+            }
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wild_crop/pumpkin_side"
+            },
+            "when": {
+                "mature": true,
+                "west": true
+            }
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/dead_crop/pumpkin_side"
+            },
+            "when": {
+                "east": true,
+                "mature": false
+            }
+        },
+        {
+            "apply": {"model": "tfc:block/dead_crop/pumpkin_side"},
+            "when": {
+                "mature": false,
+                "north": true
+            }
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/dead_crop/pumpkin_side"
+            },
+            "when": {
+                "south": true,
+                "mature": false
+            }
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/dead_crop/pumpkin_side"
+            },
+            "when": {
+                "mature": false,
+                "west": true
+            }
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

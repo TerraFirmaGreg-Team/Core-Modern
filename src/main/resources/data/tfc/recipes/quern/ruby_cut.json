@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:gem/ruby"
-  },
-  "result": {
-    "item": "tfc:powder/ruby",
-    "count": 4
-  }
+    "result": {
+        "item": "tfc:powder/ruby",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:gem/ruby"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

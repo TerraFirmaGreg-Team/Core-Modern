@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/wood/planks/white_cedar",
-    "top": "tfc:block/wood/planks/white_cedar",
-    "side": "tfc:block/wood/planks/white_cedar"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/wood/planks/white_cedar",
+        "top": "tfc:block/wood/planks/white_cedar",
+        "bottom": "tfc:block/wood/planks/white_cedar"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

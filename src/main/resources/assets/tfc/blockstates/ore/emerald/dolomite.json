@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/emerald/dolomite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/emerald/dolomite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

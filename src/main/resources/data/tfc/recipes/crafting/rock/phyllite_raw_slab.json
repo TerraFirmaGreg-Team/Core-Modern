@@ -1,16 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:rock/raw/phyllite"
-    }
-  },
-  "result": {
-    "item": "tfc:rock/raw/phyllite_slab",
-    "count": 6
-  }
+    "result": {
+        "item": "tfc:rock/raw/phyllite_slab",
+        "count": 6
+    },
+    "pattern": ["XXX"],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"item": "tfc:rock/raw/phyllite"}}
 }

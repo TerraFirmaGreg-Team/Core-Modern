@@ -1,20 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "facing=east": {
-      "model": "tfc:block/wood/sewing_table/mangrove",
-      "y": 90
+    "variants": {
+        "facing=east": {
+            "y": 90,
+            "model": "tfc:block/wood/sewing_table/mangrove"
+        },
+        "facing=south": {
+            "y": 180,
+            "model": "tfc:block/wood/sewing_table/mangrove"
+        },
+        "facing=north": {"model": "tfc:block/wood/sewing_table/mangrove"},
+        "facing=west": {
+            "y": 270,
+            "model": "tfc:block/wood/sewing_table/mangrove"
+        }
     },
-    "facing=north": {
-      "model": "tfc:block/wood/sewing_table/mangrove"
-    },
-    "facing=south": {
-      "model": "tfc:block/wood/sewing_table/mangrove",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "tfc:block/wood/sewing_table/mangrove",
-      "y": 270
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

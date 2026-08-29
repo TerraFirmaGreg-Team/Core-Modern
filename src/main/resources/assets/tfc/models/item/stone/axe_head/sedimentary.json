@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "tfc:item/stone/axe_head"
-  }
+    "parent": "item/handheld",
+    "textures": {"layer0": "tfc:item/stone/axe_head"},
+    "__comment__": "This file was automatically created by mcresources"
 }

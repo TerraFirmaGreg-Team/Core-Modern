@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "powered=false": {
-      "model": "tfc:block/rock/pressure_plate/claystone"
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/claystone_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/claystone"}
     },
-    "powered=true": {
-      "model": "tfc:block/rock/pressure_plate/claystone_down"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

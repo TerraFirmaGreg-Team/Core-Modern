@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/chest/willow"
-    },
-    {
-      "item": "minecraft:minecart"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/chest_minecart/willow"
-  }
+    "result": {"item": "tfc:wood/chest_minecart/willow"},
+    "ingredients": [
+        {"item": "tfc:wood/chest/willow"},
+        {"item": "minecraft:minecart"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

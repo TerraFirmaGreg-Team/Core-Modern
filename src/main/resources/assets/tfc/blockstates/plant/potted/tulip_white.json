@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/tulip_white"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/tulip_white"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

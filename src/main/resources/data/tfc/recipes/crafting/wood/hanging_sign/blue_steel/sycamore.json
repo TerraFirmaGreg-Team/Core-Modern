@@ -1,21 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X X",
-    "YYY",
-    "YYY"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:metal/chain/blue_steel"
+    "result": {
+        "item": "tfc:wood/hanging_sign/blue_steel/sycamore",
+        "count": 3
     },
-    "Y": {
-      "item": "tfc:wood/lumber/sycamore"
+    "pattern": [
+        "X X",
+        "YYY",
+        "YYY"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:metal/chain/blue_steel"},
+        "Y": {"item": "tfc:wood/lumber/sycamore"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/hanging_sign/blue_steel/sycamore",
-    "count": 3
-  }
 }

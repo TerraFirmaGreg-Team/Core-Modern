@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:block/plant/fountain_grass/fountain_grass_0"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:block/plant/fountain_grass/fountain_grass_0"}
 }

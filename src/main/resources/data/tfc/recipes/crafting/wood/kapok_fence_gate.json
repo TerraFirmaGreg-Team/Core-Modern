@@ -1,20 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "YXY",
-    "YXY"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/planks/kapok"
+    "result": {
+        "item": "tfc:wood/planks/kapok_fence_gate",
+        "count": 2
     },
-    "Y": {
-      "item": "tfc:wood/lumber/kapok"
+    "pattern": [
+        "YXY",
+        "YXY"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/kapok"},
+        "Y": {"item": "tfc:wood/lumber/kapok"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/planks/kapok_fence_gate",
-    "count": 2
-  }
 }

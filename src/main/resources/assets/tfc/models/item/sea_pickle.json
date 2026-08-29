@@ -1,6 +1,4 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "minecraft:item/sea_pickle"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {"layer0": "minecraft:item/sea_pickle"}
 }

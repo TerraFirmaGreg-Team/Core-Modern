@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/hardened/dolomite",
-  "result": "tfc:rock/smooth/dolomite",
-  "mode": "smooth"
+    "result": "tfc:rock/smooth/dolomite",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/hardened/dolomite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

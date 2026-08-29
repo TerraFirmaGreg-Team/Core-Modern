@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cracked_bricks/granite"
-  },
-  "result": "tfc:rock/cracked_bricks/granite_wall",
-  "count": 1
+    "result": "tfc:rock/cracked_bricks/granite_wall",
+    "ingredient": {"item": "tfc:rock/cracked_bricks/granite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

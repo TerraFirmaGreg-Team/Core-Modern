@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " L ",
-    "WAW",
-    " L "
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/stripped_log/sequoia"
+    "result": {
+        "item": "tfc:wood/encased_axle/sequoia",
+        "count": 4
     },
-    "W": {
-      "item": "tfc:wood/lumber/sequoia"
-    },
-    "A": {
-      "item": "tfc:wood/axle/sequoia"
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/sequoia"},
+        "W": {"item": "tfc:wood/lumber/sequoia"},
+        "L": {"item": "tfc:wood/stripped_log/sequoia"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/encased_axle/sequoia",
-    "count": 4
-  }
 }

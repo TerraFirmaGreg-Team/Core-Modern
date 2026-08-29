@@ -1,11 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": [
-    "minecraft:grass_block",
-    "minecraft:dirt",
-    "minecraft:coarse_dirt",
-    "minecraft:podzol"
-  ],
-  "result": "minecraft:dirt"
+    "result": "minecraft:dirt",
+    "ingredient": [
+        "minecraft:grass_block",
+        "minecraft:dirt",
+        "minecraft:coarse_dirt",
+        "minecraft:podzol"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

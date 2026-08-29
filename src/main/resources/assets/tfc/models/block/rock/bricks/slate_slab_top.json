@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab_top",
-  "textures": {
-    "bottom": "tfc:block/rock/bricks/slate",
-    "top": "tfc:block/rock/bricks/slate",
-    "side": "tfc:block/rock/bricks/slate"
-  }
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/rock/bricks/slate",
+        "top": "tfc:block/rock/bricks/slate",
+        "bottom": "tfc:block/rock/bricks/slate"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "part=base": {
-      "model": "tfc:block/rock/spike/limestone_base"
+    "variants": {
+        "part=middle": {"model": "tfc:block/rock/spike/limestone_middle"},
+        "part=tip": {"model": "tfc:block/rock/spike/limestone_tip"},
+        "part=base": {"model": "tfc:block/rock/spike/limestone_base"}
     },
-    "part=middle": {
-      "model": "tfc:block/rock/spike/limestone_middle"
-    },
-    "part=tip": {
-      "model": "tfc:block/rock/spike/limestone_tip"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

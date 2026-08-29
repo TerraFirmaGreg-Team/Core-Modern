@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/metal/block/black_steel_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/metal/block/black_steel_slab"},
+        "type=double": {"model": "tfc:block/metal/block/black_steel"},
+        "type=top": {"model": "tfc:block/metal/block/black_steel_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/metal/block/black_steel_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/metal/block/black_steel"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

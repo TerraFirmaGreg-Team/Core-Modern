@@ -1,38 +1,30 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:advanced_shapeless_crafting",
-  "ingredients": [
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "type": "tfc:lacks_trait",
-        "trait": "tfc:salted",
-        "ingredient": {
-          "tag": "tfc:foods/can_be_salted"
+    "result": {"modifiers": [
+        "tfc:copy_input",
+        {
+            "trait": "tfc:salted",
+            "type": "tfc:add_trait"
         }
-      }
-    },
-    {
-      "item": "tfc:powder/salt"
+    ]},
+    "ingredients": [
+        {
+            "ingredient": {
+                "ingredient": {"tag": "tfc:foods/can_be_salted"},
+                "trait": "tfc:salted",
+                "type": "tfc:lacks_trait"
+            },
+            "type": "tfc:not_rotten"
+        },
+        {"item": "tfc:powder/salt"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:advanced_shapeless_crafting",
+    "primary_ingredient": {
+        "ingredient": {
+            "ingredient": {"tag": "tfc:foods/can_be_salted"},
+            "trait": "tfc:salted",
+            "type": "tfc:lacks_trait"
+        },
+        "type": "tfc:not_rotten"
     }
-  ],
-  "result": {
-    "modifiers": [
-      "tfc:copy_input",
-      {
-        "type": "tfc:add_trait",
-        "trait": "tfc:salted"
-      }
-    ]
-  },
-  "primary_ingredient": {
-    "type": "tfc:not_rotten",
-    "ingredient": {
-      "type": "tfc:lacks_trait",
-      "trait": "tfc:salted",
-      "ingredient": {
-        "tag": "tfc:foods/can_be_salted"
-      }
-    }
-  }
 }

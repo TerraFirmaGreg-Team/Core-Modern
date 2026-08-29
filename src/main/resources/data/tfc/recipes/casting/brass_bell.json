@@ -1,15 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:casting",
-  "mold": {
-    "item": "tfc:ceramic/bell_mold"
-  },
-  "fluid": {
-    "ingredient": "tfc:metal/brass",
-    "amount": 100
-  },
-  "result": {
-    "item": "tfc:brass_bell"
-  },
-  "break_chance": 1
+    "result": {"item": "tfc:brass_bell"},
+    "break_chance": 1,
+    "mold": {"item": "tfc:ceramic/bell_mold"},
+    "fluid": {
+        "amount": 100,
+        "ingredient": "tfc:metal/brass"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:casting"
 }

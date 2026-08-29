@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:welding",
-  "first_input": {
-    "tag": "forge:ingots/sterling_silver"
-  },
-  "second_input": {
-    "tag": "forge:ingots/sterling_silver"
-  },
-  "tier": 0,
-  "result": {
-    "item": "tfc:metal/double_ingot/sterling_silver"
-  }
+    "result": {"item": "tfc:metal/double_ingot/sterling_silver"},
+    "first_input": {"tag": "forge:ingots/sterling_silver"},
+    "tier": 0,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:welding",
+    "second_input": {"tag": "forge:ingots/sterling_silver"}
 }

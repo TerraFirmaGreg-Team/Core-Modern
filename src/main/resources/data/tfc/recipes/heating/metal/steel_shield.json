@@ -1,13 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/shield/steel"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/steel",
-    "amount": 400
-  },
-  "temperature": 1540,
-  "use_durability": true
+    "result_fluid": {
+        "amount": 400,
+        "fluid": "tfc:metal/steel"
+    },
+    "ingredient": {"item": "tfc:metal/shield/steel"},
+    "temperature": 1540,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
 }

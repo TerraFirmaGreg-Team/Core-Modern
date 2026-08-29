@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "minecraft:gravel",
-  "result": "minecraft:gravel"
+    "result": "minecraft:gravel",
+    "ingredient": "minecraft:gravel",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

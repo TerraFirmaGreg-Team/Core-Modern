@@ -1,23 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "CCC",
-    "RRB",
-    "CCC"
-  ],
-  "key": {
-    "C": {
-      "tag": "forge:cobblestone"
-    },
-    "R": {
-      "tag": "forge:dusts/redstone"
-    },
-    "B": {
-      "item": "tfc:brass_mechanisms"
+    "result": {"item": "minecraft:observer"},
+    "pattern": [
+        "CCC",
+        "RRB",
+        "CCC"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "R": {"tag": "forge:dusts/redstone"},
+        "B": {"item": "tfc:brass_mechanisms"},
+        "C": {"tag": "forge:cobblestone"}
     }
-  },
-  "result": {
-    "item": "minecraft:observer"
-  }
 }

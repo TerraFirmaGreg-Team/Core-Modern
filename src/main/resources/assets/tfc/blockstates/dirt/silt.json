@@ -1,10 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": [
-      {
-        "model": "tfc:block/dirt/silt"
-      }
-    ]
-  }
+    "variants": {"": [{"model": "tfc:block/dirt/silt"}]},
+    "__comment__": "This file was automatically created by mcresources"
 }

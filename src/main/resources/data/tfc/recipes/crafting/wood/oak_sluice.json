@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "  X",
-    " XY",
-    "XYY"
-  ],
-  "key": {
-    "X": {
-      "tag": "forge:rods/wooden"
-    },
-    "Y": {
-      "item": "tfc:wood/lumber/oak"
+    "result": {"item": "tfc:wood/sluice/oak"},
+    "pattern": [
+        "  X",
+        " XY",
+        "XYY"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "forge:rods/wooden"},
+        "Y": {"item": "tfc:wood/lumber/oak"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/sluice/oak"
-  }
 }

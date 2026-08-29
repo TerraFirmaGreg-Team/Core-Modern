@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/blast_furnace/unlit"
+    "parent": "tfc:block/blast_furnace/unlit",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/rock/smooth/shale"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/rock/smooth/shale"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

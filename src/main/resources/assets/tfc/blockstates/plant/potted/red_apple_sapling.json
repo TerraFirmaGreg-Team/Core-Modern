@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/red_apple_sapling"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/red_apple_sapling"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

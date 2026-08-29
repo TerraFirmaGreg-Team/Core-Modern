@@ -1,26 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "LIL",
-    "STS",
-    " L "
-  ],
-  "key": {
-    "L": {
-      "tag": "tfc:lumber"
-    },
-    "I": {
-      "tag": "forge:rods/wrought_iron"
-    },
-    "S": {
-      "tag": "forge:string"
-    },
-    "T": {
-      "item": "minecraft:tripwire_hook"
+    "result": {"item": "minecraft:crossbow"},
+    "pattern": [
+        "LIL",
+        "STS",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "S": {"tag": "forge:string"},
+        "T": {"item": "minecraft:tripwire_hook"},
+        "I": {"tag": "forge:rods/wrought_iron"},
+        "L": {"tag": "tfc:lumber"}
     }
-  },
-  "result": {
-    "item": "minecraft:crossbow"
-  }
 }

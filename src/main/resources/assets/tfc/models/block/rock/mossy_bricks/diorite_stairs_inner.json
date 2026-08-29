@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/mossy_bricks/diorite",
-    "top": "tfc:block/rock/mossy_bricks/diorite",
-    "side": "tfc:block/rock/mossy_bricks/diorite"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_bricks/diorite",
+        "top": "tfc:block/rock/mossy_bricks/diorite",
+        "bottom": "tfc:block/rock/mossy_bricks/diorite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

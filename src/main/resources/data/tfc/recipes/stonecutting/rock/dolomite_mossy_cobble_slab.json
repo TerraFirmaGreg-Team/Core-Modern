@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/mossy_cobble/dolomite"
-  },
-  "result": "tfc:rock/mossy_cobble/dolomite_slab",
-  "count": 2
+    "result": "tfc:rock/mossy_cobble/dolomite_slab",
+    "ingredient": {"item": "tfc:rock/mossy_cobble/dolomite"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

@@ -1,20 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XYX",
-    "XYX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:wood/planks/mangrove"
+    "result": {
+        "item": "tfc:wood/planks/mangrove_fence",
+        "count": 8
     },
-    "Y": {
-      "item": "tfc:wood/lumber/mangrove"
+    "pattern": [
+        "XYX",
+        "XYX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:wood/planks/mangrove"},
+        "Y": {"item": "tfc:wood/lumber/mangrove"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/planks/mangrove_fence",
-    "count": 8
-  }
 }

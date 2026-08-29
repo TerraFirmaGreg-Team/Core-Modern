@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:anvil",
-  "input": {
-    "tag": "forge:double_sheets/bismuth_bronze"
-  },
-  "result": {
-    "item": "tfc:metal/unfinished_greaves/bismuth_bronze"
-  },
-  "tier": 2,
-  "rules": [
-    "bend_any",
-    "draw_any",
-    "hit_any"
-  ]
+    "result": {"item": "tfc:metal/unfinished_greaves/bismuth_bronze"},
+    "input": {"tag": "forge:double_sheets/bismuth_bronze"},
+    "tier": 2,
+    "rules": [
+        "bend_any",
+        "draw_any",
+        "hit_any"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
 }

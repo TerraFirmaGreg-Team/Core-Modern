@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/raw_sandstone/brown_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/raw_sandstone/brown_slab"},
+        "type=double": {"model": "tfc:block/raw_sandstone/brown"},
+        "type=top": {"model": "tfc:block/raw_sandstone/brown_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/raw_sandstone/brown_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/raw_sandstone/brown"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

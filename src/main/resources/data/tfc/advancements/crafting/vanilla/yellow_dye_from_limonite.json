@@ -1,35 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_item": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:powder/limonite"
-            ]
-          }
-        ]
-      }
+    "parent": "minecraft:recipes/root",
+    "requirements": [[
+        "has_item",
+        "has_the_recipe"
+    ]],
+    "criteria": {
+        "has_item": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {"items": [{"items": ["tfc:powder/limonite"]}]}
+        },
+        "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {"recipe": "tfc:crafting/vanilla/yellow_dye_from_limonite"}
+        }
     },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "tfc:crafting/vanilla/yellow_dye_from_limonite"
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_item",
-      "has_the_recipe"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "tfc:crafting/vanilla/yellow_dye_from_limonite"
-    ]
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "rewards": {"recipes": ["tfc:crafting/vanilla/yellow_dye_from_limonite"]}
 }

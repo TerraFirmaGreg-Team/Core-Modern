@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:thatch",
-    "#minecraft:leaves"
-  ]
+    "values": [
+        "tfc:thatch",
+        "#minecraft:leaves"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

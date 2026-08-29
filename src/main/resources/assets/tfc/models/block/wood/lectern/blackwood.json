@@ -1,12 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:block/lectern",
-  "textures": {
-    "bottom": "tfc:block/wood/planks/blackwood",
-    "base": "tfc:block/wood/lectern/blackwood/base",
-    "front": "tfc:block/wood/lectern/blackwood/front",
-    "sides": "tfc:block/wood/lectern/blackwood/sides",
-    "top": "tfc:block/wood/lectern/blackwood/top",
-    "particle": "tfc:block/wood/lectern/blackwood/sides"
-  }
+    "parent": "minecraft:block/lectern",
+    "textures": {
+        "top": "tfc:block/wood/lectern/blackwood/top",
+        "bottom": "tfc:block/wood/planks/blackwood",
+        "sides": "tfc:block/wood/lectern/blackwood/sides",
+        "particle": "tfc:block/wood/lectern/blackwood/sides",
+        "front": "tfc:block/wood/lectern/blackwood/front",
+        "base": "tfc:block/wood/lectern/blackwood/base"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

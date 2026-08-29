@@ -1,18 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:damage_inputs_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "item": "tfc:smooth_sandstone/red"
-      },
-      {
-        "tag": "tfc:chisels"
-      }
-    ],
-    "result": {
-      "item": "tfc:cut_sandstone/red"
-    }
-  }
+    "recipe": {
+        "result": {"item": "tfc:cut_sandstone/red"},
+        "ingredients": [
+            {"item": "tfc:smooth_sandstone/red"},
+            {"tag": "tfc:chisels"}
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
 }

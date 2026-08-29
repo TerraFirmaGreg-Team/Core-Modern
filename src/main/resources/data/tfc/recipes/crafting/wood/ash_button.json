@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/ash"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/ash_button"
-  }
+    "result": {"item": "tfc:wood/planks/ash_button"},
+    "ingredients": [{"item": "tfc:wood/planks/ash"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

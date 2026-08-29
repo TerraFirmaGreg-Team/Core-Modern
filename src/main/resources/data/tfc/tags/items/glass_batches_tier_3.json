@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:silica_glass_batch",
-    "tfc:hematitic_glass_batch",
-    "tfc:olivine_glass_batch"
-  ]
+    "values": [
+        "tfc:silica_glass_batch",
+        "tfc:hematitic_glass_batch",
+        "tfc:olivine_glass_batch"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

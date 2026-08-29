@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/support/inventory",
-  "textures": {
-    "texture": "tfc:block/wood/sheet/white_cedar"
-  }
+    "parent": "tfc:block/wood/support/inventory",
+    "textures": {"texture": "tfc:block/wood/sheet/white_cedar"},
+    "__comment__": "This file was automatically created by mcresources"
 }

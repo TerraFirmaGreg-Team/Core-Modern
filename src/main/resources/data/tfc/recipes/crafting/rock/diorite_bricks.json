@@ -1,21 +1,17 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XMX",
-    "MXM",
-    "XMX"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:brick/diorite"
+    "result": {
+        "item": "tfc:rock/bricks/diorite",
+        "count": 4
     },
-    "M": {
-      "tag": "tfc:mortar"
+    "pattern": [
+        "XMX",
+        "MXM",
+        "XMX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:brick/diorite"},
+        "M": {"tag": "tfc:mortar"}
     }
-  },
-  "result": {
-    "item": "tfc:rock/bricks/diorite",
-    "count": 4
-  }
 }

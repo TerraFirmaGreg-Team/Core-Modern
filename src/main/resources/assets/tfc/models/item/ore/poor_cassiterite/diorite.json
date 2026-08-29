@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/poor_cassiterite/diorite"
+    "parent": "tfc:block/ore/poor_cassiterite/diorite",
+    "__comment__": "This file was automatically created by mcresources"
 }

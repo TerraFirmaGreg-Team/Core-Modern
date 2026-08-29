@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "lit=true": {
-      "model": "minecraft:block/light_blue_candle_cake_lit"
+    "variants": {
+        "lit=false": {"model": "minecraft:block/light_blue_candle_cake"},
+        "lit=true": {"model": "minecraft:block/light_blue_candle_cake_lit"}
     },
-    "lit=false": {
-      "model": "minecraft:block/light_blue_candle_cake"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

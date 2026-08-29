@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/pressure_plate_down",
-  "textures": {
-    "texture": "tfc:block/rock/raw/gneiss"
-  }
+    "parent": "block/pressure_plate_down",
+    "textures": {"texture": "tfc:block/rock/raw/gneiss"},
+    "__comment__": "This file was automatically created by mcresources"
 }

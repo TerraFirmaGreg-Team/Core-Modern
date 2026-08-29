@@ -1,10 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:creeping_plant",
-  "config": {
-    "block": "tfc:plant/cobblestone_lichen",
-    "height": 5,
-    "radius": 5,
-    "integrity": 0.4
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:creeping_plant",
+    "config": {
+        "integrity": 0.4,
+        "block": "tfc:plant/cobblestone_lichen",
+        "radius": 5,
+        "height": 5
+    }
 }

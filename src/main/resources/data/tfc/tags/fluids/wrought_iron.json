@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/wrought_iron",
-    "tfc:metal/flowing_wrought_iron"
-  ]
+    "values": [
+        "tfc:metal/wrought_iron",
+        "tfc:metal/flowing_wrought_iron"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,15 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:knapping",
-  "knapping_type": "tfc:clay",
-  "outside_slot_required": true,
-  "pattern": [
-    "XXXXX",
-    "X   X",
-    " XXX ",
-    "XXXXX"
-  ],
-  "result": {
-    "item": "tfc:ceramic/unfired_pickaxe_head_mold"
-  }
+    "result": {"item": "tfc:ceramic/unfired_pickaxe_head_mold"},
+    "outside_slot_required": true,
+    "pattern": [
+        "XXXXX",
+        "X   X",
+        " XXX ",
+        "XXXXX"
+    ],
+    "knapping_type": "tfc:clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:knapping"
 }

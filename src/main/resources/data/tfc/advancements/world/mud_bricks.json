@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/root",
-  "criteria": {
-    "mud_bricks": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:mud_bricks"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:mud_brick/sandy_loam"
+    "parent": "tfc:world/root",
+    "requirements": [["mud_bricks"]],
+    "criteria": {"mud_bricks": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:mud_bricks"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:mud_brick/sandy_loam"},
+        "description": {"translate": "tfc.advancements.world.mud_bricks.description"},
+        "title": {"translate": "tfc.advancements.world.mud_bricks.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.world.mud_bricks.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.mud_bricks.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "mud_bricks"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

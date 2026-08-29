@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/support/connection",
-  "textures": {
-    "texture": "tfc:block/wood/sheet/spruce",
-    "particle": "tfc:block/wood/sheet/spruce"
-  }
+    "parent": "tfc:block/wood/support/connection",
+    "textures": {
+        "texture": "tfc:block/wood/sheet/spruce",
+        "particle": "tfc:block/wood/sheet/spruce"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

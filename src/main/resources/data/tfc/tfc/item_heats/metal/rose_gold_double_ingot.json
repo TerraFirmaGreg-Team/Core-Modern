@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "forge:double_ingots/rose_gold"
-  },
-  "heat_capacity": 5.714,
-  "forging_temperature": 576,
-  "welding_temperature": 768
+    "welding_temperature": 768,
+    "ingredient": {"tag": "forge:double_ingots/rose_gold"},
+    "heat_capacity": 5.714,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 576
 }

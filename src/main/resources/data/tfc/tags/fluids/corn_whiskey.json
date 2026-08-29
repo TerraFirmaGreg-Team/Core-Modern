@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:corn_whiskey",
-    "tfc:flowing_corn_whiskey"
-  ]
+    "values": [
+        "tfc:corn_whiskey",
+        "tfc:flowing_corn_whiskey"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

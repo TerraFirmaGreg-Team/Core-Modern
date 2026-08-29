@@ -1,19 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "sealed=true,axis=x": {
-      "model": "tfc:block/ceramic/orange_large_vessel_sealed"
+    "variants": {
+        "sealed=true,axis=z": {
+            "y": 90,
+            "model": "tfc:block/ceramic/orange_large_vessel_sealed"
+        },
+        "sealed=true,axis=x": {"model": "tfc:block/ceramic/orange_large_vessel_sealed"},
+        "sealed=false,axis=z": {
+            "y": 90,
+            "model": "tfc:block/ceramic/orange_large_vessel_opened"
+        },
+        "sealed=false,axis=x": {"model": "tfc:block/ceramic/orange_large_vessel_opened"}
     },
-    "sealed=true,axis=z": {
-      "model": "tfc:block/ceramic/orange_large_vessel_sealed",
-      "y": 90
-    },
-    "sealed=false,axis=x": {
-      "model": "tfc:block/ceramic/orange_large_vessel_opened"
-    },
-    "sealed=false,axis=z": {
-      "model": "tfc:block/ceramic/orange_large_vessel_opened",
-      "y": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

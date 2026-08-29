@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "loader": "tfc:contained_fluid",
-  "parent": "forge:item/default",
-  "textures": {
-    "base": "tfc:item/ceramic/fired_mold/propick_head_empty",
-    "fluid": "tfc:item/ceramic/fired_mold/propick_head_overlay"
-  }
+    "parent": "forge:item/default",
+    "textures": {
+        "fluid": "tfc:item/ceramic/fired_mold/propick_head_overlay",
+        "base": "tfc:item/ceramic/fired_mold/propick_head_empty"
+    },
+    "loader": "tfc:contained_fluid",
+    "__comment__": "This file was automatically created by mcresources"
 }

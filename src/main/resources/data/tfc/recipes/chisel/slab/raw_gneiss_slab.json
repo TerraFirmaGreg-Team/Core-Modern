@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/gneiss",
-  "result": "tfc:rock/raw/gneiss_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/raw/gneiss_slab"
-  }
+    "result": "tfc:rock/raw/gneiss_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/raw/gneiss_slab"},
+    "ingredient": "tfc:rock/raw/gneiss",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

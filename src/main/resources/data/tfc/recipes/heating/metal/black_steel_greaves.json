@@ -1,13 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/greaves/black_steel"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/black_steel",
-    "amount": 600
-  },
-  "temperature": 1485,
-  "use_durability": true
+    "result_fluid": {
+        "amount": 600,
+        "fluid": "tfc:metal/black_steel"
+    },
+    "ingredient": {"item": "tfc:metal/greaves/black_steel"},
+    "temperature": 1485,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
 }

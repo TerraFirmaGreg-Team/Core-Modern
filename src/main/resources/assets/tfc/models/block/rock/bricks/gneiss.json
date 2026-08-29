@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "tfc:block/rock/bricks/gneiss"
-  }
+    "parent": "block/cube_all",
+    "textures": {"all": "tfc:block/rock/bricks/gneiss"},
+    "__comment__": "This file was automatically created by mcresources"
 }

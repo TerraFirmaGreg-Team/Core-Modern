@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/rich_limonite/chalk",
-  "result": "tfc:ore/normal_limonite/chalk"
+    "result": "tfc:ore/normal_limonite/chalk",
+    "ingredient": "tfc:ore/rich_limonite/chalk",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:powder/flux"
-  },
-  "result_item": {
-    "item": "tfc:powder/lime"
-  },
-  "temperature": 840
+    "result_item": {"item": "tfc:powder/lime"},
+    "ingredient": {"item": "tfc:powder/flux"},
+    "temperature": 840,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

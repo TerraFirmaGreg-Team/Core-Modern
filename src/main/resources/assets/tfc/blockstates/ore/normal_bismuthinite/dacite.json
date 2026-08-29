@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/normal_bismuthinite/dacite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/normal_bismuthinite/dacite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

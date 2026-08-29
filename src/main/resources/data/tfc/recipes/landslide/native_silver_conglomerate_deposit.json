@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "tfc:deposit/native_silver/conglomerate",
-  "result": "tfc:deposit/native_silver/conglomerate"
+    "result": "tfc:deposit/native_silver/conglomerate",
+    "ingredient": "tfc:deposit/native_silver/conglomerate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

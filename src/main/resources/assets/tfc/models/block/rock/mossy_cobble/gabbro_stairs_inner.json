@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/mossy_cobble/gabbro",
-    "top": "tfc:block/rock/mossy_cobble/gabbro",
-    "side": "tfc:block/rock/mossy_cobble/gabbro"
-  }
+    "parent": "block/inner_stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_cobble/gabbro",
+        "top": "tfc:block/rock/mossy_cobble/gabbro",
+        "bottom": "tfc:block/rock/mossy_cobble/gabbro"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

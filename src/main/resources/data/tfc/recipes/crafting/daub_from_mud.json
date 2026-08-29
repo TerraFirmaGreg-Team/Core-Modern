@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:clay_ball"
+    "result": {
+        "item": "tfc:daub",
+        "count": 2
     },
-    {
-      "tag": "tfc:mud"
-    }
-  ],
-  "result": {
-    "item": "tfc:daub",
-    "count": 2
-  }
+    "ingredients": [
+        {"item": "minecraft:clay_ball"},
+        {"tag": "tfc:mud"}
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

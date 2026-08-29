@@ -1,30 +1,20 @@
-{
-  "multipart": [
+{"multipart": [
     {
-      "when": {
-        "part": "lower"
-      },
-      "apply": {
-        "model": "tfc:block/plant/pampas_grass_lower"
-      }
+        "apply": {"model": "tfc:block/plant/pampas_grass_lower"},
+        "when": {"part": "lower"}
     },
     {
-      "when": {
-        "part": "upper",
-        "age": "0|1"
-      },
-      "apply": {
-        "model": "tfc:block/plant/pampas_grass_short"
-      }
+        "apply": {"model": "tfc:block/plant/pampas_grass_short"},
+        "when": {
+            "part": "upper",
+            "age": "0|1"
+        }
     },
     {
-      "when": {
-        "part": "upper",
-        "age": "2|3"
-      },
-      "apply": {
-        "model": "tfc:block/plant/pampas_grass_top"
-      }
+        "apply": {"model": "tfc:block/plant/pampas_grass_top"},
+        "when": {
+            "part": "upper",
+            "age": "2|3"
+        }
     }
-  ]
-}
+]}

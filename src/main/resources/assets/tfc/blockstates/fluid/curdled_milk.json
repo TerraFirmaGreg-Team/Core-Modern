@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/fluid/curdled_milk"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/fluid/curdled_milk"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

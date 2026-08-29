@@ -1,50 +1,36 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "name": "tfc:food/fresh_seaweed",
-              "conditions": [
+    "pools": [{
+        "entries": [{
+            "children": [
                 {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "tag": "tfc:sharp_tools"
-                  }
+                    "name": "tfc:food/fresh_seaweed",
+                    "type": "minecraft:item",
+                    "conditions": [
+                        {
+                            "predicate": {"tag": "tfc:sharp_tools"},
+                            "condition": "minecraft:match_tool"
+                        },
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.3
+                        }
+                    ]
                 },
                 {
-                  "condition": "minecraft:random_chance",
-                  "chance": 0.3
+                    "name": "tfc:plant/gutweed",
+                    "type": "minecraft:item",
+                    "conditions": [{
+                        "predicate": {"tag": "forge:shears"},
+                        "condition": "minecraft:match_tool"
+                    }]
                 }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tfc:plant/gutweed",
-              "conditions": [
-                {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "tag": "forge:shears"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+            ],
+            "type": "minecraft:alternatives"
+        }],
+        "name": "loot_pool",
+        "rolls": 1,
+        "conditions": [{"condition": "minecraft:survives_explosion"}]
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
 }

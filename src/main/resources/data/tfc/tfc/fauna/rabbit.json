@@ -1,6 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "climate": {
-    "min_rainfall": 15
-  }
+    "climate": {"min_rainfall": 15},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "tfc:block/wood/stripped_log_top/sequoia",
-    "side": "tfc:block/wood/stripped_log/sequoia"
-  }
+    "parent": "block/cube_column",
+    "textures": {
+        "side": "tfc:block/wood/stripped_log/sequoia",
+        "end": "tfc:block/wood/stripped_log_top/sequoia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/normal_native_copper/dacite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/normal_native_copper/dacite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

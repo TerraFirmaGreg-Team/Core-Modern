@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:glassworking",
-  "operations": [
-    "blow",
-    "pinch",
-    "roll",
-    "saw"
-  ],
-  "batch": {
-    "tag": "tfc:glass_batches_tier_2"
-  },
-  "result": {
-    "item": "tfc:empty_jar"
-  }
+    "result": {"item": "tfc:empty_jar"},
+    "operations": [
+        "blow",
+        "pinch",
+        "roll",
+        "saw"
+    ],
+    "batch": {"tag": "tfc:glass_batches_tier_2"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
 }

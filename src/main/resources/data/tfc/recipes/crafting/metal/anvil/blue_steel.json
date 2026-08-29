@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    " X ",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "tag": "forge:double_ingots/blue_steel"
-    }
-  },
-  "result": {
-    "item": "tfc:metal/anvil/blue_steel"
-  }
+    "result": {"item": "tfc:metal/anvil/blue_steel"},
+    "pattern": [
+        "XXX",
+        " X ",
+        "XXX"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {"X": {"tag": "forge:double_ingots/blue_steel"}}
 }

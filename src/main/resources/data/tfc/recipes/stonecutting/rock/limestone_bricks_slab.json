@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/bricks/limestone"
-  },
-  "result": "tfc:rock/bricks/limestone_slab",
-  "count": 2
+    "result": "tfc:rock/bricks/limestone_slab",
+    "ingredient": {"item": "tfc:rock/bricks/limestone"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

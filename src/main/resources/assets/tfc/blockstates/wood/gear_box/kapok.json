@@ -1,111 +1,83 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "multipart": [
-    {
-      "when": {
-        "north": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/kapok"
-      }
-    },
-    {
-      "when": {
-        "north": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/kapok"
-      }
-    },
-    {
-      "when": {
-        "south": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/kapok",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "south": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/kapok",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "east": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/kapok",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "east": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/kapok",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "west": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/kapok",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "west": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/kapok",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "down": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/kapok",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "down": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/kapok",
-        "x": 90
-      }
-    },
-    {
-      "when": {
-        "up": true
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_port/kapok",
-        "x": 270
-      }
-    },
-    {
-      "when": {
-        "up": false
-      },
-      "apply": {
-        "model": "tfc:block/wood/gear_box_face/kapok",
-        "x": 270
-      }
-    }
-  ]
+    "multipart": [
+        {
+            "apply": {"model": "tfc:block/wood/gear_box_port/kapok"},
+            "when": {"north": true}
+        },
+        {
+            "apply": {"model": "tfc:block/wood/gear_box_face/kapok"},
+            "when": {"north": false}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/gear_box_port/kapok"
+            },
+            "when": {"south": true}
+        },
+        {
+            "apply": {
+                "y": 180,
+                "model": "tfc:block/wood/gear_box_face/kapok"
+            },
+            "when": {"south": false}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/gear_box_port/kapok"
+            },
+            "when": {"east": true}
+        },
+        {
+            "apply": {
+                "y": 90,
+                "model": "tfc:block/wood/gear_box_face/kapok"
+            },
+            "when": {"east": false}
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/gear_box_port/kapok"
+            },
+            "when": {"west": true}
+        },
+        {
+            "apply": {
+                "y": 270,
+                "model": "tfc:block/wood/gear_box_face/kapok"
+            },
+            "when": {"west": false}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/wood/gear_box_port/kapok"
+            },
+            "when": {"down": true}
+        },
+        {
+            "apply": {
+                "x": 90,
+                "model": "tfc:block/wood/gear_box_face/kapok"
+            },
+            "when": {"down": false}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/wood/gear_box_port/kapok"
+            },
+            "when": {"up": true}
+        },
+        {
+            "apply": {
+                "x": 270,
+                "model": "tfc:block/wood/gear_box_face/kapok"
+            },
+            "when": {"up": false}
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

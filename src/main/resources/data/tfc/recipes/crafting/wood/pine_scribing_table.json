@@ -1,26 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "F B",
-    "XXX",
-    "Y Y"
-  ],
-  "key": {
-    "F": {
-      "tag": "forge:feathers"
-    },
-    "B": {
-      "item": "minecraft:black_dye"
-    },
-    "X": {
-      "item": "tfc:wood/planks/pine_slab"
-    },
-    "Y": {
-      "item": "tfc:wood/planks/pine"
+    "result": {"item": "tfc:wood/scribing_table/pine"},
+    "pattern": [
+        "F B",
+        "XXX",
+        "Y Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "B": {"item": "minecraft:black_dye"},
+        "F": {"tag": "forge:feathers"},
+        "X": {"item": "tfc:wood/planks/pine_slab"},
+        "Y": {"item": "tfc:wood/planks/pine"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/scribing_table/pine"
-  }
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/plant/cross_4",
-  "textures": {
-    "cross": "tfc:block/fruit_tree/peach_sapling"
-  }
+    "parent": "tfc:block/plant/cross_4",
+    "textures": {"cross": "tfc:block/fruit_tree/peach_sapling"},
+    "__comment__": "This file was automatically created by mcresources"
 }

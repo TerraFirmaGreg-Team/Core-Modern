@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "tfc:block/wood/log_top/sycamore",
-    "side": "tfc:block/wood/log/sycamore"
-  }
+    "parent": "block/cube_column",
+    "textures": {
+        "side": "tfc:block/wood/log/sycamore",
+        "end": "tfc:block/wood/log_top/sycamore"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

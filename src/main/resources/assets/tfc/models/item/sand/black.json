@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/sand/black"
+    "parent": "tfc:block/sand/black",
+    "__comment__": "This file was automatically created by mcresources"
 }

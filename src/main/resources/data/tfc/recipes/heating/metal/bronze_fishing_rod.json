@@ -1,13 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/fishing_rod/bronze"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/bronze",
-    "amount": 200
-  },
-  "temperature": 950,
-  "use_durability": true
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/bronze"
+    },
+    "ingredient": {"item": "tfc:metal/fishing_rod/bronze"},
+    "temperature": 950,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
 }

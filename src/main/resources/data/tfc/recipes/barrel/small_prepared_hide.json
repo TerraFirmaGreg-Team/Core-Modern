@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "item": "tfc:small_scraped_hide"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "minecraft:water",
-    "amount": 300
-  },
-  "output_item": {
-    "item": "tfc:small_prepared_hide"
-  },
-  "duration": 8000
+    "input_fluid": {
+        "amount": 300,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 8000,
+    "output_item": {"item": "tfc:small_prepared_hide"},
+    "input_item": {"ingredient": {"item": "tfc:small_scraped_hide"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

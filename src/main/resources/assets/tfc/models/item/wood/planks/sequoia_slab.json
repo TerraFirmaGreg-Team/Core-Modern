@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/planks/sequoia_slab"
+    "parent": "tfc:block/wood/planks/sequoia_slab",
+    "__comment__": "This file was automatically created by mcresources"
 }

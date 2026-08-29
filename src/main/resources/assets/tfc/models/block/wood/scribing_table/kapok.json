@@ -1,11 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/scribing_table",
-  "textures": {
-    "top": "tfc:block/wood/scribing_table/kapok",
-    "leg": "tfc:block/wood/log/kapok",
-    "side": "tfc:block/wood/planks/kapok",
-    "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia",
-    "particle": "tfc:block/wood/planks/kapok"
-  }
+    "parent": "tfc:block/scribing_table",
+    "textures": {
+        "side": "tfc:block/wood/planks/kapok",
+        "top": "tfc:block/wood/scribing_table/kapok",
+        "particle": "tfc:block/wood/planks/kapok",
+        "leg": "tfc:block/wood/log/kapok",
+        "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

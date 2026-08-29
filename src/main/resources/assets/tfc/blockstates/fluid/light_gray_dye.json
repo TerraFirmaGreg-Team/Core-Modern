@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/fluid/light_gray_dye"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/fluid/light_gray_dye"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/rock/bricks/rhyolite_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/rock/bricks/rhyolite_slab"},
+        "type=double": {"model": "tfc:block/rock/bricks/rhyolite"},
+        "type=top": {"model": "tfc:block/rock/bricks/rhyolite_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/rock/bricks/rhyolite_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/rock/bricks/rhyolite"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

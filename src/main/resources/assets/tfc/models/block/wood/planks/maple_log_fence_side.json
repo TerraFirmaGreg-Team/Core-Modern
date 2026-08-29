@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/fence_side",
-  "textures": {
-    "texture": "tfc:block/wood/planks/maple"
-  }
+    "parent": "block/fence_side",
+    "textures": {"texture": "tfc:block/wood/planks/maple"},
+    "__comment__": "This file was automatically created by mcresources"
 }

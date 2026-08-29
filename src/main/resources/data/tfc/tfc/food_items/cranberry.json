@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:food/cranberry"
-  },
-  "hunger": 4,
-  "saturation": 0.2,
-  "water": 5,
-  "decay_modifier": 1.8,
-  "fruit": 1
+    "saturation": 0.2,
+    "ingredient": {"item": "tfc:food/cranberry"},
+    "decay_modifier": 1.8,
+    "fruit": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "water": 5,
+    "hunger": 4
 }

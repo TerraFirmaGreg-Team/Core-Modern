@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "entity": "tfc:creepers",
-  "piercing": 0,
-  "slashing": -25,
-  "crushing": 50
+    "crushing": 50,
+    "piercing": 0,
+    "slashing": -25,
+    "__comment__": "This file was automatically created by mcresources",
+    "entity": "tfc:creepers"
 }

@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/unfinished_helmet/copper"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/copper",
-    "amount": 400
-  },
-  "temperature": 1080
+    "result_fluid": {
+        "amount": 400,
+        "fluid": "tfc:metal/copper"
+    },
+    "ingredient": {"item": "tfc:metal/unfinished_helmet/copper"},
+    "temperature": 1080,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

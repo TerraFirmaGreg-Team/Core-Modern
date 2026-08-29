@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " L ",
-    "WAW",
-    " L "
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/stripped_log/hickory"
+    "result": {
+        "item": "tfc:wood/encased_axle/hickory",
+        "count": 4
     },
-    "W": {
-      "item": "tfc:wood/lumber/hickory"
-    },
-    "A": {
-      "item": "tfc:wood/axle/hickory"
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/hickory"},
+        "W": {"item": "tfc:wood/lumber/hickory"},
+        "L": {"item": "tfc:wood/stripped_log/hickory"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/encased_axle/hickory",
-    "count": 4
-  }
 }

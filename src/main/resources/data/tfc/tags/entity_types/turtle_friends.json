@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "minecraft:player",
-    "tfc:dolphin"
-  ]
+    "values": [
+        "minecraft:player",
+        "tfc:dolphin"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

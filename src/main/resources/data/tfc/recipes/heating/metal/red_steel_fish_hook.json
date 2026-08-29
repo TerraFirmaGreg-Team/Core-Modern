@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/fish_hook/red_steel"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/red_steel",
-    "amount": 200
-  },
-  "temperature": 1540
+    "result_fluid": {
+        "amount": 200,
+        "fluid": "tfc:metal/red_steel"
+    },
+    "ingredient": {"item": "tfc:metal/fish_hook/red_steel"},
+    "temperature": 1540,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

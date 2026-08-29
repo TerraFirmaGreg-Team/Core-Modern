@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/jar_shelf/willow"
+    "parent": "tfc:block/wood/jar_shelf/willow",
+    "__comment__": "This file was automatically created by mcresources"
 }

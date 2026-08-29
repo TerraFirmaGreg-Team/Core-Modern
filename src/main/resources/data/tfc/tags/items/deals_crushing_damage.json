@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:hammers",
-    "#tfc:maces"
-  ]
+    "values": [
+        "#tfc:hammers",
+        "#tfc:maces"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,17 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "item": "tfc:windmill_blade"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "tfc:yellow_dye",
-    "amount": 25
-  },
-  "output_item": {
-    "item": "tfc:yellow_windmill_blade"
-  },
-  "duration": 1000
+    "input_fluid": {
+        "amount": 25,
+        "ingredient": "tfc:yellow_dye"
+    },
+    "duration": 1000,
+    "output_item": {"item": "tfc:yellow_windmill_blade"},
+    "input_item": {"ingredient": {"item": "tfc:windmill_blade"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/spike/gabbro_base",
-  "textures": {
-    "layer0": "tfc:block/rock/raw/gabbro"
-  }
+    "parent": "tfc:block/rock/spike/gabbro_base",
+    "textures": {"layer0": "tfc:block/rock/raw/gabbro"},
+    "__comment__": "This file was automatically created by mcresources"
 }

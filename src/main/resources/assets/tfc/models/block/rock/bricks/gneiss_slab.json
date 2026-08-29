@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab",
-  "textures": {
-    "bottom": "tfc:block/rock/bricks/gneiss",
-    "top": "tfc:block/rock/bricks/gneiss",
-    "side": "tfc:block/rock/bricks/gneiss"
-  }
+    "parent": "block/slab",
+    "textures": {
+        "side": "tfc:block/rock/bricks/gneiss",
+        "top": "tfc:block/rock/bricks/gneiss",
+        "bottom": "tfc:block/rock/bricks/gneiss"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

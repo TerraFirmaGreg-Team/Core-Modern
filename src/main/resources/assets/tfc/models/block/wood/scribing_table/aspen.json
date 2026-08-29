@@ -1,11 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/scribing_table",
-  "textures": {
-    "top": "tfc:block/wood/scribing_table/aspen",
-    "leg": "tfc:block/wood/log/aspen",
-    "side": "tfc:block/wood/planks/aspen",
-    "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia",
-    "particle": "tfc:block/wood/planks/aspen"
-  }
+    "parent": "tfc:block/scribing_table",
+    "textures": {
+        "side": "tfc:block/wood/planks/aspen",
+        "top": "tfc:block/wood/scribing_table/aspen",
+        "particle": "tfc:block/wood/planks/aspen",
+        "leg": "tfc:block/wood/log/aspen",
+        "misc": "tfc:block/wood/scribing_table/scribing_paraphernalia"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

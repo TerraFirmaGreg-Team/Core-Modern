@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/poor_native_silver/slate"
+    "parent": "tfc:block/ore/poor_native_silver/slate",
+    "__comment__": "This file was automatically created by mcresources"
 }

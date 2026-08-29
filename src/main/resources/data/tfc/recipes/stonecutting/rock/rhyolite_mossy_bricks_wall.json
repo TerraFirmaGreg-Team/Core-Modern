@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/mossy_bricks/rhyolite"
-  },
-  "result": "tfc:rock/mossy_bricks/rhyolite_wall",
-  "count": 1
+    "result": "tfc:rock/mossy_bricks/rhyolite_wall",
+    "ingredient": {"item": "tfc:rock/mossy_bricks/rhyolite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

@@ -1,30 +1,26 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:guano_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 15
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": -30,
-      "max_temperature": 10,
-      "min_rainfall": 100,
-      "max_rainfall": 500
-    },
-    {
-      "type": "tfc:on_top",
-      "predicate": {
-        "type": "minecraft:matching_block_tag",
-        "tag": "tfc:creeping_stone_plantable_on"
-      }
-    },
-    {
-      "type": "tfc:biome"
-    }
-  ]
+    "feature": "tfc:guano_patch",
+    "placement": [
+        {
+            "chance": 15,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 10,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_temperature": -30
+        },
+        {
+            "predicate": {
+                "tag": "tfc:creeping_stone_plantable_on",
+                "type": "minecraft:matching_block_tag"
+            },
+            "type": "tfc:on_top"
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

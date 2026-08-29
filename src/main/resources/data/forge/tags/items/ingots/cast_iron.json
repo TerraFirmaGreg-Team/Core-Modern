@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "minecraft:iron_ingot",
-    "tfc:metal/ingot/cast_iron"
-  ]
+    "values": [
+        "minecraft:iron_ingot",
+        "tfc:metal/ingot/cast_iron"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

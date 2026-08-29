@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:anvil",
-  "input": {
-    "tag": "forge:sheets/bronze"
-  },
-  "result": {
-    "item": "tfc:metal/unfinished_boots/bronze"
-  },
-  "tier": 2,
-  "rules": [
-    "bend_last",
-    "bend_second_last",
-    "shrink_third_last"
-  ]
+    "result": {"item": "tfc:metal/unfinished_boots/bronze"},
+    "input": {"tag": "forge:sheets/bronze"},
+    "tier": 2,
+    "rules": [
+        "bend_last",
+        "bend_second_last",
+        "shrink_third_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
 }

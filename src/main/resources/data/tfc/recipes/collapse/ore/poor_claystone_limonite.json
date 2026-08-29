@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_limonite/claystone",
-  "result": "tfc:ore/poor_limonite/claystone"
+    "result": "tfc:ore/poor_limonite/claystone",
+    "ingredient": "tfc:ore/normal_limonite/claystone",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

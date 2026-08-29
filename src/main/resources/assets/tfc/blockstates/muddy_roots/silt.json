@@ -1,17 +1,15 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "axis=x": {
-      "model": "tfc:block/muddy_roots/silt",
-      "x": 90,
-      "y": 90
+    "variants": {
+        "axis=z": {
+            "x": 90,
+            "model": "tfc:block/muddy_roots/silt"
+        },
+        "axis=x": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/muddy_roots/silt"
+        },
+        "axis=y": {"model": "tfc:block/muddy_roots/silt"}
     },
-    "axis=y": {
-      "model": "tfc:block/muddy_roots/silt"
-    },
-    "axis=z": {
-      "model": "tfc:block/muddy_roots/silt",
-      "x": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

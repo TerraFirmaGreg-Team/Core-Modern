@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/shale",
-  "result": "tfc:rock/raw/shale_stairs",
-  "mode": "stair"
+    "result": "tfc:rock/raw/shale_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/raw/shale",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

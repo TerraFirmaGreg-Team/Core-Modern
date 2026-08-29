@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/rock/smooth/dolomite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/rock/smooth/dolomite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

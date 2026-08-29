@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/loose_igneous_intrusive_1",
-  "textures": {
-    "texture": "tfc:block/rock/raw/granite"
-  }
+    "parent": "tfc:block/rock/loose_igneous_intrusive_1",
+    "textures": {"texture": "tfc:block/rock/raw/granite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/smooth/rhyolite"
-  },
-  "result": "tfc:rock/smooth/rhyolite_wall",
-  "count": 1
+    "result": "tfc:rock/smooth/rhyolite_wall",
+    "ingredient": {"item": "tfc:rock/smooth/rhyolite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

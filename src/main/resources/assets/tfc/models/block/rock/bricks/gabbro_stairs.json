@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/bricks/gabbro",
-    "top": "tfc:block/rock/bricks/gabbro",
-    "side": "tfc:block/rock/bricks/gabbro"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/bricks/gabbro",
+        "top": "tfc:block/rock/bricks/gabbro",
+        "bottom": "tfc:block/rock/bricks/gabbro"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

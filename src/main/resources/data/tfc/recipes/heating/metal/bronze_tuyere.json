@@ -1,13 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/tuyere/bronze"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/bronze",
-    "amount": 400
-  },
-  "temperature": 950,
-  "use_durability": true
+    "result_fluid": {
+        "amount": 400,
+        "fluid": "tfc:metal/bronze"
+    },
+    "ingredient": {"item": "tfc:metal/tuyere/bronze"},
+    "temperature": 950,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
 }

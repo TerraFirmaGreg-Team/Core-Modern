@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/template_wall_side_tall",
-  "textures": {
-    "wall": "tfc:block/rock/bricks/shale"
-  }
+    "parent": "block/template_wall_side_tall",
+    "textures": {"wall": "tfc:block/rock/bricks/shale"},
+    "__comment__": "This file was automatically created by mcresources"
 }

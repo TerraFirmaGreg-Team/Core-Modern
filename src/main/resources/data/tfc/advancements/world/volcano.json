@@ -1,128 +1,72 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:world/root",
-  "criteria": {
-    "volcanic_mountains": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "tfc:volcanic_mountains"
-              }
-            }
-          }
-        ]
-      }
+    "parent": "tfc:world/root",
+    "requirements": [[
+        "volcanic_mountains",
+        "volcanic_oceanic_mountains",
+        "volcanic_mountain_river",
+        "volcanic_oceanic_mountain_river",
+        "volcanic_mountain_lake",
+        "volcanic_oceanic_mountain_lake"
+    ]],
+    "criteria": {
+        "volcanic_mountain_lake": {
+            "trigger": "minecraft:location",
+            "conditions": {"player": [{
+                "predicate": {"location": {"biome": "tfc:volcanic_mountain_lake"}},
+                "condition": "minecraft:entity_properties",
+                "entity": "this"
+            }]}
+        },
+        "volcanic_oceanic_mountain_lake": {
+            "trigger": "minecraft:location",
+            "conditions": {"player": [{
+                "predicate": {"location": {"biome": "tfc:volcanic_oceanic_mountain_lake"}},
+                "condition": "minecraft:entity_properties",
+                "entity": "this"
+            }]}
+        },
+        "volcanic_oceanic_mountain_river": {
+            "trigger": "minecraft:location",
+            "conditions": {"player": [{
+                "predicate": {"location": {"biome": "tfc:volcanic_oceanic_mountain_river"}},
+                "condition": "minecraft:entity_properties",
+                "entity": "this"
+            }]}
+        },
+        "volcanic_mountains": {
+            "trigger": "minecraft:location",
+            "conditions": {"player": [{
+                "predicate": {"location": {"biome": "tfc:volcanic_mountains"}},
+                "condition": "minecraft:entity_properties",
+                "entity": "this"
+            }]}
+        },
+        "volcanic_oceanic_mountains": {
+            "trigger": "minecraft:location",
+            "conditions": {"player": [{
+                "predicate": {"location": {"biome": "tfc:volcanic_oceanic_mountains"}},
+                "condition": "minecraft:entity_properties",
+                "entity": "this"
+            }]}
+        },
+        "volcanic_mountain_river": {
+            "trigger": "minecraft:location",
+            "conditions": {"player": [{
+                "predicate": {"location": {"biome": "tfc:volcanic_mountain_river"}},
+                "condition": "minecraft:entity_properties",
+                "entity": "this"
+            }]}
+        }
     },
-    "volcanic_oceanic_mountains": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "tfc:volcanic_oceanic_mountains"
-              }
-            }
-          }
-        ]
-      }
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/mud/silt.png",
+        "icon": {"item": "tfc:rock/magma/basalt"},
+        "description": {"translate": "tfc.advancements.world.volcano.description"},
+        "title": {"translate": "tfc.advancements.world.volcano.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "volcanic_mountain_river": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "tfc:volcanic_mountain_river"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "volcanic_oceanic_mountain_river": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "tfc:volcanic_oceanic_mountain_river"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "volcanic_mountain_lake": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "tfc:volcanic_mountain_lake"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "volcanic_oceanic_mountain_lake": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "tfc:volcanic_oceanic_mountain_lake"
-              }
-            }
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:rock/magma/basalt"
-    },
-    "title": {
-      "translate": "tfc.advancements.world.volcano.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.world.volcano.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
-  },
-  "requirements": [
-    [
-      "volcanic_mountains",
-      "volcanic_oceanic_mountains",
-      "volcanic_mountain_river",
-      "volcanic_oceanic_mountain_river",
-      "volcanic_mountain_lake",
-      "volcanic_oceanic_mountain_lake"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

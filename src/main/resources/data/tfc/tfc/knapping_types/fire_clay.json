@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "input": {
-    "ingredient": {
-      "tag": "tfc:fire_clay_knapping"
+    "input": {
+        "ingredient": {"tag": "tfc:fire_clay_knapping"},
+        "count": 5
     },
-    "count": 5
-  },
-  "click_sound": "tfc:item.knapping.clay",
-  "consume_after_complete": true,
-  "use_disabled_texture": true,
-  "spawns_particles": false,
-  "jei_icon_item": {
-    "item": "tfc:fire_clay"
-  }
+    "consume_after_complete": true,
+    "use_disabled_texture": true,
+    "jei_icon_item": {"item": "tfc:fire_clay"},
+    "click_sound": "tfc:item.knapping.clay",
+    "__comment__": "This file was automatically created by mcresources",
+    "spawns_particles": false
 }

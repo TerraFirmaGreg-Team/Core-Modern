@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "tfc:vessels"
-  },
-  "size": "normal",
-  "weight": "heavy"
+    "ingredient": {"tag": "tfc:vessels"},
+    "size": "normal",
+    "weight": "heavy",
+    "__comment__": "This file was automatically created by mcresources"
 }

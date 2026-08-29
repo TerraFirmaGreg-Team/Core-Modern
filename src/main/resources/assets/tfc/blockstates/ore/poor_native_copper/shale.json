@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/poor_native_copper/shale"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/poor_native_copper/shale"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

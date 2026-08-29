@@ -1,20 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": [
-    {
-      "item": "tfc:wood/log/ash"
-    },
-    {
-      "item": "tfc:wood/wood/ash"
-    },
-    {
-      "item": "tfc:wood/stripped_wood/ash"
-    },
-    {
-      "item": "tfc:wood/stripped_log/ash"
-    }
-  ],
-  "duration": 1250,
-  "temperature": 696,
-  "purity": 0.95
+    "duration": 1250,
+    "ingredient": [
+        {"item": "tfc:wood/log/ash"},
+        {"item": "tfc:wood/wood/ash"},
+        {"item": "tfc:wood/stripped_wood/ash"},
+        {"item": "tfc:wood/stripped_log/ash"}
+    ],
+    "purity": 0.95,
+    "temperature": 696,
+    "__comment__": "This file was automatically created by mcresources"
 }

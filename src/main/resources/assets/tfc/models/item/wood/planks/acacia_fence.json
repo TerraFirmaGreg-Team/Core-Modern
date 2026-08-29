@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/wood/planks/acacia_fence_inventory"
+    "parent": "tfc:block/wood/planks/acacia_fence_inventory",
+    "__comment__": "This file was automatically created by mcresources"
 }

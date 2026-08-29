@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#forge:chests/wooden",
-    "#tfc:barrels"
-  ]
+    "values": [
+        "#forge:chests/wooden",
+        "#tfc:barrels"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

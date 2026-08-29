@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/ingot/tin"
-  ]
+    "values": ["tfc:metal/ingot/tin"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

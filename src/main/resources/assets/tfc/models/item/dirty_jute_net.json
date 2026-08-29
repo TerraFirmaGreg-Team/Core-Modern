@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/dirty_jute_net"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/dirty_jute_net"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/normal_sphalerite/rhyolite",
-  "result": "tfc:ore/poor_sphalerite/rhyolite"
+    "result": "tfc:ore/poor_sphalerite/rhyolite",
+    "ingredient": "tfc:ore/normal_sphalerite/rhyolite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

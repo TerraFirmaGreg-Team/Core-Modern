@@ -1,21 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/wild_crop/soybean_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 80
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": 8,
-      "max_temperature": 30,
-      "min_rainfall": 160,
-      "max_rainfall": 410,
-      "min_forest": "normal"
-    }
-  ]
+    "feature": "tfc:plant/wild_crop/soybean_patch",
+    "placement": [
+        {
+            "chance": 80,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 30,
+            "max_rainfall": 410,
+            "type": "tfc:climate",
+            "min_rainfall": 160,
+            "min_forest": "normal",
+            "min_temperature": 8
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

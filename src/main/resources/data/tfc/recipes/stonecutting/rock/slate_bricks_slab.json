@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/bricks/slate"
-  },
-  "result": "tfc:rock/bricks/slate_slab",
-  "count": 2
+    "result": "tfc:rock/bricks/slate_slab",
+    "ingredient": {"item": "tfc:rock/bricks/slate"},
+    "count": 2,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

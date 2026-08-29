@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/emerald"
-  },
-  "result": {
-    "item": "tfc:powder/emerald",
-    "count": 4
-  }
+    "result": {
+        "item": "tfc:powder/emerald",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/emerald"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

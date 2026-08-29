@@ -1,40 +1,30 @@
-{
-  "multipart": [
+{"multipart": [
     {
-      "when": {
-        "part": "lower",
-        "age": "0"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tall_fescue_grass_shortest"
-      }
+        "apply": {"model": "tfc:block/plant/tall_fescue_grass_shortest"},
+        "when": {
+            "part": "lower",
+            "age": "0"
+        }
     },
     {
-      "when": {
-        "part": "lower",
-        "age": "1"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tall_fescue_grass_shorter"
-      }
+        "apply": {"model": "tfc:block/plant/tall_fescue_grass_shorter"},
+        "when": {
+            "part": "lower",
+            "age": "1"
+        }
     },
-	{
-      "when": {
-        "part": "lower",
-        "age": "2"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tall_fescue_grass_short"
-      }
+    {
+        "apply": {"model": "tfc:block/plant/tall_fescue_grass_short"},
+        "when": {
+            "part": "lower",
+            "age": "2"
+        }
     },
-	{
-      "when": {
-        "part": "lower",
-        "age": "3"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tall_fescue_grass"
-      }
+    {
+        "apply": {"model": "tfc:block/plant/tall_fescue_grass"},
+        "when": {
+            "part": "lower",
+            "age": "3"
+        }
     }
-  ]
-}
+]}

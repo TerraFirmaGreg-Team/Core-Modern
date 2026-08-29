@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#minecraft:dirt",
-    "#tfc:grass",
-    "#tfc:mud"
-  ]
+    "values": [
+        "#minecraft:dirt",
+        "#tfc:grass",
+        "#tfc:mud"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

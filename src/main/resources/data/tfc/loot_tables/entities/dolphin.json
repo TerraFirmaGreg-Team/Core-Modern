@@ -1,46 +1,38 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:entity",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+    "pools": [
         {
-          "type": "minecraft:item",
-          "name": "tfc:blubber",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 2,
-                "max": 7,
-                "type": "minecraft:uniform"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": {
+                        "min": 2,
+                        "max": 7,
+                        "type": "minecraft:uniform"
+                    }
+                }],
+                "name": "tfc:blubber",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
+        },
         {
-          "type": "minecraft:item",
-          "name": "minecraft:bone",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1,
-                "max": 5,
-                "type": "minecraft:uniform"
-              }
-            }
-          ]
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": {
+                        "min": 1,
+                        "max": 5,
+                        "type": "minecraft:uniform"
+                    }
+                }],
+                "name": "minecraft:bone",
+                "type": "minecraft:item"
+            }],
+            "name": "loot_pool",
+            "rolls": 1
         }
-      ]
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:entity"
 }

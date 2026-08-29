@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/smooth/diorite",
-    "top": "tfc:block/rock/smooth/diorite",
-    "side": "tfc:block/rock/smooth/diorite"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/smooth/diorite",
+        "top": "tfc:block/rock/smooth/diorite",
+        "bottom": "tfc:block/rock/smooth/diorite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

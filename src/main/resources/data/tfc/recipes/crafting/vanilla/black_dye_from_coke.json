@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:powder/coke"
-    }
-  ],
-  "result": {
-    "item": "minecraft:black_dye"
-  }
+    "result": {"item": "minecraft:black_dye"},
+    "ingredients": [{"item": "tfc:powder/coke"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

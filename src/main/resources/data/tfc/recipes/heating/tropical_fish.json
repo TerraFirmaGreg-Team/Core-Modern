@@ -1,19 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "type": "tfc:not_rotten",
-    "ingredient": {
-      "item": "tfc:food/tropical_fish"
-    }
-  },
-  "result_item": {
-    "stack": {
-      "item": "tfc:food/cooked_tropical_fish"
+    "result_item": {
+        "stack": {"item": "tfc:food/cooked_tropical_fish"},
+        "modifiers": ["tfc:copy_food"]
     },
-    "modifiers": [
-      "tfc:copy_food"
-    ]
-  },
-  "temperature": 200
+    "ingredient": {
+        "ingredient": {"item": "tfc:food/tropical_fish"},
+        "type": "tfc:not_rotten"
+    },
+    "temperature": 200,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

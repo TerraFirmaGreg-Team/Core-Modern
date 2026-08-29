@@ -1,19 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X X",
-    "MXM"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:brick/slate"
-    },
-    "M": {
-      "tag": "tfc:mortar"
+    "result": {"item": "tfc:rock/aqueduct/slate"},
+    "pattern": [
+        "X X",
+        "MXM"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:brick/slate"},
+        "M": {"tag": "tfc:mortar"}
     }
-  },
-  "result": {
-    "item": "tfc:rock/aqueduct/slate"
-  }
 }

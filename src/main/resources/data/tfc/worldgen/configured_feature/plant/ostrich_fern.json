@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:tall_plant",
-  "config": {
-    "block": "tfc:plant/ostrich_fern"
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:tall_plant",
+    "config": {"block": "tfc:plant/ostrich_fern"}
 }

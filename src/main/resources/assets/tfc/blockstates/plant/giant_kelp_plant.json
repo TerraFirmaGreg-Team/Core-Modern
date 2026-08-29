@@ -1,55 +1,35 @@
-{
-  "multipart": [
+{"multipart": [
     {
-      "when": {
-        "down": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tree_kelp_down"
-      }
+        "apply": {"model": "tfc:block/plant/tree_kelp_down"},
+        "when": {"down": "true"}
     },
     {
-      "when": {
-        "east": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tree_kelp_side",
-        "y": 180
-      }
+        "apply": {
+            "y": 180,
+            "model": "tfc:block/plant/tree_kelp_side"
+        },
+        "when": {"east": "true"}
     },
     {
-      "when": {
-        "north": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tree_kelp_side",
-		"y": 90
-      }
+        "apply": {
+            "y": 90,
+            "model": "tfc:block/plant/tree_kelp_side"
+        },
+        "when": {"north": "true"}
     },
     {
-      "when": {
-        "south": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tree_kelp_side",
-        "y": 270
-      }
+        "apply": {
+            "y": 270,
+            "model": "tfc:block/plant/tree_kelp_side"
+        },
+        "when": {"south": "true"}
     },
     {
-      "when": {
-        "up": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tree_kelp_up"
-      }
+        "apply": {"model": "tfc:block/plant/tree_kelp_up"},
+        "when": {"up": "true"}
     },
     {
-      "when": {
-        "west": "true"
-      },
-      "apply": {
-        "model": "tfc:block/plant/tree_kelp_side"
-      }
+        "apply": {"model": "tfc:block/plant/tree_kelp_side"},
+        "when": {"west": "true"}
     }
-  ]
-}
+]}

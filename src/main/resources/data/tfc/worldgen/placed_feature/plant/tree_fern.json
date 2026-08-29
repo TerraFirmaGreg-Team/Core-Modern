@@ -1,30 +1,26 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/tree_fern",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 5
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": 16.6,
-      "max_temperature": 47.6,
-      "min_rainfall": 300,
-      "max_rainfall": 500
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:air_or_empty_fluid"
-      }
-    }
-  ]
+    "feature": "tfc:plant/tree_fern",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 47.6,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 300,
+            "min_temperature": 16.6
+        },
+        {
+            "predicate": {"type": "tfc:air_or_empty_fluid"},
+            "type": "block_predicate_filter"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

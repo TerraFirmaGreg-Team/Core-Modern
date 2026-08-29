@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/fluid/vodka"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/fluid/vodka"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

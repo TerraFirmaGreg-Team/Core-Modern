@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "minecraft:rotten_flesh"
-  },
-  "hunger": 0,
-  "saturation": 0,
-  "decay_modifier": 99999
+    "saturation": 0,
+    "ingredient": {"item": "minecraft:rotten_flesh"},
+    "decay_modifier": 99999,
+    "__comment__": "This file was automatically created by mcresources",
+    "hunger": 0
 }

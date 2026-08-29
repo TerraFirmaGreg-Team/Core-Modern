@@ -1,27 +1,23 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:kaolin_disc_vein",
-  "config": {
-    "rarity": 40,
-    "min_y": 75,
-    "max_y": 110,
-    "size": 18,
-    "height": 6,
-    "density": 1.0,
-    "random_name": "kaolin",
-    "biomes": "#tfc:kaolin_clay_spawns_in",
-    "indicator": {
-      "depth": 35,
-      "spread": 5,
-      "rarity": 10,
-      "underground_rarity": 1,
-      "underground_count": 0,
-      "blocks": [
-        {
-          "block": "tfc:plant/blood_lily"
-        }
-      ]
-    },
-    "blocks": []
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:kaolin_disc_vein",
+    "config": {
+        "indicator": {
+            "depth": 35,
+            "underground_rarity": 1,
+            "blocks": [{"block": "tfc:plant/blood_lily"}],
+            "underground_count": 0,
+            "spread": 5,
+            "rarity": 10
+        },
+        "max_y": 110,
+        "size": 18,
+        "density": 1,
+        "biomes": "#tfc:kaolin_clay_spawns_in",
+        "blocks": [],
+        "min_y": 75,
+        "random_name": "kaolin",
+        "rarity": 40,
+        "height": 6
+    }
 }

@@ -1,37 +1,29 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:simple_block",
-  "config": {
-    "to_place": {
-      "seed": 2345,
-      "noise": {
-        "firstOctave": -3,
-        "amplitudes": [
-          1.0
-        ]
-      },
-      "scale": 1.0,
-      "states": [
-        {
-          "Name": "tfc:plant/red_algae",
-          "Properties": {
-            "age": "1",
-            "stage": "1"
-          }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:simple_block",
+    "config": {"to_place": {
+        "seed": 2345,
+        "variety": [
+            1,
+            1
+        ],
+        "noise": {
+            "amplitudes": [1],
+            "firstOctave": -3
+        },
+        "slow_scale": 1,
+        "scale": 1,
+        "type": "minecraft:dual_noise_provider",
+        "states": [{
+            "Properties": {
+                "stage": "1",
+                "age": "1"
+            },
+            "Name": "tfc:plant/red_algae"
+        }],
+        "slow_noise": {
+            "amplitudes": [1],
+            "firstOctave": -10
         }
-      ],
-      "variety": [
-        1,
-        1
-      ],
-      "slow_noise": {
-        "firstOctave": -10,
-        "amplitudes": [
-          1.0
-        ]
-      },
-      "slow_scale": 1.0,
-      "type": "minecraft:dual_noise_provider"
-    }
-  }
+    }}
 }

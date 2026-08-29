@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/butterfly_milkweed"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/butterfly_milkweed"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,22 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:damage_inputs_shapeless_crafting",
-  "recipe": {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-      {
-        "tag": "tfc:hammers"
-      },
-      {
-        "type": "tfc:not_rotten",
-        "ingredient": {
-          "item": "tfc:pumpkin"
-        }
-      }
-    ],
-    "result": {
-      "item": "tfc:food/pumpkin_chunks",
-      "count": 4
-    }
-  }
+    "recipe": {
+        "result": {
+            "item": "tfc:food/pumpkin_chunks",
+            "count": 4
+        },
+        "ingredients": [
+            {"tag": "tfc:hammers"},
+            {
+                "ingredient": {"item": "tfc:pumpkin"},
+                "type": "tfc:not_rotten"
+            }
+        ],
+        "type": "minecraft:crafting_shapeless"
+    },
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:damage_inputs_shapeless_crafting"
 }

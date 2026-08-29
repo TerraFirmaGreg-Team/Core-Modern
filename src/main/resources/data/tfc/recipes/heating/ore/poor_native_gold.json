@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:ore/poor_native_gold"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/gold",
-    "amount": 15
-  },
-  "temperature": 1060
+    "result_fluid": {
+        "amount": 15,
+        "fluid": "tfc:metal/gold"
+    },
+    "ingredient": {"item": "tfc:ore/poor_native_gold"},
+    "temperature": 1060,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

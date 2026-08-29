@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/plant/template_floating",
-  "textures": {
-    "pad": "tfc:block/plant/sargassum/sargassum"
-  }
+    "parent": "tfc:block/plant/template_floating",
+    "textures": {"pad": "tfc:block/plant/sargassum/sargassum"},
+    "__comment__": "This file was automatically created by mcresources"
 }

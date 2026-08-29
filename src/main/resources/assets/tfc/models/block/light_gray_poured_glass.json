@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/template_poured_glass",
-  "textures": {
-    "all": "minecraft:block/light_gray_stained_glass"
-  }
+    "parent": "tfc:block/template_poured_glass",
+    "textures": {"all": "minecraft:block/light_gray_stained_glass"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:flood_fill_lake",
-  "config": {
-    "state": "minecraft:water",
-    "replace_fluids": []
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:flood_fill_lake",
+    "config": {
+        "replace_fluids": [],
+        "state": "minecraft:water"
+    }
 }

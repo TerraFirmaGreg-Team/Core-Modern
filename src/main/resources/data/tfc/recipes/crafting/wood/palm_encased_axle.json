@@ -1,24 +1,18 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " L ",
-    "WAW",
-    " L "
-  ],
-  "key": {
-    "L": {
-      "item": "tfc:wood/stripped_log/palm"
+    "result": {
+        "item": "tfc:wood/encased_axle/palm",
+        "count": 4
     },
-    "W": {
-      "item": "tfc:wood/lumber/palm"
-    },
-    "A": {
-      "item": "tfc:wood/axle/palm"
+    "pattern": [
+        " L ",
+        "WAW",
+        " L "
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "A": {"item": "tfc:wood/axle/palm"},
+        "W": {"item": "tfc:wood/lumber/palm"},
+        "L": {"item": "tfc:wood/stripped_log/palm"}
     }
-  },
-  "result": {
-    "item": "tfc:wood/encased_axle/palm",
-    "count": 4
-  }
 }

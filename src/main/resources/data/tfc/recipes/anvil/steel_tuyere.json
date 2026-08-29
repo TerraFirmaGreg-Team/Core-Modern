@@ -1,15 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:anvil",
-  "input": {
-    "tag": "forge:double_sheets/steel"
-  },
-  "result": {
-    "item": "tfc:metal/tuyere/steel"
-  },
-  "tier": 4,
-  "rules": [
-    "bend_last",
-    "bend_second_last"
-  ]
+    "result": {"item": "tfc:metal/tuyere/steel"},
+    "input": {"tag": "forge:double_sheets/steel"},
+    "tier": 4,
+    "rules": [
+        "bend_last",
+        "bend_second_last"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
 }

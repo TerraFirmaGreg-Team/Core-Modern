@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/raw/dacite",
-  "result": "tfc:rock/smooth/dacite",
-  "mode": "smooth"
+    "result": "tfc:rock/smooth/dacite",
+    "mode": "smooth",
+    "ingredient": "tfc:rock/raw/dacite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

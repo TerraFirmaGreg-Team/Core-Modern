@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/windmill_blade/light_gray"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/windmill_blade/light_gray"},
+    "__comment__": "This file was automatically created by mcresources"
 }

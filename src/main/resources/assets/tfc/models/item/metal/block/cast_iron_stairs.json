@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/metal/block/cast_iron_stairs"
+    "parent": "tfc:block/metal/block/cast_iron_stairs",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "tfc:block/alabaster/polished/light_blue",
-    "top": "tfc:block/alabaster/polished/light_blue",
-    "side": "tfc:block/alabaster/polished/light_blue"
-  }
+    "parent": "block/outer_stairs",
+    "textures": {
+        "side": "tfc:block/alabaster/polished/light_blue",
+        "top": "tfc:block/alabaster/polished/light_blue",
+        "bottom": "tfc:block/alabaster/polished/light_blue"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

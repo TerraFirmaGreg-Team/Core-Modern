@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/axle",
-  "textures": {
-    "wood": "tfc:block/wood/sheet/aspen"
-  }
+    "parent": "tfc:block/axle",
+    "textures": {"wood": "tfc:block/wood/sheet/aspen"},
+    "__comment__": "This file was automatically created by mcresources"
 }

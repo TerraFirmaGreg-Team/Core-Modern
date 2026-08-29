@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:soups",
-    "#tfc:salads"
-  ]
+    "values": [
+        "#tfc:soups",
+        "#tfc:salads"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

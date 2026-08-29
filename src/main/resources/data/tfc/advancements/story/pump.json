@@ -1,39 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/gear_box",
-  "criteria": {
-    "steel_pump": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:steel_pump"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:steel_pump"
+    "parent": "tfc:story/gear_box",
+    "requirements": [["steel_pump"]],
+    "criteria": {"steel_pump": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"items": ["tfc:steel_pump"]}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:steel_pump"},
+        "description": {"translate": "tfc.advancements.story.pump.description"},
+        "title": {"translate": "tfc.advancements.story.pump.title"},
+        "announce_to_chat": true,
+        "frame": "challenge"
     },
-    "title": {
-      "translate": "tfc.advancements.story.pump.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.pump.description"
-    },
-    "frame": "challenge",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "steel_pump"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

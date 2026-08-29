@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:metal/chestplate/bismuth_bronze"
-  },
-  "heat_capacity": 22.857,
-  "forging_temperature": 591,
-  "welding_temperature": 788
+    "welding_temperature": 788,
+    "ingredient": {"item": "tfc:metal/chestplate/bismuth_bronze"},
+    "heat_capacity": 22.857,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 591
 }

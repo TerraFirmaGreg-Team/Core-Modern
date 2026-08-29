@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/mangrove"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/mangrove_button"
-  }
+    "result": {"item": "tfc:wood/planks/mangrove_button"},
+    "ingredients": [{"item": "tfc:wood/planks/mangrove"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/slab_top",
-  "textures": {
-    "bottom": "tfc:block/rock/raw/marble",
-    "top": "tfc:block/rock/raw/marble",
-    "side": "tfc:block/rock/raw/marble"
-  }
+    "parent": "block/slab_top",
+    "textures": {
+        "side": "tfc:block/rock/raw/marble",
+        "top": "tfc:block/rock/raw/marble",
+        "bottom": "tfc:block/rock/raw/marble"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

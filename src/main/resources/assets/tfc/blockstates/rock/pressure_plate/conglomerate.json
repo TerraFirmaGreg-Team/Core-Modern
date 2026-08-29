@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "powered=false": {
-      "model": "tfc:block/rock/pressure_plate/conglomerate"
+    "variants": {
+        "powered=true": {"model": "tfc:block/rock/pressure_plate/conglomerate_down"},
+        "powered=false": {"model": "tfc:block/rock/pressure_plate/conglomerate"}
     },
-    "powered=true": {
-      "model": "tfc:block/rock/pressure_plate/conglomerate_down"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

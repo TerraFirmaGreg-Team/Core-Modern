@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/wood/trapped_chest/douglas_fir"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/wood/trapped_chest/douglas_fir"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

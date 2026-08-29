@@ -1,13 +1,11 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:metal/scythe/red_steel"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/red_steel",
-    "amount": 100
-  },
-  "temperature": 1540,
-  "use_durability": true
+    "result_fluid": {
+        "amount": 100,
+        "fluid": "tfc:metal/red_steel"
+    },
+    "ingredient": {"item": "tfc:metal/scythe/red_steel"},
+    "temperature": 1540,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating",
+    "use_durability": true
 }

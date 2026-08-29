@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/oxeye_daisy/oxeye_daisy_4"
-  }
+    "parent": "block/cross",
+    "textures": {"cross": "tfc:block/plant/oxeye_daisy/oxeye_daisy_4"},
+    "__comment__": "This file was automatically created by mcresources"
 }

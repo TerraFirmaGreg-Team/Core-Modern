@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": "tfc:vinegar",
-  "thirst": 10,
-  "effects": [
-    {
-      "type": "minecraft:nausea",
-      "duration": 40,
-      "chance": 0.8
-    }
-  ]
+    "effects": [{
+        "duration": 40,
+        "chance": 0.8,
+        "type": "minecraft:nausea"
+    }],
+    "ingredient": "tfc:vinegar",
+    "thirst": 10,
+    "__comment__": "This file was automatically created by mcresources"
 }

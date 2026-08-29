@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cobble/gneiss"
-  },
-  "result": "tfc:rock/cobble/gneiss_stairs",
-  "count": 1
+    "result": "tfc:rock/cobble/gneiss_stairs",
+    "ingredient": {"item": "tfc:rock/cobble/gneiss"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore/poor_native_gold/rhyolite"
+    "parent": "tfc:block/ore/poor_native_gold/rhyolite",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:wood/planks/rosewood",
-  "result": "tfc:wood/planks/rosewood_stairs",
-  "mode": "stair"
+    "result": "tfc:wood/planks/rosewood_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:wood/planks/rosewood",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

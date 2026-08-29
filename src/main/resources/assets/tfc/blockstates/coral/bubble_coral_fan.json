@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "minecraft:block/bubble_coral_fan"
-    }
-  }
+    "variants": {"": {"model": "minecraft:block/bubble_coral_fan"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

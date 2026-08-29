@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/plant/stationary_bush_2",
-  "textures": {
-    "bush": "tfc:block/berry_bush/fruiting_cranberry_bush"
-  }
+    "parent": "tfc:block/plant/stationary_bush_2",
+    "textures": {"bush": "tfc:block/berry_bush/fruiting_cranberry_bush"},
+    "__comment__": "This file was automatically created by mcresources"
 }

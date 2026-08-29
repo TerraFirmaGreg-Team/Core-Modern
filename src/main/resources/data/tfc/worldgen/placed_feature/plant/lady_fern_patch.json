@@ -1,26 +1,24 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/lady_fern_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 5
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": -8.4,
-      "max_temperature": 8,
-      "min_rainfall": 200,
-      "max_rainfall": 500,
-      "min_forest": "edge",
-      "max_forest": "old_growth"
-    }
-  ]
+    "feature": "tfc:plant/lady_fern_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "max_temperature": 8,
+            "max_rainfall": 500,
+            "max_forest": "old_growth",
+            "type": "tfc:climate",
+            "min_rainfall": 200,
+            "min_forest": "edge",
+            "min_temperature": -8.4
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

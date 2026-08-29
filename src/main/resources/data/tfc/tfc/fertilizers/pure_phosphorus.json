@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:pure_phosphorus"
-  },
-  "phosphorus": 0.1
+    "ingredient": {"item": "tfc:pure_phosphorus"},
+    "__comment__": "This file was automatically created by mcresources",
+    "phosphorus": 0.1
 }

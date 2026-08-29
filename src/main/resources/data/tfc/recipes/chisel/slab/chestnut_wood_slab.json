@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:wood/planks/chestnut",
-  "result": "tfc:wood/planks/chestnut_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:wood/planks/chestnut_slab"
-  }
+    "result": "tfc:wood/planks/chestnut_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:wood/planks/chestnut_slab"},
+    "ingredient": "tfc:wood/planks/chestnut",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

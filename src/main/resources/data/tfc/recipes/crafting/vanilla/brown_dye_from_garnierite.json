@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:powder/garnierite"
-    }
-  ],
-  "result": {
-    "item": "minecraft:brown_dye"
-  }
+    "result": {"item": "minecraft:brown_dye"},
+    "ingredients": [{"item": "tfc:powder/garnierite"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

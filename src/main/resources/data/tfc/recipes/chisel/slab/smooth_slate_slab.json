@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/smooth/slate",
-  "result": "tfc:rock/smooth/slate_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/smooth/slate_slab"
-  }
+    "result": "tfc:rock/smooth/slate_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/smooth/slate_slab"},
+    "ingredient": "tfc:rock/smooth/slate",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

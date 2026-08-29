@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:glassworking",
-  "operations": [
-    "blow",
-    "stretch",
-    "roll",
-    "saw"
-  ],
-  "batch": {
-    "item": "tfc:silica_glass_batch"
-  },
-  "result": {
-    "item": "tfc:lens"
-  }
+    "result": {"item": "tfc:lens"},
+    "operations": [
+        "blow",
+        "stretch",
+        "roll",
+        "saw"
+    ],
+    "batch": {"item": "tfc:silica_glass_batch"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
 }

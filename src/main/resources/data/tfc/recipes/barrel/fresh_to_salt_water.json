@@ -1,17 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_instant",
-  "input_item": {
-    "ingredient": {
-      "item": "tfc:powder/salt"
-    }
-  },
-  "input_fluid": {
-    "ingredient": "minecraft:water",
-    "amount": 125
-  },
-  "output_fluid": {
-    "fluid": "tfc:salt_water",
-    "amount": 125
-  }
+    "input_fluid": {
+        "amount": 125,
+        "ingredient": "minecraft:water"
+    },
+    "output_fluid": {
+        "amount": 125,
+        "fluid": "tfc:salt_water"
+    },
+    "input_item": {"ingredient": {"item": "tfc:powder/salt"}},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_instant"
 }

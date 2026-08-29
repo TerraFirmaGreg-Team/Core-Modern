@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/rock/cobble/schist"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/rock/cobble/schist"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

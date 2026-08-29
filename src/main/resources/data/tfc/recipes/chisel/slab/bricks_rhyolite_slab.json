@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/bricks/rhyolite",
-  "result": "tfc:rock/bricks/rhyolite_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:rock/bricks/rhyolite_slab"
-  }
+    "result": "tfc:rock/bricks/rhyolite_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:rock/bricks/rhyolite_slab"},
+    "ingredient": "tfc:rock/bricks/rhyolite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

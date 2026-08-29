@@ -1,29 +1,25 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "axis=x,powered=false": {
-      "model": "tfc:block/wood/clutch/white_cedar",
-      "x": 90,
-      "y": 90
+    "variants": {
+        "axis=y,powered=false": {"model": "tfc:block/wood/clutch/white_cedar"},
+        "axis=z,powered=false": {
+            "x": 90,
+            "model": "tfc:block/wood/clutch/white_cedar"
+        },
+        "axis=x,powered=false": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/clutch/white_cedar"
+        },
+        "axis=x,powered=true": {
+            "x": 90,
+            "y": 90,
+            "model": "tfc:block/wood/clutch/white_cedar_powered"
+        },
+        "axis=y,powered=true": {"model": "tfc:block/wood/clutch/white_cedar_powered"},
+        "axis=z,powered=true": {
+            "x": 90,
+            "model": "tfc:block/wood/clutch/white_cedar_powered"
+        }
     },
-    "axis=x,powered=true": {
-      "model": "tfc:block/wood/clutch/white_cedar_powered",
-      "x": 90,
-      "y": 90
-    },
-    "axis=y,powered=false": {
-      "model": "tfc:block/wood/clutch/white_cedar"
-    },
-    "axis=y,powered=true": {
-      "model": "tfc:block/wood/clutch/white_cedar_powered"
-    },
-    "axis=z,powered=false": {
-      "model": "tfc:block/wood/clutch/white_cedar",
-      "x": 90
-    },
-    "axis=z,powered=true": {
-      "model": "tfc:block/wood/clutch/white_cedar_powered",
-      "x": 90
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

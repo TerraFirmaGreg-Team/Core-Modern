@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:volcanic_glass_batch",
-    "tfc:volcanic_glass_bottle"
-  ]
+    "values": [
+        "tfc:volcanic_glass_batch",
+        "tfc:volcanic_glass_bottle"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/diamond/diorite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/diamond/diorite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,10 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:wood/log/maple",
-    "tfc:wood/wood/maple",
-    "tfc:wood/stripped_log/maple",
-    "tfc:wood/stripped_wood/maple"
-  ]
+    "values": [
+        "tfc:wood/log/maple",
+        "tfc:wood/wood/maple",
+        "tfc:wood/stripped_log/maple",
+        "tfc:wood/stripped_wood/maple"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

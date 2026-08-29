@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:foods/dairy",
-    "#tfc:foods/cooked_meats",
-    "#tfc:foods/preserves"
-  ]
+    "values": [
+        "#tfc:foods/dairy",
+        "#tfc:foods/cooked_meats",
+        "#tfc:foods/preserves"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

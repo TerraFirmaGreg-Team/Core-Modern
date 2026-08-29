@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "forge:rods/gold"
-  },
-  "heat_capacity": 0.833,
-  "forging_temperature": 636,
-  "welding_temperature": 848
+    "welding_temperature": 848,
+    "ingredient": {"tag": "forge:rods/gold"},
+    "heat_capacity": 0.833,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 636
 }

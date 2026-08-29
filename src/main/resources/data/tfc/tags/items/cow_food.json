@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "#tfc:foods/grains"
-  ]
+    "values": ["#tfc:foods/grains"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

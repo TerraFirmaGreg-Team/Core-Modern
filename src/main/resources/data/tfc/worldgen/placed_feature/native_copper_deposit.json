@@ -1,20 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:native_copper_deposit",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 12
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR_WG"
-    },
-    {
-      "type": "tfc:biome"
-    }
-  ]
+    "feature": "tfc:native_copper_deposit",
+    "placement": [
+        {
+            "chance": 12,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "OCEAN_FLOOR_WG",
+            "type": "minecraft:heightmap"
+        },
+        {"type": "tfc:biome"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

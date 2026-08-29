@@ -1,24 +1,22 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/reindeer_lichen_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 10
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": -33,
-      "max_temperature": -10.4,
-      "min_rainfall": 50,
-      "max_rainfall": 470
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    }
-  ]
+    "feature": "tfc:plant/reindeer_lichen_patch",
+    "placement": [
+        {
+            "chance": 10,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "max_temperature": -10.4,
+            "max_rainfall": 470,
+            "type": "tfc:climate",
+            "min_rainfall": 50,
+            "min_temperature": -33
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

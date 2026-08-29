@@ -1,26 +1,24 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/cobblestone_lichen_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 5
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": -33,
-      "max_temperature": 17.6,
-      "min_rainfall": 25,
-      "max_rainfall": 450,
-      "min_forest": "normal",
-      "fuzzy": true
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    }
-  ]
+    "feature": "tfc:plant/cobblestone_lichen_patch",
+    "placement": [
+        {
+            "chance": 5,
+            "type": "minecraft:rarity_filter"
+        },
+        {
+            "max_temperature": 17.6,
+            "max_rainfall": 450,
+            "type": "tfc:climate",
+            "min_rainfall": 25,
+            "min_forest": "normal",
+            "min_temperature": -33,
+            "fuzzy": true
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

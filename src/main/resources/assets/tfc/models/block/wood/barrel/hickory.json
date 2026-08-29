@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/barrel",
-  "textures": {
-    "particle": "tfc:block/wood/planks/hickory",
-    "planks": "tfc:block/wood/planks/hickory",
-    "sheet": "tfc:block/wood/sheet/hickory"
-  }
+    "parent": "tfc:block/barrel",
+    "textures": {
+        "particle": "tfc:block/wood/planks/hickory",
+        "sheet": "tfc:block/wood/sheet/hickory",
+        "planks": "tfc:block/wood/planks/hickory"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

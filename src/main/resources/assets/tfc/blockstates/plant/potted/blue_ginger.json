@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/plant/flowerpot/blue_ginger"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/plant/flowerpot/blue_ginger"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:item/pan/half",
-  "textures": {
-    "material": "tfc:block/rock/gravel/schist"
-  }
+    "parent": "tfc:item/pan/half",
+    "textures": {"material": "tfc:block/rock/gravel/schist"},
+    "__comment__": "This file was automatically created by mcresources"
 }

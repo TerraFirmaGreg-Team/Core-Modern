@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/rock/bricks/quartzite_slab"
+    "parent": "tfc:block/rock/bricks/quartzite_slab",
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "item": "tfc:ore/poor_tetrahedrite"
-  },
-  "result_fluid": {
-    "fluid": "tfc:metal/copper",
-    "amount": 15
-  },
-  "temperature": 1080
+    "result_fluid": {
+        "amount": 15,
+        "fluid": "tfc:metal/copper"
+    },
+    "ingredient": {"item": "tfc:ore/poor_tetrahedrite"},
+    "temperature": 1080,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

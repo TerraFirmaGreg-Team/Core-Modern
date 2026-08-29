@@ -1,15 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:jar/wintergreen_berry"
-      }
-    }
-  ],
-  "result": {
-    "item": "tfc:jar/wintergreen_berry_unsealed"
-  }
+    "result": {"item": "tfc:jar/wintergreen_berry_unsealed"},
+    "ingredients": [{
+        "ingredient": {"item": "tfc:jar/wintergreen_berry"},
+        "type": "tfc:not_rotten"
+    }],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

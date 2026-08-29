@@ -1,16 +1,12 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:simple_block",
-  "config": {
-    "to_place": {
-      "type": "tfc:random_property",
-      "state": {
-        "Name": "tfc:plant/maiden_pink",
-        "Properties": {
-          "age": "1"
-        }
-      },
-      "property": "age"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:simple_block",
+    "config": {"to_place": {
+        "property": "age",
+        "state": {
+            "Properties": {"age": "1"},
+            "Name": "tfc:plant/maiden_pink"
+        },
+        "type": "tfc:random_property"
+    }}
 }

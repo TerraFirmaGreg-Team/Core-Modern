@@ -1,17 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:anvil",
-  "input": {
-    "tag": "forge:ingots/red_steel"
-  },
-  "result": {
-    "item": "tfc:metal/pickaxe_head/red_steel"
-  },
-  "tier": 6,
-  "rules": [
-    "punch_last",
-    "bend_not_last",
-    "draw_not_last"
-  ],
-  "apply_forging_bonus": true
+    "result": {"item": "tfc:metal/pickaxe_head/red_steel"},
+    "input": {"tag": "forge:ingots/red_steel"},
+    "tier": 6,
+    "rules": [
+        "punch_last",
+        "bend_not_last",
+        "draw_not_last"
+    ],
+    "apply_forging_bonus": true,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:anvil"
 }

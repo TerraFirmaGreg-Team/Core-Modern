@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/poor_hematite/dacite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/poor_hematite/dacite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

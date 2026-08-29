@@ -1,94 +1,66 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+    "pools": [
         {
-          "type": "minecraft:item",
-          "name": "tfc:food/green_bean",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:crop/green_bean",
-              "properties": {
-                "age": "7",
-                "part": "bottom"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "tfc:crop_yield_uniform",
-                "min": 0,
-                "max": {
-                  "type": "minecraft:uniform",
-                  "min": 6,
-                  "max": 10
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "conditions": [
+            "entries": [{
+                "functions": [{
+                    "function": "minecraft:set_count",
+                    "count": {
+                        "min": 0,
+                        "max": {
+                            "min": 6,
+                            "max": 10,
+                            "type": "minecraft:uniform"
+                        },
+                        "type": "tfc:crop_yield_uniform"
+                    }
+                }],
+                "name": "tfc:food/green_bean",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:crop/green_bean",
+                    "properties": {
+                        "part": "bottom",
+                        "age": "7"
+                    }
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
+            "entries": [{
+                "name": "tfc:seeds/green_bean",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:crop/green_bean",
+                    "properties": {"part": "bottom"}
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
+        },
         {
-          "type": "minecraft:item",
-          "name": "tfc:seeds/green_bean",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:crop/green_bean",
-              "properties": {
-                "part": "bottom"
-              }
-            }
-          ]
+            "entries": [{
+                "name": "minecraft:stick",
+                "type": "minecraft:item",
+                "conditions": [{
+                    "condition": "minecraft:block_state_property",
+                    "block": "tfc:crop/green_bean",
+                    "properties": {
+                        "part": "bottom",
+                        "stick": "true"
+                    }
+                }]
+            }],
+            "name": "loot_pool",
+            "rolls": 1,
+            "conditions": [{"condition": "minecraft:survives_explosion"}]
         }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    },
-    {
-      "name": "loot_pool",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:stick",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "tfc:crop/green_bean",
-              "properties": {
-                "part": "bottom",
-                "stick": "true"
-              }
-            }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:block"
 }

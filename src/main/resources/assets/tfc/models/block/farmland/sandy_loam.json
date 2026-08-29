@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/template_farmland",
-  "textures": {
-    "dirt": "tfc:block/dirt/sandy_loam",
-    "top": "tfc:block/farmland/sandy_loam"
-  }
+    "parent": "block/template_farmland",
+    "textures": {
+        "top": "tfc:block/farmland/sandy_loam",
+        "dirt": "tfc:block/dirt/sandy_loam"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

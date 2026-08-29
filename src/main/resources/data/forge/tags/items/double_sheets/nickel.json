@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/double_sheet/nickel"
-  ]
+    "values": ["tfc:metal/double_sheet/nickel"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

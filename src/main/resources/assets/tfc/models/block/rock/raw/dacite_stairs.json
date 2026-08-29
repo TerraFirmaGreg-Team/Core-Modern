@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/raw/dacite",
-    "top": "tfc:block/rock/raw/dacite",
-    "side": "tfc:block/rock/raw/dacite"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/raw/dacite",
+        "top": "tfc:block/rock/raw/dacite",
+        "bottom": "tfc:block/rock/raw/dacite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

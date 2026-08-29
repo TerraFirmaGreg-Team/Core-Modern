@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:landslide",
-  "ingredient": "tfc:deposit/native_silver/phyllite",
-  "result": "tfc:deposit/native_silver/phyllite"
+    "result": "tfc:deposit/native_silver/phyllite",
+    "ingredient": "tfc:deposit/native_silver/phyllite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:landslide"
 }

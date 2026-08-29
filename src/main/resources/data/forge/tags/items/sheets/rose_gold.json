@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/sheet/rose_gold"
-  ]
+    "values": ["tfc:metal/sheet/rose_gold"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

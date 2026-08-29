@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/olive_paste"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/olive_paste"},
+    "__comment__": "This file was automatically created by mcresources"
 }

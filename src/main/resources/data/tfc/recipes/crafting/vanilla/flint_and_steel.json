@@ -1,19 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X ",
-    " Y"
-  ],
-  "key": {
-    "X": {
-      "tag": "forge:ingots/steel"
-    },
-    "Y": {
-      "item": "minecraft:flint"
+    "result": {"item": "minecraft:flint_and_steel"},
+    "pattern": [
+        "X ",
+        " Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"tag": "forge:ingots/steel"},
+        "Y": {"item": "minecraft:flint"}
     }
-  },
-  "result": {
-    "item": "minecraft:flint_and_steel"
-  }
 }

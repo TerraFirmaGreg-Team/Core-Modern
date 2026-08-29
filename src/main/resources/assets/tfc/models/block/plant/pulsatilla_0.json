@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/pulsatilla/pulsatilla_0"
-  }
+    "parent": "block/cross",
+    "textures": {"cross": "tfc:block/plant/pulsatilla/pulsatilla_0"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "tag": "forge:double_sheets/rose_gold"
-  },
-  "heat_capacity": 11.429,
-  "forging_temperature": 576,
-  "welding_temperature": 768
+    "welding_temperature": 768,
+    "ingredient": {"tag": "forge:double_sheets/rose_gold"},
+    "heat_capacity": 11.429,
+    "__comment__": "This file was automatically created by mcresources",
+    "forging_temperature": 576
 }

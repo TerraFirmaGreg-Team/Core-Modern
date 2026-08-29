@@ -1,6 +1,4 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/plant/lady_fern"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/plant/lady_fern"}
 }

@@ -1,9 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/stairs",
-  "textures": {
-    "bottom": "tfc:block/rock/mossy_bricks/shale",
-    "top": "tfc:block/rock/mossy_bricks/shale",
-    "side": "tfc:block/rock/mossy_bricks/shale"
-  }
+    "parent": "block/stairs",
+    "textures": {
+        "side": "tfc:block/rock/mossy_bricks/shale",
+        "top": "tfc:block/rock/mossy_bricks/shale",
+        "bottom": "tfc:block/rock/mossy_bricks/shale"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

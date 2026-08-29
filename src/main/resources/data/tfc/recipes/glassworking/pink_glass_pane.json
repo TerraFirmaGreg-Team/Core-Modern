@@ -1,14 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:glassworking",
-  "operations": [
-    "gold",
-    "table_pour"
-  ],
-  "batch": {
-    "item": "tfc:silica_glass_batch"
-  },
-  "result": {
-    "item": "tfc:pink_poured_glass"
-  }
+    "result": {"item": "tfc:pink_poured_glass"},
+    "operations": [
+        "gold",
+        "table_pour"
+    ],
+    "batch": {"item": "tfc:silica_glass_batch"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:glassworking"
 }

@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/saltpeter"
-  },
-  "result": {
-    "item": "tfc:powder/saltpeter",
-    "count": 4
-  }
+    "result": {
+        "item": "tfc:powder/saltpeter",
+        "count": 4
+    },
+    "ingredient": {"item": "tfc:ore/saltpeter"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

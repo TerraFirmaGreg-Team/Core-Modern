@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/zinc",
-    "tfc:metal/flowing_zinc"
-  ]
+    "values": [
+        "tfc:metal/zinc",
+        "tfc:metal/flowing_zinc"
+    ],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

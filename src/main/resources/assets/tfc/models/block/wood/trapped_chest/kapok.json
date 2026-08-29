@@ -1,6 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "textures": {
-    "particle": "tfc:block/wood/planks/kapok"
-  }
+    "textures": {"particle": "tfc:block/wood/planks/kapok"},
+    "__comment__": "This file was automatically created by mcresources"
 }

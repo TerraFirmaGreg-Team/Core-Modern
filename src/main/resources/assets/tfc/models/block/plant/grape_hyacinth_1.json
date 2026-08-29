@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/grape_hyacinth/grape_hyacinth_1"
-  }
+    "parent": "block/cross",
+    "textures": {"cross": "tfc:block/plant/grape_hyacinth/grape_hyacinth_1"},
+    "__comment__": "This file was automatically created by mcresources"
 }

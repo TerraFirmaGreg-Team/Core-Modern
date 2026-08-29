@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/template_wall_post",
-  "textures": {
-    "wall": "tfc:block/rock/smooth/diorite"
-  }
+    "parent": "block/template_wall_post",
+    "textures": {"wall": "tfc:block/rock/smooth/diorite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

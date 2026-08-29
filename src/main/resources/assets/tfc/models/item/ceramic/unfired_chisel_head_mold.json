@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/ceramic/unfired_chisel_head"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/ceramic/unfired_chisel_head"},
+    "__comment__": "This file was automatically created by mcresources"
 }

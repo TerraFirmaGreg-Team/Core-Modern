@@ -1,21 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:salt_lick_patch",
-  "placement": [
-    {
-      "type": "minecraft:rarity_filter",
-      "chance": 110
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:climate",
-      "min_temperature": 5,
-      "max_temperature": 33,
-      "min_rainfall": 100,
-      "max_rainfall": 500,
-      "min_forest": "normal"
-    }
-  ]
+    "feature": "tfc:salt_lick_patch",
+    "placement": [
+        {
+            "chance": 110,
+            "type": "minecraft:rarity_filter"
+        },
+        {"type": "minecraft:in_square"},
+        {
+            "max_temperature": 33,
+            "max_rainfall": 500,
+            "type": "tfc:climate",
+            "min_rainfall": 100,
+            "min_forest": "normal",
+            "min_temperature": 5
+        }
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

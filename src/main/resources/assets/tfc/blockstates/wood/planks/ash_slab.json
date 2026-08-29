@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/wood/planks/ash_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/wood/planks/ash_slab"},
+        "type=double": {"model": "tfc:block/wood/planks/ash"},
+        "type=top": {"model": "tfc:block/wood/planks/ash_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/wood/planks/ash_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/wood/planks/ash"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

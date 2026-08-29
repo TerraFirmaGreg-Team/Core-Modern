@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "replace": false,
-  "values": [
-    "tfc:metal/rod/brass"
-  ]
+    "values": ["tfc:metal/rod/brass"],
+    "replace": false,
+    "__comment__": "This file was automatically created by mcresources"
 }

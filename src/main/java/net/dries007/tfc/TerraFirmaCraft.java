@@ -56,7 +56,6 @@ import net.dries007.tfc.common.recipes.TFCRecipeTypes;
 import net.dries007.tfc.common.recipes.ingredients.TFCIngredients;
 import net.dries007.tfc.common.recipes.outputs.ItemStackModifiers;
 import net.dries007.tfc.compat.jade.JadeIntegration;
-import net.dries007.tfc.compat.jade.TheOneProbeIntegration;
 import net.dries007.tfc.compat.patchouli.PatchouliClientEventHandler;
 import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
 import net.dries007.tfc.config.TFCConfig;
@@ -108,7 +107,6 @@ public final class TerraFirmaCraft
         bus.addListener(this::setup);
         bus.addListener(this::registerCapabilities);
         bus.addListener(this::loadComplete);
-        bus.addListener(this::onInterModComms);
         bus.addListener(TFCEntities::onEntityAttributeCreation);
         bus.addListener(Faunas::registerSpawnPlacements);
 
@@ -217,14 +215,6 @@ public final class TerraFirmaCraft
         if (syncLoadError != null)
         {
             Helpers.throwAsUnchecked(syncLoadError);
-        }
-    }
-
-    public void onInterModComms(InterModEnqueueEvent event)
-    {
-        if (ModList.get().isLoaded("theoneprobe"))
-        {
-            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TheOneProbeIntegration::new);
         }
     }
 }

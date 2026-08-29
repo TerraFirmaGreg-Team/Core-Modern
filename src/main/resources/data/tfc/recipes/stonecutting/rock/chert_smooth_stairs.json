@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/smooth/chert"
-  },
-  "result": "tfc:rock/smooth/chert_stairs",
-  "count": 1
+    "result": "tfc:rock/smooth/chert_stairs",
+    "ingredient": {"item": "tfc:rock/smooth/chert"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

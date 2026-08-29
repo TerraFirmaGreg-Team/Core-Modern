@@ -1,12 +1,10 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:heating",
-  "ingredient": {
-    "tag": "forge:rods/wooden"
-  },
-  "result_item": {
-    "item": "tfc:torch",
-    "count": 2
-  },
-  "temperature": 60
+    "result_item": {
+        "item": "tfc:torch",
+        "count": 2
+    },
+    "ingredient": {"tag": "forge:rods/wooden"},
+    "temperature": 60,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:heating"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/poor_native_copper/basalt"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/poor_native_copper/basalt"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,14 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "type=bottom": {
-      "model": "tfc:block/mud_bricks/loam_slab"
+    "variants": {
+        "type=bottom": {"model": "tfc:block/mud_bricks/loam_slab"},
+        "type=double": {"model": "tfc:block/mud_bricks/loam"},
+        "type=top": {"model": "tfc:block/mud_bricks/loam_slab_top"}
     },
-    "type=top": {
-      "model": "tfc:block/mud_bricks/loam_slab_top"
-    },
-    "type=double": {
-      "model": "tfc:block/mud_bricks/loam"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

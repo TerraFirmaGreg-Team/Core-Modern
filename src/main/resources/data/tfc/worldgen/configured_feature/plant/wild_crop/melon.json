@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:spreading_crop",
-  "config": {
-    "block": "tfc:wild_crop/melon"
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:spreading_crop",
+    "config": {"block": "tfc:wild_crop/melon"}
 }

@@ -1,18 +1,16 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_instant_fluid",
-  "primary_fluid": {
-    "ingredient": {
-      "tag": "tfc:milks"
+    "output_fluid": {
+        "amount": 10,
+        "fluid": "tfc:milk_vinegar"
     },
-    "amount": 9
-  },
-  "added_fluid": {
-    "ingredient": "tfc:vinegar",
-    "amount": 1
-  },
-  "output_fluid": {
-    "fluid": "tfc:milk_vinegar",
-    "amount": 10
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_instant_fluid",
+    "primary_fluid": {
+        "amount": 9,
+        "ingredient": {"tag": "tfc:milks"}
+    },
+    "added_fluid": {
+        "amount": 1,
+        "ingredient": "tfc:vinegar"
+    }
 }

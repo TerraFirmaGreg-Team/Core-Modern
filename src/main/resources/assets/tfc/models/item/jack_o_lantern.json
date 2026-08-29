@@ -1,4 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/jack_o_lantern"
+    "parent": "block/jack_o_lantern",
+    "__comment__": "This file was automatically created by mcresources"
 }

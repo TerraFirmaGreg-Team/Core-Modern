@@ -1,9 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "tfc:rock/cobble/quartzite"
-  },
-  "result": "tfc:rock/cobble/quartzite_stairs",
-  "count": 1
+    "result": "tfc:rock/cobble/quartzite_stairs",
+    "ingredient": {"item": "tfc:rock/cobble/quartzite"},
+    "count": 1,
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:stonecutting"
 }

@@ -1,8 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "ingredient": {
-    "item": "tfc:wrought_iron_grill"
-  },
-  "size": "large",
-  "weight": "heavy"
+    "ingredient": {"item": "tfc:wrought_iron_grill"},
+    "size": "large",
+    "weight": "heavy",
+    "__comment__": "This file was automatically created by mcresources"
 }

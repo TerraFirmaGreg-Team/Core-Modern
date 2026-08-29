@@ -1,7 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:rock/cracked_bricks/andesite",
-  "result": "tfc:rock/cracked_bricks/andesite_stairs",
-  "mode": "stair"
+    "result": "tfc:rock/cracked_bricks/andesite_stairs",
+    "mode": "stair",
+    "ingredient": "tfc:rock/cracked_bricks/andesite",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }

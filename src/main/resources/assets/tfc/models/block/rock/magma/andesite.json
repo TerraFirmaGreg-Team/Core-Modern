@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "tfc:block/rock/magma/andesite"
-  }
+    "parent": "minecraft:block/cube_all",
+    "textures": {"all": "tfc:block/rock/magma/andesite"},
+    "__comment__": "This file was automatically created by mcresources"
 }

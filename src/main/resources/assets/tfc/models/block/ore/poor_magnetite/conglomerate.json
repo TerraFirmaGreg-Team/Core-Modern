@@ -1,8 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:block/ore",
-  "textures": {
-    "all": "tfc:block/rock/raw/conglomerate",
-    "overlay": "tfc:block/ore/poor_magnetite"
-  }
+    "parent": "tfc:block/ore",
+    "textures": {
+        "all": "tfc:block/rock/raw/conglomerate",
+        "overlay": "tfc:block/ore/poor_magnetite"
+    },
+    "__comment__": "This file was automatically created by mcresources"
 }

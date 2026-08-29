@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/wood/chest/white_cedar"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/wood/chest/white_cedar"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

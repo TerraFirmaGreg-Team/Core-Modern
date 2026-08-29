@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "mature=true": {
-      "model": "tfc:block/wild_crop/carrot"
+    "variants": {
+        "mature=true": {"model": "tfc:block/wild_crop/carrot"},
+        "mature=false": {"model": "tfc:block/dead_crop/carrot"}
     },
-    "mature=false": {
-      "model": "tfc:block/dead_crop/carrot"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

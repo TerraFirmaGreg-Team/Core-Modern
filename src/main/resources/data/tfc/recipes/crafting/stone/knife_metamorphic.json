@@ -1,19 +1,13 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X",
-    "Y"
-  ],
-  "key": {
-    "X": {
-      "item": "tfc:stone/knife_head/metamorphic"
-    },
-    "Y": {
-      "tag": "forge:rods/wooden"
+    "result": {"item": "tfc:stone/knife/metamorphic"},
+    "pattern": [
+        "X",
+        "Y"
+    ],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "X": {"item": "tfc:stone/knife_head/metamorphic"},
+        "Y": {"tag": "forge:rods/wooden"}
     }
-  },
-  "result": {
-    "item": "tfc:stone/knife/metamorphic"
-  }
 }

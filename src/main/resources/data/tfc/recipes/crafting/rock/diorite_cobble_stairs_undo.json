@@ -1,13 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:rock/cobble/diorite_stairs"
-    }
-  ],
-  "result": {
-    "item": "tfc:rock/loose/diorite",
-    "count": 3
-  }
+    "result": {
+        "item": "tfc:rock/loose/diorite",
+        "count": 3
+    },
+    "ingredients": [{"item": "tfc:rock/cobble/diorite_stairs"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

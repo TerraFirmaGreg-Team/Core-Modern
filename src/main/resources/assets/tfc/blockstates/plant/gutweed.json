@@ -1,23 +1,15 @@
-{
-  "multipart": [
+{"multipart": [{"apply": [
+    {"model": "tfc:block/plant/gutweed"},
     {
-      "apply": [
-        {
-          "model": "tfc:block/plant/gutweed"
-        },
-        {
-          "model": "tfc:block/plant/gutweed",
-          "y": 90
-        },
-        {
-          "model": "tfc:block/plant/gutweed",
-          "y": 180
-        },
-        {
-          "model": "tfc:block/plant/gutweed",
-          "y": 270
-        }
-      ]
+        "y": 90,
+        "model": "tfc:block/plant/gutweed"
+    },
+    {
+        "y": 180,
+        "model": "tfc:block/plant/gutweed"
+    },
+    {
+        "y": 270,
+        "model": "tfc:block/plant/gutweed"
     }
-  ]
-}
+]}]}

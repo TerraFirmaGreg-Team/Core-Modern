@@ -1,20 +1,14 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:barrel_sealed",
-  "input_item": {
-    "ingredient": {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:food/sugarcane"
-      }
-    }
-  },
-  "input_fluid": {
-    "ingredient": "minecraft:water",
-    "amount": 600
-  },
-  "output_item": {
-    "item": "minecraft:sugar"
-  },
-  "duration": 8000
+    "input_fluid": {
+        "amount": 600,
+        "ingredient": "minecraft:water"
+    },
+    "duration": 8000,
+    "output_item": {"item": "minecraft:sugar"},
+    "input_item": {"ingredient": {
+        "ingredient": {"item": "tfc:food/sugarcane"},
+        "type": "tfc:not_rotten"
+    }},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:barrel_sealed"
 }

@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/normal_cassiterite/diorite"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/normal_cassiterite/diorite"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

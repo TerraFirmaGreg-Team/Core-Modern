@@ -1,11 +1,7 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "mature=true": {
-      "model": "tfc:block/wild_crop/onion"
+    "variants": {
+        "mature=true": {"model": "tfc:block/wild_crop/onion"},
+        "mature=false": {"model": "tfc:block/dead_crop/onion"}
     },
-    "mature=false": {
-      "model": "tfc:block/dead_crop/onion"
-    }
-  }
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cross",
-  "textures": {
-    "cross": "tfc:block/wood/sapling/mangrove"
-  }
+    "parent": "block/cross",
+    "textures": {"cross": "tfc:block/wood/sapling/mangrove"},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/metal/ingot/rose_gold"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/metal/ingot/rose_gold"},
+    "__comment__": "This file was automatically created by mcresources"
 }

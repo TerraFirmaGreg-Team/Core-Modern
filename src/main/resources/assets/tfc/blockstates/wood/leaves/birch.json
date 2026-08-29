@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/wood/leaves/birch"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/wood/leaves/birch"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

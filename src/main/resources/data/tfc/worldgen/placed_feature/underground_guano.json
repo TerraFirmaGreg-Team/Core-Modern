@@ -1,31 +1,25 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:underground_guano",
-  "placement": [
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "tfc:replaceable"
-      }
-    },
-    {
-      "type": "block_predicate_filter",
-      "predicate": {
-        "type": "would_survive",
-        "state": {
-          "Name": "tfc:groundcover/guano",
-          "Properties": {
-            "fluid": "empty"
-          }
-        }
-      }
-    },
-    {
-      "type": "tfc:underground"
-    }
-  ]
+    "feature": "tfc:underground_guano",
+    "placement": [
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "predicate": {"type": "tfc:replaceable"},
+            "type": "block_predicate_filter"
+        },
+        {
+            "predicate": {
+                "state": {
+                    "Properties": {"fluid": "empty"},
+                    "Name": "tfc:groundcover/guano"
+                },
+                "type": "would_survive"
+            },
+            "type": "block_predicate_filter"
+        },
+        {"type": "tfc:underground"}
+    ],
+    "__comment__": "This file was automatically created by mcresources"
 }

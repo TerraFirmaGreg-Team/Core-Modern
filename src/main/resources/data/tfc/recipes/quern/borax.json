@@ -1,11 +1,9 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:quern",
-  "ingredient": {
-    "item": "tfc:ore/borax"
-  },
-  "result": {
-    "item": "tfc:powder/flux",
-    "count": 6
-  }
+    "result": {
+        "item": "tfc:powder/flux",
+        "count": 6
+    },
+    "ingredient": {"item": "tfc:ore/borax"},
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:quern"
 }

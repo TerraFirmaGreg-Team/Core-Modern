@@ -1,8 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "variants": {
-    "": {
-      "model": "tfc:block/ore/normal_bismuthinite/shale"
-    }
-  }
+    "variants": {"": {"model": "tfc:block/ore/normal_bismuthinite/shale"}},
+    "__comment__": "This file was automatically created by mcresources"
 }

@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/handheld_rod",
-  "textures": {
-    "layer0": "tfc:item/metal/rod/bismuth_bronze"
-  }
+    "parent": "item/handheld_rod",
+    "textures": {"layer0": "tfc:item/metal/rod/bismuth_bronze"},
+    "__comment__": "This file was automatically created by mcresources"
 }

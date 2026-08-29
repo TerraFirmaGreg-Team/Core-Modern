@@ -1,38 +1,30 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:pot_jam",
-  "ingredients": [
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:food/gooseberry"
-      }
+    "duration": 500,
+    "result": {
+        "item": "tfc:jar/gooseberry",
+        "count": 3
     },
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:food/gooseberry"
-      }
+    "texture": "tfc:block/jar/gooseberry",
+    "temperature": 300,
+    "ingredients": [
+        {
+            "ingredient": {"item": "tfc:food/gooseberry"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "tfc:food/gooseberry"},
+            "type": "tfc:not_rotten"
+        },
+        {
+            "ingredient": {"item": "tfc:food/gooseberry"},
+            "type": "tfc:not_rotten"
+        },
+        {"tag": "tfc:sweetener"}
+    ],
+    "fluid_ingredient": {
+        "amount": 100,
+        "ingredient": "minecraft:water"
     },
-    {
-      "type": "tfc:not_rotten",
-      "ingredient": {
-        "item": "tfc:food/gooseberry"
-      }
-    },
-    {
-      "tag": "tfc:sweetener"
-    }
-  ],
-  "fluid_ingredient": {
-    "ingredient": "minecraft:water",
-    "amount": 100
-  },
-  "duration": 500,
-  "temperature": 300,
-  "result": {
-    "item": "tfc:jar/gooseberry",
-    "count": 3
-  },
-  "texture": "tfc:block/jar/gooseberry"
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:pot_jam"
 }

@@ -1,12 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "tfc:wood/planks/douglas_fir"
-    }
-  ],
-  "result": {
-    "item": "tfc:wood/planks/douglas_fir_button"
-  }
+    "result": {"item": "tfc:wood/planks/douglas_fir_button"},
+    "ingredients": [{"item": "tfc:wood/planks/douglas_fir"}],
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "minecraft:crafting_shapeless"
 }

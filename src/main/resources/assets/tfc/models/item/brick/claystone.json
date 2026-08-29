@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "tfc:item/brick/claystone"
-  }
+    "parent": "item/generated",
+    "textures": {"layer0": "tfc:item/brick/claystone"},
+    "__comment__": "This file was automatically created by mcresources"
 }

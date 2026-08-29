@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:multiple",
-  "config": {
-    "features": "#tfc:feature/clay_indicators"
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:multiple",
+    "config": {"features": "#tfc:feature/clay_indicators"}
 }

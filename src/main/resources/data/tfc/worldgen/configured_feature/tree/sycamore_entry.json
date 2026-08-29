@@ -1,25 +1,21 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:forest_entry",
-  "config": {
-    "climate": {
-      "min_temperature": -6.6,
-      "max_temperature": 13.4,
-      "min_rainfall": 330,
-      "max_rainfall": 480
-    },
-    "groundcover": [
-      {
-        "block": "tfc:wood/twig/sycamore"
-      },
-      {
-        "block": "tfc:wood/fallen_leaves/sycamore"
-      }
-    ],
-    "normal_tree": "tfc:tree/sycamore",
-    "dead_tree": "tfc:tree/sycamore_dead",
-    "fallen_log": "tfc:wood/log/sycamore",
-    "fallen_leaves": "tfc:wood/fallen_leaves/sycamore",
-    "old_growth_tree": "tfc:tree/sycamore_large"
-  }
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:forest_entry",
+    "config": {
+        "fallen_leaves": "tfc:wood/fallen_leaves/sycamore",
+        "old_growth_tree": "tfc:tree/sycamore_large",
+        "groundcover": [
+            {"block": "tfc:wood/twig/sycamore"},
+            {"block": "tfc:wood/fallen_leaves/sycamore"}
+        ],
+        "normal_tree": "tfc:tree/sycamore",
+        "climate": {
+            "max_temperature": 13.4,
+            "max_rainfall": 480,
+            "min_rainfall": 330,
+            "min_temperature": -6.6
+        },
+        "fallen_log": "tfc:wood/log/sycamore",
+        "dead_tree": "tfc:tree/sycamore_dead"
+    }
 }

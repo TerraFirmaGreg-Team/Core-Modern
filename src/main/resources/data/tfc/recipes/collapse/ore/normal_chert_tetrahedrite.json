@@ -1,6 +1,6 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:collapse",
-  "ingredient": "tfc:ore/rich_tetrahedrite/chert",
-  "result": "tfc:ore/normal_tetrahedrite/chert"
+    "result": "tfc:ore/normal_tetrahedrite/chert",
+    "ingredient": "tfc:ore/rich_tetrahedrite/chert",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:collapse"
 }

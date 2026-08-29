@@ -1,37 +1,19 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:story/root",
-  "criteria": {
-    "rock_knapping": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "tfc:rock_knapping"
-          }
-        ]
-      }
-    }
-  },
-  "display": {
-    "icon": {
-      "item": "tfc:rock/loose/schist"
+    "parent": "tfc:story/root",
+    "requirements": [["rock_knapping"]],
+    "criteria": {"rock_knapping": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {"items": [{"tag": "tfc:rock_knapping"}]}
+    }},
+    "display": {
+        "show_toast": true,
+        "hidden": false,
+        "background": "tfc:textures/block/rock/mossy_cobble/diorite.png",
+        "icon": {"item": "tfc:rock/loose/schist"},
+        "description": {"translate": "tfc.advancements.story.find_rock.description"},
+        "title": {"translate": "tfc.advancements.story.find_rock.title"},
+        "announce_to_chat": true,
+        "frame": "task"
     },
-    "title": {
-      "translate": "tfc.advancements.story.find_rock.title"
-    },
-    "description": {
-      "translate": "tfc.advancements.story.find_rock.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  },
-  "requirements": [
-    [
-      "rock_knapping"
-    ]
-  ]
+    "__comment__": "This file was automatically created by mcresources"
 }

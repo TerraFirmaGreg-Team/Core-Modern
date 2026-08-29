@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/cross",
-  "textures": {
-    "cross": "tfc:block/plant/silver_spurflower/silver_spurflower_1"
-  }
+    "parent": "block/cross",
+    "textures": {"cross": "tfc:block/plant/silver_spurflower/silver_spurflower_1"},
+    "__comment__": "This file was automatically created by mcresources"
 }

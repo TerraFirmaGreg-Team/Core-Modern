@@ -1,7 +1,5 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "tfc:item/blowpipe/blowpipe",
-  "textures": {
-    "1": "tfc:block/glass/3"
-  }
+    "parent": "tfc:item/blowpipe/blowpipe",
+    "textures": {"1": "tfc:block/glass/3"},
+    "__comment__": "This file was automatically created by mcresources"
 }

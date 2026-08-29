@@ -1,10 +1,8 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
-  "type": "tfc:chisel",
-  "ingredient": "tfc:smooth_sandstone/pink",
-  "result": "tfc:smooth_sandstone/pink_slab",
-  "mode": "slab",
-  "extra_drop": {
-    "item": "tfc:smooth_sandstone/pink_slab"
-  }
+    "result": "tfc:smooth_sandstone/pink_slab",
+    "mode": "slab",
+    "extra_drop": {"item": "tfc:smooth_sandstone/pink_slab"},
+    "ingredient": "tfc:smooth_sandstone/pink",
+    "__comment__": "This file was automatically created by mcresources",
+    "type": "tfc:chisel"
 }
