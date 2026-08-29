@@ -1,7 +1,0 @@
-{
-    "name": "Розширена механіка",
-    "icon": "tfc:metal/axe/red_steel",
-    "description": "Advanced sections of the tech tree, from the first pickaxe, all the way to colored steel.$(br2)$(br)$(bold)Note:$() you can search entries simply by starting to type anywhere!",
-    "sortnum": 2,
-    "__comment__": "This file was automatically created by mcresources"
-}
