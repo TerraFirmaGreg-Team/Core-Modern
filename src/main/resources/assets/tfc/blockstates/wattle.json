@@ -1,0 +1,93 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "multipart": [
+    {
+      "when": {
+        "woven": false
+      },
+      "apply": {
+        "model": "tfc:block/wattle/empty_wattle"
+      }
+    },
+    {
+      "when": {
+        "woven": true
+      },
+      "apply": {
+        "model": "tfc:block/wattle/woven_wattle"
+      }
+    },
+    {
+      "when": {
+        "top": true,
+        "woven": false
+      },
+      "apply": {
+        "model": "tfc:block/wattle/empty_top"
+      }
+    },
+    {
+      "when": {
+        "bottom": true,
+        "woven": false
+      },
+      "apply": {
+        "model": "tfc:block/wattle/empty_bottom"
+      }
+    },
+    {
+      "when": {
+        "left": true,
+        "woven": false
+      },
+      "apply": {
+        "model": "tfc:block/wattle/empty_left"
+      }
+    },
+    {
+      "when": {
+        "right": true,
+        "woven": false
+      },
+      "apply": {
+        "model": "tfc:block/wattle/empty_right"
+      }
+    },
+    {
+      "when": {
+        "top": true,
+        "woven": true
+      },
+      "apply": {
+        "model": "tfc:block/wattle/top"
+      }
+    },
+    {
+      "when": {
+        "bottom": true,
+        "woven": true
+      },
+      "apply": {
+        "model": "tfc:block/wattle/bottom"
+      }
+    },
+    {
+      "when": {
+        "left": true,
+        "woven": true
+      },
+      "apply": {
+        "model": "tfc:block/wattle/left"
+      }
+    },
+    {
+      "when": {
+        "right": true,
+        "woven": true
+      },
+      "apply": {
+        "model": "tfc:block/wattle/right"
+      }
+    }
+  ]
+}

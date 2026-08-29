@@ -1,0 +1,7 @@
+{
+  "parent": "tfc:block/large_tinted_cross",
+  "textures": {
+    "cross": "tfc:block/plant/tall_fescue_grass/tall",
+    "particle": "tfc:block/plant/tall_fescue_grass/tall"
+  }
+}

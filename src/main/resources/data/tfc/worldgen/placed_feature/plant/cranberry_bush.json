@@ -1,0 +1,33 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/cranberry_bush",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "block_predicate_filter",
+      "predicate": {
+        "type": "matching_blocks",
+        "blocks": [
+          "minecraft:water"
+        ]
+      }
+    },
+    {
+      "type": "block_predicate_filter",
+      "predicate": {
+        "type": "tfc:would_survive_with_fluid",
+        "state": {
+          "Name": "tfc:plant/cranberry_bush",
+          "Properties": {
+            "lifecycle": "healthy",
+            "stage": "0",
+            "fluid": "empty"
+          }
+        }
+      }
+    }
+  ]
+}

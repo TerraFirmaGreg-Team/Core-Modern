@@ -1,0 +1,129 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "sources": [
+    {
+      "type": "paletted_permutations",
+      "palette_key": "tfc:color_palettes/wood/planks/palette",
+      "textures": [
+        "tfc:block/wood/planks/bookshelf_top",
+        "tfc:block/wood/planks/bookshelf_side"
+      ],
+      "permutations": {
+        "acacia": "tfc:color_palettes/wood/planks/acacia",
+        "ash": "tfc:color_palettes/wood/planks/ash",
+        "aspen": "tfc:color_palettes/wood/planks/aspen",
+        "birch": "tfc:color_palettes/wood/planks/birch",
+        "blackwood": "tfc:color_palettes/wood/planks/blackwood",
+        "chestnut": "tfc:color_palettes/wood/planks/chestnut",
+        "douglas_fir": "tfc:color_palettes/wood/planks/douglas_fir",
+        "hickory": "tfc:color_palettes/wood/planks/hickory",
+        "kapok": "tfc:color_palettes/wood/planks/kapok",
+        "mangrove": "tfc:color_palettes/wood/planks/mangrove",
+        "maple": "tfc:color_palettes/wood/planks/maple",
+        "oak": "tfc:color_palettes/wood/planks/oak",
+        "palm": "tfc:color_palettes/wood/planks/palm",
+        "pine": "tfc:color_palettes/wood/planks/pine",
+        "rosewood": "tfc:color_palettes/wood/planks/rosewood",
+        "sequoia": "tfc:color_palettes/wood/planks/sequoia",
+        "spruce": "tfc:color_palettes/wood/planks/spruce",
+        "sycamore": "tfc:color_palettes/wood/planks/sycamore",
+        "white_cedar": "tfc:color_palettes/wood/planks/white_cedar",
+        "willow": "tfc:color_palettes/wood/planks/willow"
+      }
+    },
+    {
+      "type": "paletted_permutations",
+      "palette_key": "tfc:color_palettes/wood/planks/palette",
+      "textures": [
+        "tfc:item/wood/twig",
+        "tfc:item/wood/lumber",
+        "tfc:item/wood/chest_minecart_cover",
+        "tfc:item/wood/stripped_log",
+        "tfc:item/wood/sign_head",
+        "tfc:item/wood/hanging_sign_head",
+        "tfc:item/wood/water_wheel"
+      ],
+      "permutations": {
+        "acacia": "tfc:color_palettes/wood/plank_items/acacia",
+        "ash": "tfc:color_palettes/wood/plank_items/ash",
+        "aspen": "tfc:color_palettes/wood/plank_items/aspen",
+        "birch": "tfc:color_palettes/wood/plank_items/birch",
+        "blackwood": "tfc:color_palettes/wood/plank_items/blackwood",
+        "chestnut": "tfc:color_palettes/wood/plank_items/chestnut",
+        "douglas_fir": "tfc:color_palettes/wood/plank_items/douglas_fir",
+        "hickory": "tfc:color_palettes/wood/plank_items/hickory",
+        "kapok": "tfc:color_palettes/wood/plank_items/kapok",
+        "mangrove": "tfc:color_palettes/wood/plank_items/mangrove",
+        "maple": "tfc:color_palettes/wood/plank_items/maple",
+        "oak": "tfc:color_palettes/wood/plank_items/oak",
+        "palm": "tfc:color_palettes/wood/plank_items/palm",
+        "pine": "tfc:color_palettes/wood/plank_items/pine",
+        "rosewood": "tfc:color_palettes/wood/plank_items/rosewood",
+        "sequoia": "tfc:color_palettes/wood/plank_items/sequoia",
+        "spruce": "tfc:color_palettes/wood/plank_items/spruce",
+        "sycamore": "tfc:color_palettes/wood/plank_items/sycamore",
+        "white_cedar": "tfc:color_palettes/wood/plank_items/white_cedar",
+        "willow": "tfc:color_palettes/wood/plank_items/willow"
+      }
+    },
+    {
+      "type": "paletted_permutations",
+      "palette_key": "tfc:color_palettes/wood/planks/palette",
+      "textures": [
+        "tfc:item/wood/boat"
+      ],
+      "permutations": {
+        "acacia": "tfc:color_palettes/wood/plank_items/acacia",
+        "ash": "tfc:color_palettes/wood/plank_items/ash",
+        "aspen": "tfc:color_palettes/wood/plank_items/aspen",
+        "birch": "tfc:color_palettes/wood/plank_items/birch",
+        "blackwood": "tfc:color_palettes/wood/plank_items/blackwood",
+        "chestnut": "tfc:color_palettes/wood/plank_items/chestnut",
+        "douglas_fir": "tfc:color_palettes/wood/plank_items/douglas_fir",
+        "hickory": "tfc:color_palettes/wood/plank_items/hickory",
+        "kapok": "tfc:color_palettes/wood/plank_items/kapok",
+        "mangrove": "tfc:color_palettes/wood/plank_items/mangrove",
+        "maple": "tfc:color_palettes/wood/plank_items/maple",
+        "oak": "tfc:color_palettes/wood/plank_items/oak",
+        "pine": "tfc:color_palettes/wood/plank_items/pine",
+        "rosewood": "tfc:color_palettes/wood/plank_items/rosewood",
+        "sequoia": "tfc:color_palettes/wood/plank_items/sequoia",
+        "spruce": "tfc:color_palettes/wood/plank_items/spruce",
+        "sycamore": "tfc:color_palettes/wood/plank_items/sycamore",
+        "white_cedar": "tfc:color_palettes/wood/plank_items/white_cedar",
+        "willow": "tfc:color_palettes/wood/plank_items/willow"
+      }
+    },
+    {
+      "type": "paletted_permutations",
+      "palette_key": "trims/color_palettes/trim_palette",
+      "textures": [
+        "tfc:item/helmet_trim",
+        "tfc:item/chestplate_trim",
+        "tfc:item/greaves_trim",
+        "tfc:item/boots_trim"
+      ],
+      "permutations": {
+        "amethyst_tfc": "tfc:color_palettes/trims/amethyst",
+        "diamond_tfc": "tfc:color_palettes/trims/diamond",
+        "emerald_tfc": "tfc:color_palettes/trims/emerald",
+        "lapis_lazuli_tfc": "tfc:color_palettes/trims/lapis_lazuli",
+        "opal_tfc": "tfc:color_palettes/trims/opal",
+        "pyrite_tfc": "tfc:color_palettes/trims/pyrite",
+        "ruby_tfc": "tfc:color_palettes/trims/ruby",
+        "sapphire_tfc": "tfc:color_palettes/trims/sapphire",
+        "topaz_tfc": "tfc:color_palettes/trims/topaz",
+        "rose_gold_tfc": "tfc:color_palettes/trims/rose_gold",
+        "gold_tfc": "tfc:color_palettes/trims/gold",
+        "silver_tfc": "tfc:color_palettes/trims/silver",
+        "sterling_silver_tfc": "tfc:color_palettes/trims/sterling_silver",
+        "bismuth_tfc": "tfc:color_palettes/trims/bismuth"
+      }
+    },
+    {
+      "type": "directory",
+      "source": "entity/bell",
+      "prefix": "entity/bell/"
+    }
+  ]
+}

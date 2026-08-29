@@ -1,0 +1,32 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:forest_entry",
+  "config": {
+    "climate": {
+      "min_temperature": 6.1,
+      "max_temperature": 24.4,
+      "min_rainfall": 330,
+      "max_rainfall": 500
+    },
+    "groundcover": [
+      {
+        "block": "tfc:wood/twig/willow"
+      },
+      {
+        "block": "tfc:wood/fallen_leaves/willow"
+      }
+    ],
+    "normal_tree": "tfc:tree/willow",
+    "dead_tree": "tfc:tree/willow_dead",
+    "fallen_tree_chance": 0,
+    "bush_log": {
+      "Name": "tfc:wood/wood/willow",
+      "Properties": {
+        "branch_direction": "down",
+        "axis": "y"
+      }
+    },
+    "bush_leaves": "tfc:wood/leaves/willow",
+    "old_growth_tree": "tfc:tree/willow_large"
+  }
+}

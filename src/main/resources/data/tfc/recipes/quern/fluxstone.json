@@ -1,0 +1,11 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:quern",
+  "ingredient": {
+    "tag": "tfc:fluxstone"
+  },
+  "result": {
+    "item": "tfc:powder/flux",
+    "count": 2
+  }
+}

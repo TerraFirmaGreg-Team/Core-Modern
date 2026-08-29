@@ -1,0 +1,80 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "石臼",
+  "category": "tfc:mechanics",
+  "icon": "tfc:quern",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)石臼$()は、アイテムを粉砕するための装置です。粉末や$(l:mechanics/dye)染料$()、その他のアイテムを作成できます。$(thing)下臼$()と$(thing)上臼$()から組み立てられます。$(br2)石臼は$(l:mechanics/mechanical_power#quern)機械的な動力$()に接続することもできます。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/quern",
+      "text": "下臼は、$(thing)滑らかな石$()3つと、その他の$(thing)石$()ブロック3つを使って作ることができます。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/handstone",
+      "text": "石臼が動作するには$(thing)上臼$()が必要です。"
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "tfc:textures/gui/book/tutorial/quern_empty.png"
+      ],
+      "text": "下臼の上部にカーソルを合わせ、$(item)$(k:key.use)$()して上臼を配置します。",
+      "border": true
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "tfc:textures/gui/book/tutorial/quern_add_item.png"
+      ],
+      "text": "上臼の上部へ$(item)$(k:key.use)$()を使用して粉砕したいアイテムを追加します。",
+      "border": true
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "tfc:textures/gui/book/tutorial/quern_handle.png"
+      ],
+      "text": "ハンドルへ$(item)$(k:key.use)$()を使用して上臼を回転させます。",
+      "border": true
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "tfc:textures/gui/book/tutorial/quern_result.png"
+      ],
+      "text": "完成したアイテムは下臼に表示されます。$(item)$(k:key.use)$()を使用して回収できます。",
+      "border": true
+    },
+    {
+      "type": "tfc:quern_recipe",
+      "recipe": "tfc:quern/sulfur",
+      "text": "石臼は、$(thing)硫黄$()など、鉱石からさまざまな$(thing)粉$()を作るために使用されます。"
+    },
+    {
+      "type": "tfc:quern_recipe",
+      "recipe": "tfc:quern/red_dye",
+      "text": "$(l:mechanics/dye)染料$()はさまざまな花から取得できます。"
+    },
+    {
+      "type": "tfc:quern_recipe",
+      "recipe": "tfc:quern/emerald",
+      "text": "$(thing)宝石$()も粉末にすることができます。"
+    },
+    {
+      "type": "tfc:quern_recipe",
+      "recipe": "tfc:quern/barley_grain",
+      "text": "$(thing)小麦粉$()も石臼から入手できます。"
+    },
+    {
+      "type": "tfc:quern_recipe",
+      "recipe": "tfc:quern/fluxstone",
+      "text": "$(l:mechanics/flux)融剤$()は石臼から入手することも可能です。"
+    }
+  ],
+  "read_by_default": true
+}

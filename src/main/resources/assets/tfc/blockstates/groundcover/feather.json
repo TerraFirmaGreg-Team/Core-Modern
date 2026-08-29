@@ -1,0 +1,22 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "": [
+      {
+        "model": "tfc:block/groundcover/feather",
+        "y": 90
+      },
+      {
+        "model": "tfc:block/groundcover/feather"
+      },
+      {
+        "model": "tfc:block/groundcover/feather",
+        "y": 180
+      },
+      {
+        "model": "tfc:block/groundcover/feather",
+        "y": 270
+      }
+    ]
+  }
+}

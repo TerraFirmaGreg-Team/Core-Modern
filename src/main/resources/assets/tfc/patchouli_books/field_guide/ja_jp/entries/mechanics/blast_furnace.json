@@ -1,0 +1,68 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "高炉",
+  "category": "tfc:mechanics",
+  "icon": "tfc:blast_furnace",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)高炉$()は、$(thing)鋼$()の作成に使用される高度な装置です。$(thing)鉄鉱石$()、$(thing)木炭$()、および$(thing)融剤$()を制御された高温環境で混合すると、鋳鉄や錬鉄よりも強力な金属を作成できます。$(br2)高炉を建造するには、まず$(l:mechanics/rucible)るつぼ$()と大量の$(thing)錬鉄のプレート$()が必要です。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/blast_furnace",
+      "text": "高炉本体を作るには$(thing)るつぼ$()と、必要となる$(thing)錬鉄のプレート$()の一部が必要です。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "次に、高炉とその$(thing)煙突$()を建設する必要があります。煙突は$(l:mechanics/fire_clay#fire_bricks)耐火レンガ$()で作る必要があり、これは高炉の高温に耐えるのに十分な強度があるためです。さらに補強するために、$(thing)錬鉄のプレート$()を取り付ける必要があります。必要に応じて、$(thing)鋼$()などのより強力な金属を金属板に使用することもできます。"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock_id": "tfc:blast_furnace",
+      "name": "高炉",
+      "text": "煙突の高さを最小限に抑えた高炉。",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "高炉の煙突は最大5層まで増築でき、各層を完成させるには4つの$(thing)耐火レンガ$()と12枚の$(thing)錬鉄のプレート$()が必要です。層が増えると高炉の総容量が増加し、一度により多くの鋼を製錬できるようになります。煙突の各層は高炉に4つの鉱石を追加保持できます。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "高炉を使用するには、煙突の上部にアイテムをドロップする必要があります。鋼を作る場合は、$(thing)鉄鉱石$()と$(l:mechanics/flux)融剤$()を同量追加する必要があります。$(thing)鋳鉄$()に溶ける鉄鉱石やアイテムであれば何でも構いません。また、高炉の稼働中に消費される$(l:mechanics/charcoal_pit)木炭$()も供給する必要があります。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "高炉を使用すると、高炉GUIが開きます。ここでは、高炉に入っている鉱石と燃料の両方のメーターが表示されます。右上のスロットには、$(thing)羽口$()がなければなりません。これは、鋼を製錬するほどの温度にするために、高炉に空気を送り込む金属パイプです。羽口は$(l:mechanics/anvils)金床$()で鍛造できます。"
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "tfc:textures/gui/book/gui/blast_furnace.png"
+      ],
+      "text": "高炉GUI。",
+      "border": false
+    },
+    {
+      "type": "patchouli:text",
+      "text": "高炉が鉄を溶かす温度に達するためには$(l:mechanics/bellows)ふいご$()も必要になります。これは高炉の4つの側面のいずれかに設置できます。"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock_id": "tfc:full_blast_furnace",
+      "name": "",
+      "text": "ふいごとるつぼを取り付けた最大の高炉。",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "精錬を開始するには、$(l:getting_started/firepit#firestarter)火起こし器$()または$(thing)火打石と打ち金$()を使って高炉に点火します。時間の経過とともに内部の鉱石が加熱され始めます。高炉に燃料が残っていることを確認し、高炉の内部温度が木炭の最高燃焼温度に達した後、ふいごを使用して高炉に空気を供給します。中の鉱石が十分に加熱されると溶けて$(l:mechanics/steel)銑鉄$()に変わります。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "完成した溶けた金属は、炉の下の$(l:mechanics/rucible)るつぼ$()などの溶融金属用の容器に入ります。るつぼの出力スロットからインゴットの型にいれ、$(l:mechanics/steel)鋼$()に加工できます。"
+    }
+  ],
+  "read_by_default": true
+}

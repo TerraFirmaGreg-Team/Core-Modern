@@ -1,0 +1,26 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/red_sealing_wax_palm_patch",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 10
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "tfc:climate",
+      "min_temperature": 17.1,
+      "max_temperature": 38,
+      "min_rainfall": 280,
+      "max_rainfall": 500,
+      "min_forest": "edge",
+      "max_forest": "old_growth"
+    }
+  ]
+}

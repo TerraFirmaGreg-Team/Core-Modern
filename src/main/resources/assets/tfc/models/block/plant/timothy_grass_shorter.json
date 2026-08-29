@@ -1,0 +1,7 @@
+{
+  "parent": "block/tinted_cross",
+  "textures": {
+    "cross": "tfc:block/plant/timothy_grass/shorter",
+    "particle": "tfc:block/plant/timothy_grass/shorter"
+  }
+}

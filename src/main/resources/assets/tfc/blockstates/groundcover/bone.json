@@ -1,0 +1,22 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "": [
+      {
+        "model": "tfc:block/groundcover/bone",
+        "y": 90
+      },
+      {
+        "model": "tfc:block/groundcover/bone"
+      },
+      {
+        "model": "tfc:block/groundcover/bone",
+        "y": 180
+      },
+      {
+        "model": "tfc:block/groundcover/bone",
+        "y": 270
+      }
+    ]
+  }
+}

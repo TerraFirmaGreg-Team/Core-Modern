@@ -1,0 +1,25 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/banana",
+  "placement": [
+    {
+      "type": "tfc:climate",
+      "min_temperature": 17,
+      "max_temperature": 35,
+      "min_rainfall": 280,
+      "max_rainfall": 500,
+      "max_forest": "normal"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 50
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "tfc:item/entity_with_transforms",
+  "textures": {
+    "particle": "tfc:item/pan/interior"
+  }
+}

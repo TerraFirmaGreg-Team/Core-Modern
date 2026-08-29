@@ -1,0 +1,178 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "§l소개",
+  "category": "tfc:getting_started",
+  "icon": "tfc:rock/loose/granite",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "TerraFirmaCraft에서 당신이 처음으로 얻을 수 있는 것들은 막대기, 잔가지 그리고 돌멩이입니다. 이것들은 거의 모든 기후에서 바닥에 널브러진 채로 찾을 수 있습니다. $(item)$(k:key.use)$()을 누르거나 부수면 이 아이템들을 주워들 수 있습니다."
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "1    ",
+            " 2  4",
+            "  03 ",
+            " 4   ",
+            "    5"
+          ],
+          [
+            "GGGGG",
+            "GGGGG",
+            "GGGGG",
+            "GGGGG",
+            "GGGGG"
+          ]
+        ],
+        "mapping": {
+          "G": "tfc:grass/sandy_loam",
+          "1": "tfc:rock/loose/granite[count=1]",
+          "2": "tfc:rock/loose/granite[count=2]",
+          "3": "tfc:rock/loose/granite[count=3]",
+          "4": "tfc:groundcover/stick",
+          "5": "tfc:wood/twig/ash"
+        }
+      },
+      "name": "예시",
+      "text": "바닥에 흩어진 막대기와 돌멩이들.",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:text",
+      "text": "막대기는 바닥에서 줍는 것 외에도 나뭇잎을 맨손으로 부수어도 얻을 수 있습니다. 충분한 양의 돌과 막대기를 얻었다면, 돌을 $(thing)뗄$() 수 있습니다. 떼기는 돌 2개를 맞부딪쳐서 특정한 형태를 만드는 과정입니다. 돌을 떼려면 2개 이상의 돌을 손에 쥔 상태로 공기에 대고 $(item)$(k:key.use)$()을 누르세요. 그러면 $(thing)떼기 인터페이스$()가 열리게 됩니다."
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "tfc:textures/gui/book/gui/rock_knapping.png"
+      ],
+      "text": "떼기 인터페이스.",
+      "border": false
+    },
+    {
+      "type": "patchouli:text",
+      "text": "특정 아이템을 만들기 위해서는 사각형들을 지워서 특정 모양을 만들어야 합니다. 예를 들면, 칼 날을 만들기 위해서는 오른쪽의 모양을 만들면 됩니다.$(br2)제작대와 같이, 패턴의 위치는 결과물과 관련이 없으며 특정 제작법으로는 여러 개의 결과물이 나올 수도 있습니다."
+    },
+    {
+      "type": "tfc:rock_knapping_recipe",
+      "anchor": "knife",
+      "recipes": [
+        "tfc:rock_knapping/knife_head_sedimentary",
+        "tfc:rock_knapping/knife_head_metamorphic",
+        "tfc:rock_knapping/knife_head_igneous_extrusive",
+        "tfc:rock_knapping/knife_head_igneous_intrusive"
+      ],
+      "text": "여러 다양한 종류의 돌로 만들 수 있는 칼 날."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/stone/knife_sedimentary",
+      "text": "모든 돌 도구 머리는 막대기나 잔가지로 제작하여 도구로 조합할 수 있습니다.$(br2)돌 칼로 식물을 잘라내 $(thing)짚$()을 얻을 수 있습니다."
+    },
+    {
+      "type": "tfc:rock_knapping_recipe",
+      "recipes": [
+        "tfc:rock_knapping/axe_head_sedimentary",
+        "tfc:rock_knapping/axe_head_metamorphic",
+        "tfc:rock_knapping/axe_head_igneous_extrusive",
+        "tfc:rock_knapping/axe_head_igneous_intrusive"
+      ],
+      "text": "$(thing)도끼$()는 나무 한 그루를 통나무와 나뭇잎까지 통채로 베어낼 수 잇습니다. 다만, 묘목은 잎을 직접 캐야 얻을 수 있습니다."
+    },
+    {
+      "type": "tfc:rock_knapping_recipe",
+      "recipes": [
+        "tfc:rock_knapping/shovel_head_sedimentary",
+        "tfc:rock_knapping/shovel_head_metamorphic",
+        "tfc:rock_knapping/shovel_head_igneous_extrusive",
+        "tfc:rock_knapping/shovel_head_igneous_intrusive"
+      ],
+      "text": "$(thing)삽$()으로는 흙 종류의 블록들을 파낼 수 있습니다. 또한 삽을 $(thing)흙$()이나 $(thing)잔디$() 블록에 대고 $(item)사용$()하여 $(thing)길$()을 만들 수 있습니다."
+    },
+    {
+      "type": "tfc:rock_knapping_recipe",
+      "recipes": [
+        "tfc:rock_knapping/hoe_head_sedimentary",
+        "tfc:rock_knapping/hoe_head_metamorphic",
+        "tfc:rock_knapping/hoe_head_igneous_extrusive",
+        "tfc:rock_knapping/hoe_head_igneous_intrusive"
+      ],
+      "text": "$(thing)괭이$()는 $(l:mechanics/crops)농사$() 짓는 데 효과적인 도구이며, 나뭇잎과 식물들을 캐는 데도 효과적입니다."
+    },
+    {
+      "type": "tfc:rock_knapping_recipe",
+      "recipes": [
+        "tfc:rock_knapping/hammer_head_sedimentary",
+        "tfc:rock_knapping/hammer_head_metamorphic",
+        "tfc:rock_knapping/hammer_head_igneous_extrusive",
+        "tfc:rock_knapping/hammer_head_igneous_intrusive"
+      ],
+      "text": "$(thing)망치$()는 $(l:mechanics/damage_types)충격$() 피해를 주는 무기로도 쓰일 수 있지만, 주 용도는 $(l:getting_started/primitive_anvils)단조$()에 쓰이는 중요한 도구입니다."
+    },
+    {
+      "type": "tfc:rock_knapping_recipe",
+      "recipes": [
+        "tfc:rock_knapping/javelin_head_sedimentary",
+        "tfc:rock_knapping/javelin_head_metamorphic",
+        "tfc:rock_knapping/javelin_head_igneous_extrusive",
+        "tfc:rock_knapping/javelin_head_igneous_intrusive"
+      ],
+      "text": "마지막으로 $(thing)창$()은 기초적인 무기로 표적에게 던지거나, $(l:mechanics/damage_types)관통$() 피해를 주는 무기로 사용할 수 있습니다."
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 0,
+  "extra_recipe_mappings": {
+    "tfc:stone/knife_head/sedimentary": 5,
+    "tfc:stone/knife_head/metamorphic": 5,
+    "tfc:stone/knife_head/igneous_extrusive": 5,
+    "tfc:stone/knife_head/igneous_intrusive": 5,
+    "tfc:stone/knife/sedimentary": 5,
+    "tfc:stone/knife/metamorphic": 5,
+    "tfc:stone/knife/igneous_extrusive": 5,
+    "tfc:stone/knife/igneous_intrusive": 5,
+    "tfc:stone/axe_head/sedimentary": 7,
+    "tfc:stone/axe_head/metamorphic": 7,
+    "tfc:stone/axe_head/igneous_extrusive": 7,
+    "tfc:stone/axe_head/igneous_intrusive": 7,
+    "tfc:stone/axe/sedimentary": 7,
+    "tfc:stone/axe/metamorphic": 7,
+    "tfc:stone/axe/igneous_extrusive": 7,
+    "tfc:stone/axe/igneous_intrusive": 7,
+    "tfc:stone/shovel_head/sedimentary": 8,
+    "tfc:stone/shovel_head/metamorphic": 8,
+    "tfc:stone/shovel_head/igneous_extrusive": 8,
+    "tfc:stone/shovel_head/igneous_intrusive": 8,
+    "tfc:stone/shovel/sedimentary": 8,
+    "tfc:stone/shovel/metamorphic": 8,
+    "tfc:stone/shovel/igneous_extrusive": 8,
+    "tfc:stone/shovel/igneous_intrusive": 8,
+    "tfc:stone/hoe_head/sedimentary": 9,
+    "tfc:stone/hoe_head/metamorphic": 9,
+    "tfc:stone/hoe_head/igneous_extrusive": 9,
+    "tfc:stone/hoe_head/igneous_intrusive": 9,
+    "tfc:stone/hoe/sedimentary": 9,
+    "tfc:stone/hoe/metamorphic": 9,
+    "tfc:stone/hoe/igneous_extrusive": 9,
+    "tfc:stone/hoe/igneous_intrusive": 9,
+    "tfc:stone/hammer_head/sedimentary": 10,
+    "tfc:stone/hammer_head/metamorphic": 10,
+    "tfc:stone/hammer_head/igneous_extrusive": 10,
+    "tfc:stone/hammer_head/igneous_intrusive": 10,
+    "tfc:stone/hammer/sedimentary": 10,
+    "tfc:stone/hammer/metamorphic": 10,
+    "tfc:stone/hammer/igneous_extrusive": 10,
+    "tfc:stone/hammer/igneous_intrusive": 10,
+    "tfc:stone/javelin_head/sedimentary": 11,
+    "tfc:stone/javelin_head/metamorphic": 11,
+    "tfc:stone/javelin_head/igneous_extrusive": 11,
+    "tfc:stone/javelin_head/igneous_intrusive": 11,
+    "tfc:stone/javelin/sedimentary": 11,
+    "tfc:stone/javelin/metamorphic": 11,
+    "tfc:stone/javelin/igneous_extrusive": 11,
+    "tfc:stone/javelin/igneous_intrusive": 11
+  }
+}

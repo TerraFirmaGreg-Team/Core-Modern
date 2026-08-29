@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "tfc:block/tinted_column",
+  "textures": {
+    "side": "tfc:block/wood/leaves/palm",
+    "end": "tfc:block/wood/leaves/palm_top"
+  }
+}

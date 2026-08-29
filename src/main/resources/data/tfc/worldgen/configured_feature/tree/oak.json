@@ -1,0 +1,21 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:random_tree",
+  "config": {
+    "structures": [
+      "tfc:oak/1",
+      "tfc:oak/2",
+      "tfc:oak/3",
+      "tfc:oak/4",
+      "tfc:oak/5",
+      "tfc:oak/6",
+      "tfc:oak/7",
+      "tfc:oak/8"
+    ],
+    "radius": 1,
+    "placement": {
+      "width": 1,
+      "height": 5
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:random_tree",
+  "config": {
+    "structures": [
+      "tfc:blackwood/1",
+      "tfc:blackwood/2",
+      "tfc:blackwood/3",
+      "tfc:blackwood/4",
+      "tfc:blackwood/5",
+      "tfc:blackwood/6",
+      "tfc:blackwood/7",
+      "tfc:blackwood/8",
+      "tfc:blackwood/9",
+      "tfc:blackwood/10"
+    ],
+    "radius": 1,
+    "placement": {
+      "width": 1,
+      "height": 5
+    }
+  }
+}

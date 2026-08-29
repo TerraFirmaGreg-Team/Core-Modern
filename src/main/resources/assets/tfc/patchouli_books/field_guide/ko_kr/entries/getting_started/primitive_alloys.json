@@ -1,0 +1,76 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "§l기초 합금",
+  "category": "tfc:getting_started",
+  "icon": "tfc:ceramic/ingot_mold{tank:{\"Amount\":100,\"FluidName\":\"tfc:metal/bronze\"}}",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)합금$()은 2개 이상의 금속을 섞어서 더 강한 새로운 금속을 만드는 방법입니다. 구리는 게임 초반에 유용한 금속이었지만, 다음 티어의 금속은 3가지 종류의 $(thing)구리 합금$()입니다. 합금은 여러 $(thing)금속$()들로 구성되고, 각각의 금속의 비율은 전체 중 특정 비율을 만족해야 합니다."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "게임 초반에 합금을 제작하는 법 중 하나는 $(thing)작은 항아리$()를 이용하는 것입니다. 이 과정은 $(l:getting_started/finding_ores#casting)주조$()와 유사합니다. 다만 한 종류의 금속만을 사용하는 게 아닌, 비율을 맞춰 충분한 양의 금속 광석들을 작은 항아리 안에 넣음으로써 합금을 제작할 수 있습니다."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "예를 들어서, $(thing)청동$() 1000mB를 만들려면, (우측에 보이듯이) $(thing)구리$() 880mB에서 920mB과 $(thing)주석$() 80mB에서 120mB가 필요합니다.$(br2)다음 3장에는 2티어 금속들의 제작법이 있습니다. 각 종류의 금속들로는 도구, $(l:mechanics/armor)갑옷$(), 다른 금속 아이템들을 만들 수 있습니다. 같은 티어의 금속이어도 내구도, 효율성, 공격 피해 등의 성질이 약간씩 다릅니다."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/bronze",
+      "title": "§l청동",
+      "link_recipes": false,
+      "text": "$(br)$(bold)합금 비율:$()$(br)$(li)88 - 92% : $(thing)구리$()$(li)8 - 12% : $(thing)주석$()$(br2)"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/bismuth_bronze",
+      "title": "§l비스무트 청동",
+      "link_recipes": false,
+      "text": "$(br)$(bold)합금 비율:$()$(br)$(li)20 - 30% : $(thing)아연$()$(li)50 - 65% : $(thing)구리$()$(li)10 - 20% : $(thing)비스무트$()$(br2)"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/black_bronze",
+      "title": "§l헤파티존",
+      "link_recipes": false,
+      "text": "$(br)$(bold)합금 비율:$()$(br)$(li)50 - 70% : $(thing)구리$()$(li)10 - 25% : $(thing)은$()$(li)10 - 25% : $(thing)금$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Other alloys are not suitable for creating tools. These are $(thing)Brass$(), $(thing)Rose Gold$(), and $(thing)Sterling Silver$().$(br2)$(thing)Brass$() is a useful alloy for all sorts of contraptions, including $(l:mechanics/mechanical_power)Mechanical Power$().$(br2)$(thing)Rose Gold$() and $(thing)Sterling Silver$() are used for crafting $(l:mechanics/steel#red_steel)Red Steel$() and $(l:mechanics/steel#blue_steel)Blue Steel$().",
+      "title": "Utility Alloys"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "brass",
+      "item": "tfc:metal/ingot/brass",
+      "title": "Brass",
+      "link_recipes": false,
+      "text": "$(br)$(bold)합금 비율:$()$(br)$(li)88 - 92% : $(thing)구리$()$(li)8 - 12% : $(thing)주석$()$(br2)"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/rose_gold",
+      "title": "Rose Gold",
+      "link_recipes": false,
+      "text": "$(br)$(bold)Requirements:$()$(br)$(li)15 - 30 % : $(thing)Copper$()$(li)70 - 85 % : $(thing)Gold$()$(br2)"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/sterling_silver",
+      "title": "Sterling Silver",
+      "link_recipes": false,
+      "text": "$(br)$(bold)Requirements:$()$(br)$(li)20 - 40 % : $(thing)Copper$()$(li)60 - 80 % : $(thing)Silver$()$(br2)"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 5,
+  "extra_recipe_mappings": {
+    "tfc:metal/ingot/bronze": 3,
+    "tfc:metal/ingot/bismuth_bronze": 4,
+    "tfc:metal/ingot/black_bronze": 5,
+    "tfc:metal/ingot/brass": 7
+  }
+}

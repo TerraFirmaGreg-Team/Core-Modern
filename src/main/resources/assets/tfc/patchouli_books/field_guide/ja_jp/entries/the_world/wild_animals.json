@@ -1,0 +1,346 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "野生の動物",
+  "category": "tfc:the_world",
+  "icon": "tfc:medium_raw_hide",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "TFCの世界には動物がたくさんいます。あなたのTFCライフを助けてくれる動物もいれば、非常に危険な動物もいます。このセクションでは野生動物について説明します。必要なアイテムを提供してくれる家畜や動物の詳細については、$(l:mechanics/animal_husbandry)牧畜$()ページを参照してください。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "動物はいくつかの異なるカテゴリに分類できます:$(l:the_world/wild_animals#predators)肉食動物$()、$(l:the_world/wild_animals#prey)獲物の動物$()、$(l:the_world/wild_animals#aquatic)水生生物$()。$(br2)次の数ページでは、これらの動物の各カテゴリについて詳しく説明します。"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "predators",
+      "text": "$(thing)肉食動物$()は、プレイヤーを攻撃する可能性のある動物です。それらは、夜のみ狩猟する$(thing)夜行性$()か、日中のみ狩猟する$(thing)昼行性$()のいずれかです。肉食動物は、最近ターゲットを殺害したかどうかに応じて、中立にも敵対にもなります。肉食動物にはなわばりがあり、十分に遠くまで逃げれば、肉食動物は追いかけるのをやめてなわばりに戻ります。",
+      "title": "肉食動物"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:polar_bear",
+      "scale": 0.55,
+      "name": "シロクマ",
+      "text": "$(l:the_world/climate#temperature)気温$()10°C以下 $(l:the_world/climate#rainfall)降水量$()100mm以上のとても寒い地域にのみ生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:grizzly_bear",
+      "scale": 0.55,
+      "name": "グリズリー",
+      "text": "$(l:the_world/climate#temperature)気温$()-15~15°C $(l:the_world/climate#rainfall)降水量$()200mm以上の温かい森林に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:black_bear",
+      "scale": 0.55,
+      "name": "ブラックベア",
+      "text": "$(l:the_world/climate#temperature)気温$()5~20°C $(l:the_world/climate#rainfall)降水量$()250mm以上の暖かく湿った森林に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:cougar",
+      "scale": 0.6,
+      "name": "ピューマ",
+      "text": "$(l:the_world/climate#temperature)気温$()-10~21°C $(l:the_world/climate#rainfall)降水量$()150mm以上の温暖な気候に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:panther",
+      "scale": 0.6,
+      "name": "ヒョウ",
+      "text": "$(l:the_world/climate#temperature)気温$()-10~21°C $(l:the_world/climate#rainfall)降水量$()150mm以上の最も穏やかな気候に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:lion",
+      "scale": 0.55,
+      "name": "ライオン",
+      "text": "平均$(l:the_world/climate#temperature)気温$()16°C以上 $(l:the_world/climate#rainfall)降水量$()50~300mmの平原に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:tiger",
+      "scale": 0.55,
+      "name": "トラ",
+      "text": "平均$(l:the_world/climate#temperature)気温$()13°C以上 $(l:the_world/climate#rainfall)降水量$()100以上の森林に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:sabertooth",
+      "scale": 0.6,
+      "name": "サーベルタイガー",
+      "text": "$(l:the_world/climate#temperature)気温$()0°C以上 $(l:the_world/climate#rainfall)降水量$()250mm以上の場所に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:wolf",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()22°C以下$(l:the_world/climate#rainfall)降水量$()150~420mmの場所に生息。群れで狩りをし、十分な回数餌を与え、$(l:mechanics/pets)犬$()として飼い慣らせます。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:direwolf",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()0°C以下 $(l:the_world/climate#rainfall)降水量$()150~420mmの場所に生息。群れで狩りをし、通常のオオカミより大きく、飼い慣らせません。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:hyena",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()15°C以上 $(l:the_world/climate#rainfall)降水量$()80~380mmの場所に生息。群れで狩りをし、飼い慣らせません。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:crocodile",
+      "scale": 0.7,
+      "name": "クロコダイル",
+      "text": "$(l:the_world/climate#temperature)気温$()15°C以上 $(l:the_world/climate#rainfall)降水量$()に関係なく、川、湖、湿地に生息。夜行性で水中では特に危険。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:ocelot",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()15~30°C $(l:the_world/climate#rainfall)降水量$()300~500mmの森林に生息。十分な回数生の魚を与え、$(l:mechanics/pets)ネコ$()として飼い慣らせます。"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "ramming_prey",
+      "text": "$(thing)突進$()する動物は時折、プレイヤーを含む近くの生物に突撃します。攻撃は強力ですが、回避可能です。攻撃されると突進する頻度が増します。",
+      "title": "突進"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:boar",
+      "scale": 0.7,
+      "name": "イノシシ",
+      "text": "$(l:the_world/climate#temperature)気温$()-5~25°C $(l:the_world/climate#rainfall)降水量$()130~400mmの場所に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:moose",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()-15~10°C $(l:the_world/climate#rainfall)降水量$()150~300mmの森林に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:wildebeest",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()13°C以上 $(l:the_world/climate#rainfall)降水量$()90~380mmの開けた平原に生息。"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "prey",
+      "text": "$(thing)獲物の動物$()はプレイヤーや捕食者を恐れます。危険から逃げるのが得意で、通常は反撃しません。いくつかの獲物動物は作物をつまむのを楽しみます。",
+      "title": "獲物の動物"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:rabbit",
+      "scale": 0.7,
+      "name": "ウサギ",
+      "text": "$(l:the_world/climate#rainfall)降水量$()15mm以上の場所に広く生息。ニンジンとキャベツを噛むことで知られ、気候に応じて毛皮を変えます。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:fox",
+      "scale": 0.7,
+      "name": "キツネ",
+      "text": "$(l:the_world/climate#temperature)気温$()25°C以下$(l:the_world/climate#rainfall)降雨量$()130~400mmの森林に生息。茂みのベリーを好んで食べます。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:deer",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()-15~25°C $(l:the_world/climate#rainfall)降雨量$()130~400mmの森林に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:caribou",
+      "scale": 0.6,
+      "name": "トナカイ",
+      "text": "$(l:the_world/climate#temperature)気温$()-9°C以下 $(l:the_world/climate#rainfall)降雨量$()110~500mmの場所に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:gazelle",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()12°C以上 $(l:the_world/climate#rainfall)降雨量$()90~380mmの開けた平原に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:bongo",
+      "scale": 0.9,
+      "name": "ボンゴ",
+      "text": "$(l:the_world/climate#temperature)気温$()15°C以上 $(l:the_world/climate#rainfall)降雨量$()230~500mmの森林に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:grouse",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()-12°C~13°C $(l:the_world/climate#rainfall)降雨量$()150~400mmの場所に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:pheasant",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()-5°C~17°C $(l:the_world/climate#rainfall)降雨量$()100~300mmの森林に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:turkey",
+      "scale": 0.7,
+      "text": "$(l:the_world/climate#temperature)気温$()0°C~17°C $(l:the_world/climate#rainfall)降雨量$()250~450mmの森林に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:peafowl",
+      "scale": 0.8,
+      "name": "クジャク",
+      "text": "$(l:the_world/climate#temperature)気温$()14°C以上 $(l:the_world/climate#rainfall)降雨量$()190~500mmの森林に生息。"
+    },
+    {
+      "type": "patchouli:empty"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "aquatic",
+      "text": "$(thing)水生生物$()は、さまざまな行動を取る幅広いグループです。$(thing)沿岸居住者$()、$(thing)魚$()、$(thing)甲殻類$()、または$(thing)大型水生生物$()を含みます。",
+      "title": "水生生物"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)沿岸動物$()は、海岸のみに生息し、一日のうち一部を泳ぎ、一部をビーチを歩いて過ごします。好奇心旺盛な生き物で、プレイヤーを追いかけますが、飼いならすことはできません。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:penguin",
+      "scale": 0.7,
+      "name": "ペンギン",
+      "text": "$(l:the_world/climate#temperature)気温$()-14°C以下 $(l:the_world/climate#rainfall)降雨量$()75mm以上のとても寒いビーチに生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:turtle",
+      "scale": 0.7,
+      "name": "カメ",
+      "text": "$(l:the_world/climate#temperature)気温$()21°C以上 $(l:the_world/climate#rainfall)降雨量$()250mm以上の場所に生息。温かい水を好みます。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)魚$()は水中を泳ぐ小さな生き物です。ほとんどの魚は$(l:mechanics/fishing)釣り$()で捕獲できます。いくつかは海、川、または湖を好みます。",
+      "title": "魚"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:cod",
+      "scale": 0.7,
+      "name": "タラ",
+      "text": "$(l:the_world/climate#temperature)気温$()18°C以下の冷たい海に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:pufferfish",
+      "scale": 0.7,
+      "name": "フグ",
+      "text": "$(l:the_world/climate#temperature)気温$()10°C以上の海に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:jellyfish",
+      "scale": 0.7,
+      "name": "クラゲ",
+      "text": "$(l:the_world/climate#temperature)気温$()18°C以上の温かい海に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:tropical_fish",
+      "scale": 0.7,
+      "name": "熱帯魚",
+      "text": "$(l:the_world/climate#temperature)気温$()18°C以上の温かい海に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:salmon",
+      "scale": 0.7,
+      "name": "サケ",
+      "text": "$(l:the_world/climate#temperature)気温$()-5°C以上の川や湖に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:bluegill",
+      "scale": 0.7,
+      "name": "ブルーギル",
+      "text": "$(l:the_world/climate#temperature)気温$()-10°C~26°Cの川や湖に生息。"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "shellfish",
+      "text": "$(thing)甲殻類$()は、水中の底に住む小さな生き物です。釣ることはできませんが、食べられるものや殻を$(l:mechanics/flux)融剤$()に加工することもでき、$(l:mechanics/fishing)魚の餌$()としても使用できます。",
+      "title": "甲殻類"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:isopod",
+      "scale": 0.7,
+      "name": "ダイオウグソクムシ",
+      "text": "$(l:the_world/climate#temperature)気温$()14°C以下の深い海域に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:lobster",
+      "scale": 0.7,
+      "name": "ロブスター",
+      "text": "$(l:the_world/climate#temperature)気温$()21°C以下の海に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:crayfish",
+      "scale": 0.7,
+      "name": "ザリガニ",
+      "text": "ロブスターに似ていますが、$(l:the_world/climate#temperature)気温$()5°C以上 $(l:the_world/climate#rainfall)降雨量$()125mm以上の川や湖に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:horseshoe_crab",
+      "scale": 0.7,
+      "name": "カブトガニ",
+      "text": "$(l:the_world/climate#temperature)気温$()10°C~21°C $(l:the_world/climate#rainfall)降雨量$()400mm以下の温暖な海に生息。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)大型水生生物$()は大きな水域に住む大型の動物です。いくつかは魚を狩ります。$(l:mechanics/lamps#tallow)脂肪$()を落とし、これをランタン燃料にすることができます。",
+      "title": "大型水生生物"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:orca",
+      "scale": 0.25,
+      "name": "シャチ",
+      "text": "$(l:the_world/climate#temperature)気温$()19°C以下 $(l:the_world/climate#rainfall)降雨量$()100mm以上の深い海に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:dolphin",
+      "scale": 0.4,
+      "name": "イルカ",
+      "text": "$(l:the_world/climate#temperature)気温$()10°C以上 $(l:the_world/climate#rainfall)降雨量$()200mm以上の深い海に生息。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:manatee",
+      "scale": 0.25,
+      "name": "マナティー",
+      "text": "$(l:the_world/climate#temperature)気温$()20°C以上 $(l:the_world/climate#rainfall)降雨量$()300mm以下の温かい湖に生息。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "イカはどんな深海でも生息可能で、$(thing)インク$()を落とし、近づきすぎるプレイヤーにインクをかけます。深い未探索の洞窟にいるイカには、奇妙な特性があると言われています。",
+      "title": "イカ"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 6
+}

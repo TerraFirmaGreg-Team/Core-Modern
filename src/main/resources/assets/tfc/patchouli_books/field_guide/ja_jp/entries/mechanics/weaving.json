@@ -1,0 +1,75 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "機織り",
+  "category": "tfc:mechanics",
+  "icon": "tfc:spindle",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)機織り$()は、さまざまな種類の糸を使い$(thing)布$()を作成するプロセスです。機織りの最後のステップは$(thing)織機$()で行われます。布の作成に使用する$(thing)羊毛$()は$(l:mechanics/animal_husbandry#wooly_animals)羊毛を持つ動物$()から得られます。織るためには$(thing)羊毛の糸$()を作成する$(thing)紡錘$()が必要です。"
+    },
+    {
+      "type": "tfc:knapping_recipe",
+      "recipe": "tfc:clay_knapping/spindle_head",
+      "text": "$(thing)未焼成の紡錘の頭$()は粘土から作れます。その後、$(l:mechanics/heating)焼成$()して$(thing)紡錘の頭$()を作成できます。紡錘を完成させるには、$(thing)棒$()と頭をクラフトします。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/wool_yarn",
+      "text": "紡錘と$(thing)羊毛$()をクラフトすると$(thing)羊毛の糸$()が得られます。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/wood/acacia_loom",
+      "text": "織機は$(thing)木材$()と$(thing)棒$()だけで作成できます。"
+    },
+    {
+      "type": "tfc:loom_recipe",
+      "anchor": "wool_cloth",
+      "recipe": "tfc:loom/wool_cloth",
+      "text": "$(thing)羊毛の布$()のレシピには16本の$(thing)羊毛の糸$()が必要です。織機への糸の追加は$(item)$(k:key.use)$()で行います。そして、さらに$(item)$(k:key.use)$()を押して織機を動かし始めます。完了したら、$(item)$(k:key.use)$()を押して布が回収できます。"
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "tfc:textures/gui/book/tutorial/loom_empty.png",
+        "tfc:textures/gui/book/tutorial/loom_full.png",
+        "tfc:textures/gui/book/tutorial/loom_working.png",
+        "tfc:textures/gui/book/tutorial/loom_done.png"
+      ],
+      "text": "織機が稼働する過程。",
+      "border": true
+    },
+    {
+      "type": "tfc:loom_recipe",
+      "recipe": "tfc:loom/wool_block",
+      "text": "$(thing)羊毛の布$()は、$(thing)羊毛ブロック$()に織り直すことができ、$(l:mechanics/dye)染色$()できます。"
+    },
+    {
+      "type": "tfc:loom_recipe",
+      "recipe": "tfc:loom/silk_cloth",
+      "text": "$(thing)絹の布$()は$(thing)糸$()から織機で作れます。場合によっては羊毛の布の代用としても使えます。"
+    },
+    {
+      "type": "tfc:loom_recipe",
+      "anchor": "burlap_cloth",
+      "recipe": "tfc:loom/burlap_cloth",
+      "text": "$(thing)麻布$()には使い道がありませんが、$(l:mechanics/crops#jute)ジュートの繊維$()から作ることができます。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/vanilla/color/light_blue_bed",
+      "recipe2": "tfc:crafting/vanilla/painting"
+    }
+  ],
+  "read_by_default": true,
+  "extra_recipe_mappings": {
+    "tfc:spindle": 1,
+    "tfc:wool": 2,
+    "tag:tfc:looms": 3,
+    "tfc:wool_cloth": 4,
+    "minecraft:white_wool": 6,
+    "tfc:silk_cloth": 7,
+    "tfc:burlap_cloth": 8
+  }
+}

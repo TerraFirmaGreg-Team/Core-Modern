@@ -1,0 +1,34 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:random_tree",
+  "config": {
+    "structures": [
+      "tfc:pine/1",
+      "tfc:pine/2",
+      "tfc:pine/3",
+      "tfc:pine/4",
+      "tfc:pine/5",
+      "tfc:pine/6",
+      "tfc:pine/7",
+      "tfc:pine/8",
+      "tfc:pine/9"
+    ],
+    "radius": 1,
+    "placement": {
+      "width": 1,
+      "height": 5
+    },
+    "trunk": {
+      "state": {
+        "Name": "tfc:wood/log/pine",
+        "Properties": {
+          "axis": "y",
+          "branch_direction": "none"
+        }
+      },
+      "min_height": 3,
+      "max_height": 5,
+      "wide": false
+    }
+  }
+}

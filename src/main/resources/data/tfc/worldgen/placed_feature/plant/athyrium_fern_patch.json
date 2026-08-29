@@ -1,0 +1,13 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/athyrium_fern_patch",
+  "placement": [
+    {
+      "type": "tfc:climate",
+      "min_temperature": -6.6,
+      "max_temperature": 13.4,
+      "min_rainfall": 270,
+      "max_rainfall": 500
+    }
+  ]
+}

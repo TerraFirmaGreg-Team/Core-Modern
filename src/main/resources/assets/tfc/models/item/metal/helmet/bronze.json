@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "loader": "tfc:trim",
+  "parent": "forge:item/default",
+  "textures": {
+    "armor": "tfc:item/metal/helmet/bronze",
+    "trim": "tfc:item/helmet_trim"
+  }
+}
