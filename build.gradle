@@ -43,7 +43,6 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
-
 }
 
 mixin {
@@ -69,6 +68,26 @@ sourceSets {
         compileClasspath += main.output + main.compileClasspath
         runtimeClasspath += main.output + main.runtimeClasspath
     }
+}
+
+def pluginJar = tasks.register("pluginJar", Jar) {
+    from(sourceSets.main.output)
+    archiveClassifier = "main"
+    manifest {
+        attributes(
+            'FMLModType': 'LIBRARY',
+            'Automatic-Module-Name': "${mod_name}-${mod_name_suffix}.plugin"
+        )
+    }
+}
+
+evaluationDependsOn(":tfc") // Because of the sourceset reference
+
+dependencies {
+    implementation project(":tfc")
+    implementation files(sourceSets.main.output)
+    jarJar(project(":tfc"))
+    jarJar(files(pluginJar))
 }
 
 // gradle-local.properties should have the following:
@@ -101,7 +120,7 @@ legacyForge {
             ideName = "Client"
             sourceSet = sourceSets.dev
             gameDirectory = project.file('run/client')
-       }
+        }
 
         client2 {
             client()
@@ -128,6 +147,7 @@ legacyForge {
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll "--mod", "$mod_id", "--all"
             programArguments.addAll '--output', file('src/generated/resources/').getAbsolutePath()
+            programArguments.addAll '--existing', file('src/tfc/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
 
@@ -155,6 +175,9 @@ legacyForge {
     }
 
     mods {
+        tfc {
+            sourceSet project(":tfc").sourceSets.tfc
+        }
         "${mod_id}" {
             sourceSet sourceSets.main
         }

@@ -2,12 +2,12 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
 license = "EUPL-1.2"
-issueTrackerURL = "https://github.com/TerraFirmaCraft/TerraFirmaCraft/issues"
+issueTrackerURL = "https://github.com/TerraFirmaGreg-Team/Modpack-Modern/issues"
 
 # TFC
 [[mods]]
     modId = "tfc"
-    version = "${file.jarVersion}"
+    version = "${mod_version}"
     displayName = "TerraFirmaCraft"
     credits = "By AlcatrazEscapee, Disastermoo, Dries007, Bunsan, Claycorp, DavidTriphon, EERussianguy, Gaelmare, and many others. Based on the original work by Bioxx, Dunk, and Kitty. Music by Mike \"Menoch\" Pelaez"
     authors = "AlcatrazEscapee"
