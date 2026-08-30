@@ -175,9 +175,9 @@ legacyForge {
     }
 
     mods {
-        tfc {
-            sourceSet project(":tfc").sourceSets.tfc
-        }
+//        tfc {
+//            sourceSet project(":tfc").sourceSets.tfc
+//        }
         "${mod_id}" {
             sourceSet sourceSets.main
         }
