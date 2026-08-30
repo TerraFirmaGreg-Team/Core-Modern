@@ -1,0 +1,11 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "replace": false,
+  "values": [
+    "tfc:straw",
+    "minecraft:paper",
+    "#tfc:books",
+    "tfc:groundcover/pinecone",
+    "#tfc:fallen_leaves"
+  ]
+}

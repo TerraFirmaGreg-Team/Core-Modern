@@ -1,0 +1,82 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "紙の作成",
+  "category": "tfc:mechanics",
+  "icon": "tfc:unrefined_paper",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)紙$()は、$(l:mechanics/crops#papyrus)パピルス$(l:mechanics/crops#papyrus)の茎を加工して作られるか、$(l:mechanics/papermaking#parchment)動物の皮$()から作られます。$(thing)紙$()は、$(thing)本$()や$(thing)地図$()のような書き物に使用します。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/papyrus_strips",
+      "text": "まずパピルスを$(thing)ナイフ$()で細長く切ります。$()"
+    },
+    {
+      "type": "tfc:sealed_barrel_recipe",
+      "recipe": "tfc:barrel/soaked_papyrus_strip",
+      "text": "次に、パピルスの帯を$(thing)水$()入りの$(l:mechanics/barrels)樽$()に浸します。"
+    },
+    {
+      "type": "tfc:loom_recipe",
+      "recipe": "tfc:loom/unrefined_paper",
+      "text": "次に、浸したパピルスの帯を織機で織り合わせて$(thing)未完成の紙$()を作ります。最後に、それを丸太の上に置き、$(l:mechanics/leather_making#scraping)剥ぎ$()をして$(thing)紙$()を作成できます。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/vanilla/map",
+      "recipe2": "tfc:crafting/vanilla/name_tag"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "minecraft:writable_book",
+      "recipe2": "minecraft:book"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/wood/pine_lectern",
+      "recipe2": "tfc:crafting/wood/kapok_bookshelf"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "次のページでは、羊皮紙の製造プロセスについて確認できます。"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "parchment",
+      "text": "$(thing)羊皮紙$()は擦り取られた皮から始まります。作り方を学ぶために、$(l:mechanics/leather_making)革作りの章$()を見てください。羊皮紙にはいくつかの異なるアイテムでの処理が必要です。まず、$(thing)軽石$()が必要です。軽石は$(l:the_world/geology)火山$()の近くの地面に見つかるか、$(l:mechanics/sluices)流し樋$()や$(l:mechanics/panning)ふるい$()によって、安山岩、流紋岩、またはデイサイトの鉱石沈殿物から得ることができます。",
+      "title": "羊皮紙"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "X"
+          ],
+          [
+            "0"
+          ]
+        ],
+        "mapping": {
+          "X": "tfc:groundcover/pumice"
+        }
+      },
+      "name": "軽石",
+      "text": "地面に置かれた軽石。",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/large_treated_hide",
+      "text": "軽石、ハンマー、削られた皮を使うと、$(thing)加工された皮$()のセクションが始まります。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/parchment",
+      "text": "加工された皮、$(l:mechanics/glassworking#lime)石灰の粉$()、粉と新鮮な卵で処理し、使用可能な紙を生成します。"
+    }
+  ],
+  "read_by_default": true
+}

@@ -1,0 +1,36 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:random_tree",
+  "config": {
+    "structures": [
+      "tfc:spruce/1",
+      "tfc:spruce/2",
+      "tfc:spruce/3",
+      "tfc:spruce/4",
+      "tfc:spruce/5",
+      "tfc:spruce/6",
+      "tfc:spruce/7",
+      "tfc:spruce/8",
+      "tfc:spruce/9",
+      "tfc:spruce/10",
+      "tfc:spruce/11"
+    ],
+    "radius": 1,
+    "placement": {
+      "width": 1,
+      "height": 3
+    },
+    "trunk": {
+      "state": {
+        "Name": "tfc:wood/log/spruce",
+        "Properties": {
+          "axis": "y",
+          "branch_direction": "none"
+        }
+      },
+      "min_height": 3,
+      "max_height": 5,
+      "wide": false
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "造纸术",
+  "category": "tfc:mechanics",
+  "icon": "tfc:unrefined_paper",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)纸$()有两种获取方式：通过加工$(l:mechanics/crops#papyrus)纸莎草$()的茎来制作莎草纸，或通过加工$(l:mechanics/papermaking#parchment)兽皮$()来制作羊皮纸。要制作$(thing)书$()或是$(thing)地图$()一类的文字记录体都离不开大量的纸。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/papyrus_strips",
+      "text": "先用$(thing)刀$()将纸莎草切成条。"
+    },
+    {
+      "type": "tfc:sealed_barrel_recipe",
+      "recipe": "tfc:barrel/soaked_papyrus_strip",
+      "text": "然后，将纸莎草条浸入装有$(thing)淡水$()$(l:mechanics/barrels)大桶$()中。"
+    },
+    {
+      "type": "tfc:loom_recipe",
+      "recipe": "tfc:loom/unrefined_paper",
+      "text": "将浸泡好的纸莎草条用织布机编织成$(thing)粗制纸$()。最后，将粗制纸在一根原木上展开，用小刀$(l:mechanics/leather_making#scraping)刮去$()其表层进行剖光，就能得到可以使用的$(thing)纸$()了。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/vanilla/map",
+      "recipe2": "tfc:crafting/vanilla/name_tag"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "minecraft:writable_book",
+      "recipe2": "minecraft:book"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/wood/pine_lectern",
+      "recipe2": "tfc:crafting/wood/kapok_bookshelf"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "下一页会讲述如何制作羊皮纸。"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "parchment",
+      "text": "$(thing)羊皮纸$()是以$(l:mechanics/leather_making)刮制兽皮$()为主要原料，以及几种其他材料制成的纸。首先，需要先收集$(thing)浮石$()以便软化兽皮。浮石会生成在$(l:the_world/geology)火山$()四周，也可以通过在安山岩、流纹岩或英安岩地区的河流中收集矿物沉积物，并用$(l:mechanics/sluices)洗矿槽$()或$(l:mechanics/panning)淘金盘$()处理获得。",
+      "title": "羊皮纸"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "X"
+          ],
+          [
+            "0"
+          ]
+        ],
+        "mapping": {
+          "X": "tfc:groundcover/pumice"
+        }
+      },
+      "name": "浮石",
+      "text": "地上的浮石",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/large_treated_hide",
+      "text": "将浮石、刮制兽皮与一把锤合成就能得到$(thing)糊化兽皮$()。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/parchment",
+      "text": "最后，将糊化兽皮、$(l:mechanics/glassworking#lime)石灰粉$()、面粉和一只新鲜鸡蛋打在一起就能生产出可用的羊皮纸了。"
+    }
+  ],
+  "read_by_default": true
+}

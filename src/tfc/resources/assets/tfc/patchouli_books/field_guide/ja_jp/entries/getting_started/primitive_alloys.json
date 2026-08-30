@@ -1,0 +1,76 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "最初の合金",
+  "category": "tfc:getting_started",
+  "icon": "tfc:ceramic/ingot_mold{tank:{\"Amount\":100,\"FluidName\":\"tfc:metal/bronze\"}}",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)合金$()は、2つ以上の金属を混合して作成できる、より強力な新しい金属です。ゲームの初期段階では、通常の銅はツールを作成するのに便利な金属ですが、次に作る金属は$(thing)青銅$()の3種類のうちの1つです。合金は$(thing)各金属$()がどのくらい含まれているかで構成され、全体の特定の割合を満たさなければなりません。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "TFCの初期段階で合金を作成できる方法の1つは、$(thing)小さな壺$()を使用することです。このプロセスは$(l:getting_started/finding_ores#casting)鋳造$()と非常によく似ています。ただし、単一の金属を使用する代わりに、既知の合金を形成するために、容器内に十分な量の鉱石片を正しい比率で配置します。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "たとえば、1000mB の$(thing)青銅$()(右の図)を作成するには、880～920mB の$(thing)銅$()と、80～120mB の$(thing)錫$()を混合します。$(br2)次の3ページには、3種類の青銅のレシピが表示されます。それぞれのタイプの青銅は、ツール、$(l:mechanics/armor)防具$()、およびその他の金属アイテムの作成に使用できます。それらはわずかに性能が異なるため、結果として得られるツールの耐久性、効率、攻撃ダメージは異なります。"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/bronze",
+      "title": "青銅",
+      "link_recipes": false,
+      "text": "$(br)$(bold)材料:$()$(br)$(li)88 - 92 %:$(thing)銅$()$(li)8  - 12 %:$(thing)錫$()$(br2)"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/bismuth_bronze",
+      "title": "蒼鉛青銅",
+      "link_recipes": false,
+      "text": "$(br)$(bold)材料:$()$(br)$(li)20 - 30 % : $(thing)亜鉛$()$(li)50 - 65 % : $(thing)銅$()$(li)10 - 20 % : $(thing)蒼鉛$()$(br2)"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/black_bronze",
+      "title": "黒青銅",
+      "link_recipes": false,
+      "text": "$(br)$(bold)材料:$()$(br)$(li)50 - 70 % : $(thing)銅$()$(li)10 - 25 % : $(thing)銀$()$(li)10 - 25 % : $(thing)金$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "他の合金は、道具を作成するのには適していません。これらは$(thing)真鍮$()、$(thing)ローズゴールド$()、$(thing)スターリングシルバー$()です。$(br2)$(thing)真鍮$()は、$(l:mechanics/mechanical_power)機械的な動力$()を含むあらゆる種類の装置に役立つ合金です。$(br2)$(thing)ローズゴールド$()と$(thing)スターリングシルバー$()は、$(l:mechanics/steel#red_steel)赤鋼$()および$(l:mechanics/steel#blue_steel)青鋼$()の作成に使用されます。",
+      "title": "有益合金"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "brass",
+      "item": "tfc:metal/ingot/brass",
+      "title": "真鍮",
+      "link_recipes": false,
+      "text": "$(br)$(bold)材料:$()$(br)$(li)88 - 92 % : $(thing)銅$()$(li)8  - 12 % : $(thing)錫$()$(br2)"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/rose_gold",
+      "title": "ローズゴールド",
+      "link_recipes": false,
+      "text": "$(br)$(bold)材料:$()$(br)$(li)15 - 30 % : $(thing)銅$()$(li)70 - 85 % : $(thing)金$()$(br2)"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tfc:metal/ingot/sterling_silver",
+      "title": "スターリングシルバー",
+      "link_recipes": false,
+      "text": "$(br)$(bold)材料:$()$(br)$(li)20 - 40 % : $(thing)銅$()$(li)60 - 80 % : $(thing)銀$()$(br2)"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 5,
+  "extra_recipe_mappings": {
+    "tfc:metal/ingot/bronze": 3,
+    "tfc:metal/ingot/bismuth_bronze": 4,
+    "tfc:metal/ingot/black_bronze": 5,
+    "tfc:metal/ingot/brass": 7
+  }
+}

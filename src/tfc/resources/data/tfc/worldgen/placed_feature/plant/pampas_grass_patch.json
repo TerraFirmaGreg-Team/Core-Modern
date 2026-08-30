@@ -1,0 +1,13 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/pampas_grass_patch",
+  "placement": [
+    {
+      "type": "tfc:climate",
+      "min_temperature": 8,
+      "max_temperature": 38,
+      "min_rainfall": 0,
+      "max_rainfall": 300
+    }
+  ]
+}

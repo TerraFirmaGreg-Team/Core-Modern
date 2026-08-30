@@ -1,0 +1,13 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/perovskia_patch",
+  "placement": [
+    {
+      "type": "tfc:climate",
+      "min_temperature": -8.4,
+      "max_temperature": 11.6,
+      "min_rainfall": 0,
+      "max_rainfall": 280
+    }
+  ]
+}

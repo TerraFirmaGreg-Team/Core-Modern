@@ -1,0 +1,26 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/allium_patch",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 5
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "tfc:climate",
+      "min_temperature": -8.4,
+      "max_temperature": -1.1,
+      "min_rainfall": 150,
+      "max_rainfall": 400,
+      "min_forest": "edge",
+      "max_forest": "normal"
+    }
+  ]
+}

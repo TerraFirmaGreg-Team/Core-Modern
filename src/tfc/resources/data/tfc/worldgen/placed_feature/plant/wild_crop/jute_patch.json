@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/wild_crop/jute_patch",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 80
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "tfc:climate",
+      "min_temperature": 5,
+      "max_temperature": 37,
+      "min_rainfall": 100,
+      "max_rainfall": 410
+    }
+  ]
+}

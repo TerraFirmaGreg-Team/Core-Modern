@@ -1,0 +1,10 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "tfc:block/ore_column",
+  "textures": {
+    "side": "tfc:block/rock/raw/shale",
+    "end": "tfc:block/rock/raw/shale_top",
+    "overlay": "tfc:block/ore/poor_magnetite",
+    "overlay_end": "tfc:block/ore/poor_magnetite"
+  }
+}

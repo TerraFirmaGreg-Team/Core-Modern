@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:if_then",
+  "config": {
+    "if": "tfc:clay_disc",
+    "then": "tfc:clay_indicator"
+  }
+}

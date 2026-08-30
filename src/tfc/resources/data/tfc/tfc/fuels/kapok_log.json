@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "ingredient": [
+    {
+      "item": "tfc:wood/log/kapok"
+    },
+    {
+      "item": "tfc:wood/wood/kapok"
+    },
+    {
+      "item": "tfc:wood/stripped_wood/kapok"
+    },
+    {
+      "item": "tfc:wood/stripped_log/kapok"
+    }
+  ],
+  "duration": 1000,
+  "temperature": 645,
+  "purity": 0.95
+}

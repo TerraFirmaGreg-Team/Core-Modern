@@ -1,0 +1,31 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:random_tree",
+  "config": {
+    "structures": [
+      "tfc:sycamore_large/1",
+      "tfc:sycamore_large/2",
+      "tfc:sycamore_large/3",
+      "tfc:sycamore_large/4",
+      "tfc:sycamore_large/5"
+    ],
+    "radius": 2,
+    "placement": {
+      "width": 2,
+      "height": 5,
+      "ground_type": "shallow_water"
+    },
+    "trunk": {
+      "state": {
+        "Name": "tfc:wood/log/sycamore",
+        "Properties": {
+          "axis": "y",
+          "branch_direction": "none"
+        }
+      },
+      "min_height": 1,
+      "max_height": 2,
+      "wide": true
+    }
+  }
+}

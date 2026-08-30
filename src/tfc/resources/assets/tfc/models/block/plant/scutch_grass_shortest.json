@@ -1,0 +1,7 @@
+{
+  "parent": "block/tinted_cross",
+  "textures": {
+    "cross": "tfc:block/plant/scutch_grass/shortest",
+    "particle": "tfc:block/plant/scutch_grass/shortest"
+  }
+}

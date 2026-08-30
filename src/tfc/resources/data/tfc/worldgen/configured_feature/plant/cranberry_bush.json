@@ -1,0 +1,17 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:block_with_fluid",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "tfc:plant/cranberry_bush",
+        "Properties": {
+          "lifecycle": "healthy",
+          "stage": "0",
+          "fluid": "empty"
+        }
+      }
+    }
+  }
+}

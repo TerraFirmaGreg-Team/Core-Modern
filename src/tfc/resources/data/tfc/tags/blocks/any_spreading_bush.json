@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "replace": false,
+  "values": [
+    "tfc:plant/dead_berry_bush",
+    "tfc:plant/dead_cane",
+    "#tfc:spreading_bush"
+  ]
+}

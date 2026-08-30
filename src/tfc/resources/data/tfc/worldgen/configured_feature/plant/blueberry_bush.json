@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:spreading_bush",
+  "config": {
+    "block": "tfc:plant/blueberry_bush"
+  }
+}

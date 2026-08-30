@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "minecraft:block/iron_bars_side_alt",
+  "textures": {
+    "particle": "tfc:block/metal/bars/black_steel",
+    "bars": "tfc:block/metal/bars/black_steel",
+    "edge": "tfc:block/metal/smooth/black_steel"
+  }
+}

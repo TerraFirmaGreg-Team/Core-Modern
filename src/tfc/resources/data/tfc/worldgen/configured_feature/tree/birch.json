@@ -1,0 +1,31 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:random_tree",
+  "config": {
+    "structures": [
+      "tfc:birch/1",
+      "tfc:birch/2",
+      "tfc:birch/3",
+      "tfc:birch/4",
+      "tfc:birch/5",
+      "tfc:birch/6"
+    ],
+    "radius": 1,
+    "placement": {
+      "width": 1,
+      "height": 5
+    },
+    "trunk": {
+      "state": {
+        "Name": "tfc:wood/log/birch",
+        "Properties": {
+          "axis": "y",
+          "branch_direction": "none"
+        }
+      },
+      "min_height": 3,
+      "max_height": 5,
+      "wide": false
+    }
+  }
+}

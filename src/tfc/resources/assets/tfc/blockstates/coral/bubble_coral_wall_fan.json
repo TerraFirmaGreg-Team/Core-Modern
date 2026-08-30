@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "facing=north": {
+      "model": "minecraft:block/bubble_coral_wall_fan"
+    },
+    "facing=east": {
+      "model": "minecraft:block/bubble_coral_wall_fan",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "minecraft:block/bubble_coral_wall_fan",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minecraft:block/bubble_coral_wall_fan",
+      "y": 270
+    }
+  }
+}

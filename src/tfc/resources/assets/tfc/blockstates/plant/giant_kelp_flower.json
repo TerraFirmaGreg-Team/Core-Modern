@@ -1,0 +1,128 @@
+{
+  "multipart": [
+    {
+      "apply" : {
+        "model" : "tfc:block/plant/tree_kelp_flower"
+      },
+      "when" : {
+        "facing" : "up",
+        "age" : "0|1|2|3|4"
+      }
+    },
+    {
+      "apply" : {
+        "model" : "tfc:block/plant/tree_kelp_flower_dead"
+      },
+      "when" : {
+        "facing" : "up",
+        "age" : "5"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 180,
+        "model" : "tfc:block/plant/tree_kelp_flower"
+      },
+      "when" : {
+        "facing" : "down",
+        "age" : "0|1|2|3|4"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 180,
+        "model" : "tfc:block/plant/tree_kelp_flower_dead"
+      },
+      "when" : {
+        "facing" : "down",
+        "age" : "5"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 90,
+        "model" : "tfc:block/plant/tree_kelp_flower"
+      },
+      "when" : {
+        "facing" : "north",
+        "age" : "0|1|2|3|4"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 90,
+        "model" : "tfc:block/plant/tree_kelp_flower_dead"
+      },
+      "when" : {
+        "facing" : "north",
+        "age" : "5"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 90,
+        "y" : 90,
+        "model" : "tfc:block/plant/tree_kelp_flower"
+      },
+      "when" : {
+        "facing" : "east",
+        "age" : "0|1|2|3|4"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 90,
+        "y" : 90,
+        "model" : "tfc:block/plant/tree_kelp_flower_dead"
+      },
+      "when" : {
+        "facing" : "east",
+        "age" : "5"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 90,
+        "y" : 180,
+        "model" : "tfc:block/plant/tree_kelp_flower"
+      },
+      "when" : {
+        "facing" : "south",
+        "age" : "0|1|2|3|4"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 90,
+        "y" : 180,
+        "model" : "tfc:block/plant/tree_kelp_flower_dead"
+      },
+      "when" : {
+        "facing" : "south",
+        "age" : "5"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 90,
+        "y" : 270,
+        "model" : "tfc:block/plant/tree_kelp_flower"
+      },
+      "when" : {
+        "facing" : "west",
+        "age" : "0|1|2|3|4"
+      }
+    },
+    {
+      "apply" : {
+        "x" : 90,
+        "y" : 270,
+        "model" : "tfc:block/plant/tree_kelp_flower_dead"
+      },
+      "when" : {
+        "facing" : "west",
+        "age" : "5"
+      }
+    }
+  ]
+}

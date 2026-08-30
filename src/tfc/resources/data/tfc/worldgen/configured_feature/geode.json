@@ -1,0 +1,18 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:geode",
+  "config": {
+    "outer": "tfc:rock/hardened/basalt",
+    "middle": "tfc:rock/hardened/quartzite",
+    "inner": [
+      {
+        "data": "tfc:ore/amethyst/quartzite",
+        "weight": 1
+      },
+      {
+        "data": "tfc:rock/hardened/quartzite",
+        "weight": 5
+      }
+    ]
+  }
+}

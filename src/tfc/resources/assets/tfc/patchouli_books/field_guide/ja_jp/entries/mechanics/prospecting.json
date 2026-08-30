@@ -1,0 +1,59 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "探鉱",
+  "category": "tfc:mechanics",
+  "icon": "tfc:metal/propick/wrought_iron",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(l:getting_started/finding_ores)小さな金属鉱石$()をどこで拾ったか覚えていますよね?追加の鉱石を見つけるには、大規模な探査と採掘が必要になる場合があります。$(l:the_world/ores_and_minerals)鉱石と鉱物$()についての理解が必要です。特定の資源が必要な場合は、足元または世界中で、その資源が生成される種類の岩を見つける必要があります。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "小さな金属を拾うだけで満足できなくなったら、鉱脈の探査を開始します:$(br)$(li)小さな金属鉱石は、鉱脈が水平方向に15ブロック以内、垂直方向に35ブロック以内の近くにある場合に発生します。小さな鉱石が落ちている場所の中心を見つけた場合は、その鉱脈が真下にある可能性があります。$(li)露出した鉱石は崖や水域で発生する可能性があり、遠くからでも見つけられます。"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "propick",
+      "item": "tfc:metal/propick/copper",
+      "title": "探鉱槌",
+      "link_recipes": false,
+      "text": "金属鉱石や鉱物(地表に小さな鉱石が生成されない)を探していて、感を頼りにしても鉱脈が見つからない場合は、$(thing)探鉱槌$()を使ってみましょう。クリックされたブロックを中心とする25x25x25のエリアを検索し、見つかった鉱石の量と種類を表示します。"
+    },
+    {
+      "type": "tfc:knapping_recipe",
+      "recipe": "tfc:clay_knapping/propick_head_mold",
+      "text": "探鉱槌を作るには、上に示したように粘土から未焼成の型を$(l:getting_started/pottery)加工$()して作ることができます。"
+    },
+    {
+      "type": "tfc:heat_recipe",
+      "recipe": "tfc:heating/propick_head_mold",
+      "text": "型を$(l:getting_started/pottery)加工$()したら、$(l:mechanics/heating)焼成$()して$(thing)探鉱槌の頭の型$()を作成する必要があります。$(br2)ツールヘッドを作成するには、$(l:getting_started/finding_ores#casting)溶けた金属を型に入れ鋳造$()します。"
+    },
+    {
+      "type": "tfc:anvil_recipe",
+      "recipe": "tfc:anvil/wrought_iron_propick_head",
+      "text": "探鉱槌の頭は、$(l:mechanics/anvils)金床$()で様々な金属$(thing)インゴット$()から$(l:mechanics/anvils#working)鍛造$()することもできます。$(br2)その後、棒でツールの頭をクラフトすることで探鉱槌が作成されます。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "実際には何もないのに、探鉱槌が何かを見つけたと出力することはありません。しかし、鉱石が存在しても誤って何も存在しないと表示される場合があります。高い等級の探鉱槌はミスを軽減、またはなくします。$(br2)探鉱槌が近くに複数種類の鉱石を見つけた場合、1種類の鉱石のみを出力します。$(br)同じ等級の探鉱槌は、探査の結果で出力された鉱石が除去されない限り、同じブロックで使用すると同じ鉱石の結果を出力します。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "ブロックへ探鉱槌を右クリックすると、次のいずれかの結果が見つかったと報告されます:$(br)$(li)何もない(実際には存在する可能性もあります)$(li)鉱石を僅かに含む$(li)鉱石を少し含む$(li)鉱石を含む$(li)鉱石を多く含む$(li)鉱石を非常に多く含む$(br2)非常多くという結果は、少なくとも80ブロック、場合によってはさらに多くの鉱石があることを示します。"
+    }
+  ],
+  "read_by_default": true,
+  "extra_recipe_mappings": {
+    "tfc:metal/propick/bismuth_bronze": 2,
+    "tfc:metal/propick/black_bronze": 2,
+    "tfc:metal/propick/bronze": 2,
+    "tfc:metal/propick/copper": 2,
+    "tfc:metal/propick/wrought_iron": 2,
+    "tfc:metal/propick/steel": 2,
+    "tfc:metal/propick/black_steel": 2,
+    "tfc:metal/propick/blue_steel": 2,
+    "tfc:metal/propick/red_steel": 2
+  }
+}

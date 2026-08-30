@@ -1,0 +1,33 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:forest_entry",
+  "config": {
+    "climate": {
+      "min_temperature": -8.4,
+      "max_temperature": 8,
+      "min_rainfall": 240,
+      "max_rainfall": 470
+    },
+    "groundcover": [
+      {
+        "block": "tfc:wood/twig/maple"
+      },
+      {
+        "block": "tfc:wood/fallen_leaves/maple"
+      }
+    ],
+    "normal_tree": "tfc:tree/maple",
+    "dead_tree": "tfc:tree/maple_dead",
+    "fallen_log": "tfc:wood/log/maple",
+    "fallen_leaves": "tfc:wood/fallen_leaves/maple",
+    "bush_log": {
+      "Name": "tfc:wood/wood/maple",
+      "Properties": {
+        "branch_direction": "down",
+        "axis": "y"
+      }
+    },
+    "bush_leaves": "tfc:wood/leaves/maple",
+    "old_growth_tree": "tfc:tree/maple_large"
+  }
+}

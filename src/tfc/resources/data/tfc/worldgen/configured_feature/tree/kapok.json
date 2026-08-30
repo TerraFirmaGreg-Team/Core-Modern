@@ -1,0 +1,158 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:random_tree",
+  "config": {
+    "structures": [
+      "tfc:kapok/1",
+      "tfc:kapok/2",
+      "tfc:kapok/3",
+      "tfc:kapok/4",
+      "tfc:kapok/5",
+      "tfc:kapok/6",
+      "tfc:kapok/7",
+      "tfc:kapok/8",
+      "tfc:kapok/9",
+      "tfc:kapok/10",
+      "tfc:kapok/11",
+      "tfc:kapok/12",
+      "tfc:kapok/13",
+      "tfc:kapok/14",
+      "tfc:kapok/15",
+      "tfc:kapok/16",
+      "tfc:kapok/17"
+    ],
+    "radius": 1,
+    "placement": {
+      "width": 1,
+      "height": 5,
+      "ground_type": "shallow_water"
+    },
+    "root_system": {
+      "blocks": [
+        {
+          "replace": [
+            "tfc:grass/silt"
+          ],
+          "with": [
+            {
+              "block": "tfc:rooted_dirt/silt"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:dirt/silt"
+          ],
+          "with": [
+            {
+              "block": "tfc:rooted_dirt/silt"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:grass/loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:rooted_dirt/loam"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:dirt/loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:rooted_dirt/loam"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:grass/sandy_loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:rooted_dirt/sandy_loam"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:dirt/sandy_loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:rooted_dirt/sandy_loam"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:grass/silty_loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:rooted_dirt/silty_loam"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:dirt/silty_loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:rooted_dirt/silty_loam"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:mud/silt"
+          ],
+          "with": [
+            {
+              "block": "tfc:muddy_roots/silt"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:mud/loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:muddy_roots/loam"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:mud/sandy_loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:muddy_roots/sandy_loam"
+            }
+          ]
+        },
+        {
+          "replace": [
+            "tfc:mud/silty_loam"
+          ],
+          "with": [
+            {
+              "block": "tfc:muddy_roots/silty_loam"
+            }
+          ]
+        }
+      ],
+      "width": 4,
+      "height": 6,
+      "tries": 20
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:music_disc_11"
+    },
+    {
+      "tag": "tfc:rock_knapping"
+    }
+  ],
+  "result": {
+    "item": "minecraft:disc_fragment_5",
+    "count": 8
+  }
+}

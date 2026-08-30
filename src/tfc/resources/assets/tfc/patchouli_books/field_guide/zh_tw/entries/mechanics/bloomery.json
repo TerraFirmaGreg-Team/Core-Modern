@@ -1,0 +1,80 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "鍛鐵爐",
+  "category": "tfc:mechanics",
+  "icon": "tfc:bloomery",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)鍛鐵爐$()是一種能將$(thing)鐵礦$()燒煉成$(thing)生鐵方坯$()的裝置。生鐵方坯可進一步鍛造成$(thing)鍛鐵$()。$(l:the_world/ores_and_minerals#hematite)赤鐵礦$()、$(l:the_world/ores_and_minerals#limonite)褐鐵礦$()和$(l:the_world/ores_and_minerals#magnetite)磁鐵礦$()均含鐵。直接熔化這些礦石只會得到無用的$(thing)鑄鐵$()而非$(thing)鍛鐵$()。另外，所有含鐵物品熔化時都只會變成鑄鐵。鍛鐵爐是把鑄鐵變為鍛鐵的唯一方法。鍛鐵爐接受任何含鐵物品，包括鐵礦石或鑄鐵錠。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/bloomery",
+      "text": "鍛鐵爐由8張$(thing)青銅雙層薄板$()製作而成。"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock_id": "tfc:bloomery",
+      "name": "鍛鐵爐",
+      "text": "最基礎的鍛鐵爐結構。鍛鐵爐方塊可以用$(item)$(k:key.use)$()開啟或關閉。",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "鍛鐵爐可以容納最多16件$(thing)物品$()。可透過堆疊額外的石頭來加高至多兩層煙囪，每層額外的煙囪可以多容納16件物品。$(br2)要向鍛鐵爐中加入物品，只需將物品從煙囪頂部投入煙囪中即可。如果煙囪中出現灰色物質就說明成功了。"
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "tfc:textures/gui/book/tutorial/bloomery_hole.png"
+      ],
+      "text": "將物品新增到鍛鐵爐中。",
+      "border": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "鍛鐵爐會將每$(thing)2份木炭$()和$(thing)100mB鑄鐵$()轉化成一塊$(thing)方坯$()。在投入所需的$(thing)木炭$()和$(thing)礦石$()後，點燃鍛鐵爐方塊並等上 15 小時。鍛鐵爐熄滅後會留下許多方坯方塊。用鎬反覆挖掘$(thing)方坯$()便能得到$(thing)生鐵方坯$()。"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "X"
+          ],
+          [
+            "0"
+          ]
+        ],
+        "mapping": {
+          "X": "tfc:bloom[layers=8]"
+        }
+      },
+      "name": "方坯",
+      "text": "一大塊$(thing)方坯$().",
+      "enable_visualize": false
+    },
+    {
+      "type": "tfc:anvil_recipe",
+      "recipe": "tfc:anvil/refined_iron_bloom",
+      "text": "$(thing)生鐵方坯$()還必須在$(l:mechanics/anvils)砧$()上打造成$(thing)精鐵方坯$()。"
+    },
+    {
+      "type": "tfc:anvil_recipe",
+      "recipe": "tfc:anvil/wrought_iron_from_bloom",
+      "text": "在$(l:mechanics/anvils)砧$()上進一步打造$(thing)精鐵方坯$()就能獲得$(thing)鍛鐵錠$()了。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)如果投入鍛鐵爐的物品超出了它的所能處理的數量，它就會從鍛鐵爐門口吐出來。$()$(li)如果要取回投入鍛鐵爐中的物品，不要試圖挖掘塔中的熔融物，直接把鍛鐵爐方塊挖掉即可。$()$(li)方坯只會熔化成鑄鐵，而不是鍛鐵。方坯必須經過錘鍊才能變成鍛鐵！$()",
+      "title": "鐵匠的筆記"
+    }
+  ],
+  "read_by_default": true,
+  "extra_recipe_mappings": {
+    "tfc:bloom": 6,
+    "tfc:raw_iron_bloom": 7,
+    "tfc:refined_iron_bloom": 8
+  }
+}

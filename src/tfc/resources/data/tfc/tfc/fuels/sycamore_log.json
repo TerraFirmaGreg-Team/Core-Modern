@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "ingredient": [
+    {
+      "item": "tfc:wood/log/sycamore"
+    },
+    {
+      "item": "tfc:wood/wood/sycamore"
+    },
+    {
+      "item": "tfc:wood/stripped_wood/sycamore"
+    },
+    {
+      "item": "tfc:wood/stripped_log/sycamore"
+    }
+  ],
+  "duration": 1750,
+  "temperature": 653,
+  "purity": 0.95
+}

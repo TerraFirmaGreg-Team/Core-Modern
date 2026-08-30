@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "tfc:block/thin_spike",
+  "textures": {
+    "0": "tfc:block/calcite",
+    "particle": "tfc:block/calcite"
+  }
+}

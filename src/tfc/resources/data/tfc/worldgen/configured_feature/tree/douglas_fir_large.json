@@ -1,0 +1,52 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:stacked_tree",
+  "config": {
+    "trunk": {
+      "state": {
+        "Name": "tfc:wood/log/douglas_fir",
+        "Properties": {
+          "axis": "y",
+          "branch_direction": "none"
+        }
+      },
+      "min_height": 8,
+      "max_height": 12,
+      "wide": true
+    },
+    "layers": [
+      {
+        "templates": [
+          "tfc:douglas_fir_large/layer1_1",
+          "tfc:douglas_fir_large/layer1_2",
+          "tfc:douglas_fir_large/layer1_3"
+        ],
+        "min_count": 2,
+        "max_count": 3
+      },
+      {
+        "templates": [
+          "tfc:douglas_fir_large/layer2_1",
+          "tfc:douglas_fir_large/layer2_2",
+          "tfc:douglas_fir_large/layer2_3"
+        ],
+        "min_count": 1,
+        "max_count": 1
+      },
+      {
+        "templates": [
+          "tfc:douglas_fir_large/layer3_1",
+          "tfc:douglas_fir_large/layer3_2",
+          "tfc:douglas_fir_large/layer3_3"
+        ],
+        "min_count": 1,
+        "max_count": 1
+      }
+    ],
+    "radius": 2,
+    "placement": {
+      "width": 2,
+      "height": 7
+    }
+  }
+}

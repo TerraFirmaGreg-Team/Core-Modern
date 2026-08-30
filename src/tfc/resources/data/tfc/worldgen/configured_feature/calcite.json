@@ -1,0 +1,11 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:thin_spike",
+  "config": {
+    "state": "tfc:calcite",
+    "radius": 5,
+    "tries": 20,
+    "min_height": 2,
+    "max_height": 5
+  }
+}

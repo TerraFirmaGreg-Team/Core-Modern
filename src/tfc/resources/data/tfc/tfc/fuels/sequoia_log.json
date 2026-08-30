@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "ingredient": [
+    {
+      "item": "tfc:wood/log/sequoia"
+    },
+    {
+      "item": "tfc:wood/wood/sequoia"
+    },
+    {
+      "item": "tfc:wood/stripped_wood/sequoia"
+    },
+    {
+      "item": "tfc:wood/stripped_log/sequoia"
+    }
+  ],
+  "duration": 1750,
+  "temperature": 612,
+  "purity": 0.95
+}

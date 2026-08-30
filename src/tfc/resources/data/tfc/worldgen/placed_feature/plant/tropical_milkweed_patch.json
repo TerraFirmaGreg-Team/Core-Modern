@@ -1,0 +1,26 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/tropical_milkweed_patch",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 5
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "tfc:climate",
+      "min_temperature": 8,
+      "max_temperature": 22.5,
+      "min_rainfall": 120,
+      "max_rainfall": 300,
+      "min_forest": "sparse",
+      "max_forest": "old_growth"
+    }
+  ]
+}

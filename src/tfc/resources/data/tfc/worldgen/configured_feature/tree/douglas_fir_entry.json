@@ -1,0 +1,34 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:forest_entry",
+  "config": {
+    "climate": {
+      "min_temperature": -15.7,
+      "max_temperature": 6.1,
+      "min_rainfall": 305,
+      "max_rainfall": 500
+    },
+    "groundcover": [
+      {
+        "block": "tfc:wood/twig/douglas_fir"
+      },
+      {
+        "block": "tfc:wood/fallen_leaves/douglas_fir"
+      }
+    ],
+    "normal_tree": "tfc:tree/douglas_fir",
+    "dead_tree": "tfc:tree/douglas_fir_dead",
+    "krummholz": "tfc:tree/douglas_fir_krummholz",
+    "fallen_log": "tfc:wood/log/douglas_fir",
+    "fallen_leaves": "tfc:wood/fallen_leaves/douglas_fir",
+    "bush_log": {
+      "Name": "tfc:wood/wood/douglas_fir",
+      "Properties": {
+        "branch_direction": "down",
+        "axis": "y"
+      }
+    },
+    "bush_leaves": "tfc:wood/leaves/douglas_fir",
+    "old_growth_tree": "tfc:tree/douglas_fir_large"
+  }
+}

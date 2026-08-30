@@ -1,0 +1,32 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "tfc:random_tree",
+  "config": {
+    "structures": [
+      "tfc:aspen_large/1",
+      "tfc:aspen_large/2",
+      "tfc:aspen_large/3",
+      "tfc:aspen_large/4",
+      "tfc:aspen_large/5",
+      "tfc:aspen_large/6",
+      "tfc:aspen_large/7"
+    ],
+    "radius": 1,
+    "placement": {
+      "width": 1,
+      "height": 10
+    },
+    "trunk": {
+      "state": {
+        "Name": "tfc:wood/log/aspen",
+        "Properties": {
+          "axis": "y",
+          "branch_direction": "none"
+        }
+      },
+      "min_height": 5,
+      "max_height": 8,
+      "wide": false
+    }
+  }
+}

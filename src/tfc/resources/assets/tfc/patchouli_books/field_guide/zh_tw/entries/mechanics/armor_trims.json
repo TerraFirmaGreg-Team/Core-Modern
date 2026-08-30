@@ -1,0 +1,18 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "鍛造紋飾",
+  "category": "tfc:mechanics",
+  "icon": "minecraft:rib_armor_trim_smithing_template",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "鍛造紋飾是透過將$(thing)紋飾材料$()和$(l:mechanics/sewing_table)鍛造模板$()合成得到的。群巒傳說中所有寶石，以及紋銀、金、玫瑰金和鉍都能作為紋飾材料使用。盔甲紋飾是純裝飾作用的。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/vanilla/smithing_table",
+      "text": "鍛造臺可以將紋飾材料打入盔甲。"
+    }
+  ],
+  "read_by_default": true
+}

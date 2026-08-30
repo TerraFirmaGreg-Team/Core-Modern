@@ -1,0 +1,240 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "梁と崩落",
+  "category": "tfc:mechanics",
+  "icon": "tfc:wood/support/oak",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "TerraFirmaCraftでは、石は不安定で$(thing)崩落$()の影響を受けやすくなります。$(thing)石$()、$(thing)鉱石$()、$(thing)滑らかな石$()、$(thing)つらら石$()などの多くの石系ブロックはすべて、崩落する可能性があります。$(br2)$(thing)梁$()を使用すると、崩落の発生を防げます。",
+      "title": "梁"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "プレイヤーが$(thing)補強されていない石$()の近くにある$(thing)石ブロック$()を採掘すると、崩落が発生する可能性があります。ただし、一度崩落が始まると、$(thing)補強されている$()ブロックでも崩落が始まる可能性があります。$(br2)洞窟の屋根にある岩は$(thing)自然補強$()されています。岩石の下に崩落不可能な岩盤があるものも$(thing)補強$()です。あるいは、$(thing)梁$()を使用すると、一度に広範囲を補強できます。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "等級のある$(l:the_world/ores_and_minerals)鉱石$()(低純度、中純度、高純度の鉱石)は崩落すると品質が低下します。高純度の鉱石は中純度になり、中純度は低純度になり、低純度は丸石になります。金属鉱石ではない、鉱物は一度の崩落で丸石に変わります。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "土、草、粘土、砂利、丸石、砂も重力の影響を受けます。ただし、バニラの重力ブロックとは異なり、これらのブロックは斜面を転がり落ち、周囲に支えがない限り高さ1以上に積み重ねることはできません。$(l:mechanics/sluices)鉱石が混じった砂利$()も重力の影響を受けますが、品質は低下しません。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/wood/oak_support",
+      "title": "梁",
+      "text": "$(thing)ノコギリ$()と任意のタイプの$(thing)丸太$()を使用して$(thing)梁$()を作成できます。$(br2)$(thing)梁$()を使用すると、高さ3まで積まれた状態で設置されます。状態を維持するには、その下にしっかりしたブロックが必要です。"
+    },
+    {
+      "type": "tfc:multimultiblock",
+      "text": "上の図のように、$(thing)垂直の梁$()の間に$(thing)水平の梁$()を配置して5ブロック以内の梁同士を接続できます。",
+      "multiblocks": [
+        {
+          "pattern": [
+            [
+              "   ",
+              "CRD",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "GGG",
+              "G0G",
+              "GGG"
+            ],
+            [
+              "   ",
+              "   ",
+              "   "
+            ]
+          ],
+          "mapping": {
+            "R": "air",
+            "C": "air",
+            "D": "air",
+            "V": "air",
+            "W": "air",
+            "0": "tfc:rock/raw/andesite",
+            "G": "tfc:rock/raw/andesite"
+          }
+        },
+        {
+          "pattern": [
+            [
+              "   ",
+              "CRD",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "GGG",
+              "G0G",
+              "GGG"
+            ],
+            [
+              "   ",
+              "   ",
+              "   "
+            ]
+          ],
+          "mapping": {
+            "R": "air",
+            "C": "tfc:wood/vertical_support/oak",
+            "D": "air",
+            "V": "tfc:wood/vertical_support/oak",
+            "W": "air",
+            "0": "tfc:rock/raw/andesite",
+            "G": "tfc:rock/raw/andesite"
+          }
+        },
+        {
+          "pattern": [
+            [
+              "   ",
+              "CRD",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "GGG",
+              "G0G",
+              "GGG"
+            ],
+            [
+              "   ",
+              "   ",
+              "   "
+            ]
+          ],
+          "mapping": {
+            "R": "air",
+            "C": "tfc:wood/vertical_support/oak",
+            "D": "tfc:wood/vertical_support/oak",
+            "V": "tfc:wood/vertical_support/oak",
+            "W": "tfc:wood/vertical_support/oak",
+            "0": "tfc:rock/raw/andesite",
+            "G": "tfc:rock/raw/andesite"
+          }
+        },
+        {
+          "pattern": [
+            [
+              "   ",
+              "CRD",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "GGG",
+              "G0G",
+              "GGG"
+            ],
+            [
+              "   ",
+              "   ",
+              "   "
+            ]
+          ],
+          "mapping": {
+            "R": "tfc:wood/horizontal_support/oak[north=true,south=true]",
+            "C": "tfc:wood/vertical_support/oak[south=true]",
+            "D": "tfc:wood/vertical_support/oak[north=true]",
+            "V": "tfc:wood/vertical_support/oak",
+            "W": "tfc:wood/vertical_support/oak",
+            "0": "tfc:rock/raw/andesite",
+            "G": "tfc:rock/raw/andesite"
+          }
+        },
+        {
+          "pattern": [
+            [
+              "   ",
+              "CRD",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "   ",
+              "V W",
+              "   "
+            ],
+            [
+              "GGG",
+              "G0G",
+              "GGG"
+            ],
+            [
+              "   ",
+              "   ",
+              "   "
+            ]
+          ],
+          "mapping": {
+            "R": "tfc:wood/horizontal_support/oak[north=true,south=true]",
+            "C": "tfc:wood/vertical_support/oak[south=true]",
+            "D": "tfc:wood/vertical_support/oak[north=true]",
+            "V": "tfc:wood/vertical_support/oak",
+            "W": "tfc:wood/vertical_support/oak",
+            "0": "tfc:rock/raw/andesite",
+            "G": "tfc:rock/raw/andesite"
+          }
+        }
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)水平の梁$()のみが、近くのブロックを$(thing)補強$()します。水平の梁を中心とする$(bold)9x5x9$()エリア内のブロックはすべて$(thing)補強されている$()とみなされます。$(br2)水平の梁によって支えられることに加えて、岩は別の岩など、その下に固体ブロックがあると自然と補強されます。ただし、$(thing)階段$()や$(thing)ハーフブロック$()などの$(thing)非固体ブロック$()や、$(thing)滑らかな石$()は、$(bold)補強ブロックとしてカウントされません。$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "最後に、$(thing)石$()に対して$(l:mechanics/chisel)彫刻$()を行う場合、採掘と同様で簡単に崩落を引き起こします。それを知っておくのは重要です。ノミを使用すると近くで崩落を引き起こす可能性があります。$(br2)$(br2)安全な採掘を実践してください!",
+      "title": "彫刻"
+    }
+  ],
+  "read_by_default": true,
+  "extra_recipe_mappings": {
+    "tag:tfc:support_beams": 0
+  }
+}

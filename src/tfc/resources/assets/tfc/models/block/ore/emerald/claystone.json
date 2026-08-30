@@ -1,0 +1,10 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "tfc:block/ore_column",
+  "textures": {
+    "side": "tfc:block/rock/raw/claystone",
+    "end": "tfc:block/rock/raw/claystone_top",
+    "overlay": "tfc:block/ore/emerald",
+    "overlay_end": "tfc:block/ore/emerald"
+  }
+}

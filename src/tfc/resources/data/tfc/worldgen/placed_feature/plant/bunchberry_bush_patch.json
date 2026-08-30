@@ -1,0 +1,22 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "feature": "tfc:plant/bunchberry_bush_patch",
+  "placement": [
+    {
+      "type": "tfc:climate",
+      "min_temperature": 15,
+      "max_temperature": 35,
+      "min_rainfall": 200,
+      "max_rainfall": 500,
+      "min_forest": "edge",
+      "max_forest": "old_growth"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 30
+    }
+  ]
+}

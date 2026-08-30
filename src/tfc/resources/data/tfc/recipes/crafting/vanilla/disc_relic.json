@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SDS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "tfc:powder/sapphire"
+    },
+    "D": {
+      "item": "tfc:blank_disc"
+    }
+  },
+  "result": {
+    "item": "minecraft:music_disc_relic"
+  }
+}

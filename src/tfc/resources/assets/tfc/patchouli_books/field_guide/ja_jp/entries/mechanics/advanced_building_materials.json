@@ -1,0 +1,65 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "name": "高度な建材",
+  "category": "tfc:mechanics",
+  "icon": "tfc:brick/rhyolite",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "石器時代の原始的な$(l:getting_started/building_materials)建材$()に加えて、金属工具を入手すると、より高度な建材を作成できます。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(br) 1. $(l:mechanics/advanced_building_materials#alabaster)雪花石膏$()$(br) 2. $(l:mechanics/advanced_building_materials#bricks_and_mortar)レンガとモルタル$()$(br)",
+      "title": "もくじ"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "alabaster",
+      "text": "雪花石膏は$(l:the_world/ores_and_minerals#gypsum)石膏$()から作られる建築ブロックです。雪花石膏は$(l:the_world/ores_and_minerals#gypsum)石膏$()を直接クラフトすることで作成できます。また、$(l:the_world/ores_and_minerals#gypsum)石膏$()を$(thing)石灰水$()100mBとともに樽に入れ密封するとより効率よく作成できます。",
+      "title": "雪花石膏"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/alabaster_brick",
+      "recipe2": "tfc:crafting/alabaster_bricks",
+      "title": "雪花石膏のレンガ"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "雪花石膏は、$(l:mechanics/dye)染料$()$(l:mechanics/barrels)樽$()の中で任意の色に染めることができます。生の雪花石膏は、$(thing)滑らかにする$()ノミのモードを使用して$(l:mechanics/chisel)加工$()することで$(thing)磨かれた雪花石膏$()にすることもできますし、階段、ハーフブロック、または壁にクラフトもできます。",
+      "title": "雪花石膏の装飾"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/alabaster/magenta_bricks_stairs",
+      "recipe2": "tfc:crafting/alabaster/magenta_polished_slab",
+      "title": "階段とハーフブロック"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "bricks_and_mortar",
+      "text": "$(thing)石レンガ$()は、$(l:mechanics/chisel)ノミ$()とばらばらの石レンガ、補強のための$(thing)モルタル$()が必要です。$(br2)モルタルは、$(thing)石灰水$()を入れた$(l:mechanics/barrels#)樽$()に$(thing)砂$()を追加することで作成できます。",
+      "title": "レンガとモルタル"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/rock/gneiss_brick",
+      "recipe2": "tfc:crafting/rock/gneiss_bricks"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)ひびの入った石レンガ$()や$(thing)模様入りの石$()など、他の装飾用石ブロックも作成できます。$(thing)苔むした$()石ブロックは、水中の既存の苔むしたレンガや苔むした丸石の近くに丸石やレンガを置くことによって作成できます。苔はこれらの近くのブロックに広がり始めます。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/rock/gneiss_chiseled",
+      "recipe2": "tfc:crafting/rock/gneiss_cracked"
+    }
+  ],
+  "read_by_default": true,
+  "extra_recipe_mappings": {
+    "tfc:alabaster/raw": 2,
+    "tfc:alabaster/polished": 2
+  }
+}
