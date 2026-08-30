@@ -19,7 +19,10 @@
         "gtceu:huge_duct_pipe",
         "gtceu:normal_optical_pipe",
         "gtceu:normal_laser_pipe",
-        "gtceu:oxygen_distributor"
+        "gtceu:oxygen_distributor_10",
+        "gtceu:oxygen_distributor_50",
+        "gtceu:oxygen_distributor_200",
+        "gtceu:oxygen_distributor_1000"
     ],
     "replace": false
 }

@@ -322,6 +322,13 @@ public class TFGTRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, FillDirection.DOWN_TO_UP)
             .setSound(GTSoundEntries.COOLING);
 
+    // While gravity emission recipes are running the bubble has normal gravity.
+    public static final GTRecipeType GRAVITY_EMISSION = GTRecipeTypes
+            .register("gravity_emission", GTRecipeTypes.ELECTRIC)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.COOLING);
+
     public static final GTRecipeType ME_ASSEMBLER = GTRecipeTypes
             .register("me_assembler", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)

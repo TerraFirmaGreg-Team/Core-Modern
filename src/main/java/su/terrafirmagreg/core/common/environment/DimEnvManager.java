@@ -61,6 +61,11 @@ public class DimEnvManager extends SavedData {
     /** Map of Chunks to TemperatureProviders that affect temperature in those Chunks */
     public final ChunkRegistry<TemperatureProvider> temperatureIndex = new ChunkRegistry<>();
 
+    /** Gravity providers keyed by machine position. Persisted to NBT. */
+    private final Map<BlockPos, GravityProvider> gravityProviders = new HashMap<>();
+    /** Map of Chunks to GravityProviders that affect gravity in those Chunks */
+    public final ChunkRegistry<GravityProvider> gravityIndex = new ChunkRegistry<>();
+
     /** Active decompression events in this dimension */
     private final List<DecompressionEvent> activeDecompressions = new ArrayList<>();
 
@@ -135,6 +140,20 @@ public class DimEnvManager extends SavedData {
         }
         TFGCore.LOGGER.debug("Loaded {} temperature providers from saved data", manager.temperatureProviders.size());
 
+        // Load gravity providers
+        ListTag gravityList = tag.getList("gravityProviders", Tag.TAG_COMPOUND);
+        for (int i = 0; i < gravityList.size(); i++) {
+            CompoundTag providerTag = gravityList.getCompound(i);
+            try {
+                GravityProvider provider = GravityProvider.load(providerTag);
+                manager.gravityProviders.put(provider.getMachinePos(), provider);
+                manager.gravityIndex.add(provider, provider.getAffectedChunks());
+            } catch (Exception e) {
+                TFGCore.LOGGER.error("Failed to load gravity provider from NBT", e);
+            }
+        }
+        TFGCore.LOGGER.debug("Loaded {} gravity providers from saved data", manager.gravityProviders.size());
+
         return manager;
     }
 
@@ -189,6 +208,20 @@ public class DimEnvManager extends SavedData {
         tag.put("temperatureProviders", tempList);
         TFGCore.LOGGER.info("Saved {} temperature providers", tempList.size());
 
+        // Save gravity providers
+        ListTag gravityList = new ListTag();
+        for (GravityProvider provider : gravityProviders.values()) {
+            try {
+                CompoundTag providerTag = new CompoundTag();
+                provider.save(providerTag);
+                gravityList.add(providerTag);
+            } catch (Exception e) {
+                TFGCore.LOGGER.error("Failed to save gravity provider at {}", provider.getMachinePos(), e);
+            }
+        }
+        tag.put("gravityProviders", gravityList);
+        TFGCore.LOGGER.info("Saved {} gravity providers", gravityList.size());
+
         return tag;
     }
 
@@ -208,6 +241,13 @@ public class DimEnvManager extends SavedData {
      */
     public Map<BlockPos, TemperatureProvider> getTempProviders() {
         return Collections.unmodifiableMap(temperatureProviders);
+    }
+
+    /**
+     * @return All gravity providers in this dimension
+     */
+    public Map<BlockPos, GravityProvider> getGravityProviders() {
+        return Collections.unmodifiableMap(gravityProviders);
     }
 
     // ==================== Oxygen Provider Management ====================
@@ -471,6 +511,60 @@ public class DimEnvManager extends SavedData {
         return Optional.empty();
     }
 
+    // ==================== Gravity Provider Management ====================
+
+    /**
+     * Gets an existing gravity provider or creates a new one.
+     * Called when a gravity machine loads.
+     */
+    public GravityProvider getOrCreateGravityProvider(BlockPos machinePos, int radius) {
+        return gravityProviders.computeIfAbsent(machinePos, pos -> {
+            GravityProvider provider = new GravityProvider(pos, radius);
+            gravityIndex.add(provider, provider.getAffectedChunks());
+            setSavedDataDirty();
+            return provider;
+        });
+    }
+
+    /**
+     * Removes a gravity provider. Called when a gravity machine is broken.
+     */
+    public void removeGravityProvider(BlockPos machinePos) {
+        GravityProvider provider = gravityProviders.remove(machinePos);
+        if (provider != null) {
+            gravityIndex.remove(provider, provider.getAffectedChunks());
+            setSavedDataDirty();
+        }
+    }
+
+    // ==================== Gravity Queries ====================
+
+    /**
+     * Checks if a position has normal (Earth-like) gravity (from natural environment or a machine bubble).
+     */
+    public boolean hasNormalGravity(BlockPos pos) {
+        if (environment.hasNormalGravity())
+            return true;
+
+        if (gravityIndex.isEmpty())
+            return false;
+
+        ProfilerFiller profiler = level.getProfiler();
+        profiler.push("tfg.environment.hasNormalGravity");
+        ChunkPos chunkPos = new ChunkPos(pos);
+        Set<GravityProvider> providerSet = gravityIndex.get(chunkPos);
+        if (providerSet != null) {
+            for (GravityProvider provider : providerSet) {
+                if (provider.hasNormalGravity(pos)) {
+                    profiler.pop();
+                    return true;
+                }
+            }
+        }
+        profiler.pop();
+        return false;
+    }
+
     // ==================== Event Handling ====================
 
     /**
@@ -624,7 +718,11 @@ public class DimEnvManager extends SavedData {
                 .filter(pos -> new ChunkPos(pos).equals(chunkPos))
                 .toList();
 
-        if (oxygenInChunk.isEmpty() && pressureInChunk.isEmpty() && tempInChunk.isEmpty())
+        List<BlockPos> gravityInChunk = gravityProviders.keySet().stream()
+                .filter(pos -> new ChunkPos(pos).equals(chunkPos))
+                .toList();
+
+        if (oxygenInChunk.isEmpty() && pressureInChunk.isEmpty() && tempInChunk.isEmpty() && gravityInChunk.isEmpty())
             return;
 
         level.getServer().tell(new net.minecraft.server.TickTask(
@@ -649,6 +747,13 @@ public class DimEnvManager extends SavedData {
                         if (provider != null && !provider.isMachineLoaded()) {
                             removeTempProvider(providerPos);
                             TFGCore.LOGGER.debug("Removing orphaned temperature provider at {}", providerPos);
+                        }
+                    }
+                    for (BlockPos providerPos : gravityInChunk) {
+                        GravityProvider provider = gravityProviders.get(providerPos);
+                        if (provider != null && !provider.isMachineLoaded()) {
+                            removeGravityProvider(providerPos);
+                            TFGCore.LOGGER.debug("Removing orphaned gravity provider at {}", providerPos);
                         }
                     }
                 }));

@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.gregtechceu.gtceu.api.gui.widget.IntInputWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
@@ -17,11 +16,8 @@ import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 
@@ -29,48 +25,38 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import lombok.Getter;
-
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
 import su.terrafirmagreg.core.common.environment.*;
 
 /**
- * Space Heater machine that creates a bubble of safe temperature around itself.
+ * Higgs Emitter machine that creates a fixed-radius bubble of normal gravity around itself.
  */
-public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironmentMachine {
+public class HiggsEmitterMachine extends SimpleTieredMachine implements IEnvironmentMachine {
+
+    /** Fixed bubble radius. */
+    public static final int RADIUS = 64;
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            SpaceHeaterMachine.class, SimpleTieredMachine.MANAGED_FIELD_HOLDER);
+            HiggsEmitterMachine.class, SimpleTieredMachine.MANAGED_FIELD_HOLDER);
 
     @Override
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
 
-    private final int maxRadius;
+    private final int radius;
 
     @Nullable
-    private TemperatureProvider provider;
+    private GravityProvider provider;
 
     private DimEnvManager manager;
 
-    @Getter
-    @Persisted
-    @DescSynced
-    private int radius;
-
-    public SpaceHeaterMachine(IMachineBlockEntity holder, int tier) {
+    public HiggsEmitterMachine(IMachineBlockEntity holder, int tier) {
         super(holder, tier, GTMachineUtils.defaultTankSizeFunction);
-        this.maxRadius = getMaxRadiusForTier(tier);
-        this.radius = maxRadius;
+        this.radius = RADIUS;
     }
 
-    private static int getMaxRadiusForTier(int tier) {
-        return (int) Math.pow(2, tier + 2); // LV=8, MV=16, HV=32, EV=64
-    }
-
-    // ==================== Recipe ====================
 
     @Override
     protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
@@ -81,42 +67,19 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
         return recipeLogic != null && recipeLogic.isWorking();
     }
 
-    /**
-     * Recipe modifier: scales EU/t cost by radius.
-     */
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (!(machine instanceof SpaceHeaterMachine heater)) {
-            return RecipeModifier.nullWrongType(SpaceHeaterMachine.class, machine);
+        if (!(machine instanceof HiggsEmitterMachine emitter)) {
+            return RecipeModifier.nullWrongType(HiggsEmitterMachine.class, machine);
         }
 
         return ModifierFunction.builder()
-                .eutMultiplier(Math.max(1, heater.getRadius()))
+                .eutMultiplier(emitter.radius)
                 .build();
     }
 
     @Override
     public boolean regressWhenWaiting() {
         return false;
-    }
-
-    // ==================== Radius ====================
-
-    public void setRadius(int newRadius) {
-        newRadius = Math.max(1, Math.min(newRadius, maxRadius));
-        if (newRadius == this.radius)
-            return;
-        this.radius = newRadius;
-        markDirty();
-
-        if (!isRemote() && manager != null) {
-            provider = manager.updateTempProvider(getPos(), newRadius);
-            provider.attach(this);
-        }
-
-        // Radius change affects EU/t, so re-search the recipe with new modifier
-        if (recipeLogic != null) {
-            recipeLogic.markLastRecipeDirty();
-        }
     }
 
     // ==================== UI ====================
@@ -147,33 +110,24 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
         group.addWidget(new ComponentPanelWidget(contentX, 4, this::addStatusText)
                 .setMaxWidthLimit(width - contentX - 4));
 
-        // Radius input label + widget
-        group.addWidget(new LabelWidget(contentX + 16 + 24, height - 26,
-                Component.translatable("tfg.machine.space_heater.radius_label").getString()));
-        var radiusInput = new IntInputWidget(contentX + 16, height - 16, 80, 20,
-                this::getRadius, this::setRadius);
-        radiusInput.setMin(1);
-        radiusInput.setMax(maxRadius);
-        group.addWidget(radiusInput);
-
         return group;
     }
 
     private void addStatusText(List<Component> textList) {
         // Working state
         if (isWorking()) {
-            textList.add(Component.translatable("tfg.machine.space_heater.active").withStyle(ChatFormatting.GREEN));
+            textList.add(Component.translatable("tfg.machine.higgs_emitter.active").withStyle(ChatFormatting.GREEN));
         } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
             for (Component reason : recipeLogic.getFailureReasons()) {
                 textList.add(reason.copy().withStyle(ChatFormatting.RED));
             }
         } else {
-            textList.add(Component.translatable("tfg.machine.space_heater.idle").withStyle(ChatFormatting.GRAY));
+            textList.add(Component.translatable("tfg.machine.higgs_emitter.idle").withStyle(ChatFormatting.GRAY));
         }
 
         // Max radius info
-        textList.add(Component.translatable("tfg.machine.space_heater.max_radius",
-                FormattingUtil.formatNumbers(maxRadius)).withStyle(ChatFormatting.AQUA));
+        textList.add(Component.translatable("tfg.machine.higgs_emitter.max_radius",
+                FormattingUtil.formatNumbers(radius)).withStyle(ChatFormatting.AQUA));
     }
 
     // ==================== Lifecycle ====================
@@ -184,17 +138,17 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
         if (!(getLevel() instanceof ServerLevel serverLevel))
             return;
 
-        TFGCore.LOGGER.info("SpaceHeater onLoad, pos={}", getPos());
+        TFGCore.LOGGER.info("HiggsEmitter onLoad, pos={}", getPos());
 
         manager = EnvironmentSystem.getManager(serverLevel);
-        provider = manager.getOrCreateTempProvider(getPos(), radius);
+        provider = manager.getOrCreateGravityProvider(getPos(), radius);
         provider.attach(this);
     }
 
     @Override
     public void onUnload() {
         super.onUnload();
-        TFGCore.LOGGER.info("SpaceHeater onUnload, pos={}", getPos());
+        TFGCore.LOGGER.info("HiggsEmitter onUnload, pos={}", getPos());
         if (provider != null) {
             provider.detach();
             provider = null;
@@ -204,9 +158,9 @@ public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironm
     @Override
     public void onMachineRemoved() {
         super.onMachineRemoved();
-        TFGCore.LOGGER.info("SpaceHeater onMachineRemoved, pos={}", getPos());
+        TFGCore.LOGGER.info("HiggsEmitter onMachineRemoved, pos={}", getPos());
         if (manager != null) {
-            manager.removeTempProvider(getPos());
+            manager.removeGravityProvider(getPos());
             provider = null;
         }
     }

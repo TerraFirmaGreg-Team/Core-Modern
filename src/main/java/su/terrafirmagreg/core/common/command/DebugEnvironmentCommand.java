@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import su.terrafirmagreg.core.common.environment.DimEnvManager;
 import su.terrafirmagreg.core.common.environment.DimensionEnvironment;
 import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
+import su.terrafirmagreg.core.common.environment.GravityProvider;
 import su.terrafirmagreg.core.common.environment.OxygenProvider;
 import su.terrafirmagreg.core.common.environment.TemperatureProvider;
 
@@ -55,6 +56,14 @@ public class DebugEnvironmentCommand {
         source.sendSuccess(() -> Component.literal(String.format(
                 "Temperature at %s: %s", pos.toShortString(), tempStatus)), false);
 
+        // Gravity status
+        boolean hasGravity = EnvironmentSystem.hasNormalGravity(level, pos);
+        String gravityStatus = hasGravity ? "1.0 (normal)"
+                : String.format(
+                        "%.2f (dimension)", DimensionEnvironment.get(level.dimension()).gravity());
+        source.sendSuccess(() -> Component.literal(String.format(
+                "Gravity at %s: %s", pos.toShortString(), gravityStatus)), false);
+
         // Oxygen providers
         int oxygenCount = 0;
         source.sendSuccess(() -> Component.literal("--- Oxygen Providers ---"), false);
@@ -90,6 +99,24 @@ public class DebugEnvironmentCommand {
                     mPos.toShortString(), radius, loaded, working)), false);
         }
         if (tempCount == 0) {
+            source.sendSuccess(() -> Component.literal("  (none)"), false);
+        }
+
+        // Gravity providers
+        int gravityCount = 0;
+        source.sendSuccess(() -> Component.literal("--- Gravity Providers ---"), false);
+        for (GravityProvider provider : manager.getGravityProviders().values()) {
+            gravityCount++;
+            BlockPos mPos = provider.getMachinePos();
+            int radius = provider.getRadius();
+            boolean loaded = provider.isMachineLoaded();
+            boolean working = provider.isMachineWorking();
+
+            source.sendSuccess(() -> Component.literal(String.format(
+                    "  %s: radius=%d, loaded=%s, working=%s",
+                    mPos.toShortString(), radius, loaded, working)), false);
+        }
+        if (gravityCount == 0) {
             source.sendSuccess(() -> Component.literal("  (none)"), false);
         }
 

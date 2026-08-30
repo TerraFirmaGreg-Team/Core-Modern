@@ -34,11 +34,9 @@ public record EnvironmentQueryPacket(BlockPos pos) {
             // Query all environment properties
             EnvironmentClientCache.EnvironmentState state = new EnvironmentClientCache.EnvironmentState(
                     EnvironmentSystem.hasOxygen(player.level(), pkt.pos),
-                    //                    EnvironmentSystem.hasNormalGravity(player.level(), pkt.pos),
-                    //                    EnvironmentSystem.hasNormalTemperature(player.level(), pkt.pos),
+                    EnvironmentSystem.hasNormalGravity(player.level(), pkt.pos),
                     true,
-                    true,
-                    true // TODO: hasNormalPressure when implemented
+                    true // TODO: hasNormalTemperature/hasNormalPressure when implemented
             );
 
             // Send response back to the client

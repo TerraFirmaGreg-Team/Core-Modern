@@ -151,6 +151,28 @@ public final class EnvironmentSystem {
         return manager != null && manager.getEnvironment().hasNormalGravity();
     }
 
+    /**
+     * Checks if a position has normal gravity (server-side only).
+     * True if the dimension naturally has Earth-like gravity, or the position
+     * is inside an active gravity machine's bubble.
+     *
+     * @param level The level to check in
+     * @param pos The position to check
+     * @return true if the position has normal gravity
+     */
+    public static boolean hasNormalGravity(Level level, BlockPos pos) {
+        if (!(level instanceof ServerLevel)) {
+            return false;
+        }
+
+        DimEnvManager manager = managers.get(level.dimension());
+        if (manager == null) {
+            return false;
+        }
+
+        return manager.hasNormalGravity(pos);
+    }
+
     // ==================== Async Handling ====================
 
     private static final int THREAD_POOL_SIZE = 2;
