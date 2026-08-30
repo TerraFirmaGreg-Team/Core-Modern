@@ -84,8 +84,8 @@ def pluginJar = tasks.register("pluginJar", Jar) {
 evaluationDependsOn(":tfc") // Because of the sourceset reference
 
 dependencies {
-    implementation project(":tfc")
-    //implementation files(sourceSets.main.output)
+    modImplementation project(":tfc")
+    //modImplementation files(sourceSets.main.output)
     jarJar(project(":tfc"))
     jarJar(files(pluginJar))
 }
