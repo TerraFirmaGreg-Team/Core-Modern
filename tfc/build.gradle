@@ -19,7 +19,6 @@ plugins {
     id 'java-library'
     id 'idea'
     id 'net.neoforged.moddev.legacyforge' version "${mdg_legacy_version}"
-    id 'com.diffplug.spotless' version "${spotless_version}"
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
@@ -49,8 +48,6 @@ dependencies {
     modImplementation ("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
 }
 
-apply from: '../gradle/scripts/spotless.gradle'
-
 base {
     version = "${mod_version}"
     group = "${mod_package}"
@@ -70,21 +67,21 @@ java {
     }
 }
 
-mixin {
-    var refMap = add sourceSets.main, "tfc.refmap.json"
-    jar.from refMap
-    config "tfc.mixins.json"
-}
-
 sourceSets {
     tfc.resources {
-        srcDir 'src/tfc/resources'
+        srcDir 'tfc/src/resources'
     }
 
     tfc {
-        java.srcDir("src/tfc/java")
-        resources.srcDir("src/tfc/resources")
+        java.srcDir("tfc/src/java")
+        resources.srcDir("tfc/src/resources")
         compileClasspath += sourceSets.tfc.compileClasspath
         runtimeClasspath += sourceSets.tfc.runtimeClasspath
     }
+}
+
+mixin {
+    var refMap = add sourceSets.tfc, "tfc.refmap.json"
+    jar.from refMap
+    config "tfc.mixins.json"
 }

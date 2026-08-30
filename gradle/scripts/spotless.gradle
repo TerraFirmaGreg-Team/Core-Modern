@@ -9,6 +9,7 @@ spotless {
         target project.fileTree(project.rootDir) {
             include 'src/*/java/su/**/*.java'
             exclude 'src/**/compat/emi/ExportedOreVeinInfo.java'
+            exclude 'tfc/**/**'
         }
 
         endWithNewline()

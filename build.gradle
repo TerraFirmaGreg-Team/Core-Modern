@@ -72,7 +72,7 @@ sourceSets {
 
 def pluginJar = tasks.register("pluginJar", Jar) {
     from(sourceSets.main.output)
-    archiveClassifier = "main"
+    archiveClassifier = "TerraFirmaCraft-Modern-Fork"
     manifest {
         attributes(
             'FMLModType': 'LIBRARY',
@@ -85,7 +85,7 @@ evaluationDependsOn(":tfc") // Because of the sourceset reference
 
 dependencies {
     implementation project(":tfc")
-    implementation files(sourceSets.main.output)
+    //implementation files(sourceSets.main.output)
     jarJar(project(":tfc"))
     jarJar(files(pluginJar))
 }
