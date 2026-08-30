@@ -96,8 +96,50 @@ legacyForge {
             systemProperty 'forge.logging.console.level', 'INFO'
         }
 
-        data {
-            clientData()
+        client {
+            client()
+            ideName = "Client"
+            sourceSet = sourceSets.tfc
+            gameDirectory = project.file('run/client')
+        }
+
+        server {
+            server()
+            ideName = "Server"
+            sourceSet = sourceSets.tfc
+            gameDirectory = project.file('run/server')
+            programArgument '--nogui'
+        }
+    }
+
+    mods {
+        tfc {
+            sourceSet sourceSets.tfc
+        }
+    }
+
+    tasks.register("prepareServerDev") {
+
+        def serverDir = file("run/server")
+        def propsFile = file("${serverDir}/server.properties")
+
+        outputs.file(propsFile)
+
+        doLast {
+            serverDir.mkdirs()
+
+            // Create or patch server.properties to set online-mode=false
+            if (propsFile.exists()) {
+                def content = propsFile.text
+                if (content.contains('online-mode=')) {
+                    content = content.replaceAll(/online-mode=\w+/, 'online-mode=false')
+                } else {
+                    content += '\nonline-mode=false'
+                }
+                propsFile.text = content
+            } else {
+                propsFile.text = 'online-mode=false\n'
+            }
         }
     }
 }
