@@ -84,7 +84,8 @@ def pluginJar = tasks.register("pluginJar", Jar) {
 evaluationDependsOn(":tfc")
 
 dependencies {
-    implementation jarJar(project(":tfc"))
+    implementation project(":tfc")
+    jarJar(project(":tfc"))
 }
 
 // gradle-local.properties should have the following:
