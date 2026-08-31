@@ -28,7 +28,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
+import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.error.BlockMatchingError;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
@@ -68,6 +68,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.value.sync.BooleanSyncValue;
+import brachy.modularui.value.sync.IntSyncValue;
 import earth.terrarium.adastra.common.registry.ModBlocks;
 
 import su.terrafirmagreg.core.TFGCore;
@@ -81,6 +84,7 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.GasWellMachin
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.steam.TFGLargeBoilerMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.render.BouleRender;
 import su.terrafirmagreg.core.common.tfgt.machine.trait.GasWellRecipeLogic;
+import su.terrafirmagreg.core.common.tfgt.machine.trait.ISPOutputRecipeLogic;
 import su.terrafirmagreg.core.common.tfgt.recipe.modifier.AnimalProductModifier;
 
 @SuppressWarnings({ "unused", "SpellCheckingInspection" })
@@ -226,7 +230,7 @@ public class TFGMultiMachines {
             .register();
 
     public static final MultiblockMachineDefinition BIOREACTOR = REGISTRATE
-            .multiblock("bioreactor", BioreactorMachine::new)
+            .multiblock("bioreactor", (info) -> new WorkableElectricMultiblockMachine(info, new ISPOutputRecipeLogic()))
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(TFGTRecipeTypes.BIOREACTOR_RECIPES)
@@ -303,16 +307,16 @@ public class TFGMultiMachines {
                     TFGCore.id("block/casings/machine_casing_stainless_evaporation"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .pattern(definition -> {
-                PatternPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X).or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
-                exportPredicate.setMaxLayerLimited(1);
+                MultiPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X).or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
+                exportPredicate = exportPredicate.setMaxLayerLimited(1);
 
-                PatternPredicate maint = Predicates.autoAbilities(true, false, false).setMaxGlobalLimited(1);
+                MultiPredicate maint = Predicates.autoAbilities(true, false, false).setMaxGlobalLimited(1);
                 return MultiblockPatternBuilder.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
                         .slice("YSY", "YYY", "YYY")
                         .slice("ZZZ", "Z#Z", "ZZZ")
                         .sliceRepeatable(0, 10, "XXX", "X#X", "XXX")
                         .slice("XXX", "XXX", "XXX")
-                        .where('S', controller(blocks(definition.getBlock())))
+                        .where('S', controller(definition))
                         .where('Y', blocks(TFGBlocks_Casings.STAINLESS_EVAPORATION_CASING.get())
                                 .or(abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                                 .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
@@ -785,7 +789,7 @@ public class TFGMultiMachines {
                     .slice("AFFFFFA","L#####L","LEEEEEL","L#####L","AFFFFFA")
                     .slice("AAAAAAA","A#####A","LDDDDDL","A#####A","AAAAAAA")
                     .slice("       ","BBBXBBB","BCCCCCB","BBBMBBB","       ")
-                    .where('X', controller(blocks(definition.get())))
+                    .where('X', controller(definition))
                     .where('A', blocks(GCYMBlocks.CASING_ATOMIC.get()))
                     .where('B', blocks(GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING.get())
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
@@ -875,13 +879,23 @@ public class TFGMultiMachines {
                             GTCEu.id("block/multiblock/gcym/large_chemical_bath"))
                     .andThen(b -> b.addDynamicRenderer(BouleRender::makeRender))
             )
-            .additionalDisplay((controller, components) -> {
-                if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
-                    components.add(Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
-                            Component.translatable(FormattingUtil.formatNumbers(coilMachine.getCoilType().getCoilTemperature() +
-                                            100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) + "K")
-                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))));
-                }
+            .additionalDisplay((controller, syncManager) -> {
+                if (!(controller instanceof CoilWorkableElectricMultiblockMachine coilMachine))
+                    return Collections.emptyList();
+                BooleanSyncValue isFormed = syncManager.getOrCreateSyncHandler("isFormed", BooleanSyncValue.class,
+                        () -> new BooleanSyncValue(controller::isFormed));
+                IntSyncValue coilTemperature = syncManager.getOrCreateSyncHandler("coilTemperature", IntSyncValue.class,
+                        () -> new IntSyncValue(() -> coilMachine.getCoilType().getCoilTemperature()));
+                IntSyncValue machineTier = syncManager.getOrCreateSyncHandler("machineTier", IntSyncValue.class,
+                        () -> new IntSyncValue(coilMachine::getTier));
+
+                return Collections.singletonList(Text
+                        .dynamic(() -> Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
+                                Component.literal(
+                                                FormattingUtil.formatNumbers(coilTemperature.getIntValue() +
+                                                        100L * Math.max(0, machineTier.getIntValue() - GTValues.MV)) + "K")
+                                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))))
+                        .asWidget().setEnabledIf(w -> isFormed.getBoolValue()));
             })
             .register();
 
@@ -899,7 +913,7 @@ public class TFGMultiMachines {
                             GTBlocks.FIREBOX_BRONZE.get().defaultBlockState() :
                             GTBlocks.CASING_BRONZE_BRICKS.get().defaultBlockState())
             .pattern((definition) -> {
-                PatternPredicate fireboxPred = blocks(ALL_FIREBOXES.get(BoilerFireboxType.BRONZE_FIREBOX).get())
+                MultiPredicate fireboxPred = blocks(ALL_FIREBOXES.get(BoilerFireboxType.BRONZE_FIREBOX).get())
                         .setMinGlobalLimited(3)
                         .or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setPreviewCount(1))
                         .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
@@ -911,7 +925,7 @@ public class TFGMultiMachines {
                         .slice("XXX", "CCC", "CCC", "CCC")
                         .slice("XXX", "CPC", "CPC", "CCC")
                         .slice("XXX", "CSC", "CCC", "CCC")
-                        .where('S', controller(blocks(definition.getBlock())))
+                        .where('S', controller(definition))
                         .where('P', blocks(GTBlocks.CASING_BRONZE_PIPE.get()))
                         .where('X', fireboxPred)
                         .where('C', blocks(GTBlocks.CASING_BRONZE_BRICKS.get()).setMinGlobalLimited(20)
@@ -927,7 +941,7 @@ public class TFGMultiMachines {
                                     BoilerFireboxType.BRONZE_FIREBOX, GTBlocks.CASING_BRONZE_BRICKS))))
             .tooltips(
                     Component.translatable("tfg.multiblock.large_boiler.max_temperature", 480, 480),
-                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 480 / 1 / 20),
+                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 480 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))
             .register();
@@ -946,7 +960,7 @@ public class TFGMultiMachines {
                             GTBlocks.FIREBOX_STEEL.get().defaultBlockState() :
                             GTBlocks.CASING_STEEL_SOLID.get().defaultBlockState())
             .pattern((definition) -> {
-                PatternPredicate fireboxPred = blocks(ALL_FIREBOXES.get(BoilerFireboxType.STEEL_FIREBOX).get())
+                MultiPredicate fireboxPred = blocks(ALL_FIREBOXES.get(BoilerFireboxType.STEEL_FIREBOX).get())
                         .setMinGlobalLimited(3)
                         .or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setPreviewCount(1))
                         .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1))
@@ -958,7 +972,7 @@ public class TFGMultiMachines {
                         .slice("XXX", "CCC", "CCC", "CCC")
                         .slice("XXX", "CPC", "CPC", "CCC")
                         .slice("XXX", "CSC", "CCC", "CCC")
-                        .where('S', controller(blocks(definition.getBlock())))
+                        .where('S', controller(definition))
                         .where('P', blocks(GTBlocks.CASING_STEEL_PIPE.get()))
                         .where('X', fireboxPred)
                         .where('C', blocks(GTBlocks.CASING_STEEL_SOLID.get()).setMinGlobalLimited(20)
@@ -974,7 +988,7 @@ public class TFGMultiMachines {
                                     BoilerFireboxType.STEEL_FIREBOX, GTBlocks.CASING_STEEL_SOLID))))
             .tooltips(
                     Component.translatable("tfg.multiblock.large_boiler.max_temperature", 1280, 1280),
-                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 1280 / 1 / 20),
+                    Component.translatable("gtceu.multiblock.large_boiler.heat_time_tooltip", 1280 / 20),
                     Component.translatable("gtceu.multiblock.large_boiler.explosion_tooltip")
                             .withStyle(ChatFormatting.DARK_RED))
             .register();

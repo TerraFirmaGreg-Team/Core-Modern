@@ -17,10 +17,12 @@ import su.terrafirmagreg.core.common.tfgt.cover.RottenVoidCover;
  */
 public class TFGCovers {
 
-    public static CoverDefinition ITEM_VOIDING_ROTTEN;
+    public static CoverDefinition ITEM_VOIDING_ROTTEN = registerCover(
+            "rotten_voiding_cover",
+            RottenVoidCover::new,
+            TFGCore.id("block/cover/rotten_voiding"));
 
     public static void init() {
-        registerAll();
     }
 
     private static CoverDefinition registerCover(String idPath, CoverDefinition.CoverBehaviourProvider provider, ResourceLocation texture) {
@@ -29,12 +31,5 @@ public class TFGCovers {
         CoverDefinition def = new CoverDefinition(id, provider, renderer);
         GTRegistries.COVERS.register(id, def);
         return def;
-    }
-
-    private static void registerAll() {
-        ITEM_VOIDING_ROTTEN = registerCover(
-                "rotten_voiding_cover",
-                RottenVoidCover::new,
-                TFGCore.id("block/cover/rotten_voiding"));
     }
 }

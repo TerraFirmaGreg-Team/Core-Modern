@@ -225,17 +225,14 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
                 newOutputs.put(cap, newContents);
             }
 
-            var copied = new GTRecipe(r.recipeType, r.id,
-                    new HashMap<>(r.inputs), newOutputs,
-                    new HashMap<>(r.tickInputs), new HashMap<>(r.tickOutputs),
-                    new HashMap<>(r.inputChanceLogics), new HashMap<>(r.outputChanceLogics),
-                    new HashMap<>(r.tickInputChanceLogics), new HashMap<>(r.tickOutputChanceLogics),
-                    new ArrayList<>(r.conditions), new ArrayList<>(r.ingredientActions),
-                    r.data, r.duration, r.recipeCategory, r.groupColor);
-            copied.parallels = r.parallels;
-            copied.subtickParallels = r.subtickParallels;
+            var copied = new GTRecipe(r.recipeType,
+                    r.inputs, newOutputs,
+                    r.tickInputs, r.tickOutputs,
+                    r.inputChanceLogics, r.outputChanceLogics,
+                    r.tickInputChanceLogics, r.tickOutputChanceLogics,
+                    r.conditions, r.ingredientActions,
+                    r.data, r.duration, r.parallels, r.subtickParallels, r.batchParallels, r.recipeCategory, r.groupColor, r.keepSpoilingProgress);
             copied.ocLevel = r.ocLevel;
-            copied.batchParallels = r.batchParallels;
             return copied;
         };
     }
@@ -258,68 +255,57 @@ public class OreProcessingBeneathMachine extends WorkableElectricMultiblockMachi
         double ratio = gasLevelPercent / 100.0;
         int modifierPercent = (int) (gasModifier * 100);
 
-            ChatFormatting levelColor;
-            if (ratio < MIN_RATIO || ratio > MAX_RATIO) {
-                levelColor = ChatFormatting.RED;
-            } else if (Math.abs(ratio - OPTIMAL_RATIO) < 0.10) {
-                levelColor = ChatFormatting.GREEN;
-            } else {
-                levelColor = ChatFormatting.YELLOW;
-            }
+        ChatFormatting levelColor;
+        if (ratio < MIN_RATIO || ratio > MAX_RATIO) {
+            levelColor = ChatFormatting.RED;
+        } else if (Math.abs(ratio - OPTIMAL_RATIO) < 0.10) {
+            levelColor = ChatFormatting.GREEN;
+        } else {
+            levelColor = ChatFormatting.YELLOW;
+        }
 
         widgets.add(Text.lang("tfg.machine.ore_processing_beneath.gas_level",
                 gasLevelPercent).withStyle(levelColor).asWidget());
         widgets.add(Text.lang("tfg.machine.ore_processing_beneath.output_modifier",
-                modifierPercent).withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW).asWidget());
+                modifierPercent).withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW).asWidget()
+                .tooltip(t -> t.addLine(Component.translatable("tfg.machine.ore_processing_beneath.output_modifier.tooltip"))));
 
-        return widgets;
-
-            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.gas_level",
-                    Component.literal(gasLevelPercent + "%").withStyle(levelColor)));
-
-            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.output_modifier",
-                    Component.literal(modifierPercent + "%")
-                            .withStyle(modifierPercent >= 90 ? ChatFormatting.GREEN : ChatFormatting.YELLOW))
+        var lastRecipe = getRecipeLogic().getLastRecipe();
+        if (getRecipeLogic().isWorking() && lastRecipe != null && lastRecipe.parallels > 1) {
+            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.parallel_info",
+                    Component.literal(lastRecipe.parallels + "/" + MAX_PARALLELS).withStyle(ChatFormatting.AQUA))
                     .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            Component.translatable("tfg.machine.ore_processing_beneath.output_modifier.tooltip")))));
+                            Component.translatable("tfg.machine.ore_processing_beneath.parallel_info.tooltip",
+                                    MAX_PARALLELS)))));
 
-            var lastRecipe = getRecipeLogic().getLastRecipe();
-            if (getRecipeLogic().isWorking() && lastRecipe != null && lastRecipe.parallels > 1) {
-                customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.parallel_info",
-                        Component.literal(lastRecipe.parallels + "/" + MAX_PARALLELS).withStyle(ChatFormatting.AQUA))
-                        .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                Component.translatable("tfg.machine.ore_processing_beneath.parallel_info.tooltip",
-                                        MAX_PARALLELS)))));
+            var tickFluids = lastRecipe.tickInputs.get(FluidRecipeCapability.CAP);
+            if (tickFluids != null) {
+                for (Content content : tickFluids) {
+                    var ingredient = FluidRecipeCapability.CAP.of(content.content());
+                    if (ingredient.getStacks().length > 0) {
+                        FluidStack stack = ingredient.getStacks()[0];
 
-                var tickFluids = lastRecipe.tickInputs.get(FluidRecipeCapability.CAP);
-                if (tickFluids != null) {
-                    for (Content content : tickFluids) {
-                        var ingredient = FluidRecipeCapability.CAP.of(content.content);
-                        if (ingredient.getStacks().length > 0) {
-                            FluidStack stack = ingredient.getStacks()[0];
-
-                            Component amountText;
-                            if (content.isChanced()) {
-                                double avg = stack.getAmount()
-                                        * ((double) content.chance / content.maxChance)
-                                        * lastRecipe.parallels;
-                                amountText = Component.literal("≈ " + String.format("%.1f", avg) + " mB/t")
-                                        .withStyle(ChatFormatting.AQUA);
-                            } else {
-                                amountText = Component.literal(stack.getAmount() + " mB/t")
-                                        .withStyle(ChatFormatting.AQUA);
-                            }
-
-                            customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption",
-                                    stack.getDisplayName(), amountText)
-                                    .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                            Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption.tooltip")))));
+                        Component amountText;
+                        if (content.isChanced()) {
+                            double avg = stack.getAmount()
+                                    * ((double) content.chance() / content.maxChance())
+                                    * lastRecipe.parallels;
+                            amountText = Component.literal("≈ " + String.format("%.1f", avg) + " mB/t")
+                                    .withStyle(ChatFormatting.AQUA);
+                        } else {
+                            amountText = Component.literal(stack.getAmount() + " mB/t")
+                                    .withStyle(ChatFormatting.AQUA);
                         }
+
+                        customLines.add(Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption",
+                                stack.getDisplayName(), amountText)
+                                .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                        Component.translatable("tfg.machine.ore_processing_beneath.fluid_consumption.tooltip")))));
                     }
                 }
             }
         }
 
-        textList.addAll(Math.min(5, textList.size()), customLines);
+        return widgets;
     }
 }

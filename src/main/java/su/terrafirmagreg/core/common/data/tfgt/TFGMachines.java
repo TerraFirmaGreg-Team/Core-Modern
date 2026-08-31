@@ -3,7 +3,6 @@ package su.terrafirmagreg.core.common.data.tfgt;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_ITEM_HATCH;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createTieredHullMachineModel;
 import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 
@@ -20,6 +19,7 @@ import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
+import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.item.QuantumTankMachineItem;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
@@ -48,6 +48,7 @@ import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.RailgunItemBus
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SMRFluidImportHatchPartMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.part.SingleItemstackBus;
 
+@SuppressWarnings("unused")
 public class TFGMachines {
 
     public static void init() {
@@ -169,7 +170,7 @@ public class TFGMachines {
                     .rotationState(RotationState.ALL)
                     .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
-                            GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
+                            GTCEu.id("block/overlay/machine/" + GTMachineModels.OVERLAY_ITEM_HATCH_INPUT))
                     .tooltips(Component.translatable("gtceu.machine.item_bus.import.tooltip"),
                             Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
                                     (1 + Math.min(9, tier)) * (1 + Math.min(9, tier))))
@@ -185,7 +186,7 @@ public class TFGMachines {
                     .rotationState(RotationState.ALL)
                     .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_out_emissive"), null,
-                            GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
+                            GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH_OUTPUT))
                     .tooltips(Component.translatable("gtceu.machine.item_bus.export.tooltip"),
                             Component.translatable("gtceu.universal.tooltip.item_storage_capacity",
                                     (1 + Math.min(9, tier)) * (1 + Math.min(9, tier))))
@@ -207,7 +208,7 @@ public class TFGMachines {
     public static final MachineDefinition RAILGUN_AMMO_LOADER = REGISTRATE
             .machine("railgun_ammo_loader", TFGMachineInstanceFactories.RAILGUN_AMMO_LOADER)
             .colorOverlayTieredHullModel(GTCEu.id("block/overlay/machine/overlay_pipe_in_emissive"), null,
-                    GTCEu.id("block/overlay/machine/" + OVERLAY_ITEM_HATCH))
+                    GTCEu.id("block/overlay/machine/" + GTMachineModels.OVERLAY_ITEM_HATCH_INPUT))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .register();
 
@@ -227,7 +228,7 @@ public class TFGMachines {
 
     // LV super chest is 1M, which is already crazy.
     // 10K is about as much as three steel crates holding items that stack to 64
-    public static final MachineDefinition ULV_SUPER_CHEST = GTRegistration.REGISTRATE.machine("ulv_super_chest",
+    public static final MachineDefinition ULV_SUPER_CHEST = REGISTRATE.machine("ulv_super_chest",
             (holder) -> new QuantumChestMachine(holder, GTValues.ULV, 10_000))
             .langValue("ULV Super Chest")
             .blockProp(BlockBehaviour.Properties::dynamicShape)

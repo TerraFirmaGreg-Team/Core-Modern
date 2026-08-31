@@ -26,6 +26,9 @@ public class TFGRecipeConditions {
     public static RecipeConditionType<AnimalPresentCondition> ANIMAL_PRESENT;
 
     public static void init() {
+    }
+
+    static {
         OXYGENATED = register("oxygenated", OxygenatedCondition::new, OxygenatedCondition.CODEC);
         MONTHS = register("months", MonthCondition::new, MonthCondition.CODEC);
         SEASONS = register("seasons", SeasonCondition::new, SeasonCondition.CODEC);

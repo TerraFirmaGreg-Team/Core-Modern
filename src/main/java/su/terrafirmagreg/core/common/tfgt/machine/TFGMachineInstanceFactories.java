@@ -21,8 +21,7 @@ public interface TFGMachineInstanceFactories {
 
     MachineInstanceFactory.Tiered<SimpleTieredMachine> AQUEOUS_ACCUMULATOR = (info, tier) -> {
         var machine = new SimpleTieredMachine(info, tier);
-        machine.getTraitOrThrow(EnvironmentalExplosionTrait.TYPE).setEnableEnvironmentalExplosions(false);
-
+        machine.getTraitOrThrow(EnvironmentalExplosionTrait.class).setEnableEnvironmentalExplosions(false);
         return machine;
     };
 

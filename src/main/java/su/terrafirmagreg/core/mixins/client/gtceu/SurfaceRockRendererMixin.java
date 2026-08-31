@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.gregtechceu.gtceu.client.model.runtimegen.SurfaceRockModelGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -29,7 +30,7 @@ import su.terrafirmagreg.core.mixins.client.minecraft.IBlockModelGeneratorsInvok
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-@Mixin(value = SurfaceRockRenderer.class, remap = false)
+@Mixin(value = SurfaceRockModelGenerator.class, remap = false)
 @OnlyIn(Dist.CLIENT)
 public abstract class SurfaceRockRendererMixin {
 
