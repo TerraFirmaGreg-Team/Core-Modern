@@ -94,7 +94,6 @@ import net.dries007.tfc.compat.jei.category.InstantBarrelRecipeCategory;
 import net.dries007.tfc.compat.jei.category.InstantFluidBarrelRecipeCategory;
 import net.dries007.tfc.compat.jei.category.JamPotRecipeCategory;
 import net.dries007.tfc.compat.jei.category.KnappingRecipeCategory;
-import net.dries007.tfc.compat.jei.category.LampFuelRecipeCategory;
 import net.dries007.tfc.compat.jei.category.LoomRecipeCategory;
 import net.dries007.tfc.compat.jei.category.QuernRecipeCategory;
 import net.dries007.tfc.compat.jei.category.ScrapingRecipeCategory;
@@ -206,8 +205,7 @@ public final class JEIIntegration implements IModPlugin
             new ChiselRecipeCategory(CHISEL, gui),
             new GlassworkingRecipeCategory(GLASSWORKING, gui),
             new BlastFurnaceRecipeCategory(BLAST_FURNACE, gui),
-            new SewingRecipeCategory(SEWING, gui),
-            new LampFuelRecipeCategory(LAMP_FUEL, gui)
+            new SewingRecipeCategory(SEWING, gui)
         );
 
         for (KnappingType knappingType : KnappingType.MANAGER.getValues())

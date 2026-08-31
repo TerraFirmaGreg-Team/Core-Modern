@@ -81,13 +81,10 @@ def pluginJar = tasks.register("pluginJar", Jar) {
     }
 }
 
-evaluationDependsOn(":tfc") // Because of the sourceset reference
+evaluationDependsOn(":tfc")
 
 dependencies {
-    modImplementation project(":tfc")
-    //modImplementation files(sourceSets.main.output)
-    jarJar(project(":tfc"))
-    jarJar(files(pluginJar))
+    implementation jarJar(project(":tfc"))
 }
 
 // gradle-local.properties should have the following:
@@ -107,6 +104,11 @@ if (project.rootProject.file("gradle-local.properties").exists()) {
 
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
+
+    parchment {
+        minecraftVersion = minecraft_version
+        mappingsVersion = "2023.09.03"
+    }
 
     runs {
         configureEach {
@@ -175,9 +177,6 @@ legacyForge {
     }
 
     mods {
-        tfc {
-            sourceSet project(":tfc").sourceSets.tfc
-        }
         "${mod_id}" {
             sourceSet sourceSets.main
         }

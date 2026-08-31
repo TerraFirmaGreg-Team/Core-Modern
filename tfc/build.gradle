@@ -38,6 +38,7 @@ dependencies {
 
     modImplementation "maven.modrinth:ferrite-core:DG5Fn9Sz"
     modImplementation "maven.modrinth:architectury-api:9.2.14+forge"
+    modImplementation "maven.modrinth:jade:11.13.2+forge"
 
     // JEI
     modCompileOnly "mezz.jei:jei-1.20.1-common-api:${jei_version}"
@@ -68,26 +69,25 @@ java {
 }
 
 sourceSets {
-    tfc.resources {
-        srcDir 'tfc/src/resources'
-    }
-
-    tfc {
-        java.srcDir("tfc/src/java")
-        resources.srcDir("tfc/src/resources")
-        compileClasspath += sourceSets.tfc.compileClasspath
-        runtimeClasspath += sourceSets.tfc.runtimeClasspath
+    main {
+        java.srcDir("src/java")
+        resources.srcDir("src/resources")
     }
 }
 
 mixin {
-    var refMap = add sourceSets.tfc, "tfc.refmap.json"
+    var refMap = add sourceSets.main, "tfc.refmap.json"
     jar.from refMap
     config "tfc.mixins.json"
 }
 
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
+
+    parchment {
+        minecraftVersion = minecraft_version
+        mappingsVersion = "2023.09.03"
+    }
 
     runs {
         configureEach {
@@ -99,14 +99,14 @@ legacyForge {
         client {
             client()
             ideName = "Client"
-            sourceSet = sourceSets.tfc
+            sourceSet = sourceSets.main
             gameDirectory = project.file('run/client')
         }
 
         server {
             server()
             ideName = "Server"
-            sourceSet = sourceSets.tfc
+            sourceSet = sourceSets.main
             gameDirectory = project.file('run/server')
             programArgument '--nogui'
         }
@@ -114,7 +114,7 @@ legacyForge {
 
     mods {
         tfc {
-            sourceSet sourceSets.tfc
+            sourceSet sourceSets.main
         }
     }
 
