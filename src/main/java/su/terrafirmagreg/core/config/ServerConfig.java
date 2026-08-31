@@ -75,9 +75,6 @@ public final class ServerConfig {
     // Atmosphere system config
     public final ForgeConfigSpec.IntValue atmosphereMaxHorizontalDimension;
     public final ForgeConfigSpec.IntValue atmosphereRevalidationBaseTicks;
-    public final ForgeConfigSpec.IntValue atmosphereLvMaxBlocks;
-    public final ForgeConfigSpec.IntValue atmosphereMvMaxBlocks;
-    public final ForgeConfigSpec.IntValue atmosphereHvMaxBlocks;
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.push("hang_glider");
@@ -243,18 +240,6 @@ public final class ServerConfig {
         atmosphereRevalidationBaseTicks = builder
                 .comment("Base delay (in ticks) between room revalidation checks. Larger rooms get longer delays.")
                 .defineInRange("revalidationBaseTicks", 10, 1, 100);
-
-        atmosphereLvMaxBlocks = builder
-                .comment("Maximum room size (in blocks) for LV Oxygen Distributor.")
-                .defineInRange("lvMaxBlocks", 10_000, 1000, 100_000);
-
-        atmosphereMvMaxBlocks = builder
-                .comment("Maximum room size (in blocks) for MV Oxygen Distributor.")
-                .defineInRange("mvMaxBlocks", 100_000, 10_000, 1_000_000);
-
-        atmosphereHvMaxBlocks = builder
-                .comment("Maximum room size (in blocks) for HV Oxygen Distributor.")
-                .defineInRange("hvMaxBlocks", 1_000_000, 100_000, 10_000_000);
 
         builder.pop();
     }

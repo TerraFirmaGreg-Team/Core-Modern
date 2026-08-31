@@ -83,17 +83,21 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     private static final int TRACE_MAX_BLOCKS = 1_000_000;
     private static final int MAX_HORIZONTAL_DIMENSION = 128;
 
-    /** Maximum room volume (in blocks) this machine is designed to handle */
-    @Getter
-    private final int maxVolume;
+    /** Hard cap for a single flood fill scan. */
+    private static final int SCAN_MAX_BLOCKS = 2_000_000;
 
-    /** Block limit for validation scan: maxVolume plus a bit to detect breaches */
-    private final int scanMaxBlocks;
+    /** Reference volume (in blocks) used to normalize energy and fluid consumption. */
+    public static final int BASE_VOLUME = 10_000;
 
-    public OxygenDistributorMachine(IOxygenDistributorHost host, int maxVolume) {
+    public OxygenDistributorMachine(IOxygenDistributorHost host) {
         this.host = host;
-        this.maxVolume = maxVolume;
-        this.scanMaxBlocks = maxVolume + 5_000;
+    }
+
+    /** @return the expected EU/t consumption based on room size. */
+    public double computeEnergyCostPerTick() {
+        int effectiveVolume = computeEffectiveVolume();
+        double normalized = effectiveVolume / (double) BASE_VOLUME;
+        return 32 * Math.pow(normalized, Math.log10(4));
     }
 
     public RoomScan getRoomScan() {
@@ -135,13 +139,13 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
             return 1;
 
         } else {
-            // Unsealed: cost based on maxVolume, scaled by pressure difference
+            // Unsealed: cost based on BASE_VOLUME, scaled by pressure difference
             float pressure = manager != null ? manager.getPressure(getPos()) : 0.0f;
             if (pressure < 1.0f) {
                 float leakFactor = 1.0f - pressure;
-                return Math.max(1, (int) (maxVolume * (1.0f + 0.3f * leakFactor)));
+                return Math.max(1, (int) (BASE_VOLUME * (1.0f + 0.3f * leakFactor)));
             } else {
-                return Math.max(1, (int) (maxVolume / pressure));
+                return Math.max(1, (int) (BASE_VOLUME / pressure));
             }
         }
     }
@@ -195,18 +199,14 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
 
     private void addStatusText(List<Component> textList) {
         RoomScan scan = getRoomScan();
-        boolean elevated = !scan.isSealed() || scan.interiorSize() > maxVolume;
+        boolean elevated = !scan.isSealed();
 
         Component statusText = switch (scan.status()) {
-            case SEALED -> scan.interiorSize() > maxVolume
-                    ? Component.translatable("tfg.machine.oxygen_distributor.status.volume_limit",
-                            FormattingUtil.formatNumbers(maxVolume)).withStyle(ChatFormatting.YELLOW)
-                    : Component.translatable("tfg.machine.oxygen_distributor.status.sealed").withStyle(ChatFormatting.GREEN);
+            case SEALED -> Component.translatable("tfg.machine.oxygen_distributor.status.sealed").withStyle(ChatFormatting.GREEN);
             case ESCAPED_BUILD_HEIGHT -> Component.translatable("tfg.machine.oxygen_distributor.status.breached").withStyle(ChatFormatting.RED);
             case ESCAPED_DIMENSION -> Component.translatable("tfg.machine.oxygen_distributor.status.too_wide").withStyle(ChatFormatting.YELLOW);
             case ESCAPED_UNLOADED -> Component.translatable("tfg.machine.oxygen_distributor.status.chunk_unloaded").withStyle(ChatFormatting.YELLOW);
-            case BLOCK_LIMIT -> Component.translatable("tfg.machine.oxygen_distributor.status.volume_limit",
-                    FormattingUtil.formatNumbers(maxVolume)).withStyle(ChatFormatting.YELLOW);
+            case BLOCK_LIMIT -> Component.translatable("tfg.machine.oxygen_distributor.status.scan_limit").withStyle(ChatFormatting.YELLOW);
             case SAVED_DATA -> Component.translatable("tfg.machine.oxygen_distributor.status.restoring").withStyle(ChatFormatting.GREEN);
             case NULL -> Component.translatable("tfg.machine.oxygen_distributor.status.scanning").withStyle(ChatFormatting.GRAY);
         };
@@ -217,7 +217,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
 
         textList.add(Component.translatable("tfg.machine.oxygen_distributor.status").append(statusText));
 
-        if (scan.isSealed() && scan.interiorSize() > 0 && scan.interiorSize() <= maxVolume) {
+        if (scan.isSealed() && scan.interiorSize() > 0) {
             textList.add(Component.translatable("tfg.machine.oxygen_distributor.size",
                     FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA));
         }
@@ -228,6 +228,9 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
                 textList.add(Component.translatable("tfg.machine.oxygen_distributor.consumption", consumptionText)
                         .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
             }
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.energy",
+                    String.format("%,.0f", computeEnergyCostPerTick()))
+                    .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
         } else if (host.getRecipeLogic() != null && host.getRecipeLogic().isIdle()
                 && !host.getRecipeLogic().getFailureReasons().isEmpty()) {
             for (Component reason : host.getRecipeLogic().getFailureReasons()) {
@@ -324,7 +327,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     public void validateAsync(AsyncBlockReader reader) {
         TFGCore.LOGGER.info("[validation] validateAsync START, pos={}", getPos());
         long start = System.nanoTime();
-        newRoomScan = FloodFill.fill(reader, getPos(), scanMaxBlocks, MAX_HORIZONTAL_DIMENSION);
+        newRoomScan = FloodFill.fill(reader, getPos(), SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
         long elapsed = (System.nanoTime() - start) / 1_000_000;
         TFGCore.LOGGER.info("[validation] validateAsync DONE, pos={}, elapsedMs={}, status={}, size={}",
                 getPos(), elapsed, newRoomScan.status(), newRoomScan.interiorSize());

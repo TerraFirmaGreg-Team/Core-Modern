@@ -1327,11 +1327,12 @@ public class TFGMultiMachines {
             .register();
 
     // I made this beautiful and well-designed multiblock that looks aesthetically perfect especially for Tom
-    public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR_MULTI = REGISTRATE
-            .multiblock("oxygen_distributor_200",
-                    holder -> new OxygenDistributorMultiblock(holder, 200_000))
+    public static final MultiblockMachineDefinition OXYGEN_DISTRIBUTOR = REGISTRATE
+            .multiblock("oxygen_distributor",
+                    holder -> new OxygenDistributorMultiblock(holder))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
+            .recipeModifier(OxygenDistributorMultiblock::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),

@@ -57,7 +57,6 @@ public class HiggsEmitterMachine extends SimpleTieredMachine implements IEnviron
         this.radius = RADIUS;
     }
 
-
     @Override
     protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
         return new EnvironmentRecipeLogic(this);

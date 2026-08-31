@@ -5,10 +5,12 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
@@ -45,8 +47,7 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
 
     public OxygenDistributorMultiblock(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
-        int maxVolume = args.length > 0 && args[args.length - 1] instanceof Integer i ? i : 500_000;
-        this.machine = new OxygenDistributorMachine(this, maxVolume);
+        this.machine = new OxygenDistributorMachine(this);
     }
 
     //////////////////////////////////////
@@ -127,5 +128,18 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
     @Override
     public void setShowTraceButton(boolean show) {
         showTraceButton = show;
+    }
+
+    /** Scales energy consumption based on the room's volume. */
+    public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
+        if (machine instanceof OxygenDistributorMultiblock distributor) {
+            double energy = distributor.machine.computeEnergyCostPerTick();
+            double baseEUt = recipe.getInputEUt().getTotalEU();
+            if (baseEUt <= 0) {
+                return ModifierFunction.NULL;
+            }
+            return ModifierFunction.builder().eutMultiplier(Math.max(0, energy / baseEUt)).build();
+        }
+        return ModifierFunction.NULL;
     }
 }
