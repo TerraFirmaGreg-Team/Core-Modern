@@ -7,7 +7,7 @@ issueTrackerURL = "https://github.com/TerraFirmaGreg-Team/Modpack-Modern/issues"
 # TFC
 [[mods]]
     modId = "tfc"
-    version = "${mod_version}"
+    version = "3.2.24"
     displayName = "TerraFirmaCraft"
     credits = "By AlcatrazEscapee, Disastermoo, Dries007, Bunsan, Claycorp, DavidTriphon, EERussianguy, Gaelmare, and many others. Based on the original work by Bioxx, Dunk, and Kitty. Music by Mike \"Menoch\" Pelaez"
     authors = "AlcatrazEscapee"

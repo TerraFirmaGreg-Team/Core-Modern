@@ -98,14 +98,14 @@ legacyForge {
 
         client {
             client()
-            ideName = "Client"
+            ideName = "Client (TFC)"
             sourceSet = sourceSets.main
             gameDirectory = project.file('run/client')
         }
 
         server {
             server()
-            ideName = "Server"
+            ideName = "Server (TFC)"
             sourceSet = sourceSets.main
             gameDirectory = project.file('run/server')
             programArgument '--nogui'
