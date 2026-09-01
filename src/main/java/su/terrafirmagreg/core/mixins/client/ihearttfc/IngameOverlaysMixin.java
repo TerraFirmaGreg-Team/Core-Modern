@@ -22,7 +22,7 @@ import su.terrafirmagreg.tfcambiental.capability.TemperatureCapability;
 @Mixin(value = IngameOverlays.class, remap = false)
 public class IngameOverlaysMixin {
     @Unique
-    private static final ResourceLocation TEXTURE_TFG = TFGCore.id("textures/gui/icons/overlay.png");
+    private static final ResourceLocation TEXTURE_TFG = TFGCore.id("textures/gui/icons/temperature_indicators.png");
 
     @ModifyExpressionValue(method = "renderTemperature", at = @At(value = "INVOKE", target = "Lnet/dries007/tfc/client/ClimateRenderCache;getTemperature()F", ordinal = 0))
     private static float tfg$replaceCurrentTempWithPlayerTemp(float currentTemp, @Local(name = "player") Player player) {
@@ -39,8 +39,8 @@ public class IngameOverlaysMixin {
             float percentCurrentTemp = (Mth.clamp(currentTemp, -45.0F, 45.0F) + 45.0F) / 90.0F;
             int averageTempPixels = (int) (percentAverageTemp * 178.0F);
             int currentTempPixels = (int) (percentCurrentTemp * 178.0F);
-            graphics.blit(TEXTURE_TFG, -92 + averageTempPixels, -2, 0, 0, 7, 9);
-            graphics.blit(TEXTURE_TFG, -92 + currentTempPixels, -2, 7, 0, 7, 9);
+            graphics.blit(TEXTURE_TFG, -92 + averageTempPixels, -2, 0, 0, 7, 9, 14, 9);
+            graphics.blit(TEXTURE_TFG, -92 + currentTempPixels, -2, 7, 0, 7, 9, 14, 9);
         }
     }
 }
