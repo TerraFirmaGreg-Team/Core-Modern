@@ -11,6 +11,7 @@ import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 import java.util.*;
 import java.util.function.Supplier;
 
+import com.simibubi.create.content.decoration.girder.GirderBlock;
 import org.joml.Vector3f;
 
 import com.eerussianguy.firmalife.common.FLTags;
@@ -71,6 +72,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -86,7 +88,9 @@ import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.api.pattern.TFGPredicates;
 import su.terrafirmagreg.core.common.data.TFGTags;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Asphalt;
 import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Casings;
+import su.terrafirmagreg.core.common.data.blocks.TFGBlocks_Girders;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryItemLauncherMachine;
 import su.terrafirmagreg.core.common.tfgt.interdim_logistics.machine.InterplanetaryItemReceiverMachine;
 import su.terrafirmagreg.core.common.tfgt.machine.multiblock.electric.*;
@@ -102,11 +106,11 @@ public class TFGMultiMachines {
     public static void init() {
     }
 
-    private static net.minecraft.world.level.block.state.BlockState orientedBlockState(String namespace, String path, Direction dir) {
+    private static BlockState orientedBlockState(String namespace, String path, Direction dir) {
         Block block = ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(namespace, path));
         if (block == null)
             return Blocks.AIR.defaultBlockState();
-        net.minecraft.world.level.block.state.BlockState state = block.defaultBlockState();
+        BlockState state = block.defaultBlockState();
         if (dir.getAxis().isHorizontal() && state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
             return state.setValue(BlockStateProperties.HORIZONTAL_FACING, dir);
         }
@@ -563,7 +567,6 @@ public class TFGMultiMachines {
                     .where(" ", Predicates.any())
                     .where("H", Predicates.blocks(GTBlocks.CASING_PTFE_INERT.get()))
                     .where("A", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_CASING.get()))
-                    .where("F", Predicates.blocks(TFGBlocks_Casings.IRON_DESH_CASING.get()))
                     .where("F", Predicates.blocks(TFGBlocks_Casings.ULTRAVIOLET_CASING.get()))
                     .where("D", Predicates.blocks(TFGBlocks_Casings.BIOCULTURE_GLASS_CASING.get()))
                     .where("B", Predicates.blocks(ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("megacells", "mega_crafting_unit"))))
@@ -1487,6 +1490,83 @@ public class TFGMultiMachines {
                 shapeInfos.add(spatialCopy.build());
 
                 return shapeInfos;
+            })
+            .register();
+
+    public static final MultiblockMachineDefinition AUTOMOTIVE_WORKSHOP = REGISTRATE
+            .multiblock("automotive_workshop", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .allowFlip(false)
+            .allowExtendedFacing(false)
+            .recipeType(TFGTRecipeTypes.AUTOMOTIVE_WORKSHOP_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, GTRecipeModifiers.BATCH_MODE)
+            .appearanceBlock(GCYMBlocks.CASING_INDUSTRIAL_STEAM)
+            .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
+            .workableCasingModel(
+                    GTCEu.id("block/casings/gcym/industrial_steam_casing"),
+                    TFGCore.id("block/machines/automotive_workshop"))
+            .pattern((definition) -> FactoryBlockPattern.start()
+                    .aisle("ABBBBBA", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("ACCDCCA", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("ECCDCCE", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("ECCDCCE", "E     E", "F     E", "H     H", "H     H", "HHHHHHH")
+                    .aisle("ECCDCCE", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("ACCDCCA", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("ABBBBBA", "       ", "       ", "       ", "       ", "       ")
+                    .where(" ", Predicates.any())
+                    .where("A", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
+                    .where("B", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where("C", Predicates.blockTag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("rnr", "functional_concrete_roads")))
+                            .or(Predicates.blocks(TFGBlocks_Asphalt.ASPHALT_ROAD.get())))
+                    .where("D", Predicates.blocks(steel_catwalk.get()))
+                    .where("E", Predicates.blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(false, false, false)))
+                    .where("F", Predicates.controller(Predicates.blocks(definition.get())))
+                    .where("H", Predicates.blockTag(TFGTags.Blocks.GIRDER)
+                            .or(Predicates.blockTag(TFGTags.Blocks.TRUSS)))
+                    .build())
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+                var builder = MultiblockShapeInfo.builder()
+                        .aisle("ABBBBBA", "       ", "       ", "       ", "       ", "       ")
+                        .aisle("ACCDCCA", "       ", "       ", "       ", "       ", "       ")
+                        .aisle("LCCDCCI", "       ", "       ", "       ", "       ", "       ")
+                        .aisle("ECCDCCI", "E     E", "F     E", "G     G", "G     G", "THHHHHT")
+                        .aisle("WCCDCCO", "       ", "       ", "       ", "       ", "       ")
+                        .aisle("ACCDCCA", "       ", "       ", "       ", "       ", "       ")
+                        .aisle("ABBBBBA", "       ", "       ", "       ", "       ", "       ")
+                        .where(' ', Blocks.AIR)
+                        .where('A', GTBlocks.CASING_BRONZE_BRICKS)
+                        .where('B', GTBlocks.CASING_STEEL_SOLID)
+                        .where('C', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("rnr", "concrete_road")))
+                        .where('D', ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("createdeco", "industrial_iron_catwalk")))
+                        .where('E', GCYMBlocks.CASING_INDUSTRIAL_STEAM)
+                        .where('F', definition, Direction.NORTH)
+                        .where('I', GTMachines.ITEM_IMPORT_BUS[GTValues.LV], Direction.EAST)
+                        .where('O', GTMachines.ITEM_EXPORT_BUS[GTValues.ULV], Direction.EAST)
+                        .where('L', GTMachines.FLUID_IMPORT_HATCH[GTValues.ULV], Direction.WEST)
+                        .where('W', GTMachines.ENERGY_INPUT_HATCH[GTValues.LV], Direction.WEST)
+                        .where('G', TFGBlocks_Girders.BRASS_BEAM.getDefaultState()
+                                .setValue(GirderBlock.AXIS, Direction.Axis.Y)
+                                .setValue(GirderBlock.BOTTOM, true)
+                                .setValue(GirderBlock.TOP, true)
+                                .setValue(GirderBlock.X, false)
+                                .setValue(GirderBlock.Z, false))
+                        .where('T', TFGBlocks_Girders.BRASS_TRUSS.getDefaultState()
+                                .setValue(GirderBlock.AXIS, Direction.Axis.Y)
+                                .setValue(GirderBlock.BOTTOM, true)
+                                .setValue(GirderBlock.TOP, true)
+                                .setValue(GirderBlock.X, true)
+                                .setValue(GirderBlock.Z, false))
+                        .where('H', TFGBlocks_Girders.BRASS_TRUSS.getDefaultState()
+                                .setValue(GirderBlock.AXIS, Direction.Axis.X)
+                                .setValue(GirderBlock.BOTTOM, false)
+                                .setValue(GirderBlock.TOP, false)
+                                .setValue(GirderBlock.X, true)
+                                .setValue(GirderBlock.Z, false));
+                shapeInfo.add(builder.build());
+                return shapeInfo;
             })
             .register();
 

@@ -377,4 +377,15 @@ public class TFGTRecipeTypes {
                     return "";
                 return LocalizationUtils.format("tfg.budding_tier." + data.getInt("budding_max_tier"));
             });
+
+    public static final GTRecipeType AUTOMOTIVE_WORKSHOP_RECIPES = GTRecipeTypes
+            .register("automotive_workshop", GTRecipeTypes.MULTIBLOCK)
+            .setEUIO(IO.IN)
+            .setMaxIOSize(12, 3, 3, 0)
+            .setProgressBar(PROGRESS_BAR_CAR, FillDirection.DOWN_TO_UP)
+            .setSound(GTSoundEntries.COMBUSTION)
+            .setUiBuilder((recipe, widgetGroup) -> {
+                var size = widgetGroup.getSize();
+                widgetGroup.setSize(size.width, size.height + 5);
+            });
 }
