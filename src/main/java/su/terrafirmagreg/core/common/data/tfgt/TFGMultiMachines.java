@@ -1334,7 +1334,7 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.ME_ASSEMBLER)
             .alwaysTryModifyRecipe(true)
-            .recipeModifiers(MEAssemblerMachine::buddingOverclock ,GTRecipeModifiers.BATCH_MODE)
+            .recipeModifiers(MEAssemblerMachine::buddingModifier)
             .appearanceBlock(TFGBlocks_Casings.PTFE_BLACK_CASING)
             .tooltips(
                     Component.translatable("tfg.tooltip.machine.me_assembler_1"),
