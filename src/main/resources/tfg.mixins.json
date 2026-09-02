@@ -335,6 +335,7 @@
         "client.ftb.ClientTeamManagerImplMixin",
         "client.ftb.QuestScreenMixin",
         "client.gtceu.ISurfaceRockRendererAccessor",
+        "client.ihearttfc.IngameOverlaysMixin",
         "client.iris.IrisModernExclusiveUniformsMixin",
         "client.ldlib.ModularUIGuiContainerMixin",
         "client.minecraft.CameraMixin",
