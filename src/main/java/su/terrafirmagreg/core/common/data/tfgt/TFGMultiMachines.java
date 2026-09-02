@@ -11,7 +11,6 @@ import static su.terrafirmagreg.core.TFGCore.REGISTRATE;
 import java.util.*;
 import java.util.function.Supplier;
 
-import com.simibubi.create.content.decoration.girder.GirderBlock;
 import org.joml.Vector3f;
 
 import com.eerussianguy.firmalife.common.FLTags;
@@ -56,6 +55,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.decoration.girder.GirderBlock;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -1384,9 +1384,9 @@ public class TFGMultiMachines {
                 List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
                 var builder = MultiblockShapeInfo.builder()
                         .aisle("  TTnTT  ", "TTr X TTT", "TCT   TCT", "TTT   TTT", "  TTmTT  ")
-                        .aisle("AAACCCAAA", "ICGD  GCA", "ICG   GCA", "ICG  DGCA", "AAACCCAAA")
-                        .aisle("ACCCCCCCA", "ICGDB GCA", "ICG q GCA", "ICG BDGCA", "ACCCCCCCA")
-                        .aisle("AAACCCAAA", "ICGFDDGCA", "ICG  DGCA", "ICGDDFGCA", "AAACCCAAA")
+                        .aisle("AAACCCAAA", "ICG  DGCA", "ICG   GCA", "ICG   GCA", "AAACCCAAA")
+                        .aisle("ACCCCCCCA", "ICG BDGCA", "ICG q GCA", "ICG B GCA", "ACCCCCCCA")
+                        .aisle("AAACCCAAA", "ICGDDFGCA", "ICG  DGCA", "ICG  DGCA", "AAACCCAAA")
                         .aisle("  TTpTT  ", "TTT H TTT", "TCT   TCT", "TTT   TTT", "  TToTT  ")
                         .where('X', definition, Direction.NORTH)
                         .where('A', TFGBlocks_Casings.PTFE_BLACK_CASING.get())
@@ -1532,7 +1532,7 @@ public class TFGMultiMachines {
                         .aisle("ABBBBBA", "       ", "       ", "       ", "       ", "       ")
                         .aisle("ACCDCCA", "       ", "       ", "       ", "       ", "       ")
                         .aisle("LCCDCCI", "       ", "       ", "       ", "       ", "       ")
-                        .aisle("ECCDCCI", "E     E", "F     E", "G     G", "G     G", "THHHHHT")
+                        .aisle("ECCDCCI", "E     E", "E     F", "G     G", "G     G", "THHHHHT")
                         .aisle("WCCDCCO", "       ", "       ", "       ", "       ", "       ")
                         .aisle("ACCDCCA", "       ", "       ", "       ", "       ", "       ")
                         .aisle("ABBBBBA", "       ", "       ", "       ", "       ", "       ")
