@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import net.minecraftforge.fml.loading.LoadingModList;
+
 /** Config to modify the mixins at load and application time */
 // Normally this only works on our own mixins, but with a generous sprinkling of reflection, we get more freedom.
 public class TFGMixinPlugin implements IMixinConfigPlugin {
@@ -21,6 +23,14 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     private static final String AAAPARTICLES_MIXIN_JSON = "aaa_particles.mixins.json";
     private static final String AAAPARTICLES_GAME_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinGameRenderer";
     private static final String AAAPARTICLES_ITEM_IN_HAND_RENDERER_MIXIN = "mod.chloeprime.aaaparticles.mixin.client.MixinItemInHandRenderer";
+
+    @Override
+    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        return switch (mixinClassName) {
+            case "su.terrafirmagreg.core.mixins.client.ihearttfc.IngameOverlaysMixin" -> isModLoaded("ihearttfc");
+            default -> true;
+        };
+    }
 
     /**
      * acceptTargets fires once after all configs have been collected but before any have been applied,
@@ -95,11 +105,14 @@ public class TFGMixinPlugin implements IMixinConfigPlugin {
     // No-op event handlers that need implementation for an IMixinConfigPlugin
 
     // spotless:off
-    @Override public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {return true;}
     @Override public void onLoad(String mixinPackage) {}
     @Override public String getRefMapperConfig() {return null;}
     @Override public List<String> getMixins() {return null;}
     @Override public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
     @Override public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
     // spotless:on
+
+    private static boolean isModLoaded(String modid) {
+        return LoadingModList.get().getModFileById(modid) != null;
+    }
 }

@@ -394,7 +394,8 @@
         "common.minecraft.FogRendererMixin",
         "common.tfc.entities.ClientEventHandlerMixin",
         "common.tfc.entities.TFCDogRendererMixin",
-        "common.tfchotornot.ClientEventHandlerMixin"
+        "common.tfchotornot.ClientEventHandlerMixin",
+        "client.ihearttfc.IngameOverlaysMixin"
     ],
     "required": true,
     "refmap": "tfg.refmap.json"
