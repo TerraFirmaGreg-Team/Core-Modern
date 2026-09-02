@@ -75,8 +75,8 @@ def pluginJar = tasks.register("pluginJar", Jar) {
     archiveClassifier = "TerraFirmaCraft-Modern-Fork"
     manifest {
         attributes(
-            'FMLModType': 'LIBRARY',
-            'Automatic-Module-Name': "${mod_name}-${mod_name_suffix}.plugin"
+                'FMLModType': 'LIBRARY',
+                'Automatic-Module-Name': "${mod_name}-${mod_name_suffix}.plugin"
         )
     }
 }
@@ -154,7 +154,7 @@ legacyForge {
             programArguments.addAll '--existing', file('src/main/resources/').getAbsolutePath()
             programArguments.addAll '--existing', file("$instancePath/kubejs").getAbsolutePath()
 
-            String[] existingMods = new String[] {
+            String[] existingMods = new String[]{
                     "tfg", "gtceu", "tfc", "firmalife", "species",
                     "ad_astra", "wan_ancient_beasts", "rnr", "afc",
                     "beneath", "craftingstation"
@@ -181,25 +181,28 @@ legacyForge {
         "${mod_id}" {
             sourceSet sourceSets.main
         }
+//        tfc {
+//            sourceSet sourceSets.tfc
+//        }
     }
 }
 
 processResources {
     var replaceProperties = [
-            'mod_id'                 : "${mod_id}",
-            'mod_name'               : "${mod_name}",
-            'mod_version'            : "${mod_version}",
-            'mod_description'        : "${mod_description}",
-            'mod_authors'            : "${mod_authors}",
-            'mod_credits'            : "${mod_credits}",
-            'mod_url'                : "${mod_url}",
-            'mod_logo_path'          : "${mod_logo_path}",
+            'mod_id'              : "${mod_id}",
+            'mod_name'            : "${mod_name}",
+            'mod_version'         : "${mod_version}",
+            'mod_description'     : "${mod_description}",
+            'mod_authors'         : "${mod_authors}",
+            'mod_credits'         : "${mod_credits}",
+            'mod_url'             : "${mod_url}",
+            'mod_logo_path'       : "${mod_logo_path}",
 
-            'minecraft_version'      : "${minecraft_version}",
+            'minecraft_version'   : "${minecraft_version}",
 
-            'forge_version'          : "${forge_version}",
-            'forge_version_range'    : "${loader_version_range}",
-            'loader_version_range'   : "${loader_version_range}"
+            'forge_version'       : "${forge_version}",
+            'forge_version_range' : "${loader_version_range}",
+            'loader_version_range': "${loader_version_range}"
     ]
     var filterList = [
             'META-INF/mods.toml',

@@ -46,7 +46,7 @@ dependencies {
     modCompileOnly "mezz.jei:jei-1.20.1-forge:${jei_version}"
 
     // Patchouli
-    modImplementation ("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
+    modImplementation("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
 }
 
 base {
@@ -96,19 +96,22 @@ legacyForge {
             systemProperty 'forge.logging.console.level', 'INFO'
         }
 
-        client {
-            client()
-            ideName = "Client (TFC)"
-            sourceSet = sourceSets.main
-            gameDirectory = project.file('run/client')
-        }
 
-        server {
-            server()
-            ideName = "Server (TFC)"
-            sourceSet = sourceSets.main
-            gameDirectory = project.file('run/server')
-            programArgument '--nogui'
+        if (project == project.rootProject) {
+            client {
+                client()
+                ideName = "Client (TFC)"
+                sourceSet = sourceSets.main
+                gameDirectory = project.file('run/client')
+            }
+
+            server {
+                server()
+                ideName = "Server (TFC)"
+                sourceSet = sourceSets.main
+                gameDirectory = project.file('run/server')
+                programArgument '--nogui'
+            }
         }
     }
 
