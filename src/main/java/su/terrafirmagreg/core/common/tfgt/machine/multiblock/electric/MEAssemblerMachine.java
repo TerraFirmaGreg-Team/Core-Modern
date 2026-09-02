@@ -216,14 +216,14 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
             default -> ChatFormatting.GREEN;
         };
         // Debug Tool for Balance - Also Informations that could be shared but could lead to exploit
-/*
+        /*
         var last = getRecipeLogic().getLastRecipe();
         if (last != null) {
             int dur = last.data.contains("nominal_duration")
                     ? last.data.getInt("nominal_duration")
                     : last.duration;
             long work = (long) dur * Math.max(1, last.batchParallels);
-
+        
             textList.add(Component.literal("work: " + work));
             textList.add(Component.literal("eut: " + RecipeHelper.getRealEUt(last).getTotalEU()));
             textList.add(Component.literal("dur: " + last.duration));
@@ -232,7 +232,7 @@ public class MEAssemblerMachine extends WorkableElectricMultiblockMachine implem
             textList.add(Component.literal("units: " + Math.max(1, (int) (work / 500))));
             textList.add(Component.literal("hp: " + buddingHealth));
         }
-*/
+        */
         int speedBonus = (int) (BUDDING_SPEED_BONUS[buddingTier] * 100);
 
         textList.add(Component.translatable("tfg.machine.me_assembler.budding_tier",

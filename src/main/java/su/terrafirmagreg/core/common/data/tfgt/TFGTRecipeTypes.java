@@ -381,9 +381,9 @@ public class TFGTRecipeTypes {
     public static final GTRecipeType AUTOMOTIVE_WORKSHOP_RECIPES = GTRecipeTypes
             .register("automotive_workshop", GTRecipeTypes.MULTIBLOCK)
             .setEUIO(IO.IN)
-            .setMaxIOSize(12, 3, 3, 0)
+            .setMaxIOSize(12, 1, 3, 0)
             .setProgressBar(PROGRESS_BAR_CAR, FillDirection.DOWN_TO_UP)
-            .setSound(GTSoundEntries.COMBUSTION)
+            .setSound(GTSoundEntries.ASSEMBLER)
             .setUiBuilder((recipe, widgetGroup) -> {
                 var size = widgetGroup.getSize();
                 widgetGroup.setSize(size.width, size.height + 5);
