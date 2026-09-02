@@ -21,5 +21,5 @@ public class ProgressBars {
             "tfg:textures/gui/progress_bar/progress_bar_boule.png");
 
     public static final ResourceTexture PROGRESS_BAR_CAR = new ResourceTexture(
-            "tfg:textures/gui/progress_bar/progress_bar_boule.png");
+            "tfg:textures/gui/progress_bar/progress_bar_car.png");
 }
