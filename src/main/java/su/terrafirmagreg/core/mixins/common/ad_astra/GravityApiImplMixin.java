@@ -15,8 +15,6 @@ import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
 
 /**
  * Intercepts Ad Astra's gravity queries to check our EnvironmentSystem first.
- * Currently only does planet-level checks via DimensionEnvironment.
- * Per-position gravity machines will be added later.
  */
 @Mixin(value = GravityApiImpl.class, remap = false)
 public class GravityApiImplMixin {
@@ -25,7 +23,7 @@ public class GravityApiImplMixin {
     private void tfg$getGravity(Level level, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         if (!(level instanceof ServerLevel))
             return;
-        if (EnvironmentSystem.hasNormalGravity(level)) {
+        if (EnvironmentSystem.hasNormalGravity(level, pos)) {
             cir.setReturnValue(1.0f);
         }
     }

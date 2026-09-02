@@ -86,9 +86,6 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     /** Hard cap for a single flood fill scan. */
     private static final int SCAN_MAX_BLOCKS = 2_000_000;
 
-    /** Reference volume (in blocks) used to normalize energy and fluid consumption. */
-    public static final int BASE_VOLUME = 10_000;
-
     public OxygenDistributorMachine(IOxygenDistributorHost host) {
         this.host = host;
     }
@@ -96,8 +93,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
     /** @return the expected EU/t consumption based on room size. */
     public double computeEnergyCostPerTick() {
         int effectiveVolume = computeEffectiveVolume();
-        double normalized = effectiveVolume / (double) BASE_VOLUME;
-        return 32 * Math.pow(normalized, Math.log10(4));
+        return EnclosedRoomEnergyCurve.eutForVolume(effectiveVolume);
     }
 
     public RoomScan getRoomScan() {
@@ -127,7 +123,7 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
             baseCost = FluidRecipeCapability.CAP.of(fluidInputs.get(0).getContent()).getAmount();
         }
         // baseCost mB/min per 10k blocks -> mB/tick for actual volume
-        envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * 10_000));
+        envLogic.setFluidCostPerTick(baseCost * computeEffectiveVolume() / (60.0 * 20 * EnclosedRoomEnergyCurve.BASE_VOLUME));
     }
 
     private int computeEffectiveVolume() {
@@ -143,9 +139,9 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
             float pressure = manager != null ? manager.getPressure(getPos()) : 0.0f;
             if (pressure < 1.0f) {
                 float leakFactor = 1.0f - pressure;
-                return Math.max(1, (int) (BASE_VOLUME * (1.0f + 0.3f * leakFactor)));
+                return Math.max(1, (int) (EnclosedRoomEnergyCurve.BASE_VOLUME * (1.0f + 0.3f * leakFactor)));
             } else {
-                return Math.max(1, (int) (BASE_VOLUME / pressure));
+                return Math.max(1, (int) (EnclosedRoomEnergyCurve.BASE_VOLUME / pressure));
             }
         }
     }
@@ -222,15 +218,20 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
                     FormattingUtil.formatNumbers(scan.interiorSize())).withStyle(ChatFormatting.AQUA));
         }
 
-        if (isWorking()) {
-            String consumptionText = getFluidConsumptionDisplay();
-            if (consumptionText != null) {
-                textList.add(Component.translatable("tfg.machine.oxygen_distributor.consumption", consumptionText)
-                        .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
-            }
-            textList.add(Component.translatable("tfg.machine.oxygen_distributor.energy",
-                    String.format("%,.0f", computeEnergyCostPerTick()))
+        String consumptionText = getFluidConsumptionDisplay();
+        if (consumptionText != null) {
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.consumption", consumptionText)
                     .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
+        }
+        textList.add(Component.translatable("tfg.machine.oxygen_distributor.energy",
+                String.format("%,.0f", computeEnergyCostPerTick()))
+                .withStyle(elevated ? ChatFormatting.RED : ChatFormatting.AQUA));
+
+        if (isWorking()) {
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.active").withStyle(ChatFormatting.GREEN));
+        } else if (host.getEnergyInputPerSec() < computeEnergyCostPerTick()) {
+            textList.add(Component.translatable("tfg.machine.oxygen_distributor.status.no_energy")
+                    .withStyle(ChatFormatting.RED));
         } else if (host.getRecipeLogic() != null && host.getRecipeLogic().isIdle()
                 && !host.getRecipeLogic().getFailureReasons().isEmpty()) {
             for (Component reason : host.getRecipeLogic().getFailureReasons()) {
@@ -272,6 +273,9 @@ public class OxygenDistributorMachine implements IBlockSensitiveMachine, IEnviro
                 RoomScan result = DiagnosticFloodFill.fill(reader, tracePos, TRACE_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
                 if (result.escapePath() != null && !result.escapePath().isEmpty()) {
                     DiagnosticFloodFill.spawnTrace(traceLevel, result.escapePath());
+                } else {
+                    TFGCore.LOGGER.debug("[validation] breach trace found no escape, revalidating, pos={}", getPos());
+                    traceLevel.getServer().execute(this::requestValidation);
                 }
             } catch (Exception e) {
                 TFGCore.LOGGER.error("Breach trace failed at {}", tracePos, e);

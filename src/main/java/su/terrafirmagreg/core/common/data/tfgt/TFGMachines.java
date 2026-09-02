@@ -238,20 +238,6 @@ public class TFGMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .register();
 
-    public static final MachineDefinition SPACE_HEATER = REGISTRATE.machine("space_heater",
-            (holder) -> new SpaceHeaterMachine(holder, GTValues.MV))
-            .recipeType(TFGTRecipeTypes.SPACE_HEATING)
-            .recipeModifier(SpaceHeaterMachine::recipeModifier)
-            .tier(GTValues.MV)
-            .register();
-
-    public static final MachineDefinition HIGGS_EMITTER = REGISTRATE.machine("higgs_emitter",
-            (holder) -> new HiggsEmitterMachine(holder, GTValues.MV))
-            .recipeType(TFGTRecipeTypes.GRAVITY_EMISSION)
-            .recipeModifier(HiggsEmitterMachine::recipeModifier)
-            .tier(GTValues.MV)
-            .register();
-
     // LV super chest is 1M, which is already crazy.
     // 10K is about as much as three steel crates holding items that stack to 64
     public static final MachineDefinition ULV_SUPER_CHEST = GTRegistration.REGISTRATE.machine("ulv_super_chest",

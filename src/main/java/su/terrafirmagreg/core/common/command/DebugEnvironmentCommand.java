@@ -90,13 +90,16 @@ public class DebugEnvironmentCommand {
         for (TemperatureProvider provider : manager.getTempProviders().values()) {
             tempCount++;
             BlockPos mPos = provider.getMachinePos();
-            int radius = provider.getRadius();
             boolean loaded = provider.isMachineLoaded();
             boolean working = provider.isMachineWorking();
+            String mode = provider.getMode().name();
+            int frontSize = provider.getFrontGood().size();
+            int backSize = provider.getBackHazard().size();
+            boolean blocked = provider.isBlocked();
 
             source.sendSuccess(() -> Component.literal(String.format(
-                    "  %s: radius=%d, loaded=%s, working=%s",
-                    mPos.toShortString(), radius, loaded, working)), false);
+                    "  %s: mode=%s, frontSize=%d, backSize=%d, blocked=%s, loaded=%s, working=%s",
+                    mPos.toShortString(), mode, frontSize, backSize, blocked, loaded, working)), false);
         }
         if (tempCount == 0) {
             source.sendSuccess(() -> Component.literal("  (none)"), false);

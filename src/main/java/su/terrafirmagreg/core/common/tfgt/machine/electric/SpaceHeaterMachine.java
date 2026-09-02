@@ -1,214 +1,413 @@
 package su.terrafirmagreg.core.common.tfgt.machine.electric;
 
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.gregtechceu.gtceu.api.gui.widget.IntInputWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
-import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import com.lowdragmc.lowdraglib.utils.Position;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import lombok.Getter;
+import lombok.Setter;
 
 import su.terrafirmagreg.core.TFGCore;
-import su.terrafirmagreg.core.common.data.tfgt.machine.trait.EnvironmentRecipeLogic;
 import su.terrafirmagreg.core.common.environment.*;
 
 /**
- * Space Heater machine that creates a bubble of safe temperature around itself.
+ * Space Heater machine.
+ * The front is flood filled from just in front of the controller. If it produces a sealed room,
+ * the whole sealed envelope is the comfort region. If it escapes (i.e. in a building on earth), a
+ * greedy fill heats only a small local radius immediately in front. The back always gets a small
+ * greedy-fill hazard region (1/64 of the front's volume). If the two regions reach each other the
+ * machine cannot operate.
  */
-public class SpaceHeaterMachine extends SimpleTieredMachine implements IEnvironmentMachine {
+public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            SpaceHeaterMachine.class, SimpleTieredMachine.MANAGED_FIELD_HOLDER);
+    /** GT multiblock wrapper hosting this logic. */
+    private final ISpaceHeaterHost host;
 
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    private final int maxRadius;
-
+    /** The provider that holds our front/back region data and handles temperature queries. */
     @Nullable
     private TemperatureProvider provider;
 
+    private ServerLevel level;
     private DimEnvManager manager;
 
     @Getter
-    @Persisted
-    @DescSynced
-    private int radius;
+    @Setter
+    private boolean dirty;
 
-    public SpaceHeaterMachine(IMachineBlockEntity holder, int tier) {
-        super(holder, tier, GTMachineUtils.defaultTankSizeFunction);
-        this.maxRadius = getMaxRadiusForTier(tier);
-        this.radius = maxRadius;
+    /** Tick when this machine last had a validation dispatched. */
+    private long lastValidationTick;
+
+    /** Last validation dispatch from a change in the separation zone, throttled separately. */
+    private long lastSeparationValidationTick;
+
+    /** Pending scan results from async validation, written on the async thread. */
+    private Set<BlockPos> newFrontGood = Set.of();
+    private Set<BlockPos> newBackHazard = Set.of();
+    private TemperatureProvider.Mode newMode = TemperatureProvider.Mode.VENTED;
+    private boolean newBlocked = false;
+    private RoomScan newFrontScan = RoomScan.empty();
+
+    /** Default scan block limit for the flood fills. */
+    static final int SCAN_MAX_BLOCKS = 2_000_000;
+    static final int MAX_HORIZONTAL_DIMENSION = 128;
+
+    private static final int TRACE_MAX_BLOCKS = 1_000_000;
+    private static final int TRACE_COOLDOWN_TICKS = 100;
+    private long lastTraceRequestTick = 0;
+
+    /** Radius of blocks to check to validate that the front and back regions don't touch in case of unsealed rooms. */
+    private static final int SEPARATION_RADIUS = 20;
+
+    /** Slower revalidation period for block changes  in case of unsealed rooms. */
+    private static final int SEPARATION_REVALIDATION_GAP_TICKS = 200;
+
+    public SpaceHeaterMachine(ISpaceHeaterHost host) {
+        this.host = host;
     }
 
-    private static int getMaxRadiusForTier(int tier) {
-        return (int) Math.pow(2, tier + 2); // LV=8, MV=16, HV=32, EV=64
+    //////////////////////////////////////
+    // ********* Energy Cost ***********//
+    //////////////////////////////////////
+
+    /** @return the expected EU/t consumption, or 0 when not working. */
+    public double computeEnergyCostPerTick() {
+        if (isBlocked())
+            return 0;
+        int size = getFrontGoodCount();
+        if (size <= 0)
+            return 0;
+
+        TemperatureProvider provider = this.provider;
+        if (provider != null && provider.getMode() == TemperatureProvider.Mode.VENTED) {
+            long voltage = host.getHatchVoltage();
+            if (voltage <= 0)
+                return 0;
+            return voltage * 0.5;
+        }
+        return EnclosedRoomEnergyCurve.eutForVolume(size);
     }
 
-    // ==================== Recipe ====================
+    /** Maximum unsealed room size. */
+    private int greedyMaxFrontForEnergy() {
+        long voltage = host.getHatchVoltage();
+        if (voltage <= 0)
+            voltage = GTValues.V[GTValues.MV];
+        double volume = EnclosedRoomEnergyCurve.volumeForEut(voltage * 0.5);
+        return Math.max(1, Math.min(SCAN_MAX_BLOCKS, (int) Math.round(volume)));
+    }
+
+    public boolean isBlocked() {
+        return provider != null ? provider.isBlocked() : newBlocked;
+    }
+
+    public int getFrontGoodCount() {
+        return provider != null ? provider.getFrontGood().size() : newFrontGood.size();
+    }
+
+    public int getBackHazardCount() {
+        return provider != null ? provider.getBackHazard().size() : newBackHazard.size();
+    }
+
+    public TemperatureProvider.Mode getMode() {
+        return provider != null ? provider.getMode() : newMode;
+    }
+
+    //////////////////////////////////////
+    // ********* Recipe Logic **********//
+    //////////////////////////////////////
+
+    /** Called by the wrapper's beforeWorking. Re-searches the recipe so energy reacts to region size. */
+    public void beforeWorking(@Nullable GTRecipe recipe) {
+        if (host.getRecipeLogic() != null) {
+            host.getRecipeLogic().markLastRecipeDirty();
+        }
+    }
+
+    //////////////////////////////////////
+    // ****** Revalidation logic *******//
+    //////////////////////////////////////
 
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new EnvironmentRecipeLogic(this);
+    public void validateAsync(AsyncBlockReader reader) {
+        TFGCore.LOGGER.debug("[spaceheater] validateAsync START, pos={}", getPos());
+        long start = System.nanoTime();
+
+        BlockPos pos = getPos();
+        BlockPos frontStart = pos.relative(host.self().getFrontFacing());
+        BlockPos backStart = pos.relative(host.self().getFrontFacing().getOpposite(), host.getBackOffset());
+
+        RoomScan frontScan = FloodFill.fill(reader, frontStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
+
+        boolean blocked = false;
+        TemperatureProvider.Mode mode;
+        Set<BlockPos> frontGood;
+
+        if (frontScan.isSealed()) {
+            frontGood = envelopeToPosSet(frontScan.envelope());
+            mode = TemperatureProvider.Mode.SEALED;
+        } else {
+            GreedyResult frontGreedy = greedyFill(reader, frontStart, greedyMaxFrontForEnergy());
+            frontGood = frontGreedy.blocks;
+            mode = TemperatureProvider.Mode.VENTED;
+        }
+
+        int backMax = Math.max(1, frontGood.size() / 64);
+        GreedyResult backGreedy = greedyFill(reader, backStart, backMax);
+        Set<BlockPos> backHazard = backGreedy.blocks;
+        if (mode == TemperatureProvider.Mode.SEALED) {
+            blocked = backHazard.stream().anyMatch(frontScan::containsInterior);
+        } else {
+            blocked = frontStart.equals(backStart) || backHazard.stream().anyMatch(frontGood::contains);
+        }
+
+        newFrontGood = frontGood;
+        newBackHazard = backHazard;
+        newMode = mode;
+        newBlocked = blocked;
+        newFrontScan = frontScan;
+
+        long elapsed = (System.nanoTime() - start) / 1_000_000;
+        TFGCore.LOGGER.debug("[spaceheater] validateAsync DONE, pos={}, elapsedMs={}, mode={}, front={}, back={}, blocked={}",
+                getPos(), elapsed, mode, frontGood.size(), backHazard.size(), blocked);
     }
 
-    public boolean isWorking() {
-        return recipeLogic != null && recipeLogic.isWorking();
+    private static Set<BlockPos> envelopeToPosSet(LongOpenHashSet envelope) {
+        Set<BlockPos> result = new HashSet<>(envelope.size());
+        for (long l : envelope) {
+            result.add(BlockPos.of(l));
+        }
+        return result;
     }
 
     /**
-     * Recipe modifier: scales EU/t cost by radius.
+     * BFS greedy fill collecting the nearest fillable blocks up to {@code maxBlocks}.
      */
-    public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (!(machine instanceof SpaceHeaterMachine heater)) {
-            return RecipeModifier.nullWrongType(SpaceHeaterMachine.class, machine);
-        }
+    private GreedyResult greedyFill(AsyncBlockReader reader, BlockPos start, int maxBlocks) {
+        LongOpenHashSet collected = new LongOpenHashSet();
+        Set<BlockPos> blocks = new HashSet<>();
+        LongOpenHashSet visited = new LongOpenHashSet();
+        ArrayDeque<BlockPos> queue = new ArrayDeque<>();
 
-        return ModifierFunction.builder()
-                .eutMultiplier(Math.max(1, heater.getRadius()))
-                .build();
-    }
+        queue.add(start);
+        visited.add(start.asLong());
 
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
-    }
+        while (!queue.isEmpty() && collected.size() < maxBlocks) {
+            BlockPos current = queue.poll();
+            long currentLong = current.asLong();
 
-    // ==================== Radius ====================
+            BlockState state = reader.getBlockState(current);
+            if (state == null)
+                continue; // unloaded chunk, skip expansion
 
-    public void setRadius(int newRadius) {
-        newRadius = Math.max(1, Math.min(newRadius, maxRadius));
-        if (newRadius == this.radius)
-            return;
-        this.radius = newRadius;
-        markDirty();
+            if (blocks.size() >= maxBlocks)
+                break;
 
-        if (!isRemote() && manager != null) {
-            provider = manager.updateTempProvider(getPos(), newRadius);
-            provider.attach(this);
-        }
+            collected.add(currentLong);
+            blocks.add(current.immutable());
 
-        // Radius change affects EU/t, so re-search the recipe with new modifier
-        if (recipeLogic != null) {
-            recipeLogic.markLastRecipeDirty();
-        }
-    }
-
-    // ==================== UI ====================
-
-    @Override
-    public Widget createUIWidget() {
-        int width = 164;
-        int height = 78;
-        var group = new WidgetGroup(0, 0, width, height);
-
-        // Energy bar
-        var editableUI = createEnergyBar();
-        var energyBar = editableUI.createDefault();
-        energyBar.setSelfPosition(new Position(3, 4));
-        energyBar.setSize(energyBar.getSize().width, height);
-        group.addWidget(energyBar);
-        editableUI.setupUI(group, this);
-
-        // Battery Slot
-        var batterySlot = createBatterySlot().createDefault();
-        batterySlot.setSelfPosition(new Position(width - 4 - 20, height - 14));
-        group.addWidget(batterySlot);
-        createBatterySlot().setupUI(group, this);
-
-        int contentX = energyBar.getSize().width + 8;
-
-        // Status text panel
-        group.addWidget(new ComponentPanelWidget(contentX, 4, this::addStatusText)
-                .setMaxWidthLimit(width - contentX - 4));
-
-        // Radius input label + widget
-        group.addWidget(new LabelWidget(contentX + 16 + 24, height - 26,
-                Component.translatable("tfg.machine.space_heater.radius_label").getString()));
-        var radiusInput = new IntInputWidget(contentX + 16, height - 16, 80, 20,
-                this::getRadius, this::setRadius);
-        radiusInput.setMin(1);
-        radiusInput.setMax(maxRadius);
-        group.addWidget(radiusInput);
-
-        return group;
-    }
-
-    private void addStatusText(List<Component> textList) {
-        // Working state
-        if (isWorking()) {
-            textList.add(Component.translatable("tfg.machine.space_heater.active").withStyle(ChatFormatting.GREEN));
-        } else if (recipeLogic != null && recipeLogic.isIdle() && !recipeLogic.getFailureReasons().isEmpty()) {
-            for (Component reason : recipeLogic.getFailureReasons()) {
-                textList.add(reason.copy().withStyle(ChatFormatting.RED));
+            for (Direction dir : Direction.values()) {
+                BlockPos neighbor = current.relative(dir);
+                long neighborLong = neighbor.asLong();
+                if (visited.contains(neighborLong) || !reader.hasChunkAt(neighbor))
+                    continue;
+                BlockState neighborState = reader.getBlockState(neighbor);
+                if (neighborState == null)
+                    continue;
+                if (PassabilityChecker.getCachedPassInfo(neighborState).type() == PassabilityChecker.PassInfo.PassType.EMPTY) {
+                    visited.add(neighborLong);
+                    queue.add(neighbor.immutable());
+                }
             }
-        } else {
-            textList.add(Component.translatable("tfg.machine.space_heater.idle").withStyle(ChatFormatting.GRAY));
         }
 
-        // Max radius info
-        textList.add(Component.translatable("tfg.machine.space_heater.max_radius",
-                FormattingUtil.formatNumbers(maxRadius)).withStyle(ChatFormatting.AQUA));
+        return new GreedyResult(blocks);
     }
 
-    // ==================== Lifecycle ====================
+    private record GreedyResult(Set<BlockPos> blocks) {
+    }
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-        if (!(getLevel() instanceof ServerLevel serverLevel))
+    public ServerLevel getServerLevel() {
+        return level;
+    }
+
+    @Override
+    public void processValidationResult() {
+        TFGCore.LOGGER.debug("[spaceheater] processValidationResult, pos={}, provider={}", getPos(), provider != null);
+        if (provider == null)
             return;
 
-        TFGCore.LOGGER.info("SpaceHeater onLoad, pos={}", getPos());
+        Set<ChunkPos> oldChunks = provider.getAffectedChunks();
 
-        manager = EnvironmentSystem.getManager(serverLevel);
-        provider = manager.getOrCreateTempProvider(getPos(), radius);
+        provider.setRegions(newFrontGood, newBackHazard, newMode, newBlocked, newFrontScan);
+
+        Set<ChunkPos> newChunks = provider.getAffectedChunks();
+
+        Set<ChunkPos> toRemoveListeners = new HashSet<>(oldChunks);
+        toRemoveListeners.removeAll(newChunks);
+        Set<ChunkPos> toAddListeners = new HashSet<>(newChunks);
+        toAddListeners.removeAll(oldChunks);
+        if (!toRemoveListeners.isEmpty() || !toAddListeners.isEmpty()) {
+            manager.blockChangeListeners.update(this, toRemoveListeners, toAddListeners);
+        }
+
+        manager.updateTempProviderRegions(provider, oldChunks, newChunks);
+
+        host.setShowTraceButton(newMode == TemperatureProvider.Mode.VENTED);
+
+        if (host.getRecipeLogic() != null) {
+            host.getRecipeLogic().onRecipeFinish();
+        }
+    }
+
+    @Override
+    public void onBlockChangeAt(BlockPos pos) {
+        if (provider == null)
+            return;
+        if (dirty)
+            return;
+        if (pos.equals(getPos()))
+            return;
+        if (provider.getFrontGood().contains(pos) || provider.getBackHazard().contains(pos)) {
+            requestValidation();
+            return;
+        }
+        BlockPos machinePos = getPos();
+        if (Math.abs(pos.getX() - machinePos.getX()) <= SEPARATION_RADIUS
+                && Math.abs(pos.getY() - machinePos.getY()) <= SEPARATION_RADIUS
+                && Math.abs(pos.getZ() - machinePos.getZ()) <= SEPARATION_RADIUS) {
+            requestSeparationValidation();
+        }
+    }
+
+    @Override
+    public void onGridSpatialEvent(BlockPos min, BlockPos max) {
+        requestValidation();
+    }
+
+    @Override
+    public void onChunkLoad(ChunkPos chunkPos) {
+        requestValidation();
+    }
+
+    private void requestValidation() {
+        setDirty(true);
+        long now = level.getServer().getTickCount();
+        long earliestTick = Math.max(lastValidationTick + 20, now);
+        EnvironmentSystem.requestValidation(this, earliestTick);
+    }
+
+    /** Throttled revalidation for nearby block changes if we're in an unsealed room. */
+    private void requestSeparationValidation() {
+        setDirty(true);
+        long now = level.getServer().getTickCount();
+        long earliestTick = Math.max(lastSeparationValidationTick + SEPARATION_REVALIDATION_GAP_TICKS, now);
+        EnvironmentSystem.requestValidation(this, earliestTick);
+    }
+
+    @Override
+    public void setLastValidationTick(long tick) {
+        this.lastValidationTick = tick;
+    }
+
+    @Override
+    public void requestRevalidation() {
+        requestValidation();
+    }
+
+    public void requestFrontBreachTrace() {
+        if (level == null)
+            return;
+        long currentTick = level.getServer().getTickCount();
+        if (currentTick - lastTraceRequestTick < TRACE_COOLDOWN_TICKS)
+            return;
+        lastTraceRequestTick = currentTick;
+
+        ServerLevel traceLevel = level;
+        BlockPos tracePos = getPos().relative(host.self().getFrontFacing());
+        AsyncBlockReader reader = new AsyncBlockReader(traceLevel);
+
+        EnvironmentSystem.EXECUTOR.submit(() -> {
+            try {
+                RoomScan result = DiagnosticFloodFill.fill(reader, tracePos, TRACE_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
+                if (result.escapePath() != null && !result.escapePath().isEmpty()) {
+                    DiagnosticFloodFill.spawnTrace(traceLevel, result.escapePath());
+                } else {
+                    TFGCore.LOGGER.debug("[spaceheater] front trace found no escape, revalidating, pos={}", getPos());
+                    traceLevel.getServer().execute(this::requestValidation);
+                }
+            } catch (Exception e) {
+                TFGCore.LOGGER.error("Space heater front breach trace failed at {}", tracePos, e);
+            }
+        });
+    }
+
+    //////////////////////////////////////
+    // ****** Machine Lifecycle ******* //
+    //////////////////////////////////////
+
+    public void onLoad(ServerLevel serverLevel) {
+        TFGCore.LOGGER.debug("[spaceheater] onLoad, pos={}", getPos());
+        level = serverLevel;
+        manager = EnvironmentSystem.getManager(level);
+        provider = manager.getOrCreateTempProvider(getPos());
         provider.attach(this);
+        requestValidation();
     }
 
-    @Override
     public void onUnload() {
-        super.onUnload();
-        TFGCore.LOGGER.info("SpaceHeater onUnload, pos={}", getPos());
-        if (provider != null) {
-            provider.detach();
-            provider = null;
-        }
+        TFGCore.LOGGER.debug("[spaceheater] onUnload, pos={}", getPos());
+        if (provider == null)
+            return;
+        provider.detach();
+        deregisterListeners();
+        provider = null;
+    }
+
+    public void onRemoved() {
+        TFGCore.LOGGER.debug("[spaceheater] onRemoved, pos={}", getPos());
+        if (manager == null)
+            return;
+        deregisterListeners();
+        manager.removeTempProvider(getPos());
+        provider = null;
+    }
+
+    private void deregisterListeners() {
+        EnvironmentSystem.cancelValidation(this);
+        if (provider == null)
+            return;
+        manager.blockChangeListeners.remove(this, provider.getAffectedChunks());
+    }
+
+    // IEnvironmentMachine / IBlockSensitiveMachine
+    @Override
+    public BlockPos getPos() {
+        return host.self().getPos();
     }
 
     @Override
-    public void onMachineRemoved() {
-        super.onMachineRemoved();
-        TFGCore.LOGGER.info("SpaceHeater onMachineRemoved, pos={}", getPos());
-        if (manager != null) {
-            manager.removeTempProvider(getPos());
-            provider = null;
-        }
+    public Level getLevel() {
+        return level;
     }
 
+    @Override
+    public boolean isWorking() {
+        if (isBlocked())
+            return false;
+        return host.getRecipeLogic() != null && host.getRecipeLogic().isWorking();
+    }
 }

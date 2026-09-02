@@ -423,9 +423,9 @@ public class DimEnvManager extends SavedData {
      * Gets an existing temperature provider or creates a new one.
      * Called when a temperature machine loads.
      */
-    public TemperatureProvider getOrCreateTempProvider(BlockPos machinePos, int radius) {
+    public TemperatureProvider getOrCreateTempProvider(BlockPos machinePos) {
         return temperatureProviders.computeIfAbsent(machinePos, pos -> {
-            TemperatureProvider provider = new TemperatureProvider(pos, radius);
+            TemperatureProvider provider = new TemperatureProvider(pos);
             temperatureIndex.add(provider, provider.getAffectedChunks());
             setSavedDataDirty();
             return provider;
@@ -433,19 +433,19 @@ public class DimEnvManager extends SavedData {
     }
 
     /**
-     * Replaces a temperature provider with a new radius. Called when the machine's radius changes.
-     * Returns the new provider (already registered in chunk registry).
+     * Re-registers the affected chunks of a temperature provider after its regions change.
      */
-    public TemperatureProvider updateTempProvider(BlockPos machinePos, int newRadius) {
-        TemperatureProvider old = temperatureProviders.remove(machinePos);
-        if (old != null) {
-            temperatureIndex.remove(old, old.getAffectedChunks());
+    public void updateTempProviderRegions(TemperatureProvider provider, Set<ChunkPos> oldChunks, Set<ChunkPos> newChunks) {
+        Set<ChunkPos> toRemove = new HashSet<>(oldChunks);
+        toRemove.removeAll(newChunks);
+
+        Set<ChunkPos> toAdd = new HashSet<>(newChunks);
+        toAdd.removeAll(oldChunks);
+
+        if (!toRemove.isEmpty() || !toAdd.isEmpty()) {
+            temperatureIndex.update(provider, toRemove, toAdd);
         }
-        TemperatureProvider newProvider = new TemperatureProvider(machinePos, newRadius);
-        temperatureProviders.put(machinePos, newProvider);
-        temperatureIndex.add(newProvider, newProvider.getAffectedChunks());
         setSavedDataDirty();
-        return newProvider;
     }
 
     /**
@@ -535,6 +535,22 @@ public class DimEnvManager extends SavedData {
             gravityIndex.remove(provider, provider.getAffectedChunks());
             setSavedDataDirty();
         }
+    }
+
+    /**
+     * Replaces a gravity provider with a new radius. 
+     * Called when the machine's radius changes due to an energy hatch change.
+     */
+    public GravityProvider updateGravityProvider(BlockPos machinePos, int newRadius) {
+        GravityProvider old = gravityProviders.remove(machinePos);
+        if (old != null) {
+            gravityIndex.remove(old, old.getAffectedChunks());
+        }
+        GravityProvider newProvider = new GravityProvider(machinePos, newRadius);
+        gravityProviders.put(machinePos, newProvider);
+        gravityIndex.add(newProvider, newProvider.getAffectedChunks());
+        setSavedDataDirty();
+        return newProvider;
     }
 
     // ==================== Gravity Queries ====================

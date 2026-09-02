@@ -121,6 +121,12 @@ public class OxygenDistributorMultiblock extends WorkableElectricMultiblockMachi
     //////////////////////////////////////
 
     @Override
+    public long getEnergyInputPerSec() {
+        var energy = getEnergyContainer();
+        return energy != null ? Math.max(0, energy.getInputPerSec()) : 0;
+    }
+
+    @Override
     public boolean showTraceButton() {
         return showTraceButton;
     }

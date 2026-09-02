@@ -1333,10 +1333,10 @@ public class TFGMultiMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TFGTRecipeTypes.OXYGEN_DISTRIBUTION)
             .recipeModifier(OxygenDistributorMultiblock::recipeModifier, true)
-            .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
+            .appearanceBlock(TFGBlocks_Casings.CLEAN_STAINLESS_STEEL_DESH_CASING)
             .workableCasingModel(
-                    GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
-                    GTCEu.id("block/multiblock/implosion_compressor"))
+                    TFGCore.id("block/casings/machine_casing_clean_stainless_steel_desh"),
+                    GTCEu.id("block/machines/laser_engraver"))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("CCC", " D ", "   ")
                     .aisle("CCC", "DDD", " F ")
@@ -1344,13 +1344,58 @@ public class TFGMultiMachines {
                     .where('X', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('C', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
-                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .where('D', Predicates.blocks(GTBlocks.CASING_STEEL_TURBINE.get()))
                     .where('F', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
                     .where(" ", Predicates.air())
                     .build())
             .register();
+
+    public static final MultiblockMachineDefinition HIGGS_EMITTER = REGISTRATE
+            .multiblock("higgs_emitter",
+                    HiggsEmitterMultiblock::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.GRAVITY_EMISSION)
+            .recipeModifier(HiggsEmitterMultiblock::recipeModifier, true)
+            .appearanceBlock(TFGBlocks_Casings.CLEAN_STAINLESS_STEEL_DESH_CASING)
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_clean_stainless_steel_desh"),
+                    GTCEu.id("block/machines/laser_engraver"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("CCC", " D ", "   ")
+                    .aisle("CCC", "DDD", " F ")
+                    .aisle("CXC", " D ", "   ")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('C', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                    .where('D', Predicates.blocks(GTBlocks.CASING_STEEL_TURBINE.get()))
+                    .where('F', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
+                    .where(" ", Predicates.air())
+                    .build())
+            .register();
+    public static final MultiblockMachineDefinition SPACE_HEATER = REGISTRATE
+            .multiblock("space_heater", SpaceHeaterMultiblock::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(TFGTRecipeTypes.SPACE_HEATING)
+            .recipeModifier(SpaceHeaterMultiblock::recipeModifier, true)
+            .appearanceBlock(TFGBlocks_Casings.CLEAN_STAINLESS_STEEL_DESH_CASING)
+            .workableCasingModel(
+                    TFGCore.id("block/casings/machine_casing_clean_stainless_steel_desh"),
+                    GTCEu.id("block/machines/laser_engraver"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("C")
+                    .aisle("C")
+                    .aisle("C")
+                    .aisle("C")
+                    .aisle("C")
+                    .aisle("C")
+                    .aisle("X")
+                    .where('X', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('C', Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                    .build())
+            .register();
+
     public static final MultiblockMachineDefinition ME_ASSEMBLER = REGISTRATE
             .multiblock("me_assembler", MEAssemblerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
