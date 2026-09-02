@@ -47,6 +47,9 @@ dependencies {
 
     // Patchouli
     modImplementation("maven.modrinth:patchouli:1.20.1-84.1-forge") { transitive = false }
+
+    testCompileOnly("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testCompileOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }
 
 base {
@@ -70,8 +73,19 @@ java {
 
 sourceSets {
     main {
-        java.srcDir("src/java")
-        resources.srcDir("src/resources")
+        java {
+            srcDir 'src/java'
+        }
+
+        resources {
+            srcDir 'src/main/resources'
+            srcDir 'src/generated/resources'
+        }
+    }
+
+    test {
+        compileClasspath += main.output + main.compileClasspath
+        runtimeClasspath += main.output + main.runtimeClasspath
     }
 }
 
@@ -121,28 +135,59 @@ legacyForge {
         }
     }
 
-    tasks.register("prepareServerDev") {
 
-        def serverDir = file("run/server")
-        def propsFile = file("${serverDir}/server.properties")
+}
 
-        outputs.file(propsFile)
+processResources {
+    var replaceProperties = [
+            'mod_id'              : "${mod_id}",
+            'mod_name'            : "${mod_name}",
+            'mod_version'         : "${mod_version}",
+            'mod_description'     : "${mod_description}",
+            'mod_authors'         : "${mod_authors}",
+            'mod_credits'         : "${mod_credits}",
+            'mod_url'             : "${mod_url}",
+            'mod_logo_path'       : "${mod_logo_path}",
 
-        doLast {
-            serverDir.mkdirs()
+            'minecraft_version'   : "${minecraft_version}",
 
-            // Create or patch server.properties to set online-mode=false
-            if (propsFile.exists()) {
-                def content = propsFile.text
-                if (content.contains('online-mode=')) {
-                    content = content.replaceAll(/online-mode=\w+/, 'online-mode=false')
-                } else {
-                    content += '\nonline-mode=false'
-                }
-                propsFile.text = content
+            'forge_version'       : "${forge_version}",
+            'forge_version_range' : "${loader_version_range}",
+            'loader_version_range': "${loader_version_range}"
+    ]
+    var filterList = [
+            'META-INF/mods.toml',
+            'pack.mcmeta'
+    ]
+
+    inputs.properties replaceProperties
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    filesMatching(filterList) { fcd ->
+        fcd.expand(replaceProperties + [project: project])
+    }
+}
+
+tasks.register("prepareServerDev") {
+
+    def serverDir = file("run/server")
+    def propsFile = file("${serverDir}/server.properties")
+
+    outputs.file(propsFile)
+
+    doLast {
+        serverDir.mkdirs()
+
+        // Create or patch server.properties to set online-mode=false
+        if (propsFile.exists()) {
+            def content = propsFile.text
+            if (content.contains('online-mode=')) {
+                content = content.replaceAll(/online-mode=\w+/, 'online-mode=false')
             } else {
-                propsFile.text = 'online-mode=false\n'
+                content += '\nonline-mode=false'
             }
+            propsFile.text = content
+        } else {
+            propsFile.text = 'online-mode=false\n'
         }
     }
 }
