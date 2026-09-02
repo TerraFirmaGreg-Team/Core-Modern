@@ -1,7 +1,5 @@
 package su.terrafirmagreg.core.common.data.blocks;
 
-import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.ModelGen;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -40,14 +38,14 @@ public class TFGBlocks_Create {
             .transform(ModelGen.customItemModel())
             .register();
 
-    public static BlockEntry<CombustionEngineBlock> STEEL_COMBUSTION_ENGINE = combustionEngine(1, "steel", GTMaterials.Steel),
-            ALUMINIUM_COMBUSTION_ENGINE = combustionEngine(2, "aluminium", GTMaterials.Aluminium),
-            STAINLESS_STEEL_COMBUSTION_ENGINE = combustionEngine(3, "stainless_steel", GTMaterials.StainlessSteel),
-            TITANIUM_COMBUSTION_ENGINE = combustionEngine(4, "titanium", GTMaterials.Titanium);
+    public static BlockEntry<CombustionEngineBlock> STEEL_COMBUSTION_ENGINE = combustionEngine(1, "steel"),
+            ALUMINIUM_COMBUSTION_ENGINE = combustionEngine(2, "aluminium"),
+            STAINLESS_STEEL_COMBUSTION_ENGINE = combustionEngine(3, "stainless_steel"),
+            TITANIUM_COMBUSTION_ENGINE = combustionEngine(4, "titanium");
 
-    // Have to pass the material name as a separate parameter because the materials aren't initialised yet
-    public static BlockEntry<CombustionEngineBlock> combustionEngine(int tier, String name, Material material) {
-        return TFGCore.REGISTRATE.block("generators/" + name + "_combustion_engine", p -> new CombustionEngineBlock(p, material))
+    // Have to pass the material name as a string because the materials aren't initialised yet
+    public static BlockEntry<CombustionEngineBlock> combustionEngine(int tier, String name) {
+        return TFGCore.REGISTRATE.block("generators/" + name + "_combustion_engine", p -> new CombustionEngineBlock(p, name))
                 .initialProperties(SharedProperties::softMetal)
                 .properties(p -> p.mapColor(MapColor.COLOR_YELLOW))
                 .transform(TagGen.pickaxeOnly())
