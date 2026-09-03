@@ -123,6 +123,12 @@ public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine imp
             return;
         }
 
+        if (machine.isBackVentInsufficient()) {
+            textList.add(Component.translatable("tfg.machine.space_heater.status.no_vent_space")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
+
         if (isWorking()) {
             textList.add(Component.translatable("tfg.machine.space_heater.active").withStyle(ChatFormatting.GREEN));
         } else if (getEnergyInputPerSec() < machine.computeEnergyCostPerTick()) {
@@ -225,7 +231,7 @@ public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine imp
     /** Scales energy consumption based on the front region size. */
     public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
         if (machine instanceof SpaceHeaterMultiblock heater) {
-            if (heater.machine.isBlocked()) {
+            if (heater.machine.isBlocked() || heater.machine.isBackVentInsufficient()) {
                 return ModifierFunction.NULL;
             }
             double energy = heater.machine.computeEnergyCostPerTick();

@@ -23,6 +23,7 @@
     "tfg.machine.space_heater.idle": "Idle",
     "tfg.machine.oxygen_distributor.status.scanning": "Scanning...",
     "tfg.machine.oxygen_distributor.status.no_energy": "Waiting for power",
+    "tfg.machine.space_heater.status.no_vent_space": "No open space behind to vent into - heater must back onto an air pocket",
     "block.tfg.oxygen_distributor": "Oxygen Distributor",
     "block.tfg.higgs_emitter": "Higgs Emitter",
     "tfg.machine.oxygen_distributor.find_leak": "Trace leak",

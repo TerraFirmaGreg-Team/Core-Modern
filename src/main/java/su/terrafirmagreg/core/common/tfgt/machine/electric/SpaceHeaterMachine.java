@@ -58,6 +58,7 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
     private Set<BlockPos> newBackHazard = Set.of();
     private TemperatureProvider.Mode newMode = TemperatureProvider.Mode.VENTED;
     private boolean newBlocked = false;
+    private boolean newBackVentInsufficient = false;
     private RoomScan newFrontScan = RoomScan.empty();
 
     /** Default scan block limit for the flood fills. */
@@ -84,7 +85,7 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
 
     /** @return the expected EU/t consumption, or 0 when not working. */
     public double computeEnergyCostPerTick() {
-        if (isBlocked())
+        if (isBlocked() || isBackVentInsufficient())
             return 0;
         int size = getFrontGoodCount();
         if (size <= 0)
@@ -111,6 +112,11 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
 
     public boolean isBlocked() {
         return provider != null ? provider.isBlocked() : newBlocked;
+    }
+
+    /** Whether the back region cannot vent into enough open air to complete its fill. */
+    public boolean isBackVentInsufficient() {
+        return newBackVentInsufficient;
     }
 
     public int getFrontGoodCount() {
@@ -167,6 +173,7 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
         int backMax = Math.max(1, frontGood.size() / 64);
         GreedyResult backGreedy = greedyFill(reader, backStart, backMax);
         Set<BlockPos> backHazard = backGreedy.blocks;
+        boolean backVentInsufficient = !backGreedy.reachedCap;
         if (mode == TemperatureProvider.Mode.SEALED) {
             blocked = backHazard.stream().anyMatch(frontScan::containsInterior);
         } else {
@@ -177,6 +184,7 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
         newBackHazard = backHazard;
         newMode = mode;
         newBlocked = blocked;
+        newBackVentInsufficient = backVentInsufficient;
         newFrontScan = frontScan;
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;
@@ -233,10 +241,10 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
             }
         }
 
-        return new GreedyResult(blocks);
+        return new GreedyResult(blocks, blocks.size() >= maxBlocks);
     }
 
-    private record GreedyResult(Set<BlockPos> blocks) {
+    private record GreedyResult(Set<BlockPos> blocks, boolean reachedCap) {
     }
 
     @Override
@@ -258,10 +266,8 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
 
         Set<ChunkPos> toRemoveListeners = new HashSet<>(oldChunks);
         toRemoveListeners.removeAll(newChunks);
-        Set<ChunkPos> toAddListeners = new HashSet<>(newChunks);
-        toAddListeners.removeAll(oldChunks);
-        if (!toRemoveListeners.isEmpty() || !toAddListeners.isEmpty()) {
-            manager.blockChangeListeners.update(this, toRemoveListeners, toAddListeners);
+        if (!toRemoveListeners.isEmpty() || !newChunks.isEmpty()) {
+            manager.blockChangeListeners.update(this, toRemoveListeners, newChunks);
         }
 
         manager.updateTempProviderRegions(provider, oldChunks, newChunks);
@@ -406,7 +412,7 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
 
     @Override
     public boolean isWorking() {
-        if (isBlocked())
+        if (isBlocked() || isBackVentInsufficient())
             return false;
         return host.getRecipeLogic() != null && host.getRecipeLogic().isWorking();
     }
