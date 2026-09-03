@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 
@@ -38,6 +37,9 @@ public class TemperatureProvider {
     /** The front room scan (only meaningful when sealed). */
     private RoomScan frontScan = RoomScan.empty();
 
+    /** Cached chunk footprint. */
+    private Set<ChunkPos> affectedChunks = Set.of();
+
     /** Whether the front region is a sealed room (SEALED) or a vented greedy fill (VENTED). */
     private Mode mode = Mode.VENTED;
 
@@ -65,6 +67,15 @@ public class TemperatureProvider {
         this.mode = mode == null ? Mode.VENTED : mode;
         this.blocked = blocked;
         this.frontScan = frontScan == null ? RoomScan.empty() : frontScan;
+        this.affectedChunks = computeAffectedChunks();
+    }
+
+    private Set<ChunkPos> computeAffectedChunks() {
+        Set<ChunkPos> chunks = new HashSet<>(frontScan.touchedChunks());
+        for (BlockPos pos : backHazard) {
+            chunks.add(new ChunkPos(pos));
+        }
+        return chunks;
     }
 
     public Set<BlockPos> getFrontGood() {
@@ -147,15 +158,7 @@ public class TemperatureProvider {
      * @return All chunks this provider affects, for chunk-indexed registry.
      */
     public Set<ChunkPos> getAffectedChunks() {
-        Set<ChunkPos> chunks = new HashSet<>();
-        for (BlockPos pos : frontGood) {
-            chunks.add(new ChunkPos(pos));
-        }
-        for (BlockPos pos : backHazard) {
-            chunks.add(new ChunkPos(pos));
-        }
-        chunks.addAll(frontScan.touchedChunks());
-        return chunks;
+        return new HashSet<>(affectedChunks);
     }
 
     // ==================== Persistence ====================
@@ -164,10 +167,7 @@ public class TemperatureProvider {
         tag.putLong("pos", machinePos.asLong());
         tag.putString("mode", mode.name());
         tag.putBoolean("blocked", blocked);
-        LongArrayTag frontArray = new LongArrayTag(posToLongs(frontGood));
-        LongArrayTag backArray = new LongArrayTag(posToLongs(backHazard));
-        tag.put("frontGood", frontArray);
-        tag.put("backHazard", backArray);
+        tag.putLongArray("chunks", chunkPosToLongs(affectedChunks));
     }
 
     public static TemperatureProvider load(CompoundTag tag) {
@@ -182,24 +182,23 @@ public class TemperatureProvider {
         }
         provider.mode = mode;
         provider.blocked = tag.getBoolean("blocked");
-        provider.frontGood = longsToPosSet(tag.getLongArray("frontGood"));
-        provider.backHazard = longsToPosSet(tag.getLongArray("backHazard"));
+        provider.affectedChunks = longsToChunkSet(tag.getLongArray("chunks"));
         return provider;
     }
 
-    private static long[] posToLongs(Set<BlockPos> set) {
+    private static long[] chunkPosToLongs(Set<ChunkPos> set) {
         long[] result = new long[set.size()];
         int i = 0;
-        for (BlockPos pos : set) {
-            result[i++] = pos.asLong();
+        for (ChunkPos chunk : set) {
+            result[i++] = chunk.toLong();
         }
         return result;
     }
 
-    private static Set<BlockPos> longsToPosSet(long[] longs) {
-        Set<BlockPos> result = new HashSet<>(longs.length);
+    private static Set<ChunkPos> longsToChunkSet(long[] longs) {
+        Set<ChunkPos> result = new HashSet<>(longs.length);
         for (long l : longs) {
-            result.add(BlockPos.of(l));
+            result.add(new ChunkPos(l));
         }
         return result;
     }

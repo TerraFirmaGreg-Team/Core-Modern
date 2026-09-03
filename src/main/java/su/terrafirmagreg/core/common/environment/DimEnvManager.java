@@ -595,10 +595,10 @@ public class DimEnvManager extends SavedData {
             return;
 
         if (event instanceof BlockEvent.BreakEvent breakEvent) {
-            TFGCore.LOGGER.info("breakEvent {}", breakEvent.getState());
+            TFGCore.LOGGER.debug("breakEvent {}", breakEvent.getState());
             PassInfo before = getCachedPassInfo(breakEvent.getState());
             if (before.type() == PassType.EMPTY) {
-                TFGCore.LOGGER.info("Ignored - empty block");
+                TFGCore.LOGGER.debug("Ignored - empty block");
                 return;
             }
 
@@ -609,11 +609,11 @@ public class DimEnvManager extends SavedData {
             }
 
         } else if (event instanceof BlockEvent.EntityPlaceEvent placeEvent) {
-            TFGCore.LOGGER.info("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
+            TFGCore.LOGGER.debug("placeEvent {} {}", placeEvent.getBlockSnapshot().getReplacedBlock(), placeEvent.getPlacedBlock());
             PassInfo before = getCachedPassInfo(placeEvent.getBlockSnapshot().getReplacedBlock());
             PassInfo after = getCachedPassInfo(placeEvent.getPlacedBlock());
             if (before.equals(after) && before.type() != PassType.NO_CACHE) {
-                TFGCore.LOGGER.info("Ignored - passability unchanged");
+                TFGCore.LOGGER.debug("Ignored - passability unchanged");
                 return;
             }
 
@@ -624,14 +624,14 @@ public class DimEnvManager extends SavedData {
             }
 
         } else if (event instanceof BlockEvent.NeighborNotifyEvent nighEvent) {
-            TFGCore.LOGGER.info("neighborNotifyEvent {}", nighEvent.getState());
+            TFGCore.LOGGER.debug("neighborNotifyEvent {}", nighEvent.getState());
             PassInfo passInfo = getCachedPassInfo(nighEvent.getState());
             // NO_CACHE blocks (airlocks, pistons, etc.) have dynamic passability, always dispatch
             if (passInfo.type() == PassType.NO_CACHE) {
-                TFGCore.LOGGER.info("Dynamic block (NO_CACHE), always dispatching");
+                TFGCore.LOGGER.debug("Dynamic block (NO_CACHE), always dispatching");
             } else {
                 if (passInfo.type() == PassType.EMPTY || passInfo.type() == PassType.FULL) {
-                    TFGCore.LOGGER.info("Ignored - stable block type");
+                    TFGCore.LOGGER.debug("Ignored - stable block type");
                     return;
                 }
             }
@@ -654,7 +654,7 @@ public class DimEnvManager extends SavedData {
                 .relative(sideways, -part.xOffset())
                 .below(part.yOffset());
 
-        TFGCore.LOGGER.info("SlidingDoor expansion: controller={}, from part={}", controller, part);
+        TFGCore.LOGGER.debug("SlidingDoor expansion: controller={}, from part={}", controller, part);
 
         for (SlidingDoorPartProperty p : SlidingDoorPartProperty.values()) {
             BlockPos partPos = controller.relative(sideways, p.xOffset()).above(p.yOffset());
@@ -669,7 +669,7 @@ public class DimEnvManager extends SavedData {
         if (machines == null)
             return;
 
-        TFGCore.LOGGER.info("Dispatching block change at {} to {} machines", pos, machines.size());
+        TFGCore.LOGGER.debug("Dispatching block change at {} to {} machines", pos, machines.size());
         for (IBlockSensitiveMachine machine : machines) {
             machine.onBlockChangeAt(pos);
         }

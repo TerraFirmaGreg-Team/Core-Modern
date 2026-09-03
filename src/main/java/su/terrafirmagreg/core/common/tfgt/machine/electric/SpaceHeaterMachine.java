@@ -312,7 +312,7 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
     private void requestValidation() {
         setDirty(true);
         long now = level.getServer().getTickCount();
-        long earliestTick = Math.max(lastValidationTick + 20, now);
+        long earliestTick = Math.max(lastValidationTick + 40, now);
         EnvironmentSystem.requestValidation(this, earliestTick);
     }
 
