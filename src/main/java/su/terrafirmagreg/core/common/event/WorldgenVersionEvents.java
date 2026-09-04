@@ -16,11 +16,14 @@ import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 import su.terrafirmagreg.core.TFGCore;
 import su.terrafirmagreg.core.config.TFGConfig;
 import su.terrafirmagreg.core.mixins.common.minecraft.AccessorMinecraftServer;
 import su.terrafirmagreg.core.mixins.common.tfc.new_ow_wg.AccessorTFCBiomes;
+import su.terrafirmagreg.core.network.TFGNetworkHandler;
+import su.terrafirmagreg.core.network.packet.WorldgenVersionSyncPacket;
 import su.terrafirmagreg.core.world.new_ow_wg.WorldgenVersionData;
 import su.terrafirmagreg.core.world.new_ow_wg.biome.IBiomeExtension;
 import su.terrafirmagreg.core.world.new_ow_wg.rivers.TFGRiverBlendType;
@@ -125,9 +128,15 @@ public class WorldgenVersionEvents {
 
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (pendingOpWarnings.isEmpty())
-            return;
         if (!(event.getEntity() instanceof ServerPlayer player))
+            return;
+
+        // The client JVM never runs ServerAboutToStartEvent, so we send OVERWORLD_VERSION here 
+        TFGNetworkHandler.INSTANCE.send(
+                PacketDistributor.PLAYER.with(() -> player),
+                new WorldgenVersionSyncPacket(WorldgenVersionData.OVERWORLD_VERSION));
+
+        if (pendingOpWarnings.isEmpty())
             return;
         final MinecraftServer server = player.getServer();
         if (server == null || !server.getPlayerList().isOp(player.getGameProfile()))
