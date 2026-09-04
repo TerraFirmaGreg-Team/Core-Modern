@@ -128,6 +128,7 @@
         "common.gtceu.GTUtilMixin",
         "common.gtceu.MinerLogicMixin",
         "common.gtceu.NotifiableItemStackHandlerMixin",
+        "common.gtceu.OreRecipeHandlerMixin",
         "common.gtceu.ProtectionTypeMixin",
         "common.gtceu.QuarkTechSuiteMixin",
         "common.gtceu.SteamBoilerMachineMixin",
