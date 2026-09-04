@@ -48,7 +48,7 @@ public record FuelType(HolderSet<Fluid> fluid, int amountMb, int durationTicks) 
         return MULTIPLIER * (amountMb / (double) durationTicks);
     }
 
-    public double getFuelBurnRate(int targetRpm, int tier) {
-        return Math.max(0.0001, burnRate() * Math.abs(targetRpm / 256.0) * (tier == 1 ? 1 : tier * 4));
+    public double getFuelBurnRate(int tier) {
+        return Math.max(0.0001, burnRate() * 0.125 * (tier == 1 ? 1 : tier * 4));
     }
 }

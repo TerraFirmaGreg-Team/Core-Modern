@@ -31,7 +31,7 @@ public class CombustionEngineRecipe implements EmiRecipe {
         this.fluid = fuel.fluid().get(0).get();
 
         var formatter = new DecimalFormat("0.###");
-        burnPerSec32 = formatter.format(1.0 / (fuel.getFuelBurnRate(CombustionEngineBlockEntity.DEFAULT_SPEED, GTValues.LV) * 20.0));
+        burnPerSec32 = formatter.format(1.0 / (fuel.getFuelBurnRate(GTValues.LV) * 20.0));
     }
 
     @Override
