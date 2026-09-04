@@ -152,8 +152,8 @@ public class SpaceHeaterMachine implements IBlockSensitiveMachine, IEnvironmentM
         long start = System.nanoTime();
 
         BlockPos pos = getPos();
-        BlockPos frontStart = pos.relative(host.self().getFrontFacing());
-        BlockPos backStart = pos.relative(host.self().getFrontFacing().getOpposite(), host.getBackOffset());
+        BlockPos frontStart = pos.above(1).relative(host.self().getFrontFacing());
+        BlockPos backStart = pos.above(1).relative(host.self().getFrontFacing().getOpposite(), 3);
 
         RoomScan frontScan = FloodFill.fill(reader, frontStart, SCAN_MAX_BLOCKS, MAX_HORIZONTAL_DIMENSION);
 

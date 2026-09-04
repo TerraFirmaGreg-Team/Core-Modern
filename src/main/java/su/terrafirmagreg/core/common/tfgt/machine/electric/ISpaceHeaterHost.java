@@ -25,10 +25,4 @@ public interface ISpaceHeaterHost extends IRecipeLogicMachine {
     boolean showTraceButton();
 
     void setShowTraceButton(boolean show);
-
-    /**
-     * Offset from the controller to the far (back) end of the multiblock along the front-facing axis.
-     * The back hazard region anchors there, past any wall the stick passes through.
-     */
-    int getBackOffset();
 }

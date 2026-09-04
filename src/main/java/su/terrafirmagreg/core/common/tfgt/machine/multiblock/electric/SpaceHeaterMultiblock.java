@@ -38,7 +38,6 @@ import su.terrafirmagreg.core.common.tfgt.machine.electric.SpaceHeaterMachine;
 
 /**
  * GT multiblock wrapper for SpaceHeaterMachine.
- * A 1x1x7 stick with a front (comfort) and back (hazard) face.
  */
 public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine implements ISpaceHeaterHost, IMachineLife {
 
@@ -51,8 +50,6 @@ public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine imp
     }
 
     private final SpaceHeaterMachine machine;
-
-    public static final int BACK_REGION_OFFSET = 6;
 
     @Persisted
     @DescSynced
@@ -221,11 +218,6 @@ public class SpaceHeaterMultiblock extends WorkableElectricMultiblockMachine imp
     @Override
     public void setShowTraceButton(boolean show) {
         showTraceButton = show;
-    }
-
-    @Override
-    public int getBackOffset() {
-        return BACK_REGION_OFFSET;
     }
 
     /** Scales energy consumption based on the front region size. */

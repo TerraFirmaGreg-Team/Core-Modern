@@ -3,14 +3,14 @@
   "loader": "gtceu:machine",
   "machine": "tfg:higgs_emitter",
   "texture_overrides": {
-    "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh"
+    "all": "tfg:block/casings/machine_casing_iron_desh"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh",
+          "all": "tfg:block/casings/machine_casing_iron_desh",
           "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
           "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
@@ -20,7 +20,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh",
+          "all": "tfg:block/casings/machine_casing_iron_desh",
           "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
           "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
@@ -30,7 +30,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh",
+          "all": "tfg:block/casings/machine_casing_iron_desh",
           "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
@@ -40,7 +40,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh",
+          "all": "tfg:block/casings/machine_casing_iron_desh",
           "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
@@ -50,7 +50,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh",
+          "all": "tfg:block/casings/machine_casing_iron_desh",
           "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
           "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
@@ -60,7 +60,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh",
+          "all": "tfg:block/casings/machine_casing_iron_desh",
           "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front",
           "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_emissive"
         }
@@ -70,7 +70,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh",
+          "all": "tfg:block/casings/machine_casing_iron_desh",
           "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
@@ -80,7 +80,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "tfg:block/casings/machine_casing_clean_stainless_steel_desh",
+          "all": "tfg:block/casings/machine_casing_iron_desh",
           "overlay_front": "gtceu:block/machines/laser_engraver/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/machines/laser_engraver/overlay_front_active_emissive"
         }
