@@ -100,6 +100,13 @@ public class TFGNetworkHandler {
                 JavelinRecallPacket::decode,
                 JavelinRecallPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(
+                id(),
+                WorldgenVersionSyncPacket.class,
+                WorldgenVersionSyncPacket::encode,
+                WorldgenVersionSyncPacket::decode,
+                WorldgenVersionSyncPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     private static void sendToAllAround(Level level, BlockPos pos, Object packet) {
