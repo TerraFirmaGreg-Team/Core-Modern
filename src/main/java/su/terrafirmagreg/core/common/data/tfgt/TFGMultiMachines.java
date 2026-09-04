@@ -1520,7 +1520,7 @@ public class TFGMultiMachines {
                     .where("D", Predicates.blocks(steel_catwalk.get()))
                     .where("E", Predicates.blocks(GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
                             .or(Predicates.autoAbilities(true, false, false))
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMinGlobalLimited(1).setMaxGlobalLimited(3))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(3))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(3))
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
