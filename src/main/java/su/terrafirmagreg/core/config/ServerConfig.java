@@ -195,7 +195,7 @@ public final class ServerConfig {
                 .defineInRange("baseGlassblowingCooldown", 20, 2, Integer.MAX_VALUE);
         GLASSBLOWING_DURATION = builder
                 .comment("\nBase glassblowing duration in ticks. Default: 40, min: 2, max: maxInt")
-                .defineInRange("baseGlassblowingCooldown", 40, 2, Integer.MAX_VALUE);
+                .defineInRange("baseGlassblowingDuration", 40, 2, Integer.MAX_VALUE);
 
         builder.pop().push("tfc_create_compatibility");
         QUERN_STRESS_IMPACT = builder
