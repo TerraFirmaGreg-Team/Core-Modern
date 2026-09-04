@@ -118,7 +118,7 @@ dependencies {
     modCompileOnly "maven.modrinth:hang-glider:${hangglider_version}"
 
     // Wan's ancient beasts
-    modImplementation "curse.maven:wans-ancient-beasts-1108604:8217197"
+    modImplementation "curse.maven:wans-ancient-beasts-1108604:8761414"
     modImplementation "curse.maven:geckolib-388172:7553267"
 
     // Immersive Aircraft
