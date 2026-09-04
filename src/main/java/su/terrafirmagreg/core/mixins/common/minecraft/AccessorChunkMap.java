@@ -7,11 +7,14 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
 
 /**
- * @author Redeix
- * @reason exposes getChunks method.
+ * @author Redeix, Mqrius
+ * @reason exposes getChunks and getVisibleChunkIfPresent methods.
  */
 @Mixin(ChunkMap.class)
 public interface AccessorChunkMap {
     @Invoker("getChunks")
     Iterable<ChunkHolder> tfg$invokeGetChunks();
+
+    @Invoker("getVisibleChunkIfPresent")
+    ChunkHolder tfg$invokeGetVisibleChunkIfPresent(long pos);
 }

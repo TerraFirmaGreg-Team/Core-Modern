@@ -18,9 +18,11 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -66,12 +68,15 @@ public class ClientProxy extends CommonProxy {
         event.registerSpriteSet(TFGParticles.LIGHT_MARS_WIND.get(), (set) -> (new ColoredWindParticleProvider(set, 0xcf9f59))); // avg color of ad astra venus sand
         // environmental
         event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
+        // Decompression event
+        event.registerSpriteSet(TFGParticles.DECOMPRESSION.get(), DecompressionParticle.Provider::new);
         // for machines
         event.registerSpriteSet(TFGParticles.COOLING_STEAM.get(), CoolingSteamProvider::new);
         event.registerSpriteSet(TFGParticles.GEOTHERMAL_STEAM.get(), GeothermalSteamProvider::new);
         event.registerSpriteSet(TFGParticles.GEYSER_POOF.get(), GeyserPoofProvider::new);
         event.registerSpriteSet(TFGParticles.NOXIOUS_GAS.get(), NoxiousGasProvider::new);
         event.registerSpriteSet(TFGParticles.FISH_SCHOOL.get(), FishSchoolProvider::new);
+        event.registerSpriteSet(TFGParticles.VOLCANO_SMOKE.get(), VolcanoSmokeProvider::new);
     }
 
     @SuppressWarnings("removal")
@@ -181,5 +186,23 @@ public class ClientProxy extends CommonProxy {
     public void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
         event.register(TFGCore.id("beneath_effects"), new BeneathEffects());
         event.register(TFGCore.id("venus_effects"), new VenusEffects());
+    }
+
+    // Environment system client cache
+
+    private static long clientTicks = 0;
+
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+        clientTicks++;
+        EnvironmentClientCache.tick(clientTicks);
+    }
+
+    @SubscribeEvent
+    public static void onClientDisconnect(ClientPlayerNetworkEvent.LoggingOut event) {
+        EnvironmentClientCache.clear();
     }
 }

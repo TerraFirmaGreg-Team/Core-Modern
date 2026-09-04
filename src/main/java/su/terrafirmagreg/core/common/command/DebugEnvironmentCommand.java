@@ -1,0 +1,128 @@
+package su.terrafirmagreg.core.common.command;
+
+import static net.minecraft.commands.Commands.literal;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+
+import su.terrafirmagreg.core.common.environment.DimEnvManager;
+import su.terrafirmagreg.core.common.environment.DimensionEnvironment;
+import su.terrafirmagreg.core.common.environment.EnvironmentSystem;
+import su.terrafirmagreg.core.common.environment.GravityProvider;
+import su.terrafirmagreg.core.common.environment.OxygenProvider;
+import su.terrafirmagreg.core.common.environment.TemperatureProvider;
+
+/**
+ * /tfg debug environment: check oxygen + temperature at player position, list all providers
+ */
+public class DebugEnvironmentCommand {
+
+    public static void register(LiteralArgumentBuilder<CommandSourceStack> debug) {
+        debug.then(literal("environment")
+                .executes(c -> {
+                    BlockPos pos = BlockPos.containing(c.getSource().getPosition());
+                    ServerLevel level = c.getSource().getLevel();
+                    return checkEnvironment(c.getSource(), level, pos);
+                }));
+    }
+
+    private static int checkEnvironment(CommandSourceStack source, ServerLevel level, BlockPos pos) {
+        DimEnvManager manager = EnvironmentSystem.getManager(level);
+
+        // Oxygen status
+        boolean hasOxygen = EnvironmentSystem.hasOxygen(level, pos);
+        source.sendSuccess(() -> Component.literal(String.format(
+                "Oxygen at %s: %s", pos.toShortString(), hasOxygen ? "YES" : "NO")), false);
+
+        // Temperature status
+        boolean hasTemp = EnvironmentSystem.hasTemperature(level, pos);
+        String tempStatus;
+        if (hasTemp) {
+            tempStatus = "COZY";
+        } else {
+            short dimTemp = DimensionEnvironment.get(level.dimension()).temperature();
+            if (dimTemp < DimensionEnvironment.MIN_LIVEABLE_TEMPERATURE) {
+                tempStatus = "COLD (" + dimTemp + "°C)";
+            } else if (dimTemp > DimensionEnvironment.MAX_LIVEABLE_TEMPERATURE) {
+                tempStatus = "HOT (" + dimTemp + "°C)";
+            } else {
+                tempStatus = "COZY (" + dimTemp + "°C)";
+            }
+        }
+        source.sendSuccess(() -> Component.literal(String.format(
+                "Temperature at %s: %s", pos.toShortString(), tempStatus)), false);
+
+        // Gravity status
+        boolean hasGravity = EnvironmentSystem.hasNormalGravity(level, pos);
+        String gravityStatus = hasGravity ? "1.0 (normal)"
+                : String.format(
+                        "%.2f (dimension)", DimensionEnvironment.get(level.dimension()).gravity());
+        source.sendSuccess(() -> Component.literal(String.format(
+                "Gravity at %s: %s", pos.toShortString(), gravityStatus)), false);
+
+        // Oxygen providers
+        int oxygenCount = 0;
+        source.sendSuccess(() -> Component.literal("--- Oxygen Providers ---"), false);
+        for (OxygenProvider provider : manager.getProviders().values()) {
+            oxygenCount++;
+            BlockPos mPos = provider.getMachinePos();
+            boolean loaded = provider.isMachineLoaded();
+            boolean working = provider.isMachineWorking();
+            String status = provider.getRoomScan().status().name();
+            int intSize = provider.getRoomScan().interiorSize();
+            int envSize = provider.getRoomScan().envelopeSize();
+
+            source.sendSuccess(() -> Component.literal(String.format(
+                    "  %s: status=%s, interior=%d, envelope=%d, loaded=%s, working=%s",
+                    mPos.toShortString(), status, intSize, envSize, loaded, working)), false);
+        }
+        if (oxygenCount == 0) {
+            source.sendSuccess(() -> Component.literal("  (none)"), false);
+        }
+
+        // Temperature providers
+        int tempCount = 0;
+        source.sendSuccess(() -> Component.literal("--- Temperature Providers ---"), false);
+        for (TemperatureProvider provider : manager.getTempProviders().values()) {
+            tempCount++;
+            BlockPos mPos = provider.getMachinePos();
+            boolean loaded = provider.isMachineLoaded();
+            boolean working = provider.isMachineWorking();
+            String mode = provider.getMode().name();
+            int frontSize = provider.getFrontGood().size();
+            int backSize = provider.getBackHazard().size();
+            boolean blocked = provider.isBlocked();
+
+            source.sendSuccess(() -> Component.literal(String.format(
+                    "  %s: mode=%s, frontSize=%d, backSize=%d, blocked=%s, loaded=%s, working=%s",
+                    mPos.toShortString(), mode, frontSize, backSize, blocked, loaded, working)), false);
+        }
+        if (tempCount == 0) {
+            source.sendSuccess(() -> Component.literal("  (none)"), false);
+        }
+
+        // Gravity providers
+        int gravityCount = 0;
+        source.sendSuccess(() -> Component.literal("--- Gravity Providers ---"), false);
+        for (GravityProvider provider : manager.getGravityProviders().values()) {
+            gravityCount++;
+            BlockPos mPos = provider.getMachinePos();
+            int radius = provider.getRadius();
+            boolean loaded = provider.isMachineLoaded();
+            boolean working = provider.isMachineWorking();
+
+            source.sendSuccess(() -> Component.literal(String.format(
+                    "  %s: radius=%d, loaded=%s, working=%s",
+                    mPos.toShortString(), radius, loaded, working)), false);
+        }
+        if (gravityCount == 0) {
+            source.sendSuccess(() -> Component.literal("  (none)"), false);
+        }
+
+        return 1;
+    }
+}

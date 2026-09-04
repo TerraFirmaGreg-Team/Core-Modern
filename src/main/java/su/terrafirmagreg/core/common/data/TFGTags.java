@@ -133,6 +133,13 @@ public final class TFGTags {
 
         public static final TagKey<Block> UNPOSTER_GROWABLE = createBlockTag("unposter_growable");
 
+        // Environment system tags
+        public static final TagKey<Block> AtmospherePassable = createBlockTag("atmosphere_passable");
+        public static final TagKey<Block> AtmosphereImpassable = createBlockTag("atmosphere_impassable");
+        public static final TagKey<Block> AtmosphereUseOutline = createBlockTag("atmosphere_use_outline");
+        public static final TagKey<Block> AtmosphereCheckFacades = createBlockTag("atmosphere_check_facades");
+        public static final TagKey<Block> PressureResistant = createBlockTag("pressure_resistant");
+
         private static TagKey<Block> createBlockTag(String path) {
             return createBlockTag(TFGCore.id(path));
         }
